@@ -36,7 +36,7 @@ const UsernameFieldNames: string[] = [
 
 const TotpFieldNames: string[] = [
     // English
-    'totp', '2fa', 'mfa', 'totpcode', '2facode', 'mfacode', 'twofactorcode'
+    'totp', '2fa', 'mfa', 'totpcode', '2facode', 'mfacode', 'twofactor', 'twofactorcode'
 ]
 
 const FirstnameFieldNames: string[] = [
