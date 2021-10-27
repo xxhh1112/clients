@@ -83,23 +83,23 @@ jobs:
       - setup
       - locales-test
     steps:
-      - name: Get build number
-        id: get-build-commit
-        run: |
-          build_commit=$(ls browser-source-* | cut -d '.' -f 1 | cut -d '-' -f 3)
-          echo "::set-output name=build-commit::$build_commit"
-
       - name: Download latest RC build artifacts
         uses: bitwarden/gh-actions/download-artifacts@23433be15ed6fd046ce12b6889c5184a8d9c8783
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: release
-          artifacts: 'browser-source-${{ steps.get-build-commit.outputs.build-commit }}.zip,
-                      dist-chrome-${{ steps.get-build-commit.outputs.build-commit }}.zip,
-                      dist-opera-${{ steps.get-build-commit.outputs.build-commit }}.zip,
-                      dist-firefox-${{ steps.get-build-commit.outputs.build-commit }}.zip,
-                      dist-edge-${{ steps.get-build-commit.outputs.build-commit }}.zip'
+          artifacts: 'browser-source-*.zip,
+                      dist-chrome-*.zip,
+                      dist-opera-*.zip,
+                      dist-firefox-*.zip,
+                      dist-edge-*.zip'
+
+      - name: Get build number
+        id: get-build-commit
+        run: |
+          build_commit=$(ls browser-source-* | cut -d '.' -f 1 | cut -d '-' -f 3)
+          echo "::set-output name=build-commit::$build_commit"
 
       - name: Rename build artifacts
         env:
