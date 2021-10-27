@@ -36,8 +36,7 @@ const UsernameFieldNames: string[] = [
 
 const TotpFieldNames: string[] = [
     // English
-    'totp', '2fa', 'mfa', 'totpcode', '2facode', 'mfacode', 'twofactor', 'twofactorcode'
-]
+    'totp', '2fa', 'mfa', 'totpcode', '2facode', 'mfacode', 'twofactor', 'twofactorcode'];
 
 const FirstnameFieldNames: string[] = [
     // English
@@ -1076,7 +1075,7 @@ export default class AutofillService implements AutofillServiceInterface {
             if (!f.disabled && (canBeReadOnly || !f.readonly) &&
                 (withoutForm || f.form === passwordField.form) && (canBeHidden || f.viewable) &&
                 (f.type === 'text' || f.type === 'number')) {
-                    totpField = f;
+                totpField = f;
 
                 if (this.findMatchingFieldIndex(f, TotpFieldNames) > -1) {
                     return totpField;
