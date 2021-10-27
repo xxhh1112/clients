@@ -34,6 +34,11 @@ const UsernameFieldNames: string[] = [
     // German
     'benutzername', 'benutzer name', 'email adresse', 'e-mail adresse', 'benutzerid', 'benutzer id'];
 
+const TotpFieldNames: string[] = [
+    // English
+    'totp', '2fa', 'mfa', 'totpcode', '2facode', 'mfacode', 'twofactorcode'
+]
+
 const FirstnameFieldNames: string[] = [
     // English
     'f-name', 'first-name', 'given-name', 'first-n',
@@ -176,13 +181,13 @@ export default class AutofillService implements AutofillServiceInterface {
 
         const canAccessPremium = await this.userService.canAccessPremium();
         let didAutofill = false;
-        options.pageDetails.forEach((pd: any) => {
+        await Promise.all(options.pageDetails.map(async (pd: any) => {
             // make sure we're still on correct tab
             if (pd.tab.id !== tab.id || pd.tab.url !== tab.url) {
                 return;
             }
 
-            const fillScript = this.generateFillScript(pd.details, {
+            const fillScript = await this.generateFillScript(pd.details, {
                 skipUsernameOnlyFill: options.skipUsernameOnlyFill || false,
                 onlyEmptyFields: options.onlyEmptyFields || false,
                 onlyVisibleFields: options.onlyVisibleFields || false,
@@ -219,7 +224,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 }
                 return null;
             });
-        });
+        }));
 
         if (didAutofill) {
             this.eventService.collect(EventType.Cipher_ClientAutofilled, options.cipher.id);
@@ -289,7 +294,7 @@ export default class AutofillService implements AutofillServiceInterface {
         return tab;
     }
 
-    private generateFillScript(pageDetails: AutofillPageDetails, options: any): AutofillScript {
+    private async generateFillScript(pageDetails: AutofillPageDetails, options: any): Promise<AutofillScript> {
         if (!pageDetails || !options.cipher) {
             return null;
         }
@@ -331,7 +336,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
         switch (options.cipher.type) {
             case CipherType.Login:
-                fillScript = this.generateLoginFillScript(fillScript, pageDetails, filledFields, options);
+                fillScript = await this.generateLoginFillScript(fillScript, pageDetails, filledFields, options);
                 break;
             case CipherType.Card:
                 fillScript = this.generateCardFillScript(fillScript, pageDetails, filledFields, options);
@@ -346,16 +351,18 @@ export default class AutofillService implements AutofillServiceInterface {
         return fillScript;
     }
 
-    private generateLoginFillScript(fillScript: AutofillScript, pageDetails: any,
-        filledFields: { [id: string]: AutofillField; }, options: any): AutofillScript {
+    private async generateLoginFillScript(fillScript: AutofillScript, pageDetails: any,
+        filledFields: { [id: string]: AutofillField; }, options: any): Promise<AutofillScript> {
         if (!options.cipher.login) {
             return null;
         }
 
         const passwords: AutofillField[] = [];
         const usernames: AutofillField[] = [];
+        const totps: AutofillField[] = [];
         let pf: AutofillField = null;
         let username: AutofillField = null;
+        let totp: AutofillField = null;
         const login = options.cipher.login;
 
         if (!login.password || login.password === '') {
@@ -400,6 +407,19 @@ export default class AutofillService implements AutofillServiceInterface {
                         usernames.push(username);
                     }
                 }
+
+                if (login.totp) {
+                    totp = this.findTotpField(pageDetails, pf, false, false, false);
+
+                    if (!totp && !options.onlyVisibleFields) {
+                        // not able to find any viewable totp fields. maybe there are some "hidden" ones?
+                        totp = this.findTotpField(pageDetails, pf, true, true, false);
+                    }
+
+                    if (totp) {
+                        totps.push(totp);
+                    }
+                }
             });
         }
 
@@ -422,6 +442,19 @@ export default class AutofillService implements AutofillServiceInterface {
                     usernames.push(username);
                 }
             }
+
+            if (login.totp && pf.elementNumber > 0) {
+                totp = this.findTotpField(pageDetails, pf, false, false, true);
+
+                if (!totp && !options.onlyVisibleFields) {
+                    // not able to find any viewable username fields. maybe there are some "hidden" ones?
+                    totp = this.findTotpField(pageDetails, pf, true, true, true);
+                }
+
+                if (totp) {
+                    totps.push(totp);
+                }
+            }
         }
 
         if (!passwordFields.length && !options.skipUsernameOnlyFill) {
@@ -430,6 +463,10 @@ export default class AutofillService implements AutofillServiceInterface {
                 if (f.viewable && (f.type === 'text' || f.type === 'email' || f.type === 'tel') &&
                     this.fieldIsFuzzyMatch(f, UsernameFieldNames)) {
                     usernames.push(f);
+                }
+
+                if (f.viewable && (f.type === 'text' || f.type === 'number') && this.fieldIsFuzzyMatch(f, TotpFieldNames)) {
+                    totps.push(f);
                 }
             });
         }
@@ -451,6 +488,16 @@ export default class AutofillService implements AutofillServiceInterface {
             filledFields[p.opid] = p;
             this.fillByOpid(fillScript, p, login.password);
         });
+
+        await Promise.all(totps.map(async t => {
+            if (filledFields.hasOwnProperty(t.opid)) {
+                return;
+            }
+
+            filledFields[t.opid] = t;
+            const totpValue = await this.totpService.getCode(login.totp);
+            this.fillByOpid(fillScript, t, totpValue);
+        }));
 
         fillScript = this.setFillScriptForFocus(filledFields, fillScript);
         return fillScript;
@@ -1017,6 +1064,27 @@ export default class AutofillService implements AutofillServiceInterface {
         return usernameField;
     }
 
+    private findTotpField(pageDetails: AutofillPageDetails, passwordField: AutofillField, canBeHidden: boolean,
+        canBeReadOnly: boolean, withoutForm: boolean) {
+        let totpField: AutofillField = null;
+        for (let i = 0; i < pageDetails.fields.length; i++) {
+            const f = pageDetails.fields[i];
+            if (this.forCustomFieldsOnly(f)) {
+                continue;
+            }
+
+            if (!f.disabled && (canBeReadOnly || !f.readonly) &&
+                (withoutForm || f.form === passwordField.form) && (canBeHidden || f.viewable) &&
+                (f.type === 'text' || f.type === 'number')) {
+                    totpField = f;
+
+                if (this.findMatchingFieldIndex(f, TotpFieldNames) > -1) {
+                    return totpField;
+                }
+            }
+        }
+    }
+
     private findMatchingFieldIndex(field: AutofillField, names: string[]): number {
         for (let i = 0; i < names.length; i++) {
             if (names[i].indexOf('=') > -1) {
@@ -1024,6 +1092,12 @@ export default class AutofillService implements AutofillServiceInterface {
                     return i;
                 }
                 if (this.fieldPropertyIsPrefixMatch(field, 'htmlName', names[i], 'name')) {
+                    return i;
+                }
+                if (this.fieldPropertyIsPrefixMatch(field, 'label-left', names[i], 'label')) {
+                    return i;
+                }
+                if (this.fieldPropertyIsPrefixMatch(field, 'label-right', names[i], 'label')) {
                     return i;
                 }
                 if (this.fieldPropertyIsPrefixMatch(field, 'label-tag', names[i], 'label')) {
@@ -1041,6 +1115,12 @@ export default class AutofillService implements AutofillServiceInterface {
                 return i;
             }
             if (this.fieldPropertyIsMatch(field, 'htmlName', names[i])) {
+                return i;
+            }
+            if (this.fieldPropertyIsMatch(field, 'label-left', names[i])) {
+                return i;
+            }
+            if (this.fieldPropertyIsMatch(field, 'label-right', names[i])) {
                 return i;
             }
             if (this.fieldPropertyIsMatch(field, 'label-tag', names[i])) {
