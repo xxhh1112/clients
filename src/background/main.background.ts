@@ -550,10 +550,6 @@ export default class MainBackground {
   }
 
   async logout(expired: boolean, userId?: string) {
-    if (!userId) {
-      userId = await this.stateService.getUserId();
-    }
-
     await this.eventService.uploadEvents(userId);
 
     await Promise.all([
@@ -571,7 +567,7 @@ export default class MainBackground {
       this.keyConnectorService.clear(),
     ]);
 
-    await this.stateService.clean();
+    await this.stateService.clean({ userId: userId });
 
     if (userId == null || userId === (await this.stateService.getUserId())) {
       this.searchService.clearIndex();
@@ -990,13 +986,14 @@ export default class MainBackground {
   }
 
   private async reloadProcess(): Promise<void> {
-    const accounts = Object.keys(this.stateService.accounts.getValue());
-    for (const userId of accounts) {
-      if (!(await this.vaultTimeoutService.isLocked(userId))) {
-        return;
+    const accounts = this.stateService.accounts.getValue();
+    if (accounts != null) {
+      for (const userId of Object.keys(accounts)) {
+        if (!(await this.vaultTimeoutService.isLocked(userId))) {
+          return;
+        }
       }
     }
-
     await this.systemService.startProcessReload();
   }
 }
