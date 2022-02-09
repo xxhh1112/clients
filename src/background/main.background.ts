@@ -268,7 +268,7 @@ export default class MainBackground {
     );
 
     const vaultTimeoutServiceCallbacks = {
-      locked: async () => {
+      locked: async (userId?: string) => {
         if (this.notificationsService != null) {
           this.notificationsService.updateConnection(false);
         }
@@ -279,7 +279,7 @@ export default class MainBackground {
           await this.reloadProcess();
         }
       },
-      logout: async () => await this.logout(false),
+      logout: async (userId?: string) => await this.logout(false, userId),
     };
 
     this.vaultTimeoutService = new VaultTimeoutService(
@@ -555,7 +555,6 @@ export default class MainBackground {
     await Promise.all([
       this.eventService.clearEvents(userId),
       this.syncService.setLastSync(new Date(0), userId),
-      this.tokenService.clearToken(userId),
       this.cryptoService.clearKeys(userId),
       this.settingsService.clear(userId),
       this.cipherService.clear(userId),
