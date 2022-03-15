@@ -117,6 +117,7 @@ const config = {
     "content/notificationBar": "./src/content/notificationBar.ts",
     "content/contextMenuHandler": "./src/content/contextMenuHandler.ts",
     "content/shortcuts": "./src/content/shortcuts.ts",
+    "content/saveInButton": "./src/content/saveInButton.ts",
     "content/message_handler": "./src/content/message_handler.ts",
     "notification/bar": "./src/notification/bar.js",
   },
