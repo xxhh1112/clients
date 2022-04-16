@@ -411,7 +411,8 @@ export default class AutofillService implements AutofillServiceInterface {
         if (
           f.viewable &&
           (f.type === "text" || f.type === "number") &&
-          this.fieldIsFuzzyMatch(f, AutoFillConstants.TotpFieldNames)
+          (this.fieldIsFuzzyMatch(f, AutoFillConstants.TotpFieldNames) ||
+            f.autoCompleteType === "one-time-code")
         ) {
           totps.push(f);
         }
@@ -1219,10 +1220,14 @@ export default class AutofillService implements AutofillServiceInterface {
       ) {
         totpField = f;
 
-        if (this.findMatchingFieldIndex(f, AutoFillConstants.TotpFieldNames) > -1) {
+        if (
+          this.findMatchingFieldIndex(f, AutoFillConstants.TotpFieldNames) > -1 ||
+          f.autoCompleteType === "one-time-code"
+        ) {
           // We found an exact match. No need to keep looking.
           break;
         }
+        q;
       }
     }
 
