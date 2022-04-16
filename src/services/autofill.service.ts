@@ -353,7 +353,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
           if (!totp && !options.onlyVisibleFields) {
             // not able to find any viewable totp fields. maybe there are some "hidden" ones?
-            totp = this.findTotpField(pageDetails, pf, true, true, false);
+            totp = this.findTotpField(pageDetails, pf, true, true, true);
           }
 
           if (totp) {
@@ -1227,7 +1227,6 @@ export default class AutofillService implements AutofillServiceInterface {
           // We found an exact match. No need to keep looking.
           break;
         }
-        q;
       }
     }
 
