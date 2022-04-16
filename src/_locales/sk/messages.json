@@ -89,16 +89,16 @@
     "message": "Vygenerovať heslo (skopírované)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopírovať názov vlastného poľa"
   },
   "noMatchingLogins": {
     "message": "Žiadne zodpovedajúce prihlasovacie údaje."
   },
-  "vaultLocked": {
-    "message": "Trezor je zamknutý."
+  "unlockVaultMenu": {
+    "message": "Odomknúť trezor"
   },
-  "vaultLoggedOut": {
-    "message": "Trezor je odhlásený"
+  "loginToVaultMenu": {
+    "message": "Prihláste sa do trezora"
   },
   "autoFillInfo": {
     "message": "Nie sú prístupné žiadne prihlasovacie údaje na automatické vyplnenie pre aktuálnu kartu."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Pokračovať"
   },
+  "sendVerificationCode": {
+    "message": "Poslať overovací kód na váš e-mail"
+  },
+  "sendCode": {
+    "message": "Odoslať kód"
+  },
+  "codeSent": {
+    "message": "Kód bol odoslaný"
+  },
   "verificationCode": {
     "message": "Overovací kód"
+  },
+  "confirmIdentity": {
+    "message": "Ak chcete pokračovať, potvrďte svoju identitu."
   },
   "account": {
     "message": "Účet"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Dĺžka"
   },
+  "uppercase": {
+    "message": "Veľké písmená (A-Z)"
+  },
+  "lowercase": {
+    "message": "Malé písmená (a-z)"
+  },
+  "numbers": {
+    "message": "Čísla (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Špeciálne znaky (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Počet slov"
   },
@@ -261,7 +285,7 @@
     "message": "Heslo"
   },
   "passphrase": {
-    "message": "Heslo"
+    "message": "Prístupová fráza"
   },
   "favorite": {
     "message": "Obľúbené"
@@ -308,11 +332,11 @@
   "browserNotSupportClipboard": {
     "message": "Váš webový prehliadač nepodporuje automatické kopírovanie do schránky. Kopírujte manuálne."
   },
-  "verifyMasterPassword": {
-    "message": "Overenie hlavného hesla"
+  "verifyIdentity": {
+    "message": "Overiť identitu"
   },
   "yourVaultIsLocked": {
-    "message": "Váš trezor je uzamknutý. Overte sa hlavným heslom ak chcete pokračovať."
+    "message": "Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoju identitu."
   },
   "unlock": {
     "message": "Odomknúť"
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Overovací kód je povinný."
+  },
+  "invalidVerificationCode": {
+    "message": "Neplatný verifikačný kód"
   },
   "valueCopied": {
     "message": " skopírované",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Naozaj chcete prepísať aktuálne heslo?"
   },
+  "overwriteUsername": {
+    "message": "Prepísať používateľské meno"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Naozaj chcete prepísať aktuálne používateľské meno?"
+  },
   "searchFolder": {
     "message": "Prehľadávať priečinok"
   },
@@ -558,10 +591,7 @@
     "message": "Má si pre vás Bitwarden zapamätať toto heslo?"
   },
   "notificationAddSave": {
-    "message": "Áno, uložiť teraz"
-  },
-  "notificationNeverSave": {
-    "message": "Nikdy pre túto stránku"
+    "message": "Uložiť"
   },
   "disableChangedPasswordNotification": {
     "message": "Vypnúť oznámenie o zmene hesla"
@@ -573,7 +603,7 @@
     "message": "Chcete aktualizovať toto heslo v Bitwarden?"
   },
   "notificationChangeSave": {
-    "message": "Áno, aktualizovať"
+    "message": "Aktualizovať"
   },
   "disableContextMenuItem": {
     "message": "Vypnúť možnosti kontextového menu"
@@ -777,7 +807,7 @@
     "message": "Ak je kľúč overovateľa spojený s vašim prihlásením, TOTP verifikačný kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Pri spustení nevyžadovať biometrické údaje"
   },
   "premiumRequired": {
     "message": "Vyžaduje prémiový účet"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Zamknúť trezor"
   },
-  "privateModeMessage": {
-    "message": "Bohužiaľ, toto okno nie je dostupné v privátnom režime prehliadača."
+  "privateModeWarning": {
+    "message": "Podpora privátneho režimu je experimentálna a niektoré funkcie sú obmedzené."
   },
   "customFields": {
     "message": "Vlastné polia"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "cfTypeLinked": {
+    "message": "Prepojené",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Prepojená hodnota",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Kliknutie mimo popup okna na prezretie vášho emailu pre overovací kód spôsobí zavretie tohto popupu. Chcete otvoriť tento popup v novom okne tak, aby sa nezavrel?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Priezvisko"
+  },
+  "fullName": {
+    "message": "Celé meno"
   },
   "identityName": {
     "message": "Názov identity"
@@ -1198,7 +1239,12 @@
     "message": "Heslo nebolo nájdene v žiadnom úniku dát. Malo by byť bezpečné."
   },
   "baseDomain": {
-    "message": "Základná doména"
+    "message": "Základná doména",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Názov domény",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Hostiteľ",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Neplatný PIN kód."
-  },
-  "verifyPin": {
-    "message": "Overiť PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Váš trezor je uzamknutý. Overte sa PIN kódom ak chcete pokračovať."
   },
   "unlockWithBiometrics": {
     "message": "Odomknúť pomocou biometrie"
@@ -1465,7 +1505,7 @@
     "message": "Spustiť desktopovú aplikáciu Bitwarden Desktop"
   },
   "startDesktopDesc": {
-    "message": "Aplikácia Bitwarden Desktop musí byť pred použitím tejto funkcie spustená."
+    "message": "Aplikácia Bitwarden Desktop musí byť pred použitím odomknutia pomocou biometrických údajov spustená."
   },
   "errorEnableBiometricTitle": {
     "message": "Nie je môžné povoliť biometriu"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Bol dosiahnutý maximálny počet prístupov"
+    "message": "Bol dosiahnutý maximálny počet prístupov",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Expirované"
@@ -1760,34 +1801,34 @@
     "message": "Na použitie tejto funkcie musíte overiť svoj e-mail. Svoj e-mail môžete overiť vo webovom trezore."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Hlavné heslo aktualizované"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Aktualizovať hlavné heslo"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Vaše hlavné heslo nedávno zmenil správca vo vašej organizácii. Ak chcete získať prístup k trezoru, musíte ho teraz aktualizovať. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatická registrácia"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Vybrať priečinok..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Aby ste dokončili nastavenie prihlasovacieho portálu (SSO), prosím nastavte hlavné heslo na prístup a ochranu vášho trezora."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Hodiny"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minúty"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je $HOURS$ h a $MINUTES$ m",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Export trezoru je zakázaný"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Nie je možné identifikovať platný prvok formulára. Skúste namiesto toho preskúmať HTML."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Nenašiel sa žiadny jedinečný identifikátor."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ používa SSO s vlastným kľúčovým serverom. Na prihlásenie členov tejto organizácie už nie je potrebné hlavné heslo.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Opustiť organizáciu"
+  },
+  "removeMasterPassword": {
+    "message": "Odstrániť hlavné heslo"
+  },
+  "removedMasterPassword": {
+    "message": "Hlavné heslo bolo odstránené."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Naozaj chcete opustiť túto organizáciu?"
+  },
+  "leftOrganization": {
+    "message": "Opustili ste organizáciu."
+  },
+  "toggleCharacterCount": {
+    "message": "Prepnúť počítadlo znakov"
+  },
+  "sessionTimeout": {
+    "message": "Vaša relácia vypršala. Vráťte sa späť a skúste sa prihlásiť znova."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Exportovanie osobného trezora"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Exportované budú iba položy osobného trezora spojené s $EMAIL$. Položky trezora organizácie nebudú zahrnuté.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Chyba"
+  },
+  "regenerateUsername": {
+    "message": "Vygenerovať nové používateľské meno"
+  },
+  "generateUsername": {
+    "message": "Vygenerovať používateľské meno"
+  },
+  "usernameType": {
+    "message": "Typ používateľského mena"
+  },
+  "plusAddressedEmail": {
+    "message": "E-mail s plusovým aliasom",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Použiť možnosti subadresovania svojho poskytovateľa e-mailu."
+  },
+  "catchallEmail": {
+    "message": "Catch-all e-mail"
+  },
+  "catchallEmailDesc": {
+    "message": "Použiť doručenú poštu typu catch-all nastavenú na doméne."
+  },
+  "random": {
+    "message": "Náhodné"
+  },
+  "randomWord": {
+    "message": "Náhodné slovo"
+  },
+  "websiteName": {
+    "message": "Názov stránky"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Čo by ste chceli vygenerovať?"
+  },
+  "passwordType": {
+    "message": "Typ hesla"
+  },
+  "service": {
+    "message": "Služba"
   }
 }

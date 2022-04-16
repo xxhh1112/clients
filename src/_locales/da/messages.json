@@ -89,16 +89,16 @@
     "message": "Generér adgangskode (kopieret)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopiér brugerdefineret feltnavn"
   },
   "noMatchingLogins": {
     "message": "Ingen matchende logins."
   },
-  "vaultLocked": {
-    "message": "Boksen er låst."
+  "unlockVaultMenu": {
+    "message": "Lås din boks op"
   },
-  "vaultLoggedOut": {
-    "message": "Boksen er logget ud."
+  "loginToVaultMenu": {
+    "message": "Log ind på din boks"
   },
   "autoFillInfo": {
     "message": "Der findes ingen login til at auto-udfylde i den nuværende browserfane."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Forsæt"
   },
+  "sendVerificationCode": {
+    "message": "Send en bekræftelseskode til din e-mail"
+  },
+  "sendCode": {
+    "message": "Send kode"
+  },
+  "codeSent": {
+    "message": "Kode sendt"
+  },
   "verificationCode": {
     "message": "Bekræftelseskode"
+  },
+  "confirmIdentity": {
+    "message": "Bekræft din identitet for at fortsætte."
   },
   "account": {
     "message": "Konto"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Længde"
   },
+  "uppercase": {
+    "message": "Store bogstaver (A-Z)"
+  },
+  "lowercase": {
+    "message": "Små bogstaver (a-z)"
+  },
+  "numbers": {
+    "message": "Tal (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Specielle tegn (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Antal ord"
   },
@@ -308,11 +332,11 @@
   "browserNotSupportClipboard": {
     "message": "Din webbrowser understøtter ikke udklipsholder kopiering. Kopiér det manuelt i stedet."
   },
-  "verifyMasterPassword": {
-    "message": "Bekræft hovedadgangskode"
+  "verifyIdentity": {
+    "message": "Bekræft identitet"
   },
   "yourVaultIsLocked": {
-    "message": "Din boks er låst. Bekræft din hovedadgangskode for at fortsætte."
+    "message": "Din boks er låst. Bekræft din identitet for at fortsætte."
   },
   "unlock": {
     "message": "Lås op"
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Bekræftelseskode er påkrævet."
+  },
+  "invalidVerificationCode": {
+    "message": "Ugyldig bekræftelseskode"
   },
   "valueCopied": {
     "message": "$VALUE$ kopieret",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Er du sikker på, at du vil overskrive den aktuelle adgangskode?"
   },
+  "overwriteUsername": {
+    "message": "Overwrite Username"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Are you sure you want to overwrite the current username?"
+  },
   "searchFolder": {
     "message": "Søg mappe"
   },
@@ -558,10 +591,7 @@
     "message": "Skal Bitwarden huske denne adgangskode for dig?"
   },
   "notificationAddSave": {
-    "message": "Ja, gem nu"
-  },
-  "notificationNeverSave": {
-    "message": "Aldrig for denne hjemmeside"
+    "message": "Gem"
   },
   "disableChangedPasswordNotification": {
     "message": "Deaktivér besked om ændret adgangskode"
@@ -573,7 +603,7 @@
     "message": "Vil du opdatere denne adgangskode i Bitwarden?"
   },
   "notificationChangeSave": {
-    "message": "Ja, opdatér nu"
+    "message": "Opdatér"
   },
   "disableContextMenuItem": {
     "message": "Deaktivér Kontekst-menu valgmuligheder"
@@ -777,7 +807,7 @@
     "message": "Hvis dit login har en autentificeringsnøgle tilknyttet, kopieres TOTP verifikationskoden automatisk til din udklipsholder når du auto-udfylder login."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Bed ikke om biometri ved start"
   },
   "premiumRequired": {
     "message": "Premium påkrævet"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Lås boksen"
   },
-  "privateModeMessage": {
-    "message": "Desværre er dette vindue ikke tilgængelig i privat modus i denne browser."
+  "privateModeWarning": {
+    "message": "Understøttelse af privat tilstand er eksperimentel, og nogle funktioner er begrænsede."
   },
   "customFields": {
     "message": "Brugerdefinerede felter"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolsk"
+  },
+  "cfTypeLinked": {
+    "message": "Forbundet",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Forbundet værdi",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Ved at klikke uden for pop-up-vinduet for at tjekke din e-mail for din bekræftelseskode vil få denne popup til at lukke. Vil du åbne denne popup i et nyt vindue, så det ikke lukker?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Efternavn"
+  },
+  "fullName": {
+    "message": "Fulde navn"
   },
   "identityName": {
     "message": "Identitetsnavn"
@@ -1198,7 +1239,12 @@
     "message": "Denne adgangskode er ikke fundet i nogen kendte datalæk. Den burde være sikker at bruge."
   },
   "baseDomain": {
-    "message": "Grund-domæne"
+    "message": "Grund-domæne",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Vært",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Ugyldig pinkode."
-  },
-  "verifyPin": {
-    "message": "Bekræft pinkode"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Din boks er låst. Bekræft din pinkode for at fortsætte."
   },
   "unlockWithBiometrics": {
     "message": "Lås op med biometri"
@@ -1465,7 +1505,7 @@
     "message": "Start Bitwarden skrivebordsapplikationen"
   },
   "startDesktopDesc": {
-    "message": "Bitwarden skrivebordsapplikationen skal startes, før denne funktion kan bruges."
+    "message": "Bitwarden skrivebordsapplikationen skal startes, før oplåsning med biometri kan bruges."
   },
   "errorEnableBiometricTitle": {
     "message": "Kan ikke aktivere biometri"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Maksimalt adgangsantal nået"
+    "message": "Maksimalt adgangsantal nået",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Udløbet"
@@ -1760,34 +1801,34 @@
     "message": "Du skal bekræfte din e-mail for at bruge denne funktion. Du kan bekræfte din e-mail i web-boksen."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Hovedadgangskode opdateret"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Opdatér hovedadgangskode"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Dit hovedadgangskode blev for nylig ændret af en administrator i din organisation. For at få adgang til boksen skal du opdatere din hovedadgangskode nu. Hvis du fortsætter, logges du ud af din nuværende session, hvilket kræver, at du logger ind igen. Aktive sessioner på andre enheder kan fortsætte med at være aktive i op til én time."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Auto-indrullering"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Denne organisation har en virksomhedspolitik, der automatisk tilmelder dig til nulstilling af adgangskode. Tilmelding giver organisationsadministratorer mulighed for at skifte din hovedadgangskode."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Vælg mappe..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "For at fuldføre indlogning med SSO skal du opsætte en hovedadgangskode for at få adgang til samt beskytte din boks."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Timer"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minutter"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Din organisations politikker påvirker din boks-timeout. Maksimalt tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Din boks-timeout overskrider de begrænsninger, der er fastsat af din organisation."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Bokseksport deaktiveret"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "En eller flere organisationspolitikker forhindrer dig i at eksportere din personlige boks."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Kan ikke identificere et gyldigt formularelement. Prøv i stedet at inspicere HTML."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Ingen entydig identifikator fundet."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ bruger SSO med en selv-hostet nøgleserver. En hovedadgangskode er ikke længere påkrævet for at logge ind for medlemmer af denne organisation.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Forlad organisation"
+  },
+  "removeMasterPassword": {
+    "message": "Fjern hovedadgangskode"
+  },
+  "removedMasterPassword": {
+    "message": "Hovedadgangskode fjernet."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Er du sikker på, at du vil forlade denne organisation?"
+  },
+  "leftOrganization": {
+    "message": "Du har forladt organisationen."
+  },
+  "toggleCharacterCount": {
+    "message": "Slå tegnantal til/fra"
+  },
+  "sessionTimeout": {
+    "message": "Din session er udløbet. Gå tilbage og prøv at logge ind igen."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Eksporterer personlig boks"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Kun de personlige bokselementer tilknyttet $EMAIL$ eksporteres. Organisationsbokseelementer medtages ikke.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Fejl"
+  },
+  "regenerateUsername": {
+    "message": "Regenerate Username"
+  },
+  "generateUsername": {
+    "message": "Generate Username"
+  },
+  "usernameType": {
+    "message": "Username Type"
+  },
+  "plusAddressedEmail": {
+    "message": "Plus Addressed Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Use your email provider's sub-addressing capabilities."
+  },
+  "catchallEmail": {
+    "message": "Catch-all Email"
+  },
+  "catchallEmailDesc": {
+    "message": "Use your domain's configured catch-all inbox."
+  },
+  "random": {
+    "message": "Random"
+  },
+  "randomWord": {
+    "message": "Random Word"
+  },
+  "websiteName": {
+    "message": "Website Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "What would you like to generate?"
+  },
+  "passwordType": {
+    "message": "Password Type"
+  },
+  "service": {
+    "message": "Service"
   }
 }

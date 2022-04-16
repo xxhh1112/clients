@@ -89,16 +89,16 @@
     "message": "Генерувати пароль (з копіюванням)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Копіювати назву власного поля"
   },
   "noMatchingLogins": {
     "message": "Немає відповідних записів."
   },
-  "vaultLocked": {
-    "message": "Сховище заблоковано."
+  "unlockVaultMenu": {
+    "message": "Розблокуйте сховище"
   },
-  "vaultLoggedOut": {
-    "message": "Ви вийшли зі сховища."
+  "loginToVaultMenu": {
+    "message": "Увійдіть до сховища"
   },
   "autoFillInfo": {
     "message": "Для поточної вкладки браузера немає записів автозаповнення."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Продовжити"
   },
+  "sendVerificationCode": {
+    "message": "Надіслати код підтвердження е-поштою"
+  },
+  "sendCode": {
+    "message": "Надіслати код"
+  },
+  "codeSent": {
+    "message": "Код надіслано"
+  },
   "verificationCode": {
     "message": "Код підтвердження"
+  },
+  "confirmIdentity": {
+    "message": "Підтвердьте свої облікові дані для продовження."
   },
   "account": {
     "message": "Обліковий запис"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Довжина"
   },
+  "uppercase": {
+    "message": "Верхній регістр (A-Z)"
+  },
+  "lowercase": {
+    "message": "Нижній регістр (a-z)"
+  },
+  "numbers": {
+    "message": "Числа (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Спеціальні символи (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Кількість слів"
   },
@@ -308,11 +332,11 @@
   "browserNotSupportClipboard": {
     "message": "Ваш браузер не підтримує копіювання даних в буфер обміну. Скопіюйте вручну."
   },
-  "verifyMasterPassword": {
-    "message": "Перевірка головного пароля"
+  "verifyIdentity": {
+    "message": "Виконати перевірку"
   },
   "yourVaultIsLocked": {
-    "message": "Сховище заблоковано. Введіть головний пароль для продовження."
+    "message": "Ваше сховище заблоковане. Для продовження виконайте перевірку."
   },
   "unlock": {
     "message": "Розблокувати"
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Потрібний код підтвердження."
+  },
+  "invalidVerificationCode": {
+    "message": "Недійсний код підтвердження"
   },
   "valueCopied": {
     "message": "$VALUE$ скопійовано",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Ви дійсно хочете перезаписати поточний пароль?"
   },
+  "overwriteUsername": {
+    "message": "Перезаписати ім'я користувача"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Ви дійсно бажаєте перезаписати поточне ім'я користувача?"
+  },
   "searchFolder": {
     "message": "Пошук в теці"
   },
@@ -558,10 +591,7 @@
     "message": "Чи повинен Bitwarden зберегти цей пароль?"
   },
   "notificationAddSave": {
-    "message": "Так, зберегти"
-  },
-  "notificationNeverSave": {
-    "message": "Ніколи для цього сайту"
+    "message": "Зберегти"
   },
   "disableChangedPasswordNotification": {
     "message": "Вимкнути сповіщення зміненого пароля"
@@ -573,7 +603,7 @@
     "message": "Ви хочете оновити цей пароль в Bitwarden?"
   },
   "notificationChangeSave": {
-    "message": "Так, оновити"
+    "message": "Оновити"
   },
   "disableContextMenuItem": {
     "message": "Вимкнути в контекстному меню"
@@ -777,7 +807,7 @@
     "message": "Якщо ваш запис має вкладений ключ авторизації, код підтвердження TOTP автоматично копіюється до буфера обміну щоразу при автозаповненні."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Не запитувати біометрію при запуску"
   },
   "premiumRequired": {
     "message": "Необхідний преміум статус"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Заблокувати сховище"
   },
-  "privateModeMessage": {
-    "message": "Шкода, але це вікно недоступне в приватному режимі для цього браузера."
+  "privateModeWarning": {
+    "message": "Приватний режим - це експериментальна функція і деякі можливості обмежені."
   },
   "customFields": {
     "message": "Власні поля"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Логічне значення"
+  },
+  "cfTypeLinked": {
+    "message": "Пов'язано",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Пов'язане значення",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Натискання поза межами спливаючого вікна для перевірки коду підтвердження в пошті спричинить його закриття. Хочете відкрити його в новому вікні, щоб воно не закрилося?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Прізвище"
+  },
+  "fullName": {
+    "message": "Повне ім'я"
   },
   "identityName": {
     "message": "Назва"
@@ -1198,7 +1239,12 @@
     "message": "Цей пароль не було знайдено у жодних відомих витоках даних. Його можна безпечно використовувати."
   },
   "baseDomain": {
-    "message": "Основний домен"
+    "message": "Основний домен",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Ім'я домену",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Вузол",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Неправильний PIN-код."
-  },
-  "verifyPin": {
-    "message": "Перевірка PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Ваше сховище заблоковане. Для продовження підтвердьте свій PIN-код."
   },
   "unlockWithBiometrics": {
     "message": "Розблокувати з біометрією"
@@ -1462,10 +1502,10 @@
     "message": "Інтеграція з браузером не увімкнена в програмі Bitwarden на комп'ютері. Увімкніть її в налаштуваннях програми на комп'ютері."
   },
   "startDesktopTitle": {
-    "message": "Запустити програму Bitwarden на комп'ютері"
+    "message": "Запустіть програму Bitwarden на комп'ютері"
   },
   "startDesktopDesc": {
-    "message": "Для використання цієї функції необхідно запустити програму Bitwarden на комп'ютері."
+    "message": "Для можливості розблокування з біометрією необхідно запустити програму Bitwarden на комп'ютері."
   },
   "errorEnableBiometricTitle": {
     "message": "Не вдається увімкнути біометрію"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів"
+    "message": "Досягнуто максимальну кількість доступів",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Термін дії завершився"
@@ -1760,34 +1801,34 @@
     "message": "Для використання цієї функції необхідно підтвердити електронну пошту. Ви можете виконати підтвердження у веб сховищі."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Головний пароль оновлено"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Оновити головний пароль"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, ви повинні оновити його зараз. Продовживши, ви вийдете з поточного сеансу, після чого необхідно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Автоматичне розгортання"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Обрати теку..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Щоб завершити налаштування входу з SSO, встановіть головний пароль для доступу і захисту сховища."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Годин"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Хвилин"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Час очікування сховища перевищує обмеження, встановлені вашою організацією."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Експорт сховища вимкнено"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Не вдається ідентифікувати дійсний елемент форми. Спробуйте натомість інспектувати HTML."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Не знайдено унікальний ідентифікатор."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ використовує SSO з власним сервером ключів. Головний пароль для учасників цієї організації більше не вимагається.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Покинути організацію"
+  },
+  "removeMasterPassword": {
+    "message": "Вилучити головний пароль"
+  },
+  "removedMasterPassword": {
+    "message": "Головний пароль вилучено."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Ви справді хочете покинути цю організацію?"
+  },
+  "leftOrganization": {
+    "message": "Ви покинули організацію."
+  },
+  "toggleCharacterCount": {
+    "message": "Перемкнути лічильник символів"
+  },
+  "sessionTimeout": {
+    "message": "Час вашого сеансу завершився. Поверніться назад і спробуйте увійти знову."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Експортування особистого сховища"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Помилка"
+  },
+  "regenerateUsername": {
+    "message": "Повторно генерувати ім'я користувача"
+  },
+  "generateUsername": {
+    "message": "Генерувати ім'я користувача"
+  },
+  "usernameType": {
+    "message": "Тип імені користувача"
+  },
+  "plusAddressedEmail": {
+    "message": "Плюс адреса електронної пошти",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Використовуйте розширені можливості адрес вашого постачальника електронної пошти."
+  },
+  "catchallEmail": {
+    "message": "Адреса е-пошти Catch-all"
+  },
+  "catchallEmailDesc": {
+    "message": "Використовуйте свою скриньку вхідних Catch-All власного домену."
+  },
+  "random": {
+    "message": "Випадково"
+  },
+  "randomWord": {
+    "message": "Випадкове слово"
+  },
+  "websiteName": {
+    "message": "Назва вебсайту"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Що ви бажаєте згенерувати?"
+  },
+  "passwordType": {
+    "message": "Тип пароля"
+  },
+  "service": {
+    "message": "Послуга"
   }
 }

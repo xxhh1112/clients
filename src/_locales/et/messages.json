@@ -89,16 +89,16 @@
     "message": "Genereeri parool (kopeeritakse)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopeeri kohandatud välja nimi"
   },
   "noMatchingLogins": {
     "message": "Sobivaid kontoandmeid ei leitud."
   },
-  "vaultLocked": {
-    "message": "Hoidla on lukus."
+  "unlockVaultMenu": {
+    "message": "Lukusta hoidla lahti"
   },
-  "vaultLoggedOut": {
-    "message": "Hoidlast on välja logitud."
+  "loginToVaultMenu": {
+    "message": "Logi hoidlasse sisse"
   },
   "autoFillInfo": {
     "message": "Selle vahekaardi automaatseks täitmiseks puuduvad kirjed."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Jätka"
   },
+  "sendVerificationCode": {
+    "message": "Saada kinnituskood oma e-postile"
+  },
+  "sendCode": {
+    "message": "Saada kood"
+  },
+  "codeSent": {
+    "message": "Kood on saadetud"
+  },
   "verificationCode": {
     "message": "Kinnituskood"
+  },
+  "confirmIdentity": {
+    "message": "Jätkamiseks kinnita oma identiteet."
   },
   "account": {
     "message": "Konto"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Pikkus"
   },
+  "uppercase": {
+    "message": "Suurtäht (A-Z) "
+  },
+  "lowercase": {
+    "message": "Väiketäht (a-z) "
+  },
+  "numbers": {
+    "message": "Numbrid (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Erimärgid (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Sõnade arv"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "Kasutatav brauser ei toeta lihtsat lõikelaua kopeerimist. Kopeeri see käsitsi."
   },
-  "verifyMasterPassword": {
-    "message": "Autendi ülemparooliga"
+  "verifyIdentity": {
+    "message": "Identiteedi kinnitamine"
   },
   "yourVaultIsLocked": {
     "message": "Hoidla on lukus. Jätkamiseks sisesta ülemparool."
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Nõutav on kinnituskood."
+  },
+  "invalidVerificationCode": {
+    "message": "Vale kinnituskood"
   },
   "valueCopied": {
     "message": "$VALUE$ on kopeeritud",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Oled kindel, et soovid olemasolevat parooli üle kirjutada?"
   },
+  "overwriteUsername": {
+    "message": "Kasutajanime ülekirjutamine"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Oled kindel, et soovid praegust kasutajanime üle kirjutada? "
+  },
   "searchFolder": {
     "message": "Otsi kausta"
   },
@@ -559,9 +592,6 @@
   },
   "notificationAddSave": {
     "message": "Jah, salvesta see"
-  },
-  "notificationNeverSave": {
-    "message": "Ära sellel lehel enam küsi"
   },
   "disableChangedPasswordNotification": {
     "message": "Keela Muudetud parooli teavitus"
@@ -777,7 +807,7 @@
     "message": "Kui sinu sisselogimise andmetele on juurde lisatud autentimise võti, kopeeritakse TOTP kood automaatse täitmise kasutamisel lõikelauale."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Ära küsi käivitudes biomeetrilist kinnitamist"
   },
   "premiumRequired": {
     "message": "Vajalik on Premium versioon"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Lukusta hoidla"
   },
-  "privateModeMessage": {
-    "message": "Kahjuks ei toeta kasutatav brauser seda akent privaatses režiimis."
+  "privateModeWarning": {
+    "message": "Privaatrežiimi toetus on katsejärgus, mistõttu mõned funktsioonid on piiratud."
   },
   "customFields": {
     "message": "Kohandatud väljad"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "cfTypeLinked": {
+    "message": "Ühenduses",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Ühendatud väärtus",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "See aken sulgub, kui klikid oma e-posti aknale, et sealt kinnituskoodi vaadata. Soovid selle hüpikakna uues aknas avada, et seda ei juhtuks?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Perekonnanimi"
+  },
+  "fullName": {
+    "message": "Täisnimi"
   },
   "identityName": {
     "message": "Identiteedi nimi"
@@ -1198,7 +1239,12 @@
     "message": "Seda parooli ei õnnestu andmeleketest leida. Parooli edasi kasutamine peaks olema turvaline."
   },
   "baseDomain": {
-    "message": "Baasdomeen"
+    "message": "Baasdomeen",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domeeni nimi",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Vale PIN kood."
-  },
-  "verifyPin": {
-    "message": "Kinnita PIN koodiga"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Hoidla on lukus. Jätkamiseks sisesta PIN kood."
   },
   "unlockWithBiometrics": {
     "message": "Ava biomeetriaga"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Maksimaalne ligipääsude arv on saavutatud"
+    "message": "Maksimaalne ligipääsude arv on saavutatud",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Aegunud"
@@ -1760,34 +1801,34 @@
     "message": "Selle funktsiooni kasutamiseks pead kinnitama oma e-posti aadressi. Saad seda teha veebihoidlas."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Uuendas ülemparooli"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Ülemparooli uuendamine"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead seda nüüd uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automaatne liitumine"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Selle organisatsiooni poliitika kohaselt liidetakse sind automaatselt ülemparooli lähtestamise funktsiooniga. Liitumisel saavad organisatsiooni administraatorid sinu ülemparooli muuta."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Vali kaust..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "SSO-ga sisselogimise kinnitamiseks tuleb määrata ülemparool. See kaitseb sinu hoidlat ning võimaldab sellele ligi pääseda."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Tundi"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minutit"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on $HOURS$ tund(i) ja $MINUTES$ minut(it)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.  "
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Hoidla eksportimine on väljalülitatud"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Korrektset välja nime ei õnnestunud tuvastada. Proovi HTML koodi inspekteerimist."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Unikaalset identifikaatorit ei leitud."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ kasutab SSO-d koos enda majutatud võtmeserveriga. Selle organisatsiooni liikmed ei pea sisselogimisel enam ülemparooli kasutama.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Lahku organisatsioonist"
+  },
+  "removeMasterPassword": {
+    "message": "Eemalda ülemparool"
+  },
+  "removedMasterPassword": {
+    "message": "Ülemparool on eemaldatud."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Kas oled kindel, et soovid sellest organisatsioonist lahkuda?"
+  },
+  "leftOrganization": {
+    "message": "Oled organisatsioonist lahkunud."
+  },
+  "toggleCharacterCount": {
+    "message": "Loenda kirjatähtede hulka"
+  },
+  "sessionTimeout": {
+    "message": "Sessioon on aegunud. Palun mine tagasi ja proovi uuesti sisse logida."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Personaalse hoidla eksportimine"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Ainult personaalsed $EMAIL$ alla kuuluvad kirjed eksportidakse. Organisatsiooni kirjeid ei ekspordita.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Viga"
+  },
+  "regenerateUsername": {
+    "message": "Genereeri kasutajanimi uuesti"
+  },
+  "generateUsername": {
+    "message": "Genereeri kasutajanimi"
+  },
+  "usernameType": {
+    "message": "Kasutajanime tüüp"
+  },
+  "plusAddressedEmail": {
+    "message": "Lisaks e-post",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Kasuta e-posti teenuspakkuja alamadressimise võimalusi."
+  },
+  "catchallEmail": {
+    "message": "Kogumisaadress"
+  },
+  "catchallEmailDesc": {
+    "message": "Kasuta domeenipõhist kogumisaadressi."
+  },
+  "random": {
+    "message": "Juhuslik"
+  },
+  "randomWord": {
+    "message": "Juhuslik sõna"
+  },
+  "websiteName": {
+    "message": "Veebilehe nimi"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Mida sa soovid genereerida?"
+  },
+  "passwordType": {
+    "message": "Parooli tüüp"
+  },
+  "service": {
+    "message": "Teenus"
   }
 }

@@ -89,16 +89,16 @@
     "message": "Passwort generieren (kopiert)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Benutzerdefinierten Feldnamen kopieren"
   },
   "noMatchingLogins": {
     "message": "Keine passenden Zugangsdaten."
   },
-  "vaultLocked": {
-    "message": "Der Tresor ist gesperrt."
+  "unlockVaultMenu": {
+    "message": "Entsperre deinen Tresor"
   },
-  "vaultLoggedOut": {
-    "message": "Der Tresor ist ausgeloggt."
+  "loginToVaultMenu": {
+    "message": "In deinem Tresor anmelden"
   },
   "autoFillInfo": {
     "message": "Für den aktuellen Browser-Tab gibt es keine passenden Zugangsdaten, welche automatisch ausgefüllt werden können."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Weiter"
   },
+  "sendVerificationCode": {
+    "message": "Einen Bestätigungscode an deine E-Mail senden"
+  },
+  "sendCode": {
+    "message": "Send Code"
+  },
+  "codeSent": {
+    "message": "Code gesendet"
+  },
   "verificationCode": {
     "message": "Verifizierungscode"
+  },
+  "confirmIdentity": {
+    "message": "Bestätige deine Identität, um fortzufahren."
   },
   "account": {
     "message": "Konto"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Länge"
   },
+  "uppercase": {
+    "message": "Großbuchstaben (A-Z)"
+  },
+  "lowercase": {
+    "message": "Kleinbuchstaben (a-z)"
+  },
+  "numbers": {
+    "message": "Zahlen (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Sonderzeichen (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Anzahl der Wörter"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "Den Browser unterstützt das einfache Kopieren nicht. Bitte kopiere es manuell."
   },
-  "verifyMasterPassword": {
-    "message": "Master-Passwort verifizieren"
+  "verifyIdentity": {
+    "message": "Identität verifizieren"
   },
   "yourVaultIsLocked": {
     "message": "Dein Tresor ist gesperrt. Überprüfe dein Master-Passwort um fortzufahren."
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Verifizierungscode wird benötigt."
+  },
+  "invalidVerificationCode": {
+    "message": "Ungültiger Verifizierungscode"
   },
   "valueCopied": {
     "message": "$VALUE$ kopiert",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Sind Sie sicher, dass Sie das aktuelle Passwort ersetzen möchten?"
   },
+  "overwriteUsername": {
+    "message": "Benutzername überschreiben"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Bist du sicher, dass du den aktuellen Benutzernamen überschreiben möchtest?"
+  },
   "searchFolder": {
     "message": "Ordner durchsuchen"
   },
@@ -559,9 +592,6 @@
   },
   "notificationAddSave": {
     "message": "Ja, jetzt speichern"
-  },
-  "notificationNeverSave": {
-    "message": "Niemals für diese Webseite"
   },
   "disableChangedPasswordNotification": {
     "message": "Passwort geändert Benachrichtigung deaktivieren"
@@ -777,7 +807,7 @@
     "message": "Ist ein Authentifizierungsschlüssel mit deinen Zugangsdaten verknüpft, wird der TOTP Bestätigungscode automatisch in die Zwischenablage kopiert, wenn du die Zugangsdaten einfügen lässt."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Beim Start nicht nach biometrischen Daten fragen"
   },
   "premiumRequired": {
     "message": "Premium-Mitgliedschaft wird benötigt"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Den Tresor sperren"
   },
-  "privateModeMessage": {
-    "message": "Leider ist dieses Fenster nicht im privaten Modus für diesen Browser verfügbar."
+  "privateModeWarning": {
+    "message": "Die Unterstützung des privaten Modus ist experimentell und einige Funktionen sind eingeschränkt."
   },
   "customFields": {
     "message": "Benutzerdefinierte Felder"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Ja/Nein"
+  },
+  "cfTypeLinked": {
+    "message": "Verknüpft",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Verknüpfter Inhalt",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Dieses Pop-up Fenster wird geschlossen, wenn du außerhalb des Fensters klickst um in deinen E-Mails nach dem Verifizierungscode zu suchen. Möchtest du, dass dieses Pop-up in einem separaten Fenster geöffnet wird, damit es nicht geschlossen wird?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Nachname"
+  },
+  "fullName": {
+    "message": "Vollständiger Name"
   },
   "identityName": {
     "message": "Identitätsname"
@@ -1198,7 +1239,12 @@
     "message": "Dieses Kennwort wurde in keinen bekannten Datensätzen gefunden. Es sollte sicher sein."
   },
   "baseDomain": {
-    "message": "Basis-Domäne"
+    "message": "Basis-Domäne",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain-Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Server",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Ungültiger PIN-Code."
-  },
-  "verifyPin": {
-    "message": "PIN bestätigen"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Dein Tresor ist gesperrt. Gebe deinen PIN-Code ein um fortzufahren."
   },
   "unlockWithBiometrics": {
     "message": "Mit Biometrie entsperren"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Maximale Zugriffsanzahl erreicht"
+    "message": "Maximale Zugriffsanzahl erreicht",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Abgelaufen"
@@ -1760,34 +1801,34 @@
     "message": "Du musst deine E-Mail Adresse verifizieren, um diese Funktion nutzen zu können. Du kannst deine E-Mail im Web-Tresor verifizieren."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Master-Passwort aktualisiert"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Master-Passwort aktualisieren"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Dein Master-Passwort wurde kürzlich von einem Administrator Ihrer Organisation geändert. Um auf den Tresor zuzugreifen, musst du es jetzt aktualisieren. Wenn du fortfährst, wirst du aus der aktuellen Sitzung abgemeldet, eine erneute Anmeldung wird erforderlich. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatische Registrierung"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch zum Zurücksetzen deines Passworts registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Ordner auswählen..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Um die Anmeldung über SSO abzuschließen, lege bitte ein Master-Passwort fest, um auf deinen Tresor zuzugreifen und ihn zu schützen."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Stunden"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minuten"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Deine Unternehmensrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout ist $HOURS$ Stunde(n) und $MINUTES$ Minute(n)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Tresor-Export deaktiviert"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Eine oder mehrere Unternehmensrichtlinien hindern dich daran, deinen persönlichen Tresor zu exportieren."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Es konnte kein gültiges Formularelement identifiziert werden. Versuche stattdessen das HTML zu untersuchen."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Keine eindeutige Kennung gefunden."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ verwendet SSO mit einem selbst gehosteten Schlüsselserver. Ein Master-Passwort ist nicht mehr erforderlich, damit sich Mitglieder dieser Organisation anmelden können.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Organisation verlassen"
+  },
+  "removeMasterPassword": {
+    "message": "Master-Passwort entfernen"
+  },
+  "removedMasterPassword": {
+    "message": "Master-Passwort entfernt."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Bist du sicher, dass du diese Organisation verlassen möchtest?"
+  },
+  "leftOrganization": {
+    "message": "Du hast die Organisation verlassen."
+  },
+  "toggleCharacterCount": {
+    "message": "Zeichenzählung ein-/ausschalten"
+  },
+  "sessionTimeout": {
+    "message": "Deine Sitzung ist abgelaufen. Bitte gehe zurück und versuche dich erneut einzuloggen."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Persönlichen Tresor exportieren"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Nur die persönlichen Tresoreinträge, die mit $EMAIL$ verbunden sind, werden exportiert. Tresoreinträge der Organisation werden nicht berücksichtigt.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Fehler"
+  },
+  "regenerateUsername": {
+    "message": "Benutzername neu generieren"
+  },
+  "generateUsername": {
+    "message": "Benutzernamen generieren"
+  },
+  "usernameType": {
+    "message": "Benutzernamentyp"
+  },
+  "plusAddressedEmail": {
+    "message": "Mit Plus adressierte E-Mail",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Verwende die Unteradressierungsmöglichkeiten deines E-Mail-Providers."
+  },
+  "catchallEmail": {
+    "message": "Catch-All E-Mail-Adresse"
+  },
+  "catchallEmailDesc": {
+    "message": "Verwende den konfigurierten Catch-All-Posteingang deiner Domain."
+  },
+  "random": {
+    "message": "Zufällig"
+  },
+  "randomWord": {
+    "message": "Zufälliges Wort"
+  },
+  "websiteName": {
+    "message": "Webseiten-Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Was möchtest du generieren?"
+  },
+  "passwordType": {
+    "message": "Passworttyp"
+  },
+  "service": {
+    "message": "Dienst"
   }
 }

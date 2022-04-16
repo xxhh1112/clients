@@ -89,16 +89,16 @@
     "message": "Vygenerovat heslo a zkopírovat do schránky"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopírovat název vlastního pole"
   },
   "noMatchingLogins": {
     "message": "Žádné odpovídající přihlašovací údaje."
   },
-  "vaultLocked": {
-    "message": "Trezor je zamknutý."
+  "unlockVaultMenu": {
+    "message": "Odemknout váš trezor"
   },
-  "vaultLoggedOut": {
-    "message": "Byli jste odhlášeni."
+  "loginToVaultMenu": {
+    "message": "Přihlaste se do svého trezoru"
   },
   "autoFillInfo": {
     "message": "Pro aktuální stránku neexistují žádné přihlašovací údaje."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Pokračovat"
   },
+  "sendVerificationCode": {
+    "message": "Poslat ověřovací kód na váš e-mail"
+  },
+  "sendCode": {
+    "message": "Poslat kód"
+  },
+  "codeSent": {
+    "message": "Kód odeslán"
+  },
   "verificationCode": {
     "message": "Ověřovací kód"
+  },
+  "confirmIdentity": {
+    "message": "Pro pokračování potvrďte svou identitu."
   },
   "account": {
     "message": "Účet"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Délka"
   },
+  "uppercase": {
+    "message": "Velká písmena (A-Z)"
+  },
+  "lowercase": {
+    "message": "Malá písmena (a-z)"
+  },
+  "numbers": {
+    "message": "Čísla (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Speciální znaky (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Počet slov"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "Váš webový prohlížeč nepodporuje automatické kopírování do schránky. Musíte ho zkopírovat ručně."
   },
-  "verifyMasterPassword": {
-    "message": "Ověření hlavního hesla"
+  "verifyIdentity": {
+    "message": "Ověřit identitu"
   },
   "yourVaultIsLocked": {
     "message": "Váš trezor je uzamčen. Pro pokračování musíte zadat hlavní heslo."
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Ověřovací kód je povinný."
+  },
+  "invalidVerificationCode": {
+    "message": "Neplatný ověřovací kód"
   },
   "valueCopied": {
     "message": "Zkopírováno: $VALUE$",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Opravdu chcete přepsat aktuální heslo?"
   },
+  "overwriteUsername": {
+    "message": "Overwrite Username"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Are you sure you want to overwrite the current username?"
+  },
   "searchFolder": {
     "message": "Vyhledat ve složce"
   },
@@ -559,9 +592,6 @@
   },
   "notificationAddSave": {
     "message": "Ano, uložit nyní"
-  },
-  "notificationNeverSave": {
-    "message": "Nikdy pro tuto stránku"
   },
   "disableChangedPasswordNotification": {
     "message": "Vypnout oznámení o změněném heslu"
@@ -777,7 +807,7 @@
     "message": "Pokud mají vaše přihlašovací údaje přidán autentizační klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Neptat se na biometriku při spuštění."
   },
   "premiumRequired": {
     "message": "Vyžaduje prémiové členství"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Zamknout trezor"
   },
-  "privateModeMessage": {
-    "message": "Bohužel toto okno není v tomto prohlížeči k dispozici v soukromém režimu."
+  "privateModeWarning": {
+    "message": "Podpora soukromého režimu je experimentální a některé funkce jsou omezené."
   },
   "customFields": {
     "message": "Vlastní pole"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Ano/Ne"
+  },
+  "cfTypeLinked": {
+    "message": "Propojené",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Propojená hodnota",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Klepnutím mimo vyskakovací okno při zjišťování ověřovacího kódu zaslaného na e-mail bude vyskakovací okno zavřeno. Chcete otevřít toto vyskakovací okno v novém okně, aby se nezavřelo?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Příjmení"
+  },
+  "fullName": {
+    "message": "Celé jméno"
   },
   "identityName": {
     "message": "Název identity"
@@ -1198,7 +1239,12 @@
     "message": " V žádném ze známých případů nedošlo k úniku tohoto hesla. Mělo by být bezpečné používat jej i nadále."
   },
   "baseDomain": {
-    "message": "Základní doména"
+    "message": "Základní doména",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Neplatný PIN kód."
-  },
-  "verifyPin": {
-    "message": "Ověřit PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Váš trezor je uzamčen. Pro pokračování musíte zadat PIN."
   },
   "unlockWithBiometrics": {
     "message": "Odemknout pomocí biometrie"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Dosažen maximální počet přístupů"
+    "message": "Dosažen maximální počet přístupů",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Vypršela platnost"
@@ -1760,34 +1801,34 @@
     "message": "Abyste mohli tuto funkci používat, musíte ověřit svůj e-mail. Svůj e-mail můžete ověřit ve webovém trezoru."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Hlavní heslo aktualizováno"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Změnit hlavní heslo"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Administrátor v organizaci nedávno změnil vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování vás odhlásí z vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatická registrace"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Tato organizace má podnikové zásady, které vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit vaše hlavní heslo."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Vyberte složku"
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Chcete-li dokončit přihlášení pomocí SSO, nastavte prosím hlavní přístupové heslo k vašemu trezoru."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Hodin"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minuty"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Pravidla vaší organizace ovlivňují časový limit trezoru. Maximální povolený časový limit trezoru je $HOURS$ hodin a $MINUTES$ minut",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Časový limit vašeho trezoru překračuje omezení stanovená vaší organizací."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Export trezoru zakázán"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Jedna nebo více zásad organizace vám brání v exportu vašeho osobního trezoru."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Nelze identifikovat platný prvek formuláře. Zkuste místo toho zkontrolovat HTML."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Nenalezen žádný jedinečný identifikátor."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ používá SSO s vlastním klíčovým serverem. Hlavní heslo pro členy této organizace již není vyžadováno.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Opustit organizaci"
+  },
+  "removeMasterPassword": {
+    "message": "Odstranit hlavní heslo"
+  },
+  "removedMasterPassword": {
+    "message": "Hlavní heslo bylo odstraněno."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Opravdu chcete tuto organizaci opustit?"
+  },
+  "leftOrganization": {
+    "message": "Opustili jste organizaci."
+  },
+  "toggleCharacterCount": {
+    "message": "Zobrazit počet znaků"
+  },
+  "sessionTimeout": {
+    "message": "Vypršel časový limit relace. Vraťte se prosím zpět a zkuste se znovu přihlásit."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Exporting Personal Vault"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Error"
+  },
+  "regenerateUsername": {
+    "message": "Regenerate Username"
+  },
+  "generateUsername": {
+    "message": "Generate Username"
+  },
+  "usernameType": {
+    "message": "Username Type"
+  },
+  "plusAddressedEmail": {
+    "message": "Plus Addressed Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Use your email provider's sub-addressing capabilities."
+  },
+  "catchallEmail": {
+    "message": "Catch-all Email"
+  },
+  "catchallEmailDesc": {
+    "message": "Use your domain's configured catch-all inbox."
+  },
+  "random": {
+    "message": "Random"
+  },
+  "randomWord": {
+    "message": "Random Word"
+  },
+  "websiteName": {
+    "message": "Website Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "What would you like to generate?"
+  },
+  "passwordType": {
+    "message": "Password Type"
+  },
+  "service": {
+    "message": "Service"
   }
 }

@@ -94,11 +94,11 @@
   "noMatchingLogins": {
     "message": "പൊരുത്തപ്പെടുന്ന ലോഗിനുകളൊന്നുമില്ല."
   },
-  "vaultLocked": {
-    "message": "വാൾട് പൂട്ടിയിരിക്കുന്നു "
+  "unlockVaultMenu": {
+    "message": "Unlock your vault"
   },
-  "vaultLoggedOut": {
-    "message": "വാൾട് ലോഗ് ഔട്ട് ചെയ്തിരിക്കുന്നു "
+  "loginToVaultMenu": {
+    "message": "Log in to your vault"
   },
   "autoFillInfo": {
     "message": "നിലവിലെ ബ്രൌസർ  ടാബിന് ഓട്ടോഫിൽ ചെയ്യാൻ പ്രവേശനങ്ങൾ ലഭ്യമല്ല."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "തുടരുക"
   },
+  "sendVerificationCode": {
+    "message": "Send a verification code to your email"
+  },
+  "sendCode": {
+    "message": "Send Code"
+  },
+  "codeSent": {
+    "message": "Code Sent"
+  },
   "verificationCode": {
     "message": "പരിശോധിച്ചുറപ്പിക്കൽ കോഡ്"
+  },
+  "confirmIdentity": {
+    "message": "Confirm your identity to continue."
   },
   "account": {
     "message": "അക്കൗണ്ട്"
@@ -217,6 +229,18 @@
   "length": {
     "message": "നീളം"
   },
+  "uppercase": {
+    "message": "Uppercase (A-Z)"
+  },
+  "lowercase": {
+    "message": "Lowercase (a-z)"
+  },
+  "numbers": {
+    "message": "Numbers (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Special Characters (!@#$%^&*)"
+  },
   "numWords": {
     "message": "വാക്കുകളുടെ എണ്ണം"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "നിങ്ങളുടെ ബ്രൌസർ എളുപ്പമുള്ള ക്ലിപ്പ്ബോർഡ് പകർത്തൽ പിന്തുണയ്ക്കത്തില്ല. പകരം അത് സ്വമേധയാ പകർക്കുക ."
   },
-  "verifyMasterPassword": {
-    "message": "പ്രാഥമിക പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക"
+  "verifyIdentity": {
+    "message": "Verify Identity"
   },
   "yourVaultIsLocked": {
     "message": "തങ്ങളുടെ വാൾട്  പൂട്ടിയിരിക്കുന്നു. തുടരുന്നതിന് നിങ്ങളുടെ പ്രാഥമിക പാസ്‌വേഡ് പരിശോധിക്കുക."
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "പരിശോധിച്ചുറപ്പിക്കൽ കോഡ് ആവശ്യമാണ്."
+  },
+  "invalidVerificationCode": {
+    "message": "Invalid verification code"
   },
   "valueCopied": {
     "message": "$VALUE$ പകർത്തി",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "നിലവിലെ പാസ്‌വേഡ് പുനരാലേഖനം ചെയ്യണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?"
   },
+  "overwriteUsername": {
+    "message": "Overwrite Username"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Are you sure you want to overwrite the current username?"
+  },
   "searchFolder": {
     "message": "ഫോൾഡറുകൾ തിരയുക"
   },
@@ -559,9 +592,6 @@
   },
   "notificationAddSave": {
     "message": "ശരി, ഇപ്പോൾ സംരക്ഷിക്കുക"
-  },
-  "notificationNeverSave": {
-    "message": "ഈ വെബ്‌സൈറ്റിനായി ഒരിക്കലും"
   },
   "disableChangedPasswordNotification": {
     "message": "മാറ്റിയ പാസ്‌വേഡ് അറിയിപ്പ് പ്രവർത്തനരഹിതമാക്കുക"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "നിലവറ പൂട്ടുക"
   },
-  "privateModeMessage": {
-    "message": "നിർഭാഗ്യവശാൽ ഈ വിൻഡോ ബ്രൗസറിന്റെ സ്വകാര്യ മോഡിൽ ലഭ്യമല്ല."
+  "privateModeWarning": {
+    "message": "Private mode support is experimental and some features are limited."
   },
   "customFields": {
     "message": "ഇഷ്‌ടാനുസൃത ഫീൽഡുകൾ"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "ബൂളിയൻ"
+  },
+  "cfTypeLinked": {
+    "message": "Linked",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Linked value",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "നിങ്ങളുടെ സ്ഥിരീകരണ കോഡിനായി നിങ്ങളുടെ ഇമെയിൽ പരിശോധിക്കുന്നതിന് പോപ്പ്അപ്പ് വിൻഡോയ്ക്ക് പുറത്ത് ക്ലിക്കുചെയ്യുന്നത് ഈ പോപ്പ്അപ്പ് അടയ്‌ക്കുന്നതിന് കാരണമാകും. ഈ പോപ്പ്അപ്പ് അടയ്‌ക്കാത്തവിധം ഒരു പുതിയ വിൻ‌ഡോയിൽ‌ തുറക്കാൻ‌ നിങ്ങൾ‌ താൽ‌പ്പര്യപ്പെടുന്നോ?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "പേരിന്റെ അവസാന ഭാഗം"
+  },
+  "fullName": {
+    "message": "Full Name"
   },
   "identityName": {
     "message": "ഐഡന്റിറ്റിയുടെ പേര്"
@@ -1198,7 +1239,12 @@
     "message": "അറിയപ്പെടുന്ന ഡാറ്റാ ലംഘനങ്ങളിൽ ഈ പാസ്‌വേഡ് കണ്ടെത്തിയില്ല. ഇത് ഉപയോഗിക്കുന്നത് സുരക്ഷിതമായിരിക്കും."
   },
   "baseDomain": {
-    "message": "അടിസ്ഥാന ഡൊമെയ്ൻ"
+    "message": "അടിസ്ഥാന ഡൊമെയ്ൻ",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "ഹോസ്റ്റ്",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": " പിൻ കോഡ് അസാധുവാണ്."
-  },
-  "verifyPin": {
-    "message": "പിൻ സ്ഥിരീകരിക്കുക"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "നിങ്ങളുടെ വാൾട് പൂട്ടിയിരിക്കുന്നു. തുടരാൻ പിൻ കോഡ് സ്ഥിരീകരിക്കുക."
   },
   "unlockWithBiometrics": {
     "message": "Unlock with biometrics"
@@ -1465,7 +1505,7 @@
     "message": "Start the Bitwarden Desktop application"
   },
   "startDesktopDesc": {
-    "message": "The Bitwarden Desktop application needs to be started before this function can be used."
+    "message": "The Bitwarden Desktop application needs to be started before unlock with biometrics can be used."
   },
   "errorEnableBiometricTitle": {
     "message": "Unable to enable biometrics"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Max access count reached"
+    "message": "Max access count reached",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Expired"
@@ -1813,5 +1854,90 @@
   },
   "copyCustomFieldNameNotUnique": {
     "message": "No unique identifier found."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Leave Organization"
+  },
+  "removeMasterPassword": {
+    "message": "Remove Master Password"
+  },
+  "removedMasterPassword": {
+    "message": "Master password removed."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Are you sure you want to leave this organization?"
+  },
+  "leftOrganization": {
+    "message": "You have left the organization."
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count"
+  },
+  "sessionTimeout": {
+    "message": "Your session has timed out. Please go back and try logging in again."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Exporting Personal Vault"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Error"
+  },
+  "regenerateUsername": {
+    "message": "Regenerate Username"
+  },
+  "generateUsername": {
+    "message": "Generate Username"
+  },
+  "usernameType": {
+    "message": "Username Type"
+  },
+  "plusAddressedEmail": {
+    "message": "Plus Addressed Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Use your email provider's sub-addressing capabilities."
+  },
+  "catchallEmail": {
+    "message": "Catch-all Email"
+  },
+  "catchallEmailDesc": {
+    "message": "Use your domain's configured catch-all inbox."
+  },
+  "random": {
+    "message": "Random"
+  },
+  "randomWord": {
+    "message": "Random Word"
+  },
+  "websiteName": {
+    "message": "Website Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "What would you like to generate?"
+  },
+  "passwordType": {
+    "message": "Password Type"
+  },
+  "service": {
+    "message": "Service"
   }
 }

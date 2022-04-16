@@ -89,16 +89,16 @@
     "message": "Generiraj lozinku (i kopiraj)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopiranje prilagođenog naziva polja"
   },
   "noMatchingLogins": {
     "message": "Nema podudarajućih prijava."
   },
-  "vaultLocked": {
-    "message": "Trezor je zaključan."
+  "unlockVaultMenu": {
+    "message": "Otključaj trezor"
   },
-  "vaultLoggedOut": {
-    "message": "Trezor je odjavljen."
+  "loginToVaultMenu": {
+    "message": "Prijavite se u svoj trezor"
   },
   "autoFillInfo": {
     "message": "Nema dostupnih prijava za auto-ispunu na web stranici u ovoj kartici."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Nastavi"
   },
+  "sendVerificationCode": {
+    "message": "Slanje verifikacijskog kôda e-poštom"
+  },
+  "sendCode": {
+    "message": "Pošalji kôd"
+  },
+  "codeSent": {
+    "message": "Kôd poslan"
+  },
   "verificationCode": {
     "message": "Kôd za provjeru"
+  },
+  "confirmIdentity": {
+    "message": "Potvrdite lozinku za nastavak."
   },
   "account": {
     "message": "Račun"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Duljina"
   },
+  "uppercase": {
+    "message": "Velika slova (A-Z)"
+  },
+  "lowercase": {
+    "message": "Mala slova (a-z)"
+  },
+  "numbers": {
+    "message": "Brojevi (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Posebni znakovi (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Broj riječi"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "Web preglednik ne podržava jednostavno kopiranje međuspremnika. Umjesto toga ručno kopirajte."
   },
-  "verifyMasterPassword": {
-    "message": "Potvrdi glavnu lozinku"
+  "verifyIdentity": {
+    "message": "Potvrdi identitet"
   },
   "yourVaultIsLocked": {
     "message": "Tvoj trezor je zaključan. Potvrdi glavnu lozinku za nastavak."
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Potvrdni kôd je obavezan."
+  },
+  "invalidVerificationCode": {
+    "message": "Nevažeći kôd za provjeru"
   },
   "valueCopied": {
     "message": " kopirano",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Sigurno želiš prebrisati trenutnu lozinku?"
   },
+  "overwriteUsername": {
+    "message": "Overwrite Username"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Are you sure you want to overwrite the current username?"
+  },
   "searchFolder": {
     "message": "Mapa pretraživanja"
   },
@@ -558,10 +591,7 @@
     "message": "Treba li Bitwarden zapamtiti ovu lozinku?"
   },
   "notificationAddSave": {
-    "message": "Da, spremi sad"
-  },
-  "notificationNeverSave": {
-    "message": "Ne pitaj više za ovu stranicu"
+    "message": "Spremi"
   },
   "disableChangedPasswordNotification": {
     "message": "Onemogući upit za spremanje ažurirane lozinke"
@@ -573,7 +603,7 @@
     "message": "Želiš li ovu lozinku ažurirati u Bitwarden-u?"
   },
   "notificationChangeSave": {
-    "message": "Da, ažuriraj sada"
+    "message": "Ažuriraj"
   },
   "disableContextMenuItem": {
     "message": "Onemogući kontekstualni izbornik u pregledniku"
@@ -777,7 +807,7 @@
     "message": "Ako se za prijavu koristi dvostruka autentifikacija, TOTP kontrolni kôd se automatski kopira u međuspremnik nakon auto-ispune korisničkog imena i lozinke."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Ne traži biometriju pri pokretanju"
   },
   "premiumRequired": {
     "message": "Potrebno premium članstvo"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Zaključaj trezor"
   },
-  "privateModeMessage": {
-    "message": "Nažalost, ovaj prozor nije dostupan u privatnom načinu ovog preglednika."
+  "privateModeWarning": {
+    "message": "Private mode support is experimental and some features are limited."
   },
   "customFields": {
     "message": "Prilagođena polja"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "cfTypeLinked": {
+    "message": "Povezano",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Povezana vrijednost",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Ako klikneš izvan iskočnog prozora, za provjeru kontrolnog kôda iz e-pošte, on će se zatvoriti. Želiš li ovaj iskočni prozor otvoriti u novom prozoru kako se ne bi zatvorio?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Prezime"
+  },
+  "fullName": {
+    "message": "Ime i prezime"
   },
   "identityName": {
     "message": "Ime identiteta"
@@ -1198,7 +1239,12 @@
     "message": "Lozinka nije pronađena niti u jednoj krađi podataka. Sigurna je za korištenje."
   },
   "baseDomain": {
-    "message": "Primarna domena"
+    "message": "Primarna domena",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Nerispravan PIN."
-  },
-  "verifyPin": {
-    "message": "Potvrdi PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Tvoj trezor je zaključan. Potvrdi PIN-om za nastavak."
   },
   "unlockWithBiometrics": {
     "message": "Otključaj biometrijom"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Dostignut najveći broj pristupanja"
+    "message": "Dostignut najveći broj pristupanja",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Isteklo"
@@ -1760,34 +1801,34 @@
     "message": "Moraš ovjeriti svoju e-poštu u mrežnom trezoru za koritšenje ove značajke."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Glavna lozinka ažurirana"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Ažuriraj glavnu lozinku"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatsko učlanjenje"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Odaberi mapu..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Za dovršetak jedinstvene prijave na razini tvrtke (SSO), postavi glavnu lozinku za pristup i zaštitu tvog trezora."
   },
   "hours": {
-    "message": "Hours"
+    "message": "sat(i)"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "minuta"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Pravilo tvoje organizacije utječe na istek trezora. Najveće dozvoljeno vrijeme isteka je $HOURS$:$MINUTES$ h.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Vrijeme isteka premašuje ograničenje koju je postavila tvoja organizacija."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Izvoz trezora onemogućen"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. "
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Nije moguće identificirati valjani element formulara. Pokušaj provjeriti HTML."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Nije nađen jedinstveni identifikator."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ koristi jedinstvenu prijavu SSO s vlastitim poslužiteljem. Članovima organizacije glavna lozinka više nije potrebna.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Napusti organizaciju"
+  },
+  "removeMasterPassword": {
+    "message": "Ukloni glavnu lozinku"
+  },
+  "removedMasterPassword": {
+    "message": "Glavna lozinka uklonjena."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Sigurno želiš napustiti ovu organizaciju?"
+  },
+  "leftOrganization": {
+    "message": "Organizacija napuštena."
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count"
+  },
+  "sessionTimeout": {
+    "message": "Your session has timed out. Please go back and try logging in again."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Exporting Personal Vault"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Error"
+  },
+  "regenerateUsername": {
+    "message": "Regenerate Username"
+  },
+  "generateUsername": {
+    "message": "Generate Username"
+  },
+  "usernameType": {
+    "message": "Username Type"
+  },
+  "plusAddressedEmail": {
+    "message": "Plus Addressed Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Use your email provider's sub-addressing capabilities."
+  },
+  "catchallEmail": {
+    "message": "Catch-all Email"
+  },
+  "catchallEmailDesc": {
+    "message": "Use your domain's configured catch-all inbox."
+  },
+  "random": {
+    "message": "Random"
+  },
+  "randomWord": {
+    "message": "Random Word"
+  },
+  "websiteName": {
+    "message": "Website Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "What would you like to generate?"
+  },
+  "passwordType": {
+    "message": "Password Type"
+  },
+  "service": {
+    "message": "Service"
   }
 }

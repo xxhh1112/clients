@@ -89,16 +89,16 @@
     "message": "Wachtwoord genereren (op klembord)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Aangepaste veldnaam kopiëren"
   },
   "noMatchingLogins": {
     "message": "Geen overeenkomstige logins."
   },
-  "vaultLocked": {
-    "message": "Kluis is vergrendeld."
+  "unlockVaultMenu": {
+    "message": "Ontgrendel je kluis"
   },
-  "vaultLoggedOut": {
-    "message": "Kluis is uitgelogd."
+  "loginToVaultMenu": {
+    "message": "Log in op je kluis"
   },
   "autoFillInfo": {
     "message": "Er zijn geen logins beschikbaar om op het huidige browser-tabblad in te vullen."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Doorgaan"
   },
+  "sendVerificationCode": {
+    "message": "Stuur een verificatiecode naar je e-mail"
+  },
+  "sendCode": {
+    "message": "Code versturen"
+  },
+  "codeSent": {
+    "message": "Code verstuurd"
+  },
   "verificationCode": {
     "message": "Verificatiecode"
+  },
+  "confirmIdentity": {
+    "message": "Bevestig je identiteit om door te gaan."
   },
   "account": {
     "message": "Account"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Lengte"
   },
+  "uppercase": {
+    "message": "Hoofdletters (A-Z)"
+  },
+  "lowercase": {
+    "message": "Kleine letters (a-z)"
+  },
+  "numbers": {
+    "message": "Cijfers (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Speciale tekens (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Aantal woorden"
   },
@@ -308,11 +332,11 @@
   "browserNotSupportClipboard": {
     "message": "Je webbrowser ondersteunt kopiëren naar plakbord niet. Kopieer handmatig."
   },
-  "verifyMasterPassword": {
-    "message": "Hoofdwachtwoord invoeren"
+  "verifyIdentity": {
+    "message": "Identiteit verifiëren"
   },
   "yourVaultIsLocked": {
-    "message": "Je kluis is vergrendeld. Voer je hoofdwachtwoord in om door te gaan."
+    "message": "Je kluis is vergrendeld. Bevestig je identiteit om door te gaan."
   },
   "unlock": {
     "message": "Ontgrendelen"
@@ -410,6 +434,9 @@
   },
   "verificationCodeRequired": {
     "message": "Verificatiecode is vereist."
+  },
+  "invalidVerificationCode": {
+    "message": "Ongeldige verificatiecode"
   },
   "valueCopied": {
     "message": "$VALUE$ gekopieerd",
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Weet je zeker dat je het huidige wachtwoord wilt overschrijven?"
   },
+  "overwriteUsername": {
+    "message": "Gebruikersnaam overschrijven"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?"
+  },
   "searchFolder": {
     "message": "Map doorzoeken"
   },
@@ -559,9 +592,6 @@
   },
   "notificationAddSave": {
     "message": "Ja, nu opslaan"
-  },
-  "notificationNeverSave": {
-    "message": "Nooit voor deze website"
   },
   "disableChangedPasswordNotification": {
     "message": "Melding gewijzigd wachtwoord uitschakelen"
@@ -777,7 +807,7 @@
     "message": "Als je login gekoppeld is met een authenticatiecode, wordt de TOTP-verificatiecode automatisch naar het klembord gekopieerd bij het automatisch invullen van de login."
   },
   "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+    "message": "Bij opstarten niet om biometrisch ontgrendelen vragen"
   },
   "premiumRequired": {
     "message": "Premium is vereist"
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Kluis vergrendelen"
   },
-  "privateModeMessage": {
-    "message": "Dit scherm is helaas niet beschikbaar in het privévenster van deze browser."
+  "privateModeWarning": {
+    "message": "Private mode support is experimental and some features are limited."
   },
   "customFields": {
     "message": "Aangepaste velden"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "cfTypeLinked": {
+    "message": "Gekoppeld",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Gekoppelde waarde",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Als je buiten het pop-upvenster klikt om je e-mail te controleren op een verificatiecode, dan zal de pop-up sluiten. Wil je het pop-upvenster openen in een nieuw scherm, zodat het niet wordt gesloten?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Achternaam"
+  },
+  "fullName": {
+    "message": "Volledige naam"
   },
   "identityName": {
     "message": "Identiteitsnaam"
@@ -1198,7 +1239,12 @@
     "message": "Dit wachtwoord is niet gevonden in bekende gegevenslekken. Het kan veilig gebruikt worden."
   },
   "baseDomain": {
-    "message": "Basisdomein"
+    "message": "Basisdomein",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domeinnaam",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Hostnaam",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Ongeldige PIN-code."
-  },
-  "verifyPin": {
-    "message": "PIN-code invoeren"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Je kluis is vergrendeld. Voer je PIN-code in om door te gaan."
   },
   "unlockWithBiometrics": {
     "message": "Biometrisch ontgrendelen"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Maximum aantal keren benaderd"
+    "message": "Maximum aantal keren benaderd",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Verlopen"
@@ -1760,34 +1801,34 @@
     "message": "Je moet je e-mailadres verifiëren om deze functie te gebruiken. Je kunt je e-mailadres verifiëren in de kluis."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Hoofdwachtwoord bijgewerkt"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Hoofdwachtwoord bijgewerken"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Je hoofdwachtwoord is onlangs veranderd door een beheerder in jouw organisatie. Om toegang te krijgen tot de kluis, moet je deze nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatische inschrijving"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen."
   },
   "selectFolder": {
-    "message": "Select folder..."
+    "message": "Map selecteren..."
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "Voor het inloggen met SSO moet je een hoofdwachtwoord instellen voor toegang tot en bescherming van je kluis."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Uren"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minuten"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Het beleid van je organisatie heeft invloed op de time-out van je kluis. De maximaal toegestane kluis time-out is $HOURS$ uur en $MINUTES$ minuten.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1800,18 +1841,103 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+    "message": "Je kluis time-out is hoger dan het maximum van jouw organisatie."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Kluis exporteren uitgeschakeld"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
+    "message": "Kan geen geldig formulierelement identificeren. Probeer in plaats daarvan de HTML te inspecteren."
   },
   "copyCustomFieldNameNotUnique": {
-    "message": "No unique identifier found."
+    "message": "Geen unieke id gevonden."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ gebruikt SSO met een zelf gehoste sleutelserver. Leden van deze organisatie kunnen inloggen zonder hoofdwachtwoord.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Organisatie verlaten"
+  },
+  "removeMasterPassword": {
+    "message": "Hoofdwachtwoord verwijderen"
+  },
+  "removedMasterPassword": {
+    "message": "Hoofdwachtwoord verwijderd."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Weet je zeker dat je deze organisatie wilt verlaten?"
+  },
+  "leftOrganization": {
+    "message": "Je hebt de organisatie verlaten."
+  },
+  "toggleCharacterCount": {
+    "message": "Tekentelling in-/uitschakelen"
+  },
+  "sessionTimeout": {
+    "message": "Je sessie is verlopen. Ga terug en probeer opnieuw in te loggen."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Persoonlijke kluis exporteren"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Exporteert alleen de persoonlijke kluis-items gerelateerd aan $EMAIL$. Geen kluis-items van de organisatie.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Fout"
+  },
+  "regenerateUsername": {
+    "message": "Gebruikersnaam opnieuw genereren"
+  },
+  "generateUsername": {
+    "message": "Gebruikersnamen genereren"
+  },
+  "usernameType": {
+    "message": "Type gebruikersnaam"
+  },
+  "plusAddressedEmail": {
+    "message": "E-mailadres-met-plus",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Gebruik de subadressen van je e-mailprovider."
+  },
+  "catchallEmail": {
+    "message": "Catch-all e-mail"
+  },
+  "catchallEmailDesc": {
+    "message": "Gebruik de catch-all inbox van je domein."
+  },
+  "random": {
+    "message": "Willekeurig"
+  },
+  "randomWord": {
+    "message": "Willekeurig woord"
+  },
+  "websiteName": {
+    "message": "Websitenaam"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Wat wil je genereren?"
+  },
+  "passwordType": {
+    "message": "Type wachtwoord"
+  },
+  "service": {
+    "message": "Dienst"
   }
 }

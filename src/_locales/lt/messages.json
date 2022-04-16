@@ -20,7 +20,7 @@
     "message": "Prisijungti"
   },
   "enterpriseSingleSignOn": {
-    "message": "Enterprise Single Sign-On"
+    "message": "Vienkartinis įmonės prisijungimas"
   },
   "cancel": {
     "message": "Atšaukti"
@@ -89,16 +89,16 @@
     "message": "Kurti slaptažodį (paruoštas įterpti)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Kopijuoti pritaikyto laukelio pavadinimą"
   },
   "noMatchingLogins": {
     "message": "Nėra atitinkančių prisijungimų."
   },
-  "vaultLocked": {
-    "message": "Saugykla užrakinta."
+  "unlockVaultMenu": {
+    "message": "Unlock your vault"
   },
-  "vaultLoggedOut": {
-    "message": "Atsijungta nuo saugyklos."
+  "loginToVaultMenu": {
+    "message": "Log in to your vault"
   },
   "autoFillInfo": {
     "message": "Nėra galimų prisijungimų prie dabartinio naršyklės skirtuko."
@@ -121,8 +121,20 @@
   "continue": {
     "message": "Tęsti"
   },
+  "sendVerificationCode": {
+    "message": "Siųsti patvirtinimo kodą į el. paštą"
+  },
+  "sendCode": {
+    "message": "Siųsti kodą"
+  },
+  "codeSent": {
+    "message": "Kodas išsiųstas"
+  },
   "verificationCode": {
     "message": "Patvirtinimo kodas"
+  },
+  "confirmIdentity": {
+    "message": "Norint tęsti, patvirtinkite tapatybę."
   },
   "account": {
     "message": "Paskyra"
@@ -217,6 +229,18 @@
   "length": {
     "message": "Ilgis"
   },
+  "uppercase": {
+    "message": "Uppercase (A-Z)"
+  },
+  "lowercase": {
+    "message": "Lowercase (a-z)"
+  },
+  "numbers": {
+    "message": "Numbers (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Special Characters (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Žodžių skaičius"
   },
@@ -308,8 +332,8 @@
   "browserNotSupportClipboard": {
     "message": "Jūsų žiniatinklio naršyklė nepalaiko automatinio kopijavimo. Vietoj to nukopijuokite rankiniu būdu."
   },
-  "verifyMasterPassword": {
-    "message": "Patikrinkite pagrindinį slaptažodį"
+  "verifyIdentity": {
+    "message": "Verify Identity"
   },
   "yourVaultIsLocked": {
     "message": "Jūsų saugykla užrakinta. Norėdami tęsti, patikrinkite pagrindinį slaptažodį."
@@ -411,6 +435,9 @@
   "verificationCodeRequired": {
     "message": "Būtinas patvirtinimo kodas."
   },
+  "invalidVerificationCode": {
+    "message": "Neteisingas patvirtinimo kodas"
+  },
   "valueCopied": {
     "message": "Nukopijuota $VALUE$",
     "description": "Value has been copied to the clipboard.",
@@ -485,7 +512,7 @@
     "message": "URI"
   },
   "uriPosition": {
-    "message": "URI $POSITION$",
+    "message": "URI adresas $POSITION$",
     "description": "A listing of URIs. Ex: URI 1, URI 2, URI 3, etc.",
     "placeholders": {
       "position": {
@@ -515,6 +542,12 @@
   "overwritePasswordConfirmation": {
     "message": "Ar tikrai norite perrašyti dabartinį slaptažodį?"
   },
+  "overwriteUsername": {
+    "message": "Overwrite Username"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Are you sure you want to overwrite the current username?"
+  },
   "searchFolder": {
     "message": "Ieškoti aplanke"
   },
@@ -535,51 +568,48 @@
     "message": "Prisijungimo pridėjimo pranešimas automatiškai Jūs paragina išsaugoti naujus prisijungimus Jūsų saugykloje, kuomet prisijungiate pirmą kartą."
   },
   "dontShowCardsCurrentTab": {
-    "message": "Don't Show Cards on Tab Page"
+    "message": "Nerodyti kortelių skirtuko puslapyje"
   },
   "dontShowCardsCurrentTabDesc": {
-    "message": "Card items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+    "message": "Kortelių įrašai yra nurodyti „Dabartinis skirtukas“ puslapyje lengvai laukelių užpildymo prieigai."
   },
   "dontShowIdentitiesCurrentTab": {
-    "message": "Don't Show Identities on Tab Page"
+    "message": "Nerodyti tapatybių skirtuko puslapyje"
   },
   "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Identity items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+    "message": "Saugyklos tapatybių įrašai yra nurodyti „Dabartinis skirtukas“ puslapyje lengvai laukelių užpildymo prieigai."
   },
   "clearClipboard": {
     "message": "Išvalyti iškarpinę",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
-    "message": "Automatically clear copied values from your clipboard.",
+    "message": "Automatiškai išvalyti nukopijuotas reikšmes iškarpinėje.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Should Bitwarden remember this password for you?"
+    "message": "Ar „Bitwarden“ turėtų prisiminti šį slaptažodį?"
   },
   "notificationAddSave": {
     "message": "Taip, išsaugoti dabar"
   },
-  "notificationNeverSave": {
-    "message": "Niekada šiai interneto svetainei"
-  },
   "disableChangedPasswordNotification": {
-    "message": "Disable Changed Password Notification"
+    "message": "Išjungti pakeisto slaptažodžio pranešimą"
   },
   "disableChangedPasswordNotificationDesc": {
-    "message": "The \"Changed Password Notification\" automatically prompts you to update a login's password in your vault whenever it detects that you have changed it on a website."
+    "message": "„Pakeisto slaptažodžio pranešimas“ automatiškai ragina atnaujinti slaptažodį saugykloje, kai aptinkamas pakeitimas svetainėje."
   },
   "notificationChangeDesc": {
-    "message": "Do you want to update this password in Bitwarden?"
+    "message": "Ar norite atnaujinti šį slaptažodį „Bitwarden“?"
   },
   "notificationChangeSave": {
     "message": "Taip, atnaujinti dabar"
   },
   "disableContextMenuItem": {
-    "message": "Disable Context Menu Options"
+    "message": "Išjungti kontekstinio meniu nustatymus"
   },
   "disableContextMenuItemDesc": {
-    "message": "Context menu options provide quick access to password generation and logins for the website in your current tab."
+    "message": "Kontekstinio meniu nustatymai suteikia greitą prieigą prie slaptažodžių generavimo ir svetainės prisijungimų dabartiniame skirtuke."
   },
   "defaultUriMatchDetection": {
     "message": "Default URI Match Detection",
@@ -956,8 +986,8 @@
   "commandLockVaultDesc": {
     "message": "Lock the vault"
   },
-  "privateModeMessage": {
-    "message": "Unfortunately this window is not available in private mode for this browser."
+  "privateModeWarning": {
+    "message": "Private mode support is experimental and some features are limited."
   },
   "customFields": {
     "message": "Custom Fields"
@@ -982,6 +1012,14 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "cfTypeLinked": {
+    "message": "Linked",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Linked value",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Clicking outside the popup window to check your email for your verification code will cause this popup to close. Do you want to open this popup in a new window so that it does not close?"
@@ -1084,6 +1122,9 @@
   },
   "lastName": {
     "message": "Last Name"
+  },
+  "fullName": {
+    "message": "Full Name"
   },
   "identityName": {
     "message": "Identity Name"
@@ -1198,7 +1239,12 @@
     "message": "This password was not found in any known data breaches. It should be safe to use."
   },
   "baseDomain": {
-    "message": "Base domain"
+    "message": "Base domain",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Domain Name",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -1308,12 +1354,6 @@
   },
   "invalidPin": {
     "message": "Invalid PIN code."
-  },
-  "verifyPin": {
-    "message": "Verify PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Your vault is locked. Verify your PIN code to continue."
   },
   "unlockWithBiometrics": {
     "message": "Unlock with biometrics"
@@ -1465,7 +1505,7 @@
     "message": "Start the Bitwarden Desktop application"
   },
   "startDesktopDesc": {
-    "message": "The Bitwarden Desktop application needs to be started before this function can be used."
+    "message": "The Bitwarden Desktop application needs to be started before unlock with biometrics can be used."
   },
   "errorEnableBiometricTitle": {
     "message": "Unable to enable biometrics"
@@ -1553,7 +1593,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Max access count reached"
+    "message": "Max access count reached",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Expired"
@@ -1813,5 +1854,90 @@
   },
   "copyCustomFieldNameNotUnique": {
     "message": "No unique identifier found."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Leave Organization"
+  },
+  "removeMasterPassword": {
+    "message": "Remove Master Password"
+  },
+  "removedMasterPassword": {
+    "message": "Master password removed."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Are you sure you want to leave this organization?"
+  },
+  "leftOrganization": {
+    "message": "You have left the organization."
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count"
+  },
+  "sessionTimeout": {
+    "message": "Your session has timed out. Please go back and try logging in again."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Exporting Personal Vault"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Error"
+  },
+  "regenerateUsername": {
+    "message": "Regenerate Username"
+  },
+  "generateUsername": {
+    "message": "Generate Username"
+  },
+  "usernameType": {
+    "message": "Username Type"
+  },
+  "plusAddressedEmail": {
+    "message": "Plus Addressed Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Use your email provider's sub-addressing capabilities."
+  },
+  "catchallEmail": {
+    "message": "Catch-all Email"
+  },
+  "catchallEmailDesc": {
+    "message": "Use your domain's configured catch-all inbox."
+  },
+  "random": {
+    "message": "Random"
+  },
+  "randomWord": {
+    "message": "Random Word"
+  },
+  "websiteName": {
+    "message": "Website Name"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "What would you like to generate?"
+  },
+  "passwordType": {
+    "message": "Password Type"
+  },
+  "service": {
+    "message": "Service"
   }
 }
