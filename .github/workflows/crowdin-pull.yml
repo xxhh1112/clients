@@ -40,7 +40,7 @@ jobs:
 
       - name: Download translations
         #uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea  # v1.3.2
-        uses: bitwarden/gh-actions/crowdin@63cbb6e243a32559c9fdad295042daa74ce19a20
+        uses: bitwarden/gh-actions/crowdin@46414b4d79d44522dffbf171522884b06e26edbb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
