@@ -400,6 +400,18 @@
   "length": {
     "message": "長さ"
   },
+  "uppercase": {
+    "message": "大文字（A-Z）"
+  },
+  "lowercase": {
+    "message": "小文字（a-z）"
+  },
+  "numbers": {
+    "message": "数字 (0～9)"
+  },
+  "specialCharacters": {
+    "message": "特殊文字（!@#$%^&*)"
+  },
   "numWords": {
     "message": "単語数"
   },
@@ -1587,7 +1599,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "最大アクセス数"
+    "message": "最大アクセス数",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "設定されている場合、最大アクセス数に達するとユーザーはこの Send にアクセスできなくなります。",
@@ -1840,6 +1853,12 @@
       }
     }
   },
+  "locked": {
+    "message": "ロック中"
+  },
+  "unlocked": {
+    "message": "ロック解除済み"
+  },
   "generator": {
     "message": "ジェネレーター"
   },
@@ -1859,7 +1878,8 @@
     "message": "ユーザー名の種類"
   },
   "plusAddressedEmail": {
-    "message": "プラス付きのメールアドレス"
+    "message": "プラス付きのメールアドレス",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "メールプロバイダのエイリアス機能を使用します。"
@@ -1881,5 +1901,30 @@
   },
   "service": {
     "message": "サービス"
+  },
+  "allVaults": {
+    "message": "すべての保管庫"
+  },
+  "searchOrganization": {
+    "message": "組織の検索"
+  },
+  "searchMyVault": {
+    "message": "保管庫を検索"
+  },
+  "forwardedEmail": {
+    "message": "転送されたメールエイリアス"
+  },
+  "forwardedEmailDesc": {
+    "message": "外部転送サービスを使用してメールエイリアスを生成します。"
+  },
+  "hostname": {
+    "message": "ホスト名",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API アクセストークン"
+  },
+  "apiKey": {
+    "message": "API キー"
   }
 }
