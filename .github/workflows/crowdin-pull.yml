@@ -42,7 +42,7 @@ jobs:
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
           CROWDIN_PROJECT_ID: ${{ matrix.crowdin_project_id }}
         with:
-          config: apps/${{ matrix.app_name }}/crowdin.yml
+          config: crowdin.yml
           crowdin_branch_name: master
           upload_sources: false
           upload_translations: false
@@ -54,3 +54,4 @@ jobs:
           create_pull_request: true
           pull_request_title: "Autosync Crowdin Translations for ${{ matrix.app_name }}"
           pull_request_body: "Autosync the updated translations"
+        working-directory: apps/${{ matrix.app_name }}
