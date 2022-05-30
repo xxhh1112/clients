@@ -1,55 +1,31 @@
-[![Github Workflow build on master](https://github.com/bitwarden/browser/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/bitwarden/browser/actions/workflows/build.yml?query=branch:master)
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/bitwarden-browser/localized.svg)](https://crowdin.com/project/bitwarden-browser)
-[![Join the chat at https://gitter.im/bitwarden/Lobby](https://badges.gitter.im/bitwarden/Lobby.svg)](https://gitter.im/bitwarden/Lobby)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/apps-combo-logo.png" alt="Bitwarden" />
+</p>
+<p align="center">
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml/badge.svg?branch=master" alt="Github Workflow browser build on master" />
+  </a>
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml/badge.svg?branch=master" alt="Github Workflow desktop build on master" />
+  </a>
+  <a href="https://gitter.im/bitwarden/Lobby" target="_blank">
+    <img src="https://badges.gitter.im/bitwarden/Lobby.svg" alt="gitter chat" />
+  </a>
+</p>
 
-# Bitwarden Browser Extension
+---
 
-<a href="https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb" target="_blank"><img src="https://imgur.com/3C4iKO0.png" width="64" height="64"></a>
-<a href="https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/" target="_blank"><img src="https://imgur.com/ihXsdDO.png" width="64" height="64"></a>
-<a href="https://microsoftedge.microsoft.com/addons/detail/bitwarden-free-password/jbkfoedolllekgbhcbcoahefnbanhhlh" target="_blank"><img src="https://imgur.com/vMcaXaw.png" width="64" height="64"></a>
-<a href="https://addons.opera.com/extensions/details/bitwarden-free-password-manager/" target="_blank"><img src="https://imgur.com/nSJ9htU.png" width="64" height="64"></a>
-<a href="https://bitwarden.com/download/" target="_blank"><img src="https://imgur.com/ENbaWUu.png" width="64" height="64"></a>
-<a href="https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb" target="_blank"><img src="https://imgur.com/EuDp4vP.png" width="64" height="64"></a>
-<a href="https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb" target="_blank"><img src="https://imgur.com/z8yjLZ2.png" width="64" height="64"></a>
-<a href="https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/" target="_blank"><img src="https://imgur.com/MQYBSrD.png" width="64" height="64"></a>
+# Bitwarden Client Applications
 
-The Bitwarden browser extension is written using the Web Extension API and Angular.
+This repository houses all Bitwarden client applications except the [Mobile application](https://github.com/bitwarden/mobile).
 
-![](https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/browser-chrome.png "My Vault")
+Please check the readmes for each application under `apps` for instructions on how to build the different applications.
 
-# Build/Run
+## Related projects:
 
-**Requirements**
-
-- [Node.js](https://nodejs.org) v16.13.1 or greater
-- NPM v8
-- [Gulp](https://gulpjs.com/) (`npm install --global gulp-cli`)
-- Chrome (preferred), Opera, or Firefox browser
-
-**Run the app**
-
-```
-npm install
-npm run build:watch
-```
-
-You can now load the extension into your browser through the browser's extension tools page:
-
-- Chrome/Opera:
-  1. Type `chrome://extensions` in your address bar to bring up the extensions page.
-  2. Enable developer mode (toggle switch)
-  3. Click the "Load unpacked extension" button, navigate to the `build` folder of your local extension instance, and click "Ok".
-- Firefox
-  1. Type `about:debugging` in your address bar to bring up the add-ons page.
-  2. Click the `Load Temporary Add-on` button, navigate to the `build/manifest.json` file, and "Open".
-
-**Desktop communication**
-
-Native Messaging (communication between the desktop application and browser extension) works by having the browser start a lightweight proxy baked into our desktop application.
-
-Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
-
-Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
+- [bitwarden/server](https://github.com/bitwarden/server): The core infrastructure backend (API, database, Docker, etc).
+- [bitwarden/mobile](https://github.com/bitwarden/mobile): The mobile app vault (iOS and Android).
+- [bitwarden/directory-connector](https://github.com/bitwarden/directory-connector): A tool for syncing a directory (AD, LDAP, Azure, G Suite, Okta) to an organization.
 
 # We're Hiring!
 
@@ -61,22 +37,56 @@ Code contributions are welcome! Please commit any pull requests against the `mas
 
 Security audits and feedback are welcome. Please open an issue or email us privately if the report is sensitive in nature. You can read our security policy in the [`SECURITY.md`](SECURITY.md) file.
 
-## Prettier
+## Git blame
 
-We recently migrated to using Prettier as code formatter. All previous branches will need to updated to avoid large merge conflicts using the following steps:
-
-1. Check out your local Branch
-2. Run `git merge cebee8aa81b87cc26157e5bd0f879db254db9319`
-3. Resolve any merge conflicts, commit.
-4. Run `npm run prettier`
-5. Commit
-6. Run `git merge -Xours 8fe821b9a3f9728bcb02d607ca75add468d380c1`
-7. Push
-
-### Git blame
-
-We also recommend that you configure git to ignore the prettier revision using:
+We recommend that you configure git to ignore specific revision using:
 
 ```bash
 git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
+## Migrate PRs from old repositories
+
+We recently migrated from individual client repositories. And some PRs were unfortunately left behind in the old repositories. Luckily it's fairly straightforward to sync them up again. Please follow all the instructions below in order to avoid most merge conflicts.
+
+### Desktop
+
+```
+# Merge master
+git merge master
+
+# Merge branch mono-repo-prep
+git merge 28bc4113b9bbae4dba2b5af14d460764fce79acf
+
+# Verify files are placed in apps/desktop
+
+# Add remote
+git remote add clients git@github.com:bitwarden/clients.git
+
+# Merge against clients master
+git fetch clients
+git merge clients/master
+
+# Push to clients or your own fork
+```
+
+### CLI
+
+```
+# Merge master
+git merge master
+
+# Merge branch mono-repo-prep
+git merge 980429f4bdcb178d8d92d8202cbdacfaa45c917e
+
+# Verify files are placed in apps/cli
+
+# Add remote
+git remote add clients git@github.com:bitwarden/clients.git
+
+# Merge against clients master
+git fetch clients
+git merge clients/master
+
+# Push to clients or your own fork
 ```

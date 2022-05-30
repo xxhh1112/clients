@@ -1,15 +1,23 @@
 # Build directories
-build
-dist
-coverage
+**/build
+**/dist
+**/coverage
 
-jslib
+**/jslib
 
 # External libraries / auto synced locales
-src/_locales
-src/scripts/duo.js
-src/content/autofill.js
-src/safari
+apps/browser/src/_locales
+apps/browser/src/scripts/duo.js
+apps/browser/src/content/autofill.js
+apps/browser/src/safari
+
+apps/desktop/src/locales
+apps/desktop/dist-safari
+apps/desktop/desktop_native
+apps/desktop/src/scripts/duo.js
+
+apps/cli/src/locales
+apps/cli/.github
 
 # Github Workflows
 .github/workflows 
