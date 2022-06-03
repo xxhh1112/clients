@@ -10,7 +10,7 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 import { ProviderService } from "jslib-common/abstractions/provider.service";
 import { EventResponse } from "jslib-common/models/response/eventResponse";
 
-import { BaseEventsComponent } from "src/app/common/base.events.component";
+import { BaseEventsComponent } from "src/app/components/common/base.events.component";
 import { EventService } from "src/app/services/event.service";
 
 @Component({

@@ -1,24 +1,24 @@
 import { NgModule } from "@angular/core";
 
-import { LooseComponentsModule } from "./modules/loose-components.module";
-import { OrganizationManageModule } from "./modules/organizations/manage/organization-manage.module";
-import { OrganizationUserModule } from "./modules/organizations/users/organization-user.module";
-import { PipesModule } from "./modules/pipes/pipes.module";
-import { SharedModule } from "./modules/shared.module";
-import { VaultFilterModule } from "./modules/vault-filter/vault-filter.module";
-import { OrganizationBadgeModule } from "./modules/vault/modules/organization-badge/organization-badge.module";
+import { ComponentsModule } from "./components/components.module";
+import { OrganizationManageModule } from "./organizations/manage/organization-manage.module";
+import { OrganizationUserModule } from "./organizations/users/organization-user.module";
+import { PipesModule } from "./pipes/pipes.module";
+import { SharedModule } from "./shared.module";
+import { VaultFilterModule } from "./vault-filter/vault-filter.module";
+import { OrganizationBadgeModule } from "./vault/modules/organization-badge/organization-badge.module";
 
 @NgModule({
   imports: [
     SharedModule,
-    LooseComponentsModule,
+    ComponentsModule,
     VaultFilterModule,
     OrganizationBadgeModule,
     PipesModule,
     OrganizationManageModule,
     OrganizationUserModule,
   ],
-  exports: [LooseComponentsModule, VaultFilterModule, OrganizationBadgeModule, PipesModule],
+  exports: [ComponentsModule, VaultFilterModule, OrganizationBadgeModule, PipesModule],
   bootstrap: [],
 })
 export class OssModule {}

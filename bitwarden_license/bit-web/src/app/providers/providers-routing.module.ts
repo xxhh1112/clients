@@ -4,8 +4,8 @@ import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "jslib-angular/guards/auth.guard";
 import { Permissions } from "jslib-common/enums/permissions";
 
-import { FrontendLayoutComponent } from "src/app/layouts/frontend-layout.component";
-import { ProvidersComponent } from "src/app/providers/providers.component";
+import { FrontendLayoutComponent } from "src/app/components/layouts/frontend-layout.component";
+import { ProvidersComponent } from "src/app/components/providers/providers.component";
 
 import { ClientsComponent } from "./clients/clients.component";
 import { CreateOrganizationComponent } from "./clients/create-organization.component";

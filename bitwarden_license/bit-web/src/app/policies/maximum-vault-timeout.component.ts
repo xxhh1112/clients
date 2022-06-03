@@ -8,7 +8,7 @@ import { PolicyRequest } from "jslib-common/models/request/policyRequest";
 import {
   BasePolicy,
   BasePolicyComponent,
-} from "src/app/organizations/policies/base-policy.component";
+} from "src/app/components/organizations/policies/base-policy.component";
 
 export class MaximumVaultTimeoutPolicy extends BasePolicy {
   name = "maximumVaultTimeout";

@@ -22,9 +22,9 @@ import { ListResponse } from "jslib-common/models/response/listResponse";
 import { ProviderUserBulkResponse } from "jslib-common/models/response/provider/providerUserBulkResponse";
 import { ProviderUserUserDetailsResponse } from "jslib-common/models/response/provider/providerUserResponse";
 
-import { BasePeopleComponent } from "src/app/common/base.people.component";
-import { BulkStatusComponent } from "src/app/organizations/manage/bulk/bulk-status.component";
-import { EntityEventsComponent } from "src/app/organizations/manage/entity-events.component";
+import { BasePeopleComponent } from "src/app/components/common/base.people.component";
+import { BulkStatusComponent } from "src/app/components/organizations/manage/bulk/bulk-status.component";
+import { EntityEventsComponent } from "src/app/components/organizations/manage/entity-events.component";
 
 import { BulkConfirmComponent } from "./bulk/bulk-confirm.component";
 import { BulkRemoveComponent } from "./bulk/bulk-remove.component";

@@ -4,10 +4,10 @@ import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "jslib-angular/guards/auth.guard";
 import { Permissions } from "jslib-common/enums/permissions";
 
-import { PermissionsGuard } from "src/app/organizations/guards/permissions.guard";
-import { OrganizationLayoutComponent } from "src/app/organizations/layouts/organization-layout.component";
-import { ManageComponent } from "src/app/organizations/manage/manage.component";
-import { NavigationPermissionsService } from "src/app/organizations/services/navigation-permissions.service";
+import { PermissionsGuard } from "src/app/components/organizations/guards/permissions.guard";
+import { OrganizationLayoutComponent } from "src/app/components/organizations/layouts/organization-layout.component";
+import { ManageComponent } from "src/app/components/organizations/manage/manage.component";
+import { NavigationPermissionsService } from "src/app/components/organizations/services/navigation-permissions.service";
 
 import { SsoComponent } from "./manage/sso.component";
 

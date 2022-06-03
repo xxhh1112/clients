@@ -2,11 +2,11 @@ import { Component, Input } from "@angular/core";
 
 import { ProviderUserBulkRequest } from "jslib-common/models/request/provider/providerUserBulkRequest";
 
-import { BulkRemoveComponent as OrganizationBulkRemoveComponent } from "src/app/organizations/manage/bulk/bulk-remove.component";
+import { BulkRemoveComponent as OrganizationBulkRemoveComponent } from "src/app/components/organizations/manage/bulk/bulk-remove.component";
 
 @Component({
   templateUrl:
-    "../../../../../../../apps/web/src/app/organizations/manage/bulk/bulk-remove.component.html",
+    "../../../../../../../apps/web/src/app/components/organizations/manage/bulk/bulk-remove.component.html",
 })
 export class BulkRemoveComponent extends OrganizationBulkRemoveComponent {
   @Input() providerId: string;

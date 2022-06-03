@@ -5,41 +5,41 @@ import { AuthGuard } from "jslib-angular/guards/auth.guard";
 import { LockGuard } from "jslib-angular/guards/lock.guard";
 import { UnauthGuard } from "jslib-angular/guards/unauth.guard";
 
-import { AcceptEmergencyComponent } from "./accounts/accept-emergency.component";
-import { AcceptOrganizationComponent } from "./accounts/accept-organization.component";
-import { HintComponent } from "./accounts/hint.component";
-import { LockComponent } from "./accounts/lock.component";
-import { LoginComponent } from "./accounts/login.component";
-import { RecoverDeleteComponent } from "./accounts/recover-delete.component";
-import { RecoverTwoFactorComponent } from "./accounts/recover-two-factor.component";
-import { RegisterComponent } from "./accounts/register.component";
-import { RemovePasswordComponent } from "./accounts/remove-password.component";
-import { SetPasswordComponent } from "./accounts/set-password.component";
-import { SsoComponent } from "./accounts/sso.component";
-import { TwoFactorComponent } from "./accounts/two-factor.component";
-import { UpdatePasswordComponent } from "./accounts/update-password.component";
-import { UpdateTempPasswordComponent } from "./accounts/update-temp-password.component";
-import { VerifyEmailTokenComponent } from "./accounts/verify-email-token.component";
-import { VerifyRecoverDeleteComponent } from "./accounts/verify-recover-delete.component";
+import { AcceptEmergencyComponent } from "./components/accounts/accept-emergency.component";
+import { AcceptOrganizationComponent } from "./components/accounts/accept-organization.component";
+import { HintComponent } from "./components/accounts/hint.component";
+import { LockComponent } from "./components/accounts/lock.component";
+import { LoginComponent } from "./components/accounts/login.component";
+import { RecoverDeleteComponent } from "./components/accounts/recover-delete.component";
+import { RecoverTwoFactorComponent } from "./components/accounts/recover-two-factor.component";
+import { RegisterComponent } from "./components/accounts/register.component";
+import { RemovePasswordComponent } from "./components/accounts/remove-password.component";
+import { SetPasswordComponent } from "./components/accounts/set-password.component";
+import { SsoComponent } from "./components/accounts/sso.component";
+import { TwoFactorComponent } from "./components/accounts/two-factor.component";
+import { UpdatePasswordComponent } from "./components/accounts/update-password.component";
+import { UpdateTempPasswordComponent } from "./components/accounts/update-temp-password.component";
+import { VerifyEmailTokenComponent } from "./components/accounts/verify-email-token.component";
+import { VerifyRecoverDeleteComponent } from "./components/accounts/verify-recover-delete.component";
 import { HomeGuard } from "./guards/home.guard";
-import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
-import { UserLayoutComponent } from "./layouts/user-layout.component";
-import { AcceptFamilySponsorshipComponent } from "./organizations/sponsorships/accept-family-sponsorship.component";
-import { FamiliesForEnterpriseSetupComponent } from "./organizations/sponsorships/families-for-enterprise-setup.component";
-import { AccessComponent } from "./send/access.component";
-import { SendComponent } from "./send/send.component";
-import { AccountComponent } from "./settings/account.component";
-import { CreateOrganizationComponent } from "./settings/create-organization.component";
-import { DomainRulesComponent } from "./settings/domain-rules.component";
-import { EmergencyAccessViewComponent } from "./settings/emergency-access-view.component";
-import { EmergencyAccessComponent } from "./settings/emergency-access.component";
-import { PreferencesComponent } from "./settings/preferences.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { SponsoredFamiliesComponent } from "./settings/sponsored-families.component";
-import { ExportComponent } from "./tools/export.component";
-import { GeneratorComponent } from "./tools/generator.component";
-import { ImportComponent } from "./tools/import.component";
-import { ToolsComponent } from "./tools/tools.component";
+import { FrontendLayoutComponent } from "./components/layouts/frontend-layout.component";
+import { UserLayoutComponent } from "./components/layouts/user-layout.component";
+import { AcceptFamilySponsorshipComponent } from "./components/organizations/sponsorships/accept-family-sponsorship.component";
+import { FamiliesForEnterpriseSetupComponent } from "./components/organizations/sponsorships/families-for-enterprise-setup.component";
+import { AccessComponent } from "./components/send/access.component";
+import { SendComponent } from "./components/send/send.component";
+import { AccountComponent } from "./components/settings/account.component";
+import { CreateOrganizationComponent } from "./components/settings/create-organization.component";
+import { DomainRulesComponent } from "./components/settings/domain-rules.component";
+import { EmergencyAccessViewComponent } from "./components/settings/emergency-access-view.component";
+import { EmergencyAccessComponent } from "./components/settings/emergency-access.component";
+import { PreferencesComponent } from "./components/settings/preferences.component";
+import { SettingsComponent } from "./components/settings/settings.component";
+import { SponsoredFamiliesComponent } from "./components/settings/sponsored-families.component";
+import { ExportComponent } from "./components/tools/export.component";
+import { GeneratorComponent } from "./components/tools/generator.component";
+import { ImportComponent } from "./components/tools/import.component";
+import { ToolsComponent } from "./components/tools/tools.component";
 
 const routes: Routes = [
   {
@@ -151,7 +151,7 @@ const routes: Routes = [
       {
         path: "vault",
         loadChildren: async () =>
-          (await import("./modules/vault/modules/individual-vault/individual-vault.module"))
+          (await import("./vault/modules/individual-vault/individual-vault.module"))
             .IndividualVaultModule,
       },
       { path: "sends", component: SendComponent, data: { title: "Send" } },
@@ -174,7 +174,7 @@ const routes: Routes = [
           {
             path: "security",
             loadChildren: async () =>
-              (await import("./settings/security-routing.module")).SecurityRoutingModule,
+              (await import("./components/settings/security-routing.module")).SecurityRoutingModule,
           },
           {
             path: "domain-rules",
@@ -184,7 +184,8 @@ const routes: Routes = [
           {
             path: "subscription",
             loadChildren: async () =>
-              (await import("./settings/subscription-routing.module")).SubscriptionRoutingModule,
+              (await import("./components/settings/subscription-routing.module"))
+                .SubscriptionRoutingModule,
           },
           {
             path: "emergency-access",
@@ -226,7 +227,7 @@ const routes: Routes = [
       {
         path: "reports",
         loadChildren: async () =>
-          (await import("./reports/reports-routing.module")).ReportsRoutingModule,
+          (await import("./components/reports/reports-routing.module")).ReportsRoutingModule,
       },
       { path: "setup/families-for-enterprise", component: FamiliesForEnterpriseSetupComponent },
     ],
@@ -234,7 +235,7 @@ const routes: Routes = [
   {
     path: "organizations",
     loadChildren: () =>
-      import("./organizations/organization-routing.module").then(
+      import("./components/organizations/organization-routing.module").then(
         (m) => m.OrganizationsRoutingModule
       ),
   },

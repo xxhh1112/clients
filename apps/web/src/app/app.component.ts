@@ -25,15 +25,15 @@ import { SyncService } from "jslib-common/abstractions/sync.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
 
-import { DisableSendPolicy } from "./organizations/policies/disable-send.component";
-import { MasterPasswordPolicy } from "./organizations/policies/master-password.component";
-import { PasswordGeneratorPolicy } from "./organizations/policies/password-generator.component";
-import { PersonalOwnershipPolicy } from "./organizations/policies/personal-ownership.component";
-import { RequireSsoPolicy } from "./organizations/policies/require-sso.component";
-import { ResetPasswordPolicy } from "./organizations/policies/reset-password.component";
-import { SendOptionsPolicy } from "./organizations/policies/send-options.component";
-import { SingleOrgPolicy } from "./organizations/policies/single-org.component";
-import { TwoFactorAuthenticationPolicy } from "./organizations/policies/two-factor-authentication.component";
+import { DisableSendPolicy } from "./components/organizations/policies/disable-send.component";
+import { MasterPasswordPolicy } from "./components/organizations/policies/master-password.component";
+import { PasswordGeneratorPolicy } from "./components/organizations/policies/password-generator.component";
+import { PersonalOwnershipPolicy } from "./components/organizations/policies/personal-ownership.component";
+import { RequireSsoPolicy } from "./components/organizations/policies/require-sso.component";
+import { ResetPasswordPolicy } from "./components/organizations/policies/reset-password.component";
+import { SendOptionsPolicy } from "./components/organizations/policies/send-options.component";
+import { SingleOrgPolicy } from "./components/organizations/policies/single-org.component";
+import { TwoFactorAuthenticationPolicy } from "./components/organizations/policies/two-factor-authentication.component";
 import { PolicyListService } from "./services/policy-list.service";
 import { RouterService } from "./services/router.service";
 

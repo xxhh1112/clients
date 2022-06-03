@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { OrganizationPlansComponent } from "src/app/settings/organization-plans.component";
+import { OrganizationPlansComponent } from "src/app/components/settings/organization-plans.component";
 
 @Component({
   selector: "app-create-organization",

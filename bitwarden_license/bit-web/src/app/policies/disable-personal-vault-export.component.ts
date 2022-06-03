@@ -5,7 +5,7 @@ import { PolicyType } from "jslib-common/enums/policyType";
 import {
   BasePolicy,
   BasePolicyComponent,
-} from "src/app/organizations/policies/base-policy.component";
+} from "src/app/components/organizations/policies/base-policy.component";
 
 export class DisablePersonalVaultExportPolicy extends BasePolicy {
   name = "disablePersonalVaultExport";

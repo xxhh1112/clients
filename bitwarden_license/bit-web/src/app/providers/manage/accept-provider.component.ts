@@ -7,7 +7,7 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 import { StateService } from "jslib-common/abstractions/state.service";
 import { ProviderUserAcceptRequest } from "jslib-common/models/request/provider/providerUserAcceptRequest";
 
-import { BaseAcceptComponent } from "src/app/common/base.accept.component";
+import { BaseAcceptComponent } from "src/app/components/common/base.accept.component";
 
 @Component({
   selector: "app-accept-provider",

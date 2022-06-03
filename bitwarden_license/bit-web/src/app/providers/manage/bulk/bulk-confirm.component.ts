@@ -4,12 +4,12 @@ import { ProviderUserStatusType } from "jslib-common/enums/providerUserStatusTyp
 import { ProviderUserBulkConfirmRequest } from "jslib-common/models/request/provider/providerUserBulkConfirmRequest";
 import { ProviderUserBulkRequest } from "jslib-common/models/request/provider/providerUserBulkRequest";
 
-import { BulkConfirmComponent as OrganizationBulkConfirmComponent } from "src/app/organizations/manage/bulk/bulk-confirm.component";
-import { BulkUserDetails } from "src/app/organizations/manage/bulk/bulk-status.component";
+import { BulkConfirmComponent as OrganizationBulkConfirmComponent } from "src/app/components/organizations/manage/bulk/bulk-confirm.component";
+import { BulkUserDetails } from "src/app/components/organizations/manage/bulk/bulk-status.component";
 
 @Component({
   templateUrl:
-    "../../../../../../../apps/web/src/app/organizations/manage/bulk/bulk-confirm.component.html",
+    "../../../../../../../apps/web/src/app/components/organizations/manage/bulk/bulk-confirm.component.html",
 })
 export class BulkConfirmComponent extends OrganizationBulkConfirmComponent {
   @Input() providerId: string;
