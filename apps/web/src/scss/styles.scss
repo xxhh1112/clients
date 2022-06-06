@@ -1,7 +1,10 @@
-@import "../../jslib/angular/src/scss/webfonts.css";
+$icomoon-font-path: "../../../../libs/angular/src/scss/bwicons/fonts/";
+$card-icons-base: "../../../../libs/angular/src/images/cards/";
+
+@import "../../../../libs/angular/src/scss/webfonts.css";
 @import "./variables";
-@import "../../jslib/angular/src/scss/bwicons/styles/style.scss";
-@import "../../jslib/angular/src/scss/icons.scss";
+@import "../../../../libs/angular/src/scss/bwicons/styles/style.scss";
+@import "../../../../libs/angular/src/scss/icons.scss";
 @import "@angular/cdk/overlay-prebuilt.css";
 
 //@import "~bootstrap/scss/bootstrap";
