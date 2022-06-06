@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "es6",
+    "target": "ES2016",
+    "allowJs": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "jslib-common/*": ["../../libs/common/src/*"],
+      "jslib-angular/*": ["../../libs/angular/src/*"]
+    }
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
+  },
+  "include": ["src"]
+}

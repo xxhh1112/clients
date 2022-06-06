@@ -1,9 +1,5 @@
 [![Github Workflow build on master](https://github.com/bitwarden/jslib/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/bitwarden/jslib/actions/workflows/build.yml?query=branch:master)
 
-> **Archived**
->
-> This repository is archived, please go to https://github.com/bitwarden/clients for future development.
-
 # Bitwarden JavaScript Library
 
 Common code referenced across Bitwarden JavaScript projects.
