@@ -12,13 +12,8 @@
     "app": "build"
   },
   "afterSign": "scripts/after-sign.js",
-  "asarUnpack": [
-    "**/*.node"
-  ],
-  "files": [
-    "**/*",
-    "!**/node_modules/@bitwarden/desktop-native/**/*"
-  ],
+  "asarUnpack": ["**/*.node"],
+  "files": ["**/*", "!**/node_modules/@bitwarden/desktop-native/**/*"],
   "publish": {
     "provider": "generic",
     "url": "https://artifacts.bitwarden.com/desktop"
@@ -64,26 +59,17 @@
       ],
       "CFBundleDevelopmentRegion": "en"
     },
-    "target": [
-      "dmg",
-      "zip"
-    ]
+    "target": ["dmg", "zip"]
   },
   "win": {
     "electronUpdaterCompatibility": ">=0.0.1",
-    "target": [
-      "portable",
-      "nsis-web",
-      "appx"
-    ],
+    "target": ["portable", "nsis-web", "appx"],
     "sign": "./sign.js",
     "extraResources": [
       {
         "from": "node_modules/regedit/vbs",
         "to": "regedit/vbs",
-        "filter": [
-          "**/*"
-        ]
+        "filter": ["**/*"]
       },
       {
         "from": "resources/native-messaging.bat",
@@ -94,13 +80,7 @@
   "linux": {
     "category": "Utility",
     "synopsis": "A secure and free password manager for all of your devices.",
-    "target": [
-      "deb",
-      "freebsd",
-      "rpm",
-      "AppImage",
-      "snap"
-    ],
+    "target": ["deb", "freebsd", "rpm", "AppImage", "snap"],
     "desktop": {
       "Name": "Bitwarden",
       "Type": "Application",
@@ -154,19 +134,11 @@
     "identityName": "8bitSolutionsLLC.bitwardendesktop",
     "publisher": "CN=14D52771-DE3C-4886-B8BF-825BA7690418",
     "publisherDisplayName": "8bit Solutions LLC",
-    "languages": [
-      "en-US"
-    ]
+    "languages": ["en-US"]
   },
   "deb": {
     "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "depends": [
-      "libnotify4",
-      "libxtst6",
-      "libnss3",
-      "libsecret-1-0",
-      "libxss1"
-    ]
+    "depends": ["libnotify4", "libxtst6", "libnss3", "libsecret-1-0", "libxss1"]
   },
   "appImage": {
     "artifactName": "${productName}-${version}-${arch}.${ext}"
@@ -180,20 +152,13 @@
   "snap": {
     "autoStart": true,
     "confinement": "strict",
-    "plugs": [
-      "default",
-      "password-manager-service"
-    ],
-    "stagePackages": [
-      "default"
-    ]
+    "plugs": ["default", "password-manager-service"],
+    "stagePackages": ["default"]
   },
   "protocols": [
     {
       "name": "Bitwarden",
-      "schemes": [
-        "bitwarden"
-      ]
+      "schemes": ["bitwarden"]
     }
   ]
 }
