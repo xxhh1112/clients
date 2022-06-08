@@ -142,8 +142,7 @@
     "artifactName": "${productName}-Installer-${version}.${ext}",
     "uninstallDisplayName": "${productName}",
     "deleteAppDataOnUninstall": true,
-    "include": "installer.nsh",
-    "runAfterFinish": true
+    "include": "installer.nsh"
   },
   "portable": {
     "artifactName": "${productName}-Portable-${version}.${ext}"
