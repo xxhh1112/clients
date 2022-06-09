@@ -24,15 +24,16 @@ export class StateService
     // Check that there is an account in memory before considering the user authenticated
     return (
       (await super.getIsAuthenticated(options)) &&
-      (await this.getAccount(this.defaultInMemoryOptions)) != null
+      (await this.getAccount(await this.defaultInMemoryOptions())) != null
     );
   }
 
   async getBrowserGroupingComponentState(
     options?: StorageOptions
   ): Promise<BrowserGroupingsComponentState> {
-    return (await this.getAccount(this.reconcileOptions(options, this.defaultInMemoryOptions)))
-      ?.groupings;
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+    )?.groupings;
   }
 
   async setBrowserGroupingComponentState(
@@ -40,15 +41,19 @@ export class StateService
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, this.defaultInMemoryOptions)
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
     account.groupings = value;
-    await this.saveAccount(account, this.reconcileOptions(options, this.defaultInMemoryOptions));
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
   }
 
   async getBrowserCipherComponentState(options?: StorageOptions): Promise<BrowserComponentState> {
-    return (await this.getAccount(this.reconcileOptions(options, this.defaultInMemoryOptions)))
-      ?.ciphers;
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+    )?.ciphers;
   }
 
   async setBrowserCipherComponentState(
@@ -56,15 +61,19 @@ export class StateService
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, this.defaultInMemoryOptions)
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
     account.ciphers = value;
-    await this.saveAccount(account, this.reconcileOptions(options, this.defaultInMemoryOptions));
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
   }
 
   async getBrowserSendComponentState(options?: StorageOptions): Promise<BrowserSendComponentState> {
-    return (await this.getAccount(this.reconcileOptions(options, this.defaultInMemoryOptions)))
-      ?.send;
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+    )?.send;
   }
 
   async setBrowserSendComponentState(
@@ -72,14 +81,18 @@ export class StateService
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, this.defaultInMemoryOptions)
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
     account.send = value;
-    await this.saveAccount(account, this.reconcileOptions(options, this.defaultInMemoryOptions));
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
   }
   async getBrowserSendTypeComponentState(options?: StorageOptions): Promise<BrowserComponentState> {
-    return (await this.getAccount(this.reconcileOptions(options, this.defaultInMemoryOptions)))
-      ?.sendType;
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+    )?.sendType;
   }
 
   async setBrowserSendTypeComponentState(
@@ -87,9 +100,12 @@ export class StateService
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, this.defaultInMemoryOptions)
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
     account.sendType = value;
-    await this.saveAccount(account, this.reconcileOptions(options, this.defaultInMemoryOptions));
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
   }
 }
