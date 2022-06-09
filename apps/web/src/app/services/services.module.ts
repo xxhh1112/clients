@@ -23,7 +23,7 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "j
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "jslib-common/abstractions/platformUtils.service";
 import { StateService as BaseStateServiceAbstraction } from "jslib-common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "jslib-common/abstractions/stateMigration.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { ImportService } from "jslib-common/services/import.service";
 
@@ -77,7 +77,7 @@ import { RouterService } from "./router.service";
       useClass: I18nService,
       deps: [SYSTEM_LANGUAGE, LOCALES_DIRECTORY],
     },
-    { provide: StorageServiceAbstraction, useClass: HtmlStorageService },
+    { provide: AbstractStorageService, useClass: HtmlStorageService },
     {
       provide: SECURE_STORAGE,
       // TODO: platformUtilsService.isDev has a helper for this, but using that service here results in a circular dependency.
@@ -106,13 +106,13 @@ import { RouterService } from "./router.service";
     {
       provide: StateMigrationServiceAbstraction,
       useClass: StateMigrationService,
-      deps: [StorageServiceAbstraction, SECURE_STORAGE, STATE_FACTORY],
+      deps: [AbstractStorageService, SECURE_STORAGE, STATE_FACTORY],
     },
     {
       provide: StateServiceAbstraction,
       useClass: StateService,
       deps: [
-        StorageServiceAbstraction,
+        AbstractStorageService,
         SECURE_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,

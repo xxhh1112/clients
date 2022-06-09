@@ -30,7 +30,7 @@ import { SendService as SendServiceAbstraction } from "jslib-common/abstractions
 import { SettingsService as SettingsServiceAbstraction } from "jslib-common/abstractions/settings.service";
 import { StateService as StateServiceAbstraction } from "jslib-common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "jslib-common/abstractions/stateMigration.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { SyncService as SyncServiceAbstraction } from "jslib-common/abstractions/sync.service";
 import { TokenService as TokenServiceAbstraction } from "jslib-common/abstractions/token.service";
 import { TotpService as TotpServiceAbstraction } from "jslib-common/abstractions/totp.service";
@@ -84,7 +84,7 @@ import { PasswordRepromptService } from "./passwordReprompt.service";
 import { ValidationService } from "./validation.service";
 
 export const WINDOW = new InjectionToken<Window>("WINDOW");
-export const SECURE_STORAGE = new InjectionToken<StorageServiceAbstraction>("SECURE_STORAGE");
+export const SECURE_STORAGE = new InjectionToken<AbstractStorageService>("SECURE_STORAGE");
 export const STATE_FACTORY = new InjectionToken<StateFactory>("STATE_FACTORY");
 export const STATE_SERVICE_USE_CACHE = new InjectionToken<boolean>("STATE_SERVICE_USE_CACHE");
 export const LOGOUT_CALLBACK = new InjectionToken<(expired: boolean, userId?: string) => void>(
@@ -140,7 +140,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
     {
       provide: AppIdServiceAbstraction,
       useClass: AppIdService,
-      deps: [StorageServiceAbstraction],
+      deps: [AbstractStorageService],
     },
     {
       provide: AuditServiceAbstraction,
@@ -313,7 +313,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       provide: StateServiceAbstraction,
       useClass: StateService,
       deps: [
-        StorageServiceAbstraction,
+        AbstractStorageService,
         SECURE_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
@@ -324,7 +324,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
     {
       provide: StateMigrationServiceAbstraction,
       useClass: StateMigrationService,
-      deps: [StorageServiceAbstraction, SECURE_STORAGE, STATE_FACTORY],
+      deps: [AbstractStorageService, SECURE_STORAGE, STATE_FACTORY],
     },
     {
       provide: ExportServiceAbstraction,

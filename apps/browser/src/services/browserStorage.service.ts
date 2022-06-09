@@ -1,6 +1,6 @@
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 
-export default class BrowserStorageService implements StorageService {
+export default class BrowserStorageService implements AbstractStorageService {
   private chromeStorageApi: any;
 
   constructor() {

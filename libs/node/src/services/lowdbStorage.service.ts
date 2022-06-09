@@ -5,12 +5,12 @@ import * as lowdb from "lowdb";
 import * as FileSync from "lowdb/adapters/FileSync";
 
 import { LogService } from "jslib-common/abstractions/log.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { NodeUtils } from "jslib-common/misc/nodeUtils";
 import { sequentialize } from "jslib-common/misc/sequentialize";
 import { Utils } from "jslib-common/misc/utils";
 
-export class LowdbStorageService implements StorageService {
+export class LowdbStorageService implements AbstractStorageService {
   protected dataFilePath: string;
   private db: lowdb.LowdbSync<any>;
   private defaults: any;

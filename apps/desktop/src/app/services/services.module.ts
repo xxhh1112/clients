@@ -22,7 +22,7 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "j
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "jslib-common/abstractions/platformUtils.service";
 import { StateService as StateServiceAbstraction } from "jslib-common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "jslib-common/abstractions/stateMigration.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "jslib-common/abstractions/system.service";
 import { ClientType } from "jslib-common/enums/clientType";
 import { StateFactory } from "jslib-common/factories/stateFactory";
@@ -94,7 +94,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       useClass: ElectronRendererMessagingService,
       deps: [BroadcasterServiceAbstraction],
     },
-    { provide: StorageServiceAbstraction, useClass: ElectronRendererStorageService },
+    { provide: AbstractStorageService, useClass: ElectronRendererStorageService },
     { provide: SECURE_STORAGE, useClass: ElectronRendererSecureStorageService },
     {
       provide: CryptoServiceAbstraction,
@@ -121,7 +121,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       provide: StateServiceAbstraction,
       useClass: StateService,
       deps: [
-        StorageServiceAbstraction,
+        AbstractStorageService,
         SECURE_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,

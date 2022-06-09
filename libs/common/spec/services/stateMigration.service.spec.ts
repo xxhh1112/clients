@@ -1,6 +1,6 @@
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { StateVersion } from "jslib-common/enums/stateVersion";
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { Account } from "jslib-common/models/domain/account";
@@ -10,15 +10,15 @@ import { StateMigrationService } from "jslib-common/services/stateMigration.serv
 const userId = "USER_ID";
 
 describe("State Migration Service", () => {
-  let storageService: SubstituteOf<StorageService>;
-  let secureStorageService: SubstituteOf<StorageService>;
+  let storageService: SubstituteOf<AbstractStorageService>;
+  let secureStorageService: SubstituteOf<AbstractStorageService>;
   let stateFactory: SubstituteOf<StateFactory>;
 
   let stateMigrationService: StateMigrationService;
 
   beforeEach(() => {
-    storageService = Substitute.for<StorageService>();
-    secureStorageService = Substitute.for<StorageService>();
+    storageService = Substitute.for<AbstractStorageService>();
+    secureStorageService = Substitute.for<AbstractStorageService>();
     stateFactory = Substitute.for<StateFactory>();
 
     stateMigrationService = new StateMigrationService(

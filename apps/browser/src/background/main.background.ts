@@ -24,7 +24,7 @@ import { ProviderService as ProviderServiceAbstraction } from "jslib-common/abst
 import { SearchService as SearchServiceAbstraction } from "jslib-common/abstractions/search.service";
 import { SendService as SendServiceAbstraction } from "jslib-common/abstractions/send.service";
 import { SettingsService as SettingsServiceAbstraction } from "jslib-common/abstractions/settings.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { SyncService as SyncServiceAbstraction } from "jslib-common/abstractions/sync.service";
 import { SystemService as SystemServiceAbstraction } from "jslib-common/abstractions/system.service";
 import { TokenService as TokenServiceAbstraction } from "jslib-common/abstractions/token.service";
@@ -100,8 +100,8 @@ import WebRequestBackground from "./webRequest.background";
 
 export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
-  storageService: StorageServiceAbstraction;
-  secureStorageService: StorageServiceAbstraction;
+  storageService: AbstractStorageService;
+  secureStorageService: AbstractStorageService;
   i18nService: I18nServiceAbstraction;
   platformUtilsService: PlatformUtilsServiceAbstraction;
   logService: LogServiceAbstraction;

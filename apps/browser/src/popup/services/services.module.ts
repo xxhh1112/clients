@@ -31,7 +31,7 @@ import { SearchService as SearchServiceAbstraction } from "jslib-common/abstract
 import { SendService } from "jslib-common/abstractions/send.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
 import { StateService as BaseStateServiceAbstraction } from "jslib-common/abstractions/state.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
@@ -182,8 +182,8 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
-      provide: StorageServiceAbstraction,
-      useFactory: getBgService<StorageServiceAbstraction>("storageService"),
+      provide: AbstractStorageService,
+      useFactory: getBgService<AbstractStorageService>("storageService"),
       deps: [],
     },
     { provide: AppIdService, useFactory: getBgService<AppIdService>("appIdService"), deps: [] },
@@ -246,7 +246,7 @@ function getBgService<T>(service: keyof MainBackground) {
     },
     {
       provide: SECURE_STORAGE,
-      useFactory: getBgService<StorageServiceAbstraction>("secureStorageService"),
+      useFactory: getBgService<AbstractStorageService>("secureStorageService"),
       deps: [],
     },
     {

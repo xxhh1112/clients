@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { HtmlStorageLocation } from "jslib-common/enums/htmlStorageLocation";
 import { StorageOptions } from "jslib-common/models/domain/storageOptions";
 
 @Injectable()
-export class HtmlStorageService implements StorageService {
+export class HtmlStorageService implements AbstractStorageService {
   get defaultOptions(): StorageOptions {
     return { htmlStorageLocation: HtmlStorageLocation.Session };
   }
