@@ -1,11 +1,7 @@
 import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 
-export default class BrowserStorageService implements AbstractStorageService {
-  private chromeStorageApi: any;
-
-  constructor() {
-    this.chromeStorageApi = chrome.storage.local;
-  }
+export default abstract class AbstractChromeStorageService implements AbstractStorageService {
+  protected abstract chromeStorageApi: any;
 
   async get<T>(key: string): Promise<T> {
     return new Promise((resolve) => {
