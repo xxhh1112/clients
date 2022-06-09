@@ -8,6 +8,7 @@ import {
   STATE_SERVICE_USE_CACHE,
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
+  MEMORY_STORAGE,
 } from "jslib-angular/services/jslib-services.module";
 import { ModalService as ModalServiceAbstraction } from "jslib-angular/services/modal.service";
 import { ApiService as ApiServiceAbstraction } from "jslib-common/abstractions/api.service";
@@ -85,6 +86,10 @@ import { RouterService } from "./router.service";
       useClass: process.env.NODE_ENV === "development" ? HtmlStorageService : MemoryStorageService,
     },
     {
+      provide: MEMORY_STORAGE,
+      useClass: MemoryStorageService,
+    },
+    {
       provide: PlatformUtilsServiceAbstraction,
       useClass: WebPlatformUtilsService,
     },
@@ -114,6 +119,7 @@ import { RouterService } from "./router.service";
       deps: [
         AbstractStorageService,
         SECURE_STORAGE,
+        MEMORY_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,

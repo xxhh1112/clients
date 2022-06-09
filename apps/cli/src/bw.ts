@@ -23,6 +23,7 @@ import { FileUploadService } from "jslib-common/services/fileUpload.service";
 import { FolderService } from "jslib-common/services/folder.service";
 import { ImportService } from "jslib-common/services/import.service";
 import { KeyConnectorService } from "jslib-common/services/keyConnector.service";
+import { MemoryStorageService } from "jslib-common/services/memoryStorage.service";
 import { NoopMessagingService } from "jslib-common/services/noopMessaging.service";
 import { OrganizationService } from "jslib-common/services/organization.service";
 import { PasswordGenerationService } from "jslib-common/services/passwordGeneration.service";
@@ -61,6 +62,7 @@ export class Main {
   messagingService: NoopMessagingService;
   storageService: LowdbStorageService;
   secureStorageService: NodeEnvSecureStorageService;
+  memoryStorageService: MemoryStorageService;
   i18nService: I18nService;
   platformUtilsService: CliPlatformUtilsService;
   cryptoService: CryptoService;
@@ -129,6 +131,8 @@ export class Main {
       () => this.cryptoService
     );
 
+    this.memoryStorageService = new MemoryStorageService();
+
     this.stateMigrationService = new StateMigrationService(
       this.storageService,
       this.secureStorageService,
@@ -138,6 +142,7 @@ export class Main {
     this.stateService = new StateService(
       this.storageService,
       this.secureStorageService,
+      this.memoryStorageService,
       this.logService,
       this.stateMigrationService,
       new StateFactory(GlobalState, Account)

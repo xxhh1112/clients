@@ -53,6 +53,7 @@ import { ExportService } from "jslib-common/services/export.service";
 import { FileUploadService } from "jslib-common/services/fileUpload.service";
 import { FolderService } from "jslib-common/services/folder.service";
 import { KeyConnectorService } from "jslib-common/services/keyConnector.service";
+import { MemoryStorageService } from "jslib-common/services/memoryStorage.service";
 import { NotificationsService } from "jslib-common/services/notifications.service";
 import { OrganizationService } from "jslib-common/services/organization.service";
 import { PasswordGenerationService } from "jslib-common/services/passwordGeneration.service";
@@ -79,10 +80,11 @@ import { AutofillService as AutofillServiceAbstraction } from "../services/abstr
 import { StateService as StateServiceAbstraction } from "../services/abstractions/state.service";
 import AutofillService from "../services/autofill.service";
 import { BrowserCryptoService } from "../services/browserCrypto.service";
+import BrowserLocalStorageService from "../services/browserLocalStorage.service";
+import BrowserMemoryStorageService from "../services/browserMemoryStorage.service";
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
-import BrowserStorageService from "../services/browserStorage.service";
 import I18nService from "../services/i18n.service";
 import { StateService } from "../services/state.service";
 import { VaultFilterService } from "../services/vaultFilter.service";
@@ -102,6 +104,7 @@ export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
   storageService: AbstractStorageService;
   secureStorageService: AbstractStorageService;
+  memoryStorageService: AbstractStorageService;
   i18nService: I18nServiceAbstraction;
   platformUtilsService: PlatformUtilsServiceAbstraction;
   logService: LogServiceAbstraction;
@@ -181,8 +184,9 @@ export default class MainBackground {
     this.messagingService = isPrivateMode
       ? new BrowserMessagingPrivateModeBackgroundService()
       : new BrowserMessagingService();
-    this.storageService = new BrowserStorageService();
-    this.secureStorageService = new BrowserStorageService();
+    this.storageService = new BrowserLocalStorageService();
+    this.secureStorageService = new BrowserLocalStorageService();
+    this.memoryStorageService = chrome.runtime.getManifest().manifest_version == 3 ? new BrowserMemoryStorageService() : new MemoryStorageService();
     this.logService = new ConsoleLogService(false);
     this.stateMigrationService = new StateMigrationService(
       this.storageService,
@@ -192,6 +196,7 @@ export default class MainBackground {
     this.stateService = new StateService(
       this.storageService,
       this.secureStorageService,
+      this.memoryStorageService,
       this.logService,
       this.stateMigrationService,
       new StateFactory(GlobalState, Account)
@@ -426,8 +431,8 @@ export default class MainBackground {
     this.sidebarAction = this.isSafari
       ? null
       : typeof opr !== "undefined" && opr.sidebarAction
-      ? opr.sidebarAction
-      : (window as any).chrome.sidebarAction;
+        ? opr.sidebarAction
+        : (window as any).chrome.sidebarAction;
 
     // Background
     this.runtimeBackground = new RuntimeBackground(

@@ -84,6 +84,7 @@ import { PasswordRepromptService } from "./passwordReprompt.service";
 import { ValidationService } from "./validation.service";
 
 export const WINDOW = new InjectionToken<Window>("WINDOW");
+export const MEMORY_STORAGE = new InjectionToken<AbstractStorageService>("MEMORY_STORAGE");
 export const SECURE_STORAGE = new InjectionToken<AbstractStorageService>("SECURE_STORAGE");
 export const STATE_FACTORY = new InjectionToken<StateFactory>("STATE_FACTORY");
 export const STATE_SERVICE_USE_CACHE = new InjectionToken<boolean>("STATE_SERVICE_USE_CACHE");
@@ -315,6 +316,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       deps: [
         AbstractStorageService,
         SECURE_STORAGE,
+        MEMORY_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,
