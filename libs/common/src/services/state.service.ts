@@ -79,7 +79,11 @@ export class StateService<
       await this.stateMigrationService.migrate();
     }
 
-    await this.setState(new State<TGlobalState, TAccount>(this.createGlobals()));
+    await this.state.then(async (state) => {
+      if (state == null) {
+        await this.setState(new State<TGlobalState, TAccount>(this.createGlobals()));
+      }
+    });
     await this.initAccountState();
     this.hasBeenInited = true;
   }
