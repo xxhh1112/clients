@@ -27,6 +27,7 @@ import { StateMigrationService as StateMigrationServiceAbstraction } from "jslib
 import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { ImportService } from "jslib-common/services/import.service";
+import { MemoryStorageService } from "jslib-common/services/memoryStorage.service";
 
 import { StateService as StateServiceAbstraction } from "../../abstractions/state.service";
 import { Account } from "../../models/account";
@@ -34,7 +35,6 @@ import { GlobalState } from "../../models/globalState";
 import { BroadcasterMessagingService } from "../../services/broadcasterMessaging.service";
 import { HtmlStorageService } from "../../services/htmlStorage.service";
 import { I18nService } from "../../services/i18n.service";
-import { MemoryStorageService } from "../../services/memoryStorage.service";
 import { PasswordRepromptService } from "../../services/passwordReprompt.service";
 import { StateService } from "../../services/state.service";
 import { StateMigrationService } from "../../services/stateMigration.service";
