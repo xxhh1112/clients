@@ -186,7 +186,10 @@ export default class MainBackground {
       : new BrowserMessagingService();
     this.storageService = new BrowserLocalStorageService();
     this.secureStorageService = new BrowserLocalStorageService();
-    this.memoryStorageService = chrome.runtime.getManifest().manifest_version == 3 ? new BrowserMemoryStorageService() : new MemoryStorageService();
+    this.memoryStorageService =
+      chrome.runtime.getManifest().manifest_version == 3
+        ? new BrowserMemoryStorageService()
+        : new MemoryStorageService();
     this.logService = new ConsoleLogService(false);
     this.stateMigrationService = new StateMigrationService(
       this.storageService,
@@ -431,8 +434,8 @@ export default class MainBackground {
     this.sidebarAction = this.isSafari
       ? null
       : typeof opr !== "undefined" && opr.sidebarAction
-        ? opr.sidebarAction
-        : (window as any).chrome.sidebarAction;
+      ? opr.sidebarAction
+      : (window as any).chrome.sidebarAction;
 
     // Background
     this.runtimeBackground = new RuntimeBackground(

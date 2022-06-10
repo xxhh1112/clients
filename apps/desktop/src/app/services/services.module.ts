@@ -8,6 +8,7 @@ import {
   CLIENT_TYPE,
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
+  MEMORY_STORAGE,
 } from "jslib-angular/services/jslib-services.module";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "jslib-common/abstractions/broadcaster.service";
 import { CryptoService as CryptoServiceAbstraction } from "jslib-common/abstractions/crypto.service";
@@ -27,6 +28,7 @@ import { SystemService as SystemServiceAbstraction } from "jslib-common/abstract
 import { ClientType } from "jslib-common/enums/clientType";
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { GlobalState } from "jslib-common/models/domain/globalState";
+import { MemoryStorageService } from "jslib-common/services/memoryStorage.service";
 import { SystemService } from "jslib-common/services/system.service";
 import { ElectronCryptoService } from "jslib-electron/services/electronCrypto.service";
 import { ElectronLogService } from "jslib-electron/services/electronLog.service";
@@ -96,6 +98,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
     },
     { provide: AbstractStorageService, useClass: ElectronRendererStorageService },
     { provide: SECURE_STORAGE, useClass: ElectronRendererSecureStorageService },
+    { provide: MEMORY_STORAGE, useClass: MemoryStorageService },
     {
       provide: CryptoServiceAbstraction,
       useClass: ElectronCryptoService,
@@ -123,6 +126,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       deps: [
         AbstractStorageService,
         SECURE_STORAGE,
+        MEMORY_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,
