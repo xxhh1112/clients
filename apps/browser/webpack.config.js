@@ -11,6 +11,9 @@ if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
 }
 const ENV = (process.env.ENV = process.env.NODE_ENV);
+const manifestVersion = process.env.MANIFEST_VERSION == 3 ? 3 : 2;
+
+console.log(`Building Manifest Version ${manifestVersion} app`);
 
 const moduleRules = [
   {
@@ -72,7 +75,7 @@ const plugins = [
   }),
   new CopyWebpackPlugin({
     patterns: [
-      process.env.MANIFEST_VERSION == 3
+      manifestVersion == 3
         ? { from: "./src/manifest.v3.json", to: "manifest.json" }
         : "./src/manifest.json",
       { from: "./src/_locales", to: "_locales" },
