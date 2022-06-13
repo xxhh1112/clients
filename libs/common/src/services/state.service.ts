@@ -144,7 +144,7 @@ export class StateService<
   async clean(options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultInMemoryOptions());
     await this.deAuthenticateAccount(options.userId);
-    if (options.userId === (await this.state).activeUserId) {
+    if (options.userId === (await this.state)?.activeUserId) {
       await this.dynamicallySetActiveUser();
     }
 
@@ -435,6 +435,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(SymmetricCryptoKey)
   async getCryptoMasterKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.keys?.cryptoMasterKey;
@@ -544,6 +545,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(CipherView)
   async getDecryptedCiphers(options?: StorageOptions): Promise<CipherView[]> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.data?.ciphers?.decrypted;
@@ -557,6 +559,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(CollectionView)
   async getDecryptedCollections(options?: StorageOptions): Promise<CollectionView[]> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.data?.collections?.decrypted;
@@ -570,6 +573,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototype(SymmetricCryptoKey)
   async getDecryptedCryptoSymmetricKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.keys?.cryptoSymmetricKey?.decrypted;
@@ -586,6 +590,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(FolderView)
   async getDecryptedFolders(options?: StorageOptions): Promise<FolderView[]> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.data?.folders?.decrypted;
@@ -599,6 +604,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForMap(SymmetricCryptoKey)
   async getDecryptedOrganizationKeys(
     options?: StorageOptions
   ): Promise<Map<string, SymmetricCryptoKey>> {
@@ -617,6 +623,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(GeneratedPasswordHistory)
   async getDecryptedPasswordGenerationHistory(
     options?: StorageOptions
   ): Promise<GeneratedPasswordHistory[]> {
@@ -635,6 +642,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototype(EncString)
   async getDecryptedPinProtected(options?: StorageOptions): Promise<EncString> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.settings?.pinProtected?.decrypted;
@@ -648,6 +656,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(Policy)
   async getDecryptedPolicies(options?: StorageOptions): Promise<Policy[]> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.data?.policies?.decrypted;
@@ -661,6 +670,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  // @withPrototype(ArrayBuffer)
   async getDecryptedPrivateKey(options?: StorageOptions): Promise<ArrayBuffer> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.keys?.privateKey?.decrypted;
@@ -674,6 +684,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForMap(SymmetricCryptoKey)
   async getDecryptedProviderKeys(
     options?: StorageOptions
   ): Promise<Map<string, SymmetricCryptoKey>> {
@@ -692,6 +703,7 @@ export class StateService<
     await this.saveAccount(account, this.reconcileOptions(options, await this.defaultInMemoryOptions()));
   }
 
+  @withPrototypeForArrayMembers(SendView)
   async getDecryptedSends(options?: StorageOptions): Promise<SendView[]> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.data?.sends?.decrypted;
@@ -1158,6 +1170,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(CipherData)
   async getEncryptedCiphers(options?: StorageOptions): Promise<{ [id: string]: CipherData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
@@ -1178,6 +1191,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(CollectionData)
   async getEncryptedCollections(
     options?: StorageOptions
   ): Promise<{ [id: string]: CollectionData }> {
@@ -1217,6 +1231,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(FolderData)
   async getEncryptedFolders(options?: StorageOptions): Promise<{ [id: string]: FolderData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
@@ -1257,6 +1272,7 @@ export class StateService<
     );
   }
 
+  @withPrototypeForArrayMembers(GeneratedPasswordHistory)
   async getEncryptedPasswordGenerationHistory(
     options?: StorageOptions
   ): Promise<GeneratedPasswordHistory[]> {
@@ -1296,6 +1312,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(PolicyData)
   async getEncryptedPolicies(options?: StorageOptions): Promise<{ [id: string]: PolicyData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -1350,6 +1367,7 @@ export class StateService<
     );
   }
 
+  @withPrototypeForObjectValues(SendData)
   async getEncryptedSends(options?: StorageOptions): Promise<{ [id: string]: SendData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
@@ -1404,8 +1422,9 @@ export class StateService<
     );
   }
 
+  @withPrototype(EnvironmentUrls)
   async getEnvironmentUrls(options?: StorageOptions): Promise<EnvironmentUrls> {
-    if ((await this.state).activeUserId == null) {
+    if ((await this.state)?.activeUserId == null) {
       return await this.getGlobalEnvironmentUrls(options);
     }
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
@@ -1442,6 +1461,7 @@ export class StateService<
     );
   }
 
+  @withPrototypeForArrayMembers(EventData)
   async getEventCollection(options?: StorageOptions): Promise<EventData[]> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -1607,6 +1627,7 @@ export class StateService<
     );
   }
 
+  @withPrototype(SymmetricCryptoKey)
   async getLegacyEtmKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -1859,6 +1880,7 @@ export class StateService<
     );
   }
 
+  @withPrototypeForObjectValues(ProviderData)
   async getProviders(options?: StorageOptions): Promise<{ [id: string]: ProviderData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -1879,6 +1901,7 @@ export class StateService<
     );
   }
 
+  // @withPrototype(ArrayBuffer)
   async getPublicKey(options?: StorageOptions): Promise<ArrayBuffer> {
     return (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
       ?.keys?.publicKey;
@@ -2202,7 +2225,7 @@ export class StateService<
   }
 
   protected async getAccountFromDisk(options: StorageOptions): Promise<TAccount> {
-    if (options?.userId == null && (await this.state).activeUserId == null) {
+    if (options?.userId == null && (await this.state)?.activeUserId == null) {
       return null;
     }
 
@@ -2261,7 +2284,7 @@ export class StateService<
 
   protected async saveAccountToMemory(account: TAccount): Promise<void> {
     if (this.getAccountFromMemory({ userId: account.profile.userId }) !== null) {
-      await this.updateState(async (state) => {
+      await this.updateState((state) => {
         state.accounts[account.profile.userId] = account;
       });
     }
@@ -2395,7 +2418,7 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Session,
-      userId: (await this.state).activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId: (await this.state)?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
     };
   }
@@ -2585,4 +2608,112 @@ export class StateService<
       await this.setState(state);
     });
   }
+}
+
+function withPrototype(constructor: new (...args: any[]) => any) {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    const originalMethod = descriptor.value;
+
+    return {
+      value: function (...args: any[]) {
+        const originalResult: Promise<any> = originalMethod.apply(this, args);
+
+        if (!(originalResult instanceof Promise)) {
+          throw new Error(`Error applying prototype to stored value -- result is not a promise for method ${String(propertyKey)}`);
+        }
+
+        return originalResult.then((result) => {
+          return result == null ? null : Object.create(constructor.prototype, Object.getOwnPropertyDescriptors(result));
+        });
+      }
+    };
+  };
+}
+
+function withPrototypeForArrayMembers(memberConstructor: new (...args: any[]) => any) {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    const originalMethod = descriptor.value;
+
+    return {
+      value: function (...args: any[]) {
+        const originalResult: Promise<any[]> = originalMethod.apply(this, args);
+
+        if (!(originalResult instanceof Promise)) {
+          throw new Error(`Error applying prototype to stored value -- result is not a promise for method ${String(propertyKey)}`);
+        }
+
+        return originalResult.then((result) => {
+          if (result == null) {
+            return null;
+          } else if (!(result instanceof Array)) {
+            throw new Error(`Attempted to retrieve non array type from state as an array for method ${String(propertyKey)}`);
+          } else {
+            return result.map((r) => {
+              return r == null ? null : Object.create(memberConstructor.prototype, Object.getOwnPropertyDescriptors(r));
+            });
+          }
+        });
+      }
+    };
+  };
+}
+
+function withPrototypeForObjectValues(valuesConstructor: new (...args: any[]) => any) {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    const originalMethod = descriptor.value;
+
+    return {
+      value: function (...args: any[]) {
+        const originalResult: Promise<any> = originalMethod.apply(this, args);
+
+        if (!(originalResult instanceof Promise)) {
+          throw new Error(`Error applying prototype to stored value -- result is not a promise for method ${String(propertyKey)}`);
+        }
+
+        return originalResult.then((result) => {
+          if (result == null) {
+            return null;
+          } else {
+            for (const key in Object.keys(result)) {
+              const val = result[key] == null ?
+                null :
+                Object.create(valuesConstructor.prototype, Object.getOwnPropertyDescriptors(result[key]));
+              result[key] = val;
+            }
+            return result;
+          }
+        });
+      }
+    };
+  };
+}
+
+function withPrototypeForMap(valueConstructor: new (...args: any[]) => any) {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    const originalMethod = descriptor.value;
+
+    return {
+      value: function (...args: any[]) {
+        const originalResult: Promise<any> = originalMethod.apply(this, args);
+
+        if (!(originalResult instanceof Promise)) {
+          throw new Error(`Error applying prototype to stored value -- result is not a promise for method ${String(propertyKey)}`);
+        }
+
+        return originalResult.then((result) => {
+          if (result == null) {
+            return null;
+          } else {
+            for (const key in Object.keys(result)) {
+              const val = result[key] == null ?
+                null :
+                Object.create(valueConstructor.prototype, Object.getOwnPropertyDescriptors(result[key]));
+              result[key] = val;
+            }
+            return new Map<any, any>(Object.entries(result));
+          }
+        });
+      }
+    };
+  };
 }
