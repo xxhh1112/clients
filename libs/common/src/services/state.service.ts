@@ -51,9 +51,9 @@ const partialKeys = {
 export class StateService<
   TGlobalState extends GlobalState = GlobalState,
   TAccount extends Account = Account
-  > implements StateServiceAbstraction<TAccount>
+> implements StateServiceAbstraction<TAccount>
 {
-  accounts = new BehaviorSubject<{ [userId: string]: TAccount; }>({});
+  accounts = new BehaviorSubject<{ [userId: string]: TAccount }>({});
   activeAccount = new BehaviorSubject<string>(null);
 
   private hasBeenInited = false;
@@ -68,7 +68,7 @@ export class StateService<
     protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
     protected useAccountCache: boolean = true
-  ) { }
+  ) {}
 
   async init(): Promise<void> {
     if (this.hasBeenInited) {
@@ -1234,14 +1234,14 @@ export class StateService<
   }
 
   @withPrototypeForObjectValues(CipherData)
-  async getEncryptedCiphers(options?: StorageOptions): Promise<{ [id: string]: CipherData; }> {
+  async getEncryptedCiphers(options?: StorageOptions): Promise<{ [id: string]: CipherData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
     )?.data?.ciphers?.encrypted;
   }
 
   async setEncryptedCiphers(
-    value: { [id: string]: CipherData; },
+    value: { [id: string]: CipherData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1257,14 +1257,14 @@ export class StateService<
   @withPrototypeForObjectValues(CollectionData)
   async getEncryptedCollections(
     options?: StorageOptions
-  ): Promise<{ [id: string]: CollectionData; }> {
+  ): Promise<{ [id: string]: CollectionData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
     )?.data?.collections?.encrypted;
   }
 
   async setEncryptedCollections(
-    value: { [id: string]: CollectionData; },
+    value: { [id: string]: CollectionData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1295,14 +1295,14 @@ export class StateService<
   }
 
   @withPrototypeForObjectValues(FolderData)
-  async getEncryptedFolders(options?: StorageOptions): Promise<{ [id: string]: FolderData; }> {
+  async getEncryptedFolders(options?: StorageOptions): Promise<{ [id: string]: FolderData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
     )?.data?.folders?.encrypted;
   }
 
   async setEncryptedFolders(
-    value: { [id: string]: FolderData; },
+    value: { [id: string]: FolderData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1376,14 +1376,14 @@ export class StateService<
   }
 
   @withPrototypeForObjectValues(PolicyData)
-  async getEncryptedPolicies(options?: StorageOptions): Promise<{ [id: string]: PolicyData; }> {
+  async getEncryptedPolicies(options?: StorageOptions): Promise<{ [id: string]: PolicyData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.data?.policies?.encrypted;
   }
 
   async setEncryptedPolicies(
-    value: { [id: string]: PolicyData; },
+    value: { [id: string]: PolicyData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1431,14 +1431,14 @@ export class StateService<
   }
 
   @withPrototypeForObjectValues(SendData)
-  async getEncryptedSends(options?: StorageOptions): Promise<{ [id: string]: SendData; }> {
+  async getEncryptedSends(options?: StorageOptions): Promise<{ [id: string]: SendData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
     )?.data?.sends.encrypted;
   }
 
   async setEncryptedSends(
-    value: { [id: string]: SendData; },
+    value: { [id: string]: SendData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1653,7 +1653,7 @@ export class StateService<
   async getLastActive(options?: StorageOptions): Promise<number> {
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
 
-    const accountActivity = await this.storageService.get<{ [userId: string]: number; }>(
+    const accountActivity = await this.storageService.get<{ [userId: string]: number }>(
       keys.accountActivity,
       options
     );
@@ -1671,7 +1671,7 @@ export class StateService<
       return;
     }
     const accountActivity =
-      (await this.storageService.get<{ [userId: string]: number; }>(
+      (await this.storageService.get<{ [userId: string]: number }>(
         keys.accountActivity,
         options
       )) ?? {};
@@ -1782,13 +1782,13 @@ export class StateService<
     );
   }
 
-  async getNeverDomains(options?: StorageOptions): Promise<{ [id: string]: any; }> {
+  async getNeverDomains(options?: StorageOptions): Promise<{ [id: string]: any }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.settings?.neverDomains;
   }
 
-  async setNeverDomains(value: { [id: string]: any; }, options?: StorageOptions): Promise<void> {
+  async setNeverDomains(value: { [id: string]: any }, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
@@ -1869,14 +1869,14 @@ export class StateService<
     );
   }
 
-  async getOrganizations(options?: StorageOptions): Promise<{ [id: string]: OrganizationData; }> {
+  async getOrganizations(options?: StorageOptions): Promise<{ [id: string]: OrganizationData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.data?.organizations;
   }
 
   async setOrganizations(
-    value: { [id: string]: OrganizationData; },
+    value: { [id: string]: OrganizationData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -1958,14 +1958,14 @@ export class StateService<
   }
 
   @withPrototypeForObjectValues(ProviderData)
-  async getProviders(options?: StorageOptions): Promise<{ [id: string]: ProviderData; }> {
+  async getProviders(options?: StorageOptions): Promise<{ [id: string]: ProviderData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.data?.providers;
   }
 
   async setProviders(
-    value: { [id: string]: ProviderData; },
+    value: { [id: string]: ProviderData },
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
@@ -2323,10 +2323,10 @@ export class StateService<
 
     const account = options?.useSecureStorage
       ? (await this.secureStorageService.get<TAccount>(options.userId, options)) ??
-      (await this.storageService.get<TAccount>(
-        options.userId,
-        this.reconcileOptions(options, { htmlStorageLocation: HtmlStorageLocation.Local })
-      ))
+        (await this.storageService.get<TAccount>(
+          options.userId,
+          this.reconcileOptions(options, { htmlStorageLocation: HtmlStorageLocation.Local })
+        ))
       : await this.storageService.get<TAccount>(options.userId, options);
 
     if (this.useAccountCache) {
@@ -2698,10 +2698,10 @@ export class StateService<
 function withPrototype<T>(
   constructor: new (...args: any[]) => T
 ): (
-    target: any,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
-  ) => { value: (...args: any[]) => Promise<T>; } {
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor
+) => { value: (...args: any[]) => Promise<T> } {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
@@ -2730,10 +2730,10 @@ function withPrototype<T>(
 function withPrototypeForArrayMembers<T>(
   memberConstructor: new (...args: any[]) => T
 ): (
-    target: any,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
-  ) => { value: (...args: any[]) => Promise<T[]>; } {
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor
+) => { value: (...args: any[]) => Promise<T[]> } {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
@@ -2774,16 +2774,16 @@ function withPrototypeForArrayMembers<T>(
 function withPrototypeForObjectValues<T>(
   valuesConstructor: new (...args: any[]) => T
 ): (
-    target: any,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
-  ) => { value: (...args: any[]) => Promise<{ [key: string]: T; }>; } {
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor
+) => { value: (...args: any[]) => Promise<{ [key: string]: T }> } {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     return {
       value: function (...args: any[]) {
-        const originalResult: Promise<{ [key: string]: T; }> = originalMethod.apply(this, args);
+        const originalResult: Promise<{ [key: string]: T }> = originalMethod.apply(this, args);
 
         if (!(originalResult instanceof Promise)) {
           throw new Error(
@@ -2802,12 +2802,12 @@ function withPrototypeForObjectValues<T>(
                 result[key] == null
                   ? null
                   : Object.create(
-                    valuesConstructor.prototype,
-                    Object.getOwnPropertyDescriptors(result[key])
-                  );
+                      valuesConstructor.prototype,
+                      Object.getOwnPropertyDescriptors(result[key])
+                    );
               result[key] = val;
             }
-            return result as { [key: string]: T; };
+            return result as { [key: string]: T };
           }
         });
       },
@@ -2818,10 +2818,10 @@ function withPrototypeForObjectValues<T>(
 function withPrototypeForMap<T>(
   valueConstructor: new (...args: any[]) => T
 ): (
-    target: any,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
-  ) => { value: (...args: any[]) => Promise<Map<string, T>>; } {
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor
+) => { value: (...args: any[]) => Promise<Map<string, T>> } {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
@@ -2846,9 +2846,9 @@ function withPrototypeForMap<T>(
                 result[key] == null
                   ? null
                   : Object.create(
-                    valueConstructor.prototype,
-                    Object.getOwnPropertyDescriptors(result[key])
-                  );
+                      valueConstructor.prototype,
+                      Object.getOwnPropertyDescriptors(result[key])
+                    );
               result[key] = val;
             }
             return new Map<string, T>(Object.entries(result));
