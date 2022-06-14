@@ -2723,7 +2723,7 @@ export class StateService<
   }
 }
 
-function withPrototype<T>(
+export function withPrototype<T>(
   constructor: new (...args: any[]) => T
 ): (
   target: any,

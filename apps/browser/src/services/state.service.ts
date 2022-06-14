@@ -1,6 +1,9 @@
 import { GlobalState } from "jslib-common/models/domain/globalState";
 import { StorageOptions } from "jslib-common/models/domain/storageOptions";
-import { StateService as BaseStateService } from "jslib-common/services/state.service";
+import {
+  StateService as BaseStateService,
+  withPrototype,
+} from "jslib-common/services/state.service";
 
 import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
@@ -28,6 +31,7 @@ export class StateService
     );
   }
 
+  @withPrototype(BrowserGroupingsComponentState)
   async getBrowserGroupingComponentState(
     options?: StorageOptions
   ): Promise<BrowserGroupingsComponentState> {
@@ -50,6 +54,7 @@ export class StateService
     );
   }
 
+  @withPrototype(BrowserComponentState)
   async getBrowserCipherComponentState(options?: StorageOptions): Promise<BrowserComponentState> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -70,6 +75,7 @@ export class StateService
     );
   }
 
+  @withPrototype(BrowserSendComponentState)
   async getBrowserSendComponentState(options?: StorageOptions): Promise<BrowserSendComponentState> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -89,6 +95,8 @@ export class StateService
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
   }
+
+  @withPrototype(BrowserComponentState)
   async getBrowserSendTypeComponentState(options?: StorageOptions): Promise<BrowserComponentState> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
