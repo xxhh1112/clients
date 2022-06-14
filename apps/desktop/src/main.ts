@@ -4,7 +4,7 @@ import { app } from "electron";
 
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { GlobalState } from "jslib-common/models/domain/globalState";
-import { MemoryStorageService } from 'jslib-common/services/memoryStorage.service';
+import { MemoryStorageService } from "jslib-common/services/memoryStorage.service";
 import { StateService } from "jslib-common/services/state.service";
 import { ElectronLogService } from "jslib-electron/services/electronLog.service";
 import { ElectronMainMessagingService } from "jslib-electron/services/electronMainMessaging.service";

@@ -2718,8 +2718,9 @@ function withPrototype<T>(
         }
 
         return originalResult.then((result) => {
-          return result == null
-            ? null
+          return result == null ||
+            result.constructor.name === constructor.prototype.constructor.name
+            ? (result as T)
             : (Object.create(constructor.prototype, Object.getOwnPropertyDescriptors(result)) as T);
         });
       },
@@ -2760,8 +2761,9 @@ function withPrototypeForArrayMembers<T>(
             );
           } else {
             return result.map((r) => {
-              return r == null
-                ? null
+              return r == null ||
+                r.constructor.name === memberConstructor.prototype.constructor.name
+                ? r
                 : Object.create(memberConstructor.prototype, Object.getOwnPropertyDescriptors(r));
             });
           }
@@ -2797,16 +2799,16 @@ function withPrototypeForObjectValues<T>(
           if (result == null) {
             return null;
           } else {
-            for (const key in Object.keys(result)) {
-              const val =
-                result[key] == null
-                  ? null
+            for (const [key, val] of Object.entries(result)) {
+              result[key] =
+                val == null || val.constructor.name === valuesConstructor.prototype.constructor.name
+                  ? val
                   : Object.create(
                       valuesConstructor.prototype,
-                      Object.getOwnPropertyDescriptors(result[key])
+                      Object.getOwnPropertyDescriptors(val)
                     );
-              result[key] = val;
             }
+
             return result as { [key: string]: T };
           }
         });
@@ -2840,16 +2842,18 @@ function withPrototypeForMap<T>(
         return originalResult.then((result) => {
           if (result == null) {
             return null;
+          } else if (result instanceof Map) {
+            return result;
           } else {
             for (const key in Object.keys(result)) {
-              const val =
-                result[key] == null
-                  ? null
+              result[key] =
+                result[key] == null ||
+                result[key].constructor.name === valueConstructor.prototype.constructor.name
+                  ? result[key]
                   : Object.create(
                       valueConstructor.prototype,
                       Object.getOwnPropertyDescriptors(result[key])
                     );
-              result[key] = val;
             }
             return new Map<string, T>(Object.entries(result));
           }
