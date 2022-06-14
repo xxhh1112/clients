@@ -2512,7 +2512,7 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Local,
-      userId: (await this.state).activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId: (await this.state)?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
     };
   }
@@ -2521,7 +2521,7 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Memory,
-      userId: (await this.state).activeUserId ?? (await this.getUserId()),
+      userId: (await this.state)?.activeUserId ?? (await this.getUserId()),
       useSecureStorage: false,
     };
   }
@@ -2530,7 +2530,7 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       useSecureStorage: true,
-      userId: (await this.state).activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId: (await this.state)?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
     };
   }
 
@@ -2539,7 +2539,7 @@ export class StateService<
   }
 
   protected async removeAccountFromLocalStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state).activeUserId;
+    userId = userId ?? (await this.state)?.activeUserId;
     const storedAccount = await this.getAccount(
       this.reconcileOptions({ userId: userId }, await this.defaultOnDiskLocalOptions())
     );
@@ -2550,7 +2550,7 @@ export class StateService<
   }
 
   protected async removeAccountFromSessionStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state).activeUserId;
+    userId = userId ?? (await this.state)?.activeUserId;
     const storedAccount = await this.getAccount(
       this.reconcileOptions({ userId: userId }, await this.defaultOnDiskOptions())
     );
@@ -2561,7 +2561,7 @@ export class StateService<
   }
 
   protected async removeAccountFromSecureStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state).activeUserId;
+    userId = userId ?? (await this.state)?.activeUserId;
     await this.setCryptoMasterKeyAuto(null, { userId: userId });
     await this.setCryptoMasterKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyB64(null, { userId: userId });
@@ -2580,7 +2580,7 @@ export class StateService<
 
   protected async pruneInMemoryAccounts() {
     // We preserve settings for logged out accounts, but we don't want to consider them when thinking about active account state
-    for (const userId in (await this.state).accounts) {
+    for (const userId in (await this.state)?.accounts) {
       if (!(await this.getIsAuthenticated({ userId: userId }))) {
         await this.removeAccountFromMemory(userId);
       }
@@ -2638,7 +2638,7 @@ export class StateService<
   }
 
   protected async dynamicallySetActiveUser() {
-    const accounts = (await this.state).accounts;
+    const accounts = (await this.state)?.accounts;
     if (accounts == null || Object.keys(accounts).length < 1) {
       await this.setActiveUser(null);
       return;
