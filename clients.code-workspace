@@ -39,7 +39,10 @@
       }
     },
     "jest.disabledWorkspaceFolders": [
-      "root",
+      "browser",
+      "cli",
+      "desktop",
+      "libs",
       "web vault",
       "web vault (bit)",
       "desktop"

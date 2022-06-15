@@ -1,4 +1,4 @@
-import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
+import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 
 export default abstract class AbstractChromeStorageService implements AbstractStorageService {
   protected abstract chromeStorageApi: any;

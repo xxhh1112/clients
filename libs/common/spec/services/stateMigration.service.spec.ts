@@ -1,11 +1,11 @@
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
-import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
-import { StateVersion } from "jslib-common/enums/stateVersion";
-import { StateFactory } from "jslib-common/factories/stateFactory";
-import { Account } from "jslib-common/models/domain/account";
-import { GlobalState } from "jslib-common/models/domain/globalState";
-import { StateMigrationService } from "jslib-common/services/stateMigration.service";
+import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
+import { StateVersion } from "@bitwarden/common/enums/stateVersion";
+import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { Account } from "@bitwarden/common/models/domain/account";
+import { GlobalState } from "@bitwarden/common/models/domain/globalState";
+import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
 
 const userId = "USER_ID";
 
@@ -28,7 +28,7 @@ describe("State Migration Service", () => {
     );
   });
 
-  describe("StateVersion 3 to 4 migration", async () => {
+  describe("StateVersion 3 to 4 migration", () => {
     beforeEach(() => {
       const globalVersion3: Partial<GlobalState> = {
         stateVersion: StateVersion.Three,
