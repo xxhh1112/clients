@@ -2,9 +2,11 @@ import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { LogService } from "jslib-common/abstractions/log.service";
 import { AbstractStorageService } from "jslib-common/abstractions/storage.service";
+import { SendType } from "jslib-common/enums/sendType";
 import { StateFactory } from "jslib-common/factories/stateFactory";
 import { GlobalState } from "jslib-common/models/domain/globalState";
 import { State } from "jslib-common/models/domain/state";
+import { SendView } from "jslib-common/models/view/sendView";
 import { StateMigrationService } from "jslib-common/services/stateMigration.service";
 
 import { Account } from "../models/account";
@@ -42,7 +44,8 @@ describe("Browser State Service", () => {
       profile: { userId: userId },
     });
     state.activeUserId = userId;
-    memoryStorageService.get("state").resolves(JSON.parse(JSON.stringify(state)));
+    const stateGetter = (key: string) => Promise.resolve(JSON.parse(JSON.stringify(state)));
+    memoryStorageService.get("state").mimicks(stateGetter);
 
     sut = new StateService(
       diskStorageService,
@@ -57,7 +60,7 @@ describe("Browser State Service", () => {
 
   describe("getBrowserGroupingComponentState", () => {
     it("should return a BrowserGroupingsComponentState", async () => {
-      state.accounts["userId"].groupings = new BrowserGroupingsComponentState();
+      state.accounts[userId].groupings = new BrowserGroupingsComponentState();
 
       const actual = await sut.getBrowserGroupingComponentState();
       expect(actual).toBeInstanceOf(BrowserGroupingsComponentState);
@@ -66,28 +69,41 @@ describe("Browser State Service", () => {
 
   describe("getBrowserCipherComponentState", () => {
     it("should return a BrowserComponentState", async () => {
-      state.accounts["userId"].ciphers = new BrowserComponentState();
+      const componentState = new BrowserComponentState();
+      componentState.scrollY = 0;
+      componentState.searchText = "test";
+      state.accounts[userId].ciphers = componentState;
 
       const actual = await sut.getBrowserCipherComponentState();
-      expect(actual).toBeInstanceOf(BrowserComponentState);
+      expect(actual).toStrictEqual(componentState);
     });
   });
 
   describe("getBrowserSendComponentState", () => {
     it("should return a BrowserSendComponentState", async () => {
-      state.accounts["userId"].send = new BrowserSendComponentState();
+      const sendState = new BrowserSendComponentState();
+      sendState.sends = [new SendView(), new SendView()];
+      sendState.typeCounts = new Map<SendType, number>([
+        [SendType.File, 3],
+        [SendType.Text, 5],
+      ]);
+      state.accounts[userId].send = sendState;
 
       const actual = await sut.getBrowserSendComponentState();
       expect(actual).toBeInstanceOf(BrowserSendComponentState);
+      expect(actual).toMatchObject(sendState);
     });
   });
 
   describe("getBrowserSendTypeComponentState", () => {
     it("should return a BrowserComponentState", async () => {
-      state.accounts["userId"].sendType = new BrowserComponentState();
+      const componentState = new BrowserComponentState();
+      componentState.scrollY = 0;
+      componentState.searchText = "test";
+      state.accounts[userId].sendType = componentState;
 
       const actual = await sut.getBrowserSendTypeComponentState();
-      expect(actual).toBeInstanceOf(BrowserComponentState);
+      expect(actual).toStrictEqual(componentState);
     });
   });
 });
