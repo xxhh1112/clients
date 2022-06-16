@@ -212,6 +212,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   togglePassword(confirmField: boolean) {
     this.showPassword = !this.showPassword;
+    console.log("Here::", document.getElementById("masterPasswordRetype"));
+    console.log("Here2::", document.getElementById("masterPassword"));
     document.getElementById(confirmField ? "masterPasswordRetype" : "masterPassword").focus();
   }
 
