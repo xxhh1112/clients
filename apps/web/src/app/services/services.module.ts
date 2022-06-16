@@ -14,6 +14,9 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
+import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
+import { FilePasswordPromptService as FilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
@@ -25,12 +28,14 @@ import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/a
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { ExportService } from "@bitwarden/common/services/export.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
 
 import { StateService as StateServiceAbstraction } from "../../abstractions/state.service";
 import { Account } from "../../models/account";
 import { GlobalState } from "../../models/globalState";
 import { BroadcasterMessagingService } from "../../services/broadcasterMessaging.service";
+import { FilePasswordPromptService } from "../../services/filePasswordPrompt.service";
 import { HtmlStorageService } from "../../services/htmlStorage.service";
 import { I18nService } from "../../services/i18n.service";
 import { MemoryStorageService } from "../../services/memoryStorage.service";
@@ -104,6 +109,17 @@ import { RouterService } from "./router.service";
       ],
     },
     {
+      provide: ExportServiceAbstraction,
+      useClass: ExportService,
+      deps: [
+        FolderServiceAbstraction,
+        CipherServiceAbstraction,
+        ApiServiceAbstraction,
+        CryptoServiceAbstraction,
+        CryptoFunctionServiceAbstraction,
+      ],
+    },
+    {
       provide: StateMigrationServiceAbstraction,
       useClass: StateMigrationService,
       deps: [StorageServiceAbstraction, SECURE_STORAGE, STATE_FACTORY],
@@ -127,6 +143,10 @@ import { RouterService } from "./router.service";
     {
       provide: PasswordRepromptServiceAbstraction,
       useClass: PasswordRepromptService,
+    },
+    {
+      provide: FilePasswordPromptServiceAbstraction,
+      useClass: FilePasswordPromptService,
     },
     HomeGuard,
   ],
