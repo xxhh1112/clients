@@ -1,0 +1,147 @@
+<form
+  #form
+  (ngSubmit)="submit()"
+  [appApiAction]="formPromise"
+  class="tw-container tw-mx-auto"
+  [formGroup]="formData"
+>
+  <div class="">
+    <!--Email-->
+    <div class="tw-mb-3">
+      <bit-form-field>
+        <bit-label>{{ "emailAddress" | i18n }}</bit-label>
+        <input bitInput type="email" formControlName="email" />
+      </bit-form-field>
+      <small class="tw-mb-2 tw-text-grey-500">{{ "emailAddressDesc" | i18n }}</small>
+    </div>
+
+    <div class="tw-mb-3">
+      <bit-form-field>
+        <bit-label>{{ "name" | i18n }}</bit-label>
+        <input bitInput type="text" formControlName="name" />
+      </bit-form-field>
+      <small class="tw-mb-2 tw-text-grey-500">{{ "yourNameDesc" | i18n }}</small>
+    </div>
+
+    <div class="tw-mb-3">
+      <!-- <app-callout
+            type="info"
+            [enforcedPolicyOptions]="enforcedPolicyOptions"
+            *ngIf="enforcedPolicyOptions"
+        >
+        </app-callout> -->
+      <bit-form-field>
+        <bit-label>{{ "masterPass" | i18n }}</bit-label>
+
+        <input
+          bitInput
+          type="{{ showPassword ? 'text' : 'password' }}"
+          formControlName="masterPassword"
+        />
+        <app-password-strength [score]="masterPasswordScore" [showText]="true">
+        </app-password-strength>
+
+        <button
+          type="button"
+          bit-button
+          class="tw-ml-1 tw-p-2 tw-text-main tw-bg-transparent tw-text-sm tw-border-0 tw-rounded-md tw-block tw-outline-none focus:tw-outline-none tw-mb-1"
+          appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+          (click)="togglePassword(false)"
+        >
+          <i
+            class="bwi bwi-lg"
+            aria-hidden="true"
+            [ngClass]="{
+              'bwi-eye': !showPassword,
+              'bwi-eye-slash': showPassword
+            }"
+          ></i>
+        </button>
+      </bit-form-field>
+
+      <small class="tw-text-grey-500">{{ "masterPassDesc" | i18n }}</small>
+    </div>
+
+    <div class="tw-mb-3">
+      <bit-form-field>
+        <bit-label>{{ "reTypeMasterPass" | i18n }}</bit-label>
+        <input
+          bitInput
+          type="{{ showPassword ? 'text' : 'password' }}"
+          formControlName="confirmMasterPassword"
+        />
+
+        <button
+          type="button"
+          bit-button
+          class="tw-ml-1 tw-p-2 tw-text-main tw-bg-transparent tw-text-sm tw-border-0 tw-rounded-md tw-block tw-outline-none focus:tw-outline-none tw-mb-1"
+          appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+          (click)="togglePassword(true)"
+        >
+          <i
+            class="bwi bwi-lg"
+            aria-hidden="true"
+            [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+          ></i>
+        </button>
+      </bit-form-field>
+    </div>
+
+    <div class="tw-mb-3">
+      <bit-form-field>
+        <bit-label>{{ "masterPassHint" | i18n }}</bit-label>
+        <input bitInput type="text" formControlName="hint" />
+      </bit-form-field>
+      <small class="tw-text-grey-500">{{ "masterPassHintDesc" | i18n }}</small>
+    </div>
+
+    <div [hidden]="!showCaptcha()">
+      <iframe id="hcaptcha_iframe" height="80"></iframe>
+    </div>
+
+    <div class="tw-flex tw-items-start tw-mb-3" *ngIf="showTerms">
+      <div class="tw-flex tw-items-center tw-h-5">
+        <input
+          class="tw-w-4 tw-rounded tw-border tw-border-gray-300"
+          bitInput
+          type="checkbox"
+          formControlName="acceptPolicies"
+        />
+      </div>
+      <bit-label
+        >{{ "acceptPolicies" | i18n }}<br />
+        <a href="https://bitwarden.com/terms/" target="_blank" rel="noopener">{{
+          "termsOfService" | i18n
+        }}</a
+        >,
+        <a href="https://bitwarden.com/privacy/" target="_blank" rel="noopener">{{
+          "privacyPolicy" | i18n
+        }}</a></bit-label
+      >
+    </div>
+
+    <hr />
+
+    <div class="tw-flex tw-mb-2">
+      <button
+        class="tw-px-6 tw-py-2.5"
+        type="submit"
+        bitButton
+        buttonType="primary"
+        [disabled]="form.loading"
+      >
+        <span>{{ "createAccount" | i18n }}</span>
+        <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
+      </button>
+      <a
+        bitButton
+        buttonType="secondary"
+        routerLink="/login"
+        class="tw-inline-flex tw-items-center tw-ml-3 tw-px-3"
+      >
+        <i class="bwi bwi-sign-in tw-mr-2"></i>
+        {{ "logIn" | i18n }}
+      </a>
+    </div>
+  </div>
+</form>
