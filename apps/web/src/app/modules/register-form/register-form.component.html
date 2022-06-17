@@ -3,43 +3,46 @@
   (ngSubmit)="submit()"
   [appApiAction]="formPromise"
   class="tw-container tw-mx-auto"
-  [formGroup]="formData"
+  [formGroup]="formGroup"
 >
-  <div class="">
-    <!--Email-->
+  <div>
     <div class="tw-mb-3">
       <bit-form-field>
         <bit-label>{{ "emailAddress" | i18n }}</bit-label>
         <input bitInput type="email" formControlName="email" />
+        <bit-hint class="tw-text-sm">{{ "emailAddressDesc" | i18n }}</bit-hint>
       </bit-form-field>
-      <small class="tw-mb-2 tw-text-grey-500">{{ "emailAddressDesc" | i18n }}</small>
     </div>
 
     <div class="tw-mb-3">
       <bit-form-field>
         <bit-label>{{ "name" | i18n }}</bit-label>
         <input bitInput type="text" formControlName="name" />
+        <bit-hint class="tw-text-sm">{{ "yourNameDesc" | i18n }}</bit-hint>
       </bit-form-field>
-      <small class="tw-mb-2 tw-text-grey-500">{{ "yourNameDesc" | i18n }}</small>
     </div>
 
     <div class="tw-mb-3">
-      <!-- <app-callout
-            type="info"
-            [enforcedPolicyOptions]="enforcedPolicyOptions"
-            *ngIf="enforcedPolicyOptions"
-        >
-        </app-callout> -->
+      <app-callout
+        type="info"
+        [enforcedPolicyOptions]="enforcedPolicyOptions"
+        *ngIf="enforcedPolicyOptions"
+      >
+      </app-callout>
       <bit-form-field>
         <bit-label>{{ "masterPass" | i18n }}</bit-label>
-
-        <input
-          bitInput
-          type="{{ showPassword ? 'text' : 'password' }}"
-          formControlName="masterPassword"
-        />
-        <app-password-strength [score]="masterPasswordScore" [showText]="true">
-        </app-password-strength>
+        <div class="tw-w-full">
+          <input
+            #masterPassword
+            class="mb-2"
+            bitInput
+            (input)="updatePasswordStrength()"
+            type="{{ showPassword ? 'text' : 'password' }}"
+            formControlName="masterPassword"
+          />
+          <app-password-strength [score]="masterPasswordScore" [showText]="true">
+          </app-password-strength>
+        </div>
 
         <button
           type="button"
@@ -57,15 +60,18 @@
             }"
           ></i>
         </button>
+        <bit-hint class="tw-text-sm">
+          <span class="tw-font-semibold">Important:</span>
+          {{ "masterPassImportant" | i18n }}</bit-hint
+        >
       </bit-form-field>
-
-      <small class="tw-text-grey-500">{{ "masterPassDesc" | i18n }}</small>
     </div>
 
     <div class="tw-mb-3">
       <bit-form-field>
         <bit-label>{{ "reTypeMasterPass" | i18n }}</bit-label>
         <input
+          #masterPasswordRetype
           bitInput
           type="{{ showPassword ? 'text' : 'password' }}"
           formControlName="confirmMasterPassword"
@@ -91,8 +97,8 @@
       <bit-form-field>
         <bit-label>{{ "masterPassHint" | i18n }}</bit-label>
         <input bitInput type="text" formControlName="hint" />
+        <bit-hint class="tw-tracking-tight tw-text-sm">{{ "masterPassHintDesc" | i18n }}</bit-hint>
       </bit-form-field>
-      <small class="tw-text-grey-500">{{ "masterPassHintDesc" | i18n }}</small>
     </div>
 
     <div [hidden]="!showCaptcha()">
@@ -100,7 +106,7 @@
     </div>
 
     <div class="tw-flex tw-items-start tw-mb-3" *ngIf="showTerms">
-      <div class="tw-flex tw-items-center tw-h-5">
+      <div class="tw-flex tw-items-center tw-h-6">
         <input
           class="tw-w-4 tw-rounded tw-border tw-border-gray-300"
           bitInput
@@ -108,16 +114,16 @@
           formControlName="acceptPolicies"
         />
       </div>
-      <bit-label
-        >{{ "acceptPolicies" | i18n }}<br />
+      <bit-label class="ml-2">
+        {{ "acceptPolicies" | i18n }}<br />
         <a href="https://bitwarden.com/terms/" target="_blank" rel="noopener">{{
           "termsOfService" | i18n
         }}</a
         >,
         <a href="https://bitwarden.com/privacy/" target="_blank" rel="noopener">{{
           "privacyPolicy" | i18n
-        }}</a></bit-label
-      >
+        }}</a>
+      </bit-label>
     </div>
 
     <hr />
@@ -128,6 +134,7 @@
         type="submit"
         bitButton
         buttonType="primary"
+        class="btn-submit"
         [disabled]="form.loading"
       >
         <span>{{ "createAccount" | i18n }}</span>

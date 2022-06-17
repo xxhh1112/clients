@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -32,6 +33,7 @@ export class RegisterComponent extends BaseRegisterComponent {
   private policies: Policy[];
 
   constructor(
+    formBuilder: FormBuilder,
     authService: AuthService,
     router: Router,
     i18nService: I18nService,
@@ -47,6 +49,7 @@ export class RegisterComponent extends BaseRegisterComponent {
     private routerService: RouterService
   ) {
     super(
+      formBuilder,
       authService,
       router,
       i18nService,

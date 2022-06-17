@@ -593,6 +593,9 @@
   "masterPassDesc": {
     "message": "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
   },
+  "masterPassImportant": {
+    "message": "Master passwords cannot be recovered if you forget it!"
+  },
   "masterPassHintDesc": {
     "message": "A master password hint can help you remember your password if you forget it."
   },
