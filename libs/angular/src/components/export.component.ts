@@ -184,9 +184,8 @@ export class ExportComponent implements OnInit {
   }
 
   get validForm() {
-    //TODO check if fileEncryption type is null?
+    //fileEncryptionType 2 = file requires a user entered password, specific to the file
     if (this.fileEncryptionType == 2 && this.format == "encrypted_json") {
-      //password encryption type
       const password = this.password;
       const confirmPassword = this.confirmPassword;
 
