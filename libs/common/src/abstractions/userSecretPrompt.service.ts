@@ -1,4 +1,4 @@
-export abstract class ExportFilePasswordPromptService {
+export abstract class UserSecretPromptService {
   protectedFields: () => string[];
   showPasswordPrompt: (
     confirmDescription: string,

@@ -7,12 +7,12 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
-import { ExportFilePasswordPromptService } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { UserSecretPromptService } from "@bitwarden/common/abstractions/userSecretPrompt.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 
 @Component({
@@ -47,7 +47,7 @@ export class ExportComponent extends BaseExportComponent {
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
-    exportFilePasswordPromptService: ExportFilePasswordPromptService,
+    userSecretPromptService: UserSecretPromptService,
     modalConfig: ModalConfig
   ) {
     super(
@@ -64,7 +64,7 @@ export class ExportComponent extends BaseExportComponent {
       modalService,
       apiService,
       stateService,
-      exportFilePasswordPromptService,
+      userSecretPromptService,
       modalConfig
     );
   }
@@ -85,7 +85,7 @@ export class ExportComponent extends BaseExportComponent {
     const entityId = await this.stateService.getUserId();
     try {
       if (
-        await this.exportFilePasswordPromptService.showPasswordPrompt(
+        await this.userSecretPromptService.showPasswordPrompt(
           confirmDescription,
           confirmButtonText,
           modalTitle

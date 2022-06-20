@@ -15,7 +15,7 @@ import { ModalRef } from "./modal/modal.ref";
  * Used to verify the user's secret, you can customize all of the text in the modal.
  */
 @Directive()
-export class ExportFilePasswordPromptComponent {
+export class UserSecretPromptComponent {
   showPassword = false;
   organizationId = "";
   confirmDescription = "";

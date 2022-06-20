@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 
-import { ExportFilePasswordPromptService as ExportFilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
+import { UserSecretPromptService as UserSecretPromptServiceAbstraction } from "@bitwarden/common/abstractions/userSecretPrompt.service";
 
-import { ExportFilePasswordPromptComponent } from "../components/export-file-password-prompt.component";
+import { UserSecretPromptComponent } from "../components/user-secret-prompt.component";
 
 import { ModalService } from "./modal.service";
 
@@ -11,8 +11,8 @@ import { ModalService } from "./modal.service";
  * Used to verify the user's File Password for the "Import passwords using File Password" feature only.
  */
 @Injectable()
-export class ExportFilePasswordPromptService implements ExportFilePasswordPromptServiceAbstraction {
-  protected component = ExportFilePasswordPromptComponent;
+export class UserSecretPromptService implements UserSecretPromptServiceAbstraction {
+  protected component = UserSecretPromptComponent;
 
   constructor(
     private modalService: ModalService,

@@ -9,14 +9,17 @@ import {
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
-import { ModalService as ModalServiceAbstraction , ModalConfig as ModalConfigAbstraction , ModalConfig } from "@bitwarden/angular/services/modal.service";
+import {
+  ModalService as ModalServiceAbstraction,
+  ModalConfig as ModalConfigAbstraction,
+  ModalConfig,
+} from "@bitwarden/angular/services/modal.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
-import { ExportFilePasswordPromptService as ExportFilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { FilePasswordPromptService as FilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
@@ -28,6 +31,7 @@ import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwar
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/abstractions/storage.service";
+import { UserSecretPromptService as UserSecretPromptServiceAbstraction } from "@bitwarden/common/abstractions/userSecretPrompt.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
@@ -36,7 +40,6 @@ import { StateService as StateServiceAbstraction } from "../../abstractions/stat
 import { Account } from "../../models/account";
 import { GlobalState } from "../../models/globalState";
 import { BroadcasterMessagingService } from "../../services/broadcasterMessaging.service";
-import { ExportFilePasswordPromptService } from "../../services/exportFilePasswordPrompt.service";
 import { FilePasswordPromptService } from "../../services/filePasswordPrompt.service";
 import { HtmlStorageService } from "../../services/htmlStorage.service";
 import { I18nService } from "../../services/i18n.service";
@@ -44,6 +47,7 @@ import { MemoryStorageService } from "../../services/memoryStorage.service";
 import { PasswordRepromptService } from "../../services/passwordReprompt.service";
 import { StateService } from "../../services/state.service";
 import { StateMigrationService } from "../../services/stateMigration.service";
+import { UserSecretPromptService } from "../../services/userSecretPrompt.service";
 import { WebPlatformUtilsService } from "../../services/webPlatformUtils.service";
 import { HomeGuard } from "../guards/home.guard";
 import { PermissionsGuard as OrgPermissionsGuard } from "../organizations/guards/permissions.guard";
@@ -152,8 +156,8 @@ import { RouterService } from "./router.service";
       useClass: FilePasswordPromptService,
     },
     {
-      provide: ExportFilePasswordPromptServiceAbstraction,
-      useClass: ExportFilePasswordPromptService,
+      provide: UserSecretPromptServiceAbstraction,
+      useClass: UserSecretPromptService,
     },
     HomeGuard,
   ],
