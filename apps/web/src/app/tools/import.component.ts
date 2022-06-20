@@ -114,12 +114,16 @@ export class ImportComponent implements OnInit {
       if (error != null) {
         //Check if the error is that a password is required
         if (error.passwordRequired) {
-          if (await this.promptPassword(fileContents)) {
+          if (await this.promptFilePassword(fileContents)) {
             //successful
           } else {
-            //failed
-            this.error(error); //TODO different error
+            //failed - File Password issues
             this.loading = false;
+            this.platformUtilsService.showToast(
+              "error",
+              this.i18nService.t("error"),
+              this.i18nService.t("invalidMasterPassword")
+            );
             return;
           }
         } else {
@@ -139,7 +143,7 @@ export class ImportComponent implements OnInit {
     this.loading = false;
   }
 
-  private async promptPassword(fcontents: string) {
+  private async promptFilePassword(fcontents: string) {
     return await this.filePasswordPromptService.showPasswordPrompt(fcontents, this.organizationId);
   }
 
