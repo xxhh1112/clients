@@ -8,10 +8,12 @@ import {
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { ExportFilePasswordPromptService } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -20,8 +22,6 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
-
-import { ModalService } from "../services/modal.service";
 
 @Directive()
 export class ExportComponent implements OnInit {
@@ -63,7 +63,9 @@ export class ExportComponent implements OnInit {
     private formBuilder: FormBuilder,
     protected modalService: ModalService,
     protected apiService: ApiService,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected exportFilePasswordPromptService: ExportFilePasswordPromptService,
+    protected modalConfig: ModalConfig
   ) {}
 
   async ngOnInit() {

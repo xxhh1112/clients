@@ -878,30 +878,6 @@
   "fileFormat": {
     "message": "File format"
   },
-  "confirmFormat": {
-    "message": "Confirm Format"
-  },
-  "filePassword": {
-    "message": "File Password"
-  },
-  "confirmFilePassword": {
-    "message": "Confirm File Password"
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Leverages your bitwarden account encryption not master password, to protect the export. This export can only be imported into the current account. Use this to create a backup that cannot be used elsewhere."
-  },
-  "accountBackupOptionDescription": {
-    "message": "Create a user-generated password to protect the export. Use this to create an export that can be used in other accounts."
-  },
-  "fileTypeHeading": {
-    "message": "File Type"
-  },
-  "confirmVaultImport": {
-    "message": "Confirm Vault Import"
-  },
-  "confirmVaultImportDesc": {
-    "message": "This file is password protected. Please enter the file password to import data."
-  },
   "exportSuccess": {
     "message": "Your vault data has been exported."
   },
@@ -4724,9 +4700,6 @@
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
-  },
-  "exportPasswordDescription" : {
-    "message": "This password will be used to export and import this file"
   },
   "verificationCodeRequired": {
     "message": "Verification code is required."

@@ -2,19 +2,18 @@ import { Component, EventEmitter, Output, ViewChild, ViewContainerRef } from "@a
 import { FormBuilder, FormControl } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { ExportFilePasswordPromptService } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
-
-import { ApiKeyComponent } from "../settings/api-key.component";
 
 @Component({
   selector: "app-export",
@@ -28,6 +27,9 @@ export class ExportComponent extends BaseExportComponent {
   showConfirmPassword: boolean;
   secretValue: string;
   secret: FormControl;
+  confirmDescription: string;
+  confirmButtonText: string;
+  modalTitle: string;
 
   @ViewChild("viewUserApiKeyModalRef", { read: ViewContainerRef, static: true })
   viewUserApiKeyModalRef: ViewContainerRef;
@@ -44,7 +46,9 @@ export class ExportComponent extends BaseExportComponent {
     formBuilder: FormBuilder,
     modalService: ModalService,
     apiService: ApiService,
-    stateService: StateService
+    stateService: StateService,
+    exportFilePasswordPromptService: ExportFilePasswordPromptService,
+    modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -59,31 +63,52 @@ export class ExportComponent extends BaseExportComponent {
       formBuilder,
       modalService,
       apiService,
-      stateService
+      stateService,
+      exportFilePasswordPromptService,
+      modalConfig
     );
   }
 
-  async promptUserForSecret() {
+  async promptUserForSecret(encryptionType: string) {
+    //Default text values
+    let confirmDescription = "encExportKeyWarningDesc";
+    let confirmButtonText = "exportVault";
+    let modalTitle = "confirmVaultExport";
+
+    //Password encrypted export
+    if (encryptionType == "2") {
+      confirmDescription = "confirmVaultExportDesc";
+      confirmButtonText = "exportVault";
+      modalTitle = "confirmVaultExport";
+    }
+
     const entityId = await this.stateService.getUserId();
     try {
-      // //TODO get help from Thomas on this/ other options I have to get a Secret :
-      // await this.modalService.openViewRef(ApiKeyComponent, this.viewUserApiKeyModalRef, (comp) => {
-      //   comp.keyType = "user";
-      //   comp.entityId = entityId;
-      //   comp.postKey = this.apiService.postUserApiKey.bind(this.apiService);
-      //   comp.scope = "api";
-      //   comp.grantType = "client_credentials";
-      //   comp.apiKeyTitle = "apiKey";
-      //   comp.apiKeyWarning = "userApiKeyWarning";
-      //   comp.apiKeyDescription = "userApiKeyDesc";
-      // });
+      if (
+        await this.exportFilePasswordPromptService.showPasswordPrompt(
+          confirmDescription,
+          confirmButtonText,
+          modalTitle
+        )
+      ) {
+        //successful
+      } else {
+        //failed
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("error"),
+          this.i18nService.t("invalidMasterPassword")
+        );
+        return;
+      }
 
-      // this.platformUtilsService.showToast("error", "This line doesn't get called because of an error ", this.i18nService.t("exportFail"));
-
-      //If verification is successful:
       this.submitWithSecretAlreadyVerified();
     } catch {
-      this.platformUtilsService.showToast("error", "FAIL", this.i18nService.t("exportFail"));
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
     }
   }
 

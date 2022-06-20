@@ -2,7 +2,8 @@ import { Component } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ExportFilePasswordPromptService } from "@bitwarden/angular/services/exportFilePasswordPrompt.service";
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -34,7 +35,9 @@ export class ExportComponent extends BaseExportComponent {
     formBuilder: FormBuilder,
     modalService: ModalService,
     apiService: ApiService,
-    stateService: StateService
+    stateService: StateService,
+    exportFilePasswordPromptService: ExportFilePasswordPromptService,
+    modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -48,8 +51,13 @@ export class ExportComponent extends BaseExportComponent {
       formBuilder,
       modalService,
       apiService,
-      stateService
+      stateService,
+      exportFilePasswordPromptService,
+      modalConfig
     );
+    this.confirmDescription = modalConfig.data.confirmDescription;
+    this.confirmButtonText = modalConfig.data.confirmButtonText;
+    this.modalTitle = modalConfig.data.modalTitle;
   }
 
   async ngOnInit() {
@@ -69,10 +77,5 @@ export class ExportComponent extends BaseExportComponent {
 
   getFileName() {
     return super.getFileName("org");
-  }
-
-  async collectEvent(): Promise<any> {
-    // TODO
-    // await this.eventService.collect(EventType.Organization_ClientExportedVault);
   }
 }

@@ -878,6 +878,15 @@
   "fileFormat": {
     "message": "File Format"
   },
+  "confirmVaultExportDesc" : {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "exportPasswordDescription" : {
+    "message": "This password will be used to export and import this file"
+  },
+  "confirmMasterPassword" : {
+    "message": "Confirm Master Password"
+  },
   "confirmFormat": {
     "message": "Confirm Format"
   },
@@ -900,7 +909,7 @@
     "message": "Confirm Vault Import"
   },
   "confirmVaultImportDesc": {
-    "message": "This file is password protected. Please enter the file password to import data."
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "Your vault data has been exported."
@@ -4724,9 +4733,6 @@
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
-  },
-  "exportPasswordDescription" : {
-    "message": "This password will be used to export and import this file"
   },
   "verificationCodeRequired": {
     "message": "Verification code is required."

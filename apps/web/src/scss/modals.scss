@@ -75,6 +75,10 @@
   }
 }
 
+.modal-top-padding-sm {
+  padding-top: 1.5em;
+}
+
 .close {
   @include themify($themes) {
     color: themed("textColor");

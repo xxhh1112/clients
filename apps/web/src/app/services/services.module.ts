@@ -9,13 +9,14 @@ import {
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
-import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
+import { ModalService as ModalServiceAbstraction , ModalConfig as ModalConfigAbstraction , ModalConfig } from "@bitwarden/angular/services/modal.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
+import { ExportFilePasswordPromptService as ExportFilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/exportFilePasswordPrompt.service";
 import { FilePasswordPromptService as FilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
@@ -35,6 +36,7 @@ import { StateService as StateServiceAbstraction } from "../../abstractions/stat
 import { Account } from "../../models/account";
 import { GlobalState } from "../../models/globalState";
 import { BroadcasterMessagingService } from "../../services/broadcasterMessaging.service";
+import { ExportFilePasswordPromptService } from "../../services/exportFilePasswordPrompt.service";
 import { FilePasswordPromptService } from "../../services/filePasswordPrompt.service";
 import { HtmlStorageService } from "../../services/htmlStorage.service";
 import { I18nService } from "../../services/i18n.service";
@@ -95,6 +97,7 @@ import { RouterService } from "./router.service";
     },
     { provide: MessagingServiceAbstraction, useClass: BroadcasterMessagingService },
     { provide: ModalServiceAbstraction, useClass: ModalService },
+    { provide: ModalConfigAbstraction, useClass: ModalConfig },
     {
       provide: ImportServiceAbstraction,
       useClass: ImportService,
@@ -147,6 +150,10 @@ import { RouterService } from "./router.service";
     {
       provide: FilePasswordPromptServiceAbstraction,
       useClass: FilePasswordPromptService,
+    },
+    {
+      provide: ExportFilePasswordPromptServiceAbstraction,
+      useClass: ExportFilePasswordPromptService,
     },
     HomeGuard,
   ],

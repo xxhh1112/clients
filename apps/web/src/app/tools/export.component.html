@@ -1,6 +1,6 @@
 <form
   #form
-  (ngSubmit)="promptUserForSecret()"
+  (ngSubmit)="promptUserForSecret(encryptionType)"
   ngNativeValidate
   [appApiAction]="formPromise"
   [formGroup]="exportForm"
