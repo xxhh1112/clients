@@ -27,6 +27,8 @@ import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/a
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { ImportService } from "@bitwarden/common/services/import.service";
 
+import { BitwardenClientService } from "src/services/bitwarden-client.service";
+
 import { StateService as StateServiceAbstraction } from "../../abstractions/state.service";
 import { Account } from "../../models/account";
 import { GlobalState } from "../../models/globalState";
@@ -129,6 +131,7 @@ import { RouterService } from "./router.service";
       useClass: PasswordRepromptService,
     },
     HomeGuard,
+    BitwardenClientService,
   ],
 })
 export class ServicesModule {}

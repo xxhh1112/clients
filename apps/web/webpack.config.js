@@ -205,8 +205,8 @@ const devServer =
               {
                 key: "Content-Security-Policy",
                 value: `
-                  default-src 'self'; 
-                  script-src 
+                  default-src 'self';
+                  script-src
                     'self'
                     'sha256-ryoU+5+IUZTuUyTElqkrQGBJXr1brEv6r2CA62WUw8w='
                     https://js.stripe.com
@@ -255,7 +255,7 @@ const devServer =
                     https://*.blob.core.windows.net
                     https://app.simplelogin.io/api/alias/random/new
                     https://app.anonaddy.com/api/v1/aliases;
-                  object-src 
+                  object-src
                     'self'
                     blob:;`,
               },
@@ -335,6 +335,9 @@ const webpackConfig = {
   },
   module: { rules: moduleRules },
   plugins: plugins,
+  experiments: {
+    asyncWebAssembly: true,
+  },
 };
 
 module.exports = webpackConfig;
