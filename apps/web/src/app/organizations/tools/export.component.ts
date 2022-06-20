@@ -78,4 +78,9 @@ export class ExportComponent extends BaseExportComponent {
   getFileName() {
     return super.getFileName("org");
   }
+
+  async collectEvent(): Promise<any> {
+    // TODO
+    // await this.eventService.collect(EventType.Organization_ClientExportedVault);
+  }
 }
