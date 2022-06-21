@@ -4,7 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -16,6 +16,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 
 const BroadcasterSubscriptionId = "ExportComponent";
 
@@ -37,7 +38,9 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     logService: LogService,
     protected modalService: ModalService,
     protected apiService: ApiService,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected userVerificationPromptService: UserVerificationPromptService,
+    protected modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -52,7 +55,9 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       formBuilder,
       modalService,
       apiService,
-      stateService
+      stateService,
+      userVerificationPromptService,
+      modalConfig
     );
   }
 
