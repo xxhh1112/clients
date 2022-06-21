@@ -1,6 +1,6 @@
 <form
   #form
-  (ngSubmit)="promptUserForSecret(encryptionType)"
+  (ngSubmit)="submit()"
   ngNativeValidate
   [appApiAction]="formPromise"
   [formGroup]="exportForm"
@@ -25,28 +25,21 @@
         name="format"
         formControlName="format"
         [(ngModel)]="formatControl"
-        (change)="encryptionType = '0'"
+        (change)="encryptionType = 0"
       >
         <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
       </select>
     </div>
   </div>
   <div class="row">
-    <div class="box form-group col-6">
-      <input formControlName="secret" name="secret" style="display: none" />
-
-      <ng-container class="box-content condensed" *ngIf="formatControl === 'encrypted_json'">
-        <div
-          class="box-content-row box-content-row-radio"
-          role="radiogroup"
-          aria-labelledby="fileTypeHeading"
-        >
+    <div class="form-group col-6">
+      <ng-container *ngIf="formatControl === 'encrypted_json'">
+        <div role="radiogroup" aria-labelledby="fileTypeHeading">
           <label id="fileTypeHeading" class="radio-header">
             {{ "fileTypeHeading" | i18n }}
           </label>
 
-          <!-- First Item -- Account Backup Option -->
-          <div class="radio-group align-start text-default" appBoxRow name="FileTypeOptions">
+          <div appBoxRow name="FileTypeOptions">
             <input
               type="radio"
               class="radio"
@@ -54,9 +47,9 @@
               id="1"
               [value]="1"
               [(ngModel)]="encryptionType"
-              (change)="encryptionType = '1'"
+              (change)="encryptionType = 0"
             />
-            <label class="unstyled"> Account Backup </label>
+            <label class="unstyled"> {{ "accountBackup" | i18n }} </label>
             <div class="small text-muted" style="margin-left: 1.25em">
               {{ "accountBackupOptionDescription" | i18n }}
             </div>
@@ -67,87 +60,84 @@
               id="2"
               [value]="2"
               [(ngModel)]="encryptionType"
-              (change)="encryptionType = '2'"
+              (change)="encryptionType = 1"
             />
 
             <input formControlName="fileEncryptionType" [ngModel]="encryptionType" hidden="true" />
 
-            <label class="unstyled"> Password Protected </label>
+            <label class="unstyled">{{ "passwordProtected" | i18n }}</label>
             <div class="small text-muted" style="margin-left: 1.25em">
               {{ "passwordProtectedOptionDescription" | i18n }}
             </div>
           </div>
           <br />
         </div>
-      </ng-container>
 
-      <ng-container
-        class="row"
-        *ngIf="encryptionType === '2' && formatControl === 'encrypted_json'"
-      >
-        <label for="format">{{ "filePassword" | i18n }}</label>
+        <ng-container *ngIf="encryptionType == 1">
+          <label for="format">{{ "filePassword" | i18n }}</label>
 
-        <div class="input-group">
-          <input
-            type="{{ showPassword ? 'text' : 'password' }}"
-            formControlName="password"
-            class="form-control"
-          />
-          <div class="input-group-append">
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              appStopClick
-              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-              [attr.aria-pressed]="showPassword"
-              (click)="togglePassword()"
-            >
-              <i
-                class="bwi bwi-lg"
-                aria-hidden="true"
-                [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-              ></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="small text-muted">
-          {{ "exportPasswordDescription" | i18n }}
-        </div>
-        <br />
-        <label for="format">{{ "confirmFilePassword" | i18n }}</label>
-        <div class="input-group">
-          <input
-            formControlName="confirmPassword"
-            [(ngModel)]="encryptionPassword"
-            (change)="encryptionPassword = $event.target.value"
-            class="form-control"
-            type="{{ showConfirmPassword ? 'text' : 'password' }}"
-          />
-
-          <div class="input-group-append">
-            <div class="action-buttons">
+          <div class="input-group">
+            <input
+              type="{{ showPassword ? 'text' : 'password' }}"
+              formControlName="password"
+              class="form-control"
+            />
+            <div class="input-group-append">
               <button
                 type="button"
                 class="btn btn-outline-secondary"
                 appStopClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-pressed]="showConfirmPassword"
-                (click)="toggleConfirmPassword()"
+                [attr.aria-pressed]="showPassword"
+                (click)="togglePassword()"
               >
                 <i
                   class="bwi bwi-lg"
                   aria-hidden="true"
-                  [ngClass]="{
-                    'bwi-eye': !showConfirmPassword,
-                    'bwi-eye-slash': showConfirmPassword
-                  }"
+                  [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
                 ></i>
               </button>
             </div>
           </div>
-        </div>
-        <br />
+
+          <div class="small text-muted">
+            {{ "exportPasswordDescription" | i18n }}
+          </div>
+          <br />
+          <label for="format">{{ "confirmFilePassword" | i18n }}</label>
+          <div class="input-group">
+            <input
+              formControlName="confirmPassword"
+              [(ngModel)]="encryptionPassword"
+              (change)="encryptionPassword = $event.target.value"
+              class="form-control"
+              type="{{ showConfirmPassword ? 'text' : 'password' }}"
+            />
+
+            <div class="input-group-append">
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  appStopClick
+                  appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                  [attr.aria-pressed]="showConfirmPassword"
+                  (click)="toggleConfirmPassword()"
+                >
+                  <i
+                    class="bwi bwi-lg"
+                    aria-hidden="true"
+                    [ngClass]="{
+                      'bwi-eye': !showConfirmPassword,
+                      'bwi-eye-slash': showConfirmPassword
+                    }"
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <br />
+        </ng-container>
       </ng-container>
       <button
         type="submit"

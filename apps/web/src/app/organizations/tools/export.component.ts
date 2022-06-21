@@ -3,7 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
-import { UserSecretPromptService } from "@bitwarden/angular/services/userSecretPrompt.service";
+import { UserVerificationPromptService } from "@bitwarden/angular/services/userVerificationPrompt.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -36,7 +36,7 @@ export class ExportComponent extends BaseExportComponent {
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
-    userSecretPromptService: UserSecretPromptService,
+    userVerificationPromptService: UserVerificationPromptService,
     modalConfig: ModalConfig
   ) {
     super(
@@ -52,7 +52,7 @@ export class ExportComponent extends BaseExportComponent {
       modalService,
       apiService,
       stateService,
-      userSecretPromptService,
+      userVerificationPromptService,
       modalConfig
     );
     this.confirmDescription = modalConfig.data.confirmDescription;

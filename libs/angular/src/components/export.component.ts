@@ -18,8 +18,9 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { UserSecretPromptService } from "@bitwarden/common/abstractions/userSecretPrompt.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 
@@ -29,7 +30,6 @@ export class ExportComponent implements OnInit {
 
   formPromise: Promise<string>;
   disabledByPolicy = false;
-  private alreadyVerified = false;
 
   @ViewChild("viewUserApiKeyTemplate", { read: ViewContainerRef, static: true })
   viewUserApiKeyModalRef: ViewContainerRef;
@@ -64,7 +64,7 @@ export class ExportComponent implements OnInit {
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    protected userSecretPromptService: UserSecretPromptService,
+    protected userVerificationPromptService: UserVerificationPromptService,
     protected modalConfig: ModalConfig
   ) {}
 
@@ -86,12 +86,29 @@ export class ExportComponent implements OnInit {
   }
 
   async submitWithSecretAlreadyVerified() {
+    if (this.disabledByPolicy) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("personalVaultExportPolicyInEffect")
+      );
+      return;
+    }
+
     if (!this.validForm) {
       return;
     }
 
-    this.alreadyVerified = true;
-    this.submit();
+    try {
+      this.formPromise = this.getExportData();
+      const data = await this.formPromise;
+      this.downloadFile(data);
+      this.saved();
+      await this.collectEvent();
+      this.exportForm.get("secret").setValue("");
+    } catch (e) {
+      this.logService.error(e);
+    }
   }
 
   async submit() {
@@ -104,24 +121,22 @@ export class ExportComponent implements OnInit {
       return;
     }
 
-    if (!this.alreadyVerified) {
-      const acceptedWarning = await this.warningDialog();
-      if (!acceptedWarning) {
-        return;
-      }
-      const secret = this.exportForm.get("secret").value;
-
-      try {
-        await this.userVerificationService.verifyUser(secret);
-      } catch (e) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          e.message
-        );
-        return;
-      }
+    const acceptedWarning = await this.warningDialog();
+    if (!acceptedWarning) {
+      return;
     }
+    const secret = this.exportForm.get("secret").value;
+
+    const successfulVerification = await this.userVerificationService.verifyUser(secret);
+    if (!successfulVerification) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
+      return;
+    }
+
     try {
       this.formPromise = this.getExportData();
       const data = await this.formPromise;
@@ -184,22 +199,21 @@ export class ExportComponent implements OnInit {
   }
 
   get validForm() {
-    //fileEncryptionType 2 = file requires a user entered password, specific to the file
-    if (this.fileEncryptionType == 2 && this.format == "encrypted_json") {
-      const password = this.password;
-      const confirmPassword = this.confirmPassword;
-
-      if (password.length > 0 || confirmPassword.length > 0) {
-        if (password != confirmPassword) {
+    if (
+      this.fileEncryptionType == EncryptedExportType.FileEncrypted &&
+      this.format == "encrypted_json"
+    ) {
+      if (this.password.length > 0 || this.confirmPassword.length > 0) {
+        if (this.password != this.confirmPassword) {
           this.platformUtilsService.showToast(
             "error",
             this.i18nService.t("errorOccurred"),
-            "File Password and Confirm File Password do not match."
+            this.i18nService.t("filePasswordAndConfirmFilePasswordDoNotMatch")
           );
           return false;
         }
 
-        this.encryptionPassword = password;
+        this.encryptionPassword = this.password;
         return true;
       }
     } else {

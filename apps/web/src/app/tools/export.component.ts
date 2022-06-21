@@ -12,8 +12,9 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { UserSecretPromptService } from "@bitwarden/common/abstractions/userSecretPrompt.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 
 @Component({
   selector: "app-export",
@@ -22,7 +23,7 @@ import { UserVerificationService } from "@bitwarden/common/abstractions/userVeri
 export class ExportComponent extends BaseExportComponent {
   organizationId: string;
   formatControl: string;
-  encryptionType: string;
+  encryptionType: EncryptedExportType;
   showPassword: boolean;
   showConfirmPassword: boolean;
   secretValue: string;
@@ -30,9 +31,6 @@ export class ExportComponent extends BaseExportComponent {
   confirmDescription: string;
   confirmButtonText: string;
   modalTitle: string;
-
-  @ViewChild("viewUserApiKeyModalRef", { read: ViewContainerRef, static: true })
-  viewUserApiKeyModalRef: ViewContainerRef;
 
   constructor(
     cryptoService: CryptoService,
@@ -47,7 +45,7 @@ export class ExportComponent extends BaseExportComponent {
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
-    userSecretPromptService: UserSecretPromptService,
+    userVerificationPromptService: UserVerificationPromptService,
     modalConfig: ModalConfig
   ) {
     super(
@@ -64,44 +62,30 @@ export class ExportComponent extends BaseExportComponent {
       modalService,
       apiService,
       stateService,
-      userSecretPromptService,
+      userVerificationPromptService,
       modalConfig
     );
   }
 
-  async promptUserForSecret(encryptionType: string) {
-    //Default text values
-    let confirmDescription = "encExportKeyWarningDesc";
-    let confirmButtonText = "exportVault";
-    let modalTitle = "confirmVaultExport";
-
-    //Password encrypted export
-    if (encryptionType == "2") {
-      confirmDescription = "confirmVaultExportDesc";
-      confirmButtonText = "exportVault";
-      modalTitle = "confirmVaultExport";
-    }
+  async submit() {
+    const confirmDescription =
+      this.encryptionType == EncryptedExportType.FileEncrypted
+        ? "confirmVaultExportDesc"
+        : "encExportKeyWarningDesc";
+    const confirmButtonText = "exportVault";
+    const modalTitle = "confirmVaultExport";
 
     try {
       if (
-        await this.userSecretPromptService.showPasswordPrompt(
+        await this.userVerificationPromptService.showUserVerificationPrompt(
           confirmDescription,
           confirmButtonText,
           modalTitle
         )
       ) {
         //successful
-      } else {
-        //failed
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("error"),
-          this.i18nService.t("invalidMasterPassword")
-        );
-        return;
+        this.submitWithSecretAlreadyVerified();
       }
-
-      this.submitWithSecretAlreadyVerified();
     } catch {
       this.platformUtilsService.showToast(
         "error",

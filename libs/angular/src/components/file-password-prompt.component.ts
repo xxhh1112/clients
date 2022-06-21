@@ -1,6 +1,5 @@
 import { Directive } from "@angular/core";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -21,7 +20,6 @@ export class FilePasswordPromptComponent {
 
   constructor(
     private modalRef: ModalRef,
-    private cryptoService: CryptoService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private importService: ImportService,
@@ -50,7 +48,11 @@ export class FilePasswordPromptComponent {
     const passwordError = await formPromise;
 
     if (passwordError != null) {
-      this.modalRef.close(false);
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
     } else {
       this.modalRef.close(true);
     }

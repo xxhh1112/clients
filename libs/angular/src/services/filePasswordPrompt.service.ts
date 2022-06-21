@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { FilePasswordPromptService as FilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 
-
 import { FilePasswordPromptComponent } from "../components/file-password-prompt.component";
 
 import { ModalService } from "./modal.service";
@@ -29,7 +28,7 @@ export class FilePasswordPromptService implements FilePasswordPromptServiceAbstr
       return true;
     }
 
-    const ref = this.modalService.open(this.component, {
+    const ref = await this.modalService.open(this.component, {
       allowMultipleModals: true,
       data: {
         fileContents: fcontents,

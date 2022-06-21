@@ -25,7 +25,7 @@ import { OrganizationSwitcherComponent } from "../components/organization-switch
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PasswordStrengthComponent } from "../components/password-strength.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
-import { UserSecretPromptComponent } from "../components/user-secret-prompt.component";
+import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
@@ -272,7 +272,7 @@ import { OrganizationBadgeModule } from "./vault/modules/organization-badge/orga
     PasswordGeneratorPolicyComponent,
     PasswordRepromptComponent,
     FilePasswordPromptComponent,
-    UserSecretPromptComponent,
+    UserVerificationPromptComponent,
     PasswordStrengthComponent,
     PaymentComponent,
     PaymentMethodComponent,

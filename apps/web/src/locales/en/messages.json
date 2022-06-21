@@ -896,14 +896,23 @@
   "confirmFilePassword": {
     "message": "Confirm File Password"
   },
-  "passwordProtectedOptionDescription": {
-    "message": "Leverages your bitwarden account encryption not master password, to protect the export. This export can only be imported into the current account. Use this to create a backup that cannot be used elsewhere."
-  },
   "accountBackupOptionDescription": {
+    "message": "Leverages your Bitwarden account encryption not master password, to protect the export. This export can only be imported into the current account. Use this to create a backup that cannot be used elsewhere."
+  },
+  "passwordProtectedOptionDescription": {
     "message": "Create a user-generated password to protect the export. Use this to create an export that can be used in other accounts."
   },
   "fileTypeHeading": {
     "message": "File Type"
+  },
+  "accountBackup": {
+    "message": "Account Backup"
+  },
+  "passwordProtected": {
+    "message": "Password Protected"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "File Password and Confirm File Password do not match."
   },
   "confirmVaultImport": {
     "message": "Confirm Vault Import"

@@ -119,11 +119,6 @@ export class ImportComponent implements OnInit {
           } else {
             //failed - File Password issues
             this.loading = false;
-            this.platformUtilsService.showToast(
-              "error",
-              this.i18nService.t("error"),
-              this.i18nService.t("invalidMasterPassword")
-            );
             return;
           }
         } else {
