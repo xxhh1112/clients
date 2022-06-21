@@ -95,10 +95,6 @@ export class ExportComponent implements OnInit {
       return;
     }
 
-    if (!this.validForm) {
-      return;
-    }
-
     try {
       this.formPromise = this.getExportData();
       const data = await this.formPromise;
@@ -198,30 +194,6 @@ export class ExportComponent implements OnInit {
 
   protected async collectEvent(): Promise<any> {
     await this.eventService.collect(EventType.User_ClientExportedVault);
-  }
-
-  get validForm() {
-    if (
-      this.fileEncryptionType == EncryptedExportType.FileEncrypted &&
-      this.format == "encrypted_json"
-    ) {
-      if (this.password.length > 0 || this.confirmPassword.length > 0) {
-        if (this.password != this.confirmPassword) {
-          this.platformUtilsService.showToast(
-            "error",
-            this.i18nService.t("errorOccurred"),
-            this.i18nService.t("filePasswordAndConfirmFilePasswordDoNotMatch")
-          );
-          return false;
-        }
-
-        this.encryptionPassword = this.password;
-        return true;
-      }
-    } else {
-      this.clearPasswordField();
-      return true;
-    }
   }
 
   protected clearPasswordField() {

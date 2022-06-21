@@ -22,11 +22,8 @@ import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType
 })
 export class ExportComponent extends BaseExportComponent {
   organizationId: string;
-  encryptionType: EncryptedExportType;
   showPassword: boolean;
   showConfirmPassword: boolean;
-  secretValue: string;
-  secret: FormControl;
   confirmDescription: string;
   confirmButtonText: string;
   modalTitle: string;
@@ -74,6 +71,10 @@ export class ExportComponent extends BaseExportComponent {
     const confirmButtonText = "exportVault";
     const modalTitle = "confirmVaultExport";
 
+    if (!this.validForm) {
+      return;
+    }
+
     try {
       if (
         await this.userVerificationPromptService.showUserVerificationPrompt(
@@ -95,17 +96,43 @@ export class ExportComponent extends BaseExportComponent {
   }
 
   togglePassword() {
-    this.showPassword = !this.showPassword;
+    this.exportForm.get("showPassword").setValue(!this.exportForm.get("showPassword").value);
     document.getElementById("newPassword").focus();
   }
 
   toggleConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+    this.exportForm
+      .get("showConfirmPassword")
+      .setValue(!this.exportForm.get("showConfirmPassword").value);
     document.getElementById("newConfirmPassword").focus();
   }
 
   protected saved() {
     super.saved();
     this.platformUtilsService.showToast("success", null, this.i18nService.t("exportSuccess"));
+  }
+
+  get validForm() {
+    if (
+      this.fileEncryptionType == EncryptedExportType.FileEncrypted &&
+      this.format == "encrypted_json"
+    ) {
+      if (this.password.length > 0 || this.confirmPassword.length > 0) {
+        if (this.password != this.confirmPassword) {
+          this.platformUtilsService.showToast(
+            "error",
+            this.i18nService.t("errorOccurred"),
+            this.i18nService.t("filePasswordAndConfirmFilePasswordDoNotMatch")
+          );
+          return false;
+        }
+
+        this.encryptionPassword = this.password;
+        return true;
+      }
+    } else {
+      this.clearPasswordField();
+      return true;
+    }
   }
 }
