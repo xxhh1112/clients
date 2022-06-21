@@ -4,6 +4,7 @@
   ngNativeValidate
   [appApiAction]="formPromise"
   [formGroup]="exportForm"
+  *ngIf="exportForm"
 >
   <div class="page-header">
     <h1>{{ "exportVault" | i18n }}</h1>
@@ -20,20 +21,14 @@
   <div class="row">
     <div class="form-group col-6">
       <label for="format">{{ "fileFormat" | i18n }}</label>
-      <select
-        class="form-control"
-        name="format"
-        formControlName="format"
-        [(ngModel)]="formatControl"
-        (change)="encryptionType = 0"
-      >
+      <select class="form-control" name="format" formControlName="format">
         <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
       </select>
     </div>
   </div>
   <div class="row">
     <div class="form-group col-6">
-      <ng-container *ngIf="formatControl === 'encrypted_json'">
+      <ng-container *ngIf="format === 'encrypted_json'">
         <div role="radiogroup" aria-labelledby="fileTypeHeading">
           <label id="fileTypeHeading" class="radio-header">
             {{ "fileTypeHeading" | i18n }}
@@ -43,11 +38,10 @@
             <input
               type="radio"
               class="radio"
-              name="FileType"
+              name="fileEncryptionType"
               id="1"
-              [value]="1"
-              [(ngModel)]="encryptionType"
-              (change)="encryptionType = 0"
+              [value]="0"
+              formControlName="fileEncryptionType"
             />
             <label class="unstyled"> {{ "accountBackup" | i18n }} </label>
             <div class="small text-muted" style="margin-left: 1.25em">
@@ -56,14 +50,11 @@
             <input
               type="radio"
               class="radio"
-              name="FileType"
+              name="fileEncryptionType"
               id="2"
-              [value]="2"
-              [(ngModel)]="encryptionType"
-              (change)="encryptionType = 1"
+              [value]="1"
+              formControlName="fileEncryptionType"
             />
-
-            <input formControlName="fileEncryptionType" [ngModel]="encryptionType" hidden="true" />
 
             <label class="unstyled">{{ "passwordProtected" | i18n }}</label>
             <div class="small text-muted" style="margin-left: 1.25em">
@@ -73,13 +64,14 @@
           <br />
         </div>
 
-        <ng-container *ngIf="encryptionType == 1">
+        <ng-container *ngIf="fileEncryptionType == 1">
           <label for="format">{{ "filePassword" | i18n }}</label>
 
           <div class="input-group">
             <input
               type="{{ showPassword ? 'text' : 'password' }}"
               formControlName="password"
+              name="password"
               class="form-control"
             />
             <div class="input-group-append">
@@ -108,8 +100,7 @@
           <div class="input-group">
             <input
               formControlName="confirmPassword"
-              [(ngModel)]="encryptionPassword"
-              (change)="encryptionPassword = $event.target.value"
+              name="confirmPassword"
               class="form-control"
               type="{{ showConfirmPassword ? 'text' : 'password' }}"
             />
@@ -142,7 +133,7 @@
       <button
         type="submit"
         class="btn btn-primary btn-submit"
-        [disabled]="form.loading || exportForm.disabled"
+        [disabled]="form.loading || disabled"
       >
         <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
         <span>{{ "confirmFormat" | i18n }}</span>

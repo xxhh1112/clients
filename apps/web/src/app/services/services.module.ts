@@ -20,7 +20,6 @@ import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/co
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
-import { FilePasswordPromptService as FilePasswordPromptServiceAbstraction } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
@@ -40,7 +39,6 @@ import { StateService as StateServiceAbstraction } from "../../abstractions/stat
 import { Account } from "../../models/account";
 import { GlobalState } from "../../models/globalState";
 import { BroadcasterMessagingService } from "../../services/broadcasterMessaging.service";
-import { FilePasswordPromptService } from "../../services/filePasswordPrompt.service";
 import { HtmlStorageService } from "../../services/htmlStorage.service";
 import { I18nService } from "../../services/i18n.service";
 import { MemoryStorageService } from "../../services/memoryStorage.service";
@@ -150,10 +148,6 @@ import { RouterService } from "./router.service";
     {
       provide: PasswordRepromptServiceAbstraction,
       useClass: PasswordRepromptService,
-    },
-    {
-      provide: FilePasswordPromptServiceAbstraction,
-      useClass: FilePasswordPromptService,
     },
     {
       provide: UserVerificationPromptServiceAbstraction,

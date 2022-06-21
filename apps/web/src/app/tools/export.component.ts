@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
@@ -22,7 +22,6 @@ import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType
 })
 export class ExportComponent extends BaseExportComponent {
   organizationId: string;
-  formatControl: string;
   encryptionType: EncryptedExportType;
   showPassword: boolean;
   showConfirmPassword: boolean;
@@ -69,7 +68,7 @@ export class ExportComponent extends BaseExportComponent {
 
   async submit() {
     const confirmDescription =
-      this.encryptionType == EncryptedExportType.FileEncrypted
+      this.exportForm.get("fileEncryptionType").value == EncryptedExportType.FileEncrypted
         ? "confirmVaultExportDesc"
         : "encExportKeyWarningDesc";
     const confirmButtonText = "exportVault";

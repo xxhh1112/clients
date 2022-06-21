@@ -60,7 +60,7 @@ export class ExportComponent implements OnInit {
     protected win: Window,
     private logService: LogService,
     private userVerificationService: UserVerificationService,
-    private formBuilder: FormBuilder,
+    protected formBuilder: FormBuilder,
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
@@ -106,6 +106,8 @@ export class ExportComponent implements OnInit {
       this.saved();
       await this.collectEvent();
       this.exportForm.get("secret").setValue("");
+      this.exportForm.get("password").setValue("");
+      this.exportForm.get("confirmPassword").setValue("");
     } catch (e) {
       this.logService.error(e);
     }

@@ -51,7 +51,7 @@ export class FilePasswordPromptComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("error"),
-        this.i18nService.t("invalidMasterPassword")
+        this.i18nService.t("invalidFilePassword")
       );
     } else {
       this.modalRef.close(true);

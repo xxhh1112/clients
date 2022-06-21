@@ -4,15 +4,17 @@ import * as JSZip from "jszip";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { FilePasswordPromptService } from "@bitwarden/common/abstractions/filePasswordPrompt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
+import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ImportError } from "@bitwarden/common/importers/importError";
+
+import { FilePasswordPromptComponent } from "../components/file-password-prompt.component";
 
 @Component({
   selector: "app-import",
@@ -26,6 +28,7 @@ export class ImportComponent implements OnInit {
   formPromise: Promise<ImportError>;
   loading = false;
   importBlockedByPolicy = false;
+  protected component = FilePasswordPromptComponent;
 
   protected organizationId: string = null;
   protected successNavigate: any[] = ["vault"];
@@ -37,8 +40,8 @@ export class ImportComponent implements OnInit {
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     private logService: LogService,
-    private modalService: ModalService,
-    private filePasswordPromptService: FilePasswordPromptService
+    protected modalService: ModalService,
+    protected keyConnectorService: KeyConnectorService
   ) {}
 
   async ngOnInit() {
@@ -139,7 +142,7 @@ export class ImportComponent implements OnInit {
   }
 
   private async promptFilePassword(fcontents: string) {
-    return await this.filePasswordPromptService.showPasswordPrompt(fcontents, this.organizationId);
+    return await this.showPasswordPrompt(fcontents, this.organizationId);
   }
 
   getFormatInstructionTitle() {
@@ -245,5 +248,34 @@ export class ImportComponent implements OnInit {
           return "";
         }
       );
+  }
+
+  protectedFields() {
+    return ["TOTP", "Password", "H_Field", "Card Number", "Security Code"];
+  }
+
+  async showPasswordPrompt(fcontents: string, organizationId: string) {
+    // if (!(await this.enabled())) {
+    //   return true;
+    // }
+
+    const ref = this.modalService.open(this.component, {
+      allowMultipleModals: true,
+      data: {
+        fileContents: fcontents,
+        organizationId: organizationId,
+      },
+    });
+
+    // if (ref == null) {
+    //   return false;
+    // }
+
+    const result = await ref.onClosedPromise();
+    return result === true;
+  }
+
+  async enabled() {
+    return !this.keyConnectorService.getUsesKeyConnector();
   }
 }

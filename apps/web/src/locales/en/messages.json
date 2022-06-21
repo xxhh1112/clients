@@ -666,6 +666,9 @@
   "invalidMasterPassword": {
     "message": "Invalid master password"
   },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
+  },
   "lockNow": {
     "message": "Lock Now"
   },
