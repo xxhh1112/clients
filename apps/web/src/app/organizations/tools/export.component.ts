@@ -55,9 +55,6 @@ export class ExportComponent extends BaseExportComponent {
       userVerificationPromptService,
       modalConfig
     );
-    this.confirmDescription = modalConfig.data.confirmDescription;
-    this.confirmButtonText = modalConfig.data.confirmButtonText;
-    this.modalTitle = modalConfig.data.modalTitle;
   }
 
   async ngOnInit() {
