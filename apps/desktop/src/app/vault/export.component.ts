@@ -4,6 +4,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -12,7 +14,9 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 
 const BroadcasterSubscriptionId = "ExportComponent";
 
@@ -31,7 +35,12 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     userVerificationService: UserVerificationService,
     formBuilder: FormBuilder,
     private broadcasterService: BroadcasterService,
-    logService: LogService
+    logService: LogService,
+    protected modalService: ModalService,
+    protected apiService: ApiService,
+    protected stateService: StateService,
+    protected userVerificationPromptService: UserVerificationPromptService,
+    protected modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -43,7 +52,12 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       window,
       logService,
       userVerificationService,
-      formBuilder
+      formBuilder,
+      modalService,
+      apiService,
+      stateService,
+      userVerificationPromptService,
+      modalConfig
     );
   }
 

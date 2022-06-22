@@ -1,6 +1,15 @@
-import { Directive, EventEmitter, OnInit, Output } from "@angular/core";
+import {
+  Directive,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -8,7 +17,10 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 
@@ -19,9 +31,17 @@ export class ExportComponent implements OnInit {
   formPromise: Promise<string>;
   disabledByPolicy = false;
 
+  @ViewChild("viewUserApiKeyTemplate", { read: ViewContainerRef, static: true })
+  viewUserApiKeyModalRef: ViewContainerRef;
+
+  encryptionPassword: string;
+
   exportForm = this.formBuilder.group({
     format: ["json"],
     secret: [""],
+    password: [""],
+    confirmPassword: [""],
+    fileEncryptionType: [""],
   });
 
   formatOptions = [
@@ -40,7 +60,12 @@ export class ExportComponent implements OnInit {
     protected win: Window,
     private logService: LogService,
     private userVerificationService: UserVerificationService,
-    private formBuilder: FormBuilder
+    protected formBuilder: FormBuilder,
+    protected modalService: ModalService,
+    protected apiService: ApiService,
+    protected stateService: StateService,
+    protected userVerificationPromptService: UserVerificationPromptService,
+    protected modalConfig: ModalConfig
   ) {}
 
   async ngOnInit() {
@@ -60,6 +85,30 @@ export class ExportComponent implements OnInit {
     return this.format === "encrypted_json";
   }
 
+  async submitWithSecretAlreadyVerified() {
+    if (this.disabledByPolicy) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("personalVaultExportPolicyInEffect")
+      );
+      return;
+    }
+
+    try {
+      this.formPromise = this.getExportData();
+      const data = await this.formPromise;
+      this.downloadFile(data);
+      this.saved();
+      await this.collectEvent();
+      this.exportForm.get("secret").setValue("");
+      this.exportForm.get("password").setValue("");
+      this.exportForm.get("confirmPassword").setValue("");
+    } catch (e) {
+      this.logService.error(e);
+    }
+  }
+
   async submit() {
     if (this.disabledByPolicy) {
       this.platformUtilsService.showToast(
@@ -74,12 +123,15 @@ export class ExportComponent implements OnInit {
     if (!acceptedWarning) {
       return;
     }
-
     const secret = this.exportForm.get("secret").value;
-    try {
-      await this.userVerificationService.verifyUser(secret);
-    } catch (e) {
-      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), e.message);
+
+    const successfulVerification = await this.userVerificationService.verifyUser(secret);
+    if (!successfulVerification) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
       return;
     }
 
@@ -124,7 +176,7 @@ export class ExportComponent implements OnInit {
   }
 
   protected getExportData() {
-    return this.exportService.getExport(this.format);
+    return this.exportService.getExport(this.format, null, this.encryptionPassword);
   }
 
   protected getFileName(prefix?: string) {
@@ -144,8 +196,24 @@ export class ExportComponent implements OnInit {
     await this.eventService.collect(EventType.User_ClientExportedVault);
   }
 
+  protected clearPasswordField() {
+    this.encryptionPassword = "";
+  }
+
   get format() {
     return this.exportForm.get("format").value;
+  }
+
+  get password() {
+    return this.exportForm.get("password").value;
+  }
+
+  get confirmPassword() {
+    return this.exportForm.get("confirmPassword").value;
+  }
+
+  get fileEncryptionType() {
+    return this.exportForm.get("fileEncryptionType").value;
   }
 
   private downloadFile(csv: string): void {

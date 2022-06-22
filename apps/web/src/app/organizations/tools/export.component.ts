@@ -2,6 +2,9 @@ import { Component } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
+import { UserVerificationPromptService } from "@bitwarden/angular/services/userVerificationPrompt.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -9,6 +12,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 
 import { ExportComponent as BaseExportComponent } from "../../tools/export.component";
@@ -28,7 +32,12 @@ export class ExportComponent extends BaseExportComponent {
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder
+    formBuilder: FormBuilder,
+    modalService: ModalService,
+    apiService: ApiService,
+    stateService: StateService,
+    userVerificationPromptService: UserVerificationPromptService,
+    modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -39,7 +48,12 @@ export class ExportComponent extends BaseExportComponent {
       policyService,
       logService,
       userVerificationService,
-      formBuilder
+      formBuilder,
+      modalService,
+      apiService,
+      stateService,
+      userVerificationPromptService,
+      modalConfig
     );
   }
 

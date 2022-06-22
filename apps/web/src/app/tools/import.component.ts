@@ -3,13 +3,18 @@ import { Router } from "@angular/router";
 import * as JSZip from "jszip";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
+import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { ImportError } from "@bitwarden/common/importers/importError";
+
+import { FilePasswordPromptComponent } from "../components/file-password-prompt.component";
 
 @Component({
   selector: "app-import",
@@ -20,9 +25,10 @@ export class ImportComponent implements OnInit {
   importOptions: ImportOption[];
   format: ImportType = null;
   fileContents: string;
-  formPromise: Promise<Error>;
+  formPromise: Promise<ImportError>;
   loading = false;
   importBlockedByPolicy = false;
+  protected component = FilePasswordPromptComponent;
 
   protected organizationId: string = null;
   protected successNavigate: any[] = ["vault"];
@@ -33,7 +39,9 @@ export class ImportComponent implements OnInit {
     protected router: Router,
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
-    private logService: LogService
+    private logService: LogService,
+    protected modalService: ModalService,
+    protected keyConnectorService: KeyConnectorService
   ) {}
 
   async ngOnInit() {
@@ -55,7 +63,6 @@ export class ImportComponent implements OnInit {
     }
 
     this.loading = true;
-
     const importer = this.importService.getImporter(this.format, this.organizationId);
     if (importer === null) {
       this.platformUtilsService.showToast(
@@ -108,10 +115,23 @@ export class ImportComponent implements OnInit {
       this.formPromise = this.importService.import(importer, fileContents, this.organizationId);
       const error = await this.formPromise;
       if (error != null) {
-        this.error(error);
-        this.loading = false;
-        return;
+        //Check if the error is that a password is required
+        if (error.passwordRequired) {
+          if (await this.promptFilePassword(fileContents)) {
+            //successful
+          } else {
+            //failed - File Password issues
+            this.loading = false;
+            return;
+          }
+        } else {
+          this.error(error);
+          this.loading = false;
+          return;
+        }
       }
+
+      //No errors, display success message
       this.platformUtilsService.showToast("success", null, this.i18nService.t("importSuccess"));
       this.router.navigate(this.successNavigate);
     } catch (e) {
@@ -119,6 +139,10 @@ export class ImportComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  private async promptFilePassword(fcontents: string) {
+    return await this.showPasswordPrompt(fcontents, this.organizationId);
   }
 
   getFormatInstructionTitle() {
@@ -224,5 +248,34 @@ export class ImportComponent implements OnInit {
           return "";
         }
       );
+  }
+
+  protectedFields() {
+    return ["TOTP", "Password", "H_Field", "Card Number", "Security Code"];
+  }
+
+  async showPasswordPrompt(fcontents: string, organizationId: string) {
+    // if (!(await this.enabled())) {
+    //   return true;
+    // }
+
+    const ref = this.modalService.open(this.component, {
+      allowMultipleModals: true,
+      data: {
+        fileContents: fcontents,
+        organizationId: organizationId,
+      },
+    });
+
+    // if (ref == null) {
+    //   return false;
+    // }
+
+    const result = await ref.onClosedPromise();
+    return result === true;
+  }
+
+  async enabled() {
+    return !this.keyConnectorService.getUsesKeyConnector();
   }
 }

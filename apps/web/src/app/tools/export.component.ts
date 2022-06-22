@@ -1,7 +1,9 @@
-import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
+import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -9,7 +11,10 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 
 @Component({
   selector: "app-export",
@@ -17,6 +22,11 @@ import { UserVerificationService } from "@bitwarden/common/abstractions/userVeri
 })
 export class ExportComponent extends BaseExportComponent {
   organizationId: string;
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  confirmDescription: string;
+  confirmButtonText: string;
+  modalTitle: string;
 
   constructor(
     cryptoService: CryptoService,
@@ -27,7 +37,12 @@ export class ExportComponent extends BaseExportComponent {
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder
+    formBuilder: FormBuilder,
+    modalService: ModalService,
+    apiService: ApiService,
+    stateService: StateService,
+    userVerificationPromptService: UserVerificationPromptService,
+    modalConfig: ModalConfig
   ) {
     super(
       cryptoService,
@@ -39,12 +54,85 @@ export class ExportComponent extends BaseExportComponent {
       window,
       logService,
       userVerificationService,
-      formBuilder
+      formBuilder,
+      modalService,
+      apiService,
+      stateService,
+      userVerificationPromptService,
+      modalConfig
     );
+  }
+
+  async submit() {
+    const confirmDescription =
+      this.exportForm.get("fileEncryptionType").value == EncryptedExportType.FileEncrypted
+        ? "confirmVaultExportDesc"
+        : "encExportKeyWarningDesc";
+    const confirmButtonText = "exportVault";
+    const modalTitle = "confirmVaultExport";
+
+    if (!this.validForm) {
+      return;
+    }
+
+    try {
+      if (
+        await this.userVerificationPromptService.showUserVerificationPrompt(
+          confirmDescription,
+          confirmButtonText,
+          modalTitle
+        )
+      ) {
+        //successful
+        this.submitWithSecretAlreadyVerified();
+      }
+    } catch {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
+    }
+  }
+
+  togglePassword() {
+    this.exportForm.get("showPassword").setValue(!this.exportForm.get("showPassword").value);
+    document.getElementById("newPassword").focus();
+  }
+
+  toggleConfirmPassword() {
+    this.exportForm
+      .get("showConfirmPassword")
+      .setValue(!this.exportForm.get("showConfirmPassword").value);
+    document.getElementById("newConfirmPassword").focus();
   }
 
   protected saved() {
     super.saved();
     this.platformUtilsService.showToast("success", null, this.i18nService.t("exportSuccess"));
+  }
+
+  get validForm() {
+    if (
+      this.fileEncryptionType == EncryptedExportType.FileEncrypted &&
+      this.format == "encrypted_json"
+    ) {
+      if (this.password.length > 0 || this.confirmPassword.length > 0) {
+        if (this.password != this.confirmPassword) {
+          this.platformUtilsService.showToast(
+            "error",
+            this.i18nService.t("errorOccurred"),
+            this.i18nService.t("filePasswordAndConfirmFilePasswordDoNotMatch")
+          );
+          return false;
+        }
+
+        this.encryptionPassword = this.password;
+        return true;
+      }
+    } else {
+      this.clearPasswordField();
+      return true;
+    }
   }
 }
