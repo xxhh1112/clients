@@ -20,7 +20,7 @@
 
   <div class="row">
     <div class="form-group col-6">
-      <label for="format">{{ "fileFormat" | i18n }}</label>
+      <label class="tw-text-sm tw-semi-bold" for="format">{{ "fileFormat" | i18n }}</label>
       <select class="form-control" name="format" formControlName="format">
         <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
       </select>
@@ -30,39 +30,53 @@
     <div class="form-group col-6">
       <ng-container *ngIf="format === 'encrypted_json'">
         <div role="radiogroup" aria-labelledby="fileTypeHeading">
-          <label id="fileTypeHeading" class="radio-header">
+          <label id="fileTypeHeading" class="tw-text-sm tw-semi-bold">
             {{ "fileTypeHeading" | i18n }}
           </label>
 
-          <div appBoxRow name="FileTypeOptions">
-            <input
-              type="radio"
-              class="radio"
-              name="fileEncryptionType"
-              id="1"
-              [value]="0"
-              formControlName="fileEncryptionType"
-            />
-            <label class="unstyled"> {{ "accountBackup" | i18n }} </label>
-            <div class="small text-muted" style="margin-left: 1.25em">
-              {{ "accountBackupOptionDescription" | i18n }}
+          <div appBoxRow name="FileTypeOptions" class="tw-flex tw-items-center">
+            <div>
+              <input
+                type="radio"
+                class="radio"
+                name="fileEncryptionType"
+                id="1"
+                [value]="0"
+                formControlName="fileEncryptionType"
+              />
             </div>
-            <input
-              type="radio"
-              class="radio"
-              name="fileEncryptionType"
-              id="2"
-              [value]="1"
-              formControlName="fileEncryptionType"
-            />
-
-            <label class="unstyled">{{ "passwordProtected" | i18n }}</label>
-            <div class="small text-muted" style="margin-left: 1.25em">
-              {{ "passwordProtectedOptionDescription" | i18n }}
+            <div>
+              <label class="tw-text-xs tw-semi-bold tw-ml-1"> {{ "accountBackup" | i18n }} </label>
             </div>
           </div>
-          <br />
+
+          <div class="tw-text-xs tw-regular ml-3 pb-2">
+            {{ "accountBackupOptionDescription" | i18n }}
+          </div>
+
+          <div class="tw-flex tw-items-center">
+            <div>
+              <input
+                type="radio"
+                class="radio"
+                name="fileEncryptionType"
+                id="2"
+                [value]="1"
+                formControlName="fileEncryptionType"
+              />
+            </div>
+            <div>
+              <label class="tw-text-xs tw-semi-bold tw-ml-1">{{
+                "passwordProtected" | i18n
+              }}</label>
+            </div>
+          </div>
+
+          <div class="tw-text-xs tw-regular ml-3 pb-2">
+            {{ "passwordProtectedOptionDescription" | i18n }}
+          </div>
         </div>
+        <br />
 
         <ng-container *ngIf="fileEncryptionType == 1">
           <label for="format">{{ "filePassword" | i18n }}</label>

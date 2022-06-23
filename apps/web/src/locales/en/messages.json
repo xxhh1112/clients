@@ -915,7 +915,7 @@
     "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "File Password and Confirm File Password do not match."
+    "message": "“File password”  and “Confirm File Password“ do not match."
   },
   "confirmVaultImport": {
     "message": "Confirm Vault Import"
