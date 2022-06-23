@@ -81,7 +81,7 @@ export class SettingsComponent implements OnInit {
     // Workaround to avoid ghosting trays https://github.com/electron/electron/issues/17622
     this.requireEnableTray = this.platformUtilsService.getDevice() === DeviceType.LinuxDesktop;
 
-    const trayKey = isMac ? "enableMenuBar" : "enableTray";
+    const trayKey = isMac ? "showMenuBarIcon" : "showTrayIcon";
     this.enableTrayText = this.i18nService.t(trayKey);
     this.enableTrayDescText = this.i18nService.t(trayKey + "Desc");
 

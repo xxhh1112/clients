@@ -174,10 +174,10 @@
                       [(ngModel)]="enableFavicons"
                       (change)="saveFavicons()"
                     />
-                    {{ "enableFavicon" | i18n }}
+                    {{ "showWebsiteIcons" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "faviconDesc" | i18n }}</small>
+                <small class="help-block">{{ "showWebsiteIconsDesc" | i18n }}</small>
               </div>
             </ng-container>
           </div>
@@ -305,10 +305,10 @@
                       [(ngModel)]="enableBrowserIntegration"
                       (change)="saveBrowserIntegration()"
                     />
-                    {{ "enableBrowserIntegration" | i18n }}
+                    {{ "allowBrowserIntegration" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "enableBrowserIntegrationDesc" | i18n }}</small>
+                <small class="help-block">{{ "allowBrowserIntegrationDesc" | i18n }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -321,11 +321,11 @@
                       (change)="saveBrowserIntegrationFingerprint()"
                       [disabled]="!enableBrowserIntegration"
                     />
-                    {{ "enableBrowserIntegrationFingerprint" | i18n }}
+                    {{ "requireVerificationForBrowserIntegration" | i18n }}
                   </label>
                 </div>
                 <small class="help-block">{{
-                  "enableBrowserIntegrationFingerprintDesc" | i18n
+                  "requireVerificationForBrowserIntegrationDesc" | i18n
                 }}</small>
               </div>
               <div class="form-group">
