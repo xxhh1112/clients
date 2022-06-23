@@ -567,22 +567,22 @@
     "message": "No Folder",
     "description": "This is the folder for uncategorized items"
   },
-  "enableAddLoginNotification": {
+  "askToAddLogin": {
     "message": "Ask to add login"
   },
-  "addLoginNotificationDesc": {
+  "askToAddLoginDesc": {
     "message": "Ask to add an item if one isn't found in your vault."
   },
-  "showCardsCurrentTab": {
+  "showCardsOnTabPage": {
     "message": "Show cards on Tab page"
   },
-  "showCardsCurrentTabDesc": {
+  "showCardsOnTabPageDesc": {
     "message": "List card items on the Tab page for easy auto-fill."
   },
-  "showIdentitiesCurrentTab": {
+  "showIdentitiesOnTabPage": {
     "message": "Show identities on Tab page"
   },
-  "showIdentitiesCurrentTabDesc": {
+  "showIdentitiesOnTabPageDesc": {
     "message": "List identity items on the Tab page for easy auto-fill."
   },
   "clearClipboard": {
@@ -599,10 +599,10 @@
   "notificationAddSave": {
     "message": "Save"
   },
-  "enableChangedPasswordNotification": {
+  "askToUpdateExistingLogin": {
     "message": "Ask to update existing login"
   },
-  "changedPasswordNotificationDesc": {
+  "askToUpdateExistingLoginDesc": {
     "message": "Ask to update a login's password when a change is detected on a website."
   },
   "notificationChangeDesc": {
@@ -611,10 +611,10 @@
   "notificationChangeSave": {
     "message": "Update"
   },
-  "enableContextMenuItem": {
+  "showContextMenuOptions": {
     "message": "Show context menu options"
   },
-  "contextMenuItemDesc": {
+  "showContextMenuOptionsDesc": {
     "message": "Use a secondary click to access password generation and matching logins for the website. "
   },
   "defaultUriMatchDetection": {
@@ -806,13 +806,13 @@
   "refreshComplete": {
     "message": "Refresh complete"
   },
-  "enableAutoTotpCopy": {
+  "copyTotpAutomatically": {
     "message": "Copy TOTP automatically"
   },
-  "disableAutoTotpCopyDesc": {
+  "copyTotpAutomaticallyDesc": {
     "message": "If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login."
   },
-  "enableAutoBiometricsPrompt": {
+  "askForBiometricsOnLaunch": {
     "message": "Ask for biometrics on launch"
   },
   "premiumRequired": {
@@ -1033,16 +1033,16 @@
   "popupU2fCloseMessage": {
     "message": "This browser cannot process U2F requests in this popup window. Do you want to open this popup in a new window so that you can log in using U2F?"
   },
-  "enableFavicon": {
+  "showWebsiteIcons": {
     "message": "Show website icons"
   },
-  "faviconDesc": {
+  "showWebsiteIconsDesc": {
     "message": "Show a recognizable image next to each login."
   },
-  "enableBadgeCounter": {
+  "showBadgeCounter": {
     "message": "Show badge counter"
   },
-  "badgeCounterDesc": {
+  "showBadgeCounterDesc": {
     "message": "Indicate how many logins you have for the current web page."
   },
   "cardholderName": {
