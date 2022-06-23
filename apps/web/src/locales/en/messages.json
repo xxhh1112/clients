@@ -1151,24 +1151,24 @@
   "languageDesc": {
     "message": "Change the language used by the web vault."
   },
-  "enableFavicon": {
+  "showWebsiteIcons": {
     "message": "Show website icons"
   },
-  "faviconDesc": {
+  "showWebsiteIconsDesc": {
     "message": "Show a recognizable image next to each login."
   },
-  "enableGravatars": {
+  "showGravatars": {
     "message": "Show Gravatars",
     "description": "Use avatar images loaded from gravatar.com."
   },
-  "enableGravatarsDesc": {
+  "showGravatarsDesc": {
     "message": "Use avatar images loaded from gravatar.com."
   },
-  "enableFullWidth": {
+  "displayFullWidthLayout": {
     "message": "Display full width layout",
     "description": "Allows scaling the web vault UI's width"
   },
-  "enableFullWidthDesc": {
+  "displayFullWidthLayoutDesc": {
     "message": "Allow the web vault to expand the full width of the browser window."
   },
   "default": {
