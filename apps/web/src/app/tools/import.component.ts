@@ -255,11 +255,7 @@ export class ImportComponent implements OnInit {
   }
 
   async showPasswordPrompt(fcontents: string, organizationId: string) {
-    // if (!(await this.enabled())) {
-    //   return true;
-    // }
-
-    const ref = this.modalService.open(this.component, {
+    const ref = await this.modalService.open(this.component, {
       allowMultipleModals: true,
       data: {
         fileContents: fcontents,
@@ -267,9 +263,9 @@ export class ImportComponent implements OnInit {
       },
     });
 
-    // if (ref == null) {
-    //   return false;
-    // }
+    if (ref == null) {
+      return false;
+    }
 
     const result = await ref.onClosedPromise();
     return result === true;
