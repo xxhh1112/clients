@@ -1,5 +1,5 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { Component } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
