@@ -400,6 +400,18 @@
   "length": {
     "message": "Довжина"
   },
+  "uppercase": {
+    "message": "Верхній регістр (A-Z)"
+  },
+  "lowercase": {
+    "message": "Нижній регістр (a-z)"
+  },
+  "numbers": {
+    "message": "Числа (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Спеціальні символи (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Кількість слів"
   },
@@ -427,16 +439,16 @@
     "message": "Уникати неоднозначних символів"
   },
   "searchCollection": {
-    "message": "Пошук в збірках"
+    "message": "Шукати в збірці"
   },
   "searchFolder": {
-    "message": "Пошук в теці"
+    "message": "Шукати в теці"
   },
   "searchFavorites": {
-    "message": "Пошук в обраному"
+    "message": "Шукати в обраному"
   },
   "searchType": {
-    "message": "Пошук за типом",
+    "message": "Шукати за типом",
     "description": "Search item type"
   },
   "newAttachment": {
@@ -882,11 +894,11 @@
     "message": "Автоматично очищати скопійовані значення з буфера обміну.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Вимкнути піктограми вебсайтів"
+  "enableFavicon": {
+    "message": "Показувати піктограми вебсайтів"
   },
-  "disableFaviconDesc": {
-    "message": "Впізнавані піктограми вебсайтів додаються біля кожного запису вашого сховища."
+  "faviconDesc": {
+    "message": "Показувати впізнаване зображення біля кожного запису."
   },
   "enableMinToTray": {
     "message": "Згортати до системного лотка"
@@ -973,7 +985,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Перевірити оновлення"
+    "message": "Перевірити оновлення…"
   },
   "version": {
     "message": "Версія $VERSION_NUM$",
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Формат файлу"
   },
+  "hCaptchaUrl": {
+    "message": "URL-адреса hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Завантажити cookie спеціальних можливостей"
+  },
+  "registerAccessibilityUser": {
+    "message": "Реєстрація користувача зі спеціальними можливостями",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Вставте нижче код, надісланий на вашу е-пошту"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Введіть URL-адресу для завантаження cookie спеціальних можливостей для hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Необхідно ввести URL-адресу hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Недійсна URL-адреса"
+  },
+  "done": {
+    "message": "Виконано"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Cookie спеціальних можливостей збережено!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Немає збережених cookie особливих можливостей"
+  },
   "warning": {
     "message": "ПОПЕРЕДЖЕННЯ",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "розблокувати сховище"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Не запитувати Windows Hello під час запуску."
+  "autoPromptWindowsHello": {
+    "message": "Ініціювати Windows Hello під час запуску"
   },
-  "noAutoPromptTouchId": {
-    "message": "Не запитувати Touch ID під час запуску."
+  "autoPromptTouchId": {
+    "message": "Ініціювати Touch ID під час запуску"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Блокувати головним паролем при перезапуску"
@@ -1408,7 +1454,7 @@
     "description": "Noun: a special folder to hold deleted items"
   },
   "searchTrash": {
-    "message": "Пошук у смітнику"
+    "message": "Шукати в смітнику"
   },
   "permanentlyDeleteItem": {
     "message": "Остаточно видалити запис"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Інтеграція з браузером використовується для біометрії в браузері."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Інтеграція з браузером не підтримується"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "На жаль, зараз інтеграція з браузером підтримується лише у версії для Mac з App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Інтеграція з браузером не підтримується"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "На жаль, зараз інтеграція з браузером не підтримується у версії з Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "На жаль, зараз інтеграція з браузером не підтримується у версії для Linux."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Вимагати підтвердження для інтеграції з браузером"
@@ -1559,7 +1605,7 @@
     "message": "Текст"
   },
   "searchSends": {
-    "message": "Пошук відправлень",
+    "message": "Шукати відправлення",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Максимальна кількість доступів"
+    "message": "Максимальна кількість доступів",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Якщо встановлено, користувачі більше не зможуть отримати доступ до цього відправлення після досягнення максимальної кількості доступів.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Ви покинули організацію."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Не вдається отримати доступ до Key Connector. Спробуйте знову пізніше."
+  "ssoKeyConnectorError": {
+    "message": "Помилка Key Connector: переконайтеся, що Key Connector доступний та працює правильно."
   },
   "lockAllVaults": {
     "message": "Заблокувати всі сховища"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Заблоковано"
+  },
+  "unlocked": {
+    "message": "Розблоковано"
+  },
   "generator": {
     "message": "Генератор"
   },
@@ -1859,7 +1912,8 @@
     "message": "Тип імені користувача"
   },
   "plusAddressedEmail": {
-    "message": "Плюс адреса електронної пошти"
+    "message": "Плюс адреса електронної пошти",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Використовуйте розширені можливості адрес вашого постачальника електронної пошти."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Послуга"
+  },
+  "allVaults": {
+    "message": "Усі сховища"
+  },
+  "searchOrganization": {
+    "message": "Шукати в організації"
+  },
+  "searchMyVault": {
+    "message": "Шукати у сховищі"
+  },
+  "forwardedEmail": {
+    "message": "Псевдонім е-пошти для пересилання"
+  },
+  "forwardedEmailDesc": {
+    "message": "Згенеруйте псевдонім е-пошти зі стороннім сервісом пересилання."
+  },
+  "hostname": {
+    "message": "Ім'я вузла",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Токен доступу до АРІ"
+  },
+  "apiKey": {
+    "message": "Ключ API"
   }
 }

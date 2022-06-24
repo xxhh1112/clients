@@ -370,10 +370,10 @@
     "message": "Er du sikker på, at du vil overskrive den aktuelle adgangskode?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Overskriv brugernavn"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Er du sikker på, at du vil overskrive det aktuelle brugernavn?"
   },
   "noneFolder": {
     "message": "Ingen mappe",
@@ -399,6 +399,18 @@
   },
   "length": {
     "message": "Længde"
+  },
+  "uppercase": {
+    "message": "Store bogstaver (A-Z)"
+  },
+  "lowercase": {
+    "message": "Små bogstaver (a-z)"
+  },
+  "numbers": {
+    "message": "Cifre (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Specialtegn (!@#$%^&*)"
   },
   "numWords": {
     "message": "Antal ord"
@@ -716,7 +728,7 @@
     "message": "Er du sikker på, at du vil logge ud?"
   },
   "logOut": {
-    "message": "Log ud"
+    "message": "Log af"
   },
   "addNewLogin": {
     "message": "Tilføj nyt login"
@@ -882,11 +894,11 @@
     "message": "Fjern automatisk kopierede data fra din udklipsholder.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Slå webikoner fra"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Webikoner vises som et genkendeligt billede ved siden af hvert loginelement i din boks."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "Minimer til bakkeikon"
@@ -973,7 +985,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Søg efter opdateringer"
+    "message": "Søg efter opdateringer…"
   },
   "version": {
     "message": "Version $VERSION_NUM$",
@@ -1198,7 +1210,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Domænenavn",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1260,6 +1272,40 @@
   },
   "fileFormat": {
     "message": "Filformat"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Load Accessibility Cookie"
+  },
+  "registerAccessibilityUser": {
+    "message": "Register as an accessibility user at",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copy and paste the link sent to your email below"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url is required",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Ugyldig URL"
+  },
+  "done": {
+    "message": "Done"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Accessibility cookie saved!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "No accessibility cookie saved"
   },
   "warning": {
     "message": "ADVARSEL",
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "lås din boks op"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Bed ikke om Windows Hello ved start."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Bed ikke om Touch ID ved start."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lås med hovedadgangskode ved genstart"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Browserintegration bruges til biometri i browseren."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Browserintegration understøttes ikke"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Desværre understøttes browserintegration kun i Mac App Store-versionen indtil videre."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Browserintegration understøttes ikke"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Desværre understøttes browserintegration i øjeblikket ikke i Windows Store-versionen."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Desværre understøttes browserintegration i øjeblikket ikke i linux-versionen."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Kræv verifikation for browserintegration"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksimalt antal tilgange"
+    "message": "Maksimalt antal tilgange",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Hvis opsat, vil brugere ikke længere kunne tilgå denne Send, når det maksimale adgangsantal er nået.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Du har forladt organisationen."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Kan ikke kontakte key connector, forsøg igen senere."
+  "ssoKeyConnectorError": {
+    "message": "Key Connector-fejl: Sørg for, at Key Connector er tilgængelig og fungerer korrekt."
   },
   "lockAllVaults": {
     "message": "Lås alle bokse"
@@ -1840,46 +1887,78 @@
       }
     }
   },
+  "locked": {
+    "message": "Låst"
+  },
+  "unlocked": {
+    "message": "Låst op"
+  },
   "generator": {
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Hvad vil du gerne generere?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Adgangskodetype"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Regenerér brugernavn"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generér brugernavn"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Brugernavnstype"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "Plus adresseret e-mail",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Brug din e-mailudbyders underadresseringsmuligheder."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Fang-alle e-mail"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Brug dit domænes konfigurerede fang-alle-indbakke."
   },
   "random": {
-    "message": "Random"
+    "message": "Tilfældig"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Tilfældigt ord"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Hjemmeside navn"
   },
   "service": {
-    "message": "Service"
+    "message": "Tjeneste"
+  },
+  "allVaults": {
+    "message": "Alle bokse"
+  },
+  "searchOrganization": {
+    "message": "Søg organisation"
+  },
+  "searchMyVault": {
+    "message": "Søg i min boks"
+  },
+  "forwardedEmail": {
+    "message": "Videresendt E-mail Alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generér et e-mail alias med en ekstern viderestillingstjeneste."
+  },
+  "hostname": {
+    "message": "Værtsnavn",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API-adgangstoken"
+  },
+  "apiKey": {
+    "message": "API-nøgle"
   }
 }

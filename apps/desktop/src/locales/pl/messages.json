@@ -373,7 +373,7 @@
     "message": "Nadpisz nazwę użytkownika"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Czy na pewno chcesz nadpisać obecną nazwę użytkownika?"
   },
   "noneFolder": {
     "message": "Nieprzypisane",
@@ -399,6 +399,18 @@
   },
   "length": {
     "message": "Długość"
+  },
+  "uppercase": {
+    "message": "Wielkie litery (A-Z)"
+  },
+  "lowercase": {
+    "message": "Małe litery (a-z)"
+  },
+  "numbers": {
+    "message": "Cyfry (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Znaki specjalne (!@#$%^&*)"
   },
   "numWords": {
     "message": "Liczba słów"
@@ -866,7 +878,7 @@
     "message": "Po zablokowaniu komputera"
   },
   "onRestart": {
-    "message": "Po restarcie aplikacji"
+    "message": "Po uruchomieniu ponownym"
   },
   "never": {
     "message": "Nigdy"
@@ -882,11 +894,11 @@
     "message": "Automatycznie wyczyść skopiowaną wartość ze schowka.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Wyłącz ikony stron"
+  "enableFavicon": {
+    "message": "Pokaż ikony witryn"
   },
-  "disableFaviconDesc": {
-    "message": "Wyświetlaj rozpoznawalną ikonę serwisu obok danych logowania w sejfie."
+  "faviconDesc": {
+    "message": "Pokaż rozpoznawalny obraz obok każdych danych logowania."
   },
   "enableMinToTray": {
     "message": "Minimalizuj do zasobnika systemowego"
@@ -973,7 +985,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Sprawdź dostępność aktualizacji"
+    "message": "Sprawdź dostępność aktualizacji…"
   },
   "version": {
     "message": "Wersja $VERSION_NUM$",
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Format pliku"
   },
+  "hCaptchaUrl": {
+    "message": "Adres URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Załaduj ciasteczko ułatwień dostępu"
+  },
+  "registerAccessibilityUser": {
+    "message": "Zarejestruj się jako użytkownik ułatwień dostępu na",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Skopiuj i wklej link wysłany na poniższy adres e-mail"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Wpisz adres URL, aby załadować ciasteczko ułatwień dostępu dla hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Adres URL hCaptcha jest wymagany",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Nieprawidłowy adres URL"
+  },
+  "done": {
+    "message": "Gotowe"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Zapisano ciasteczko ułatwień dostępu!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Brak zapisanych ciasteczek ułatwień dostępu"
+  },
   "warning": {
     "message": "UWAGA",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "odblokuj sejf"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Zapamiętaj autoryzację Windows Hello."
+  "autoPromptWindowsHello": {
+    "message": "Poproś o Windows Hello przy uruchomieniu"
   },
-  "noAutoPromptTouchId": {
-    "message": "Zapamiętaj autoryzację Touch ID."
+  "autoPromptTouchId": {
+    "message": "Poproś o Touch ID przy uruchomieniu"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Zablokuj hasłem głównym po uruchomieniu ponownym"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Połączenie z przeglądarką jest używane do odblokowania danymi biometrycznymi."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Połączenie z przeglądarką nie jest obsługiwane"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Połączenie z przeglądarką jest obsługiwane tylko z wersją aplikacji ze sklepu Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Połączenie z przeglądarką nie jest obsługiwane"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Połączenie z przeglądarką nie jest obecnie obsługiwane w aplikacji w wersji Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Połączenie z przeglądarką nie jest obecnie obsługiwane w aplikacji na Linuksa."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Wymagaj weryfikacji połączenia z przeglądarką"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksymalna liczba dostępów"
+    "message": "Maksymalna liczba dostępów",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Jeśli funkcja jest włączona, po osiągnięciu maksymalnej liczby dostępów, użytkownicy nie będą mieli dostępu do tej wysyłki.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Nie należysz już do tej organizacji."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Nie można nawiązać połączenia z serwerem Key Connector. Spróbuj ponownie później."
+  "ssoKeyConnectorError": {
+    "message": "Błąd serwera Key Connector: upewnij się, że serwer Key Connector jest dostępny i działa poprawnie."
   },
   "lockAllVaults": {
     "message": "Zablokuj wszystkie sejfy"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Zablokowany"
+  },
+  "unlocked": {
+    "message": "Odblokowany"
+  },
   "generator": {
     "message": "Generator"
   },
@@ -1859,7 +1912,8 @@
     "message": "Rodzaj nazwy użytkownika"
   },
   "plusAddressedEmail": {
-    "message": "Adres e-mail z plusem"
+    "message": "Adres e-mail z plusem",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Użyj możliwości dodawania aliasów u swojego dostawcy poczty e-mail."
@@ -1871,7 +1925,7 @@
     "message": "Użyj skonfigurowanej skrzynki catch-all w swojej domenie."
   },
   "random": {
-    "message": "Random"
+    "message": "Losowa"
   },
   "randomWord": {
     "message": "Losowe słowo"
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Usługa"
+  },
+  "allVaults": {
+    "message": "Wszystkie sejfy"
+  },
+  "searchOrganization": {
+    "message": "Szukaj w organizacji"
+  },
+  "searchMyVault": {
+    "message": "Szukaj w sejfie"
+  },
+  "forwardedEmail": {
+    "message": "Alias przekazywanego e-maila"
+  },
+  "forwardedEmailDesc": {
+    "message": "Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania."
+  },
+  "hostname": {
+    "message": "Nazwa hosta",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Token dostępu API"
+  },
+  "apiKey": {
+    "message": "Klucz interfejsu API"
   }
 }

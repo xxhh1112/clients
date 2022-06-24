@@ -400,6 +400,18 @@
   "length": {
     "message": "Длина"
   },
+  "uppercase": {
+    "message": "Прописные буквы (A-Z)"
+  },
+  "lowercase": {
+    "message": "Строчные буквы (a-z)"
+  },
+  "numbers": {
+    "message": "Цифры (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Специальные символы (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Количество слов"
   },
@@ -716,7 +728,7 @@
     "message": "Вы действительно хотите выйти?"
   },
   "logOut": {
-    "message": "Выйти"
+    "message": "Выход"
   },
   "addNewLogin": {
     "message": "Добавить новый логин"
@@ -875,18 +887,18 @@
     "message": "Безопасность"
   },
   "clearClipboard": {
-    "message": "Очистка буфера обмена",
+    "message": "Очистить буфер обмена",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
-    "message": "Автоматически очищать скопированные значения в вашем буфере обмена.",
+    "message": "Автоматически удалять скопированные значения из буфера обмена.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Отключить значки веб-сайтов"
+  "enableFavicon": {
+    "message": "Показать значки веб-сайтов"
   },
-  "disableFaviconDesc": {
-    "message": "Значки веб-сайтов отображаются рядом с каждым элементом в вашем хранилище."
+  "faviconDesc": {
+    "message": "Отображать узнаваемое изображение рядом с каждым логином."
   },
   "enableMinToTray": {
     "message": "Сворачивать в область уведомлений"
@@ -973,7 +985,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Проверка наличия обновлений"
+    "message": "Проверка обновлений…"
   },
   "version": {
     "message": "Версия $VERSION_NUM$",
@@ -985,7 +997,7 @@
     }
   },
   "restartToUpdate": {
-    "message": "Перезапуск для обновления"
+    "message": "Перезапустить для обновления"
   },
   "restartToUpdateDesc": {
     "message": "Версия $VERSION_NUM$ готова к установке. Для завершения установки необходимо перезапустить Bitwarden. Сделать это сейчас?",
@@ -1256,10 +1268,44 @@
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
-    "message": "Экспорт хранилища"
+    "message": "Экспортировать хранилище"
   },
   "fileFormat": {
     "message": "Формат файла"
+  },
+  "hCaptchaUrl": {
+    "message": "URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Загрузить cookie специальных возможностей"
+  },
+  "registerAccessibilityUser": {
+    "message": "Зарегистрироваться как пользователь специальных возможностей на",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Скопируйте и вставьте ниже ссылку, отправленную на вашу почту"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Введите URL для загрузки cookie специальных возможностей для hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Требуется URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Неверный URL"
+  },
+  "done": {
+    "message": "Готово"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Cookie специальных возможностей сохранены!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Отсутствуют сохраненные cookie специальных возможностей"
   },
   "warning": {
     "message": "ВНИМАНИЕ",
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "разблокировать ваше хранилище"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Не запрашивать Windows Hello при запуске."
+  "autoPromptWindowsHello": {
+    "message": "Запрашивать Windows Hello при запуске"
   },
-  "noAutoPromptTouchId": {
-    "message": "Не запрашивать Touch ID при запуске."
+  "autoPromptTouchId": {
+    "message": "Запрашивать Touch ID при запуске"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Блокировать мастер-паролем при перезапуске"
@@ -1394,10 +1440,10 @@
     "message": "Действие по тайм-ауту хранилища"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Заблокированное хранилище потребует повторного ввода мастер-пароля для получения доступа к нему."
+    "message": "Чтобы снова получить доступ к заблокированному хранилищу, нужно повторно ввести мастер-пароль."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Выход из хранилища потребует повторную аутентификацию для получения доступа к нему."
+    "message": "Чтобы получить доступ к хранилищу после выхода из него требуется повторная авторизация."
   },
   "lock": {
     "message": "Заблокировать",
@@ -1501,28 +1547,28 @@
     "message": "Условия предоставления услуг и Политика конфиденциальности не были подтверждены."
   },
   "enableBrowserIntegration": {
-    "message": "Включить интеграцию с браузером"
+    "message": "Разрешить интеграцию с браузером"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Интеграция с браузером используется для биометрии в браузере."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Интеграция с браузером не поддерживается"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "К сожалению, интеграция браузера пока поддерживается только в версии Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Интеграция с браузером не поддерживается"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "К сожалению, интеграция с браузером на текущий момент не поддерживается в версии из магазина Windows."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "К сожалению, интеграция с браузером на текущий момент не поддерживается в версии для linux."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Требовать верификацию для интеграции с браузером"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Включите дополнительный уровень безопасности, используя проверку отпечатка фразы при установлении соединения между компьютером и браузером. Когда эта функция включена, она требует участия пользователя и верификации каждый раз при установлении соединения."
+    "message": "Добавьте дополнительный уровень безопасности, требуя подтверждения отпечатка фразы при установлении связи между компьютером и браузером. Это потребует действий пользователя и подтверждения при каждом создании соединения."
   },
   "approve": {
     "message": "Принять"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Максимум обращений"
+    "message": "Максимум обращений",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Если задано, пользователи больше не смогут получить доступ к этой Send, как только будет достигнуто максимальное количество обращений.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Вы покинули организацию."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Не удается подключиться к соединителю ключей, повторите попытку позже."
+  "ssoKeyConnectorError": {
+    "message": "Ошибка соединителя ключей: убедитесь, что он доступен и работает корректно."
   },
   "lockAllVaults": {
     "message": "Заблокировать все хранилища"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Заблокировано"
+  },
+  "unlocked": {
+    "message": "Разблокировано"
+  },
   "generator": {
     "message": "Генератор"
   },
@@ -1859,7 +1912,8 @@
     "message": "Тип имени пользователя"
   },
   "plusAddressedEmail": {
-    "message": "Плюс-адресованные email"
+    "message": "Плюс-адресованные email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Использовать возможности суб-адресации вашего провайдера электронной почты."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Служба"
+  },
+  "allVaults": {
+    "message": "Все хранилища"
+  },
+  "searchOrganization": {
+    "message": "Поиск организации"
+  },
+  "searchMyVault": {
+    "message": "Поиск в моем хранилище"
+  },
+  "forwardedEmail": {
+    "message": "Псевдоним электронной почты для пересылки"
+  },
+  "forwardedEmailDesc": {
+    "message": "Создать псевдоним электронной почты для внешней службы пересылки."
+  },
+  "hostname": {
+    "message": "Имя хоста",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Токен доступа к API"
+  },
+  "apiKey": {
+    "message": "Ключ API"
   }
 }

@@ -400,6 +400,18 @@
   "length": {
     "message": "Μήκος"
   },
+  "uppercase": {
+    "message": "Κεφαλαία (A-Z)"
+  },
+  "lowercase": {
+    "message": "Πεζά (α-ω)"
+  },
+  "numbers": {
+    "message": "Αριθμοί (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Ειδικοί Χαρακτήρες (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Αριθμός Λέξεων"
   },
@@ -882,11 +894,11 @@
     "message": "Αυτόματη εκκαθάριση αντιγραμμένων τιμών προχείρου.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Απενεργοποίηση Εικονιδίων Ιστοσελίδας"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Τα εικονίδια ιστοσελίδων παρέχουν μια αναγνωρίσιμη εικόνα δίπλα σε κάθε στοιχείο σύνδεσης της λίστας σας."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "Ελαχιστοποίηση σε Εικονίδιο Δίσκου"
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Μορφή Αρχείου"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Φόρτωση cookie προσβασιμότητας"
+  },
+  "registerAccessibilityUser": {
+    "message": "Εγγραφείτε ως χρήστης προσβασιμότητας στο",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Αντιγράψτε και επικολλήστε τον σύνδεσμο που στάλθηκε στο email σας παρακάτω"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Εισαγάγετε τη διεύθυνση URL για τη φόρτωση του cookie προσβασιμότητας για το hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Απαιτείται διεύθυνση URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Μη έγκυρο Url"
+  },
+  "done": {
+    "message": "Εγινε"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Το cookie προσβασιμότητας αποθηκεύτηκε!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Δεν έχει αποθηκευτεί cookie προσβασιμότητας"
+  },
   "warning": {
     "message": "ΠΡΟΕΙΔΟΠΟΙΗΣΗ",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "Ξεκλειδώστε το vault σας"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Μην προτρέξετε για τα Windows Hello κατά την εκκίνηση."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Να μην ζητηθεί το Touch ID κατά την εκκίνηση."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Κλείδωμα με τον κύριο κωδικό πρόσβασης κατά την επανεκκίνηση"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Η ενσωμάτωση του προγράμματος περιήγησης χρησιμοποιείται για βιομετρικά στοιχεία στο πρόγραμμα περιήγησης."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Η ενσωμάτωση του περιηγητή δεν υποστηρίζεται"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Δυστυχώς η ενσωμάτωση του προγράμματος περιήγησης υποστηρίζεται μόνο στην έκδοση Mac App Store για τώρα."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Η ενσωμάτωση του περιηγητή δεν υποστηρίζεται"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Δυστυχώς η ενσωμάτωση του προγράμματος περιήγησης, δεν υποστηρίζεται στην έκδοση Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Δυστυχώς, η ενσωμάτωση του browser δεν υποστηρίζεται αυτήν τη στιγμή στην έκδοση linux."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Απαιτείται επαλήθευση για ολοκλήρωση περιηγητή"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Μέγιστος Αριθμός Πρόσβασης"
+    "message": "Μέγιστος Αριθμός Πρόσβασης",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Εάν οριστεί, οι χρήστες δεν θα μπορούν πλέον να έχουν πρόσβαση σε αυτό το send μόλις επιτευχθεί ο μέγιστος αριθμός πρόσβασης.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Έχετε φύγει από τον οργανισμό."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Δεν είναι δυνατή η πρόσβαση στον σύνδεσμο κλειδιού, προσπαθήστε ξανά αργότερα."
+  "ssoKeyConnectorError": {
+    "message": "Σφάλμα Key Connector: βεβαιωθείτε ότι το Key Connector είναι διαθέσιμο και λειτουργεί σωστά."
   },
   "lockAllVaults": {
     "message": "Κλείδωμα Όλων Των Vault"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Κλειδωμένο"
+  },
+  "unlocked": {
+    "message": "Ξεκλείδωτο"
+  },
   "generator": {
     "message": "Γεννήτρια"
   },
@@ -1859,7 +1912,8 @@
     "message": "Τύπος Ονόματος Χρήστη"
   },
   "plusAddressedEmail": {
-    "message": "Συν Διεύθυνση Email"
+    "message": "Συν Διεύθυνση Email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Χρησιμοποιήστε τις δυνατότητες δευτερεύουσας διεύθυνσης του παρόχου email σας."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Υπηρεσία"
+  },
+  "allVaults": {
+    "message": "Όλα τα Vaults"
+  },
+  "searchOrganization": {
+    "message": "Αναζήτηση Οργανισμού"
+  },
+  "searchMyVault": {
+    "message": "Αναζήτηση στο Vault"
+  },
+  "forwardedEmail": {
+    "message": "Προωθημένο Email Alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Δημιουργήστε ένα alias email με μια εξωτερική υπηρεσία προώθησης."
+  },
+  "hostname": {
+    "message": "Hostname",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API Access Token"
+  },
+  "apiKey": {
+    "message": "Kλειδί API"
   }
 }

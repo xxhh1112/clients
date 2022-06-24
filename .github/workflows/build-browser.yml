@@ -5,10 +5,13 @@ on:
   pull_request:
     branches-ignore:
       - 'l10n_master'
-      - 'gh-pages'
+      - 'cf-pages'
     paths:
       - 'apps/browser/**'
-      - '.github/workflows/build-browser.yml'
+      - 'libs/**'
+      - '*'
+      - '!*.md'
+      - '!*.txt'
   push:
     branches:
       - 'master'
@@ -16,6 +19,10 @@ on:
       - 'hotfix-rc/**'
     paths:
       - 'apps/browser/**'
+      - 'libs/**'
+      - '*'
+      - '!*.md'
+      - '!*.txt'
       - '.github/workflows/build-browser.yml'
   workflow_dispatch:
     inputs: {}
@@ -111,20 +118,28 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846  # v3.0.0
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd  # v3.3.0
         with:
           cache: 'npm'
-          cache-dependency-path: 'apps/browser/**/package-lock.json'
+          cache-dependency-path: '**/package-lock.json'
           node-version: '16'
+
+      - name: Install node-gyp
+        run: |
+          npm install -g node-gyp
+          node-gyp install $(node -v)
 
       - name: Print environment
         run: |
           node --version
           npm --version
 
-      - name: NPM setup & test
+      - name: NPM setup
+        run: npm ci
+        working-directory: ./
+
+      - name: Build & Test
         run: |
-          npm ci
           npm run dist
           npm run test
 
@@ -134,14 +149,23 @@ jobs:
       - name: Build sources for reviewers
         shell: cmd
         run: |
-          mkdir dist\Source
-          call git clone %GITHUB_SERVER_URL%/%GITHUB_REPOSITORY% dist\Source
-          cd dist\Source
-          call git checkout %GITHUB_SHA%
-          call git submodule update --init --recursive
-          cd ../
-          del /S/Q "Source\.git\objects\pack\*"
-          call 7z a browser-source.zip "Source\*"
+          REM Remove ".git" directory
+          rmdir /S /Q ".git"
+
+          REM Copy root level files to source directory
+          mkdir browser-source
+          copy * browser-source
+
+          REM Copy apps\browser to Browser source directory
+          mkdir browser-source\apps\browser
+          xcopy apps\browser\* browser-source\apps\browser /E
+
+          REM Copy libs to Browser source directory
+          mkdir browser-source\libs
+          xcopy libs\* browser-source\libs /E
+
+          call 7z a browser-source.zip "browser-source\*"
+        working-directory: ./
 
       - name: Upload Opera artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
@@ -175,7 +199,7 @@ jobs:
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
         with:
           name: browser-source-${{ env._BUILD_NUMBER }}.zip
-          path: apps/browser/dist/browser-source.zip
+          path: browser-source.zip
           if-no-files-found: error
 
       - name: Upload coverage artifact
@@ -199,10 +223,10 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846  # v3.0.0
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd  # v3.3.0
         with:
           cache: 'npm'
-          cache-dependency-path: 'apps/browser/**/package-lock.json'
+          cache-dependency-path: '**/package-lock.json'
           node-version: '16'
 
       - name: Print environment
@@ -264,10 +288,12 @@ jobs:
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
+      - name: NPM setup
+        run: npm ci
+        working-directory: ./
+
       - name: Build Safari extension
-        run: |
-          npm ci
-          npm run dist:safari
+        run: npm run dist:safari
         working-directory: apps/browser
 
       - name: Zip Safari build artifact
@@ -319,6 +345,46 @@ jobs:
           upload_sources: true
           upload_translations: false
 
+  trigger-desktop-build:
+    name: Trigger desktop build
+    if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') || contains(github.ref, 'hotfix-rc') }}
+    runs-on: ubuntu-20.04
+    needs:
+      - build
+      - build-safari
+    steps:
+
+      - name: Login to Azure
+        uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "github-pat-bitwarden-devops-bot-repo-scope"
+
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
+      - name: Call GitHub API to trigger desktop build workflow
+        env:
+          TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+        run: |
+
+          JSON_STRING=$(printf '{"ref":"%s"}' "$BRANCH_NAME")
+
+          curl \
+            -X POST \
+            -i -u bitwarden-devops-bot:$TOKEN \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/bitwarden/clients/actions/workflows/build-desktop.yml/dispatches \
+            -d $JSON_STRING
 
   check-failures:
     name: Check for failures
@@ -331,6 +397,7 @@ jobs:
       - build
       - build-safari
       - crowdin-push
+      - trigger-desktop-build
     steps:
       - name: Check if any job failed
         if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') }}
@@ -341,6 +408,7 @@ jobs:
           BUILD_STATUS: ${{ needs.build.result }}
           SAFARI_BUILD_STATUS: ${{ needs.build-safari.result }}
           CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
+          TRIGGER_DESKTOP_BUILD_STATUS: ${{ needs.trigger-desktop-build.result }}
         run: |
           if [ "$CLOC_STATUS" = "failure" ]; then
               exit 1
@@ -353,6 +421,8 @@ jobs:
           elif [ "$SAFARI_BUILD_STATUS" = "failure" ]; then
               exit 1
           elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$TRIGGER_DESKTOP_BUILD_STATUS" = "failure" ]; then
               exit 1
           fi
 

@@ -72,7 +72,9 @@ const plugins = [
   }),
   new CopyWebpackPlugin({
     patterns: [
-      "./src/manifest.json",
+      process.env.MANIFEST_VERSION == 3
+        ? { from: "./src/manifest.json.v3", to: "manifest.json" }
+        : "./src/manifest.json",
       { from: "./src/_locales", to: "_locales" },
       { from: "./src/images", to: "images" },
       { from: "./src/popup/images", to: "popup/images" },
@@ -176,7 +178,7 @@ const config = {
   resolve: {
     extensions: [".ts", ".js"],
     symlinks: false,
-    modules: [path.resolve("node_modules")],
+    modules: [path.resolve("../../node_modules")],
     alias: {
       sweetalert2: require.resolve("sweetalert2/dist/sweetalert2.js"),
       "#sweetalert2": require.resolve("sweetalert2/src/sweetalert2.scss"),

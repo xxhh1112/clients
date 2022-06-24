@@ -126,7 +126,7 @@
     "message": "Minimalizálás vágólapra másoláskor"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimalizálás asz összes elemadat vágólapra másolásakor."
+    "message": "Minimalizálás egy elem adatainak vágólapra való másolásakor."
   },
   "toggleVisibility": {
     "message": "Láthatóság váltása"
@@ -399,6 +399,18 @@
   },
   "length": {
     "message": "Hossz"
+  },
+  "uppercase": {
+    "message": "Nagybetűs (A-Z)"
+  },
+  "lowercase": {
+    "message": "Kisbetűs (a-z)"
+  },
+  "numbers": {
+    "message": "Számok (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Speciális karakterek (!@#$%^&*)"
   },
   "numWords": {
     "message": "Szavak száma"
@@ -818,10 +830,10 @@
     "message": "Kétlépcsős bejelentkezés"
   },
   "vaultTimeout": {
-    "message": "Széf időkifutás"
+    "message": "Széf időkorlát"
   },
   "vaultTimeoutDesc": {
-    "message": "Válasszuk ki, hogy a széfnél mikor legyen időkifutás és a kiválasztott művelet végrehajtása."
+    "message": "Állítsd be a széfedhez egy időkorlátot és egy végrehajtandó műveletet."
   },
   "immediately": {
     "message": "Azonnal"
@@ -857,13 +869,13 @@
     "message": "4 óra"
   },
   "onIdle": {
-    "message": "Rendszer üresjárat esetén"
+    "message": "Tétlenség esetén"
   },
   "onSleep": {
-    "message": "Rendszer alvó mód esetén"
+    "message": "Alvó módba lépéskor"
   },
   "onLocked": {
-    "message": "Rendszer zárolás esetén"
+    "message": "A rendszer zárolásakor"
   },
   "onRestart": {
     "message": "Újraindításkor"
@@ -882,14 +894,14 @@
     "message": "Automatikusan törli a vágólapra másolt értékeket.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Webhely ikonok letiltása"
+  "enableFavicon": {
+    "message": "Webhely ikonok megjelenítése"
   },
-  "disableFaviconDesc": {
-    "message": "A webhelyek ikonjai felismerhető ikonként jelennek meg a széf összes eleme mellett."
+  "faviconDesc": {
+    "message": "Felismerhető kép megjelenítése minden bejelentkezés mellett."
   },
   "enableMinToTray": {
-    "message": "Kicsinyítés tálcaikonná"
+    "message": "Kicsinyítés tálcára"
   },
   "enableMinToTrayDesc": {
     "message": "Az ablak minimalizálásakor helyette egy ikon jelenik meg a rendszertálcán."
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Fájlformátum"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha webcím",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Akadálymentes süti betöltése"
+  },
+  "registerAccessibilityUser": {
+    "message": "Regisztrálás akadálymentes felhasználóként:",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Vágólapon át szúrjuk be lentebb a kapott emailben levő hivatkozást."
+  },
+  "enterhCaptchaUrl": {
+    "message": "Webcím megadása a hCaptcha akadálymentes sütijének betöltéséhez",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "A hCaptcha webcím megadása szükséges",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "A webcím érvénytelen."
+  },
+  "done": {
+    "message": "Kész"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Az ajadálymentes süti mentésre került."
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Nem lett elmentve akadálymentes süti."
+  },
   "warning": {
     "message": "FIGYELEM",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "Bitwarden feloldás"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Indításkor ne kérje a Windows Hello alkalmazást."
+  "autoPromptWindowsHello": {
+    "message": "Windows Hello kérése indításkor"
   },
-  "noAutoPromptTouchId": {
-    "message": "Indításkor ne kérje a Touch ID alkalmazást."
+  "autoPromptTouchId": {
+    "message": "Érintés AZ kérése indításkor"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lezárás mesterjelszóval újraindításkor"
@@ -1391,13 +1437,13 @@
     "message": "Egy vagy több szervezeti szabály érinti a generátor beállításokat."
   },
   "vaultTimeoutAction": {
-    "message": "Széf időkifutás művelet"
+    "message": "Széf időkorlát művelet"
   },
   "vaultTimeoutActionLockDesc": {
     "message": "Egy zárolt széfnél újra meg kell adni a mesterjelszót az ismételt hozzáféréshez."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "A lezárt széfnél szükséges az újra hitelesítés az ismételt eléréshez."
+    "message": "A lezárt széfnél szükséges az újbóli hitelesítés az ismételt hozzáféréshez."
   },
   "lock": {
     "message": "Lezárás",
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "A böngésző integrációt a biometrikus adatokhoz használják a böngészőben."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "A böngésző integráció nem támogatott."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Sajnos a böngésző integrációt egyelőre csak a Mac App Store verzió támogatja."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "A böngésző integráció nem támogatott."
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "A böngésző integrációt egyelőre csak a Windows Store verzió támogatja."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Sajnos a böngésző integrációját a linux verzió jelenleg nem támogatja."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Ellenőrzés kérése a böngésző integrációhoz"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maximális elérési szám"
+    "message": "Maximális elérési szám",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Beállítva a Küldés elérhetetlen lesz a meghatározott hozzáférések számának elérése után.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Megtörtént a kilépés a szervezetből."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Nem érhető el a kulcskapcsoló. Próbáljuk újra később."
+  "ssoKeyConnectorError": {
+    "message": "Kulcs csatlakozó hiba: ellenőrizzük, hogy a kulcs csatlakozó rendelkezésre áll-e és megfelelően működik-e."
   },
   "lockAllVaults": {
     "message": "Összes széf lezárása"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Lezárva"
+  },
+  "unlocked": {
+    "message": "Feloldva"
+  },
   "generator": {
     "message": "Generátor"
   },
@@ -1859,7 +1912,8 @@
     "message": "Felhasználónév típusa"
   },
   "plusAddressedEmail": {
-    "message": "További címzési email cím"
+    "message": "További címzési email cím",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Használjuk az email cím szolgáltató alcímzési képességeit."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Szolgáltatás"
+  },
+  "allVaults": {
+    "message": "Összes széf"
+  },
+  "searchOrganization": {
+    "message": "Szervezet keresése"
+  },
+  "searchMyVault": {
+    "message": "Keresés a saját széfben"
+  },
+  "forwardedEmail": {
+    "message": "Továbbított email álnevek"
+  },
+  "forwardedEmailDesc": {
+    "message": "Email álnév generálása külső továbbító szolgáltatással."
+  },
+  "hostname": {
+    "message": "Kiszolglónév",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API hozzáférési vezérjel"
+  },
+  "apiKey": {
+    "message": "API kulcs"
   }
 }

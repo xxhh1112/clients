@@ -7,29 +7,29 @@
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "A secure and free password manager for all of your devices.",
+    "message": "Isang ligtas at libreng password manager para sa lahat ng iyong mga aparato.",
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Log in or create a new account to access your secure vault."
+    "message": "Maglog-in o gumawa ng bagong account para ma-access ang iyong ligtas na kahadeyero."
   },
   "createAccount": {
-    "message": "Create Account"
+    "message": "Gumawa ng Account"
   },
   "login": {
-    "message": "Log In"
+    "message": "Mag-login"
   },
   "enterpriseSingleSignOn": {
     "message": "Enterprise Single Sign-On"
   },
   "cancel": {
-    "message": "Cancel"
+    "message": "Kanselahin"
   },
   "close": {
-    "message": "Close"
+    "message": "Isara"
   },
   "submit": {
-    "message": "Submit"
+    "message": "Isumite"
   },
   "emailAddress": {
     "message": "Email Address"
@@ -38,13 +38,13 @@
     "message": "Master Password"
   },
   "masterPassDesc": {
-    "message": "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
+    "message": "Ang master password ay ang password na gagamitin mo upang ma-access ang iyong kahadeyero. Napakaimportante na hindi mo makalimutan ang iyong master password. Walang paraan upang ma-recover ang password kapag nakalimutan mo ito."
   },
   "masterPassHintDesc": {
-    "message": "A master password hint can help you remember your password if you forget it."
+    "message": "May isang pahiwatig para sa master password na makakatulong na maalala mo ang iyong password kapag nakalimutan mo ito."
   },
   "reTypeMasterPass": {
-    "message": "Re-type Master Password"
+    "message": "Muling i-type ang Master Password"
   },
   "masterPassHint": {
     "message": "Master Password Hint (optional)"
@@ -52,26 +52,32 @@
   "tab": {
     "message": "Tab"
   },
+  "vault": {
+    "message": "Vault"
+  },
   "myVault": {
-    "message": "My Vault"
+    "message": "Aking Kahadeyero"
+  },
+  "allVaults": {
+    "message": "All Vaults"
   },
   "tools": {
-    "message": "Tools"
+    "message": "Mga Kagamitan"
   },
   "settings": {
-    "message": "Settings"
+    "message": "Mga Preperensya"
   },
   "currentTab": {
-    "message": "Current Tab"
+    "message": "Pangkasalukuyang Tab"
   },
   "copyPassword": {
-    "message": "Copy Password"
+    "message": "Kopyahin ang Password"
   },
   "copyNote": {
-    "message": "Copy Note"
+    "message": "Kopyahin ang Note"
   },
   "copyUri": {
-    "message": "Copy URI"
+    "message": "Kopyahin ang URI"
   },
   "copyUsername": {
     "message": "Copy Username"
@@ -95,7 +101,7 @@
     "message": "No matching logins."
   },
   "unlockVaultMenu": {
-    "message": "Unlock your vault"
+    "message": "Buksan ang iyong kahadeyero"
   },
   "loginToVaultMenu": {
     "message": "Log in to your vault"
@@ -104,10 +110,10 @@
     "message": "There are no logins available to auto-fill for the current browser tab."
   },
   "addLogin": {
-    "message": "Add a Login"
+    "message": "Magdagdag ng Login"
   },
   "addItem": {
-    "message": "Add Item"
+    "message": "Magdagdag ng Item"
   },
   "passwordHint": {
     "message": "Password Hint"
@@ -119,7 +125,7 @@
     "message": "Get master password hint"
   },
   "continue": {
-    "message": "Continue"
+    "message": "Magpatuloy"
   },
   "sendVerificationCode": {
     "message": "Send a verification code to your email"
@@ -128,22 +134,22 @@
     "message": "Send Code"
   },
   "codeSent": {
-    "message": "Code Sent"
+    "message": "Ipinadala ang Code"
   },
   "verificationCode": {
     "message": "Verification Code"
   },
   "confirmIdentity": {
-    "message": "Confirm your identity to continue."
+    "message": "Kumpirmahin ang iyong identididad upang magpatuloy."
   },
   "account": {
     "message": "Account"
   },
   "changeMasterPassword": {
-    "message": "Change Master Password"
+    "message": "Change master password"
   },
   "fingerprintPhrase": {
-    "message": "Fingerprint Phrase",
+    "message": "Fingerprint phrase",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -151,10 +157,10 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
-    "message": "Two-step Login"
+    "message": "Two-step login"
   },
   "logOut": {
-    "message": "Log Out"
+    "message": "Log out"
   },
   "about": {
     "message": "About"
@@ -187,7 +193,7 @@
     "message": "There are no folders to list."
   },
   "helpFeedback": {
-    "message": "Help & Feedback"
+    "message": "Help & feedback"
   },
   "sync": {
     "message": "Sync"
@@ -209,10 +215,10 @@
     "message": "Automatically generate strong, unique passwords for your logins."
   },
   "bitWebVault": {
-    "message": "Bitwarden Web Vault"
+    "message": "Bitwarden web vault"
   },
   "importItems": {
-    "message": "Import Items"
+    "message": "Import items"
   },
   "select": {
     "message": "Select"
@@ -324,7 +330,7 @@
     "message": "Other"
   },
   "rateExtension": {
-    "message": "Rate the Extension"
+    "message": "Rate the extension"
   },
   "rateExtensionDesc": {
     "message": "Please consider helping us out with a good review!"
@@ -358,10 +364,10 @@
     "message": "Invalid master password"
   },
   "vaultTimeout": {
-    "message": "Vault Timeout"
+    "message": "Vault timeout"
   },
   "lockNow": {
-    "message": "Lock Now"
+    "message": "Lock now"
   },
   "immediately": {
     "message": "Immediately"
@@ -397,10 +403,10 @@
     "message": "4 hours"
   },
   "onLocked": {
-    "message": "On System Lock"
+    "message": "On system lock"
   },
   "onRestart": {
-    "message": "On Browser Restart"
+    "message": "On browser restart"
   },
   "never": {
     "message": "Never"
@@ -561,26 +567,26 @@
     "message": "No Folder",
     "description": "This is the folder for uncategorized items"
   },
-  "disableAddLoginNotification": {
-    "message": "Disable Add Login Notification"
+  "enableAddLoginNotification": {
+    "message": "Ask to add login"
   },
   "addLoginNotificationDesc": {
-    "message": "The \"Add Login Notification\" automatically prompts you to save new logins to your vault whenever you log into them for the first time."
+    "message": "Ask to add an item if one isn't found in your vault."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Don't Show Cards on Tab Page"
+  "showCardsCurrentTab": {
+    "message": "Show cards on Tab page"
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Card items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+  "showCardsCurrentTabDesc": {
+    "message": "List card items on the Tab page for easy auto-fill."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Don't Show Identities on Tab Page"
+  "showIdentitiesCurrentTab": {
+    "message": "Show identities on Tab page"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Identity items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "List identity items on the Tab page for easy auto-fill."
   },
   "clearClipboard": {
-    "message": "Clear Clipboard",
+    "message": "Clear clipboard",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
@@ -593,11 +599,11 @@
   "notificationAddSave": {
     "message": "Save"
   },
-  "disableChangedPasswordNotification": {
-    "message": "Disable Changed Password Notification"
+  "enableChangedPasswordNotification": {
+    "message": "Ask to update existing login"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "The \"Changed Password Notification\" automatically prompts you to update a login's password in your vault whenever it detects that you have changed it on a website."
+  "changedPasswordNotificationDesc": {
+    "message": "Ask to update a login's password when a change is detected on a website."
   },
   "notificationChangeDesc": {
     "message": "Do you want to update this password in Bitwarden?"
@@ -605,14 +611,14 @@
   "notificationChangeSave": {
     "message": "Update"
   },
-  "disableContextMenuItem": {
-    "message": "Disable Context Menu Options"
+  "enableContextMenuItem": {
+    "message": "Show context menu options"
   },
-  "disableContextMenuItemDesc": {
-    "message": "Context menu options provide quick access to password generation and logins for the website in your current tab."
+  "contextMenuItemDesc": {
+    "message": "Use a secondary click to access password generation and matching logins for the website. "
   },
   "defaultUriMatchDetection": {
-    "message": "Default URI Match Detection",
+    "message": "Default URI match detection",
     "description": "Default URI match detection for auto-fill."
   },
   "defaultUriMatchDetectionDesc": {
@@ -633,11 +639,11 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Solarized Dark",
+    "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
-    "message": "Export Vault"
+    "message": "Export vault"
   },
   "fileFormat": {
     "message": "File Format"
@@ -665,7 +671,7 @@
     "message": "Shared"
   },
   "learnOrg": {
-    "message": "Learn about Organizations"
+    "message": "Learn about organizations"
   },
   "learnOrgConfirmation": {
     "message": "Bitwarden allows you to share your vault items with others by using an organization. Would you like to visit the bitwarden.com website to learn more?"
@@ -741,7 +747,7 @@
     "message": "You cannot use this feature until you update your encryption key."
   },
   "premiumMembership": {
-    "message": "Premium Membership"
+    "message": "Premium membership"
   },
   "premiumManage": {
     "message": "Manage Membership"
@@ -800,14 +806,14 @@
   "refreshComplete": {
     "message": "Refresh complete"
   },
-  "disableAutoTotpCopy": {
-    "message": "Disable Automatic TOTP Copy"
+  "enableAutoTotpCopy": {
+    "message": "Copy TOTP automatically"
   },
   "disableAutoTotpCopyDesc": {
-    "message": "If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login."
+    "message": "If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Do not prompt for biometrics on launch"
+  "enableAutoBiometricsPrompt": {
+    "message": "Ask for biometrics on launch"
   },
   "premiumRequired": {
     "message": "Premium Required"
@@ -945,10 +951,10 @@
     "message": "The environment URLs have been saved."
   },
   "enableAutoFillOnPageLoad": {
-    "message": "Enable Auto-fill on Page Load"
+    "message": "Auto-fill on page load"
   },
   "enableAutoFillOnPageLoadDesc": {
-    "message": "If a login form is detected, automatically perform an auto-fill when the web page loads."
+    "message": "If a login form is detected, auto-fill when the web page loads."
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."
@@ -957,10 +963,10 @@
     "message": "Default autofill setting for login items"
   },
   "defaultAutoFillOnPageLoadDesc": {
-    "message": "After enabling Auto-fill on Page Load, you can enable or disable the feature for individual login items. This is the default setting for login items that are not separately configured."
+    "message": "You can turn off auto-fill on page load for individual login items from the item's Edit view."
   },
   "itemAutoFillOnPageLoad": {
-    "message": "Auto-fill on Page Load (if enabled in Options)"
+    "message": "Auto-fill on page load (if enabled in Options)"
   },
   "autoFillOnPageLoadUseDefault": {
     "message": "Use default setting"
@@ -1027,17 +1033,17 @@
   "popupU2fCloseMessage": {
     "message": "This browser cannot process U2F requests in this popup window. Do you want to open this popup in a new window so that you can log in using U2F?"
   },
-  "disableFavicon": {
-    "message": "Disable Website Icons"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Website Icons provide a recognizable image next to each login item in your vault."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
-  "disableBadgeCounter": {
-    "message": "Disable Badge Counter"
+  "enableBadgeCounter": {
+    "message": "Show badge counter"
   },
-  "disableBadgeCounterDesc": {
-    "message": "Badge counter indicates how many logins you have for the current page in your vault."
+  "badgeCounterDesc": {
+    "message": "Indicate how many logins you have for the current web page."
   },
   "cardholderName": {
     "message": "Cardholder Name"
@@ -1243,7 +1249,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Domain name",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1380,7 +1386,7 @@
     "message": "One or more organization policies are affecting your generator settings."
   },
   "vaultTimeoutAction": {
-    "message": "Vault Timeout Action"
+    "message": "Vault timeout action"
   },
   "lock": {
     "message": "Lock",
@@ -1556,7 +1562,7 @@
     "message": "An organization policy is affecting your ownership options."
   },
   "excludedDomains": {
-    "message": "Excluded Domains"
+    "message": "Excluded domains"
   },
   "excludedDomainsDesc": {
     "message": "Bitwarden will not ask to save login details for these domains. You must refresh the page for changes to take effect."
@@ -1939,5 +1945,24 @@
   },
   "service": {
     "message": "Service"
+  },
+  "forwardedEmail": {
+    "message": "Forwarded Email Alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generate an email alias with an external forwarding service."
+  },
+  "hostname": {
+    "message": "Hostname",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API Access Token"
+  },
+  "apiKey": {
+    "message": "API Key"
+  },
+  "ssoKeyConnectorError": {
+    "message": "Key Connector error: make sure Key Connector is available and working correctly."
   }
 }

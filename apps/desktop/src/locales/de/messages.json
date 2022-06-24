@@ -400,6 +400,18 @@
   "length": {
     "message": "Länge"
   },
+  "uppercase": {
+    "message": "Großbuchstaben (A-Z)"
+  },
+  "lowercase": {
+    "message": "Kleinbuchstaben (a-z)"
+  },
+  "numbers": {
+    "message": "Zahlen (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Sonderzeichen (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Anzahl der Wörter"
   },
@@ -411,7 +423,7 @@
     "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Ziffer hinzufügen"
+    "message": "Zahl hinzufügen"
   },
   "close": {
     "message": "Schließen"
@@ -882,14 +894,14 @@
     "message": "Kopierten Inhalt automatisch aus der Zwischenablage löschen.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Website-Icons deaktivieren"
+  "enableFavicon": {
+    "message": "Zeige Webseiten-Icons"
   },
-  "disableFaviconDesc": {
-    "message": "Website-Icons zeigen ein wiedererkennbares Bild neben jedem Login in deinem Tresor."
+  "faviconDesc": {
+    "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
   },
   "enableMinToTray": {
-    "message": "Minimieren und in der Taskleiste anzeigen"
+    "message": "Zum Taskleisten-Symbol minimieren"
   },
   "enableMinToTrayDesc": {
     "message": "Zeige ein Symbol in der Taskleiste, wenn das Fenster minimiert wird."
@@ -901,7 +913,7 @@
     "message": "Bei minimiertem Fenster stattdessen ein Symbol in der Menüleiste anzeigen."
   },
   "enableCloseToTray": {
-    "message": "In Taskleiste minimieren"
+    "message": "In den Infobereich minimieren"
   },
   "enableCloseToTrayDesc": {
     "message": "Zeige ein Symbol in der Taskleiste, wenn das Fenster geschlossen wird."
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Dateiformat"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Barrierefreiheits-Cookie laden"
+  },
+  "registerAccessibilityUser": {
+    "message": "Als Benutzer für Barrierefreiheit registrieren bei",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Kopiere und füge den Link aus der an dich gesendeten E-Mail unten ein"
+  },
+  "enterhCaptchaUrl": {
+    "message": "URL eingeben, um den Barrierefreiheits-Cookie für hCaptcha zu laden",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha-URL ist erforderlich",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Ungültige URL"
+  },
+  "done": {
+    "message": "Fertig"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Barrierefreiheits-Cookie gespeichert!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Kein Barrierefreiheits-Cookie gespeichert"
+  },
   "warning": {
     "message": "WARNUNG",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "Deinen Tresor entsperren"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Beim Start nicht nach Windows Hello fragen."
+  "autoPromptWindowsHello": {
+    "message": "Beim Start nach Windows Hello fragen"
   },
-  "noAutoPromptTouchId": {
-    "message": "Beim Start nicht nach Touch ID fragen."
+  "autoPromptTouchId": {
+    "message": "Beim Start nach Touch ID fragen"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Beim Neustart mit Master-Passwort sperren"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Die Browser-Integration wird für Biometrie im Browser verwendet."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Browser-Integration wird nicht unterstützt"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Leider wird die Browser-Integration derzeit nur in der Mac App Store Version unterstützt."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Browser-Integration wird nicht unterstützt"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Leider wird die Browser-Integration derzeit nicht in der Windows Store Version unterstützt."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Leider wird die Browser-Integration derzeit nicht in der Linux Version unterstützt."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Überprüfung für Browser-Integration verlangen"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maximale Zugriffsanzahl"
+    "message": "Maximale Zugriffsanzahl",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Du hast die Organisation verlassen."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Der Key Connector konnte nicht erreicht werden. Versuche es später erneut."
+  "ssoKeyConnectorError": {
+    "message": "Key Connector Fehler: Stelle sicher, dass der Key Connector verfügbar ist und korrekt funktioniert."
   },
   "lockAllVaults": {
     "message": "Alle Tresore sperren"
@@ -1820,7 +1867,7 @@
     }
   },
   "switchAccount": {
-    "message": "Switch to Other Account"
+    "message": "Konto wechseln"
   },
   "options": {
     "message": "Optionen"
@@ -1839,6 +1886,12 @@
         "example": "name@example.com"
       }
     }
+  },
+  "locked": {
+    "message": "Gesperrt"
+  },
+  "unlocked": {
+    "message": "Entsperrt"
   },
   "generator": {
     "message": "Generator"
@@ -1859,7 +1912,8 @@
     "message": "Benutzernamentyp"
   },
   "plusAddressedEmail": {
-    "message": "Mit Plus adressierte E-Mail"
+    "message": "Mit Plus adressierte E-Mail",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Verwende die Unteradressierungsmöglichkeiten deines E-Mail-Providers."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Dienst"
+  },
+  "allVaults": {
+    "message": "Alle Tresore"
+  },
+  "searchOrganization": {
+    "message": "Organisationen durchsuchen"
+  },
+  "searchMyVault": {
+    "message": "Meinen Tresor durchsuchen"
+  },
+  "forwardedEmail": {
+    "message": "Weitergeleitetes E-Mail-Alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst."
+  },
+  "hostname": {
+    "message": "Hostname",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API-Zugangs-Token"
+  },
+  "apiKey": {
+    "message": "API-Schlüssel"
   }
 }

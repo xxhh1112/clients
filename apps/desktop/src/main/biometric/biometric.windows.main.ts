@@ -1,10 +1,10 @@
 import { ipcMain } from "electron";
 import forceFocus from "forcefocus";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { WindowMain } from "jslib-electron/window.main";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { WindowMain } from "@bitwarden/electron/window.main";
 
 import { BiometricMain } from "src/main/biometric/biometric.main";
 
@@ -31,7 +31,7 @@ export default class BiometricWindowsMain implements BiometricMain {
     }
     await this.stateService.setEnableBiometric(supportsBiometric);
     await this.stateService.setBiometricText("unlockWithWindowsHello");
-    await this.stateService.setNoAutoPromptBiometricsText("noAutoPromptWindowsHello");
+    await this.stateService.setNoAutoPromptBiometricsText("autoPromptWindowsHello");
 
     ipcMain.on("biometric", async (event: any, message: any) => {
       event.returnValue = await this.authenticateBiometric();

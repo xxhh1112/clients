@@ -400,6 +400,18 @@
   "length": {
     "message": "Дужина"
   },
+  "uppercase": {
+    "message": "Велика слова (A-Z)"
+  },
+  "lowercase": {
+    "message": "Мала слова (a-z)"
+  },
+  "numbers": {
+    "message": "Цифре (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Специјална слова (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Број речи"
   },
@@ -882,11 +894,11 @@
     "message": "Аутоматски обришите копиране вредности из привремене меморије.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Онемогући иконице сајта"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Иконе веб сајта пружају препознатљиву слику поред сваке пријаве у сефу."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "Минимизирај као иконицу у системској траци"
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Формат датотеке"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Учитај колачић приступачности"
+  },
+  "registerAccessibilityUser": {
+    "message": "Региструјте се као корисник приступачности на",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Копирајте и испод налепите линк који је послат на адресу ваше е-поште"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Упишите адресу како би се учитао колачић приступачности за hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha адреса је неопходна",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Неисправна адреса"
+  },
+  "done": {
+    "message": "Готово"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Колачић приступачности сачуван!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Нема сачуваног колачића приступачности"
+  },
   "warning": {
     "message": "УПОЗОРЕЊЕ",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "Откључај свој сеф"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Не тражи Windows Hello након покретања."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Не тражи Touch ID након покретања."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Закључајте са главном лозинком при поновном покретању"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Интеграција прегледача се користи за биометрију у прегледачу."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "Интеграција претраживача није подржана"
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Интеграција са претраживачем није подржана"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Нажалост, интеграција прегледача за сада је подржана само у верзији Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Интеграција претраживача није подржана"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Нажалост, интеграција прегледача није за сада подржана у Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Нажалост интеграција са претраживачем није подржана у linux верзији."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Захтева верификацију за интеграцију прегледача"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Максималан број приступа"
+    "message": "Максималан број приступа",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Ако је постављено, корисници више неће моћи да приступе овом „Send“ када се достигне максимални број приступа.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Напустили сте организацију."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Немогуће повезати се са добављачем кључева, покушајте поново касније."
+  "ssoKeyConnectorError": {
+    "message": "Key Connector грешка: будите сигурни да је Key Connector доступан и да ради."
   },
   "lockAllVaults": {
     "message": "Закључај сефове"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Закључано"
+  },
+  "unlocked": {
+    "message": "Откључано"
+  },
   "generator": {
     "message": "Генератор"
   },
@@ -1859,7 +1912,8 @@
     "message": "Тип имена"
   },
   "plusAddressedEmail": {
-    "message": "Плус имејл адресе"
+    "message": "Плус имејл адресе",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Користите могућности подадресирања вашег добављача е-поште."
@@ -1868,7 +1922,7 @@
     "message": "„Ухвати све“ е-порука"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Користите подешено catch-all пријемно сандуче вашег домена."
   },
   "random": {
     "message": "Случајно"
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Сервис"
+  },
+  "allVaults": {
+    "message": "Сви Сефови"
+  },
+  "searchOrganization": {
+    "message": "Претражи Организацију"
+  },
+  "searchMyVault": {
+    "message": "Претражи мој сеф"
+  },
+  "forwardedEmail": {
+    "message": "Псеудоним прослешне е-поште"
+  },
+  "forwardedEmailDesc": {
+    "message": "Генеришите псеудоним е-поште помоћу екстерне услуге прослеђивања."
+  },
+  "hostname": {
+    "message": "Име домаћина",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Приступни АПИ токен"
+  },
+  "apiKey": {
+    "message": "АПИ Кључ"
   }
 }

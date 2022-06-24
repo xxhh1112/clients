@@ -1,5 +1,6 @@
 import { A11yModule } from "@angular/cdk/a11y";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { LayoutModule } from "@angular/cdk/layout";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { CurrencyPipe, DatePipe, registerLocaleData } from "@angular/common";
@@ -59,8 +60,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { BitwardenToastModule } from "jslib-angular/components/toastr.component";
-import { JslibModule } from "jslib-angular/jslib.module";
+import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.component";
+import { JslibModule } from "@bitwarden/angular/jslib.module";
 
 import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
@@ -181,6 +182,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     DragDropModule,
     FormsModule,
     JslibModule,
+    LayoutModule,
     OverlayModule,
     ReactiveFormsModule,
     ScrollingModule,

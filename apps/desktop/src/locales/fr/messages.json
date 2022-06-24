@@ -400,6 +400,18 @@
   "length": {
     "message": "Longueur"
   },
+  "uppercase": {
+    "message": "Majuscules (A-Z)"
+  },
+  "lowercase": {
+    "message": "Minuscules (a-z)"
+  },
+  "numbers": {
+    "message": "Chiffres (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Caractères spéciaux (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Nombre de mots"
   },
@@ -671,7 +683,7 @@
     "message": "URL du serveur"
   },
   "apiUrl": {
-    "message": "URL du serveur de l'API"
+    "message": "URL du serveur de l'IPA"
   },
   "webVaultUrl": {
     "message": "URL du serveur du coffre web"
@@ -882,14 +894,14 @@
     "message": "Effacer automatiquement de votre presse-papiers les valeurs copiées.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Désactiver les icônes des sites web"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Les icônes des sites web permettent d'avoir une icône reconnaissable à côté de chaque identifiant dans votre coffre."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
-    "message": "Réduire dans la zone de notification"
+    "message": "Réduire dans la barre d'outils"
   },
   "enableMinToTrayDesc": {
     "message": "Lorsque la fenêtre est réduite, afficher une icône dans la zone de notification à la place."
@@ -901,7 +913,7 @@
     "message": "Lorsque la fenêtre est réduite, privilégier l'affichage d'une icône dans la barre de menu."
   },
   "enableCloseToTray": {
-    "message": "Fermer dans la zone de notification"
+    "message": "Réduire dans la zone de notifications"
   },
   "enableCloseToTrayDesc": {
     "message": "Lorsque la fenêtre est fermée, afficher une icône dans la zone de notification."
@@ -913,13 +925,13 @@
     "message": "Lorsque la fenêtre est fermée, privilégier l'affichage d'une icône dans la barre de menu."
   },
   "enableTray": {
-    "message": "Activer le raccourci dans la zone de notification"
+    "message": "Activer le raccourci dans la zone de notifications"
   },
   "enableTrayDesc": {
     "message": "Toujours afficher une icône dans la zone de notification."
   },
   "startToTray": {
-    "message": "Démarrer dans la zone de notification"
+    "message": "Démarrer dans la zone de notifications"
   },
   "startToTrayDesc": {
     "message": "Au premier démarrage de l'application, afficher uniquement une icône dans la zone de notification."
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Format de fichier"
   },
+  "hCaptchaUrl": {
+    "message": "URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Charger le cookie d'accessibilité"
+  },
+  "registerAccessibilityUser": {
+    "message": "S'inscrire en tant qu'utilisateur avec accessibilité à",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copiez et collez le lien envoyé à votre adresse e-mail ci-dessous"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Entrez l'URL pour charger le cookie d'accessibilité pour hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "L'URL hCaptcha est nécessaire",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "URL invalide"
+  },
+  "done": {
+    "message": "Terminé"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Cookie d'accessibilité enregistré !"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Aucun cookie d'accessibilité sauvegardé"
+  },
   "warning": {
     "message": "AVERTISSEMENT",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "déverouiller votre coffre"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Ne pas proposer Windows Hello au lancement."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Ne pas proposer Touch ID au lancement."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Verrouiller avec le mot de passe maître lors du redémarrage"
@@ -1394,7 +1440,7 @@
     "message": "Action lors de l'expiration du délai du coffre"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Un coffre verrouillé requiert la saisie de votre mot de passe maître pour y avoir à nouveau accès."
+    "message": "Un coffre-fort verrouillé nécessite la saisie de votre mot de passe principal pour y accéder de nouveau."
   },
   "vaultTimeoutActionLogOutDesc": {
     "message": "Un coffre déconnecté nécessite que vous vous ré-authentifiez pour y accéder de nouveau."
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "L'intégration avec le navigateur est utilisée pour le déverrouillage biométrique dans le navigateur."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "Intégration avec le navigateur non supportée"
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Intégration dans le navigateur non supportée"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Malheureusement l'intégration avec le navigateur est uniquement supportée dans la version Mac App Store pour le moment."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Intégration avec le navigateur non supportée"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Malheureusement l'intégration avec le navigateur n'est pas supportée dans la version Windows Store pour le moment."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "L'intégration dans le navigateur n'est malheureusement pas supportée dans la version Linux pour le moment."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Exiger une vérification pour l'intégration avec le navigateur"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Nombre maximum d'accès"
+    "message": "Nombre maximum d'accès",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Si défini, les utilisateurs ne seront plus en mesure d'accéder à ce Send une fois que le nombre maximum d'accès sera atteint.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Vous avez quitté l'organisation."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Impossible de contacter Key Connector, réessayez plus tard."
+  "ssoKeyConnectorError": {
+    "message": "Erreur du connecteur de clé: veuillez vérifier que le connecteur de clé est disponible et qu'il fonctionne correctement."
   },
   "lockAllVaults": {
     "message": "Verrouiller tous les coffres"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Verrouillé"
+  },
+  "unlocked": {
+    "message": "Déverrouillé"
+  },
   "generator": {
     "message": "Générateur"
   },
@@ -1859,7 +1912,8 @@
     "message": "Type de nom d'utilisateur"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "E-mail sous-adressé",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Utilisez les capacités de sous-adressage de votre fournisseur de courriel."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Service"
+  },
+  "allVaults": {
+    "message": "Tous les coffres"
+  },
+  "searchOrganization": {
+    "message": "Recherche d'organisations"
+  },
+  "searchMyVault": {
+    "message": "Recherche dans le coffre"
+  },
+  "forwardedEmail": {
+    "message": "Alias d'email transféré"
+  },
+  "forwardedEmailDesc": {
+    "message": "Générer un alias de courriel avec un service de transfert externe."
+  },
+  "hostname": {
+    "message": "Nom d'hôte",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Jetons d'accès IPA"
+  },
+  "apiKey": {
+    "message": "Clé d'IPA"
   }
 }

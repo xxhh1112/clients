@@ -370,10 +370,10 @@
     "message": "Är du säker på att du vill skriva över det nuvarande lösenordet?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Ersätt användarnamn"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Är du säker på att du vill ersätta den nuvarande användarnamnet?"
   },
   "noneFolder": {
     "message": "Ingen mapp",
@@ -399,6 +399,18 @@
   },
   "length": {
     "message": "Längd"
+  },
+  "uppercase": {
+    "message": "Versaler (A-Ö)"
+  },
+  "lowercase": {
+    "message": "Gemener (a-ö)"
+  },
+  "numbers": {
+    "message": "Siffror (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Specialtecken (!@#$%^&*)"
   },
   "numWords": {
     "message": "Antal ord"
@@ -743,10 +755,10 @@
     "message": "Lösenordsgenerator"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Kontakta oss"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Få hjälp"
   },
   "fileBugReport": {
     "message": "Skicka en felrapport"
@@ -882,11 +894,11 @@
     "message": "Rensa automatiskt kopierade värden från urklipp.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Inaktivera webbplatsikoner"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Webbplatsikoner ger en igenkännbar ikon bredvid varje inloggningsobjekt i ditt valv."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "Minimera till systemfältsikon"
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Filformat"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha-URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Ladda tillgänglighets-cookie"
+  },
+  "registerAccessibilityUser": {
+    "message": "Registrera som en tillgänglighetsanvändare på",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Kopiera och klistra in länken som skickats till din e-post nedan"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Ange URL för att ladda tillgänlighets-cookie för hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha-URL krävs",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Ogiltig URL"
+  },
+  "done": {
+    "message": "Klar"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Tillgänglighets-cookie sparad!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Ingen tillgänlighets-cookie sparad"
+  },
   "warning": {
     "message": "VARNING",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "lås upp ditt valv"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Fråga inte efter Windows Hello vid uppstart."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Fråga inte efter Touch-ID vid uppstart."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lås med huvudlösenordet vid omstart"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Webbläsarintegration används för biometri i webbläsaren."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "Webbläsarintegration stöds inte"
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Webbläsarintegration stödjs inte"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Tyvärr stöds webbläsarintegration för tillfället endast i versionen från Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Webbläsarintegration stöds inte"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Tyvärr stöds webbläsarintegration för tillfället inte i versionen från Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Tyvärr stödjs förnärvarande inte webbläsarintegration i Linux-versionen."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Kräv verifiering för webbläsarintegration"
@@ -1549,7 +1595,7 @@
     "message": "En organisationspolicy påverkar dina ägarskapsalternativ."
   },
   "allSends": {
-    "message": "All Sends",
+    "message": "Alla Send",
     "description": "'Sends' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTypeFile": {
@@ -1559,7 +1605,7 @@
     "message": "Text"
   },
   "searchSends": {
-    "message": "Search Sends",
+    "message": "Sök bland Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -1576,60 +1622,61 @@
     "message": "Raderingsdatum"
   },
   "deletionDateDesc": {
-    "message": "The Send will be permanently deleted on the specified date and time.",
+    "message": "Denna Send kommer att raderas permanent på angivet datum och klockslag.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
     "message": "Utgångsdatum"
   },
   "expirationDateDesc": {
-    "message": "If set, access to this Send will expire on the specified date and time.",
+    "message": "Om detta ställs in kommer åtkomst till denna Skicka att upphöra på angivet datum och tid.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maximalt antal åtkomster"
+    "message": "Maximalt antal åtkomster",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
-    "message": "If set, users will no longer be able to access this Send once the maximum access count is reached.",
+    "message": "Om angivet kommer användare inte längre kunna komma åt denna Send när det maximala antalet åtkomster har uppnåtts.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
     "message": "Nuvarande antal åtkomster"
   },
   "disableSend": {
-    "message": "Disable this Send so that no one can access it.",
+    "message": "Inaktivera denna Send så att ingen kan komma åt den.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendPasswordDesc": {
-    "message": "Optionally require a password for users to access this Send.",
+    "message": "Kräv ett lösenord för att användare ska få åtkomst till denna Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNotesDesc": {
-    "message": "Private notes about this Send.",
+    "message": "Privata anteckningar om denna Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLink": {
-    "message": "Send link",
+    "message": "Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinkLabel": {
-    "message": "Send Link",
+    "message": "Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "textHiddenByDefault": {
-    "message": "When accessing the Send, hide the text by default",
+    "message": "Vid åtkomst till denna Send, dölj texten som standard",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Created Send",
+    "message": "Skapade Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Edited Send",
+    "message": "Redigerade Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Deleted Send",
+    "message": "Raderade Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
@@ -1669,18 +1716,18 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLinkToClipboard": {
-    "message": "Copy Send link to clipboard",
+    "message": "Kopiera Send-länk till urklipp",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLinkOnSave": {
-    "message": "Copy the link to share this Send to my clipboard upon save."
+    "message": "Kopiera länken för att dela denna Send till mitt klippbord när den sparas."
   },
   "sendDisabled": {
-    "message": "Send disabled",
+    "message": "Send inaktiverad",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "Due to an enterprise policy, you are only able to delete an existing Send.",
+    "message": "På grund av en enterprise-policy kan du enbart radera en befintlig Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copyLink": {
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Du har lämnat organisationen."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Kunde inte nå key connector, försök igen senare."
+  "ssoKeyConnectorError": {
+    "message": "Key Connector-fel: säkerställ att Key Connector är tillgänglig och fungerar korrekt."
   },
   "lockAllVaults": {
     "message": "Lås alla valv"
@@ -1826,13 +1873,13 @@
     "message": "Alternativ"
   },
   "sessionTimeout": {
-    "message": "Your session has timed out. Please go back and try logging in again."
+    "message": "Din session har gått ut. Gå tillbaka och försök att logga in igen."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Exporterar personligt valv"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Endast de personliga valvobjekten som är kopplade till $EMAIL$ kommer att exporteras. Organisationens valvobjekt kommer inte att inkluderas.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1840,46 +1887,78 @@
       }
     }
   },
+  "locked": {
+    "message": "Låst"
+  },
+  "unlocked": {
+    "message": "Upplåst"
+  },
   "generator": {
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Vad vill du skapa?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Lösenordstyp"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Skapa nytt användarnamn"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Skapa användarnamn"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Användarnamnstyp"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "Plusadresserad e-post",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Använd din e-posttjänsts funktion för plusadressering."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Fånga alla-e-post"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Använd din domäns ”fånga alla-inkorg”."
   },
   "random": {
-    "message": "Random"
+    "message": "Slumpmässig"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Slumpmässigt ord"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Webbplatsnamn"
   },
   "service": {
-    "message": "Service"
+    "message": "Tjänst"
+  },
+  "allVaults": {
+    "message": "Alla valv"
+  },
+  "searchOrganization": {
+    "message": "Sök i organisation"
+  },
+  "searchMyVault": {
+    "message": "Sök i mitt valv"
+  },
+  "forwardedEmail": {
+    "message": "Vidarebefordrande e-postalias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Skapa ett e-postalias med en extern vidarebefordranstjänst."
+  },
+  "hostname": {
+    "message": "Värdnamn",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API-åtkomsttoken"
+  },
+  "apiKey": {
+    "message": "API-nyckel"
   }
 }

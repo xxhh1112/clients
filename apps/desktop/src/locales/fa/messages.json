@@ -400,6 +400,18 @@
   "length": {
     "message": "طول"
   },
+  "uppercase": {
+    "message": "حروف بزرگ (A-Z)"
+  },
+  "lowercase": {
+    "message": "حروف کوچک (a-z)"
+  },
+  "numbers": {
+    "message": "اعداد (‪0-9‬)"
+  },
+  "specialCharacters": {
+    "message": "نویسه‌های ویژه (!@#$%^&*)"
+  },
   "numWords": {
     "message": "تعداد کلمات"
   },
@@ -882,11 +894,11 @@
     "message": "به صورت خودکار، مقادیر رونوشت شده را از کلیپ‌برد پاک کن.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "غیرفعال‌سازی آیکون‌های وبسایت"
+  "enableFavicon": {
+    "message": "نمایش نمادهای وب سایت"
   },
-  "disableFaviconDesc": {
-    "message": "آیکون‌های وبسایت یک تصویر قابل تشخیص در کنار هر داده ورودی ارائه می‌دهد."
+  "faviconDesc": {
+    "message": "یک تصویر قابل تشخیص در کنار هر ورود نشان دهید."
   },
   "enableMinToTray": {
     "message": "کوچک کردن به نماد Tray"
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "فرمت پرونده"
   },
+  "hCaptchaUrl": {
+    "message": "آدرس اینترنتی hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "بارگیری کوکی دسترس‌پذیری"
+  },
+  "registerAccessibilityUser": {
+    "message": "ثبت نام به عنوان کاربر قابلیت دسترسی در",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "لینک ارسال شده به ایمیل خود را در زیر کپی و پیست کنید"
+  },
+  "enterhCaptchaUrl": {
+    "message": "برای بارگیری کوکی دسترسی برای hCaptcha، URL را وارد کنید",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "آدرس اینترنتی hCaptcha مورد نیاز است",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "آدرس اینترنتی نامعتبر"
+  },
+  "done": {
+    "message": "انجام شده"
+  },
+  "accessibilityCookieSaved": {
+    "message": "کوکی دسترس‌پذیری ذخیره شد!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "هیچ کوکی دسترسی ذخیره نشد"
+  },
   "warning": {
     "message": "اخطار",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "تایید برای Bitwarden."
   },
-  "noAutoPromptWindowsHello": {
-    "message": "در هنگام راه اندازی ، درخواست Windows Hello نکنید."
+  "autoPromptWindowsHello": {
+    "message": "درخواست Windows Hello در هنگام راه اندازی"
   },
-  "noAutoPromptTouchId": {
-    "message": "در هنگام راه اندازی ، درخواست Touch ID نکنید."
+  "autoPromptTouchId": {
+    "message": "درخواست تاچ آیدی در هنگام راه اندازی"
   },
   "lockWithMasterPassOnRestart": {
     "message": "در زمان شروع مجدد، با کلمه عبور اصلی قفل کن"
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "یکپارچه سازی مرورگر برای بیومتریک در مرورگر استفاده می شود."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "ادغام مرورگر پشتیبانی نمی شود"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "متأسفانه در حال حاضر ادغام مرورگر فقط در نسخه Mac App Store پشتیبانی می شود."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "ادغام مرورگر پشتیبانی نمی شود"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "متأسفانه در حال حاضر ادغام مرورگر در نسخه فروشگاه ویندوز پشتیبانی نمی شود."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "متأسفانه در حال حاضر ادغام مرورگر در نسخه لینوکس پشتیبانی نمی شود."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "برای ادغام مرورگر نیاز به تأیید است"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "تعداد دسترسی حداکثر"
+    "message": "تعداد دسترسی حداکثر",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "در صورت تنظیم، با رسیدن به حداکثر تعداد دسترسی، کاربران دیگر نمی توانند به این ارسال دسترسی پیدا کنند.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "شما از سازمان ها خارج شده اید."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "دسترسی به رابط کلید ممکن نیست، بعداً دوباره امتحان کنید."
+  "ssoKeyConnectorError": {
+    "message": "خطای Key Connector: مطمئن شوید که Key Connector در دسترس است و به درستی کار می کند."
   },
   "lockAllVaults": {
     "message": "قفل کردن تمام گاوصندوق ها"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "قفل شده"
+  },
+  "unlocked": {
+    "message": "باز شده"
+  },
   "generator": {
     "message": "تولید کننده"
   },
@@ -1859,7 +1912,8 @@
     "message": "نوع نام کاربری"
   },
   "plusAddressedEmail": {
-    "message": "به علاوه ایمیل آدرس داده شده"
+    "message": "به علاوه ایمیل آدرس داده شده",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "از قابلیت های آدرس دهی فرعی ارائه دهنده ایمیل خود استفاده کنید."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "خدمت"
+  },
+  "allVaults": {
+    "message": "تمام گاو‌صندوق‌ها"
+  },
+  "searchOrganization": {
+    "message": "سازماندهی جستجو"
+  },
+  "searchMyVault": {
+    "message": "جستجوی گاوصندوق من"
+  },
+  "forwardedEmail": {
+    "message": "نام مستعار ایمیل فوروارد شده"
+  },
+  "forwardedEmailDesc": {
+    "message": "یک نام مستعار ایمیل با یک سرویس فروارد خارجی ایجاد کنید."
+  },
+  "hostname": {
+    "message": "نام میزبان",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "توکن دسترسی API"
+  },
+  "apiKey": {
+    "message": "کلید API"
   }
 }

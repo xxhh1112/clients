@@ -400,6 +400,18 @@
   "length": {
     "message": "Uzunluk"
   },
+  "uppercase": {
+    "message": "Büyük harf (A-Z)"
+  },
+  "lowercase": {
+    "message": "Küçük harf (a-z)"
+  },
+  "numbers": {
+    "message": "Rakamlar (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Özel karakterler (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Kelime sayısı"
   },
@@ -716,7 +728,7 @@
     "message": "Çıkmak istediğinize emin misiniz?"
   },
   "logOut": {
-    "message": "Çıkış yap"
+    "message": "Çıkış Yap"
   },
   "addNewLogin": {
     "message": "Yeni hesap ekle"
@@ -743,10 +755,10 @@
     "message": "Parola oluşturucu"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Bize Ulaşın"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Yardım Alın"
   },
   "fileBugReport": {
     "message": "Hata bildirin"
@@ -775,7 +787,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
-    "message": "Web kasasına git"
+    "message": "Web Kasasına Git"
   },
   "getMobileApp": {
     "message": "Mobil uygulamayı indir"
@@ -875,21 +887,21 @@
     "message": "Güvenlik"
   },
   "clearClipboard": {
-    "message": "Panoyu temizle",
+    "message": "Panoyu Temizle",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
     "message": "Kopyalanan değerleri otomatik olarak panodan sil.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Site simgelerini devre dışı bırak"
+  "enableFavicon": {
+    "message": "Web sitesi simgelerini göster"
   },
-  "disableFaviconDesc": {
-    "message": "Web sitesi simgeleri, kasanızdaki her kaydın yanında o siteyi tanımanıza yardımcı olan bir resim sunar."
+  "faviconDesc": {
+    "message": "Hesapların yanında tanıdık görseller göster."
   },
   "enableMinToTray": {
-    "message": "Tepsi simgesine küçült"
+    "message": "Sistem çubuğu ikonuna küçült"
   },
   "enableMinToTrayDesc": {
     "message": "Pencere küçültülünce sistem tepsisinde bir simge göster."
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "Dosya biçimi"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha adresi",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Erişilebilirlik çerezini yükle"
+  },
+  "registerAccessibilityUser": {
+    "message": "Erişilebilirlik kullanıcısı olarak kaydolun:",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "E-postanıza gönderilen bağlantıyı kopyalayıp aşağıya yapıştırın"
+  },
+  "enterhCaptchaUrl": {
+    "message": "hCaptcha erişilebilirlik çerezini yüklemek için adresi yazın",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha adresi gereklidir",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Geçersiz adres"
+  },
+  "done": {
+    "message": "Tamam"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Erişilebilirlik çerezi kaydedildi."
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Erişilebilirlik çerezi kaydedilmedi"
+  },
   "warning": {
     "message": "UYARI",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "kasanızın kilidini açma"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Açılışta Windows Hello doğrulaması isteme."
+  "autoPromptWindowsHello": {
+    "message": "Açılışta Windows Hello doğrulaması iste"
   },
-  "noAutoPromptTouchId": {
-    "message": "Açılışta Touch ID doğrulaması isteme."
+  "autoPromptTouchId": {
+    "message": "Açılışta Touch ID doğrulaması iste"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Yeniden başlatmada ana şifre ile kilitle"
@@ -1348,7 +1394,7 @@
     "message": "Tercihler"
   },
   "enableMenuBar": {
-    "message": "Menü çubuğu simgesini etkinleştir"
+    "message": "Menü Çubuğu Simgesini Etkinleştir"
   },
   "enableMenuBarDesc": {
     "message": "Menü çubuğunda her zaman bir simge göster."
@@ -1506,17 +1552,17 @@
   "enableBrowserIntegrationDesc": {
     "message": "Tarayıcı entegrasyonu tarayıcıda biyometrik doğrulama için kullanılır."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "Tarayıcı entegrasyonu desteklenmiyor"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Ne yazık ki tarayıcı entegrasyonu şu anda sadece Mac App Store sürümünde destekleniyor."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Tarayıcı entegrasyonu desteklenmiyor"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Maalesef tarayıcı entegrasyonu şimdilik Windows Store sürümünde desteklenmiyor."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Maalesef tarayıcı entegrasyonu şimdilik Linux sürümünde desteklenmiyor."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Tarayıcı entegrasyonu için doğrulamayı zorunlu kıl"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksimum erişim sayısı"
+    "message": "Maksimum erişim sayısı",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Bunu ayarlarsanız maksimum erişim sayısına ulaşıldıktan sonra bu Send'e erişilemeyecektir.",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "Kuruluştan ayrıldınız."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Anahtar bağlayıcısına ulaşılamıyor, daha sonra yeniden deneyin."
+  "ssoKeyConnectorError": {
+    "message": "Anahtar Bağlayıcı hatası: Anahtar Bağlayıcının mevcut olduğundan ve doğru çalıştığından emin olun."
   },
   "lockAllVaults": {
     "message": "Tüm kasaları kilitle"
@@ -1829,16 +1876,22 @@
     "message": "Oturumunuzun süresi doldu. Lütfen geri dönüp yeniden giriş yapın."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Kişisel Kasanızı Dışarı Aktarın"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Sadece $EMAIL$ ile ilişkili kişisel kasa ögeleri dışarı aktarılacak. Kuruluş kasasındaki ögeler dahil edilmeyecek.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
       }
     }
+  },
+  "locked": {
+    "message": "Kilitli"
+  },
+  "unlocked": {
+    "message": "Kilitli değil"
   },
   "generator": {
     "message": "Oluşturucu"
@@ -1859,7 +1912,8 @@
     "message": "Kullanıcı adı türü"
   },
   "plusAddressedEmail": {
-    "message": "Artı adresli e-posta"
+    "message": "Artı adresli e-posta",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "E-posta sağlayıcınızın alt adres özelliklerini kullanın."
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "Servis"
+  },
+  "allVaults": {
+    "message": "Tüm kasalar"
+  },
+  "searchOrganization": {
+    "message": "Kuruluşta ara"
+  },
+  "searchMyVault": {
+    "message": "Kasamda ara"
+  },
+  "forwardedEmail": {
+    "message": "İletilen e-posta maskesi"
+  },
+  "forwardedEmailDesc": {
+    "message": "Harici bir yönlendirme servisiyle e-posta maskesi oluştur."
+  },
+  "hostname": {
+    "message": "Sunucu",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API erişim anahtarı"
+  },
+  "apiKey": {
+    "message": "API anahtarı"
   }
 }

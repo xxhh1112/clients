@@ -104,7 +104,7 @@
     "message": "電子郵件地址"
   },
   "verificationCodeTotp": {
-    "message": "驗證碼（TOTP）"
+    "message": "驗證碼 (TOTP)"
   },
   "website": {
     "message": "網站"
@@ -116,7 +116,7 @@
     "message": "自訂欄位"
   },
   "launch": {
-    "message": "啟動"
+    "message": "前往"
   },
   "copyValue": {
     "message": "複製值",
@@ -126,7 +126,7 @@
     "message": "複製到剪貼簿後最小化"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "複製項目資料到剪貼簿後最小化。"
+    "message": "複製項目資料到剪貼簿後最小化應用程式。"
   },
   "toggleVisibility": {
     "message": "切換可見性"
@@ -308,7 +308,7 @@
     "message": "編輯"
   },
   "authenticatorKeyTotp": {
-    "message": "驗證器金鑰（TOTP）"
+    "message": "驗證器金鑰 (TOTP)"
   },
   "folder": {
     "message": "資料夾"
@@ -395,10 +395,22 @@
     "message": "複製 URI"
   },
   "copyVerificationCodeTotp": {
-    "message": "複製驗證碼（TOTP）"
+    "message": "複製驗證碼 (TOTP)"
   },
   "length": {
     "message": "長度"
+  },
+  "uppercase": {
+    "message": "大寫 (A-Z)"
+  },
+  "lowercase": {
+    "message": "小寫 (a-z)"
+  },
+  "numbers": {
+    "message": "數字 (0-9)"
+  },
+  "specialCharacters": {
+    "message": "特殊字元 (!@#$%^&*)"
   },
   "numWords": {
     "message": "字數"
@@ -764,7 +776,7 @@
     "message": "變更主密碼"
   },
   "changeMasterPasswordConfirmation": {
-    "message": "您可以在 Bitwarden 網頁版密碼庫變更主密碼。現在要前往嗎？"
+    "message": "您可以在 bitwarden.com 網頁版密碼庫變更主密碼。現在要前往嗎？"
   },
   "fingerprintPhrase": {
     "message": "指紋短語",
@@ -812,7 +824,7 @@
     "message": "無效的主密碼"
   },
   "twoStepLoginConfirmation": {
-    "message": "兩步驟登入需要您從其他設備（例如安全鑰匙、驗證器程式、SMS、手機或電子郵件）來驗證您的登入，這使您的賬戶更加安全。兩步驟登入可以在 Bitwarden 網頁版密碼庫啟用。現在要前往嗎？"
+    "message": "兩步驟登入需要您從其他設備（例如安全鑰匙、驗證器程式、SMS、手機或電子郵件）來驗證您的登入，這使您的賬戶更加安全。兩步驟登入可以在 bitwarden.com 網頁版密碼庫啟用。現在要前往嗎？"
   },
   "twoStepLogin": {
     "message": "兩步驟登入"
@@ -821,7 +833,7 @@
     "message": "密碼庫逾時時間"
   },
   "vaultTimeoutDesc": {
-    "message": "選擇密碼庫多久之後才會逾時並執行選取動作。"
+    "message": "選擇密碼庫何時執行密碼庫逾時動作。"
   },
   "immediately": {
     "message": "立即"
@@ -882,11 +894,11 @@
     "message": "自動清除剪貼簿中複製的值。",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "停用網站圖示"
+  "enableFavicon": {
+    "message": "顯示網站圖示"
   },
-  "disableFaviconDesc": {
-    "message": "在您密碼庫的每個登入資料旁顯示一個可辨識的圖示。"
+  "faviconDesc": {
+    "message": "在每個登入資料旁顯示一個可辨識的圖片。"
   },
   "enableMinToTray": {
     "message": "最小化至系統匣圖示"
@@ -934,7 +946,7 @@
     "message": "登入時自動啟動"
   },
   "openAtLoginDesc": {
-    "message": "登入時自動啟動 Bitwarden 桌面應用程式。"
+    "message": "登入後自動啟動 Bitwarden 桌面應用程式。"
   },
   "alwaysShowDock": {
     "message": "總是在 Dock 中顯示"
@@ -1035,7 +1047,7 @@
     "message": "管理會員資格"
   },
   "premiumManageAlert": {
-    "message": "您可以在 Bitwarden 網頁版密碼庫管理你的會員資格。現在要前往嗎？"
+    "message": "您可以在 bitwarden.com 網頁版密碼庫管理你的會員資格。現在要前往嗎？"
   },
   "premiumRefresh": {
     "message": "刷新會員資格"
@@ -1056,7 +1068,7 @@
     "message": "密碼健康度檢查、提供帳戶體檢以及資料外洩報告，以保障您的密碼庫安全。"
   },
   "premiumSignUpTotp": {
-    "message": "用於登入您的密碼庫的 TOTP 驗證碼 (2FA) 產生器。"
+    "message": "用於您的密碼庫中登入項目的 TOTP 驗證碼 (2FA) 產生器。"
   },
   "premiumSignUpSupport": {
     "message": "優先客戶支援。"
@@ -1068,7 +1080,7 @@
     "message": "購買進階會員資格"
   },
   "premiumPurchaseAlert": {
-    "message": "您可以在 Bitwarden 網頁版密碼庫購買進階會員資格。現在要前往嗎？"
+    "message": "您可以在 bitwarden.com 網頁版密碼庫購買進階會員資格。現在要前往嗎？"
   },
   "premiumCurrentMember": {
     "message": "您目前是進階會員！"
@@ -1109,7 +1121,7 @@
     "description": "Cut to clipboard"
   },
   "paste": {
-    "message": "粘貼",
+    "message": "貼上",
     "description": "Paste from clipboard"
   },
   "selectAll": {
@@ -1261,6 +1273,40 @@
   "fileFormat": {
     "message": "檔案格式"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "載入無障礙 Cookie"
+  },
+  "registerAccessibilityUser": {
+    "message": "以無障礙使用者，在下述位置註冊：",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "複製寄到您信箱的連結然後貼在下方"
+  },
+  "enterhCaptchaUrl": {
+    "message": "輸入 URL 以載入 hCaptcha 的無障礙 Cookie",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha URL 為必填",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "無效的 URL"
+  },
+  "done": {
+    "message": "完成"
+  },
+  "accessibilityCookieSaved": {
+    "message": "已儲存無障礙 Cookie！"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "未儲存無障礙 Cookie"
+  },
   "warning": {
     "message": "警告",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
@@ -1335,11 +1381,11 @@
   "touchIdConsentMessage": {
     "message": "解鎖您的密碼庫"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "啟動時不要提示使用 Windows Hello。"
+  "autoPromptWindowsHello": {
+    "message": "啟動時詢問 Windows Hello"
   },
-  "noAutoPromptTouchId": {
-    "message": "啟動時不要提示使用 Touch ID。"
+  "autoPromptTouchId": {
+    "message": "啟動時詢問 Touch ID"
   },
   "lockWithMasterPassOnRestart": {
     "message": "重啟後使用主密碼鎖定"
@@ -1348,7 +1394,7 @@
     "message": "偏好設定"
   },
   "enableMenuBar": {
-    "message": "啟用選單列圖示"
+    "message": "顯示選單列圖示"
   },
   "enableMenuBarDesc": {
     "message": "總是在選單列中顯示圖示。"
@@ -1394,10 +1440,10 @@
     "message": "密碼庫逾時動作"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "鎖定密碼庫後需要重新輸入主密碼才能再次存取。"
+    "message": "需要主密碼或其他解鎖方式才能再次存取密碼庫。"
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "登出密碼庫後需要重新驗證才能再次存取。"
+    "message": "需要重新驗證才能再次存取密碼庫。"
   },
   "lock": {
     "message": "鎖定",
@@ -1501,28 +1547,28 @@
     "message": "尚未接受服務條款與隱私權保護政策。"
   },
   "enableBrowserIntegration": {
-    "message": "開啟瀏覽器整合"
+    "message": "允許瀏覽器整合"
   },
   "enableBrowserIntegrationDesc": {
     "message": "瀏覽器整合用於在瀏覽器中提供生物特徵辨識。"
   },
-  "browserIntegrationMasOnlyTitle": {
+  "browserIntegrationUnsupportedTitle": {
     "message": "不支援瀏覽器整合"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "很遺憾，目前僅 Mac App Store 版本支援瀏覽器整合功能。"
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "不支援瀏覽器整合"
-  },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "很遺憾，目前的 Windows Store 版本尚不支援瀏覽器整合功能。"
+    "message": "很遺憾，Windows Store 版本目前尚不支援瀏覽器整合功能。"
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "很遺憾，Linux 版本目前尚未支援瀏覽器整合功能。"
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "要求瀏覽器整合驗證"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "在您的桌面和瀏覽器閒建立連綫時，要求驗證指紋短語以實現一個額外的安全層。此選項啓用後，每次建立連綫都需要使用者干預和驗證。"
+    "message": "在您的桌面和瀏覽器閒建立連綫時，透過要求指紋短語確認，以添加一個額外的安全層。每次建立連綫都需要使用者干預和驗證。"
   },
   "approve": {
     "message": "核准"
@@ -1587,7 +1633,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "最大存取次數"
+    "message": "最大存取次數",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。",
@@ -1792,8 +1839,8 @@
   "leftOrganization": {
     "message": "您已離開此組織。"
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "無法連線到 Key Connector。請稍後再試。"
+  "ssoKeyConnectorError": {
+    "message": "Key Connector 錯誤：請確保 Key Connector 可用且運作正常。"
   },
   "lockAllVaults": {
     "message": "鎖定所有密碼庫"
@@ -1840,6 +1887,12 @@
       }
     }
   },
+  "locked": {
+    "message": "已鎖定"
+  },
+  "unlocked": {
+    "message": "已解鎖"
+  },
   "generator": {
     "message": "產生器"
   },
@@ -1859,7 +1912,8 @@
     "message": "使用者名稱類型"
   },
   "plusAddressedEmail": {
-    "message": "加號地址電子郵件"
+    "message": "加號地址電子郵件",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "使用您的電子郵件提供者的子地址功能。"
@@ -1881,5 +1935,30 @@
   },
   "service": {
     "message": "服務"
+  },
+  "allVaults": {
+    "message": "所有密碼庫"
+  },
+  "searchOrganization": {
+    "message": "搜尋組織"
+  },
+  "searchMyVault": {
+    "message": "搜尋個人密碼庫"
+  },
+  "forwardedEmail": {
+    "message": "轉寄的電子郵件別名"
+  },
+  "forwardedEmailDesc": {
+    "message": "使用外部轉寄服務產生一個電子郵件別名。"
+  },
+  "hostname": {
+    "message": "主機名稱",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API 存取權杖"
+  },
+  "apiKey": {
+    "message": "API 金鑰"
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 import { PopupUtilsService } from "../services/popup-utils.service";
 
@@ -18,7 +18,10 @@ export class PopOutComponent implements OnInit {
 
   ngOnInit() {
     if (this.show) {
-      if (this.popupUtilsService.inSidebar(window) && this.platformUtilsService.isFirefox()) {
+      if (
+        (this.popupUtilsService.inSidebar(window) && this.platformUtilsService.isFirefox()) ||
+        this.popupUtilsService.inPopout(window)
+      ) {
         this.show = false;
       }
     }
