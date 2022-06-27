@@ -30,7 +30,6 @@ import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwar
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/abstractions/storage.service";
-import { UserVerificationPromptService as UserVerificationPromptServiceAbstraction } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
@@ -45,7 +44,6 @@ import { MemoryStorageService } from "../../services/memoryStorage.service";
 import { PasswordRepromptService } from "../../services/passwordReprompt.service";
 import { StateService } from "../../services/state.service";
 import { StateMigrationService } from "../../services/stateMigration.service";
-import { UserVerificationPromptService } from "../../services/userVerificationPrompt.service";
 import { WebPlatformUtilsService } from "../../services/webPlatformUtils.service";
 import { HomeGuard } from "../guards/home.guard";
 import { PermissionsGuard as OrgPermissionsGuard } from "../organizations/guards/permissions.guard";
@@ -148,10 +146,6 @@ import { RouterService } from "./router.service";
     {
       provide: PasswordRepromptServiceAbstraction,
       useClass: PasswordRepromptService,
-    },
-    {
-      provide: UserVerificationPromptServiceAbstraction,
-      useClass: UserVerificationPromptService,
     },
     HomeGuard,
   ],

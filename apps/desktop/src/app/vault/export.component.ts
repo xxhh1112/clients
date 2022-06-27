@@ -16,7 +16,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
-import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 
 const BroadcasterSubscriptionId = "ExportComponent";
 
@@ -39,7 +38,6 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    protected userVerificationPromptService: UserVerificationPromptService,
     protected modalConfig: ModalConfig
   ) {
     super(
@@ -56,7 +54,6 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       modalService,
       apiService,
       stateService,
-      userVerificationPromptService,
       modalConfig
     );
   }

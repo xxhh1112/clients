@@ -19,7 +19,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
-import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -64,7 +63,6 @@ export class ExportComponent implements OnInit {
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    protected userVerificationPromptService: UserVerificationPromptService,
     protected modalConfig: ModalConfig
   ) {}
 
@@ -176,7 +174,9 @@ export class ExportComponent implements OnInit {
   }
 
   protected getExportData() {
-    return this.exportService.getExport(this.format, null, this.encryptionPassword);
+    return (this.fileEncryptionType != 1 && this.password == undefined) || this.password == ""
+      ? this.exportService.getExport(this.format, null)
+      : this.exportService.getPasswordProtectedExport(this.password);
   }
 
   protected getFileName(prefix?: string) {

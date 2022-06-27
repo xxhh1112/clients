@@ -36,19 +36,13 @@ export class ExportService implements ExportServiceAbstraction {
     private cryptoFunctionService: CryptoFunctionService
   ) {}
 
-  async getExport(
-    format: ExportFormat = "csv",
-    organizationId?: string,
-    password?: string
-  ): Promise<string> {
+  async getExport(format: ExportFormat = "csv", organizationId?: string): Promise<string> {
     if (organizationId) {
       return await this.getOrganizationExport(organizationId, format);
     }
 
     if (format === "encrypted_json") {
-      return password == undefined || password == ""
-        ? this.getEncryptedExport()
-        : this.getPasswordProtectedExport(password);
+      return this.getEncryptedExport();
     } else {
       return this.getDecryptedExport(format);
     }

@@ -13,8 +13,9 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
-import { UserVerificationPromptService } from "@bitwarden/common/abstractions/userVerificationPrompt.service";
 import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
+
+import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
 
 @Component({
   selector: "app-export",
@@ -41,7 +42,6 @@ export class ExportComponent extends BaseExportComponent {
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
-    userVerificationPromptService: UserVerificationPromptService,
     modalConfig: ModalConfig
   ) {
     super(
@@ -58,7 +58,6 @@ export class ExportComponent extends BaseExportComponent {
       modalService,
       apiService,
       stateService,
-      userVerificationPromptService,
       modalConfig
     );
   }
@@ -76,15 +75,28 @@ export class ExportComponent extends BaseExportComponent {
     }
 
     try {
-      if (
-        await this.userVerificationPromptService.showUserVerificationPrompt(
-          confirmDescription,
-          confirmButtonText,
-          modalTitle
-        )
-      ) {
+      const ref = this.modalService.open(UserVerificationPromptComponent, {
+        allowMultipleModals: true,
+        data: {
+          confirmDescription: confirmDescription,
+          confirmButtonText: confirmButtonText,
+          modalTitle: modalTitle,
+        },
+      });
+
+      if (ref == null) {
+        return;
+      }
+
+      if (await ref.onClosedPromise()) {
         //successful
         this.submitWithSecretAlreadyVerified();
+      } else {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("error"),
+          this.i18nService.t("invalidMasterPassword")
+        );
       }
     } catch {
       this.platformUtilsService.showToast(
