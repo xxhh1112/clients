@@ -331,22 +331,31 @@ export class IndividualVaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const component = await this.editCipher(null);
-    component.type = this.activeFilter.cipherType;
+    component.type = this.activeFilter.type;
     component.folderId = this.folderId === "none" ? null : this.folderId;
-    if (this.activeFilter.selectedCollectionId != null) {
+    if (
+      this.activeFilter.collectionId != null &&
+      this.activeFilter.collectionId !== VaultFilter.Unassigned
+    ) {
       const collection = this.filterComponent.collections.fullList.filter(
-        (c) => c.id === this.activeFilter.selectedCollectionId
+        (c) => c.id === this.activeFilter.collectionId
       );
       if (collection.length > 0) {
         component.organizationId = collection[0].organizationId;
-        component.collectionIds = [this.activeFilter.selectedCollectionId];
+        component.collectionIds = [this.activeFilter.collectionId];
       }
     }
-    if (this.activeFilter.selectedFolderId && this.activeFilter.selectedFolder) {
-      component.folderId = this.activeFilter.selectedFolderId;
+    if (
+      this.activeFilter.folderId !== null &&
+      this.activeFilter.folderId !== VaultFilter.Unassigned
+    ) {
+      component.folderId = this.activeFilter.folderId;
     }
-    if (this.activeFilter.selectedOrganizationId) {
-      component.organizationId = this.activeFilter.selectedOrganizationId;
+    if (
+      this.activeFilter.organizationId &&
+      this.activeFilter.organizationId !== VaultFilter.Unassigned
+    ) {
+      component.organizationId = this.activeFilter.organizationId;
     }
   }
 
@@ -403,7 +412,7 @@ export class IndividualVaultComponent implements OnInit, OnDestroy {
     if (queryParams == null) {
       queryParams = {
         favorites: this.favorites ? true : null,
-        type: this.activeFilter.cipherType,
+        type: this.activeFilter.type,
         folderId: this.folderId,
         collectionId: this.collectionId,
         deleted: this.deleted ? true : null,

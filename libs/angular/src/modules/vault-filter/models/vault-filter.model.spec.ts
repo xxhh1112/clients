@@ -1,7 +1,7 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
+import { VaultFilter, VaultFilterOptions } from "./vault-filter.model";
 
 describe("VaultFilter", () => {
   describe("update", () => {

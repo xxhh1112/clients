@@ -8,19 +8,22 @@ export class VaultService {
     if (vaultFilter.status === "trash") {
       return "searchTrash";
     }
-    if (vaultFilter.cipherType != null) {
+    if (vaultFilter.type != null) {
       return "searchType";
     }
-    if (vaultFilter.selectedFolderId != null && vaultFilter.selectedFolderId != "none") {
+    if (vaultFilter.folderId != null && vaultFilter.folderId !== VaultFilter.Unassigned) {
       return "searchFolder";
     }
-    if (vaultFilter.selectedCollectionId != null) {
+    if (vaultFilter.collectionId != null && vaultFilter.collectionId !== VaultFilter.Unassigned) {
       return "searchCollection";
     }
-    if (vaultFilter.selectedOrganizationId != null) {
+    if (
+      vaultFilter.organizationId != null &&
+      vaultFilter.organizationId !== VaultFilter.Unassigned
+    ) {
       return "searchOrganization";
     }
-    if (vaultFilter.myVaultOnly) {
+    if (vaultFilter.organizationId === VaultFilter.Unassigned) {
       return "searchMyVault";
     }
 
