@@ -120,6 +120,33 @@ describe("VaultFilter", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return true when filter matches collection id", () => {
+      const cipher = createCipher({ collectionIds: ["collectionId", "anotherId"] });
+      const filterFunction = createFilterFunction({ collection: "collectionId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return true when filtering on unassigned collection and cipher does not have any collections", () => {
+      const cipher = createCipher({ collectionIds: [] });
+      const filterFunction = createFilterFunction({ collection: Unassigned });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter does not match collection id", () => {
+      const cipher = createCipher({ collectionIds: ["collectionId", "anotherId"] });
+      const filterFunction = createFilterFunction({ collection: "nonMatchingId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
   });
 });
 
@@ -134,6 +161,7 @@ function createCipher(options: Partial<CipherView> = {}) {
   cipher.deletedDate = options.deletedDate;
   cipher.type = options.type;
   cipher.folderId = options.folderId;
+  cipher.collectionIds = options.collectionIds;
 
   return cipher;
 }
