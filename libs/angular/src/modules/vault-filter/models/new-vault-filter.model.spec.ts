@@ -32,7 +32,7 @@ describe("VaultFilter", () => {
   describe("filterFunction", () => {
     it("should return true when filter is set to all statuses", () => {
       const cipher = createCipher();
-      const filterFunction = createFilterFunction({ status: "all" });
+      const filterFunction = createFilterFunction({ cipherStatus: "all" });
 
       const result = filterFunction(cipher);
 
@@ -41,7 +41,7 @@ describe("VaultFilter", () => {
 
     it("should return true when filter is set to favorites and cipher is favorite", () => {
       const cipher = createCipher({ favorite: true });
-      const filterFunction = createFilterFunction({ status: "favorites" });
+      const filterFunction = createFilterFunction({ cipherStatus: "favorites" });
 
       const result = filterFunction(cipher);
 
@@ -50,7 +50,7 @@ describe("VaultFilter", () => {
 
     it("should return false when filter is set to all and cipher is not favorite", () => {
       const cipher = createCipher({ favorite: false });
-      const filterFunction = createFilterFunction({ status: "favorites" });
+      const filterFunction = createFilterFunction({ cipherStatus: "favorites" });
 
       const result = filterFunction(cipher);
 
@@ -59,7 +59,7 @@ describe("VaultFilter", () => {
 
     it("should return true when filter is set to trash and cipher is deleted", () => {
       const cipher = createCipher({ deletedDate: new Date() });
-      const filterFunction = createFilterFunction({ status: "trash" });
+      const filterFunction = createFilterFunction({ cipherStatus: "trash" });
 
       const result = filterFunction(cipher);
 
@@ -68,7 +68,7 @@ describe("VaultFilter", () => {
 
     it("should return false when filter is set to trash and cipher is not deleted", () => {
       const cipher = createCipher({ deletedDate: undefined });
-      const filterFunction = createFilterFunction({ status: "trash" });
+      const filterFunction = createFilterFunction({ cipherStatus: "trash" });
 
       const result = filterFunction(cipher);
 

@@ -3,12 +3,12 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CipherStatus } from "./cipher-status.model";
 
 const DefaultOptions: VaultFilterOptions = {
-  status: "all",
+  cipherStatus: "all",
   selectedFolder: false,
 };
 
 export type VaultFilterOptions = Readonly<{
-  status: CipherStatus;
+  cipherStatus: CipherStatus;
   selectedFolder: boolean;
 }>;
 
@@ -24,8 +24,8 @@ export class VaultFilter implements VaultFilterOptions {
     };
   }
 
-  get status() {
-    return this.options.status;
+  get cipherStatus() {
+    return this.options.cipherStatus;
   }
 
   get selectedFolder() {
@@ -35,9 +35,9 @@ export class VaultFilter implements VaultFilterOptions {
   get filterFunction(): VaultFilterFunction {
     return (cipher) => {
       return (
-        this.status === "all" ||
-        (this.status === "favorites" && cipher.favorite) ||
-        (this.status === "trash" && cipher.isDeleted)
+        this.cipherStatus === "all" ||
+        (this.cipherStatus === "favorites" && cipher.favorite) ||
+        (this.cipherStatus === "trash" && cipher.isDeleted)
       );
     };
   }
