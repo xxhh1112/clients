@@ -1,3 +1,4 @@
+import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
@@ -74,6 +75,24 @@ describe("VaultFilter", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return true when filter matches cipher type", () => {
+      const cipher = createCipher({ type: CipherType.Identity });
+      const filterFunction = createFilterFunction({ cipherType: CipherType.Identity });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter does not match cipher type", () => {
+      const cipher = createCipher({ type: CipherType.Card });
+      const filterFunction = createFilterFunction({ cipherType: CipherType.Identity });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
   });
 });
 
@@ -86,6 +105,7 @@ function createCipher(options: Partial<CipherView> = {}) {
 
   cipher.favorite = options.favorite ?? false;
   cipher.deletedDate = options.deletedDate;
+  cipher.type = options.type;
 
   return cipher;
 }
