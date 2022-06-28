@@ -33,7 +33,13 @@ export class VaultFilter implements VaultFilterOptions {
   }
 
   get filterFunction(): VaultFilterFunction {
-    return () => true;
+    return (cipher) => {
+      return (
+        this.status === "all" ||
+        (this.status === "favorites" && cipher.favorite) ||
+        (this.status === "trash" && cipher.isDeleted)
+      );
+    };
   }
 
   update(options: Partial<VaultFilterOptions>) {

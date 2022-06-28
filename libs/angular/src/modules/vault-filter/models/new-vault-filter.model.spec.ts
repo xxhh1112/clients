@@ -1,6 +1,6 @@
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { VaultFilter } from "./new-vault-filter.model";
+import { VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
 
 describe("VaultFilter", () => {
   describe("update", () => {
@@ -31,13 +31,61 @@ describe("VaultFilter", () => {
 
   describe("filterFunction", () => {
     it("should return true when filter is set to all statuses", () => {
-      const filter = new VaultFilter({ status: "favorites" });
-      const cipher = new CipherView();
-      const filterFunction = filter.filterFunction;
+      const cipher = createCipher();
+      const filterFunction = createFilterFunction({ status: "all" });
 
       const result = filterFunction(cipher);
 
       expect(result).toBe(true);
     });
+
+    it("should return true when filter is set to favorites and cipher is favorite", () => {
+      const cipher = createCipher({ favorite: true });
+      const filterFunction = createFilterFunction({ status: "favorites" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter is set to all and cipher is not favorite", () => {
+      const cipher = createCipher({ favorite: false });
+      const filterFunction = createFilterFunction({ status: "favorites" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
+
+    it("should return true when filter is set to trash and cipher is deleted", () => {
+      const cipher = createCipher({ deletedDate: new Date() });
+      const filterFunction = createFilterFunction({ status: "trash" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter is set to trash and cipher is not deleted", () => {
+      const cipher = createCipher({ deletedDate: undefined });
+      const filterFunction = createFilterFunction({ status: "trash" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
   });
 });
+
+function createFilterFunction(options: Partial<VaultFilterOptions> = {}) {
+  return new VaultFilter(options).filterFunction;
+}
+
+function createCipher(options: Partial<CipherView> = {}) {
+  const cipher = new CipherView();
+
+  cipher.favorite = options.favorite ?? false;
+  cipher.deletedDate = options.deletedDate;
+
+  return cipher;
+}
