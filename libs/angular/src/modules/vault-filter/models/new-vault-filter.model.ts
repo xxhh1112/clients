@@ -3,8 +3,6 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { CipherStatus } from "./cipher-status.model";
 
-export const Unassigned: unique symbol = Symbol("Unassigned");
-
 const DefaultOptions: VaultFilterOptions = {
   status: "all",
   type: null,
@@ -16,14 +14,16 @@ const DefaultOptions: VaultFilterOptions = {
 export type VaultFilterOptions = Readonly<{
   status: CipherStatus;
   type?: CipherType;
-  folderId?: string | typeof Unassigned;
-  collectionId?: string | typeof Unassigned;
-  organizationId?: string | typeof Unassigned;
+  folderId?: string | typeof VaultFilter.Unassigned;
+  collectionId?: string | typeof VaultFilter.Unassigned;
+  organizationId?: string | typeof VaultFilter.Unassigned;
 }>;
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
 
 export class VaultFilter implements VaultFilterOptions {
+  static readonly Unassigned: unique symbol = Symbol("Unassigned");
+
   private readonly options: VaultFilterOptions;
 
   constructor(options: Partial<VaultFilterOptions> = {}) {
@@ -64,21 +64,21 @@ export class VaultFilter implements VaultFilterOptions {
 
       const folder =
         this.folderId == null ||
-        (this.folderId === Unassigned && cipher.folderId == null) ||
+        (this.folderId === VaultFilter.Unassigned && cipher.folderId == null) ||
         (this.folderId != null && this.folderId === cipher.folderId);
 
       const collection =
         this.collectionId == null ||
-        (this.collectionId === Unassigned &&
+        (this.collectionId === VaultFilter.Unassigned &&
           (cipher.collectionIds == null || cipher.collectionIds.length === 0)) ||
         (this.collectionId != null &&
-          this.collectionId !== Unassigned &&
+          this.collectionId !== VaultFilter.Unassigned &&
           cipher.collectionIds != null &&
           cipher.collectionIds.includes(this.collectionId));
 
       const organization =
         this.organizationId == null ||
-        (this.organizationId === Unassigned && cipher.organizationId == null) ||
+        (this.organizationId === VaultFilter.Unassigned && cipher.organizationId == null) ||
         (this.organizationId != null && this.organizationId === cipher.organizationId);
 
       return status && type && folder && collection && organization;

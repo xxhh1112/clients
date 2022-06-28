@@ -1,7 +1,7 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { Unassigned, VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
+import { VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
 
 describe("VaultFilter", () => {
   describe("update", () => {
@@ -105,7 +105,7 @@ describe("VaultFilter", () => {
 
     it("should return true when filtering on unassigned folder and cipher does not have folder", () => {
       const cipher = createCipher({ folderId: undefined });
-      const filterFunction = createFilterFunction({ folderId: Unassigned });
+      const filterFunction = createFilterFunction({ folderId: VaultFilter.Unassigned });
 
       const result = filterFunction(cipher);
 
@@ -132,7 +132,7 @@ describe("VaultFilter", () => {
 
     it("should return true when filtering on unassigned collection and cipher does not have any collections", () => {
       const cipher = createCipher({ collectionIds: [] });
-      const filterFunction = createFilterFunction({ collectionId: Unassigned });
+      const filterFunction = createFilterFunction({ collectionId: VaultFilter.Unassigned });
 
       const result = filterFunction(cipher);
 
@@ -159,7 +159,7 @@ describe("VaultFilter", () => {
 
     it("should return true when filtering on unassigned organization and cipher does not have any organization", () => {
       const cipher = createCipher({ organizationId: null });
-      const filterFunction = createFilterFunction({ organizationId: Unassigned });
+      const filterFunction = createFilterFunction({ organizationId: VaultFilter.Unassigned });
 
       const result = filterFunction(cipher);
 
