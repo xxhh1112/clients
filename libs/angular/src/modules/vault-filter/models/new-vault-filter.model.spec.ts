@@ -157,6 +157,15 @@ describe("VaultFilter", () => {
       expect(result).toBe(true);
     });
 
+    it("should return true when filtering on unassigned organization and cipher does not have any organization", () => {
+      const cipher = createCipher({ organizationId: null });
+      const filterFunction = createFilterFunction({ organization: Unassigned });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
     it("should return false when filter does not match organization id", () => {
       const cipher = createCipher({ organizationId: "organizationId" });
       const filterFunction = createFilterFunction({ organization: "anotherOrganizationId" });

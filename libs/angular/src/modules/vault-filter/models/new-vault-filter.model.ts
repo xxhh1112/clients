@@ -18,7 +18,7 @@ export type VaultFilterOptions = Readonly<{
   cipherType?: CipherType;
   folder?: string | typeof Unassigned;
   collection?: string | typeof Unassigned;
-  organization?: string;
+  organization?: string | typeof Unassigned;
 }>;
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
@@ -79,6 +79,7 @@ export class VaultFilter implements VaultFilterOptions {
 
       const organization =
         this.organization == null ||
+        (this.organization === Unassigned && cipher.organizationId == null) ||
         (this.organization != null && this.organization === cipher.organizationId);
 
       return status && type && folder && collection && organization;
