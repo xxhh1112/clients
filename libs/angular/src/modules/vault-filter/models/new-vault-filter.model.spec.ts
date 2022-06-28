@@ -1,7 +1,7 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
+import { Unassigned, VaultFilter, VaultFilterOptions } from "./new-vault-filter.model";
 
 describe("VaultFilter", () => {
   describe("update", () => {
@@ -14,19 +14,19 @@ describe("VaultFilter", () => {
     });
 
     it("should not be equal when updating fields", () => {
-      const filter = new VaultFilter({ selectedFolder: true });
+      const filter = new VaultFilter({ folder: "folderId" });
 
-      const result = filter.update({ selectedFolder: false });
+      const result = filter.update({ folder: "updatedFolderId" });
 
       expect(result).not.toEqual(filter);
     });
 
     it("should return filter with new field value when updating field", () => {
-      const filter = new VaultFilter({ selectedFolder: false });
+      const filter = new VaultFilter({ folder: "folderId" });
 
-      const result = filter.update({ selectedFolder: true });
+      const result = filter.update({ folder: "updatedFolderId" });
 
-      expect(result.selectedFolder).toBe(true);
+      expect(result.folder).toBe("updatedFolderId");
     });
   });
 
@@ -93,6 +93,33 @@ describe("VaultFilter", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return true when filter matches folder id", () => {
+      const cipher = createCipher({ folderId: "folderId" });
+      const filterFunction = createFilterFunction({ folder: "folderId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return true when filtering on unassigned folder and cipher does not have folder", () => {
+      const cipher = createCipher({ folderId: undefined });
+      const filterFunction = createFilterFunction({ folder: Unassigned });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter does not match folder id", () => {
+      const cipher = createCipher({ folderId: "folderId" });
+      const filterFunction = createFilterFunction({ folder: "anotherFolderId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
   });
 });
 
@@ -106,6 +133,7 @@ function createCipher(options: Partial<CipherView> = {}) {
   cipher.favorite = options.favorite ?? false;
   cipher.deletedDate = options.deletedDate;
   cipher.type = options.type;
+  cipher.folderId = options.folderId;
 
   return cipher;
 }

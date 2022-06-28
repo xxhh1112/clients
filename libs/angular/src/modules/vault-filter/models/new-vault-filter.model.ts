@@ -3,16 +3,18 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { CipherStatus } from "./cipher-status.model";
 
+export const Unassigned: unique symbol = Symbol("Unassigned");
+
 const DefaultOptions: VaultFilterOptions = {
   cipherStatus: "all",
   cipherType: null,
-  selectedFolder: false,
+  folder: null,
 };
 
 export type VaultFilterOptions = Readonly<{
   cipherStatus: CipherStatus;
   cipherType?: CipherType;
-  selectedFolder: boolean;
+  folder?: string | typeof Unassigned;
 }>;
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
@@ -35,8 +37,8 @@ export class VaultFilter implements VaultFilterOptions {
     return this.options.cipherType;
   }
 
-  get selectedFolder() {
-    return this.options.selectedFolder;
+  get folder() {
+    return this.options.folder;
   }
 
   get filterFunction(): VaultFilterFunction {
@@ -49,7 +51,12 @@ export class VaultFilter implements VaultFilterOptions {
       const type =
         this.cipherType == null || (this.cipherType != null && this.cipherType === cipher.type);
 
-      return status && type;
+      const folder =
+        this.folder == null ||
+        (this.folder === Unassigned && cipher.folderId == null) ||
+        (this.folder != null && this.folder === cipher.folderId);
+
+      return status && type && folder;
     };
   }
 
