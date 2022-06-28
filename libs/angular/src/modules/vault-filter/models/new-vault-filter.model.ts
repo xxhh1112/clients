@@ -6,19 +6,19 @@ import { CipherStatus } from "./cipher-status.model";
 export const Unassigned: unique symbol = Symbol("Unassigned");
 
 const DefaultOptions: VaultFilterOptions = {
-  cipherStatus: "all",
-  cipherType: null,
-  folder: null,
-  collection: null,
-  organization: null,
+  status: "all",
+  type: null,
+  folderId: null,
+  collectionId: null,
+  organizationId: null,
 };
 
 export type VaultFilterOptions = Readonly<{
-  cipherStatus: CipherStatus;
-  cipherType?: CipherType;
-  folder?: string | typeof Unassigned;
-  collection?: string | typeof Unassigned;
-  organization?: string | typeof Unassigned;
+  status: CipherStatus;
+  type?: CipherType;
+  folderId?: string | typeof Unassigned;
+  collectionId?: string | typeof Unassigned;
+  organizationId?: string | typeof Unassigned;
 }>;
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
@@ -33,54 +33,53 @@ export class VaultFilter implements VaultFilterOptions {
     };
   }
 
-  get cipherStatus() {
-    return this.options.cipherStatus;
+  get status() {
+    return this.options.status;
   }
 
-  get cipherType() {
-    return this.options.cipherType;
+  get type() {
+    return this.options.type;
   }
 
-  get folder() {
-    return this.options.folder;
+  get folderId() {
+    return this.options.folderId;
   }
 
-  get collection() {
-    return this.options.collection;
+  get collectionId() {
+    return this.options.collectionId;
   }
 
-  get organization() {
-    return this.options.organization;
+  get organizationId() {
+    return this.options.organizationId;
   }
 
   get filterFunction(): VaultFilterFunction {
     return (cipher) => {
       const status =
-        this.cipherStatus === "all" ||
-        (this.cipherStatus === "favorites" && cipher.favorite) ||
-        (this.cipherStatus === "trash" && cipher.isDeleted);
+        this.status === "all" ||
+        (this.status === "favorites" && cipher.favorite) ||
+        (this.status === "trash" && cipher.isDeleted);
 
-      const type =
-        this.cipherType == null || (this.cipherType != null && this.cipherType === cipher.type);
+      const type = this.type == null || (this.type != null && this.type === cipher.type);
 
       const folder =
-        this.folder == null ||
-        (this.folder === Unassigned && cipher.folderId == null) ||
-        (this.folder != null && this.folder === cipher.folderId);
+        this.folderId == null ||
+        (this.folderId === Unassigned && cipher.folderId == null) ||
+        (this.folderId != null && this.folderId === cipher.folderId);
 
       const collection =
-        this.collection == null ||
-        (this.collection === Unassigned &&
+        this.collectionId == null ||
+        (this.collectionId === Unassigned &&
           (cipher.collectionIds == null || cipher.collectionIds.length === 0)) ||
-        (this.collection != null &&
-          this.collection !== Unassigned &&
+        (this.collectionId != null &&
+          this.collectionId !== Unassigned &&
           cipher.collectionIds != null &&
-          cipher.collectionIds.includes(this.collection));
+          cipher.collectionIds.includes(this.collectionId));
 
       const organization =
-        this.organization == null ||
-        (this.organization === Unassigned && cipher.organizationId == null) ||
-        (this.organization != null && this.organization === cipher.organizationId);
+        this.organizationId == null ||
+        (this.organizationId === Unassigned && cipher.organizationId == null) ||
+        (this.organizationId != null && this.organizationId === cipher.organizationId);
 
       return status && type && folder && collection && organization;
     };
