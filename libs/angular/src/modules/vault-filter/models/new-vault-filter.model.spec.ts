@@ -147,6 +147,24 @@ describe("VaultFilter", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return true when filter matches organization id", () => {
+      const cipher = createCipher({ organizationId: "organizationId" });
+      const filterFunction = createFilterFunction({ organization: "organizationId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when filter does not match organization id", () => {
+      const cipher = createCipher({ organizationId: "organizationId" });
+      const filterFunction = createFilterFunction({ organization: "anotherOrganizationId" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
   });
 });
 
@@ -162,6 +180,7 @@ function createCipher(options: Partial<CipherView> = {}) {
   cipher.type = options.type;
   cipher.folderId = options.folderId;
   cipher.collectionIds = options.collectionIds;
+  cipher.organizationId = options.organizationId;
 
   return cipher;
 }

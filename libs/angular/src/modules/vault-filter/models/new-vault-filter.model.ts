@@ -10,6 +10,7 @@ const DefaultOptions: VaultFilterOptions = {
   cipherType: null,
   folder: null,
   collection: null,
+  organization: null,
 };
 
 export type VaultFilterOptions = Readonly<{
@@ -17,6 +18,7 @@ export type VaultFilterOptions = Readonly<{
   cipherType?: CipherType;
   folder?: string | typeof Unassigned;
   collection?: string | typeof Unassigned;
+  organization?: string;
 }>;
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
@@ -47,6 +49,10 @@ export class VaultFilter implements VaultFilterOptions {
     return this.options.collection;
   }
 
+  get organization() {
+    return this.options.organization;
+  }
+
   get filterFunction(): VaultFilterFunction {
     return (cipher) => {
       const status =
@@ -71,7 +77,11 @@ export class VaultFilter implements VaultFilterOptions {
           cipher.collectionIds != null &&
           cipher.collectionIds.includes(this.collection));
 
-      return status && type && folder && collection;
+      const organization =
+        this.organization == null ||
+        (this.organization != null && this.organization === cipher.organizationId);
+
+      return status && type && folder && collection && organization;
     };
   }
 
