@@ -1,6 +1,9 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { CipherStatus } from "./cipher-status.model";
+
+export type VaultFilterFunction = (cipher: CipherView) => boolean;
 
 export class VaultFilter {
   cipherType?: CipherType;
@@ -28,5 +31,35 @@ export class VaultFilter {
     this.myVaultOnly = false;
     this.selectedOrganizationId = null;
     this.resetFilter();
+  }
+
+  buildFilter(): VaultFilterFunction {
+    return (cipher) => {
+      let cipherPassesFilter = true;
+      if (this.status === "favorites" && cipherPassesFilter) {
+        cipherPassesFilter = cipher.favorite;
+      }
+      if (this.status === "trash" && cipherPassesFilter) {
+        cipherPassesFilter = cipher.isDeleted;
+      }
+      if (this.cipherType != null && cipherPassesFilter) {
+        cipherPassesFilter = cipher.type === this.cipherType;
+      }
+      if (this.selectedFolder && this.selectedFolderId != "none" && cipherPassesFilter) {
+        cipherPassesFilter = cipher.folderId === this.selectedFolderId;
+      }
+      if (this.selectedCollectionId != null && cipherPassesFilter) {
+        cipherPassesFilter =
+          cipher.collectionIds != null &&
+          cipher.collectionIds.indexOf(this.selectedCollectionId) > -1;
+      }
+      if (this.selectedOrganizationId != null && cipherPassesFilter) {
+        cipherPassesFilter = cipher.organizationId === this.selectedOrganizationId;
+      }
+      if (this.myVaultOnly && cipherPassesFilter) {
+        cipherPassesFilter = cipher.organizationId === null;
+      }
+      return cipherPassesFilter;
+    };
   }
 }
