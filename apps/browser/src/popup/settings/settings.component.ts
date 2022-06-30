@@ -46,7 +46,7 @@ export class SettingsComponent implements OnInit {
   pin: boolean = null;
   supportsBiometric: boolean;
   biometric = false;
-  disableAutoBiometricsPrompt = true;
+  enableAutoBiometricsPrompt = true;
   previousVaultTimeout: number = null;
   showChangeMasterPass = true;
 
@@ -114,8 +114,9 @@ export class SettingsComponent implements OnInit {
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
-    this.disableAutoBiometricsPrompt =
+    const disableAutoBiometricsPrompt =
       (await this.stateService.getDisableAutoBiometricsPrompt()) ?? true;
+    this.enableAutoBiometricsPrompt = !disableAutoBiometricsPrompt;
     this.showChangeMasterPass = !(await this.keyConnectorService.getUsesKeyConnector());
   }
 
@@ -134,8 +135,14 @@ export class SettingsComponent implements OnInit {
       }
     }
 
-    if (!this.vaultTimeout.valid) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("vaultTimeoutToLarge"));
+    // The minTimeoutError does not apply to browser because it supports Immediately
+    // So only check for the policyError
+    if (this.vaultTimeout.hasError("policyError")) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("vaultTimeoutTooLarge")
+      );
       return;
     }
 
@@ -170,8 +177,12 @@ export class SettingsComponent implements OnInit {
       }
     }
 
-    if (!this.vaultTimeout.valid) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("vaultTimeoutToLarge"));
+    if (this.vaultTimeout.hasError("policyError")) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("vaultTimeoutTooLarge")
+      );
       return;
     }
 
@@ -289,7 +300,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async updateAutoBiometricsPrompt() {
-    await this.stateService.setDisableAutoBiometricsPrompt(this.disableAutoBiometricsPrompt);
+    await this.stateService.setDisableAutoBiometricsPrompt(!this.enableAutoBiometricsPrompt);
   }
 
   async lock() {

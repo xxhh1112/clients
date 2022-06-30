@@ -5,21 +5,17 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
 
 @Injectable()
 export class WebPlatformUtilsService implements PlatformUtilsService {
   private browserCache: DeviceType = null;
-  private prefersColorSchemeDark = window.matchMedia("(prefers-color-scheme: dark)");
 
   constructor(
     private i18nService: I18nService,
     private messagingService: MessagingService,
-    private logService: LogService,
-    private stateService: StateService
+    private logService: LogService
   ) {}
 
   getDevice(): DeviceType {
@@ -106,54 +102,6 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
-
-  saveFile(win: Window, blobData: any, blobOptions: any, fileName: string): void {
-    let blob: Blob = null;
-    let type: string = null;
-    const fileNameLower = fileName.toLowerCase();
-    let doDownload = true;
-    if (fileNameLower.endsWith(".pdf")) {
-      type = "application/pdf";
-      doDownload = false;
-    } else if (fileNameLower.endsWith(".xlsx")) {
-      type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    } else if (fileNameLower.endsWith(".docx")) {
-      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    } else if (fileNameLower.endsWith(".pptx")) {
-      type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    } else if (fileNameLower.endsWith(".csv")) {
-      type = "text/csv";
-    } else if (fileNameLower.endsWith(".png")) {
-      type = "image/png";
-    } else if (fileNameLower.endsWith(".jpg") || fileNameLower.endsWith(".jpeg")) {
-      type = "image/jpeg";
-    } else if (fileNameLower.endsWith(".gif")) {
-      type = "image/gif";
-    }
-    if (type != null) {
-      blobOptions = blobOptions || {};
-      if (blobOptions.type == null) {
-        blobOptions.type = type;
-      }
-    }
-    if (blobOptions != null) {
-      blob = new Blob([blobData], blobOptions);
-    } else {
-      blob = new Blob([blobData]);
-    }
-
-    const a = win.document.createElement("a");
-    if (doDownload) {
-      a.download = fileName;
-    } else if (!this.isSafari()) {
-      a.target = "_blank";
-    }
-    a.href = URL.createObjectURL(blob);
-    a.style.position = "fixed";
-    win.document.body.appendChild(a);
-    a.click();
-    win.document.body.removeChild(a);
   }
 
   getApplicationVersion(): Promise<string> {
@@ -302,33 +250,5 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage() {
     return false;
-  }
-
-  getDefaultSystemTheme(): Promise<ThemeType.Light | ThemeType.Dark> {
-    return Promise.resolve(this.prefersColorSchemeDark.matches ? ThemeType.Dark : ThemeType.Light);
-  }
-
-  async getEffectiveTheme(): Promise<ThemeType.Light | ThemeType.Dark> {
-    const theme = await this.stateService.getTheme();
-    if (theme === ThemeType.Dark) {
-      return ThemeType.Dark;
-    } else if (theme === ThemeType.System) {
-      return this.getDefaultSystemTheme();
-    } else {
-      return ThemeType.Light;
-    }
-  }
-
-  onDefaultSystemThemeChange(callback: (theme: ThemeType.Light | ThemeType.Dark) => unknown) {
-    try {
-      this.prefersColorSchemeDark.addEventListener("change", ({ matches }) => {
-        callback(matches ? ThemeType.Dark : ThemeType.Light);
-      });
-    } catch (e) {
-      // Safari older than v14
-      this.prefersColorSchemeDark.addListener((ev) => {
-        callback(ev.matches ? ThemeType.Dark : ThemeType.Light);
-      });
-    }
   }
 }

@@ -13,6 +13,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -58,11 +59,12 @@ export class ExportComponent implements OnInit {
     protected win: Window,
     private logService: LogService,
     private userVerificationService: UserVerificationService,
-    protected formBuilder: FormBuilder,
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    protected modalConfig: ModalConfig
+    protected modalConfig: ModalConfig,
+    private formBuilder: FormBuilder,
+    protected fileDownloadService: FileDownloadService
   ) {}
 
   async ngOnInit() {
@@ -217,6 +219,10 @@ export class ExportComponent implements OnInit {
 
   private downloadFile(csv: string): void {
     const fileName = this.getFileName();
-    this.platformUtilsService.saveFile(this.win, csv, { type: "text/plain" }, fileName);
+    this.fileDownloadService.download({
+      fileName: fileName,
+      blobData: csv,
+      blobOptions: { type: "text/plain" },
+    });
   }
 }

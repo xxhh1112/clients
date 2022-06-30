@@ -10,6 +10,7 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -32,13 +33,14 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     eventService: EventService,
     policyService: PolicyService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder,
     private broadcasterService: BroadcasterService,
     logService: LogService,
     protected modalService: ModalService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    protected modalConfig: ModalConfig
+    protected modalConfig: ModalConfig,
+    formBuilder: FormBuilder,
+    fileDownloadService: FileDownloadService
   ) {
     super(
       cryptoService,
@@ -50,11 +52,12 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       window,
       logService,
       userVerificationService,
-      formBuilder,
       modalService,
       apiService,
       stateService,
-      modalConfig
+      modalConfig,
+      formBuilder,
+      fileDownloadService
     );
   }
 

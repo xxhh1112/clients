@@ -6,7 +6,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
 
 import { isDev, isMacAppStore } from "../utils";
 
@@ -82,16 +81,6 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
 
   launchUri(uri: string, options?: any): void {
     shell.openExternal(uri);
-  }
-
-  saveFile(win: Window, blobData: any, blobOptions: any, fileName: string): void {
-    const blob = new Blob([blobData], blobOptions);
-    const a = win.document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    win.document.body.appendChild(a);
-    a.click();
-    win.document.body.removeChild(a);
   }
 
   getApplicationVersion(): Promise<string> {
@@ -187,25 +176,6 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
       });
       resolve(val);
     });
-  }
-
-  getDefaultSystemTheme() {
-    return ipcRenderer.invoke("systemTheme");
-  }
-
-  onDefaultSystemThemeChange(callback: (theme: ThemeType.Light | ThemeType.Dark) => unknown) {
-    ipcRenderer.on("systemThemeUpdated", (event, theme: ThemeType.Light | ThemeType.Dark) =>
-      callback(theme)
-    );
-  }
-
-  async getEffectiveTheme() {
-    const theme = await this.stateService.getTheme();
-    if (theme == null || theme === ThemeType.System) {
-      return this.getDefaultSystemTheme();
-    } else {
-      return theme;
-    }
   }
 
   supportsSecureStorage(): boolean {

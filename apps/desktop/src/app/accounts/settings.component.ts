@@ -3,6 +3,7 @@ import { FormControl } from "@angular/forms";
 import { debounceTime } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -24,7 +25,7 @@ import { SetPinComponent } from "../components/set-pin.component";
 export class SettingsComponent implements OnInit {
   vaultTimeoutAction: string;
   pin: boolean = null;
-  disableFavicons = false;
+  enableFavicons = false;
   enableBrowserIntegration = false;
   enableBrowserIntegrationFingerprint = false;
   enableMinToTray = false;
@@ -43,8 +44,8 @@ export class SettingsComponent implements OnInit {
   supportsBiometric: boolean;
   biometric: boolean;
   biometricText: string;
-  noAutoPromptBiometrics: boolean;
-  noAutoPromptBiometricsText: string;
+  autoPromptBiometrics: boolean;
+  autoPromptBiometricsText: string;
   alwaysShowDock: boolean;
   showAlwaysShowDock = false;
   openAtLogin: boolean;
@@ -74,7 +75,8 @@ export class SettingsComponent implements OnInit {
     private stateService: StateService,
     private messagingService: MessagingService,
     private cryptoService: CryptoService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private themingService: AbstractThemingService
   ) {
     const isMac = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
 
@@ -179,7 +181,7 @@ export class SettingsComponent implements OnInit {
     this.pin = pinSet[0] || pinSet[1];
 
     // Account preferences
-    this.disableFavicons = await this.stateService.getDisableFavicon();
+    this.enableFavicons = !(await this.stateService.getDisableFavicon());
     this.enableBrowserIntegration = await this.stateService.getEnableBrowserIntegration();
     this.enableBrowserIntegrationFingerprint =
       await this.stateService.getEnableBrowserIntegrationFingerprint();
@@ -188,8 +190,8 @@ export class SettingsComponent implements OnInit {
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
     this.biometricText = await this.stateService.getBiometricText();
-    this.noAutoPromptBiometrics = await this.stateService.getNoAutoPromptBiometrics();
-    this.noAutoPromptBiometricsText = await this.stateService.getNoAutoPromptBiometricsText();
+    this.autoPromptBiometrics = !(await this.stateService.getNoAutoPromptBiometrics());
+    this.autoPromptBiometricsText = await this.stateService.getNoAutoPromptBiometricsText();
   }
 
   async saveVaultTimeoutOptions() {
@@ -259,27 +261,27 @@ export class SettingsComponent implements OnInit {
     } else {
       await this.stateService.setBiometricUnlock(null);
       await this.stateService.setNoAutoPromptBiometrics(null);
-      this.noAutoPromptBiometrics = false;
+      this.autoPromptBiometrics = false;
     }
     await this.stateService.setBiometricLocked(false);
     await this.cryptoService.toggleKey();
   }
 
-  async updateNoAutoPromptBiometrics() {
+  async updateAutoPromptBiometrics() {
     if (!this.biometric) {
-      this.noAutoPromptBiometrics = false;
+      this.autoPromptBiometrics = false;
     }
 
-    if (this.noAutoPromptBiometrics) {
-      await this.stateService.setNoAutoPromptBiometrics(true);
-    } else {
+    if (this.autoPromptBiometrics) {
       await this.stateService.setNoAutoPromptBiometrics(null);
+    } else {
+      await this.stateService.setNoAutoPromptBiometrics(true);
     }
   }
 
   async saveFavicons() {
-    await this.stateService.setDisableFavicon(this.disableFavicons);
-    await this.stateService.setDisableFavicon(this.disableFavicons, {
+    await this.stateService.setDisableFavicon(!this.enableFavicons);
+    await this.stateService.setDisableFavicon(!this.enableFavicons, {
       storageLocation: StorageLocation.Disk,
     });
     this.messagingService.send("refreshCiphers");
@@ -342,8 +344,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async saveTheme() {
-    await this.stateService.setTheme(this.theme);
-    window.setTimeout(() => window.location.reload(), 200);
+    await this.themingService.updateConfiguredTheme(this.theme);
   }
 
   async saveMinOnCopyToClipboard() {
