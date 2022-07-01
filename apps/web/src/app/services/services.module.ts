@@ -105,19 +105,6 @@ import { WebFileDownloadService } from "./webFileDownload.service";
     { provide: ModalServiceAbstraction, useClass: ModalService },
     { provide: ModalConfigAbstraction, useClass: ModalConfig },
     {
-      provide: ImportServiceAbstraction,
-      useClass: ImportService,
-      deps: [
-        CipherServiceAbstraction,
-        FolderServiceAbstraction,
-        ApiServiceAbstraction,
-        I18nServiceAbstraction,
-        CollectionServiceAbstraction,
-        PlatformUtilsServiceAbstraction,
-        CryptoServiceAbstraction,
-      ],
-    },
-    {
       provide: ExportServiceAbstraction,
       useClass: ExportService,
       deps: [

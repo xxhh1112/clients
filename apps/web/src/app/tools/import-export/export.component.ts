@@ -16,7 +16,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 
-import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
+import { UserVerificationPromptComponent } from "src/app/components/user-verification-prompt.component";
 
 @Component({
   selector: "app-export",
@@ -39,11 +39,11 @@ export class ExportComponent extends BaseExportComponent {
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder,
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
     modalConfig: ModalConfig,
+    formBuilder: FormBuilder,
     fileDownloadService: FileDownloadService
   ) {
     super(
@@ -56,11 +56,11 @@ export class ExportComponent extends BaseExportComponent {
       window,
       logService,
       userVerificationService,
-      formBuilder,
       modalService,
       apiService,
       stateService,
       modalConfig,
+      formBuilder,
       fileDownloadService
     );
   }

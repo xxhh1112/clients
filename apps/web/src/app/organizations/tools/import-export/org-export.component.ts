@@ -32,11 +32,11 @@ export class OrganizationExportComponent extends ExportComponent {
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder,
     modalService: ModalService,
     apiService: ApiService,
     stateService: StateService,
     modalConfig: ModalConfig,
+    formBuilder: FormBuilder,
     fileDownloadService: FileDownloadService
   ) {
     super(
@@ -48,11 +48,11 @@ export class OrganizationExportComponent extends ExportComponent {
       policyService,
       logService,
       userVerificationService,
-      formBuilder,
       modalService,
       apiService,
       stateService,
       modalConfig,
+      formBuilder,
       fileDownloadService
     );
   }

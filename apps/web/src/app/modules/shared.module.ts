@@ -61,6 +61,7 @@ import {
   BadgeModule,
   ButtonModule,
   CalloutModule,
+  FormFieldModule,
   MenuModule,
   SubmitButtonModule,
 } from "@bitwarden/components";
@@ -132,6 +133,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     BadgeModule,
     ButtonModule,
     MenuModule,
+    FormFieldModule,
     SubmitButtonModule,
   ],
   exports: [
@@ -149,6 +151,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     BadgeModule,
     ButtonModule,
     MenuModule,
+    FormFieldModule,
     SubmitButtonModule,
   ],
   providers: [DatePipe],

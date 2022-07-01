@@ -13,6 +13,8 @@ import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abs
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
 
+import { SharedModule } from "src/app/modules/shared.module";
+
 import { LooseComponentsModule } from "../../modules/loose-components.module";
 
 import { ExportComponent } from "./export.component";
@@ -27,6 +29,7 @@ import { ImportComponent } from "./import.component";
     FormsModule,
     ReactiveFormsModule,
     ImportExportRoutingModule,
+    SharedModule,
   ],
   declarations: [ImportComponent, ExportComponent],
   providers: [

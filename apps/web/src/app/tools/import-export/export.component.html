@@ -1,7 +1,6 @@
 <form
   #form
   (ngSubmit)="submit()"
-  ngNativeValidate
   [appApiAction]="formPromise"
   [formGroup]="exportForm"
   *ngIf="exportForm"
@@ -20,10 +19,12 @@
 
   <div class="row">
     <div class="form-group col-6">
-      <label class="tw-text-sm tw-semi-bold" for="format">{{ "fileFormat" | i18n }}</label>
-      <select class="form-control" name="format" formControlName="format">
-        <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
-      </select>
+      <bit-form-field>
+        <bit-label for="format">{{ "fileFormat" | i18n }}</bit-label>
+        <select bitInput name="format" formControlName="format">
+          <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
+        </select>
+      </bit-form-field>
     </div>
   </div>
   <div class="row">
@@ -79,51 +80,57 @@
         <br />
 
         <ng-container *ngIf="fileEncryptionType == 1">
-          <label for="format">{{ "filePassword" | i18n }}</label>
-
           <div class="input-group">
-            <input
-              type="{{ showPassword ? 'text' : 'password' }}"
-              formControlName="password"
-              name="password"
-              class="form-control"
-            />
-            <div class="input-group-append">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                appStopClick
-                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-pressed]="showPassword"
-                (click)="togglePassword()"
-              >
-                <i
-                  class="bwi bwi-lg"
-                  aria-hidden="true"
-                  [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-                ></i>
-              </button>
-            </div>
-          </div>
+            <bit-form-field>
+              <bit-label>{{ "filePassword" | i18n }}</bit-label>
+              <input
+                bitInput
+                required
+                type="{{ showPassword ? 'text' : 'password' }}"
+                formControlName="password"
+                name="password"
+              />
 
+              <div class="input-group-append">
+                <button
+                  bitSuffix
+                  bitButton
+                  buttonType="secondary"
+                  appStopClick
+                  appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                  [attr.aria-pressed]="showPassword"
+                  (click)="togglePassword()"
+                >
+                  <i
+                    class="bwi bwi-lg"
+                    aria-hidden="true"
+                    [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                  ></i>
+                </button>
+              </div>
+            </bit-form-field>
+          </div>
           <div class="small text-muted">
             {{ "exportPasswordDescription" | i18n }}
           </div>
           <br />
-          <label for="format">{{ "confirmFilePassword" | i18n }}</label>
-          <div class="input-group">
-            <input
-              formControlName="confirmPassword"
-              name="confirmPassword"
-              class="form-control"
-              type="{{ showConfirmPassword ? 'text' : 'password' }}"
-            />
 
-            <div class="input-group-append">
-              <div class="action-buttons">
+          <div class="input-group">
+            <bit-form-field>
+              <bit-label>{{ "confirmFilePassword" | i18n }}</bit-label>
+              <input
+                bitInput
+                required
+                type="{{ showConfirmPassword ? 'text' : 'password' }}"
+                formControlName="confirmPassword"
+                name="confirmPassword"
+              />
+
+              <div class="input-group-append">
                 <button
-                  type="button"
-                  class="btn btn-outline-secondary"
+                  bitSuffix
+                  bitButton
+                  buttonType="secondary"
                   appStopClick
                   appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                   [attr.aria-pressed]="showConfirmPassword"
@@ -139,11 +146,11 @@
                   ></i>
                 </button>
               </div>
-            </div>
+            </bit-form-field>
           </div>
-          <br />
         </ng-container>
       </ng-container>
+
       <button
         type="submit"
         class="btn btn-primary btn-submit"
