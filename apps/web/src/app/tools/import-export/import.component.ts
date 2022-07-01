@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import * as JSZip from "jszip";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
-import { FilePasswordPromptComponent } from "@bitwarden/angular/components/file-password-prompt.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
@@ -15,6 +14,7 @@ import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions"
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ImportError } from "@bitwarden/common/importers/importError";
 
+import { FilePasswordPromptComponent } from "src/app/components/file-password-prompt.component";
 
 @Component({
   selector: "app-import",

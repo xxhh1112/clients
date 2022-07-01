@@ -69,6 +69,7 @@ export class ExportComponent implements OnInit {
 
   async ngOnInit() {
     await this.checkExportDisabled();
+    this.exportForm.get("fileEncryptionType").setValue(0);
   }
 
   async checkExportDisabled() {

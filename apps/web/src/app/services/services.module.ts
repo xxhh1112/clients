@@ -24,6 +24,7 @@ import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abs
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
+import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
@@ -104,6 +105,19 @@ import { WebFileDownloadService } from "./webFileDownload.service";
     { provide: MessagingServiceAbstraction, useClass: BroadcasterMessagingService },
     { provide: ModalServiceAbstraction, useClass: ModalService },
     { provide: ModalConfigAbstraction, useClass: ModalConfig },
+    {
+      provide: ImportServiceAbstraction,
+      useClass: ImportService,
+      deps: [
+        CipherServiceAbstraction,
+        FolderServiceAbstraction,
+        ApiServiceAbstraction,
+        I18nServiceAbstraction,
+        CollectionServiceAbstraction,
+        PlatformUtilsServiceAbstraction,
+        CryptoServiceAbstraction,
+      ],
+    },
     {
       provide: ExportServiceAbstraction,
       useClass: ExportService,

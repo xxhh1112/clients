@@ -111,14 +111,12 @@ export class ExportComponent extends BaseExportComponent {
   }
 
   togglePassword() {
-    this.exportForm.get("showPassword").setValue(!this.exportForm.get("showPassword").value);
+    this.showPassword = !this.showPassword;
     document.getElementById("newPassword").focus();
   }
 
   toggleConfirmPassword() {
-    this.exportForm
-      .get("showConfirmPassword")
-      .setValue(!this.exportForm.get("showConfirmPassword").value);
+    this.showConfirmPassword = !this.showConfirmPassword;
     document.getElementById("newConfirmPassword").focus();
   }
 
