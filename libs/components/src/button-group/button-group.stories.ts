@@ -1,13 +1,19 @@
-import { Meta, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
+import { ButtonModule } from "../button/button.module";
+
+import { ButtonGroupElementComponent } from "./button-group-element.component";
 import { ButtonGroupComponent } from "./button-group.component";
 
 export default {
   title: "Component Library/Button Group",
   component: ButtonGroupComponent,
-  args: {
-    type: "primary",
-  },
+  decorators: [
+    moduleMetadata({
+      declarations: [ButtonGroupComponent, ButtonGroupElementComponent],
+      imports: [ButtonModule],
+    }),
+  ],
   parameters: {
     design: {
       type: "figma",
@@ -16,16 +22,22 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
-  props: args,
+const Template: Story<ButtonGroupComponent> = () => ({
   template: `
-    <bit-button-group [buttonType]="buttonType" [block]="block">
-      Group
+    <bit-button-group>
+      <bit-button-group-element>
+        Left
+      </bit-button-group-element>
+
+      <bit-button-group-element>
+        Center
+      </bit-button-group-element>
+
+      <bit-button-group-element>
+        Right
+      </bit-button-group-element>
     </bit-button-group>
   `,
 });
 
-export const Primary = Template.bind({});
-Primary.args = {
-  type: "primary",
-};
+export const Standard = Template.bind({});
