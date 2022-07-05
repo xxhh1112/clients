@@ -81,7 +81,6 @@ jobs:
 
   snap:
     name: Deploy Snap
-    if: false
     runs-on: ubuntu-20.04
     needs: setup
     env:
@@ -125,7 +124,6 @@ jobs:
 
   choco:
     name: Deploy Choco
-    if: false
     runs-on: windows-2019
     needs: setup
     env:
