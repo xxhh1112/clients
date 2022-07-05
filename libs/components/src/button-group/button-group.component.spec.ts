@@ -3,14 +3,13 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 
 import { ButtonGroupElementComponent } from "./button-group-element.component";
-import { ButtonGroupComponent } from "./button-group.component";
 import { ButtonGroupModule } from "./button-group.module";
 
 describe("Button", () => {
   let fixture: ComponentFixture<TestApp>;
   let testAppComponent: TestApp;
-  let buttonGroup: ButtonGroupComponent;
   let buttonElements: ButtonGroupElementComponent[];
+  let radioButtons: HTMLInputElement[];
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -21,10 +20,12 @@ describe("Button", () => {
     TestBed.compileComponents();
     fixture = TestBed.createComponent(TestApp);
     testAppComponent = fixture.debugElement.componentInstance;
-    buttonGroup = fixture.debugElement.query(By.css("bit-button-group")).componentInstance;
     buttonElements = fixture.debugElement
       .queryAll(By.css("bit-button-group-element"))
       .map((e) => e.componentInstance);
+    radioButtons = fixture.debugElement
+      .queryAll(By.css("input[type=radio]"))
+      .map((e) => e.nativeElement);
 
     fixture.detectChanges();
   }));
@@ -42,12 +43,21 @@ describe("Button", () => {
 
     expect(buttonElements[1].selected).toBe(false);
   });
+
+  it("should emit new value when changing selection by clicking on radio button", () => {
+    testAppComponent.selected = "first";
+    fixture.detectChanges();
+
+    radioButtons[1].click();
+
+    expect(testAppComponent.selected).toBe("second");
+  });
 });
 
 @Component({
   selector: "test-app",
   template: `
-    <bit-button-group [selected]="selected">
+    <bit-button-group [(selected)]="selected">
       <bit-button-group-element value="first">First</bit-button-group-element>
       <bit-button-group-element value="second">Second</bit-button-group-element>
       <bit-button-group-element value="third">Third</bit-button-group-element>

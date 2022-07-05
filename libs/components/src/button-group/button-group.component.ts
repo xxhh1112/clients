@@ -34,6 +34,6 @@ export class ButtonGroupComponent {
   @HostBinding("attr.aria-labelledby") labelId = `bit-button-group-label-${this.id}`;
 
   onInputInteraction(value: unknown) {
-    console.log("onInputInteraction", value);
+    this.selectedChange.emit(value);
   }
 }
