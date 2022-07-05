@@ -1,4 +1,5 @@
-import { HostBinding, Component, Optional, Inject } from "@angular/core";
+import { FocusableOption } from "@angular/cdk/a11y";
+import { HostBinding, Component, Optional, Inject, ViewChild, ElementRef } from "@angular/core";
 
 import { ButtonGroupComponent } from "./button-group.component";
 
@@ -8,12 +9,16 @@ let nextId = 0;
   selector: "bit-button-group-element",
   templateUrl: "./button-group-element.component.html",
 })
-export class ButtonGroupElementComponent {
+export class ButtonGroupElementComponent implements FocusableOption {
+  @ViewChild("input") private inputElement: ElementRef<HTMLInputElement>;
+
   id = nextId++;
 
   constructor(
     @Optional() @Inject(ButtonGroupComponent) private groupComponent: ButtonGroupComponent
   ) {}
+
+  @HostBinding("tabIndex") tabIndex = "-1";
 
   @HostBinding("class") get classList() {
     return ["tw-group"];
@@ -21,6 +26,10 @@ export class ButtonGroupElementComponent {
 
   get name() {
     return this.groupComponent?.name;
+  }
+
+  get inputClasses() {
+    return ["tw-peer", "tw-appearance-none", "tw-outline-none"];
   }
 
   get labelClasses() {
@@ -40,13 +49,14 @@ export class ButtonGroupElementComponent {
       "group-first:tw-rounded-l",
       "group-last:tw-rounded-r",
 
-      "focus:tw-outline-none",
-      "focus:tw-ring",
-      "focus:tw-ring-offset-2",
-      "focus:tw-ring-primary-700",
-      "focus:tw-z-10",
-      "focus:tw-bg-primary-700",
-      "focus:tw-border-primary-700",
+      "peer-focus:tw-outline-none",
+      "peer-focus:tw-ring",
+      "peer-focus:tw-ring-offset-2",
+      "peer-focus:tw-ring-primary-500",
+      "peer-focus:tw-z-10",
+      "peer-focus:tw-bg-primary-500",
+      "peer-focus:tw-border-primary-500",
+      "peer-focus:tw-text-contrast",
 
       "hover:tw-no-underline",
       "hover:tw-bg-text-muted",
@@ -57,5 +67,9 @@ export class ButtonGroupElementComponent {
       "peer-checked:tw-border-primary-500",
       "peer-checked:tw-text-contrast",
     ];
+  }
+
+  focus() {
+    this.inputElement.nativeElement.focus();
   }
 }
