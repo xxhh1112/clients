@@ -43,9 +43,9 @@ export class ButtonGroupElementComponent implements FocusableOption {
       "tw-border-y",
       "tw-border-r",
       "tw-border-l-0",
-      "group-first:tw-border-l",
-      "group-first:tw-rounded-l",
-      "group-last:tw-rounded-r",
+      "group-first-of-type:tw-border-l",
+      "group-first-of-type:tw-rounded-l",
+      "group-last-of-type:tw-rounded-r",
 
       "peer-focus:tw-outline-none",
       "peer-focus:tw-ring",
