@@ -37,6 +37,22 @@ const Template: Story<ButtonGroupComponent> = () => ({
         Right
       </bit-button-group-element>
     </bit-button-group>
+
+    <bit-button-group class="tw-ml-2">
+      <bit-button-group-element>
+        Left
+      </bit-button-group-element>
+
+      <bit-button-group-element>
+        Right
+      </bit-button-group-element>
+    </bit-button-group>
+
+    <bit-button-group class="tw-ml-2">
+      <bit-button-group-element>
+        Single
+      </bit-button-group-element>
+    </bit-button-group>
   `,
 });
 
