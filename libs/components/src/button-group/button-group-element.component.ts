@@ -1,5 +1,13 @@
 import { FocusableOption } from "@angular/cdk/a11y";
-import { HostBinding, Component, Optional, Inject, ViewChild, ElementRef } from "@angular/core";
+import {
+  HostBinding,
+  Component,
+  Optional,
+  Inject,
+  ViewChild,
+  ElementRef,
+  Input,
+} from "@angular/core";
 
 import { ButtonGroupComponent } from "./button-group.component";
 
@@ -14,12 +22,13 @@ export class ButtonGroupElementComponent implements FocusableOption {
 
   id = nextId++;
 
+  @Input() selected = false;
+
   constructor(
-    @Optional() @Inject(ButtonGroupComponent) private groupComponent: ButtonGroupComponent
+    @Optional() @Inject(ButtonGroupComponent) private groupComponent?: ButtonGroupComponent
   ) {}
 
   @HostBinding("tabIndex") tabIndex = "-1";
-
   @HostBinding("class") get classList() {
     return ["tw-group"];
   }
@@ -65,7 +74,7 @@ export class ButtonGroupElementComponent implements FocusableOption {
       "peer-checked:tw-border-primary-500",
       "peer-checked:tw-text-contrast",
     ].concat(
-      this.groupComponent.size === "small" ? ["tw-py-1", "tw-px-2"] : ["tw-py-1.5", "tw-px-3"]
+      this.groupComponent?.size === "small" ? ["tw-py-1", "tw-px-2"] : ["tw-py-1.5", "tw-px-3"]
     );
   }
 
