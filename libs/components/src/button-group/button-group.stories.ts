@@ -8,6 +8,9 @@ import { ButtonGroupComponent } from "./button-group.component";
 export default {
   title: "Component Library/Button Group",
   component: ButtonGroupComponent,
+  args: {
+    size: "default",
+  },
   decorators: [
     moduleMetadata({
       declarations: [ButtonGroupComponent, ButtonGroupElementComponent],
@@ -22,9 +25,10 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ButtonGroupComponent> = () => ({
+const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
+  props: args,
   template: `
-    <bit-button-group>
+    <bit-button-group [size]="size">
       <bit-button-group-element>
         Left
       </bit-button-group-element>
@@ -38,7 +42,7 @@ const Template: Story<ButtonGroupComponent> = () => ({
       </bit-button-group-element>
     </bit-button-group>
 
-    <bit-button-group class="tw-ml-2">
+    <bit-button-group [size]="size" class="tw-ml-2">
       <bit-button-group-element>
         Left
       </bit-button-group-element>
@@ -48,7 +52,7 @@ const Template: Story<ButtonGroupComponent> = () => ({
       </bit-button-group-element>
     </bit-button-group>
 
-    <bit-button-group class="tw-ml-2">
+    <bit-button-group [size]="size" class="tw-ml-2">
       <bit-button-group-element>
         Single
       </bit-button-group-element>
@@ -56,4 +60,12 @@ const Template: Story<ButtonGroupComponent> = () => ({
   `,
 });
 
-export const Standard = Template.bind({});
+export const Default = Template.bind({});
+Default.args = {
+  size: "default",
+};
+
+export const Small = Template.bind({});
+Small.args = {
+  size: "small",
+};

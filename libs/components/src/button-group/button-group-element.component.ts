@@ -35,8 +35,6 @@ export class ButtonGroupElementComponent implements FocusableOption {
   get labelClasses() {
     return [
       "tw-font-semibold",
-      "tw-py-1.5",
-      "tw-px-3",
       "tw-transition",
       "tw-text-center",
       "tw-border-text-muted",
@@ -66,7 +64,9 @@ export class ButtonGroupElementComponent implements FocusableOption {
       "peer-checked:tw-bg-primary-500",
       "peer-checked:tw-border-primary-500",
       "peer-checked:tw-text-contrast",
-    ];
+    ].concat(
+      this.groupComponent.size === "small" ? ["tw-py-1", "tw-px-2"] : ["tw-py-1.5", "tw-px-3"]
+    );
   }
 
   focus() {
