@@ -11,6 +11,8 @@ let nextId = 0;
 export class ButtonGroupComponent {
   private id = nextId++;
 
+  externalSelectionChange = new EventEmitter<unknown>();
+
   @Input() label?: string;
   @Input() name = `bit-button-group-${this.id}`;
   @Input() size: ButtonGroupSizes = "default";

@@ -7,7 +7,9 @@ import {
   ViewChild,
   ElementRef,
   Input,
+  OnDestroy,
 } from "@angular/core";
+import { Subscription } from "rxjs";
 
 import { ButtonGroupComponent } from "./button-group.component";
 
@@ -17,8 +19,10 @@ let nextId = 0;
   selector: "bit-button-group-element",
   templateUrl: "./button-group-element.component.html",
 })
-export class ButtonGroupElementComponent implements FocusableOption {
+export class ButtonGroupElementComponent implements FocusableOption, OnDestroy {
   @ViewChild("input") private inputElement: ElementRef<HTMLInputElement>;
+
+  private subscription: Subscription;
 
   id = nextId++;
   selected = false;
@@ -27,7 +31,11 @@ export class ButtonGroupElementComponent implements FocusableOption {
 
   constructor(
     @Optional() @Inject(ButtonGroupComponent) private groupComponent?: ButtonGroupComponent
-  ) {}
+  ) {
+    this.subscription = groupComponent.externalSelectionChange.subscribe((value) => {
+      this.selected = value === this.value;
+    });
+  }
 
   @HostBinding("tabIndex") tabIndex = "-1";
   @HostBinding("class") get classList() {
@@ -85,5 +93,9 @@ export class ButtonGroupElementComponent implements FocusableOption {
 
   onInputInteraction() {
     this.groupComponent?.onInputInteraction(this.value);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

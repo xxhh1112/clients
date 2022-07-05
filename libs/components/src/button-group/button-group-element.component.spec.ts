@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 
@@ -35,10 +35,32 @@ describe("Button", () => {
 
     expect(mockGroupComponent.onInputInteraction).toHaveBeenCalledWith("value");
   });
+
+  it("should check radio button when externally changed value matches value", () => {
+    testAppComponent.value = "value";
+    fixture.detectChanges();
+
+    mockGroupComponent.externalSelectionChange.emit("value");
+    fixture.detectChanges();
+
+    expect(radioButton.checked).toBe(true);
+  });
+
+  it("should not check radio button when externally changed value does not match value", () => {
+    testAppComponent.value = "value";
+    fixture.detectChanges();
+
+    mockGroupComponent.externalSelectionChange.emit("nonMatchingValue");
+    fixture.detectChanges();
+
+    expect(radioButton.checked).toBe(false);
+  });
 });
 
 class MockedButtonGroupComponent implements Partial<ButtonGroupComponent> {
   onInputInteraction = jest.fn();
+
+  externalSelectionChange = new EventEmitter<unknown>();
 }
 
 @Component({
