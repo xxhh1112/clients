@@ -10,12 +10,23 @@ let nextId = 0;
 })
 export class ButtonGroupComponent {
   private id = nextId++;
+  private _selected?: string;
 
   externalSelectionChange = new EventEmitter<unknown>();
 
   @Input() label?: string;
   @Input() name = `bit-button-group-${this.id}`;
   @Input() size: ButtonGroupSizes = "default";
+
+  @Input()
+  get selected(): string | undefined {
+    return this._selected;
+  }
+
+  set selected(value: string | undefined) {
+    this._selected = value;
+    this.externalSelectionChange.emit(value);
+  }
 
   @Output() selectedChange = new EventEmitter<unknown>();
 

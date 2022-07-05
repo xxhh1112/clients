@@ -10,6 +10,7 @@ export default {
   component: ButtonGroupComponent,
   args: {
     size: "default",
+    selected: "left",
   },
   decorators: [
     moduleMetadata({
@@ -28,7 +29,7 @@ export default {
 const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
   props: args,
   template: `
-    <bit-button-group [size]="size" label="Example with 3 grouped buttons">
+    <bit-button-group [size]="size" [selected]="selected" label="Example with 3 grouped buttons">
       <bit-button-group-element value="left">
         Left
       </bit-button-group-element>
@@ -42,7 +43,7 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
       </bit-button-group-element>
     </bit-button-group>
 
-    <bit-button-group [size]="size" label="Example with 2 grouped buttons" class="tw-ml-2">
+    <bit-button-group [size]="size" [selected]="selected" label="Example with 2 grouped buttons" class="tw-ml-2">
       <bit-button-group-element value="left">
         Left
       </bit-button-group-element>
@@ -52,9 +53,9 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
       </bit-button-group-element>
     </bit-button-group>
 
-    <bit-button-group [size]="size" label="Example with 1 grouped button" class="tw-ml-2">
+    <bit-button-group [size]="size" [selected]="selected" label="Example with 1 grouped button" class="tw-ml-2">
       <bit-button-group-element value="single">
-        Single
+        Left
       </bit-button-group-element>
     </bit-button-group>
   `,
@@ -63,9 +64,11 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
 export const Default = Template.bind({});
 Default.args = {
   size: "default",
+  selected: "left",
 };
 
 export const Small = Template.bind({});
 Small.args = {
   size: "small",
+  selected: "left",
 };
