@@ -29,31 +29,31 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
   props: args,
   template: `
     <bit-button-group [size]="size" label="Example with 3 grouped buttons">
-      <bit-button-group-element>
+      <bit-button-group-element value="left">
         Left
       </bit-button-group-element>
 
-      <bit-button-group-element>
+      <bit-button-group-element value="center">
         Center
       </bit-button-group-element>
 
-      <bit-button-group-element>
+      <bit-button-group-element value="right">
         Right
       </bit-button-group-element>
     </bit-button-group>
 
     <bit-button-group [size]="size" label="Example with 2 grouped buttons" class="tw-ml-2">
-      <bit-button-group-element>
+      <bit-button-group-element value="left">
         Left
       </bit-button-group-element>
 
-      <bit-button-group-element>
+      <bit-button-group-element value="right">
         Right
       </bit-button-group-element>
     </bit-button-group>
 
     <bit-button-group [size]="size" label="Example with 1 grouped button" class="tw-ml-2">
-      <bit-button-group-element>
+      <bit-button-group-element value="single">
         Single
       </bit-button-group-element>
     </bit-button-group>

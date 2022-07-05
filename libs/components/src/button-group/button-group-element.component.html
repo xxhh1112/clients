@@ -4,6 +4,7 @@
   [name]="name"
   [ngClass]="inputClasses"
   [checked]="selected"
+  (change)="onInputInteraction()"
 />
 <label for="bit-button-group-element-{{ id }}" [ngClass]="labelClasses">
   <ng-content></ng-content>

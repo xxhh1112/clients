@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from "@angular/core";
+import { Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 
 export type ButtonGroupSizes = "small" | "default";
 
@@ -15,6 +15,12 @@ export class ButtonGroupComponent {
   @Input() name = `bit-button-group-${this.id}`;
   @Input() size: ButtonGroupSizes = "default";
 
+  @Output() selectedChange = new EventEmitter<unknown>();
+
   @HostBinding("attr.role") role = "radiogroup";
   @HostBinding("attr.aria-labelledby") labelId = `bit-button-group-label-${this.id}`;
+
+  onInputInteraction(value: unknown) {
+    console.log("onInputInteraction", value);
+  }
 }

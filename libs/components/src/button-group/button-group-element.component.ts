@@ -21,8 +21,9 @@ export class ButtonGroupElementComponent implements FocusableOption {
   @ViewChild("input") private inputElement: ElementRef<HTMLInputElement>;
 
   id = nextId++;
+  selected = false;
 
-  @Input() selected = false;
+  @Input() value?: string;
 
   constructor(
     @Optional() @Inject(ButtonGroupComponent) private groupComponent?: ButtonGroupComponent
@@ -80,5 +81,9 @@ export class ButtonGroupElementComponent implements FocusableOption {
 
   focus() {
     this.inputElement.nativeElement.focus();
+  }
+
+  onInputInteraction() {
+    this.groupComponent?.onInputInteraction(this.value);
   }
 }
