@@ -1,5 +1,6 @@
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
+import { BadgeModule } from "../badge";
 import { ButtonModule } from "../button/button.module";
 
 import { ButtonGroupElementComponent } from "./button-group-element.component";
@@ -15,7 +16,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [ButtonGroupComponent, ButtonGroupElementComponent],
-      imports: [ButtonModule],
+      imports: [ButtonModule, BadgeModule],
     }),
   ],
   parameters: {
@@ -31,7 +32,7 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
   template: `
     <bit-button-group [size]="size" [(selected)]="selected" label="Example with 3 grouped buttons">
       <bit-button-group-element value="left">
-        Left
+        Left <span bitBadge badgeType="info">1</span>
       </bit-button-group-element>
 
       <bit-button-group-element value="center">
@@ -40,22 +41,6 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
 
       <bit-button-group-element value="right">
         Right
-      </bit-button-group-element>
-    </bit-button-group>
-
-    <bit-button-group [size]="size" [(selected)]="selected" label="Example with 2 grouped buttons" class="tw-ml-2">
-      <bit-button-group-element value="left">
-        Left
-      </bit-button-group-element>
-
-      <bit-button-group-element value="right">
-        Right
-      </bit-button-group-element>
-    </bit-button-group>
-
-    <bit-button-group [size]="size" [(selected)]="selected" label="Example with 1 grouped button" class="tw-ml-2">
-      <bit-button-group-element value="left">
-        Left
       </bit-button-group-element>
     </bit-button-group>
   `,
