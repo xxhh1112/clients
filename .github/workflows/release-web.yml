@@ -21,6 +21,7 @@ jobs:
     outputs:
       release_version: ${{ steps.version.outputs.version }}
       tag_version: ${{ steps.version.outputs.tag }}
+      branch_name: ${{ steps.get-branch.outputs.branch_name }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
@@ -34,6 +35,12 @@ jobs:
             echo "==================================="
             exit 1
           fi
+
+      - name: Compute Branch Name
+        id: get-branch
+        run:
+          BRANCH_NAME=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")  # slash safe branch name
+          echo "::set-output name=branch_name::$BRANCH_NAME"
 
       - name: Check Release Version
         id: version
@@ -51,7 +58,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: setup
     env:
-      _BRANCH_NAME: ${{ github.ref_name }}
+      _BRANCH_NAME: ${{ needs.setup.outputs.branch_name }}
       _RELEASE_VERSION: ${{ needs.setup.outputs.release_version }}
       _RELEASE_OPTION: ${{ github.event.inputs.release_type }}
     steps:
@@ -62,6 +69,7 @@ jobs:
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
           echo "Github Release Option: $_RELEASE_OPTION"
+
 
       - name: Checkout repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
