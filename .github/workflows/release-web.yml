@@ -38,7 +38,7 @@ jobs:
 
       - name: Compute Branch Name
         id: get-branch
-        run:
+        run: |
           BRANCH_NAME=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")  # slash safe branch name
           echo "::set-output name=branch_name::$BRANCH_NAME"
 
