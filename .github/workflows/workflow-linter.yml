@@ -8,4 +8,5 @@ on:
 
 jobs:
   call-workflow:
+    if: false
     uses: bitwarden/gh-actions/.github/workflows/workflow-linter.yml@master
