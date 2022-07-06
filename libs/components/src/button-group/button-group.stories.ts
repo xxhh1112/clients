@@ -1,7 +1,6 @@
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { BadgeModule } from "../badge";
-import { ButtonModule } from "../button/button.module";
 
 import { ButtonGroupElementComponent } from "./button-group-element.component";
 import { ButtonGroupComponent } from "./button-group.component";
@@ -16,7 +15,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [ButtonGroupComponent, ButtonGroupElementComponent],
-      imports: [ButtonModule, BadgeModule],
+      imports: [BadgeModule],
     }),
   ],
   parameters: {
