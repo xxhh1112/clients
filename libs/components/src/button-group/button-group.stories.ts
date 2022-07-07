@@ -1,3 +1,4 @@
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { BadgeModule } from "../badge";
@@ -14,7 +15,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [ButtonGroupComponent, ButtonGroupElementComponent],
-      imports: [BadgeModule],
+      imports: [FormsModule, ReactiveFormsModule, BadgeModule],
     }),
   ],
   parameters: {
@@ -26,21 +27,41 @@ export default {
 } as Meta;
 
 const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
-  props: args,
+  props: {
+    form: new FormGroup({
+      position: new FormControl("left"),
+    }),
+    ...args,
+  },
   template: `
-    <bit-button-group [(selected)]="selected" label="Example with 3 grouped buttons">
-      <bit-button-group-element value="left">
-        Left <span bitBadge badgeType="info">1</span>
-      </bit-button-group-element>
-
-      <bit-button-group-element value="center">
-        Center
-      </bit-button-group-element>
-
-      <bit-button-group-element value="right">
-        Right
-      </bit-button-group-element>
-    </bit-button-group>
+    <h3 class="tw-text-main">Template-driven forms (ngModel)</h3>
+    <p>
+      <bit-button-group [(ngModel)]="selected" label="Example with 3 grouped buttons">
+        <bit-button-group-element value="left">
+          Left <span bitBadge badgeType="info">1</span>
+        </bit-button-group-element>
+        <bit-button-group-element value="center">
+          Center
+        </bit-button-group-element>
+        <bit-button-group-element value="right">
+          Right
+        </bit-button-group-element>
+      </bit-button-group>
+    </p>
+    <h3 class="tw-text-main">Reactive forms (form control)</h3>
+    <form [formGroup]="form">
+      <bit-button-group formControlName="position" label="Example with 3 grouped buttons">
+        <bit-button-group-element value="left">
+          Left <span bitBadge badgeType="info">1</span>
+        </bit-button-group-element>
+        <bit-button-group-element value="center">
+          Center
+        </bit-button-group-element>
+        <bit-button-group-element value="right">
+          Right
+        </bit-button-group-element>
+      </bit-button-group>
+    </form>
   `,
 });
 
