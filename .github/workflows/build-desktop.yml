@@ -121,7 +121,7 @@ jobs:
             echo "::set-output name=rc_branch_exists::0"
           fi
 
-          if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
+          if [[ $(git ls-remote --heads origin hotfix-rc/org-reset-key-fix) ]]; then
             echo "::set-output name=hotfix_branch_exists::1"
           else
             echo "::set-output name=hotfix_branch_exists::0"
@@ -668,7 +668,7 @@ jobs:
         run: npm run build
 
       - name: Extract branch name
-        if: contains(github.ref, 'hotfix-rc')
+        if: contains(github.ref, 'hotfix-rc/org-reset-key-fix')
         id: extract_branch
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -939,7 +939,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+            || github.ref == 'refs/heads/hotfix-rc/org-reset-key-fix'
         run: npm run upload:mas
 
 
