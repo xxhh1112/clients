@@ -1,7 +1,5 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from "@angular/core";
 
-export type ButtonGroupSizes = "small" | "default";
-
 let nextId = 0;
 
 @Component({
@@ -13,7 +11,6 @@ export class ButtonGroupComponent {
 
   @Input() label?: string;
   @Input() name = `bit-button-group-${this.id}`;
-  @Input() size: ButtonGroupSizes = "default";
 
   @Input() selected?: unknown;
   @Output() selectedChange = new EventEmitter<unknown>();

@@ -9,7 +9,6 @@ export default {
   title: "Component Library/Button Group",
   component: ButtonGroupComponent,
   args: {
-    size: "default",
     selected: "left",
   },
   decorators: [
@@ -29,7 +28,7 @@ export default {
 const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
   props: args,
   template: `
-    <bit-button-group [size]="size" [(selected)]="selected" label="Example with 3 grouped buttons">
+    <bit-button-group [(selected)]="selected" label="Example with 3 grouped buttons">
       <bit-button-group-element value="left">
         Left <span bitBadge badgeType="info">1</span>
       </bit-button-group-element>
@@ -47,12 +46,5 @@ const Template: Story<ButtonGroupComponent> = (args: ButtonGroupComponent) => ({
 
 export const Default = Template.bind({});
 Default.args = {
-  size: "default",
-  selected: "left",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
   selected: "left",
 };
