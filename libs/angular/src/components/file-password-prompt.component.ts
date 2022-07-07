@@ -1,4 +1,5 @@
 import { Directive } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
@@ -13,20 +14,24 @@ import { ModalRef } from "./modal/modal.ref";
  */
 @Directive()
 export class FilePasswordPromptComponent {
-  showPassword = false;
-  filePassword = "";
-  organizationId = "";
-  fileContents = "";
+  showPassword: boolean;
+
+  importForm = this.formBuilder.group({
+    filePassword: [""],
+    organizationId: [""],
+    fileContents: [""],
+  });
 
   constructor(
     private modalRef: ModalRef,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private importService: ImportService,
-    config: ModalConfig
+    config: ModalConfig,
+    protected formBuilder: FormBuilder
   ) {
-    this.fileContents = config.data.fileContents;
-    this.organizationId = config.data.organizationId;
+    this.importForm.get("fileContents").setValue(config.data.fileContents);
+    this.importForm.get("organizationId").setValue(config.data.organizationId);
   }
 
   togglePassword() {
@@ -36,14 +41,14 @@ export class FilePasswordPromptComponent {
   async submit() {
     const importerPassword = this.importService.getImporter(
       "bitwardenpasswordprotected",
-      this.organizationId,
-      this.filePassword
+      this.importForm.get("organizationId").value,
+      this.importForm.get("filePassword").value
     );
 
     const formPromise = this.importService.import(
       importerPassword,
-      this.fileContents,
-      this.organizationId
+      this.importForm.get("fileContents").value,
+      this.importForm.get("organizationId").value
     );
     const passwordError = await formPromise;
 
