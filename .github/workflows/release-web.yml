@@ -40,6 +40,9 @@ jobs:
         id: get-branch
         run: |
           BRANCH_NAME=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")  # slash safe branch name
+          if [[ "${BRANCH_NAME:0:9}" == "hotfix-rc" ]]; then
+            BRANCH_NAME=hotfix-rc
+          fi
           echo "::set-output name=branch_name::$BRANCH_NAME"
 
       - name: Check Release Version
