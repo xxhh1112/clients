@@ -939,7 +939,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc/org-reset-key-fix'
+            || github.ref == 'refs/heads/hotfix-rc/desktop-biometric'
         run: npm run upload:mas
 
 
