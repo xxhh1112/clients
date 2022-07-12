@@ -8,7 +8,13 @@ export default class VaultTimeoutService extends BaseVaultTimeoutService {
     if (this.platformUtilsService.isSafari()) {
       this.checkSafari();
     } else {
-      setInterval(() => this.checkVaultTimeout(), 10 * 1000); // check every 10 seconds
+      // setInterval(() => this.checkVaultTimeout(), 10 * 1000); // check every 10 seconds
+
+      // chrome won't allow alarms shorter than 1 min
+      chrome.alarms.create("alarm", { periodInMinutes: 1 });
+      chrome.alarms.onAlarm.addListener(() => {
+        this.checkVaultTimeout();
+      });
     }
   }
 
