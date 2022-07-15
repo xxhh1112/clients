@@ -70,8 +70,6 @@ import { PolicyRequest } from "../models/request/policyRequest";
 import { PreloginRequest } from "../models/request/preloginRequest";
 import { ProviderAddOrganizationRequest } from "../models/request/provider/providerAddOrganizationRequest";
 import { ProviderOrganizationCreateRequest } from "../models/request/provider/providerOrganizationCreateRequest";
-import { ProviderSetupRequest } from "../models/request/provider/providerSetupRequest";
-import { ProviderUpdateRequest } from "../models/request/provider/providerUpdateRequest";
 import { ProviderUserAcceptRequest } from "../models/request/provider/providerUserAcceptRequest";
 import { ProviderUserBulkConfirmRequest } from "../models/request/provider/providerUserBulkConfirmRequest";
 import { ProviderUserBulkRequest } from "../models/request/provider/providerUserBulkRequest";
@@ -158,7 +156,6 @@ import {
   ProviderOrganizationOrganizationDetailsResponse,
   ProviderOrganizationResponse,
 } from "../models/response/provider/providerOrganizationResponse";
-import { ProviderResponse } from "../models/response/provider/providerResponse";
 import { ProviderUserBulkPublicKeyResponse } from "../models/response/provider/providerUserBulkPublicKeyResponse";
 import { ProviderUserBulkResponse } from "../models/response/provider/providerUserBulkResponse";
 import {
@@ -1912,23 +1909,6 @@ export class ApiService implements ApiServiceAbstraction {
   ): Promise<OrganizationKeysResponse> {
     const r = await this.send("POST", "/organizations/" + id + "/keys", request, true, true);
     return new OrganizationKeysResponse(r);
-  }
-
-  // Provider APIs
-
-  async postProviderSetup(id: string, request: ProviderSetupRequest) {
-    const r = await this.send("POST", "/providers/" + id + "/setup", request, true, true);
-    return new ProviderResponse(r);
-  }
-
-  async getProvider(id: string) {
-    const r = await this.send("GET", "/providers/" + id, null, true, true);
-    return new ProviderResponse(r);
-  }
-
-  async putProvider(id: string, request: ProviderUpdateRequest) {
-    const r = await this.send("PUT", "/providers/" + id, request, true, true);
-    return new ProviderResponse(r);
   }
 
   // Provider User APIs
