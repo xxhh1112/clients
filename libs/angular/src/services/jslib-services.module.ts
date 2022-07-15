@@ -32,8 +32,8 @@ import { PasswordGenerationService as PasswordGenerationServiceAbstraction } fro
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService as PolicyServiceAbstraction } from "@bitwarden/common/abstractions/policy.service";
-import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common/abstractions/provider.service";
 import { ProviderApiServiceAbstraction } from "@bitwarden/common/abstractions/provider/provider-api.service.abstraction";
+import { ProviderServiceAbstraction } from "@bitwarden/common/abstractions/provider/provider.service.abstraction";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SendService as SendServiceAbstraction } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
@@ -71,8 +71,8 @@ import { NotificationsService } from "@bitwarden/common/services/notifications.s
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
 import { PolicyService } from "@bitwarden/common/services/policy.service";
-import { ProviderService } from "@bitwarden/common/services/provider.service";
 import { ProviderApiService } from "@bitwarden/common/services/provider/provider-api.service";
+import { ProviderService } from "@bitwarden/common/services/provider/provider.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { SendService } from "@bitwarden/common/services/send.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
