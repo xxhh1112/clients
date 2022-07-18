@@ -67,7 +67,7 @@ export class ExportComponent extends BaseExportComponent {
 
   async submit() {
     const confirmDescription =
-      this.exportForm.get("fileEncryptionType").value == EncryptedExportType.FileEncrypted
+      this.exportForm.get("fileEncryptionType").value === EncryptedExportType.FileEncrypted
         ? "confirmVaultExportDesc"
         : "encExportKeyWarningDesc";
     const confirmButtonText = "exportVault";
