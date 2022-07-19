@@ -35,7 +35,7 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
-import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
+import { InternalProviderService as InternalProviderServiceAbstraction } from "@bitwarden/common/abstractions/provider/provider.service.abstraction";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
@@ -50,6 +50,7 @@ import { UsernameGenerationService } from "@bitwarden/common/abstractions/userna
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
+import { ProviderService } from "@bitwarden/common/services/provider/provider.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 
 import MainBackground from "../../background/main.background";
@@ -263,7 +264,7 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
-      provide: ProviderService,
+      provide: InternalProviderServiceAbstraction,
       useFactory: getBgService<ProviderService>("providerService"),
       deps: [],
     },
