@@ -1080,6 +1080,10 @@
     border-color: var(--color-secondary-100);
 }
 
+.disabled\:tw-border-secondary-500:disabled{
+    border-color: var(--color-secondary-500);
+}
+
 .disabled\:tw-bg-secondary-100:disabled{
     background-color: var(--color-secondary-100);
 }
@@ -1088,6 +1092,10 @@
     color: var(--color-text-main) !important;
 }
 
+.disabled\:\!tw-text-muted:disabled{
+    color: var(--color-text-muted) !important;
+}
 
 
-/*# sourceMappingURL=main.c89ed2c45b98b4f49bca.css.map*/
+
+/*# sourceMappingURL=main.5de99c0f5257030daa60.css.map*/
