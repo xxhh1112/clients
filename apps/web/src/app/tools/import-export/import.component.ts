@@ -14,7 +14,7 @@ import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions"
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ImportError } from "@bitwarden/common/importers/importError";
 
-import { FilePasswordPromptComponent } from "../components/file-password-prompt.component";
+import { FilePasswordPromptComponent } from "../../components/file-password-prompt.component";
 
 @Component({
   selector: "app-import",
