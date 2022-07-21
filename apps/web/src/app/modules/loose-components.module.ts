@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { UserVerificationComponent } from "@bitwarden/angular/components/user-verification.component";
 
+//test change
 import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
