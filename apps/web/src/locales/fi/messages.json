@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Luo tili"
   },
+  "startTrial": {
+    "message": "Aloita kokeilu"
+  },
   "logIn": {
     "message": "Kirjaudu sisään"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen."
+  },
+  "masterPassImportant": {
+    "message": "Pääsalasanan palautus ei ole mahdollista, jos unohdat sen!"
   },
   "masterPassHintDesc": {
     "message": "Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Virheellinen sähköpostiosoite."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Pääsalasana vaaditaan."
   },
-  "masterPassLength": {
-    "message": "Pääsalasanan on oltava vähintään 8 merkkiä pitkä."
+  "confirmMasterPasswordRequired": {
+    "message": "Pääsalasanan uudelleensyöttö vaaditaan."
+  },
+  "masterPasswordMinLength": {
+    "message": "Pääsalasanan tulee sisältää ainakin 8 merkkiä."
   },
   "masterPassDoesntMatch": {
     "message": "Pääsalasanan vahvistus ei täsmää."
@@ -1067,7 +1076,7 @@
     "message": "Poista tili"
   },
   "deleteAccountDesc": {
-    "message": "Jatka alla poistaaksesi tilisi ja kaikki siihen liittyvät tiedot."
+    "message": "Jatka alla poistaaksesi tilisi ja kaikki holvin tiedot."
   },
   "deleteAccountWarning": {
     "message": "Tilin poisto on pysyvä toimenpide, eikä sen peruminen ole mahdollista."
@@ -1076,7 +1085,7 @@
     "message": "Tili poistettu"
   },
   "accountDeletedDesc": {
-    "message": "Tilisi on suljettu ja kaikki siihen liittyvät tiedot on poistettu."
+    "message": "Bitwarden-tilisi ja -holvin tiedot on poistettu pysyvästi."
   },
   "myAccount": {
     "message": "Oma tili"
@@ -1267,7 +1276,7 @@
     "message": "Poista käytöstä"
   },
   "deactivate": {
-    "message": "Poista aktivointi"
+    "message": "Deaktivoi"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Tämä kaksivaiheisen kirjautumisen todentaja on käytössä tililläsi."
@@ -2236,7 +2245,7 @@
     "message": "Jäsenellä ei ole enää organisaation käyttöoikeutta, mutta hän voi edelleen käyttää henkilökohtaista hoviaan."
   },
   "activateUserConfirmation": {
-    "message": "Haluatko varmasti aktivoida käyttäjän ja myöntää heille organisaation käyttöoikeuden?"
+    "message": "Haluatko varmasti aktivoida käyttäjän ja myöntää hänelle käyttöoikeuden organisaatioon?"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Varoitus! Tämä käyttäjä tarvitsee salauksensa hallintaan Key Connectoria. Käyttäjän poistaminen organisaatiostasi poistaa heidän tilinsä käytöstä pysvästi. Toimenpide on pysyvä, eikä sen peruminen ole mahdollista. Haluatko jatkaa?"
@@ -2584,7 +2593,7 @@
     }
   },
   "deactivatedUserId": {
-    "message": "Käyttäjän $ID$ aktivointi poistettiin.",
+    "message": "Käyttäjä $ID$ on deaktivoitu.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2593,7 +2602,7 @@
     }
   },
   "activatedUserId": {
-    "message": "Käyttäjä $ID$ aktivointiin.",
+    "message": "Käyttäjä $ID$ on aktivoitu.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2602,7 +2611,7 @@
     }
   },
   "deactivateUserId": {
-    "message": "Poistetaanko käyttäjän $ID$ aktivointi?",
+    "message": "Deaktivoidaanko käyttäjä $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2812,7 +2821,7 @@
     "message": "Sähköpostiosoitteesi on vahvistettu."
   },
   "emailVerifiedFailed": {
-    "message": "Sähköpostiosoitteesi vahvistus ei onnistunut. Yritä lähettää uusi vahvistussähköposti."
+    "message": "Sähköpostiosoitettasi ei voitu vahvistaa. Yritä lähettää uusi vahvistussähköposti."
   },
   "emailVerificationRequired": {
     "message": "Sähköpostiosoitteen vahvistus vaaditaan"
@@ -2839,7 +2848,7 @@
     "message": "Saat organisaation käyttöoikeuden ylläpitäjän vahvistettua jäsentyytesi. Saat vahvistuksesta ilmoituksen sähköpostitse."
   },
   "inviteAcceptFailed": {
-    "message": "Kutsun hyväksyntä ei onnistu. Pyydä organisaation ylläpitäjää lähettämään uusi kutsu."
+    "message": "Kutsua ei voitu hyväksyä. Pyydä organisaation ylläpitäjää lähettämään uusi kutsu."
   },
   "inviteAcceptFailedShort": {
     "message": "Kutsua ei voitu hyväksyä. $DESCRIPTION$",
@@ -3159,7 +3168,7 @@
   "acceptPolicies": {
     "message": "Valitsemalla tämän ruudun hyväksyt seuraavat:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Käyttöehtoja ja tietosuojakäytäntöä ei ole vahvistettu."
   },
   "termsOfService": {
@@ -3208,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organisaatio on poistettu käytöstä."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Käytöstä poistettujen organisaatioiden kohteet eivät ole käytettävissä. Ole yhteydessä organisaation omistajaan saadaksesi apua."
   },
   "licenseIsExpired": {
     "message": "Lisenssi on erääntynyt."
@@ -3333,20 +3345,26 @@
   "clone": {
     "message": "Kloonaa"
   },
+  "masterPassPolicyTitle": {
+    "message": "Pääsalasanan vaatimukset"
+  },
   "masterPassPolicyDesc": {
-    "message": "Aseta pääsalasanan vahvuuden vähimmäisvaatimukset."
+    "message": "Aseta pääsalasanan vahvuusvaatimukset."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Vaadi kaksivaiheinen kirjautuminen"
   },
   "twoStepLoginPolicyDesc": {
-    "message": "Vaadi käyttäjiä ottamaan kaksivaiheinen kirjautuminen käyttöön henkilökohtaisilla tileillään."
+    "message": "Vaadi jäseniä määrittämään kaksivaiheinen kirjautuminen."
   },
   "twoStepLoginPolicyWarning": {
-    "message": "Organisaation jäsenet, jotka eivät ole sen omistajia tai ylläpitäjiä, eivätkä ole ottaneet kaksivaiheista kirjautumista käyttöön henkilökohtaisilla tileillään, poistetaan organisaatiosta ja heille ilmoitetaan muutoksesta sähköpostitse."
+    "message": "Organisaation jäsenet, jotka eivät ole sen omistajia tai ylläpitäjiä, eivätkä ole ottaneet tileillään käyttöön kaksivaiheista kirjautumista, poistetaan organisaatiosta ja heille ilmoitetaan muutoksesta sähköpostitse."
   },
   "twoStepLoginPolicyUserWarning": {
     "message": "Olet jäsenenä organisaatiossa, joka vaatii kaksivaiheisen kirjautumisen käyttöä käyttäjätililläsi. Jos poistat kaikki kaksivaiheisen kirjautumisen todentajat käytöstä, sinut poistetaan automaattisesti näistä organisaatioista."
   },
   "passwordGeneratorPolicyDesc": {
-    "message": "Aseta salasanageneraattorin määritysten vähimmäisvaatimukset."
+    "message": "Aseta salasanageneraattorin vaatimukset."
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "Yksi tai useampi organisaatiokäytäntö vaikuttaa generaattorisi asetuksiin."
@@ -3403,13 +3421,13 @@
     "message": "Käyttäjän asetus"
   },
   "vaultTimeoutAction": {
-    "message": "Holvin aikakatkaisun toiminto"
+    "message": "Holvin aikakatkaisutoiminto"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Holvin käyttö edellyttää pääsalasanaa tai muuta avaustapaa."
+    "message": "Holvisi käyttö edellyttää pääsalasanaa tai muuta avaustapaa."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Holvin käyttö edellyttää uuttaa todennusta."
+    "message": "Holvisi käyttö edellyttää uutta todennusta."
   },
   "lock": {
     "message": "Lukitse",
@@ -3501,7 +3519,7 @@
     "message": "Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen internet-yhteyden välityksellä. Haluatko varmasti käyttää tätä asetusta?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Aikakatkaisun toiminnon vahvistus"
+    "message": "Aikakatkaisutoiminnon vahvistus"
   },
   "hidePasswords": {
     "message": "Piilota salasanat"
@@ -3567,7 +3585,7 @@
     "message": "Yksittäinen organisaatio"
   },
   "singleOrgDesc": {
-    "message": "Estä käyttäjiä liittymästä muihin organisaatioihin."
+    "message": "Estä jäseniä liittymästä muihin organisaatioihin."
   },
   "singleOrgBlockCreateMessage": {
     "message": "Nykyisen organisaatiosi käytäntö ei salli liittymistä useampaan kuin yhteen organisaatioon. Ota yhteyttä organisaatiosi ylläpitäjiin tai liity eri Bitwarden-tilin kautta."
@@ -3576,10 +3594,10 @@
     "message": "Organisaation jäsenet, jotka eivät ole omistajia tai ylläpitäjiä ja jotka ovat jo toisen organisaation jäseniä, poistetaan organisaatiostasi."
   },
   "requireSso": {
-    "message": "Kertakirjautumisen (SSO) todennus"
+    "message": "Vaadi kertakirjautumisen (SSO) todennus"
   },
   "requireSsoPolicyDesc": {
-    "message": "Vaadi käyttäjiä kirjautumaan sisään käyttäen yrityksen kertakirjautumista (SSO)."
+    "message": "Vaadi jäseniä kirjautumaan käyttäen yrityksen kertakirjautumista (SSO)."
   },
   "prerequisite": {
     "message": "Edellytys"
@@ -3667,7 +3685,7 @@
     "message": "Poistettu käytöstä"
   },
   "deactivated": {
-    "message": "Aktivointi poistettiin"
+    "message": "Deaktivoitu"
   },
   "sendLink": {
     "message": "Send-linkki",
@@ -3810,7 +3828,7 @@
     "message": "Sinut on kutsuttu yllä mainitun käyttäjän varmuuskontaktiksi. Hyväksyäksesi kutsun, sinun tulee kirjautua tilillesi tai luoda uusi Bitwarden tili."
   },
   "emergencyInviteAcceptFailed": {
-    "message": "Kutsun hyväksyntä ei onnistu. Pyydä käyttäjää lähettämään uusi kutsu."
+    "message": "Kutsua ei voitu hyväksyä. Pyydä käyttäjää lähettämään uusi kutsu."
   },
   "emergencyInviteAcceptFailedShort": {
     "message": "Kutsua ei voitu hyväksyä. $DESCRIPTION$",
@@ -3880,10 +3898,10 @@
     }
   },
   "personalOwnership": {
-    "message": "Henkilökohtainen omistus"
+    "message": "Poista yksityinen holvi"
   },
   "personalOwnershipPolicyDesc": {
-    "message": "Vaadi käyttäjiä tallentamaan holvin kohteet organisaatiolle poistamalla henkilökohtaisen omistuksen valinta."
+    "message": "Vaadi jäseniä tallentamaan holvin kohteet organisaatiolle poistamalla yksityisen holvin valinta."
   },
   "personalOwnershipExemption": {
     "message": "Organisaation omistajat ja ylläpitäjät on vapautettu tämän käytännön piiristä."
@@ -3892,10 +3910,10 @@
     "message": "Yrityksen asettaman käytännön johdosta kohteiden tallennus omaan holviisi ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista."
   },
   "disableSend": {
-    "message": "Poista Send käytöstä"
+    "message": "Poista Send"
   },
   "disableSendPolicyDesc": {
-    "message": "Älä salli käyttäjien luoda tai muokata Bitwarden Sendejä. Olemassa olevan Sendin poisto sallitaan edelleen.",
+    "message": "Älä salli käyttäjien luoda tai muokata Sendejä.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -3921,7 +3939,7 @@
     "message": "Käytäntöä ei pakoteta käyttöön niille organisaation käyttäjille, joilla on organisaation käytäntöjen hallintaoikeudet."
   },
   "disableHideEmail": {
-    "message": "Estä käyttäjiltä sähköpostiosoitteen piilotus kun he luovat tai muokkaavat Sendiä.",
+    "message": "Näytä jäsenen sähköpostiosoite aina vastaanottajien kanssa, kun luodaan tai muokataan Sendiä.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -4220,7 +4238,7 @@
     "message": "Pääsalasanan palautus"
   },
   "resetPasswordPolicyDescription": {
-    "message": "Salli organisaation ylläpitäjien palauttaa organisaation käyttäjien pääsalasanat."
+    "message": "Salli ylläpitäjien palauttaa jäsenten pääsalasanat."
   },
   "resetPasswordPolicyWarning": {
     "message": "Organisaation käyttäjien on liityttävä itse tai automaattisen liitoksen välityksellä ennen kuin ylläpitäjät voivat palauttaa heidän pääsalasanojaan."
@@ -4271,10 +4289,10 @@
     "message": "Haluatko varmasti poistaa seuraavat käyttäjät? Toiminto saattaa kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
   },
   "deactivateUsersWarning": {
-    "message": "Haluatko varmasti poistaa seuraavien käyttäjien aktivoinnin? Heillä ei enää ole organisaation käyttöoikeutta, mutta he voivat edelleen käyttää henkilökohtaisia holvejaan. Toiminto saattaa kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
+    "message": "Haluatko varmasti deaktivoida seuraavat käyttäjät? Heillä ei enää ole organisaation käyttöoikeutta, mutta he voivat edelleen käyttää henkilökohtaisia holvejaan. Toiminto saattaa kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
   },
   "activateUsersWarning": {
-    "message": "Haluatko varmasti aktivoida seuraavat käyttäjät ja myöntää heille organisaation käyttöoikeuden? Toiminto saattaa kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
+    "message": "Haluatko varmasti aktivoida seuraavat käyttäjät ja myöntää heille käyttöoikeuden organisaatioon? Toiminto saattaa kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
   },
   "theme": {
     "message": "Teema"
@@ -4307,7 +4325,7 @@
     "message": "Poistettu onnistuneesti."
   },
   "bulkDeactivatedMessage": {
-    "message": "Aktivoinnin poisto onnistui"
+    "message": "Deaktivointi onnistui"
   },
   "bulkActivatedMessage": {
     "message": "Aktivointi onnistui"
@@ -4322,7 +4340,7 @@
     "message": "Poista käyttäjiä"
   },
   "deactivateUsers": {
-    "message": "Poista käyttäjien aktivointi"
+    "message": "Deaktivoi käyttäjät"
   },
   "activateUsers": {
     "message": "Aktivoi käyttäjät"
@@ -4373,7 +4391,7 @@
     "message": "Sinut on kutsuttu liittymään yllä mainittuun todentajaan. Hyväksyäksesi kutsun, sinun tulee kirjautua tilillesi tai luoda uusi Bitwarden-tili."
   },
   "providerInviteAcceptFailed": {
-    "message": "Kutsua ei voida hyväksyä. Pyydä todentajan ylläpitäjää lähettämään uusi kutsu."
+    "message": "Kutsua ei voitu hyväksyä. Pyydä todentajan ylläpitäjää lähettämään uusi kutsu."
   },
   "providerInviteAcceptedDesc": {
     "message": "Pääset käyttämään todentajaa ylläpitäjän vahvistettua jäsentyytesi. Saat tästä ilmoituksen sähköpostitse."
@@ -4467,13 +4485,13 @@
     "message": "Holvin aikakatkaisu"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Määritä holvin aikakatkaisun enimmäisviive kaikille käyttäjille."
+    "message": "Aseta jäsenille holvin aikakatkaisun enimmäisaika."
   },
   "maximumVaultTimeoutLabel": {
-    "message": "Holvin aikakatkaisun enimmäisviive"
+    "message": "Holvin aikakatkaisun enimmäisaika"
   },
   "invalidMaximumVaultTimeout": {
-    "message": "Virheellinen holvin aikakatkaisun enimmäisviive."
+    "message": "Virheellinen holvin aikakatkaisun enimmäisaika."
   },
   "hours": {
     "message": "Tuntia"
@@ -4482,7 +4500,7 @@
     "message": "Minuuttia"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisaatiosi käytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu viive on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a)",
+    "message": "Organisaatiosi käytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4495,22 +4513,22 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Mukautettu holvin aikakatkaisuviive"
+    "message": "Mukautettu holvin aikakatkaisu"
   },
   "vaultTimeoutToLarge": {
-    "message": "Holvisi aikakatkaisuviive ylittää organisaatiosi asettamat rajoitukset."
+    "message": "Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset."
   },
   "vaultCustomTimeoutMinimum": {
-    "message": "Lyhin omavalintainen aikakatkaisuaika on 1 minuutti."
+    "message": "Mukautetun aikakatkaisun vähimmäisaika on 1 minuutti."
   },
   "vaultTimeoutRangeError": {
-    "message": "Holvin aikakatkaisuaika ei ole sallitun alueen sisällä."
+    "message": "Holvin aikakatkaisu ei ole sallitun alueen sisällä."
   },
   "disablePersonalVaultExport": {
-    "message": "Poista henkilökohtaisen holvin vienti käytöstä"
+    "message": "Estä yksityisen holvin vienti"
   },
   "disablePersonalVaultExportDesc": {
-    "message": "Estää käyttäjiä viemästä yksityisen holvinsa tietoja."
+    "message": "Älä salli jäseniä viemästä yksityisten holviensa tietoja."
   },
   "vaultExportDisabled": {
     "message": "Holvin vienti on poistettu käytöstä"
@@ -4678,10 +4696,10 @@
     "message": "Sinulle on tarjottu ilmaista Bitwarden Perheille -organisaatiota. Jatkaaksesi sinun on kirjauduttava tarjouksen saaneelle tilille."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Tarjousta ei voida hyväksyä. Lähetä tarjoussähköposti uudestaan yritystililtäsi ja yritä uudelleen."
+    "message": "Tarjousta ei voitu hyväksyä. Lähetä tarjoussähköposti uudestaan yritystililtäsi ja yritä uudelleen."
   },
   "sponsoredFamiliesAcceptFailedShort": {
-    "message": "Tarjousta ei voida hyväksyä. $DESCRIPTION$",
+    "message": "Kutsua ei voitu hyväksyä. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
@@ -4777,7 +4795,7 @@
     "message": "Virheellinen todennuskoodi"
   },
   "convertOrganizationEncryptionDesc": {
-    "message": "$ORGANIZATION$ käyttää kertakirjautumista (SSO) itse ylläpitämänsä avainpalvelimen kanssa. Organisaation jäsenet eivät enää tarvitse pääsalasanaa kirjautumiseen.",
+    "message": "$ORGANIZATION$ käyttää kertakirjautumista (SSO) itse ylläpidetyllä avainpalvelimella. Organisaation jäsenet eivät enää tarvitse pääsalasanaa kirjautumiseen.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4801,19 +4819,19 @@
     "message": "Määrityksen jälkeen asetukset tallennetaan ja käyttäjät voivat tunnistautua käyttäen tunnistustietojen tarjoajansa (Identity Provider) tietoja."
   },
   "ssoPolicyHelpStart": {
-    "message": "Ota",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "message": "Käytä",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
-    "message": "SSO-todennuskäytäntö",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "message": "\"Vaadi kertakirjautumisen (SSO) todennus\" -käytäntöä",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "käyttöön pakottaaksesi kertakirjautumisen kaikille jäsenille.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "\"SSO-todennus\" ja \"Yksittäinen organisaatio\" -käytännöt vaaditaan Key Connector -salauksenpurun määritykseen."
+    "message": "\"Vaadi kertakirjautumisen (SSO) todennus\" ja \"Yksittäinen organisaatio\" -käytännöt vaaditaan Key Connector -salauksenpurun määritykseen."
   },
   "memberDecryptionOption": {
     "message": "Jäsenen salauksenpurkuvalinnat"
@@ -4903,7 +4921,7 @@
     "message": "Uudista tunniste"
   },
   "rotateBillingSyncTokenWarning": {
-    "message": "Jos jatkat, on itse ylläpitämäsi palvelimen laskutuksen synkronointi määritettävä uudelleen."
+    "message": "Jos jatkat, tulee itse ylläpitämäsi palvelimen laskutuksen synkronointi määrittää uudelleen."
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Laskutuksen synkronointitunnisteen uudistus mitätöi edellisen tunnisteen."
@@ -4912,7 +4930,7 @@
     "message": "Itse ylläpidetty"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
-    "message": "Määrittääksesi organisaatiosi itse ylläpitämällesi palvelimelle, on lisenssitiedostosi tallennettava sinne. Sinun on määritettävä laskutuksen synkronointi, jotta ilmaiset Perheille-tilaukset ja edistyneet laskutusominaisuudet ovat itse ylläpitämäsi organisaation käytettävissä."
+    "message": "Määrittääksesi organisaation omalle palvelimellesi, tulee lisenssitiedosto tallentaa sinne. Sinun on määritettävä laskutuksen synkronointi, jotta ilmaiset Perheille-tilaukset ja edistyneet laskutusominaisuudet ovat itse ylläpitämäsi organisaation käytettävissä."
   },
   "billingSyncApiKeyRotated": {
     "message": "Tunniste uudistettiin."
@@ -4921,19 +4939,19 @@
     "message": "Laskutuksen synkronointi"
   },
   "billingSyncDesc": {
-    "message": "Laskutuksen synkronointi mahdollistaa jäsenille ilmaiset Perheille-tilaukset ja edistyneet laskutusominaisuudet liittämällä itse ylläpitämäsi Bitwarden-palvelimen Bitwardenin pilvipalvelimeen."
+    "message": "Laskutuksen synkronointi mahdollistaa jäsenille ilmaiset Perheille-tilaukset ja edistyneet laskutusominaisuudet liittämällä itse ylläpitämäsi Bitwarden-palvelin Bitwardenin pilvipalvelimeen."
   },
   "billingSyncKeyDesc": {
-    "message": "Tämän lomakkeen täyttöön tarvitaan laskutuksen synkronointitunniste pilviorganisaatiosi tilausasetuksista."
+    "message": "Lomakkeen täyttö edellyttää laskutuksen synkronointitunnisteen pilviorganisaatiosi tilausasetuksista."
   },
   "billingSyncKey": {
     "message": "Laskutuksen synkronointitunniste"
   },
   "active": {
-    "message": "Käytössä"
+    "message": "Aktiivinen"
   },
   "inactive": {
-    "message": "Ei käytössä"
+    "message": "Ei aktivoitu"
   },
   "sentAwaitingSync": {
     "message": "Lähetetty (odottaa synkronointia)"
@@ -5165,5 +5183,35 @@
         "example": "My Email"
       }
     }
+  },
+  "inputRequired": {
+    "message": "Syöte vaaditaan."
+  },
+  "inputEmail": {
+    "message": "Syöte ei ole sähköpostiosoite."
+  },
+  "inputMinLength": {
+    "message": "Syötteen tulee sisältää ainakin $COUNT$ merkkiä.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ yllä oleva(a) kenttä(ä) vaatii huomiotasi.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Ota käyttöön"
+  },
+  "on": {
+    "message": "Käytössä"
   }
 }

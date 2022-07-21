@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "無効なEメールアドレスです。"
   },
-  "masterPassRequired": {
-    "message": "マスターパスワードは必須です。"
+  "masterPasswordRequired": {
+    "message": "マスターパスワードが必要です。"
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "マスターパスワードの再入力が必要です。"
+  },
+  "masterPasswordMinlength": {
     "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
   },
   "masterPassDoesntMatch": {
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "以下に同意しチェックします:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "利用規約とプライバシーポリシーを確認してください。"
   },
   "termsOfService": {
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "保管庫のタイムアウトが組織によって設定された制限を超えています。"
   },
   "vaultExportDisabled": {
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "キーコネクターエラー: キーコネクターが使用可能で、正常に動作しているか確認してください。"
+  },
+  "organizationIsDisabled": {
+    "message": "組織は無効です。"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "無効な組織のアイテムにアクセスすることはできません。組織の所有者に連絡してください。"
   }
 }

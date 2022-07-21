@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -81,7 +82,7 @@ export class UpdateKeyComponent {
 
     await this.syncService.fullSync(true);
 
-    const folders = await this.folderService.getAllDecrypted();
+    const folders = await firstValueFrom(this.folderService.folderViews$);
     for (let i = 0; i < folders.length; i++) {
       if (folders[i].id == null) {
         continue;

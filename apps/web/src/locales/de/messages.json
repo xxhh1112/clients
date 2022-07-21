@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Konto erstellen"
   },
+  "startTrial": {
+    "message": "Probephase starten"
+  },
   "logIn": {
     "message": "Anmelden"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass Sie das Passwort nicht vergessen, da es keine Möglichkeit gibt es zurückzusetzen."
+  },
+  "masterPassImportant": {
+    "message": "Master-Passwörter können nicht wiederhergestellt werden, wenn du sie vergisst!"
   },
   "masterPassHintDesc": {
     "message": "Ein Master-Passwort-Hinweis kann Ihnen helfen, sich an das Passwort zu erinnern, wenn Sie es vergessen haben sollten."
@@ -623,10 +629,13 @@
   "invalidEmail": {
     "message": "Ungültige E-Mail Adresse."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Das Master-Passwort ist erforderlich."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Erneute Eingabe des Master-Passworts ist erforderlich."
+  },
+  "masterPasswordMinLength": {
     "message": "Das Master-Passwort muss mindestens 8 Zeichen lang sein."
   },
   "masterPassDoesntMatch": {
@@ -1152,10 +1161,10 @@
     "message": "Ändern Sie die Sprache für den Web-Tresor."
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Zeige Webseiten-Icons"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
   },
   "enableGravatars": {
     "message": "Gravatare aktivieren",
@@ -3159,7 +3168,7 @@
   "acceptPolicies": {
     "message": "Durch Anwählen dieses Kästchens erklären Sie sich mit folgendem einverstanden:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
   },
   "termsOfService": {
@@ -3208,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organisation ist deaktiviert."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Auf Einträge in deaktivierten Organisationen kann nicht zugegriffen werden. Kontaktiere deinen Organisationseigentümer für Unterstützung."
   },
   "licenseIsExpired": {
     "message": "Lizenz ist abgelaufen."
@@ -3333,8 +3345,14 @@
   "clone": {
     "message": "Duplizieren"
   },
+  "masterPassPolicyTitle": {
+    "message": "Master-Passwort-Anforderungen"
+  },
   "masterPassPolicyDesc": {
     "message": "Mindestanforderungen für die Stärke des Master-Passworts festlegen."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Zwei-Faktor-Authentifizierung verlangen"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Benutzer müssen eine zweistufige Anmeldung für ihre persönlichen Konten einrichten."
@@ -4802,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Aktiviere die",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO-Richtlinie",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": ", um zu erzwingen, dass sich alle Mitglieder mit SSO anmelden.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "SSO-Authentifizierung und Richtlinien für eine einzelne Organisation werden benötigt, um die Key Connector Entschlüsselung einzurichten."
@@ -5165,5 +5183,35 @@
         "example": "My Email"
       }
     }
+  },
+  "inputRequired": {
+    "message": "Angabe ist erforderlich."
+  },
+  "inputEmail": {
+    "message": "Angabe ist keine E-Mail-Adresse."
+  },
+  "inputMinLength": {
+    "message": "Angabe muss mindestens $COUNT$ Zeichen lang sein.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ Feld(er) oben benötigt deine Aufmerksamkeit.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Einschalten"
+  },
+  "on": {
+    "message": "Ein"
   }
 }

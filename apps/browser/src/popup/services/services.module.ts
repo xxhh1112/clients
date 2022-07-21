@@ -7,6 +7,8 @@ import {
   MEMORY_STORAGE,
   SECURE_STORAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
+import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -20,7 +22,8 @@ import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/abstractions/log.service";
@@ -148,7 +151,16 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<CryptoFunctionService>("cryptoFunctionService"),
       deps: [],
     },
-    { provide: FolderService, useFactory: getBgService<FolderService>("folderService"), deps: [] },
+    {
+      provide: FolderService,
+      useFactory: getBgService<FolderService>("folderService"),
+      deps: [],
+    },
+    {
+      provide: FolderApiServiceAbstraction,
+      useFactory: getBgService<FolderApiServiceAbstraction>("folderApiService"),
+      deps: [],
+    },
     {
       provide: CollectionService,
       useFactory: getBgService<CollectionService>("collectionService"),
@@ -277,6 +289,20 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: FileDownloadService,
       useClass: BrowserFileDownloadService,
+    },
+    {
+      provide: AbstractThemingService,
+      useFactory: () => {
+        return new ThemingService(
+          getBgService<StateServiceAbstraction>("stateService")(),
+          // Safari doesn't properly handle the (prefers-color-scheme) media query in the popup window, it always returns light.
+          // In Safari we have to use the background page instead, which comes with limitations like not dynamically changing the extension theme when the system theme is changed.
+          getBgService<PlatformUtilsService>("platformUtilsService")().isSafari()
+            ? getBgService<Window>("backgroundWindow")()
+            : window,
+          document
+        );
+      },
     },
   ],
 })

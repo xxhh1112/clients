@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Fiók létrehozása"
   },
+  "startTrial": {
+    "message": "Próbaverzió indítása"
+  },
   "logIn": {
     "message": "Bejelentkezés"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "A mesterjelszó a jelszó a széf eléréséhez. Nagyon fontos a mesterjelszó ismerete. Nincs mód a jelszó visszaállítására."
+  },
+  "masterPassImportant": {
+    "message": "Az elfelejtett mesterjelszavak nem állíthatók helyre!"
   },
   "masterPassHintDesc": {
     "message": "A mesterjelszó emlékeztető segíthet emlékezni a jelszóra elfelejtése esetén."
@@ -623,10 +629,13 @@
   "invalidEmail": {
     "message": "Az email cím érvénytelen."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "A mesterjelszó megadása kötelező."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "A mesterjelszó ismételt megadása kötelező."
+  },
+  "masterPasswordMinLength": {
     "message": "A mesterjelszó legyen legalább 8 karakter hosszú."
   },
   "masterPassDoesntMatch": {
@@ -3159,7 +3168,7 @@
   "acceptPolicies": {
     "message": "A doboz bejelölésével elfogadjuk a következőket:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "A szolgáltatási feltételeket és az adatvédelmi irányelveket nem vették figyelembe."
   },
   "termsOfService": {
@@ -3208,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "A szervezet letiltásra került."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "A letiltott szervezetek elemeii nem érhetők el. Vegyük fel a kapcsolatot a szervezet tulajdonosával segítségért."
   },
   "licenseIsExpired": {
     "message": "A licensz lejárt."
@@ -3333,8 +3345,14 @@
   "clone": {
     "message": "Klónozás"
   },
+  "masterPassPolicyTitle": {
+    "message": "Mesterjelszó követelmények"
+  },
   "masterPassPolicyDesc": {
     "message": "A minimális követelmények beállítása a mesterjelszó hozzához."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Kétlépéses bejelentkezés szükséges"
   },
   "twoStepLoginPolicyDesc": {
     "message": "A felhasználók számára kétlépcsős bejelentkezés szükséges a személyes fióknál."
@@ -4217,7 +4235,7 @@
     "message": "A regisztráció lehetővé teszi a szervezet adminisztrátorainak a saját mesterjelszó megváltoztatását. Biztosan feliratkozunk?"
   },
   "resetPasswordPolicy": {
-    "message": "Mesterjelszó alaphelyzetbe állítás"
+    "message": "Mesterjelszó alaphelyzetbe állítása"
   },
   "resetPasswordPolicyDescription": {
     "message": "A szervezet adminisztrátorai alaphelyzetbe állíthatják a szervezet mesterjelszavát."
@@ -4802,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Engedélyezzük az",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO hitelesítési szabályzat",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "szolgáltatást az összes tag bejelentkezéséhez SSO szolgáltatással.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "A kulcscsatlakozó visszafejtésének beállításához SSO hitelesítés és egy szervezeti szabályzat szükséges."
@@ -5165,5 +5183,35 @@
         "example": "My Email"
       }
     }
+  },
+  "inputRequired": {
+    "message": "Az adatbevitel kötelező."
+  },
+  "inputEmail": {
+    "message": "Az megadott adat nem email cím."
+  },
+  "inputMinLength": {
+    "message": "Az adat legyen legalább $COUNT$ karakter hosszú.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ mező fentebb figyelmet érdemel.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Bekapcsolás"
+  },
+  "on": {
+    "message": "Be"
   }
 }

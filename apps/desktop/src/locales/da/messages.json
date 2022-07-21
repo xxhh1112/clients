@@ -126,7 +126,7 @@
     "message": "Minimér, når du kopierer til udklipsholder"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimér, når du kopierer et elements data til udklipsholderen."
+    "message": "Minimér programmet, når du kopierer et elements data til udklipsholderen."
   },
   "toggleVisibility": {
     "message": "Slå synlighed til/fra"
@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "Ugyldig e-mailadresse."
   },
-  "masterPassRequired": {
-    "message": "Hovedadgangskode er påkrævet."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Hovedadgangskoden skal være på mindst 8 tegn."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -728,7 +731,7 @@
     "message": "Er du sikker på, at du vil logge ud?"
   },
   "logOut": {
-    "message": "Log af"
+    "message": "Log ud"
   },
   "addNewLogin": {
     "message": "Tilføj nyt login"
@@ -833,7 +836,7 @@
     "message": "Boks timeout"
   },
   "vaultTimeoutDesc": {
-    "message": "Vælg timeout for din boks, hvorefter den vil udføre den valgte handling."
+    "message": "Vælg hvornår din boks skal udføre timeout-handlingen."
   },
   "immediately": {
     "message": "Straks"
@@ -895,10 +898,10 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Vis webstedsikoner"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Vis et genkendeligt billede ud for hvert login."
   },
   "enableMinToTray": {
     "message": "Minimer til bakkeikon"
@@ -913,7 +916,7 @@
     "message": "Når vinduet minimeres, vis i stedet et ikon på menulinjen."
   },
   "enableCloseToTray": {
-    "message": "Luk til ikon i meddelelsesområdet"
+    "message": "Luk ned til ikon i meddelelsesområdet"
   },
   "enableCloseToTrayDesc": {
     "message": "Når vinduet lukkes, vis i stedet et ikon i meddelelsesområdet."
@@ -1278,34 +1281,34 @@
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "Load Accessibility Cookie"
+    "message": "Indlæs tilgængelighedscookie"
   },
   "registerAccessibilityUser": {
-    "message": "Register as an accessibility user at",
+    "message": "Registrér som tilgængelighedsbruger på",
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
-    "message": "Copy and paste the link sent to your email below"
+    "message": "Kopiér og indsæt linket, der er sendt til din e-mail nedenfor"
   },
   "enterhCaptchaUrl": {
-    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "message": "Indtast URL for at indlæse tilgængelighedscookie til hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
-    "message": "hCaptcha Url is required",
+    "message": "hCaptcha-URL er påkrævet",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "invalidUrl": {
     "message": "Ugyldig URL"
   },
   "done": {
-    "message": "Done"
+    "message": "Udført"
   },
   "accessibilityCookieSaved": {
-    "message": "Accessibility cookie saved!"
+    "message": "Tilgængelighedscookie gemt!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "Ingen tilgængelighedscookie gemt"
   },
   "warning": {
     "message": "ADVARSEL",
@@ -1382,10 +1385,10 @@
     "message": "lås din boks op"
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "Bed om Windows Hello ved start"
   },
   "autoPromptTouchId": {
-    "message": "Ask for Touch ID on launch"
+    "message": "Bed om Touch ID ved start"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lås med hovedadgangskode ved genstart"
@@ -1440,10 +1443,10 @@
     "message": "Boks timeout-handling"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "En låst boks kræver at du gentaster din hovedadgangskode for at tilgå den igen."
+    "message": "Hovedadgangskode eller anden oplåsningsmetode kræves for at få adgang til din boks igen."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "En boks der er logget ud kræver, at du godkender igen for at få adgang til den."
+    "message": "Gengodkendelse kræves for at få adgang til din boks igen."
   },
   "lock": {
     "message": "Lås",
@@ -1543,11 +1546,11 @@
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Servicevilkår og fortrolighedspolitik er ikke blevet bekræftet."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
-    "message": "Aktiver browserintegration"
+    "message": "Tillad browserintegration"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Browserintegration bruges til biometri i browseren."
@@ -1568,7 +1571,7 @@
     "message": "Kræv verifikation for browserintegration"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Aktivér et ekstra sikkerhedslag ved at kræve validering af fingeraftrykssætning, når du opretter en forbindelse mellem dit skrivebord og din browser. Når det er aktiveret, kræver dette brugerintervention og verifikation hver gang en forbindelse oprettes."
+    "message": "Tilføj et ekstra sikkerhedslag ved at kræve bekræftelse af fingeraftrykssætning, når du opretter forbindelse mellem dit skrivebord og din browser. Dette kræver brugerhandling og verifikation, hver gang en forbindelse oprettes."
   },
   "approve": {
     "message": "Godkend"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API-nøgle"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   }
 }

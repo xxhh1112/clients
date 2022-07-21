@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "无效的电子邮件地址。"
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "必须填写主密码。"
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "必须填写确认主密码。"
+  },
+  "masterPasswordMinlength": {
     "message": "主密码至少需要 8 个字符。"
   },
   "masterPassDoesntMatch": {
@@ -568,10 +571,10 @@
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
-    "message": "要求添加登录"
+    "message": "询问添加登录"
   },
   "addLoginNotificationDesc": {
-    "message": "在密码库中找不到项目时询问添加一个项目。"
+    "message": "在密码库中找不到匹配项目时询问添加一个。"
   },
   "showCardsCurrentTab": {
     "message": "在标签页上显示支付卡"
@@ -600,10 +603,10 @@
     "message": "保存"
   },
   "enableChangedPasswordNotification": {
-    "message": "要求更新现有的登录"
+    "message": "询问更新现有的登录"
   },
   "changedPasswordNotificationDesc": {
-    "message": "在网站上检测到更改时要求更新登录密码。"
+    "message": "在网站上检测到更改时询问更新登录密码。"
   },
   "notificationChangeDesc": {
     "message": "是否要在 Bitwarden 中更新此密码？"
@@ -615,7 +618,7 @@
     "message": "显示上下文菜单选项"
   },
   "contextMenuItemDesc": {
-    "message": "使用辅助点击来访问网站的密码生成和匹配登录。"
+    "message": "使用辅助点击来访问网站的密码生成和匹配的登录项目。 "
   },
   "defaultUriMatchDetection": {
     "message": "默认 URI 匹配检测",
@@ -954,7 +957,7 @@
     "message": "页面加载时自动填充"
   },
   "enableAutoFillOnPageLoadDesc": {
-    "message": "网页加载时如果检测到登录表单，则自动填充。"
+    "message": "网页加载时如果检测到登录表单，则执行自动填充。"
   },
   "experimentalFeature": {
     "message": "目前这是一项实验功能。使用需自担风险。"
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "选中此框表示您同意："
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "尚未同意服务条款和隐私政策。"
   },
   "termsOfService": {
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "您的密码库超时时间超出了组织设置的限制。"
   },
   "vaultExportDisabled": {
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector 错误：请确保 Key Connector 可用且工作正常。"
+  },
+  "organizationIsDisabled": {
+    "message": "组织已被禁用。"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "无法访问已禁用组织中的项目。请联系您的组织所有者获取协助。"
   }
 }

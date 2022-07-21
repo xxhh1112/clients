@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "כתובת אימייל לא תקינה."
   },
-  "masterPassRequired": {
-    "message": "יש להזין את הסיסמה הראשית."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "הסיסמה הראשית חייבת להיות לפחות באורך 8 תווים."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "שדה אימות סיסמה ראשית לא תואם."
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "סימון תיבה זו מהווה את הסכמתך לתנאים הבאים:"
   },
-  "acceptPoliciesError": {
-    "message": "תנאי השירות ומדיניות הפרטיות לא אושרו."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "תנאי השירות"
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restrictions set by your organization."
+  "vaultTimeoutTooLarge": {
+    "message": "הזמן הקצוב לכספת שלך חורג מהמגבלות שנקבעו על ידי הארגון שלך."
   },
   "vaultExportDisabled": {
     "message": "Vault Export Disabled"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }

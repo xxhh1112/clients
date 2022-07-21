@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Adresă de e-mail greșită."
   },
-  "masterPassRequired": {
-    "message": "Este necesară parola principală."
+  "masterPasswordRequired": {
+    "message": "Este necesară o parolă principală."
   },
-  "masterPassLength": {
-    "message": "Parola principală trebuie să conțină minimum 8 caractere."
+  "confirmMasterPasswordRequired": {
+    "message": "Este necesară rescrierea parolei principale."
+  },
+  "masterPasswordMinlength": {
+    "message": "Parola principală trebuie să aibă cel puțin 8 caractere."
   },
   "masterPassDoesntMatch": {
     "message": "Parola principală și confirmarea ei nu coincid!"
@@ -568,7 +571,7 @@
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
-    "message": "Solicitați adăugarea autentificării"
+    "message": "Solicitare de adăugare cont"
   },
   "addLoginNotificationDesc": {
     "message": "Solicitați adăugarea unui element dacă nu se găsește unul în seif."
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "Dacă bifați această casetă sunteți de acord cu următoarele:"
   },
-  "acceptPoliciesError": {
-    "message": "Termenii de utilizare și Politica de confidențialitate nu au fost recunoscute."
+  "acceptPoliciesRequired": {
+    "message": "Termeni de utilizare și Politica de confidențialitate nu au fost recunoscute."
   },
   "termsOfService": {
     "message": "Termeni de utilizare"
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Timpul de expirare a seifului depășește restricțiile stabilite de organizația dvs."
+  "vaultTimeoutTooLarge": {
+    "message": "Timpul de expirare al seifului depășește restricțiile stabilite de organizația dvs."
   },
   "vaultExportDisabled": {
     "message": "Export de seif dezactivat"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Eroare de Conector Cheie: asigurați-vă că aveți conectorul Cheie disponibil și că funcționează corect."
+  },
+  "organizationIsDisabled": {
+    "message": "Organizația este dezactivată."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Articolele din Organizațiile dezactivate nu pot fi accesate. Contactați proprietarul Organizației pentru asistență."
   }
 }

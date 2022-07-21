@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "L'indirizzo email non è valido."
   },
-  "masterPassRequired": {
-    "message": "La password principale è obbligatoria."
+  "masterPasswordRequired": {
+    "message": "È necessario inserire la password principale."
   },
-  "masterPassLength": {
-    "message": "La password principale deve avere almeno 8 caratteri."
+  "confirmMasterPasswordRequired": {
+    "message": "È necessario reinserire la password principale."
+  },
+  "masterPasswordMinlength": {
+    "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -1543,7 +1546,7 @@
   "acceptPolicies": {
     "message": "Marcando la casella accetti quanto segue:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "I termini di servizio e l'informativa sulla privacy non sono stati accettati."
   },
   "enableBrowserIntegration": {
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "Chiave API"
+  },
+  "organizationIsDisabled": {
+    "message": "L'organizzazione è disabilitata."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Non è possibile accedere agli oggetti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per ricevere assistenza."
+  },
+  "neverLockWarning": {
+    "message": "Sei sicuro di voler usare l'opzione \"Mai\"? Impostando le opzioni di blocco su \"Mai\", la chiave di cifratura della cassaforte sarà salvata sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il dispositivo adeguatamente protetto."
   }
 }

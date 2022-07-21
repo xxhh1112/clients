@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Nederīga e-pasta adrese."
   },
-  "masterPassRequired": {
-    "message": "Ir jānorāda galvenā parole."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
     "message": "Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai."
   },
   "masterPassDoesntMatch": {
@@ -1543,8 +1546,8 @@
   "acceptPolicies": {
     "message": "Atzīmējot šo rūtiņu, Tu piekrīti sekojošajam:"
   },
-  "acceptPoliciesError": {
-    "message": "Nav pieņemti izmantošanas nosacījumi un privātuma politika."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
     "message": "Iespējot pārlūka saistīšanu"
@@ -1798,7 +1801,7 @@
     }
   },
   "vaultTimeoutTooLarge": {
-    "message": "Glabātavas noildze pāŗsniedz apvienības uzstādītos ierobežojumus."
+    "message": "Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automātiska ievietošana sarakstā"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API atslēga"
+  },
+  "organizationIsDisabled": {
+    "message": "Apvienība ir atspējota."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Atspējotu apvienību vienumiem nevar piekļūt. Jāsazinās ar apvienības īpašnieku, lai iegūtu palīdzību."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   }
 }

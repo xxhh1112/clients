@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Neispravna adresa e-pošte."
   },
-  "masterPassRequired": {
-    "message": "Potrebna je glavna lozinka."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "Označavanjem ove kućice slažete se sa sljedećim:"
   },
-  "acceptPoliciesError": {
-    "message": "Uvjeti korištenja i Pravila privatnosti nisu prihvaćeni."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Uvjeti korištenja"
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Vrijeme isteka premašuje ograničenje koju je postavila tvoja organizacija."
+  "vaultTimeoutTooLarge": {
+    "message": "Your vault timeout exceeds the restrictions set by your organization."
   },
   "vaultExportDisabled": {
     "message": "Izvoz trezora onemogućen"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Pogreška konektora ključa: provjerite je li konektor ključa dostupan i radi ispravno."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }

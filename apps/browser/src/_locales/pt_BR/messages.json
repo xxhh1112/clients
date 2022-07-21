@@ -101,10 +101,10 @@
     "message": "Sem credenciais correspondentes."
   },
   "unlockVaultMenu": {
-    "message": "Desbloqueie seu Cofre"
+    "message": "Desbloqueie seu cofre"
   },
   "loginToVaultMenu": {
-    "message": "Acesse o seu Cofre"
+    "message": "Acesse o seu cofre"
   },
   "autoFillInfo": {
     "message": "Não há credenciais disponíveis para autopreenchimento para a aba do navegador atual."
@@ -149,7 +149,7 @@
     "message": "Alterar Senha Mestra"
   },
   "fingerprintPhrase": {
-    "message": "Frase de Biometria",
+    "message": "Frase Biométrica",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -364,7 +364,7 @@
     "message": "Senha mestra inválida"
   },
   "vaultTimeout": {
-    "message": "Tempo limite do cofre."
+    "message": "Cofre - tempo esgotado"
   },
   "lockNow": {
     "message": "Bloquear Agora"
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Endereço de e-mail inválido."
   },
-  "masterPassRequired": {
-    "message": "A senha mestra é obrigatória."
+  "masterPasswordRequired": {
+    "message": "A senha mestre é obrigatória."
   },
-  "masterPassLength": {
-    "message": "A senha mestra deve ter pelo menos 8 caracteres."
+  "confirmMasterPasswordRequired": {
+    "message": "É necessário redigitar a senha mestre."
+  },
+  "masterPasswordMinlength": {
+    "message": "A senha mestre deve ter pelo menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -574,16 +577,16 @@
     "message": "A \"Notificação de Adicionar Login\" pede para salvar automaticamente novas logins para o seu cofre quando você inicia uma sessão em um site pela primeira vez."
   },
   "showCardsCurrentTab": {
-    "message": "Mostrar cartões na aba atual"
+    "message": "Mostrar cartões em páginas com guias."
   },
   "showCardsCurrentTabDesc": {
-    "message": "Listar itens do cartão na Aba  para facilitar  preenchimento automático."
+    "message": "Exibir itens de cartão em páginas com abas para simplificar o preenchimento automático"
   },
   "showIdentitiesCurrentTab": {
-    "message": "Mostrar identidades na aba atual"
+    "message": "Exibir Identidades na Aba Atual"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List identity items on the Tab page for easy auto-fill."
+    "message": "Liste os itens de identidade na aba atual  para facilitar preenchimento automático."
   },
   "clearClipboard": {
     "message": "Limpar Área de Transferência",
@@ -600,10 +603,10 @@
     "message": "Salvar"
   },
   "enableChangedPasswordNotification": {
-    "message": "Ask to update existing login"
+    "message": "Pedir para atualizar os dados de login existentes"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Ask to update a login's password when a change is detected on a website."
+    "message": "Peça para atualizar a senha de login quando uma mudança for detectada em um site."
   },
   "notificationChangeDesc": {
     "message": "Você quer atualizar esta senha no Bitwarden?"
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "Ao marcar esta caixa, você concorda com o seguinte:"
   },
-  "acceptPoliciesError": {
-    "message": "Os Termos de Serviço e a Política de Privacidade não foram reconhecidos."
+  "acceptPoliciesRequired": {
+    "message": "Os Termos de Serviço e a Política de Privacidade não foram aceitos."
   },
   "termsOfService": {
     "message": "Termos de Serviço"
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "O tempo limite do seu cofre excede as restrições definidas por sua organização."
+  "vaultTimeoutTooLarge": {
+    "message": "Seu tempo de espera no cofre excede as restrições estabelecidas por sua organização."
   },
   "vaultExportDisabled": {
     "message": "Exportação de Cofre Desativada"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Erro de Key Connector: certifique-se de que a Key Connector está disponível e funcionando corretamente."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }
