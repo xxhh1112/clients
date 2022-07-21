@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Etibarsız e-poçt ünvanı."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Ana parol lazımdır."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Ana parolun yenidən yazılması lazımdır."
+  },
+  "masterPasswordMinlength": {
     "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
   },
   "masterPassDoesntMatch": {
@@ -894,11 +897,11 @@
     "message": "Kopyalanmış dəyərləri lövhədən avtomatik təmizlə.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Veb sayt nişanlarını sıradan çıxart"
+  "enableFavicon": {
+    "message": "Veb sayt nişanlarını göstər"
   },
-  "disableFaviconDesc": {
-    "message": "Veb sayt nişanları, anbarınızda hər bir giriş elementinin yanında tanımağınıza kömək edən bir təsvir təqdim edir."
+  "faviconDesc": {
+    "message": "Hər girişin yanında tanına bilən bir təsvir göstər."
   },
   "enableMinToTray": {
     "message": "Bildiriş nişanına kiçildin"
@@ -1274,38 +1277,38 @@
     "message": "Fayl formatı"
   },
   "hCaptchaUrl": {
-    "message": "hCaptcha Url",
+    "message": "hCaptcha ünvanı",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "Load Accessibility Cookie"
+    "message": "Əlçatımlılıq çərəzini yüklə"
   },
   "registerAccessibilityUser": {
-    "message": "Register as an accessibility user at",
+    "message": "Əlçatımlılıq istifadəçisi kimi qeydiyyatdan keçin",
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
-    "message": "Copy and paste the link sent to your email below"
+    "message": "E-poçtunuza göndərilən bağlantını kopyalayıb aşağıda yapışdırın"
   },
   "enterhCaptchaUrl": {
-    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "message": "hCaptcha əlçatımlılıq çərəzini yükləmək üçün ünvanı daxil edin",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
-    "message": "hCaptcha Url is required",
+    "message": "hCaptcha ünvanı tələb olunur",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "invalidUrl": {
-    "message": "Invalid Url"
+    "message": "Yararsız ünvan"
   },
   "done": {
-    "message": "Done"
+    "message": "Bitdi"
   },
   "accessibilityCookieSaved": {
-    "message": "Accessibility cookie saved!"
+    "message": "Əlçatımlılıq çərəzi saxlanıldı!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "Əlçatımlılıq çərəzi saxlanılmadı"
   },
   "warning": {
     "message": "XƏBƏRDARLIQ",
@@ -1381,11 +1384,11 @@
   "touchIdConsentMessage": {
     "message": "anbarınızın kilidini açın"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Açılışda Windows Hello üçün soruşma."
+  "autoPromptWindowsHello": {
+    "message": "Açılışda Windows Hello-nu soruşun"
   },
-  "noAutoPromptTouchId": {
-    "message": "Açılışda Touch ID üçün soruşma."
+  "autoPromptTouchId": {
+    "message": "Açılışda Touch ID-ni soruşun"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Yenidən başladılanda ana parol ilə kilidlə"
@@ -1543,7 +1546,7 @@
   "acceptPolicies": {
     "message": "Bu qutunu işarələyərək aşağıdakılarla razılaşırsınız:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Xidmət Şərtləri və Gizlilik Siyasəti qəbul edilməyib."
   },
   "enableBrowserIntegration": {
@@ -1553,16 +1556,16 @@
     "message": "Səyyah inteqrasiyası səyyahda biometrik təsdiqləmə üçün istifadə olunur."
   },
   "browserIntegrationUnsupportedTitle": {
-    "message": "Browser integration not supported"
+    "message": "Səyyah inteqrasiyası dəstəklənmir"
   },
   "browserIntegrationMasOnlyDesc": {
-    "message": "Təəssüf ki, səyyah inteqrasiyası yalnız Mac App Store versiyasında dəstəklənir."
+    "message": "Təəssüf ki, səyyah inteqrasiyası indilik yalnız Mac App Store versiyasında dəstəklənir."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Təəssüf ki, səyyah inteqrasiyası hazır Windows Store versiyasında dəstəklənmir."
+    "message": "Təəssüf ki, səyyah inteqrasiyası hal-hazırda Windows Store versiyasında dəstəklənmir."
   },
   "browserIntegrationLinuxDesc": {
-    "message": "Unfortunately browser integration is currently not supported in the linux version."
+    "message": "Təəssüf ki, səyyah inteqrasiyası hal-hazırda Linux versiyasında dəstəklənmir."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Səyyah inteqrasiyası üçün təsdiqləmə tələb et"
@@ -1840,7 +1843,7 @@
     "message": "Təşkilatı tərk etdiniz."
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "Açar bağlayıcı xətası: Açar Bağlayıcının mövcud olduğuna və düzgün işlədiyinə əmin olun."
   },
   "lockAllVaults": {
     "message": "Bütün anbarları kilidlə"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API açar"
+  },
+  "organizationIsDisabled": {
+    "message": "Təşkilat sıradan çıxarıldı."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Sıradan çıxarılmış Təşkilatlardakı elementlərə müraciət edilə bilmir. Kömək üçün Təşkilatınızın sahibi ilə əlaqə saxlayın."
+  },
+  "neverLockWarning": {
+    "message": "\"Heç vaxt\" seçimini istifadə etmək istədiyinizə əminsiniz? Kilid seçimini \"Heç vaxt\" olaraq tənzimləsəniz, anbarınızın şifrələmə açarı cihazınızda saxlanılacaq. Bu seçimi istifadə etsəniz, cihazınızı daha yaxşı mühafizə etməlisiniz."
   }
 }

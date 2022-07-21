@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Utwórz konto"
   },
+  "startTrial": {
+    "message": "Rozpocznij okres próbny"
+  },
   "logIn": {
     "message": "Zaloguj się"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Hasło główne zapewnia dostęp do sejfu. To bardzo ważne, aby je pamiętać, ponieważ zapomnianego hasła nie będzie można odzyskać."
+  },
+  "masterPassImportant": {
+    "message": "Hasła główne nie mogą zostać odzyskane, jeśli je zapomnisz!"
   },
   "masterPassHintDesc": {
     "message": "Podpowiedź do hasła głównego może pomóc Ci przypomnieć hasło, jeśli je zapomnisz."
@@ -623,10 +629,13 @@
   "invalidEmail": {
     "message": "Adres e-mail jest nieprawidłowy."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Hasło główne jest wymagane."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Wymagane jest ponowne wpisanie hasła głównego."
+  },
+  "masterPasswordMinLength": {
     "message": "Hasło główne musi zawierać co najmniej 8 znaków."
   },
   "masterPassDoesntMatch": {
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Zmień język używany przez sejf."
   },
-  "disableIcons": {
-    "message": "Wyłącz ikony stron"
+  "enableFavicon": {
+    "message": "Pokaż ikony witryn"
   },
-  "disableIconsDesc": {
-    "message": "Wyświetlaj rozpoznawalną ikonę serwisu obok danych logowania w sejfie."
+  "faviconDesc": {
+    "message": "Pokaż rozpoznawalny obraz obok każdych danych logowania."
   },
   "enableGravatars": {
     "message": "Włącz Gravatary",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Korzystaj ze zdjęć profilowych załadowanych z serwisu gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Włączone"
   },
+  "activate": {
+    "message": "Aktywuj"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1262,6 +1274,9 @@
   },
   "disable": {
     "message": "Wyłącz"
+  },
+  "deactivate": {
+    "message": "Dezaktywuj"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Ten dostawca logowania dwustopniowego jest już włączony na koncie."
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Czy na pewno chcesz usunąć tego użytkownika?"
   },
+  "deactivateUserConfirmation": {
+    "message": "Użytkownik nie będzie już miał dostępu do organizacji, ale nadal będzie miał dostęp do swojego sejfu."
+  },
+  "activateUserConfirmation": {
+    "message": "Czy na pewno chcesz aktywować tego użytkownika, przyznając mu dostęp do organizacji?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Ostrzeżenie! Ten użytkownik wymaga serwera Key Connector do zarządzania szyfrowaniem. Usunięcie tego użytkownika z organizacji spowoduje trwałe wyłączenie jego konta. Nie możesz cofnąć tej akcji. Czy chcesz kontynuować?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Użytkownik $ID$ został usunięty.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Użytkownika $ID$ dezaktywowany.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Użytkownika $ID$ aktywowany.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Dezaktywować użytkownika $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Aktywować użytkownika $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,8 +3168,8 @@
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
   },
-  "acceptPoliciesError": {
-    "message": "Nie zaakceptowałeś regulaminu i polityki prywatności."
+  "acceptPoliciesRequired": {
+    "message": "Warunki użytkowania i polityka prywatności nie zostały zaakceptowane."
   },
   "termsOfService": {
     "message": "Regulamin"
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organizacja jest wyłączona."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Nie można uzyskać dostępu do elementów w wyłączonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   },
   "licenseIsExpired": {
     "message": "Licencja wygasła."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Klonuj"
   },
+  "masterPassPolicyTitle": {
+    "message": "Wymagania hasła głównego"
+  },
   "masterPassPolicyDesc": {
     "message": "Ustaw minimalne wymagania dla hasła głównego."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Wymagaj logowania dwustopniowego"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Wymagaj od użytkowników aktywowania logowania dwustopniowego na swoich kontach osobistych."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Wyłączone"
+  },
+  "deactivated": {
+    "message": "Dezaktywowany"
   },
   "sendLink": {
     "message": "Link wysyłki",
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Czy na pewno chcesz usunąć następujących użytkowników? Proces może potrwać kilka sekund i nie może zostać przerwany lub anulowany."
   },
+  "deactivateUsersWarning": {
+    "message": "Czy na pewno chcesz dezaktywować następujących użytkowników? Nie będą już mieli dostępu do organizacji, ale nadal będą mieli dostęp do swoich indywidualnych sejfów. Proces może potrwać kilka sekund i nie można go przerwać ani anulować."
+  },
+  "activateUsersWarning": {
+    "message": "Czy na pewno chcesz aktywować następujących użytkowników, przyznając im dostęp do organizacji? Proces może potrwać kilka sekund i nie można go przerwać ani anulować."
+  },
   "theme": {
     "message": "Motyw"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Usunięto"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Dezaktywowany pomyślnie"
+  },
+  "bulkActivatedMessage": {
+    "message": "Aktywowany pomyślnie"
+  },
   "bulkFilteredMessage": {
     "message": "Wykluczono, nie dotyczy tej akcji."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Usuń użytkowników"
+  },
+  "deactivateUsers": {
+    "message": "Dezaktywuj użytkowników"
+  },
+  "activateUsers": {
+    "message": "Aktywuj użytkowników"
   },
   "error": {
     "message": "Błąd"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Włącz",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "zasadę logowania jednokrotnego SSO",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": ", aby wymagać od wszystkich użytkowników logowania jednokrotnego SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "Zasady logowania jednokrotnego SSO i pojedynczej organizacji muszą być włączone, aby skonfigurować serwer Key Connector."
@@ -5048,7 +5135,7 @@
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
-    "message": "Self-hosted sponsorships synced."
+    "message": "Zsynchronizowano sponsorowanie na własnym hostingu."
   },
   "billingManagedByProvider": {
     "message": "Zarządzane przez $PROVIDER$",
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "Token dostępu API"
+  },
+  "deviceVerification": {
+    "message": "Weryfikacja urządzenia"
+  },
+  "enableDeviceVerification": {
+    "message": "Włącz weryfikację urządzenia"
+  },
+  "deviceVerificationDesc": {
+    "message": "Gdy włączone, kody weryfikacyjne są wysyłane na Twój adres e-mail podczas logowania się z nierozpoznanego urządzenia"
+  },
+  "updatedDeviceVerification": {
+    "message": "Zaktualizowano weryfikację urządzenia"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Czy na pewno chcesz włączyć weryfikację urządzenia? Wiadomości e-mail z kodem weryfikacyjnym będą wysyłane do: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Dane wejściowe są wymagane."
+  },
+  "inputEmail": {
+    "message": "Dane wejściowe nie są adresem e-mail."
+  },
+  "inputMinLength": {
+    "message": "Dane wejściowe muszą zawierać co najmniej $COUNT$ znaki(-ów).",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "Pola powyżej wymagające Twojej uwagi: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Włącz"
+  },
+  "on": {
+    "message": "Wł."
   }
 }

@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Неисправан имејл."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Главна Лозинка је неопходна."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Поновно уписивање главне лозинке је неопходно."
+  },
+  "masterPasswordMinlength": {
     "message": "Главна Лозинка треба имати бар 8 знака."
   },
   "masterPassDoesntMatch": {
@@ -567,23 +570,23 @@
     "message": "Без фасцикле",
     "description": "This is the folder for uncategorized items"
   },
-  "disableAddLoginNotification": {
-    "message": "Онемогући обавештење Додај Пријаву"
+  "enableAddLoginNotification": {
+    "message": "Питај пре додавања"
   },
   "addLoginNotificationDesc": {
     "message": "„Нотификације Додај Лозинку“ аутоматски тражи да сачувате нове пријаве у сефу кад год се први пут пријавите на њих."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Не приказуј кредитне картице на страници"
+  "showCardsCurrentTab": {
+    "message": "Прикажи кредитне картице на страници картице"
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Ставке кредитне картице из вашег сефа наведене су на страници „Тренутна картица“ ради једноставног приступа аутоматског попуњавања."
+  "showCardsCurrentTabDesc": {
+    "message": "Прикажи ставке кредитних картица на страници картице за лакше аутоматско допуњавање."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Не приказуј идентитете на страници"
+  "showIdentitiesCurrentTab": {
+    "message": "Прикажи идентитете на страници"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Идентитети из вашег сефа наведени су на страници „Тренутна картица“ ради једноставног приступа аутоматског попуњавања."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "Прикажи ставке идентитета на страници за лакше аутоматско допуњавање."
   },
   "clearClipboard": {
     "message": "Обриши привремену меморију",
@@ -599,11 +602,11 @@
   "notificationAddSave": {
     "message": "Сачувај"
   },
-  "disableChangedPasswordNotification": {
-    "message": "Онемогући обавештење о  промењеним лозинкама"
+  "enableChangedPasswordNotification": {
+    "message": "Питај за ажурирање постојеће пријаве"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "„Нотификација Промењена Лозинка“ аутоматски тражи да ажурирате лозинку за пријављивање у сефу сваки пут када открије да сте је променили на веб сајту."
+  "changedPasswordNotificationDesc": {
+    "message": "Прикажи потврду за ажурирање тренутне лозинке за пријаву када се промена препозна на Web страници."
   },
   "notificationChangeDesc": {
     "message": "Да ли желите да ажурирате ову лозинку за Bitwarden?"
@@ -611,11 +614,11 @@
   "notificationChangeSave": {
     "message": "Ажурирај"
   },
-  "disableContextMenuItem": {
-    "message": "Онемогући опције у контекстном менију"
+  "enableContextMenuItem": {
+    "message": "Прикажи контекстни мени"
   },
-  "disableContextMenuItemDesc": {
-    "message": "Опције контекстуалног менија пружају брз приступ генерисању лозинки и пријавама за веб сајт на вашом тренутном језичку."
+  "contextMenuItemDesc": {
+    "message": "Користите други клик за приступање генерисању лозинки и пријавама за тренутну web страницу. "
   },
   "defaultUriMatchDetection": {
     "message": "Стандардно налажење УРЛ",
@@ -806,14 +809,14 @@
   "refreshComplete": {
     "message": "Освежавање је завршено"
   },
-  "disableAutoTotpCopy": {
-    "message": "Угаси аутоматско копирање једнократног кода"
+  "enableAutoTotpCopy": {
+    "message": "Аутоматски копирај једнократни код"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Ако је за вашу пријаву приложен аутентификациони кључ, једнократни код се аутоматски копира у вашој привременој меморији кад год ауто-попуните пријаву."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Не тражи биометрику након покретања."
+  "enableAutoBiometricsPrompt": {
+    "message": "Захтевај биометрију при покретању"
   },
   "premiumRequired": {
     "message": "Потребан Премијум"
@@ -1033,17 +1036,17 @@
   "popupU2fCloseMessage": {
     "message": "Овај прегледач не може да обрађује U2F захтеве у овом искачућем прозору. Да ли желите да отворите овај искачући прозор у новом прозору како бисте могли да се пријавите користећи U2F?"
   },
-  "disableFavicon": {
-    "message": "Онемогући иконице сајта"
+  "enableFavicon": {
+    "message": "Прикажи иконе сајтова"
   },
-  "disableFaviconDesc": {
-    "message": "Иконе веб сајта пружају препознатљиву слику поред сваке пријаве у сефу."
+  "faviconDesc": {
+    "message": "Прикажи препознатљиву слику поред сваке ставке за пријаву."
   },
-  "disableBadgeCounter": {
-    "message": "Онемогући бројач на иконици"
+  "enableBadgeCounter": {
+    "message": "Прикажи бедж са бројачем"
   },
-  "disableBadgeCounterDesc": {
-    "message": "Бројач иконице указује колико пријава имате за тренутну страницу у вашем сефу."
+  "badgeCounterDesc": {
+    "message": "Означи број пријава које се могу користити на тренутној Web страници."
   },
   "cardholderName": {
     "message": "Име Власника Картице"
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "Означавањем овог поља пристајете на следеће:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Услови услуге и Политика приватности нису прихваћени."
   },
   "termsOfService": {
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Време истека вашег сефа је премашило дозвољена ограничења од стране ваше организације."
   },
   "vaultExportDisabled": {
@@ -1926,7 +1929,7 @@
     "message": "„Ухвати све“ е-порука"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Користите подешено catch-all пријемно сандуче вашег домена."
   },
   "random": {
     "message": "Случајно"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector грешка: будите сигурни да је Key Connector доступан и да ради."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }

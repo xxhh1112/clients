@@ -101,10 +101,10 @@
     "message": "Sem credenciais correspondentes."
   },
   "unlockVaultMenu": {
-    "message": "Desbloqueie seu Cofre"
+    "message": "Desbloqueie seu cofre"
   },
   "loginToVaultMenu": {
-    "message": "Acesse o seu Cofre"
+    "message": "Acesse o seu cofre"
   },
   "autoFillInfo": {
     "message": "Não há credenciais disponíveis para autopreenchimento para a aba do navegador atual."
@@ -149,7 +149,7 @@
     "message": "Alterar Senha Mestra"
   },
   "fingerprintPhrase": {
-    "message": "Frase de Biometria",
+    "message": "Frase Biométrica",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -364,7 +364,7 @@
     "message": "Senha mestra inválida"
   },
   "vaultTimeout": {
-    "message": "Tempo limite do cofre."
+    "message": "Cofre - tempo esgotado"
   },
   "lockNow": {
     "message": "Bloquear Agora"
@@ -403,7 +403,7 @@
     "message": "4 horas"
   },
   "onLocked": {
-    "message": "Quando o Sistema for Bloqueado"
+    "message": "No bloqueio"
   },
   "onRestart": {
     "message": "Ao Reiniciar"
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Endereço de e-mail inválido."
   },
-  "masterPassRequired": {
-    "message": "A senha mestra é obrigatória."
+  "masterPasswordRequired": {
+    "message": "A senha mestre é obrigatória."
   },
-  "masterPassLength": {
-    "message": "A senha mestra deve ter pelo menos 8 caracteres."
+  "confirmMasterPasswordRequired": {
+    "message": "É necessário redigitar a senha mestre."
+  },
+  "masterPasswordMinlength": {
+    "message": "A senha mestre deve ter pelo menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -567,23 +570,23 @@
     "message": "Nenhuma Pasta",
     "description": "This is the folder for uncategorized items"
   },
-  "disableAddLoginNotification": {
-    "message": "Desativar Notificação de Adicionar Credencial"
+  "enableAddLoginNotification": {
+    "message": "Peça para adicionar login"
   },
   "addLoginNotificationDesc": {
     "message": "A \"Notificação de Adicionar Login\" pede para salvar automaticamente novas logins para o seu cofre quando você inicia uma sessão em um site pela primeira vez."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Não Mostrar Cartões na Página 'Aba'"
+  "showCardsCurrentTab": {
+    "message": "Mostrar cartões em páginas com guias."
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Os itens de cartão do seu cofre estão listados na página 'Aba Atual' para facilitar o acesso ao preenchimento automático."
+  "showCardsCurrentTabDesc": {
+    "message": "Exibir itens de cartão em páginas com abas para simplificar o preenchimento automático"
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Não Mostrar Identidades na Página \"Aba\""
+  "showIdentitiesCurrentTab": {
+    "message": "Exibir Identidades na Aba Atual"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Os itens de identidade do seu cofre estão listados na página 'Aba Atual' para facilitar o acesso ao preenchimento automático."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "Liste os itens de identidade na aba atual  para facilitar preenchimento automático."
   },
   "clearClipboard": {
     "message": "Limpar Área de Transferência",
@@ -599,11 +602,11 @@
   "notificationAddSave": {
     "message": "Salvar"
   },
-  "disableChangedPasswordNotification": {
-    "message": "Desativar Notificação de Alteração da Senha"
+  "enableChangedPasswordNotification": {
+    "message": "Pedir para atualizar os dados de login existentes"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "A \"Notificação de Alteração da Senha\" solicita automaticamente que você atualize a senha de uma credencial no seu cofre quando detecta que você a alterou em um site."
+  "changedPasswordNotificationDesc": {
+    "message": "Peça para atualizar a senha de login quando uma mudança for detectada em um site."
   },
   "notificationChangeDesc": {
     "message": "Você quer atualizar esta senha no Bitwarden?"
@@ -611,11 +614,11 @@
   "notificationChangeSave": {
     "message": "Atualizar"
   },
-  "disableContextMenuItem": {
-    "message": "Desativar Opções do Menu de Contexto"
+  "enableContextMenuItem": {
+    "message": "Mostrar opções de menu de contexto"
   },
-  "disableContextMenuItemDesc": {
-    "message": "As opções do menu de contexto fornecem acesso rápido à geração de senha e credenciais para o site na sua aba atual."
+  "contextMenuItemDesc": {
+    "message": "Use um duplo clique para acessar a geração de usuários e senhas correspondentes para o site. "
   },
   "defaultUriMatchDetection": {
     "message": "Detecção de Correspondência de URI Padrão",
@@ -639,7 +642,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Escuro Solarizado",
+    "message": "Solarized (escuro)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
@@ -806,14 +809,14 @@
   "refreshComplete": {
     "message": "Atualização completa"
   },
-  "disableAutoTotpCopy": {
-    "message": "Desativar Cópia Automática de TOTP"
+  "enableAutoTotpCopy": {
+    "message": "Copiar TOTP automaticamente"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Se a sua credencial tiver uma chave de autenticação anexada, o código de verificação TOTP será copiado automaticamente para a área de transferência quando você autopreencher a credencial."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Não solicitar por biometria na inicialização."
+  "enableAutoBiometricsPrompt": {
+    "message": "Pedir biometria ao iniciar"
   },
   "premiumRequired": {
     "message": "Requer Assinatura Premium"
@@ -954,7 +957,7 @@
     "message": "Ativar o Autopreenchimento ao Carregar a Página"
   },
   "enableAutoFillOnPageLoadDesc": {
-    "message": "Se um formulário de login for detectado, realize automaticamente um autopreenchimento quando a página web carregar."
+    "message": "Se um formulário de login for detectado, realizar automaticamente um auto-preenchimento quando a página web carregar."
   },
   "experimentalFeature": {
     "message": "Atualmente, este é um recurso experimental. Utilize por sua conta e risco."
@@ -963,10 +966,10 @@
     "message": "Configuração de autopreenchimento padrão para itens de credenciais"
   },
   "defaultAutoFillOnPageLoadDesc": {
-    "message": "Depois de ativar o Autopreenchimento ao carregar a página, você pode ativar ou desativar o recurso para itens de credenciais individuais. Esta é a configuração padrão para itens de credenciais que não são configurados separadamente."
+    "message": "Depois de habilitar o Auto-preenchimento ao carregar a página, você pode habilitar ou desabilitar o recurso para itens de credenciais individuais. Esta é a configuração padrão para itens de credenciais que não são configurados separadamente."
   },
   "itemAutoFillOnPageLoad": {
-    "message": "Autopreencher no Carregamento da Página (se ativado nas Opções)"
+    "message": "Auto-preencher no Carregamento da Página (se ativado nas Opções)"
   },
   "autoFillOnPageLoadUseDefault": {
     "message": "Usar configuração padrão"
@@ -1033,17 +1036,17 @@
   "popupU2fCloseMessage": {
     "message": "Este navegador não pode processar requisições U2F nesta janela popup. Você quer abrir este popup em uma nova janela para que você possa entrar usando U2F?"
   },
-  "disableFavicon": {
-    "message": "Desativar Ícones de Site"
+  "enableFavicon": {
+    "message": "Mostrar ícones do site"
   },
-  "disableFaviconDesc": {
-    "message": "O Ícone do Site fornece uma imagem reconhecível ao lado de cada credencial no seu cofre."
+  "faviconDesc": {
+    "message": "Mostrar uma imagem reconhecível ao lado de cada login."
   },
-  "disableBadgeCounter": {
-    "message": "Desativar Contador"
+  "enableBadgeCounter": {
+    "message": "Mostrar contador de insígnia"
   },
-  "disableBadgeCounterDesc": {
-    "message": "O contador indica a quantidade de credenciais que você tem para a página atual no seu cofre."
+  "badgeCounterDesc": {
+    "message": "Indique quantos acessos você tem para a página “web” atual."
   },
   "cardholderName": {
     "message": "Titular do Cartão"
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "Ao marcar esta caixa, você concorda com o seguinte:"
   },
-  "acceptPoliciesError": {
-    "message": "Os Termos de Serviço e a Política de Privacidade não foram reconhecidos."
+  "acceptPoliciesRequired": {
+    "message": "Os Termos de Serviço e a Política de Privacidade não foram aceitos."
   },
   "termsOfService": {
     "message": "Termos de Serviço"
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "O tempo limite do seu cofre excede as restrições definidas por sua organização."
+  "vaultTimeoutTooLarge": {
+    "message": "Seu tempo de espera no cofre excede as restrições estabelecidas por sua organização."
   },
   "vaultExportDisabled": {
     "message": "Exportação de Cofre Desativada"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Erro de Key Connector: certifique-se de que a Key Connector está disponível e funcionando corretamente."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }

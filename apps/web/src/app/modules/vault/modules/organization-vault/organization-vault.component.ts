@@ -54,7 +54,6 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
   organization: Organization;
   collectionId: string = null;
   type: CipherType = null;
-  deleted = false;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
@@ -152,6 +151,10 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
     });
   }
 
+  get deleted(): boolean {
+    return this.activeFilter.status === "trash";
+  }
+
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
@@ -159,44 +162,13 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
   async applyVaultFilter(vaultFilter: VaultFilter) {
     this.ciphersComponent.showAddNew = vaultFilter.status !== "trash";
     this.activeFilter = vaultFilter;
-    await this.ciphersComponent.reload(this.buildFilter(), vaultFilter.status === "trash");
+    await this.ciphersComponent.reload(
+      this.activeFilter.buildFilter(),
+      vaultFilter.status === "trash"
+    );
     this.vaultFilterComponent.searchPlaceholder =
       this.vaultService.calculateSearchBarLocalizationString(this.activeFilter);
     this.go();
-  }
-
-  private buildFilter(): (cipher: CipherView) => boolean {
-    return (cipher) => {
-      let cipherPassesFilter = true;
-      if (this.activeFilter.status === "favorites" && cipherPassesFilter) {
-        cipherPassesFilter = cipher.favorite;
-      }
-      if (this.activeFilter.status === "trash" && cipherPassesFilter) {
-        cipherPassesFilter = cipher.isDeleted;
-      }
-      if (this.activeFilter.cipherType != null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.type === this.activeFilter.cipherType;
-      }
-      if (
-        this.activeFilter.selectedFolder != null &&
-        this.activeFilter.selectedFolderId != "none" &&
-        cipherPassesFilter
-      ) {
-        cipherPassesFilter = cipher.folderId === this.activeFilter.selectedFolderId;
-      }
-      if (this.activeFilter.selectedCollectionId != null && cipherPassesFilter) {
-        cipherPassesFilter =
-          cipher.collectionIds != null &&
-          cipher.collectionIds.indexOf(this.activeFilter.selectedCollectionId) > -1;
-      }
-      if (this.activeFilter.selectedOrganizationId != null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.organizationId === this.activeFilter.selectedOrganizationId;
-      }
-      if (this.activeFilter.myVaultOnly && cipherPassesFilter) {
-        cipherPassesFilter = cipher.organizationId === null;
-      }
-      return cipherPassesFilter;
-    };
   }
 
   filterSearchText(searchText: string) {
@@ -239,7 +211,7 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
         if (this.organization.canEditAnyCollection) {
           comp.collectionIds = cipher.collectionIds;
           comp.collections = this.vaultFilterComponent.collections.fullList.filter(
-            (c) => !c.readOnly
+            (c) => !c.readOnly && c.id != null
           );
         }
         comp.organization = this.organization;
@@ -258,7 +230,7 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
     component.type = this.type;
     if (this.organization.canEditAnyCollection) {
       component.collections = this.vaultFilterComponent.collections.fullList.filter(
-        (c) => !c.readOnly
+        (c) => !c.readOnly && c.id != null
       );
     }
     if (this.collectionId != null) {
@@ -313,7 +285,7 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
     component.organizationId = this.organization.id;
     if (this.organization.canEditAnyCollection) {
       component.collections = this.vaultFilterComponent.collections.fullList.filter(
-        (c) => !c.readOnly
+        (c) => !c.readOnly && c.id != null
       );
     }
     // Regardless of Admin state, the collection Ids need to passed manually as they are not assigned value
@@ -331,17 +303,11 @@ export class OrganizationVaultComponent implements OnInit, OnDestroy {
     });
   }
 
-  private clearFilters() {
-    this.collectionId = null;
-    this.type = null;
-    this.deleted = false;
-  }
-
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        type: this.type,
-        collectionId: this.collectionId,
+        type: this.activeFilter.cipherType,
+        collectionId: this.activeFilter.selectedCollectionId,
         deleted: this.deleted ? true : null,
       };
     }

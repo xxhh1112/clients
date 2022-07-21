@@ -5,7 +5,7 @@ on:
   pull_request:
     branches-ignore:
       - 'l10n_master'
-      - 'gh-pages'
+      - 'cf-pages'
     paths:
       - 'apps/desktop/**'
       - '*'
@@ -16,7 +16,7 @@ on:
     branches:
       - 'master'
       - 'rc'
-      - 'hotfix-rc/**'
+      - 'hotfix-rc'
     paths:
       - 'apps/desktop/**'
       - 'libs/**'

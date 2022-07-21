@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "כתובת אימייל לא תקינה."
   },
-  "masterPassRequired": {
-    "message": "יש להזין את הסיסמה הראשית."
+  "masterPasswordRequired": {
+    "message": "הסיסמה הראשית נדרשת."
   },
-  "masterPassLength": {
-    "message": "הסיסמה הראשית חייבת להיות לפחות באורך 8 תווים."
+  "confirmMasterPasswordRequired": {
+    "message": "נדרשת חזרה על הסיסמה הראשית."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "אימות סיסמה ראשית אינו תואם."
@@ -894,11 +897,11 @@
     "message": "נקה אוטומטית ערכים שהועתקו ללוח ההעתקות (clipboard).",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "בטל אייקונים של האתר"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "יכולת הצג אייקונים-של-האתר מאפשרת הצגה של תמונה או אייקון מוכר ליד פרטי הכניסה שבכספת שלך."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "מזער למגש המערכת"
@@ -1381,11 +1384,11 @@
   "touchIdConsentMessage": {
     "message": "פתח את הכספת שלך"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "אל תבקש גישה ל- Windows Hello בעת ההפעלה."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "אל תבקש גישה ל-Touch ID בעת ההפעלה."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "נעל בעזרת הסיסמה הראשית בהפעלה מחדש"
@@ -1543,8 +1546,8 @@
   "acceptPolicies": {
     "message": "סימון תיבה זו מהווה את הסכמתך לתנאים הבאים:"
   },
-  "acceptPoliciesError": {
-    "message": "לא הסכמת לתנאי השירות ומדיניות הפרטיות."
+  "acceptPoliciesRequired": {
+    "message": "תנאי השירות ומדיניות הפרטיות לא אושרו."
   },
   "enableBrowserIntegration": {
     "message": "אפשר אינטגרציה עם הדפדפן"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   }
 }

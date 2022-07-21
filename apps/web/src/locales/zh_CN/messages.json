@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "创建账户"
   },
+  "startTrial": {
+    "message": "开始试用"
+  },
   "logIn": {
     "message": "登录"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "主密码是您访问密码库的密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。"
+  },
+  "masterPassImportant": {
+    "message": "主密码忘记后，将无法恢复！"
   },
   "masterPassHintDesc": {
     "message": "主密码提示可以在你忘记密码时帮你回忆起来。"
@@ -623,10 +629,13 @@
   "invalidEmail": {
     "message": "无效的电子邮件地址。"
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "必须填写主密码。"
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "必须填写确认主密码。"
+  },
+  "masterPasswordMinLength": {
     "message": "主密码至少需要 8 个字符。"
   },
   "masterPassDoesntMatch": {
@@ -645,7 +654,7 @@
     "message": "电子邮件地址"
   },
   "yourVaultIsLocked": {
-    "message": "您的密码库已被锁定，请验证您的主密码以继续。"
+    "message": "您的密码库已锁定，请验证您的主密码以继续。"
   },
   "unlock": {
     "message": "解锁​​​​"
@@ -1067,7 +1076,7 @@
     "message": "删除账户"
   },
   "deleteAccountDesc": {
-    "message": "接下来的操作会删除您的账户和所有相关数据。"
+    "message": "接下来的操作会删除您的账户和所有密码库数据。"
   },
   "deleteAccountWarning": {
     "message": "删除账户是永久性的。不能被撤消。"
@@ -1076,7 +1085,7 @@
     "message": "账户已删除"
   },
   "accountDeletedDesc": {
-    "message": "您的账户已关闭，所有相关数据也已被删除。"
+    "message": "您的 Bitwarden 账户和密码库数据已被永久删除。"
   },
   "myAccount": {
     "message": "我的账户"
@@ -1151,21 +1160,21 @@
   "languageDesc": {
     "message": "更改网页密码库的语言。"
   },
-  "disableIcons": {
-    "message": "禁用网站图标"
+  "enableFavicon": {
+    "message": "显示网站图标"
   },
-  "disableIconsDesc": {
-    "message": "网站图标用于在您密码库的每个登录项目旁显示一个易识别的图标。"
+  "faviconDesc": {
+    "message": "在每个登录旁显示一个可识别的图像。"
   },
   "enableGravatars": {
-    "message": "启用 Gravatar 头像",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "message": "显示 Gravatar 头像",
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "使用从 gravatar.com 加载的头像图像。"
   },
   "enableFullWidth": {
-    "message": "启用全宽布局",
+    "message": "显示全宽布局",
     "description": "Allows scaling the web vault UI's width"
   },
   "enableFullWidthDesc": {
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "启用"
   },
+  "activate": {
+    "message": "激活"
+  },
   "premium": {
     "message": "高级会员",
     "description": "Premium Membership"
@@ -1261,6 +1273,9 @@
     "message": "管理"
   },
   "disable": {
+    "message": "停用"
+  },
+  "deactivate": {
     "message": "停用"
   },
   "twoStepLoginProviderEnabled": {
@@ -1494,7 +1509,7 @@
     "message": "发现未启用 2FA 的登录项目"
   },
   "inactive2faFoundDesc": {
-    "message": "我们在您的密码库中发现 $COUNT$ 个网站可能没有配置双重身份验证（通过 twofactorauth.org）。为了进一步保护这些账户，您应该启用双重身份验证。",
+    "message": "我们在您的密码库中发现 $COUNT$ 个网站可能没有配置双重身份验证（根据 2fa.directory）。为了进一步保护这些账户，您应该启用双重身份验证。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "您确实要移除此用户吗？"
   },
+  "deactivateUserConfirmation": {
+    "message": "该用户将无法再访问本组织，但仍可以访问其个人密码库。"
+  },
+  "activateUserConfirmation": {
+    "message": "您确定要激活此用户，授予他们访问本组织的权限吗？"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "警告！此用户需要 Key Connector 来管理他们的加密。从您的组织中移除此用户将永久禁用他们的账户。此操作无法撤消。您要继续吗？"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "已删除用户 $ID$。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "已停用的用户 $ID$。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "已激活的用户 $ID$。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "停用用户 $ID$ 吗？",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "激活用户 $ID$ 吗？",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,7 +3168,7 @@
   "acceptPolicies": {
     "message": "选中此框表示您同意："
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "尚未同意服务条款和隐私政策。"
   },
   "termsOfService": {
@@ -3127,7 +3184,7 @@
     "message": "密码库超时时间"
   },
   "vaultTimeoutDesc": {
-    "message": "选择您的密码库何时超时并执行所选的动作。"
+    "message": "选择您的密码库何时执行密码库超时动作。"
   },
   "oneMinute": {
     "message": "1 分钟"
@@ -3148,7 +3205,7 @@
     "message": "4 小时"
   },
   "onRefresh": {
-    "message": "在浏览器刷新时"
+    "message": "浏览器刷新时"
   },
   "dateUpdated": {
     "message": "更新于",
@@ -3161,11 +3218,14 @@
   "organizationIsDisabled": {
     "message": "该组织已被禁用。"
   },
+  "disabledOrganizationFilterError": {
+    "message": "无法访问已禁用组织中的项目。请联系您的组织所有者获取协助。"
+  },
   "licenseIsExpired": {
     "message": "授权已过期"
   },
   "updatedUsers": {
-    "message": "更新用户"
+    "message": "用户已更新"
   },
   "selected": {
     "message": "已选择"
@@ -3285,20 +3345,26 @@
   "clone": {
     "message": "克隆"
   },
+  "masterPassPolicyTitle": {
+    "message": "主密码要求"
+  },
   "masterPassPolicyDesc": {
-    "message": "设置主密码强度的最低要求。"
+    "message": "设置主密码强度要求。"
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "需要两步登录"
   },
   "twoStepLoginPolicyDesc": {
-    "message": "要求用户在个人账户上设置两步登录。"
+    "message": "要求成员设置两步登录。"
   },
   "twoStepLoginPolicyWarning": {
-    "message": "非所有者或管理员并且其个人账户未启用两步登录的组织成员将从组织中移除，并将收到一封关于此更改的电子邮件通知。"
+    "message": "非所有者或管理员并且其账户未启用两步登录的组织成员将从组织中移除，并将收到一封关于此更改的电子邮件通知。"
   },
   "twoStepLoginPolicyUserWarning": {
     "message": "您的组织要求您在您的个人账户上启用两步登录。如果您禁用所有两步登录提供程序，您将自动从这些组织中移除。"
   },
   "passwordGeneratorPolicyDesc": {
-    "message": "设置密码生成器配置的最低要求。"
+    "message": "设置密码生成器要求。"
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "一个或多个组织策略正在影响您的生成器设置。"
@@ -3358,10 +3424,10 @@
     "message": "密码库超时动作"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "已锁定的密码库需要重新输入主密码才能再次访问。"
+    "message": "需要主密码或其他解锁方式才能再次访问您的密码库。"
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "已注销的密码库需要重新验证才能再次访问。"
+    "message": "需要重新验证才能再次访问您的密码库。"
   },
   "lock": {
     "message": "锁定",
@@ -3519,7 +3585,7 @@
     "message": "单一组织"
   },
   "singleOrgDesc": {
-    "message": "限制用户加入任何其他组织。"
+    "message": "限制成员加入其他组织。"
   },
   "singleOrgBlockCreateMessage": {
     "message": "您当前的组织策略禁止您加入多个组织。请联系您的组织管理员，或从其他 Bitwarden 账户注册。"
@@ -3528,16 +3594,16 @@
     "message": "非所有者或管理员并且已是其他组织成员的组织成员将从您的组织中移除。"
   },
   "requireSso": {
-    "message": "单点登录身份验证"
+    "message": "要求单点登录（SSO）验证"
   },
   "requireSsoPolicyDesc": {
-    "message": "要求用户使用企业单点登录方式登录。"
+    "message": "要求成员使用企业单点登录方式登录。"
   },
   "prerequisite": {
     "message": "先决条件"
   },
   "requireSsoPolicyReq": {
-    "message": "启用此策略前，需先启用「单一组织」企业策略。"
+    "message": "激活此策略前，需先启用「单一组织」企业策略。"
   },
   "requireSsoPolicyReqError": {
     "message": "单一组织策略未启用。"
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "已禁用"
+  },
+  "deactivated": {
+    "message": "已停用"
   },
   "sendLink": {
     "message": "Send 链接",
@@ -3829,10 +3898,10 @@
     }
   },
   "personalOwnership": {
-    "message": "个人所有权"
+    "message": "移除个人密码库"
   },
   "personalOwnershipPolicyDesc": {
-    "message": "通过移除个人所有权选项，要求用户将密码库项目保存到组织。"
+    "message": "通过禁用个人密码库选项，要求成员将项目保存到组织。"
   },
   "personalOwnershipExemption": {
     "message": "组织的所有者和管理员豁免此策略。"
@@ -3844,7 +3913,7 @@
     "message": "禁用 Send"
   },
   "disableSendPolicyDesc": {
-    "message": "不允许用户创建和编辑 Bitwarden Send。但允许删除现有的 Send。",
+    "message": "不允许成员创建或编辑 Send。",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -3870,7 +3939,7 @@
     "message": "可以管理组织策略的组织用户豁免此策略的执行。"
   },
   "disableHideEmail": {
-    "message": "不允许用户在创建或编辑 Send 时隐藏他们的电子邮件地址。",
+    "message": "在创建或编辑 Send 时始终显示成员的电子邮件地址。",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -4169,7 +4238,7 @@
     "message": "主密码重置"
   },
   "resetPasswordPolicyDescription": {
-    "message": "允许组织管理员重置组织用户的主密码。"
+    "message": "允许管理员重置成员的主密码。"
   },
   "resetPasswordPolicyWarning": {
     "message": "组织中的用户自行注册或被自动注册后，管理员才能重置他们的主密码。"
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "您确定要移除以下用户吗？该过程可能需要几秒钟才能完成，并且不能中断或取消。"
   },
+  "deactivateUsersWarning": {
+    "message": "您确定要停用以下成员吗？他们将无法再访问该组织，但仍可以访问其个人密码库。该过程可能需要几秒钟才能完成，并且不能被中断或取消。"
+  },
+  "activateUsersWarning": {
+    "message": "您确定要激活以下成员，授予他们对组织的访问权限吗？该过程可能需要几秒钟才能完成，并且不能被中断或取消。"
+  },
   "theme": {
     "message": "主题"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "移除成功"
   },
+  "bulkDeactivatedMessage": {
+    "message": "停用成功"
+  },
+  "bulkActivatedMessage": {
+    "message": "激活成功"
+  },
   "bulkFilteredMessage": {
     "message": "排除，不适用于此操作。"
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "移除用户"
+  },
+  "deactivateUsers": {
+    "message": "停用用户"
+  },
+  "activateUsers": {
+    "message": "激活用户"
   },
   "error": {
     "message": "错误"
@@ -4383,7 +4470,7 @@
     "message": "添加"
   },
   "updatedMasterPassword": {
-    "message": "已更新主密码。"
+    "message": "已更新主密码"
   },
   "updateMasterPassword": {
     "message": "更新主密码"
@@ -4398,7 +4485,7 @@
     "message": "密码库超时时间"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "为所有用户配置最大密码库超时时间。"
+    "message": "为成员配置最大密码库超时时间。"
   },
   "maximumVaultTimeoutLabel": {
     "message": "最大密码库超时时间"
@@ -4441,7 +4528,7 @@
     "message": "禁用个人密码库导出"
   },
   "disablePersonalVaultExportDesc": {
-    "message": "禁止用户导出个人密码库数据。"
+    "message": "不允许成员导出他们的个人密码库数据。"
   },
   "vaultExportDisabled": {
     "message": "密码库导出已禁用"
@@ -4732,19 +4819,19 @@
     "message": "设置后，您的配置将被保存，成员将能够使用他们的身份提供程序凭据进行身份验证。"
   },
   "ssoPolicyHelpStart": {
-    "message": "启用",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "message": "使用",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO 身份验证策略",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "将要求所有会员使用 SSO 登录。",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "需要先设置 Key Connector 解密，然后才能启用 SSO 身份验证和单一组织策略。"
+    "message": "设置 Key Connector 解密之前，需要先启用 SSO 身份验证和单一组织策略。"
   },
   "memberDecryptionOption": {
     "message": "成员解密选项"
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API 访问令牌"
+  },
+  "deviceVerification": {
+    "message": "设备验证"
+  },
+  "enableDeviceVerification": {
+    "message": "启用设备验证"
+  },
+  "deviceVerificationDesc": {
+    "message": "启用后，当登录未识别的设备时，验证码会发送到您的电子邮箱"
+  },
+  "updatedDeviceVerification": {
+    "message": "设备验证已更新"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "您确定要启用设备验证吗？验证码邮件将发送到 $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "必须输入内容。"
+  },
+  "inputEmail": {
+    "message": "输入的不是电子邮件地址。"
+  },
+  "inputMinLength": {
+    "message": "至少输入 $COUNT$ 个字符。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "上面的 $COUNT$ 个字段需要您注意。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "打开"
+  },
+  "on": {
+    "message": "开启"
   }
 }

@@ -57,7 +57,18 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { BadgeModule, ButtonModule, CalloutModule, MenuModule } from "@bitwarden/components";
+import {
+  BadgeModule,
+  ButtonModule,
+  CalloutModule,
+  FormFieldModule,
+  SubmitButtonModule,
+  MenuModule,
+} from "@bitwarden/components";
+
+import { PasswordStrengthComponent } from "../components/password-strength.component";
+import { PaymentComponent } from "../settings/payment.component";
+import { TaxInfoComponent } from "../settings/tax-info.component";
 
 registerLocaleData(localeAf, "af");
 registerLocaleData(localeAz, "az");
@@ -111,6 +122,7 @@ registerLocaleData(localeZhCn, "zh-CN");
 registerLocaleData(localeZhTw, "zh-TW");
 
 @NgModule({
+  declarations: [PasswordStrengthComponent, PaymentComponent, TaxInfoComponent],
   imports: [
     CommonModule,
     DragDropModule,
@@ -126,6 +138,8 @@ registerLocaleData(localeZhTw, "zh-TW");
     BadgeModule,
     ButtonModule,
     MenuModule,
+    FormFieldModule,
+    SubmitButtonModule,
   ],
   exports: [
     CommonModule,
@@ -142,6 +156,11 @@ registerLocaleData(localeZhTw, "zh-TW");
     BadgeModule,
     ButtonModule,
     MenuModule,
+    FormFieldModule,
+    SubmitButtonModule,
+    PasswordStrengthComponent,
+    PaymentComponent,
+    TaxInfoComponent,
   ],
   providers: [DatePipe],
   bootstrap: [],

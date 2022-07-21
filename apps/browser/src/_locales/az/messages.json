@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Etibarsız e-poçt ünvanı."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Ana parol lazımdır."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Ana parolun yenidən yazılması lazımdır."
+  },
+  "masterPasswordMinlength": {
     "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
   },
   "masterPassDoesntMatch": {
@@ -567,23 +570,23 @@
     "message": "Qovluq yoxdur",
     "description": "This is the folder for uncategorized items"
   },
-  "disableAddLoginNotification": {
-    "message": "\"Hesab əlavə et\" bildirişini sıradan çıxart"
+  "enableAddLoginNotification": {
+    "message": "Giriş əlavə etmək üçün soruş"
   },
   "addLoginNotificationDesc": {
     "message": "\"Hesab əlavə et bildirişi\", ilk dəfə giriş edəndə yeni giriş məlumatlarını anbarda saxlamaq istəyib-istəmədiyinizi avtomatik olaraq soruşur."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Vərəq səhifəsində kartları göstərmə"
+  "showCardsCurrentTab": {
+    "message": "Kartları vərəq səhifəsində göstər"
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Anbarınızdakı kart elementləri, avto-doldurma müraciətini asanlaşdırmaq üçün \"Hazırkı vərəq\" səhifəsində siyahılanır."
+  "showCardsCurrentTabDesc": {
+    "message": "Asan avto-doldurma üçün Vərəq səhifəsində kart elementlərini siyahılayın."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Vərəq səhifəsində kimlikləri göstərmə"
+  "showIdentitiesCurrentTab": {
+    "message": "Vərəq səhifəsində kimlikləri göstər"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Anbarınızdakı kimlik elementləri, avto-doldurma müraciətini asanlaşdırmaq üçün \"Hazırkı vərəq\" səhifəsində siyahılanır."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "Asan avto-doldurma üçün Vərəq səhifəsində kimlik elementlərini siyahılayın."
   },
   "clearClipboard": {
     "message": "Lövhəni təmizlə",
@@ -599,11 +602,11 @@
   "notificationAddSave": {
     "message": "Bəli, indi saxla"
   },
-  "disableChangedPasswordNotification": {
-    "message": "\"Parol dəyişdirildi\" bildirişini sıradan çıxart"
+  "enableChangedPasswordNotification": {
+    "message": "Mövcud girişin güncəllənməsini soruş"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "\"Parol dəyişdirildi bildirişi\", bir veb saytında parolu dəyişdirdiyinizi aşkarlayanda, anbarınızda qeyd etdiyiniz parolu yeniləməyinizi avtomatik olaraq soruşur."
+  "changedPasswordNotificationDesc": {
+    "message": "Bir veb saytda dəyişiklik aşkarlananda giriş parolunun güncəllənməsini soruşun."
   },
   "notificationChangeDesc": {
     "message": "Bu parolu \"Bitwarden\"də yeniləmək istəyirsiniz?"
@@ -611,11 +614,11 @@
   "notificationChangeSave": {
     "message": "Bəli, indi yenilə"
   },
-  "disableContextMenuItem": {
-    "message": "Kontekst menyu seçimlərini sıradan çıxart"
+  "enableContextMenuItem": {
+    "message": "Konteks menyu seçimlərini göstər"
   },
-  "disableContextMenuItemDesc": {
-    "message": "Kontekst menyu seçimləri, hazırkı vərəqinizdə veb sayt üçün parol yaratma və giriş etmə əməliyyatlarına cəld müraciəti təmin edir."
+  "contextMenuItemDesc": {
+    "message": "Veb sayt üçün parol yaratmaq və uyğunlaşan giriş məlumatlarına müraciət etmək üçün ikinci klikləməni istifadə edin. "
   },
   "defaultUriMatchDetection": {
     "message": "İlkin URI uyğunluq aşkarlaması",
@@ -806,14 +809,14 @@
   "refreshComplete": {
     "message": "Təzələmə tamamlandı"
   },
-  "disableAutoTotpCopy": {
-    "message": "Avtomatik TOTP kopyalamasını sıradan çıxart"
+  "enableAutoTotpCopy": {
+    "message": "TOTP-ni avtomatik kopyala"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Hesabınıza əlavə edilən kimlik təsdiqləyici açarı varsa, giriş məlumatları avto-doldurulanda TOTP təsdiqləmə kodu da avtomatik olaraq lövhəyə kopyalanacaq."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Açılışda biometrik üçün soruşma"
+  "enableAutoBiometricsPrompt": {
+    "message": "Açılışda biometrik təsdiqləmə soruş"
   },
   "premiumRequired": {
     "message": "Premium üzvlük lazımdır"
@@ -1033,17 +1036,17 @@
   "popupU2fCloseMessage": {
     "message": "Bu səyyah bu açılan pəncərədə U2F tələblərini emal edə bilmir. U2F istifadə edərək giriş etmək üçün bu açılan pəncərəni yeni bir pəncərədə açmaq istəyirsiniz?"
   },
-  "disableFavicon": {
-    "message": "Veb sayt nişanlarını sıradan çıxart"
+  "enableFavicon": {
+    "message": "Veb sayt nişanlarını göstər"
   },
-  "disableFaviconDesc": {
-    "message": "Veb sayt nişanları, anbarınızda hər bir giriş elementinin yanında tanımağınıza kömək edən bir təsvir təqdim edir."
+  "faviconDesc": {
+    "message": "Hər girişin yanında tanına bilən təsvir göstər."
   },
-  "disableBadgeCounter": {
-    "message": "Nişan sayğacını sıradan çıxart"
+  "enableBadgeCounter": {
+    "message": "Nişan sayğacını göstər"
   },
-  "disableBadgeCounterDesc": {
-    "message": "Nişan sayğacı, anbarınızdakı hazırkı səhifə üçün neçə dəfə giriş etdiyinizi göstərir."
+  "badgeCounterDesc": {
+    "message": "Hazırkı veb səhifə üçün neçə giriş olduğunu göstərir."
   },
   "cardholderName": {
     "message": "Kart sahibinin adı"
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "Bu qutunu işarələyərək aşağıdakılarla razılaşırsınız:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Xidmət Şərtləri və Gizlilik Siyasəti qəbul edilməyib."
   },
   "termsOfService": {
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır."
   },
   "vaultExportDisabled": {
@@ -1963,6 +1966,12 @@
     "message": "API açar"
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "Açar bağlayıcı xətası: Açar Bağlayıcının mövcud olduğuna və düzgün işlədiyinə əmin olun."
+  },
+  "organizationIsDisabled": {
+    "message": "Təşkilat sıradan çıxarıldı."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Sıradan çıxarılmış Təşkilatlardakı elementlərə müraciət edilə bilmir. Kömək üçün Təşkilatınızın sahibi ilə əlaqə saxlayın."
   }
 }

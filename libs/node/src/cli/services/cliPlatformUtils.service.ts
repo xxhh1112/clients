@@ -3,7 +3,6 @@ import * as child_process from "child_process";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
 
 // eslint-disable-next-line
 const open = require("open");
@@ -85,10 +84,6 @@ export class CliPlatformUtilsService implements PlatformUtilsService {
     }
   }
 
-  saveFile(win: Window, blobData: any, blobOptions: any, fileName: string): void {
-    throw new Error("Not implemented.");
-  }
-
   getApplicationVersion(): Promise<string> {
     return Promise.resolve(this.packageJson.version);
   }
@@ -146,18 +141,6 @@ export class CliPlatformUtilsService implements PlatformUtilsService {
 
   authenticateBiometric(): Promise<boolean> {
     return Promise.resolve(false);
-  }
-
-  getDefaultSystemTheme() {
-    return Promise.resolve(ThemeType.Light as ThemeType.Light | ThemeType.Dark);
-  }
-
-  onDefaultSystemThemeChange() {
-    /* noop */
-  }
-
-  getEffectiveTheme() {
-    return Promise.resolve(ThemeType.Light);
   }
 
   supportsSecureStorage(): boolean {

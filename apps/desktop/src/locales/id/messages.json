@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "Alamat email tidak valid."
   },
-  "masterPassRequired": {
-    "message": "Sandi utama diperlukan."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Kata sandi utama sedikitnya harus 8 karakter."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Konfirmasi sandi utama tidak cocok."
@@ -894,11 +897,11 @@
     "message": "Secara otomatis menghapus nilai yang disalin dari clipboard Anda.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Nonaktifkan Ikon Situs Web"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Ikon Situs Web menyediakan gambar yang dikenali di sebelah item info masuk di brankas Anda."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "Kecilkan ke Ikon Baki"
@@ -1381,11 +1384,11 @@
   "touchIdConsentMessage": {
     "message": "Verifikasi untuk Bitwarden."
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Jangan meminta Windows Hello waktu baru dinyalakan."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Jangan meminta Touch ID waktu baru dinyalakan."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Kunci dengan kata sandi utama saat komputer dihidupkan ulang"
@@ -1543,8 +1546,8 @@
   "acceptPolicies": {
     "message": "Dengan mencentang kotak ini, anda menyetujui yang berikut:"
   },
-  "acceptPoliciesError": {
-    "message": "Persyaratan Layanan dan Kebijakan Privasi belum diakui."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
     "message": "Aktifkan integrasi browser"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   }
 }

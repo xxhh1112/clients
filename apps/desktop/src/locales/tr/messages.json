@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Geçersiz e-posta adresi."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Ana parola gereklidir."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Ana parolayı yeniden yazmalısınız."
+  },
+  "masterPasswordMinlength": {
     "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
   },
   "masterPassDoesntMatch": {
@@ -728,7 +731,7 @@
     "message": "Çıkmak istediğinize emin misiniz?"
   },
   "logOut": {
-    "message": "Çıkış yap"
+    "message": "Çıkış Yap"
   },
   "addNewLogin": {
     "message": "Yeni hesap ekle"
@@ -887,21 +890,21 @@
     "message": "Güvenlik"
   },
   "clearClipboard": {
-    "message": "Panoyu temizle",
+    "message": "Panoyu Temizle",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
     "message": "Kopyalanan değerleri otomatik olarak panodan sil.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Site simgelerini devre dışı bırak"
+  "enableFavicon": {
+    "message": "Web sitesi simgelerini göster"
   },
-  "disableFaviconDesc": {
-    "message": "Web sitesi simgeleri, kasanızdaki her kaydın yanında o siteyi tanımanıza yardımcı olan bir resim sunar."
+  "faviconDesc": {
+    "message": "Hesapların yanında tanıdık görseller göster."
   },
   "enableMinToTray": {
-    "message": "Tepsi simgesine küçült"
+    "message": "Sistem çubuğu ikonuna küçült"
   },
   "enableMinToTrayDesc": {
     "message": "Pencere küçültülünce sistem tepsisinde bir simge göster."
@@ -1381,11 +1384,11 @@
   "touchIdConsentMessage": {
     "message": "kasanızın kilidini açma"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Açılışta Windows Hello doğrulaması isteme."
+  "autoPromptWindowsHello": {
+    "message": "Açılışta Windows Hello doğrulaması iste"
   },
-  "noAutoPromptTouchId": {
-    "message": "Açılışta Touch ID doğrulaması isteme."
+  "autoPromptTouchId": {
+    "message": "Açılışta Touch ID doğrulaması iste"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Yeniden başlatmada ana şifre ile kilitle"
@@ -1394,7 +1397,7 @@
     "message": "Tercihler"
   },
   "enableMenuBar": {
-    "message": "Menü çubuğu simgesini etkinleştir"
+    "message": "Menü Çubuğu Simgesini Etkinleştir"
   },
   "enableMenuBarDesc": {
     "message": "Menü çubuğunda her zaman bir simge göster."
@@ -1543,7 +1546,7 @@
   "acceptPolicies": {
     "message": "Bu kutuyu işaretleyerek aşağıdakileri kabul etmiş olursunuz:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Hizmet Koşulları ve Gizlilik Politikası kabul edilmemiş."
   },
   "enableBrowserIntegration": {
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API anahtarı"
+  },
+  "organizationIsDisabled": {
+    "message": "Kuruluş devre dışı."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Devre dışı kuruluşlardaki kayıtlara erişilemez. Destek almak için kuruluş sahibinizle iletişime geçin."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   }
 }

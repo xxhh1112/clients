@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Créer un compte"
   },
+  "startTrial": {
+    "message": "Commencer la Période d'Essai"
+  },
   "logIn": {
     "message": "S'identifier"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre coffre. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
+  },
+  "masterPassImportant": {
+    "message": "Le mot de passe maître ne peut pas être récupérés si vous l'oubliez!"
   },
   "masterPassHintDesc": {
     "message": "Un indice de mot de passe maître peut vous aider à vous rappeler de votre mot de passe en cas d'oubli."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Adresse e-mail invalide."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Le mot de passe maître est requis."
   },
-  "masterPassLength": {
-    "message": "Le mot de passe maître doit au moins contenir 8 caractères."
+  "confirmMasterPasswordRequired": {
+    "message": "Le mot de passe maître doit être entré de nouveau."
+  },
+  "masterPasswordMinLength": {
+    "message": "Le mot de passe maître doit comporter au moins 8 caractères."
   },
   "masterPassDoesntMatch": {
     "message": "La confirmation du mot de passe maître ne correspond pas."
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Changer la langue utilisée par le coffre web."
   },
-  "disableIcons": {
-    "message": "Désactiver les icônes de sites web"
+  "enableFavicon": {
+    "message": "Afficher les icônes du site web"
   },
-  "disableIconsDesc": {
-    "message": "Les icônes de sites web permettent d'avoir une icône reconnaissable à côté de chaque identifiant dans votre coffre."
+  "faviconDesc": {
+    "message": "Afficher une image reconnaissable à côté de chaque identifiant."
   },
   "enableGravatars": {
     "message": "Activer Gravatar",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Charger votre image de profil depuis gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Activé"
   },
+  "activate": {
+    "message": "Activer"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1261,6 +1273,9 @@
     "message": "Gérer"
   },
   "disable": {
+    "message": "Désactiver"
+  },
+  "deactivate": {
     "message": "Désactiver"
   },
   "twoStepLoginProviderEnabled": {
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Êtes-vous sûr de vouloir retirer cet utilisateur ?"
   },
+  "deactivateUserConfirmation": {
+    "message": "Le membre n'aura plus accès à l'organisation, mais aura toujours accès à son coffre individuel."
+  },
+  "activateUserConfirmation": {
+    "message": "Êtes-vous sûr de vouloir activer cet utilisateur ; cela lui donne accès à l'organisation?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Attention ! Cet utilisateur a besoin de Key Connector pour gérer son chiffrement. Supprimer cet utilisateur de votre organisation désactivera définitivement son compte. Cette action ne peut pas être annulée. Voulez-vous continuer?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Utilisateur $ID$ retiré.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Utilisateur désactivé $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Utilisateur activé $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Désactiver l'utilisateur $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Activer l'utilisateur $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,8 +3168,8 @@
   "acceptPolicies": {
     "message": "En cochant cette case, vous acceptez les éléments suivants :"
   },
-  "acceptPoliciesError": {
-    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
+  "acceptPoliciesRequired": {
+    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
   },
   "termsOfService": {
     "message": "Conditions d'utilisation"
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "L'organisation est désactivée."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "La licence a expiré."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Cloner"
   },
+  "masterPassPolicyTitle": {
+    "message": "Exigences pour le mot de passe maître"
+  },
   "masterPassPolicyDesc": {
-    "message": "Définir des exigences minimales pour la force du mot de passe maître."
+    "message": "Définir les exigences minimales pour la force du mot de passe maître."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Nécessite une connexion en deux étapes"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Exiger que les utilisateurs définissent une connexion en deux étapes sur leurs comptes personnels."
@@ -3616,6 +3682,9 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disabled": {
+    "message": "Désactivé"
+  },
+  "deactivated": {
     "message": "Désactivé"
   },
   "sendLink": {
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Êtes-vous sûr de vouloir supprimer les utilisateurs suivants ? Le processus peut prendre quelques secondes et ne peut être interrompu ou annulé."
   },
+  "deactivateUsersWarning": {
+    "message": "Êtes-vous sûr de vouloir désactiver les membres suivants? Ils n'auront plus accès à l'organisation, mais auront toujours accès à leurs coffres individuels. Le processus peut prendre quelques secondes et ne peut pas être interrompu ou annulé."
+  },
+  "activateUsersWarning": {
+    "message": "Êtes-vous sûr de vouloir activer les membres suivants, leur donnant accès à l'organisation? Le processus peut prendre quelques secondes et ne peut pas être interrompu ou annulé."
+  },
   "theme": {
     "message": "Thème"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Supprimé avec succès"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Désactivé avec succès"
+  },
+  "bulkActivatedMessage": {
+    "message": "Activé avec succès"
+  },
   "bulkFilteredMessage": {
     "message": "Exclu, non applicable pour cette action."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Supprimer les utilisateurs"
+  },
+  "deactivateUsers": {
+    "message": "Désactiver les Utilisateurs"
+  },
+  "activateUsers": {
+    "message": "Activer les Utilisateurs"
   },
   "error": {
     "message": "Erreur"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Activer la",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "politique de connexion SSO",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "pour obliger tous les membres à se connecter avec SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "Les politiques \"Authentification SSO\" et \"Organisation Unique\" sont requises pour mettre en place le déchiffrement avec Key Connector."
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "Jetons d'accès API"
+  },
+  "deviceVerification": {
+    "message": "Vérification de l'Appareil"
+  },
+  "enableDeviceVerification": {
+    "message": "Activer la Vérification de l'Appareil"
+  },
+  "deviceVerificationDesc": {
+    "message": "Lorsque cette option est activée, les codes de vérification sont envoyés à votre adresse e-mail lorsque vous vous connectez à partir d'un appareil inconnu"
+  },
+  "updatedDeviceVerification": {
+    "message": "Vérification de l'Appareil mise à jour"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Êtes-vous sûr de vouloir activer la Vérification de l'Appareil ? Les e-mails de code de vérification arriveront à : $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Entrée requise."
+  },
+  "inputEmail": {
+    "message": "L'entrée n'est pas une adresse e-mail."
+  },
+  "inputMinLength": {
+    "message": "L'entrée doit comporter au moins $COUNT$ caractères.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ champ(s) ci-dessus nécessitent votre attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Activer"
+  },
+  "on": {
+    "message": "Activé"
   }
 }

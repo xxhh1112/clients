@@ -1,5 +1,8 @@
 import { InjectionToken, Injector, LOCALE_ID, NgModule } from "@angular/core";
 
+import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -13,7 +16,12 @@ import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
-import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder.service";
+import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
+import {
+  FolderService as FolderServiceAbstraction,
+  InternalFolderService,
+} from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
+import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -30,7 +38,7 @@ import { SendService as SendServiceAbstraction } from "@bitwarden/common/abstrac
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
-import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/abstractions/storage.service";
+import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync.service";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/abstractions/token.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
@@ -49,11 +57,14 @@ import { CipherService } from "@bitwarden/common/services/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
+import { EncryptService } from "@bitwarden/common/services/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 import { EventService } from "@bitwarden/common/services/event.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
-import { FolderService } from "@bitwarden/common/services/folder.service";
+import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
+import { FolderService } from "@bitwarden/common/services/folder/folder.service";
+import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
@@ -84,7 +95,8 @@ import { PasswordRepromptService } from "./passwordReprompt.service";
 import { ValidationService } from "./validation.service";
 
 export const WINDOW = new InjectionToken<Window>("WINDOW");
-export const SECURE_STORAGE = new InjectionToken<StorageServiceAbstraction>("SECURE_STORAGE");
+export const MEMORY_STORAGE = new InjectionToken<AbstractStorageService>("MEMORY_STORAGE");
+export const SECURE_STORAGE = new InjectionToken<AbstractStorageService>("SECURE_STORAGE");
 export const STATE_FACTORY = new InjectionToken<StateFactory>("STATE_FACTORY");
 export const STATE_SERVICE_USE_CACHE = new InjectionToken<boolean>("STATE_SERVICE_USE_CACHE");
 export const LOGOUT_CALLBACK = new InjectionToken<(expired: boolean, userId?: string) => void>(
@@ -94,6 +106,7 @@ export const LOCKED_CALLBACK = new InjectionToken<() => void>("LOCKED_CALLBACK")
 export const CLIENT_TYPE = new InjectionToken<boolean>("CLIENT_TYPE");
 export const LOCALES_DIRECTORY = new InjectionToken<string>("LOCALES_DIRECTORY");
 export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
+export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
 
 @NgModule({
   declarations: [],
@@ -138,9 +151,13 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       useValue: null,
     },
     {
+      provide: LOG_MAC_FAILURES,
+      useValue: true,
+    },
+    {
       provide: AppIdServiceAbstraction,
       useClass: AppIdService,
-      deps: [StorageServiceAbstraction],
+      deps: [AbstractStorageService],
     },
     {
       provide: AuditServiceAbstraction,
@@ -203,11 +220,19 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       useClass: FolderService,
       deps: [
         CryptoServiceAbstraction,
-        ApiServiceAbstraction,
         I18nServiceAbstraction,
         CipherServiceAbstraction,
         StateServiceAbstraction,
       ],
+    },
+    {
+      provide: InternalFolderService,
+      useExisting: FolderServiceAbstraction,
+    },
+    {
+      provide: FolderApiServiceAbstraction,
+      useClass: FolderApiService,
+      deps: [FolderServiceAbstraction, ApiServiceAbstraction],
     },
     { provide: LogService, useFactory: () => new ConsoleLogService(false) },
     {
@@ -231,6 +256,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       useClass: CryptoService,
       deps: [
         CryptoFunctionServiceAbstraction,
+        AbstractEncryptService,
         PlatformUtilsServiceAbstraction,
         LogService,
         StateServiceAbstraction,
@@ -280,6 +306,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
         StateServiceAbstraction,
         OrganizationServiceAbstraction,
         ProviderServiceAbstraction,
+        FolderApiServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -313,8 +340,9 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       provide: StateServiceAbstraction,
       useClass: StateService,
       deps: [
-        StorageServiceAbstraction,
+        AbstractStorageService,
         SECURE_STORAGE,
+        MEMORY_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,
@@ -324,7 +352,7 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
     {
       provide: StateMigrationServiceAbstraction,
       useClass: StateMigrationService,
-      deps: [StorageServiceAbstraction, SECURE_STORAGE, STATE_FACTORY],
+      deps: [AbstractStorageService, SECURE_STORAGE, STATE_FACTORY],
     },
     {
       provide: ExportServiceAbstraction,
@@ -359,6 +387,11 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       provide: CryptoFunctionServiceAbstraction,
       useClass: WebCryptoFunctionService,
       deps: [WINDOW],
+    },
+    {
+      provide: AbstractEncryptService,
+      useClass: EncryptService,
+      deps: [CryptoFunctionServiceAbstraction, LogService, LOG_MAC_FAILURES],
     },
     {
       provide: EventServiceAbstraction,
@@ -422,6 +455,14 @@ export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
       provide: TwoFactorServiceAbstraction,
       useClass: TwoFactorService,
       deps: [I18nServiceAbstraction, PlatformUtilsServiceAbstraction],
+    },
+    {
+      provide: AbstractThemingService,
+      useClass: ThemingService,
+    },
+    {
+      provide: FormValidationErrorsServiceAbstraction,
+      useClass: FormValidationErrorsService,
     },
   ],
 })

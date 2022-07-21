@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "startTrial": {
+    "message": "Start prøveperiode"
+  },
   "logIn": {
     "message": "Log ind"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Hovedadgangskoden er den adgangskode, du bruger til at få adgang til din boks. Det er meget vigtigt, at du ikke glemmer din hovedadgangskode. Der er ingen måde hvorpå koden kan genoprettes, i tilfælde af at du glemmer den."
+  },
+  "masterPassImportant": {
+    "message": "Hovedadgangskoder kan ikke gendannes, hvis de glemmes!"
   },
   "masterPassHintDesc": {
     "message": "Et tip til hovedadgangskoden kan hjælpe dig med at huske din adgangskode, hvis du glemmer den."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Ugyldig e-mailadresse."
   },
-  "masterPassRequired": {
-    "message": "Hovedadgangskode er påkrævet."
+  "masterPasswordRequired": {
+    "message": "Hovedadgangskode er obligatorisk."
   },
-  "masterPassLength": {
-    "message": "Hovedadgangskoden skal være på mindst 8 tegn."
+  "confirmMasterPasswordRequired": {
+    "message": "Hovedadgangskode kræves angivet igen."
+  },
+  "masterPasswordMinLength": {
+    "message": "Hovedadgangskode skal udgøre min. 8 tegn."
   },
   "masterPassDoesntMatch": {
     "message": "De to hovedadgangskoder matcher ikke."
@@ -1151,21 +1160,21 @@
   "languageDesc": {
     "message": "Skift det sprog, der bruges af web-boksen."
   },
-  "disableIcons": {
-    "message": "Slå webikoner fra"
+  "enableFavicon": {
+    "message": "Vis webstedsikoner"
   },
-  "disableIconsDesc": {
-    "message": "Webikoner vises som et genkendeligt billede ved siden af hvert loginelement i din boks."
+  "faviconDesc": {
+    "message": "Vis et genkendeligt billede ud for hvert login."
   },
   "enableGravatars": {
-    "message": "Aktivér Gravatars",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "message": "Vis Gravatarer",
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Brug avatar billeder hentet fra gravatar.com."
   },
   "enableFullWidth": {
-    "message": "Aktivér layout med fuld bredde",
+    "message": "Vis layout med fuld bredde",
     "description": "Allows scaling the web vault UI's width"
   },
   "enableFullWidthDesc": {
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Aktiveret"
   },
+  "activate": {
+    "message": "Aktivér"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1261,6 +1273,9 @@
     "message": "Håndtér"
   },
   "disable": {
+    "message": "Deaktivér"
+  },
+  "deactivate": {
     "message": "Deaktivér"
   },
   "twoStepLoginProviderEnabled": {
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Er du sikker på, at du vil fjerne denne bruger?"
   },
+  "deactivateUserConfirmation": {
+    "message": "Medlemmet vil ikke længere have adgang til organisationen, men vil stadig have adgang til sin egen boks."
+  },
+  "activateUserConfirmation": {
+    "message": "Er du sikker på, at du vil aktivere denne bruger og give vedkommende adgang til organisationen?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Advarsel! Denne bruger behøver Key Connector til krypteringshåndtering. Fjernes brugeren fra din organisation, deaktiveres vedkommendes konto permanent. Denne handling kan ikke fortrydes. Vil du fortsætte?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Slettede bruger $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Deaktiveret bruger $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Aktiveret bruger $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Deaktivér bruger $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Aktivér bruger $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,8 +3168,8 @@
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Servicevilkår og fortrolighedspolitik er ikke blevet bekræftet."
+  "acceptPoliciesRequired": {
+    "message": "Tjenestevilkår og Fortrolighedspolitik er ikke blevet accepteret."
   },
   "termsOfService": {
     "message": "Servicevilkår"
@@ -3127,7 +3184,7 @@
     "message": "Boks timeout"
   },
   "vaultTimeoutDesc": {
-    "message": "Vælg timeout for din boks, hvorefter den vil udføre den valgte handling."
+    "message": "Vælg hvornår din boks skal udføre timeout-handlingen."
   },
   "oneMinute": {
     "message": "1 minut"
@@ -3148,7 +3205,7 @@
     "message": "4 timer"
   },
   "onRefresh": {
-    "message": "Ved genstart af browseren"
+    "message": "Ved browser opdatering"
   },
   "dateUpdated": {
     "message": "Opdateret",
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organisationen er deaktiveret."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Elementer i deaktiverede organisationer kan ikke tilgås. Kontakt organisationsejeren for hjælp."
   },
   "licenseIsExpired": {
     "message": "Licensen er udløbet."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Klon"
   },
+  "masterPassPolicyTitle": {
+    "message": "Hovedadgangskodekrav"
+  },
   "masterPassPolicyDesc": {
     "message": "Angiv minimumskrav til styrken af hovedadgangskoden."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Kræv totrins-login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Kræv at brugerne konfigurerer to-trins-login på deres personlige konti."
@@ -3358,10 +3424,10 @@
     "message": "Boks timeout-handling"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "En låst boks kræver at du gentaster din hovedadgangskode for at tilgå den igen."
+    "message": "Hovedadgangskode eller anden oplåsningsmetode kræves for at få adgang til din boks igen."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "En boks der er logget ud kræver, at du godkender igen for at få adgang til den."
+    "message": "Gengodkendelse kræves for at få adgang til din boks igen."
   },
   "lock": {
     "message": "Lås",
@@ -3616,6 +3682,9 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disabled": {
+    "message": "Deaktiveret"
+  },
+  "deactivated": {
     "message": "Deaktiveret"
   },
   "sendLink": {
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Er du sikker på, at du vil fjerne følgende brugere? Processen kan tage et par sekunder at fuldføre og kan ikke afbrydes eller annulleres."
   },
+  "deactivateUsersWarning": {
+    "message": "Er du sikker på, at du vil deaktivere følgende medlemmer? De vil ikke længere have adgang til organisationen, men vil stadig have adgang til deres egne bokse. Processen kan tage nogle sekunder at gennemføre, og den kan ikke afbrydes eller annulleres."
+  },
+  "activateUsersWarning": {
+    "message": "Er du sikker på, at du vil aktivere følgende medlemmer og give dem adgang til organisationen? Processen kan tage nogle sekunder at gennemføre og kan ikke afbrydes eller annulleres."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Fjernet med succes"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Deaktivering udført"
+  },
+  "bulkActivatedMessage": {
+    "message": "Aktivering udført"
+  },
   "bulkFilteredMessage": {
     "message": "Udelukket, ikke anvendeligt til denne handling."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Fjern brugere"
+  },
+  "deactivateUsers": {
+    "message": "Deaktivere brugere"
+  },
+  "activateUsers": {
+    "message": "Aktivere brugere"
   },
   "error": {
     "message": "Fejl"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Aktivér",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO-godkendelsespolitik",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "for at kræve, at alle medlemmer logger ind med SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "SSO-godkendelse og Enkel organisation-politikker er påkrævet for at konfigurere Key Connector-dekryptering."
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API-adgangstoken"
+  },
+  "deviceVerification": {
+    "message": "Enhedsbekræftelse"
+  },
+  "enableDeviceVerification": {
+    "message": "Aktivér enhedsbekræftelse"
+  },
+  "deviceVerificationDesc": {
+    "message": "Når aktiveret, sendes bekræftelseskoder til din e-mailadresse ved indlogning fra en ikke genkendt enhed"
+  },
+  "updatedDeviceVerification": {
+    "message": "Opdateret enhedsbekræftelse"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Er du sikker på, at du vil aktivere enhedsbekræftelse? Bekræftelseskoder e-mailes til: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Input obligatorisk."
+  },
+  "inputEmail": {
+    "message": "Input er ikke en gyldig e-mailadresse."
+  },
+  "inputMinLength": {
+    "message": "Input skal udgøre min. $COUNT$ tegn.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$-felt(er) ovenfor kræver din opmærksomhed.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Slå til"
+  },
+  "on": {
+    "message": "Til"
   }
 }

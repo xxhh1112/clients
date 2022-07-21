@@ -8,10 +8,14 @@ import {
   CLIENT_TYPE,
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
+  MEMORY_STORAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import {
   LogService,
@@ -22,11 +26,12 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
-import { StorageService as StorageServiceAbstraction } from "@bitwarden/common/abstractions/storage.service";
+import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/globalState";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
 import { ElectronCryptoService } from "@bitwarden/electron/services/electronCrypto.service";
 import { ElectronLogService } from "@bitwarden/electron/services/electronLog.service";
@@ -43,6 +48,8 @@ import { StateService } from "../../services/state.service";
 import { LoginGuard } from "../guards/login.guard";
 import { SearchBarService } from "../layout/search/search-bar.service";
 
+import { DesktopThemingService } from "./desktop-theming.service";
+import { DesktopFileDownloadService } from "./desktopFileDownloadService";
 import { InitService } from "./init.service";
 
 const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
@@ -94,13 +101,15 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       useClass: ElectronRendererMessagingService,
       deps: [BroadcasterServiceAbstraction],
     },
-    { provide: StorageServiceAbstraction, useClass: ElectronRendererStorageService },
+    { provide: AbstractStorageService, useClass: ElectronRendererStorageService },
     { provide: SECURE_STORAGE, useClass: ElectronRendererSecureStorageService },
+    { provide: MEMORY_STORAGE, useClass: MemoryStorageService },
     {
       provide: CryptoServiceAbstraction,
       useClass: ElectronCryptoService,
       deps: [
         CryptoFunctionServiceAbstraction,
+        AbstractEncryptService,
         PlatformUtilsServiceAbstraction,
         LogServiceAbstraction,
         StateServiceAbstraction,
@@ -121,13 +130,22 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       provide: StateServiceAbstraction,
       useClass: StateService,
       deps: [
-        StorageServiceAbstraction,
+        AbstractStorageService,
         SECURE_STORAGE,
+        MEMORY_STORAGE,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,
         STATE_SERVICE_USE_CACHE,
       ],
+    },
+    {
+      provide: FileDownloadService,
+      useClass: DesktopFileDownloadService,
+    },
+    {
+      provide: AbstractThemingService,
+      useClass: DesktopThemingService,
     },
   ],
 })

@@ -45,7 +45,7 @@
         </li>
       </ul>
     </ng-container>
-    <ng-container *ngSwitchCase="'organizationMember'">
+    <ng-container *ngSwitchDefault>
       <div class="filter-heading" [ngClass]="{ active: !hasActiveFilter }">
         <button
           appA11yTitle="{{ 'toggleCollapse' | i18n }}"
@@ -92,6 +92,12 @@
             >
               <i class="bwi bwi-fw bwi-business" aria-hidden="true"></i>
               &nbsp;{{ organization.name }}
+              <i
+                *ngIf="!organization.enabled"
+                class="bwi bwi-fw bwi-exclamation-triangle text-danger"
+                aria-label="{{ 'organizationIsDisabled' | i18n }}"
+                appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
+              ></i>
             </button>
           </span>
         </li>

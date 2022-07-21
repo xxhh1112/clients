@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Ugyldig e-mailadresse."
   },
-  "masterPassRequired": {
-    "message": "Hovedadgangskode er påkrævet."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Hovedadgangskoden skal være på mindst 8 tegn."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -567,23 +570,23 @@
     "message": "Ingen mappe",
     "description": "This is the folder for uncategorized items"
   },
-  "disableAddLoginNotification": {
-    "message": "Deaktivér Tilføj login notifikation"
+  "enableAddLoginNotification": {
+    "message": "Bed om at tilføje login"
   },
   "addLoginNotificationDesc": {
-    "message": "\"Tilføj login notifikation\" spørger dig automatisk om du vil gemme nye logins til din boks, når du logger ind med dem for første gang."
+    "message": "Bed om at tilføje et element, hvis et ikke findes i din boks."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Vis ikke kort på fanebladet"
+  "showCardsCurrentTab": {
+    "message": "Vis kort på fanebladet"
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Kort fra din boks er vist på siden 'Aktuel fane' for nem adgang til automatisk udfyldning."
+  "showCardsCurrentTabDesc": {
+    "message": "Vis kortelementer på fanebladet for nem auto-udfyldning."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Vis ikke identiteter på fanebladet"
+  "showIdentitiesCurrentTab": {
+    "message": "Vis identiteter på fanebladet"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Identiteter fra din boks er vist på siden 'Aktuel fane' for nem adgang til automatisk udfyldning."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "Vis identitetselementer på fanebladet for nem auto-udfyldning."
   },
   "clearClipboard": {
     "message": "Ryd udklipsholder",
@@ -599,11 +602,11 @@
   "notificationAddSave": {
     "message": "Gem"
   },
-  "disableChangedPasswordNotification": {
-    "message": "Deaktivér besked om ændret adgangskode"
+  "enableChangedPasswordNotification": {
+    "message": "Bed om at opdatere eksisterende login"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "\"Besked om ændret adgangskode\" beder dig automatisk om at opdatere en adgangskode i din boks, når det opdager, at du har ændret den på en hjemmeside."
+  "changedPasswordNotificationDesc": {
+    "message": "Bed om at opdatere et logins adgangskode, når der registreres en ændring på en hjemmeside."
   },
   "notificationChangeDesc": {
     "message": "Vil du opdatere denne adgangskode i Bitwarden?"
@@ -611,11 +614,11 @@
   "notificationChangeSave": {
     "message": "Opdatér"
   },
-  "disableContextMenuItem": {
-    "message": "Deaktivér Kontekst-menu valgmuligheder"
+  "enableContextMenuItem": {
+    "message": "Vis indstillinger i kontekstmenuen"
   },
-  "disableContextMenuItemDesc": {
-    "message": "Kontekst-menu valgmuligheder giver hurtig adgang til adgangskode generering og login til hjemmesiden i din aktuelle fane."
+  "contextMenuItemDesc": {
+    "message": "Brug et sekundært klik for at få adgang til adgangskodegenerering og matchende logins til hjemmesiden."
   },
   "defaultUriMatchDetection": {
     "message": "Standard URI matchmetode",
@@ -806,14 +809,14 @@
   "refreshComplete": {
     "message": "Opdatering færdig"
   },
-  "disableAutoTotpCopy": {
-    "message": "Deaktivér Automatisk TOTP kopi"
+  "enableAutoTotpCopy": {
+    "message": "Kopiér TOTP automatisk"
   },
   "disableAutoTotpCopyDesc": {
-    "message": "Hvis dit login har en autentificeringsnøgle tilknyttet, kopieres TOTP verifikationskoden automatisk til din udklipsholder når du auto-udfylder login."
+    "message": "Hvis et login har en autentificeringsnøgle, så kopiér TOTP-bekræftelseskoden til din udklipsholder, når du auto-udfylder login."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Bed ikke om biometri ved start"
+  "enableAutoBiometricsPrompt": {
+    "message": "Bed om biometri ved start"
   },
   "premiumRequired": {
     "message": "Premium påkrævet"
@@ -951,10 +954,10 @@
     "message": "Miljøets URLs er blevet gemt."
   },
   "enableAutoFillOnPageLoad": {
-    "message": "Aktivér Auto-udfyld ved sideindlæsning"
+    "message": "Auto-udfyld ved sideindlæsning"
   },
   "enableAutoFillOnPageLoadDesc": {
-    "message": "Hvis en login-formular er opdaget, så udfør automatisk en auto-udfyld når hjemmesiden indlæses."
+    "message": "Hvis der registreres en loginformular, så auto-udfyld, når websiden indlæses."
   },
   "experimentalFeature": {
     "message": "Dette er i øjeblikket en eksperimentel funktion. Brug på egen risiko."
@@ -963,7 +966,7 @@
     "message": "Standardindstilling for autofyld for loginelementer"
   },
   "defaultAutoFillOnPageLoadDesc": {
-    "message": "Når du har aktiveret auto-udfyldning ved sideindlæsning, kan du aktivere eller deaktivere funktionen for individuelle loginelementer. Dette er standardindstillingen for loginelementer, der ikke er konfigureret separat."
+    "message": "Du kan deaktivere auto-udfyld ved sideindlæsning for individuelle login-elementer fra elementets redigeringsvisning."
   },
   "itemAutoFillOnPageLoad": {
     "message": "Auto-udfyld ved sideindlæsning (hvis aktiveret i Indstillinger)"
@@ -1033,17 +1036,17 @@
   "popupU2fCloseMessage": {
     "message": "Denne browser kan ikke behandle U2F-anmodninger i dette popup-vindue. Vil du åbne denne popup i et nyt vindue, så du kan logge ind ved hjælp af U2F?"
   },
-  "disableFavicon": {
-    "message": "Slå webikoner fra"
+  "enableFavicon": {
+    "message": "Vis webstedsikoner"
   },
-  "disableFaviconDesc": {
-    "message": "Webikoner vises som et genkendeligt billede ved siden af hvert loginelement i din boks."
+  "faviconDesc": {
+    "message": "Vis et genkendeligt billede ud for hvert login."
   },
-  "disableBadgeCounter": {
-    "message": "Deaktivér Badge-tæller"
+  "enableBadgeCounter": {
+    "message": "Vis badge-tæller"
   },
-  "disableBadgeCounterDesc": {
-    "message": "Badge-tæller angiver, hvor mange logins du har for den aktuelle side i din boks."
+  "badgeCounterDesc": {
+    "message": "Vis hvor mange logins du har til den aktuelle webside."
   },
   "cardholderName": {
     "message": "Kortindehaverens navn"
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Servicevilkår og fortrolighedspolitik er ikke blevet bekræftet."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Servicevilkår"
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Din boks-timeout overskrider de begrænsninger, der er fastsat af din organisation."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector-fejl: Sørg for, at Key Connector er tilgængelig og fungerer korrekt."
+  },
+  "organizationIsDisabled": {
+    "message": "Organization is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   }
 }

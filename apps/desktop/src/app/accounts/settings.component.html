@@ -87,25 +87,24 @@
                       id="biometric"
                       type="checkbox"
                       name="biometric"
-                      [checked]="biometric"
-                      (change)="updateBiometric()"
+                      [ngModel]="biometric"
+                      (ngModelChange)="updateBiometric($event)"
                     />
                     {{ biometricText | i18n }}
                   </label>
                 </div>
               </div>
-              <div class="form-group" *ngIf="supportsBiometric">
+              <div class="form-group" *ngIf="supportsBiometric && biometric">
                 <div class="checkbox">
-                  <label for="noAutoPromptBiometrics">
+                  <label for="autoPromptBiometrics">
                     <input
-                      id="noAutoPromptBiometrics"
+                      id="autoPromptBiometrics"
                       type="checkbox"
-                      name="noAutoPromptBiometrics"
-                      [(ngModel)]="noAutoPromptBiometrics"
-                      [disabled]="!biometric"
-                      (change)="updateNoAutoPromptBiometrics()"
+                      name="autoPromptBiometrics"
+                      [(ngModel)]="autoPromptBiometrics"
+                      (change)="updateAutoPromptBiometrics()"
                     />
-                    {{ noAutoPromptBiometricsText | i18n }}
+                    {{ autoPromptBiometricsText | i18n }}
                   </label>
                 </div>
               </div>
@@ -166,18 +165,18 @@
               </div>
               <div class="form-group">
                 <div class="checkbox">
-                  <label for="disableFavicons">
+                  <label for="enableFavicons">
                     <input
-                      id="disableFavicons"
+                      id="enableFavicons"
                       type="checkbox"
-                      name="DisableFavicons"
-                      [(ngModel)]="disableFavicons"
+                      name="enableFavicons"
+                      [(ngModel)]="enableFavicons"
                       (change)="saveFavicons()"
                     />
-                    {{ "disableFavicon" | i18n }}
+                    {{ "enableFavicon" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "disableFaviconDesc" | i18n }}</small>
+                <small class="help-block">{{ "faviconDesc" | i18n }}</small>
               </div>
             </ng-container>
           </div>

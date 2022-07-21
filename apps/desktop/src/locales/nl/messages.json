@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Ongeldig e-mailadres."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Hoofdwachtwoord vereist."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Type je hoofdwachtwoord opnieuw in."
+  },
+  "masterPasswordMinlength": {
     "message": "Het hoofdwachtwoord moet minimaal 8 tekens lang zijn."
   },
   "masterPassDoesntMatch": {
@@ -894,11 +897,11 @@
     "message": "Gekopieerde waarden automatisch van het klembord wissen.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Websitepictogrammen uitschakelen"
+  "enableFavicon": {
+    "message": "Websitepictogrammen weergeven"
   },
-  "disableFaviconDesc": {
-    "message": "Websitepictogrammen geven een herkenbare afbeelding naast elk item in je kluis."
+  "faviconDesc": {
+    "message": "Een herkenbare afbeelding naast iedere login weergeven."
   },
   "enableMinToTray": {
     "message": "Minimaliseren naar systeemvak"
@@ -1381,11 +1384,11 @@
   "touchIdConsentMessage": {
     "message": "ontgrendel je kluis"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Bij het opstarten niet om Windows Hello vragen."
+  "autoPromptWindowsHello": {
+    "message": "Vraag om Windows Hello bij opstarten"
   },
-  "noAutoPromptTouchId": {
-    "message": "Bij het opstarten niet om Touch ID vragen."
+  "autoPromptTouchId": {
+    "message": "Vraag om Touch ID bij opstarten"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bij herstart vergrendelen met hoofdwachtwoord"
@@ -1543,8 +1546,8 @@
   "acceptPolicies": {
     "message": "Door dit vakje aan te vinken, ga je akkoord met het volgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Algemene voorwaarden en privacybeleid zijn nog niet erkend."
+  "acceptPoliciesRequired": {
+    "message": "Je hebt de algemene voorwaarden en het privacybeleid nog niet erkend."
   },
   "enableBrowserIntegration": {
     "message": "Browserintegratie inschakelen"
@@ -1960,5 +1963,14 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisatie is uitgeschakeld."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Je kunt uitgeschakelde items in een organisatie niet benaderen. Neem contact op met de eigenaar van je organisatie voor hulp."
+  },
+  "neverLockWarning": {
+    "message": "Weet je zeker dat je de optie \"Nooit\" wilt gebruiken? De vergrendelingsoptie \"Nooit\" bewaart de sleutel van je kluis op je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt."
   }
 }

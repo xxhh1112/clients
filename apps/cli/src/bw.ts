@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
 import { LogLevelType } from "@bitwarden/common/enums/logLevelType";
@@ -13,16 +14,20 @@ import { GlobalState } from "@bitwarden/common/models/domain/globalState";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
+import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
+import { EncryptService } from "@bitwarden/common/services/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
-import { FolderService } from "@bitwarden/common/services/folder.service";
+import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
+import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { NoopMessagingService } from "@bitwarden/common/services/noopMessaging.service";
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
@@ -61,6 +66,7 @@ export class Main {
   messagingService: NoopMessagingService;
   storageService: LowdbStorageService;
   secureStorageService: NodeEnvSecureStorageService;
+  memoryStorageService: MemoryStorageService;
   i18nService: I18nService;
   platformUtilsService: CliPlatformUtilsService;
   cryptoService: CryptoService;
@@ -70,7 +76,7 @@ export class Main {
   environmentService: EnvironmentService;
   settingsService: SettingsService;
   cipherService: CipherService;
-  folderService: FolderService;
+  folderService: InternalFolderService;
   collectionService: CollectionService;
   vaultTimeoutService: VaultTimeoutService;
   syncService: SyncService;
@@ -82,6 +88,7 @@ export class Main {
   exportService: ExportService;
   searchService: SearchService;
   cryptoFunctionService: NodeCryptoFunctionService;
+  encryptService: EncryptService;
   authService: AuthService;
   policyService: PolicyService;
   program: Program;
@@ -97,6 +104,8 @@ export class Main {
   organizationService: OrganizationService;
   providerService: ProviderService;
   twoFactorService: TwoFactorService;
+  broadcasterService: BroadcasterService;
+  folderApiService: FolderApiService;
 
   constructor() {
     let p = null;
@@ -122,12 +131,15 @@ export class Main {
       (level) => process.env.BITWARDENCLI_DEBUG !== "true" && level <= LogLevelType.Info
     );
     this.cryptoFunctionService = new NodeCryptoFunctionService();
+    this.encryptService = new EncryptService(this.cryptoFunctionService, this.logService, true);
     this.storageService = new LowdbStorageService(this.logService, null, p, false, true);
     this.secureStorageService = new NodeEnvSecureStorageService(
       this.storageService,
       this.logService,
       () => this.cryptoService
     );
+
+    this.memoryStorageService = new MemoryStorageService();
 
     this.stateMigrationService = new StateMigrationService(
       this.storageService,
@@ -138,6 +150,7 @@ export class Main {
     this.stateService = new StateService(
       this.storageService,
       this.secureStorageService,
+      this.memoryStorageService,
       this.logService,
       this.stateMigrationService,
       new StateFactory(GlobalState, Account)
@@ -145,6 +158,7 @@ export class Main {
 
     this.cryptoService = new CryptoService(
       this.cryptoFunctionService,
+      this.encryptService,
       this.platformUtilsService,
       this.logService,
       this.stateService
@@ -186,13 +200,16 @@ export class Main {
       this.stateService
     );
 
+    this.broadcasterService = new BroadcasterService();
+
     this.folderService = new FolderService(
       this.cryptoService,
-      this.apiService,
       this.i18nService,
       this.cipherService,
       this.stateService
     );
+
+    this.folderApiService = new FolderApiService(this.folderService, this.apiService);
 
     this.collectionService = new CollectionService(
       this.cryptoService,
@@ -284,6 +301,7 @@ export class Main {
       this.stateService,
       this.organizationService,
       this.providerService,
+      this.folderApiService,
       async (expired: boolean) => await this.logout()
     );
 
@@ -293,11 +311,7 @@ export class Main {
       this.stateService
     );
 
-    this.totpService = new TotpService(
-      this.cryptoFunctionService,
-      this.logService,
-      this.stateService
-    );
+    this.totpService = new TotpService(this.cryptoFunctionService, this.logService);
 
     this.importService = new ImportService(
       this.cipherService,
