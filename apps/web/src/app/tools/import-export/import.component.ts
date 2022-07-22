@@ -117,9 +117,7 @@ export class ImportComponent implements OnInit {
       if (error != null) {
         //Check if the error is that a password is required
         if (error.passwordRequired) {
-          if (await this.promptFilePassword(fileContents)) {
-            //successful
-          } else {
+          if (!(await this.showFilePasswordPrompt(fileContents, this.organizationId))) {
             //failed - File Password issues
             this.loading = false;
             return;
@@ -139,10 +137,6 @@ export class ImportComponent implements OnInit {
     }
 
     this.loading = false;
-  }
-
-  private async promptFilePassword(fcontents: string) {
-    return await this.showPasswordPrompt(fcontents, this.organizationId);
   }
 
   getFormatInstructionTitle() {
@@ -254,7 +248,7 @@ export class ImportComponent implements OnInit {
     return ["TOTP", "Password", "H_Field", "Card Number", "Security Code"];
   }
 
-  async showPasswordPrompt(fcontents: string, organizationId: string) {
+  async showFilePasswordPrompt(fcontents: string, organizationId: string) {
     const ref = await this.modalService.open(this.component, {
       allowMultipleModals: true,
       data: {

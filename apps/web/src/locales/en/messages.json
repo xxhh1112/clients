@@ -881,7 +881,7 @@
   "fileFormat": {
     "message": "File Format"
   },
-  "confirmVaultExportDesc" : {
+  "FileEncryptedExportWarningDesc" : {
     "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription" : {

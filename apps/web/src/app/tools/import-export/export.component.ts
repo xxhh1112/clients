@@ -26,9 +26,6 @@ export class ExportComponent extends BaseExportComponent {
   organizationId: string;
   showPassword: boolean;
   showConfirmPassword: boolean;
-  confirmDescription: string;
-  confirmButtonText: string;
-  modalTitle: string;
 
   constructor(
     cryptoService: CryptoService,
@@ -66,24 +63,22 @@ export class ExportComponent extends BaseExportComponent {
   }
 
   async submit() {
-    const confirmDescription =
-      this.exportForm.get("fileEncryptionType").value === EncryptedExportType.FileEncrypted
-        ? "confirmVaultExportDesc"
-        : "encExportKeyWarningDesc";
-    const confirmButtonText = "exportVault";
-    const modalTitle = "confirmVaultExport";
-
     if (!this.validForm) {
       return;
     }
+
+    const confirmDescription =
+      this.exportForm.get("fileEncryptionType").value === EncryptedExportType.FileEncrypted
+        ? "FileEncryptedExportWarningDesc"
+        : "encExportKeyWarningDesc";
 
     try {
       const ref = this.modalService.open(UserVerificationPromptComponent, {
         allowMultipleModals: true,
         data: {
           confirmDescription: confirmDescription,
-          confirmButtonText: confirmButtonText,
-          modalTitle: modalTitle,
+          confirmButtonText: "exportVault",
+          modalTitle: "confirmVaultExport",
         },
       });
 
@@ -94,12 +89,6 @@ export class ExportComponent extends BaseExportComponent {
       if (await ref.onClosedPromise()) {
         //successful
         this.submitWithSecretAlreadyVerified();
-      } else {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("error"),
-          this.i18nService.t("invalidMasterPassword")
-        );
       }
     } catch {
       this.platformUtilsService.showToast(
