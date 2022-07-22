@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Invalid email address."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Master password is required."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
     "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
@@ -1480,8 +1483,8 @@
   "acceptPolicies": {
     "message": "By checking this box you agree to the following:"
   },
-  "acceptPoliciesError": {
-    "message": "Terms of service and privacy policy have not been acknowledged."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Terms of service"
@@ -1846,7 +1849,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Your vault timeout exceeds the restrictions set by your organisation."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
+  },
+  "organizationIsDisabled": {
+    "message": "Organisation is disabled."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organisations cannot be accessed. Contact your Organisation owner for assistance."
   }
 }

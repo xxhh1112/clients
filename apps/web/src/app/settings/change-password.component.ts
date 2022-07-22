@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "@bitwarden/angular/components/change-password.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -35,6 +36,7 @@ import { UpdateKeyRequest } from "@bitwarden/common/models/request/updateKeyRequ
 export class ChangePasswordComponent extends BaseChangePasswordComponent {
   rotateEncKey = false;
   currentMasterPassword: string;
+  masterPasswordHint: string;
 
   constructor(
     i18nService: I18nService,
@@ -68,6 +70,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     if (await this.keyConnectorService.getUsesKeyConnector()) {
       this.router.navigate(["/settings/security/two-factor"]);
     }
+
+    this.masterPasswordHint = (await this.apiService.getProfile()).masterPasswordHint;
     await super.ngOnInit();
   }
 
@@ -155,6 +159,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       this.currentMasterPassword,
       null
     );
+    request.masterPasswordHint = this.masterPasswordHint;
     request.newMasterPasswordHash = newMasterPasswordHash;
     request.key = newEncKey[1].encryptedString;
 
@@ -192,7 +197,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     request.key = encKey[1].encryptedString;
     request.masterPasswordHash = masterPasswordHash;
 
-    const folders = await this.folderService.getAllDecrypted();
+    const folders = await firstValueFrom(this.folderService.folderViews$);
     for (let i = 0; i < folders.length; i++) {
       if (folders[i].id == null) {
         continue;
@@ -224,7 +229,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
     await this.updateEmergencyAccesses(encKey[0]);
 
-    await this.updateAllResetPasswordKeys(encKey[0]);
+    await this.updateAllResetPasswordKeys(encKey[0], masterPasswordHash);
   }
 
   private async updateEmergencyAccesses(encKey: SymmetricCryptoKey) {
@@ -252,7 +257,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     }
   }
 
-  private async updateAllResetPasswordKeys(encKey: SymmetricCryptoKey) {
+  private async updateAllResetPasswordKeys(encKey: SymmetricCryptoKey, masterPasswordHash: string) {
     const orgs = await this.organizationService.getAll();
 
     for (const org of orgs) {
@@ -270,6 +275,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
       // Create/Execute request
       const request = new OrganizationUserResetPasswordEnrollmentRequest();
+      request.masterPasswordHash = masterPasswordHash;
       request.resetPasswordKey = encryptedKey.encryptedString;
 
       await this.apiService.putOrganizationUserResetPasswordEnrollment(org.id, org.userId, request);

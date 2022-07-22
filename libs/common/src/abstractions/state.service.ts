@@ -1,10 +1,11 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { KdfType } from "../enums/kdfType";
 import { ThemeType } from "../enums/themeType";
 import { UriMatchType } from "../enums/uriMatchType";
 import { CipherData } from "../models/data/cipherData";
 import { CollectionData } from "../models/data/collectionData";
+import { EncryptedOrganizationKeyData } from "../models/data/encryptedOrganizationKeyData";
 import { EventData } from "../models/data/eventData";
 import { FolderData } from "../models/data/folderData";
 import { OrganizationData } from "../models/data/organizationData";
@@ -21,12 +22,13 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { WindowState } from "../models/domain/windowState";
 import { CipherView } from "../models/view/cipherView";
 import { CollectionView } from "../models/view/collectionView";
-import { FolderView } from "../models/view/folderView";
 import { SendView } from "../models/view/sendView";
 
 export abstract class StateService<T extends Account = Account> {
   accounts: BehaviorSubject<{ [userId: string]: T }>;
   activeAccount: BehaviorSubject<string>;
+
+  activeAccountUnlocked: Observable<boolean>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
@@ -88,8 +90,6 @@ export abstract class StateService<T extends Account = Account> {
     value: SymmetricCryptoKey,
     options?: StorageOptions
   ) => Promise<void>;
-  getDecryptedFolders: (options?: StorageOptions) => Promise<FolderView[]>;
-  setDecryptedFolders: (value: FolderView[], options?: StorageOptions) => Promise<void>;
   getDecryptedOrganizationKeys: (
     options?: StorageOptions
   ) => Promise<Map<string, SymmetricCryptoKey>>;
@@ -183,14 +183,22 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
   setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use FolderService
+   */
   getEncryptedFolders: (options?: StorageOptions) => Promise<{ [id: string]: FolderData }>;
+  /**
+   * @deprecated Do not call this directly, use FolderService
+   */
   setEncryptedFolders: (
     value: { [id: string]: FolderData },
     options?: StorageOptions
   ) => Promise<void>;
-  getEncryptedOrganizationKeys: (options?: StorageOptions) => Promise<any>;
+  getEncryptedOrganizationKeys: (
+    options?: StorageOptions
+  ) => Promise<{ [orgId: string]: EncryptedOrganizationKeyData }>;
   setEncryptedOrganizationKeys: (
-    value: Map<string, SymmetricCryptoKey>,
+    value: { [orgId: string]: EncryptedOrganizationKeyData },
     options?: StorageOptions
   ) => Promise<void>;
   getEncryptedPasswordGenerationHistory: (

@@ -13,6 +13,22 @@ on:
           - Initial Release
           - Redeploy
           - Dry Run
+      snap_publish:
+        description: 'Publish to snap store'
+        required: true
+        default: true
+        type: boolean
+      choco_publish:
+        description: 'Publish to chocolatey store'
+        required: true
+        default: true
+        type: boolean
+      npm_publish:
+        description: 'Publish to npm registry'
+        required: true
+        default: true
+        type: boolean
+
 
 defaults:
   run:
@@ -48,13 +64,23 @@ jobs:
           monorepo: true
           monorepo-project: cli
 
-      - name: Download all artifacts
+      - name: Download all Release artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build-cli.yml
           path: apps/cli
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+
+      - name: Download all artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        with:
+          workflow: build-cli.yml
+          path: apps/cli
+          workflow_conclusion: success
+          branch: master
 
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
@@ -83,6 +109,7 @@ jobs:
     name: Deploy Snap
     runs-on: ubuntu-20.04
     needs: setup
+    if: inputs.snap_publish
     env:
       _PKG_VERSION: ${{ needs.setup.outputs.release-version }}
     steps:
@@ -107,12 +134,23 @@ jobs:
           snapcraft_token: ${{ steps.retrieve-secrets.outputs.snapcraft-store-token }}
 
       - name: Download artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build-cli.yml
           path: apps/cli
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+          artifacts: bw_${{ env._PKG_VERSION }}_amd64.snap
+
+      - name: Download artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        with:
+          workflow: build-cli.yml
+          path: apps/cli
+          workflow_conclusion: success
+          branch: master
           artifacts: bw_${{ env._PKG_VERSION }}_amd64.snap
 
       - name: Publish Snap & logout
@@ -126,6 +164,7 @@ jobs:
     name: Deploy Choco
     runs-on: windows-2019
     needs: setup
+    if: inputs.choco_publish
     env:
       _PKG_VERSION: ${{ needs.setup.outputs.release-version }}
     steps:
@@ -154,12 +193,23 @@ jobs:
         run: New-Item -ItemType directory -Path ./dist
 
       - name: Download artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build-cli.yml
-          path: apps/cli
+          path: apps/cli/dist
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+          artifacts: bitwarden-cli.${{ env._PKG_VERSION }}.nupkg
+
+      - name: Download artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        with:
+          workflow: build-cli.yml
+          path: apps/cli/dist
+          workflow_conclusion: success
+          branch: master
           artifacts: bitwarden-cli.${{ env._PKG_VERSION }}.nupkg
 
       - name: Push to Chocolatey
@@ -174,25 +224,49 @@ jobs:
     name: Publish NPM
     runs-on: ubuntu-20.04
     needs: setup
+    if: inputs.npm_publish
     env:
       _PKG_VERSION: ${{ needs.setup.outputs.release-version }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
 
+      - name: Login to Azure
+        uses: Azure/login@24848bc889cfc0a8313c2b3e378ac0d625b9bc16
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "cli-npm-api-key"
+
       - name: Download artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build-cli.yml
-          path: apps/cli
+          path: apps/cli/build
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+          artifacts: bitwarden-cli-${{ env._PKG_VERSION }}-npm-build.zip
+
+      - name: Download artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        with:
+          workflow: build-cli.yml
+          path: apps/cli/build
+          workflow_conclusion: success
+          branch: master
           artifacts: bitwarden-cli-${{ env._PKG_VERSION }}-npm-build.zip
 
       - name: Setup NPM
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ steps.retrieve-secrets.outputs.cli-npm-api-key }}
 
       - name: Install Husky
         run: npm install -g husky

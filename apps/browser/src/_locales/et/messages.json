@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Vigane e-posti aadress."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Vajalik on ülemparooli sisestamine."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Vajalik on ülemparooli uuesti sisestamine."
+  },
+  "masterPasswordMinlength": {
     "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
   },
   "masterPassDoesntMatch": {
@@ -574,16 +577,16 @@
     "message": "\"Lisa konto andmed\" teavitus ilmub pärast esimest sisselogimist ning võimaldab kontoandmeid automaatselt Bitwardenisse lisada."
   },
   "showCardsCurrentTab": {
-    "message": "Kuva kaardiandmed hoidla vaates"
+    "message": "Kuva \"Kaart\" vaates kaardiandmed"
   },
   "showCardsCurrentTabDesc": {
-    "message": "Kuvab hoidla lehel kaardiandmed, et neid saaks kiiresti sisestada"
+    "message": "Kuvab \"Kaart\" vaates kaardiandmeid, et neid saaks kiiresti sisestada"
   },
   "showIdentitiesCurrentTab": {
-    "message": "Kuva hoidla vaates identiteete"
+    "message": "Kuva \"Kaart\" vaates identiteete"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List identity items on the Tab page for easy auto-fill."
+    "message": "Kuvab \"Kaart\" vaates identiteete, et neid saaks kiiresti sisestada"
   },
   "clearClipboard": {
     "message": "Lõikelaua sisu kustutamine",
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "Märkeruudu markeerimisel nõustud järgnevaga:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Kasutustingimuste ja Privaatsuspoliitikaga pole nõustutud."
   },
   "termsOfService": {
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.  "
+  "vaultTimeoutTooLarge": {
+    "message": "Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas."
   },
   "vaultExportDisabled": {
     "message": "Hoidla eksportimine on väljalülitatud"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connectori viga: veendu, et Key Connector on saadaval ja töötab korrektselt."
+  },
+  "organizationIsDisabled": {
+    "message": "Organisatsiooni ligipääs on keelatud."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Organisatsiooni alla kuuluvatele kirjetele ei ole ligipääsu. Kontakteeru oma organisatsiooni omanikuga."
   }
 }

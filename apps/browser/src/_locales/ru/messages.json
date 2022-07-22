@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Неверный адрес email."
   },
-  "masterPassRequired": {
-    "message": "Необходимо ввести мастер-пароль."
+  "masterPasswordRequired": {
+    "message": "Требуется мастер-пароль."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Необходимо повторно ввести мастер-пароль."
+  },
+  "masterPasswordMinlength": {
     "message": "Мастер-пароль должен содержать не менее 8 символов."
   },
   "masterPassDoesntMatch": {
@@ -1480,7 +1483,7 @@
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Условия предоставления услуг и Политика конфиденциальности не были подтверждены."
   },
   "termsOfService": {
@@ -1846,8 +1849,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Время ожидания превышает ограничения, установленные вашей организацией."
+  "vaultTimeoutTooLarge": {
+    "message": "Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией."
   },
   "vaultExportDisabled": {
     "message": "Экспорт хранилища отключен"
@@ -1964,5 +1967,11 @@
   },
   "ssoKeyConnectorError": {
     "message": "Ошибка соединителя ключей: убедитесь, что он доступен и работает корректно."
+  },
+  "organizationIsDisabled": {
+    "message": "Организация отключена."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Доступ к элементам в отключенных организациях невозможен. Обратитесь за помощью к владельцу организации."
   }
 }
