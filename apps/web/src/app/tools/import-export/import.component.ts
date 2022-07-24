@@ -28,7 +28,6 @@ export class ImportComponent implements OnInit {
   formPromise: Promise<ImportError>;
   loading = false;
   importBlockedByPolicy = false;
-  protected component = FilePasswordPromptComponent;
 
   protected organizationId: string = null;
   protected successNavigate: any[] = ["vault"];
@@ -244,12 +243,8 @@ export class ImportComponent implements OnInit {
       );
   }
 
-  protectedFields() {
-    return ["TOTP", "Password", "H_Field", "Card Number", "Security Code"];
-  }
-
   async showFilePasswordPrompt(fcontents: string, organizationId: string) {
-    const ref = await this.modalService.open(this.component, {
+    const ref = await this.modalService.open(FilePasswordPromptComponent, {
       allowMultipleModals: true,
       data: {
         fileContents: fcontents,
@@ -263,9 +258,5 @@ export class ImportComponent implements OnInit {
 
     const result = await ref.onClosedPromise();
     return result === true;
-  }
-
-  async enabled() {
-    return !this.keyConnectorService.getUsesKeyConnector();
   }
 }

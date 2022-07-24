@@ -1,11 +1,4 @@
-import {
-  Directive,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-} from "@angular/core";
+import { Directive, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
@@ -29,10 +22,6 @@ export class ExportComponent implements OnInit {
 
   formPromise: Promise<string>;
   disabledByPolicy = false;
-
-  @ViewChild("viewUserApiKeyTemplate", { read: ViewContainerRef, static: true })
-  viewUserApiKeyModalRef: ViewContainerRef;
-
   encryptionPassword: string;
 
   exportForm = this.formBuilder.group({

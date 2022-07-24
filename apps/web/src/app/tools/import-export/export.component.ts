@@ -72,30 +72,23 @@ export class ExportComponent extends BaseExportComponent {
         ? "FileEncryptedExportWarningDesc"
         : "encExportKeyWarningDesc";
 
-    try {
-      const ref = this.modalService.open(UserVerificationPromptComponent, {
-        allowMultipleModals: true,
-        data: {
-          confirmDescription: confirmDescription,
-          confirmButtonText: "exportVault",
-          modalTitle: "confirmVaultExport",
-        },
-      });
+    const ref = this.modalService.open(UserVerificationPromptComponent, {
+      allowMultipleModals: true,
+      data: {
+        confirmDescription: confirmDescription,
+        confirmButtonText: "exportVault",
+        modalTitle: "confirmVaultExport",
+      },
+    });
 
-      if (ref == null) {
-        return;
-      }
+    if (ref == null) {
+      return;
+    }
 
-      if (await ref.onClosedPromise()) {
-        //successful
-        this.submitWithSecretAlreadyVerified();
-      }
-    } catch {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("error"),
-        this.i18nService.t("invalidMasterPassword")
-      );
+    const userVerified = await ref.onClosedPromise();
+    if (userVerified) {
+      //successful
+      this.submitWithSecretAlreadyVerified();
     }
   }
 
