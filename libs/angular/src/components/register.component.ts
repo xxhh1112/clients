@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -23,11 +23,13 @@ import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenc
 import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
+import { PasswordStrengthComponent } from "./password-strength.component";
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
   @Input() isInTrialFlow = false;
   @Output() createdAccount = new EventEmitter<string>();
+  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
 
   showPassword = false;
   formPromise: Promise<any>;
@@ -149,7 +151,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
     const strengthResult = this.passwordGenerationService.passwordStrength(
       masterPassword,
-      this.getPasswordStrengthUserInput()
+      this.passwordStrengthComponent.getPasswordStrengthUserInput()
     );
     if (strengthResult != null && strengthResult.score < 3) {
       const result = await this.platformUtilsService.showDialog(
@@ -233,41 +235,6 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   togglePassword() {
     this.showPassword = !this.showPassword;
-  }
-
-  updatePasswordStrength() {
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
-
-    if (this.masterPasswordStrengthTimeout != null) {
-      clearTimeout(this.masterPasswordStrengthTimeout);
-    }
-    this.masterPasswordStrengthTimeout = setTimeout(() => {
-      const strengthResult = this.passwordGenerationService.passwordStrength(
-        masterPassword,
-        this.getPasswordStrengthUserInput()
-      );
-      this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
-    }, 300);
-  }
-
-  private getPasswordStrengthUserInput() {
-    let userInput: string[] = [];
-    const email = this.formGroup.get("email")?.value;
-    const name = this.formGroup.get("name").value;
-    const atPosition = email.indexOf("@");
-    if (atPosition > -1) {
-      userInput = userInput.concat(
-        email
-          .substr(0, atPosition)
-          .trim()
-          .toLowerCase()
-          .split(/[^A-Za-z0-9]/)
-      );
-    }
-    if (name != null && name !== "") {
-      userInput = userInput.concat(name.trim().toLowerCase().split(" "));
-    }
-    return userInput;
   }
 
   private getErrorToastMessage() {

@@ -1,4 +1,4 @@
-import { Directive, OnInit } from "@angular/core";
+import { Directive, OnInit, ViewChild } from "@angular/core";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -12,6 +12,8 @@ import { EncString } from "@bitwarden/common/models/domain/encString";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 
+import { PasswordStrengthComponent } from "./password-strength.component";
+
 @Directive()
 export class ChangePasswordComponent implements OnInit {
   masterPassword: string;
@@ -19,12 +21,11 @@ export class ChangePasswordComponent implements OnInit {
   formPromise: Promise<any>;
   masterPasswordScore: number;
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
+  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
 
   protected email: string;
   protected kdf: KdfType;
   protected kdfIterations: number;
-
-  private masterPasswordStrengthTimeout: any;
 
   constructor(
     protected i18nService: I18nService,
@@ -38,6 +39,7 @@ export class ChangePasswordComponent implements OnInit {
 
   async ngOnInit() {
     this.email = await this.stateService.getEmail();
+    this.passwordStrengthComponent.email = this.email;
     this.enforcedPolicyOptions ??= await this.policyService.getMasterPasswordPolicyOptions();
   }
 
@@ -118,7 +120,7 @@ export class ChangePasswordComponent implements OnInit {
 
     const strengthResult = this.passwordGenerationService.passwordStrength(
       this.masterPassword,
-      this.getPasswordStrengthUserInput()
+      this.passwordStrengthComponent.getPasswordStrengthUserInput()
     );
 
     if (
@@ -153,19 +155,6 @@ export class ChangePasswordComponent implements OnInit {
     return true;
   }
 
-  updatePasswordStrength() {
-    if (this.masterPasswordStrengthTimeout != null) {
-      clearTimeout(this.masterPasswordStrengthTimeout);
-    }
-    this.masterPasswordStrengthTimeout = setTimeout(() => {
-      const strengthResult = this.passwordGenerationService.passwordStrength(
-        this.masterPassword,
-        this.getPasswordStrengthUserInput()
-      );
-      this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
-    }, 300);
-  }
-
   async logOut() {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("logOutConfirmation"),
@@ -176,20 +165,5 @@ export class ChangePasswordComponent implements OnInit {
     if (confirmed) {
       this.messagingService.send("logout");
     }
-  }
-
-  private getPasswordStrengthUserInput() {
-    let userInput: string[] = [];
-    const atPosition = this.email.indexOf("@");
-    if (atPosition > -1) {
-      userInput = userInput.concat(
-        this.email
-          .substr(0, atPosition)
-          .trim()
-          .toLowerCase()
-          .split(/[^A-Za-z0-9]/)
-      );
-    }
-    return userInput;
   }
 }

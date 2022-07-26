@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
@@ -8,12 +8,12 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
   templateUrl: "./password-strength.component.html",
 })
 export class PasswordStrengthComponent implements OnChanges {
-  @Input() score: number;
   @Input() showText = false;
   @Input() email: string;
   @Input() password: string;
   @Input() name: string;
 
+  score: number;
   scoreWidth = 0;
   color = "bg-danger";
   text: string;
@@ -26,27 +26,30 @@ export class PasswordStrengthComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.updatePasswordStrength(changes.password?.currentValue);
+    this.masterPasswordStrengthTimeout = setTimeout(() => {
+      this.updatePasswordStrength(changes.password?.currentValue);
 
-    this.scoreWidth = this.score == null ? 0 : (this.score + 1) * 20;
-    switch (this.score) {
-      case 4:
-        this.color = "bg-success";
-        this.text = this.i18nService.t("strong");
-        break;
-      case 3:
-        this.color = "bg-primary";
-        this.text = this.i18nService.t("good");
-        break;
-      case 2:
-        this.color = "bg-warning";
-        this.text = this.i18nService.t("weak");
-        break;
-      default:
-        this.color = "bg-danger";
-        this.text = this.score != null ? this.i18nService.t("weak") : null;
-        break;
-    }
+      this.scoreWidth = this.score == null ? 0 : (this.score + 1) * 20;
+
+      switch (this.score) {
+        case 4:
+          this.color = "bg-success";
+          this.text = this.i18nService.t("strong");
+          break;
+        case 3:
+          this.color = "bg-primary";
+          this.text = this.i18nService.t("good");
+          break;
+        case 2:
+          this.color = "bg-warning";
+          this.text = this.i18nService.t("weak");
+          break;
+        default:
+          this.color = "bg-danger";
+          this.text = this.score != null ? this.i18nService.t("weak") : null;
+          break;
+      }
+    }, 100);
   }
 
   updatePasswordStrength(password: string) {
@@ -55,13 +58,12 @@ export class PasswordStrengthComponent implements OnChanges {
     if (this.masterPasswordStrengthTimeout != null) {
       clearTimeout(this.masterPasswordStrengthTimeout);
     }
-    this.masterPasswordStrengthTimeout = setTimeout(() => {
-      const strengthResult = this.passwordGenerationService.passwordStrength(
-        masterPassword,
-        this.getPasswordStrengthUserInput()
-      );
-      this.score = strengthResult == null ? null : strengthResult.score;
-    }, 300);
+
+    const strengthResult = this.passwordGenerationService.passwordStrength(
+      masterPassword,
+      this.getPasswordStrengthUserInput()
+    );
+    this.score = strengthResult == null ? null : strengthResult.score;
   }
 
   getPasswordStrengthUserInput() {

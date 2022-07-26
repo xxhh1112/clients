@@ -6,6 +6,7 @@ import { AvatarComponent } from "./components/avatar.component";
 import { CalloutComponent } from "./components/callout.component";
 import { ExportScopeCalloutComponent } from "./components/export-scope-callout.component";
 import { IconComponent } from "./components/icon.component";
+import { PasswordStrengthComponent } from "./components/password-strength.component";
 import { BitwardenToastModule } from "./components/toastr.component";
 import { A11yInvalidDirective } from "./directives/a11y-invalid.directive";
 import { A11yTitleDirective } from "./directives/a11y-title.directive";
@@ -55,6 +56,7 @@ import { UserNamePipe } from "./pipes/user-name.pipe";
     CreditCardNumberPipe,
     EllipsisPipe,
     ExportScopeCalloutComponent,
+    PasswordStrengthComponent,
     FallbackSrcDirective,
     I18nPipe,
     IconComponent,
@@ -84,6 +86,7 @@ import { UserNamePipe } from "./pipes/user-name.pipe";
     CreditCardNumberPipe,
     EllipsisPipe,
     ExportScopeCalloutComponent,
+    PasswordStrengthComponent,
     FallbackSrcDirective,
     I18nPipe,
     IconComponent,
