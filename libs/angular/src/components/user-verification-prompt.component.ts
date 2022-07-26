@@ -10,7 +10,7 @@ import { ModalConfig } from "../services/modal.service";
 import { ModalRef } from "./modal/modal.ref";
 
 /**
- * Used to verify the user's secret, you can customize all of the text in the modal.
+ * Used to verify the user's identity (using their master password or email-based OTP for Key Connector users). You can customize all of the text in the modal.
  */
 @Directive()
 export class UserVerificationPromptComponent {
