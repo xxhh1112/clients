@@ -1,21 +1,32 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# Add git branch if relevant
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
+issue_pattern="[A-Z]{2,}-\d+"
 
-# Extact tracker abbreviation and ticket number (e.g. PS-123)
-parse_git_tracker_and_ticket() {
-  parse_git_branch | grep -e '[A-Z]\+-[0-9]\+' -o
-}
-
-MESSAGE="$(cat $1)"
-TICKET=`parse_git_tracker_and_ticket`
-
-if [ -n "$TICKET" ]
+# If the commit message doesn't have the issue, let's check the branch
+if [ "" != "$(grep $issue_pattern "$1")" ]
 then
-   echo "New commit message: [$TICKET] $MESSAGE"
-   echo "[$TICKET] $MESSAGE" > $1
+  # Get the current git branch if we're in a git repo (see http://kenglish.co/add-jira-issue-number-to-git-commit-message/)
+  parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+  }
+
+  # Parse issue identifier in XXX-9999 format from branch (e.g. PS-123)
+  parse_issue_identifier() {
+    parse_git_branch | grep -e $issue_pattern -o
+  }
+
+  current_message="$(cat $1)"
+  issue_identifier=$(parse_issue_identifier)
+
+  if [ -n "$issue_identifier" ]
+  then
+    echo "New commit message: [$issue_identifier] $current_message"
+    echo "[$issue_identifier] $current_message" > $1
+  else
+    echo >&2 "ERROR: Commit message is missing Jira identifier and it cannot be inferred from the current branch."
+    exit 1
+  fi
+else
+  echo "Commit message contains Jira issue identifier."
 fi
