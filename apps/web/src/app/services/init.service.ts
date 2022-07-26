@@ -17,7 +17,7 @@ import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EventService as EventLoggingService } from "@bitwarden/common/services/event.service";
 import { VaultTimeoutService as VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout.service";
 
-import { I18nService as I18nService } from "../../services/i18n.service";
+import { I18nService } from "./i18n.service";
 
 @Injectable()
 export class InitService {
@@ -52,7 +52,7 @@ export class InitService {
       htmlEl.classList.add("locale_" + this.i18nService.translationLocale);
       await this.themingService.monitorThemeChanges();
       const containerService = new ContainerService(this.cryptoService);
-      containerService.attachToWindow(this.win);
+      containerService.attachToGlobal(this.win);
     };
   }
 }

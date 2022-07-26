@@ -280,14 +280,14 @@ export class EventService {
           this.getShortId(ev.organizationUserId)
         );
         break;
-      case EventType.OrganizationUser_Deactivated:
+      case EventType.OrganizationUser_Revoked:
         msg = this.i18nService.t("revokedUserId", this.formatOrgUserId(ev));
         humanReadableMsg = this.i18nService.t(
           "revokedUserId",
           this.getShortId(ev.organizationUserId)
         );
         break;
-      case EventType.OrganizationUser_Activated:
+      case EventType.OrganizationUser_Restored:
         msg = this.i18nService.t("restoredUserId", this.formatOrgUserId(ev));
         humanReadableMsg = this.i18nService.t(
           "restoredUserId",
@@ -301,11 +301,9 @@ export class EventService {
       case EventType.Organization_PurgedVault:
         msg = humanReadableMsg = this.i18nService.t("purgedOrganizationVault");
         break;
-      /*
-            case EventType.Organization_ClientExportedVault:
-                msg = this.i18nService.t('exportedOrganizationVault');
-                break;
-            */
+      case EventType.Organization_ClientExportedVault:
+        msg = humanReadableMsg = this.i18nService.t("exportedOrganizationVault");
+        break;
       case EventType.Organization_VaultAccessed:
         msg = humanReadableMsg = this.i18nService.t("vaultAccessedByProvider");
         break;
