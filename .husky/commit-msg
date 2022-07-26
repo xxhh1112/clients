@@ -1,19 +1,21 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-message="$(cat $1)"
-requiredPattern="((?<!([A-Za-z]{1,10})-?)[A-Z]+-\d+)"
-if ! [[ $message =~ $requiredPattern ]];
+# Add git branch if relevant
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+# Extact tracker abbreviation and ticket number (e.g. PS-123)
+parse_git_tracker_and_ticket() {
+  parse_git_branch | grep -e '[A-Z]\+-[0-9]\+' -o
+}
+
+MESSAGE="$(cat $1)"
+TICKET=`parse_git_tracker_and_ticket`
+
+if [ -n "$TICKET" ]
 then
-  echo "-"
-  echo "-"
-  echo "-"
-  echo "The commit message must contain a JIRA issue identifier in the format XXX-9999"
-  echo "-"
-  echo "Your commit message was:"
-  echo $message
-  echo "-"
-  echo "For more information, check script in .husky/commit-msg"
-  echo "-"
-  exit 1
+   echo "New commit message: [$TICKET] $MESSAGE"
+   echo "[$TICKET] $MESSAGE" > $1
 fi
