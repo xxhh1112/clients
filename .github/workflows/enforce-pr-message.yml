@@ -1,0 +1,14 @@
+---
+name: Enforce Jira Issue on PR message
+
+on:
+  pull_request:
+    types: [opened, edited]
+jobs:
+  update_pr:
+    runs-on: ubuntu-20.04
+    steps:  
+      - name: Enforce Jira Issue Key in PR title
+        uses: ryanvade/enforce-pr-title-style-action@6219de5d10b3205f0b41215bdf51a01b89bd8a1b
+
+      
