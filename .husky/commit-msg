@@ -1,32 +1,30 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-issue_pattern="[A-Z]{2,}-\d+"
+issue_pattern='([A-Z]{2,}-\d+)'
+file=$1
+commit_message="$(cat $file)"
 
-# If the commit message doesn't have the issue, let's check the branch
-if [ "" != "$(grep $issue_pattern "$1")" ]
+if [[ "$issue_pattern" =~ "$commit_message" ]]
 then
-  # Get the current git branch if we're in a git repo (see http://kenglish.co/add-jira-issue-number-to-git-commit-message/)
-  parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-  }
-
-  # Parse issue identifier in XXX-9999 format from branch (e.g. PS-123)
-  parse_issue_identifier() {
-    parse_git_branch | grep -e $issue_pattern -o
-  }
-
-  current_message="$(cat $1)"
-  issue_identifier=$(parse_issue_identifier)
-
-  if [ -n "$issue_identifier" ]
-  then
-    echo "New commit message: [$issue_identifier] $current_message"
-    echo "[$issue_identifier] $current_message" > $1
-  else
-    echo >&2 "ERROR: Commit message is missing Jira identifier and it cannot be inferred from the current branch."
-    exit 1
-  fi
+  echo "Commit message '$commit_message' has a Jira issue in it. No changes needed."
 else
-  echo "Commit message contains Jira issue identifier."
+  # If the commit message doesn't have the issue, let's check the branch.
+  # This is the same logic as the prepare-commit-msg hook, but this handles the case where the user discarded the suggestion or accidentally overwrote it.
+  echo "Commit message '$commit_message' does not have a Jira issue in it.  Checking the branch..."
+ 
+  # Use git rev-parse to find the current branch and send the full branch through grep to parse out the Jira identifier
+  issue_identifier=[$(git rev-parse --abbrev-ref HEAD | grep -Eo '^(\w+/)?(\w+[-_])?[0-9]+' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")]
+
+  echo "Found issue identifier '$issue_identifier' from current branch."
+
+  # If there was no identifier found in the branch, exit with an error.
+  # If there was an identifier found in the branch, add it to the message.
+  if [[ $issue_identifier == "[]" ]];
+  then
+    echo >&2 "ERROR: Commit message '$commit_message' is missing Jira identifier and it cannot be inferred from the current branch."
+    exit 1
+  else
+    echo "$issue_identifier $commit_message" > $file
+  fi
 fi
