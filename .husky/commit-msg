@@ -8,7 +8,7 @@ if [[ $commit_message =~ [A-Z]{2,}-\d+ ]]
 then
   echo "Commit message '$commit_message' has a Jira issue in it. No changes needed."
 else
-  # If the commit message doesn't have the issue, let's check the branch.
+  # If the commit message does not have the issue, let's check the branch.
   # This is the same logic as the prepare-commit-msg hook, but this handles the case where the user discarded the suggestion or accidentally overwrote it.
   echo "Commit message '$commit_message' does not have a Jira issue in it.  Checking the branch..."
  
