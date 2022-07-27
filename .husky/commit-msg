@@ -25,6 +25,7 @@ else
     echo >&2 "ERROR: Commit message '$commit_message' is missing Jira identifier and it cannot be inferred from the current branch."
     exit 1
   else
+    echo "Modified commit message to include '$issue_identifier'."
     echo "$issue_identifier $commit_message" > $file
   fi
 fi
