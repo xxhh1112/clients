@@ -13,12 +13,40 @@ export class PasswordStrengthComponent implements OnChanges {
   @Input() password: string;
   @Input() name: string;
 
-  score: number;
+  masterPasswordScore: number;
   scoreWidth = 0;
   color = "bg-danger";
   text: string;
 
   private masterPasswordStrengthTimeout: any;
+
+  //used by desktop and browser to display strength text color
+  get masterPasswordScoreColor() {
+    switch (this.masterPasswordScore) {
+      case 4:
+        return "success";
+      case 3:
+        return "primary";
+      case 2:
+        return "warning";
+      default:
+        return "danger";
+    }
+  }
+
+  //used by desktop and browser to display strength text
+  get masterPasswordScoreText() {
+    switch (this.masterPasswordScore) {
+      case 4:
+        return this.i18nService.t("strong");
+      case 3:
+        return this.i18nService.t("good");
+      case 2:
+        return this.i18nService.t("weak");
+      default:
+        return this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
+    }
+  }
 
   constructor(
     private i18nService: I18nService,
@@ -29,9 +57,9 @@ export class PasswordStrengthComponent implements OnChanges {
     this.masterPasswordStrengthTimeout = setTimeout(() => {
       this.updatePasswordStrength(changes.password?.currentValue);
 
-      this.scoreWidth = this.score == null ? 0 : (this.score + 1) * 20;
+      this.scoreWidth = this.masterPasswordScore == null ? 0 : (this.masterPasswordScore + 1) * 20;
 
-      switch (this.score) {
+      switch (this.masterPasswordScore) {
         case 4:
           this.color = "bg-success";
           this.text = this.i18nService.t("strong");
@@ -46,7 +74,7 @@ export class PasswordStrengthComponent implements OnChanges {
           break;
         default:
           this.color = "bg-danger";
-          this.text = this.score != null ? this.i18nService.t("weak") : null;
+          this.text = this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
           break;
       }
     }, 100);
@@ -63,7 +91,7 @@ export class PasswordStrengthComponent implements OnChanges {
       masterPassword,
       this.getPasswordStrengthUserInput()
     );
-    this.score = strengthResult == null ? null : strengthResult.score;
+    this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
   }
 
   getPasswordStrengthUserInput() {

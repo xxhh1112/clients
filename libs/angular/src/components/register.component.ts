@@ -33,7 +33,6 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   showPassword = false;
   formPromise: Promise<any>;
-  masterPasswordScore: number;
   referenceData: ReferenceEventRequest;
   showTerms = true;
   showErrorSummary = false;
@@ -65,7 +64,6 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   );
 
   protected successRoute = "login";
-  private masterPasswordStrengthTimeout: any;
 
   constructor(
     protected formValidationErrorService: FormValidationErrorsService,
@@ -87,36 +85,6 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   async ngOnInit() {
     this.setupCaptcha();
-  }
-
-  get masterPasswordScoreWidth() {
-    return this.masterPasswordScore == null ? 0 : (this.masterPasswordScore + 1) * 20;
-  }
-
-  get masterPasswordScoreColor() {
-    switch (this.masterPasswordScore) {
-      case 4:
-        return "success";
-      case 3:
-        return "primary";
-      case 2:
-        return "warning";
-      default:
-        return "danger";
-    }
-  }
-
-  get masterPasswordScoreText() {
-    switch (this.masterPasswordScore) {
-      case 4:
-        return this.i18nService.t("strong");
-      case 3:
-        return this.i18nService.t("good");
-      case 2:
-        return this.i18nService.t("weak");
-      default:
-        return this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
-    }
   }
 
   async submit(showToast = true) {
