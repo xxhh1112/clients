@@ -3,7 +3,7 @@
 
 # See https://betterprogramming.pub/how-to-automatically-add-the-ticket-number-in-git-commit-message-bda5426ded05 for implementation details
 
-# The input is a file containing the commit message
+# The input is a file containing the commit message.
 file=$1
 commit_message=$(cat $file)
 
