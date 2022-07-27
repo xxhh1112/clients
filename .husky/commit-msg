@@ -4,7 +4,7 @@
 file=$1
 commit_message="$(cat $file)"
 
-if [[ "$commit_message" =~ ([A-Z]{2,}-\d+) ]]
+if [[ "$commit_message" =~ [A-Z]{2,}-\d+ ]]
 then
   echo "Commit message '$commit_message' has a Jira issue in it. No changes needed."
 else
