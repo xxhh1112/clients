@@ -20,8 +20,7 @@ else
   # If there was an identifier found in the branch, add it to the message.
   if [[ $issue_identifier == "[]" ]];
   then
-    echo >&2 "ERROR: Commit message '$commit_message' is missing Jira identifier and it cannot be inferred from the current branch."
-    exit 1
+    echo "  WARNING: Commit message '$commit_message' is missing Jira identifier and it cannot be inferred from the current branch."
   else
     echo "Found issue identifier '$issue_identifier' from current branch."
     echo "Modified commit message to include '$issue_identifier'."
