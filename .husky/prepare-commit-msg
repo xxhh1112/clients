@@ -16,5 +16,5 @@ then
   exit 0;
 fi
 
-# Otherwise, add the ticket to the existing message and send it back to the file
+# Otherwise, add the ticket to the existing message and send it back to the file.
 echo "$issue_identifier $commit_message" > $file
