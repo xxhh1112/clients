@@ -16,8 +16,6 @@ else
   # Use git rev-parse to find the current branch and send the full branch through grep to parse out the Jira identifier
   issue_identifier=[$(git rev-parse --abbrev-ref HEAD | grep -Eo '^(\w+/)?(\w+[-_])?[0-9]+' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")]
 
-  echo "Found issue identifier '$issue_identifier' from current branch."
-
   # If there was no identifier found in the branch, exit with an error.
   # If there was an identifier found in the branch, add it to the message.
   if [[ $issue_identifier == "[]" ]];
@@ -25,6 +23,7 @@ else
     echo >&2 "ERROR: Commit message '$commit_message' is missing Jira identifier and it cannot be inferred from the current branch."
     exit 1
   else
+    echo "Found issue identifier '$issue_identifier' from current branch."
     echo "Modified commit message to include '$issue_identifier'."
     echo "$issue_identifier $commit_message" > $file
   fi
