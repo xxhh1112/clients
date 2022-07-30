@@ -1,0 +1,13 @@
+---
+name: Require PR Title to Include Jira Issue
+
+on:
+  pull_request:
+    types: [ready_for_review, labeled, unlabled]
+jobs:
+  update_pr:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Enforce Jira Issue Key in PR title
+        if: ${{ !contains( github.event.pull_request.labels.*.name, 'automated-pr') }}
+        uses: ryanvade/enforce-pr-title-style-action@6219de5d10b3205f0b41215bdf51a01b89bd8a1b

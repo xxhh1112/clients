@@ -1,0 +1,24 @@
+---
+name: Update PR Title with Jira Identifier from Branch
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+jobs:
+  update_pr:
+    runs-on: ubuntu-20.04
+    steps:  
+      - name: Make sure the branch has a Jira identifier in it
+        id: check_branch
+        run: |
+          if [[ ${{ github.head_ref }} =~ ^[A-Za-z]+-[0-9]+.*$ ]]; then
+              echo ::set-output name=match::true
+          fi
+      - name: Update the PR title with Jira identifier from source branch
+        if: steps.check_branch.outputs.match == 'true'
+        uses: tzkhan/pr-update-action@bbd4c9395df8a9c4ef075b8b7fe29f2ca76cdca9
+        id: update_title
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          head-branch-regex: '[A-Z][A-Z0-9]+-[0-9]+'
+          title-template: '[%headbranch%] '
