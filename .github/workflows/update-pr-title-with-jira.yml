@@ -20,5 +20,5 @@ jobs:
         id: update_title
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          head-branch-regex: '[A-Z][A-Z0-9]+-[0-9]+'
+          head-branch-regex: '[A-Za-z]+-[0-9]+'
           title-template: '[%headbranch%] '
