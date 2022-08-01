@@ -89,7 +89,7 @@ jobs:
         uses: chrnorm/deployment-status@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
-          state: 'failure'
+          state: 'in_progress'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Login to Azure

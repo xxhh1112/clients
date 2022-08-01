@@ -5,7 +5,8 @@ on:
   pull_request:
     types: [ready_for_review]
 jobs:
-  update_pr:
+  check_pr:
+    name: Enforce Issue Key
     runs-on: ubuntu-20.04
     steps:
       - name: Enforce Jira Issue Key in PR title

@@ -6,6 +6,7 @@ on:
     types: [opened, edited, reopened]
 jobs:
   update_pr:
+    name: Update PR Title
     runs-on: ubuntu-20.04
     steps:  
       - name: Make sure the branch has a Jira identifier in it
