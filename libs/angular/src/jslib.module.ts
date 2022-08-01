@@ -29,7 +29,7 @@ import { I18nPipe } from "./pipes/i18n.pipe";
 import { SearchCiphersPipe } from "./pipes/search-ciphers.pipe";
 import { SearchPipe } from "./pipes/search.pipe";
 import { UserNamePipe } from "./pipes/user-name.pipe";
-import { SharedModule } from "./shared/shared.module";
+import { PasswordStrengthComponent } from "./shared/components/password-strength/password-strength.component";
 
 @NgModule({
   imports: [
@@ -41,7 +41,6 @@ import { SharedModule } from "./shared/shared.module";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
   ],
   declarations: [
     A11yInvalidDirective,
@@ -70,6 +69,7 @@ import { SharedModule } from "./shared/shared.module";
     StopPropDirective,
     TrueFalseValueDirective,
     UserNamePipe,
+    PasswordStrengthComponent,
   ],
   exports: [
     A11yInvalidDirective,
@@ -99,6 +99,7 @@ import { SharedModule } from "./shared/shared.module";
     StopPropDirective,
     TrueFalseValueDirective,
     UserNamePipe,
+    PasswordStrengthComponent,
   ],
   providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe],
 })
