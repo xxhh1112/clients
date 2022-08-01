@@ -25,11 +25,8 @@
             <div class="row-main">
               <label for="masterPassword">
                 {{ "masterPass" | i18n }}
-                <strong
-                  class="sub-label text-{{ passwordStrengthComponent?.masterPasswordScoreColor }}"
-                  *ngIf="passwordStrengthComponent?.masterPasswordScoreText"
-                >
-                  {{ passwordStrengthComponent?.masterPasswordScoreText }}
+                <strong class="sub-label text-{{ color }}" *ngIf="text">
+                  {{ text }}
                 </strong>
               </label>
               <input
@@ -61,6 +58,8 @@
             [password]="formGroup.get('masterPassword')?.value"
             [email]="formGroup.get('email')?.value"
             [name]="formGroup.get('name')?.value"
+            (passwordStrengthResult)="getStrengthResult($event)"
+            (passwordScoreColor)="getPasswordScoreText($event)"
           >
           </app-password-strength>
         </div>

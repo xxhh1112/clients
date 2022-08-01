@@ -1,17 +1,25 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 
+export interface PasswordColorText {
+  color: string;
+  text: string;
+}
+
 @Component({
   selector: "app-password-strength",
-  templateUrl: "./password-strength.component.html",
+  templateUrl: "password-strength.component.html",
 })
 export class PasswordStrengthComponent implements OnChanges {
   @Input() showText = false;
   @Input() email: string;
   @Input() password: string;
   @Input() name: string;
+
+  @Output() passwordStrengthResult = new EventEmitter<any>();
+  @Output() passwordScoreColor = new EventEmitter<PasswordColorText>();
 
   masterPasswordScore: number;
   scoreWidth = 0;
@@ -77,6 +85,8 @@ export class PasswordStrengthComponent implements OnChanges {
           this.text = this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
           break;
       }
+
+      this.setPasswordScoreText(this.color, this.text);
     }, 100);
   }
 
@@ -91,6 +101,8 @@ export class PasswordStrengthComponent implements OnChanges {
       masterPassword,
       this.getPasswordStrengthUserInput()
     );
+    this.passwordStrengthResult.emit(strengthResult);
+
     this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
   }
 
@@ -112,5 +124,10 @@ export class PasswordStrengthComponent implements OnChanges {
       userInput = userInput.concat(name.trim().toLowerCase().split(" "));
     }
     return userInput;
+  }
+
+  setPasswordScoreText(color: string, text: string) {
+    color = color.slice(3);
+    this.passwordScoreColor.emit({ color: color, text: text });
   }
 }

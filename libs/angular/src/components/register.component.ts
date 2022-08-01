@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -22,20 +22,23 @@ import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
 
+import { PasswordColorText } from "../shared/components/password-strength.component";
+
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
-import { PasswordStrengthComponent } from "./password-strength.component";
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
   @Input() isInTrialFlow = false;
   @Output() createdAccount = new EventEmitter<string>();
-  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
 
   showPassword = false;
   formPromise: Promise<any>;
   referenceData: ReferenceEventRequest;
   showTerms = true;
   showErrorSummary = false;
+  passwordStrengthResult: any;
+  color: string;
+  text: string;
 
   formGroup = this.formBuilder.group(
     {
@@ -117,11 +120,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       return;
     }
 
-    const strengthResult = this.passwordGenerationService.passwordStrength(
-      masterPassword,
-      this.passwordStrengthComponent.getPasswordStrengthUserInput()
-    );
-    if (strengthResult != null && strengthResult.score < 3) {
+    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
       const result = await this.platformUtilsService.showDialog(
         this.i18nService.t("weakMasterPasswordDesc"),
         this.i18nService.t("weakMasterPassword"),
@@ -203,6 +202,15 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  getStrengthResult(result: any) {
+    this.passwordStrengthResult = result;
+  }
+
+  getPasswordScoreText(event: PasswordColorText) {
+    this.color = event.color;
+    this.text = event.text;
   }
 
   private getErrorToastMessage() {

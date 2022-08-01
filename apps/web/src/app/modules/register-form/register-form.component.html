@@ -54,6 +54,7 @@
         [email]="formGroup.get('email')?.value"
         [name]="formGroup.get('name')?.value"
         [showText]="true"
+        (passwordStrengthResult)="getStrengthResult($event)"
       >
       </app-password-strength>
     </div>

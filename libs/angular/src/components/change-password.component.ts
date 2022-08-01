@@ -1,4 +1,4 @@
-import { Directive, OnInit, ViewChild } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -12,16 +12,17 @@ import { EncString } from "@bitwarden/common/models/domain/encString";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 
-import { PasswordStrengthComponent } from "./password-strength.component";
+import { PasswordColorText } from "../shared/components/password-strength.component";
 
 @Directive()
 export class ChangePasswordComponent implements OnInit {
   masterPassword: string;
   masterPasswordRetype: string;
   formPromise: Promise<any>;
-  masterPasswordScore: number;
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
-  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
+  passwordStrengthResult: any;
+  color: string;
+  text: string;
 
   protected email: string;
   protected kdf: KdfType;
@@ -39,7 +40,6 @@ export class ChangePasswordComponent implements OnInit {
 
   async ngOnInit() {
     this.email = await this.stateService.getEmail();
-    this.passwordStrengthComponent.email = this.email;
     this.enforcedPolicyOptions ??= await this.policyService.getMasterPasswordPolicyOptions();
   }
 
@@ -118,10 +118,7 @@ export class ChangePasswordComponent implements OnInit {
       return false;
     }
 
-    const strengthResult = this.passwordGenerationService.passwordStrength(
-      this.masterPassword,
-      this.passwordStrengthComponent.getPasswordStrengthUserInput()
-    );
+    const strengthResult = this.passwordStrengthResult;
 
     if (
       this.enforcedPolicyOptions != null &&
@@ -165,5 +162,14 @@ export class ChangePasswordComponent implements OnInit {
     if (confirmed) {
       this.messagingService.send("logout");
     }
+  }
+
+  getStrengthResult(result: any) {
+    this.passwordStrengthResult = result;
+  }
+
+  getPasswordScoreText(event: PasswordColorText) {
+    this.color = event.color;
+    this.text = event.text;
   }
 }
