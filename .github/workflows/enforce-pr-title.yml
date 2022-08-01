@@ -3,7 +3,7 @@ name: Require PR Title to Include Jira Issue
 
 on:
   pull_request:
-    types: [ready_for_review, labeled, unlabled]
+    types: [ready_for_review]
 jobs:
   update_pr:
     runs-on: ubuntu-20.04
