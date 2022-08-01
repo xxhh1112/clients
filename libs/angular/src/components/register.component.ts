@@ -22,7 +22,7 @@ import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
 
-import { PasswordColorText } from "../shared/components/password-strength.component";
+import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 

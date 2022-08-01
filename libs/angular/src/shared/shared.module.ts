@@ -1,11 +1,10 @@
-import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
-import { PasswordStrengthComponent } from "./components/password-strength.component";
+import { PasswordStrengthModule } from "./components/password-strength/password-strength.module";
 
 @NgModule({
-  declarations: [PasswordStrengthComponent],
-  imports: [CommonModule],
-  exports: [PasswordStrengthComponent],
+  declarations: [],
+  imports: [PasswordStrengthModule],
+  exports: [PasswordStrengthModule],
 })
 export class SharedModule {}

@@ -99,7 +99,6 @@ import { SharedModule } from "./shared/shared.module";
     StopPropDirective,
     TrueFalseValueDirective,
     UserNamePipe,
-    SharedModule,
   ],
   providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe],
 })
