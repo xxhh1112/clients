@@ -6,7 +6,6 @@ import Swal, { SweetAlertIcon } from "sweetalert2";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
-import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
@@ -39,8 +38,7 @@ export class ImportComponent implements OnInit {
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     private logService: LogService,
-    protected modalService: ModalService,
-    protected keyConnectorService: KeyConnectorService
+    protected modalService: ModalService
   ) {}
 
   async ngOnInit() {
@@ -256,7 +254,6 @@ export class ImportComponent implements OnInit {
       return false;
     }
 
-    const result = await ref.onClosedPromise();
-    return result === true;
+    return await ref.onClosedPromise();
   }
 }

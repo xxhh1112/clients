@@ -41,8 +41,8 @@
                 type="radio"
                 class="radio"
                 name="fileEncryptionType"
-                id="1"
-                [value]="0"
+                id="AccountEncrypted"
+                [value]="encryptedExportType.AccountEncrypted"
                 formControlName="fileEncryptionType"
               />
             </div>
@@ -61,8 +61,8 @@
                 type="radio"
                 class="radio"
                 name="fileEncryptionType"
-                id="2"
-                [value]="1"
+                id="FileEncrypted"
+                [value]="encryptedExportType.FileEncrypted"
                 formControlName="fileEncryptionType"
               />
             </div>
@@ -79,7 +79,7 @@
         </div>
         <br />
 
-        <ng-container *ngIf="fileEncryptionType == 1">
+        <ng-container *ngIf="fileEncryptionType == encryptedExportType.FileEncrypted">
           <div class="input-group">
             <bit-form-field>
               <bit-label>{{ "filePassword" | i18n }}</bit-label>
@@ -87,7 +87,8 @@
                 bitInput
                 required
                 type="{{ showPassword ? 'text' : 'password' }}"
-                formControlName="password"
+                id="filePassword"
+                formControlName="filePassword"
                 name="password"
               />
 
@@ -98,13 +99,13 @@
                   buttonType="secondary"
                   appStopClick
                   appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                  [attr.aria-pressed]="showPassword"
-                  (click)="togglePassword()"
+                  [attr.aria-pressed]="showFilePassword"
+                  (click)="toggleFilePassword()"
                 >
                   <i
                     class="bwi bwi-lg"
                     aria-hidden="true"
-                    [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                    [ngClass]="{ 'bwi-eye': !showFilePassword, 'bwi-eye-slash': showFilePassword }"
                   ></i>
                 </button>
               </div>
@@ -122,8 +123,9 @@
                 bitInput
                 required
                 type="{{ showConfirmPassword ? 'text' : 'password' }}"
-                formControlName="confirmPassword"
-                name="confirmPassword"
+                id="confirmFilePassword"
+                formControlName="confirmFilePassword"
+                name="confirmFilePassword"
               />
 
               <div class="input-group-append">
@@ -133,15 +135,15 @@
                   buttonType="secondary"
                   appStopClick
                   appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                  [attr.aria-pressed]="showConfirmPassword"
-                  (click)="toggleConfirmPassword()"
+                  [attr.aria-pressed]="showConfirmFilePassword"
+                  (click)="toggleConfirmFilePassword()"
                 >
                   <i
                     class="bwi bwi-lg"
                     aria-hidden="true"
                     [ngClass]="{
-                      'bwi-eye': !showConfirmPassword,
-                      'bwi-eye-slash': showConfirmPassword
+                      'bwi-eye': !showConfirmFilePassword,
+                      'bwi-eye-slash': showConfirmFilePassword
                     }"
                   ></i>
                 </button>

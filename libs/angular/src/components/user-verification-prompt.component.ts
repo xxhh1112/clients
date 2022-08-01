@@ -14,14 +14,10 @@ import { ModalRef } from "./modal/modal.ref";
  */
 @Directive()
 export class UserVerificationPromptComponent {
-  showPassword = false;
-  organizationId = "";
   confirmDescription = this.config.data.confirmDescription;
   confirmButtonText = this.config.data.confirmButtonText;
   modalTitle = this.config.data.modalTitle;
-  myGroup = this.formBuilder.group({
-    secret: new FormControl(),
-  });
+  secret = new FormControl();
 
   constructor(
     private modalRef: ModalRef,
@@ -32,16 +28,10 @@ export class UserVerificationPromptComponent {
     private i18nService: I18nService
   ) {}
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
   async submit() {
-    const secret = this.myGroup.get("secret").value;
-
     try {
       //Incorrect secret will throw an invalid password error.
-      await this.userVerificationService.verifyUser(secret);
+      await this.userVerificationService.verifyUser(this.secret.value);
     } catch (e) {
       this.platformUtilsService.showToast(
         "error",

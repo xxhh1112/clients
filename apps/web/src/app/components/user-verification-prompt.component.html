@@ -1,28 +1,23 @@
 <div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="confirmUserTitle">
   <div class="modal-dialog modal-dialog-scrollable" role="document">
     <form class="modal-content" #form (ngSubmit)="submit()">
-      <div class="tw-text-center bwi-3x">
-        <i class="bwi bwi-exclamation-triangle text-warning"></i>
+      <div class="modal-header">
+        <div class="tw-text-center bwi-3x">
+          <i class="bwi bwi-exclamation-triangle text-warning"></i>
+        </div>
+        <h2 class="tw-text-center tw-font-semibold" id="modalTitle | i18n">
+          {{ modalTitle | i18n }}
+        </h2>
       </div>
-
-      <h2 class="tw-text-center tw-font-semibold" id="confirmUserTitle">
-        {{ modalTitle | i18n }}
-      </h2>
-
       <div class="modal-body">
         <div>
           {{ confirmDescription | i18n }}
         </div>
       </div>
-
       <div class="modal-footer">
         <div class="modal-footer-content">
-          <div [formGroup]="myGroup">
-            <div class="form-group">
-              <app-user-verification ngDefaultControl formControlName="secret" name="secret">
-              </app-user-verification>
-            </div>
-          </div>
+          <app-user-verification ngDefaultControl [formControl]="secret" name="secret">
+          </app-user-verification>
         </div>
         <button bitButton buttonType="primary" type="submit" appBlurClick>
           <span>{{ confirmButtonText | i18n }}</span>

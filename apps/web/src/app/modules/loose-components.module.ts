@@ -425,7 +425,6 @@ import { OrganizationBadgeModule } from "./vault/modules/organization-badge/orga
     PasswordGeneratorHistoryComponent,
     PasswordGeneratorPolicyComponent,
     PasswordRepromptComponent,
-    FilePasswordPromptComponent,
     PaymentMethodComponent,
     PersonalOwnershipPolicyComponent,
     PreferencesComponent,

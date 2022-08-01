@@ -7,10 +7,12 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { ExportService } from "@bitwarden/common/services/export.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
 
 import { SharedModule } from "src/app/modules/shared.module";
@@ -33,6 +35,11 @@ import { ImportComponent } from "./import.component";
   ],
   declarations: [ImportComponent, ExportComponent],
   providers: [
+    {
+      provide: ExportServiceAbstraction,
+      useClass: ExportService,
+      deps: [FolderService, CipherService, ApiService, CryptoService],
+    },
     {
       provide: ImportServiceAbstraction,
       useClass: ImportService,

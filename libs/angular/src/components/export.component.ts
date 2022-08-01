@@ -1,8 +1,6 @@
 import { Directive, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
-import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -11,10 +9,11 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
+
+import { ModalService } from "../services/modal.service";
 
 @Directive()
 export class ExportComponent implements OnInit {
@@ -22,13 +21,12 @@ export class ExportComponent implements OnInit {
 
   formPromise: Promise<string>;
   disabledByPolicy = false;
-  encryptionPassword: string;
 
   exportForm = this.formBuilder.group({
     format: ["json"],
     secret: [""],
-    password: [""],
-    confirmPassword: [""],
+    filePassword: [""],
+    confirmFilePassword: [""],
     fileEncryptionType: [""],
   });
 
@@ -48,12 +46,9 @@ export class ExportComponent implements OnInit {
     protected win: Window,
     private logService: LogService,
     private userVerificationService: UserVerificationService,
-    protected modalService: ModalService,
-    protected apiService: ApiService,
-    protected stateService: StateService,
-    protected modalConfig: ModalConfig,
     private formBuilder: FormBuilder,
-    protected fileDownloadService: FileDownloadService
+    protected fileDownloadService: FileDownloadService,
+    protected modalService: ModalService
   ) {}
 
   async ngOnInit() {
@@ -91,8 +86,8 @@ export class ExportComponent implements OnInit {
       this.saved();
       await this.collectEvent();
       this.exportForm.get("secret").setValue("");
-      this.exportForm.get("password").setValue("");
-      this.exportForm.get("confirmPassword").setValue("");
+      this.exportForm.get("filePassword").setValue("");
+      this.exportForm.get("confirmFilePassword").setValue("");
     } catch (e) {
       this.logService.error(e);
     }
@@ -165,9 +160,10 @@ export class ExportComponent implements OnInit {
   }
 
   protected getExportData() {
-    return (this.fileEncryptionType != 1 && this.password == undefined) || this.password == ""
+    return (this.fileEncryptionType != 1 && this.filePassword == undefined) ||
+      this.filePassword == ""
       ? this.exportService.getExport(this.format, null)
-      : this.exportService.getPasswordProtectedExport(this.password);
+      : this.exportService.getPasswordProtectedExport(this.filePassword);
   }
 
   protected getFileName(prefix?: string) {
@@ -187,20 +183,16 @@ export class ExportComponent implements OnInit {
     await this.eventService.collect(EventType.User_ClientExportedVault);
   }
 
-  protected clearPasswordField() {
-    this.encryptionPassword = "";
-  }
-
   get format() {
     return this.exportForm.get("format").value;
   }
 
-  get password() {
-    return this.exportForm.get("password").value;
+  get filePassword() {
+    return this.exportForm.get("filePassword").value;
   }
 
-  get confirmPassword() {
-    return this.exportForm.get("confirmPassword").value;
+  get confirmFilePassword() {
+    return this.exportForm.get("confirmFilePassword").value;
   }
 
   get fileEncryptionType() {
