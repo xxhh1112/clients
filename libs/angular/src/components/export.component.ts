@@ -10,6 +10,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 
@@ -53,7 +54,9 @@ export class ExportComponent implements OnInit {
 
   async ngOnInit() {
     await this.checkExportDisabled();
-    this.exportForm.get("fileEncryptionType").setValue(0);
+    this.exportForm
+      .get("fileEncryptionType")
+      .setValue(EncryptedExportType.AccountEncrypted.toString());
   }
 
   async checkExportDisabled() {
@@ -160,7 +163,8 @@ export class ExportComponent implements OnInit {
   }
 
   protected getExportData() {
-    return (this.fileEncryptionType != 1 && this.filePassword == undefined) ||
+    return (this.fileEncryptionType != EncryptedExportType.FileEncrypted.toString() &&
+      this.filePassword == undefined) ||
       this.filePassword == ""
       ? this.exportService.getExport(this.format, null)
       : this.exportService.getPasswordProtectedExport(this.filePassword);

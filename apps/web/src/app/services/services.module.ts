@@ -10,11 +10,7 @@ import {
   SYSTEM_LANGUAGE,
   MEMORY_STORAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
-import {
-  ModalService as ModalServiceAbstraction,
-  ModalConfig as ModalConfigAbstraction,
-  ModalConfig,
-} from "@bitwarden/angular/services/modal.service";
+import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
@@ -104,7 +100,6 @@ import { WebFileDownloadService } from "./webFileDownload.service";
     },
     { provide: MessagingServiceAbstraction, useClass: BroadcasterMessagingService },
     { provide: ModalServiceAbstraction, useClass: ModalService },
-    { provide: ModalConfigAbstraction, useClass: ModalConfig },
     {
       provide: ImportServiceAbstraction,
       useClass: ImportService,

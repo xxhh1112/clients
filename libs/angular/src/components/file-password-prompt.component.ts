@@ -14,7 +14,7 @@ import { ModalRef } from "./modal/modal.ref";
  */
 @Directive()
 export class FilePasswordPromptComponent {
-  showPassword: boolean;
+  showFilePassword: boolean;
   filePassword = new FormControl("");
   organizationId: string;
   fileContents: string;
@@ -31,8 +31,8 @@ export class FilePasswordPromptComponent {
     this.organizationId = config.data.organizationId;
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
+  toggleFilePassword() {
+    this.showFilePassword = !this.showFilePassword;
   }
 
   async submit() {

@@ -13,12 +13,12 @@
         <div>
           {{ confirmDescription | i18n }}
         </div>
-      </div>
-      <div class="modal-footer">
         <div class="modal-footer-content">
           <app-user-verification ngDefaultControl [formControl]="secret" name="secret">
           </app-user-verification>
         </div>
+      </div>
+      <div class="modal-footer">
         <button bitButton buttonType="primary" type="submit" appBlurClick>
           <span>{{ confirmButtonText | i18n }}</span>
         </button>
