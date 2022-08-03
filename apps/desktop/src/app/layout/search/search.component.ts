@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 
@@ -11,7 +11,7 @@ import { SearchBarService, SearchBarState } from "./search-bar.service";
 })
 export class SearchComponent implements OnInit, OnDestroy {
   state: SearchBarState;
-  searchText: UntypedFormControl = new UntypedFormControl(null);
+  searchText: FormControl = new FormControl(null);
 
   constructor(private searchBarService: SearchBarService, private stateService: StateService) {
     this.searchBarService.state.subscribe((state) => {

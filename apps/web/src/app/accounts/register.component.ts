@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -20,7 +20,7 @@ import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/mas
 import { Policy } from "@bitwarden/common/models/domain/policy";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 
-import { RouterService } from "../core";
+import { RouterService } from "../services/router.service";
 
 @Component({
   selector: "app-register",
@@ -36,7 +36,7 @@ export class RegisterComponent extends BaseRegisterComponent {
 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     authService: AuthService,
     router: Router,
     i18nService: I18nService,

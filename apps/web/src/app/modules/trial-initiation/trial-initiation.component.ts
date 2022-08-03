@@ -1,7 +1,7 @@
 import { StepperSelectionEvent } from "@angular/cdk/stepper";
 import { TitleCasePipe } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs";
 
@@ -34,7 +34,6 @@ export class TrialInitiationComponent implements OnInit {
   accountCreateOnly = true;
   policies: Policy[];
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
-  validOrgs: string[] = ["teams", "enterprise", "families"];
   @ViewChild("stepper", { static: false }) verticalStepper: VerticalStepperComponent;
 
   orgInfoFormGroup = this.formBuilder.group({
@@ -45,7 +44,7 @@ export class TrialInitiationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private titleCasePipe: TitleCasePipe,
     private stateService: StateService,
     private apiService: ApiService,
@@ -64,22 +63,17 @@ export class TrialInitiationComponent implements OnInit {
         return;
       }
 
-      if (this.validOrgs.includes(qParams.org)) {
-        this.org = qParams.org;
-      } else {
-        this.org = "families";
-      }
-
+      this.org = qParams.org;
       this.orgLabel = this.titleCasePipe.transform(this.org);
       this.accountCreateOnly = false;
 
-      if (this.org === "families") {
+      if (qParams.org === "families") {
         this.plan = PlanType.FamiliesAnnually;
         this.product = ProductType.Families;
-      } else if (this.org === "teams") {
+      } else if (qParams.org === "teams") {
         this.plan = PlanType.TeamsAnnually;
         this.product = ProductType.Teams;
-      } else if (this.org === "enterprise") {
+      } else if (qParams.org === "enterprise") {
         this.plan = PlanType.EnterpriseAnnually;
         this.product = ProductType.Enterprise;
       }

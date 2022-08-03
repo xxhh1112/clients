@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { UntypedFormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-org-info",
@@ -10,6 +10,6 @@ export class OrganizationInformationComponent {
   @Input() createOrganization = true;
   @Input() isProvider = false;
   @Input() acceptingSponsorship = false;
-  @Input() formGroup: UntypedFormGroup;
+  @Input() formGroup: FormGroup;
   @Output() changedBusinessOwned = new EventEmitter<void>();
 }

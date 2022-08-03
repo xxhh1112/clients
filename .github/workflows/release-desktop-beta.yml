@@ -19,19 +19,18 @@ jobs:
     outputs:
       release-version: ${{ steps.version.outputs.version }}
       release-channel: ${{ steps.release-channel.outputs.channel }}
-      branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
 
-      - name: Branch check
-        run: |
-          if [[ "$GITHUB_REF" != "refs/heads/master" ]] && [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != "refs/heads/hotfix-rc" ]]; then
-            echo "==================================="
-            echo "[!] Can only release from the 'master', 'rc' or 'hotfix-rc' branches"
-            echo "==================================="
-            exit 1
-          fi
+      # - name: Branch check
+      #   run: |
+      #     if [[ "$GITHUB_REF" != "refs/heads/master" ]] && [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc/* ]]; then
+      #       echo "==================================="
+      #       echo "[!] Can only release from the 'master', 'rc' or 'hotfix-rc/*' branches"
+      #       echo "==================================="
+      #       exit 1
+      #     fi
 
       - name: Bump Desktop Version - Root
         env:
@@ -71,45 +70,18 @@ jobs:
               ;;
           esac
 
-      - name: Setup git config
-        run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global url."https://github.com/".insteadOf ssh://git@github.com/
-          git config --global url."https://".insteadOf ssh://
-
-      - name: Create desktop-beta-release branch
-        id: branch
-        env:
-          VERSION: ${{ github.event.inputs.version_number }}
-        run: |
-          find="."
-          replace="_"
-          ver=${VERSION//$find/$replace}
-          branch_name=desktop-beta-release-$ver-beta
-
-          git switch -c $branch_name
-          git add .
-          git commit -m "Bump desktop version to $VERSION-beta"
-
-          git push -u origin $branch_name
-
-          echo "::set-output name=branch-name::$branch_name"
-
   linux:
     name: Linux Build
     runs-on: ubuntu-20.04
     needs: setup
     env:
-      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
       run:
         working-directory: apps/desktop
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-        with:
-          ref: ${{ needs.setup.outputs.branch-name }}
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
@@ -186,8 +158,8 @@ jobs:
       - name: Upload auto-update artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: ${{ needs.setup.outputs.release-channel }}-linux.yml
-          path: apps/desktop/dist/${{ needs.setup.outputs.release-channel }}-linux.yml
+          name: ${{ needs.setup.outputs.release_channel }}-linux.yml
+          path: apps/desktop/dist/${{ needs.setup.outputs.release_channel }}-linux.yml
           if-no-files-found: error
 
 
@@ -200,12 +172,10 @@ jobs:
         shell: pwsh
         working-directory: apps/desktop
     env:
-      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-        with:
-          ref: ${{ needs.setup.outputs.branch-name }}
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
@@ -382,8 +352,8 @@ jobs:
       - name: Upload auto-update artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: ${{ needs.setup.outputs.release-channel }}.yml
-          path: apps/desktop/dist/nsis-web/${{ needs.setup.outputs.release-channel }}.yml
+          name: ${{ needs.setup.outputs.release_channel }}.yml
+          path: apps/desktop/dist/nsis-web/${{ needs.setup.outputs.release_channel }}.yml
           if-no-files-found: error
 
 
@@ -392,15 +362,13 @@ jobs:
     runs-on: macos-11
     needs: setup
     env:
-      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
       run:
         working-directory: apps/desktop
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-        with:
-          ref: ${{ needs.setup.outputs.branch-name }}
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
@@ -521,15 +489,13 @@ jobs:
       - setup
       - macos-build
     env:
-      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
       run:
         working-directory: apps/desktop
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-        with:
-          ref: ${{ needs.setup.outputs.branch-name }}
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
@@ -643,13 +609,19 @@ jobs:
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: npm run build
 
+      - name: Extract branch name
+        if: contains(github.ref, 'hotfix-rc')
+        id: extract_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
       - name: Download artifact from hotfix-rc
-        if: github.ref == 'refs/heads/hotfix-rc')
+        if: contains(github.ref, 'hotfix-rc')
         uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
         with:
           workflow: build-browser.yml
           workflow_conclusion: success
-          branch: hotfix-rc
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Download artifact from rc
@@ -662,7 +634,7 @@ jobs:
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Download artifact from master
-        if: ${{ github.ref != 'refs/heads/rc' && github.ref != 'refs/heads/hotfix-rc' }}
+        if: ${{ github.ref != 'refs/heads/rc' && !contains(github.ref, 'hotfix-rc') }}
         uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
         with:
           workflow: build-browser.yml
@@ -711,8 +683,8 @@ jobs:
       - name: Upload auto-update artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: ${{ needs.setup.outputs.release-channel }}-mac.yml
-          path: apps/desktop/dist/${{ needs.setup.outputs.release-channel }}-mac.yml
+          name: ${{ needs.setup.outputs.release_channel }}-mac.yml
+          path: apps/desktop/dist/${{ needs.setup.outputs.release_channel }}-mac.yml
           if-no-files-found: error
 
 
@@ -723,15 +695,13 @@ jobs:
       - setup
       - macos-build
     env:
-      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
       run:
         working-directory: apps/desktop
     steps:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-        with:
-          ref: ${{ needs.setup.outputs.branch-name }}
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
@@ -845,13 +815,19 @@ jobs:
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: npm run build
 
+      - name: Extract branch name
+        if: contains(github.ref, 'hotfix-rc')
+        id: extract_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
       - name: Download artifact from hotfix-rc
-        if: github.ref == 'refs/heads/hotfix-rc')
+        if: contains(github.ref, 'hotfix-rc')
         uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
         with:
           workflow: build-browser.yml
           workflow_conclusion: success
-          branch: hotfix-rc
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Download artifact from rc
@@ -864,7 +840,7 @@ jobs:
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Download artifact from master
-        if: ${{ github.ref != 'refs/heads/rc' && github.ref != 'refs/heads/hotfix-rc' }}
+        if: ${{ github.ref != 'refs/heads/rc' && !contains(github.ref, 'hotfix-rc') }}
         uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
         with:
           workflow: build-browser.yml
@@ -897,7 +873,7 @@ jobs:
           if-no-files-found: error
 
   release:
-    name: Release beta channel to S3
+    name: MacOS Package Prod Release Asset
     runs-on: ubuntu-20.04
     needs:
       - setup
@@ -920,7 +896,7 @@ jobs:
           secrets: "aws-electron-access-id, aws-electron-access-key, aws-electron-bucket-name"
 
       - name: Download all artifacts
-        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741 # v3.0.0
+        uses: bitwarden/gh-actions/download-artifacts@23433be15ed6fd046ce12b6889c5184a8d9c8783
         with:
           path: apps/desktop/artifacts
 
@@ -930,44 +906,15 @@ jobs:
         working-directory: apps/desktop/artifacts
         run: mv Bitwarden-${{ env.PKG_VERSION }}-universal.pkg Bitwarden-${{ env.PKG_VERSION }}-universal.pkg.archive
 
-      - name: Publish artifacts to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.retrieve-secrets.outputs.aws-electron-access-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.retrieve-secrets.outputs.aws-electron-access-key }}
-          AWS_DEFAULT_REGION: 'us-west-2'
-          AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.aws-electron-bucket-name }}
-        working-directory: apps/desktop/artifacts
-        run: |
-          aws s3 cp ./ $AWS_S3_BUCKET_NAME/desktop/ \
-          --acl "public-read" \
-          --recursive \
-          --quiet
-
-
-  remove-branch:
-    name: Remove branch
-    runs-on: ubuntu-20.04
-    if: always()
-    needs:
-      - setup
-      - linux
-      - windows
-      - macos-build
-      - macos-package-github
-      - macos-package-mas
-      - release
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
-
-      - name: Setup git config
-        run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global url."https://github.com/".insteadOf ssh://git@github.com/
-          git config --global url."https://".insteadOf ssh://
-      - name: Remove branch
-        env:
-          BRANCH: ${{ needs.setup.outputs.branch-name }}
-        run: git push origin --delete $BRANCH
-
+      # - name: Publish artifacts to S3
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ steps.retrieve-secrets.outputs.aws-electron-access-id }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ steps.retrieve-secrets.outputs.aws-electron-access-key }}
+      #     AWS_DEFAULT_REGION: 'us-west-2'
+      #     AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.aws-electron-bucket-name }}
+      #   working-directory: apps/desktop/artifacts
+      #   run: |
+      #     aws s3 cp ./ $AWS_S3_BUCKET_NAME/desktop/ \
+      #     --acl "public-read" \
+      #     --recursive \
+      #     --quiet

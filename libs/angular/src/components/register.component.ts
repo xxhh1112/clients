@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { InputsFieldMatch } from "@bitwarden/angular/validators/inputsFieldMatch.validator";
@@ -22,8 +22,6 @@ import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
 
-import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
-
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
 @Directive()
@@ -33,12 +31,10 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   showPassword = false;
   formPromise: Promise<any>;
+  masterPasswordScore: number;
   referenceData: ReferenceEventRequest;
   showTerms = true;
   showErrorSummary = false;
-  passwordStrengthResult: any;
-  color: string;
-  text: string;
 
   formGroup = this.formBuilder.group(
     {
@@ -67,10 +63,11 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   );
 
   protected successRoute = "login";
+  private masterPasswordStrengthTimeout: any;
 
   constructor(
     protected formValidationErrorService: FormValidationErrorsService,
-    protected formBuilder: UntypedFormBuilder,
+    protected formBuilder: FormBuilder,
     protected authService: AuthService,
     protected router: Router,
     i18nService: I18nService,
@@ -88,6 +85,36 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   async ngOnInit() {
     this.setupCaptcha();
+  }
+
+  get masterPasswordScoreWidth() {
+    return this.masterPasswordScore == null ? 0 : (this.masterPasswordScore + 1) * 20;
+  }
+
+  get masterPasswordScoreColor() {
+    switch (this.masterPasswordScore) {
+      case 4:
+        return "success";
+      case 3:
+        return "primary";
+      case 2:
+        return "warning";
+      default:
+        return "danger";
+    }
+  }
+
+  get masterPasswordScoreText() {
+    switch (this.masterPasswordScore) {
+      case 4:
+        return this.i18nService.t("strong");
+      case 3:
+        return this.i18nService.t("good");
+      case 2:
+        return this.i18nService.t("weak");
+      default:
+        return this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
+    }
   }
 
   async submit(showToast = true) {
@@ -120,7 +147,11 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       return;
     }
 
-    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
+    const strengthResult = this.passwordGenerationService.passwordStrength(
+      masterPassword,
+      this.getPasswordStrengthUserInput()
+    );
+    if (strengthResult != null && strengthResult.score < 3) {
       const result = await this.platformUtilsService.showDialog(
         this.i18nService.t("weakMasterPasswordDesc"),
         this.i18nService.t("weakMasterPassword"),
@@ -204,13 +235,39 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     this.showPassword = !this.showPassword;
   }
 
-  getStrengthResult(result: any) {
-    this.passwordStrengthResult = result;
+  updatePasswordStrength() {
+    const masterPassword = this.formGroup.get("masterPassword")?.value;
+
+    if (this.masterPasswordStrengthTimeout != null) {
+      clearTimeout(this.masterPasswordStrengthTimeout);
+    }
+    this.masterPasswordStrengthTimeout = setTimeout(() => {
+      const strengthResult = this.passwordGenerationService.passwordStrength(
+        masterPassword,
+        this.getPasswordStrengthUserInput()
+      );
+      this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
+    }, 300);
   }
 
-  getPasswordScoreText(event: PasswordColorText) {
-    this.color = event.color;
-    this.text = event.text;
+  private getPasswordStrengthUserInput() {
+    let userInput: string[] = [];
+    const email = this.formGroup.get("email")?.value;
+    const name = this.formGroup.get("name").value;
+    const atPosition = email.indexOf("@");
+    if (atPosition > -1) {
+      userInput = userInput.concat(
+        email
+          .substr(0, atPosition)
+          .trim()
+          .toLowerCase()
+          .split(/[^A-Za-z0-9]/)
+      );
+    }
+    if (name != null && name !== "") {
+      userInput = userInput.concat(name.trim().toLowerCase().split(" "));
+    }
+    return userInput;
   }
 
   private getErrorToastMessage() {

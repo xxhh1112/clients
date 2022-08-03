@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -62,15 +62,15 @@ export class EffluxDatesComponent implements OnInit {
     return BrowserPath.Default;
   }
 
-  datesForm = new UntypedFormGroup({
-    selectedDeletionDatePreset: new UntypedFormControl(),
-    selectedExpirationDatePreset: new UntypedFormControl(),
-    defaultDeletionDateTime: new UntypedFormControl(),
-    defaultExpirationDateTime: new UntypedFormControl(),
-    fallbackDeletionDate: new UntypedFormControl(),
-    fallbackDeletionTime: new UntypedFormControl(),
-    fallbackExpirationDate: new UntypedFormControl(),
-    fallbackExpirationTime: new UntypedFormControl(),
+  datesForm = new FormGroup({
+    selectedDeletionDatePreset: new FormControl(),
+    selectedExpirationDatePreset: new FormControl(),
+    defaultDeletionDateTime: new FormControl(),
+    defaultExpirationDateTime: new FormControl(),
+    fallbackDeletionDate: new FormControl(),
+    fallbackDeletionTime: new FormControl(),
+    fallbackExpirationDate: new FormControl(),
+    fallbackExpirationTime: new FormControl(),
   });
 
   deletionDatePresets: any[] = [
@@ -87,36 +87,36 @@ export class EffluxDatesComponent implements OnInit {
     { name: this.i18nService.t("never"), value: DatePreset.Never },
   ].concat([...this.deletionDatePresets]);
 
-  get selectedDeletionDatePreset(): UntypedFormControl {
-    return this.datesForm.get("selectedDeletionDatePreset") as UntypedFormControl;
+  get selectedDeletionDatePreset(): FormControl {
+    return this.datesForm.get("selectedDeletionDatePreset") as FormControl;
   }
 
-  get selectedExpirationDatePreset(): UntypedFormControl {
-    return this.datesForm.get("selectedExpirationDatePreset") as UntypedFormControl;
+  get selectedExpirationDatePreset(): FormControl {
+    return this.datesForm.get("selectedExpirationDatePreset") as FormControl;
   }
 
-  get defaultDeletionDateTime(): UntypedFormControl {
-    return this.datesForm.get("defaultDeletionDateTime") as UntypedFormControl;
+  get defaultDeletionDateTime(): FormControl {
+    return this.datesForm.get("defaultDeletionDateTime") as FormControl;
   }
 
-  get defaultExpirationDateTime(): UntypedFormControl {
-    return this.datesForm.get("defaultExpirationDateTime") as UntypedFormControl;
+  get defaultExpirationDateTime(): FormControl {
+    return this.datesForm.get("defaultExpirationDateTime") as FormControl;
   }
 
-  get fallbackDeletionDate(): UntypedFormControl {
-    return this.datesForm.get("fallbackDeletionDate") as UntypedFormControl;
+  get fallbackDeletionDate(): FormControl {
+    return this.datesForm.get("fallbackDeletionDate") as FormControl;
   }
 
-  get fallbackDeletionTime(): UntypedFormControl {
-    return this.datesForm.get("fallbackDeletionTime") as UntypedFormControl;
+  get fallbackDeletionTime(): FormControl {
+    return this.datesForm.get("fallbackDeletionTime") as FormControl;
   }
 
-  get fallbackExpirationDate(): UntypedFormControl {
-    return this.datesForm.get("fallbackExpirationDate") as UntypedFormControl;
+  get fallbackExpirationDate(): FormControl {
+    return this.datesForm.get("fallbackExpirationDate") as FormControl;
   }
 
-  get fallbackExpirationTime(): UntypedFormControl {
-    return this.datesForm.get("fallbackExpirationTime") as UntypedFormControl;
+  get fallbackExpirationTime(): FormControl {
+    return this.datesForm.get("fallbackExpirationTime") as FormControl;
   }
 
   // Should be able to call these at any time and compute a submitable value

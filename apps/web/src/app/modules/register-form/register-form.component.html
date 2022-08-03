@@ -34,6 +34,7 @@
         <input
           id="register-form_input_master-password"
           bitInput
+          (input)="updatePasswordStrength()"
           type="{{ showPassword ? 'text' : 'password' }}"
           formControlName="masterPassword"
         />
@@ -49,13 +50,7 @@
           {{ "masterPassImportant" | i18n }}
         </bit-hint>
       </bit-form-field>
-      <app-password-strength
-        [password]="formGroup.get('masterPassword')?.value"
-        [email]="formGroup.get('email')?.value"
-        [name]="formGroup.get('name')?.value"
-        [showText]="true"
-        (passwordStrengthResult)="getStrengthResult($event)"
-      >
+      <app-password-strength [score]="masterPasswordScore" [showText]="true">
       </app-password-strength>
     </div>
 
@@ -90,11 +85,11 @@
       <iframe id="hcaptcha_iframe" height="80"></iframe>
     </div>
 
-    <div class="tw-mb-3 tw-flex tw-items-start" *ngIf="showTerms">
-      <div class="tw-flex tw-h-6 tw-items-center">
+    <div class="tw-flex tw-items-start tw-mb-3" *ngIf="showTerms">
+      <div class="tw-flex tw-items-center tw-h-6">
         <input
           id="register-form_input_accept-policies"
-          class="tw-border-gray-300 tw-w-4 tw-rounded tw-border"
+          class="tw-w-4 tw-rounded tw-border tw-border-gray-300"
           bitInput
           type="checkbox"
           formControlName="acceptPolicies"
@@ -112,13 +107,13 @@
       </bit-label>
     </div>
 
-    <div class="tw-mb-3 tw-flex">
+    <div class="tw-flex tw-mb-3">
       <bit-submit-button [loading]="form.loading">{{ "createAccount" | i18n }}</bit-submit-button>
       <a
         bitButton
         buttonType="secondary"
         routerLink="/login"
-        class="tw-ml-3 tw-inline-flex tw-items-center tw-px-3"
+        class="tw-inline-flex tw-items-center tw-ml-3 tw-px-3"
       >
         <i class="bwi bwi-sign-in tw-mr-2"></i>
         {{ "logIn" | i18n }}

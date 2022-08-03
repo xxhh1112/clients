@@ -72,17 +72,20 @@
 
   &.active {
     .filter-button {
-      font-weight: bold;
-      @include themify($themes) {
-        color: themed("primaryColor");
+      h2 {
+        @include themify($themes) {
+          color: themed("primaryColor");
+        }
       }
     }
   }
 
   .filter-button {
     &:hover {
-      @include themify($themes) {
-        color: themed("primaryColor");
+      h2 {
+        @include themify($themes) {
+          color: themed("primaryColor");
+        }
       }
     }
   }

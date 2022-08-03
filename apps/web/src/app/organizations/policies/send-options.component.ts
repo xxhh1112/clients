@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 
@@ -21,7 +21,7 @@ export class SendOptionsPolicyComponent extends BasePolicyComponent {
     disableHideEmail: false,
   });
 
-  constructor(private formBuilder: UntypedFormBuilder) {
+  constructor(private formBuilder: FormBuilder) {
     super();
   }
 }

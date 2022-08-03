@@ -1,11 +1,10 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
-import { ControlValueAccessor, UntypedFormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
 import { VerificationType } from "@bitwarden/common/enums/verificationType";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";
 
 /**
@@ -35,7 +34,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   disableRequestOTP = false;
   sentCode = false;
 
-  secret = new UntypedFormControl("");
+  secret = new FormControl("");
 
   private onChange: (value: Verification) => void;
 
@@ -91,7 +90,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
 
     this.onChange({
       type: this.usesKeyConnector ? VerificationType.OTP : VerificationType.MasterPassword,
-      secret: Utils.isNullOrWhitespace(secret) ? null : secret,
+      secret: secret,
     });
   }
 }

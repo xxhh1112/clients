@@ -120,12 +120,12 @@ export class PeopleComponent
     return this.apiService.deleteProviderUser(this.providerId, id);
   }
 
-  revokeUser(id: string): Promise<any> {
+  deactivateUser(id: string): Promise<any> {
     // Not implemented.
     return null;
   }
 
-  restoreUser(id: string): Promise<any> {
+  activateUser(id: string): Promise<any> {
     // Not implemented.
     return null;
   }

@@ -3,6 +3,7 @@ const { pathsToModuleNameMapper } = require("ts-jest");
 const { compilerOptions } = require("../shared/tsconfig.libs");
 
 module.exports = {
+  name: "common",
   displayName: "libs/common tests",
   preset: "ts-jest",
   testEnvironment: "jsdom",

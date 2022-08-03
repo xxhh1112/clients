@@ -239,6 +239,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     RemovePasswordComponent,
     VaultSelectComponent,
   ],
+  entryComponents: [],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
 })

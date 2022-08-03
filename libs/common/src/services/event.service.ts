@@ -34,8 +34,7 @@ export class EventService implements EventServiceAbstraction {
   async collect(
     eventType: EventType,
     cipherId: string = null,
-    uploadImmediately = false,
-    organizationId: string = null
+    uploadImmediately = false
   ): Promise<any> {
     const authed = await this.stateService.getIsAuthenticated();
     if (!authed) {
@@ -55,11 +54,6 @@ export class EventService implements EventServiceAbstraction {
         return;
       }
     }
-    if (organizationId != null) {
-      if (!orgIds.has(organizationId)) {
-        return;
-      }
-    }
     let eventCollection = await this.stateService.getEventCollection();
     if (eventCollection == null) {
       eventCollection = [];
@@ -68,7 +62,6 @@ export class EventService implements EventServiceAbstraction {
     event.type = eventType;
     event.cipherId = cipherId;
     event.date = new Date().toISOString();
-    event.organizationId = organizationId;
     eventCollection.push(event);
     await this.stateService.setEventCollection(eventCollection);
     if (uploadImmediately) {
@@ -90,7 +83,6 @@ export class EventService implements EventServiceAbstraction {
       req.type = e.type;
       req.cipherId = e.cipherId;
       req.date = e.date;
-      req.organizationId = e.organizationId;
       return req;
     });
     try {

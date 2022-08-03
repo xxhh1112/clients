@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "message": "$APP_NAME$ webguneko kutxa gotorra",
+    "message": "Kutxa gotorra",
     "description": "The title of the website in the browser window.",
     "placeholders": {
       "app_name": {
@@ -873,7 +873,7 @@
     "message": "Baieztatu kutxa gotorra esportatzea"
   },
   "exportWarningDesc": {
-    "message": "Esportazio honek kutxa gotorraren datuak zifratu gabeko formatuan biltzen ditu. Ez zenuke gorde edo kanal ez-seguruetaik (emaila, adibidez) bidali behar. Erabili eta berehala ezabatu."
+    "message": "Esportazio honek kutxa gotorraren datuak zifratu gabeko formatuan biltzen ditu. Ez zenuke gorde edo kanal ez-seguruetaik (posta elektronikoa, adibidez) bidali behar. Erabili eta berehala ezabatu."
   },
   "encExportKeyWarningDesc": {
     "message": "Esportazio honek zure datuak enkriptatzen ditu zure kontuaren zifratze-kodea erabiliz. Inoiz zure kontuko zifratze-gakoa aldatuz gero, berriro esportatu beharko duzu, ezin izango baituzu fitxategi hori deszifratu."
@@ -1279,7 +1279,7 @@
     "message": "Desgaitu"
   },
   "revokeAccess": {
-    "message": "Sarbidea ezeztatu"
+    "message": "Revoke Access"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Zure kontuan gaituta dago bi urratseko saio hasieraren hornitzaile hori."
@@ -1673,7 +1673,7 @@
     "message": "Fakturazioa"
   },
   "billingPlanLabel": {
-    "message": "Fakturazio plana"
+    "message": "Billing Plan"
   },
   "paymentType": {
     "message": "Payment Type"
@@ -2021,7 +2021,7 @@
     "message": "Kontu hau enpresa batena da."
   },
   "billingEmail": {
-    "message": "Fakturazio emaila"
+    "message": "Fakturaziorako emaila"
   },
   "businessName": {
     "message": "Enpresaren izena"
@@ -2155,7 +2155,7 @@
     }
   },
   "onPremHostingOptional": {
-    "message": "Norbere ostatazea (aukerakoa)"
+    "message": "Norbere ostatazea (Hautazkoa)"
   },
   "usersGetPremium": {
     "message": "Erabiltzaileek Premium ezaugarrietarako sarbidea lortzen dute"
@@ -2185,7 +2185,7 @@
     }
   },
   "trialThankYou": {
-    "message": "Eskerrik asko Bitwarden $PLAN$-en erregistratzeagatik!",
+    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2194,7 +2194,7 @@
     }
   },
   "trialPaidInfoMessage": {
-    "message": "$PLAN$-en 7 eguneko doako proba, ordainpeko harpidetza bihurtuko da 7 egun igaro ondoren.",
+    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2203,7 +2203,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "Baieztapen email bat bidali dugu zure taldearen fakturazio email honetara "
+    "message": "We've sent a confirmation email to your team's billing email at "
   },
   "monthly": {
     "message": "Hilero"
@@ -2257,79 +2257,79 @@
     "message": "Politikak"
   },
   "singleSignOn": {
-    "message": "Saio hasiera bakarra"
+    "message": "Single Sign-On"
   },
   "editPolicy": {
-    "message": "Editatu politika"
+    "message": "Edit Policy"
   },
   "groups": {
-    "message": "Taldeak"
+    "message": "Groups"
   },
   "newGroup": {
-    "message": "Talde berria"
+    "message": "New Group"
   },
   "addGroup": {
-    "message": "Gehitu taldea"
+    "message": "Add Group"
   },
   "editGroup": {
-    "message": "Editatu taldea"
+    "message": "Edit Group"
   },
   "deleteGroupConfirmation": {
-    "message": "Ziur talde hau ezabatu nahi duzula?"
+    "message": "Are you sure you want to delete this group?"
   },
   "removeUserConfirmation": {
-    "message": "Ziur zaude erabiltzaile hau ezabatu nahi duzula?"
+    "message": "Are you sure you want to remove this user?"
   },
   "removeOrgUserConfirmation": {
-    "message": "Kide bat ezabatzen denean, ez du erakundearen datuetarako sarbiderik, eta ekintza hori atzeraezina da. Kidea erakundera itzul dadin, gonbidatu egin behar da eta berriro erakundean sartu."
+    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
   },
   "revokeUserConfirmation": {
-    "message": "Kide bat ezeztatzen denean, ez du erakundearen datuetarako sarbiderik. Kideen sarrera berehala leheneratzeko, joan Ezeztatuak atalera."
+    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
   },
   "removeUserConfirmationKeyConnector": {
-    "message": "Kontuz! Erabiltzaile honek konektore-giltza behar du zifratzea kudeatzeko. Zure erakundeko erabiltzaile hori ezabatzeak betiko desgaituko du bere kontua. Ekintza hori ezin da desegin. Jarraitu nahi al duzu?"
+    "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
   },
   "externalId": {
-    "message": "Kanpoko ID"
+    "message": "External Id"
   },
   "externalIdDesc": {
-    "message": "Kanpoko Id-a erreferentzia gisa erabil daiteke edo baliabide hori kanpoko sistema batekin lotzeko, erabiltzaileen direktorio gisa adibidez."
+    "message": "The external id can be used as a reference or to link this resource to an external system such as a user directory."
   },
   "accessControl": {
-    "message": "Sarbide kontrola"
+    "message": "Access Control"
   },
   "groupAccessAllItems": {
-    "message": "Talde hau elementu guztietara sartu eta aldaketak egin ditzake."
+    "message": "This group can access and modify all items."
   },
   "groupAccessSelectedCollections": {
-    "message": "Talde hau hautatutako bildumetara soilik sar daiteke."
+    "message": "This group can access only the selected collections."
   },
   "readOnly": {
-    "message": "Irakurtzeko soilik"
+    "message": "Read Only"
   },
   "newCollection": {
-    "message": "Bilduma berria"
+    "message": "New Collection"
   },
   "addCollection": {
-    "message": "Gehitu bilduma"
+    "message": "Add Collection"
   },
   "editCollection": {
-    "message": "Editatu bilduma"
+    "message": "Edit Collection"
   },
   "deleteCollectionConfirmation": {
-    "message": "Ziur al zaude bilduma hau ezabatu nahi duzula?"
+    "message": "Are you sure you want to delete this collection?"
   },
   "editUser": {
-    "message": "Editatu erabiltzailea"
+    "message": "Edit User"
   },
   "inviteUser": {
-    "message": "Gonbidatu erabiltzailea"
+    "message": "Invite User"
   },
   "inviteUserDesc": {
-    "message": "Gonbidatu erabiltzaile berri bat zure erakundera, jarraian bere Bitwarden kontuko emaila sartuz (Bitwarden konturik ez badu, kontu berri bat sortzeko eskatuko zaio)."
+    "message": "Invite a new user to your organization by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "inviteMultipleEmailDesc": {
-    "message": "$COUNT$-rarteko erabiltzaileak gonbida ditzakezu, komaz bereizita, emailen zerrenda bat eginez.",
+    "message": "You can invite up to $COUNT$ users at a time by comma separating a list of email addresses.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2341,91 +2341,91 @@
     "message": "Erabiltzaile hau bi urratseko saio hasiera erabiltzen ari da bere kontua babesteko."
   },
   "userAccessAllItems": {
-    "message": "Erabiltzaile hau elementu guztietara sartu eta aldaketak egin ditzake."
+    "message": "This user can access and modify all items."
   },
   "userAccessSelectedCollections": {
-    "message": "Erabiltzaile hau hautatutako bildumetara soilik sar daiteke."
+    "message": "This user can access only the selected collections."
   },
   "search": {
-    "message": "Bilatu"
+    "message": "Search"
   },
   "invited": {
-    "message": "Gonbidatuta"
+    "message": "Invited"
   },
   "accepted": {
-    "message": "Onartuta"
+    "message": "Accepted"
   },
   "confirmed": {
-    "message": "Berretsita"
+    "message": "Confirmed"
   },
   "clientOwnerEmail": {
-    "message": "Bezeroaren jabearen emaila"
+    "message": "Client Owner Email"
   },
   "owner": {
-    "message": "Jabea"
+    "message": "Owner"
   },
   "ownerDesc": {
-    "message": "Erakundearen alderdi guztiak kudea ditzakeen sarbiderik altueneko erabiltzailea."
+    "message": "The highest access user that can manage all aspects of your organization."
   },
   "clientOwnerDesc": {
-    "message": "Erabiltzaile horrek hornitzailearekiko independentea izan behar du. Hornitzaileak erakundearekin loturarik ez badu, erabiltzaile horrek erakundearen jabetzari eutsiko dio."
+    "message": "This user should be independent of the Provider. If the Provider is disassociated with the organization, this user will maintain ownership of the organization."
   },
   "admin": {
-    "message": "Administratzailea"
+    "message": "Admin"
   },
   "adminDesc": {
-    "message": "Administratzaileek erakundeko artikulu, bilduma eta erabiltzaile guztiak eskuratu eta kudeatu ditzakete."
+    "message": "Admins can access and manage all items, collections and users in your organization."
   },
   "user": {
-    "message": "Erabiltzailea"
+    "message": "User"
   },
   "userDesc": {
-    "message": "Erakundean esleitutako bildumetara sarbidea duen erabiltzaile erregularra."
+    "message": "A regular user with access to assigned collections in your organization."
   },
   "manager": {
-    "message": "Kudeatzailea"
+    "message": "Manager"
   },
   "managerDesc": {
-    "message": "Kudeatzaileek zure erakundean esleitutako bildumak eskuratu eta kudeatu ditzakete."
+    "message": "Managers can access and manage assigned collections in your organization."
   },
   "all": {
-    "message": "Guztiak"
+    "message": "All"
   },
   "refresh": {
-    "message": "Freskatu"
+    "message": "Refresh"
   },
   "timestamp": {
-    "message": "Denbora-marka"
+    "message": "Timestamp"
   },
   "event": {
-    "message": "Ekitaldia"
+    "message": "Event"
   },
   "unknown": {
-    "message": "Ezezaguna"
+    "message": "Unknown"
   },
   "loadMore": {
-    "message": "Kargatu gehiago"
+    "message": "Load More"
   },
   "mobile": {
-    "message": "Mugikorra",
+    "message": "Mobile",
     "description": "Mobile app"
   },
   "extension": {
-    "message": "Gehigarria",
+    "message": "Extension",
     "description": "Browser extension/addon"
   },
   "desktop": {
-    "message": "Mahaigaina",
+    "message": "Desktop",
     "description": "Desktop app"
   },
   "webVault": {
     "message": "Webguneko kutxa gotorra"
   },
   "loggedIn": {
-    "message": "Saioa hasita"
+    "message": "Logged in."
   },
   "changedPassword": {
-    "message": "Kontuaren pasahitza aldatuta."
+    "message": "Changed account password."
   },
   "enabledUpdated2fa": {
     "message": "Bi urratseko saio hasiera gaituta/eguneratuta."
@@ -2437,22 +2437,22 @@
     "message": "Bi urratseko sai hasieradun kontua berreskuratuta."
   },
   "failedLogin": {
-    "message": "Sarbidea ukatuta pasahitz okerragatik."
+    "message": "Login attempt failed with incorrect password."
   },
   "failedLogin2fa": {
     "message": "Sarbidea ukatuta bi urratseko saio hasiera okerragatik."
   },
   "exportedVault": {
-    "message": "Kutxa gotorra esportatua."
+    "message": "Exported vault."
   },
   "exportedOrganizationVault": {
-    "message": "Erakundeko kutxa gotorra esportatuta."
+    "message": "Exported organization vault."
   },
   "editedOrgSettings": {
-    "message": "Erakundearen ezarpenak editatuta."
+    "message": "Edited organization settings."
   },
   "createdItemId": {
-    "message": "$ID$ elementua sortua.",
+    "message": "Created item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2461,7 +2461,7 @@
     }
   },
   "editedItemId": {
-    "message": "$ID$ elementua editatua.",
+    "message": "Edited item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2470,7 +2470,7 @@
     }
   },
   "deletedItemId": {
-    "message": "$ID$ elementua zakarrontzira bidalia.",
+    "message": "Sent item $ID$ to trash.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2479,7 +2479,7 @@
     }
   },
   "movedItemIdToOrg": {
-    "message": "$ID$ elementua erakundera mugitua.",
+    "message": "Moved item $ID$ to an organization.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2488,7 +2488,7 @@
     }
   },
   "viewedItemId": {
-    "message": "$ID$ elementua ikusia.",
+    "message": "Viewed item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2497,7 +2497,7 @@
     }
   },
   "viewedPasswordItemId": {
-    "message": "$ID$ elementurako pasahitza ikusia.",
+    "message": "Viewed password for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2506,7 +2506,7 @@
     }
   },
   "viewedHiddenFieldItemId": {
-    "message": "$ID$ elementuko eremu ezkutua ikusia.",
+    "message": "Viewed hidden field for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2515,7 +2515,7 @@
     }
   },
   "viewedSecurityCodeItemId": {
-    "message": "$ID$ elementuko segurtasun-kodea ikusia.",
+    "message": "Viewed security code for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2524,7 +2524,7 @@
     }
   },
   "copiedPasswordItemId": {
-    "message": "$ID$ elementurako pasahitza kopiatua.",
+    "message": "Copied password for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2533,7 +2533,7 @@
     }
   },
   "copiedHiddenFieldItemId": {
-    "message": "$ID$ elementuko eremu ezkutua kopiatua.",
+    "message": "Copied hidden field for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2542,7 +2542,7 @@
     }
   },
   "copiedSecurityCodeItemId": {
-    "message": "$ID$ elementuko segurtasun-kodea kopiatua.",
+    "message": "Copied security code for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2551,7 +2551,7 @@
     }
   },
   "autofilledItemId": {
-    "message": "$ID$ elementua auto-betea.",
+    "message": "Auto-filled item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2560,7 +2560,7 @@
     }
   },
   "createdCollectionId": {
-    "message": "$ID$ bilduma sortua.",
+    "message": "Created collection $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2569,7 +2569,7 @@
     }
   },
   "editedCollectionId": {
-    "message": "$ID$ bilduma editatua.",
+    "message": "Edited collection $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2578,7 +2578,7 @@
     }
   },
   "deletedCollectionId": {
-    "message": "$ID$ bilduma ezabatua.",
+    "message": "Deleted collection $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2587,7 +2587,7 @@
     }
   },
   "editedPolicyId": {
-    "message": "$ID$ politika editatua.",
+    "message": "Edited policy $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2596,7 +2596,7 @@
     }
   },
   "createdGroupId": {
-    "message": "$ID$ taldea sortua.",
+    "message": "Created group $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2605,7 +2605,7 @@
     }
   },
   "editedGroupId": {
-    "message": "$ID$ taldea editatua.",
+    "message": "Edited group $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2614,7 +2614,7 @@
     }
   },
   "deletedGroupId": {
-    "message": "$ID$ taldea ezabatua.",
+    "message": "Deleted group $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2623,7 +2623,7 @@
     }
   },
   "removedUserId": {
-    "message": "$ID$ erabiltzailea kendua.",
+    "message": "Removed user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2632,7 +2632,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "Kendu $ID$-ren sarbidea",
+    "message": "Remove $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2641,7 +2641,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Erakunderako sarbidea ezeztatua $ID$-rentzat.",
+    "message": "Revoked organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2650,7 +2650,7 @@
     }
   },
   "restoredUserId": {
-    "message": "Erakunderako sarbidea berrezarria $ID$-rentzat.",
+    "message": "Restored organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2659,7 +2659,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Ezeztatu $ID$-ren sarbidea",
+    "message": "Revoke $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2668,7 +2668,7 @@
     }
   },
   "createdAttachmentForItem": {
-    "message": "$ID$ elementurako eranskina sortua.",
+    "message": "Created attachment for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2677,7 +2677,7 @@
     }
   },
   "deletedAttachmentForItem": {
-    "message": "$ID$ elementurako eranskina ezabatua.",
+    "message": "Deleted attachment for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2686,7 +2686,7 @@
     }
   },
   "editedCollectionsForItem": {
-    "message": "$ID$ elementurako bilduma editatua.",
+    "message": "Edited collections for item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2695,7 +2695,7 @@
     }
   },
   "invitedUserId": {
-    "message": "$ID$ erabiltzailea gonbidatua.",
+    "message": "Invited user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2704,7 +2704,7 @@
     }
   },
   "confirmedUserId": {
-    "message": "$ID$ erabiltzailea baieztatua.",
+    "message": "Confirmed user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2713,7 +2713,7 @@
     }
   },
   "editedUserId": {
-    "message": "$ID$ erabiltzailea editatua.",
+    "message": "Edited user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2722,7 +2722,7 @@
     }
   },
   "editedGroupsForUser": {
-    "message": "$ID$ erabiltzailearentzako taldea editatua.",
+    "message": "Edited groups for user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2731,7 +2731,7 @@
     }
   },
   "unlinkedSsoUser": {
-    "message": "$ID$ erabiltzailearentzako SSO lotura kendua.",
+    "message": "Unlinked SSO for user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2740,7 +2740,7 @@
     }
   },
   "createdOrganizationId": {
-    "message": "$ID$ erakundea sortua.",
+    "message": "Created organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2749,7 +2749,7 @@
     }
   },
   "addedOrganizationId": {
-    "message": "$ID$ erakundea gehitua.",
+    "message": "Added organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2758,7 +2758,7 @@
     }
   },
   "removedOrganizationId": {
-    "message": "$ID$ erakundea ezabatua.",
+    "message": "Removed organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2767,7 +2767,7 @@
     }
   },
   "accessedClientVault": {
-    "message": "$ID$ erakundeko kutxa gotorrera sartua.",
+    "message": "Accessed $ID$ organization vault.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2776,40 +2776,40 @@
     }
   },
   "device": {
-    "message": "Gailua"
+    "message": "Device"
   },
   "view": {
-    "message": "Erakutsi"
+    "message": "View"
   },
   "invalidDateRange": {
-    "message": "Data-tarte baliogabea."
+    "message": "Invalid date range."
   },
   "errorOccurred": {
-    "message": "Akats bat gertatu da."
+    "message": "An error has occurred."
   },
   "userAccess": {
-    "message": "Erabiltzailearen sarbidea"
+    "message": "User Access"
   },
   "userType": {
-    "message": "Erabiltzaile mota"
+    "message": "User Type"
   },
   "groupAccess": {
-    "message": "Taldeko sarbidea"
+    "message": "Group Access"
   },
   "groupAccessUserDesc": {
-    "message": "Editatu erabiltzaile honen taldeak."
+    "message": "Edit the groups that this user belongs to."
   },
   "invitedUsers": {
-    "message": "Erabiltzaile gonbidatua(k)."
+    "message": "Invited user(s)."
   },
   "resendInvitation": {
-    "message": "Birbidali gonbidapena"
+    "message": "Resend Invitation"
   },
   "resendEmail": {
-    "message": "Birbidali emaila"
+    "message": "Resend Email"
   },
   "hasBeenReinvited": {
-    "message": "$USER$ birgonbidatua zan da.",
+    "message": "$USER$ has been reinvited.",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -2818,13 +2818,13 @@
     }
   },
   "confirm": {
-    "message": "Berretsi"
+    "message": "Confirm"
   },
   "confirmUser": {
-    "message": "Erabiltzailea berretsi"
+    "message": "Confirm User"
   },
   "hasBeenConfirmed": {
-    "message": "$USER$ berretsia zan da.",
+    "message": "$USER$ has been confirmed.",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -2833,64 +2833,64 @@
     }
   },
   "confirmUsers": {
-    "message": "Erabiltzaileak berretsi"
+    "message": "Confirm Users"
   },
   "usersNeedConfirmed": {
-    "message": "Gonbidapena onartu duten erabiltzaileak dituzu, baina oraindik berretsi egin behar dituzu. Erabiltzaileek ez dute erakundera sartzerik izango berretsi arte."
+    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the organization until they are confirmed."
   },
   "startDate": {
-    "message": "Hasiera data"
+    "message": "Start Date"
   },
   "endDate": {
-    "message": "Amaiera Eguna"
+    "message": "End Date"
   },
   "verifyEmail": {
-    "message": "Egiaztatu emaila"
+    "message": "Verify Email"
   },
   "verifyEmailDesc": {
-    "message": "Egiaztatu zure kontuaren emaila, ezaugarri guztietarako sarbidea desblokeatzeko."
+    "message": "Verify your account's email address to unlock access to all features."
   },
   "verifyEmailFirst": {
-    "message": "Lehenengo zure kontuaren emaila egiaztatu behar da."
+    "message": "Your account's email address first must be verified."
   },
   "checkInboxForVerification": {
-    "message": "Bilatu zure emailaren sarrerako ontzian egiaztatze-lotura."
+    "message": "Check your email inbox for a verification link."
   },
   "emailVerified": {
-    "message": "Zure emaila egiaztatu da."
+    "message": "Your email has been verified."
   },
   "emailVerifiedFailed": {
-    "message": "Ezin izan da emaila egiaztatu. Saiatu egiaztatzeko email berri bat bidaltzen."
+    "message": "Unable to verify your email. Try sending a new verification email."
   },
   "emailVerificationRequired": {
-    "message": "Emailaren egiaztapena behar da"
+    "message": "Email Verification Required"
   },
   "emailVerificationRequiredDesc": {
-    "message": "Emaila egiaztatu behar duzu funtzio hau erabiltzeko."
+    "message": "You must verify your email to use this feature."
   },
   "updateBrowser": {
-    "message": "Nabigatzailea eguneratu"
+    "message": "Update Browser"
   },
   "updateBrowserDesc": {
-    "message": "Euskarririk gabeko web nabigatzailea erabiltzen ari zara. Baliteke webguneko kutxa gotorrak behar bezala ez funtzionatzea."
+    "message": "You are using an unsupported web browser. The web vault may not function properly."
   },
   "joinOrganization": {
-    "message": "Erakundeko kide egin"
+    "message": "Join Organization"
   },
   "joinOrganizationDesc": {
-    "message": "Lehen aipatutako erakundean parte hartzera gonbidatu zaituzte. Gonbidapena onartzeko, saioa hasi edo Bitwarden kontu berri bat sortu behar duzu."
+    "message": "You've been invited to join the organization listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "inviteAccepted": {
-    "message": "Gonbidapena onartua"
+    "message": "Invitation Accepted"
   },
   "inviteAcceptedDesc": {
-    "message": "Erakundeko kudeatzaile batek berresten zaituenean sartu ahal izango zara. Email bat bidaliko dizugu hori gertatzen denean."
+    "message": "You can access this organization once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "inviteAcceptFailed": {
-    "message": "Ezin du gonbidapena onartu. Eskatu erakundeko kudeatzaile bati gonbidapen berri bat bidaltzeko."
+    "message": "Unable to accept invitation. Ask an organization admin to send a new invitation."
   },
   "inviteAcceptFailedShort": {
-    "message": "Ezin dugu gonbidapena onartu. $DESCRIPTION$",
+    "message": "Unable to accept invitation. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
@@ -2899,7 +2899,7 @@
     }
   },
   "rememberEmail": {
-    "message": "Emaila gogoratu"
+    "message": "Remember email"
   },
   "recoverAccountTwoStepDesc": {
     "message": "Bi urratseko saio hasiera bidez zure kontura ezin bazara sartu, bi urratseko saio hasierako berreskuratze kodea erabil dezakezu zure kontuan bi urratseko hornitzaile guztiak desgaitzeko."
@@ -2911,25 +2911,25 @@
     "message": "Zure kontuan bi urratseko sai hasiera desgaitu da."
   },
   "learnMore": {
-    "message": "Gehiago ikasi"
+    "message": "Learn more"
   },
   "deleteRecoverDesc": {
-    "message": "Sartu zure emaila jarraian, zure kontua berreskuratu eta ezabatzeko."
+    "message": "Enter your email address below to recover and delete your account."
   },
   "deleteRecoverEmailSent": {
-    "message": "Zure kontua existitzen bada, email bat bidaliko dizugu jarraibide gehiagorekin."
+    "message": "If your account exists, we've sent you an email with further instructions."
   },
   "deleteRecoverConfirmDesc": {
-    "message": "Bitwarden kontua ezabatzeko eskatu duzu. Egin klik beheko botoian, berresteko."
+    "message": "You have requested to delete your Bitwarden account. Click the button below to confirm."
   },
   "myOrganization": {
-    "message": "Nire erakundea"
+    "message": "My Organization"
   },
   "deleteOrganization": {
-    "message": "Ezabatu erakundea"
+    "message": "Delete Organization"
   },
   "deletingOrganizationContentWarning": {
-    "message": "Sartu pasahitz nagusia $ORGANIZATION$ eta honekin lotutako datu guztiak ezabatzea baieztatzeko. $ORGANIZATION$-en kutxa gotorraren datuak honakoak dira:",
+    "message": "Enter the master password to confirm deletion of $ORGANIZATION$ and all associated data. Vault data in $ORGANIZATION$ includes:",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2938,10 +2938,10 @@
     }
   },
   "deletingOrganizationActiveUserAccountsWarning": {
-    "message": "Erabiltzaile kontuak aktibo mantenduko dira ezabatu ondoren, baina ez dira erakundeari lotuta egongo."
+    "message": "User accounts will remain active after deletion but will no longer be associated to this organization."
   },
   "deletingOrganizationIsPermanentWarning": {
-    "message": "$ORGANIZATION$ ezabatzea iraunkorra eta itzulezina da.",
+    "message": "Deleting $ORGANIZATION$ is permanent and irreversible.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2950,34 +2950,34 @@
     }
   },
   "organizationDeleted": {
-    "message": "Erakundea ezabatua"
+    "message": "Organization Deleted"
   },
   "organizationDeletedDesc": {
-    "message": "Erakundea eta honi lotutako datu guztiak ezabatu dira."
+    "message": "The organization and all associated data has been deleted."
   },
   "organizationUpdated": {
-    "message": "Erakundea eguneratua"
+    "message": "Organization updated"
   },
   "taxInformation": {
-    "message": "Informazio fiskala"
+    "message": "Tax Information"
   },
   "taxInformationDesc": {
-    "message": "Estatu Batuetako bezeroentzat, posta-kodea salmenten gaineko zergaren baldintzak betetzera behartuta dago; beste herrialde batzuentzat, nahi izanez gero, identifikazio fiskaleko zenbakia (BEZ/GST) eta/edo fakturetan agertzen den helbidea eman dezake."
+    "message": "For customers within the US, ZIP code is required to satisfy sales tax requirements, for other countries you may optionally provide a tax identification number (VAT/GST) and/or address to appear on your invoices."
   },
   "billingPlan": {
-    "message": "Plana",
+    "message": "Plan",
     "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
-    "message": "Eguneratu plana",
+    "message": "Upgrade Plan",
     "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
-    "message": "Eguneratu zure kontua beste plan batera, informazio hau emanez. Ziurtatu kontuan ordaintzeko metodo aktibo bat duzula.",
+    "message": "Upgrade your account to another plan by providing the information below. Please ensure that you have an active payment method added to the account.",
     "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
-    "message": "$NUMBER$ faktura",
+    "message": "Invoice #$NUMBER$",
     "description": "ex. Invoice #79C66F0-0001",
     "placeholders": {
       "number": {
@@ -2987,31 +2987,31 @@
     }
   },
   "viewInvoice": {
-    "message": "Faktura ikusi"
+    "message": "View Invoice"
   },
   "downloadInvoice": {
-    "message": "Faktura deskargatu"
+    "message": "Download Invoice"
   },
   "verifyBankAccount": {
-    "message": "Bankuko kontua egiaztatu"
+    "message": "Verify Bank Account"
   },
   "verifyBankAccountDesc": {
-    "message": "Bi mikro-kargu egin ditugu zure banku-kontuan (1-2 egun baliodun har ditzake agertzeko). Sartu kopuru horiek banku kontua egiaztatzeko."
+    "message": "We have made two micro-deposits to your bank account (it may take 1-2 business days to show up). Enter these amounts to verify the bank account."
   },
   "verifyBankAccountInitialDesc": {
-    "message": "Banku kontu baten bidezko ordainketa Estatu Batuetako bezeroentzako bakarrik da. Zure banku kontua egiaztatu beharko duzu. Bi mikro-kargu egingo ditugu hurrengo 1-2 egun baliodunetan. Sartu kopuru horiek erakundearen fakturazio orrian, banku kontua egiaztatzeko."
+    "message": "Payment with a bank account is only available to customers in the United States. You will be required to verify your bank account. We will make two micro-deposits within the next 1-2 business days. Enter these amounts on the organization's billing page to verify the bank account."
   },
   "verifyBankAccountFailureWarning": {
-    "message": "Bankuko kontua ez egiaztatzeak ordainketa galtzea ekarriko du eta harpidetza desgaituko da."
+    "message": "Failure to verify the bank account will result in a missed payment and your subscription being disabled."
   },
   "verifiedBankAccount": {
-    "message": "Banku kontua egiaztatu da."
+    "message": "Bank account has been verified."
   },
   "bankAccount": {
-    "message": "Banku kontua"
+    "message": "Bank Account"
   },
   "amountX": {
-    "message": "Zenbatekoa $COUNT$",
+    "message": "Amount $COUNT$",
     "description": "Used in bank account verification of micro-deposits. Amount, as in a currency amount. Ex. Amount 1 is $2.00, Amount 2 is $1.50",
     "placeholders": {
       "count": {
@@ -3021,36 +3021,36 @@
     }
   },
   "routingNumber": {
-    "message": "Banku-ibilbidearen zenbakia",
+    "message": "Routing Number",
     "description": "Bank account routing number"
   },
   "accountNumber": {
-    "message": "Kontu zenbakia"
+    "message": "Account Number"
   },
   "accountHolderName": {
-    "message": "Kontuaren titularraren izena"
+    "message": "Account Holder Name"
   },
   "bankAccountType": {
-    "message": "Kontu mota"
+    "message": "Account Type"
   },
   "bankAccountTypeCompany": {
-    "message": "Enpresa"
+    "message": "Company (Business)"
   },
   "bankAccountTypeIndividual": {
-    "message": "Norbanakoa"
+    "message": "Individual (Personal)"
   },
   "enterInstallationId": {
-    "message": "Sartu zure instalazioko ID-a"
+    "message": "Enter your installation id"
   },
   "limitSubscriptionDesc": {
-    "message": "Ezarri harpidetzarako postuen muga. Muga horretara iritsitakoan, ezingo dituzu erabiltzaile berriak gonbidatu."
+    "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
   },
   "maxSeatLimit": {
-    "message": "Gehienezko postu kopurua (aukerakoa)",
+    "message": "Gehienezko postu kopurua (hautazkoa)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
-    "message": "Postuaren gehienezko kostu potentziala"
+    "message": "Max potential seat cost"
   },
   "addSeats": {
     "message": "Gehitu postuak",
@@ -3073,19 +3073,19 @@
     }
   },
   "limitSubscription": {
-    "message": "Harpidetza mugatu (aukerakoa)"
+    "message": "Limit Subscription (Optional)"
   },
   "subscriptionSeats": {
     "message": "Harpidetzako postuak"
   },
   "subscriptionUpdated": {
-    "message": "Harpidetza eguneratua"
+    "message": "Subscription updated"
   },
   "additionalOptions": {
-    "message": "Aukera gehigarriak"
+    "message": "Additional Options"
   },
   "additionalOptionsDesc": {
-    "message": "Harpidetzaren kudeaketan laguntza gehiago lortzeko, jarri harremanetan bezeroarentzako arretarekin."
+    "message": "For additional help in managing your subscription, please contact Customer Support."
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Zure harpidetzako doikuntzak fakturazioko guztizkoetan hainbanatutako aldaketak eragingo ditu. Erabiltzaile gonbidatuek harpidetza postuak gainditzen badituzte, berehala tarifa hainbanatua jasoko dute erabiltzaile gehigarrientzat."
@@ -3100,7 +3100,7 @@
     }
   },
   "subscriptionFreePlan": {
-    "message": "Ezin dituzu $COUNT$ erabiltzaile baino gehiago gonbidatu zure plana aldatu gabe.",
+    "message": "You cannot invite more than $COUNT$ users without upgrading your plan.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3109,7 +3109,7 @@
     }
   },
   "subscriptionFamiliesPlan": {
-    "message": "Ezin dituzu $COUNT$ erabiltzaile baino gehiago gonbidatu zure plana aldatu gabe. Mesedez, jarri bezeroaren arretarekin haremanetan.",
+    "message": "You cannot invite more than $COUNT$ users without upgrading your plan. Please contact Customer Support to upgrade.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3118,7 +3118,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "Zre harpidetzak $COUNT$ erabiltzaile izateko aukera ematen du. Zure plana kanpoko erakunde batek babestuta eta fakturatuta dago.",
+    "message": "Your subscription allows for a total of $COUNT$ users. Your plan is sponsored and billed to an external organization.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3157,145 +3157,145 @@
     }
   },
   "keyUpdated": {
-    "message": "Gakoa eguneratua"
+    "message": "Key Updated"
   },
   "updateKeyTitle": {
-    "message": "Eguneratu gakoa"
+    "message": "Update Key"
   },
   "updateEncryptionKey": {
-    "message": "Eguneratu enkriptatze-gakoa"
+    "message": "Update Encryption Key"
   },
   "updateEncryptionKeyShortDesc": {
-    "message": "Une honetan, zifratze sistema zaharkitua erabiltzen ari zara."
+    "message": "You are currently using an outdated encryption scheme."
   },
   "updateEncryptionKeyDesc": {
-    "message": "Zifratze-gako handiagoetara aldatu gara, segurtasun hobea eta ezaugarri berrietarako sarbidea ematen baitute. Zifratze-gakoa azkar eta erraz eguneratzen da. Idatzi zure pasahitz nagusia behean. Eguneratze hau nahitaezkoa izango da uneren batean."
+    "message": "We've moved to larger encryption keys that provide better security and access to newer features. Updating your encryption key is quick and easy. Just type your master password below. This update will eventually become mandatory."
   },
   "updateEncryptionKeyWarning": {
-    "message": "Zifratze-gakoa eguneratu ondoren, saioa hasi eta erabiltzen ari zaren Bitwarden aplikazio guztietara itzuli behar duzu (adibidez, aplikazio mugikorra edo nabigatzailearen gehigarriak). Saioa berriro hasteak huts egiten badu (zifratze-gako berria deskargatzea dakar) datuen korrupzioa ekar lezake. Automatikoki saioa ixten saiatuko gara, baina atzeratu egin daiteke."
+    "message": "After updating your encryption key, you are required to log out and back in to all Bitwarden applications that you are currently using (such as the mobile app or browser extensions). Failure to log out and back in (which downloads your new encryption key) may result in data corruption. We will attempt to log you out automatically, however, it may be delayed."
   },
   "updateEncryptionKeyExportWarning": {
-    "message": "Gorde duzun edozein esportazio enkriptatu ez da baliozkoa izango."
+    "message": "Any encrypted exports that you have saved will also become invalid."
   },
   "subscription": {
-    "message": "Harpidetza"
+    "message": "Subscription"
   },
   "loading": {
-    "message": "Kargatzen"
+    "message": "Loading"
   },
   "upgrade": {
-    "message": "Eguneratu"
+    "message": "Upgrade"
   },
   "upgradeOrganization": {
-    "message": "Eguneratu erakundea"
+    "message": "Upgrade Organization"
   },
   "upgradeOrganizationDesc": {
-    "message": "Ezaugarri hau ez dago doako erakundeentzat erabilgarri. Aldatu ordainketa plan batera, ezaugarri gehiago desblokeatzeko."
+    "message": "This feature is not available for free organizations. Switch to a paid plan to unlock more features."
   },
   "createOrganizationStep1": {
-    "message": "Sortu erakundea: 1go urratsa"
+    "message": "Create Organization: Step 1"
   },
   "createOrganizationCreatePersonalAccount": {
-    "message": "Zure erakundea sortu aurretik, lehenbizi doako kontu pertsonal bat sortu behar duzu."
+    "message": "Before creating your organization, you first need to create a free personal account."
   },
   "refunded": {
-    "message": "Itzulia"
+    "message": "Refunded"
   },
   "nothingSelected": {
-    "message": "Ez duzu ezer aukeratu."
+    "message": "You have not selected anything."
   },
   "acceptPolicies": {
-    "message": "Laukitxo hau markatzean, honakoa onartzen duzu:"
+    "message": "By checking this box you agree to the following:"
   },
   "acceptPoliciesRequired": {
-    "message": "Zerbitzuaren baldintzak eta pribatutasun politika ez dira onartu."
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
-    "message": "Zerbitzuaren baldintzak"
+    "message": "Terms of Service"
   },
   "privacyPolicy": {
-    "message": "Pribatutasun politika"
+    "message": "Privacy Policy"
   },
   "filters": {
-    "message": "Iragazkiak"
+    "message": "Filters"
   },
   "vaultTimeout": {
-    "message": "Kutxa gotorraren itxarote-denbora"
+    "message": "Vault timeout"
   },
   "vaultTimeoutDesc": {
-    "message": "Aukeratu kutxa gotorraren itxaronaldia eta egingo den ekintza."
+    "message": "Choose when your vault will take the vault timeout action."
   },
   "oneMinute": {
-    "message": "Minutu 1"
+    "message": "1 minute"
   },
   "fiveMinutes": {
-    "message": "5 minutu"
+    "message": "5 minutes"
   },
   "fifteenMinutes": {
-    "message": "15 minutu"
+    "message": "15 minutes"
   },
   "thirtyMinutes": {
-    "message": "30 minutu"
+    "message": "30 minutes"
   },
   "oneHour": {
-    "message": "Ordu 1"
+    "message": "1 hour"
   },
   "fourHours": {
-    "message": "4 ordu"
+    "message": "4 hours"
   },
   "onRefresh": {
-    "message": "Nabigatzailea eguneratzean"
+    "message": "On browser refresh"
   },
   "dateUpdated": {
-    "message": "Eguneratua",
+    "message": "Updated",
     "description": "ex. Date this item was updated"
   },
   "datePasswordUpdated": {
-    "message": "Pasahitza eguneratu da",
+    "message": "Password Updated",
     "description": "ex. Date this password was updated"
   },
   "organizationIsDisabled": {
-    "message": "Erakundea desgaituta dago."
+    "message": "Organization is disabled."
   },
   "disabledOrganizationFilterError": {
-    "message": "Ezin da sartu desgaitutako erakundeetako elementuetara. Laguntza lortzeko, jarri harremanetan zure erakundearekin."
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
-    "message": "Lizentzia iraungi da."
+    "message": "License is expired."
   },
   "updatedUsers": {
-    "message": "Erabiltzaileak eguneratuta"
+    "message": "Updated users"
   },
   "selected": {
-    "message": "Aukeratuta"
+    "message": "Selected"
   },
   "ownership": {
-    "message": "Jabetza"
+    "message": "Ownership"
   },
   "whoOwnsThisItem": {
-    "message": "Nork du elementu hau?"
+    "message": "Who owns this item?"
   },
   "strong": {
-    "message": "Sendoa",
+    "message": "Strong",
     "description": "ex. A strong password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "good": {
-    "message": "Ona",
+    "message": "Good",
     "description": "ex. A good password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "weak": {
-    "message": "Ahula",
+    "message": "Weak",
     "description": "ex. A weak password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "veryWeak": {
-    "message": "Oso ahula",
+    "message": "Very Weak",
     "description": "ex. A very weak password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "weakMasterPassword": {
-    "message": "Pasahitz nagusi ahula"
+    "message": "Weak Master Password"
   },
   "weakMasterPasswordDesc": {
-    "message": "Aukeratu duzun pasahitza ahula da. Pasahitz nagusi sendo bat (edo pasaesaldi bat) erabili beharko zenuke Bitwarden kontua behar bezala babesteko. Ziur zaude pasahitz nagusi hau erabili nahi duzula?"
+    "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
   },
   "rotateAccountEncKey": {
     "message": "Also rotate my account's encryption key"
@@ -3567,7 +3567,7 @@
     "message": "We require this information for calculating sales tax and financial reporting only."
   },
   "includeVAT": {
-    "message": "BEZ/GST informazioa txertatu (aukerakoa)"
+    "message": "Include VAT/GST Information (optional)"
   },
   "taxIdNumber": {
     "message": "VAT/GST Tax ID"
@@ -3651,87 +3651,87 @@
     "message": "Organization Owners and Administrators are exempt from this policy's enforcement."
   },
   "sendTypeFile": {
-    "message": "Fitxategia"
+    "message": "File"
   },
   "sendTypeText": {
-    "message": "Testua"
+    "message": "Text"
   },
   "createSend": {
-    "message": "Sortu Send berria",
+    "message": "Create New Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
-    "message": "Editatu Send-a",
+    "message": "Edit Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Send-a sortua",
+    "message": "Created Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Send-a editatua",
+    "message": "Edited Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Send-a ezabatua",
+    "message": "Deleted Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSend": {
-    "message": "Ezabatu Send-a",
+    "message": "Delete Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSendConfirmation": {
-    "message": "Ziur al zaude Send hau ezabatu nahi duzula?",
+    "message": "Are you sure you want to delete this Send?",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "whatTypeOfSend": {
-    "message": "Zein Send mota da hau?",
+    "message": "What type of Send is this?",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletionDate": {
     "message": "Deletion Date"
   },
   "deletionDateDesc": {
-    "message": "Send-a betiko ezabatuko da zehaztutako datan eta orduan.",
+    "message": "The Send will be permanently deleted on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
     "message": "Expiration Date"
   },
   "expirationDateDesc": {
-    "message": "Hala ezartzen bada, Send honetarako sarbidea zehaztutako egunean eta orduan amaituko da.",
+    "message": "If set, access to this Send will expire on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
     "message": "Maximum Access Count"
   },
   "maxAccessCountDesc": {
-    "message": "Hala ezartzen bada, erabiltzaileak ezin izango dira Send honetara sartu gehienezko sarbide kopurura iritsi ondoren.",
+    "message": "If set, users will no longer be able to access this Send once the maximum access count is reached.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
     "message": "Current Access Count"
   },
   "sendPasswordDesc": {
-    "message": "Nahi izanez gero, pasahitza eskatu erabiltzaileak bidalketa honetara sar daitezen.",
+    "message": "Optionally require a password for users to access this Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNotesDesc": {
-    "message": "Send honi buruzko ohar pribatuak.",
+    "message": "Private notes about this Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disabled": {
     "message": "Disabled"
   },
   "revoked": {
-    "message": "Ezeztatuak"
+    "message": "Revoked"
   },
   "sendLink": {
-    "message": "Send esteka",
+    "message": "Send link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLink": {
-    "message": "Send esteka kopiatu",
+    "message": "Copy Send Link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "removePassword": {
@@ -3747,14 +3747,14 @@
     "message": "Hide my email address from recipients."
   },
   "disableThisSend": {
-    "message": "Desgaitu Send hau inor sar ez dadin.",
+    "message": "Disable this Send so that no one can access it.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "allSends": {
-    "message": "Send guztiak"
+    "message": "All Sends"
   },
   "maxAccessCountReached": {
-    "message": "Sarbide kopuru maximoa gaindituta",
+    "message": "Max access count reached",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "pendingDeletion": {
@@ -3764,34 +3764,34 @@
     "message": "Expired"
   },
   "searchSends": {
-    "message": "Send-ak bilatu",
+    "message": "Search Sends",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPassword": {
-    "message": "Send hau pasahitz batekin babestuta dago. Idatzi pasahitza jarraitzeko.",
+    "message": "This Send is protected with a password. Please type the password below to continue.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
-    "message": "Ez duzu pasahitza ezagutzen? Eskatu bidaltzaileari Send honetara sartzeko behar den pasahitza.",
+    "message": "Don't know the password? Ask the Sender for the password needed to access this Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendHiddenByDefault": {
-    "message": "Send hau modu lehenetsian ezkutatuta dago. Beheko botoia sakatuz alda dezakezu ikusgarritasuna.",
+    "message": "This send is hidden by default. You can toggle its visibility using the button below.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "downloadFile": {
     "message": "Download File"
   },
   "sendAccessUnavailable": {
-    "message": "Sartzen saiatzen ari zaren Send-a ez da existitzen edo ez dago erabilgarri.",
+    "message": "The Send you are trying to access does not exist or is no longer available.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "missingSendFile": {
-    "message": "Send honi lotutako fitxategia ezin izan da aurkitu.",
+    "message": "The file associated with this Send could not be found.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "Ez dago erakusteko Send-ik.",
+    "message": "There are no Sends to list.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
@@ -3867,7 +3867,7 @@
     "message": "You've been invited to become an emergency contact for the user listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "emergencyInviteAcceptFailed": {
-    "message": "Ezin du gonbidapena onartu. Eskatu erabiltzaileari gonbidapen berri bat bidaltzeko."
+    "message": "Unable to accept invitation. Ask the user to send a new invitation."
   },
   "emergencyInviteAcceptFailedShort": {
     "message": "Unable to accept invitation. $DESCRIPTION$",
@@ -3879,7 +3879,7 @@
     }
   },
   "emergencyInviteAcceptedDesc": {
-    "message": "Erabiltzaile honen larrialdi aukeretara sar zaitezke, zure identitatea egiaztatu ondoren. Email bat bidaliko dizugu hori egitean."
+    "message": "You can access the emergency options for this user after your identity has been confirmed. We'll send you an email when that happens."
   },
   "requestAccess": {
     "message": "Request Access"
@@ -3949,43 +3949,43 @@
     "message": "Due to an enterprise policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections."
   },
   "disableSend": {
-    "message": "Kendu Send-ak"
+    "message": "Remove Send"
   },
   "disableSendPolicyDesc": {
-    "message": "Ez utzi kideei Send-ak sortu edo editatzen.",
+    "message": "Do not allow members to create or edit sends.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
-    "message": "Erakundearen politikak kudea ditzaketen erabiltzaileak politika honetatik salbuetsita daude."
+    "message": "Organization users that can manage the organization's policies are exempt from this policy's enforcement."
   },
   "sendDisabled": {
-    "message": "Send-a desgaitua",
+    "message": "Send disabled",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "Enpresa-politika baten ondorioz, lehendik dagoen Send-a bakarrik ezaba dezakezu.",
+    "message": "Due to an enterprise policy, you are only able to delete an existing Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptions": {
-    "message": "Send aukerak",
+    "message": "Send options",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyDesc": {
-    "message": "Ezarri Send-a sortzeko eta editatzeko aukerak.",
+    "message": "Set options for creating and editing Sends.",
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
-    "message": "Erakundearen politikak kudea ditzaketen erabiltzaileak politika honetatik salbuetsita daude."
+    "message": "Organization users that can manage the organization's policies are exempt from this policy's enforcement."
   },
   "disableHideEmail": {
-    "message": "Send bat sortzean edo editatzean, erakutsi beti kidearen emaila hartzaileari.",
+    "message": "Always show member’s email address with recipients when creating or editing a send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "Une honetan, erakunderako politika hauek aplikatzen dira:"
+    "message": "The following organization policies are currently in effect:"
   },
   "sendDisableHideEmailInEffect": {
-    "message": "Erabiltzaileek ezin diete hartzaileei beren emaila ezkutatu Send bat sortu edo editatzen dutenean.",
+    "message": "Users are not allowed to hide their email address from recipients when creating or editing a Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "modifiedPolicyId": {
@@ -4079,24 +4079,24 @@
     "message": "Disable personal ownership for organization users"
   },
   "textHiddenByDefault": {
-    "message": "Send-era sartzean, ezkutatu testua modu lehenetsian",
+    "message": "When accessing the Send, hide the text by default",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNameDesc": {
-    "message": "Send hau deskribatzeko izena.",
+    "message": "A friendly name to describe this Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
-    "message": "Bidali nahi duzun testua."
+    "message": "The text you want to send."
   },
   "sendFileDesc": {
-    "message": "Bidali nahi duzun fitxategia."
+    "message": "The file you want to send."
   },
   "copySendLinkOnSave": {
-    "message": "Gordetzean kopiatu Send honen esteka arbelean, ondoren partekatzeko."
+    "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendLinkLabel": {
-    "message": "Send esteka",
+    "message": "Send link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "send": {
@@ -4104,50 +4104,50 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendAccessTaglineProductDesc": {
-    "message": "Bitwarden Send-ek informazio sentikorra eta aldi baterakoa transmititzen die beste batzuei erraz eta modu seguruan.",
+    "message": "Bitwarden Send transmits sensitive, temporary information to others easily and securely.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendAccessTaglineLearnMore": {
-    "message": "Informazio gehiago",
+    "message": "Learn more about",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more about** Bitwarden Send or sign up to try it today.'"
   },
   "sendVaultCardProductDesc": {
-    "message": "Partekatu testua edo fitxategiak zuzenean edozeinekin."
+    "message": "Share text or files directly with anyone."
   },
   "sendVaultCardLearnMore": {
-    "message": "Gehiago ikasi",
+    "message": "Learn more",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more**, see how it works, or try it now. '"
   },
   "sendVaultCardSee": {
-    "message": "ikusi",
+    "message": "see",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, **see** how it works, or try it now.'"
   },
   "sendVaultCardHowItWorks": {
-    "message": "nola funtzionatzen duen",
+    "message": "how it works",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see **how it works**, or try it now.'"
   },
   "sendVaultCardOr": {
-    "message": "edo",
+    "message": "or",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
   },
   "sendVaultCardTryItNow": {
-    "message": "saiatu orain",
+    "message": "try it now",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, or **try it now**.'"
   },
   "sendAccessTaglineOr": {
-    "message": "edo",
+    "message": "or",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send **or** sign up to try it today.'"
   },
   "sendAccessTaglineSignUp": {
-    "message": "izena eman",
+    "message": "sign up",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send or **sign up** to try it today.'"
   },
   "sendAccessTaglineTryToday": {
-    "message": "gaur probatzeko.",
+    "message": "to try it today.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send or sign up to **try it today.**'"
   },
   "sendCreatorIdentifier": {
-    "message": "$USER_IDENTIFIER$ Bitwarden erabiltzaileak, ondorengoa zurekin partekatu du",
+    "message": "Bitwarden user $USER_IDENTIFIER$ shared the following with you",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -4156,7 +4156,7 @@
     }
   },
   "viewSendHiddenEmailWarning": {
-    "message": "Send hau sortu duen Bitwarden erabiltzaileak emaileko helbidea ezkutatzea erabaki du. Ziurtatu lotura honen iturrian konfiantza duzula edukia erabili edo deskargatu aurretik.",
+    "message": "The Bitwarden user who created this Send has chosen to hide their email address. You should ensure you trust the source of this link before using or downloading its content.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDateIsInvalid": {
@@ -4319,7 +4319,7 @@
     "message": "This action is protected. To continue, please re-enter your master password to verify your identity."
   },
   "reinviteSelected": {
-    "message": "Birbidali gonbidapenak"
+    "message": "Resend Invitations"
   },
   "noSelectedUsersApplicable": {
     "message": "This action is not applicable to any of the selected users."
@@ -4331,7 +4331,7 @@
     "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "revokeUsersWarning": {
-    "message": "Kideak ezeztatzen direnean, jada ez dute erakundearen datuetarako sarbiderik. Kideen sarrera berehala leheneratzeko, joan Ezeztatuak atalera. Baliteke segundo batzuk behar izatea prozesua osatzeko, eta ezin da eten edo bertan behera utzi."
+    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Theme"
@@ -4364,7 +4364,7 @@
     "message": "Removed successfully"
   },
   "bulkRevokedMessage": {
-    "message": "Erakunderako sarrera behar bezala ezeztatua"
+    "message": "Revoked organization access successfully"
   },
   "bulkRestoredMessage": {
     "message": "Restored organization access successfully"
@@ -4379,7 +4379,7 @@
     "message": "Remove Users"
   },
   "revokeUsers": {
-    "message": "Ezeztatu erabiltzaileak"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
     "message": "Restore Users"
@@ -4430,10 +4430,10 @@
     "message": "You've been invited to join the provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "providerInviteAcceptFailed": {
-    "message": "Ezin du gonbidapena onartu. Eskatu hornitzaileko kudeatzaile bati gonbidapen berri bat bidaltzeko."
+    "message": "Unable to accept invitation. Ask a provider admin to send a new invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "Hornitzaileko kudeatzaile batek berresten zaituenean sartu ahal izango zara. Email bat bidaliko dizugu hori gertatzen denean."
+    "message": "You can access this provider once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "providerUsersNeedConfirmed": {
     "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the provider until they are confirmed."
@@ -4708,7 +4708,7 @@
     "message": "Shared collections for Family secrets"
   },
   "badToken": {
-    "message": "Lotura ez da baliozkoa. Mesedez, eskatu babesleari eskaintza birbidaltzeko."
+    "message": "The link is no longer valid. Please have the sponsor resend the offer."
   },
   "reclaimedFreePlan": {
     "message": "Reclaimed free plan"
@@ -4735,7 +4735,7 @@
     "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Ezin da eskaintza onartu. Mesedez, bidali berriro eskaintzaren emaila zure enpresa kontutik eta saiatu berriro."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Unable to accept offer. $DESCRIPTION$",
@@ -4759,7 +4759,7 @@
     "message": "Redeemed Account"
   },
   "revokeAccount": {
-    "message": "Ezeztatu $NAME$ kontua",
+    "message": "Revoke account $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4768,7 +4768,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Birbidali babesleen emaila $NAME$-(e)ra",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4798,22 +4798,22 @@
     "message": "Email Sent"
   },
   "revokeSponsorshipConfirmation": {
-    "message": "Kontu hau ezabatu ondoren, fakturazio-aldiaren amaieran amaituko da Familiak planaren babesa. Ezin izango duzu beste babes-eskaintza bat trukatu, harik eta eskaintza amaitu arte. Ziur al daude jarraitu nahi duzula?"
+    "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
     "message": "Sponsorship Removed"
   },
   "ssoKeyConnectorError": {
-    "message": "Konektore-giltzaren akatsa: ziurtatu konektore-giltza erabilgarri dagoela eta behar bezala dabilela."
+    "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "keyConnectorUrl": {
-    "message": "Konektore-giltzaren URL-a"
+    "message": "Key Connector URL"
   },
   "sendVerificationCode": {
-    "message": "Bidali egiaztatze-kodea zure emailera"
+    "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Bidali kodea"
+    "message": "Send Code"
   },
   "codeSent": {
     "message": "Code Sent"
@@ -4867,7 +4867,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "SSO-ren autentifikazio eta erakunde bakar baten politikak behar dira, konektore-giltzaren deszifratzea konfiguratzeko."
+    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
     "message": "Member Decryption Options"
@@ -4876,13 +4876,13 @@
     "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
   },
   "keyConnector": {
-    "message": "Konektore-giltza"
+    "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Konektatu SSO saio hasierarekin deszifratze giltza autoostatatuen zerbitzarira. Aukera hori erabiliz, kideek ez dituzte pasahitz nagusiak erabili beharko kutxa gotorreko datuak deszifratzeko. Laguntza behar baduzu, jarri harremanetan Bitwardenen arreta zerbitzuarekin."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"SSO bidezko saio hasiera eta konektore-giltzen deszifratzea\" gaituta dago. Politika hau jabe eta administratzaileei bakarrik aplikatuko zaie."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
     "message": "Enabled SSO"
@@ -4891,16 +4891,16 @@
     "message": "Disabled SSO"
   },
   "enabledKeyConnector": {
-    "message": "Konektore-giltza gaituta"
+    "message": "Enabled Key Connector"
   },
   "disabledKeyConnector": {
-    "message": "Konektore-giltza desgaituta"
+    "message": "Disabled Key Connector"
   },
   "keyConnectorWarning": {
-    "message": "Kideak konektore-giltza erabiltzen hasten direnean, zure erakundeak ezin du pasahitz nagusia berriro deszifratu. Zerbitzari gako bat ezarria baduzu eta ongi kudeatzen ari bazara soilik jarraitu."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
-    "message": "Konektore-giltzara migratua"
+    "message": "Migrated to Key Connector"
   },
   "paymentSponsored": {
     "message": "Please provide a payment method to associate with the organization. Don't worry, we won't charge you anything unless you select additional features or your sponsorship expires. "
@@ -4918,13 +4918,13 @@
     "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
-    "message": "Testa"
+    "message": "Test"
   },
   "keyConnectorTestSuccess": {
-    "message": "Egina! Konektore-giltza lortua."
+    "message": "Success! Key Connector reached."
   },
   "keyConnectorTestFail": {
-    "message": "Ezin da konektore-giltza lortu. Berrikusi URL-a."
+    "message": "Cannot reach Key Connector. Check URL."
   },
   "sponsorshipTokenHasExpired": {
     "message": "The sponsorship offer has expired."
@@ -5029,7 +5029,7 @@
     "message": "Required if Entity ID is not a URL."
   },
   "openIdOptionalCustomizations": {
-    "message": "Aukerako pertsonalizazioa"
+    "message": "Optional Customizations"
   },
   "openIdAuthorityRequired": {
     "message": "Required if Authority is not valid."
@@ -5140,7 +5140,7 @@
     "message": "You cannot redeem for the active account. Enter a different email."
   },
   "revokeWhenExpired": {
-    "message": "$DATE$-an iraungitzen da",
+    "message": "Expires $DATE$",
     "placeholders": {
       "date": {
         "content": "$1",
@@ -5306,8 +5306,5 @@
   },
   "cardBrandMir": {
     "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Number of users"
   }
 }

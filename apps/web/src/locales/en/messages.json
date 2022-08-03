@@ -1133,7 +1133,7 @@
     "message": "Account Deleted"
   },
   "accountDeletedDesc": {
-    "message": "Your account has been closed and all associated data has been deleted."
+    "message": "Your Bitwarden account and vault data were permanently deleted."
   },
   "myAccount": {
     "message": "My Account"
@@ -5351,8 +5351,5 @@
   },
   "cardBrandMir": {
     "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Number of users"
   }
 }

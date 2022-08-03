@@ -10,7 +10,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { SEND_KDF_ITERATIONS } from "@bitwarden/common/enums/kdfType";
 import { SendType } from "@bitwarden/common/enums/sendType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { SendAccess } from "@bitwarden/common/models/domain/sendAccess";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { SendAccessRequest } from "@bitwarden/common/models/request/sendAccessRequest";
@@ -110,8 +109,8 @@ export class AccessComponent implements OnInit {
     }
 
     try {
-      const encBuf = await EncArrayBuffer.fromResponse(response);
-      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, this.decKey);
+      const buf = await response.arrayBuffer();
+      const decBuf = await this.cryptoService.decryptFromBytes(buf, this.decKey);
       this.fileDownloadService.download({
         fileName: this.send.file.fileName,
         blobData: decBuf,

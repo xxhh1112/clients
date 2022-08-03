@@ -517,7 +517,7 @@ export default class MainBackground {
   }
 
   async bootstrap() {
-    this.containerService.attachToGlobal(window);
+    this.containerService.attachToWindow(window);
 
     await this.stateService.init();
 

@@ -169,12 +169,13 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
     return await this.stateService.getEnableBiometric();
   }
 
-  async authenticateBiometric(): Promise<boolean> {
-    const val = await ipcRenderer.invoke("biometric", {
-      action: "authenticate",
+  authenticateBiometric(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const val = ipcRenderer.sendSync("biometric", {
+        action: "authenticate",
+      });
+      resolve(val);
     });
-
-    return val;
   }
 
   supportsSecureStorage(): boolean {

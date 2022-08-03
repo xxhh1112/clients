@@ -6,11 +6,7 @@
         <ul class="filter-options">
           <li class="filter-option" [ngClass]="{ active: selectedAll }">
             <span class="filter-buttons">
-              <button
-                class="filter-button"
-                (click)="selectAll()"
-                [attr.aria-pressed]="selectedAll === true"
-              >
+              <button class="filter-button" (click)="selectAll()" [attr.aria-pressed]="selectedAll">
                 <i class="bwi bwi-fw bwi-filter" aria-hidden="true"></i>&nbsp;{{
                   "allSends" | i18n
                 }}
@@ -134,12 +130,7 @@
         </ng-container>
       </div>
       <div class="footer">
-        <button
-          type="button"
-          (click)="addSend()"
-          class="block primary"
-          appA11yTitle="{{ 'addItem' | i18n }}"
-        >
+        <button (click)="addSend()" class="block primary" appA11yTitle="{{ 'addItem' | i18n }}">
           <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
         </button>
       </div>

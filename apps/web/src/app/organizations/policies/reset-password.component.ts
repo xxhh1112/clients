@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -30,10 +30,7 @@ export class ResetPasswordPolicyComponent extends BasePolicyComponent {
   defaultTypes: { name: string; value: string }[];
   showKeyConnectorInfo = false;
 
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private organizationService: OrganizationService
-  ) {
+  constructor(private formBuilder: FormBuilder, private organizationService: OrganizationService) {
     super();
   }
 

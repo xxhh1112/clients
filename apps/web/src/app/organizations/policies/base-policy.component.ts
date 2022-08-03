@@ -1,5 +1,5 @@
 import { Directive, Input, OnInit } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -22,8 +22,8 @@ export abstract class BasePolicyComponent implements OnInit {
   @Input() policyResponse: PolicyResponse;
   @Input() policy: BasePolicy;
 
-  enabled = new UntypedFormControl(false);
-  data: UntypedFormGroup = null;
+  enabled = new FormControl(false);
+  data: FormGroup = null;
 
   ngOnInit(): void {
     this.enabled.setValue(this.policyResponse.enabled);

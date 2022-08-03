@@ -14,7 +14,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 
 import { BaseEventsComponent } from "../../common/base.events.component";
-import { EventService } from "../../core";
+import { EventService } from "../../services/event.service";
 
 @Component({
   selector: "app-org-events",

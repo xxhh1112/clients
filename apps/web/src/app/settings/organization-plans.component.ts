@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { UntypedFormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -79,7 +79,7 @@ export class OrganizationPlansComponent implements OnInit {
     private organizationService: OrganizationService,
     private logService: LogService,
     private messagingService: MessagingService,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: FormBuilder
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -451,8 +451,6 @@ export class OrganizationPlansComponent implements OnInit {
     fd.append("collectionName", collectionCt);
     const response = await this.apiService.postOrganizationLicense(fd);
     const orgId = response.id;
-
-    await this.apiService.refreshIdentityToken();
 
     // Org Keys live outside of the OrganizationLicense - add the keys to the org here
     const request = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);

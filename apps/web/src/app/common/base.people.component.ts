@@ -55,9 +55,9 @@ export abstract class BasePeopleComponent<
       : 0;
   }
 
-  get revokedCount() {
-    return this.statusMap.has(this.userStatusType.Revoked)
-      ? this.statusMap.get(this.userStatusType.Revoked).length
+  get deactivatedCount() {
+    return this.statusMap.has(this.userStatusType.Deactivated)
+      ? this.statusMap.get(this.userStatusType.Deactivated).length
       : 0;
   }
 
@@ -112,8 +112,8 @@ export abstract class BasePeopleComponent<
   abstract edit(user: UserType): void;
   abstract getUsers(): Promise<ListResponse<UserType>>;
   abstract deleteUser(id: string): Promise<any>;
-  abstract revokeUser(id: string): Promise<any>;
-  abstract restoreUser(id: string): Promise<any>;
+  abstract deactivateUser(id: string): Promise<any>;
+  abstract activateUser(id: string): Promise<any>;
   abstract reinviteUser(id: string): Promise<any>;
   abstract confirmUser(user: UserType, publicKey: Uint8Array): Promise<any>;
 
@@ -133,7 +133,7 @@ export abstract class BasePeopleComponent<
       } else {
         this.statusMap.get(u.status).push(u);
       }
-      if (u.status !== this.userStatusType.Revoked) {
+      if (u.status !== this.userStatusType.Deactivated) {
         this.activeUsers.push(u);
       }
     });
@@ -235,9 +235,9 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
-  async revoke(user: UserType) {
+  async deactivate(user: UserType) {
     const confirmed = await this.platformUtilsService.showDialog(
-      this.revokeWarningMessage(),
+      this.deactivateWarningMessage(),
       this.i18nService.t("revokeUserId", this.userNamePipe.transform(user)),
       this.i18nService.t("revokeAccess"),
       this.i18nService.t("cancel"),
@@ -248,7 +248,7 @@ export abstract class BasePeopleComponent<
       return false;
     }
 
-    this.actionPromise = this.revokeUser(user.id);
+    this.actionPromise = this.deactivateUser(user.id);
     try {
       await this.actionPromise;
       this.platformUtilsService.showToast(
@@ -263,8 +263,8 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
-  async restore(user: UserType) {
-    this.actionPromise = this.restoreUser(user.id);
+  async activate(user: UserType) {
+    this.actionPromise = this.activateUser(user.id);
     try {
       await this.actionPromise;
       this.platformUtilsService.showToast(
@@ -381,8 +381,16 @@ export abstract class BasePeopleComponent<
     return !searching && this.users && this.users.length > this.pageSize;
   }
 
-  protected revokeWarningMessage(): string {
+  protected deleteWarningMessage(user: UserType): string {
+    return this.i18nService.t("removeUserConfirmation");
+  }
+
+  protected deactivateWarningMessage(): string {
     return this.i18nService.t("revokeUserConfirmation");
+  }
+
+  protected activateWarningMessage(): string {
+    return this.i18nService.t("activateUserConfirmation");
   }
 
   protected getCheckedUsers() {

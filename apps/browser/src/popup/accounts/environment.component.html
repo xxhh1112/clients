@@ -1,13 +1,13 @@
 <form #form (ngSubmit)="submit()">
   <header>
     <div class="left">
-      <button type="button" routerLink="/home">{{ "close" | i18n }}</button>
+      <a routerLink="/home">{{ "close" | i18n }}</a>
     </div>
     <h1 class="center">
       <span class="title">{{ "appName" | i18n }}</span>
     </h1>
     <div class="right">
-      <button type="submit" [disabled]="form.loading">
+      <button type="submit" appBlurClick [disabled]="form.loading">
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>

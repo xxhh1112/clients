@@ -1,6 +1,6 @@
 import {
   AbstractControl,
-  UntypedFormBuilder,
+  FormBuilder,
   FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
@@ -46,7 +46,7 @@ export default {
   },
 } as Meta;
 
-const fb = new UntypedFormBuilder();
+const fb = new FormBuilder();
 const formObj = fb.group({
   test: [""],
   required: ["", [Validators.required]],

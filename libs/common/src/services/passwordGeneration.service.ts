@@ -380,7 +380,6 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     }
 
     const newHistory = await this.encryptHistory(currentHistory);
-    await this.stateService.setDecryptedPasswordGenerationHistory(currentHistory);
     return await this.stateService.setEncryptedPasswordGenerationHistory(newHistory);
   }
 

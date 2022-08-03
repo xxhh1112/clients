@@ -3,6 +3,7 @@ const { pathsToModuleNameMapper } = require("ts-jest");
 const { compilerOptions } = require("../shared/tsconfig.libs");
 
 module.exports = {
+  name: "angular",
   displayName: "libs/angular tests",
   preset: "jest-preset-angular",
   testMatch: ["**/+(*.)+(spec).+(ts)"],

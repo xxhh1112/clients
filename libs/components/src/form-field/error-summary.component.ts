@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { AbstractControl, UntypedFormGroup } from "@angular/forms";
+import { AbstractControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "bit-error-summary",
@@ -13,7 +13,7 @@ import { AbstractControl, UntypedFormGroup } from "@angular/forms";
 })
 export class BitErrorSummary {
   @Input()
-  formGroup: UntypedFormGroup;
+  formGroup: FormGroup;
 
   get errorCount(): number {
     return this.getErrorCount(this.formGroup);
@@ -23,9 +23,9 @@ export class BitErrorSummary {
     return this.errorCount.toString();
   }
 
-  private getErrorCount(form: UntypedFormGroup): number {
+  private getErrorCount(form: FormGroup): number {
     return Object.values(form.controls).reduce((acc: number, control: AbstractControl) => {
-      if (control instanceof UntypedFormGroup) {
+      if (control instanceof FormGroup) {
         return acc + this.getErrorCount(control);
       }
 

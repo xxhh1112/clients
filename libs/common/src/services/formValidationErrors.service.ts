@@ -1,4 +1,4 @@
-import { UntypedFormGroup, ValidationErrors } from "@angular/forms";
+import { FormGroup, ValidationErrors } from "@angular/forms";
 
 import {
   FormGroupControls,
@@ -11,7 +11,7 @@ export class FormValidationErrorsService implements FormValidationErrorsAbstract
     let errors: AllValidationErrors[] = [];
     Object.keys(controls).forEach((key) => {
       const control = controls[key];
-      if (control instanceof UntypedFormGroup) {
+      if (control instanceof FormGroup) {
         errors = errors.concat(this.getFormValidationErrors(control.controls));
       }
 

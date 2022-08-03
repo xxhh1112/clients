@@ -2,7 +2,6 @@
 **/build
 **/dist
 **/coverage
-.angular
 
 # External libraries / auto synced locales
 apps/browser/src/_locales
