@@ -644,9 +644,6 @@
   "newAccountCreated": {
     "message": "Your new account has been created! You may now log in."
   },
-  "trialAccountCreated": {
-    "message": "Account created successfully."
-  },
   "masterPassSent": {
     "message": "We've sent you an email with your master password hint."
   },
@@ -1088,7 +1085,7 @@
     "message": "Account Deleted"
   },
   "accountDeletedDesc": {
-    "message": "Your account has been closed and all associated data has been deleted."
+    "message": "Your Bitwarden account and vault data were permanently deleted."
   },
   "myAccount": {
     "message": "My Account"
@@ -1672,12 +1669,6 @@
   "billing": {
     "message": "Billing"
   },
-  "billingPlanLabel": {
-    "message": "Billing Plan"
-  },
-  "paymentType": {
-    "message": "Payment Type"
-  },
   "accountCredit": {
     "message": "Account Credit",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1794,9 +1785,6 @@
   "year": {
     "message": "year"
   },
-  "yr": {
-    "message": "yr"
-  },
   "month": {
     "message": "month"
   },
@@ -1824,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "Billing Information"
-  },
-  "billingTrialSubLabel": {
-    "message": "Your payment method will not be charged during the 7 day free trial."
   },
   "creditCard": {
     "message": "Credit Card"
@@ -2184,35 +2169,11 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "We've sent a confirmation email to your team's billing email at "
-  },
   "monthly": {
     "message": "Monthly"
   },
   "annually": {
     "message": "Annually"
-  },
-  "annual": {
-    "message": "Annual"
   },
   "basePrice": {
     "message": "Base Price"
@@ -3257,8 +3218,8 @@
   "organizationIsDisabled": {
     "message": "Organization is disabled."
   },
-  "disabledOrganizationFilterError": {
-    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+  "disabledOrganizationFilterError" : {
+    "message" : "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "License is expired."
@@ -5303,11 +5264,5 @@
   },
   "on": {
     "message": "On"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Number of users"
   }
 }
