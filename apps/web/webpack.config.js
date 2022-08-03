@@ -64,18 +64,25 @@ const moduleRules = [
     ],
   },
   {
-    test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+    test: /\.[cm]?js$/,
+    use: [
+      {
+        loader: "babel-loader",
+        options: {
+          configFile: false,
+          plugins: ["@angular/compiler-cli/linker/babel"],
+        },
+      },
+    ],
+  },
+  {
+    test: /\.[jt]sx?$/,
     loader: "@ngtools/webpack",
   },
 ];
 
 const plugins = [
   new CleanWebpackPlugin(),
-  // ref: https://github.com/angular/angular/issues/20357
-  new webpack.ContextReplacementPlugin(
-    /\@angular(\\|\/)core(\\|\/)fesm5/,
-    path.resolve(__dirname, "./src")
-  ),
   new HtmlWebpackPlugin({
     template: "./src/index.html",
     filename: "index.html",
@@ -142,6 +149,9 @@ const plugins = [
     filename: "[name].[contenthash].css",
     chunkFilename: "[id].[contenthash].css",
   }),
+  new webpack.ProvidePlugin({
+    process: "process/browser.js",
+  }),
   new webpack.EnvironmentPlugin({
     ENV: ENV,
     NODE_ENV: NODE_ENV === "production" ? "production" : "development",
@@ -152,9 +162,6 @@ const plugins = [
     BRAINTREE_KEY: envConfig["braintreeKey"] ?? "",
     PAYPAL_CONFIG: envConfig["paypal"] ?? {},
     FLAGS: envConfig["flags"] ?? {},
-  }),
-  new webpack.ProvidePlugin({
-    process: "process/browser",
   }),
   new AngularWebpackPlugin({
     tsConfigPath: "tsconfig.json",
@@ -282,8 +289,8 @@ const webpackConfig = {
   devtool: "source-map",
   devServer: devServer,
   entry: {
-    "app/polyfills": "./src/app/polyfills.ts",
-    "app/main": "./src/app/main.ts",
+    "app/polyfills": "./src/polyfills.ts",
+    "app/main": "./src/main.ts",
     "connectors/webauthn": "./src/connectors/webauthn.ts",
     "connectors/webauthn-fallback": "./src/connectors/webauthn-fallback.ts",
     "connectors/duo": "./src/connectors/duo.ts",

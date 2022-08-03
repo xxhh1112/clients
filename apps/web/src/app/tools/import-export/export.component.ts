@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -35,7 +35,7 @@ export class ExportComponent extends BaseExportComponent {
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
     modalService: ModalService
   ) {

@@ -139,6 +139,7 @@ import {
   OrganizationConnectionConfigApis,
   OrganizationConnectionResponse,
 } from "../models/response/organizationConnectionResponse";
+import { OrganizationExportResponse } from "../models/response/organizationExportResponse";
 import { OrganizationKeysResponse } from "../models/response/organizationKeysResponse";
 import { OrganizationResponse } from "../models/response/organizationResponse";
 import { OrganizationSponsorshipSyncStatusResponse } from "../models/response/organizationSponsorshipSyncStatusResponse";
@@ -347,10 +348,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   postSecurityStamp(request: SecretVerificationRequest): Promise<any> {
     return this.send("POST", "/accounts/security-stamp", request, true, false);
-  }
-
-  deleteAccount(request: SecretVerificationRequest): Promise<any> {
-    return this.send("DELETE", "/accounts", request, true, false);
   }
 
   async getAccountRevisionDate(): Promise<number> {
@@ -1344,23 +1341,23 @@ export class ApiService implements ApiServiceAbstraction {
     return new ListResponse(r, OrganizationUserBulkResponse);
   }
 
-  deactivateOrganizationUser(organizationId: string, id: string): Promise<any> {
+  revokeOrganizationUser(organizationId: string, id: string): Promise<any> {
     return this.send(
       "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/deactivate",
+      "/organizations/" + organizationId + "/users/" + id + "/revoke",
       null,
       true,
       false
     );
   }
 
-  async deactivateManyOrganizationUsers(
+  async revokeManyOrganizationUsers(
     organizationId: string,
     request: OrganizationUserBulkRequest
   ): Promise<ListResponse<OrganizationUserBulkResponse>> {
     const r = await this.send(
       "PUT",
-      "/organizations/" + organizationId + "/users/deactivate",
+      "/organizations/" + organizationId + "/users/revoke",
       request,
       true,
       true
@@ -1368,23 +1365,23 @@ export class ApiService implements ApiServiceAbstraction {
     return new ListResponse(r, OrganizationUserBulkResponse);
   }
 
-  activateOrganizationUser(organizationId: string, id: string): Promise<any> {
+  restoreOrganizationUser(organizationId: string, id: string): Promise<any> {
     return this.send(
       "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/activate",
+      "/organizations/" + organizationId + "/users/" + id + "/restore",
       null,
       true,
       false
     );
   }
 
-  async activateManyOrganizationUsers(
+  async restoreManyOrganizationUsers(
     organizationId: string,
     request: OrganizationUserBulkRequest
   ): Promise<ListResponse<OrganizationUserBulkResponse>> {
     const r = await this.send(
       "PUT",
-      "/organizations/" + organizationId + "/users/activate",
+      "/organizations/" + organizationId + "/users/restore",
       request,
       true,
       true
@@ -2321,6 +2318,17 @@ export class ApiService implements ApiServiceAbstraction {
       const error = await this.handleError(response, false, true);
       return Promise.reject(error);
     }
+  }
+
+  async getOrganizationExport(organizationId: string): Promise<OrganizationExportResponse> {
+    const r = await this.send(
+      "GET",
+      "/organizations/" + organizationId + "/export",
+      null,
+      true,
+      true
+    );
+    return new OrganizationExportResponse(r);
   }
 
   // Helpers

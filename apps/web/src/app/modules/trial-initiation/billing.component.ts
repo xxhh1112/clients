@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -11,6 +11,7 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { ProductType } from "@bitwarden/common/enums/productType";
 
 import { OrganizationPlansComponent } from "src/app/settings/organization-plans.component";
 
@@ -33,7 +34,7 @@ export class BillingComponent extends OrganizationPlansComponent {
     organizationService: OrganizationService,
     logService: LogService,
     messagingService: MessagingService,
-    formBuilder: FormBuilder
+    formBuilder: UntypedFormBuilder
   ) {
     super(
       apiService,
@@ -51,10 +52,11 @@ export class BillingComponent extends OrganizationPlansComponent {
   }
 
   async ngOnInit() {
+    const additionalSeats = this.product == ProductType.Families ? 0 : 1;
     this.formGroup.patchValue({
       name: this.orgInfoForm.get("name")?.value,
       billingEmail: this.orgInfoForm.get("email")?.value,
-      additionalSeats: 1,
+      additionalSeats: additionalSeats,
       plan: this.plan,
       product: this.product,
     });
