@@ -11,8 +11,16 @@ import {
   MEMORY_STORAGE,
 } from "@bitwarden/angular/services/jslib-services.module";
 import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
+import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
+import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
+import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
+import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
+import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -20,6 +28,8 @@ import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/a
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { ExportService } from "@bitwarden/common/services/export.service";
+import { ImportService } from "@bitwarden/common/services/import.service";
 import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 
 import { BroadcasterMessagingService } from "./broadcaster-messaging.service";
@@ -80,6 +90,30 @@ import { WebPlatformUtilsService } from "./web-platform-utils.service";
     },
     { provide: MessagingServiceAbstraction, useClass: BroadcasterMessagingService },
     { provide: ModalServiceAbstraction, useClass: ModalService },
+    {
+      provide: ImportServiceAbstraction,
+      useClass: ImportService,
+      deps: [
+        CipherServiceAbstraction,
+        FolderServiceAbstraction,
+        ApiServiceAbstraction,
+        I18nServiceAbstraction,
+        CollectionServiceAbstraction,
+        PlatformUtilsServiceAbstraction,
+        CryptoServiceAbstraction,
+      ],
+    },
+    {
+      provide: ExportServiceAbstraction,
+      useClass: ExportService,
+      deps: [
+        FolderServiceAbstraction,
+        CipherServiceAbstraction,
+        ApiServiceAbstraction,
+        CryptoServiceAbstraction,
+        CryptoFunctionServiceAbstraction,
+      ],
+    },
     {
       provide: StateMigrationServiceAbstraction,
       useClass: StateMigrationService,

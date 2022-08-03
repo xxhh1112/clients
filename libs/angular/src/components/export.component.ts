@@ -10,8 +10,11 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
+
+import { ModalService } from "../services/modal.service";
 
 @Directive()
 export class ExportComponent implements OnInit {
@@ -23,6 +26,9 @@ export class ExportComponent implements OnInit {
   exportForm = this.formBuilder.group({
     format: ["json"],
     secret: [""],
+    filePassword: [""],
+    confirmFilePassword: [""],
+    fileEncryptionType: [""],
   });
 
   formatOptions = [
@@ -42,11 +48,15 @@ export class ExportComponent implements OnInit {
     private logService: LogService,
     private userVerificationService: UserVerificationService,
     private formBuilder: UntypedFormBuilder,
-    protected fileDownloadService: FileDownloadService
+    protected fileDownloadService: FileDownloadService,
+    protected modalService: ModalService
   ) {}
 
   async ngOnInit() {
     await this.checkExportDisabled();
+    this.exportForm
+      .get("fileEncryptionType")
+      .setValue(EncryptedExportType.AccountEncrypted.toString());
   }
 
   async checkExportDisabled() {
@@ -60,6 +70,30 @@ export class ExportComponent implements OnInit {
 
   get encryptedFormat() {
     return this.format === "encrypted_json";
+  }
+
+  async submitWithSecretAlreadyVerified() {
+    if (this.disabledByPolicy) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("personalVaultExportPolicyInEffect")
+      );
+      return;
+    }
+
+    try {
+      this.formPromise = this.getExportData();
+      const data = await this.formPromise;
+      this.downloadFile(data);
+      this.saved();
+      await this.collectEvent();
+      this.exportForm.get("secret").setValue("");
+      this.exportForm.get("filePassword").setValue("");
+      this.exportForm.get("confirmFilePassword").setValue("");
+    } catch (e) {
+      this.logService.error(e);
+    }
   }
 
   async submit() {
@@ -76,12 +110,15 @@ export class ExportComponent implements OnInit {
     if (!acceptedWarning) {
       return;
     }
-
     const secret = this.exportForm.get("secret").value;
-    try {
-      await this.userVerificationService.verifyUser(secret);
-    } catch (e) {
-      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), e.message);
+
+    const successfulVerification = await this.userVerificationService.verifyUser(secret);
+    if (!successfulVerification) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("error"),
+        this.i18nService.t("invalidMasterPassword")
+      );
       return;
     }
 
@@ -126,7 +163,11 @@ export class ExportComponent implements OnInit {
   }
 
   protected getExportData() {
-    return this.exportService.getExport(this.format);
+    return (this.fileEncryptionType != EncryptedExportType.FileEncrypted.toString() &&
+      this.filePassword == undefined) ||
+      this.filePassword == ""
+      ? this.exportService.getExport(this.format, null)
+      : this.exportService.getPasswordProtectedExport(this.filePassword);
   }
 
   protected getFileName(prefix?: string) {
@@ -148,6 +189,18 @@ export class ExportComponent implements OnInit {
 
   get format() {
     return this.exportForm.get("format").value;
+  }
+
+  get filePassword() {
+    return this.exportForm.get("filePassword").value;
+  }
+
+  get confirmFilePassword() {
+    return this.exportForm.get("confirmFilePassword").value;
+  }
+
+  get fileEncryptionType() {
+    return this.exportForm.get("fileEncryptionType").value;
   }
 
   private downloadFile(csv: string): void {

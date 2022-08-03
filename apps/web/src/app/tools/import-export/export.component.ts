@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -11,6 +12,9 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { EncryptedExportType } from "@bitwarden/common/enums/EncryptedExportType";
+
+import { UserVerificationPromptComponent } from "src/app/components/user-verification-prompt.component";
 
 @Component({
   selector: "app-export",
@@ -18,6 +22,9 @@ import { UserVerificationService } from "@bitwarden/common/abstractions/userVeri
 })
 export class ExportComponent extends BaseExportComponent {
   organizationId: string;
+  showFilePassword: boolean;
+  showConfirmFilePassword: boolean;
+  encryptedExportType = EncryptedExportType;
 
   constructor(
     cryptoService: CryptoService,
@@ -29,7 +36,8 @@ export class ExportComponent extends BaseExportComponent {
     logService: LogService,
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    modalService: ModalService
   ) {
     super(
       cryptoService,
@@ -42,12 +50,76 @@ export class ExportComponent extends BaseExportComponent {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      modalService
     );
+  }
+
+  async submit() {
+    if (!this.validForm) {
+      return;
+    }
+
+    const confirmDescription =
+      this.exportForm.get("fileEncryptionType").value ===
+      EncryptedExportType.FileEncrypted.toString()
+        ? "FileEncryptedExportWarningDesc"
+        : "encExportKeyWarningDesc";
+
+    const ref = this.modalService.open(UserVerificationPromptComponent, {
+      allowMultipleModals: true,
+      data: {
+        confirmDescription: confirmDescription,
+        confirmButtonText: "exportVault",
+        modalTitle: "confirmVaultExport",
+      },
+    });
+
+    if (ref == null) {
+      return;
+    }
+
+    const userVerified = await ref.onClosedPromise();
+    if (userVerified) {
+      //successful
+      this.submitWithSecretAlreadyVerified();
+    }
+  }
+
+  toggleFilePassword() {
+    this.showFilePassword = !this.showFilePassword;
+    document.getElementById("filePassword").focus();
+  }
+
+  toggleConfirmFilePassword() {
+    this.showConfirmFilePassword = !this.showConfirmFilePassword;
+    document.getElementById("confirmFilePassword").focus();
   }
 
   protected saved() {
     super.saved();
     this.platformUtilsService.showToast("success", null, this.i18nService.t("exportSuccess"));
+  }
+
+  get validForm() {
+    if (
+      this.fileEncryptionType == EncryptedExportType.FileEncrypted.toString() &&
+      this.format == "encrypted_json"
+    ) {
+      if (this.filePassword.length > 0 || this.confirmFilePassword.length > 0) {
+        if (this.filePassword != this.confirmFilePassword) {
+          this.platformUtilsService.showToast(
+            "error",
+            this.i18nService.t("errorOccurred"),
+            this.i18nService.t("filePasswordAndConfirmFilePasswordDoNotMatch")
+          );
+          return false;
+        }
+
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 }

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -31,7 +32,8 @@ export class OrganizationExportComponent extends ExportComponent {
     logService: LogService,
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    modalService: ModalService
   ) {
     super(
       cryptoService,
@@ -43,7 +45,8 @@ export class OrganizationExportComponent extends ExportComponent {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      modalService
     );
   }
 

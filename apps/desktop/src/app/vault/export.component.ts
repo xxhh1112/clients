@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -30,10 +31,11 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     eventService: EventService,
     policyService: PolicyService,
     userVerificationService: UserVerificationService,
-    formBuilder: UntypedFormBuilder,
     private broadcasterService: BroadcasterService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    formBuilder: UntypedFormBuilder,
+    fileDownloadService: FileDownloadService,
+    modalService: ModalService
   ) {
     super(
       cryptoService,
@@ -46,7 +48,8 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      modalService
     );
   }
 
