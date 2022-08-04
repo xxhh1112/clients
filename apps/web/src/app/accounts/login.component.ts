@@ -8,6 +8,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -47,7 +48,8 @@ export class LoginComponent extends BaseLoginComponent {
     protected stateService: StateService,
     private messagingService: MessagingService,
     private routerService: RouterService,
-    formBuilder: UntypedFormBuilder
+    formBuilder: UntypedFormBuilder,
+    formValidationErrorService: FormValidationErrorsService
   ) {
     super(
       authService,
@@ -60,7 +62,8 @@ export class LoginComponent extends BaseLoginComponent {
       cryptoFunctionService,
       logService,
       ngZone,
-      formBuilder
+      formBuilder,
+      formValidationErrorService
     );
     this.onSuccessfulLogin = async () => {
       this.messagingService.send("setFullWidth");
@@ -71,7 +74,7 @@ export class LoginComponent extends BaseLoginComponent {
   async ngOnInit() {
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.email != null && qParams.email.indexOf("@") > -1) {
-        this.email = qParams.email;
+        this.formGroup.get("email")?.setValue(qParams.email);
       }
       if (qParams.premium != null) {
         this.routerService.setPreviousUrl("/settings/premium");
@@ -90,7 +93,8 @@ export class LoginComponent extends BaseLoginComponent {
         this.routerService.setPreviousUrl(route.toString());
       }
       await super.ngOnInit();
-      this.rememberEmail = await this.stateService.getRememberEmail();
+      const rememberEmail = await this.stateService.getRememberEmail();
+      this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
     });
 
     const invite = await this.stateService.getOrganizationInvitation();
@@ -124,10 +128,12 @@ export class LoginComponent extends BaseLoginComponent {
   }
 
   async goAfterLogIn() {
+    const masterPassword = this.formGroup.get("masterPassword")?.value;
+
     // Check master password against policy
     if (this.enforcedPasswordPolicyOptions != null) {
       const strengthResult = this.passwordGenerationService.passwordStrength(
-        this.masterPassword,
+        masterPassword,
         this.getPasswordStrengthUserInput()
       );
       const masterPasswordScore = strengthResult == null ? null : strengthResult.score;
@@ -136,7 +142,7 @@ export class LoginComponent extends BaseLoginComponent {
       if (
         !this.policyService.evaluateMasterPassword(
           masterPasswordScore,
-          this.masterPassword,
+          masterPassword,
           this.enforcedPasswordPolicyOptions
         )
       ) {
@@ -157,19 +163,22 @@ export class LoginComponent extends BaseLoginComponent {
   }
 
   async submit() {
-    await this.stateService.setRememberEmail(this.rememberEmail);
-    if (!this.rememberEmail) {
+    const rememberEmail = this.formGroup.get("rememberEmail")?.value;
+
+    await this.stateService.setRememberEmail(rememberEmail);
+    if (!rememberEmail) {
       await this.stateService.setRememberedEmail(null);
     }
     await super.submit();
   }
 
   private getPasswordStrengthUserInput() {
+    const email = this.formGroup.get("email")?.value;
     let userInput: string[] = [];
-    const atPosition = this.email.indexOf("@");
+    const atPosition = email.indexOf("@");
     if (atPosition > -1) {
       userInput = userInput.concat(
-        this.email
+        email
           .substr(0, atPosition)
           .trim()
           .toLowerCase()
