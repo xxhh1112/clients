@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Criar conta"
   },
+  "startTrial": {
+    "message": "Iniciar avaliação"
+  },
   "logIn": {
     "message": "Iniciar sessão"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não existe maneira de recuperar a palavra-passe no caso de a esquecer."
+  },
+  "masterPassImportant": {
+    "message": "As palavras-passe mestras não podem ser recuperadas se as esquecer!"
   },
   "masterPassHintDesc": {
     "message": "Uma dica da palavra-passe mestra pode ajudar a lembrar-se da sua palavra-passe se a esquecer."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Endereço de email inválido."
   },
-  "masterPassRequired": {
-    "message": "A palavra-passe mestra é requerida."
+  "masterPasswordRequired": {
+    "message": "A palavra-passe mestra é necessária."
   },
-  "masterPassLength": {
-    "message": "A palavra-passe mestra tem de ter pelo menos 8 caracteres."
+  "confirmMasterPasswordRequired": {
+    "message": "É necessário reescrever a palavra-passe mestra."
+  },
+  "masterPasswordMinLength": {
+    "message": "A palavra-passe mestra deve ter pelo menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da palavra-passe mestra não corresponde."
@@ -1076,7 +1085,7 @@
     "message": "Conta eliminada"
   },
   "accountDeletedDesc": {
-    "message": "A sua conta foi encerrada e todos os dados associados foram eliminados."
+    "message": "A sua conta foi encerrada e todos os dados associados eliminados."
   },
   "myAccount": {
     "message": "Minha conta"
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Alterar o idioma utilizado pelo cofre web."
   },
-  "disableIcons": {
-    "message": "Desativar ícones de websites"
+  "enableFavicon": {
+    "message": "Mostrar ícones do site"
   },
-  "disableIconsDesc": {
-    "message": "Os ícones de websites providenciam uma imagem reconhecível ao lado de cada item de credencial no seu cofre."
+  "faviconDesc": {
+    "message": "Mostre uma imagem reconhecível ao lado de cada login."
   },
   "enableGravatars": {
     "message": "Ativar Gravatars",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Utilizar imagens de avatar carregadas a partir de gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Ativado"
   },
+  "activate": {
+    "message": "Ativar"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1261,6 +1273,9 @@
     "message": "Gerir"
   },
   "disable": {
+    "message": "Desativar"
+  },
+  "deactivate": {
     "message": "Desativar"
   },
   "twoStepLoginProviderEnabled": {
@@ -1441,10 +1456,10 @@
     "message": "Ocorreu um problema ao ler a chave de segurança. Tente novamente."
   },
   "twoFactorWebAuthnWarning": {
-    "message": "Due to platform limitations, WebAuthn cannot be used on all Bitwarden applications. You should enable another two-step login provider so that you can access your account when WebAuthn cannot be used. Supported platforms:"
+    "message": "Devido as limitações da plataforma, o WebAuthn não pode ser usado em todos os aplicativos do Bitwarden. Deve habilitar outro provedor de login de duas etapas para aceder à sua conta quando a WebAuthn não puder ser usada. Plataformas suportadas:"
   },
   "twoFactorWebAuthnSupportWeb": {
-    "message": "Web vault and browser extensions on a desktop/laptop with a WebAuthn enabled browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F enabled)."
+    "message": "Cofre web e extensões de navegador em um desktop/laptop com um navegador habilitado para WebAuthn (Chrome, Opera, Vivaldi ou Firefox com o FIDO U2F ativado)."
   },
   "twoFactorRecoveryYourCode": {
     "message": "O seu código Bitwarden de recuperação de início de sessão de dois passos"
@@ -1460,7 +1475,7 @@
     "message": "Relatórios"
   },
   "reportsDesc": {
-    "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
+    "message": "Identifique e feche lacunas de segurança nas suas contas online clicando nos relatórios abaixo.",
     "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
@@ -2226,8 +2241,14 @@
   "removeUserConfirmation": {
     "message": "Tem a certeza de que pretende remover este utilizador?"
   },
+  "deactivateUserConfirmation": {
+    "message": "O membro não terá mais acesso à organização, mas continuará a ter acesso ao seu cofre individual."
+  },
+  "activateUserConfirmation": {
+    "message": "Tem a certeza de que deseja ativar este utilizador, concedendo-lhes o acesso à organização?"
+  },
   "removeUserConfirmationKeyConnector": {
-    "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
+    "message": "Atenção! Este utilizador requer o Key Connector para gerir a sua encriptação. Remover esse utilizador da sua organização desativará permanentemente a sua conta. Esta ação não pode ser desfeita. Você deseja continuar?"
   },
   "externalId": {
     "message": "Id externo"
@@ -2308,7 +2329,7 @@
     "message": "O utilizador com acesso mais elevado que pode gerir todos os aspetos da sua organização."
   },
   "clientOwnerDesc": {
-    "message": "This user should be independent of the Provider. If the Provider is disassociated with the organization, this user will maintain ownership of the organization."
+    "message": "Este utilizador deve ser independente do Provedor. Se o Provedor for desassociado da organização, este utilizador manterá a propriedade da organização."
   },
   "admin": {
     "message": "Administrador"
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Utilizador $ID$ removido.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Utilizador $ID$ desativado.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Utilizador $ID$ editado.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Desativar o utilizador $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Ativar o utilizador $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2842,10 +2899,10 @@
     }
   },
   "deletingOrganizationActiveUserAccountsWarning": {
-    "message": "User accounts will remain active after deletion but will no longer be associated to this organization."
+    "message": "As contas de utilizadores permanecerão ativas após a exclusão, mas não estarão mais associadas a essa organização."
   },
   "deletingOrganizationIsPermanentWarning": {
-    "message": "Deleting $ORGANIZATION$ is permanent and irreversible.",
+    "message": "A exclusão de $ORGANIZATION$ é permanente e irreversível.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2947,14 +3004,14 @@
     "message": "Introduza o id da sua instalação"
   },
   "limitSubscriptionDesc": {
-    "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
+    "message": "Defina um limite de utilizadores para sua assinatura. Depois que este limite for atingido, não poderá convidar novos utilizadores."
   },
   "maxSeatLimit": {
-    "message": "Maximum Seat Limit (optional)",
+    "message": "Limite Máximo de Assentos (opcional)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
-    "message": "Max potential seat cost"
+    "message": "Custo máximo potencial de utilizadores"
   },
   "addSeats": {
     "message": "Adicionar lugares",
@@ -2965,7 +3022,7 @@
     "description": "Seat = User Seat"
   },
   "subscriptionDesc": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users."
+    "message": "Os ajustes à sua assinatura resultarão em alterações repartidas nos totais de faturamento. Se os utilizadores recém-convidados excederem o número de utilizadores na sua assinatura, receberá imediatamente uma cobrança proporcional pelos utilizadores adicionais."
   },
   "subscriptionUserSeats": {
     "message": "A sua subscrição permite um total de $COUNT$ utilizadores.",
@@ -2977,10 +3034,10 @@
     }
   },
   "limitSubscription": {
-    "message": "Limit Subscription (Optional)"
+    "message": "Assinatura Limite (Opcional)"
   },
   "subscriptionSeats": {
-    "message": "Subscription Seats"
+    "message": "Assentos de Assinatura"
   },
   "subscriptionUpdated": {
     "message": "Assinatura atualizada"
@@ -2989,7 +3046,7 @@
     "message": "Opções Adicionais"
   },
   "additionalOptionsDesc": {
-    "message": "For additional help in managing your subscription, please contact Customer Support."
+    "message": "Para ajuda adicional no gerenciamento da sua assinatura, entre em contato com o suporte ao cliente."
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users."
@@ -3109,10 +3166,10 @@
     "message": "Não selecionou nada."
   },
   "acceptPolicies": {
-    "message": "By checking this box you agree to the following:"
+    "message": "Ao marcar esta caixa concorda com o seguinte:"
   },
-  "acceptPoliciesError": {
-    "message": "Terms of Service and Privacy Policy have not been acknowledged."
+  "acceptPoliciesRequired": {
+    "message": "Os Termos de Serviço e a Política de Privacidade não foram reconhecidos."
   },
   "termsOfService": {
     "message": "Termos de serviço"
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "A organização está desativada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Itens em Organizações desativadas não podem ser acedidos. Entre em contato com o proprietário da sua Organização para obter assistência."
   },
   "licenseIsExpired": {
     "message": "A licença está expirada."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Clonar"
   },
+  "masterPassPolicyTitle": {
+    "message": "Requisitos de palavra-passe mestra"
+  },
   "masterPassPolicyDesc": {
     "message": "Defina os requisitos mínimos para a força da palavra-passe mestra."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Exigir login em duas etapas"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Requer que os utilizadores definam a autenticação de dois passos nas suas contas pessoais."
@@ -3519,7 +3585,7 @@
     "message": "Organização única"
   },
   "singleOrgDesc": {
-    "message": "Restrict users from being able to join any other organizations."
+    "message": "Restringir que membros entrem em outras organizações."
   },
   "singleOrgBlockCreateMessage": {
     "message": "Your current organization has a policy that does not allow you to join more than one organization. Please contact your organization admins or sign up from a different Bitwarden account."
@@ -3531,13 +3597,13 @@
     "message": "Autenticação de acesso único"
   },
   "requireSsoPolicyDesc": {
-    "message": "Require users to log in with the Enterprise Single Sign-On method."
+    "message": "Require members to log in with the Enterprise Single Sign-On method."
   },
   "prerequisite": {
     "message": "Pré-requisito"
   },
   "requireSsoPolicyReq": {
-    "message": "The Single Organization enterprise policy must be enabled before activating this policy."
+    "message": "The Single Organization enterprise policy must be turned on before activating this policy."
   },
   "requireSsoPolicyReqError": {
     "message": "Política da Organização Única não ativada."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Desabilitado"
+  },
+  "deactivated": {
+    "message": "Desativado"
   },
   "sendLink": {
     "message": "Enviar ligação",
@@ -3729,7 +3798,7 @@
     "message": "Pode ver todos os itens no seu próprio cofre."
   },
   "takeover": {
-    "message": "Takeover"
+    "message": "Controlo"
   },
   "takeoverDesc": {
     "message": "Pode redefinir a sua conta com uma nova senha mestra."
@@ -3832,7 +3901,7 @@
     "message": "Propriedade pessoal"
   },
   "personalOwnershipPolicyDesc": {
-    "message": "Require users to save vault items to an organization by removing the personal ownership option."
+    "message": "Require members to save items to an organization by removing the individual vault option."
   },
   "personalOwnershipExemption": {
     "message": "Organization Owners and Administrators are exempt from this policy's enforcement."
@@ -3844,7 +3913,7 @@
     "message": "Desabilitar envio"
   },
   "disableSendPolicyDesc": {
-    "message": "Do not allow users to create or edit a Bitwarden Send. Deleting an existing Send is still allowed.",
+    "message": "Do not allow members to create or edit sends.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -3870,7 +3939,7 @@
     "message": "Organization users that can manage the organization's policies are exempt from this policy's enforcement."
   },
   "disableHideEmail": {
-    "message": "Do not allow users to hide their email address from recipients when creating or editing a Send.",
+    "message": "Always show member’s email address with recipients when creating or editing a send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -3890,7 +3959,7 @@
     }
   },
   "planPrice": {
-    "message": "Plan price"
+    "message": "Preço do planoplanejado"
   },
   "estimatedTax": {
     "message": "Imposto estimado"
@@ -3968,14 +4037,14 @@
     "message": "An organization policy has disabled importing items into your personal vault."
   },
   "personalOwnershipCheckboxDesc": {
-    "message": "Disable personal ownership for organization users"
+    "message": "Desativar direito de propriedade para utilizadores da organização"
   },
   "textHiddenByDefault": {
-    "message": "When accessing the Send, hide the text by default",
+    "message": "Ao aceder ao Envio, ocultar o texto por padrão",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNameDesc": {
-    "message": "A friendly name to describe this Send.",
+    "message": "Um nome amigável para descrever este Envio.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -4169,7 +4238,7 @@
     "message": "Redefinir Senha Mestra"
   },
   "resetPasswordPolicyDescription": {
-    "message": "Allow administrators in the organization to reset organization users' master password."
+    "message": "Allow admins to reset master passwords for members."
   },
   "resetPasswordPolicyWarning": {
     "message": "Users in the organization will need to self-enroll or be auto-enrolled before administrators can reset their master password."
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Are you sure you want to remove the following users? The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
+  "deactivateUsersWarning": {
+    "message": "Tem a certeza de que deseja desativar os seguintes membros? Deixarão de ter acesso à organização, e continuarão a ter acesso aos seus cofres individuais. O processo pode demorar alguns segundos para ser concluído e não pode ser interrompido ou cancelado."
+  },
+  "activateUsersWarning": {
+    "message": "Tem a certeza de que deseja ativar os seguintes membros, concedendo-lhes acesso à organização? O processo pode demorar alguns segundos para ser concluído e não pode ser interrompido ou cancelado."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Removido com sucesso"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Desativado com sucesso"
+  },
+  "bulkActivatedMessage": {
+    "message": "Ativado com sucesso"
+  },
   "bulkFilteredMessage": {
     "message": "Excluído, não aplicável para esta ação."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Remover utilizadores"
+  },
+  "deactivateUsers": {
+    "message": "Desativar Utilizadores"
+  },
+  "activateUsers": {
+    "message": "Ativar Utilizadores"
   },
   "error": {
     "message": "Erro"
@@ -4398,7 +4485,7 @@
     "message": "Expiração do cofre"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Configure a maximum vault timeout for all users."
+    "message": "Set a maximum vault timeout for members."
   },
   "maximumVaultTimeoutLabel": {
     "message": "Maximum Vault Timeout"
@@ -4438,10 +4525,10 @@
     "message": "Tempo limite do cofre não está dentro do intervalo permitido."
   },
   "disablePersonalVaultExport": {
-    "message": "Disable Personal Vault Export"
+    "message": "Remove individual vault export"
   },
   "disablePersonalVaultExportDesc": {
-    "message": "Prohibits users from exporting their private vault data."
+    "message": "Do not allow members to export their individual vault data."
   },
   "vaultExportDisabled": {
     "message": "Exportação de cofre desabilitada"
@@ -4732,19 +4819,19 @@
     "message": "Once set up, your configuration will be saved and members will be able to authenticate using their Identity Provider credentials."
   },
   "ssoPolicyHelpStart": {
-    "message": "Enable the",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "message": "Use the",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
-    "message": "SSO Authentication policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "message": "require single-sign-on authentication policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "to require all members to log in with SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "SSO Authentication and Single Organization policies are required to set up Key Connector decryption."
+    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
     "message": "Member Decryption Options"
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API Access Token"
+  },
+  "deviceVerification": {
+    "message": "Verificação do Dispositivo"
+  },
+  "enableDeviceVerification": {
+    "message": "Ativar a Verificação do Dispositivo"
+  },
+  "deviceVerificationDesc": {
+    "message": "Quando ativada, são enviados códigos de verificação para o seu endereço de e-mail ao iniciar sessão a partir de um dispositivo não reconhecido"
+  },
+  "updatedDeviceVerification": {
+    "message": "Verificação do Dispositivo Atualizada"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Tem a certeza de que deseja ativar a Verificação do Dispositivo? Os e-mails com os códigos de verificação serão enviados para: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Entrada necessária."
+  },
+  "inputEmail": {
+    "message": "A entrada não é um endereço de e-mail."
+  },
+  "inputMinLength": {
+    "message": "A entrada deve ter pelo menos $COUNT$ caracteres.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ campos(s) acima precisam da sua atenção.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Ativar"
+  },
+  "on": {
+    "message": "Ligado"
   }
 }

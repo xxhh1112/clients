@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Crea account"
   },
+  "startTrial": {
+    "message": "Inizia il periodo di prova"
+  },
   "logIn": {
     "message": "Accedi"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "La password principale è la password che utilizzi per accedere alla tua cassaforte. È molto importante che tu non la dimentichi. Non c'è modo di recuperare questa password nel caso che tu la dimenticassi."
+  },
+  "masterPassImportant": {
+    "message": "Le password principali non possono essere recuperate se dimenticate!"
   },
   "masterPassHintDesc": {
     "message": "Un suggerimento che può aiutarti a ricordare la tua password principale se la dimentichi."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "L'indirizzo email non è valido."
   },
-  "masterPassRequired": {
-    "message": "La password principale è obbligatoria."
+  "masterPasswordRequired": {
+    "message": "È necessario inserire la password principale."
   },
-  "masterPassLength": {
-    "message": "La password principale deve essere almeno di 8 caratteri."
+  "confirmMasterPasswordRequired": {
+    "message": "È necessario reinserire la password principale."
+  },
+  "masterPasswordMinLength": {
+    "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Cambia la lingua utilizzata dalla cassaforte web."
   },
-  "disableIcons": {
-    "message": "Disabilita icone dei siti web"
+  "enableFavicon": {
+    "message": "Mostra icone del sito"
   },
-  "disableIconsDesc": {
-    "message": "Le icone dei siti web forniscono un'immagine riconoscibile accanto a ogni elemento di accesso."
+  "faviconDesc": {
+    "message": "Mostra un'immagine riconoscibile accanto a ogni login."
   },
   "enableGravatars": {
     "message": "Abilita Gravatar",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Usa immagine profilo caricata da gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Abilitato"
   },
+  "activate": {
+    "message": "Attiva"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1262,6 +1274,9 @@
   },
   "disable": {
     "message": "Disabilita"
+  },
+  "deactivate": {
+    "message": "Disattiva"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Questo metodo di verifica in due passaggi è abilitato sul tuo account."
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Confermi di voler rimuovere questo utente?"
   },
+  "deactivateUserConfirmation": {
+    "message": "Il membro non avrà più accesso all'organizzazione, ma continuerà ad avere accesso alla propria cassaforte."
+  },
+  "activateUserConfirmation": {
+    "message": "Sei sicuro di voler attivare questo utente e concedere l'accesso all'organizzazione?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Attenzione! Questo utente richiede Key Connector per gestire la crittografia. Rimuovere questo utente dalla propria organizzazione disabiliterà definitivamente l'account. Questa azione non può essere annullata. Vuoi procedere?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Utente $ID$ rimosso.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Utente $ID$ disattivato.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Utente $ID$ attivato.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Disattivare l'utente $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Attivare l'utente $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,7 +3168,7 @@
   "acceptPolicies": {
     "message": "Selezionando la casella accetti quanto segue:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "I termini di servizio e l'informativa sulla privacy non sono stati accettati."
   },
   "termsOfService": {
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "L'organizzazione è disabilitata."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Non è possibile accedere agli oggetti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per ricevere assistenza."
   },
   "licenseIsExpired": {
     "message": "La licenza è scaduta."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Clona"
   },
+  "masterPassPolicyTitle": {
+    "message": "Requisiti della password principale"
+  },
   "masterPassPolicyDesc": {
     "message": "Imposta i requisiti minimi di complessità della password principale."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Richiedi login in due passaggi"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Obbliga gli utenti a impostare l'autenticazione a due fattori sul loro account personale."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Disabilitato"
+  },
+  "deactivated": {
+    "message": "Disattivato"
   },
   "sendLink": {
     "message": "Collegamento del Send",
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Sei sicuro di voler rimuovere i seguenti utenti? Il processo potrebbe richiedere alcuni secondi per essere completato e non può essere interrotto o annullato."
   },
+  "deactivateUsersWarning": {
+    "message": "Sei sicuro di voler disattivare i seguenti membri? Non avranno più accesso all'organizzazione, ma continueranno comunque ad avere accesso alle loro casseforti personali. Il processo può richiedere alcuni secondi e non può essere interrotto o annullato."
+  },
+  "activateUsersWarning": {
+    "message": "Sei sicuro di voler attivare i seguenti membri, concedendogli l'accesso all'organizzazione? Il processo potrebbe richiedere alcuni secondi e non può essere interrotto o annullato."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Rimosso correttamente"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Disattivato con successo"
+  },
+  "bulkActivatedMessage": {
+    "message": "Attivato con successo"
+  },
   "bulkFilteredMessage": {
     "message": "Escluso, non applicabile per questa azione."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Rimuovi utenti"
+  },
+  "deactivateUsers": {
+    "message": "Disattiva utenti"
+  },
+  "activateUsers": {
+    "message": "Attiva utenti"
   },
   "error": {
     "message": "Errore"
@@ -4432,10 +4519,10 @@
     "message": "Il timeout della tua cassaforte supera le restrizioni impostate dalla tua organizzazione."
   },
   "vaultCustomTimeoutMinimum": {
-    "message": "Minimum custom timeout is 1 minute."
+    "message": "Il timeout minimo personalizzabile è di 1 minuto."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault Timeout is not within allowed range."
+    "message": "Il timeout della cassaforte non è all'interno dell'intervallo consentito."
   },
   "disablePersonalVaultExport": {
     "message": "Disabilita esportazione cassaforte personale"
@@ -4702,7 +4789,7 @@
     "message": "Conferma la tua identità per continuare."
   },
   "verificationCodeRequired": {
-    "message": "Il codice di verifica è obbligatorio."
+    "message": "È necessario inserire il codice di verifica."
   },
   "invalidVerificationCode": {
     "message": "Codice di verifica non valido"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Abilita la",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "policy SSO",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "per obbligare tutti i membri ad accedere con SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "L'autenticazione SSO e i criteri dell'organizzazione unica sono necessari per configurare la decifratura del connettore chiave."
@@ -5048,7 +5135,7 @@
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
-    "message": "Self-hosted sponsorships synced."
+    "message": "Sponsorizzazione self-hosted sincronizzata."
   },
   "billingManagedByProvider": {
     "message": "Gestito da $PROVIDER$",
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "Token di accesso API"
+  },
+  "deviceVerification": {
+    "message": "Verifica del dispositivo"
+  },
+  "enableDeviceVerification": {
+    "message": "Abilita la verifica del dispositivo"
+  },
+  "deviceVerificationDesc": {
+    "message": "Se abilitato, i codici di verifica vengono inviati al tuo indirizzo email quando accedi da un dispositivo non riconosciuto"
+  },
+  "updatedDeviceVerification": {
+    "message": "Verifica del dispositivo aggiornata"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Sei sicuro di voler abilitare la verifica del dispositivo? Le email con il codice di verifica saranno inviate a: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Input richiesto."
+  },
+  "inputEmail": {
+    "message": "L'input non è un indirizzo email."
+  },
+  "inputMinLength": {
+    "message": "L'input deve contenere almeno $COUNT$ caratteri.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "Il/i campo/i $COUNT$ sopra richiedono la tua attenzione.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Attiva"
+  },
+  "on": {
+    "message": "Attivo"
   }
 }

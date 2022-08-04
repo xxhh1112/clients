@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Stvori račun"
   },
+  "startTrial": {
+    "message": "Start Trial"
+  },
   "logIn": {
     "message": "Prijavi se"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Glavnu lozinku koristiš za pristup svom trezoru. Vrlo je važno da ne zaboraviš glavnu lozinku. Ne postoji način za oporavak lozinke u slučaju da ju zaboraviš."
+  },
+  "masterPassImportant": {
+    "message": "Master passwords cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "Podsjetnik glavne lozinke ti može pomoći da se prisjetiš svoje lozinke ako ju zaboraviš."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Neispravna adresa e-pošte."
   },
-  "masterPassRequired": {
-    "message": "Potrebna je glavna lozinka."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinLength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Promijeni jezik web trezora."
   },
-  "disableIcons": {
-    "message": "Onemogući ikone web mjesta"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableIconsDesc": {
-    "message": "Ikone web mjesta nude prepoznatljivu ikonu pokraj svake stavke za prijavu u vašem trezoru."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableGravatars": {
     "message": "Omogući Gravatar",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Koristi slike učitane s gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Omogućeno"
   },
+  "activate": {
+    "message": "Activate"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1262,6 +1274,9 @@
   },
   "disable": {
     "message": "Onemogući"
+  },
+  "deactivate": {
+    "message": "Deactivate"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Ovaj pružatelj prijave u dva koraka je omogućen na tvojem računu."
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Sigurno želiš ukoniti ovog korisnika?"
   },
+  "deactivateUserConfirmation": {
+    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
+  },
+  "activateUserConfirmation": {
+    "message": "Are you sure you want to activate this user, granting them access to the organization?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Upozorenje! Ovaj korisnik koristi konektor za ključ kako bi upravljao svojim šifriranjem. Uklanjanjem korisnika iz tvoje organizacije korisnički će račun biti trajno onemogućen. Ovu opciju nije moguće opozvati. Sigurno želiš nastaviti?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Uklonjen korisnik $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Deactivated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Activated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Deactivate user $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Activate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,8 +3168,8 @@
   "acceptPolicies": {
     "message": "Označavanjem ove kućice slažete se sa sljedećim:"
   },
-  "acceptPoliciesError": {
-    "message": "Uvjeti korištenja i Pravila privatnosti nisu prihvaćeni."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Uvjeti korištenja"
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organizacija je onemogućena."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "Licenca je istekla."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Kloniraj"
   },
+  "masterPassPolicyTitle": {
+    "message": "Master password requirements"
+  },
   "masterPassPolicyDesc": {
     "message": "Postavi smjernice sigurnosti koju glavna lozinka mora zadovoljiti."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Zahtijevaj da korisnici uključe prijavu u dva koraka na svojim osobnim računima."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Onemogućeno"
+  },
+  "deactivated": {
+    "message": "Deactivated"
   },
   "sendLink": {
     "message": "Veza na Send",
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Sigurno želiš ukloniti sljedeće korisnike? Ova radnja može potrajati i nije ga moguće prekinuti ili poništiti."
   },
+  "deactivateUsersWarning": {
+    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
+  "activateUsersWarning": {
+    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Uspješno uklonjeno"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Deactivated successfully"
+  },
+  "bulkActivatedMessage": {
+    "message": "Activated successfully"
+  },
   "bulkFilteredMessage": {
     "message": "Isključeno, nije primijenjivo na ovu radnju."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Ukloni korisnike"
+  },
+  "deactivateUsers": {
+    "message": "Deactivate Users"
+  },
+  "activateUsers": {
+    "message": "Activate Users"
   },
   "error": {
     "message": "Greška"
@@ -4733,18 +4820,18 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Omogući",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO autentifikaciju",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "kako bi se svi članovi mogli prijaviti sa SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "SSO Authentication and Single Organization policies are required to set up Key Connector decryption."
+    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
     "message": "Opcije dešifriranja za članove"
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API Access Token"
+  },
+  "deviceVerification": {
+    "message": "Device Verification"
+  },
+  "enableDeviceVerification": {
+    "message": "Enable Device Verification"
+  },
+  "deviceVerificationDesc": {
+    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
+  },
+  "updatedDeviceVerification": {
+    "message": "Updated Device Verification"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Input is required."
+  },
+  "inputEmail": {
+    "message": "Input is not an email-address."
+  },
+  "inputMinLength": {
+    "message": "Input must be at least $COUNT$ characters long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Turn on"
+  },
+  "on": {
+    "message": "On"
   }
 }

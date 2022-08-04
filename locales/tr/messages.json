@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Hesap aç"
   },
+  "startTrial": {
+    "message": "Denemeyi başlat"
+  },
   "logIn": {
     "message": "Giriş yap"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Ana parola, kasanıza ulaşmak için kullanacağınız paroladır. Ana parolanızı unutmamanız çok önemlidir. Unutursanız parolalarınızı asla kurtaramazsınız."
+  },
+  "masterPassImportant": {
+    "message": "Master passwords cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz."
@@ -623,10 +629,13 @@
   "invalidEmail": {
     "message": "Geçersiz e-posta adresi."
   },
-  "masterPassRequired": {
-    "message": "Ana parola gerekli."
+  "masterPasswordRequired": {
+    "message": "Ana parola gereklidir."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Ana parolayı yeniden yazmalısınız."
+  },
+  "masterPasswordMinLength": {
     "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
   },
   "masterPassDoesntMatch": {
@@ -1067,7 +1076,7 @@
     "message": "Hesabı sil"
   },
   "deleteAccountDesc": {
-    "message": "Hesabınızı ve tüm ilişkili verileri silmek için aşağıdan devam edin."
+    "message": "Hesabınızı ve ilişkili tüm verileri silmek için aşağıya devam edin."
   },
   "deleteAccountWarning": {
     "message": "Hesabınızı silmek kalıcıdır. Geri alınamaz."
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Web kasasında kullanılan dili değiştirin."
   },
-  "disableIcons": {
-    "message": "Site simgelerini devre dışı bırak"
+  "enableFavicon": {
+    "message": "Web sitesi simgelerini göster"
   },
-  "disableIconsDesc": {
-    "message": "Web sitesi simgeleri, kasanızdaki her kaydın yanında o siteyi tanımanıza yardımcı olan bir resim sunar."
+  "faviconDesc": {
+    "message": "Hesapların yanında tanıdık görseller göster."
   },
   "enableGravatars": {
-    "message": "Gravatar'ı etkinleştir",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "message": "Gravatar'ı Etkinleştir",
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "gravatar.com adresinden yüklenen avatarları kullan."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Etkin"
   },
+  "activate": {
+    "message": "Activate"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1262,6 +1274,9 @@
   },
   "disable": {
     "message": "Devre dışı bırak"
+  },
+  "deactivate": {
+    "message": "Deactivate"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Bu iki aşamalı giriş sağlayıcısı hesabınızda etkin durumda."
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Bu kullanıcıyı silmek istediğinizden emin misiniz?"
   },
+  "deactivateUserConfirmation": {
+    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
+  },
+  "activateUserConfirmation": {
+    "message": "Are you sure you want to activate this user, granting them access to the organization?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Uyarı! Bu kullanıcı, şifrelemelerini yönetmek için Key Connector'a ihtiyaç duyuyor. Bu kullanıcıyı kuruluşunuzdan çıkarırsanız hesabı kalıcı olarak devre dışı kalacaktır. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Kullanıcı silindi: $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Deactivated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Activated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Deactivate user $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Activate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,7 +3168,7 @@
   "acceptPolicies": {
     "message": "Bu kutuyu işaretleyerek aşağıdakileri kabul etmiş olursunuz:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Hizmet Koşulları ve Gizlilik Politikası kabul edilmemiş."
   },
   "termsOfService": {
@@ -3148,7 +3205,7 @@
     "message": "4 saat"
   },
   "onRefresh": {
-    "message": "On Browser Refresh"
+    "message": "On browser refresh"
   },
   "dateUpdated": {
     "message": "Güncelleme",
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Kuruluş devre dışı."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Devre dışı kuruluşlardaki kayıtlara erişilemez. Destek almak için kuruluş sahibinizle iletişime geçin."
   },
   "licenseIsExpired": {
     "message": "Lisans süresi doldu."
@@ -3285,14 +3345,20 @@
   "clone": {
     "message": "Klonla"
   },
+  "masterPassPolicyTitle": {
+    "message": "Ana parola gereksinimleri"
+  },
   "masterPassPolicyDesc": {
     "message": "Ana parola gücü için minimum gereksinimleri ayarlayın."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Kullanıcıların hesaplarında iki aşamalı giriş kullanmalarını zorunlu tutun."
   },
   "twoStepLoginPolicyWarning": {
-    "message": "Organization members who are not Owners or Administrators and do not have two-step login enabled for their personal account will be removed from the organization and will receive an email notifying them about the change."
+    "message": "Organization members who are not Owners or Administrators and do not have two-step login turned on for their account will be removed from the organization and will receive an email notifying them about the change."
   },
   "twoStepLoginPolicyUserWarning": {
     "message": "İki aşamalı girişin etkinleştirilmesi gereken bir kuruluşa üyesisiniz. İki aşamalı giriş sağlayıcılarının tümünü devre dışı bırakırsanız bu kuruluşlardan otomatik olarak kaldırılırsınız."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Devre dışı"
+  },
+  "deactivated": {
+    "message": "Deactivated"
   },
   "sendLink": {
     "message": "Send bağlantısı",
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Aşağıdaki kullanıcıları kaldırmak istediğinize emin misiniz? İşlemin tamamlanması birkaç saniye sürer ve durdurulamaz veya iptal edilemez."
   },
+  "deactivateUsersWarning": {
+    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
+  "activateUsersWarning": {
+    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Başarıyla kaldırıldı"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Deactivated successfully"
+  },
+  "bulkActivatedMessage": {
+    "message": "Activated successfully"
+  },
   "bulkFilteredMessage": {
     "message": "İstisna. Bu eylem için geçerli değildir."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Kullanıcıları kaldır"
+  },
+  "deactivateUsers": {
+    "message": "Deactivate Users"
+  },
+  "activateUsers": {
+    "message": "Activate Users"
   },
   "error": {
     "message": "Hata"
@@ -4398,7 +4485,7 @@
     "message": "Kasa zaman aşımı"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Configure a maximum vault timeout for all users."
+    "message": "Set a maximum vault timeout for members."
   },
   "maximumVaultTimeoutLabel": {
     "message": "Maksimum kasa zaman aşımı"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Tüm üyelerin SSO ile giriş yapmasını zorunlu tutmak için",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO kimlik doğrulama ilkesini",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "etkinleştirin.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "Key Connector ile çözmeyi kurmak için \"SSO kimlik doğrulama\" ve \"tek kuruluş\" ilkeleri gereklidir."
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API erişim anahtarı"
+  },
+  "deviceVerification": {
+    "message": "Cihaz doğrulama"
+  },
+  "enableDeviceVerification": {
+    "message": "Cihaz doğrulamasını etkinleştir"
+  },
+  "deviceVerificationDesc": {
+    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
+  },
+  "updatedDeviceVerification": {
+    "message": "Cihaz doğrulaması güncellendi"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Girdi gerekli."
+  },
+  "inputEmail": {
+    "message": "Input is not an email-address."
+  },
+  "inputMinLength": {
+    "message": "Input must be at least $COUNT$ characters long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Aç"
+  },
+  "on": {
+    "message": "Açık"
   }
 }

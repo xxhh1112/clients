@@ -572,6 +572,9 @@
   "createAccount": {
     "message": "Opprett en konto"
   },
+  "startTrial": {
+    "message": "Start Trial"
+  },
   "logIn": {
     "message": "Logg på"
   },
@@ -592,6 +595,9 @@
   },
   "masterPassDesc": {
     "message": "Superpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er veldig viktig at du aldri glemmer ditt superpassord. Det er ingen måter å få tilbake passordet på dersom du noensinne skulle klare å glemme det."
+  },
+  "masterPassImportant": {
+    "message": "Master passwords cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "Et hint for superpassordet kan hjelpe deg med å huske på passordet dersom du skulle glemme det."
@@ -623,11 +629,14 @@
   "invalidEmail": {
     "message": "Ugyldig E-postadresse."
   },
-  "masterPassRequired": {
-    "message": "Superpassordet er påkrevd."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Superpassordet må være ≥8 tegn langt."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinLength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Superpassord-bekreftelsen er ikke samsvarende."
@@ -1151,15 +1160,15 @@
   "languageDesc": {
     "message": "Endre språket som brukes av netthvelvet."
   },
-  "disableIcons": {
-    "message": "Skru av nettstedsikoner"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableIconsDesc": {
-    "message": "Nettstedsikoner sørger for et gjenkjennelig bilde ved hvert innloggingselement i hvelvet ditt."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableGravatars": {
     "message": "Skru på Gravatarer",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
+    "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
     "message": "Bruk avatarbilder som har blitt lastet inn fra gravatar.com."
@@ -1238,6 +1247,9 @@
   "enabled": {
     "message": "Aktivert"
   },
+  "activate": {
+    "message": "Activate"
+  },
   "premium": {
     "message": "Premium",
     "description": "Premium Membership"
@@ -1262,6 +1274,9 @@
   },
   "disable": {
     "message": "Deaktiver"
+  },
+  "deactivate": {
+    "message": "Deactivate"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Denne 2-trinnsleverandøren er aktivert på din konto."
@@ -2226,6 +2241,12 @@
   "removeUserConfirmation": {
     "message": "Er du sikker på at du vil slette denne brukeren?"
   },
+  "deactivateUserConfirmation": {
+    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
+  },
+  "activateUserConfirmation": {
+    "message": "Are you sure you want to activate this user, granting them access to the organization?"
+  },
   "removeUserConfirmationKeyConnector": {
     "message": "Advarsel! Denne brukeren krever nøkkelkobling for å administrere krypteringen. Fjerner du denne brukeren fra organisasjonen din vil deaktivere kontoen sin. Denne handlingen kan ikke angres. Vil du fortsette?"
   },
@@ -2564,6 +2585,42 @@
   },
   "removedUserId": {
     "message": "Fjernet brukeren $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivatedUserId": {
+    "message": "Deactivated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activatedUserId": {
+    "message": "Activated user $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deactivateUserId": {
+    "message": "Deactivate user $ID$?",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "activateUserId": {
+    "message": "Activate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3111,8 +3168,8 @@
   "acceptPolicies": {
     "message": "Ved å huke av denne boksen sier du deg enig i følgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Bruksvilkårene og personvernerklæring er ikke godkjent."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Tjenestevilkår"
@@ -3160,6 +3217,9 @@
   },
   "organizationIsDisabled": {
     "message": "Organisasjonen er skrudd av."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "Lisensen har utløpt."
@@ -3285,8 +3345,14 @@
   "clone": {
     "message": "Klon"
   },
+  "masterPassPolicyTitle": {
+    "message": "Master password requirements"
+  },
   "masterPassPolicyDesc": {
     "message": "Sett minimumskrav til hovedpassordets styrke."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Krev at brukere konfigurere totrinns pålogging på sine personlige kontoer."
@@ -3617,6 +3683,9 @@
   },
   "disabled": {
     "message": "Deaktivert"
+  },
+  "deactivated": {
+    "message": "Deactivated"
   },
   "sendLink": {
     "message": "Send lenke",
@@ -4219,6 +4288,12 @@
   "removeUsersWarning": {
     "message": "Er du sikker på at du vil fjerne følgende brukere? Prosessen kan ta noen sekunder å fullføre og ikke kan avbrytes eller avbrytes."
   },
+  "deactivateUsersWarning": {
+    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
+  "activateUsersWarning": {
+    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
+  },
   "theme": {
     "message": "Tema"
   },
@@ -4249,6 +4324,12 @@
   "bulkRemovedMessage": {
     "message": "Fjernet"
   },
+  "bulkDeactivatedMessage": {
+    "message": "Deactivated successfully"
+  },
+  "bulkActivatedMessage": {
+    "message": "Activated successfully"
+  },
   "bulkFilteredMessage": {
     "message": "Unntatt dette, gjelder ikke for dette tiltaket."
   },
@@ -4257,6 +4338,12 @@
   },
   "removeUsers": {
     "message": "Fjern brukere"
+  },
+  "deactivateUsers": {
+    "message": "Deactivate Users"
+  },
+  "activateUsers": {
+    "message": "Activate Users"
   },
   "error": {
     "message": "Feil"
@@ -4733,15 +4820,15 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Skru på",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO godkjenningspolicy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "for å få alle medlemmer til å logge inn med SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "SSO-autentisering og Enslig organisasjons politikk er nødvendig for å sette opp nøkkel Connector dekryptering."
@@ -5075,5 +5162,56 @@
   },
   "apiAccessToken": {
     "message": "API tilgangstoken"
+  },
+  "deviceVerification": {
+    "message": "Device Verification"
+  },
+  "enableDeviceVerification": {
+    "message": "Enable Device Verification"
+  },
+  "deviceVerificationDesc": {
+    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
+  },
+  "updatedDeviceVerification": {
+    "message": "Updated Device Verification"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "inputRequired": {
+    "message": "Input is required."
+  },
+  "inputEmail": {
+    "message": "Input is not an email-address."
+  },
+  "inputMinLength": {
+    "message": "Input must be at least $COUNT$ characters long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Turn on"
+  },
+  "on": {
+    "message": "On"
   }
 }
