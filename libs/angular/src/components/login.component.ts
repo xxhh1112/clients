@@ -1,4 +1,5 @@
 import { Directive, Input, NgZone, OnInit } from "@angular/core";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { take } from "rxjs/operators";
 
@@ -23,11 +24,18 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
 
   masterPassword = "";
   showPassword = false;
+  showLoginOptions = true;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
+
+  formGroup = this.formBuilder.group({
+    email: ["", [Validators.required, Validators.email]],
+    masterPassword: ["", [Validators.required, Validators.minLength(8)]],
+    rememberEmail: [false],
+  });
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
@@ -44,7 +52,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     protected passwordGenerationService: PasswordGenerationService,
     protected cryptoFunctionService: CryptoFunctionService,
     protected logService: LogService,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    protected formBuilder: UntypedFormBuilder
   ) {
     super(environmentService, i18nService, platformUtilsService);
   }

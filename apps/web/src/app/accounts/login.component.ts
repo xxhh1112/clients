@@ -1,4 +1,5 @@
 import { Component, NgZone } from "@angular/core";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -45,7 +46,8 @@ export class LoginComponent extends BaseLoginComponent {
     ngZone: NgZone,
     protected stateService: StateService,
     private messagingService: MessagingService,
-    private routerService: RouterService
+    private routerService: RouterService,
+    formBuilder: UntypedFormBuilder
   ) {
     super(
       authService,
@@ -57,7 +59,8 @@ export class LoginComponent extends BaseLoginComponent {
       passwordGenerationService,
       cryptoFunctionService,
       logService,
-      ngZone
+      ngZone,
+      formBuilder
     );
     this.onSuccessfulLogin = async () => {
       this.messagingService.send("setFullWidth");

@@ -100,3 +100,126 @@
     </div>
   </div>
 </form>
+
+<!-- 
+  * ngContainer to show view with email with continue button
+  * if email has valid value show ngTeplate view with other login options
+
+
+
+-->
+<ng-container>
+  <form
+    #form
+    (ngSubmit)="submit()"
+    [appApiAction]="formPromise"
+    class="tw-container tw-mx-auto"
+    [formGroup]="formGroup"
+  >
+    <div
+      class="tw-flex tw-flex-col tw-items-center tw-max-w-lg tw-mx-auto tw-p-8 tw-mt-5 tw-justify-center"
+    >
+      <div>
+        <img class="logo logo-themed" alt="Bitwarden" />
+        <p class="tw-mt-3 tw-text-xl tw-text-center tw-mx-4 tw-mb-4">
+          {{ "loginOrCreateNewAccount" | i18n }}
+        </p>
+        <div
+          class="tw-p-4 tw-border tw-mt-3 tw-rounded-md tw-border-secondary-500 tw-bg-background"
+        >
+          <bit-callout
+            type="warning"
+            title="{{ 'resetPasswordPolicyAutoEnroll' | i18n }}"
+            *ngIf="showResetPasswordAutoEnrollWarning"
+          >
+            {{ "resetPasswordAutoEnrollInviteWarning" | i18n }}
+          </bit-callout>
+
+          <div class="tw-mb-3">
+            <bit-form-field>
+              <bit-label>{{ "emailAddress" | i18n }}</bit-label>
+              <input id="login_input_email" bitInput type="email" formControlName="email" />
+            </bit-form-field>
+          </div>
+
+          <div class="tw-mb-3">
+            <bit-form-field>
+              <bit-label>{{ "masterPass" | i18n }}</bit-label>
+              <input
+                id="login_input_master-password"
+                bitInput
+                type="{{ showPassword ? 'text' : 'password' }}"
+                formControlName="masterPassword"
+              />
+              <button type="button" bitSuffix bitButton (click)="togglePassword()">
+                <i
+                  aria-hidden="true"
+                  class="bwi bwi-lg bwi-eye"
+                  [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                ></i>
+              </button>
+              <bit-hint>
+                <a routerLink="/hint">{{ "getMasterPasswordHint" | i18n }}</a>
+              </bit-hint>
+            </bit-form-field>
+          </div>
+
+          <div class="tw-mb-3 tw-flex tw-items-start">
+            <div class="tw-flex tw-h-6 tw-items-center">
+              <input
+                id="login_input_remember-email"
+                class="tw-w-4 tw-rounded tw-border"
+                bitInput
+                type="checkbox"
+                formControlName="rememberEmail"
+              />
+            </div>
+            <bit-label class="ml-2">
+              {{ "rememberEmail" | i18n }}
+            </bit-label>
+          </div>
+
+          <hr />
+
+          <div [hidden]="!showCaptcha()">
+            <iframe id="hcaptcha_iframe" height="80"></iframe>
+          </div>
+
+          <div class="tw-mb-3 tw-flex">
+            <bit-submit-button
+              class="!tw-w-1/2 tw-inline-block"
+              buttonType="primary"
+              [loading]="form.loading"
+            >
+              <span> <i class="bwi bwi-sign-in"></i> {{ "logIn" | i18n }} </span>
+            </bit-submit-button>
+
+            <a
+              bitButton
+              buttonType="secondary"
+              routerLink="/register"
+              class="tw-w-1/2 tw-inline-block"
+            >
+              <i class="bwi bwi-pencil-square"></i>
+              {{ "createAccount" | i18n }}
+            </a>
+          </div>
+
+          <div class="tw-mb-3">
+            <a routerLink="/sso" bitButton buttonType="secondary" class="tw-w-full">
+              <i class="bwi bwi-sign-in tw-mr-2"></i>
+              {{ "loginWithDevice" | i18n }}
+            </a>
+          </div>
+
+          <div class="tw-mb-3">
+            <a routerLink="/sso" bitButton buttonType="secondary" class="tw-w-full">
+              <i class="bwi bwi-provider tw-mr-2"></i>
+              {{ "enterpriseSingleSignOn" | i18n }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-container>

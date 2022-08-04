@@ -569,8 +569,14 @@
   "loginOrCreateNewAccount": {
     "message": "Log in or create a new account to access your secure vault."
   },
+  "loginWithDevice" : {
+    "message": "Log in with device"
+  },
   "createAccount": {
     "message": "Create Account"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
   },
   "startTrial": {
     "message": "Start Trial"
