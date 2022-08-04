@@ -90,7 +90,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       return;
     }
 
-    //desktop, browser
+    //desktop, browser; This should be removed once all clients use reactive forms
     if (this.formGroup.invalid && showToast) {
       const errorText = this.getErrorToastMessage();
       this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
