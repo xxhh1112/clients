@@ -11,6 +11,7 @@ import { AcceptEmergencyComponent } from "./accounts/accept-emergency.component"
 import { AcceptOrganizationComponent } from "./accounts/accept-organization.component";
 import { HintComponent } from "./accounts/hint.component";
 import { LockComponent } from "./accounts/lock.component";
+import { LoginWithDeviceComponent } from "./accounts/login-with-device.component";
 import { LoginComponent } from "./accounts/login.component";
 import { RecoverDeleteComponent } from "./accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "./accounts/recover-two-factor.component";
@@ -60,6 +61,12 @@ const routes: Routes = [
         canActivate: [HomeGuard], // Redirects either to vault, login or lock page.
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
+      {
+        path: "login-with-device",
+        component: LoginWithDeviceComponent,
+        canActivate: [UnauthGuard],
+        data: { titleId: "loginWithDevice" },
+      },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "register",

@@ -1,0 +1,41 @@
+<div
+  class="tw-flex tw-flex-col tw-items-center tw-max-w-lg tw-mx-auto tw-p-8 tw-mt-5 tw-justify-center"
+>
+  <div>
+    <img class="logo logo-themed" alt="Bitwarden" />
+    <p class="tw-mt-3 tw-text-xl tw-text-center tw-mx-4 tw-mb-4">
+      {{ "loginOrCreateNewAccount" | i18n }}
+    </p>
+
+    <div
+      class="tw-p-6 tw-border tw-border-solid tw-mt-3 tw-rounded-md tw-border-secondary-300 tw-bg-background"
+    >
+      <h2 class="tw-text-xl tw-font-semibold tw-mb-6">{{ "logInInitiated" | i18n }}</h2>
+
+      <div class="tw-text-light">
+        <p class="tw-mb-6">{{ "notificationSentDevice" | i18n }}</p>
+
+        <p class="tw-mb-6">
+          {{ "fingerprintMatchInfo" | i18n }}
+        </p>
+      </div>
+
+      <div class="tw-mb-6">
+        <h4 class="tw-font-semibold">{{ "fingerprintPhraseHeader" | i18n }}</h4>
+
+        <code class="">{{ fingerPrint }}</code>
+      </div>
+
+      <div class="tw-my-10">
+        <a routerLink="">{{ "resendNotification" | i18n }}</a>
+      </div>
+
+      <hr />
+
+      <div class="tw-mt-3 tw-text-light">
+        <p>{{ "loginWithDevciceEnabledInfo" | i18n }}</p>
+        <a routerLink="/login">{{ "View all log in options" | i18n }}</a>
+      </div>
+    </div>
+  </div>
+</div>
