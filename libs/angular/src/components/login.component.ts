@@ -210,4 +210,9 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     const name = error.errorName.charAt(0).toUpperCase() + error.errorName.slice(1);
     return `${error.controlName}${name}`;
   }
+
+  protected focusInput() {
+    const email = this.formGroup.get("email")?.value;
+    document.getElementById(email == null || email === "" ? "email" : "masterPassword").focus();
+  }
 }

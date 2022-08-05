@@ -169,7 +169,7 @@ export class LoginComponent extends BaseLoginComponent {
     if (!rememberEmail) {
       await this.stateService.setRememberedEmail(null);
     }
-    await super.submit();
+    await super.submit(false);
   }
 
   private getPasswordStrengthUserInput() {
