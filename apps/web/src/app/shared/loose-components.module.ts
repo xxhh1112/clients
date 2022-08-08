@@ -59,13 +59,10 @@ import { SingleOrgPolicyComponent } from "../organizations/policies/single-org.c
 import { TwoFactorAuthenticationPolicyComponent } from "../organizations/policies/two-factor-authentication.component";
 import { AccountComponent as OrgAccountComponent } from "../organizations/settings/account.component";
 import { AdjustSubscription } from "../organizations/settings/adjust-subscription.component";
-import { BillingSyncApiKeyComponent } from "../organizations/settings/billing-sync-api-key.component";
 import { ChangePlanComponent } from "../organizations/settings/change-plan.component";
 import { DeleteOrganizationComponent } from "../organizations/settings/delete-organization.component";
 import { DownloadLicenseComponent } from "../organizations/settings/download-license.component";
 import { ImageSubscriptionHiddenComponent as OrgSubscriptionHiddenComponent } from "../organizations/settings/image-subscription-hidden.component";
-import { OrganizationBillingComponent } from "../organizations/settings/organization-billing.component";
-import { OrganizationSubscriptionComponent } from "../organizations/settings/organization-subscription.component";
 import { SettingsComponent as OrgSettingComponent } from "../organizations/settings/settings.component";
 import { TwoFactorSetupComponent as OrgTwoFactorSetupComponent } from "../organizations/settings/two-factor-setup.component";
 import { AcceptFamilySponsorshipComponent } from "../organizations/sponsorships/accept-family-sponsorship.component";
@@ -89,6 +86,8 @@ import { AddCreditComponent } from "../settings/add-credit.component";
 import { AdjustPaymentComponent } from "../settings/adjust-payment.component";
 import { AdjustStorageComponent } from "../settings/adjust-storage.component";
 import { ApiKeyComponent } from "../settings/api-key.component";
+import { BillingHistoryViewComponent } from "../settings/billing-history-view.component";
+import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
 import { ChangeKdfComponent } from "../settings/change-kdf.component";
@@ -128,7 +127,6 @@ import { TwoFactorWebAuthnComponent } from "../settings/two-factor-webauthn.comp
 import { TwoFactorYubiKeyComponent } from "../settings/two-factor-yubikey.component";
 import { UpdateKeyComponent } from "../settings/update-key.component";
 import { UpdateLicenseComponent } from "../settings/update-license.component";
-import { UserBillingHistoryComponent } from "../settings/user-billing-history.component";
 import { UserSubscriptionComponent } from "../settings/user-subscription.component";
 import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.component";
 import { VerifyEmailComponent } from "../settings/verify-email.component";
@@ -177,7 +175,6 @@ import { SharedModule } from ".";
     AdjustSubscription,
     ApiKeyComponent,
     AttachmentsComponent,
-    BillingSyncApiKeyComponent,
     BillingSyncKeyComponent,
     BulkActionsComponent,
     BulkDeleteComponent,
@@ -216,10 +213,8 @@ import { SharedModule } from ".";
     OrganizationSwitcherComponent,
     OrgAccountComponent,
     OrgAddEditComponent,
-    OrganizationBillingComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
-    OrganizationSubscriptionComponent,
     OrgAttachmentsComponent,
     OrgBulkConfirmComponent,
     OrgBulkRestoreRevokeComponent,
@@ -299,7 +294,8 @@ import { SharedModule } from ".";
     UpdateLicenseComponent,
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
-    UserBillingHistoryComponent,
+    BillingHistoryComponent,
+    BillingHistoryViewComponent,
     UserLayoutComponent,
     UserSubscriptionComponent,
     UserVerificationComponent,
@@ -360,10 +356,8 @@ import { SharedModule } from ".";
     OrganizationSwitcherComponent,
     OrgAccountComponent,
     OrgAddEditComponent,
-    OrganizationBillingComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
-    OrganizationSubscriptionComponent,
     OrgAttachmentsComponent,
     OrgBulkConfirmComponent,
     OrgBulkRestoreRevokeComponent,
@@ -442,7 +436,8 @@ import { SharedModule } from ".";
     UpdateLicenseComponent,
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
-    UserBillingHistoryComponent,
+    BillingHistoryComponent,
+    BillingHistoryViewComponent,
     UserLayoutComponent,
     UserSubscriptionComponent,
     UserVerificationComponent,

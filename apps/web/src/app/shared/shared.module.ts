@@ -14,6 +14,7 @@ import {
   FormFieldModule,
   SubmitButtonModule,
   MenuModule,
+  TabsModule,
   IconModule,
 } from "@bitwarden/components";
 
@@ -46,6 +47,7 @@ import "./locales";
     FormFieldModule,
     SubmitButtonModule,
     IconModule,
+    TabsModule,
   ],
   exports: [
     CommonModule,
@@ -65,6 +67,7 @@ import "./locales";
     FormFieldModule,
     SubmitButtonModule,
     IconModule,
+    TabsModule,
   ],
   providers: [DatePipe],
   bootstrap: [],

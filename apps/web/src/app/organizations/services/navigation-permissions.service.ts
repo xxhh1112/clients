@@ -15,8 +15,11 @@ const permissions = {
     Permissions.ManageSso,
     Permissions.ManageScim,
   ],
-  tools: [Permissions.AccessImportExport, Permissions.AccessReports],
-  settings: [Permissions.ManageOrganization],
+  members: [Permissions.ManageUsers, Permissions.ManageUsersPassword],
+  groups: [Permissions.ManageGroups],
+  reporting: [Permissions.AccessReports, Permissions.AccessEventLogs],
+  billing: [Permissions.ManageBilling],
+  settings: [Permissions.ManageOrganization, Permissions.ManagePolicies, Permissions.ManageSso],
 };
 
 export class NavigationPermissionsService {
@@ -30,21 +33,30 @@ export class NavigationPermissionsService {
 
   static canAccessAdmin(organization: Organization): boolean {
     return (
-      this.canAccessTools(organization) ||
-      this.canAccessSettings(organization) ||
-      this.canAccessManage(organization)
+      this.canAccessMembers(organization) ||
+      this.canAccessGroups(organization) ||
+      this.canAccessReporting(organization) ||
+      this.canAccessBilling(organization)
     );
   }
 
-  static canAccessTools(organization: Organization): boolean {
-    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("tools"));
+  static canAccessMembers(organization: Organization): boolean {
+    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("members"));
+  }
+
+  static canAccessGroups(organization: Organization): boolean {
+    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("groups"));
+  }
+
+  static canAccessReporting(organization: Organization): boolean {
+    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("reporting"));
+  }
+
+  static canAccessBilling(organization: Organization): boolean {
+    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("billing"));
   }
 
   static canAccessSettings(organization: Organization): boolean {
     return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("settings"));
-  }
-
-  static canAccessManage(organization: Organization): boolean {
-    return organization.hasAnyPermission(NavigationPermissionsService.getPermissions("manage"));
   }
 }

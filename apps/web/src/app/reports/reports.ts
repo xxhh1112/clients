@@ -1,4 +1,4 @@
-import { ReportEntry } from "./models/report-entry";
+import { ReportEntry } from "./shared";
 
 export enum ReportType {
   ExposedPasswords = "exposedPasswords",

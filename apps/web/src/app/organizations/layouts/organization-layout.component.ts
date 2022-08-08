@@ -50,49 +50,29 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
     this.organization = await this.organizationService.get(this.organizationId);
   }
 
-  get showManageTab(): boolean {
-    return NavigationPermissionsService.canAccessManage(this.organization);
-  }
-
-  get showToolsTab(): boolean {
-    return NavigationPermissionsService.canAccessTools(this.organization);
-  }
-
   get showSettingsTab(): boolean {
     return NavigationPermissionsService.canAccessSettings(this.organization);
   }
 
-  get toolsRoute(): string {
-    return this.organization.canAccessImportExport
-      ? "tools/import"
-      : "tools/exposed-passwords-report";
+  get showMembersTab(): boolean {
+    return NavigationPermissionsService.canAccessMembers(this.organization);
   }
 
-  get manageRoute(): string {
-    let route: string;
-    switch (true) {
-      case this.organization.canManageUsers:
-        route = "manage/people";
-        break;
-      case this.organization.canViewAssignedCollections || this.organization.canViewAllCollections:
-        route = "manage/collections";
-        break;
-      case this.organization.canManageGroups:
-        route = "manage/groups";
-        break;
-      case this.organization.canManagePolicies:
-        route = "manage/policies";
-        break;
-      case this.organization.canManageSso:
-        route = "manage/sso";
-        break;
-      case this.organization.canManageScim:
-        route = "manage/scim";
-        break;
-      case this.organization.canAccessEventLogs:
-        route = "manage/events";
-        break;
-    }
-    return route;
+  get showGroupsTab(): boolean {
+    return (
+      this.organization.useGroups && NavigationPermissionsService.canAccessGroups(this.organization)
+    );
+  }
+
+  get showReportsTab(): boolean {
+    return NavigationPermissionsService.canAccessReporting(this.organization);
+  }
+
+  get showBillingTab(): boolean {
+    return NavigationPermissionsService.canAccessBilling(this.organization);
+  }
+
+  get reportTabLabel(): string {
+    return this.organization.useEvents ? "reporting" : "reports";
   }
 }

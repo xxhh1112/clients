@@ -1,18 +1,31 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
+import { filter, Subject, takeUntil } from "rxjs";
 
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 
-import { reports, ReportType } from "../reports";
-import { ReportEntry, ReportVariant } from "../shared";
+import { ReportVariant, reports, ReportType, ReportEntry } from "../../reports";
 
 @Component({
-  selector: "app-reports-home",
+  selector: "app-org-reports-home",
   templateUrl: "reports-home.component.html",
 })
-export class ReportsHomeComponent implements OnInit {
+export class ReportsHomeComponent implements OnInit, OnDestroy {
   reports: ReportEntry[];
 
-  constructor(private stateService: StateService) {}
+  homepage = true;
+  private destrory$: Subject<void> = new Subject<void>();
+
+  constructor(private stateService: StateService, router: Router) {
+    router.events
+      .pipe(
+        takeUntil(this.destrory$),
+        filter((event) => event instanceof NavigationEnd)
+      )
+      .subscribe((event) => {
+        this.homepage = (event as NavigationEnd).urlAfterRedirects.endsWith("/reports");
+      });
+  }
 
   async ngOnInit(): Promise<void> {
     const userHasPremium = await this.stateService.getCanAccessPremium();
@@ -42,10 +55,11 @@ export class ReportsHomeComponent implements OnInit {
         ...reports[ReportType.Inactive2fa],
         variant: reportRequiresPremium,
       },
-      {
-        ...reports[ReportType.DataBreach],
-        variant: ReportVariant.Enabled,
-      },
     ];
+  }
+
+  ngOnDestroy(): void {
+    this.destrory$.next();
+    this.destrory$.complete();
   }
 }

@@ -48,7 +48,7 @@ export class GroupsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.route.parent.parent.params.subscribe(async (params) => {
+    this.route.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       const organization = await this.organizationService.get(this.organizationId);
       if (organization == null || !organization.useGroups) {

@@ -1481,6 +1481,10 @@
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
     "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
+  "orgsReportsDesc": {
+    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+  },
   "unsecuredWebsitesReport": {
     "message": "Unsecure Websites"
   },
@@ -2924,6 +2928,9 @@
   },
   "myOrganization": {
     "message": "My Organization"
+  },
+  "organizationInfo": {
+    "message": "Organization Info"
   },
   "deleteOrganization": {
     "message": "Delete Organization"
@@ -5303,6 +5310,12 @@
   },
   "on": {
     "message": "On"
+  },
+  "members": {
+    "message": "Members"
+  },
+  "reporting": {
+    "message": "Reporting"
   },
   "cardBrandMir": {
     "message": "Mir"
