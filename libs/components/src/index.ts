@@ -8,6 +8,7 @@ export * from "./menu";
 export * from "./dialog";
 export * from "./submit-button";
 export * from "./link";
+export * from "./table";
 export * from "./tabs";
 export * from "./toggle-group";
 export * from "./utils/i18n-mock.service";

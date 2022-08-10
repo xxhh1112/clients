@@ -8,7 +8,7 @@ import { SMGuard } from "./sm.guard";
 
 const routes: Routes = [
   {
-    path: "",
+    path: ":organizationId",
     component: LayoutComponent,
     canActivate: [SMGuard],
     children: [
