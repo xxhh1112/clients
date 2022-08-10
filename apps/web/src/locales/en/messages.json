@@ -5312,5 +5312,44 @@
   },
   "numberOfUsers": {
     "message": "Number of users"
+  },
+  "projects":{
+    "message": "Projects"
+  },
+  "lastEdited":{
+    "message": "Last Edited"
+  },
+  "editSecret":{
+    "message": "Edit Secret"
+  },
+  "copySecretName":{
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue":{
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret":{
+    "message": "Delete Secret"
+  },
+  "deleteSecrets":{
+    "message": "Delete Secrets"
+  },
+  "project":{
+    "message": "Project"
+  },
+  "secret":{
+    "message": "Secret"
+  },
+  "serviceAccount":{
+    "message": "Service Account"
+  },
+  "new":{
+    "message": "New"
+  },
+  "secrets":{
+    "message":"Secrets"
+  },
+  "searchSecrets":{
+    "message":"Search Secrets"
   }
 }
