@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -19,7 +19,7 @@ export class PurgeVaultComponent {
   formPromise: Promise<any>;
 
   constructor(
-    private apiService: ApiService,
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private userVerificationService: UserVerificationService,
@@ -31,7 +31,9 @@ export class PurgeVaultComponent {
     try {
       this.formPromise = this.userVerificationService
         .buildRequest(this.masterPassword)
-        .then((request) => this.apiService.postPurgeCiphers(request, this.organizationId));
+        .then((request) =>
+          this.cipherApiServiceAbstraction.postPurgeCiphers(request, this.organizationId)
+        );
       await this.formPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("vaultPurged"));
       if (this.organizationId != null) {

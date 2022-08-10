@@ -1,6 +1,6 @@
 import * as lunr from "lunr";
 
-import { CipherService } from "../abstractions/cipher.service";
+import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { I18nService } from "../abstractions/i18n.service";
 import { LogService } from "../abstractions/log.service";
 import { SearchService as SearchServiceAbstraction } from "../abstractions/search.service";

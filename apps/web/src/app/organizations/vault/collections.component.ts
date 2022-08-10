@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -25,10 +25,17 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     cipherService: CipherService,
-    private apiService: ApiService,
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction,
     logService: LogService
   ) {
-    super(collectionService, platformUtilsService, i18nService, cipherService, logService);
+    super(
+      collectionService,
+      platformUtilsService,
+      i18nService,
+      cipherService,
+      logService,
+      cipherApiServiceAbstraction
+    );
     this.allowSelectNone = true;
   }
 
@@ -36,7 +43,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     if (!this.organization.canViewAllCollections) {
       return await super.loadCipher();
     }
-    const response = await this.apiService.getCipherAdmin(this.cipherId);
+    const response = await this.cipherApiServiceAbstraction.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 
@@ -57,7 +64,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
   protected saveCollections() {
     if (this.organization.canEditAnyCollection) {
       const request = new CipherCollectionsRequest(this.cipherDomain.collectionIds);
-      return this.apiService.putCipherCollectionsAdmin(this.cipherId, request);
+      return this.cipherApiServiceAbstraction.putCipherCollectionsAdmin(this.cipherId, request);
     } else {
       return super.saveCollections();
     }

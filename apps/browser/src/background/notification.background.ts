@@ -1,7 +1,8 @@
 import { firstValueFrom } from "rxjs";
 
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
@@ -32,7 +33,8 @@ export default class NotificationBackground {
     private authService: AuthService,
     private policyService: PolicyService,
     private folderService: FolderService,
-    private stateService: StateService
+    private stateService: StateService,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {}
 
   async init() {
@@ -394,7 +396,7 @@ export default class NotificationBackground {
     }
 
     const cipher = await this.cipherService.encrypt(model);
-    await this.cipherService.saveWithServer(cipher);
+    await this.cipherApiService.saveWithServer(cipher);
   }
 
   private async getDecryptedCipherById(cipherId: string) {
@@ -409,7 +411,7 @@ export default class NotificationBackground {
     if (cipher != null && cipher.type === CipherType.Login) {
       cipher.login.password = newPassword;
       const newCipher = await this.cipherService.encrypt(cipher);
-      await this.cipherService.saveWithServer(newCipher);
+      await this.cipherApiService.saveWithServer(newCipher);
     }
   }
 

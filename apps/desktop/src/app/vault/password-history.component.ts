@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { PasswordHistoryComponent as BasePasswordHistoryComponent } from "@bitwarden/angular/components/password-history.component";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 

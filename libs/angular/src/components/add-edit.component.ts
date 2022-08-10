@@ -2,7 +2,8 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -91,7 +92,8 @@ export class AddEditComponent implements OnInit {
     protected policyService: PolicyService,
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
@@ -564,16 +566,16 @@ export class AddEditComponent implements OnInit {
   }
 
   protected saveCipher(cipher: Cipher) {
-    return this.cipherService.saveWithServer(cipher);
+    return this.cipherApiService.saveWithServer(cipher);
   }
 
   protected deleteCipher() {
     return this.cipher.isDeleted
-      ? this.cipherService.deleteWithServer(this.cipher.id)
-      : this.cipherService.softDeleteWithServer(this.cipher.id);
+      ? this.cipherApiService.deleteWithServer(this.cipher.id)
+      : this.cipherApiService.softDeleteWithServer(this.cipher.id);
   }
 
   protected restoreCipher() {
-    return this.cipherService.restoreWithServer(this.cipher.id);
+    return this.cipherApiService.restoreWithServer(this.cipher.id);
   }
 }

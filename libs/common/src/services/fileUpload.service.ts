@@ -1,3 +1,5 @@
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+
 import { ApiService } from "../abstractions/api.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "../abstractions/fileUpload.service";
 import { LogService } from "../abstractions/log.service";
@@ -14,7 +16,11 @@ export class FileUploadService implements FileUploadServiceAbstraction {
   private azureFileUploadService: AzureFileUploadService;
   private bitwardenFileUploadService: BitwardenFileUploadService;
 
-  constructor(private logService: LogService, private apiService: ApiService) {
+  constructor(
+    private logService: LogService,
+    private apiService: ApiService,
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction
+  ) {
     this.azureFileUploadService = new AzureFileUploadService(logService);
     this.bitwardenFileUploadService = new BitwardenFileUploadService(apiService);
   }
@@ -98,9 +104,15 @@ export class FileUploadService implements FileUploadServiceAbstraction {
       }
     } catch (e) {
       if (admin) {
-        await this.apiService.deleteCipherAttachmentAdmin(response.id, uploadData.attachmentId);
+        await this.cipherApiServiceAbstraction.deleteCipherAttachmentAdmin(
+          response.id,
+          uploadData.attachmentId
+        );
       } else {
-        await this.apiService.deleteCipherAttachment(response.id, uploadData.attachmentId);
+        await this.cipherApiServiceAbstraction.deleteCipherAttachment(
+          response.id,
+          uploadData.attachmentId
+        );
       }
       throw e;
     }

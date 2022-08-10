@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -55,7 +56,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     private organizationService: OrganizationService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {
     super(searchService);
   }
@@ -203,7 +205,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
 
     try {
-      this.actionPromise = this.cipherService.restoreWithServer(c.id);
+      this.actionPromise = this.cipherApiService.restoreWithServer(c.id);
       await this.actionPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("restoredItem"));
       this.refresh();
@@ -289,8 +291,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
   protected deleteCipher(id: string, permanent: boolean) {
     return permanent
-      ? this.cipherService.deleteWithServer(id)
-      : this.cipherService.softDeleteWithServer(id);
+      ? this.cipherApiService.deleteWithServer(id)
+      : this.cipherApiService.softDeleteWithServer(id);
   }
 
   protected showFixOldAttachments(c: CipherView) {

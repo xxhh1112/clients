@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -28,7 +28,7 @@ export class BulkShareComponent implements OnInit {
   private writeableCollections: CollectionView[] = [];
 
   constructor(
-    private cipherService: CipherService,
+    private cipherApiService: CipherApiServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
@@ -70,7 +70,7 @@ export class BulkShareComponent implements OnInit {
       .filter((c) => (c as any).checked)
       .map((c) => c.id);
     try {
-      this.formPromise = this.cipherService.shareManyWithServer(
+      this.formPromise = this.cipherApiService.shareManyWithServer(
         this.shareableCiphers,
         this.organizationId,
         checkedCollectionIds

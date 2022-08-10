@@ -2,7 +2,8 @@ import * as papa from "papaparse";
 import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "../abstractions/api.service";
-import { CipherService } from "../abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "../abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../abstractions/crypto.service";
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
 import {
@@ -33,6 +34,7 @@ export class ExportService implements ExportServiceAbstraction {
     private folderService: FolderService,
     private cipherService: CipherService,
     private apiService: ApiService,
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction,
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService
   ) {}
@@ -351,7 +353,7 @@ export class ExportService implements ExportServiceAbstraction {
     );
 
     promises.push(
-      this.apiService.getCiphersOrganization(organizationId).then((c) => {
+      this.cipherApiServiceAbstraction.getCiphersOrganization(organizationId).then((c) => {
         const cipherPromises: any = [];
         if (c != null && c.data != null && c.data.length > 0) {
           c.data

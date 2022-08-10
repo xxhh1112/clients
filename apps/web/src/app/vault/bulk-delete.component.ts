@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -20,10 +19,9 @@ export class BulkDeleteComponent {
   formPromise: Promise<any>;
 
   constructor(
-    private cipherService: CipherService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private apiService: ApiService
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction
   ) {}
 
   async submit() {
@@ -45,18 +43,26 @@ export class BulkDeleteComponent {
 
   private async deleteCiphers() {
     if (this.permanent) {
-      this.formPromise = await this.cipherService.deleteManyWithServer(this.cipherIds);
+      this.formPromise = await this.cipherApiServiceAbstraction.deleteManyWithServer(
+        this.cipherIds
+      );
     } else {
-      this.formPromise = await this.cipherService.softDeleteManyWithServer(this.cipherIds);
+      this.formPromise = await this.cipherApiServiceAbstraction.softDeleteManyWithServer(
+        this.cipherIds
+      );
     }
   }
 
   private async deleteCiphersAdmin() {
     const deleteRequest = new CipherBulkDeleteRequest(this.cipherIds, this.organization.id);
     if (this.permanent) {
-      this.formPromise = await this.apiService.deleteManyCiphersAdmin(deleteRequest);
+      this.formPromise = await this.cipherApiServiceAbstraction.deleteManyCiphersAdmin(
+        deleteRequest
+      );
     } else {
-      this.formPromise = await this.apiService.putDeleteManyCiphersAdmin(deleteRequest);
+      this.formPromise = await this.cipherApiServiceAbstraction.putDeleteManyCiphersAdmin(
+        deleteRequest
+      );
     }
   }
 }

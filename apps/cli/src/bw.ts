@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
@@ -15,7 +16,8 @@ import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
-import { CipherService } from "@bitwarden/common/services/cipher.service";
+import { CipherApiService } from "@bitwarden/common/services/cipher/cipher-api.service";
+import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
@@ -77,6 +79,7 @@ export class Main {
   settingsService: SettingsService;
   cipherService: CipherService;
   folderService: InternalFolderService;
+  internalCipherService: InternalCipherService;
   collectionService: CollectionService;
   vaultTimeoutService: VaultTimeoutService;
   syncService: SyncService;
@@ -106,6 +109,7 @@ export class Main {
   twoFactorService: TwoFactorService;
   broadcasterService: BroadcasterService;
   folderApiService: FolderApiService;
+  cipherApiService: CipherApiService;
 
   constructor() {
     let p = null;
@@ -187,13 +191,15 @@ export class Main {
 
     this.settingsService = new SettingsService(this.stateService);
 
-    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
+    this.fileUploadService = new FileUploadService(
+      this.logService,
+      this.apiService,
+      this.cipherApiService
+    );
 
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
-      this.apiService,
-      this.fileUploadService,
       this.i18nService,
       null,
       this.logService,
@@ -288,6 +294,7 @@ export class Main {
 
     this.syncService = new SyncService(
       this.apiService,
+      this.cipherApiService,
       this.settingsService,
       this.folderService,
       this.cipherService,
@@ -302,7 +309,8 @@ export class Main {
       this.organizationService,
       this.providerService,
       this.folderApiService,
-      async (expired: boolean) => await this.logout()
+      async (expired: boolean) => await this.logout(),
+      this.internalCipherService
     );
 
     this.passwordGenerationService = new PasswordGenerationService(
@@ -316,7 +324,7 @@ export class Main {
     this.importService = new ImportService(
       this.cipherService,
       this.folderService,
-      this.apiService,
+      this.cipherApiService,
       this.i18nService,
       this.collectionService,
       this.platformUtilsService,
@@ -326,6 +334,7 @@ export class Main {
       this.folderService,
       this.cipherService,
       this.apiService,
+      this.cipherApiService,
       this.cryptoService,
       this.cryptoFunctionService
     );
@@ -364,7 +373,7 @@ export class Main {
       this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.settingsService.clear(userId),
-      this.cipherService.clear(userId),
+      this.internalCipherService.clear(userId),
       this.folderService.clear(userId),
       this.collectionService.clear(userId),
       this.policyService.clear(userId),

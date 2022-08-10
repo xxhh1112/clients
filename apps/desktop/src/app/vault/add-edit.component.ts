@@ -4,7 +4,8 @@ import { NgForm } from "@angular/forms";
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -41,7 +42,8 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
     logService: LogService,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -56,7 +58,8 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
       policyService,
       logService,
       passwordRepromptService,
-      organizationService
+      organizationService,
+      cipherApiService
     );
   }
 

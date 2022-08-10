@@ -10,15 +10,7 @@ import { PolicyType } from "../enums/policyType";
 import { Utils } from "../misc/utils";
 import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
 import { VerifyOTPRequest } from "../models/request/account/verifyOTPRequest";
-import { AttachmentRequest } from "../models/request/attachmentRequest";
 import { BitPayInvoiceRequest } from "../models/request/bitPayInvoiceRequest";
-import { CipherBulkDeleteRequest } from "../models/request/cipherBulkDeleteRequest";
-import { CipherBulkMoveRequest } from "../models/request/cipherBulkMoveRequest";
-import { CipherBulkShareRequest } from "../models/request/cipherBulkShareRequest";
-import { CipherCollectionsRequest } from "../models/request/cipherCollectionsRequest";
-import { CipherCreateRequest } from "../models/request/cipherCreateRequest";
-import { CipherRequest } from "../models/request/cipherRequest";
-import { CipherShareRequest } from "../models/request/cipherShareRequest";
 import { CollectionRequest } from "../models/request/collectionRequest";
 import { DeleteRecoverRequest } from "../models/request/deleteRecoverRequest";
 import { DeviceRequest } from "../models/request/deviceRequest";
@@ -37,9 +29,7 @@ import { ApiTokenRequest } from "../models/request/identityToken/apiTokenRequest
 import { PasswordTokenRequest } from "../models/request/identityToken/passwordTokenRequest";
 import { SsoTokenRequest } from "../models/request/identityToken/ssoTokenRequest";
 import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
-import { ImportCiphersRequest } from "../models/request/importCiphersRequest";
 import { ImportDirectoryRequest } from "../models/request/importDirectoryRequest";
-import { ImportOrganizationCiphersRequest } from "../models/request/importOrganizationCiphersRequest";
 import { KdfRequest } from "../models/request/kdfRequest";
 import { KeyConnectorUserKeyRequest } from "../models/request/keyConnectorUserKeyRequest";
 import { KeysRequest } from "../models/request/keysRequest";
@@ -111,7 +101,6 @@ import { BillingHistoryResponse } from "../models/response/billingHistoryRespons
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
 import { BreachAccountResponse } from "../models/response/breachAccountResponse";
-import { CipherResponse } from "../models/response/cipherResponse";
 import {
   CollectionGroupDetailsResponse,
   CollectionResponse,
@@ -580,157 +569,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("DELETE", "/sends/" + id, null, true, false);
   }
 
-  // Cipher APIs
-
-  async getCipher(id: string): Promise<CipherResponse> {
-    const r = await this.send("GET", "/ciphers/" + id, null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async getFullCipherDetails(id: string): Promise<CipherResponse> {
-    const r = await this.send("GET", "/ciphers/" + id + "/details", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async getCipherAdmin(id: string): Promise<CipherResponse> {
-    const r = await this.send("GET", "/ciphers/" + id + "/admin", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async getCiphersOrganization(organizationId: string): Promise<ListResponse<CipherResponse>> {
-    const r = await this.send(
-      "GET",
-      "/ciphers/organization-details?organizationId=" + organizationId,
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, CipherResponse);
-  }
-
-  async postCipher(request: CipherRequest): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  async postCipherCreate(request: CipherCreateRequest): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/create", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  async postCipherAdmin(request: CipherCreateRequest): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/admin", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putCipher(id: string, request: CipherRequest): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id, request, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putCipherAdmin(id: string, request: CipherRequest): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/admin", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  deleteCipher(id: string): Promise<any> {
-    return this.send("DELETE", "/ciphers/" + id, null, true, false);
-  }
-
-  deleteCipherAdmin(id: string): Promise<any> {
-    return this.send("DELETE", "/ciphers/" + id + "/admin", null, true, false);
-  }
-
-  deleteManyCiphers(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("DELETE", "/ciphers", request, true, false);
-  }
-
-  deleteManyCiphersAdmin(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("DELETE", "/ciphers/admin", request, true, false);
-  }
-
-  putMoveCiphers(request: CipherBulkMoveRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/move", request, true, false);
-  }
-
-  async putShareCipher(id: string, request: CipherShareRequest): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/share", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  putShareCiphers(request: CipherBulkShareRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/share", request, true, false);
-  }
-
-  putCipherCollections(id: string, request: CipherCollectionsRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/collections", request, true, false);
-  }
-
-  putCipherCollectionsAdmin(id: string, request: CipherCollectionsRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/collections-admin", request, true, false);
-  }
-
-  postPurgeCiphers(
-    request: SecretVerificationRequest,
-    organizationId: string = null
-  ): Promise<any> {
-    let path = "/ciphers/purge";
-    if (organizationId != null) {
-      path += "?organizationId=" + organizationId;
-    }
-    return this.send("POST", path, request, true, false);
-  }
-
-  postImportCiphers(request: ImportCiphersRequest): Promise<any> {
-    return this.send("POST", "/ciphers/import", request, true, false);
-  }
-
-  postImportOrganizationCiphers(
-    organizationId: string,
-    request: ImportOrganizationCiphersRequest
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/ciphers/import-organization?organizationId=" + organizationId,
-      request,
-      true,
-      false
-    );
-  }
-
-  putDeleteCipher(id: string): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/delete", null, true, false);
-  }
-
-  putDeleteCipherAdmin(id: string): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/delete-admin", null, true, false);
-  }
-
-  putDeleteManyCiphers(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/delete", request, true, false);
-  }
-
-  putDeleteManyCiphersAdmin(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/delete-admin", request, true, false);
-  }
-
-  async putRestoreCipher(id: string): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/restore", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putRestoreCipherAdmin(id: string): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/restore-admin", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putRestoreManyCiphers(
-    request: CipherBulkDeleteRequest
-  ): Promise<ListResponse<CipherResponse>> {
-    const r = await this.send("PUT", "/ciphers/restore", request, true, true);
-    return new ListResponse<CipherResponse>(r, CipherResponse);
-  }
-
   // Attachments APIs
 
   async getAttachmentData(
@@ -745,61 +583,6 @@ export class ApiService implements ApiServiceAbstraction {
       attachmentId;
     const r = await this.send("GET", path, null, true, true);
     return new AttachmentResponse(r);
-  }
-
-  async postCipherAttachment(
-    id: string,
-    request: AttachmentRequest
-  ): Promise<AttachmentUploadDataResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment/v2", request, true, true);
-    return new AttachmentUploadDataResponse(r);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment", data, true, true);
-    return new CipherResponse(r);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentAdminLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment-admin", data, true, true);
-    return new CipherResponse(r);
-  }
-
-  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
-    return this.send("DELETE", "/ciphers/" + id + "/attachment/" + attachmentId, null, true, false);
-  }
-
-  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-      null,
-      true,
-      false
-    );
-  }
-
-  postShareCipherAttachment(
-    id: string,
-    attachmentId: string,
-    data: FormData,
-    organizationId: string
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/share?organizationId=" + organizationId,
-      data,
-      true,
-      false
-    );
   }
 
   async renewAttachmentUploadUrl(

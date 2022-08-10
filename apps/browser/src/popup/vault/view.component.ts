@@ -7,7 +7,8 @@ import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/component
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -63,7 +64,8 @@ export class ViewComponent extends BaseViewComponent {
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -82,7 +84,8 @@ export class ViewComponent extends BaseViewComponent {
       passwordRepromptService,
       logService,
       stateService,
-      fileDownloadService
+      fileDownloadService,
+      cipherApiService
     );
   }
 
@@ -214,7 +217,7 @@ export class ViewComponent extends BaseViewComponent {
 
       try {
         const cipher: Cipher = await this.cipherService.encrypt(this.cipher);
-        await this.cipherService.saveWithServer(cipher);
+        await this.cipherApiService.saveWithServer(cipher);
         this.platformUtilsService.showToast(
           "success",
           null,

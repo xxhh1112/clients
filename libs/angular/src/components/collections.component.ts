@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -27,7 +28,8 @@ export class CollectionsComponent implements OnInit {
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
     protected cipherService: CipherService,
-    private logService: LogService
+    private logService: LogService,
+    protected cipherApiService: CipherApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -87,6 +89,6 @@ export class CollectionsComponent implements OnInit {
   }
 
   protected saveCollections() {
-    return this.cipherService.saveCollectionsWithServer(this.cipherDomain);
+    return this.cipherApiService.saveCollectionsWithServer(this.cipherDomain);
   }
 }

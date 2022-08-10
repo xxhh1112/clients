@@ -11,7 +11,8 @@ import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/component
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -35,7 +36,7 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
   @Output() onViewCipherPasswordHistory = new EventEmitter<CipherView>();
 
   constructor(
-    cipherService: CipherService,
+    cipherService: InternalCipherService,
     totpService: TotpService,
     tokenService: TokenService,
     i18nService: I18nService,
@@ -51,7 +52,8 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     stateService: StateService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -70,7 +72,8 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
       passwordRepromptService,
       logService,
       stateService,
-      fileDownloadService
+      fileDownloadService,
+      cipherApiService
     );
   }
   ngOnInit() {

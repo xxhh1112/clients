@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -41,7 +41,7 @@ export class CiphersComponent extends BaseCiphersComponent {
     stateService: StateService,
     organizationService: OrganizationService,
     tokenService: TokenService,
-    private apiService: ApiService
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction
   ) {
     super(
       searchService,
@@ -54,7 +54,8 @@ export class CiphersComponent extends BaseCiphersComponent {
       passwordRepromptService,
       logService,
       organizationService,
-      tokenService
+      tokenService,
+      cipherApiServiceAbstraction
     );
   }
 
@@ -95,8 +96,8 @@ export class CiphersComponent extends BaseCiphersComponent {
       return super.deleteCipher(id, this.deleted);
     }
     return this.deleted
-      ? this.apiService.deleteCipherAdmin(id)
-      : this.apiService.putDeleteCipherAdmin(id);
+      ? this.cipherApiServiceAbstraction.deleteCipherAdmin(id)
+      : this.cipherApiServiceAbstraction.putDeleteCipherAdmin(id);
   }
 
   protected showFixOldAttachments(c: CipherView) {

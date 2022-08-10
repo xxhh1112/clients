@@ -2,7 +2,8 @@ import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 import { BehaviorSubject } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -88,6 +89,7 @@ describe("ExportService", () => {
   let apiService: SubstituteOf<ApiService>;
   let cryptoFunctionService: SubstituteOf<CryptoFunctionService>;
   let cipherService: SubstituteOf<CipherService>;
+  let cipherApiService: SubstituteOf<CipherApiServiceAbstraction>;
   let folderService: SubstituteOf<FolderService>;
   let cryptoService: SubstituteOf<CryptoService>;
 
@@ -95,6 +97,7 @@ describe("ExportService", () => {
     apiService = Substitute.for<ApiService>();
     cryptoFunctionService = Substitute.for<CryptoFunctionService>();
     cipherService = Substitute.for<CipherService>();
+    cipherApiService = Substitute.for<CipherApiServiceAbstraction>();
     folderService = Substitute.for<FolderService>();
     cryptoService = Substitute.for<CryptoService>();
 
@@ -105,6 +108,7 @@ describe("ExportService", () => {
       folderService,
       cipherService,
       apiService,
+      cipherApiService,
       cryptoService,
       cryptoFunctionService
     );

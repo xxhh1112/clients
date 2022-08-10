@@ -1,5 +1,8 @@
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { InternalCipherService as InternalCipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+
 import { ApiService } from "../abstractions/api.service";
-import { CipherService } from "../abstractions/cipher.service";
+import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "../abstractions/folder/folder-api.service.abstraction";
@@ -40,6 +43,7 @@ export class SyncService implements SyncServiceAbstraction {
 
   constructor(
     private apiService: ApiService,
+    private cipherApiServiceAbstraction: CipherApiServiceAbstraction,
     private settingsService: SettingsService,
     private folderService: InternalFolderService,
     private cipherService: CipherService,
@@ -54,7 +58,8 @@ export class SyncService implements SyncServiceAbstraction {
     private organizationService: OrganizationService,
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
-    private logoutCallback: (expired: boolean) => Promise<void>
+    private logoutCallback: (expired: boolean) => Promise<void>,
+    private internalCipherServiceAbstraction: InternalCipherServiceAbstraction
   ) {}
 
   async getLastSync(): Promise<Date> {
@@ -198,16 +203,18 @@ export class SyncService implements SyncServiceAbstraction {
         }
 
         if (shouldUpdate) {
-          const remoteCipher = await this.apiService.getFullCipherDetails(notification.id);
+          const remoteCipher = await this.cipherApiServiceAbstraction.getFullCipherDetails(
+            notification.id
+          );
           if (remoteCipher != null) {
-            await this.cipherService.upsert(new CipherData(remoteCipher));
+            await this.internalCipherServiceAbstraction.upsert(new CipherData(remoteCipher));
             this.messagingService.send("syncedUpsertedCipher", { cipherId: notification.id });
             return this.syncCompleted(true);
           }
         }
       } catch (e) {
         if (e != null && e.statusCode === 404 && isEdit) {
-          await this.cipherService.delete(notification.id);
+          await this.internalCipherServiceAbstraction.delete(notification.id);
           this.messagingService.send("syncedDeletedCipher", { cipherId: notification.id });
           return this.syncCompleted(true);
         }
@@ -219,7 +226,7 @@ export class SyncService implements SyncServiceAbstraction {
   async syncDeleteCipher(notification: SyncCipherNotification): Promise<boolean> {
     this.syncStarted();
     if (await this.stateService.getIsAuthenticated()) {
-      await this.cipherService.delete(notification.id);
+      await this.internalCipherServiceAbstraction.delete(notification.id);
       this.messagingService.send("syncedDeletedCipher", { cipherId: notification.id });
       return this.syncCompleted(true);
     }
@@ -360,7 +367,7 @@ export class SyncService implements SyncServiceAbstraction {
     response.forEach((c) => {
       ciphers[c.id] = new CipherData(c);
     });
-    return await this.cipherService.replace(ciphers);
+    return await this.internalCipherServiceAbstraction.replace(ciphers);
   }
 
   private async syncSends(response: SendResponse[]) {

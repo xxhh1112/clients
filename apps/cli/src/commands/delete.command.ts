@@ -1,5 +1,6 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -14,7 +15,8 @@ export class DeleteCommand {
     private folderService: FolderService,
     private stateService: StateService,
     private apiService: ApiService,
-    private folderApiService: FolderApiServiceAbstraction
+    private folderApiService: FolderApiServiceAbstraction,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {}
 
   async run(object: string, id: string, cmdOptions: Record<string, any>): Promise<Response> {
@@ -45,9 +47,9 @@ export class DeleteCommand {
 
     try {
       if (options.permanent) {
-        await this.cipherService.deleteWithServer(id);
+        await this.cipherApiService.deleteWithServer(id);
       } else {
-        await this.cipherService.softDeleteWithServer(id);
+        await this.cipherApiService.softDeleteWithServer(id);
       }
       return Response.success();
     } catch (e) {
@@ -80,7 +82,7 @@ export class DeleteCommand {
     }
 
     try {
-      await this.cipherService.deleteAttachmentWithServer(cipher.id, attachments[0].id);
+      await this.cipherApiService.deleteAttachmentWithServer(cipher.id, attachments[0].id);
       return Response.success();
     } catch (e) {
       return Response.error(e);
