@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "message": "Reta Trezorejo $APP_NAME$",
+    "message": "Kasa retejo de $APP_NAME$",
     "description": "The title of the website in the browser window.",
     "placeholders": {
       "app_name": {
@@ -10,7 +10,7 @@
     }
   },
   "whatTypeOfItem": {
-    "message": "Kiuspeca estas ĉi tiu ero?"
+    "message": "Kia tipo de elemento estas ĉi tio?"
   },
   "name": {
     "message": "Nomo"
@@ -47,7 +47,7 @@
     "message": "Notoj"
   },
   "customFields": {
-    "message": "Tekstujoj Uzantfaritaj"
+    "message": "Propraj kampoj"
   },
   "cardholderName": {
     "message": "Nomo de la posedanto de la karto"
@@ -128,13 +128,13 @@
     "message": "S-ro"
   },
   "mrs": {
-    "message": "S-ino"
+    "message": "Sinjorino"
   },
   "ms": {
-    "message": "F-ino"
+    "message": "Sinjorino"
   },
   "dr": {
-    "message": "Dr-o"
+    "message": "Dr"
   },
   "expirationMonth": {
     "message": "Monato de validoperiodo"
@@ -282,7 +282,7 @@
     "description": "Search item type"
   },
   "searchVault": {
-    "message": "Traserĉu Trezorejon"
+    "message": "Serĉi Volbon"
   },
   "allItems": {
     "message": "Ĉiuj Eroj"
@@ -333,7 +333,7 @@
     "message": "Lasta nomo"
   },
   "fullName": {
-    "message": "Plena Nomo"
+    "message": "Full Name"
   },
   "address1": {
     "message": "Adreso 1"
@@ -385,7 +385,7 @@
     "message": "Kunhavigi"
   },
   "moveToOrganization": {
-    "message": "Movu al Organizo"
+    "message": "Move to Organization"
   },
   "valueCopied": {
     "message": "$VALUE$ kopiita",
@@ -422,31 +422,31 @@
     "description": "Copy URI to clipboard"
   },
   "me": {
-    "message": "Mi"
+    "message": "Me"
   },
   "myVault": {
-    "message": "Mia Trezorejo"
+    "message": "Mia Volbo"
   },
   "allVaults": {
-    "message": "Ĉiuj Trezorejoj"
+    "message": "All Vaults"
   },
   "vault": {
-    "message": "Trezorejo"
+    "message": "Volbo"
   },
   "vaults": {
-    "message": "Trezorejoj"
+    "message": "Vaults"
   },
   "vaultItems": {
-    "message": "Trezorejaj Eroj"
+    "message": "Vault Items"
   },
   "moveSelectedToOrg": {
-    "message": "Movu Elektitaĵojn al Organizo"
+    "message": "Move Selected to Organization"
   },
   "deleteSelected": {
     "message": "Forigi Elektitajn"
   },
   "moveSelected": {
-    "message": "Movu Elektitaĵojn"
+    "message": "Movi Elektitan"
   },
   "selectAll": {
     "message": "Elekti ĉiujn"
@@ -573,7 +573,7 @@
     "message": "Krei konton"
   },
   "startTrial": {
-    "message": "Komencu Provperiodon"
+    "message": "Start Trial"
   },
   "logIn": {
     "message": "Saluti"
@@ -597,7 +597,7 @@
     "message": "La ĉefa pasvorto estas la pasvorto, kiun vi uzas por aliri vian trezorejon. Tre gravas, ke vi ne forgesu vian ĉefan pasvorton. Ne eblas retrovi la pasvorton, se vi forgesos ĝin."
   },
   "masterPassImportant": {
-    "message": "Maleblas restarigado de ĉefpasvorto, se vi ĝin forgesos!"
+    "message": "Master passwords cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "Majstra pasvorta sugesto povas helpi vin memori vian pasvorton se vi forgesas ĝin."
@@ -630,10 +630,10 @@
     "message": "Nevalida retpoŝta adreso."
   },
   "masterPasswordRequired": {
-    "message": "Ĉefpasvorto estas nepra."
+    "message": "Master password is required."
   },
   "confirmMasterPasswordRequired": {
-    "message": "Reentajpado de ĉefpasvorto estas nepra."
+    "message": "Master password retype is required."
   },
   "masterPasswordMinLength": {
     "message": "Master password must be at least 8 characters long."
@@ -643,9 +643,6 @@
   },
   "newAccountCreated": {
     "message": "Via nova konto kreiĝis! Vi nun povas ensaluti."
-  },
-  "trialAccountCreated": {
-    "message": "Account created successfully."
   },
   "masterPassSent": {
     "message": "Ni sendis al vi retpoŝton kun via ĉefa pasvorta sugesto."
@@ -663,7 +660,7 @@
     "message": "Malŝlosi"
   },
   "loggedInAsEmailOn": {
-    "message": "Ensalutinta kiel $EMAIL$ ĉe $HOSTNAME$.",
+    "message": "Ensalutinta kiel $EMAIL$ ĉe $HOSTNAME $.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -703,7 +700,7 @@
     "message": "Vi ne apartenas al iuj organizoj. Organizoj permesas al vi sekure dividi erojn kun aliaj uzantoj."
   },
   "versionNumber": {
-    "message": "Versio $VERSION_NUMBER$",
+    "message": "Versio $VERSION_NUMBER $",
     "placeholders": {
       "version_number": {
         "content": "$1",
@@ -793,7 +790,7 @@
     "message": "Sekureca Ŝlosilo FIDO U2F"
   },
   "webAuthnTitle": {
-    "message": "WebAuthn FIDO2"
+    "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
     "message": "Use any WebAuthn enabled security key to access your account."
@@ -870,7 +867,7 @@
     "message": "Averto"
   },
   "confirmVaultExport": {
-    "message": "Konfirmu Eksportadon de Trezorejo"
+    "message": "Konfirmi Volbon-Eksportadon"
   },
   "exportWarningDesc": {
     "message": "Ĉi tiu eksportado enhavas viajn volbajn datumojn en neĉifrita formato. Vi ne devas stoki aŭ sendi la eksportitan dosieron per nesekuraj kanaloj (kiel retpoŝto). Forigu ĝin tuj post kiam vi finuzos ĝin."
@@ -885,7 +882,7 @@
     "message": "Export"
   },
   "exportVault": {
-    "message": "Eksportu Trezorejon"
+    "message": "Eksporti Volbon"
   },
   "fileFormat": {
     "message": "Dosierformato"
@@ -924,10 +921,10 @@
     "description": "Include lowercase letters in the password generator."
   },
   "numbers": {
-    "message": "Ciferoj (0-9)"
+    "message": "Numbers (0-9)"
   },
   "specialCharacters": {
-    "message": "Signoj Specialaj (!@#$%^&*)"
+    "message": "Special Characters (!@#$%^&*)"
   },
   "numWords": {
     "message": "Nombro de Vortoj"
@@ -1055,10 +1052,10 @@
     "message": "Ĉiuj Sesioj Neaŭtorizitaj"
   },
   "purgeVault": {
-    "message": "Malplenigu Trezorejon"
+    "message": "Purigi Volbon"
   },
   "purgedOrganizationVault": {
-    "message": "Malpleniĝis trezorejo de organizo."
+    "message": "Purigita organizo-volbo."
   },
   "vaultAccessedByProvider": {
     "message": "Vault accessed by provider."
@@ -1070,10 +1067,10 @@
     "message": "Sekvu sube por forigi ĉiujn erojn en la trezorejo de la organizo."
   },
   "purgeVaultWarning": {
-    "message": "Malplenigado de via trezorejo estas daŭra. Malfarado estos malebla."
+    "message": "Purigi vian trezorejon estas konstanta. Ĝi ne povas esti malfarita."
   },
   "vaultPurged": {
-    "message": "Via trezorejo malpleniĝis."
+    "message": "Via trezorejo estis elpurigita."
   },
   "deleteAccount": {
     "message": "Forigi konton"
@@ -1250,8 +1247,8 @@
   "enabled": {
     "message": "Enŝaltita"
   },
-  "restoreAccess": {
-    "message": "Restarigu Aliron"
+  "activate": {
+    "message": "Activate"
   },
   "premium": {
     "message": "Premium",
@@ -1278,8 +1275,8 @@
   "disable": {
     "message": "Neebligi"
   },
-  "revokeAccess": {
-    "message": "Revoke Access"
+  "deactivate": {
+    "message": "Deactivate"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Ĉi tiu du-ŝtupa ensaluta provizanto estas ebligita en via konto."
@@ -1672,12 +1669,6 @@
   "billing": {
     "message": "Fakturado"
   },
-  "billingPlanLabel": {
-    "message": "Billing Plan"
-  },
-  "paymentType": {
-    "message": "Payment Type"
-  },
   "accountCredit": {
     "message": "Kredita Konto",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1794,9 +1785,6 @@
   "year": {
     "message": "jaro"
   },
-  "yr": {
-    "message": "jaro"
-  },
   "month": {
     "message": "monato"
   },
@@ -1824,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "Fakturaj Informoj"
-  },
-  "billingTrialSubLabel": {
-    "message": "Your payment method will not be charged during the 7 day free trial."
   },
   "creditCard": {
     "message": "Kreditkarto"
@@ -2184,34 +2169,10 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "We've sent a confirmation email to your team's billing email at "
-  },
   "monthly": {
     "message": "Monata"
   },
   "annually": {
-    "message": "Ĉiujare"
-  },
-  "annual": {
     "message": "Ĉiujare"
   },
   "basePrice": {
@@ -2280,11 +2241,11 @@
   "removeUserConfirmation": {
     "message": "Ĉu vi certe volas forigi ĉi tiun uzanton?"
   },
-  "removeOrgUserConfirmation": {
-    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
+  "deactivateUserConfirmation": {
+    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
   },
-  "revokeUserConfirmation": {
-    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
+  "activateUserConfirmation": {
+    "message": "Are you sure you want to activate this user, granting them access to the organization?"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
@@ -2419,7 +2380,7 @@
     "description": "Desktop app"
   },
   "webVault": {
-    "message": "Rettrezorejo"
+    "message": "Reta Volbo"
   },
   "loggedIn": {
     "message": "Ensalutinta."
@@ -2443,10 +2404,10 @@
     "message": "Ensaluta provo malsukcesis kun malĝusta du-ŝtupa ensaluto."
   },
   "exportedVault": {
-    "message": "Eksportiĝis trezorejo."
+    "message": "Eksportita trezorejo."
   },
   "exportedOrganizationVault": {
-    "message": "Eksportiĝis trezorejo de organizo."
+    "message": "Eksportita organizo-volbo."
   },
   "editedOrgSettings": {
     "message": "Redaktitaj organizaj agordoj."
@@ -2461,7 +2422,7 @@
     }
   },
   "editedItemId": {
-    "message": "Redaktiĝis ero $ID$.",
+    "message": "Redaktita ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2488,7 +2449,7 @@
     }
   },
   "viewedItemId": {
-    "message": "Vidiĝis ero $ID$.",
+    "message": "Vidita ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2497,7 +2458,7 @@
     }
   },
   "viewedPasswordItemId": {
-    "message": "Vidiĝis pasvorto de ero $ID$.",
+    "message": "Vidita pasvorto por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2506,7 +2467,7 @@
     }
   },
   "viewedHiddenFieldItemId": {
-    "message": "Vidiĝis tekstujo kaŝita de ero $ID$.",
+    "message": "Vidita kaŝita kampo por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2515,7 +2476,7 @@
     }
   },
   "viewedSecurityCodeItemId": {
-    "message": "Vidiĝis sekureca kodo de ero $ID$.",
+    "message": "Vidita sekureca kodo por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2524,7 +2485,7 @@
     }
   },
   "copiedPasswordItemId": {
-    "message": "Kopiiĝis pasvorto de ero $ID$.",
+    "message": "Kopiita pasvorto por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2533,7 +2494,7 @@
     }
   },
   "copiedHiddenFieldItemId": {
-    "message": "Kopiiĝis tekstujo kaŝita de ero $ID$.",
+    "message": "Kopiita kaŝita kampo por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2542,7 +2503,7 @@
     }
   },
   "copiedSecurityCodeItemId": {
-    "message": "Kopiiĝis sekureca kodo de ero $ID$.",
+    "message": "Kopiita sekureca kodo por ero $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2631,8 +2592,8 @@
       }
     }
   },
-  "removeUserIdAccess": {
-    "message": "Remove $ID$ access",
+  "deactivatedUserId": {
+    "message": "Deactivated user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2640,8 +2601,8 @@
       }
     }
   },
-  "revokedUserId": {
-    "message": "Revoked organization access for $ID$.",
+  "activatedUserId": {
+    "message": "Activated user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2649,8 +2610,8 @@
       }
     }
   },
-  "restoredUserId": {
-    "message": "Restored organization access for $ID$.",
+  "deactivateUserId": {
+    "message": "Deactivate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2658,8 +2619,8 @@
       }
     }
   },
-  "revokeUserId": {
-    "message": "Revoke $ID$ access",
+  "activateUserId": {
+    "message": "Activate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2713,7 +2674,7 @@
     }
   },
   "editedUserId": {
-    "message": "Redaktiĝis uzanto $ID$.",
+    "message": "Redaktita uzanto $ID $.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2740,7 +2701,7 @@
     }
   },
   "createdOrganizationId": {
-    "message": "Kreiĝis organizo $ID$.",
+    "message": "Created organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2749,7 +2710,7 @@
     }
   },
   "addedOrganizationId": {
-    "message": "Aldoniĝis organizo $ID$.",
+    "message": "Added organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2758,7 +2719,7 @@
     }
   },
   "removedOrganizationId": {
-    "message": "Forviŝiĝis organizo $ID$.",
+    "message": "Removed organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2806,7 +2767,7 @@
     "message": "Resendi Inviton"
   },
   "resendEmail": {
-    "message": "Resendu Retpoŝton"
+    "message": "Resend Email"
   },
   "hasBeenReinvited": {
     "message": "$USER$ estis reenvitita.",
@@ -3220,7 +3181,7 @@
     "message": "Filtriloj"
   },
   "vaultTimeout": {
-    "message": "Tempolimo de trezorejo"
+    "message": "Tempomezuro de Volbo"
   },
   "vaultTimeoutDesc": {
     "message": "Elektu kiam via trezorejo eksvalidiĝos kaj plenumos la elektitan agon."
@@ -3391,7 +3352,7 @@
     "message": "Agordi minimumajn postulojn por majstra pasvorta forto."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "Devigu dufazan ensaluton"
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Postuli uzantojn agordi du-ŝtupan ensaluton en siaj personaj kontoj."
@@ -3546,7 +3507,7 @@
     }
   },
   "restoredItemId": {
-    "message": "Restariĝis ero $ID$.",
+    "message": "Restored item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3723,8 +3684,8 @@
   "disabled": {
     "message": "Neebligita"
   },
-  "revoked": {
-    "message": "Revoked"
+  "deactivated": {
+    "message": "Deactivated"
   },
   "sendLink": {
     "message": "Sendi ligon",
@@ -4262,7 +4223,7 @@
     }
   },
   "thisUser": {
-    "message": "ĉi tiu uzanto"
+    "message": "this user"
   },
   "resetPasswordMasterPasswordPolicyInEffect": {
     "message": "One or more organization policies require the master password to meet the following requirements:"
@@ -4327,11 +4288,11 @@
   "removeUsersWarning": {
     "message": "Are you sure you want to remove the following users? The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
-  "removeOrgUsersConfirmation": {
-    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "deactivateUsersWarning": {
+    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
-  "revokeUsersWarning": {
-    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "activateUsersWarning": {
+    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Theme"
@@ -4343,10 +4304,10 @@
     "message": "Use System Theme"
   },
   "themeDark": {
-    "message": "Malhela"
+    "message": "Dark"
   },
   "themeLight": {
-    "message": "Hela"
+    "message": "Light"
   },
   "confirmSelected": {
     "message": "Confirm Selected"
@@ -4363,11 +4324,11 @@
   "bulkRemovedMessage": {
     "message": "Removed successfully"
   },
-  "bulkRevokedMessage": {
-    "message": "Revoked organization access successfully"
+  "bulkDeactivatedMessage": {
+    "message": "Deactivated successfully"
   },
-  "bulkRestoredMessage": {
-    "message": "Restored organization access successfully"
+  "bulkActivatedMessage": {
+    "message": "Activated successfully"
   },
   "bulkFilteredMessage": {
     "message": "Excluded, not applicable for this action."
@@ -4378,14 +4339,14 @@
   "removeUsers": {
     "message": "Remove Users"
   },
-  "revokeUsers": {
-    "message": "Revoke Users"
+  "deactivateUsers": {
+    "message": "Deactivate Users"
   },
-  "restoreUsers": {
-    "message": "Restore Users"
+  "activateUsers": {
+    "message": "Activate Users"
   },
   "error": {
-    "message": "Eraro"
+    "message": "Error"
   },
   "resetPasswordManageUsers": {
     "message": "Manage Users must also be enabled with the Manage Password Reset permission"
@@ -4400,7 +4361,7 @@
     "message": "Please enter the details below to complete the provider setup. Contact Customer Support if you have any questions."
   },
   "providerName": {
-    "message": "Nomo de Provizanto"
+    "message": "Provider Name"
   },
   "providerSetup": {
     "message": "The provider has been set up."
@@ -4409,7 +4370,7 @@
     "message": "Clients"
   },
   "providerAdmin": {
-    "message": "Administranto de Provizanto"
+    "message": "Provider Admin"
   },
   "providerAdminDesc": {
     "message": "The highest access user that can manage all aspects of your provider as well as access and manage client organizations."
@@ -4439,7 +4400,7 @@
     "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the provider until they are confirmed."
   },
   "provider": {
-    "message": "Provizanto"
+    "message": "Provider"
   },
   "newClientOrganization": {
     "message": "New Client Organization"
@@ -4506,13 +4467,13 @@
     "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
   },
   "add": {
-    "message": "Aldonu"
+    "message": "Add"
   },
   "updatedMasterPassword": {
-    "message": "Ĉefpasvorto Estas Aktualigita"
+    "message": "Updated Master Password"
   },
   "updateMasterPassword": {
-    "message": "Aktualigu Ĉefpasvorton"
+    "message": "Update Master Password"
   },
   "updateMasterPasswordWarning": {
     "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
@@ -4521,7 +4482,7 @@
     "message": "Your Master Password does not meet the policy requirements of this organization. In order to join the organization, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
-    "message": "Tempolimo de trezorejo"
+    "message": "Vault timeout"
   },
   "maximumVaultTimeoutDesc": {
     "message": "Set a maximum vault timeout for members."
@@ -4533,10 +4494,10 @@
     "message": "Invalid Maximum Vault Timeout."
   },
   "hours": {
-    "message": "Horoj"
+    "message": "Hours"
   },
   "minutes": {
-    "message": "Minutoj"
+    "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
     "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
@@ -4794,8 +4755,11 @@
   "sponsorshipCreated": {
     "message": "Sponsorship Created"
   },
+  "revoke": {
+    "message": "Revoke"
+  },
   "emailSent": {
-    "message": "Retmesaĝo Sendiĝis"
+    "message": "Email Sent"
   },
   "revokeSponsorshipConfirmation": {
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
@@ -4813,19 +4777,19 @@
     "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Sendu Kodon"
+    "message": "Send Code"
   },
   "codeSent": {
-    "message": "Kodo Sendiĝis"
+    "message": "Code Sent"
   },
   "verificationCode": {
-    "message": "Aŭtentiga Kodo"
+    "message": "Verification Code"
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
   },
   "verificationCodeRequired": {
-    "message": "Aŭtentiga kodo estas deviga."
+    "message": "Verification code is required."
   },
   "invalidVerificationCode": {
     "message": "Invalid verification code"
@@ -4843,7 +4807,7 @@
     "message": "Leave Organization"
   },
   "removeMasterPassword": {
-    "message": "Forigu Ĉefpasvorton"
+    "message": "Remove Master Password"
   },
   "removedMasterPassword": {
     "message": "Master password removed."
@@ -4918,7 +4882,7 @@
     "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
-    "message": "Testu"
+    "message": "Test"
   },
   "keyConnectorTestSuccess": {
     "message": "Success! Key Connector reached."
@@ -4993,7 +4957,7 @@
     "message": "Sent (Awaiting Sync)"
   },
   "sent": {
-    "message": "Sendita"
+    "message": "Sent"
   },
   "requestRemoved": {
     "message": "Removed (Awaiting Sync)"
@@ -5023,7 +4987,7 @@
     }
   },
   "required": {
-    "message": "deviga"
+    "message": "required"
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Required if Entity ID is not a URL."
@@ -5068,13 +5032,13 @@
     "message": "Access Denied. You do not have permission to view this page."
   },
   "masterPassword": {
-    "message": "Ĉefpasvorto"
+    "message": "Master Password"
   },
   "security": {
-    "message": "Sekureco"
+    "message": "Security"
   },
   "keys": {
-    "message": "Ŝlosiloj"
+    "message": "Keys"
   },
   "billingHistory": {
     "message": "Billing History"
@@ -5124,11 +5088,11 @@
     "message": "Use your domain's configured catch-all inbox."
   },
   "random": {
-    "message": "Hazarda",
+    "message": "Random",
     "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
-    "message": "Vorto Hazarda"
+    "message": "Random Word"
   },
   "service": {
     "message": "Service"
@@ -5193,7 +5157,7 @@
     "message": "Generate an email alias with an external forwarding service."
   },
   "hostname": {
-    "message": "Domajna nomo",
+    "message": "Hostname",
     "description": "Part of a URL."
   },
   "apiAccessToken": {
@@ -5220,65 +5184,11 @@
       }
     }
   },
-  "scim": {
-    "message": "SCIM Provisioning",
-    "description": "The text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimDescription": {
-    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDesc": {
-    "message": "Enable SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDescHelpText": {
-    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimApiKeyHelperText": {
-    "message": "This API key has access to manage users within your organization. It should be kept secret."
-  },
-  "copyScimKey": {
-    "message": "Copy the SCIM API Key to your clipboard",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKey": {
-    "message": "Rotate the SCIM API Key",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKeyWarning": {
-    "message": "Are you sure you want to rotate the SCIM API Key? The current key will no longer work for any existing integrations.",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateKey": {
-    "message": "Rotaciigu Ŝlosilon"
-  },
-  "scimApiKey": {
-    "message": "SCIM API Key",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "copyScimUrl": {
-    "message": "Copy the SCIM endpoint URL to your clipboard",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimUrl": {
-    "message": "SCIM URL",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimApiKeyRotated": {
-    "message": "The SCIM API Key has been successfully rotated",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "scimSettingsSaved": {
-    "message": "SCIM settings have been saved successfully",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
   "inputRequired": {
-    "message": "Enigo estas deviga."
+    "message": "Input is required."
   },
   "inputEmail": {
-    "message": "Enigo ne estas retpoŝta adreso."
+    "message": "Input is not an email-address."
   },
   "inputMinLength": {
     "message": "Input must be at least $COUNT$ characters long.",
@@ -5299,15 +5209,9 @@
     }
   },
   "turnOn": {
-    "message": "Ŝaltu"
+    "message": "Turn on"
   },
   "on": {
-    "message": "Ŝaltita"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Number of users"
+    "message": "On"
   }
 }
