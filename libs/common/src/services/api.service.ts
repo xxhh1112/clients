@@ -64,6 +64,7 @@ import { OrganizationUserUpdateGroupsRequest } from "../models/request/organizat
 import { OrganizationUserUpdateRequest } from "../models/request/organizationUserUpdateRequest";
 import { PasswordHintRequest } from "../models/request/passwordHintRequest";
 import { PasswordRequest } from "../models/request/passwordRequest";
+import { PasswordlessCreateAuthRequest } from "../models/request/passwordlessCreateAuthRequest";
 import { PaymentRequest } from "../models/request/paymentRequest";
 import { PreloginRequest } from "../models/request/preloginRequest";
 import { ProviderAddOrganizationRequest } from "../models/request/provider/providerAddOrganizationRequest";
@@ -104,6 +105,7 @@ import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
 import { AttachmentResponse } from "../models/response/attachmentResponse";
 import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
+import { AuthRequestResponse } from "../models/response/authRequestResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
@@ -217,7 +219,6 @@ export class ApiService implements ApiServiceAbstraction {
       this.device === DeviceType.MacOsDesktop ||
       this.device === DeviceType.LinuxDesktop;
   }
-
   // Auth APIs
 
   async postIdentityToken(
@@ -281,6 +282,11 @@ export class ApiService implements ApiServiceAbstraction {
     } catch (e) {
       return Promise.reject(null);
     }
+  }
+
+  async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
+    const r = await this.send("POST", "/auth-requests/", request, false, true);
+    return new AuthRequestResponse(r);
   }
 
   // Account APIs

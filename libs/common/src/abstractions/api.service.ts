@@ -96,6 +96,7 @@ import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
 import { AttachmentResponse } from "../models/response/attachmentResponse";
 import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
+import { AuthRequestResponse } from "../models/response/authRequestResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
@@ -178,6 +179,8 @@ import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyRes
 import { UserKeyResponse } from "../models/response/userKeyResponse";
 import { SendAccessView } from "../models/view/sendAccessView";
 
+import { PasswordlessCreateAuthRequest } from "./../models/request/passwordlessCreateAuthRequest";
+
 export abstract class ApiService {
   send: (
     method: "GET" | "POST" | "PUT" | "DELETE",
@@ -228,6 +231,8 @@ export abstract class ApiService {
   postUserRotateApiKey: (id: string, request: SecretVerificationRequest) => Promise<ApiKeyResponse>;
   putUpdateTempPassword: (request: UpdateTempPasswordRequest) => Promise<any>;
   postConvertToKeyConnector: () => Promise<void>;
+
+  postAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
 
   getUserBillingHistory: () => Promise<BillingHistoryResponse>;
   getUserBillingPayment: () => Promise<BillingPaymentResponse>;
