@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 
-import { CipherStatus } from "../models/cipher-status.model";
+import { CipherStatus } from "../models/cipher-filter.model";
 import { VaultFilter } from "../models/vault-filter.model";
 
 @Directive()

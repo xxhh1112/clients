@@ -1,7 +1,7 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { CipherStatus } from "./cipher-status.model";
+import { CipherStatus } from "./cipher-filter.model";
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
 
