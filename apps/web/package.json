@@ -1,6 +1,6 @@
 {
   "name": "@bitwarden/web-vault",
-  "version": "2022.6.2",
+  "version": "2022.8.0",
   "scripts": {
     "build:oss": "webpack",
     "build:bit": "webpack -c ../../bitwarden_license/bit-web/webpack.config.js",
@@ -18,6 +18,9 @@
     "clean:l10n": "git push origin --delete l10n_master",
     "dist:bit:cloud": "npm run build:bit:cloud",
     "dist:oss:selfhost": "npm run build:oss:selfhost:prod",
-    "dist:bit:selfhost": "npm run build:bit:selfhost:prod"
+    "dist:bit:selfhost": "npm run build:bit:selfhost:prod",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:watch:all": "jest --watchAll"
   }
 }

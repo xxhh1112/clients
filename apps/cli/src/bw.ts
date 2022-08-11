@@ -31,7 +31,7 @@ import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.s
 import { NoopMessagingService } from "@bitwarden/common/services/noopMessaging.service";
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
-import { PolicyService } from "@bitwarden/common/services/policy.service";
+import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
 import { ProviderService } from "@bitwarden/common/services/provider.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { SendService } from "@bitwarden/common/services/send.service";
@@ -42,7 +42,8 @@ import { SyncService } from "@bitwarden/common/services/sync.service";
 import { TokenService } from "@bitwarden/common/services/token.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
 import { TwoFactorService } from "@bitwarden/common/services/twoFactor.service";
-import { UserVerificationService } from "@bitwarden/common/services/userVerification.service";
+import { UserVerificationApiService } from "@bitwarden/common/services/userVerification/userVerification-api.service";
+import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout.service";
 import { CliPlatformUtilsService } from "@bitwarden/node/cli/services/cliPlatformUtils.service";
 import { ConsoleLogService } from "@bitwarden/node/cli/services/consoleLog.service";
@@ -106,6 +107,7 @@ export class Main {
   twoFactorService: TwoFactorService;
   broadcasterService: BroadcasterService;
   folderApiService: FolderApiService;
+  userVerificationApiService: UserVerificationApiService;
 
   constructor() {
     let p = null;
@@ -223,11 +225,7 @@ export class Main {
 
     this.organizationService = new OrganizationService(this.stateService);
 
-    this.policyService = new PolicyService(
-      this.stateService,
-      this.organizationService,
-      this.apiService
-    );
+    this.policyService = new PolicyService(this.stateService, this.organizationService);
 
     this.sendService = new SendService(
       this.cryptoService,
@@ -334,10 +332,13 @@ export class Main {
     this.program = new Program(this);
     this.vaultProgram = new VaultProgram(this);
     this.sendProgram = new SendProgram(this);
+
+    this.userVerificationApiService = new UserVerificationApiService(this.apiService);
+
     this.userVerificationService = new UserVerificationService(
       this.cryptoService,
       this.i18nService,
-      this.apiService
+      this.userVerificationApiService
     );
   }
 

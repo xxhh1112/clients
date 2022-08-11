@@ -26,9 +26,8 @@ import { SendView } from "../models/view/sendView";
 
 export abstract class StateService<T extends Account = Account> {
   accounts: BehaviorSubject<{ [userId: string]: T }>;
-  activeAccount: BehaviorSubject<string>;
-
-  activeAccountUnlocked: Observable<boolean>;
+  activeAccount$: Observable<string>;
+  activeAccountUnlocked$: Observable<boolean>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
@@ -53,8 +52,6 @@ export abstract class StateService<T extends Account = Account> {
   setBiometricAwaitingAcceptance: (value: boolean, options?: StorageOptions) => Promise<void>;
   getBiometricFingerprintValidated: (options?: StorageOptions) => Promise<boolean>;
   setBiometricFingerprintValidated: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getBiometricLocked: (options?: StorageOptions) => Promise<boolean>;
-  setBiometricLocked: (value: boolean, options?: StorageOptions) => Promise<void>;
   getBiometricText: (options?: StorageOptions) => Promise<string>;
   setBiometricText: (value: string, options?: StorageOptions) => Promise<void>;
   getBiometricUnlock: (options?: StorageOptions) => Promise<boolean>;
@@ -248,8 +245,6 @@ export abstract class StateService<T extends Account = Account> {
   setLastActive: (value: number, options?: StorageOptions) => Promise<void>;
   getLastSync: (options?: StorageOptions) => Promise<string>;
   setLastSync: (value: string, options?: StorageOptions) => Promise<void>;
-  getLegacyEtmKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
-  setLegacyEtmKey: (value: SymmetricCryptoKey, options?: StorageOptions) => Promise<void>;
   getLocalData: (options?: StorageOptions) => Promise<any>;
   setLocalData: (value: string, options?: StorageOptions) => Promise<void>;
   getLocale: (options?: StorageOptions) => Promise<string>;

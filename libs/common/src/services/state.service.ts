@@ -55,8 +55,11 @@ export class StateService<
 > implements StateServiceAbstraction<TAccount>
 {
   accounts = new BehaviorSubject<{ [userId: string]: TAccount }>({});
-  activeAccount = new BehaviorSubject<string>(null);
-  activeAccountUnlocked = new BehaviorSubject<boolean>(false);
+  private activeAccountSubject = new BehaviorSubject<string>(null);
+  activeAccount$ = this.activeAccountSubject.asObservable();
+
+  private activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
+  activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
 
   private hasBeenInited = false;
   private isRecoveredSession = false;
@@ -73,17 +76,17 @@ export class StateService<
     protected useAccountCache: boolean = true
   ) {
     // If the account gets changed, verify the new account is unlocked
-    this.activeAccount.subscribe(async (userId) => {
-      if (userId == null && this.activeAccountUnlocked.getValue() == false) {
+    this.activeAccountSubject.subscribe(async (userId) => {
+      if (userId == null && this.activeAccountUnlockedSubject.getValue() == false) {
         return;
       } else if (userId == null) {
-        this.activeAccountUnlocked.next(false);
+        this.activeAccountUnlockedSubject.next(false);
       }
 
       // FIXME: This should be refactored into AuthService or a similar service,
       //  as checking for the existance of the crypto key is a low level
       //  implementation detail.
-      this.activeAccountUnlocked.next((await this.getCryptoMasterKey()) != null);
+      this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
     });
   }
 
@@ -125,7 +128,7 @@ export class StateService<
         state.activeUserId = storedActiveUser;
       }
       await this.pushAccounts();
-      this.activeAccount.next(state.activeUserId);
+      this.activeAccountSubject.next(state.activeUserId);
 
       return state;
     });
@@ -154,7 +157,7 @@ export class StateService<
     await this.scaffoldNewAccountStorage(account);
     await this.setLastActive(new Date().getTime(), { userId: account.profile.userId });
     await this.setActiveUser(account.profile.userId);
-    this.activeAccount.next(account.profile.userId);
+    this.activeAccountSubject.next(account.profile.userId);
   }
 
   async setActiveUser(userId: string): Promise<void> {
@@ -162,7 +165,7 @@ export class StateService<
     await this.updateState(async (state) => {
       state.activeUserId = userId;
       await this.storageService.save(keys.activeUserId, userId);
-      this.activeAccount.next(state.activeUserId);
+      this.activeAccountSubject.next(state.activeUserId);
       return state;
     });
 
@@ -324,24 +327,6 @@ export class StateService<
     );
   }
 
-  async getBiometricLocked(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.settings?.biometricLocked ?? false
-    );
-  }
-
-  async setBiometricLocked(value: boolean, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
-    );
-    account.settings.biometricLocked = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
-    );
-  }
-
   async getBiometricText(options?: StorageOptions): Promise<string> {
     return (
       await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -498,7 +483,7 @@ export class StateService<
     );
   }
 
-  @withPrototype(SymmetricCryptoKey, SymmetricCryptoKey.initFromJson)
+  @withPrototype(SymmetricCryptoKey, SymmetricCryptoKey.fromJSON)
   async getCryptoMasterKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -515,12 +500,12 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    if (options.userId == this.activeAccount.getValue()) {
+    if (options.userId == this.activeAccountSubject.getValue()) {
       const nextValue = value != null;
 
       // Avoid emitting if we are already unlocked
-      if (this.activeAccountUnlocked.getValue() != nextValue) {
-        this.activeAccountUnlocked.next(nextValue);
+      if (this.activeAccountUnlockedSubject.getValue() != nextValue) {
+        this.activeAccountUnlockedSubject.next(nextValue);
       }
     }
   }
@@ -625,7 +610,7 @@ export class StateService<
     );
   }
 
-  @withPrototypeForArrayMembers(CipherView)
+  @withPrototypeForArrayMembers(CipherView, CipherView.fromJSON)
   async getDecryptedCiphers(options?: StorageOptions): Promise<CipherView[]> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -661,7 +646,7 @@ export class StateService<
     );
   }
 
-  @withPrototype(SymmetricCryptoKey, SymmetricCryptoKey.initFromJson)
+  @withPrototype(SymmetricCryptoKey, SymmetricCryptoKey.fromJSON)
   async getDecryptedCryptoSymmetricKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -682,7 +667,7 @@ export class StateService<
     );
   }
 
-  @withPrototypeForMap(SymmetricCryptoKey, SymmetricCryptoKey.initFromJson)
+  @withPrototypeForMap(SymmetricCryptoKey, SymmetricCryptoKey.fromJSON)
   async getDecryptedOrganizationKeys(
     options?: StorageOptions
   ): Promise<Map<string, SymmetricCryptoKey>> {
@@ -789,7 +774,7 @@ export class StateService<
     );
   }
 
-  @withPrototypeForMap(SymmetricCryptoKey, SymmetricCryptoKey.initFromJson)
+  @withPrototypeForMap(SymmetricCryptoKey, SymmetricCryptoKey.fromJSON)
   async getDecryptedProviderKeys(
     options?: StorageOptions
   ): Promise<Map<string, SymmetricCryptoKey>> {
@@ -1750,24 +1735,6 @@ export class StateService<
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
-    );
-  }
-
-  @withPrototype(SymmetricCryptoKey, SymmetricCryptoKey.initFromJson)
-  async getLegacyEtmKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.keys?.legacyEtmKey;
-  }
-
-  async setLegacyEtmKey(value: SymmetricCryptoKey, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    account.keys.legacyEtmKey = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
 
@@ -2766,7 +2733,7 @@ export class StateService<
 
 export function withPrototype<T>(
   constructor: new (...args: any[]) => T,
-  converter: (input: T) => T = (i) => i
+  converter: (input: any) => T = (i) => i
 ): (
   target: any,
   propertyKey: string | symbol,
@@ -2802,7 +2769,7 @@ export function withPrototype<T>(
 
 function withPrototypeForArrayMembers<T>(
   memberConstructor: new (...args: any[]) => T,
-  memberConverter: (input: T) => T = (i) => i
+  memberConverter: (input: any) => T = (i) => i
 ): (
   target: any,
   propertyKey: string | symbol,
@@ -2850,7 +2817,7 @@ function withPrototypeForArrayMembers<T>(
 
 function withPrototypeForObjectValues<T>(
   valuesConstructor: new (...args: any[]) => T,
-  valuesConverter: (input: T) => T = (i) => i
+  valuesConverter: (input: any) => T = (i) => i
 ): (
   target: any,
   propertyKey: string | symbol,
@@ -2897,7 +2864,7 @@ function withPrototypeForObjectValues<T>(
 
 function withPrototypeForMap<T>(
   valuesConstructor: new (...args: any[]) => T,
-  valuesConverter: (input: T) => T = (i) => i
+  valuesConverter: (input: any) => T = (i) => i
 ): (
   target: any,
   propertyKey: string | symbol,

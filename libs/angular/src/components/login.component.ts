@@ -59,6 +59,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     super(environmentService, i18nService, platformUtilsService);
   }
 
+  get selfHostedDomain() {
+    return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
+  }
+
   async ngOnInit() {
     let email = this.formGroup.get("email")?.value;
     if (email == null || email === "") {

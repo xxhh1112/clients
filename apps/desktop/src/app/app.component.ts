@@ -1,6 +1,7 @@
 import {
   Component,
   NgZone,
+  OnDestroy,
   OnInit,
   SecurityContext,
   Type,
@@ -28,7 +29,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -77,7 +78,7 @@ const systemTimeoutOptions = {
     </div>
   `,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("settings", { read: ViewContainerRef, static: true }) settingsRef: ViewContainerRef;
   @ViewChild("premium", { read: ViewContainerRef, static: true }) premiumRef: ViewContainerRef;
   @ViewChild("passwordHistory", { read: ViewContainerRef, static: true })
@@ -123,13 +124,13 @@ export class AppComponent implements OnInit {
     private systemService: SystemService,
     private stateService: StateService,
     private eventService: EventService,
-    private policyService: PolicyService,
+    private policyService: InternalPolicyService,
     private modalService: ModalService,
     private keyConnectorService: KeyConnectorService
   ) {}
 
   ngOnInit() {
-    this.stateService.activeAccount.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
+    this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       this.activeUserId = userId;
     });
 
@@ -158,7 +159,7 @@ export class AppComponent implements OnInit {
             this.notificationsService.updateConnection();
             this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
-            await this.reloadProcess();
+            await this.systemService.startProcessReload(this.authService);
             break;
           case "authBlocked":
             this.router.navigate(["login"]);
@@ -189,7 +190,7 @@ export class AppComponent implements OnInit {
             this.notificationsService.updateConnection();
             await this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
-            await this.reloadProcess();
+            await this.systemService.startProcessReload(this.authService);
             break;
           case "reloadProcess":
             (window.location as any).reload(true);
@@ -470,8 +471,6 @@ export class AppComponent implements OnInit {
       this.keyConnectorService.clear(),
     ]);
 
-    await this.stateService.setBiometricLocked(true, { userId: userBeingLoggedOut });
-
     if (userBeingLoggedOut === this.activeUserId) {
       this.searchService.clearIndex();
       this.authService.logOut(async () => {
@@ -583,21 +582,6 @@ export class AppComponent implements OnInit {
         replaceUrl: true,
       });
     }
-  }
-
-  private async reloadProcess(): Promise<void> {
-    const accounts = this.stateService.accounts.getValue();
-    if (accounts != null) {
-      const keys = Object.keys(accounts);
-      if (keys.length > 0) {
-        for (const userId of keys) {
-          if ((await this.authService.getAuthStatus(userId)) === AuthenticationStatus.Unlocked) {
-            return;
-          }
-        }
-      }
-    }
-    await this.systemService.startProcessReload();
   }
 
   private async checkForSystemTimeout(timeout: number): Promise<void> {

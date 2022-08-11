@@ -33,7 +33,8 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
@@ -44,7 +45,7 @@ import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
@@ -55,6 +56,7 @@ import MainBackground from "../../background/main.background";
 import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
 import { StateService as StateServiceAbstraction } from "../../services/abstractions/state.service";
+import { BrowserEnvironmentService } from "../../services/browser-environment.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
 import BrowserMessagingService from "../../services/browserMessaging.service";
 import BrowserMessagingPrivateModePopupService from "../../services/browserMessagingPrivateModePopup.service";
@@ -172,6 +174,10 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
+      provide: BrowserEnvironmentService,
+      useExisting: EnvironmentService,
+    },
+    {
       provide: EnvironmentService,
       useFactory: getBgService<EnvironmentService>("environmentService"),
       deps: [],
@@ -181,7 +187,16 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: I18nService, useFactory: getBgService<I18nService>("i18nService"), deps: [] },
     { provide: CryptoService, useFactory: getBgService<CryptoService>("cryptoService"), deps: [] },
     { provide: EventService, useFactory: getBgService<EventService>("eventService"), deps: [] },
-    { provide: PolicyService, useFactory: getBgService<PolicyService>("policyService"), deps: [] },
+    {
+      provide: PolicyService,
+      useFactory: getBgService<PolicyService>("policyService"),
+      deps: [],
+    },
+    {
+      provide: PolicyApiServiceAbstraction,
+      useFactory: getBgService<PolicyApiServiceAbstraction>("policyApiService"),
+      deps: [],
+    },
     {
       provide: PlatformUtilsService,
       useFactory: getBgService<PlatformUtilsService>("platformUtilsService"),

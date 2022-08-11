@@ -6,7 +6,7 @@ import { FolderService } from "../abstractions/folder/folder.service.abstraction
 import { KeyConnectorService } from "../abstractions/keyConnector.service";
 import { MessagingService } from "../abstractions/messaging.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
-import { PolicyService } from "../abstractions/policy.service";
+import { PolicyService } from "../abstractions/policy/policy.service.abstraction";
 import { SearchService } from "../abstractions/search.service";
 import { StateService } from "../abstractions/state.service";
 import { TokenService } from "../abstractions/token.service";
@@ -84,7 +84,6 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     }
 
     await this.stateService.setEverBeenUnlocked(true, { userId: userId });
-    await this.stateService.setBiometricLocked(true, { userId: userId });
     await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
 
     await this.cryptoService.clearKey(false, userId);

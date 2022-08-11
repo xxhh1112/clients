@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ipcRenderer } from "electron";
 
@@ -13,6 +13,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
 
 const BroadcasterSubscriptionId = "LockComponent";
@@ -21,8 +22,10 @@ const BroadcasterSubscriptionId = "LockComponent";
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
-export class LockComponent extends BaseLockComponent implements OnDestroy {
+export class LockComponent extends BaseLockComponent {
   private deferFocus: boolean = null;
+  authenicatedUrl = "vault";
+  unAuthenicatedUrl = "update-temp-password";
 
   constructor(
     router: Router,
@@ -38,7 +41,8 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
     private broadcasterService: BroadcasterService,
     ngZone: NgZone,
     logService: LogService,
-    keyConnectorService: KeyConnectorService
+    keyConnectorService: KeyConnectorService,
+    private syncService: SyncService
   ) {
     super(
       router,
@@ -59,6 +63,11 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
   async ngOnInit() {
     await super.ngOnInit();
     const autoPromptBiometric = !(await this.stateService.getNoAutoPromptBiometrics());
+
+    await this.syncService.fullSync(true);
+
+    const forcePasswordReset = await this.stateService.getForcePasswordReset();
+    this.successRoute = forcePasswordReset === true ? this.unAuthenicatedUrl : this.authenicatedUrl;
 
     this.route.queryParams.subscribe((params) => {
       if (this.supportsBiometric && params.promptBiometric && autoPromptBiometric) {
@@ -94,6 +103,7 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 

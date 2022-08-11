@@ -6,6 +6,7 @@ import * as koaBodyParser from "koa-bodyparser";
 import * as koaJson from "koa-json";
 
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { Response } from "@bitwarden/node/cli/models/response";
 import { FileResponse } from "@bitwarden/node/cli/models/response/fileResponse";
 
@@ -149,14 +150,37 @@ export class ServeCommand {
   }
 
   async run(options: program.OptionValues) {
+    const protectOrigin = !options.disableOriginProtection;
     const port = options.port || 8087;
     const hostname = options.hostname || "localhost";
+    this.main.logService.info(
+      `Starting server on ${hostname}:${port} with ${
+        protectOrigin ? "origin protection" : "no origin protection"
+      }`
+    );
+
     const server = new koa();
     const router = new koaRouter();
     process.env.BW_SERVE = "true";
     process.env.BW_NOINTERACTION = "true";
 
-    server.use(koaBodyParser()).use(koaJson({ pretty: false, param: "pretty" }));
+    server
+      .use(async (ctx, next) => {
+        if (protectOrigin && ctx.headers.origin != undefined) {
+          ctx.status = 403;
+          this.main.logService.warning(
+            `Blocking request from "${
+              Utils.isNullOrEmpty(ctx.headers.origin)
+                ? "(Origin header value missing)"
+                : ctx.headers.origin
+            }"`
+          );
+          return;
+        }
+        await next();
+      })
+      .use(koaBodyParser())
+      .use(koaJson({ pretty: false, param: "pretty" }));
 
     router.get("/generate", async (ctx, next) => {
       const response = await this.generateCommand.run(ctx.request.query);

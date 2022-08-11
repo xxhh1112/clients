@@ -11,10 +11,11 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
+  HostListener,
 } from "@angular/core";
 import { merge } from "rxjs";
 
-import { VaultFilter } from "@bitwarden/angular/modules/vault-filter/models/vault-filter.model";
+import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -86,6 +87,14 @@ export class VaultSelectComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private platformUtilsService: PlatformUtilsService
   ) {}
+
+  @HostListener("document:keydown.escape", ["$event"])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.isOpen) {
+      event.preventDefault();
+      this.close();
+    }
+  }
 
   async ngOnInit() {
     await this.load();

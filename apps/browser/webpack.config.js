@@ -85,6 +85,7 @@ const plugins = [
       manifestVersion == 3
         ? { from: "./src/manifest.v3.json", to: "manifest.json" }
         : "./src/manifest.json",
+      { from: "./src/managed_schema.json", to: "managed_schema.json" },
       { from: "./src/_locales", to: "_locales" },
       { from: "./src/images", to: "images" },
       { from: "./src/popup/images", to: "popup/images" },
@@ -175,13 +176,6 @@ const config = {
             return chunk.name === "popup/main";
           },
         },
-        commons2: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: (chunk) => {
-            return chunk.name === "background";
-          },
-        },
       },
     },
   },
@@ -207,5 +201,17 @@ const config = {
   module: { rules: moduleRules },
   plugins: plugins,
 };
+
+if (manifestVersion == 2) {
+  // We can't use this in manifest v3
+  // Ideally we understand why this breaks it and we don't have to do this
+  config.optimization.splitChunks.cacheGroups.commons2 = {
+    test: /[\\/]node_modules[\\/]/,
+    name: "vendor",
+    chunks: (chunk) => {
+      return chunk.name === "background";
+    },
+  };
+}
 
 module.exports = config;
