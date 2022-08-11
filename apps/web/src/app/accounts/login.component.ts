@@ -172,6 +172,18 @@ export class LoginComponent extends BaseLoginComponent {
     await super.submit(false);
   }
 
+  async startPasswordlessLogin() {
+    this.formGroup.get("masterPassword")?.clearValidators();
+    this.formGroup.get("masterPassword")?.updateValueAndValidity();
+
+    if (!this.formGroup.valid) {
+      return;
+    }
+
+    const email = this.formGroup.get("email").value;
+    this.router.navigate(["/login-with-device"], { state: { email: email } });
+  }
+
   private getPasswordStrengthUserInput() {
     const email = this.formGroup.get("email")?.value;
     let userInput: string[] = [];

@@ -97,10 +97,20 @@
         </div>
 
         <div class="tw-mb-3">
-          <a routerLink="/login-with-device" bitButton buttonType="secondary" class="tw-w-full">
+          <!-- <a routerLink="/login-with-device" bitButton buttonType="secondary" class="tw-w-full">
             <i class="bwi bwi-mobile tw-mr-2"></i>
             {{ "loginWithDevice" | i18n }}
-          </a>
+          </a> -->
+          <button
+            bitButton
+            type="button"
+            buttonType="secondary"
+            class="tw-w-full"
+            (click)="startPasswordlessLogin()"
+            [disabled]="form.loading"
+          >
+            <span> <i class="bwi bwi-mobile"></i> {{ "loginWithDevice" | i18n }} </span>
+          </button>
         </div>
 
         <div class="tw-mb-3">

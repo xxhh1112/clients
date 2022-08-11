@@ -64,7 +64,6 @@ const routes: Routes = [
       {
         path: "login-with-device",
         component: LoginWithDeviceComponent,
-        canActivate: [UnauthGuard],
         data: { titleId: "loginWithDevice" },
       },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },

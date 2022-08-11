@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 
 @Component({
   selector: "app-login-with-device",
@@ -9,16 +10,28 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 })
 export class LoginWithDeviceComponent implements OnInit {
   fingerPrint: string;
+  email: string;
 
-  constructor(private cryptoService: CryptoService, private stateService: StateService) {}
+  constructor(
+    private router: Router,
+    private cryptoService: CryptoService,
+    private cryptoFunctionService: CryptoFunctionService
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    this.email = navigation.extras?.state?.email;
+  }
 
   async ngOnInit() {
-    // const fingerPrint = await this.cryptoService.getFingerprint(
-    //   await this.stateService.getUserId()
-    // );
-    // if (fingerPrint) {
-    //   this.fingerPrint = fingerPrint.join("-");
-    // }
-    this.fingerPrint = "longinus-spear-black-moon-scrolls";
+    if (!this.email) {
+      this.router.navigate(["/login"]);
+    }
+
+    this.startPasswordlessLogin();
+  }
+
+  async startPasswordlessLogin() {
+    const keypair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
+    const fingerprint = await this.cryptoService.getFingerprint(this.email, keypair[0]);
+    this.fingerPrint = fingerprint.join("-");
   }
 }
