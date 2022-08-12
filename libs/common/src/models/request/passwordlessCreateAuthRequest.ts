@@ -1,4 +1,4 @@
-import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
+import { AuthRequestType } from "../../enums/authRequestType";
 
 export class PasswordlessCreateAuthRequest {
   constructor(

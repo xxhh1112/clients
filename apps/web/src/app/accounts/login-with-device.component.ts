@@ -2,13 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { PasswordlessCreateAuthRequest } from "@bitwarden/common/src/models/request/passwordlessCreateAuthRequest";
-import { AppIdService } from "@bitwarden/common/src/services/appId.service";
+import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
 @Component({
   selector: "app-login-with-device",

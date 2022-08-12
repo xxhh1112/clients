@@ -56,6 +56,7 @@ import { OrganizationUserUpdateGroupsRequest } from "../models/request/organizat
 import { OrganizationUserUpdateRequest } from "../models/request/organizationUserUpdateRequest";
 import { PasswordHintRequest } from "../models/request/passwordHintRequest";
 import { PasswordRequest } from "../models/request/passwordRequest";
+import { PasswordlessCreateAuthRequest } from "../models/request/passwordlessCreateAuthRequest";
 import { PaymentRequest } from "../models/request/paymentRequest";
 import { PreloginRequest } from "../models/request/preloginRequest";
 import { ProviderAddOrganizationRequest } from "../models/request/provider/providerAddOrganizationRequest";
@@ -179,7 +180,6 @@ import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyRes
 import { UserKeyResponse } from "../models/response/userKeyResponse";
 import { SendAccessView } from "../models/view/sendAccessView";
 
-import { PasswordlessCreateAuthRequest } from "./../models/request/passwordlessCreateAuthRequest";
 
 export abstract class ApiService {
   send: (
