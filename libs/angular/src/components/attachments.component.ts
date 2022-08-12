@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -41,7 +41,7 @@ export class AttachmentsComponent implements OnInit {
     protected logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected cipherApiService: CipherApiServiceAbstraction
+    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -246,7 +246,7 @@ export class AttachmentsComponent implements OnInit {
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
           const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
-          this.cipherDomain = await this.cipherApiService.saveAttachmentRawWithServer(
+          this.cipherDomain = await this.cipherApiAttachmentService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
             decBuf,
@@ -288,10 +288,10 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherApiService.saveAttachmentWithServer(this.cipherDomain, file);
+    return this.cipherApiAttachmentService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
   protected deleteCipherAttachment(attachmentId: string) {
-    return this.cipherApiService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
+    return this.cipherApiAttachmentService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
   }
 }

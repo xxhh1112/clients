@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -48,7 +49,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
     organizationService: OrganizationService,
-    private cipherApiServiceAbstraction: CipherApiServiceAbstraction
+    cipherApiService: CipherApiServiceAbstraction,
+    private cipherApiAdminService: CipherApiAdminServiceAbstraction
   ) {
     super(
       cipherService,
@@ -66,7 +68,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       organizationService,
       logService,
       passwordRepromptService,
-      cipherApiServiceAbstraction
+      cipherApiService
     );
   }
 
@@ -95,7 +97,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (!this.organization.canEditAnyCollection) {
       return await super.loadCipher();
     }
-    const response = await this.cipherApiServiceAbstraction.getCipherAdmin(this.cipherId);
+    const response = await this.cipherApiAdminService.getCipherAdmin(this.cipherId);
     const data = new CipherData(response);
     this.originalCipher = new Cipher(data);
     return new Cipher(data);
@@ -114,10 +116,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
     if (this.editMode && !this.cloneMode) {
       const request = new CipherRequest(cipher);
-      return this.cipherApiServiceAbstraction.putCipherAdmin(this.cipherId, request);
+      return this.cipherApiAdminService.putCipherAdmin(this.cipherId, request);
     } else {
       const request = new CipherCreateRequest(cipher);
-      return this.cipherApiServiceAbstraction.postCipherAdmin(request);
+      return this.cipherApiAdminService.postCipherAdmin(request);
     }
   }
 
@@ -126,7 +128,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       return super.deleteCipher();
     }
     return this.cipher.isDeleted
-      ? this.cipherApiServiceAbstraction.deleteCipherAdmin(this.cipherId)
-      : this.cipherApiServiceAbstraction.putDeleteCipherAdmin(this.cipherId);
+      ? this.cipherApiAdminService.deleteCipherAdmin(this.cipherId)
+      : this.cipherApiAdminService.putDeleteCipherAdmin(this.cipherId);
   }
 }

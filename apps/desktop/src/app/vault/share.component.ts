@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { ShareComponent as BaseShareComponent } from "@bitwarden/angular/components/share.component";
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -21,7 +21,7 @@ export class ShareComponent extends BaseShareComponent {
     platformUtilsService: PlatformUtilsService,
     logService: LogService,
     organizationService: OrganizationService,
-    cipherApiService: CipherApiServiceAbstraction
+    cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {
     super(
       collectionService,
@@ -30,7 +30,7 @@ export class ShareComponent extends BaseShareComponent {
       cipherService,
       logService,
       organizationService,
-      cipherApiService
+      cipherApiAttachmentService
     );
   }
 }

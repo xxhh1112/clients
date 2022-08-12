@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -25,7 +26,8 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     cipherService: CipherService,
-    private cipherApiServiceAbstraction: CipherApiServiceAbstraction,
+    cipherApiService: CipherApiServiceAbstraction,
+    private cipherApiAdminService: CipherApiAdminServiceAbstraction,
     logService: LogService
   ) {
     super(
@@ -34,7 +36,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
       i18nService,
       cipherService,
       logService,
-      cipherApiServiceAbstraction
+      cipherApiService
     );
     this.allowSelectNone = true;
   }
@@ -43,7 +45,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     if (!this.organization.canViewAllCollections) {
       return await super.loadCipher();
     }
-    const response = await this.cipherApiServiceAbstraction.getCipherAdmin(this.cipherId);
+    const response = await this.cipherApiAdminService.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 
@@ -64,7 +66,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
   protected saveCollections() {
     if (this.organization.canEditAnyCollection) {
       const request = new CipherCollectionsRequest(this.cipherDomain.collectionIds);
-      return this.cipherApiServiceAbstraction.putCipherCollectionsAdmin(this.cipherId, request);
+      return this.cipherApiAdminService.putCipherCollectionsAdmin(this.cipherId, request);
     } else {
       return super.saveCollections();
     }

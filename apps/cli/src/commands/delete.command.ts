@@ -1,4 +1,5 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
@@ -16,7 +17,8 @@ export class DeleteCommand {
     private stateService: StateService,
     private apiService: ApiService,
     private folderApiService: FolderApiServiceAbstraction,
-    private cipherApiService: CipherApiServiceAbstraction
+    private cipherApiService: CipherApiServiceAbstraction,
+    private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async run(object: string, id: string, cmdOptions: Record<string, any>): Promise<Response> {
@@ -82,7 +84,10 @@ export class DeleteCommand {
     }
 
     try {
-      await this.cipherApiService.deleteAttachmentWithServer(cipher.id, attachments[0].id);
+      await this.cipherApiAttachmentService.deleteAttachmentWithServer(
+        cipher.id,
+        attachments[0].id
+      );
       return Response.success();
     } catch (e) {
       return Response.error(e);

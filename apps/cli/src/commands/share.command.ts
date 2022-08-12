@@ -1,4 +1,4 @@
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { Response } from "@bitwarden/node/cli/models/response";
 
@@ -8,7 +8,7 @@ import { CliUtils } from "../utils";
 export class ShareCommand {
   constructor(
     private cipherService: CipherService,
-    private cipherApiService: CipherApiServiceAbstraction
+    private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async run(id: string, organizationId: string, requestJson: string): Promise<Response> {
@@ -51,7 +51,7 @@ export class ShareCommand {
     }
     const cipherView = await cipher.decrypt();
     try {
-      await this.cipherApiService.shareWithServer(cipherView, organizationId, req);
+      await this.cipherApiAttachmentService.shareWithServer(cipherView, organizationId, req);
       const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt();
       const res = new CipherResponse(decCipher);

@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
@@ -110,6 +111,7 @@ export class Main {
   broadcasterService: BroadcasterService;
   folderApiService: FolderApiService;
   cipherApiService: CipherApiService;
+  cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -194,7 +196,7 @@ export class Main {
     this.fileUploadService = new FileUploadService(
       this.logService,
       this.apiService,
-      this.cipherApiService
+      this.cipherApiAttachmentService
     );
 
     this.cipherService = new CipherService(

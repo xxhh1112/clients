@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -33,7 +33,7 @@ export class ShareComponent implements OnInit {
     protected cipherService: CipherService,
     private logService: LogService,
     protected organizationService: OrganizationService,
-    protected cipherApiService: CipherApiServiceAbstraction
+    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -87,7 +87,7 @@ export class ShareComponent implements OnInit {
       this.i18nService.t("organization");
 
     try {
-      this.formPromise = this.cipherApiService
+      this.formPromise = this.cipherApiAttachmentService
         .shareWithServer(cipherView, this.organizationId, selectedCollectionIds)
         .then(async () => {
           this.onSharedCipher.emit();

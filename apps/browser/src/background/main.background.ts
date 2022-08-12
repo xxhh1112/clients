@@ -2,6 +2,7 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import {
   CipherService as CipherServiceAbstraction,
@@ -156,6 +157,7 @@ export default class MainBackground {
   folderApiService: FolderApiServiceAbstraction;
   cipherApiServiceAbstraction: CipherApiServiceAbstraction;
   internalCipherServiceAbstraction: InternalCipherServiceAbstraction;
+  cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -268,7 +270,7 @@ export default class MainBackground {
     this.fileUploadService = new FileUploadService(
       this.logService,
       this.apiService,
-      this.cipherApiServiceAbstraction
+      this.cipherApiAttachmentService
     );
     this.cipherService = new CipherService(
       this.cryptoService,

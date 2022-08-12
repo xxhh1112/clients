@@ -6,14 +6,14 @@ import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { EncString } from "@bitwarden/common/models/domain/encString";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { CipherApiService } from "@bitwarden/common/services/cipher/cipher-api.service";
+import { CipherApiAttachmentService } from "@bitwarden/common/services/cipher/cipher-api-attachement.service";
 
 const ENCRYPTED_TEXT = "This data has been encrypted";
 const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
 
 describe("Cipher Service", () => {
   let cryptoService: SubstituteOf<CryptoService>;
-  let cipherApiService: SubstituteOf<CipherApiService>;
+  let cipherApiAttachmentService: SubstituteOf<CipherApiAttachmentService>;
   let fileUploadService: SubstituteOf<FileUploadService>;
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe("Cipher Service", () => {
     const fileData = new Uint8Array(10).buffer;
     cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
 
-    await cipherApiService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
+    await cipherApiAttachmentService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
 
     fileUploadService
       .received(1)

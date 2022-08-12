@@ -10,6 +10,8 @@ import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstr
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import {
   CipherService as CipherServiceAbstraction,
@@ -98,6 +100,8 @@ import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
 
+import { CipherApiAdminService } from "./../../../common/src/services/cipher/cipher-api-admin.service";
+import { CipherApiAttachmentService } from "./../../../common/src/services/cipher/cipher-api-attachement.service";
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
@@ -225,12 +229,21 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
     {
       provide: CipherApiServiceAbstraction,
       useClass: CipherApiService,
+      deps: [CipherServiceAbstraction, ApiServiceAbstraction, StateServiceAbstraction],
+    },
+    {
+      provide: CipherApiAdminServiceAbstraction,
+      useClass: CipherApiAdminService,
+      deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: CipherApiAttachmentServiceAbstraction,
+      useClass: CipherApiAttachmentService,
       deps: [
         CipherServiceAbstraction,
         ApiServiceAbstraction,
         CryptoServiceAbstraction,
         FileUploadServiceAbstraction,
-        StateServiceAbstraction,
       ],
     },
     {

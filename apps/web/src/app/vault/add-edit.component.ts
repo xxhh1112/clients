@@ -55,7 +55,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     organizationService: OrganizationService,
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
-    cipherApiServiceAbstraction: CipherApiServiceAbstraction
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -71,7 +71,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       logService,
       passwordRepromptService,
       organizationService,
-      cipherApiServiceAbstraction
+      cipherApiService
     );
   }
 
