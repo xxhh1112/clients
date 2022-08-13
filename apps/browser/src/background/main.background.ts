@@ -4,7 +4,10 @@ import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstr
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
-import { CipherService as CipherServiceAbstraction, InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import {
+  CipherService as CipherServiceAbstraction,
+  InternalCipherService,
+} from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -159,7 +162,7 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
-  cipherApiService : CipherApiServiceAbstraction;
+  cipherApiService: CipherApiServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -269,7 +272,11 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired)
     );
     this.settingsService = new SettingsService(this.stateService);
-    this.fileUploadService = new FileUploadService(this.logService, this.apiService,this.cipherApiAttachmentService);
+    this.fileUploadService = new FileUploadService(
+      this.logService,
+      this.apiService,
+      this.cipherApiAttachmentService
+    );
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,

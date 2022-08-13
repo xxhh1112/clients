@@ -8,17 +8,17 @@ import { CipherBulkMoveRequest } from "@bitwarden/common/models/request/cipherBu
 import { CipherBulkRestoreRequest } from "@bitwarden/common/models/request/cipherBulkRestoreRequest";
 import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
 import { CipherCollectionsRequest } from "@bitwarden/common/models/request/cipherCollectionsRequest";
-import { CipherCreateRequest } from "@bitwarden/common/models/request/cipherCreateRequest";
-import { CipherRequest } from "@bitwarden/common/models/request/cipherRequest";
 import { ImportCiphersRequest } from "@bitwarden/common/models/request/importCiphersRequest";
 import { ImportOrganizationCiphersRequest } from "@bitwarden/common/models/request/importOrganizationCiphersRequest";
 import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
-import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { ApiService } from "../../abstractions/api.service";
+import { CipherCreateRequest } from "../../models/request/cipherCreateRequest";
+import { CipherRequest } from "../../models/request/cipherRequest";
+import { CipherResponse } from "../../models/response/cipherResponse";
 
 export class CipherApiService implements CipherApiServiceAbstraction {
   constructor(

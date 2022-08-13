@@ -6,6 +6,7 @@ import * as jsdom from "jsdom";
 
 import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
@@ -78,7 +79,7 @@ export class Main {
   apiService: NodeApiService;
   environmentService: EnvironmentService;
   settingsService: SettingsService;
-  cipherService: CipherService;
+  cipherService: InternalCipherService;
   folderService: InternalFolderService;
   collectionService: CollectionService;
   vaultTimeoutService: VaultTimeoutService;

@@ -93,7 +93,7 @@ export class AddEditComponent implements OnInit {
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
     private organizationService: OrganizationService,
-    protected cipherApiService: CipherApiServiceAbstraction
+    private cipherApiService: CipherApiServiceAbstraction
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
