@@ -1,8 +1,12 @@
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 export class RestoreCommand {
-  constructor(private cipherService: CipherService) {}
+  constructor(
+    private cipherService: CipherService,
+    private cipherApiService: CipherApiServiceAbstraction
+  ) {}
 
   async run(object: string, id: string): Promise<Response> {
     if (id != null) {
@@ -27,7 +31,7 @@ export class RestoreCommand {
     }
 
     try {
-      await this.cipherService.restoreWithServer(id);
+      await this.cipherApiService.restoreWithServer(id);
       return Response.success();
     } catch (e) {
       return Response.error(e);

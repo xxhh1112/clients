@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Observable } from "rxjs";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -20,7 +20,7 @@ export class BulkMoveComponent implements OnInit {
   formPromise: Promise<any>;
 
   constructor(
-    private cipherService: CipherService,
+    private cipherApiService: CipherApiServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private folderService: FolderService
@@ -32,7 +32,7 @@ export class BulkMoveComponent implements OnInit {
   }
 
   async submit() {
-    this.formPromise = this.cipherService.moveManyWithServer(this.cipherIds, this.folderId);
+    this.formPromise = this.cipherApiService.moveManyWithServer(this.cipherIds, this.folderId);
     await this.formPromise;
     this.onMoved.emit();
     this.platformUtilsService.showToast("success", null, this.i18nService.t("movedItems"));

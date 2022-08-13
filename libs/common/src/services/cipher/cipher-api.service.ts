@@ -251,6 +251,13 @@ export class CipherApiService implements CipherApiServiceAbstraction {
     await this.cipherService.restore(restores);
   }
 
+  async saveCollectionsWithServer(cipher: Cipher): Promise<any> {
+    const request = new CipherCollectionsRequest(cipher.collectionIds);
+    await this.putCipherCollections(cipher.id, request);
+    const data = cipher.toCipherData();
+    await this.cipherService.upsert(data);
+  }
+
   private addEventParameters(base: string, start: string, end: string, token: string) {
     if (start != null) {
       base += "?start=" + start;

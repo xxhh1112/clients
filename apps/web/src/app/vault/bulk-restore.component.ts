@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
@@ -15,13 +15,13 @@ export class BulkRestoreComponent {
   formPromise: Promise<any>;
 
   constructor(
-    private cipherService: CipherService,
+    private cipherApiService: CipherApiServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService
   ) {}
 
   async submit() {
-    this.formPromise = this.cipherService.restoreManyWithServer(this.cipherIds);
+    this.formPromise = this.cipherApiService.restoreManyWithServer(this.cipherIds);
     await this.formPromise;
     this.onRestored.emit();
     this.platformUtilsService.showToast("success", null, this.i18nService.t("restoredItems"));

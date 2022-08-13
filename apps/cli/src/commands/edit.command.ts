@@ -109,7 +109,7 @@ export class EditCommand {
 
     cipher.collectionIds = req;
     try {
-      await this.cipherService.saveCollectionsWithServer(cipher);
+      await this.cipherApiService.saveCollectionsWithServer(cipher);
       const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt();
       const res = new CipherResponse(decCipher);

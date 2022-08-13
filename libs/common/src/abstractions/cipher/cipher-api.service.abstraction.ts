@@ -59,4 +59,5 @@ export class CipherApiServiceAbstraction {
   softDeleteManyWithServer: (ids: string[]) => Promise<any>;
   restoreWithServer: (id: string) => Promise<any>;
   restoreManyWithServer: (ids: string[]) => Promise<any>;
+  saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
 }
