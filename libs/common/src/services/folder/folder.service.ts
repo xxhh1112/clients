@@ -1,6 +1,7 @@
 import { BehaviorSubject } from "rxjs";
 
-import { CipherService } from "../../abstractions/cipher/cipher.service.abstraction";
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+
 import { CryptoService } from "../../abstractions/crypto.service";
 import { InternalFolderService as InternalFolderServiceAbstraction } from "../../abstractions/folder/folder.service.abstraction";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -22,7 +23,7 @@ export class FolderService implements InternalFolderServiceAbstraction {
   constructor(
     private cryptoService: CryptoService,
     private i18nService: I18nService,
-    private cipherService: CipherService,
+    private cipherService: InternalCipherService,
     private stateService: StateService
   ) {
     this.stateService.activeAccountUnlocked$.subscribe(async (unlocked) => {

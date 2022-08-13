@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/angular/components/attachments.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -25,20 +25,20 @@ export class EmergencyAccessAttachmentsComponent extends BaseAttachmentsComponen
     cryptoService: CryptoService,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
-    apiService: ApiService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {
     super(
       cipherService,
       i18nService,
       cryptoService,
       platformUtilsService,
-      apiService,
       window,
       logService,
       stateService,
-      fileDownloadService
+      fileDownloadService,
+      cipherApiAttachmentService
     );
   }
 

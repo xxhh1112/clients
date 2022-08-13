@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ShareComponent as BaseShareComponent } from "@bitwarden/angular/components/share.component";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -23,7 +24,8 @@ export class ShareComponent extends BaseShareComponent {
     cipherService: CipherService,
     private route: ActivatedRoute,
     private router: Router,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {
     super(
       collectionService,
@@ -31,7 +33,8 @@ export class ShareComponent extends BaseShareComponent {
       i18nService,
       cipherService,
       logService,
-      organizationService
+      organizationService,
+      cipherApiAttachmentService
     );
   }
 

@@ -11,6 +11,8 @@ import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/component
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -51,7 +53,9 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     stateService: StateService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction,
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -70,7 +74,9 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
       passwordRepromptService,
       logService,
       stateService,
-      fileDownloadService
+      fileDownloadService,
+      cipherApiAttachmentService,
+      cipherApiService
     );
   }
   ngOnInit() {

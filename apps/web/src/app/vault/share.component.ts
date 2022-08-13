@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 
 import { ShareComponent as BaseShareComponent } from "@bitwarden/angular/components/share.component";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -20,7 +21,8 @@ export class ShareComponent extends BaseShareComponent implements OnDestroy {
     i18nService: I18nService,
     cipherService: CipherService,
     organizationService: OrganizationService,
-    logService: LogService
+    logService: LogService,
+    cipherApiService: CipherApiAttachmentServiceAbstraction
   ) {
     super(
       collectionService,
@@ -28,7 +30,8 @@ export class ShareComponent extends BaseShareComponent implements OnDestroy {
       i18nService,
       cipherService,
       logService,
-      organizationService
+      organizationService,
+      cipherApiService
     );
   }
 

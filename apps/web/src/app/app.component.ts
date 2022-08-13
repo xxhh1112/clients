@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -57,7 +57,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private settingsService: SettingsService,
     private syncService: SyncService,
     private passwordGenerationService: PasswordGenerationService,
-    private cipherService: CipherService,
+    private cipherService: InternalCipherService,
     private authService: AuthService,
     private router: Router,
     private toastrService: ToastrService,
