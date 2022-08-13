@@ -37,6 +37,7 @@ export class CipherApiServiceAbstraction {
     request: CipherBulkRestoreRequest
   ) => Promise<ListResponse<CipherResponse>>;
   nativeFetch: (request: Request) => Promise<Response>;
+  getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
   getEventsCipher: (
     id: string,
     start: string,
@@ -52,9 +53,8 @@ export class CipherApiServiceAbstraction {
   ) => Promise<any>;
 
   moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
-
-  deleteWithServer: (id: string) => Promise<any>;
   deleteManyWithServer: (ids: string[]) => Promise<any>;
+  deleteWithServer: (id: string) => Promise<any>;
   softDeleteWithServer: (id: string) => Promise<any>;
   softDeleteManyWithServer: (ids: string[]) => Promise<any>;
   restoreWithServer: (id: string) => Promise<any>;

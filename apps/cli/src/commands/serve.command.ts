@@ -65,7 +65,8 @@ export class ServeCommand {
       this.main.stateService,
       this.main.searchService,
       this.main.apiService,
-      this.main.organizationService
+      this.main.organizationService,
+      this.main.cipherApiAttachmentService
     );
     this.listCommand = new ListCommand(
       this.main.cipherService,
@@ -81,14 +82,17 @@ export class ServeCommand {
       this.main.stateService,
       this.main.cryptoService,
       this.main.apiService,
-      this.main.folderApiService
+      this.main.folderApiService,
+      this.main.cipherApiService,
+      this.main.cipherApiAttachmentService
     );
     this.editCommand = new EditCommand(
       this.main.cipherService,
       this.main.folderService,
       this.main.cryptoService,
       this.main.apiService,
-      this.main.folderApiService
+      this.main.folderApiService,
+      this.main.cipherApiService
     );
     this.generateCommand = new GenerateCommand(
       this.main.passwordGenerationService,
@@ -106,11 +110,16 @@ export class ServeCommand {
       this.main.folderService,
       this.main.stateService,
       this.main.apiService,
-      this.main.folderApiService
+      this.main.folderApiService,
+      this.main.cipherApiService,
+      this.main.cipherApiAttachmentService
     );
     this.confirmCommand = new ConfirmCommand(this.main.apiService, this.main.cryptoService);
-    this.restoreCommand = new RestoreCommand(this.main.cipherService);
-    this.shareCommand = new ShareCommand(this.main.cipherService);
+    this.restoreCommand = new RestoreCommand(this.main.cipherService, this.main.cipherApiService);
+    this.shareCommand = new ShareCommand(
+      this.main.cipherService,
+      this.main.cipherApiAttachmentService
+    );
     this.lockCommand = new LockCommand(this.main.vaultTimeoutService);
     this.unlockCommand = new UnlockCommand(
       this.main.cryptoService,

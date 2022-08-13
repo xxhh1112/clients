@@ -1,11 +1,11 @@
-import { CipherApiServiceAbstraction } from "../abstractions/cipher/cipher-api.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+
 import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { FolderService } from "../abstractions/folder/folder.service.abstraction";
 import { I18nService } from "../abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "../abstractions/import.service";
-import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { CipherType } from "../enums/cipherType";
 import {
   featuredImportOptions,
@@ -93,7 +93,6 @@ export class ImportService implements ImportServiceAbstraction {
     private ciphherApiService: CipherApiServiceAbstraction,
     private i18nService: I18nService,
     private collectionService: CollectionService,
-    private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService
   ) {}
 

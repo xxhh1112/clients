@@ -223,7 +223,6 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       deps: [
         CryptoServiceAbstraction,
         SettingsServiceAbstraction,
-        ApiServiceAbstraction,
         I18nServiceAbstraction,
         Injector, // TODO: Get rid of this circular dependency!
         LogService,

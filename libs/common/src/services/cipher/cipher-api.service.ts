@@ -18,7 +18,7 @@ import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { ApiService } from "../api.service";
+import { ApiService } from "../../abstractions/api.service";
 
 export class CipherApiService implements CipherApiServiceAbstraction {
   constructor(
@@ -130,6 +130,24 @@ export class CipherApiService implements CipherApiServiceAbstraction {
 
   nativeFetch(request: Request): Promise<Response> {
     return fetch(request);
+  }
+
+  async getAllFromApiForOrganization(organizationId: string): Promise<CipherView[]> {
+    const ciphers = await this.getCiphersOrganization(organizationId);
+    if (ciphers != null && ciphers.data != null && ciphers.data.length) {
+      const decCiphers: CipherView[] = [];
+      const promises: any[] = [];
+      ciphers.data.forEach((r) => {
+        const data = new CipherData(r);
+        const cipher = new Cipher(data);
+        promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
+      });
+      await Promise.all(promises);
+      decCiphers.sort(this.cipherService.getLocaleSortingFunction());
+      return decCiphers;
+    } else {
+      return [];
+    }
   }
 
   async getEventsCipher(

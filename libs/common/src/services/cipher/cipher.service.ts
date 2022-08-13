@@ -1,34 +1,34 @@
-import { InternalCipherService as InternalCipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { sequentialize } from "@bitwarden/common/misc/sequentialize";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { Attachment } from "@bitwarden/common/models/domain/attachment";
-import { Card } from "@bitwarden/common/models/domain/card";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import Domain from "@bitwarden/common/models/domain/domainBase";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { Field } from "@bitwarden/common/models/domain/field";
-import { Identity } from "@bitwarden/common/models/domain/identity";
-import { Login } from "@bitwarden/common/models/domain/login";
-import { LoginUri } from "@bitwarden/common/models/domain/loginUri";
-import { Password } from "@bitwarden/common/models/domain/password";
-import { SecureNote } from "@bitwarden/common/models/domain/secureNote";
-import { SortedCiphersCache } from "@bitwarden/common/models/domain/sortedCiphersCache";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { FieldView } from "@bitwarden/common/models/view/fieldView";
-import { PasswordHistoryView } from "@bitwarden/common/models/view/passwordHistoryView";
-import { View } from "@bitwarden/common/models/view/view";
+import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
+import { CryptoService } from "../../abstractions/crypto.service";
+import { I18nService } from "../../abstractions/i18n.service";
+import { LogService } from "../../abstractions/log.service";
+import { SearchService } from "../../abstractions/search.service";
+import { SettingsService } from "../../abstractions/settings.service";
+import { StateService } from "../../abstractions/state.service";
+import { CipherType } from "../../enums/cipherType";
+import { FieldType } from "../../enums/fieldType";
+import { UriMatchType } from "../../enums/uriMatchType";
+import { sequentialize } from "../../misc/sequentialize";
+import { Utils } from "../../misc/utils";
+import { CipherData } from "../../models/data/cipherData";
+import { Attachment } from "../../models/domain/attachment";
+import { Card } from "../../models/domain/card";
+import { Cipher } from "../../models/domain/cipher";
+import Domain from "../../models/domain/domainBase";
+import { EncString } from "../../models/domain/encString";
+import { Field } from "../../models/domain/field";
+import { Identity } from "../../models/domain/identity";
+import { Login } from "../../models/domain/login";
+import { LoginUri } from "../../models/domain/loginUri";
+import { Password } from "../../models/domain/password";
+import { SecureNote } from "../../models/domain/secureNote";
+import { SortedCiphersCache } from "../../models/domain/sortedCiphersCache";
+import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
+import { AttachmentView } from "../../models/view/attachmentView";
+import { CipherView } from "../../models/view/cipherView";
+import { FieldView } from "../../models/view/fieldView";
+import { PasswordHistoryView } from "../../models/view/passwordHistoryView";
+import { View } from "../../models/view/view";
 
 const DomainMatchBlacklist = new Map<string, Set<string>>([
   ["google.com", new Set(["script.google.com"])],
@@ -38,6 +38,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
     this.sortCiphersByLastUsed
   );
+
   constructor(
     private cryptoService: CryptoService,
     private settingsService: SettingsService,
@@ -46,6 +47,11 @@ export class CipherService implements InternalCipherServiceAbstraction {
     private logService: LogService,
     private stateService: StateService
   ) {}
+  shareWithServer: (
+    cipher: CipherView,
+    organizationId: string,
+    collectionIds: string[]
+  ) => Promise<any>;
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
     const decryptedCiphers = await this.stateService.getDecryptedCiphers();
@@ -61,53 +67,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
         this.searchService().indexCiphers();
       }
     }
-  }
-  async upsert(cipher: CipherData | CipherData[]): Promise<any> {
-    let ciphers = await this.stateService.getEncryptedCiphers();
-    if (ciphers == null) {
-      ciphers = {};
-    }
-
-    if (cipher instanceof CipherData) {
-      const c = cipher as CipherData;
-      ciphers[c.id] = c;
-    } else {
-      (cipher as CipherData[]).forEach((c) => {
-        ciphers[c.id] = c;
-      });
-    }
-
-    await this.replace(ciphers);
-  }
-  async replace(ciphers: { [id: string]: CipherData }): Promise<any> {
-    await this.clearDecryptedCiphersState();
-    await this.stateService.setEncryptedCiphers(ciphers);
-  }
-
-  async clear(userId?: string): Promise<any> {
-    await this.clearEncryptedCiphersState(userId);
-    await this.clearCache(userId);
-  }
-
-  async delete(id: string | string[]): Promise<any> {
-    const ciphers = await this.stateService.getEncryptedCiphers();
-    if (ciphers == null) {
-      return;
-    }
-
-    if (typeof id === "string") {
-      if (ciphers[id] == null) {
-        return;
-      }
-      delete ciphers[id];
-    } else {
-      (id as string[]).forEach((i) => {
-        delete ciphers[i];
-      });
-    }
-
-    await this.clearCache();
-    await this.stateService.setEncryptedCiphers(ciphers);
   }
 
   async clearCache(userId?: string): Promise<void> {
@@ -216,6 +175,42 @@ export class CipherService implements InternalCipherServiceAbstraction {
     return cipher;
   }
 
+  async encryptAttachments(
+    attachmentsModel: AttachmentView[],
+    key: SymmetricCryptoKey
+  ): Promise<Attachment[]> {
+    if (attachmentsModel == null || attachmentsModel.length === 0) {
+      return null;
+    }
+
+    const promises: Promise<any>[] = [];
+    const encAttachments: Attachment[] = [];
+    attachmentsModel.forEach(async (model) => {
+      const attachment = new Attachment();
+      attachment.id = model.id;
+      attachment.size = model.size;
+      attachment.sizeName = model.sizeName;
+      attachment.url = model.url;
+      const promise = this.encryptObjProperty(
+        model,
+        attachment,
+        {
+          fileName: null,
+        },
+        key
+      ).then(async () => {
+        if (model.key != null) {
+          attachment.key = await this.cryptoService.encrypt(model.key.key, key);
+        }
+        encAttachments.push(attachment);
+      });
+      promises.push(promise);
+    });
+
+    await Promise.all(promises);
+    return encAttachments;
+  }
+
   async encryptFields(fieldsModel: FieldView[], key: SymmetricCryptoKey): Promise<Field[]> {
     if (!fieldsModel || !fieldsModel.length) {
       return null;
@@ -252,6 +247,44 @@ export class CipherService implements InternalCipherServiceAbstraction {
     );
 
     return field;
+  }
+
+  async encryptPasswordHistories(
+    phModels: PasswordHistoryView[],
+    key: SymmetricCryptoKey
+  ): Promise<Password[]> {
+    if (!phModels || !phModels.length) {
+      return null;
+    }
+
+    const self = this;
+    const encPhs: Password[] = [];
+    await phModels.reduce(async (promise, ph) => {
+      await promise;
+      const encPh = await self.encryptPasswordHistory(ph, key);
+      encPhs.push(encPh);
+    }, Promise.resolve());
+
+    return encPhs;
+  }
+
+  async encryptPasswordHistory(
+    phModel: PasswordHistoryView,
+    key: SymmetricCryptoKey
+  ): Promise<Password> {
+    const ph = new Password();
+    ph.lastUsedDate = phModel.lastUsedDate;
+
+    await this.encryptObjProperty(
+      phModel,
+      ph,
+      {
+        password: null,
+      },
+      key
+    );
+
+    return ph;
   }
 
   async get(id: string): Promise<Cipher> {
@@ -297,7 +330,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
       throw new Error("No key.");
     }
 
-    const promises: any[] = [];
+    const promises: Promise<number>[] = [];
     const ciphers = await this.getAll();
     ciphers.forEach(async (cipher) => {
       promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
@@ -307,6 +340,43 @@ export class CipherService implements InternalCipherServiceAbstraction {
     decCiphers.sort(this.getLocaleSortingFunction());
     await this.setDecryptedCipherCache(decCiphers);
     return decCiphers;
+  }
+
+  getLocaleSortingFunction(): (a: CipherView, b: CipherView) => number {
+    return (a, b) => {
+      let aName = a.name;
+      let bName = b.name;
+
+      if (aName == null && bName != null) {
+        return -1;
+      }
+      if (aName != null && bName == null) {
+        return 1;
+      }
+      if (aName == null && bName == null) {
+        return 0;
+      }
+
+      const result = this.i18nService.collator
+        ? this.i18nService.collator.compare(aName, bName)
+        : aName.localeCompare(bName);
+
+      if (result !== 0 || a.type !== CipherType.Login || b.type !== CipherType.Login) {
+        return result;
+      }
+
+      if (a.login.username != null) {
+        aName += a.login.username;
+      }
+
+      if (b.login.username != null) {
+        bName += b.login.username;
+      }
+
+      return this.i18nService.collator
+        ? this.i18nService.collator.compare(aName, bName)
+        : aName.localeCompare(bName);
+    };
   }
 
   async getAllDecryptedForGrouping(groupingId: string, folder = true): Promise<CipherView[]> {
@@ -436,8 +506,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     });
   }
 
-  getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
-
   async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
     return this.getCipherForUrl(url, true, false, autofillOnPageLoad);
   }
@@ -529,6 +597,55 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setNeverDomains(domains);
   }
 
+  async upsert(cipher: CipherData | CipherData[]): Promise<any> {
+    let ciphers = await this.stateService.getEncryptedCiphers();
+    if (ciphers == null) {
+      ciphers = {};
+    }
+
+    if (cipher instanceof CipherData) {
+      const c = cipher as CipherData;
+      ciphers[c.id] = c;
+    } else {
+      (cipher as CipherData[]).forEach((c) => {
+        ciphers[c.id] = c;
+      });
+    }
+
+    await this.replace(ciphers);
+  }
+
+  async replace(ciphers: { [id: string]: CipherData }): Promise<any> {
+    await this.clearDecryptedCiphersState();
+    await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  async clear(userId?: string): Promise<any> {
+    await this.clearEncryptedCiphersState(userId);
+    await this.clearCache(userId);
+  }
+
+  async delete(id: string | string[]): Promise<any> {
+    const ciphers = await this.stateService.getEncryptedCiphers();
+    if (ciphers == null) {
+      return;
+    }
+
+    if (typeof id === "string") {
+      if (ciphers[id] == null) {
+        return;
+      }
+      delete ciphers[id];
+    } else {
+      (id as string[]).forEach((i) => {
+        delete ciphers[i];
+      });
+    }
+
+    await this.clearCache();
+    await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
   async deleteAttachment(id: string, attachmentId: string): Promise<void> {
     const ciphers = await this.stateService.getEncryptedCiphers();
 
@@ -580,43 +697,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     return this.getLocaleSortingFunction()(a, b);
   }
 
-  getLocaleSortingFunction(): (a: CipherView, b: CipherView) => number {
-    return (a, b) => {
-      let aName = a.name;
-      let bName = b.name;
-
-      if (aName == null && bName != null) {
-        return -1;
-      }
-      if (aName != null && bName == null) {
-        return 1;
-      }
-      if (aName == null && bName == null) {
-        return 0;
-      }
-
-      const result = this.i18nService.collator
-        ? this.i18nService.collator.compare(aName, bName)
-        : aName.localeCompare(bName);
-
-      if (result !== 0 || a.type !== CipherType.Login || b.type !== CipherType.Login) {
-        return result;
-      }
-
-      if (a.login.username != null) {
-        aName += a.login.username;
-      }
-
-      if (b.login.username != null) {
-        bName += b.login.username;
-      }
-
-      return this.i18nService.collator
-        ? this.i18nService.collator.compare(aName, bName)
-        : aName.localeCompare(bName);
-    };
-  }
-
   async softDelete(id: string | string[]): Promise<any> {
     const ciphers = await this.stateService.getEncryptedCiphers();
     if (ciphers == null) {
@@ -666,116 +746,38 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  async encryptAttachments(
-    attachmentsModel: AttachmentView[],
+  private async encryptObjProperty<V extends View, D extends Domain>(
+    model: V,
+    obj: D,
+    map: any,
     key: SymmetricCryptoKey
-  ): Promise<Attachment[]> {
-    if (attachmentsModel == null || attachmentsModel.length === 0) {
-      return null;
-    }
+  ): Promise<void> {
+    const promises = [];
+    const self = this;
 
-    const promises: Promise<any>[] = [];
-    const encAttachments: Attachment[] = [];
-    attachmentsModel.forEach(async (model) => {
-      const attachment = new Attachment();
-      attachment.id = model.id;
-      attachment.size = model.size;
-      attachment.sizeName = model.sizeName;
-      attachment.url = model.url;
-      const promise = this.encryptObjProperty(
-        model,
-        attachment,
-        {
-          fileName: null,
-        },
-        key
-      ).then(async () => {
-        if (model.key != null) {
-          attachment.key = await this.cryptoService.encrypt(model.key.key, key);
-        }
-        encAttachments.push(attachment);
-      });
-      promises.push(promise);
-    });
+    for (const prop in map) {
+      // eslint-disable-next-line
+      if (!map.hasOwnProperty(prop)) {
+        continue;
+      }
+
+      (function (theProp, theObj) {
+        const p = Promise.resolve()
+          .then(() => {
+            const modelProp = (model as any)[map[theProp] || theProp];
+            if (modelProp && modelProp !== "") {
+              return self.cryptoService.encrypt(modelProp, key);
+            }
+            return null;
+          })
+          .then((val: EncString) => {
+            (theObj as any)[theProp] = val;
+          });
+        promises.push(p);
+      })(prop, obj);
+    }
 
     await Promise.all(promises);
-    return encAttachments;
-  }
-
-  async encryptPasswordHistories(
-    phModels: PasswordHistoryView[],
-    key: SymmetricCryptoKey
-  ): Promise<Password[]> {
-    if (!phModels || !phModels.length) {
-      return null;
-    }
-
-    const self = this;
-    const encPhs: Password[] = [];
-    await phModels.reduce(async (promise, ph) => {
-      await promise;
-      const encPh = await self.encryptPasswordHistory(ph, key);
-      encPhs.push(encPh);
-    }, Promise.resolve());
-
-    return encPhs;
-  }
-
-  async encryptPasswordHistory(
-    phModel: PasswordHistoryView,
-    key: SymmetricCryptoKey
-  ): Promise<Password> {
-    const ph = new Password();
-    ph.lastUsedDate = phModel.lastUsedDate;
-
-    await this.encryptObjProperty(
-      phModel,
-      ph,
-      {
-        password: null,
-      },
-      key
-    );
-
-    return ph;
-  }
-
-  private async getCipherForUrl(
-    url: string,
-    lastUsed: boolean,
-    lastLaunched: boolean,
-    autofillOnPageLoad: boolean
-  ): Promise<CipherView> {
-    const cacheKey = autofillOnPageLoad ? "autofillOnPageLoad-" + url : url;
-
-    if (!this.sortedCiphersCache.isCached(cacheKey)) {
-      let ciphers = await this.getAllDecryptedForUrl(url);
-      if (!ciphers) {
-        return null;
-      }
-
-      if (autofillOnPageLoad) {
-        const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
-        ciphers = ciphers.filter(
-          (cipher) =>
-            cipher.login.autofillOnPageLoad ||
-            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
-        );
-        if (ciphers.length === 0) {
-          return null;
-        }
-      }
-
-      this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
-    }
-
-    if (lastLaunched) {
-      return this.sortedCiphersCache.getLastLaunched(cacheKey);
-    } else if (lastUsed) {
-      return this.sortedCiphersCache.getLastUsed(cacheKey);
-    } else {
-      return this.sortedCiphersCache.getNext(cacheKey);
-    }
   }
 
   private async encryptCipherData(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
@@ -865,38 +867,42 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
   }
 
-  private async encryptObjProperty<V extends View, D extends Domain>(
-    model: V,
-    obj: D,
-    map: any,
-    key: SymmetricCryptoKey
-  ): Promise<void> {
-    const promises = [];
-    const self = this;
+  private async getCipherForUrl(
+    url: string,
+    lastUsed: boolean,
+    lastLaunched: boolean,
+    autofillOnPageLoad: boolean
+  ): Promise<CipherView> {
+    const cacheKey = autofillOnPageLoad ? "autofillOnPageLoad-" + url : url;
 
-    for (const prop in map) {
-      // eslint-disable-next-line
-      if (!map.hasOwnProperty(prop)) {
-        continue;
+    if (!this.sortedCiphersCache.isCached(cacheKey)) {
+      let ciphers = await this.getAllDecryptedForUrl(url);
+      if (!ciphers) {
+        return null;
       }
 
-      (function (theProp, theObj) {
-        const p = Promise.resolve()
-          .then(() => {
-            const modelProp = (model as any)[map[theProp] || theProp];
-            if (modelProp && modelProp !== "") {
-              return self.cryptoService.encrypt(modelProp, key);
-            }
-            return null;
-          })
-          .then((val: EncString) => {
-            (theObj as any)[theProp] = val;
-          });
-        promises.push(p);
-      })(prop, obj);
+      if (autofillOnPageLoad) {
+        const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
+        ciphers = ciphers.filter(
+          (cipher) =>
+            cipher.login.autofillOnPageLoad ||
+            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
+        );
+        if (ciphers.length === 0) {
+          return null;
+        }
+      }
+
+      this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
     }
 
-    await Promise.all(promises);
+    if (lastLaunched) {
+      return this.sortedCiphersCache.getLastLaunched(cacheKey);
+    } else if (lastUsed) {
+      return this.sortedCiphersCache.getLastUsed(cacheKey);
+    } else {
+      return this.sortedCiphersCache.getNext(cacheKey);
+    }
   }
 
   private async clearEncryptedCiphersState(userId?: string) {

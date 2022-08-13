@@ -4,6 +4,8 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
@@ -108,6 +110,8 @@ export class Main {
   broadcasterService: BroadcasterService;
   folderApiService: FolderApiService;
   userVerificationApiService: UserVerificationApiService;
+  cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
+  cipherApiService: CipherApiServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -189,13 +193,15 @@ export class Main {
 
     this.settingsService = new SettingsService(this.stateService);
 
-    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
+    this.fileUploadService = new FileUploadService(
+      this.logService,
+      this.apiService,
+      this.cipherApiAttachmentService
+    );
 
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
-      this.apiService,
-      this.fileUploadService,
       this.i18nService,
       null,
       this.logService,
@@ -300,6 +306,7 @@ export class Main {
       this.organizationService,
       this.providerService,
       this.folderApiService,
+      this.cipherApiService,
       async (expired: boolean) => await this.logout()
     );
 
@@ -314,10 +321,9 @@ export class Main {
     this.importService = new ImportService(
       this.cipherService,
       this.folderService,
-      this.apiService,
+      this.cipherApiService,
       this.i18nService,
       this.collectionService,
-      this.platformUtilsService,
       this.cryptoService
     );
     this.exportService = new ExportService(
@@ -325,7 +331,8 @@ export class Main {
       this.cipherService,
       this.apiService,
       this.cryptoService,
-      this.cryptoFunctionService
+      this.cryptoFunctionService,
+      this.cipherApiService
     );
 
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);

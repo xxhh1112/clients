@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
@@ -24,7 +25,8 @@ export class UnsecuredWebsitesReportComponent extends BaseUnsecuredWebsitesRepor
     stateService: StateService,
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
-    passwordRepromptService: PasswordRepromptService
+    passwordRepromptService: PasswordRepromptService,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {
     super(cipherService, modalService, messagingService, stateService, passwordRepromptService);
   }
@@ -37,6 +39,6 @@ export class UnsecuredWebsitesReportComponent extends BaseUnsecuredWebsitesRepor
   }
 
   getAllCiphers(): Promise<CipherView[]> {
-    return this.cipherService.getAllFromApiForOrganization(this.organization.id);
+    return this.cipherApiService.getAllFromApiForOrganization(this.organization.id);
   }
 }

@@ -64,7 +64,9 @@ export class CiphersComponent extends BaseCiphersComponent {
     this.deleted = deleted || false;
     if (this.organization.canEditAnyCollection) {
       this.accessEvents = this.organization.useEvents;
-      this.allCiphers = await this.cipherService.getAllFromApiForOrganization(this.organization.id);
+      this.allCiphers = await this.cipherApiService.getAllFromApiForOrganization(
+        this.organization.id
+      );
     } else {
       this.allCiphers = (await this.cipherService.getAllDecrypted()).filter(
         (c) => c.organizationId === this.organization.id
