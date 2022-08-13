@@ -1,16 +1,7 @@
 import { OrganizationApiKeyType } from "../enums/organizationApiKeyType";
 import { OrganizationConnectionType } from "../enums/organizationConnectionType";
 import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
-import { AttachmentRequest } from "../models/request/attachmentRequest";
 import { BitPayInvoiceRequest } from "../models/request/bitPayInvoiceRequest";
-import { CipherBulkDeleteRequest } from "../models/request/cipherBulkDeleteRequest";
-import { CipherBulkMoveRequest } from "../models/request/cipherBulkMoveRequest";
-import { CipherBulkRestoreRequest } from "../models/request/cipherBulkRestoreRequest";
-import { CipherBulkShareRequest } from "../models/request/cipherBulkShareRequest";
-import { CipherCollectionsRequest } from "../models/request/cipherCollectionsRequest";
-import { CipherCreateRequest } from "../models/request/cipherCreateRequest";
-import { CipherRequest } from "../models/request/cipherRequest";
-import { CipherShareRequest } from "../models/request/cipherShareRequest";
 import { CollectionRequest } from "../models/request/collectionRequest";
 import { DeleteRecoverRequest } from "../models/request/deleteRecoverRequest";
 import { DeviceVerificationRequest } from "../models/request/deviceVerificationRequest";
@@ -27,9 +18,7 @@ import { IapCheckRequest } from "../models/request/iapCheckRequest";
 import { ApiTokenRequest } from "../models/request/identityToken/apiTokenRequest";
 import { PasswordTokenRequest } from "../models/request/identityToken/passwordTokenRequest";
 import { SsoTokenRequest } from "../models/request/identityToken/ssoTokenRequest";
-import { ImportCiphersRequest } from "../models/request/importCiphersRequest";
 import { ImportDirectoryRequest } from "../models/request/importDirectoryRequest";
-import { ImportOrganizationCiphersRequest } from "../models/request/importOrganizationCiphersRequest";
 import { KdfRequest } from "../models/request/kdfRequest";
 import { KeyConnectorUserKeyRequest } from "../models/request/keyConnectorUserKeyRequest";
 import { KeysRequest } from "../models/request/keysRequest";
@@ -94,13 +83,11 @@ import { VerifyBankRequest } from "../models/request/verifyBankRequest";
 import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
 import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
-import { AttachmentResponse } from "../models/response/attachmentResponse";
 import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
 import { BreachAccountResponse } from "../models/response/breachAccountResponse";
-import { CipherResponse } from "../models/response/cipherResponse";
 import {
   CollectionGroupDetailsResponse,
   CollectionResponse,
@@ -256,68 +243,6 @@ export abstract class ApiService {
     apiUrl?: string
   ) => Promise<SendFileDownloadDataResponse>;
   renewSendFileUploadUrl: (sendId: string, fileId: string) => Promise<SendFileUploadDataResponse>;
-
-  getCipher: (id: string) => Promise<CipherResponse>;
-  getFullCipherDetails: (id: string) => Promise<CipherResponse>;
-  getCipherAdmin: (id: string) => Promise<CipherResponse>;
-  getAttachmentData: (
-    cipherId: string,
-    attachmentId: string,
-    emergencyAccessId?: string
-  ) => Promise<AttachmentResponse>;
-  getCiphersOrganization: (organizationId: string) => Promise<ListResponse<CipherResponse>>;
-  postCipher: (request: CipherRequest) => Promise<CipherResponse>;
-  postCipherCreate: (request: CipherCreateRequest) => Promise<CipherResponse>;
-  postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
-  putCipher: (id: string, request: CipherRequest) => Promise<CipherResponse>;
-  putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
-  deleteCipher: (id: string) => Promise<any>;
-  deleteCipherAdmin: (id: string) => Promise<any>;
-  deleteManyCiphers: (request: CipherBulkDeleteRequest) => Promise<any>;
-  deleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putMoveCiphers: (request: CipherBulkMoveRequest) => Promise<any>;
-  putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
-  putShareCiphers: (request: CipherBulkShareRequest) => Promise<any>;
-  putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
-  putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
-  postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
-  postImportCiphers: (request: ImportCiphersRequest) => Promise<any>;
-  postImportOrganizationCiphers: (
-    organizationId: string,
-    request: ImportOrganizationCiphersRequest
-  ) => Promise<any>;
-  putDeleteCipher: (id: string) => Promise<any>;
-  putDeleteCipherAdmin: (id: string) => Promise<any>;
-  putDeleteManyCiphers: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putDeleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putRestoreCipher: (id: string) => Promise<CipherResponse>;
-  putRestoreCipherAdmin: (id: string) => Promise<CipherResponse>;
-  putRestoreManyCiphers: (
-    request: CipherBulkRestoreRequest
-  ) => Promise<ListResponse<CipherResponse>>;
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  postCipherAttachmentLegacy: (id: string, data: FormData) => Promise<CipherResponse>;
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  postCipherAttachmentAdminLegacy: (id: string, data: FormData) => Promise<CipherResponse>;
-  postCipherAttachment: (
-    id: string,
-    request: AttachmentRequest
-  ) => Promise<AttachmentUploadDataResponse>;
-  deleteCipherAttachment: (id: string, attachmentId: string) => Promise<any>;
-  deleteCipherAttachmentAdmin: (id: string, attachmentId: string) => Promise<any>;
-  postShareCipherAttachment: (
-    id: string,
-    attachmentId: string,
-    data: FormData,
-    organizationId: string
-  ) => Promise<any>;
   renewAttachmentUploadUrl: (
     id: string,
     attachmentId: string

@@ -1,6 +1,7 @@
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
+import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
 import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachmentUploadDataResponse";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
@@ -47,4 +48,9 @@ export class CipherApiAttachmentServiceAbstraction {
     admin?: boolean
   ) => Promise<Cipher>;
   deleteAttachmentWithServer: (id: string, attachmentId: string) => Promise<void>;
+  getAttachmentData: (
+    cipherId: string,
+    attachmentId: string,
+    emergencyAccessId?: string
+  ) => Promise<AttachmentResponse>;
 }

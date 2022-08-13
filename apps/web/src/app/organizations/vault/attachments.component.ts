@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -31,7 +33,9 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     platformUtilsService: PlatformUtilsService,
     apiService: ApiService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    private cipherApiAdminService: CipherApiAdminServiceAbstraction,
+    cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {
     super(
       cipherService,
@@ -39,9 +43,9 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
       cryptoService,
       stateService,
       platformUtilsService,
-      apiService,
       logService,
-      fileDownloadService
+      fileDownloadService,
+      cipherApiAttachmentService
     );
   }
 
@@ -55,12 +59,12 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return await super.loadCipher();
     }
-    const response = await this.apiService.getCipherAdmin(this.cipherId);
+    const response = await this.cipherApiAdminService.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherService.saveAttachmentWithServer(
+    return this.cipherApiAttachmentService.saveAttachmentWithServer(
       this.cipherDomain,
       file,
       this.organization.canEditAnyCollection
@@ -71,7 +75,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.deleteCipherAttachment(attachmentId);
     }
-    return this.apiService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
+    return this.cipherApiAttachmentService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
   }
 
   protected showFixOldAttachments(attachment: AttachmentView) {

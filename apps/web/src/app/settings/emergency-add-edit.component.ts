@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";

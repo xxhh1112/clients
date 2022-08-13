@@ -1,8 +1,8 @@
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
@@ -10,21 +10,19 @@ import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { EncString } from "@bitwarden/common/models/domain/encString";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
+import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
 import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachmentUploadDataResponse";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { ApiService } from "../api.service";
-
 export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbstraction {
   constructor(
     private cipherService: InternalCipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
-    private fileUploadService: FileUploadService,
-    private stateService: StateService
+    private fileUploadService: FileUploadService
   ) {}
 
   async deleteAttachmentWithServer(id: string, attachmentId: string): Promise<void> {
@@ -118,6 +116,20 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
       true
     );
     return new AttachmentUploadDataResponse(r);
+  }
+
+  async getAttachmentData(
+    cipherId: string,
+    attachmentId: string,
+    emergencyAccessId?: string
+  ): Promise<AttachmentResponse> {
+    const path =
+      (emergencyAccessId != null ? "/emergency-access/" + emergencyAccessId + "/" : "/ciphers/") +
+      cipherId +
+      "/attachment/" +
+      attachmentId;
+    const r = await this.apiService.send("GET", path, null, true, true);
+    return new AttachmentResponse(r);
   }
 
   nativeFetch(request: Request): Promise<Response> {

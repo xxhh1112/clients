@@ -2,7 +2,7 @@ import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStat
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/globalState";
 import { AuthService } from "@bitwarden/common/services/auth.service";
-import { CipherService } from "@bitwarden/common/services/cipher.service";
+import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { EncryptService } from "@bitwarden/common/services/encrypt.service";
 import NoOpEventService from "@bitwarden/common/services/noOpEvent.service";

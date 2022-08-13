@@ -1,5 +1,6 @@
 import { ApiService } from "../abstractions/api.service";
-import { CipherService } from "../abstractions/cipher.service";
+import { CipherApiServiceAbstraction } from "../abstractions/cipher/cipher-api.service.abstraction";
+import { InternalCipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "../abstractions/folder/folder-api.service.abstraction";
@@ -42,7 +43,7 @@ export class SyncService implements SyncServiceAbstraction {
     private apiService: ApiService,
     private settingsService: SettingsService,
     private folderService: InternalFolderService,
-    private cipherService: CipherService,
+    private cipherService: InternalCipherService,
     private cryptoService: CryptoService,
     private collectionService: CollectionService,
     private messagingService: MessagingService,
@@ -54,6 +55,7 @@ export class SyncService implements SyncServiceAbstraction {
     private organizationService: OrganizationService,
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
+    private cipherApiService: CipherApiServiceAbstraction,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
 
@@ -198,7 +200,7 @@ export class SyncService implements SyncServiceAbstraction {
         }
 
         if (shouldUpdate) {
-          const remoteCipher = await this.apiService.getFullCipherDetails(notification.id);
+          const remoteCipher = await this.cipherApiService.getFullCipherDetails(notification.id);
           if (remoteCipher != null) {
             await this.cipherService.upsert(new CipherData(remoteCipher));
             this.messagingService.send("syncedUpsertedCipher", { cipherId: notification.id });

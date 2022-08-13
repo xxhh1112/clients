@@ -2,7 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -28,7 +30,9 @@ export class CreateCommand {
     private stateService: StateService,
     private cryptoService: CryptoService,
     private apiService: ApiService,
-    private folderApiService: FolderApiServiceAbstraction
+    private folderApiService: FolderApiServiceAbstraction,
+    private cipherApiService: CipherApiServiceAbstraction,
+    private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async run(
@@ -77,7 +81,7 @@ export class CreateCommand {
   private async createCipher(req: CipherExport) {
     const cipher = await this.cipherService.encrypt(CipherExport.toView(req));
     try {
-      await this.cipherService.saveWithServer(cipher);
+      await this.cipherApiService.saveWithServer(cipher);
       const newCipher = await this.cipherService.get(cipher.id);
       const decCipher = await newCipher.decrypt();
       const res = new CipherResponse(decCipher);
@@ -134,7 +138,7 @@ export class CreateCommand {
     }
 
     try {
-      await this.cipherService.saveAttachmentRawWithServer(
+      await this.cipherApiAttachmentService.saveAttachmentRawWithServer(
         cipher,
         fileName,
         new Uint8Array(fileBuf).buffer

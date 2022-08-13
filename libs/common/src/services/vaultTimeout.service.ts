@@ -1,5 +1,5 @@
 import { AuthService } from "../abstractions/auth.service";
-import { CipherService } from "../abstractions/cipher.service";
+import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { FolderService } from "../abstractions/folder/folder.service.abstraction";

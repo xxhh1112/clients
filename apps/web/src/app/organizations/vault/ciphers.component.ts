@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -33,7 +34,7 @@ export class CiphersComponent extends BaseCiphersComponent {
     searchService: SearchService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
-    cipherService: CipherService,
+    private cipherService: CipherService,
     eventService: EventService,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
@@ -41,13 +42,14 @@ export class CiphersComponent extends BaseCiphersComponent {
     stateService: StateService,
     organizationService: OrganizationService,
     tokenService: TokenService,
-    private apiService: ApiService
+    private cipherApiAdminService: CipherApiAdminServiceAbstraction,
+    cipherApiService: CipherApiServiceAbstraction
   ) {
     super(
       searchService,
       i18nService,
       platformUtilsService,
-      cipherService,
+      cipherApiService,
       eventService,
       totpService,
       stateService,
@@ -95,8 +97,8 @@ export class CiphersComponent extends BaseCiphersComponent {
       return super.deleteCipher(id, this.deleted);
     }
     return this.deleted
-      ? this.apiService.deleteCipherAdmin(id)
-      : this.apiService.putDeleteCipherAdmin(id);
+      ? this.cipherApiAdminService.deleteCipherAdmin(id)
+      : this.cipherApiAdminService.putDeleteCipherAdmin(id);
   }
 
   protected showFixOldAttachments(c: CipherView) {

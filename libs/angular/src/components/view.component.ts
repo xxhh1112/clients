@@ -12,7 +12,9 @@ import {
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -79,7 +81,9 @@ export class ViewComponent implements OnDestroy, OnInit {
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     protected stateService: StateService,
-    protected fileDownloadService: FileDownloadService
+    protected fileDownloadService: FileDownloadService,
+    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction,
+    protected cipherApiService: CipherApiServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -346,7 +350,7 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.apiService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherApiAttachmentService.getAttachmentData(
         this.cipher.id,
         attachment.id
       );
@@ -389,12 +393,12 @@ export class ViewComponent implements OnDestroy, OnInit {
 
   protected deleteCipher() {
     return this.cipher.isDeleted
-      ? this.cipherService.deleteWithServer(this.cipher.id)
-      : this.cipherService.softDeleteWithServer(this.cipher.id);
+      ? this.cipherApiService.deleteWithServer(this.cipher.id)
+      : this.cipherApiService.softDeleteWithServer(this.cipher.id);
   }
 
   protected restoreCipher() {
-    return this.cipherService.restoreWithServer(this.cipher.id);
+    return this.cipherApiService.restoreWithServer(this.cipher.id);
   }
 
   protected async promptPassword() {

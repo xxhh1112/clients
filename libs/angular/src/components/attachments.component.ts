@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -35,11 +35,11 @@ export class AttachmentsComponent implements OnInit {
     protected i18nService: I18nService,
     protected cryptoService: CryptoService,
     protected platformUtilsService: PlatformUtilsService,
-    protected apiService: ApiService,
     protected win: Window,
     protected logService: LogService,
     protected stateService: StateService,
-    protected fileDownloadService: FileDownloadService
+    protected fileDownloadService: FileDownloadService,
+    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -143,7 +143,7 @@ export class AttachmentsComponent implements OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.apiService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherApiAttachmentService.getAttachmentData(
         this.cipher.id,
         attachment.id,
         this.emergencyAccessId
@@ -244,7 +244,7 @@ export class AttachmentsComponent implements OnInit {
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
           const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
-          this.cipherDomain = await this.cipherService.saveAttachmentRawWithServer(
+          this.cipherDomain = await this.cipherApiAttachmentService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
             decBuf,
@@ -286,10 +286,10 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherService.saveAttachmentWithServer(this.cipherDomain, file);
+    return this.cipherApiAttachmentService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
   protected deleteCipherAttachment(attachmentId: string) {
-    return this.cipherService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
+    return this.cipherApiAttachmentService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
   }
 }
