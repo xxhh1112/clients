@@ -10,7 +10,13 @@ import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstr
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import {
+  CipherService as CipherServiceAbstraction,
+  InternalCipherService,
+} from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -62,6 +68,8 @@ import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
+import { CipherApiAttachmentService } from "@bitwarden/common/services/cipher/cipher-api-attachment.service";
+import { CipherApiService } from "@bitwarden/common/services/cipher/cipher-api.service";
 import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
@@ -100,6 +108,7 @@ import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
 
+import { CipherApiAdminService } from "./../../../common/src/services/cipher/cipher-api-admin.service";
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
@@ -198,8 +207,6 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       useFactory: (
         cryptoService: CryptoServiceAbstraction,
         settingsService: SettingsServiceAbstraction,
-        apiService: ApiServiceAbstraction,
-        fileUploadService: FileUploadServiceAbstraction,
         i18nService: I18nServiceAbstraction,
         injector: Injector,
         logService: LogService,
@@ -208,8 +215,6 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
         new CipherService(
           cryptoService,
           settingsService,
-          apiService,
-          fileUploadService,
           i18nService,
           () => injector.get(SearchServiceAbstraction),
           logService,
@@ -219,11 +224,34 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
         CryptoServiceAbstraction,
         SettingsServiceAbstraction,
         ApiServiceAbstraction,
-        FileUploadServiceAbstraction,
         I18nServiceAbstraction,
         Injector, // TODO: Get rid of this circular dependency!
         LogService,
         StateServiceAbstraction,
+      ],
+    },
+    {
+      provide: InternalCipherService,
+      useExisting: CryptoServiceAbstraction,
+    },
+    {
+      provide: CipherApiServiceAbstraction,
+      useClass: CipherApiService,
+      deps: [CipherServiceAbstraction, ApiServiceAbstraction, StateServiceAbstraction],
+    },
+    {
+      provide: CipherApiAdminServiceAbstraction,
+      useClass: CipherApiAdminService,
+      deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: CipherApiAttachmentServiceAbstraction,
+      useClass: CipherApiAttachmentService,
+      deps: [
+        CipherServiceAbstraction,
+        ApiServiceAbstraction,
+        CryptoServiceAbstraction,
+        FileUploadServiceAbstraction,
       ],
     },
     {
