@@ -33,7 +33,7 @@ export class ShareComponent implements OnInit {
     protected cipherService: CipherService,
     private logService: LogService,
     protected organizationService: OrganizationService,
-    protected cipherApiService: CipherApiAttachmentServiceAbstraction
+    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -87,7 +87,7 @@ export class ShareComponent implements OnInit {
       this.i18nService.t("organization");
 
     try {
-      this.formPromise = this.cipherApiService
+      this.formPromise = this.cipherApiAttachmentService
         .shareWithServer(cipherView, this.organizationId, selectedCollectionIds)
         .then(async () => {
           this.onSharedCipher.emit();
