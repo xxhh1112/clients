@@ -630,19 +630,8 @@ export class CipherService implements InternalCipherServiceAbstraction {
       b.localData && b.localData.lastUsedDate ? (b.localData.lastUsedDate as number) : null;
 
     const bothNotNull = aLastUsed != null && bLastUsed != null;
-    if (bothNotNull && aLastUsed < bLastUsed) {
-      return 1;
-    }
-    if (aLastUsed != null && bLastUsed == null) {
-      return -1;
-    }
 
-    if (bothNotNull && aLastUsed > bLastUsed) {
-      return -1;
-    }
-    if (bLastUsed != null && aLastUsed == null) {
-      return 1;
-    }
+    this.getLastUsed(bothNotNull, aLastUsed, bLastUsed);
 
     return 0;
   }
@@ -877,6 +866,21 @@ export class CipherService implements InternalCipherServiceAbstraction {
     this.sortedCiphersCache.clear();
   }
 
+  private getLastUsed(bothNotNull: boolean, aLastUsed: number, bLastUsed: number) {
+    if (bothNotNull && aLastUsed < bLastUsed) {
+      return 1;
+    }
+    if (aLastUsed != null && bLastUsed == null) {
+      return -1;
+    }
+
+    if (bothNotNull && aLastUsed > bLastUsed) {
+      return -1;
+    }
+    if (bLastUsed != null && aLastUsed == null) {
+      return 1;
+    }
+  }
   private checkMatch(
     domain: string,
     match: UriMatchType,
