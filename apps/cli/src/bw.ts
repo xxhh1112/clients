@@ -163,13 +163,7 @@ export class Main {
       new StateFactory(GlobalState, Account)
     );
 
-    this.cryptoService = new CryptoService(
-      this.cryptoFunctionService,
-      this.encryptService,
-      this.platformUtilsService,
-      this.logService,
-      this.stateService
-    );
+    this.instantiateStateService();
 
     this.appIdService = new AppIdService(this.storageService);
     this.tokenService = new TokenService(this.stateService);
@@ -301,6 +295,16 @@ export class Main {
       this.cryptoService,
       this.i18nService,
       this.userVerificationApiService
+    );
+  }
+
+  private instantiateStateService() {
+    this.cryptoService = new CryptoService(
+      this.cryptoFunctionService,
+      this.encryptService,
+      this.platformUtilsService,
+      this.logService,
+      this.stateService
     );
   }
 
