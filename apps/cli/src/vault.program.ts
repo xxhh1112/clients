@@ -179,22 +179,26 @@ export class VaultProgram extends Program {
         }
 
         await this.exitIfLocked();
-        const command = new GetCommand(
-          this.main.cipherService,
-          this.main.folderService,
-          this.main.collectionService,
-          this.main.totpService,
-          this.main.auditService,
-          this.main.cryptoService,
-          this.main.stateService,
-          this.main.searchService,
-          this.main.apiService,
-          this.main.organizationService,
-          this.main.cipherApiAttachmentService
-        );
+        const command = this.instantiateGetCommand();
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
       });
+  }
+
+  private instantiateGetCommand() {
+    return new GetCommand(
+      this.main.cipherService,
+      this.main.folderService,
+      this.main.collectionService,
+      this.main.totpService,
+      this.main.auditService,
+      this.main.cryptoService,
+      this.main.stateService,
+      this.main.searchService,
+      this.main.apiService,
+      this.main.organizationService,
+      this.main.cipherApiAttachmentService
+    );
   }
 
   private createCommand() {
