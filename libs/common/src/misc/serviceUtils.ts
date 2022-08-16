@@ -54,14 +54,15 @@ export class ServiceUtils {
   }
 
   static getTreeNodeObject(
-    nodeTree: TreeNode<ITreeNodeObject>[],
+    nodeTree: TreeNode<ITreeNodeObject>,
     id: string
   ): TreeNode<ITreeNodeObject> {
-    for (let i = 0; i < nodeTree.length; i++) {
-      if (nodeTree[i].node.id === id) {
-        return nodeTree[i];
-      } else if (nodeTree[i].children != null) {
-        const node = ServiceUtils.getTreeNodeObject(nodeTree[i].children, id);
+    if (nodeTree.node.id === id) {
+      return nodeTree;
+    }
+    for (let i = 0; i < nodeTree.children.length; i++) {
+      if (nodeTree.children[i].children != null) {
+        const node = ServiceUtils.getTreeNodeObject(nodeTree.children[i], id);
         if (node !== null) {
           return node;
         }

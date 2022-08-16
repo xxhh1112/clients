@@ -1,6 +1,8 @@
-import { Component, Input } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OptionsInput } from "@bitwarden/angular/vault/vault-filter/components/filter-section.component";
+import { VaultFilterType } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -22,10 +24,10 @@ export class OrganizationOptionsComponent {
   actionPromise: Promise<any>;
   policies: Policy[];
   loaded = false;
-
-  @Input() organization: Organization;
+  organization: Organization;
 
   constructor(
+    @Inject(OptionsInput) injectedOrg: VaultFilterType,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private apiService: ApiService,
@@ -33,7 +35,9 @@ export class OrganizationOptionsComponent {
     private policyService: PolicyService,
     private modalService: ModalService,
     private logService: LogService
-  ) {}
+  ) {
+    this.organization = injectedOrg as any;
+  }
 
   async ngOnInit() {
     await this.load();

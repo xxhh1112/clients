@@ -1,24 +1,48 @@
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { Observable } from "rxjs";
+
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-import { CipherFilter } from "./cipher-filter.model";
-import { VaultFilter } from "./vault-filter.model";
+import { CipherTypeFilter } from "./cipher-filter.model";
+import { CollectionFilter } from "./collection-filter.model";
+import { FolderFilter } from "./folder-filter.model";
+import { OrganizationFilter } from "./organization-filter.model";
 
-export type VaultFilterType = Organization | CipherFilter | FolderView | CollectionView;
+export type VaultFilterType =
+  | OrganizationFilter
+  | CipherTypeFilter
+  | FolderFilter
+  | CollectionFilter;
+
+export enum VaultFilterLabel {
+  OrganizationFilter = "organizationFilter",
+  TypeFilter = "typeFilter",
+  FolderFilter = "folderFilter",
+  CollectionFilter = "collectionFilter",
+  TrashFilter = "trashFilter",
+}
 
 export type VaultFilterSection = {
-  tree: TreeNode<VaultFilterType>;
-  action: (model: VaultFilter, filter: VaultFilterType) => VaultFilter;
-  edit: {
-    enabled: boolean;
-    icon: string;
+  data$: Observable<TreeNode<VaultFilterType>>;
+  header: {
+    showHeader: boolean;
+    isSelectable: boolean;
+  };
+  action: (filter: VaultFilterType) => void;
+  edit?: {
+    text: string;
     action: (filter: VaultFilterType) => void;
   };
-  add: {
-    enabled: boolean;
-    icon: string;
-    action: () => void;
+  add?: {
+    text: string;
+    route?: string;
+    action?: () => void;
   };
+  options?: {
+    component: any;
+  };
+  divider?: boolean;
+};
+
+export type VaultFilterList = {
+  [key in VaultFilterLabel]: VaultFilterSection;
 };

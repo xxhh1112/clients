@@ -1,0 +1,141 @@
+<ng-container>
+  <div class="{{ filterHeader.children.length ? 'filter-heading' : 'filter-buttons' }}">
+    <button
+      *ngIf="filterHeader.children.length"
+      class="toggle-button"
+      (click)="toggleCollapse(filterHeader.node)"
+      [attr.aria-expanded]="!isCollapsed(filterHeader.node)"
+      aria-controls="folder-filters"
+      title="{{ 'toggleCollapse' | i18n }}"
+    >
+      <i
+        class="bwi bwi-fw"
+        aria-hidden="true"
+        [ngClass]="{
+          'bwi-angle-right': isCollapsed(filterHeader.node),
+          'bwi-angle-down': !isCollapsed(filterHeader.node)
+        }"
+      ></i>
+    </button>
+    <button
+      *ngIf="header.isSelectable"
+      class="filter-button"
+      (click)="onFilterSelect(filterHeader)"
+    >
+      <i
+        *ngIf="filterHeader.children.length === 0"
+        class="bwi bwi-fw {{ filterHeader.node.icon }}"
+        aria-hidden="true"
+      ></i>
+      <h3 *ngIf="header.showHeader" class="filter-title">
+        &nbsp;{{ filterHeader.node.name | i18n }}
+      </h3>
+      <span *ngIf="!header.showHeader">&nbsp;{{ filterHeader.node.name | i18n }}</span>
+    </button>
+    <h3 *ngIf="!header.isSelectable" class="filter-title">
+      &nbsp;{{ filterHeader.node.name | i18n }}
+    </h3>
+
+    <button
+      *ngIf="showAddButton"
+      (click)="onAdd()"
+      class="text-muted ml-auto add-button"
+      appA11yTitle="{{ add.text | i18n }}"
+    >
+      <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
+    </button>
+  </div>
+  <ul
+    id="{{ filterHeader.node.name }}-filters"
+    *ngIf="!isCollapsed(filterHeader.node)"
+    class="filter-options"
+  >
+    <ng-template #recursiveFilters let-filters>
+      <li
+        *ngFor="let f of filters"
+        [ngClass]="{
+          active: f.node.id === activeFilter.selectedFolderId && activeFilter.selectedFolder
+        }"
+        class="filter-option"
+      >
+        <span class="filter-buttons">
+          <button
+            *ngIf="f.children.length"
+            title="{{ 'toggleCollapse' | i18n }}"
+            (click)="toggleCollapse(f.node)"
+            [attr.aria-expanded]="!isCollapsed(f.node)"
+            [attr.aria-controls]="f.node.name + '_children'"
+            class="toggle-button"
+          >
+            <i
+              class="bwi bwi-fw"
+              [ngClass]="{
+                'bwi-angle-right': isCollapsed(f.node),
+                'bwi-angle-down': !isCollapsed(f.node)
+              }"
+              aria-hidden="true"
+            ></i>
+          </button>
+          <button
+            class="filter-button"
+            [ngClass]="{ 'disabled-organization': isOrganization && !f.node.enabled }"
+            (click)="onFilterSelect(f.node)"
+          >
+            <i
+              *ngIf="f.children.length === 0"
+              class="bwi bwi-fw {{ f.node.icon }}"
+              aria-hidden="true"
+            ></i>
+            &nbsp;{{ f.node.name }}
+          </button>
+          <i
+            *ngIf="isOrganization && !f.node.enabled"
+            class="filter-options-icon bwi bwi-fw bwi-exclamation-triangle text-danger"
+            aria-label="{{ 'organizationIsDisabled' | i18n }}"
+            appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
+          ></i>
+          <button
+            *ngIf="showEdit && f.node.id"
+            class="edit-button"
+            (click)="onEdit(f.node)"
+            appA11yTitle="{{ edit.text | i18n }}"
+          >
+            <i class="bwi bwi-pencil bwi-fw" aria-hidden="true"></i>
+          </button>
+          <ng-container *ngIf="options && !f.node.hideOptions">
+            <span class="ml-auto">
+              <button [bitMenuTriggerFor]="optionsMenu" class="filter-options-icon">
+                <i class="bwi bwi-ellipsis-v" aria-hidden="true"></i>
+              </button>
+              <bit-menu #optionsMenu>
+                <ng-container
+                  *ngComponentOutlet="options.component; injector: createInjector(f.node)"
+                ></ng-container>
+              </bit-menu>
+            </span>
+          </ng-container>
+        </span>
+        <ul
+          [id]="f.node.name + '_children'"
+          class="nested-filter-options"
+          *ngIf="f.children.length && !isCollapsed(f.node)"
+        >
+          <ng-container *ngTemplateOutlet="recursiveFilters; context: { $implicit: f.children }">
+          </ng-container>
+        </ul>
+      </li>
+    </ng-template>
+    <ng-container
+      *ngTemplateOutlet="recursiveFilters; context: { $implicit: filters }"
+    ></ng-container>
+    <li class="filter-option" *ngIf="showAddLink">
+      <span class="filter-buttons">
+        <a href="#" routerLink="{{ add.route }}" class="filter-button">
+          <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
+          &nbsp;{{ add.text | i18n }}
+        </a>
+      </span>
+    </li>
+  </ul>
+  <hr *ngIf="divider" />
+</ng-container>

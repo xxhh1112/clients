@@ -1,13 +1,7 @@
-export enum VaultFilterType {
+export enum VaultFilterLabel {
   OrganizationFilter = "organizationFilter",
   TypeFilter = "typeFilter",
   FolderFilter = "folderFilter",
   CollectionFilter = "collectionFilter",
   TrashFilter = "trashFilter",
 }
-
-// export const filters: Record<VaultFilterType, VaultFilterSection> = {
-//   [VaultFilterType.OrganizationFilter]: {
-//     }
-//   },
-// }

@@ -11,6 +11,14 @@ import { ActivatedRoute, Params, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
+import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
+import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
+import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
+import {
+  VaultFilterLabel,
+  VaultFilterList,
+} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -23,6 +31,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
+import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { UpdateKeyComponent } from "../settings/update-key.component";
@@ -34,6 +43,7 @@ import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultService } from "./shared/vault.service";
+import { OrganizationOptionsComponent } from "./vault-filter/organization-filter/organization-options.component";
 import { VaultFilterService } from "./vault-filter/shared/vault-filter.service";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 
@@ -66,6 +76,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   showPremiumCallout = false;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
+  filters: VaultFilterList;
 
   constructor(
     private syncService: SyncService,
@@ -103,7 +114,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
-      this.filterComponent.reloadCollectionsAndFolders(this.activeFilter);
+      this.filterComponent.reloadCollections(this.activeFilter);
       this.filterComponent.reloadOrganizations();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
@@ -145,7 +156,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             case "syncCompleted":
               if (message.successfully) {
                 await Promise.all([
-                  this.filterComponent.reloadCollectionsAndFolders(this.activeFilter),
+                  this.filterComponent.reloadCollections(this.activeFilter),
                   this.filterComponent.reloadOrganizations(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
@@ -156,6 +167,99 @@ export class VaultComponent implements OnInit, OnDestroy {
         });
       });
     });
+
+    this.filters = {
+      [VaultFilterLabel.OrganizationFilter]: {
+        data$: await this.vaultFilterService.buildOrganizations(),
+        header: {
+          showHeader: true,
+          isSelectable: true,
+        },
+        action: this.applyOrganizationFilter.bind(this),
+        options: {
+          component: OrganizationOptionsComponent,
+        },
+        add: {
+          text: "newOrganization",
+          route: "/create-organization",
+        },
+        divider: true,
+      },
+      [VaultFilterLabel.TypeFilter]: {
+        data$: await this.vaultFilterService.buildNestedTypes(
+          { id: "all", name: "allItems", type: "all", icon: "CHANGE THIS" },
+          [
+            {
+              id: "favorites",
+              name: this.i18nService.t("favorites"),
+              type: "favorites",
+              icon: "bwi-star",
+            },
+            {
+              id: "login",
+              name: this.i18nService.t("typeLogin"),
+              type: CipherType.Login,
+              icon: "bwi-globe",
+            },
+            {
+              id: "card",
+              name: this.i18nService.t("typeCard"),
+              type: CipherType.Card,
+              icon: "bwi-credit-card",
+            },
+            {
+              id: "identity",
+              name: this.i18nService.t("typeIdentity"),
+              type: CipherType.Identity,
+              icon: "bwi-id-card",
+            },
+            {
+              id: "note",
+              name: this.i18nService.t("typeSecureNote"),
+              type: CipherType.SecureNote,
+              icon: "bwi-sticky-note",
+            },
+          ]
+        ),
+        header: {
+          showHeader: true,
+          isSelectable: true,
+        },
+        action: this.applyTypeFilter.bind(this),
+      },
+      [VaultFilterLabel.FolderFilter]: {
+        data$: await this.vaultFilterService.buildNestedFolders(),
+        header: {
+          showHeader: true,
+          isSelectable: false,
+        },
+        action: await this.applyFolderFilter.bind(this),
+        edit: {
+          text: "editFolder",
+          action: this.editFolder.bind(this),
+        },
+        add: {
+          text: "Add Folder",
+          action: this.addFolder.bind(this),
+        },
+      },
+      [VaultFilterLabel.CollectionFilter]: {
+        data$: await this.vaultFilterService.buildCollections(),
+        header: {
+          showHeader: true,
+          isSelectable: true,
+        },
+        action: this.applyCollectionFilter.bind(this),
+      },
+      [VaultFilterLabel.TrashFilter]: {
+        data$: this.vaultFilterService.buildTrash(),
+        header: {
+          showHeader: false,
+          isSelectable: true,
+        },
+        action: this.applyTypeFilter.bind(this),
+      },
+    };
   }
 
   get isShowingCards() {
@@ -184,14 +288,34 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.go();
   }
 
-  async applyOrganizationFilter(orgId: string) {
-    if (orgId == null) {
+  async applyOrganizationFilter(org: OrganizationFilter) {
+    if (org.id == null) {
       this.activeFilter.resetOrganization();
       this.activeFilter.myVaultOnly = true;
     } else {
-      this.activeFilter.selectedOrganizationId = orgId;
+      this.activeFilter.selectedOrganizationId = org.id;
     }
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
+    await this.applyVaultFilter(this.activeFilter);
+  }
+
+  async applyTypeFilter(filter: CipherTypeFilter) {
+    this.activeFilter.resetFilter();
+    this.activeFilter.status = filter.type;
+    await this.applyVaultFilter(this.activeFilter);
+  }
+
+  async applyFolderFilter(folder: FolderFilter) {
+    this.activeFilter.resetFilter();
+    this.activeFilter.selectedFolder = true;
+    this.activeFilter.selectedFolderId = folder.id;
+    await this.applyVaultFilter(this.activeFilter);
+  }
+
+  async applyCollectionFilter(collection: CollectionFilter) {
+    this.activeFilter.resetFilter();
+    this.activeFilter.selectedCollection = true;
+    this.activeFilter.selectedCollectionId = collection.id;
     await this.applyVaultFilter(this.activeFilter);
   }
 
@@ -271,25 +395,25 @@ export class VaultComponent implements OnInit, OnDestroy {
         comp.folderId = null;
         comp.onSavedFolder.subscribe(async () => {
           modal.close();
-          await this.filterComponent.reloadCollectionsAndFolders(this.activeFilter);
+          await this.filterComponent.reloadCollections(this.activeFilter);
         });
       }
     );
   }
 
-  async editFolder(folderId: string) {
+  async editFolder(folder: FolderFilter) {
     const [modal] = await this.modalService.openViewRef(
       FolderAddEditComponent,
       this.folderAddEditModalRef,
       (comp) => {
-        comp.folderId = folderId;
+        comp.folderId = folder.id;
         comp.onSavedFolder.subscribe(async () => {
           modal.close();
-          await this.filterComponent.reloadCollectionsAndFolders(this.activeFilter);
+          // await this.filterComponent.reloadCollections(this.activeFilter);
         });
         comp.onDeletedFolder.subscribe(async () => {
           modal.close();
-          await this.filterComponent.reloadCollectionsAndFolders(this.activeFilter);
+          // await this.filterComponent.reloadCollections(this.activeFilter);
         });
       }
     );

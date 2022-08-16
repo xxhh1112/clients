@@ -1,3 +1,4 @@
+import { CollectionFilter } from "../../../angular/src/vault/vault-filter/models/collection-filter.model";
 import { CollectionService as CollectionServiceAbstraction } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { I18nService } from "../abstractions/i18n.service";
@@ -91,19 +92,27 @@ export class CollectionService implements CollectionServiceAbstraction {
     return decryptedCollections;
   }
 
-  async getAllNested(collections: CollectionView[] = null): Promise<TreeNode<CollectionView>[]> {
+  async getAllNested(collections: CollectionView[] = null): Promise<TreeNode<CollectionFilter>> {
     if (collections == null) {
       collections = await this.getAllDecrypted();
     }
-    const nodes: TreeNode<CollectionView>[] = [];
+    const nodes: TreeNode<CollectionFilter>[] = [];
     collections.forEach((c) => {
-      const collectionCopy = new CollectionView();
+      const collectionCopy = new CollectionView() as CollectionFilter;
       collectionCopy.id = c.id;
       collectionCopy.organizationId = c.organizationId;
+      collectionCopy.icon = "bwi-collection";
       const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
       ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
     });
-    return nodes;
+
+    const head = new CollectionView() as CollectionFilter;
+    const headNode = new TreeNode<CollectionFilter>(head, "collections", null, "AllCollections");
+    nodes.forEach((n) => {
+      n.parent = head;
+      headNode.children.push(n);
+    });
+    return headNode;
   }
 
   async getNested(id: string): Promise<TreeNode<CollectionView>> {

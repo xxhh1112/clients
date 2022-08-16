@@ -28,8 +28,8 @@ export class VaultFilterService extends BaseVaultFilterService {
     cipherService: CipherService,
     collectionService: CollectionService,
     policyService: PolicyService,
-    private i18nService: I18nService,
-    protected apiService: ApiService
+    protected apiService: ApiService,
+    i18nService: I18nService
   ) {
     super(
       stateService,
@@ -37,7 +37,8 @@ export class VaultFilterService extends BaseVaultFilterService {
       folderService,
       cipherService,
       collectionService,
-      policyService
+      policyService,
+      i18nService
     );
   }
 

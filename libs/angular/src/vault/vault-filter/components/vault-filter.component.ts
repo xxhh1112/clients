@@ -7,6 +7,7 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
+import { VaultFilterList } from "../models/vault-filter-section";
 import { VaultFilter } from "../models/vault-filter.model";
 import { VaultFilterService } from "../services/vault-filter.service";
 
@@ -18,6 +19,7 @@ export class VaultFilterComponent implements OnInit {
   @Input() hideFavorites = false;
   @Input() hideTrash = false;
   @Input() hideOrganizations = false;
+  @Input() filters?: VaultFilterList;
 
   @Output() onFilterChange = new EventEmitter<VaultFilter>();
   @Output() onAddFolder = new EventEmitter<never>();
@@ -39,21 +41,21 @@ export class VaultFilterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
-    this.organizations = await this.vaultFilterService.buildOrganizations();
-    if (this.organizations != null && this.organizations.length > 0) {
-      this.activePersonalOwnershipPolicy =
-        await this.vaultFilterService.checkForPersonalOwnershipPolicy();
-      this.activeSingleOrganizationPolicy =
-        await this.vaultFilterService.checkForSingleOrganizationPolicy();
-    }
-    this.folders$ = await this.vaultFilterService.buildNestedFolders();
-    this.collections = await this.initCollections();
+    // this.organizations = await this.vaultFilterService.buildOrganizations();
+    // if (this.organizations != null && this.organizations.length > 0) {
+    //   this.activePersonalOwnershipPolicy =
+    //     await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+    //   this.activeSingleOrganizationPolicy =
+    //     await this.vaultFilterService.checkForSingleOrganizationPolicy();
+    // }
+    // this.folders$ = await this.vaultFilterService.buildNestedFolders();
+    // this.collections = await this.initCollections();
     this.isLoaded = true;
   }
 
   // overwritten in web for organization vaults
   async initCollections() {
-    return await this.vaultFilterService.buildCollections();
+    // return await this.vaultFilterService.buildCollections();
   }
 
   async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
@@ -67,25 +69,24 @@ export class VaultFilterComponent implements OnInit {
 
   async applyFilter(filter: VaultFilter) {
     if (filter.refreshCollectionsAndFolders) {
-      await this.reloadCollectionsAndFolders(filter);
+      await this.reloadCollections(filter);
       filter = await this.pruneInvalidatedFilterSelections(filter);
     }
     this.onFilterChange.emit(filter);
   }
 
-  async reloadCollectionsAndFolders(filter: VaultFilter) {
-    this.folders$ = await this.vaultFilterService.buildNestedFolders(filter.selectedOrganizationId);
-    this.collections = filter.myVaultOnly
+  async reloadCollections(filter: VaultFilter) {
+    this.filters.collectionFilter.data$ = filter.myVaultOnly
       ? null
       : await this.vaultFilterService.buildCollections(filter.selectedOrganizationId);
   }
 
   async reloadOrganizations() {
-    this.organizations = await this.vaultFilterService.buildOrganizations();
-    this.activePersonalOwnershipPolicy =
-      await this.vaultFilterService.checkForPersonalOwnershipPolicy();
-    this.activeSingleOrganizationPolicy =
-      await this.vaultFilterService.checkForSingleOrganizationPolicy();
+    this.filters.organizationFilter.data$ = await this.vaultFilterService.buildOrganizations();
+    // this.activePersonalOwnershipPolicy =
+    //   await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+    // this.activeSingleOrganizationPolicy =
+    //   await this.vaultFilterService.checkForSingleOrganizationPolicy();
   }
 
   addFolder() {

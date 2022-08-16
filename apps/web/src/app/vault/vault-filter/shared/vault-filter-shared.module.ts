@@ -6,6 +6,7 @@ import { CollectionFilterComponent } from "./collection-filter/collection-filter
 import { FolderFilterComponent } from "./folder-filter/folder-filter.component";
 import { StatusFilterComponent } from "./status-filter/status-filter.component";
 import { TypeFilterComponent } from "./type-filter/type-filter.component";
+import { FilterSectionComponent } from "./vault-filter-section.component";
 import { VaultFilterService } from "./vault-filter.service";
 
 @NgModule({
@@ -15,6 +16,7 @@ import { VaultFilterService } from "./vault-filter.service";
     FolderFilterComponent,
     StatusFilterComponent,
     TypeFilterComponent,
+    FilterSectionComponent,
   ],
   exports: [
     SharedModule,
@@ -22,6 +24,7 @@ import { VaultFilterService } from "./vault-filter.service";
     FolderFilterComponent,
     StatusFilterComponent,
     TypeFilterComponent,
+    FilterSectionComponent,
   ],
   providers: [VaultFilterService],
 })

@@ -26,53 +26,74 @@
         autocomplete="off"
         appAutofocus
       />
-      <app-organization-filter
-        [hide]="hideOrganizations"
+      <app-filter-section
         [activeFilter]="activeFilter"
-        [collapsedFilterNodes]="collapsedFilterNodes"
-        [organizations]="organizations"
-        [activePersonalOwnershipPolicy]="activePersonalOwnershipPolicy"
-        [activeSingleOrganizationPolicy]="activeSingleOrganizationPolicy"
-        (onNodeCollapseStateChange)="toggleFilterNodeCollapseState($event)"
-        (onFilterChange)="applyFilter($event)"
-      ></app-organization-filter>
+        [data]="filters?.organizationFilter.data$ | async"
+        [header]="filters?.organizationFilter.header"
+        [action]="filters?.organizationFilter.action"
+        [edit]="filters?.organizationFilter.edit"
+        [add]="filters?.organizationFilter.add"
+        [options]="filters?.organizationFilter.options"
+        [divider]="filters?.organizationFilter.divider"
+        [nodeCollapsedState]="collapsedFilterNodes"
+        (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+      >
+      </app-filter-section>
       <div class="filter">
-        <app-status-filter
-          [hideFavorites]="hideFavorites"
-          [hideTrash]="hideTrash"
+        <app-filter-section
           [activeFilter]="activeFilter"
-          (onFilterChange)="applyFilter($event)"
-        ></app-status-filter>
+          [data]="filters?.typeFilter.data$ | async"
+          [header]="filters?.typeFilter.header"
+          [action]="filters?.typeFilter.action"
+          [edit]="filters?.typeFilter.edit"
+          [add]="filters?.typeFilter.add"
+          [options]="filters?.typeFilter.options"
+          [divider]="filters?.typeFilter.divider"
+          [nodeCollapsedState]="collapsedFilterNodes"
+          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+        ></app-filter-section>
       </div>
       <div class="filter">
-        <app-type-filter
+        <app-filter-section
           [activeFilter]="activeFilter"
-          [collapsedFilterNodes]="collapsedFilterNodes"
-          (onNodeCollapseStateChange)="toggleFilterNodeCollapseState($event)"
-          (onFilterChange)="applyFilter($event)"
-        ></app-type-filter>
+          [data]="filters?.folderFilter.data$ | async"
+          [header]="filters?.folderFilter.header"
+          [action]="filters?.folderFilter.action"
+          [edit]="filters?.folderFilter.edit"
+          [add]="filters?.folderFilter.add"
+          [options]="filters?.folderFilter.options"
+          [divider]="filters?.folderFilter.divider"
+          [nodeCollapsedState]="collapsedFilterNodes"
+          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+        ></app-filter-section>
       </div>
       <div class="filter">
-        <app-folder-filter
-          [hide]="hideFolders"
+        <app-filter-section
           [activeFilter]="activeFilter"
-          [collapsedFilterNodes]="collapsedFilterNodes"
-          [folderNodes]="folders$ | async"
-          (onNodeCollapseStateChange)="toggleFilterNodeCollapseState($event)"
-          (onFilterChange)="applyFilter($event)"
-          (onAddFolder)="addFolder()"
-          (onEditFolder)="editFolder($event)"
-        ></app-folder-filter>
+          [data]="filters?.collectionFilter.data$ | async"
+          [header]="filters?.collectionFilter.header"
+          [action]="filters?.collectionFilter.action"
+          [edit]="filters?.collectionFilter.edit"
+          [add]="filters?.collectionFilter.add"
+          [options]="filters?.collectionFilter.options"
+          [divider]="filters?.collectionFilter.divider"
+          [nodeCollapsedState]="collapsedFilterNodes"
+          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+        ></app-filter-section>
       </div>
       <div class="filter">
-        <app-collection-filter
-          [hide]="hideCollections"
+        <app-filter-section
           [activeFilter]="activeFilter"
-          [collapsedFilterNodes]="collapsedFilterNodes"
-          [collectionNodes]="collections"
-          (onNodeCollapseStateChange)="toggleFilterNodeCollapseState($event)"
-          (onFilterChange)="applyFilter($event)"
-        ></app-collection-filter>
+          [data]="filters?.trashFilter.data$ | async"
+          [header]="filters?.trashFilter.header"
+          [action]="filters?.trashFilter.action"
+          [edit]="filters?.trashFilter.edit"
+          [add]="filters?.trashFilter.add"
+          [options]="filters?.trashFilter.options"
+          [divider]="filters?.trashFilter.divider"
+          [nodeCollapsedState]="collapsedFilterNodes"
+          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+        ></app-filter-section>
       </div>
     </div>
   </div>

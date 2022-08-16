@@ -16,13 +16,13 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   organization: Organization;
 
   async initCollections() {
-    if (this.organization.canEditAnyCollection) {
-      return await this.vaultFilterService.buildAdminCollections(this.organization.id);
-    }
-    return await this.vaultFilterService.buildCollections(this.organization.id);
+    //   if (this.organization.canEditAnyCollection) {
+    //     return await this.vaultFilterService.buildAdminCollections(this.organization.id);
+    //   }
+    //   return await this.vaultFilterService.buildCollections(this.organization.id);
   }
 
   async reloadCollectionsAndFolders() {
-    this.collections = await this.initCollections();
+    //   this.collections = await this.initCollections();
   }
 }
