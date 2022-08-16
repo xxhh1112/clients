@@ -5,7 +5,7 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
+import { canAccessSettingsTab } from "../navigation-permissions";
 
 const BroadcasterSubscriptionId = "OrganizationLayoutComponent";
 
@@ -51,25 +51,23 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
   }
 
   get showSettingsTab(): boolean {
-    return NavigationPermissionsService.canAccessSettings(this.organization);
+    return canAccessSettingsTab(this.organization);
   }
 
   get showMembersTab(): boolean {
-    return NavigationPermissionsService.canAccessMembers(this.organization);
+    return this.organization.canManageUsers;
   }
 
   get showGroupsTab(): boolean {
-    return (
-      this.organization.useGroups && NavigationPermissionsService.canAccessGroups(this.organization)
-    );
+    return this.organization.canManageGroups;
   }
 
   get showReportsTab(): boolean {
-    return NavigationPermissionsService.canAccessReporting(this.organization);
+    return this.organization.canAccessReports;
   }
 
   get showBillingTab(): boolean {
-    return NavigationPermissionsService.canAccessBilling(this.organization);
+    return this.organization.canManageBilling;
   }
 
   get reportTabLabel(): string {

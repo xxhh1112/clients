@@ -1,11 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { Permissions } from "@bitwarden/common/enums/permissions";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
-import { PermissionsGuard } from "../guards/permissions.guard";
+import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 import { EventsComponent } from "../manage/events.component";
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
 import { ExposedPasswordsReportComponent } from "../tools/exposed-passwords-report.component";
 import { InactiveTwoFactorReportComponent } from "../tools/inactive-two-factor-report.component";
 import { ReusedPasswordsReportComponent } from "../tools/reused-passwords-report.component";
@@ -19,62 +18,62 @@ const routes: Routes = [
   {
     path: "",
     component: ReportingComponent,
-    canActivate: [PermissionsGuard],
-    data: { permissions: NavigationPermissionsService.getPermissions("reporting") },
+    canActivate: [OrganizationPermissionsGuard],
+    data: { organizationPermissions: (org: Organization) => org.canAccessReports },
     children: [
       { path: "", pathMatch: "full", redirectTo: "reports" },
       {
         path: "reports",
         component: ReportsHomeComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "reports",
-          permissions: [Permissions.AccessReports],
+          organizationPermissions: (org: Organization) => org.canAccessReports,
         },
         children: [
           {
             path: "exposed-passwords-report",
             component: ExposedPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
+            canActivate: [OrganizationPermissionsGuard],
             data: {
               titleId: "exposedPasswordsReport",
-              permissions: [Permissions.AccessReports],
+              organizationPermissions: (org: Organization) => org.canAccessReports,
             },
           },
           {
             path: "inactive-two-factor-report",
             component: InactiveTwoFactorReportComponent,
-            canActivate: [PermissionsGuard],
+            canActivate: [OrganizationPermissionsGuard],
             data: {
               titleId: "inactive2faReport",
-              permissions: [Permissions.AccessReports],
+              organizationPermissions: (org: Organization) => org.canAccessReports,
             },
           },
           {
             path: "reused-passwords-report",
             component: ReusedPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
+            canActivate: [OrganizationPermissionsGuard],
             data: {
               titleId: "reusedPasswordsReport",
-              permissions: [Permissions.AccessReports],
+              organizationPermissions: (org: Organization) => org.canAccessReports,
             },
           },
           {
             path: "unsecured-websites-report",
             component: UnsecuredWebsitesReportComponent,
-            canActivate: [PermissionsGuard],
+            canActivate: [OrganizationPermissionsGuard],
             data: {
               titleId: "unsecuredWebsitesReport",
-              permissions: [Permissions.AccessReports],
+              organizationPermissions: (org: Organization) => org.canAccessReports,
             },
           },
           {
             path: "weak-passwords-report",
             component: WeakPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
+            canActivate: [OrganizationPermissionsGuard],
             data: {
               titleId: "weakPasswordsReport",
-              permissions: [Permissions.AccessReports],
+              organizationPermissions: (org: Organization) => org.canAccessReports,
             },
           },
         ],
@@ -82,10 +81,10 @@ const routes: Routes = [
       {
         path: "events",
         component: EventsComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "eventLogs",
-          permissions: [Permissions.AccessEventLogs],
+          organizationPermissions: (org: Organization) => org.canAccessEventLogs,
         },
       },
     ],

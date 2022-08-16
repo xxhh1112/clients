@@ -1,11 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { Permissions } from "@bitwarden/common/enums/permissions";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 import { PaymentMethodComponent } from "../../settings/payment-method.component";
-import { PermissionsGuard } from "../guards/permissions.guard";
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
+import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 
 import { OrgBillingHistoryViewComponent } from "./organization-billing-history-view.component";
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";
@@ -15,8 +14,8 @@ const routes: Routes = [
   {
     path: "",
     component: OrganizationBillingTabComponent,
-    canActivate: [PermissionsGuard],
-    data: { permissions: NavigationPermissionsService.getPermissions("billing") },
+    canActivate: [OrganizationPermissionsGuard],
+    data: { organizationPermissions: (org: Organization) => org.canManageBilling },
     children: [
       { path: "", pathMatch: "full", redirectTo: "subscription" },
       {
@@ -27,14 +26,20 @@ const routes: Routes = [
       {
         path: "payment-method",
         component: PaymentMethodComponent,
-        canActivate: [PermissionsGuard],
-        data: { titleId: "paymentMethod", permissions: [Permissions.ManageBilling] },
+        canActivate: [OrganizationPermissionsGuard],
+        data: {
+          titleId: "paymentMethod",
+          organizationPermissions: (org: Organization) => org.canManageBilling,
+        },
       },
       {
         path: "history",
         component: OrgBillingHistoryViewComponent,
-        canActivate: [PermissionsGuard],
-        data: { titleId: "billingHistory", permissions: [Permissions.ManageBilling] },
+        canActivate: [OrganizationPermissionsGuard],
+        data: {
+          titleId: "billingHistory",
+          organizationPermissions: (org: Organization) => org.canManageBilling,
+        },
       },
     ],
   },
