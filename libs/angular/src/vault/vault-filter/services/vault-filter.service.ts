@@ -46,7 +46,7 @@ export class VaultFilterService {
     const orgs = (await this.organizationService.getAll()) as OrganizationFilter[];
     const head = new Organization() as OrganizationFilter;
     const headNode = new TreeNode<OrganizationFilter>(head, "allVaults", null, "AllVaults");
-    if (!(await this.checkForSingleOrganizationPolicy())) {
+    if (!(await this.checkForPersonalOwnershipPolicy())) {
       const myVault = new Organization() as OrganizationFilter;
       myVault.id = null;
       myVault.icon = "bwi-user";
@@ -59,6 +59,9 @@ export class VaultFilterService {
         null
       );
       headNode.children.push(myVaultNode);
+    }
+    if (await this.checkForSingleOrganizationPolicy()) {
+      orgs.length = 1;
     }
     orgs.forEach((filter) => {
       filter.icon = "bwi-business";
