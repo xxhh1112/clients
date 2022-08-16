@@ -329,18 +329,4 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
       throw new Error((e as ErrorResponse).getSingleMessage());
     }
   }
-  private addEventParameters(base: string, start: string, end: string, token: string) {
-    if (start != null) {
-      base += "?start=" + start;
-    }
-    if (end != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "end=" + end;
-    }
-    if (token != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "continuationToken=" + token;
-    }
-    return base;
-  }
 }
