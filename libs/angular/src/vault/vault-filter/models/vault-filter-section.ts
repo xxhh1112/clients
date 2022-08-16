@@ -27,7 +27,7 @@ export type VaultFilterSection = {
     showHeader: boolean;
     isSelectable: boolean;
   };
-  action: (filter: VaultFilterType) => void;
+  action: (filter: VaultFilterType) => Promise<void>;
   edit?: {
     text: string;
     action: (filter: VaultFilterType) => void;

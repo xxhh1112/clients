@@ -88,12 +88,6 @@
             ></i>
             &nbsp;{{ f.node.name }}
           </button>
-          <i
-            *ngIf="isOrganization && !f.node.enabled"
-            class="filter-options-icon bwi bwi-fw bwi-exclamation-triangle text-danger"
-            aria-label="{{ 'organizationIsDisabled' | i18n }}"
-            appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
-          ></i>
           <button
             *ngIf="showEdit && f.node.id"
             class="edit-button"
@@ -102,18 +96,24 @@
           >
             <i class="bwi bwi-pencil bwi-fw" aria-hidden="true"></i>
           </button>
-          <ng-container *ngIf="options && !f.node.hideOptions">
-            <span class="ml-auto">
+          <span class="ml-auto">
+            <i
+              *ngIf="isOrganization && !f.node.enabled"
+              class="org-options bwi bwi-fw bwi-exclamation-triangle text-danger"
+              aria-label="{{ 'organizationIsDisabled' | i18n }}"
+              appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
+            ></i>
+            <ng-container *ngIf="options && !f.node.hideOptions">
               <button [bitMenuTriggerFor]="optionsMenu" class="filter-options-icon">
                 <i class="bwi bwi-ellipsis-v" aria-hidden="true"></i>
               </button>
-              <bit-menu #optionsMenu>
+              <bit-menu class="filter-organization-options" #optionsMenu>
                 <ng-container
                   *ngComponentOutlet="options.component; injector: createInjector(f.node)"
                 ></ng-container>
               </bit-menu>
-            </span>
-          </ng-container>
+            </ng-container>
+          </span>
         </span>
         <ul
           [id]="f.node.name + '_children'"

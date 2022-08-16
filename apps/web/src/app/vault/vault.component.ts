@@ -175,7 +175,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           showHeader: true,
           isSelectable: true,
         },
-        action: this.applyOrganizationFilter.bind(this),
+        action: this.applyOrganizationFilter,
         options: {
           component: OrganizationOptionsComponent,
         },
@@ -225,7 +225,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           showHeader: true,
           isSelectable: true,
         },
-        action: this.applyTypeFilter.bind(this),
+        action: this.applyTypeFilter,
       },
       [VaultFilterLabel.FolderFilter]: {
         data$: await this.vaultFilterService.buildNestedFolders(),
@@ -233,14 +233,14 @@ export class VaultComponent implements OnInit, OnDestroy {
           showHeader: true,
           isSelectable: false,
         },
-        action: await this.applyFolderFilter.bind(this),
+        action: await this.applyFolderFilter,
         edit: {
           text: "editFolder",
-          action: this.editFolder.bind(this),
+          action: this.editFolder,
         },
         add: {
           text: "Add Folder",
-          action: this.addFolder.bind(this),
+          action: this.addFolder,
         },
       },
       [VaultFilterLabel.CollectionFilter]: {
@@ -249,7 +249,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           showHeader: true,
           isSelectable: true,
         },
-        action: this.applyCollectionFilter.bind(this),
+        action: this.applyCollectionFilter,
       },
       [VaultFilterLabel.TrashFilter]: {
         data$: this.vaultFilterService.buildTrash(),
@@ -257,7 +257,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           showHeader: false,
           isSelectable: true,
         },
-        action: this.applyTypeFilter.bind(this),
+        action: this.applyTypeFilter,
       },
     };
   }
@@ -288,7 +288,15 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.go();
   }
 
-  async applyOrganizationFilter(org: OrganizationFilter) {
+  applyOrganizationFilter = async (org: OrganizationFilter): Promise<void> => {
+    if (!org.enabled) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("disabledOrganizationFilterError")
+      );
+      return;
+    }
     if (org.id == null) {
       this.activeFilter.resetOrganization();
       this.activeFilter.myVaultOnly = true;
@@ -297,27 +305,59 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
     await this.applyVaultFilter(this.activeFilter);
-  }
+  };
 
-  async applyTypeFilter(filter: CipherTypeFilter) {
+  applyTypeFilter = async (filter: CipherTypeFilter): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.status = filter.type;
     await this.applyVaultFilter(this.activeFilter);
-  }
+  };
 
-  async applyFolderFilter(folder: FolderFilter) {
+  applyFolderFilter = async (folder: FolderFilter): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.selectedFolder = true;
     this.activeFilter.selectedFolderId = folder.id;
     await this.applyVaultFilter(this.activeFilter);
-  }
+  };
 
-  async applyCollectionFilter(collection: CollectionFilter) {
+  applyCollectionFilter = async (collection: CollectionFilter): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.selectedCollection = true;
     this.activeFilter.selectedCollectionId = collection.id;
     await this.applyVaultFilter(this.activeFilter);
-  }
+  };
+
+  addFolder = async (): Promise<void> => {
+    const [modal] = await this.modalService.openViewRef(
+      FolderAddEditComponent,
+      this.folderAddEditModalRef,
+      (comp) => {
+        comp.folderId = null;
+        comp.onSavedFolder.subscribe(async () => {
+          modal.close();
+          await this.filterComponent.reloadCollections(this.activeFilter);
+        });
+      }
+    );
+  };
+
+  editFolder = async (folder: FolderFilter): Promise<void> => {
+    const [modal] = await this.modalService.openViewRef(
+      FolderAddEditComponent,
+      this.folderAddEditModalRef,
+      (comp) => {
+        comp.folderId = folder.id;
+        comp.onSavedFolder.subscribe(async () => {
+          modal.close();
+          // await this.filterComponent.reloadCollections(this.activeFilter);
+        });
+        comp.onDeletedFolder.subscribe(async () => {
+          modal.close();
+          // await this.filterComponent.reloadCollections(this.activeFilter);
+        });
+      }
+    );
+  };
 
   filterSearchText(searchText: string) {
     this.ciphersComponent.searchText = searchText;
@@ -382,38 +422,6 @@ export class VaultComponent implements OnInit, OnDestroy {
         comp.onSavedCollections.subscribe(async () => {
           modal.close();
           await this.ciphersComponent.refresh();
-        });
-      }
-    );
-  }
-
-  async addFolder() {
-    const [modal] = await this.modalService.openViewRef(
-      FolderAddEditComponent,
-      this.folderAddEditModalRef,
-      (comp) => {
-        comp.folderId = null;
-        comp.onSavedFolder.subscribe(async () => {
-          modal.close();
-          await this.filterComponent.reloadCollections(this.activeFilter);
-        });
-      }
-    );
-  }
-
-  async editFolder(folder: FolderFilter) {
-    const [modal] = await this.modalService.openViewRef(
-      FolderAddEditComponent,
-      this.folderAddEditModalRef,
-      (comp) => {
-        comp.folderId = folder.id;
-        comp.onSavedFolder.subscribe(async () => {
-          modal.close();
-          // await this.filterComponent.reloadCollections(this.activeFilter);
-        });
-        comp.onDeletedFolder.subscribe(async () => {
-          modal.close();
-          // await this.filterComponent.reloadCollections(this.activeFilter);
         });
       }
     );
