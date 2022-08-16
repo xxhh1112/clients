@@ -5,7 +5,7 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { AttachmentFileUpload } from "@bitwarden/common/models/domain/AttachmentFileUpload";
+import { AttachmentFileUpload } from "@bitwarden/common/models/domain/attachmentFileUpload";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
@@ -196,12 +196,13 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
         (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
         (e as ErrorResponse).statusCode === 405
       ) {
-        let attachmentFileUpload: AttachmentFileUpload;
-        attachmentFileUpload.admin = admin;
-        attachmentFileUpload.cipherId = cipher.id;
-        attachmentFileUpload.encFileName = encFileName;
-        attachmentFileUpload.encData = encData;
-        attachmentFileUpload.key = dataEncKey[1];
+        const attachmentFileUpload: AttachmentFileUpload = {
+          admin: admin,
+          cipherId: cipher.id,
+          encFileName: encFileName,
+          encData: encData,
+          key: dataEncKey[1],
+        };
         response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
       } else if (e instanceof ErrorResponse) {
         throw new Error((e as ErrorResponse).getSingleMessage());
