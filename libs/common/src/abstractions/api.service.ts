@@ -180,7 +180,6 @@ import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyRes
 import { UserKeyResponse } from "../models/response/userKeyResponse";
 import { SendAccessView } from "../models/view/sendAccessView";
 
-
 export abstract class ApiService {
   send: (
     method: "GET" | "POST" | "PUT" | "DELETE",

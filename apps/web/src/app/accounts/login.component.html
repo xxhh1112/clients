@@ -6,15 +6,15 @@
   [formGroup]="formGroup"
 >
   <div
-    class="tw-flex tw-flex-col tw-items-center tw-max-w-lg tw-mx-auto tw-p-8 tw-mt-5 tw-justify-center"
+    class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
   >
     <div>
       <img class="logo logo-themed" alt="Bitwarden" />
-      <p class="tw-mt-3 tw-text-xl tw-text-center tw-mx-4 tw-mb-4">
+      <p class="tw-mx-4 tw-mt-3 tw-mb-4 tw-text-center tw-text-xl">
         {{ "loginOrCreateNewAccount" | i18n }}
       </p>
       <div
-        class="tw-p-6 tw-border tw-border-solid tw-mt-3 tw-rounded-md tw-border-secondary-300 tw-bg-background"
+        class="tw-mt-3 tw-rounded-md tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-p-6"
       >
         <bit-callout
           type="warning"
@@ -79,7 +79,7 @@
             bitButton
             buttonType="primary"
             type="submit"
-            class="tw-w-1/2 tw-inline-block"
+            class="tw-inline-block tw-w-1/2"
             [disabled]="form.loading"
           >
             <span> <i class="bwi bwi-sign-in"></i> {{ "logIn" | i18n }} </span>
@@ -89,7 +89,7 @@
             bitButton
             buttonType="secondary"
             routerLink="/register"
-            class="tw-w-1/2 tw-inline-block"
+            class="tw-inline-block tw-w-1/2"
           >
             <i class="bwi bwi-pencil-square"></i>
             {{ "createAccount" | i18n }}

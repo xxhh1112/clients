@@ -62,5 +62,7 @@ export class LoginWithDeviceComponent implements OnInit {
     this.fingerPrint = fingerprint;
 
     await this.apiService.postAuthRequest(request);
+
+    //delay and get response
   }
 }
