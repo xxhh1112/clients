@@ -5,9 +5,9 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
+import { AttachmentFileUpload } from "@bitwarden/common/models/domain/AttachmentFileUpload";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
-import { EncString } from "@bitwarden/common/models/domain/encString";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
 import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
@@ -196,13 +196,13 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
         (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
         (e as ErrorResponse).statusCode === 405
       ) {
-        response = await this.legacyServerAttachmentFileUpload(
-          admin,
-          cipher.id,
-          encFileName,
-          encData,
-          dataEncKey[1]
-        );
+        let attachmentFileUpload: AttachmentFileUpload;
+        attachmentFileUpload.admin = admin;
+        attachmentFileUpload.cipherId = cipher.id;
+        attachmentFileUpload.encFileName = encFileName;
+        attachmentFileUpload.encData = encData;
+        attachmentFileUpload.key = dataEncKey[1];
+        response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
       } else if (e instanceof ErrorResponse) {
         throw new Error((e as ErrorResponse).getSingleMessage());
       } else {
@@ -221,26 +221,20 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
    * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
    * This method still exists for backward compatibility with old server versions.
    */
-  async legacyServerAttachmentFileUpload(
-    admin: boolean,
-    cipherId: string,
-    encFileName: EncString,
-    encData: EncArrayBuffer,
-    key: EncString
-  ) {
+  async legacyServerAttachmentFileUpload(request: AttachmentFileUpload) {
     const fd = new FormData();
     try {
-      const blob = new Blob([encData.buffer], { type: "application/octet-stream" });
-      fd.append("key", key.encryptedString);
-      fd.append("data", blob, encFileName.encryptedString);
+      const blob = new Blob([request.encData.buffer], { type: "application/octet-stream" });
+      fd.append("key", request.key.encryptedString);
+      fd.append("data", blob, request.encFileName.encryptedString);
     } catch (e) {
       if (Utils.isNode && !Utils.isBrowser) {
-        fd.append("key", key.encryptedString);
+        fd.append("key", request.key.encryptedString);
         fd.append(
           "data",
-          Buffer.from(encData.buffer) as any,
+          Buffer.from(request.encData.buffer) as any,
           {
-            filepath: encFileName.encryptedString,
+            filepath: request.encFileName.encryptedString,
             contentType: "application/octet-stream",
           } as any
         );
@@ -251,10 +245,10 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
 
     let response: CipherResponse;
     try {
-      if (admin) {
-        response = await this.postCipherAttachmentAdminLegacy(cipherId, fd);
+      if (request.admin) {
+        response = await this.postCipherAttachmentAdminLegacy(request.cipherId, fd);
       } else {
-        response = await this.postCipherAttachmentLegacy(cipherId, fd);
+        response = await this.postCipherAttachmentLegacy(request.cipherId, fd);
       }
     } catch (e) {
       throw new Error((e as ErrorResponse).getSingleMessage());

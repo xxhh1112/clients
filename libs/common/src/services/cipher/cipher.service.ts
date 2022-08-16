@@ -1,5 +1,3 @@
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
-
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -457,7 +455,50 @@ export class CipherService implements InternalCipherServiceAbstraction {
           }
 
           const match = u.match == null ? defaultMatch : u.match;
-          this.checkMatch(domain, match, url, u, matchingDomains);
+          switch (match) {
+            case UriMatchType.Domain:
+              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
+                if (DomainMatchBlacklist.has(u.domain)) {
+                  const domainUrlHost = Utils.getHost(url);
+                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
+                    return true;
+                  }
+                } else {
+                  return true;
+                }
+              }
+              break;
+            case UriMatchType.Host: {
+              const urlHost = Utils.getHost(url);
+              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
+                return true;
+              }
+              break;
+            }
+            case UriMatchType.Exact:
+              if (url === u.uri) {
+                return true;
+              }
+              break;
+            case UriMatchType.StartsWith:
+              if (url.startsWith(u.uri)) {
+                return true;
+              }
+              break;
+            case UriMatchType.RegularExpression:
+              try {
+                const regex = new RegExp(u.uri, "i");
+                if (regex.test(url)) {
+                  return true;
+                }
+              } catch (e) {
+                this.logService.error(e);
+              }
+              break;
+            case UriMatchType.Never:
+            default:
+              break;
+          }
         }
       }
 
@@ -630,8 +671,19 @@ export class CipherService implements InternalCipherServiceAbstraction {
       b.localData && b.localData.lastUsedDate ? (b.localData.lastUsedDate as number) : null;
 
     const bothNotNull = aLastUsed != null && bLastUsed != null;
+    if (bothNotNull && aLastUsed < bLastUsed) {
+      return 1;
+    }
+    if (aLastUsed != null && bLastUsed == null) {
+      return -1;
+    }
 
-    this.getLastUsed(bothNotNull, aLastUsed, bLastUsed);
+    if (bothNotNull && aLastUsed > bLastUsed) {
+      return -1;
+    }
+    if (bLastUsed != null && aLastUsed == null) {
+      return 1;
+    }
 
     return 0;
   }
@@ -864,73 +916,5 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private clearSortedCiphers() {
     this.sortedCiphersCache.clear();
-  }
-
-  private getLastUsed(bothNotNull: boolean, aLastUsed: number, bLastUsed: number) {
-    if (bothNotNull && aLastUsed < bLastUsed) {
-      return 1;
-    }
-    if (aLastUsed != null && bLastUsed == null) {
-      return -1;
-    }
-
-    if (bothNotNull && aLastUsed > bLastUsed) {
-      return -1;
-    }
-    if (bLastUsed != null && aLastUsed == null) {
-      return 1;
-    }
-  }
-  private checkMatch(
-    domain: string,
-    match: UriMatchType,
-    url: string,
-    u: LoginUriView,
-    matchingDomains: any[]
-  ): boolean {
-    switch (match) {
-      case UriMatchType.Domain:
-        if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
-          if (DomainMatchBlacklist.has(u.domain)) {
-            const domainUrlHost = Utils.getHost(url);
-            if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
-              return true;
-            }
-          } else {
-            return true;
-          }
-        }
-        break;
-      case UriMatchType.Host: {
-        const urlHost = Utils.getHost(url);
-        if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-          return true;
-        }
-        break;
-      }
-      case UriMatchType.Exact:
-        if (url === u.uri) {
-          return true;
-        }
-        break;
-      case UriMatchType.StartsWith:
-        if (url.startsWith(u.uri)) {
-          return true;
-        }
-        break;
-      case UriMatchType.RegularExpression:
-        try {
-          const regex = new RegExp(u.uri, "i");
-          if (regex.test(url)) {
-            return true;
-          }
-        } catch (e) {
-          this.logService.error(e);
-        }
-        break;
-      case UriMatchType.Never:
-      default:
-        break;
-    }
   }
 }
