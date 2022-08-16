@@ -179,9 +179,11 @@ export class VaultComponent implements OnInit, OnDestroy {
           isSelectable: true,
         },
         action: this.applyOrganizationFilter,
-        options: {
-          component: OrganizationOptionsComponent,
-        },
+        options: !personalVaultPolicy
+          ? {
+              component: OrganizationOptionsComponent,
+            }
+          : null,
         add: !singleOrgPolicy
           ? {
               text: "newOrganization",
