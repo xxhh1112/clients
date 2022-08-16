@@ -45,7 +45,7 @@ export class VaultFilterService {
   async buildOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
     const orgs = (await this.organizationService.getAll()) as OrganizationFilter[];
     const head = new Organization() as OrganizationFilter;
-    const headNode = new TreeNode<OrganizationFilter>(head, "allVaults", null, "AllVaults");
+    const headNode = new TreeNode<OrganizationFilter>(head, null, "allVaults", "AllVaults");
     if (!(await this.checkForPersonalOwnershipPolicy())) {
       const myVault = new Organization() as OrganizationFilter;
       myVault.id = null;
@@ -55,8 +55,8 @@ export class VaultFilterService {
       myVault.hideOptions = true;
       const myVaultNode = new TreeNode<OrganizationFilter>(
         myVault,
-        this.i18nService.t("myVault"),
-        null
+        null,
+        this.i18nService.t("myVault")
       );
       headNode.children.push(myVaultNode);
     }
@@ -65,7 +65,7 @@ export class VaultFilterService {
     }
     orgs.forEach((filter) => {
       filter.icon = "bwi-business";
-      const node = new TreeNode<OrganizationFilter>(filter, filter.name, head);
+      const node = new TreeNode<OrganizationFilter>(filter, head, filter.name);
       headNode.children.push(node);
     });
     return of(headNode);
@@ -108,28 +108,33 @@ export class VaultFilterService {
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
   ): Observable<TreeNode<CipherTypeFilter>> {
-    const headNode = new TreeNode<CipherTypeFilter>(head, "allItems", null, "AllItems");
+    const headNode = new TreeNode<CipherTypeFilter>(head, null, "allItems", "AllItems");
     array.forEach((filter) => {
-      const node = new TreeNode<CipherTypeFilter>(filter, filter.name, head);
+      const node = new TreeNode<CipherTypeFilter>(filter, head, filter.name);
       headNode.children.push(node);
     });
     return of(headNode);
   }
 
   buildTrash() {
-    return of(
-      new TreeNode<CipherTypeFilter>(
-        {
-          id: "trash",
-          name: "trash",
-          type: "trash",
-          icon: "bwi-trash",
-        },
-        "trash",
-        null,
-        "trash"
-      )
+    const head: CipherTypeFilter = {
+      id: "headTrash",
+      name: "HeadTrash",
+      type: "trash",
+      icon: "bwi-trash",
+    };
+    const headNode = new TreeNode<CipherTypeFilter>(head, null);
+    const node = new TreeNode<CipherTypeFilter>(
+      {
+        id: "trash",
+        name: this.i18nService.t("trash"),
+        type: "trash",
+        icon: "bwi-trash",
+      },
+      null
     );
+    headNode.children.push(node);
+    return of(headNode);
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
@@ -152,7 +157,7 @@ export class VaultFilterService {
     });
 
     const head = new FolderView() as FolderFilter;
-    const headNode = new TreeNode<FolderFilter>(head, "folders", null, "AllFolders");
+    const headNode = new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
     nodes.forEach((n) => {
       n.parent = head;
       headNode.children.push(n);

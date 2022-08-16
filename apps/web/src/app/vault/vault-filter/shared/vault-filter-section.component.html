@@ -1,7 +1,6 @@
 <ng-container>
-  <div class="{{ filterHeader.children.length ? 'filter-heading' : 'filter-buttons' }}">
+  <div *ngIf="header.showHeader" class="filter-heading">
     <button
-      *ngIf="filterHeader.children.length"
       class="toggle-button"
       (click)="toggleCollapse(filterHeader.node)"
       [attr.aria-expanded]="!isCollapsed(filterHeader.node)"
@@ -22,15 +21,7 @@
       class="filter-button"
       (click)="onFilterSelect(filterHeader)"
     >
-      <i
-        *ngIf="filterHeader.children.length === 0"
-        class="bwi bwi-fw {{ filterHeader.node.icon }}"
-        aria-hidden="true"
-      ></i>
-      <h3 *ngIf="header.showHeader" class="filter-title">
-        &nbsp;{{ filterHeader.node.name | i18n }}
-      </h3>
-      <span *ngIf="!header.showHeader">&nbsp;{{ filterHeader.node.name | i18n }}</span>
+      <h3 class="filter-title">&nbsp;{{ filterHeader.node.name | i18n }}</h3>
     </button>
     <h3 *ngIf="!header.isSelectable" class="filter-title">
       &nbsp;{{ filterHeader.node.name | i18n }}

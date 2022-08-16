@@ -22,7 +22,7 @@ export class ServiceUtils {
       }
       if (end && nodeTree[i].node.id !== obj.id) {
         // Another node with the same name.
-        nodeTree.push(new TreeNode(obj, partName, parent));
+        nodeTree.push(new TreeNode(obj, parent, partName));
         return;
       }
       ServiceUtils.nestedTraverse(
@@ -38,7 +38,7 @@ export class ServiceUtils {
 
     if (nodeTree.filter((n) => n.node.name === partName).length === 0) {
       if (end) {
-        nodeTree.push(new TreeNode(obj, partName, parent));
+        nodeTree.push(new TreeNode(obj, parent, partName));
         return;
       }
       const newPartName = parts[partIndex] + delimiter + parts[partIndex + 1];

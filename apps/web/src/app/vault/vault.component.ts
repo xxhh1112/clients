@@ -168,26 +168,31 @@ export class VaultComponent implements OnInit, OnDestroy {
       });
     });
 
+    const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
+    const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+
     this.filters = {
       [VaultFilterLabel.OrganizationFilter]: {
         data$: await this.vaultFilterService.buildOrganizations(),
         header: {
-          showHeader: true,
+          showHeader: !(singleOrgPolicy && personalVaultPolicy),
           isSelectable: true,
         },
         action: this.applyOrganizationFilter,
         options: {
           component: OrganizationOptionsComponent,
         },
-        add: {
-          text: "newOrganization",
-          route: "/create-organization",
-        },
+        add: !singleOrgPolicy
+          ? {
+              text: "newOrganization",
+              route: "/create-organization",
+            }
+          : null,
         divider: true,
       },
       [VaultFilterLabel.TypeFilter]: {
         data$: await this.vaultFilterService.buildNestedTypes(
-          { id: "all", name: "allItems", type: "all", icon: "CHANGE THIS" },
+          { id: "all", name: "allItems", type: "all", icon: "" },
           [
             {
               id: "favorites",

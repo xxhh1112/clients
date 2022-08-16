@@ -107,7 +107,7 @@ export class CollectionService implements CollectionServiceAbstraction {
     });
 
     const head = new CollectionView() as CollectionFilter;
-    const headNode = new TreeNode<CollectionFilter>(head, "collections", null, "AllCollections");
+    const headNode = new TreeNode<CollectionFilter>(head, null, "collections", "AllCollections");
     nodes.forEach((n) => {
       n.parent = head;
       headNode.children.push(n);
