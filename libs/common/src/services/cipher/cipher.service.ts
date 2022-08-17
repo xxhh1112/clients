@@ -1,5 +1,3 @@
-import { filterUriMatchTypeRequest } from "@bitwarden/common/models/domain/filterUriMatchTypeRequest";
-
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -88,8 +86,45 @@ export class CipherService implements InternalCipherServiceAbstraction {
       if (originalCipher != null) {
         const existingCipher = await originalCipher.decrypt();
         model.passwordHistory = existingCipher.passwordHistory || [];
-        this.validateCipherLogin(model, existingCipher);
-        this.existingCipherHasFields(existingCipher, model);
+        if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
+          if (
+            existingCipher.login.password != null &&
+            existingCipher.login.password !== "" &&
+            existingCipher.login.password !== model.login.password
+          ) {
+            const ph = new PasswordHistoryView();
+            ph.password = existingCipher.login.password;
+            ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
+            model.passwordHistory.splice(0, 0, ph);
+          } else {
+            model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
+          }
+        }
+        if (existingCipher.hasFields) {
+          const existingHiddenFields = existingCipher.fields.filter(
+            (f) =>
+              f.type === FieldType.Hidden &&
+              f.name != null &&
+              f.name !== "" &&
+              f.value != null &&
+              f.value !== ""
+          );
+          const hiddenFields =
+            model.fields == null
+              ? []
+              : model.fields.filter(
+                  (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
+                );
+          existingHiddenFields.forEach((ef) => {
+            const matchedField = hiddenFields.find((f) => f.name === ef.name);
+            if (matchedField == null || matchedField.value !== ef.value) {
+              const ph = new PasswordHistoryView();
+              ph.password = ef.name + ": " + ef.value;
+              ph.lastUsedDate = new Date();
+              model.passwordHistory.splice(0, 0, ph);
+            }
+          });
+        }
       }
       if (model.passwordHistory != null && model.passwordHistory.length === 0) {
         model.passwordHistory = null;
@@ -99,7 +134,15 @@ export class CipherService implements InternalCipherServiceAbstraction {
       }
     }
 
-    const cipher = this.mapCipherModel(model);
+    const cipher = new Cipher();
+    cipher.id = model.id;
+    cipher.folderId = model.folderId;
+    cipher.favorite = model.favorite;
+    cipher.organizationId = model.organizationId;
+    cipher.type = model.type;
+    cipher.collectionIds = model.collectionIds;
+    cipher.revisionDate = model.revisionDate;
+    cipher.reprompt = model.reprompt;
 
     if (key == null && cipher.organizationId != null) {
       key = await this.cryptoService.getOrgKey(cipher.organizationId);
@@ -107,8 +150,27 @@ export class CipherService implements InternalCipherServiceAbstraction {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-
-    await this.encryptResponse(model, cipher, key);
+    await Promise.all([
+      this.encryptObjProperty(
+        model,
+        cipher,
+        {
+          name: null,
+          notes: null,
+        },
+        key
+      ),
+      this.encryptCipherData(cipher, model, key),
+      this.encryptFields(model.fields, key).then((fields) => {
+        cipher.fields = fields;
+      }),
+      this.encryptPasswordHistories(model.passwordHistory, key).then((ph) => {
+        cipher.passwordHistory = ph;
+      }),
+      this.encryptAttachments(model.attachments, key).then((attachments) => {
+        cipher.attachments = attachments;
+      }),
+    ]);
 
     return cipher;
   }
@@ -348,7 +410,23 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     const domain = Utils.getDomain(url);
-    const eqDomainsPromise = domain == null ? Promise.resolve([]) : this.getDomian(domain);
+    const eqDomainsPromise =
+      domain == null
+        ? Promise.resolve([])
+        : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
+            let matches: any[] = [];
+            eqDomains.forEach((eqDomain) => {
+              if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+                matches = matches.concat(eqDomain);
+              }
+            });
+
+            if (!matches.length) {
+              matches.push(domain);
+            }
+
+            return matches;
+          });
 
     const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
     const matchingDomains = result[0];
@@ -376,15 +454,51 @@ export class CipherService implements InternalCipherServiceAbstraction {
             continue;
           }
 
-          const uriMatchTypeRequest: filterUriMatchTypeRequest = {
-            loginUriView: u,
-            defaultMatch: defaultMatch,
-            domain: domain,
-            matchingDomains: matchingDomains,
-            url: url,
-          };
-
-          this.checkUriMatchType(uriMatchTypeRequest);
+          const match = u.match == null ? defaultMatch : u.match;
+          switch (match) {
+            case UriMatchType.Domain:
+              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
+                if (DomainMatchBlacklist.has(u.domain)) {
+                  const domainUrlHost = Utils.getHost(url);
+                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
+                    return true;
+                  }
+                } else {
+                  return true;
+                }
+              }
+              break;
+            case UriMatchType.Host: {
+              const urlHost = Utils.getHost(url);
+              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
+                return true;
+              }
+              break;
+            }
+            case UriMatchType.Exact:
+              if (url === u.uri) {
+                return true;
+              }
+              break;
+            case UriMatchType.StartsWith:
+              if (url.startsWith(u.uri)) {
+                return true;
+              }
+              break;
+            case UriMatchType.RegularExpression:
+              try {
+                const regex = new RegExp(u.uri, "i");
+                if (regex.test(url)) {
+                  return true;
+                }
+              } catch (e) {
+                this.logService.error(e);
+              }
+              break;
+            case UriMatchType.Never:
+            default:
+              break;
+          }
         }
       }
 
@@ -632,59 +746,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  private checkUriMatchType(request: filterUriMatchTypeRequest) {
-    const match =
-      request.loginUriView.match == null ? request.defaultMatch : request.loginUriView.match;
-    switch (match) {
-      case UriMatchType.Domain:
-        if (
-          request.domain != null &&
-          request.loginUriView.domain != null &&
-          request.matchingDomains.indexOf(request.loginUriView.domain) > -1
-        ) {
-          if (DomainMatchBlacklist.has(request.loginUriView.domain)) {
-            const domainUrlHost = Utils.getHost(request.url);
-            if (!DomainMatchBlacklist.get(request.loginUriView.domain).has(domainUrlHost)) {
-              return true;
-            }
-          } else {
-            return true;
-          }
-        }
-        break;
-      case UriMatchType.Host: {
-        const urlHost = Utils.getHost(request.url);
-        if (urlHost != null && urlHost === Utils.getHost(request.loginUriView.uri)) {
-          return true;
-        }
-        break;
-      }
-      case UriMatchType.Exact:
-        if (request.url === request.loginUriView.uri) {
-          return true;
-        }
-        break;
-      case UriMatchType.StartsWith:
-        if (request.url.startsWith(request.loginUriView.uri)) {
-          return true;
-        }
-        break;
-      case UriMatchType.RegularExpression:
-        try {
-          const regex = new RegExp(request.loginUriView.uri, "i");
-          if (regex.test(request.url)) {
-            return true;
-          }
-        } catch (e) {
-          this.logService.error(e);
-        }
-        break;
-      case UriMatchType.Never:
-      default:
-        break;
-    }
-  }
-
   private async encryptObjProperty<V extends View, D extends Domain>(
     model: V,
     obj: D,
@@ -722,120 +783,88 @@ export class CipherService implements InternalCipherServiceAbstraction {
   private async encryptCipherData(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
     switch (cipher.type) {
       case CipherType.Login:
-        return await this.CipherTypeLogin(cipher, model, key);
-      case CipherType.SecureNote:
-        return this.CiphertypeSecureNote(cipher, model);
-      case CipherType.Card:
-        return await this.CipherTypeCard(cipher, model, key);
-      case CipherType.Identity:
-        return await this.CipherTypeIdentity(cipher, model, key);
-      default:
-        throw new Error("Unknown cipher type.");
-    }
-  }
-  private getDomian(domain: string): any {
-    this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-      let matches: any[] = [];
-      eqDomains.forEach((eqDomain) => {
-        if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-          matches = matches.concat(eqDomain);
-        }
-      });
-
-      if (!matches.length) {
-        matches.push(domain);
-      }
-
-      return matches;
-    });
-  }
-
-  private async CipherTypeCard(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.card = new Card();
-    await this.encryptObjProperty(
-      model.card,
-      cipher.card,
-      {
-        cardholderName: null,
-        brand: null,
-        number: null,
-        expMonth: null,
-        expYear: null,
-        code: null,
-      },
-      key
-    );
-    return;
-  }
-
-  private CiphertypeSecureNote(cipher: Cipher, model: CipherView) {
-    cipher.secureNote = new SecureNote();
-    cipher.secureNote.type = model.secureNote.type;
-    return;
-  }
-
-  private async CipherTypeLogin(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.login = new Login();
-    cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;
-    cipher.login.autofillOnPageLoad = model.login.autofillOnPageLoad;
-    await this.encryptObjProperty(
-      model.login,
-      cipher.login,
-      {
-        username: null,
-        password: null,
-        totp: null,
-      },
-      key
-    );
-
-    if (model.login.uris != null) {
-      cipher.login.uris = [];
-      for (let i = 0; i < model.login.uris.length; i++) {
-        const loginUri = new LoginUri();
-        loginUri.match = model.login.uris[i].match;
+        cipher.login = new Login();
+        cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;
+        cipher.login.autofillOnPageLoad = model.login.autofillOnPageLoad;
         await this.encryptObjProperty(
-          model.login.uris[i],
-          loginUri,
+          model.login,
+          cipher.login,
           {
-            uri: null,
+            username: null,
+            password: null,
+            totp: null,
           },
           key
         );
-        cipher.login.uris.push(loginUri);
-      }
-    }
-    return;
-  }
 
-  private async CipherTypeIdentity(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.identity = new Identity();
-    await this.encryptObjProperty(
-      model.identity,
-      cipher.identity,
-      {
-        title: null,
-        firstName: null,
-        middleName: null,
-        lastName: null,
-        address1: null,
-        address2: null,
-        address3: null,
-        city: null,
-        state: null,
-        postalCode: null,
-        country: null,
-        company: null,
-        email: null,
-        phone: null,
-        ssn: null,
-        username: null,
-        passportNumber: null,
-        licenseNumber: null,
-      },
-      key
-    );
-    return;
+        if (model.login.uris != null) {
+          cipher.login.uris = [];
+          for (let i = 0; i < model.login.uris.length; i++) {
+            const loginUri = new LoginUri();
+            loginUri.match = model.login.uris[i].match;
+            await this.encryptObjProperty(
+              model.login.uris[i],
+              loginUri,
+              {
+                uri: null,
+              },
+              key
+            );
+            cipher.login.uris.push(loginUri);
+          }
+        }
+        return;
+      case CipherType.SecureNote:
+        cipher.secureNote = new SecureNote();
+        cipher.secureNote.type = model.secureNote.type;
+        return;
+      case CipherType.Card:
+        cipher.card = new Card();
+        await this.encryptObjProperty(
+          model.card,
+          cipher.card,
+          {
+            cardholderName: null,
+            brand: null,
+            number: null,
+            expMonth: null,
+            expYear: null,
+            code: null,
+          },
+          key
+        );
+        return;
+      case CipherType.Identity:
+        cipher.identity = new Identity();
+        await this.encryptObjProperty(
+          model.identity,
+          cipher.identity,
+          {
+            title: null,
+            firstName: null,
+            middleName: null,
+            lastName: null,
+            address1: null,
+            address2: null,
+            address3: null,
+            city: null,
+            state: null,
+            postalCode: null,
+            country: null,
+            company: null,
+            email: null,
+            phone: null,
+            ssn: null,
+            username: null,
+            passportNumber: null,
+            licenseNumber: null,
+          },
+          key
+        );
+        return;
+      default:
+        throw new Error("Unknown cipher type.");
+    }
   }
 
   private async getCipherForUrl(
@@ -847,22 +876,12 @@ export class CipherService implements InternalCipherServiceAbstraction {
     const cacheKey = autofillOnPageLoad ? "autofillOnPageLoad-" + url : url;
 
     if (!this.sortedCiphersCache.isCached(cacheKey)) {
-      let ciphers = await this.getAllDecryptedForUrl(url);
+      const ciphers = await this.getAllDecryptedForUrl(url);
       if (!ciphers) {
         return null;
       }
 
-      if (autofillOnPageLoad) {
-        const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
-        ciphers = ciphers.filter(
-          (cipher) =>
-            cipher.login.autofillOnPageLoad ||
-            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
-        );
-        if (ciphers.length === 0) {
-          return null;
-        }
-      }
+      await this.autofillOnPageLoad(autofillOnPageLoad, ciphers);
 
       this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
     }
@@ -876,6 +895,22 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
   }
 
+  private async autofillOnPageLoad(
+    autofillOnPageLoad: boolean,
+    ciphers: CipherView[]
+  ): Promise<CipherView> {
+    if (autofillOnPageLoad) {
+      const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
+      ciphers = ciphers.filter(
+        (cipher) =>
+          cipher.login.autofillOnPageLoad ||
+          (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
+      );
+      if (ciphers.length === 0) {
+        return null;
+      }
+    }
+  }
   private async clearEncryptedCiphersState(userId?: string) {
     await this.stateService.setEncryptedCiphers(null, { userId: userId });
   }
@@ -887,87 +922,5 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private clearSortedCiphers() {
     this.sortedCiphersCache.clear();
-  }
-
-  private existingCipherHasFields(existingCipher: CipherView, model: CipherView) {
-    if (existingCipher.hasFields) {
-      const existingHiddenFields = existingCipher.fields.filter(
-        (f) =>
-          f.type === FieldType.Hidden &&
-          f.name != null &&
-          f.name !== "" &&
-          f.value != null &&
-          f.value !== ""
-      );
-      const hiddenFields =
-        model.fields == null
-          ? []
-          : model.fields.filter(
-              (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
-            );
-      existingHiddenFields.forEach((ef) => {
-        const matchedField = hiddenFields.find((f) => f.name === ef.name);
-        if (matchedField == null || matchedField.value !== ef.value) {
-          const ph = new PasswordHistoryView();
-          ph.password = ef.name + ": " + ef.value;
-          ph.lastUsedDate = new Date();
-          model.passwordHistory.splice(0, 0, ph);
-        }
-      });
-    }
-  }
-
-  private validateCipherLogin(model: CipherView, existingCipher: CipherView) {
-    if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
-      if (
-        existingCipher.login.password != null &&
-        existingCipher.login.password !== "" &&
-        existingCipher.login.password !== model.login.password
-      ) {
-        const ph = new PasswordHistoryView();
-        ph.password = existingCipher.login.password;
-        ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
-        model.passwordHistory.splice(0, 0, ph);
-      } else {
-        model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
-      }
-    }
-  }
-
-  private mapCipherModel(model: CipherView) {
-    const cipher = new Cipher();
-    cipher.id = model.id;
-    cipher.folderId = model.folderId;
-    cipher.favorite = model.favorite;
-    cipher.organizationId = model.organizationId;
-    cipher.type = model.type;
-    cipher.collectionIds = model.collectionIds;
-    cipher.revisionDate = model.revisionDate;
-    cipher.reprompt = model.reprompt;
-    return cipher;
-  }
-
-  private async encryptResponse(model: CipherView, cipher: Cipher, key: SymmetricCryptoKey) {
-    await Promise.all([
-      this.encryptObjProperty(
-        model,
-        cipher,
-        {
-          name: null,
-          notes: null,
-        },
-        key
-      ),
-      this.encryptCipherData(cipher, model, key),
-      this.encryptFields(model.fields, key).then((fields) => {
-        cipher.fields = fields;
-      }),
-      this.encryptPasswordHistories(model.passwordHistory, key).then((ph) => {
-        cipher.passwordHistory = ph;
-      }),
-      this.encryptAttachments(model.attachments, key).then((attachments) => {
-        cipher.attachments = attachments;
-      }),
-    ]);
   }
 }
