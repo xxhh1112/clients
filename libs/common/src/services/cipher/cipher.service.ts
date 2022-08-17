@@ -469,20 +469,18 @@ export class CipherService implements InternalCipherServiceAbstraction {
       if (cipher.deletedDate != null) {
         return false;
       }
-      if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
-        return true;
-      }
 
-      if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
-        const uriMatchTypeRequest: UriMatchTypeRequest = {
-          cipher: cipher,
-          defaultMatch: defaultMatch,
-          url: url,
-          matchingDomains: matchingDomains,
-          domain: domain,
-        };
-        this.getUriMatchType(uriMatchTypeRequest);
-      }
+      this.includeOtherTypes(includeOtherTypes, cipher);
+
+      const uriMatchTypeRequest: UriMatchTypeRequest = {
+        cipher: cipher,
+        defaultMatch: defaultMatch,
+        url: url,
+        matchingDomains: matchingDomains,
+        domain: domain,
+      };
+
+      this.getUriMatchType(uriMatchTypeRequest);
 
       return false;
     });
@@ -647,29 +645,18 @@ export class CipherService implements InternalCipherServiceAbstraction {
   }
 
   sortCiphersByLastUsed(a: CipherView, b: CipherView): number {
-    let aLastUsed = null;
-
-    if (a.localData && a.localData.lastUsedDate) {
-      aLastUsed = a.localData.lastUsedDate as number;
-    }
-
-    let bLastUsed = null;
-    if (b.localData && b.localData.lastUsedDate) {
-      bLastUsed = b.localData.lastUsedDate as number;
-    }
+    const aLastUsed =
+      a.localData && a.localData.lastUsedDate ? (a.localData.lastUsedDate as number) : null;
+    const bLastUsed =
+      b.localData && b.localData.lastUsedDate ? (b.localData.lastUsedDate as number) : null;
 
     const bothNotNull = aLastUsed != null && bLastUsed != null;
-    if (bothNotNull && aLastUsed < bLastUsed) {
-      return 1;
-    }
-    if (aLastUsed != null && bLastUsed == null) {
+
+    if ((bothNotNull && aLastUsed > bLastUsed) || (aLastUsed != null && bLastUsed == null)) {
       return -1;
     }
 
-    if (bothNotNull && aLastUsed > bLastUsed) {
-      return -1;
-    }
-    if (bLastUsed != null && aLastUsed == null) {
+    if ((bLastUsed != null && aLastUsed == null) || (bothNotNull && aLastUsed < bLastUsed)) {
       return 1;
     }
 
@@ -929,53 +916,67 @@ export class CipherService implements InternalCipherServiceAbstraction {
   }
 
   private getUriMatchType(request: UriMatchTypeRequest) {
-    for (let i = 0; i < request.cipher.login.uris.length; i++) {
-      const u = request.cipher.login.uris[i];
-      if (u.uri == null) {
-        continue;
-      }
-
-      const match = u.match == null ? request.defaultMatch : u.match;
-      switch (match) {
-        case UriMatchType.Domain:
-          if (
-            request.domain != null &&
-            u.domain != null &&
-            request.matchingDomains.indexOf(u.domain) > -1
-          ) {
-            return this.isDomainMatchBlacklist(request.url, u);
-          }
-          break;
-        case UriMatchType.Host: {
-          const urlHost = Utils.getHost(request.url);
-          if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-            return true;
-          }
-          break;
+    if (
+      request.url != null &&
+      request.cipher.type === CipherType.Login &&
+      request.cipher.login.uris != null
+    ) {
+      for (let i = 0; i < request.cipher.login.uris.length; i++) {
+        const u = request.cipher.login.uris[i];
+        if (u.uri == null) {
+          continue;
         }
-        case UriMatchType.Exact:
-          if (request.url === u.uri) {
-            return true;
-          }
-          break;
-        case UriMatchType.StartsWith:
-          if (request.url.startsWith(u.uri)) {
-            return true;
-          }
-          break;
-        case UriMatchType.RegularExpression:
-          try {
-            const regex = new RegExp(u.uri, "i");
-            if (regex.test(request.url)) {
+
+        const match = u.match == null ? request.defaultMatch : u.match;
+        if (
+          match == UriMatchType.Domain &&
+          request.domain != null &&
+          u.domain != null &&
+          request.matchingDomains.indexOf(u.domain) > -1
+        ) {
+          return this.isDomainMatchBlacklist(request.url, u);
+        }
+        switch (match) {
+          case UriMatchType.Domain:
+            if (
+              request.domain != null &&
+              u.domain != null &&
+              request.matchingDomains.indexOf(u.domain) > -1
+            ) {
+              return this.isDomainMatchBlacklist(request.url, u);
+            }
+            break;
+          case UriMatchType.Host: {
+            const urlHost = Utils.getHost(request.url);
+            if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
               return true;
             }
-          } catch (e) {
-            this.logService.error(e);
+            break;
           }
-          break;
-        case UriMatchType.Never:
-        default:
-          break;
+          case UriMatchType.Exact:
+            if (request.url === u.uri) {
+              return true;
+            }
+            break;
+          case UriMatchType.StartsWith:
+            if (request.url.startsWith(u.uri)) {
+              return true;
+            }
+            break;
+          case UriMatchType.RegularExpression:
+            try {
+              const regex = new RegExp(u.uri, "i");
+              if (regex.test(request.url)) {
+                return true;
+              }
+            } catch (e) {
+              this.logService.error(e);
+            }
+            break;
+          case UriMatchType.Never:
+          default:
+            break;
+        }
       }
     }
   }
@@ -1018,6 +1019,12 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
           return matches;
         });
+  }
+
+  private includeOtherTypes(includeOtherTypes?: CipherType[], cipher?: CipherView) {
+    if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
+      return true;
+    }
   }
 }
 
