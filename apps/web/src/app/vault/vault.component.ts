@@ -284,19 +284,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
-  async applyVaultFilter(vaultFilter: VaultFilter) {
-    this.ciphersComponent.showAddNew = vaultFilter.status !== "trash";
-    this.activeFilter = vaultFilter;
-    await this.ciphersComponent.reload(
-      this.activeFilter.buildFilter(),
-      vaultFilter.status === "trash"
-    );
-    this.filterComponent.searchPlaceholder = this.vaultService.calculateSearchBarLocalizationString(
-      this.activeFilter
-    );
-    this.go();
-  }
-
   applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
     if (!orgNode.node.enabled) {
       this.platformUtilsService.showToast(
@@ -307,39 +294,49 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
     this.activeFilter.resetOrganization();
-    this.activeFilter.selectedOrganizationNode = orgNode;
-    // if (orgNode.node.id == null) {
-    //   this.activeFilter.resetOrganization();
-    //   this.activeFilter.myVaultOnly = true;
-    // } else {
-    //   this.activeFilter.selectedOrganizationId = orgNode.node.id;
-    // }
+    if (orgNode.node.id === "AllVaults") {
+      this.activeFilter.selectedOrganizationNode = null;
+      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections();
+    } else {
+      this.activeFilter.selectedOrganizationNode = orgNode;
+      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections(
+        orgNode.node.id
+      );
+    }
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
-    await this.applyVaultFilter(this.activeFilter);
+    await this.applyVaultFilter();
   };
 
   applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedFilterNode = filterNode;
-    // this.activeFilter.status = filterNode.node.type;
-    await this.applyVaultFilter(this.activeFilter);
+    this.activeFilter.selectedCipherTypeNode = filterNode;
+    await this.applyVaultFilter();
   };
 
   applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedFilterNode = folderNode;
-    // this.activeFilter.selectedFolder = true;
-    // this.activeFilter.selectedFolderId = folderNode.node.id;
-    await this.applyVaultFilter(this.activeFilter);
+    this.activeFilter.selectedFolderNode = folderNode;
+    await this.applyVaultFilter();
   };
 
   applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedFilterNode = collectionNode;
-    // this.activeFilter.selectedCollectionId = collectionNode.node.id;
-    // this.activeFilter.selectedCollection = true;
-    await this.applyVaultFilter(this.activeFilter);
+    this.activeFilter.selectedCollectionNode = collectionNode;
+    await this.applyVaultFilter();
   };
+
+  private async applyVaultFilter() {
+    this.ciphersComponent.showAddNew =
+      this.activeFilter.selectedCipherTypeNode?.node.id !== "trash";
+    await this.ciphersComponent.reload(
+      this.activeFilter.buildFilter(),
+      this.activeFilter.selectedCipherTypeNode?.node.id === "trash"
+    );
+    this.filterComponent.searchPlaceholder = this.vaultService.calculateSearchBarLocalizationString(
+      this.activeFilter
+    );
+    this.go();
+  }
 
   addFolder = async (): Promise<void> => {
     const [modal] = await this.modalService.openViewRef(
@@ -349,7 +346,6 @@ export class VaultComponent implements OnInit, OnDestroy {
         comp.folderId = null;
         comp.onSavedFolder.subscribe(async () => {
           modal.close();
-          await this.filterComponent.reloadCollections(this.activeFilter);
         });
       }
     );
@@ -363,11 +359,9 @@ export class VaultComponent implements OnInit, OnDestroy {
         comp.folderId = folder.id;
         comp.onSavedFolder.subscribe(async () => {
           modal.close();
-          // await this.filterComponent.reloadCollections(this.activeFilter);
         });
         comp.onDeletedFolder.subscribe(async () => {
           modal.close();
-          // await this.filterComponent.reloadCollections(this.activeFilter);
         });
       }
     );

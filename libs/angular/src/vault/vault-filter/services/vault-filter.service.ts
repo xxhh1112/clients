@@ -49,7 +49,7 @@ export class VaultFilterService {
     const headNode = new TreeNode<OrganizationFilter>(head, null, "allVaults", "AllVaults");
     if (!(await this.checkForPersonalOwnershipPolicy())) {
       const myVault = new Organization() as OrganizationFilter;
-      myVault.id = null;
+      myVault.id = "MyVault";
       myVault.icon = "bwi-user";
       myVault.enabled = true;
       myVault.hideOptions = true;

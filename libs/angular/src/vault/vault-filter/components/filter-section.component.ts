@@ -58,7 +58,11 @@ export class FilterSectionComponent implements OnInit {
     if (this.isOrganizationFilter) {
       return this.activeFilter.selectedOrganizationNode == filterNode;
     }
-    return this.activeFilter.selectedFilterNode == filterNode;
+    return (
+      this.activeFilter.selectedCipherTypeNode == filterNode ||
+      this.activeFilter.selectedFolderNode == filterNode ||
+      this.activeFilter.selectedCollectionNode == filterNode
+    );
   }
 
   async onFilterSelect(filterNode: TreeNode<VaultFilterType>) {

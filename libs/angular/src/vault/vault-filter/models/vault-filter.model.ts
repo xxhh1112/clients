@@ -2,15 +2,18 @@ import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { CipherStatus } from "./cipher-filter.model";
+import { CipherStatus , CipherTypeFilter } from "./cipher-filter.model";
+import { CollectionFilter } from "./collection-filter.model";
+import { FolderFilter } from "./folder-filter.model";
 import { OrganizationFilter } from "./organization-filter.model";
-import { VaultFilterType } from "./vault-filter-section";
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
 
 export class VaultFilter {
   selectedOrganizationNode: TreeNode<OrganizationFilter>;
-  selectedFilterNode: TreeNode<VaultFilterType>;
+  selectedCipherTypeNode: TreeNode<CipherTypeFilter>;
+  selectedFolderNode: TreeNode<FolderFilter>;
+  selectedCollectionNode: TreeNode<CollectionFilter>;
 
   cipherType?: CipherType;
   selectedCollection = false; // This is needed because of how the "Unassigned" collection works. It has a null id.
@@ -27,52 +30,64 @@ export class VaultFilter {
   }
 
   resetFilter() {
-    this.cipherType = null;
-    this.status = null;
-    this.selectedCollection = false;
-    this.selectedCollectionId = null;
-    this.selectedFolder = false;
-    this.selectedFolderId = null;
+    this.selectedCipherTypeNode = null;
+    this.selectedFolderNode = null;
+    this.selectedCollectionNode = null;
   }
 
   resetOrganization() {
-    this.myVaultOnly = false;
-    this.selectedOrganizationId = null;
-    this.resetFilter();
+    this.selectedOrganizationNode = null;
   }
 
   buildFilter(): VaultFilterFunction {
     return (cipher) => {
       let cipherPassesFilter = true;
-      if (this.status === "favorites" && cipherPassesFilter) {
-        cipherPassesFilter = cipher.favorite;
+      if (this.selectedCipherTypeNode) {
+        if (this.selectedCipherTypeNode.node.type === "favorites" && cipherPassesFilter) {
+          cipherPassesFilter = cipher.favorite;
+        } else if (this.selectedCipherTypeNode.node.type === "trash" && cipherPassesFilter) {
+          cipherPassesFilter = cipher.isDeleted;
+        } else if (this.selectedCipherTypeNode.node.type != "all" && cipherPassesFilter) {
+          cipherPassesFilter = cipher.type === this.selectedCipherTypeNode.node.type;
+        }
       }
-      if (this.status === "trash" && cipherPassesFilter) {
-        cipherPassesFilter = cipher.isDeleted;
+      if (this.selectedFolderNode) {
+        // No folder
+        if (this.selectedFolderNode.node.id == null && cipherPassesFilter) {
+          cipherPassesFilter = cipher.folderId == null;
+        }
+        // Folder
+        if (this.selectedFolderNode.node.id != null && cipherPassesFilter) {
+          cipherPassesFilter = cipher.folderId === this.selectedFolderNode.node.id;
+        }
       }
-      if (this.cipherType != null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.type === this.cipherType;
+      if (this.selectedCollectionNode) {
+        // All Collections
+        if (this.selectedCollectionNode.node.id === "AllCollections" && cipherPassesFilter) {
+          cipherPassesFilter = false;
+        }
+        // Unassigned
+        if (this.selectedCollectionNode.node.id == null && cipherPassesFilter) {
+          cipherPassesFilter =
+            cipher.organizationId != null &&
+            (cipher.collectionIds == null || cipher.collectionIds.length === 0);
+        }
+        // Collection
+        if (this.selectedCollectionNode.node.id != null && cipherPassesFilter) {
+          cipherPassesFilter =
+            cipher.collectionIds != null &&
+            cipher.collectionIds.includes(this.selectedCollectionNode.node.id);
+        }
       }
-      if (this.selectedFolder && this.selectedFolderId == null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.folderId == null;
-      }
-      if (this.selectedFolder && this.selectedFolderId != null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.folderId === this.selectedFolderId;
-      }
-      if (this.selectedCollection && this.selectedCollectionId == null && cipherPassesFilter) {
-        cipherPassesFilter =
-          cipher.organizationId != null &&
-          (cipher.collectionIds == null || cipher.collectionIds.length === 0);
-      }
-      if (this.selectedCollection && this.selectedCollectionId != null && cipherPassesFilter) {
-        cipherPassesFilter =
-          cipher.collectionIds != null && cipher.collectionIds.includes(this.selectedCollectionId);
-      }
-      if (this.selectedOrganizationId != null && cipherPassesFilter) {
-        cipherPassesFilter = cipher.organizationId === this.selectedOrganizationId;
-      }
-      if (this.myVaultOnly && cipherPassesFilter) {
-        cipherPassesFilter = cipher.organizationId === null;
+      if (this.selectedOrganizationNode) {
+        // My Vault
+        if (this.selectedOrganizationNode.node.id === "MyVault" && cipherPassesFilter) {
+          cipherPassesFilter = cipher.organizationId === null;
+        }
+        // Organization
+        else if (this.selectedOrganizationNode.node.id != null && cipherPassesFilter) {
+          cipherPassesFilter = cipher.organizationId === this.selectedOrganizationNode.node.id;
+        }
       }
       return cipherPassesFilter;
     };
