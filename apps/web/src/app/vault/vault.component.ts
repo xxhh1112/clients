@@ -306,12 +306,14 @@ export class VaultComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    if (orgNode.node.id == null) {
-      this.activeFilter.resetOrganization();
-      this.activeFilter.myVaultOnly = true;
-    } else {
-      this.activeFilter.selectedOrganizationId = orgNode.node.id;
-    }
+    this.activeFilter.resetOrganization();
+    this.activeFilter.selectedOrganizationNode = orgNode;
+    // if (orgNode.node.id == null) {
+    //   this.activeFilter.resetOrganization();
+    //   this.activeFilter.myVaultOnly = true;
+    // } else {
+    //   this.activeFilter.selectedOrganizationId = orgNode.node.id;
+    // }
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
     await this.applyVaultFilter(this.activeFilter);
   };
@@ -319,21 +321,23 @@ export class VaultComponent implements OnInit, OnDestroy {
   applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.selectedFilterNode = filterNode;
-    this.activeFilter.status = filterNode.node.type;
+    // this.activeFilter.status = filterNode.node.type;
     await this.applyVaultFilter(this.activeFilter);
   };
 
   applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedFolder = true;
-    this.activeFilter.selectedFolderId = folderNode.node.id;
+    this.activeFilter.selectedFilterNode = folderNode;
+    // this.activeFilter.selectedFolder = true;
+    // this.activeFilter.selectedFolderId = folderNode.node.id;
     await this.applyVaultFilter(this.activeFilter);
   };
 
   applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedCollection = true;
-    this.activeFilter.selectedCollectionId = collectionNode.node.id;
+    this.activeFilter.selectedFilterNode = collectionNode;
+    // this.activeFilter.selectedCollectionId = collectionNode.node.id;
+    // this.activeFilter.selectedCollection = true;
     await this.applyVaultFilter(this.activeFilter);
   };
 

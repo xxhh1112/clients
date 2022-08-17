@@ -46,15 +46,18 @@ export class FilterSectionComponent implements OnInit {
     return this.data.children;
   }
 
-  get isOrganization() {
+  get isOrganizationFilter() {
     return this.data.node instanceof Organization;
   }
 
   get isAllVaultsSelected() {
-    return this.isOrganization && !this.activeFilter.selectedOrganizationNode;
+    return this.isOrganizationFilter && !this.activeFilter.selectedOrganizationNode;
   }
 
   isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
+    if (this.isOrganizationFilter) {
+      return this.activeFilter.selectedOrganizationNode == filterNode;
+    }
     return this.activeFilter.selectedFilterNode == filterNode;
   }
 
