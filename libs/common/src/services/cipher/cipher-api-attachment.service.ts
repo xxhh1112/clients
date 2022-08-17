@@ -8,6 +8,8 @@ import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { AttachmentFileUpload } from "@bitwarden/common/models/domain/attachmentFileUpload";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
+import { EncString } from "@bitwarden/common/models/domain/encString";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
 import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
@@ -192,23 +194,19 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
         encData
       );
     } catch (e) {
-      if (
-        (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
-        (e as ErrorResponse).statusCode === 405
-      ) {
-        const attachmentFileUpload: AttachmentFileUpload = {
-          admin: admin,
-          cipherId: cipher.id,
-          encFileName: encFileName,
-          encData: encData,
-          key: dataEncKey[1],
-        };
-        response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
-      } else if (e instanceof ErrorResponse) {
-        throw new Error((e as ErrorResponse).getSingleMessage());
-      } else {
-        throw e;
-      }
+      const attachmentFileUpload: AttachmentFileUpload = {
+        admin: admin,
+        cipherId: cipher.id,
+        encFileName: encFileName,
+        encData: encData,
+        key: dataEncKey[1],
+      };
+
+      response = await this.throwErrorOnSaveAttachmentRawWithServer(
+        e,
+        response,
+        attachmentFileUpload
+      );
     }
 
     const cData = new CipherData(response, cipher.collectionIds);
@@ -216,6 +214,24 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
       await this.cipherService.upsert(cData);
     }
     return new Cipher(cData);
+  }
+
+  private async throwErrorOnSaveAttachmentRawWithServer(
+    e: any,
+    response: CipherResponse,
+    attachmentFileUpload: AttachmentFileUpload
+  ) {
+    if (
+      (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
+      (e as ErrorResponse).statusCode === 405
+    ) {
+      response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
+    } else if (e instanceof ErrorResponse) {
+      throw new Error((e as ErrorResponse).getSingleMessage());
+    } else {
+      throw e;
+    }
+    return response;
   }
 
   /**
@@ -300,6 +316,22 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
     const key = await this.cryptoService.getOrgKey(organizationId);
     const encFileName = await this.cryptoService.encrypt(attachmentView.fileName, key);
 
+    const fd = new FormData();
+
+    this.creatBlobObject(decBuf, encFileName, key);
+
+    try {
+      await this.postShareCipherAttachment(cipherId, attachmentView.id, fd, organizationId);
+    } catch (e) {
+      throw new Error((e as ErrorResponse).getSingleMessage());
+    }
+  }
+
+  private async creatBlobObject(
+    decBuf: ArrayBuffer,
+    encFileName: EncString,
+    key: SymmetricCryptoKey
+  ) {
     const dataEncKey = await this.cryptoService.makeEncKey(key);
     const encData = await this.cryptoService.encryptToBytes(decBuf, dataEncKey[0]);
 
@@ -322,12 +354,6 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
       } else {
         throw e;
       }
-    }
-
-    try {
-      await this.postShareCipherAttachment(cipherId, attachmentView.id, fd, organizationId);
-    } catch (e) {
-      throw new Error((e as ErrorResponse).getSingleMessage());
     }
   }
 }

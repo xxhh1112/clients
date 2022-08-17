@@ -1,3 +1,5 @@
+import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
+
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -92,16 +94,21 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
     const cipher = this.mapCipherObject(model);
 
-    if (key == null && cipher.organizationId != null) {
-      key = await this.cryptoService.getOrgKey(cipher.organizationId);
-    }
-    if (key == null) {
-      throw new Error("Cannot encrypt cipher for organization. No key.");
-    }
+    key = await this.getOrganizationKey(key, cipher);
 
     await this.encryptCipher(model, cipher, key);
 
     return cipher;
+  }
+
+  private async getOrganizationKey(key: SymmetricCryptoKey, cipher: Cipher) {
+    if (key == null && cipher.organizationId != null) {
+      key = await this.cryptoService.getOrgKey(cipher.organizationId);
+      if (key == null) {
+        throw new Error("Cannot encrypt cipher for organization. No key.");
+      }
+    }
+    return key;
   }
 
   private getlastFivePasswordhistory(model: CipherView) {
@@ -139,30 +146,43 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private filterExistingCipherFields(existingCipher: CipherView, model: CipherView) {
     if (existingCipher.hasFields) {
-      const existingHiddenFields = existingCipher.fields.filter(
-        (f) =>
-          f.type === FieldType.Hidden &&
-          f.name != null &&
-          f.name !== "" &&
-          f.value != null &&
-          f.value !== ""
-      );
-      const hiddenFields =
-        model.fields == null
-          ? []
-          : model.fields.filter(
-              (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
-            );
-      existingHiddenFields.forEach((ef) => {
-        const matchedField = hiddenFields.find((f) => f.name === ef.name);
-        if (matchedField == null || matchedField.value !== ef.value) {
-          const ph = new PasswordHistoryView();
-          ph.password = ef.name + ": " + ef.value;
-          ph.lastUsedDate = new Date();
-          model.passwordHistory.splice(0, 0, ph);
-        }
-      });
+      const existingHiddenFields = this.getExistingHiddenFields(existingCipher);
+      const hiddenFields = this.getHiddenField(model);
+      this.PasswordHistoryForMatchedField(existingHiddenFields, hiddenFields, model);
     }
+  }
+
+  private PasswordHistoryForMatchedField(
+    existingHiddenFields: FieldView[],
+    hiddenFields: FieldView[],
+    model: CipherView
+  ) {
+    existingHiddenFields.forEach((ef) => {
+      const matchedField = hiddenFields.find((f) => f.name === ef.name);
+      if (matchedField == null || matchedField.value !== ef.value) {
+        const ph = new PasswordHistoryView();
+        ph.password = ef.name + ": " + ef.value;
+        ph.lastUsedDate = new Date();
+        model.passwordHistory.splice(0, 0, ph);
+      }
+    });
+  }
+
+  private getExistingHiddenFields(existingCipher: CipherView) {
+    return existingCipher.fields.filter(
+      (f) =>
+        f.type === FieldType.Hidden &&
+        f.name != null &&
+        f.name !== "" &&
+        f.value != null &&
+        f.value !== ""
+    );
+  }
+
+  private getHiddenField(model: CipherView) {
+    return model.fields == null
+      ? []
+      : model.fields.filter((f) => f.type === FieldType.Hidden && f.name != null && f.name !== "");
   }
 
   private async encryptCipher(model: CipherView, cipher: Cipher, key: SymmetricCryptoKey) {
@@ -466,94 +486,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
       return false;
     });
-  }
-
-  private getUriMatchType(request: UriMatchTypeRequest) {
-    for (let i = 0; i < request.cipher.login.uris.length; i++) {
-      const u = request.cipher.login.uris[i];
-      if (u.uri == null) {
-        continue;
-      }
-
-      const match = u.match == null ? request.defaultMatch : u.match;
-      switch (match) {
-        case UriMatchType.Domain:
-          if (
-            request.domain != null &&
-            u.domain != null &&
-            request.matchingDomains.indexOf(u.domain) > -1
-          ) {
-            if (DomainMatchBlacklist.has(u.domain)) {
-              const domainUrlHost = Utils.getHost(request.url);
-              if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
-                return true;
-              }
-            } else {
-              return true;
-            }
-          }
-          break;
-        case UriMatchType.Host: {
-          const urlHost = Utils.getHost(request.url);
-          if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-            return true;
-          }
-          break;
-        }
-        case UriMatchType.Exact:
-          if (request.url === u.uri) {
-            return true;
-          }
-          break;
-        case UriMatchType.StartsWith:
-          if (request.url.startsWith(u.uri)) {
-            return true;
-          }
-          break;
-        case UriMatchType.RegularExpression:
-          try {
-            const regex = new RegExp(u.uri, "i");
-            if (regex.test(request.url)) {
-              return true;
-            }
-          } catch (e) {
-            this.logService.error(e);
-          }
-          break;
-        case UriMatchType.Never:
-        default:
-          break;
-      }
-    }
-  }
-
-  private async getDefaultMatch(defaultMatch: UriMatchType) {
-    if (defaultMatch == null) {
-      defaultMatch = await this.stateService.getDefaultUriMatch();
-      if (defaultMatch == null) {
-        defaultMatch = UriMatchType.Domain;
-      }
-    }
-    return defaultMatch;
-  }
-
-  private getEquivalentDomain(domain: string) {
-    return domain == null
-      ? Promise.resolve([])
-      : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-          let matches: any[] = [];
-          eqDomains.forEach((eqDomain) => {
-            if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-              matches = matches.concat(eqDomain);
-            }
-          });
-
-          if (!matches.length) {
-            matches.push(domain);
-          }
-
-          return matches;
-        });
   }
 
   async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
@@ -994,6 +926,98 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private clearSortedCiphers() {
     this.sortedCiphersCache.clear();
+  }
+
+  private getUriMatchType(request: UriMatchTypeRequest) {
+    for (let i = 0; i < request.cipher.login.uris.length; i++) {
+      const u = request.cipher.login.uris[i];
+      if (u.uri == null) {
+        continue;
+      }
+
+      const match = u.match == null ? request.defaultMatch : u.match;
+      switch (match) {
+        case UriMatchType.Domain:
+          if (
+            request.domain != null &&
+            u.domain != null &&
+            request.matchingDomains.indexOf(u.domain) > -1
+          ) {
+            return this.isDomainMatchBlacklist(request.url, u);
+          }
+          break;
+        case UriMatchType.Host: {
+          const urlHost = Utils.getHost(request.url);
+          if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
+            return true;
+          }
+          break;
+        }
+        case UriMatchType.Exact:
+          if (request.url === u.uri) {
+            return true;
+          }
+          break;
+        case UriMatchType.StartsWith:
+          if (request.url.startsWith(u.uri)) {
+            return true;
+          }
+          break;
+        case UriMatchType.RegularExpression:
+          try {
+            const regex = new RegExp(u.uri, "i");
+            if (regex.test(request.url)) {
+              return true;
+            }
+          } catch (e) {
+            this.logService.error(e);
+          }
+          break;
+        case UriMatchType.Never:
+        default:
+          break;
+      }
+    }
+  }
+
+  private isDomainMatchBlacklist(url: string, loginView: LoginUriView): boolean {
+    if (DomainMatchBlacklist.has(loginView.domain)) {
+      const domainUrlHost = Utils.getHost(url);
+      if (!DomainMatchBlacklist.get(loginView.domain).has(domainUrlHost)) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  private async getDefaultMatch(defaultMatch: UriMatchType) {
+    if (defaultMatch == null) {
+      defaultMatch = await this.stateService.getDefaultUriMatch();
+      if (defaultMatch == null) {
+        defaultMatch = UriMatchType.Domain;
+      }
+    }
+    return defaultMatch;
+  }
+
+  private getEquivalentDomain(domain: string) {
+    return domain == null
+      ? Promise.resolve([])
+      : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
+          let matches: any[] = [];
+          eqDomains.forEach((eqDomain) => {
+            if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+              matches = matches.concat(eqDomain);
+            }
+          });
+
+          if (!matches.length) {
+            matches.push(domain);
+          }
+
+          return matches;
+        });
   }
 }
 
