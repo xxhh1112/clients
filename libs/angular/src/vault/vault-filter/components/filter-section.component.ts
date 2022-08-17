@@ -1,4 +1,12 @@
-import { Directive, EventEmitter, InjectionToken, Injector, Input, Output } from "@angular/core";
+import {
+  Directive,
+  EventEmitter,
+  InjectionToken,
+  Injector,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
@@ -7,7 +15,7 @@ import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-sect
 import { VaultFilter } from "../models/vault-filter.model";
 
 @Directive()
-export class FilterSectionComponent {
+export class FilterSectionComponent implements OnInit {
   @Input() activeFilter: VaultFilter;
 
   @Input() data: TreeNode<VaultFilterType>;
@@ -24,6 +32,12 @@ export class FilterSectionComponent {
 
   constructor(private injector: Injector) {}
 
+  async ngOnInit() {
+    if (this.header.defaultSelection) {
+      await this.onFilterSelect(this.filterHeader);
+    }
+  }
+
   get filterHeader() {
     return this.data;
   }
@@ -38,6 +52,10 @@ export class FilterSectionComponent {
 
   get isAllVaultsSelected() {
     return this.isOrganization && !this.activeFilter.selectedOrganizationNode;
+  }
+
+  isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
+    return this.activeFilter.selectedFilterNode == filterNode;
   }
 
   async onFilterSelect(filterNode: TreeNode<VaultFilterType>) {
@@ -77,7 +95,7 @@ export class FilterSectionComponent {
   }
 
   // an injector is necessary to pass data into a dynamic component
-  // here we are creating a new injector for each filter node
+  // here we are creating a new injector for each filter that has options
   createInjector(data: VaultFilterType) {
     let inject = this.injectors.get(data.id);
     if (!inject) {

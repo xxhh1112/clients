@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *ngIf="filterHeader">
   <div *ngIf="header.showHeader" class="filter-heading">
     <button
       class="toggle-button"
@@ -23,7 +23,7 @@
     >
       <h3
         [ngClass]="{
-          active: isAllVaultsSelected
+          active: isAllVaultsSelected || isNodeSelected(filterHeader)
         }"
       >
         &nbsp;{{ filterHeader.node.name | i18n }}
@@ -51,7 +51,7 @@
       <li
         *ngFor="let f of filters"
         [ngClass]="{
-          active: f.node.id === activeFilter.selectedFolderId && activeFilter.selectedFolder
+          active: isNodeSelected(f)
         }"
         class="filter-option"
       >

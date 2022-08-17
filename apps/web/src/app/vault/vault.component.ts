@@ -232,6 +232,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         header: {
           showHeader: true,
           isSelectable: true,
+          defaultSelection: true,
         },
         action: this.applyTypeFilter,
       },
@@ -317,6 +318,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
+    this.activeFilter.selectedFilterNode = filterNode;
     this.activeFilter.status = filterNode.node.type;
     await this.applyVaultFilter(this.activeFilter);
   };
