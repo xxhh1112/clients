@@ -1,5 +1,5 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { firstValueFrom, Observable } from "rxjs";
+import { Directive, Input, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject } from "@bitwarden/common/models/domain/treeNode";
@@ -14,30 +14,15 @@ import { VaultFilterService } from "../services/vault-filter.service";
 @Directive()
 export class VaultFilterComponent implements OnInit {
   @Input() activeFilter: VaultFilter = new VaultFilter();
-  @Input() hideFolders = false;
-  @Input() hideCollections = false;
-  @Input() hideFavorites = false;
-  @Input() hideTrash = false;
-  @Input() hideOrganizations = false;
   @Input() filters?: VaultFilterList;
-
-  @Output() onFilterChange = new EventEmitter<VaultFilter>();
-  @Output() onAddFolder = new EventEmitter<never>();
-  @Output() onEditFolder = new EventEmitter<FolderView>();
 
   isLoaded = false;
   collapsedFilterNodes: Set<string>;
   organizations: Organization[];
-  activePersonalOwnershipPolicy: boolean;
-  activeSingleOrganizationPolicy: boolean;
   collections: DynamicTreeNode<CollectionView>;
   folders$: Observable<DynamicTreeNode<FolderView>>;
 
   constructor(protected vaultFilterService: VaultFilterService) {}
-
-  get displayCollections() {
-    return this.collections?.fullList != null && this.collections.fullList.length > 0;
-  }
 
   async ngOnInit(): Promise<void> {
     this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
@@ -53,11 +38,6 @@ export class VaultFilterComponent implements OnInit {
     this.isLoaded = true;
   }
 
-  // overwritten in web for organization vaults
-  async initCollections() {
-    // return await this.vaultFilterService.buildCollections();
-  }
-
   async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
     if (this.collapsedFilterNodes.has(node.id)) {
       this.collapsedFilterNodes.delete(node.id);
@@ -65,14 +45,6 @@ export class VaultFilterComponent implements OnInit {
       this.collapsedFilterNodes.add(node.id);
     }
     await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
-  }
-
-  async applyFilter(filter: VaultFilter) {
-    if (filter.refreshCollectionsAndFolders) {
-      await this.reloadCollections(filter);
-      filter = await this.pruneInvalidatedFilterSelections(filter);
-    }
-    this.onFilterChange.emit(filter);
   }
 
   async reloadCollections(filter: VaultFilter) {
@@ -83,18 +55,6 @@ export class VaultFilterComponent implements OnInit {
 
   async reloadOrganizations() {
     this.filters.organizationFilter.data$ = await this.vaultFilterService.buildOrganizations();
-    // this.activePersonalOwnershipPolicy =
-    //   await this.vaultFilterService.checkForPersonalOwnershipPolicy();
-    // this.activeSingleOrganizationPolicy =
-    //   await this.vaultFilterService.checkForSingleOrganizationPolicy();
-  }
-
-  addFolder() {
-    this.onAddFolder.emit();
-  }
-
-  editFolder(folder: FolderView) {
-    this.onEditFolder.emit(folder);
   }
 
   protected async pruneInvalidatedFilterSelections(filter: VaultFilter): Promise<VaultFilter> {
@@ -104,26 +64,26 @@ export class VaultFilterComponent implements OnInit {
   }
 
   protected async pruneInvalidFolderSelection(filter: VaultFilter): Promise<VaultFilter> {
-    if (
-      filter.selectedFolder &&
-      !(await firstValueFrom(this.folders$))?.hasId(filter.selectedFolderId)
-    ) {
-      filter.selectedFolder = false;
-      filter.selectedFolderId = null;
-    }
+    // if (
+    //   filter.selectedFolder &&
+    //   !(await firstValueFrom(this.folders$))?.hasId(filter.selectedFolderId)
+    // ) {
+    //   filter.selectedFolder = false;
+    //   filter.selectedFolderId = null;
+    // }
     return filter;
   }
 
   protected pruneInvalidCollectionSelection(filter: VaultFilter): VaultFilter {
-    if (
-      filter.myVaultOnly ||
-      (filter.selectedCollection &&
-        filter.selectedCollectionId != null &&
-        !this.collections?.hasId(filter.selectedCollectionId))
-    ) {
-      filter.selectedCollection = false;
-      filter.selectedCollectionId = null;
-    }
+    // if (
+    //   filter.myVaultOnly ||
+    //   (filter.selectedCollection &&
+    //     filter.selectedCollectionId != null &&
+    //     !this.collections?.hasId(filter.selectedCollectionId))
+    // ) {
+    //   filter.selectedCollection = false;
+    //   filter.selectedCollectionId = null;
+    // }
     return filter;
   }
 }

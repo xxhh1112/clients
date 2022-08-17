@@ -32,6 +32,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { UpdateKeyComponent } from "../settings/update-key.component";
@@ -295,8 +296,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.go();
   }
 
-  applyOrganizationFilter = async (org: OrganizationFilter): Promise<void> => {
-    if (!org.enabled) {
+  applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
+    if (!orgNode.node.enabled) {
       this.platformUtilsService.showToast(
         "error",
         null,
@@ -304,33 +305,33 @@ export class VaultComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    if (org.id == null) {
+    if (orgNode.node.id == null) {
       this.activeFilter.resetOrganization();
       this.activeFilter.myVaultOnly = true;
     } else {
-      this.activeFilter.selectedOrganizationId = org.id;
+      this.activeFilter.selectedOrganizationId = orgNode.node.id;
     }
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
     await this.applyVaultFilter(this.activeFilter);
   };
 
-  applyTypeFilter = async (filter: CipherTypeFilter): Promise<void> => {
+  applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
-    this.activeFilter.status = filter.type;
+    this.activeFilter.status = filterNode.node.type;
     await this.applyVaultFilter(this.activeFilter);
   };
 
-  applyFolderFilter = async (folder: FolderFilter): Promise<void> => {
+  applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.selectedFolder = true;
-    this.activeFilter.selectedFolderId = folder.id;
+    this.activeFilter.selectedFolderId = folderNode.node.id;
     await this.applyVaultFilter(this.activeFilter);
   };
 
-  applyCollectionFilter = async (collection: CollectionFilter): Promise<void> => {
+  applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
     this.activeFilter.resetFilter();
     this.activeFilter.selectedCollection = true;
-    this.activeFilter.selectedCollectionId = collection.id;
+    this.activeFilter.selectedCollectionId = collectionNode.node.id;
     await this.applyVaultFilter(this.activeFilter);
   };
 
@@ -439,13 +440,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.type = this.activeFilter.cipherType;
     component.folderId = this.folderId === "none" ? null : this.folderId;
     if (this.activeFilter.selectedCollectionId != null) {
-      const collection = this.filterComponent.collections.fullList.filter(
-        (c) => c.id === this.activeFilter.selectedCollectionId
-      );
-      if (collection.length > 0) {
-        component.organizationId = collection[0].organizationId;
-        component.collectionIds = [this.activeFilter.selectedCollectionId];
-      }
+      // const collection = this.filterComponent.collections.fullList.filter(
+      //   (c) => c.id === this.activeFilter.selectedCollectionId
+      // );
+      // if (collection.length > 0) {
+      //   component.organizationId = collection[0].organizationId;
+      //   component.collectionIds = [this.activeFilter.selectedCollectionId];
+      // }
     }
     if (this.activeFilter.selectedFolderId && this.activeFilter.selectedFolder) {
       component.folderId = this.activeFilter.selectedFolderId;

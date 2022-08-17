@@ -21,7 +21,13 @@
       class="filter-button"
       (click)="onFilterSelect(filterHeader)"
     >
-      <h3 class="filter-title">&nbsp;{{ filterHeader.node.name | i18n }}</h3>
+      <h3
+        [ngClass]="{
+          active: isAllVaultsSelected
+        }"
+      >
+        &nbsp;{{ filterHeader.node.name | i18n }}
+      </h3>
     </button>
     <h3 *ngIf="!header.isSelectable" class="filter-title">
       &nbsp;{{ filterHeader.node.name | i18n }}
@@ -70,7 +76,7 @@
           <button
             class="filter-button"
             [ngClass]="{ 'disabled-organization': isOrganization && !f.node.enabled }"
-            (click)="onFilterSelect(f.node)"
+            (click)="onFilterSelect(f)"
           >
             <i
               *ngIf="f.children.length === 0"

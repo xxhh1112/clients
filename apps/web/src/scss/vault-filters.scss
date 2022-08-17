@@ -4,7 +4,6 @@
 
 .filter-heading {
   display: flex;
-  text-transform: uppercase;
   align-items: center;
 
   * {
@@ -163,7 +162,6 @@
 
     h3 {
       font-weight: normal;
-      text-transform: uppercase;
       @include themify($themes) {
         color: themed("textMuted");
       }

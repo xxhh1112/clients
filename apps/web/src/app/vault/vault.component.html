@@ -8,9 +8,6 @@
               #vaultFilter
               [activeFilter]="activeFilter"
               [filters]="filters"
-              (onFilterChange)="applyVaultFilter($event)"
-              (onAddFolder)="addFolder()"
-              (onEditFolder)="editFolder($event.id)"
               (onSearchTextChanged)="filterSearchText($event)"
             ></app-vault-filter>
           </div>

@@ -1,11 +1,17 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 import { CipherStatus } from "./cipher-filter.model";
+import { OrganizationFilter } from "./organization-filter.model";
+import { VaultFilterType } from "./vault-filter-section";
 
 export type VaultFilterFunction = (cipher: CipherView) => boolean;
 
 export class VaultFilter {
+  selectedOrganizationNode: TreeNode<OrganizationFilter>;
+  selectedFilterNode: TreeNode<VaultFilterType>;
+
   cipherType?: CipherType;
   selectedCollection = false; // This is needed because of how the "Unassigned" collection works. It has a null id.
   selectedCollectionId?: string;

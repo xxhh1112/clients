@@ -45,6 +45,7 @@ export class VaultFilterService {
   async buildOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
     const orgs = (await this.organizationService.getAll()) as OrganizationFilter[];
     const head = new Organization() as OrganizationFilter;
+    head.enabled = true;
     const headNode = new TreeNode<OrganizationFilter>(head, null, "allVaults", "AllVaults");
     if (!(await this.checkForPersonalOwnershipPolicy())) {
       const myVault = new Organization() as OrganizationFilter;

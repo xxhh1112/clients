@@ -36,8 +36,12 @@ export class FilterSectionComponent {
     return this.data.node instanceof Organization;
   }
 
-  async onFilterSelect(filter: VaultFilterType) {
-    await this.action(filter);
+  get isAllVaultsSelected() {
+    return this.isOrganization && !this.activeFilter.selectedOrganizationNode;
+  }
+
+  async onFilterSelect(filterNode: TreeNode<VaultFilterType>) {
+    await this.action(filterNode);
   }
 
   get showEdit() {
