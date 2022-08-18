@@ -114,7 +114,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
       this.reloadCollections();
-      this.filterComponent.reloadOrganizations();
+      this.reloadOrganizations();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
       const cipherId = getCipherIdFromParams(params);
@@ -156,7 +156,7 @@ export class VaultComponent implements OnInit, OnDestroy {
               if (message.successfully) {
                 await Promise.all([
                   this.reloadCollections(),
-                  this.filterComponent.reloadOrganizations(),
+                  this.reloadOrganizations(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
                 this.changeDetectorRef.detectChanges();
@@ -280,6 +280,11 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+  }
+
+  async reloadOrganizations() {
+    this.filters.organizationFilter.data$ =
+      await this.vaultFilterService.buildNestedOrganizations();
   }
 
   async reloadCollections(orgNode?: TreeNode<OrganizationFilter>) {

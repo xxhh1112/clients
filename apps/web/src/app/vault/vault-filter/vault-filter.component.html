@@ -26,75 +26,23 @@
         autocomplete="off"
         appAutofocus
       />
-      <app-filter-section
-        [activeFilter]="activeFilter"
-        [data]="filters?.organizationFilter.data$ | async"
-        [header]="filters?.organizationFilter.header"
-        [action]="filters?.organizationFilter.action"
-        [edit]="filters?.organizationFilter.edit"
-        [add]="filters?.organizationFilter.add"
-        [options]="filters?.organizationFilter.options"
-        [divider]="filters?.organizationFilter.divider"
-        [nodeCollapsedState]="collapsedFilterNodes"
-        (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-      >
-      </app-filter-section>
-      <div class="filter">
-        <app-filter-section
-          [activeFilter]="activeFilter"
-          [data]="filters?.typeFilter.data$ | async"
-          [header]="filters?.typeFilter.header"
-          [action]="filters?.typeFilter.action"
-          [edit]="filters?.typeFilter.edit"
-          [add]="filters?.typeFilter.add"
-          [options]="filters?.typeFilter.options"
-          [divider]="filters?.typeFilter.divider"
-          [nodeCollapsedState]="collapsedFilterNodes"
-          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-        ></app-filter-section>
-      </div>
-      <div class="filter">
-        <app-filter-section
-          [activeFilter]="activeFilter"
-          [data]="filters?.folderFilter.data$ | async"
-          [header]="filters?.folderFilter.header"
-          [action]="filters?.folderFilter.action"
-          [edit]="filters?.folderFilter.edit"
-          [add]="filters?.folderFilter.add"
-          [options]="filters?.folderFilter.options"
-          [divider]="filters?.folderFilter.divider"
-          [nodeCollapsedState]="collapsedFilterNodes"
-          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-        ></app-filter-section>
-      </div>
-      <div class="filter">
-        <app-filter-section
-          [activeFilter]="activeFilter"
-          [data]="filters?.collectionFilter.data$ | async"
-          [header]="filters?.collectionFilter.header"
-          [action]="filters?.collectionFilter.action"
-          [edit]="filters?.collectionFilter.edit"
-          [add]="filters?.collectionFilter.add"
-          [options]="filters?.collectionFilter.options"
-          [divider]="filters?.collectionFilter.divider"
-          [nodeCollapsedState]="collapsedFilterNodes"
-          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-        ></app-filter-section>
-      </div>
-      <div class="filter">
-        <app-filter-section
-          [activeFilter]="activeFilter"
-          [data]="filters?.trashFilter.data$ | async"
-          [header]="filters?.trashFilter.header"
-          [action]="filters?.trashFilter.action"
-          [edit]="filters?.trashFilter.edit"
-          [add]="filters?.trashFilter.add"
-          [options]="filters?.trashFilter.options"
-          [divider]="filters?.trashFilter.divider"
-          [nodeCollapsedState]="collapsedFilterNodes"
-          (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-        ></app-filter-section>
-      </div>
+      <ng-container *ngFor="let f of filtersList">
+        <div class="filter">
+          <app-filter-section
+            [activeFilter]="activeFilter"
+            [data]="f.data$ | async"
+            [header]="f.header"
+            [action]="f.action"
+            [edit]="f.edit"
+            [add]="f.add"
+            [options]="f.options"
+            [divider]="f.divider"
+            [nodeCollapsedState]="collapsedFilterNodes"
+            (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
+          >
+          </app-filter-section>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

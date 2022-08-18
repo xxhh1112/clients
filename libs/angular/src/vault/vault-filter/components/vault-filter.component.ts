@@ -29,6 +29,10 @@ export class VaultFilterComponent implements OnInit {
     this.isLoaded = true;
   }
 
+  get filtersList() {
+    return Object.values(this.filters);
+  }
+
   async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
     if (this.collapsedFilterNodes.has(node.id)) {
       this.collapsedFilterNodes.delete(node.id);
@@ -36,10 +40,5 @@ export class VaultFilterComponent implements OnInit {
       this.collapsedFilterNodes.add(node.id);
     }
     await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
-  }
-
-  async reloadOrganizations() {
-    this.filters.organizationFilter.data$ =
-      await this.vaultFilterService.buildNestedOrganizations();
   }
 }
