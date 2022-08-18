@@ -692,11 +692,11 @@ export class CipherService implements InternalCipherServiceAbstraction {
     const bLastUsed = this.getLastUsed(b);
     const bothNotNull = this.ValidateLastUsedNotNull(aLastUsed, bLastUsed);
 
-    if ((bothNotNull && aLastUsed > bLastUsed) || (aLastUsed != null && bLastUsed == null)) {
+    if (this.validateaLastUsed(bothNotNull, aLastUsed, bLastUsed)) {
       return -1;
     }
 
-    if ((bLastUsed != null && aLastUsed == null) || (bothNotNull && aLastUsed < bLastUsed)) {
+    if (this.validatebLastUsed(bLastUsed, aLastUsed, bothNotNull)) {
       return 1;
     }
 
@@ -759,6 +759,14 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
     await this.clearCache();
     await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  private validateaLastUsed(bothNotNull: boolean, aLastUsed: number, bLastUsed: number) {
+    return (bothNotNull && aLastUsed > bLastUsed) || (aLastUsed != null && bLastUsed == null);
+  }
+
+  private validatebLastUsed(bLastUsed: number, aLastUsed: number, bothNotNull: boolean) {
+    return (bLastUsed != null && aLastUsed == null) || (bothNotNull && aLastUsed < bLastUsed);
   }
 
   private ValidateLastUsedNotNull(aLastUsed: number, bLastUsed: number) {
