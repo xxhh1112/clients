@@ -153,7 +153,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   get deleted(): boolean {
-    return this.activeFilter.status === "trash";
+    // return this.activeFilter.status === "trash";
+    return false;
   }
 
   ngOnDestroy() {
@@ -161,11 +162,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async applyVaultFilter(vaultFilter: VaultFilter) {
-    this.ciphersComponent.showAddNew = vaultFilter.status !== "trash";
+    // this.ciphersComponent.showAddNew = vaultFilter.status !== "trash";
     this.activeFilter = vaultFilter;
     await this.ciphersComponent.reload(
-      this.activeFilter.buildFilter(),
-      vaultFilter.status === "trash"
+      this.activeFilter.buildFilter()
+      // vaultFilter.status === "trash"
     );
     this.vaultFilterComponent.searchPlaceholder =
       this.vaultService.calculateSearchBarLocalizationString(this.activeFilter);
@@ -307,8 +308,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        type: this.activeFilter.cipherType,
-        collectionId: this.activeFilter.selectedCollectionId,
+        type: this.activeFilter.selectedCipherTypeNode?.node.type,
+        collectionId: this.activeFilter.selectedCollectionNode?.node.id,
         deleted: this.deleted ? true : null,
       };
     }

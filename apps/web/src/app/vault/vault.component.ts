@@ -69,8 +69,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild("updateKeyTemplate", { read: ViewContainerRef, static: true })
   updateKeyModalRef: ViewContainerRef;
 
-  folderId: string = null;
-  myVaultOnly = false;
   showVerifyEmail = false;
   showBrowserOutdated = false;
   showUpdateKey = false;
@@ -115,7 +113,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
-      this.filterComponent.reloadCollections(this.activeFilter);
+      this.reloadCollections();
       this.filterComponent.reloadOrganizations();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
@@ -157,7 +155,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             case "syncCompleted":
               if (message.successfully) {
                 await Promise.all([
-                  this.filterComponent.reloadCollections(this.activeFilter),
+                  this.reloadCollections(),
                   this.filterComponent.reloadOrganizations(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
@@ -174,7 +172,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.filters = {
       [VaultFilterLabel.OrganizationFilter]: {
-        data$: await this.vaultFilterService.buildOrganizations(),
+        data$: await this.vaultFilterService.buildNestedOrganizations(),
         header: {
           showHeader: !(singleOrgPolicy && personalVaultPolicy),
           isSelectable: true,
@@ -284,6 +282,18 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
+  async reloadCollections(orgNode?: TreeNode<OrganizationFilter>) {
+    if (!orgNode || orgNode.node.id === "AllVaults") {
+      this.activeFilter.selectedOrganizationNode = null;
+      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections();
+    } else {
+      this.activeFilter.selectedOrganizationNode = orgNode;
+      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections(
+        orgNode.node.id
+      );
+    }
+  }
+
   applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
     if (!orgNode.node.enabled) {
       this.platformUtilsService.showToast(
@@ -294,15 +304,8 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
     this.activeFilter.resetOrganization();
-    if (orgNode.node.id === "AllVaults") {
-      this.activeFilter.selectedOrganizationNode = null;
-      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections();
-    } else {
-      this.activeFilter.selectedOrganizationNode = orgNode;
-      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections(
-        orgNode.node.id
-      );
-    }
+    await this.reloadCollections(orgNode);
+
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
     await this.applyVaultFilter();
   };
@@ -437,22 +440,19 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const component = await this.editCipher(null);
-    component.type = this.activeFilter.cipherType;
-    component.folderId = this.folderId === "none" ? null : this.folderId;
-    if (this.activeFilter.selectedCollectionId != null) {
-      // const collection = this.filterComponent.collections.fullList.filter(
-      //   (c) => c.id === this.activeFilter.selectedCollectionId
-      // );
-      // if (collection.length > 0) {
-      //   component.organizationId = collection[0].organizationId;
-      //   component.collectionIds = [this.activeFilter.selectedCollectionId];
-      // }
+    if (this.activeFilter.selectedCipherTypeNode.node.type in CipherType) {
+      component.type = this.activeFilter.selectedCipherTypeNode?.node.type as CipherType;
     }
-    if (this.activeFilter.selectedFolderId && this.activeFilter.selectedFolder) {
-      component.folderId = this.activeFilter.selectedFolderId;
+    const selectedCol = this.activeFilter.selectedCollectionNode?.node;
+    if (selectedCol && selectedCol.id && selectedCol.id != "AllCollections") {
+      component.organizationId = selectedCol.organizationId;
+      component.collectionIds = [selectedCol.id];
     }
-    if (this.activeFilter.selectedOrganizationId) {
-      component.organizationId = this.activeFilter.selectedOrganizationId;
+    if (this.activeFilter.selectedFolderNode) {
+      component.folderId = this.activeFilter.selectedFolderNode.node.id;
+    }
+    if (this.activeFilter.selectedOrganizationNode) {
+      component.organizationId = this.activeFilter.selectedOrganizationNode.node.id;
     }
   }
 
@@ -508,11 +508,12 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        favorites: this.activeFilter.status === "favorites" ? true : null,
-        type: this.activeFilter.cipherType,
-        folderId: this.activeFilter.selectedFolderId,
-        collectionId: this.activeFilter.selectedCollectionId,
-        deleted: this.activeFilter.status === "trash" ? true : null,
+        favorites:
+          this.activeFilter.selectedCipherTypeNode?.node.type === "favorites" ? true : null,
+        type: this.activeFilter.selectedCipherTypeNode?.node.type,
+        folderId: this.activeFilter.selectedFolderNode?.node.id,
+        collectionId: this.activeFilter.selectedCollectionNode?.node.id,
+        deleted: this.activeFilter.selectedCipherTypeNode?.node.type === "trash" ? true : null,
       };
     }
 

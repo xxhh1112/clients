@@ -2,26 +2,29 @@ import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-
 
 export class VaultService {
   calculateSearchBarLocalizationString(vaultFilter: VaultFilter): string {
-    if (vaultFilter.status === "favorites") {
+    if (vaultFilter.selectedCipherTypeNode?.node.type === "favorites") {
       return "searchFavorites";
     }
-    if (vaultFilter.status === "trash") {
+    if (vaultFilter.selectedCipherTypeNode?.node.type === "trash") {
       return "searchTrash";
     }
-    if (vaultFilter.cipherType != null) {
+    if (
+      vaultFilter.selectedCipherTypeNode?.node.type != null &&
+      vaultFilter.selectedCipherTypeNode?.node.type !== "all"
+    ) {
       return "searchType";
     }
-    if (vaultFilter.selectedFolderId != null && vaultFilter.selectedFolderId != "none") {
+    if (vaultFilter.selectedFolderNode?.node) {
       return "searchFolder";
     }
-    if (vaultFilter.selectedCollection) {
+    if (vaultFilter.selectedCollectionNode?.node.id) {
       return "searchCollection";
     }
-    if (vaultFilter.selectedOrganizationId != null) {
-      return "searchOrganization";
-    }
-    if (vaultFilter.myVaultOnly) {
+    if (vaultFilter.selectedOrganizationNode?.node.id === "MyVault") {
       return "searchMyVault";
+    }
+    if (vaultFilter.selectedOrganizationNode?.node.id) {
+      return "searchOrganization";
     }
 
     return "searchVault";

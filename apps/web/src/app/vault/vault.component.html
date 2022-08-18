@@ -32,14 +32,14 @@
         <div class="ml-auto d-flex">
           <app-vault-bulk-actions
             [ciphersComponent]="ciphersComponent"
-            [deleted]="activeFilter.status === 'trash'"
+            [deleted]="activeFilter.selectedCipherTypeNode?.node.type === 'trash'"
           >
           </app-vault-bulk-actions>
           <button
             type="button"
             class="btn btn-outline-primary btn-sm"
             (click)="addCipher()"
-            *ngIf="activeFilter.status !== 'trash'"
+            *ngIf="activeFilter.selectedCipherTypeNode?.node.type !== 'trash'"
           >
             <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>{{ "addItem" | i18n }}
           </button>
@@ -47,7 +47,7 @@
       </div>
       <app-callout
         type="warning"
-        *ngIf="activeFilter.status === 'trash'"
+        *ngIf="activeFilter.selectedCipherTypeNode?.node.type === 'trash'"
         icon="bwi-exclamation-triangle"
       >
         {{ trashCleanupWarning }}

@@ -41,8 +41,8 @@ export class CollectionFilterComponent {
 
   applyFilter(collection: CollectionView) {
     this.activeFilter.resetFilter();
-    this.activeFilter.selectedCollection = true;
-    this.activeFilter.selectedCollectionId = collection.id;
+    // this.activeFilter.selectedCollection = true;
+    // this.activeFilter.selectedCollectionId = collection.id;
     this.onFilterChange.emit(this.activeFilter);
   }
 

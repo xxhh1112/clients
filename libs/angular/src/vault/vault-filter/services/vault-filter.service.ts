@@ -42,7 +42,7 @@ export class VaultFilterService {
     return new Set(await this.stateService.getCollapsedGroupings());
   }
 
-  async buildOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
+  async buildNestedOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
     const orgs = (await this.organizationService.getAll()) as OrganizationFilter[];
     const head = new Organization() as OrganizationFilter;
     head.enabled = true;

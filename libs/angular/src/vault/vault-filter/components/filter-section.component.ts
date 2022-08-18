@@ -43,7 +43,7 @@ export class FilterSectionComponent implements OnInit {
   }
 
   get filters() {
-    return this.data.children;
+    return this.data?.children;
   }
 
   get isOrganizationFilter() {

@@ -36,7 +36,8 @@ export class OrganizationFilterComponent {
   }
 
   get hasActiveFilter() {
-    return this.activeFilter.myVaultOnly || this.activeFilter.selectedOrganizationId != null;
+    // return this.activeFilter.myVaultOnly || this.activeFilter.selectedOrganizationId != null;
+    return false;
   }
 
   readonly organizationGrouping: TopLevelTreeNode = {
@@ -45,22 +46,22 @@ export class OrganizationFilterComponent {
   };
 
   async applyOrganizationFilter(organization: Organization) {
-    this.activeFilter.selectedOrganizationId = organization.id;
-    this.activeFilter.myVaultOnly = false;
-    this.activeFilter.refreshCollectionsAndFolders = true;
+    // this.activeFilter.selectedOrganizationId = organization.id;
+    // this.activeFilter.myVaultOnly = false;
+    // this.activeFilter.refreshCollectionsAndFolders = true;
     this.applyFilter(this.activeFilter);
   }
 
   async applyMyVaultFilter() {
-    this.activeFilter.selectedOrganizationId = null;
-    this.activeFilter.myVaultOnly = true;
-    this.activeFilter.refreshCollectionsAndFolders = true;
+    // this.activeFilter.selectedOrganizationId = null;
+    // this.activeFilter.myVaultOnly = true;
+    // this.activeFilter.refreshCollectionsAndFolders = true;
     this.applyFilter(this.activeFilter);
   }
 
   clearFilter() {
-    this.activeFilter.myVaultOnly = false;
-    this.activeFilter.selectedOrganizationId = null;
+    // this.activeFilter.myVaultOnly = false;
+    // this.activeFilter.selectedOrganizationId = null;
     this.applyFilter(new VaultFilter(this.activeFilter));
   }
 

@@ -1,8 +1,7 @@
-import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { CipherStatus , CipherTypeFilter } from "./cipher-filter.model";
+import { CipherTypeFilter } from "./cipher-filter.model";
 import { CollectionFilter } from "./collection-filter.model";
 import { FolderFilter } from "./folder-filter.model";
 import { OrganizationFilter } from "./organization-filter.model";
@@ -14,16 +13,6 @@ export class VaultFilter {
   selectedCipherTypeNode: TreeNode<CipherTypeFilter>;
   selectedFolderNode: TreeNode<FolderFilter>;
   selectedCollectionNode: TreeNode<CollectionFilter>;
-
-  cipherType?: CipherType;
-  selectedCollection = false; // This is needed because of how the "Unassigned" collection works. It has a null id.
-  selectedCollectionId?: string;
-  status?: CipherStatus;
-  selectedFolder = false; // This is needed because of how the "No Folder" folder works. It has a null id.
-  selectedFolderId?: string;
-  selectedOrganizationId?: string;
-  myVaultOnly = false;
-  refreshCollectionsAndFolders = false;
 
   constructor(init?: Partial<VaultFilter>) {
     Object.assign(this, init);

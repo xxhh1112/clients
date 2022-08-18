@@ -26,15 +26,6 @@ export class VaultFilterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
-    // this.organizations = await this.vaultFilterService.buildOrganizations();
-    // if (this.organizations != null && this.organizations.length > 0) {
-    //   this.activePersonalOwnershipPolicy =
-    //     await this.vaultFilterService.checkForPersonalOwnershipPolicy();
-    //   this.activeSingleOrganizationPolicy =
-    //     await this.vaultFilterService.checkForSingleOrganizationPolicy();
-    // }
-    // this.folders$ = await this.vaultFilterService.buildNestedFolders();
-    // this.collections = await this.initCollections();
     this.isLoaded = true;
   }
 
@@ -47,43 +38,8 @@ export class VaultFilterComponent implements OnInit {
     await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
-  async reloadCollections(filter: VaultFilter) {
-    this.filters.collectionFilter.data$ = filter.myVaultOnly
-      ? null
-      : await this.vaultFilterService.buildCollections(filter.selectedOrganizationId);
-  }
-
   async reloadOrganizations() {
-    this.filters.organizationFilter.data$ = await this.vaultFilterService.buildOrganizations();
-  }
-
-  protected async pruneInvalidatedFilterSelections(filter: VaultFilter): Promise<VaultFilter> {
-    filter = await this.pruneInvalidFolderSelection(filter);
-    filter = this.pruneInvalidCollectionSelection(filter);
-    return filter;
-  }
-
-  protected async pruneInvalidFolderSelection(filter: VaultFilter): Promise<VaultFilter> {
-    // if (
-    //   filter.selectedFolder &&
-    //   !(await firstValueFrom(this.folders$))?.hasId(filter.selectedFolderId)
-    // ) {
-    //   filter.selectedFolder = false;
-    //   filter.selectedFolderId = null;
-    // }
-    return filter;
-  }
-
-  protected pruneInvalidCollectionSelection(filter: VaultFilter): VaultFilter {
-    // if (
-    //   filter.myVaultOnly ||
-    //   (filter.selectedCollection &&
-    //     filter.selectedCollectionId != null &&
-    //     !this.collections?.hasId(filter.selectedCollectionId))
-    // ) {
-    //   filter.selectedCollection = false;
-    //   filter.selectedCollectionId = null;
-    // }
-    return filter;
+    this.filters.organizationFilter.data$ =
+      await this.vaultFilterService.buildNestedOrganizations();
   }
 }

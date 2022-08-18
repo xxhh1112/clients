@@ -30,7 +30,7 @@ export class TypeFilterComponent {
 
   applyFilter(cipherType: CipherType) {
     this.activeFilter.resetFilter();
-    this.activeFilter.cipherType = cipherType;
+    // this.activeFilter.cipherType = cipherType;
     this.onFilterChange.emit(this.activeFilter);
   }
 
