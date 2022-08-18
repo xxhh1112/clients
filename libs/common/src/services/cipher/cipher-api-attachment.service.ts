@@ -5,7 +5,6 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { AttachmentFileUpload } from "@bitwarden/common/models/domain/attachmentFileUpload";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { EncString } from "@bitwarden/common/models/domain/encString";
@@ -18,6 +17,14 @@ import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse
 import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
+
+type legacyServerAttachmentFileUploadRequest = {
+  admin: boolean;
+  cipherId: string;
+  encFileName: EncString;
+  encData: EncArrayBuffer;
+  key: EncString;
+};
 
 export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbstraction {
   constructor(
@@ -194,7 +201,7 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
         encData
       );
     } catch (e) {
-      const attachmentFileUpload: AttachmentFileUpload = {
+      const attachmentFileUpload: legacyServerAttachmentFileUploadRequest = {
         admin: admin,
         cipherId: cipher.id,
         encFileName: encFileName,
@@ -219,7 +226,7 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
   private async throwErrorOnSaveAttachmentRawWithServer(
     e: any,
     response: CipherResponse,
-    attachmentFileUpload: AttachmentFileUpload
+    attachmentFileUpload: legacyServerAttachmentFileUploadRequest
   ) {
     if (
       (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
@@ -238,7 +245,7 @@ export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbs
    * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
    * This method still exists for backward compatibility with old server versions.
    */
-  async legacyServerAttachmentFileUpload(request: AttachmentFileUpload) {
+  async legacyServerAttachmentFileUpload(request: legacyServerAttachmentFileUploadRequest) {
     const fd = new FormData();
     try {
       const blob = new Blob([request.encData.buffer], { type: "application/octet-stream" });
