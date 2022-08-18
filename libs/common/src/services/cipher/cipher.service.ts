@@ -1,5 +1,3 @@
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
-
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -472,15 +470,60 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
       this.includeOtherTypes(includeOtherTypes, cipher);
 
-      const uriMatchTypeRequest: UriMatchTypeRequest = {
-        cipher: cipher,
-        defaultMatch: defaultMatch,
-        url: url,
-        matchingDomains: matchingDomains,
-        domain: domain,
-      };
+      if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
+        for (let i = 0; i < cipher.login.uris.length; i++) {
+          const u = cipher.login.uris[i];
+          if (u.uri == null) {
+            continue;
+          }
 
-      this.getUriMatchType(uriMatchTypeRequest);
+          const match = u.match == null ? defaultMatch : u.match;
+          switch (match) {
+            case UriMatchType.Domain:
+              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
+                if (DomainMatchBlacklist.has(u.domain)) {
+                  const domainUrlHost = Utils.getHost(url);
+                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
+                    return true;
+                  }
+                } else {
+                  return true;
+                }
+              }
+              break;
+            case UriMatchType.Host: {
+              const urlHost = Utils.getHost(url);
+              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
+                return true;
+              }
+              break;
+            }
+            case UriMatchType.Exact:
+              if (url === u.uri) {
+                return true;
+              }
+              break;
+            case UriMatchType.StartsWith:
+              if (url.startsWith(u.uri)) {
+                return true;
+              }
+              break;
+            case UriMatchType.RegularExpression:
+              try {
+                const regex = new RegExp(u.uri, "i");
+                if (regex.test(url)) {
+                  return true;
+                }
+              } catch (e) {
+                this.logService.error(e);
+              }
+              break;
+            case UriMatchType.Never:
+            default:
+              break;
+          }
+        }
+      }
 
       return false;
     });
@@ -645,12 +688,9 @@ export class CipherService implements InternalCipherServiceAbstraction {
   }
 
   sortCiphersByLastUsed(a: CipherView, b: CipherView): number {
-    const aLastUsed =
-      a.localData && a.localData.lastUsedDate ? (a.localData.lastUsedDate as number) : null;
-    const bLastUsed =
-      b.localData && b.localData.lastUsedDate ? (b.localData.lastUsedDate as number) : null;
-
-    const bothNotNull = aLastUsed != null && bLastUsed != null;
+    const aLastUsed = this.getLastUsed(a);
+    const bLastUsed = this.getLastUsed(b);
+    const bothNotNull = this.ValidateLastUsedNotNull(aLastUsed, bLastUsed);
 
     if ((bothNotNull && aLastUsed > bLastUsed) || (aLastUsed != null && bLastUsed == null)) {
       return -1;
@@ -719,6 +759,14 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
     await this.clearCache();
     await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  private ValidateLastUsedNotNull(aLastUsed: number, bLastUsed: number) {
+    return aLastUsed != null && bLastUsed != null;
+  }
+
+  private getLastUsed(a: CipherView) {
+    return a.localData && a.localData.lastUsedDate ? (a.localData.lastUsedDate as number) : null;
   }
 
   private async encryptObjProperty<V extends View, D extends Domain>(
@@ -915,83 +963,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     this.sortedCiphersCache.clear();
   }
 
-  private getUriMatchType(request: UriMatchTypeRequest) {
-    if (
-      request.url != null &&
-      request.cipher.type === CipherType.Login &&
-      request.cipher.login.uris != null
-    ) {
-      for (let i = 0; i < request.cipher.login.uris.length; i++) {
-        const u = request.cipher.login.uris[i];
-        if (u.uri == null) {
-          continue;
-        }
-
-        const match = u.match == null ? request.defaultMatch : u.match;
-        if (
-          match == UriMatchType.Domain &&
-          request.domain != null &&
-          u.domain != null &&
-          request.matchingDomains.indexOf(u.domain) > -1
-        ) {
-          return this.isDomainMatchBlacklist(request.url, u);
-        }
-        switch (match) {
-          case UriMatchType.Domain:
-            if (
-              request.domain != null &&
-              u.domain != null &&
-              request.matchingDomains.indexOf(u.domain) > -1
-            ) {
-              return this.isDomainMatchBlacklist(request.url, u);
-            }
-            break;
-          case UriMatchType.Host: {
-            const urlHost = Utils.getHost(request.url);
-            if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-              return true;
-            }
-            break;
-          }
-          case UriMatchType.Exact:
-            if (request.url === u.uri) {
-              return true;
-            }
-            break;
-          case UriMatchType.StartsWith:
-            if (request.url.startsWith(u.uri)) {
-              return true;
-            }
-            break;
-          case UriMatchType.RegularExpression:
-            try {
-              const regex = new RegExp(u.uri, "i");
-              if (regex.test(request.url)) {
-                return true;
-              }
-            } catch (e) {
-              this.logService.error(e);
-            }
-            break;
-          case UriMatchType.Never:
-          default:
-            break;
-        }
-      }
-    }
-  }
-
-  private isDomainMatchBlacklist(url: string, loginView: LoginUriView): boolean {
-    if (DomainMatchBlacklist.has(loginView.domain)) {
-      const domainUrlHost = Utils.getHost(url);
-      if (!DomainMatchBlacklist.get(loginView.domain).has(domainUrlHost)) {
-        return true;
-      }
-    } else {
-      return true;
-    }
-  }
-
   private async getDefaultMatch(defaultMatch: UriMatchType) {
     if (defaultMatch == null) {
       defaultMatch = await this.stateService.getDefaultUriMatch();
@@ -1027,11 +998,3 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
   }
 }
-
-export type UriMatchTypeRequest = {
-  cipher: CipherView;
-  defaultMatch: UriMatchType;
-  url: string;
-  matchingDomains: any;
-  domain: string;
-};
