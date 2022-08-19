@@ -289,6 +289,12 @@ export class ApiService implements ApiServiceAbstraction {
     return new AuthRequestResponse(r);
   }
 
+  async getAuthResponse(id: string, accessCode: string): Promise<AuthRequestResponse> {
+    const path = `/auth-requests/${id}/response?code=${accessCode}`;
+    const r = await this.send("GET", path, null, false, true);
+    return new AuthRequestResponse(r);
+  }
+
   // Account APIs
 
   async getProfile(): Promise<ProfileResponse> {

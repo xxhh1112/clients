@@ -1,11 +1,16 @@
 import { DeviceRequest } from "../deviceRequest";
 
+import { TokenRequestPasswordless } from "./tokenRequestPasswordless";
 import { TokenRequestTwoFactor } from "./tokenRequestTwoFactor";
 
 export abstract class TokenRequest {
   protected device?: DeviceRequest;
 
-  constructor(protected twoFactor: TokenRequestTwoFactor, device?: DeviceRequest) {
+  constructor(
+    protected twoFactor: TokenRequestTwoFactor,
+    device?: DeviceRequest,
+    protected passwordless?: TokenRequestPasswordless
+  ) {
     this.device = device != null ? device : null;
   }
 
@@ -16,6 +21,10 @@ export abstract class TokenRequest {
 
   setTwoFactor(twoFactor: TokenRequestTwoFactor) {
     this.twoFactor = twoFactor;
+  }
+
+  setPasswordlessAccessCode(accessCode: string) {
+    this.passwordless.authRequest = accessCode;
   }
 
   protected toIdentityToken(clientId: string) {
@@ -30,6 +39,11 @@ export abstract class TokenRequest {
       obj.deviceName = this.device.name;
       // no push tokens for browser apps yet
       // obj.devicePushToken = this.device.pushToken;
+    }
+
+    //passswordless login
+    if (this.passwordless?.authRequest) {
+      obj.authRequest = this.passwordless.authRequest;
     }
 
     if (this.twoFactor.token && this.twoFactor.provider != null) {

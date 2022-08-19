@@ -1,6 +1,8 @@
 import { AuthenticationType } from "../../enums/authenticationType";
 import { TokenRequestTwoFactor } from "../request/identityToken/tokenRequestTwoFactor";
 
+import { TokenRequestPasswordless } from "./../request/identityToken/tokenRequestPasswordless";
+
 export class PasswordLogInCredentials {
   readonly type = AuthenticationType.Password;
 
@@ -8,7 +10,8 @@ export class PasswordLogInCredentials {
     public email: string,
     public masterPassword: string,
     public captchaToken?: string,
-    public twoFactor?: TokenRequestTwoFactor
+    public twoFactor?: TokenRequestTwoFactor,
+    public passwordless?: TokenRequestPasswordless
   ) {}
 }
 
