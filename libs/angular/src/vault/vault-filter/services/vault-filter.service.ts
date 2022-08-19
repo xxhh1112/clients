@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, from, mergeMap, Observable, of } from "rxjs";
+import { BehaviorSubject, firstValueFrom, from, mergeMap, Observable, of } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -8,6 +8,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/common/abstractions/vault-filter.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -23,7 +24,10 @@ import { OrganizationFilter } from "../models/organization-filter.model";
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService {
+export class VaultFilterService implements VaultFilterServiceAbstraction {
+  private _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
+  collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.asObservable();
+
   constructor(
     protected stateService: StateService,
     protected organizationService: OrganizationService,
@@ -36,10 +40,22 @@ export class VaultFilterService {
 
   async storeCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
     await this.stateService.setCollapsedGroupings(Array.from(collapsedFilterNodes));
+    this._collapsedFilterNodes.next(collapsedFilterNodes);
   }
 
   async buildCollapsedFilterNodes(): Promise<Set<string>> {
-    return new Set(await this.stateService.getCollapsedGroupings());
+    const nodes = new Set(await this.stateService.getCollapsedGroupings());
+    this._collapsedFilterNodes.next(nodes);
+    return nodes;
+  }
+
+  async ensureVaultFiltersAreExpanded() {
+    const collapsedFilterNodes = await this.buildCollapsedFilterNodes();
+    if (!collapsedFilterNodes.has("AllVaults")) {
+      return;
+    }
+    collapsedFilterNodes.delete("AllVaults");
+    await this.storeCollapsedFilterNodes(collapsedFilterNodes);
   }
 
   async buildNestedOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
@@ -94,11 +110,11 @@ export class VaultFilterService {
     );
   }
 
-  async buildCollections(organizationId?: string): Promise<Observable<TreeNode<CollectionFilter>>> {
+  async buildCollections(org?: Organization): Promise<Observable<TreeNode<CollectionFilter>>> {
     const storedCollections = await this.collectionService.getAllDecrypted();
     let collections: CollectionView[];
-    if (organizationId != null) {
-      collections = storedCollections.filter((c) => c.organizationId === organizationId);
+    if (org?.id != null) {
+      collections = storedCollections.filter((c) => c.organizationId === org?.id);
     } else {
       collections = storedCollections;
     }

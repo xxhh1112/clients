@@ -24,7 +24,6 @@ import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { VaultService } from "../../vault/shared/vault.service";
 import { EntityEventsComponent } from "../manage/entity-events.component";
 
 import { AddEditComponent } from "./add-edit.component";
@@ -75,7 +74,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
     private platformUtilsService: PlatformUtilsService,
-    private vaultService: VaultService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
@@ -101,7 +99,7 @@ export class VaultComponent implements OnInit, OnDestroy {
                 case "syncCompleted":
                   if (message.successfully) {
                     await Promise.all([
-                      this.vaultFilterComponent.reloadCollectionsAndFolders(),
+                      this.vaultFilterComponent.reloadCollections(),
                       this.ciphersComponent.refresh(),
                     ]);
                     this.changeDetectorRef.detectChanges();
@@ -113,7 +111,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
 
         if (this.firstLoaded) {
-          await this.vaultFilterComponent.reloadCollectionsAndFolders();
+          await this.vaultFilterComponent.reloadCollections();
         }
         this.firstLoaded = true;
 
@@ -168,10 +166,14 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.activeFilter.buildFilter()
       // vaultFilter.status === "trash"
     );
-    this.vaultFilterComponent.searchPlaceholder =
-      this.vaultService.calculateSearchBarLocalizationString(this.activeFilter);
+    // this.vaultFilterComponent.searchPlaceholder =
+    //   this.vaultService.calculateSearchBarLocalizationString(this.activeFilter);
     this.go();
   }
+
+  //  async applyOrganizationFilter(){
+  //   ServiceUtils.getTreeNodeObject(this.filterC)
+  //  }
 
   filterSearchText(searchText: string) {
     this.ciphersComponent.searchText = searchText;

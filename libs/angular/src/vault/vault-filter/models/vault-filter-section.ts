@@ -45,5 +45,5 @@ export type VaultFilterSection = {
 };
 
 export type VaultFilterList = {
-  [key in VaultFilterLabel]: VaultFilterSection;
+  [key in VaultFilterLabel]?: VaultFilterSection;
 };

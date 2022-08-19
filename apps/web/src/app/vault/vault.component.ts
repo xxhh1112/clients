@@ -8,17 +8,11 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
-import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
-import {
-  VaultFilterLabel,
-  VaultFilterList,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -31,7 +25,9 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
+import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
@@ -43,9 +39,6 @@ import { CiphersComponent } from "./ciphers.component";
 import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
-import { VaultService } from "./shared/vault.service";
-import { OrganizationOptionsComponent } from "./vault-filter/organization-filter/organization-options.component";
-import { VaultFilterService } from "./vault-filter/shared/vault-filter.service";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";
@@ -75,7 +68,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   showPremiumCallout = false;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
-  filters: VaultFilterList;
 
   constructor(
     private syncService: SyncService,
@@ -92,7 +84,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private stateService: StateService,
     private organizationService: OrganizationService,
-    private vaultService: VaultService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService,
     private vaultFilterService: VaultFilterService
@@ -113,8 +104,8 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
-      this.reloadCollections();
-      this.reloadOrganizations();
+      this.filterComponent.reloadCollections();
+      this.filterComponent.reloadOrganizations();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
       const cipherId = getCipherIdFromParams(params);
@@ -155,8 +146,8 @@ export class VaultComponent implements OnInit, OnDestroy {
             case "syncCompleted":
               if (message.successfully) {
                 await Promise.all([
-                  this.reloadCollections(),
-                  this.reloadOrganizations(),
+                  this.filterComponent.reloadCollections(),
+                  this.filterComponent.reloadOrganizations(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
                 this.changeDetectorRef.detectChanges();
@@ -166,107 +157,6 @@ export class VaultComponent implements OnInit, OnDestroy {
         });
       });
     });
-
-    const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
-    const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
-
-    this.filters = {
-      [VaultFilterLabel.OrganizationFilter]: {
-        data$: await this.vaultFilterService.buildNestedOrganizations(),
-        header: {
-          showHeader: !(singleOrgPolicy && personalVaultPolicy),
-          isSelectable: true,
-        },
-        action: this.applyOrganizationFilter,
-        options: !personalVaultPolicy
-          ? {
-              component: OrganizationOptionsComponent,
-            }
-          : null,
-        add: !singleOrgPolicy
-          ? {
-              text: "newOrganization",
-              route: "/create-organization",
-            }
-          : null,
-        divider: true,
-      },
-      [VaultFilterLabel.TypeFilter]: {
-        data$: await this.vaultFilterService.buildNestedTypes(
-          { id: "all", name: "allItems", type: "all", icon: "" },
-          [
-            {
-              id: "favorites",
-              name: this.i18nService.t("favorites"),
-              type: "favorites",
-              icon: "bwi-star",
-            },
-            {
-              id: "login",
-              name: this.i18nService.t("typeLogin"),
-              type: CipherType.Login,
-              icon: "bwi-globe",
-            },
-            {
-              id: "card",
-              name: this.i18nService.t("typeCard"),
-              type: CipherType.Card,
-              icon: "bwi-credit-card",
-            },
-            {
-              id: "identity",
-              name: this.i18nService.t("typeIdentity"),
-              type: CipherType.Identity,
-              icon: "bwi-id-card",
-            },
-            {
-              id: "note",
-              name: this.i18nService.t("typeSecureNote"),
-              type: CipherType.SecureNote,
-              icon: "bwi-sticky-note",
-            },
-          ]
-        ),
-        header: {
-          showHeader: true,
-          isSelectable: true,
-          defaultSelection: true,
-        },
-        action: this.applyTypeFilter,
-      },
-      [VaultFilterLabel.FolderFilter]: {
-        data$: await this.vaultFilterService.buildNestedFolders(),
-        header: {
-          showHeader: true,
-          isSelectable: false,
-        },
-        action: await this.applyFolderFilter,
-        edit: {
-          text: "editFolder",
-          action: this.editFolder,
-        },
-        add: {
-          text: "Add Folder",
-          action: this.addFolder,
-        },
-      },
-      [VaultFilterLabel.CollectionFilter]: {
-        data$: await this.vaultFilterService.buildCollections(),
-        header: {
-          showHeader: true,
-          isSelectable: true,
-        },
-        action: this.applyCollectionFilter,
-      },
-      [VaultFilterLabel.TrashFilter]: {
-        data$: this.vaultFilterService.buildTrash(),
-        header: {
-          showHeader: false,
-          isSelectable: true,
-        },
-        action: this.applyTypeFilter,
-      },
-    };
   }
 
   get isShowingCards() {
@@ -282,68 +172,21 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
-  async reloadOrganizations() {
-    this.filters.organizationFilter.data$ =
-      await this.vaultFilterService.buildNestedOrganizations();
-  }
-
-  async reloadCollections(orgNode?: TreeNode<OrganizationFilter>) {
-    if (!orgNode || orgNode.node.id === "AllVaults") {
-      this.activeFilter.selectedOrganizationNode = null;
-      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections();
-    } else {
-      this.activeFilter.selectedOrganizationNode = orgNode;
-      this.filters.collectionFilter.data$ = await this.vaultFilterService.buildCollections(
-        orgNode.node.id
-      );
-    }
-  }
-
-  applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
-    if (!orgNode.node.enabled) {
-      this.platformUtilsService.showToast(
-        "error",
-        null,
-        this.i18nService.t("disabledOrganizationFilterError")
-      );
-      return;
-    }
-    this.activeFilter.resetOrganization();
-    await this.reloadCollections(orgNode);
-
-    await this.vaultFilterService.ensureVaultFiltersAreExpanded();
-    await this.applyVaultFilter();
-  };
-
-  applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
-    this.activeFilter.resetFilter();
-    this.activeFilter.selectedCipherTypeNode = filterNode;
-    await this.applyVaultFilter();
-  };
-
-  applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
-    this.activeFilter.resetFilter();
-    this.activeFilter.selectedFolderNode = folderNode;
-    await this.applyVaultFilter();
-  };
-
-  applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
-    this.activeFilter.resetFilter();
-    this.activeFilter.selectedCollectionNode = collectionNode;
-    await this.applyVaultFilter();
-  };
-
-  private async applyVaultFilter() {
+  async applyVaultFilter(filter: VaultFilter) {
+    this.activeFilter = filter;
     this.ciphersComponent.showAddNew =
       this.activeFilter.selectedCipherTypeNode?.node.id !== "trash";
     await this.ciphersComponent.reload(
       this.activeFilter.buildFilter(),
       this.activeFilter.selectedCipherTypeNode?.node.id === "trash"
     );
-    this.filterComponent.searchPlaceholder = this.vaultService.calculateSearchBarLocalizationString(
-      this.activeFilter
-    );
     this.go();
+  }
+
+  async applyOrganizationFilter(orgId: string) {
+    const orgs = await firstValueFrom(this.filterComponent.filters.organizationFilter.data$);
+    const orgNode = ServiceUtils.getTreeNodeObject(orgs, orgId) as TreeNode<FolderFilter>;
+    this.filterComponent.filters?.organizationFilter?.action(orgNode);
   }
 
   addFolder = async (): Promise<void> => {

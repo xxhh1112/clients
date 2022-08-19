@@ -7,8 +7,10 @@
             <app-vault-filter
               #vaultFilter
               [activeFilter]="activeFilter"
-              [filters]="filters"
+              (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"
+              (onAddFolder)="addFolder()"
+              (onEditFolder)="editFolder($event)"
             ></app-vault-filter>
           </div>
         </div>

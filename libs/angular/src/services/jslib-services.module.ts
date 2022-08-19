@@ -52,6 +52,7 @@ import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/comm
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
+import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/common/abstractions/vault-filter.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Account } from "@bitwarden/common/models/domain/account";
@@ -99,6 +100,7 @@ import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFu
 import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
+import { VaultFilterService } from "../vault/vault-filter/services/vault-filter.service";
 
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
@@ -512,6 +514,19 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       provide: UserVerificationApiServiceAbstraction,
       useClass: UserVerificationApiService,
       deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: VaultFilterServiceAbstraction,
+      useClass: VaultFilterService,
+      deps: [
+        StateServiceAbstraction,
+        OrganizationServiceAbstraction,
+        FolderServiceAbstraction,
+        CipherServiceAbstraction,
+        CollectionServiceAbstraction,
+        PolicyServiceAbstraction,
+        I18nServiceAbstraction,
+      ],
     },
   ],
 })
