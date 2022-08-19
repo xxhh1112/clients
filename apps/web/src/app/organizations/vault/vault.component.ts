@@ -52,8 +52,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   eventsModalRef: ViewContainerRef;
 
   organization: Organization;
-  collectionId: string = null;
-  type: CipherType = null;
+  // collectionId: string = null;
+  // type: CipherType = null;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
@@ -151,29 +151,23 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   get deleted(): boolean {
-    // return this.activeFilter.status === "trash";
-    return false;
+    return this.activeFilter.selectedCipherTypeNode?.node.type === "trash";
   }
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
-  async applyVaultFilter(vaultFilter: VaultFilter) {
-    // this.ciphersComponent.showAddNew = vaultFilter.status !== "trash";
-    this.activeFilter = vaultFilter;
+  async applyVaultFilter(filter: VaultFilter) {
+    this.activeFilter = filter;
+    this.ciphersComponent.showAddNew =
+      this.activeFilter.selectedCipherTypeNode?.node.id !== "trash";
     await this.ciphersComponent.reload(
-      this.activeFilter.buildFilter()
-      // vaultFilter.status === "trash"
+      this.activeFilter.buildFilter(),
+      this.activeFilter.selectedCipherTypeNode?.node.id === "trash"
     );
-    // this.vaultFilterComponent.searchPlaceholder =
-    //   this.vaultService.calculateSearchBarLocalizationString(this.activeFilter);
     this.go();
   }
-
-  //  async applyOrganizationFilter(){
-  //   ServiceUtils.getTreeNodeObject(this.filterC)
-  //  }
 
   filterSearchText(searchText: string) {
     this.ciphersComponent.searchText = searchText;
@@ -213,10 +207,10 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.collectionsModalRef,
       (comp) => {
         if (this.organization.canEditAnyCollection) {
-          comp.collectionIds = cipher.collectionIds;
-          comp.collections = this.vaultFilterComponent.collections.fullList.filter(
-            (c) => !c.readOnly && c.id != null
-          );
+          // comp.collectionIds = cipher.collectionIds;
+          // comp.collections = this.vaultFilterComponent.collections.fullList.filter(
+          //   (c) => !c.readOnly && c.id != null
+          // );
         }
         comp.organization = this.organization;
         comp.cipherId = cipher.id;
@@ -231,15 +225,17 @@ export class VaultComponent implements OnInit, OnDestroy {
   async addCipher() {
     const component = await this.editCipher(null);
     component.organizationId = this.organization.id;
-    component.type = this.type;
-    if (this.organization.canEditAnyCollection) {
-      component.collections = this.vaultFilterComponent.collections.fullList.filter(
-        (c) => !c.readOnly && c.id != null
-      );
+    if (this.activeFilter.selectedCipherTypeNode.node.type in CipherType) {
+      component.type = this.activeFilter.selectedCipherTypeNode?.node.type as CipherType;
     }
-    if (this.collectionId != null) {
-      component.collectionIds = [this.collectionId];
-    }
+    // if (this.organization.canEditAnyCollection) {
+    //   component.collections = this.vaultFilterComponent.collections.fullList.filter(
+    //     (c) => !c.readOnly && c.id != null
+    //   );
+    // }
+    // if (this.collectionId != null) {
+    //   component.collectionIds = [this.collectionId];
+    // }
   }
 
   async editCipher(cipher: CipherView) {
@@ -288,9 +284,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.cloneMode = true;
     component.organizationId = this.organization.id;
     if (this.organization.canEditAnyCollection) {
-      component.collections = this.vaultFilterComponent.collections.fullList.filter(
-        (c) => !c.readOnly && c.id != null
-      );
+      // component.collections = this.vaultFilterComponent.collections.fullList.filter(
+      //   (c) => !c.readOnly && c.id != null
+      // );
     }
     // Regardless of Admin state, the collection Ids need to passed manually as they are not assigned value
     // in the add-edit componenet

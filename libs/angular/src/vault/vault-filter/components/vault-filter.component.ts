@@ -1,15 +1,10 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Observable } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
-import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 import { OrganizationFilter } from "../models/organization-filter.model";
 import { VaultFilterList } from "../models/vault-filter-section";
 import { VaultFilter } from "../models/vault-filter.model";
@@ -22,9 +17,6 @@ export class VaultFilterComponent implements OnInit {
 
   isLoaded = false;
   collapsedFilterNodes: Set<string>;
-  organizations: Organization[];
-  collections: DynamicTreeNode<CollectionView>;
-  folders$: Observable<DynamicTreeNode<FolderView>>;
 
   constructor(
     protected vaultFilterService: VaultFilterService,
