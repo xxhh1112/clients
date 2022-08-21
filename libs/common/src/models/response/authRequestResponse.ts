@@ -10,6 +10,7 @@ export class AuthRequestResponse extends BaseResponse {
   key: string;
   masterPasswordHash: string;
   creationDate: string;
+  requestApproved: boolean;
 
   constructor(response: any) {
     super(response);
@@ -20,5 +21,6 @@ export class AuthRequestResponse extends BaseResponse {
     this.key = this.getResponseProperty("Key");
     this.masterPasswordHash = this.getResponseProperty("MaterPasswordHash");
     this.creationDate = this.getResponseProperty("CreationDate");
+    this.requestApproved = this.getResponseProperty("requestApproved");
   }
 }

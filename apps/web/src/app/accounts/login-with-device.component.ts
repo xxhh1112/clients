@@ -28,6 +28,7 @@ import { AuthRequestResponse } from "@bitwarden/common/models/response/authReque
 export class LoginWithDeviceComponent extends CaptchaProtectedComponent implements OnInit {
   fingerPrint: string;
   email: string;
+  resendNotification = false;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
@@ -60,6 +61,7 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
   async ngOnInit() {
     if (!this.email) {
       this.router.navigate(["/login"]);
+      return;
     }
 
     this.startPasswordlessLogin();
@@ -90,22 +92,37 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
 
     //replace with signalR
     //delay and get response
+    //after request has been posted the show loader and hide resend notification
     defer(() =>
       from(this.apiService.getAuthResponse(reqResponse.id, accessCode)).pipe(delay(2000))
     ).subscribe({
       next: (res: AuthRequestResponse) => {
         response = res;
+        if (!response.requestApproved) {
+          this.resendNotification = true;
+        } else {
+          this.confirmResponse(response, accessCode, keypair[1]);
+        }
       },
-      error: (error) => this.logService.error(error),
+      error: (error) => {
+        this.resendNotification = true;
+        this.logService.error(error);
+      },
     });
+  }
 
+  private async confirmResponse(
+    response: AuthRequestResponse,
+    accessCode: string,
+    privateKeyVal: ArrayBuffer
+  ) {
     if (response) {
       await this.setupCaptcha();
 
       // const decKey = await this.cryptoService.rsaDecrypt(response.key, keypair[1]);
       const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
         response.masterPasswordHash,
-        keypair[1]
+        privateKeyVal
       );
 
       try {

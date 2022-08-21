@@ -26,8 +26,8 @@
         <code class="">{{ fingerPrint }}</code>
       </div>
 
-      <div class="tw-my-10">
-        <a [routerLink]="[]" (click)="startPasswordlessLogin()">{{
+      <div class="tw-my-10" *ngIf="resendNotification">
+        <a [routerLink]="[]" disabled="true" (click)="startPasswordlessLogin()">{{
           "resendNotification" | i18n
         }}</a>
       </div>
