@@ -92,7 +92,7 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
 
     //replace with signalR
     //delay and get response
-    //after request has been posted the show loader and hide resend notification
+    //after request has been posted resend notification
     defer(() =>
       from(this.apiService.getAuthResponse(reqResponse.id, accessCode)).pipe(delay(2000))
     ).subscribe({
