@@ -25,6 +25,8 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   }
 
   async buildAllFilters() {
+    this.vaultFilterService.updateOrganizationFilter(this.organization);
+
     this.filters = {
       [VaultFilterLabel.TypeFilter]: {
         data$: await this.vaultFilterService.buildNestedTypes(
@@ -70,7 +72,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         action: this.applyTypeFilter,
       },
       [VaultFilterLabel.CollectionFilter]: {
-        data$: await this.vaultFilterService.buildCollections(this.organization),
+        data$: await this.vaultFilterService.nestedCollections$,
         header: {
           showHeader: true,
           isSelectable: true,
@@ -78,7 +80,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         action: this.applyCollectionFilter,
       },
       [VaultFilterLabel.TrashFilter]: {
-        data$: this.vaultFilterService.buildTrash(),
+        data$: this.vaultFilterService.buildNestedTrash(),
         header: {
           showHeader: false,
           isSelectable: true,

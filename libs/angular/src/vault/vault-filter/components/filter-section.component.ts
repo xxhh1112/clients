@@ -59,9 +59,9 @@ export class FilterSectionComponent implements OnInit {
       return this.activeFilter.selectedOrganizationNode == filterNode;
     }
     return (
-      this.activeFilter.selectedCipherTypeNode == filterNode ||
-      this.activeFilter.selectedFolderNode == filterNode ||
-      this.activeFilter.selectedCollectionNode == filterNode
+      this.activeFilter.selectedCipherTypeNode?.node.id === filterNode?.node.id ||
+      this.activeFilter.selectedFolderNode?.node.id === filterNode?.node.id ||
+      this.activeFilter.selectedCollectionNode?.node.id === filterNode?.node.id
     );
   }
 

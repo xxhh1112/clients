@@ -1,5 +1,15 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, firstValueFrom, from, mergeMap, Observable, of } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatestWith,
+  firstValueFrom,
+  mergeMap,
+  Observable,
+  of,
+  Subject,
+  takeUntil,
+  map,
+} from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -25,8 +35,33 @@ const NestingDelimiter = "/";
 
 @Injectable()
 export class VaultFilterService implements VaultFilterServiceAbstraction {
-  private _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
+  protected _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
   collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.asObservable();
+  protected _filteredFolders = new BehaviorSubject<FolderView[]>(null);
+  filteredFolders$: Observable<FolderView[]> = this._filteredFolders.asObservable();
+  protected _filteredCollections = new BehaviorSubject<CollectionView[]>(null);
+  filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
+
+  protected _organizationFilter = new BehaviorSubject<Organization>(null);
+
+  protected destroy$: Subject<void> = new Subject<void>();
+
+  nestedFolders$: Observable<TreeNode<FolderFilter>> = this.filteredFolders$.pipe(
+    map((folders) => {
+      return this.getAllNestedFolders(folders);
+    })
+  );
+  nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
+    map((collections) => {
+      return collections ? this.getAllNestedCollections(collections) : null;
+    })
+  );
+
+  // Fake collections observable
+  // TODO: Remove once collections is refactored with observables and use Collection Service
+  protected collectionViews$: BehaviorSubject<CollectionView[]> = new BehaviorSubject<
+    CollectionView[]
+  >(null);
 
   constructor(
     protected stateService: StateService,
@@ -36,7 +71,43 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     protected collectionService: CollectionService,
     protected policyService: PolicyService,
     protected i18nService: I18nService
-  ) {}
+  ) {
+    this.loadSubscriptions();
+  }
+
+  protected loadSubscriptions() {
+    this.folderService.folderViews$
+      .pipe(
+        combineLatestWith(this._organizationFilter),
+        mergeMap(([folders, org]) => {
+          return this.filterFolders(folders, org);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(this._filteredFolders);
+
+    // TODO: Use collectionService once collections is refactored
+    this.collectionViews$
+      .pipe(
+        combineLatestWith(this._organizationFilter),
+        mergeMap(([collections, org]) => {
+          return this.filterCollections(collections, org);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(this._filteredCollections);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // Helper method to update collections and update fake observable
+  // TODO: Remove once collections is refactored with observables
+  async updateCollections() {
+    this.collectionViews$.next(await this.collectionService.getAllDecrypted());
+  }
 
   async storeCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
     await this.stateService.setCollapsedGroupings(Array.from(collapsedFilterNodes));
@@ -47,6 +118,14 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     const nodes = new Set(await this.stateService.getCollapsedGroupings());
     this._collapsedFilterNodes.next(nodes);
     return nodes;
+  }
+
+  updateOrganizationFilter(organization: Organization) {
+    if (organization.id != "AllVaults") {
+      this._organizationFilter.next(organization);
+    } else {
+      this._organizationFilter.next(null);
+    }
   }
 
   async ensureVaultFiltersAreExpanded() {
@@ -88,39 +167,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     return of(headNode);
   }
 
-  buildNestedFolders(organizationId?: string): Observable<TreeNode<FolderFilter>> {
-    const transformation = async (storedFolders: FolderView[]) => {
-      let folders: FolderView[];
-      if (organizationId != null) {
-        const ciphers = await this.cipherService.getAllDecrypted();
-        const orgCiphers = ciphers.filter((c) => c.organizationId == organizationId);
-        folders = storedFolders.filter(
-          (f) =>
-            orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
-            ciphers.filter((c) => c.folderId == f.id).length < 1
-        );
-      } else {
-        folders = storedFolders;
-      }
-      return await this.getAllFoldersNested(folders);
-    };
-
-    return this.folderService.folderViews$.pipe(
-      mergeMap((folders) => from(transformation(folders)))
-    );
-  }
-
-  async buildCollections(org?: Organization): Promise<Observable<TreeNode<CollectionFilter>>> {
-    const storedCollections = await this.collectionService.getAllDecrypted();
-    let collections: CollectionView[];
-    if (org?.id != null) {
-      collections = storedCollections.filter((c) => c.organizationId === org?.id);
-    } else {
-      collections = storedCollections;
-    }
-    return of(await this.collectionService.getAllNested(collections));
-  }
-
   buildNestedTypes(
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
@@ -133,7 +179,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     return of(headNode);
   }
 
-  buildTrash() {
+  buildNestedTrash(): Observable<TreeNode<CipherTypeFilter>> {
     const head: CipherTypeFilter = {
       id: "headTrash",
       name: "HeadTrash",
@@ -154,15 +200,74 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     return of(headNode);
   }
 
-  async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+  // TODO: Use observable once collections is refactored
+  async getNestedCollection(id: string): Promise<TreeNode<CollectionFilter>> {
+    const collections = await this.getAllNestedCollections(
+      await this.collectionService.getAllDecrypted()
+    );
+    return ServiceUtils.getTreeNodeObject(collections, id) as TreeNode<CollectionFilter>;
   }
 
-  async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
+  protected async filterCollections(
+    storedCollections: CollectionView[],
+    org?: Organization
+  ): Promise<CollectionView[]> {
+    let collections: CollectionView[];
+    if (org?.id != null) {
+      collections = storedCollections.filter((c) => c.organizationId === org?.id);
+    } else {
+      collections = storedCollections;
+    }
+    return collections;
   }
 
-  protected async getAllFoldersNested(folders: FolderView[]): Promise<TreeNode<FolderFilter>> {
+  protected getAllNestedCollections(collections: CollectionView[]): TreeNode<CollectionFilter> {
+    const nodes: TreeNode<CollectionFilter>[] = [];
+    collections.forEach((c) => {
+      const collectionCopy = new CollectionView() as CollectionFilter;
+      collectionCopy.id = c.id;
+      collectionCopy.organizationId = c.organizationId;
+      collectionCopy.icon = "bwi-collection";
+      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
+    });
+
+    const head = new CollectionView() as CollectionFilter;
+    const headNode = new TreeNode<CollectionFilter>(head, null, "collections", "AllCollections");
+    nodes.forEach((n) => {
+      n.parent = head;
+      headNode.children.push(n);
+    });
+    return headNode;
+  }
+
+  async getNestedFolder(id: string): Promise<TreeNode<FolderFilter>> {
+    const folders = await this.getAllNestedFolders(
+      await firstValueFrom(this.folderService.folderViews$)
+    );
+    return ServiceUtils.getTreeNodeObject(folders, id) as TreeNode<FolderFilter>;
+  }
+
+  protected async filterFolders(
+    storedFolders: FolderView[],
+    org?: Organization
+  ): Promise<FolderView[]> {
+    let folders: FolderView[];
+    if (org?.id != null) {
+      const ciphers = await this.cipherService.getAllDecrypted();
+      const orgCiphers = ciphers.filter((c) => c.organizationId == org?.id);
+      folders = storedFolders.filter(
+        (f) =>
+          orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
+          ciphers.filter((c) => c.folderId == f.id).length < 1
+      );
+    } else {
+      folders = storedFolders;
+    }
+    return folders;
+  }
+
+  protected getAllNestedFolders(folders: FolderView[]): TreeNode<FolderFilter> {
     const nodes: TreeNode<FolderFilter>[] = [];
     folders.forEach((f) => {
       const folderCopy = new FolderView() as FolderFilter;
@@ -182,10 +287,11 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     return headNode;
   }
 
-  async getFolderNested(id: string): Promise<TreeNode<FolderFilter>> {
-    const folders = await this.getAllFoldersNested(
-      await firstValueFrom(this.folderService.folderViews$)
-    );
-    return ServiceUtils.getTreeNodeObject(folders, id) as TreeNode<FolderFilter>;
+  async checkForSingleOrganizationPolicy(): Promise<boolean> {
+    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+  }
+
+  async checkForPersonalOwnershipPolicy(): Promise<boolean> {
+    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
   }
 }

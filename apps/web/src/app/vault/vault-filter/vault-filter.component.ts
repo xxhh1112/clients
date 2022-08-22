@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "@bitwarden/angular/vault/vault-filter/components/vault-filter.component";
 import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
@@ -12,6 +13,8 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { OrganizationOptionsComponent } from "./organization-filter/organization-options.component";
 
@@ -27,12 +30,23 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   searchPlaceholder = this.calculateSearchBarLocalizationString(this.activeFilter);
   searchText = "";
 
+  private currentFilterFolders: FolderView[] = [];
+  private currentFilterCollections: CollectionView[] = [];
+
   constructor(
     vaultFilterService: VaultFilterService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService
   ) {
     super(vaultFilterService, i18nService, platformUtilsService);
+
+    this.vaultFilterService.filteredFolders$.subscribe((folders) => {
+      this.currentFilterFolders = folders;
+    });
+
+    this.vaultFilterService.filteredCollections$.subscribe((collections) => {
+      this.currentFilterCollections = collections;
+    });
   }
 
   async ngOnInit() {
@@ -58,9 +72,14 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
       );
       return;
     }
-    const filter = this.activeFilter;
+    let filter = this.activeFilter;
     filter.resetOrganization();
+    if (orgNode.node.id !== "AllVaults") {
+      filter.selectedOrganizationNode = orgNode;
+    }
+    this.vaultFilterService.updateOrganizationFilter(orgNode.node);
     await this.reloadCollections(orgNode);
+    filter = await this.pruneInvalidatedFilterSelections(filter);
     await this.vaultFilterService.ensureVaultFiltersAreExpanded();
     await this.applyVaultFilter(filter);
   };
@@ -93,6 +112,44 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   editFolder = async (folder: FolderFilter): Promise<void> => {
     this.onEditFolder.emit(folder);
   };
+
+  protected async pruneInvalidatedFilterSelections(filter: VaultFilter): Promise<VaultFilter> {
+    filter = await this.pruneInvalidFolderSelection(filter);
+    filter = await this.pruneInvalidCollectionSelection(filter);
+    return filter;
+  }
+
+  protected async pruneInvalidFolderSelection(filter: VaultFilter): Promise<VaultFilter> {
+    if (filter.selectedFolderNode) {
+      if (
+        !this.currentFilterFolders.find(
+          (f) => f.id === this.activeFilter.selectedFolderNode?.node.id
+        )
+      ) {
+        filter.resetFilter();
+        filter.selectedCipherTypeNode = (await firstValueFrom(
+          this.filters?.typeFilter.data$
+        )) as TreeNode<CipherTypeFilter>;
+      }
+    }
+    return filter;
+  }
+
+  protected async pruneInvalidCollectionSelection(filter: VaultFilter): Promise<VaultFilter> {
+    if (filter.selectedCollectionNode) {
+      if (
+        !this.currentFilterCollections.find(
+          (f) => f.id === this.activeFilter.selectedCollectionNode?.node.id
+        )
+      ) {
+        filter.resetFilter();
+        filter.selectedCipherTypeNode = (await firstValueFrom(
+          this.filters?.typeFilter.data$
+        )) as TreeNode<CipherTypeFilter>;
+      }
+    }
+    return filter;
+  }
 
   calculateSearchBarLocalizationString(vaultFilter: VaultFilter): string {
     if (vaultFilter.selectedCipherTypeNode?.node.type === "favorites") {
@@ -192,7 +249,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         action: this.applyTypeFilter,
       },
       [VaultFilterLabel.FolderFilter]: {
-        data$: await this.vaultFilterService.buildNestedFolders(),
+        data$: await this.vaultFilterService.nestedFolders$,
         header: {
           showHeader: true,
           isSelectable: false,
@@ -208,7 +265,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         },
       },
       [VaultFilterLabel.CollectionFilter]: {
-        data$: await this.vaultFilterService.buildCollections(),
+        data$: await this.vaultFilterService.nestedCollections$,
         header: {
           showHeader: true,
           isSelectable: true,
@@ -216,7 +273,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         action: this.applyCollectionFilter,
       },
       [VaultFilterLabel.TrashFilter]: {
-        data$: this.vaultFilterService.buildTrash(),
+        data$: this.vaultFilterService.buildNestedTrash(),
         header: {
           showHeader: false,
           isSelectable: true,

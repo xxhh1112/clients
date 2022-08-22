@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { of } from "rxjs";
+import { BehaviorSubject, combineLatestWith, mergeMap, switchMap, takeUntil } from "rxjs";
 
 import { VaultFilterService as BaseVaultFilterService } from "@bitwarden/angular/vault/vault-filter/services/vault-filter.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -18,6 +18,8 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
+  protected collectionViews$: BehaviorSubject<CollectionView[]>;
+
   constructor(
     stateService: StateService,
     organizationService: OrganizationService,
@@ -39,9 +41,50 @@ export class VaultFilterService extends BaseVaultFilterService {
     );
   }
 
-  async buildCollections(org?: Organization) {
+  protected loadSubscriptions() {
+    this.folderService.folderViews$
+      .pipe(
+        combineLatestWith(this._organizationFilter),
+        mergeMap(async ([folders, org]) => {
+          return this.filterFolders(folders, org);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(this._filteredFolders);
+
+    this._organizationFilter
+      .pipe(
+        switchMap((org) => {
+          return this.loadCollections(org);
+        })
+      )
+      .subscribe(this.collectionViews$);
+
+    this.collectionViews$
+      .pipe(
+        combineLatestWith(this._organizationFilter),
+        mergeMap(async ([collections, org]) => {
+          if (org?.permissions && org?.canEditAnyCollection) {
+            return collections;
+          } else {
+            await this.filterCollections(collections, org);
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(this._filteredCollections);
+  }
+
+  protected async loadCollections(org: Organization) {
+    if (org?.permissions && org?.canEditAnyCollection) {
+      await this.loadAdminCollections(org);
+    } else {
+      return await this.collectionService.getAllDecrypted();
+    }
+  }
+
+  async loadAdminCollections(org: Organization): Promise<CollectionView[]> {
     let collections: CollectionView[] = [];
-    // Build admin collections
     if (org?.permissions && org?.canEditAnyCollection) {
       const collectionResponse = await this.apiService.getCollections(org.id);
       if (collectionResponse?.data != null && collectionResponse.data.length) {
@@ -56,16 +99,6 @@ export class VaultFilterService extends BaseVaultFilterService {
       noneCollection.organizationId = org.id;
       collections.push(noneCollection);
     }
-    // Build regular collections
-    else {
-      const storedCollections = await this.collectionService.getAllDecrypted();
-      if (org?.id != null) {
-        collections = storedCollections.filter((c) => c.organizationId === org.id);
-      } else {
-        collections = storedCollections;
-      }
-    }
-
-    return of(await this.collectionService.getAllNested(collections));
+    return collections;
   }
 }
