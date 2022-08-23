@@ -16,7 +16,7 @@ import {
   SyncCipherNotification,
   SyncFolderNotification,
   SyncSendNotification,
-} from "../models/response/notificationResponse";
+ AuthRequestPushNotification } from "../models/response/notificationResponse";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
   private signalrConnection: signalR.HubConnection;
@@ -182,6 +182,11 @@ export class NotificationsService implements NotificationsServiceAbstraction {
         break;
       case NotificationType.SyncSendDelete:
         await this.syncService.syncDeleteSend(notification.payload as SyncSendNotification);
+        break;
+      case NotificationType.AuthRequestResponse:
+        await this.authService.authResponsePushNotifiction(
+          notification.payload as AuthRequestPushNotification
+        );
         break;
       default:
         break;

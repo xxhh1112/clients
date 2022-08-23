@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { defer, delay, from } from "rxjs";
 
 import { CaptchaProtectedComponent } from "@bitwarden/angular/components/captchaProtected.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -56,6 +55,11 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
     if (navigation) {
       this.email = navigation.extras?.state?.email;
     }
+
+    //gets signalR push notification
+    this.authService.getPushNotifcationObs().subscribe(() => {
+      this.confirmResponse(null, null, null);
+    });
   }
 
   async ngOnInit() {
@@ -75,7 +79,7 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
     const deviceIdentifier = await this.appIdService.getAppId();
     const publicKey = Utils.fromBufferToB64(keypair[0]);
     const accessCode = await this.PasswordGenerationService.generatePassword({ length: 25 });
-    let response: AuthRequestResponse = null;
+    // let response: AuthRequestResponse = null;
 
     const request = new PasswordlessCreateAuthRequest(
       this.email,
@@ -88,27 +92,11 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
 
     this.fingerPrint = fingerprint;
 
-    const reqResponse = await this.apiService.postAuthRequest(request);
+    await this.apiService.postAuthRequest(request);
 
-    //replace with signalR
-    //delay and get response
-    //after request has been posted resend notification
-    defer(() =>
-      from(this.apiService.getAuthResponse(reqResponse.id, accessCode)).pipe(delay(2000))
-    ).subscribe({
-      next: (res: AuthRequestResponse) => {
-        response = res;
-        if (!response.requestApproved) {
-          this.resendNotification = true;
-        } else {
-          this.confirmResponse(response, accessCode, keypair[1]);
-        }
-      },
-      error: (error) => {
-        this.resendNotification = true;
-        this.logService.error(error);
-      },
-    });
+    setTimeout(() => {
+      this.resendNotification = true;
+    }, 2000);
   }
 
   private async confirmResponse(

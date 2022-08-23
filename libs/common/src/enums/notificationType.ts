@@ -17,4 +17,7 @@ export enum NotificationType {
   SyncSendCreate = 12,
   SyncSendUpdate = 13,
   SyncSendDelete = 14,
+
+  AuthRequest,
+  AuthRequestResponse,
 }

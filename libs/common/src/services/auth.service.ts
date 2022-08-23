@@ -1,3 +1,5 @@
+import { Observable, Subject } from "rxjs";
+
 import { ApiService } from "../abstractions/api.service";
 import { AppIdService } from "../abstractions/appId.service";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
@@ -28,6 +30,7 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
 import { PreloginRequest } from "../models/request/preloginRequest";
 import { ErrorResponse } from "../models/response/errorResponse";
+import { AuthRequestPushNotification } from "../models/response/notificationResponse";
 
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
 
@@ -44,6 +47,8 @@ export class AuthService implements AuthServiceAbstraction {
 
   private logInStrategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
   private sessionTimeout: any;
+
+  private pushNotificationSubject = new Subject<string>();
 
   constructor(
     protected cryptoService: CryptoService,
@@ -200,6 +205,15 @@ export class AuthService implements AuthServiceAbstraction {
       }
     }
     return this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
+  }
+
+  async authResponsePushNotifiction(notification: AuthRequestPushNotification): Promise<any> {
+    //pass id as subject
+    this.pushNotificationSubject.next(notification.id);
+  }
+
+  getPushNotifcationObs(): Observable<any> {
+    return this.pushNotificationSubject.asObservable();
   }
 
   private saveState(strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy) {
