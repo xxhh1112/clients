@@ -1,3 +1,5 @@
+import { BehaviorSubject } from "rxjs";
+
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -35,6 +37,12 @@ const DomainMatchBlacklist = new Map<string, Set<string>>([
 ]);
 
 export class CipherService implements InternalCipherServiceAbstraction {
+  protected _ciphers: BehaviorSubject<Cipher[]> = new BehaviorSubject([]);
+  protected _cipherViews: BehaviorSubject<CipherView[]> = new BehaviorSubject([]);
+
+  ciphers$ = this._ciphers.asObservable();
+  cipherViews$ = this._cipherViews.asObservable();
+
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
     this.sortCiphersByLastUsed
   );
@@ -46,20 +54,39 @@ export class CipherService implements InternalCipherServiceAbstraction {
     private searchService: () => SearchService,
     private logService: LogService,
     private stateService: StateService
-  ) {}
+  ) {
+    this.stateService.activeAccountUnlocked$.subscribe(async (unlocked) => {
+      if ((Utils.global as any).bitwardenContainerService == null) {
+        return;
+      }
+
+      if (!unlocked) {
+        this._ciphers.next([]);
+        this._cipherViews.next([]);
+        return;
+      }
+
+      const data = await this.stateService.getEncryptedCiphers();
+
+      await this.updateObservables(data);
+    });
+  }
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
     collectionIds: string[]
   ) => Promise<any>;
 
+  // TODO Cy: This should probably totally go away.
   async getDecryptedCipherCache(): Promise<CipherView[]> {
     const decryptedCiphers = await this.stateService.getDecryptedCiphers();
     return decryptedCiphers;
   }
 
+  // TODO Cy: This should probably totally go away.
   async setDecryptedCipherCache(value: CipherView[]) {
     await this.stateService.setDecryptedCiphers(value);
+    // TODO Cy: This should be implemented by subscribing to the decrypted ciphers observable.
     if (this.searchService != null) {
       if (value == null) {
         this.searchService().clearIndex();
@@ -80,110 +107,76 @@ export class CipherService implements InternalCipherServiceAbstraction {
   ): Promise<Cipher> {
     // Adjust password history
     if (model.id != null) {
-      originalCipher = await this.getOriginalCiperIfNull(originalCipher, model);
+      if (originalCipher == null) {
+        originalCipher = await this.get(model.id);
+      }
       if (originalCipher != null) {
         const existingCipher = await originalCipher.decrypt();
         model.passwordHistory = existingCipher.passwordHistory || [];
-        this.getPasswordHistory(model, existingCipher);
-        this.filterExistingCipherFields(existingCipher, model);
+        if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
+          if (
+            existingCipher.login.password != null &&
+            existingCipher.login.password !== "" &&
+            existingCipher.login.password !== model.login.password
+          ) {
+            const ph = new PasswordHistoryView();
+            ph.password = existingCipher.login.password;
+            ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
+            model.passwordHistory.splice(0, 0, ph);
+          } else {
+            model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
+          }
+        }
+        if (existingCipher.hasFields) {
+          const existingHiddenFields = existingCipher.fields.filter(
+            (f) =>
+              f.type === FieldType.Hidden &&
+              f.name != null &&
+              f.name !== "" &&
+              f.value != null &&
+              f.value !== ""
+          );
+          const hiddenFields =
+            model.fields == null
+              ? []
+              : model.fields.filter(
+                  (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
+                );
+          existingHiddenFields.forEach((ef) => {
+            const matchedField = hiddenFields.find((f) => f.name === ef.name);
+            if (matchedField == null || matchedField.value !== ef.value) {
+              const ph = new PasswordHistoryView();
+              ph.password = ef.name + ": " + ef.value;
+              ph.lastUsedDate = new Date();
+              model.passwordHistory.splice(0, 0, ph);
+            }
+          });
+        }
       }
-      this.getlastFivePasswordhistory(model);
+      if (model.passwordHistory != null && model.passwordHistory.length === 0) {
+        model.passwordHistory = null;
+      } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
+        // only save last 5 history
+        model.passwordHistory = model.passwordHistory.slice(0, 5);
+      }
     }
 
-    const cipher = this.mapCipherObject(model);
+    const cipher = new Cipher();
+    cipher.id = model.id;
+    cipher.folderId = model.folderId;
+    cipher.favorite = model.favorite;
+    cipher.organizationId = model.organizationId;
+    cipher.type = model.type;
+    cipher.collectionIds = model.collectionIds;
+    cipher.revisionDate = model.revisionDate;
+    cipher.reprompt = model.reprompt;
 
-    key = await this.getOrganizationKey(key, cipher);
-
-    await this.encryptCipher(model, cipher, key);
-
-    return cipher;
-  }
-
-  private async getOrganizationKey(key: SymmetricCryptoKey, cipher: Cipher) {
     if (key == null && cipher.organizationId != null) {
       key = await this.cryptoService.getOrgKey(cipher.organizationId);
       if (key == null) {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-    return key;
-  }
-
-  private getlastFivePasswordhistory(model: CipherView) {
-    if (model.passwordHistory != null && model.passwordHistory.length === 0) {
-      model.passwordHistory = null;
-    } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
-      // only save last 5 history
-      model.passwordHistory = model.passwordHistory.slice(0, 5);
-    }
-  }
-
-  private getPasswordHistory(model: CipherView, existingCipher: CipherView) {
-    if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
-      if (
-        existingCipher.login.password != null &&
-        existingCipher.login.password !== "" &&
-        existingCipher.login.password !== model.login.password
-      ) {
-        const ph = new PasswordHistoryView();
-        ph.password = existingCipher.login.password;
-        ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
-        model.passwordHistory.splice(0, 0, ph);
-      } else {
-        model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
-      }
-    }
-  }
-
-  private async getOriginalCiperIfNull(originalCipher: Cipher, model: CipherView) {
-    if (originalCipher == null) {
-      originalCipher = await this.get(model.id);
-    }
-    return originalCipher;
-  }
-
-  private filterExistingCipherFields(existingCipher: CipherView, model: CipherView) {
-    if (existingCipher.hasFields) {
-      const existingHiddenFields = this.getExistingHiddenFields(existingCipher);
-      const hiddenFields = this.getHiddenField(model);
-      this.PasswordHistoryForMatchedField(existingHiddenFields, hiddenFields, model);
-    }
-  }
-
-  private PasswordHistoryForMatchedField(
-    existingHiddenFields: FieldView[],
-    hiddenFields: FieldView[],
-    model: CipherView
-  ) {
-    existingHiddenFields.forEach((ef) => {
-      const matchedField = hiddenFields.find((f) => f.name === ef.name);
-      if (matchedField == null || matchedField.value !== ef.value) {
-        const ph = new PasswordHistoryView();
-        ph.password = ef.name + ": " + ef.value;
-        ph.lastUsedDate = new Date();
-        model.passwordHistory.splice(0, 0, ph);
-      }
-    });
-  }
-
-  private getExistingHiddenFields(existingCipher: CipherView) {
-    return existingCipher.fields.filter(
-      (f) =>
-        f.type === FieldType.Hidden &&
-        f.name != null &&
-        f.name !== "" &&
-        f.value != null &&
-        f.value !== ""
-    );
-  }
-
-  private getHiddenField(model: CipherView) {
-    return model.fields == null
-      ? []
-      : model.fields.filter((f) => f.type === FieldType.Hidden && f.name != null && f.name !== "");
-  }
-
-  private async encryptCipher(model: CipherView, cipher: Cipher, key: SymmetricCryptoKey) {
     await Promise.all([
       this.encryptObjProperty(
         model,
@@ -205,18 +198,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
         cipher.attachments = attachments;
       }),
     ]);
-  }
 
-  private mapCipherObject(model: CipherView) {
-    const cipher = new Cipher();
-    cipher.id = model.id;
-    cipher.folderId = model.folderId;
-    cipher.favorite = model.favorite;
-    cipher.organizationId = model.organizationId;
-    cipher.type = model.type;
-    cipher.collectionIds = model.collectionIds;
-    cipher.revisionDate = model.revisionDate;
-    cipher.reprompt = model.reprompt;
     return cipher;
   }
 
@@ -333,26 +315,14 @@ export class CipherService implements InternalCipherServiceAbstraction {
   }
 
   async get(id: string): Promise<Cipher> {
-    const ciphers = await this.stateService.getEncryptedCiphers();
-    // eslint-disable-next-line
-    if (ciphers == null || !ciphers.hasOwnProperty(id)) {
-      return null;
-    }
+    const ciphers = this._ciphers.getValue();
 
-    const localData = await this.stateService.getLocalData();
-    return new Cipher(ciphers[id], localData ? localData[id] : null);
+    return ciphers.find((cipher) => cipher.id === id);
   }
 
   async getAll(): Promise<Cipher[]> {
-    const localData = await this.stateService.getLocalData();
-    const ciphers = await this.stateService.getEncryptedCiphers();
-    const response: Cipher[] = [];
-    for (const id in ciphers) {
-      // eslint-disable-next-line
-      if (ciphers.hasOwnProperty(id)) {
-        response.push(new Cipher(ciphers[id], localData ? localData[id] : null));
-      }
-    }
+    const cipherMap = await this.stateService.getEncryptedCiphers();
+    const response = Object.values(cipherMap || {}).map((c) => new Cipher(c));
     return response;
   }
 
@@ -376,7 +346,9 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     const promises: Promise<number>[] = [];
-    const ciphers = await this.getAll();
+    const cipherMap = await this.stateService.getEncryptedCiphers();
+    const ciphers = Object.values(cipherMap || {}).map((c) => new Cipher(c));
+
     ciphers.forEach(async (cipher) => {
       promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
     });
@@ -463,7 +435,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
     defaultMatch = await this.getDefaultMatch(defaultMatch);
 
-    return ciphers.filter((cipher) => {
+    const cipherResponse = ciphers.filter((cipher) => {
       if (cipher.deletedDate != null) {
         return false;
       }
@@ -527,6 +499,8 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
       return false;
     });
+
+    return cipherResponse;
   }
 
   async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
@@ -635,17 +609,21 @@ export class CipherService implements InternalCipherServiceAbstraction {
       });
     }
 
-    await this.replace(ciphers);
+    await this.updateObservables(ciphers);
+    await this.stateService.setEncryptedCiphers(ciphers);
   }
 
   async replace(ciphers: { [id: string]: CipherData }): Promise<any> {
-    await this.clearDecryptedCiphersState();
+    await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
   async clear(userId?: string): Promise<any> {
-    await this.clearEncryptedCiphersState(userId);
-    await this.clearCache(userId);
+    if (userId == null || userId == (await this.stateService.getUserId())) {
+      this._ciphers.next([]);
+      this._cipherViews.next([]);
+    }
+    await this.stateService.setEncryptedCiphers(null, { userId: userId });
   }
 
   async delete(id: string | string[]): Promise<any> {
@@ -666,6 +644,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     await this.clearCache();
+    await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
@@ -684,6 +663,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     await this.clearCache();
+    await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
@@ -732,6 +712,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     await this.clearCache();
+    await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
@@ -758,6 +739,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     await this.clearCache();
+    await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
@@ -958,9 +940,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
       }
     }
   }
-  private async clearEncryptedCiphersState(userId?: string) {
-    await this.stateService.setEncryptedCiphers(null, { userId: userId });
-  }
 
   private async clearDecryptedCiphersState(userId?: string) {
     await this.stateService.setDecryptedCiphers(null, { userId: userId });
@@ -1004,5 +983,24 @@ export class CipherService implements InternalCipherServiceAbstraction {
     if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
       return true;
     }
+  }
+
+  private async updateObservables(ciphersMap: { [id: string]: CipherData }) {
+    const ciphers = Object.values(ciphersMap || {}).map((c) => new Cipher(c));
+
+    this._ciphers.next(ciphers);
+
+    if (await this.cryptoService.hasKey()) {
+      this._cipherViews.next(await this.decryptCiphers(ciphers));
+    }
+  }
+
+  private async decryptCiphers(ciphers: Cipher[]): Promise<CipherView[]> {
+    const decryptCipherPromises = ciphers.map((c) => c.decrypt());
+    const decryptedCiphers = await Promise.all(decryptCipherPromises);
+
+    decryptedCiphers.sort(Utils.getSortFunction(this.i18nService, "name"));
+
+    return decryptedCiphers;
   }
 }
