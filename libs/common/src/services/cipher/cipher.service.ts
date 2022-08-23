@@ -80,110 +80,76 @@ export class CipherService implements InternalCipherServiceAbstraction {
   ): Promise<Cipher> {
     // Adjust password history
     if (model.id != null) {
-      originalCipher = await this.getOriginalCiperIfNull(originalCipher, model);
+      if (originalCipher == null) {
+        originalCipher = await this.get(model.id);
+      }
       if (originalCipher != null) {
         const existingCipher = await originalCipher.decrypt();
         model.passwordHistory = existingCipher.passwordHistory || [];
-        this.getPasswordHistory(model, existingCipher);
-        this.filterExistingCipherFields(existingCipher, model);
+        if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
+          if (
+            existingCipher.login.password != null &&
+            existingCipher.login.password !== "" &&
+            existingCipher.login.password !== model.login.password
+          ) {
+            const ph = new PasswordHistoryView();
+            ph.password = existingCipher.login.password;
+            ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
+            model.passwordHistory.splice(0, 0, ph);
+          } else {
+            model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
+          }
+        }
+        if (existingCipher.hasFields) {
+          const existingHiddenFields = existingCipher.fields.filter(
+            (f) =>
+              f.type === FieldType.Hidden &&
+              f.name != null &&
+              f.name !== "" &&
+              f.value != null &&
+              f.value !== ""
+          );
+          const hiddenFields =
+            model.fields == null
+              ? []
+              : model.fields.filter(
+                  (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
+                );
+          existingHiddenFields.forEach((ef) => {
+            const matchedField = hiddenFields.find((f) => f.name === ef.name);
+            if (matchedField == null || matchedField.value !== ef.value) {
+              const ph = new PasswordHistoryView();
+              ph.password = ef.name + ": " + ef.value;
+              ph.lastUsedDate = new Date();
+              model.passwordHistory.splice(0, 0, ph);
+            }
+          });
+        }
       }
-      this.getlastFivePasswordhistory(model);
+      if (model.passwordHistory != null && model.passwordHistory.length === 0) {
+        model.passwordHistory = null;
+      } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
+        // only save last 5 history
+        model.passwordHistory = model.passwordHistory.slice(0, 5);
+      }
     }
 
-    const cipher = this.mapCipherObject(model);
+    const cipher = new Cipher();
+    cipher.id = model.id;
+    cipher.folderId = model.folderId;
+    cipher.favorite = model.favorite;
+    cipher.organizationId = model.organizationId;
+    cipher.type = model.type;
+    cipher.collectionIds = model.collectionIds;
+    cipher.revisionDate = model.revisionDate;
+    cipher.reprompt = model.reprompt;
 
-    key = await this.getOrganizationKey(key, cipher);
-
-    await this.encryptCipher(model, cipher, key);
-
-    return cipher;
-  }
-
-  private async getOrganizationKey(key: SymmetricCryptoKey, cipher: Cipher) {
     if (key == null && cipher.organizationId != null) {
       key = await this.cryptoService.getOrgKey(cipher.organizationId);
       if (key == null) {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-    return key;
-  }
-
-  private getlastFivePasswordhistory(model: CipherView) {
-    if (model.passwordHistory != null && model.passwordHistory.length === 0) {
-      model.passwordHistory = null;
-    } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
-      // only save last 5 history
-      model.passwordHistory = model.passwordHistory.slice(0, 5);
-    }
-  }
-
-  private getPasswordHistory(model: CipherView, existingCipher: CipherView) {
-    if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
-      if (
-        existingCipher.login.password != null &&
-        existingCipher.login.password !== "" &&
-        existingCipher.login.password !== model.login.password
-      ) {
-        const ph = new PasswordHistoryView();
-        ph.password = existingCipher.login.password;
-        ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
-        model.passwordHistory.splice(0, 0, ph);
-      } else {
-        model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
-      }
-    }
-  }
-
-  private async getOriginalCiperIfNull(originalCipher: Cipher, model: CipherView) {
-    if (originalCipher == null) {
-      originalCipher = await this.get(model.id);
-    }
-    return originalCipher;
-  }
-
-  private filterExistingCipherFields(existingCipher: CipherView, model: CipherView) {
-    if (existingCipher.hasFields) {
-      const existingHiddenFields = this.getExistingHiddenFields(existingCipher);
-      const hiddenFields = this.getHiddenField(model);
-      this.PasswordHistoryForMatchedField(existingHiddenFields, hiddenFields, model);
-    }
-  }
-
-  private PasswordHistoryForMatchedField(
-    existingHiddenFields: FieldView[],
-    hiddenFields: FieldView[],
-    model: CipherView
-  ) {
-    existingHiddenFields.forEach((ef) => {
-      const matchedField = hiddenFields.find((f) => f.name === ef.name);
-      if (matchedField == null || matchedField.value !== ef.value) {
-        const ph = new PasswordHistoryView();
-        ph.password = ef.name + ": " + ef.value;
-        ph.lastUsedDate = new Date();
-        model.passwordHistory.splice(0, 0, ph);
-      }
-    });
-  }
-
-  private getExistingHiddenFields(existingCipher: CipherView) {
-    return existingCipher.fields.filter(
-      (f) =>
-        f.type === FieldType.Hidden &&
-        f.name != null &&
-        f.name !== "" &&
-        f.value != null &&
-        f.value !== ""
-    );
-  }
-
-  private getHiddenField(model: CipherView) {
-    return model.fields == null
-      ? []
-      : model.fields.filter((f) => f.type === FieldType.Hidden && f.name != null && f.name !== "");
-  }
-
-  private async encryptCipher(model: CipherView, cipher: Cipher, key: SymmetricCryptoKey) {
     await Promise.all([
       this.encryptObjProperty(
         model,
@@ -205,18 +171,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
         cipher.attachments = attachments;
       }),
     ]);
-  }
 
-  private mapCipherObject(model: CipherView) {
-    const cipher = new Cipher();
-    cipher.id = model.id;
-    cipher.folderId = model.folderId;
-    cipher.favorite = model.favorite;
-    cipher.organizationId = model.organizationId;
-    cipher.type = model.type;
-    cipher.collectionIds = model.collectionIds;
-    cipher.revisionDate = model.revisionDate;
-    cipher.reprompt = model.reprompt;
     return cipher;
   }
 
