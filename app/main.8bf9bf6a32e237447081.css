@@ -519,8 +519,8 @@
 .tw-h-4{
     height: 1rem;
 }
-.tw-h-96{
-    height: 24rem;
+.tw-h-\[28rem\]{
+    height: 28rem;
 }
 .tw-h-12{
     height: 3rem;
@@ -605,10 +605,6 @@
 }
 .tw-table-auto{
     table-layout: auto;
-}
-.tw--skew-y-3{
-    --tw-skew-y: -3deg;
-    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .tw-cursor-pointer{
     cursor: pointer;
@@ -981,8 +977,8 @@
 .tw-pl-4{
     padding-left: 1rem;
 }
-.tw-pt-24{
-    padding-top: 6rem;
+.tw-pt-32{
+    padding-top: 8rem;
 }
 .tw-pl-7{
     padding-left: 1.75rem;
@@ -1574,4 +1570,4 @@
 
 
 
-/*# sourceMappingURL=main.8ecd2fec231c2e021caf.css.map*/
+/*# sourceMappingURL=main.8bf9bf6a32e237447081.css.map*/
