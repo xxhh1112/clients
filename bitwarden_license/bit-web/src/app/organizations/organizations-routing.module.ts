@@ -7,7 +7,6 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { OrganizationPermissionsGuard } from "src/app/organizations/guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "src/app/organizations/layouts/organization-layout.component";
 import { ManageComponent } from "src/app/organizations/manage/manage.component";
-import { canAccessManageTab } from "src/app/organizations/navigation-permissions";
 
 import { ScimComponent } from "./manage/scim.component";
 import { SsoComponent } from "./manage/sso.component";
@@ -21,10 +20,6 @@ const routes: Routes = [
       {
         path: "manage",
         component: ManageComponent,
-        canActivate: [OrganizationPermissionsGuard],
-        data: {
-          organizationPermissions: canAccessManageTab,
-        },
         children: [
           {
             path: "sso",
