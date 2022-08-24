@@ -99,15 +99,9 @@ export class BitIconButtonComponent {
       "tw-px-3",
       "tw-rounded",
       "tw-transition",
-      // "tw-border-none",
-      // "tw-border",
-      // "tw-border-solid",
       "tw-text-center",
       "hover:tw-no-underline",
       "disabled:tw-opacity-60",
-      // "disabled:tw-bg-secondary-100",
-      // "disabled:tw-border-secondary-100",
-      // "disabled:!tw-text-main",
       "focus:tw-outline-none",
       "focus:tw-ring",
       "focus:tw-ring-offset-2",
@@ -116,13 +110,4 @@ export class BitIconButtonComponent {
       .concat(styles[this.style])
       .concat(sizes[this.size]);
   }
-
-  // @HostBinding("innerHtml")
-  // protected get innerHtml() {
-  //   const svg = IconSvg[this.icon];
-  //   if (svg == null) {
-  //     return "Unknown icon";
-  //   }
-  //   return this.domSanitizer.bypassSecurityTrustHtml(IconSvg[this.icon]);
-  // }
 }
