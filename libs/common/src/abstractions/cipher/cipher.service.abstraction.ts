@@ -2,24 +2,19 @@ import { CipherType } from "../../enums/cipherType";
 import { UriMatchType } from "../../enums/uriMatchType";
 import { CipherData } from "../../models/data/cipherData";
 import { Cipher } from "../../models/domain/cipher";
-import { Field } from "../../models/domain/field";
 import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { CipherView } from "../../models/view/cipherView";
-import { FieldView } from "../../models/view/fieldView";
 
 export abstract class CipherService {
   restore: (
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;
 
-  clearCache: (userId?: string) => Promise<void>;
   encrypt: (
     model: CipherView,
     key?: SymmetricCryptoKey,
     originalCipher?: Cipher
   ) => Promise<Cipher>;
-  encryptFields: (fieldsModel: FieldView[], key: SymmetricCryptoKey) => Promise<Field[]>;
-  encryptField: (fieldModel: FieldView, key: SymmetricCryptoKey) => Promise<Field>;
   get: (id: string) => Promise<Cipher>;
   getAll: () => Promise<Cipher[]>;
   getAllDecrypted: () => Promise<CipherView[]>;
