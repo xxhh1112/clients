@@ -9,6 +9,7 @@ export default {
     bitIconButton: "bwi-plus",
     style: "primary",
     size: "default",
+    disabled: false,
   },
 } as Meta;
 
@@ -16,7 +17,7 @@ const ControlsTemplate: Story<BitIconButtonComponent> = (args: BitIconButtonComp
   props: args,
   template: `
   <div class="tw-p-5" [class.tw-bg-primary-500]="style === 'contrast'">
-    <button [bitIconButton]="bitIconButton" [style]="style" [size]="size"></button>
+    <button [bitIconButton]="bitIconButton" [style]="style" [size]="size" [disabled]="disabled"></button>
   </div>
   `,
 });
