@@ -6,17 +6,19 @@ export default {
   title: "Component Library/Icon Button",
   component: BitIconButtonComponent,
   args: {
-    icon: "reportExposedPasswords",
+    bitIconButton: "bwi-plus",
+    style: "primary",
+    size: "default",
   },
 } as Meta;
 
-const Template: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
+const ControlsTemplate: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
   props: args,
   template: `
-  <div class="tw-bg-primary-500 tw-p-5">
-    <button bitIconButton="bwi-star"></button>
+  <div class="tw-p-5" [class.tw-bg-primary-500]="style === 'contrast'">
+    <button [bitIconButton]="bitIconButton" [style]="style" [size]="size"></button>
   </div>
   `,
 });
 
-export const ReportExposedPasswords = Template.bind({});
+export const Controls = ControlsTemplate.bind({});
