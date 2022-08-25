@@ -9,8 +9,11 @@ const styles: Record<IconButtonStyle, string[]> = {
     "tw-border",
     "tw-border-transparent",
     "tw-border-solid",
+    "hover:tw-bg-transparent-hover",
     "hover:tw-border-text-contrast",
+    "focus:tw-ring-offset-primary-500",
     "focus:tw-ring-text-contrast",
+    "disabled:hover:tw-bg-transparent",
     "disabled:hover:tw-border-transparent",
   ],
   main: [
@@ -19,8 +22,10 @@ const styles: Record<IconButtonStyle, string[]> = {
     "tw-border",
     "tw-border-transparent",
     "tw-border-solid",
+    "hover:tw-bg-transparent-hover",
     "hover:tw-border-text-main",
     "focus:tw-ring-text-main",
+    "disabled:hover:tw-bg-transparent",
     "disabled:hover:tw-border-transparent",
   ],
   muted: [
@@ -29,8 +34,10 @@ const styles: Record<IconButtonStyle, string[]> = {
     "tw-border",
     "tw-border-transparent",
     "tw-border-solid",
+    "hover:tw-bg-transparent-hover",
     "hover:tw-border-primary-700",
     "focus:tw-ring-primary-700",
+    "disabled:hover:tw-bg-transparent",
     "disabled:hover:tw-border-transparent",
   ],
   primary: [
@@ -39,7 +46,9 @@ const styles: Record<IconButtonStyle, string[]> = {
     "tw-border",
     "tw-border-primary-500",
     "tw-border-solid",
+    "hover:tw-bg-primary-700",
     "focus:tw-ring-primary-700",
+    "disabled:hover:tw-bg-primary-500",
     "disabled:hover:tw-border-transparent",
   ],
   secondary: [
