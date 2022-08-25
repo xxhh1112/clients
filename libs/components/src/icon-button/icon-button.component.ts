@@ -109,11 +109,11 @@ export class BitIconButtonComponent {
       "tw-rounded",
       "tw-transition",
       "tw-text-center",
+      "tw-alt-focus-ring",
       "hover:tw-no-underline",
       "disabled:tw-opacity-60",
       "focus:tw-outline-none",
-      "focus:tw-ring",
-      "focus:tw-ring-offset-2",
+      // "tw-ring-offset-2",
       "focus:tw-z-10",
     ]
       .concat(styles[this.style])

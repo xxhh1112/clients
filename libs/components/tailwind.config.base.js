@@ -1,5 +1,6 @@
 /* eslint-disable */
 const colors = require("tailwindcss/colors");
+const plugin = require("tailwindcss/plugin");
 
 function rgba(color) {
   return "rgb(var(" + color + ") / <alpha-value>)";
@@ -83,5 +84,37 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".alt-focus-ring": {
+          position: "relative",
+
+          "&:before": {
+            content: "''",
+            opacity: "0",
+            display: "block",
+            position: "absolute",
+            top: "-5px",
+            right: "-5px",
+            bottom: "-5px",
+            left: "-5px",
+            border: "2px solid white",
+            "border-radius": "0.5rem",
+
+            "transition-property":
+              "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter",
+            "transition-timing-function": "cubic-bezier(0.4, 0, 0.2, 1)",
+            "transition-duration": "150ms",
+          },
+
+          "&:focus": {
+            "&:before": {
+              opacity: "1",
+            },
+          },
+        },
+      });
+    }),
+  ],
 };
