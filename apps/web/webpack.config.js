@@ -267,7 +267,8 @@ const devServer =
                     https://app.simplelogin.io/api/alias/random/new
                     https://quack.duckduckgo.com/api/email/addresses
                     https://app.anonaddy.com/api/v1/aliases
-                    https://api.fastmail.com/jmap/api;
+                    https://api.fastmail.com/jmap/api/
+                    https://api.fastmail.com/.well-known/jmap;
                   object-src
                     'self'
                     blob:;`,
