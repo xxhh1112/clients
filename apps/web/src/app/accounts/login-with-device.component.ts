@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { CaptchaProtectedComponent } from "@bitwarden/angular/components/captchaProtected.component";
+import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
@@ -24,7 +25,10 @@ import { AuthRequestResponse } from "@bitwarden/common/models/response/authReque
   selector: "app-login-with-device",
   templateUrl: "login-with-device.component.html",
 })
-export class LoginWithDeviceComponent extends CaptchaProtectedComponent implements OnInit {
+export class LoginWithDeviceComponent
+  extends CaptchaProtectedComponent
+  implements OnInit, OnDestroy
+{
   fingerPrint: string;
   email: string;
   resendNotification = false;
@@ -47,7 +51,8 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
     private stateService: StateService,
     environmentService: EnvironmentService,
     i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService
+    platformUtilsService: PlatformUtilsService,
+    private anonymousHubService: AnonymousHubService
   ) {
     super(environmentService, i18nService, platformUtilsService);
 
@@ -57,8 +62,8 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
     }
 
     //gets signalR push notification
-    this.authService.getPushNotifcationObs().subscribe(() => {
-      this.confirmResponse(null, null, null);
+    this.authService.getPushNotifcationObs().subscribe((id) => {
+      id;
     });
   }
 
@@ -92,11 +97,17 @@ export class LoginWithDeviceComponent extends CaptchaProtectedComponent implemen
 
     this.fingerPrint = fingerprint;
 
-    await this.apiService.postAuthRequest(request);
+    const reqResponse = await this.apiService.postAuthRequest(request);
+
+    this.anonymousHubService.createHubConnection(reqResponse.id);
 
     setTimeout(() => {
       this.resendNotification = true;
     }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    this.anonymousHubService.stopHubConnection();
   }
 
   private async confirmResponse(
