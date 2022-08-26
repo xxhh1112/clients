@@ -19,7 +19,7 @@ import {
 
 @Injectable()
 export class AnonymousHubService implements AnonymousHubServiceAbstraction {
-  private hubConnection: HubConnection;
+  private anonHubConnection: HubConnection;
   private url: string;
 
   constructor(
@@ -31,7 +31,7 @@ export class AnonymousHubService implements AnonymousHubServiceAbstraction {
   async createHubConnection(token: string) {
     this.url = this.environmentService.getNotificationsUrl();
 
-    this.hubConnection = new HubConnectionBuilder()
+    this.anonHubConnection = new HubConnectionBuilder()
       .withUrl(this.url + "/anonymousHub?Token=" + token, {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
@@ -39,16 +39,16 @@ export class AnonymousHubService implements AnonymousHubServiceAbstraction {
       .withHubProtocol(new MessagePackHubProtocol() as IHubProtocol)
       .build();
 
-    this.hubConnection.start().catch((error) => this.logService.error(error));
+    this.anonHubConnection.start().catch((error) => this.logService.error(error));
 
-    this.hubConnection.on("AuthRequestResponseRecieved", (data: any) => {
+    this.anonHubConnection.on("AuthRequestResponseRecieved", (data: any) => {
       this.ProcessNotification(new NotificationResponse(data));
     });
   }
 
   stopHubConnection() {
-    if (this.hubConnection) {
-      this.hubConnection.stop();
+    if (this.anonHubConnection) {
+      this.anonHubConnection.stop();
     }
   }
 

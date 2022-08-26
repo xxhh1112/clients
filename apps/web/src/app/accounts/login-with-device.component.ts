@@ -19,7 +19,6 @@ import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 import { TokenRequestPasswordless } from "@bitwarden/common/models/request/identityToken/tokenRequestPasswordless";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
-import { AuthRequestResponse } from "@bitwarden/common/models/response/authRequestResponse";
 
 @Component({
   selector: "app-login-with-device",
@@ -29,6 +28,8 @@ export class LoginWithDeviceComponent
   extends CaptchaProtectedComponent
   implements OnInit, OnDestroy
 {
+  private accessCode: string;
+  private privateKeyValue: ArrayBuffer;
   fingerPrint: string;
   email: string;
   resendNotification = false;
@@ -63,7 +64,7 @@ export class LoginWithDeviceComponent
 
     //gets signalR push notification
     this.authService.getPushNotifcationObs().subscribe((id) => {
-      id;
+      this.confirmResponse(id, this.accessCode, this.privateKeyValue);
     });
   }
 
@@ -77,6 +78,7 @@ export class LoginWithDeviceComponent
   }
 
   async startPasswordlessLogin() {
+    this.resendNotification = false;
     const keypair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const fingerprint = await (
       await this.cryptoService.getFingerprint(this.email, keypair[0])
@@ -84,7 +86,6 @@ export class LoginWithDeviceComponent
     const deviceIdentifier = await this.appIdService.getAppId();
     const publicKey = Utils.fromBufferToB64(keypair[0]);
     const accessCode = await this.PasswordGenerationService.generatePassword({ length: 25 });
-    // let response: AuthRequestResponse = null;
 
     const request = new PasswordlessCreateAuthRequest(
       this.email,
@@ -99,7 +100,12 @@ export class LoginWithDeviceComponent
 
     const reqResponse = await this.apiService.postAuthRequest(request);
 
-    this.anonymousHubService.createHubConnection(reqResponse.id);
+    if (reqResponse.id) {
+      this.anonymousHubService.createHubConnection(reqResponse.id);
+    }
+
+    this.accessCode = accessCode;
+    this.privateKeyValue = keypair[1];
 
     setTimeout(() => {
       this.resendNotification = true;
@@ -110,55 +116,52 @@ export class LoginWithDeviceComponent
     this.anonymousHubService.stopHubConnection();
   }
 
-  private async confirmResponse(
-    response: AuthRequestResponse,
-    accessCode: string,
-    privateKeyVal: ArrayBuffer
-  ) {
-    if (response) {
-      await this.setupCaptcha();
+  private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
+    const response = await this.apiService.getAuthResponse(requestId, accessCode);
+    // if (response.requestApproved) {
+    await this.setupCaptcha();
 
-      // const decKey = await this.cryptoService.rsaDecrypt(response.key, keypair[1]);
-      const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
-        response.masterPasswordHash,
-        privateKeyVal
+    // const decKey = await this.cryptoService.rsaDecrypt(response.key, keypair[1]);
+    const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
+      response.masterPasswordHash,
+      privateKeyVal
+    );
+
+    try {
+      const masterPassword = Utils.fromBufferToB64(decMasterPasswordHash);
+
+      const credentials = new PasswordLogInCredentials(
+        this.email,
+        masterPassword,
+        this.captchaToken,
+        null,
+        new TokenRequestPasswordless(accessCode)
       );
+      const loginResponse = await this.authService.logIn(credentials);
 
-      try {
-        const masterPasswordHash = Utils.fromBufferToB64(decMasterPasswordHash);
-
-        const credentials = new PasswordLogInCredentials(
-          this.email,
-          masterPasswordHash,
-          this.captchaToken,
-          null,
-          new TokenRequestPasswordless(accessCode)
-        );
-        const loginResponse = await this.authService.logIn(credentials);
-
-        if (this.handleCaptchaRequired(loginResponse)) {
-          return;
-        } else if (loginResponse.requiresTwoFactor) {
-          if (this.onSuccessfulLoginTwoFactorNavigate != null) {
-            this.onSuccessfulLoginTwoFactorNavigate();
-          } else {
-            this.router.navigate([this.twoFactorRoute]);
-          }
+      if (this.handleCaptchaRequired(loginResponse)) {
+        return;
+      } else if (loginResponse.requiresTwoFactor) {
+        if (this.onSuccessfulLoginTwoFactorNavigate != null) {
+          this.onSuccessfulLoginTwoFactorNavigate();
         } else {
-          const disableFavicon = await this.stateService.getDisableFavicon();
-          await this.stateService.setDisableFavicon(!!disableFavicon);
-          if (this.onSuccessfulLogin != null) {
-            this.onSuccessfulLogin();
-          }
-          if (this.onSuccessfulLoginNavigate != null) {
-            this.onSuccessfulLoginNavigate();
-          } else {
-            this.router.navigate([this.successRoute]);
-          }
+          this.router.navigate([this.twoFactorRoute]);
         }
-      } catch (error) {
-        this.logService.error(error);
+      } else {
+        const disableFavicon = await this.stateService.getDisableFavicon();
+        await this.stateService.setDisableFavicon(!!disableFavicon);
+        if (this.onSuccessfulLogin != null) {
+          this.onSuccessfulLogin();
+        }
+        if (this.onSuccessfulLoginNavigate != null) {
+          this.onSuccessfulLoginNavigate();
+        } else {
+          this.router.navigate([this.successRoute]);
+        }
       }
+    } catch (error) {
+      this.logService.error(error);
     }
   }
+  // }
 }
