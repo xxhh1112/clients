@@ -25,6 +25,7 @@ import {
   ApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
+  PasswordlessLogInCredentials,
 } from "../models/domain/logInCredentials";
 import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
@@ -66,52 +67,75 @@ export class AuthService implements AuthServiceAbstraction {
   ) {}
 
   async logIn(
-    credentials: ApiLogInCredentials | PasswordLogInCredentials | SsoLogInCredentials
+    credentials:
+      | ApiLogInCredentials
+      | PasswordLogInCredentials
+      | SsoLogInCredentials
+      | PasswordlessLogInCredentials
   ): Promise<AuthResult> {
     this.clearState();
 
     let strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
 
-    if (credentials.type === AuthenticationType.Password) {
-      strategy = new PasswordLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this
-      );
-    } else if (credentials.type === AuthenticationType.Sso) {
-      strategy = new SsoLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this.keyConnectorService
-      );
-    } else if (credentials.type === AuthenticationType.Api) {
-      strategy = new ApiLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this.environmentService,
-        this.keyConnectorService
-      );
+    switch (credentials.type) {
+      case AuthenticationType.Password:
+        strategy = new PasswordLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this
+        );
+        break;
+      case AuthenticationType.Sso:
+        strategy = new SsoLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this.keyConnectorService
+        );
+        break;
+      case AuthenticationType.Api:
+        strategy = new ApiLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this.environmentService,
+          this.keyConnectorService
+        );
+        break;
+      case AuthenticationType.Passwordless:
+        strategy = new ApiLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this.environmentService,
+          this.keyConnectorService
+        );
+        break;
     }
 
     const result = await strategy.logIn(credentials as any);
@@ -212,7 +236,7 @@ export class AuthService implements AuthServiceAbstraction {
     this.pushNotificationSubject.next(notification.id);
   }
 
-  getPushNotifcationObs(): Observable<any> {
+  getPushNotifcationObs$(): Observable<any> {
     return this.pushNotificationSubject.asObservable();
   }
 

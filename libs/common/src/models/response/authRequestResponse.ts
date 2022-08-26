@@ -19,8 +19,8 @@ export class AuthRequestResponse extends BaseResponse {
     this.requestDeviceType = this.getResponseProperty("RequestDeviceType");
     this.requestIpAddress = this.getResponseProperty("RequestIpAddress");
     this.key = this.getResponseProperty("Key");
-    this.masterPasswordHash = this.getResponseProperty("MaterPasswordHash");
+    this.masterPasswordHash = this.getResponseProperty("MasterPasswordHash");
     this.creationDate = this.getResponseProperty("CreationDate");
-    this.requestApproved = this.getResponseProperty("requestApproved");
+    this.requestApproved = this.getResponseProperty("RequestApproved");
   }
 }

@@ -6,6 +6,7 @@ import {
   ApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
+  PasswordlessLogInCredentials,
 } from "../models/domain/logInCredentials";
 import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
@@ -15,7 +16,11 @@ export abstract class AuthService {
   masterPasswordHash: string;
   email: string;
   logIn: (
-    credentials: ApiLogInCredentials | PasswordLogInCredentials | SsoLogInCredentials
+    credentials:
+      | ApiLogInCredentials
+      | PasswordLogInCredentials
+      | SsoLogInCredentials
+      | PasswordlessLogInCredentials
   ) => Promise<AuthResult>;
   logInTwoFactor: (
     twoFactor: TokenRequestTwoFactor,
@@ -29,5 +34,5 @@ export abstract class AuthService {
   getAuthStatus: (userId?: string) => Promise<AuthenticationStatus>;
   authResponsePushNotifiction: (notification: AuthRequestPushNotification) => Promise<any>;
 
-  getPushNotifcationObs: () => Observable<any>;
+  getPushNotifcationObs$: () => Observable<any>;
 }

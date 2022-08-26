@@ -1,7 +1,8 @@
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+
 import { AuthenticationType } from "../../enums/authenticationType";
 import { TokenRequestTwoFactor } from "../request/identityToken/tokenRequestTwoFactor";
 
-import { TokenRequestPasswordless } from "./../request/identityToken/tokenRequestPasswordless";
 
 export class PasswordLogInCredentials {
   readonly type = AuthenticationType.Password;
@@ -10,8 +11,7 @@ export class PasswordLogInCredentials {
     public email: string,
     public masterPassword: string,
     public captchaToken?: string,
-    public twoFactor?: TokenRequestTwoFactor,
-    public passwordless?: TokenRequestPasswordless
+    public twoFactor?: TokenRequestTwoFactor
   ) {}
 }
 
@@ -31,4 +31,17 @@ export class ApiLogInCredentials {
   readonly type = AuthenticationType.Api;
 
   constructor(public clientId: string, public clientSecret: string) {}
+}
+
+export class PasswordlessLogInCredentials {
+  readonly type = AuthenticationType.Passwordless;
+
+  constructor(
+    public email: string,
+    public accessCode: string,
+    public authRequestId: string,
+    public key: SymmetricCryptoKey,
+    public localHashedPassword: string,
+    public masterPassword: string
+  ) {}
 }

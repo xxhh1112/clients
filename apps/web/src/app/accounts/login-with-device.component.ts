@@ -17,7 +17,6 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
-import { TokenRequestPasswordless } from "@bitwarden/common/models/request/identityToken/tokenRequestPasswordless";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
 @Component({
@@ -39,6 +38,7 @@ export class LoginWithDeviceComponent
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
+  private keypair: [ArrayBuffer, ArrayBuffer];
 
   constructor(
     private router: Router,
@@ -63,7 +63,7 @@ export class LoginWithDeviceComponent
     }
 
     //gets signalR push notification
-    this.authService.getPushNotifcationObs().subscribe((id) => {
+    this.authService.getPushNotifcationObs$().subscribe((id) => {
       this.confirmResponse(id, this.accessCode, this.privateKeyValue);
     });
   }
@@ -79,12 +79,12 @@ export class LoginWithDeviceComponent
 
   async startPasswordlessLogin() {
     this.resendNotification = false;
-    const keypair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
+    this.keypair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const fingerprint = await (
-      await this.cryptoService.getFingerprint(this.email, keypair[0])
+      await this.cryptoService.getFingerprint(this.email, this.keypair[0])
     ).join("-");
     const deviceIdentifier = await this.appIdService.getAppId();
-    const publicKey = Utils.fromBufferToB64(keypair[0]);
+    const publicKey = Utils.fromBufferToB64(this.keypair[0]);
     const accessCode = await this.PasswordGenerationService.generatePassword({ length: 25 });
 
     const request = new PasswordlessCreateAuthRequest(
@@ -105,7 +105,7 @@ export class LoginWithDeviceComponent
     }
 
     this.accessCode = accessCode;
-    this.privateKeyValue = keypair[1];
+    this.privateKeyValue = this.keypair[1];
 
     setTimeout(() => {
       this.resendNotification = true;
@@ -118,36 +118,20 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
     const response = await this.apiService.getAuthResponse(requestId, accessCode);
-    // if (response.requestApproved) {
-    await this.setupCaptcha();
-
-    // const decKey = await this.cryptoService.rsaDecrypt(response.key, keypair[1]);
-    const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
-      response.masterPasswordHash,
-      privateKeyVal
-    );
-
-    try {
-      const masterPassword = Utils.fromBufferToB64(decMasterPasswordHash);
-
-      const credentials = new PasswordLogInCredentials(
-        this.email,
-        masterPassword,
-        this.captchaToken,
-        null,
-        new TokenRequestPasswordless(accessCode)
+    if (response.requestApproved) {
+      //const decKey = await this.cryptoService.rsaDecrypt(response.key, this.keypair[1]);
+      const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
+        response.masterPasswordHash,
+        privateKeyVal
       );
-      const loginResponse = await this.authService.logIn(credentials);
+      const masterPassword = Utils.fromBufferToB64(decMasterPasswordHash);
+      // const key = new SymmetricCryptoKey(decKey);
+      // const localHashedPassword = Utils.fromBufferToB64(decMasterPasswordHash);
 
-      if (this.handleCaptchaRequired(loginResponse)) {
-        return;
-      } else if (loginResponse.requiresTwoFactor) {
-        if (this.onSuccessfulLoginTwoFactorNavigate != null) {
-          this.onSuccessfulLoginTwoFactorNavigate();
-        } else {
-          this.router.navigate([this.twoFactorRoute]);
-        }
-      } else {
+      try {
+        const credentials = new PasswordLogInCredentials(this.email, masterPassword);
+        await this.authService.logIn(credentials);
+
         const disableFavicon = await this.stateService.getDisableFavicon();
         await this.stateService.setDisableFavicon(!!disableFavicon);
         if (this.onSuccessfulLogin != null) {
@@ -158,10 +142,9 @@ export class LoginWithDeviceComponent
         } else {
           this.router.navigate([this.successRoute]);
         }
+      } catch (error) {
+        this.logService.error(error);
       }
-    } catch (error) {
-      this.logService.error(error);
     }
   }
-  // }
 }
