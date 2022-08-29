@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -8,16 +9,26 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
   selector: "app-org-manage",
   templateUrl: "manage.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class ManageComponent implements OnInit {
+export class ManageComponent implements OnInit, OnDestroy {
   organization: Organization;
+
+  private destroy$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 
   ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.params.subscribe(async (params) => {
-      this.organization = await this.organizationService.get(params.organizationId);
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organization = await this.organizationService.get(params.organizationId);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

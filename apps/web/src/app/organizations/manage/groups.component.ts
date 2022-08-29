@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { first } from "rxjs/operators";
+import { Subject, takeUntil, concatMap } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -18,8 +18,7 @@ import { GroupAddEditComponent } from "./group-add-edit.component";
   selector: "app-org-groups",
   templateUrl: "groups.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
   usersModalRef: ViewContainerRef;
@@ -34,6 +33,7 @@ export class GroupsComponent implements OnInit {
   protected pageSize = 100;
 
   private pagedGroupsCount = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -46,15 +46,24 @@ export class GroupsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.parent.params.subscribe(async (params) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-      this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-        this.searchText = qParams.search;
-      });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          await this.load();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((qParams) => {
+      this.searchText = qParams.search;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async load() {

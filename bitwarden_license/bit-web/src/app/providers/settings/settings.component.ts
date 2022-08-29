@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
 
@@ -7,14 +8,24 @@ import { ProviderService } from "@bitwarden/common/abstractions/provider.service
   selector: "provider-settings",
   templateUrl: "settings.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SettingsComponent {
+export class SettingsComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+
   constructor(private route: ActivatedRoute, private providerService: ProviderService) {}
 
   ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.params.subscribe(async (params) => {
-      await this.providerService.get(params.providerId);
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          await this.providerService.get(params.providerId);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

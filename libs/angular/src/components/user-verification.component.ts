@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from "@angular/animations";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from "@angular/forms";
+import { Subject, takeUntil } from "rxjs";
 
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
@@ -30,8 +31,7 @@ import { Verification } from "@bitwarden/common/types/verification";
     ]),
   ],
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class UserVerificationComponent implements ControlValueAccessor, OnInit {
+export class UserVerificationComponent implements ControlValueAccessor, OnInit, OnDestroy {
   usesKeyConnector = false;
   disableRequestOTP = false;
   sentCode = false;
@@ -39,6 +39,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   secret = new FormControl("");
 
   private onChange: (value: Verification) => void;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private keyConnectorService: KeyConnectorService,
@@ -49,8 +50,14 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     this.usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
     this.processChanges(this.secret.value);
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.secret.valueChanges.subscribe((secret: string) => this.processChanges(secret));
+    this.secret.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((secret: string) => this.processChanges(secret));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async requestOTP() {

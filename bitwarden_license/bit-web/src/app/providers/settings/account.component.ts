@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,8 +14,7 @@ import { ProviderResponse } from "@bitwarden/common/models/response/provider/pro
   selector: "provider-account",
   templateUrl: "account.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AccountComponent {
+export class AccountComponent implements OnDestroy {
   selfHosted = false;
   loading = true;
   provider: ProviderResponse;
@@ -22,6 +22,7 @@ export class AccountComponent {
   taxFormPromise: Promise<any>;
 
   private providerId: string;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -34,16 +35,26 @@ export class AccountComponent {
 
   async ngOnInit() {
     this.selfHosted = this.platformUtilsService.isSelfHost();
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.parent.params.subscribe(async (params) => {
-      this.providerId = params.providerId;
-      try {
-        this.provider = await this.apiService.getProvider(this.providerId);
-      } catch (e) {
-        this.logService.error(`Handled exception: ${e}`);
-      }
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.providerId = params.providerId;
+          try {
+            this.provider = await this.apiService.getProvider(this.providerId);
+          } catch (e) {
+            this.logService.error(`Handled exception: ${e}`);
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
     this.loading = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async submit() {

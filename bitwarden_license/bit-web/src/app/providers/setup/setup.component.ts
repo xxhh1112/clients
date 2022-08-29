@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { first } from "rxjs/operators";
+import { firstValueFrom } from "rxjs";
 
 import { ValidationService } from "@bitwarden/angular/services/validation.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -14,7 +14,6 @@ import { ProviderSetupRequest } from "@bitwarden/common/models/request/provider/
   selector: "provider-setup",
   templateUrl: "setup.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SetupComponent implements OnInit {
   loading = true;
   authed = false;
@@ -37,37 +36,37 @@ export class SetupComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     document.body.classList.remove("layout_frontend");
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-      const error = qParams.providerId == null || qParams.email == null || qParams.token == null;
 
-      if (error) {
-        this.platformUtilsService.showToast(
-          "error",
-          null,
-          this.i18nService.t("emergencyInviteAcceptFailed"),
-          { timeout: 10000 }
-        );
-        this.router.navigate(["/"]);
-        return;
+    const qParams = await firstValueFrom(this.route.queryParams);
+
+    const error = qParams.providerId == null || qParams.email == null || qParams.token == null;
+
+    if (error) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("emergencyInviteAcceptFailed"),
+        { timeout: 10000 }
+      );
+      this.router.navigate(["/"]);
+      return;
+    }
+
+    this.providerId = qParams.providerId;
+    this.token = qParams.token;
+
+    // Check if provider exists, redirect if it does
+    try {
+      const provider = await this.apiService.getProvider(this.providerId);
+      if (provider.name != null) {
+        this.router.navigate(["/providers", provider.id], { replaceUrl: true });
       }
-
-      this.providerId = qParams.providerId;
-      this.token = qParams.token;
-
-      // Check if provider exists, redirect if it does
-      try {
-        const provider = await this.apiService.getProvider(this.providerId);
-        if (provider.name != null) {
-          this.router.navigate(["/providers", provider.id], { replaceUrl: true });
-        }
-      } catch (e) {
-        this.validationService.showError(e);
-        this.router.navigate(["/"]);
-      }
-    });
+    } catch (e) {
+      this.validationService.showError(e);
+      this.router.navigate(["/"]);
+    }
   }
 
   async submit() {
