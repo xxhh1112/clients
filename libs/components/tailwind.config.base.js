@@ -1,6 +1,8 @@
 /* eslint-disable */
 const colors = require("tailwindcss/colors");
 const plugin = require("tailwindcss/plugin");
+const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette").default;
+const toColorValue = require("tailwindcss/lib/util/toColorValue").default;
 
 function rgba(color) {
   return "rgb(var(" + color + ") / <alpha-value>)";
@@ -77,6 +79,10 @@ module.exports = {
       DEFAULT: theme("colors.background"),
       ...theme("colors"),
     }),
+    altRingColor: ({ theme }) => ({
+      DEFAULT: "rgb(var(--color-primary-700))",
+      ...theme("colors"),
+    }),
     extend: {
       width: {
         "50vw": "50vw",
@@ -85,36 +91,60 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        ".alt-focus-ring": {
-          position: "relative",
+    plugin(
+      ({ matchUtilities, theme }) => {
+        matchUtilities(
+          {
+            "alt-focus-ring": (value) => {
+              return {
+                position: "relative",
 
-          "&:before": {
-            content: "''",
-            opacity: "0",
-            display: "block",
-            position: "absolute",
-            top: "-5px",
-            right: "-5px",
-            bottom: "-5px",
-            left: "-5px",
-            border: "2px solid white",
-            "border-radius": "0.5rem",
+                "&:before": {
+                  content: "''",
+                  opacity: "0",
+                  display: "block",
+                  position: "absolute",
+                  top: `-${theme("altRingOffset")}`,
+                  right: `-${theme("altRingOffset")}`,
+                  bottom: `-${theme("altRingOffset")}`,
+                  left: `-${theme("altRingOffset")}`,
+                  border: `${theme("altRingWidth")} solid ${toColorValue(value)}`,
+                  "border-radius": theme("altRingBorderRadius"),
 
-            "transition-property":
-              "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter",
-            "transition-timing-function": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "transition-duration": "150ms",
-          },
+                  "transition-property": theme("transitionProperty"),
+                  "transition-timing-function": theme("transitionTimingFunction"),
+                  "transition-duration": theme("transitionDuration"),
+                },
 
-          "&:focus": {
-            "&:before": {
-              opacity: "1",
+                "&:focus": {
+                  outline: "0",
+
+                  "&:before": {
+                    opacity: "1",
+                  },
+                },
+              };
             },
           },
+          {
+            values: flattenColorPalette(theme("altRingColor")),
+            type: "color",
+          }
+        );
+      },
+      {
+        theme: {
+          altRingColor: {
+            DEFAULT: "#000",
+          },
+          altRingWidth: "2px",
+          altRingOffset: "5px", // 1px parent border + 2px whitespace + 2px altRingWidth
+          altRingBorderRadius: "0.5rem",
+          transitionProperty: "opacity",
+          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+          transitionDuration: "150ms",
         },
-      });
-    }),
+      }
+    ),
   ],
 };
