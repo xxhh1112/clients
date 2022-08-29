@@ -3,7 +3,6 @@ import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCry
 import { AuthenticationType } from "../../enums/authenticationType";
 import { TokenRequestTwoFactor } from "../request/identityToken/tokenRequestTwoFactor";
 
-
 export class PasswordLogInCredentials {
   readonly type = AuthenticationType.Password;
 

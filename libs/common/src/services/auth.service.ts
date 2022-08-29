@@ -232,7 +232,6 @@ export class AuthService implements AuthServiceAbstraction {
   }
 
   async authResponsePushNotifiction(notification: AuthRequestPushNotification): Promise<any> {
-    //pass id as subject
     this.pushNotificationSubject.next(notification.id);
   }
 
