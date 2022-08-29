@@ -7,7 +7,7 @@
             <app-organization-vault-filter
               #vaultFilter
               [activeFilter]="activeFilter"
-              (onFilterChange)="applyVaultFilter($event)"
+              (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"
             ></app-organization-vault-filter>
           </div>

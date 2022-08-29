@@ -1,11 +1,14 @@
 import { Component } from "@angular/core";
+import { firstValueFrom, switchMap } from "rxjs";
 
+import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { VaultFilterLabel } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/vault-filter.component";
 
@@ -14,7 +17,11 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
   templateUrl: "../../../vault/vault-filter/vault-filter.component.html",
 })
 export class VaultFilterComponent extends BaseVaultFilterComponent {
-  organization: Organization;
+  private _organization: Organization;
+
+  get organization() {
+    return this._organization;
+  }
 
   constructor(
     vaultFilterService: VaultFilterService,
@@ -22,6 +29,44 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
     platformUtilsService: PlatformUtilsService
   ) {
     super(vaultFilterService, i18nService, platformUtilsService);
+  }
+
+  protected loadSubscriptions() {
+    this.vaultFilterService.filteredCollections$
+      .pipe(
+        switchMap(async (collections) => {
+          if (this.activeFilter.selectedCollectionNode) {
+            if (
+              !collections.find((f) => f.id === this.activeFilter.selectedCollectionNode?.node.id)
+            ) {
+              const filter = this.activeFilter;
+              filter.resetFilter();
+              filter.selectedCollectionNode = (await firstValueFrom(
+                this.filters?.collectionFilter.data$
+              )) as TreeNode<CollectionFilter>;
+              await this.applyVaultFilter(filter);
+            }
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  async initCollections(org: Organization) {
+    this._organization = org;
+    await this.reloadCollections();
+    this.applyCollectionFilter(
+      (await firstValueFrom(this.filters?.collectionFilter.data$)) as TreeNode<CollectionFilter>
+    );
+  }
+
+  async updateOrganizationFilter(org: Organization) {
+    this.vaultFilterService.updateOrganizationFilter(org);
+    await this.reloadCollections();
+  }
+
+  async reloadCollections() {
+    await this.vaultFilterService.reloadCollections();
   }
 
   async buildAllFilters() {
@@ -67,12 +112,11 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
         header: {
           showHeader: true,
           isSelectable: true,
-          defaultSelection: true,
         },
         action: this.applyTypeFilter,
       },
       [VaultFilterLabel.CollectionFilter]: {
-        data$: await this.vaultFilterService.nestedCollections$,
+        data$: this.vaultFilterService.nestedCollections$,
         header: {
           showHeader: true,
           isSelectable: true,

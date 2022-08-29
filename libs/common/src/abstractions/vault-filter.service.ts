@@ -16,7 +16,7 @@ export abstract class VaultFilterService {
   filteredCollections$: Observable<CollectionView[]>;
   nestedFolders$: Observable<TreeNode<FolderFilter>>;
   nestedCollections$: Observable<TreeNode<CollectionFilter>>;
-  updateCollections: () => Promise<void>;
+  reloadCollections: () => Promise<void>;
   buildCollapsedFilterNodes: () => Promise<Set<string>>;
   storeCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;
   ensureVaultFiltersAreExpanded: () => Promise<void>;

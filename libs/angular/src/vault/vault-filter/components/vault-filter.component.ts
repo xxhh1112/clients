@@ -54,8 +54,8 @@ export class VaultFilterComponent implements OnInit {
   }
 
   // TODO: Remove when collections is refactored with observables
-  async reloadCollections(orgNode?: TreeNode<OrganizationFilter>) {
-    this.vaultFilterService.updateCollections();
+  async reloadCollections() {
+    await this.vaultFilterService.reloadCollections();
   }
 
   protected async applyVaultFilter(filter: VaultFilter) {
@@ -68,7 +68,9 @@ export class VaultFilterComponent implements OnInit {
     }
     const filter = this.activeFilter;
     filter.resetOrganization();
-    await this.reloadCollections(orgNode);
+    filter.selectedOrganizationNode = orgNode;
+    this.vaultFilterService.updateOrganizationFilter(orgNode.node);
+    await this.reloadCollections();
 
     await this.applyVaultFilter(filter);
   };

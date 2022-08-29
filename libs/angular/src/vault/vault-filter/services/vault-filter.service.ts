@@ -105,7 +105,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
 
   // Helper method to update collections and update fake observable
   // TODO: Remove once collections is refactored with observables
-  async updateCollections() {
+  async reloadCollections() {
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
   }
 

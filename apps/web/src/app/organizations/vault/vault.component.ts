@@ -60,7 +60,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   // This is a hack to avoid redundant api calls that fetch OrganizationVaultFilterComponent collections
   // When it makes sense to do so we should leverage some other communication method for change events that isn't directly tied to the query param for organizationId
   // i.e. exposing the VaultFiltersService to the OrganizationSwitcherComponent to make relevant updates from a change event instead of just depending on the router
-  firstLoaded = true;
+  firstLoad = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +86,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
     this.route.parent.params.subscribe(async (params: any) => {
       this.organization = await this.organizationService.get(params.organizationId);
-      this.vaultFilterComponent.organization = this.organization;
       this.ciphersComponent.organization = this.organization;
 
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -110,12 +109,17 @@ export class VaultComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.firstLoaded) {
-          await this.vaultFilterComponent.reloadCollections();
+        if (this.firstLoad) {
+          await this.vaultFilterComponent.initCollections(this.organization);
+        } else {
+          this.vaultFilterComponent.updateOrganizationFilter(this.organization);
         }
-        this.firstLoaded = true;
+        this.firstLoad = false;
 
-        await this.ciphersComponent.reload();
+        await this.ciphersComponent.reload(
+          this.activeFilter.buildFilter(),
+          this.activeFilter.selectedCipherTypeNode?.node.id === "trash"
+        );
 
         if (qParams.viewEvents != null) {
           const cipher = this.ciphersComponent.ciphers.filter((c) => c.id === qParams.viewEvents);
@@ -207,10 +211,10 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.collectionsModalRef,
       (comp) => {
         if (this.organization.canEditAnyCollection) {
-          // comp.collectionIds = cipher.collectionIds;
-          // comp.collections = this.vaultFilterComponent.collections.fullList.filter(
-          //   (c) => !c.readOnly && c.id != null
-          // );
+          comp.collectionIds = cipher.collectionIds;
+          comp.collections = this.vaultFilterComponent.currentFilterCollections.filter(
+            (c) => !c.readOnly && c.id != null
+          );
         }
         comp.organization = this.organization;
         comp.cipherId = cipher.id;
@@ -225,17 +229,15 @@ export class VaultComponent implements OnInit, OnDestroy {
   async addCipher() {
     const component = await this.editCipher(null);
     component.organizationId = this.organization.id;
-    if (this.activeFilter.selectedCipherTypeNode.node.type in CipherType) {
+    if (this.activeFilter.selectedCipherTypeNode?.node.type in CipherType) {
       component.type = this.activeFilter.selectedCipherTypeNode?.node.type as CipherType;
     }
-    // if (this.organization.canEditAnyCollection) {
-    //   component.collections = this.vaultFilterComponent.collections.fullList.filter(
-    //     (c) => !c.readOnly && c.id != null
-    //   );
-    // }
-    // if (this.collectionId != null) {
-    //   component.collectionIds = [this.collectionId];
-    // }
+    component.collections = this.vaultFilterComponent.currentFilterCollections.filter(
+      (c) => !c.readOnly && c.id != null
+    );
+    if (this.activeFilter.selectedCollectionNode?.node.id != null) {
+      component.collectionIds = [this.activeFilter.selectedCollectionNode?.node.id];
+    }
   }
 
   async editCipher(cipher: CipherView) {
@@ -284,9 +286,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.cloneMode = true;
     component.organizationId = this.organization.id;
     if (this.organization.canEditAnyCollection) {
-      // component.collections = this.vaultFilterComponent.collections.fullList.filter(
-      //   (c) => !c.readOnly && c.id != null
-      // );
+      component.collections = this.vaultFilterComponent.currentFilterCollections.filter(
+        (c) => !c.readOnly && c.id != null
+      );
     }
     // Regardless of Admin state, the collection Ids need to passed manually as they are not assigned value
     // in the add-edit componenet

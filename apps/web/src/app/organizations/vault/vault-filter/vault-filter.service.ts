@@ -18,7 +18,9 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
-  protected collectionViews$: BehaviorSubject<CollectionView[]>;
+  protected collectionViews$: BehaviorSubject<CollectionView[]> = new BehaviorSubject<
+    CollectionView[]
+  >(null);
 
   constructor(
     stateService: StateService,
@@ -75,10 +77,17 @@ export class VaultFilterService extends BaseVaultFilterService {
       .subscribe(this._filteredCollections);
   }
 
+  async reloadCollections(org?: Organization) {
+    this.collectionViews$.next(
+      await this.loadCollections(org ?? this._organizationFilter.getValue())
+    );
+  }
+
   protected async loadCollections(org: Organization) {
     if (org?.permissions && org?.canEditAnyCollection) {
-      await this.loadAdminCollections(org);
+      return await this.loadAdminCollections(org);
     } else {
+      // TODO: remove when collections is refactored with observables
       return await this.collectionService.getAllDecrypted();
     }
   }
