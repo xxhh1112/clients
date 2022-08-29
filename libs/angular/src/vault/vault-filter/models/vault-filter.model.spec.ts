@@ -1,14 +1,58 @@
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 
+import { CipherTypeFilter } from "./cipher-filter.model";
+import { CollectionFilter } from "./collection-filter.model";
+import { FolderFilter } from "./folder-filter.model";
+import { OrganizationFilter } from "./organization-filter.model";
 import { VaultFilter } from "./vault-filter.model";
 
 describe("VaultFilter", () => {
   describe("filterFunction", () => {
+    const allCiphersFilter = new TreeNode<CipherTypeFilter>(
+      {
+        id: "AllItems",
+        name: "allItems",
+        type: "all",
+        icon: "",
+      },
+      null
+    );
+    const favoriteCiphersFilter = new TreeNode<CipherTypeFilter>(
+      {
+        id: "favorites",
+        name: "favorites",
+        type: "favorites",
+        icon: "bwi-star",
+      },
+      null
+    );
+    const identityCiphersFilter = new TreeNode<CipherTypeFilter>(
+      {
+        id: "identity",
+        name: "identity",
+        type: CipherType.Identity,
+        icon: "bwi-id-card",
+      },
+      null
+    );
+    const trashFilter = new TreeNode<CipherTypeFilter>(
+      {
+        id: "trash",
+        name: "trash",
+        type: "trash",
+        icon: "bwi-trash",
+      },
+      null
+    );
     describe("generic cipher", () => {
-      it("should return true when not filtering for anything specific", () => {
+      it("should return true when no filter is applied", () => {
         const cipher = createCipher();
-        const filterFunction = createFilterFunction({ status: "all" });
+        const filterFunction = createFilterFunction({});
 
         const result = filterFunction(cipher);
 
@@ -20,7 +64,7 @@ describe("VaultFilter", () => {
       const cipher = createCipher({ favorite: true });
 
       it("should return true when filtering for favorites", () => {
-        const filterFunction = createFilterFunction({ status: "favorites" });
+        const filterFunction = createFilterFunction({ selectedCipherTypeNode: allCiphersFilter });
 
         const result = filterFunction(cipher);
 
@@ -28,7 +72,7 @@ describe("VaultFilter", () => {
       });
 
       it("should return false when filtering for trash", () => {
-        const filterFunction = createFilterFunction({ status: "trash" });
+        const filterFunction = createFilterFunction({ selectedCipherTypeNode: trashFilter });
 
         const result = filterFunction(cipher);
 
@@ -40,7 +84,7 @@ describe("VaultFilter", () => {
       const cipher = createCipher({ deletedDate: new Date() });
 
       it("should return true when filtering for trash", () => {
-        const filterFunction = createFilterFunction({ status: "trash" });
+        const filterFunction = createFilterFunction({ selectedCipherTypeNode: trashFilter });
 
         const result = filterFunction(cipher);
 
@@ -48,7 +92,9 @@ describe("VaultFilter", () => {
       });
 
       it("should return false when filtering for favorites", () => {
-        const filterFunction = createFilterFunction({ status: "favorites" });
+        const filterFunction = createFilterFunction({
+          selectedCipherTypeNode: favoriteCiphersFilter,
+        });
 
         const result = filterFunction(cipher);
 
@@ -59,7 +105,9 @@ describe("VaultFilter", () => {
     describe("given a cipher with type", () => {
       it("should return true when filter matches cipher type", () => {
         const cipher = createCipher({ type: CipherType.Identity });
-        const filterFunction = createFilterFunction({ cipherType: CipherType.Identity });
+        const filterFunction = createFilterFunction({
+          selectedCipherTypeNode: identityCiphersFilter,
+        });
 
         const result = filterFunction(cipher);
 
@@ -68,7 +116,9 @@ describe("VaultFilter", () => {
 
       it("should return false when filter does not match cipher type", () => {
         const cipher = createCipher({ type: CipherType.Card });
-        const filterFunction = createFilterFunction({ cipherType: CipherType.Identity });
+        const filterFunction = createFilterFunction({
+          selectedCipherTypeNode: identityCiphersFilter,
+        });
 
         const result = filterFunction(cipher);
 
@@ -80,8 +130,7 @@ describe("VaultFilter", () => {
       it("should return true when filter matches folder id", () => {
         const cipher = createCipher({ folderId: "folderId" });
         const filterFunction = createFilterFunction({
-          selectedFolder: true,
-          selectedFolderId: "folderId",
+          selectedFolderNode: createFolderFilterNode({ id: "folderId" }),
         });
 
         const result = filterFunction(cipher);
@@ -92,8 +141,7 @@ describe("VaultFilter", () => {
       it("should return false when filter does not match folder id", () => {
         const cipher = createCipher({ folderId: "folderId" });
         const filterFunction = createFilterFunction({
-          selectedFolder: true,
-          selectedFolderId: "anotherFolderId",
+          selectedFolderNode: createFolderFilterNode({ id: "differentFolderId" }),
         });
 
         const result = filterFunction(cipher);
@@ -107,8 +155,7 @@ describe("VaultFilter", () => {
 
       it("should return true when filtering on unassigned folder", () => {
         const filterFunction = createFilterFunction({
-          selectedFolder: true,
-          selectedFolderId: null,
+          selectedFolderNode: createFolderFilterNode({ id: null }),
         });
 
         const result = filterFunction(cipher);
@@ -125,8 +172,10 @@ describe("VaultFilter", () => {
 
       it("should return true when filter matches collection id", () => {
         const filterFunction = createFilterFunction({
-          selectedCollection: true,
-          selectedCollectionId: "collectionId",
+          selectedCollectionNode: createCollectionFilterNode({
+            id: "collectionId",
+            organizationId: "organizationId",
+          }),
         });
 
         const result = filterFunction(cipher);
@@ -136,8 +185,10 @@ describe("VaultFilter", () => {
 
       it("should return false when filter does not match collection id", () => {
         const filterFunction = createFilterFunction({
-          selectedCollection: true,
-          selectedCollectionId: "nonMatchingId",
+          selectedCollectionNode: createCollectionFilterNode({
+            id: "nonMatchingCollectionId",
+            organizationId: "organizationId",
+          }),
         });
 
         const result = filterFunction(cipher);
@@ -147,7 +198,9 @@ describe("VaultFilter", () => {
 
       it("should return false when filter does not match organization id", () => {
         const filterFunction = createFilterFunction({
-          selectedOrganizationId: "anotherOrganizationId",
+          selectedOrganizationNode: createOrganizationFilterNode({
+            id: "nonMatchingOrganizationId",
+          }),
         });
 
         const result = filterFunction(cipher);
@@ -157,7 +210,7 @@ describe("VaultFilter", () => {
 
       it("should return false when filtering for my vault only", () => {
         const filterFunction = createFilterFunction({
-          myVaultOnly: true,
+          selectedOrganizationNode: createOrganizationFilterNode({ id: "MyVault" }),
         });
 
         const result = filterFunction(cipher);
@@ -171,8 +224,7 @@ describe("VaultFilter", () => {
 
       it("should return true when filtering for unassigned collection", () => {
         const filterFunction = createFilterFunction({
-          selectedCollection: true,
-          selectedCollectionId: null,
+          selectedCollectionNode: createCollectionFilterNode({ id: null }),
         });
 
         const result = filterFunction(cipher);
@@ -182,7 +234,7 @@ describe("VaultFilter", () => {
 
       it("should return true when filter matches organization id", () => {
         const filterFunction = createFilterFunction({
-          selectedOrganizationId: "organizationId",
+          selectedOrganizationNode: createOrganizationFilterNode({ id: "organizationId" }),
         });
 
         const result = filterFunction(cipher);
@@ -196,8 +248,7 @@ describe("VaultFilter", () => {
 
       it("should return false when filtering for unassigned collection", () => {
         const filterFunction = createFilterFunction({
-          selectedCollection: true,
-          selectedCollectionId: null,
+          selectedCollectionNode: createCollectionFilterNode({ id: null }),
         });
 
         const result = filterFunction(cipher);
@@ -208,7 +259,7 @@ describe("VaultFilter", () => {
       it("should return true when filtering for my vault only", () => {
         const cipher = createCipher({ organizationId: null });
         const filterFunction = createFilterFunction({
-          myVaultOnly: true,
+          selectedOrganizationNode: createOrganizationFilterNode({ id: "MyVault" }),
         });
 
         const result = filterFunction(cipher);
@@ -221,6 +272,38 @@ describe("VaultFilter", () => {
 
 function createFilterFunction(options: Partial<VaultFilter> = {}) {
   return new VaultFilter(options).buildFilter();
+}
+
+function createOrganizationFilterNode(
+  options: Partial<OrganizationFilter>
+): TreeNode<OrganizationFilter> {
+  const org = new Organization() as OrganizationFilter;
+  org.id = options.id;
+  org.icon = options.icon ?? "";
+  return new TreeNode<OrganizationFilter>(org, null);
+}
+
+function createFolderFilterNode(options: Partial<FolderFilter>): TreeNode<FolderFilter> {
+  const folder = new FolderView() as FolderFilter;
+  folder.id = options.id;
+  folder.name = options.name;
+  folder.icon = options.icon ?? "";
+  folder.revisionDate = options.revisionDate ?? new Date();
+  return new TreeNode<FolderFilter>(folder, null);
+}
+
+function createCollectionFilterNode(
+  options: Partial<CollectionFilter>
+): TreeNode<CollectionFilter> {
+  const collection = new CollectionView() as CollectionFilter;
+  collection.id = options.id;
+  collection.name = options.name ?? "";
+  collection.icon = options.icon ?? "";
+  collection.organizationId = options.organizationId;
+  collection.externalId = options.externalId ?? "";
+  collection.readOnly = options.readOnly ?? false;
+  collection.hidePasswords = options.hidePasswords ?? false;
+  return new TreeNode<CollectionFilter>(collection, null);
 }
 
 function createCipher(options: Partial<CipherView> = {}) {
