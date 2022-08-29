@@ -7,6 +7,7 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
 import { OrganizationKeysRequest } from "@bitwarden/common/models/request/organizationKeysRequest";
@@ -22,6 +23,7 @@ import { DeleteOrganizationComponent } from "./delete-organization.component";
   selector: "app-org-account",
   templateUrl: "account.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AccountComponent {
   @ViewChild("deleteOrganizationTemplate", { read: ViewContainerRef, static: true })
   deleteModalRef: ViewContainerRef;
@@ -37,7 +39,8 @@ export class AccountComponent {
   loading = true;
   canUseApi = false;
   org: OrganizationResponse;
-  formPromise: Promise<any>;
+  formPromise: Promise<boolean>;
+  taxFormPromise: Promise<unknown>;
 
   private organizationId: string;
 
@@ -51,19 +54,21 @@ export class AccountComponent {
     private cryptoService: CryptoService,
     private logService: LogService,
     private router: Router,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
     this.selfHosted = this.platformUtilsService.isSelfHost();
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       this.canManageBilling = (
         await this.organizationService.get(this.organizationId)
       ).canManageBilling;
       try {
-        this.org = await this.apiService.getOrganization(this.organizationId);
+        this.org = await this.organizationApiService.get(this.organizationId);
         this.canUseApi = this.org.useApi;
       } catch (e) {
         this.logService.error(e);
@@ -87,7 +92,7 @@ export class AccountComponent {
         request.keys = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
       }
 
-      this.formPromise = this.apiService.putOrganization(this.organizationId, request).then(() => {
+      this.formPromise = this.organizationApiService.save(this.organizationId, request).then(() => {
         return this.syncService.fullSync(true);
       });
       await this.formPromise;
@@ -107,6 +112,7 @@ export class AccountComponent {
       this.deleteModalRef,
       (comp) => {
         comp.organizationId = this.organizationId;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onSuccess.subscribe(() => {
           this.router.navigate(["/"]);
         });
@@ -124,7 +130,9 @@ export class AccountComponent {
     await this.modalService.openViewRef(ApiKeyComponent, this.apiKeyModalRef, (comp) => {
       comp.keyType = "organization";
       comp.entityId = this.organizationId;
-      comp.postKey = this.apiService.postOrganizationApiKey.bind(this.apiService);
+      comp.postKey = this.organizationApiService.getOrCreateApiKey.bind(
+        this.organizationApiService
+      );
       comp.scope = "api.organization";
       comp.grantType = "client_credentials";
       comp.apiKeyTitle = "apiKey";
@@ -138,7 +146,7 @@ export class AccountComponent {
       comp.keyType = "organization";
       comp.isRotation = true;
       comp.entityId = this.organizationId;
-      comp.postKey = this.apiService.postOrganizationRotateApiKey.bind(this.apiService);
+      comp.postKey = this.organizationApiService.rotateApiKey.bind(this.organizationApiService);
       comp.scope = "api.organization";
       comp.grantType = "client_credentials";
       comp.apiKeyTitle = "apiKey";

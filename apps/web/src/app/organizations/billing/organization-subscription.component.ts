@@ -8,6 +8,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiKeyType } from "@bitwarden/common/enums/organizationApiKeyType";
 import { OrganizationConnectionType } from "@bitwarden/common/enums/organizationConnectionType";
@@ -25,6 +26,7 @@ import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
   selector: "app-org-subscription",
   templateUrl: "organization-subscription.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class OrganizationSubscriptionComponent implements OnInit {
   @ViewChild("setupBillingSyncTemplate", { read: ViewContainerRef, static: true })
   setupBillingSyncModalRef: ViewContainerRef;
@@ -48,9 +50,9 @@ export class OrganizationSubscriptionComponent implements OnInit {
   userOrg: Organization;
   existingBillingSyncConnection: OrganizationConnectionResponse<BillingSyncConfigApi>;
 
-  removeSponsorshipPromise: Promise<any>;
-  cancelPromise: Promise<any>;
-  reinstatePromise: Promise<any>;
+  removeSponsorshipPromise: Promise<void>;
+  cancelPromise: Promise<void>;
+  reinstatePromise: Promise<void>;
 
   @ViewChild("rotateBillingSyncKeyTemplate", { read: ViewContainerRef, static: true })
   billingSyncKeyViewContainerRef: ViewContainerRef;
@@ -64,12 +66,14 @@ export class OrganizationSubscriptionComponent implements OnInit {
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
     private logService: LogService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       await this.load();
@@ -85,9 +89,9 @@ export class OrganizationSubscriptionComponent implements OnInit {
     this.loading = true;
     this.userOrg = await this.organizationService.get(this.organizationId);
     if (this.userOrg.canManageBilling) {
-      this.sub = await this.apiService.getOrganizationSubscription(this.organizationId);
+      this.sub = await this.organizationApiService.getSubscription(this.organizationId);
     }
-    const apiKeyResponse = await this.apiService.getOrganizationApiKeyInformation(
+    const apiKeyResponse = await this.organizationApiService.getApiKeyInformation(
       this.organizationId
     );
     this.hasBillingSyncToken = apiKeyResponse.data.some(
@@ -125,7 +129,7 @@ export class OrganizationSubscriptionComponent implements OnInit {
     }
 
     try {
-      this.reinstatePromise = this.apiService.postOrganizationReinstate(this.organizationId);
+      this.reinstatePromise = this.organizationApiService.reinstate(this.organizationId);
       await this.reinstatePromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("reinstated"));
       this.load();
@@ -151,7 +155,7 @@ export class OrganizationSubscriptionComponent implements OnInit {
     }
 
     try {
-      this.cancelPromise = this.apiService.postOrganizationCancel(this.organizationId);
+      this.cancelPromise = this.organizationApiService.cancel(this.organizationId);
       await this.cancelPromise;
       this.platformUtilsService.showToast(
         "success",
@@ -185,6 +189,7 @@ export class OrganizationSubscriptionComponent implements OnInit {
         comp.hasBillingToken = this.hasBillingSyncToken;
       }
     );
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     ref.onClosed.subscribe(async () => {
       await this.load();
     });

@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiKeyType } from "@bitwarden/common/enums/organizationApiKeyType";
 import { OrganizationConnectionType } from "@bitwarden/common/enums/organizationConnectionType";
@@ -12,18 +13,20 @@ import { ScimConfigApi } from "@bitwarden/common/models/api/scimConfigApi";
 import { OrganizationApiKeyRequest } from "@bitwarden/common/models/request/organizationApiKeyRequest";
 import { OrganizationConnectionRequest } from "@bitwarden/common/models/request/organizationConnectionRequest";
 import { ScimConfigRequest } from "@bitwarden/common/models/request/scimConfigRequest";
+import { ApiKeyResponse } from "@bitwarden/common/models/response/apiKeyResponse";
 import { OrganizationConnectionResponse } from "@bitwarden/common/models/response/organizationConnectionResponse";
 
 @Component({
   selector: "app-org-manage-scim",
   templateUrl: "scim.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ScimComponent implements OnInit {
   loading = true;
   organizationId: string;
   existingConnectionId: string;
-  formPromise: Promise<any>;
-  rotatePromise: Promise<any>;
+  formPromise: Promise<OrganizationConnectionResponse<ScimConfigApi>>;
+  rotatePromise: Promise<ApiKeyResponse>;
   enabled = new FormControl(false);
   showScimSettings = false;
 
@@ -38,10 +41,12 @@ export class ScimComponent implements OnInit {
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       await this.load();
@@ -61,7 +66,7 @@ export class ScimComponent implements OnInit {
     const apiKeyRequest = new OrganizationApiKeyRequest();
     apiKeyRequest.type = OrganizationApiKeyType.Scim;
     apiKeyRequest.masterPasswordHash = "N/A";
-    const apiKeyResponse = await this.apiService.postOrganizationApiKey(
+    const apiKeyResponse = await this.organizationApiService.getOrCreateApiKey(
       this.organizationId,
       apiKeyRequest
     );
@@ -91,7 +96,7 @@ export class ScimComponent implements OnInit {
     request.type = OrganizationApiKeyType.Scim;
     request.masterPasswordHash = "N/A";
 
-    this.rotatePromise = this.apiService.postOrganizationRotateApiKey(this.organizationId, request);
+    this.rotatePromise = this.organizationApiService.rotateApiKey(this.organizationId, request);
 
     try {
       const response = await this.rotatePromise;

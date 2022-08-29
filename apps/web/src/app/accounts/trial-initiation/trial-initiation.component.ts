@@ -15,13 +15,16 @@ import { ProductType } from "@bitwarden/common/enums/productType";
 import { PolicyData } from "@bitwarden/common/models/data/policyData";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
 import { Policy } from "@bitwarden/common/models/domain/policy";
+import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 
+import { RouterService } from "./../../core/router.service";
 import { VerticalStepperComponent } from "./vertical-stepper/vertical-stepper.component";
 
 @Component({
   selector: "app-trial",
   templateUrl: "trial-initiation.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TrialInitiationComponent implements OnInit {
   email = "";
   org = "";
@@ -29,18 +32,36 @@ export class TrialInitiationComponent implements OnInit {
   orgId = "";
   orgLabel = "";
   billingSubLabel = "";
+  layout = "default";
   plan: PlanType;
   product: ProductType;
   accountCreateOnly = true;
   policies: Policy[];
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
   validOrgs: string[] = ["teams", "enterprise", "families"];
+  referenceData: ReferenceEventRequest;
   @ViewChild("stepper", { static: false }) verticalStepper: VerticalStepperComponent;
 
   orgInfoFormGroup = this.formBuilder.group({
     name: ["", [Validators.required]],
     email: [""],
   });
+
+  private set referenceDataId(referenceId: string) {
+    if (referenceId != null) {
+      this.referenceData.id = referenceId;
+    } else {
+      this.referenceData.id = ("; " + document.cookie)
+        .split("; reference=")
+        .pop()
+        .split(";")
+        .shift();
+    }
+
+    if (this.referenceData.id === "") {
+      this.referenceData.id = null;
+    }
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -51,17 +72,26 @@ export class TrialInitiationComponent implements OnInit {
     private logService: LogService,
     private policyApiService: PolicyApiServiceAbstraction,
     private policyService: PolicyService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private routerService: RouterService
   ) {}
 
   async ngOnInit(): Promise<void> {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.route.queryParams.pipe(first()).subscribe((qParams) => {
+      this.referenceData = new ReferenceEventRequest();
       if (qParams.email != null && qParams.email.indexOf("@") > -1) {
         this.email = qParams.email;
       }
 
+      this.referenceDataId = qParams.reference;
+
       if (!qParams.org) {
         return;
+      }
+
+      if (qParams.layout) {
+        this.layout = qParams.layout;
       }
 
       if (this.validOrgs.includes(qParams.org)) {
@@ -69,6 +99,12 @@ export class TrialInitiationComponent implements OnInit {
       } else {
         this.org = "families";
       }
+
+      this.referenceData.flow = qParams.org;
+
+      // Are they coming from an email for sponsoring a families organization
+      // After logging in redirect them to setup the families sponsorship
+      this.setupFamilySponsorship(qParams.sponsorshipToken);
 
       this.orgLabel = this.titleCasePipe.transform(this.org);
       this.accountCreateOnly = false;
@@ -147,5 +183,14 @@ export class TrialInitiationComponent implements OnInit {
 
   previousStep() {
     this.verticalStepper.previous();
+  }
+
+  private setupFamilySponsorship(sponsorshipToken: string) {
+    if (sponsorshipToken != null) {
+      const route = this.router.createUrlTree(["setup/families-for-enterprise"], {
+        queryParams: { plan: sponsorshipToken },
+      });
+      this.routerService.setPreviousUrl(route.toString());
+    }
   }
 }
