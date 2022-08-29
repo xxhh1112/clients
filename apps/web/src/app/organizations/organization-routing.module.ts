@@ -3,11 +3,16 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/guards/auth.guard";
 
-import { PermissionsGuard } from "./guards/permissions.guard";
+import { OrganizationPermissionsGuard } from "./guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "./layouts/organization-layout.component";
 import { GroupsComponent } from "./manage/groups.component";
 import { PeopleComponent } from "./manage/people.component";
-import { NavigationPermissionsService } from "./services/navigation-permissions.service";
+import {
+  canAccessGroupsTab,
+  canAccessMembersTab,
+  canAccessOrgAdmin,
+  canAccessSettingsTab,
+} from "./navigation-permissions";
 import { AccountComponent } from "./settings/account.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { TwoFactorSetupComponent } from "./settings/two-factor-setup.component";
@@ -17,9 +22,9 @@ const routes: Routes = [
   {
     path: ":organizationId",
     component: OrganizationLayoutComponent,
-    canActivate: [AuthGuard, PermissionsGuard],
+    canActivate: [AuthGuard, OrganizationPermissionsGuard],
     data: {
-      permissions: NavigationPermissionsService.getPermissions("admin"),
+      organizationPermissions: canAccessOrgAdmin,
     },
     children: [
       { path: "", pathMatch: "full", redirectTo: "vault" },
@@ -30,8 +35,8 @@ const routes: Routes = [
       {
         path: "settings",
         component: SettingsComponent,
-        canActivate: [PermissionsGuard],
-        data: { permissions: NavigationPermissionsService.getPermissions("settings") },
+        canActivate: [OrganizationPermissionsGuard],
+        data: { organizationPermissions: canAccessSettingsTab },
         children: [
           { path: "", pathMatch: "full", redirectTo: "account" },
           { path: "account", component: AccountComponent, data: { titleId: "organizationInfo" } },
@@ -45,19 +50,19 @@ const routes: Routes = [
       {
         path: "members",
         component: PeopleComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "members",
-          permissions: NavigationPermissionsService.getPermissions("members"),
+          organizationPermissions: canAccessMembersTab,
         },
       },
       {
         path: "groups",
         component: GroupsComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "groups",
-          permissions: NavigationPermissionsService.getPermissions("groups"),
+          organizationPermissions: canAccessGroupsTab,
         },
       },
       {

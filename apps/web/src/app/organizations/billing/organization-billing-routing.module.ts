@@ -1,11 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { Permissions } from "@bitwarden/common/enums/permissions";
-
 import { PaymentMethodComponent } from "../../settings/payment-method.component";
-import { PermissionsGuard } from "../guards/permissions.guard";
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
+import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
+import { canAccessBillingTab } from "../navigation-permissions";
 
 import { OrgBillingHistoryViewComponent } from "./organization-billing-history-view.component";
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";
@@ -15,8 +13,8 @@ const routes: Routes = [
   {
     path: "",
     component: OrganizationBillingTabComponent,
-    canActivate: [PermissionsGuard],
-    data: { permissions: NavigationPermissionsService.getPermissions("billing") },
+    canActivate: [OrganizationPermissionsGuard],
+    data: { organizationPermissions: canAccessBillingTab },
     children: [
       { path: "", pathMatch: "full", redirectTo: "subscription" },
       {
@@ -27,14 +25,16 @@ const routes: Routes = [
       {
         path: "payment-method",
         component: PaymentMethodComponent,
-        canActivate: [PermissionsGuard],
-        data: { titleId: "paymentMethod", permissions: [Permissions.ManageBilling] },
+        data: {
+          titleId: "paymentMethod",
+        },
       },
       {
         path: "history",
         component: OrgBillingHistoryViewComponent,
-        canActivate: [PermissionsGuard],
-        data: { titleId: "billingHistory", permissions: [Permissions.ManageBilling] },
+        data: {
+          titleId: "billingHistory",
+        },
       },
     ],
   },

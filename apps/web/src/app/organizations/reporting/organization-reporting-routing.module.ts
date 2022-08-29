@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { Permissions } from "@bitwarden/common/enums/permissions";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
-import { PermissionsGuard } from "../guards/permissions.guard";
+import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 import { EventsComponent } from "../manage/events.component";
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
+import { canAccessReportingTab } from "../navigation-permissions";
 import { ExposedPasswordsReportComponent } from "../tools/exposed-passwords-report.component";
 import { InactiveTwoFactorReportComponent } from "../tools/inactive-two-factor-report.component";
 import { ReusedPasswordsReportComponent } from "../tools/reused-passwords-report.component";
@@ -19,62 +19,51 @@ const routes: Routes = [
   {
     path: "",
     component: ReportingComponent,
-    canActivate: [PermissionsGuard],
-    data: { permissions: NavigationPermissionsService.getPermissions("reporting") },
+    canActivate: [OrganizationPermissionsGuard],
+    data: { organizationPermissions: canAccessReportingTab },
     children: [
       { path: "", pathMatch: "full", redirectTo: "reports" },
       {
         path: "reports",
         component: ReportsHomeComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "reports",
-          permissions: [Permissions.AccessReports],
         },
         children: [
           {
             path: "exposed-passwords-report",
             component: ExposedPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
             data: {
               titleId: "exposedPasswordsReport",
-              permissions: [Permissions.AccessReports],
             },
           },
           {
             path: "inactive-two-factor-report",
             component: InactiveTwoFactorReportComponent,
-            canActivate: [PermissionsGuard],
             data: {
               titleId: "inactive2faReport",
-              permissions: [Permissions.AccessReports],
             },
           },
           {
             path: "reused-passwords-report",
             component: ReusedPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
             data: {
               titleId: "reusedPasswordsReport",
-              permissions: [Permissions.AccessReports],
             },
           },
           {
             path: "unsecured-websites-report",
             component: UnsecuredWebsitesReportComponent,
-            canActivate: [PermissionsGuard],
             data: {
               titleId: "unsecuredWebsitesReport",
-              permissions: [Permissions.AccessReports],
             },
           },
           {
             path: "weak-passwords-report",
             component: WeakPasswordsReportComponent,
-            canActivate: [PermissionsGuard],
             data: {
               titleId: "weakPasswordsReport",
-              permissions: [Permissions.AccessReports],
             },
           },
         ],
@@ -82,10 +71,10 @@ const routes: Routes = [
       {
         path: "events",
         component: EventsComponent,
-        canActivate: [PermissionsGuard],
+        canActivate: [OrganizationPermissionsGuard],
         data: {
           titleId: "eventLogs",
-          permissions: [Permissions.AccessEventLogs],
+          organizationPermissions: (org: Organization) => org.canAccessEventLogs,
         },
       },
     ],

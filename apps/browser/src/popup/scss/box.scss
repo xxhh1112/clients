@@ -33,7 +33,7 @@
     }
 
     &:hover,
-    &:focus,
+    &:focus-visible,
     &.active {
       @include themify($themes) {
         background-color: themed("boxBackgroundHoverColor");
@@ -441,7 +441,7 @@
       }
     }
 
-    &:focus {
+    &:not([type="file"]):focus {
       outline: none;
     }
   }
