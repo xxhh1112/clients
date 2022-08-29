@@ -34,6 +34,9 @@ const filters = {
 
 function buildString() {
   var build = "";
+  if (process.env.MANIFEST_VERSION) {
+    build = `-mv${process.env.MANIFEST_VERSION}`;
+  }
   if (process.env.BUILD_NUMBER && process.env.BUILD_NUMBER !== "") {
     build = `-${process.env.BUILD_NUMBER}`;
   }
@@ -57,6 +60,7 @@ function dist(browserName, manifest) {
 function distFirefox() {
   return dist("firefox", (manifest) => {
     delete manifest.content_security_policy;
+    delete manifest.storage;
     removeShortcuts(manifest);
     return manifest;
   });

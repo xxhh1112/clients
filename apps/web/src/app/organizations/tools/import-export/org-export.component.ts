@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
@@ -19,6 +20,7 @@ import { ExportComponent } from "../../../tools/import-export/export.component";
   selector: "app-org-export",
   templateUrl: "../../../tools/import-export/export.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class OrganizationExportComponent extends ExportComponent {
   constructor(
     cryptoService: CryptoService,
@@ -31,7 +33,8 @@ export class OrganizationExportComponent extends ExportComponent {
     logService: LogService,
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    modalService: ModalService
   ) {
     super(
       cryptoService,
@@ -43,11 +46,13 @@ export class OrganizationExportComponent extends ExportComponent {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      modalService
     );
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
     });

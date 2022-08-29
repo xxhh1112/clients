@@ -1,4 +1,5 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -10,7 +11,7 @@ import { VaultFilterList } from "../models/vault-filter-section";
 import { VaultFilter } from "../models/vault-filter.model";
 
 @Directive()
-export class VaultFilterComponent implements OnInit {
+export class VaultFilterComponent implements OnInit, OnDestroy {
   @Input() activeFilter: VaultFilter = new VaultFilter();
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Input() filters?: VaultFilterList;
@@ -18,17 +19,26 @@ export class VaultFilterComponent implements OnInit {
   isLoaded = false;
   collapsedFilterNodes: Set<string>;
 
+  destroy$: Subject<void>;
+
   constructor(
     protected vaultFilterService: VaultFilterService,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService
   ) {}
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   async ngOnInit(): Promise<void> {
     this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
-    this.vaultFilterService.collapsedFilterNodes$.subscribe((nodes) => {
-      this.collapsedFilterNodes = nodes;
-    });
+    this.vaultFilterService.collapsedFilterNodes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((nodes) => {
+        this.collapsedFilterNodes = nodes;
+      });
 
     this.isLoaded = true;
   }

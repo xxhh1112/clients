@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { firstValueFrom, switchMap } from "rxjs";
+import { Component, OnDestroy } from "@angular/core";
+import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { VaultFilterLabel } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
@@ -16,12 +16,15 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
   selector: "app-organization-vault-filter",
   templateUrl: "../../../vault/vault-filter/vault-filter.component.html",
 })
-export class VaultFilterComponent extends BaseVaultFilterComponent {
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
+export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
   private _organization: Organization;
 
   get organization() {
     return this._organization;
   }
+
+  destroy$: Subject<void>;
 
   constructor(
     vaultFilterService: VaultFilterService,
@@ -29,6 +32,11 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
     platformUtilsService: PlatformUtilsService
   ) {
     super(vaultFilterService, i18nService, platformUtilsService);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   protected loadSubscriptions() {
@@ -47,7 +55,8 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
               await this.applyVaultFilter(filter);
             }
           }
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe();
   }

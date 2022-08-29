@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { firstValueFrom, switchMap } from "rxjs";
+import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
+import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "@bitwarden/angular/vault/vault-filter/components/vault-filter.component";
 import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
@@ -21,7 +21,8 @@ import { OrganizationOptionsComponent } from "./organization-filter/organization
   selector: "./app-vault-filter",
   templateUrl: "vault-filter.component.html",
 })
-export class VaultFilterComponent extends BaseVaultFilterComponent {
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
+export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
   @Output() onSearchTextChanged = new EventEmitter<string>();
   @Output() onAddFolder = new EventEmitter();
   @Output() onEditFolder = new EventEmitter<FolderFilter>();
@@ -30,6 +31,8 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   searchText = "";
 
   currentFilterCollections: CollectionView[] = [];
+
+  destroy$: Subject<void>;
 
   constructor(
     vaultFilterService: VaultFilterService,
@@ -55,7 +58,8 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
               await this.applyVaultFilter(filter);
             }
           }
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe();
 
@@ -75,7 +79,8 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
               await this.applyVaultFilter(filter);
             }
           }
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe();
   }
@@ -83,6 +88,11 @@ export class VaultFilterComponent extends BaseVaultFilterComponent {
   async ngOnInit() {
     await super.ngOnInit();
     await this.buildAllFilters();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   searchTextChanged() {

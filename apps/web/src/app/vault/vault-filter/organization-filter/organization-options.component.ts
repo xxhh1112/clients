@@ -6,6 +6,7 @@ import { VaultFilterType } from "@bitwarden/angular/vault/vault-filter/models/va
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SyncService } from "@bitwarden/common/abstractions/sync.service";
@@ -21,7 +22,7 @@ import { EnrollMasterPasswordReset } from "../../../organizations/users/enroll-m
   templateUrl: "organization-options.component.html",
 })
 export class OrganizationOptionsComponent {
-  actionPromise: Promise<any>;
+  actionPromise: Promise<void | boolean>;
   policies: Policy[];
   loaded = false;
   organization: Organization;
@@ -34,7 +35,8 @@ export class OrganizationOptionsComponent {
     private syncService: SyncService,
     private policyService: PolicyService,
     private modalService: ModalService,
-    private logService: LogService
+    private logService: LogService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {
     this.organization = injectedOrg as any;
   }
@@ -104,7 +106,7 @@ export class OrganizationOptionsComponent {
     }
 
     try {
-      this.actionPromise = this.apiService.postLeaveOrganization(org.id).then(() => {
+      this.actionPromise = this.organizationApiService.leave(org.id).then(() => {
         return this.syncService.fullSync(true);
       });
       await this.actionPromise;

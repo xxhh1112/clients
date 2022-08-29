@@ -7,6 +7,7 @@ import { dirtyRequired } from "@bitwarden/angular/validators/dirty.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import {
   OpenIdConnectRedirectBehavior,
@@ -28,6 +29,7 @@ const defaultSigningAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha2
   selector: "app-org-manage-sso",
   templateUrl: "sso.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SsoComponent implements OnInit {
   readonly ssoType = SsoType;
 
@@ -79,7 +81,7 @@ export class SsoComponent implements OnInit {
   haveTestedKeyConnector = false;
   organizationId: string;
   organization: Organization;
-  formPromise: Promise<any>;
+  formPromise: Promise<OrganizationSsoResponse>;
 
   callbackPath: string;
   signedOutCallbackPath: string;
@@ -147,10 +149,12 @@ export class SsoComponent implements OnInit {
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.ssoConfigForm.get("configType").valueChanges.subscribe((newType: SsoType) => {
       if (newType === SsoType.OpenIdConnect) {
         this.openIdForm.enable();
@@ -166,10 +170,12 @@ export class SsoComponent implements OnInit {
 
     this.samlForm
       .get("spSigningBehavior")
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       .valueChanges.subscribe(() =>
         this.samlForm.get("idpX509PublicCert").updateValueAndValidity()
       );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       await this.load();
@@ -178,7 +184,7 @@ export class SsoComponent implements OnInit {
 
   async load() {
     this.organization = await this.organizationService.get(this.organizationId);
-    const ssoSettings = await this.apiService.getOrganizationSso(this.organizationId);
+    const ssoSettings = await this.organizationApiService.getSso(this.organizationId);
     this.populateForm(ssoSettings);
 
     this.callbackPath = ssoSettings.urls.callbackPath;
@@ -206,7 +212,7 @@ export class SsoComponent implements OnInit {
     request.enabled = this.enabled.value;
     request.data = SsoConfigApi.fromView(this.ssoConfigForm.value as SsoConfigView);
 
-    this.formPromise = this.apiService.postOrganizationSso(this.organizationId, request);
+    this.formPromise = this.organizationApiService.updateSso(this.organizationId, request);
 
     try {
       const response = await this.formPromise;
