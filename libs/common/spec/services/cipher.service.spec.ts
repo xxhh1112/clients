@@ -12,6 +12,8 @@ import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
+import { EncString } from "@bitwarden/common/models/domain/encString";
+import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 
@@ -185,6 +187,26 @@ describe("Cipher Service", () => {
       );
 
       expect(actual.map((c) => c.id)).toEqual(["23"]);
+    });
+  });
+
+  describe("getAllDecrypted$", () => {
+    const getAllDecrypted$ = new BehaviorSubject(null);
+
+    beforeEach(() => {
+      (cipherService as any).cipherViews$ = getAllDecrypted$;
+
+      getAllDecrypted$.next([
+        getcipherData("23", "http://localhost"),
+        getcipherData("24", "www.google.com"),
+        getcipherData("24", "www.goal.com"),
+      ]);
+    });
+
+    it("Count of CipherView In The Return List", async () => {
+      const actual = await firstValueFrom(cipherService.getAllDecrypted$());
+
+      expect(actual.length).toEqual(3);
     });
   });
 
@@ -402,6 +424,27 @@ describe("Cipher Service", () => {
       const actual = await cipherService.getLastUsedForUrl(url, true);
 
       expect(actual.id).toEqual("23");
+    });
+  });
+
+  describe("encrypt", () => {
+    it("encrypt", async () => {
+      const model = new CipherView();
+      model.id = "2";
+      model.name = "Test Cipher";
+      model.organizationId = Utils.newGuid();
+      model.type = CipherType.SecureNote;
+      model.collectionIds = [Utils.newGuid()];
+      model.revisionDate = null;
+
+      cryptoService.encrypt(Arg.any()).resolves(new EncString("ENC"));
+      cryptoService.decryptToUtf8(Arg.any()).resolves("DEC");
+
+      const result = await cipherService.encrypt(model);
+
+      expect(result.id).toEqual("2");
+      expect(result.collectionIds).toEqual(model.collectionIds);
+      expect(result.organizationId).toEqual(model.organizationId);
     });
   });
 
