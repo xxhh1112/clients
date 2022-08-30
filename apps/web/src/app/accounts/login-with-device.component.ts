@@ -109,7 +109,7 @@ export class LoginWithDeviceComponent
 
     setTimeout(() => {
       this.resendNotification = true;
-    }, 2000);
+    }, 12000);
   }
 
   ngOnDestroy(): void {

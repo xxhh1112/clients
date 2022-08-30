@@ -24,7 +24,6 @@ import { CaptchaProtectedComponent } from "./captchaProtected.component";
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
   showPassword = false;
-  showErrorSummary = false;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
@@ -87,7 +86,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     await this.setupCaptcha();
 
     this.formGroup.markAllAsTouched();
-    this.showErrorSummary = true;
 
     //web
     if (this.formGroup.invalid && !showToast) {
