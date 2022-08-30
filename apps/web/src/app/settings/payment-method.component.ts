@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 import { VerifyBankRequest } from "@bitwarden/common/models/request/verifyBankRequest";
@@ -17,6 +18,7 @@ import { TaxInfoComponent } from "./tax-info.component";
   selector: "app-payment-method",
   templateUrl: "payment-method.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class PaymentMethodComponent implements OnInit {
   @ViewChild(TaxInfoComponent) taxInfo: TaxInfoComponent;
 
@@ -47,6 +49,7 @@ export class PaymentMethodComponent implements OnInit {
 
   constructor(
     protected apiService: ApiService,
+    protected organizationApiService: OrganizationApiServiceAbstraction,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     private router: Router,
@@ -56,6 +59,7 @@ export class PaymentMethodComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.params.subscribe(async (params) => {
       if (params.organizationId) {
         this.organizationId = params.organizationId;
@@ -76,8 +80,8 @@ export class PaymentMethodComponent implements OnInit {
     this.loading = true;
 
     if (this.forOrganization) {
-      const billingPromise = this.apiService.getOrganizationBilling(this.organizationId);
-      const orgPromise = this.apiService.getOrganization(this.organizationId);
+      const billingPromise = this.organizationApiService.getBilling(this.organizationId);
+      const orgPromise = this.organizationApiService.get(this.organizationId);
 
       [this.billing, this.org] = await Promise.all([billingPromise, orgPromise]);
     } else {
@@ -138,10 +142,7 @@ export class PaymentMethodComponent implements OnInit {
       const request = new VerifyBankRequest();
       request.amount1 = this.verifyBankForm.value.amount1;
       request.amount2 = this.verifyBankForm.value.amount2;
-      this.verifyBankPromise = this.apiService.postOrganizationVerifyBank(
-        this.organizationId,
-        request
-      );
+      this.verifyBankPromise = this.organizationApiService.verifyBank(this.organizationId, request);
       await this.verifyBankPromise;
       this.platformUtilsService.showToast(
         "success",

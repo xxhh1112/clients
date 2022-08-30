@@ -8,6 +8,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
   selector: "app-org-reporting",
   templateUrl: "reporting.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ReportingComponent implements OnInit {
   organization: Organization;
   accessEvents = false;
@@ -16,6 +17,7 @@ export class ReportingComponent implements OnInit {
   constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.params.subscribe(async (params) => {
       this.organization = await this.organizationService.get(params.organizationId);
       this.accessEvents = this.showLeftNav = this.organization.useEvents;
