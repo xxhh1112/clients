@@ -916,18 +916,18 @@
     "message": "길이"
   },
   "uppercase": {
-    "message": "대문자 (A-Z)",
+    "message": "Uppercase (A-Z)",
     "description": "Include uppercase letters in the password generator."
   },
   "lowercase": {
-    "message": "소문자 (a-z)",
+    "message": "Lowercase (a-z)",
     "description": "Include lowercase letters in the password generator."
   },
   "numbers": {
-    "message": "숫자 (0-9)"
+    "message": "Numbers (0-9)"
   },
   "specialCharacters": {
-    "message": "특수 문자 (!@#$%^&*)"
+    "message": "Special Characters (!@#$%^&*)"
   },
   "numWords": {
     "message": "단어 수"
@@ -1673,10 +1673,10 @@
     "message": "결제"
   },
   "billingPlanLabel": {
-    "message": "요금제"
+    "message": "Billing Plan"
   },
   "paymentType": {
-    "message": "결제 수단"
+    "message": "Payment Type"
   },
   "accountCredit": {
     "message": "계정 크레딧",
@@ -1826,7 +1826,7 @@
     "message": "결제 정보"
   },
   "billingTrialSubLabel": {
-    "message": "7일 무료 체험 기간 동안에는 등록한 결제 수단에 요금이 청구되지 않습니다."
+    "message": "Your payment method will not be charged during the 7 day free trial."
   },
   "creditCard": {
     "message": "신용카드"
@@ -2185,7 +2185,7 @@
     }
   },
   "trialThankYou": {
-    "message": "Bitwarden의 $PLAN$에 가입해 주셔서 감사합니다!",
+    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2194,7 +2194,7 @@
     }
   },
   "trialPaidInfoMessage": {
-    "message": "고객님의 $PLAN$ 7일 무료 체험은 7일 후 유료 구독으로 전환될 예정입니다.",
+    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2212,7 +2212,7 @@
     "message": "연간"
   },
   "annual": {
-    "message": "연간"
+    "message": "Annual"
   },
   "basePrice": {
     "message": "기준 단가"
@@ -2281,7 +2281,7 @@
     "message": "정말 이 사용자를 제거하시겠습니까?"
   },
   "removeOrgUserConfirmation": {
-    "message": "구성원이 제거되면 해당 구성원은 그룹 데이터에 접근할 수 없으며 이 작업은 되돌릴 수 없습니다. 구성원을 다시 그룹에 추가하려면 해당 구성원을 다시 초대하여야 합니다."
+    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
   },
   "revokeUserConfirmation": {
     "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
@@ -2806,7 +2806,7 @@
     "message": "초대장 다시 보내기"
   },
   "resendEmail": {
-    "message": "이매일 재발송"
+    "message": "Resend Email"
   },
   "hasBeenReinvited": {
     "message": "$USER$가 다시 초대되었습니다.",
@@ -4467,7 +4467,7 @@
     }
   },
   "organizationJoinedProvider": {
-    "message": "제공자가 조직에 성공적으로 추가되었습니다."
+    "message": "Organization was successfully added to the provider"
   },
   "accessingUsingProvider": {
     "message": "Accessing organization using provider $PROVIDER$",
@@ -4714,7 +4714,7 @@
     "message": "Reclaimed free plan"
   },
   "redeem": {
-    "message": "코드 입력"
+    "message": "Redeem"
   },
   "sponsoredFamiliesSelectOffer": {
     "message": "Select the organization you would like sponsored"
@@ -4859,7 +4859,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
-    "message": "SSO 인증 정책 요청",
+    "message": "SSO 인증 정책",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
