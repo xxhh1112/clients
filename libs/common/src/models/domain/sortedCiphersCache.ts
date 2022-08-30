@@ -19,7 +19,6 @@ export class SortedCiphersCache {
   }
 
   getLastUsed(url: string) {
-    this.resetTimer(url);
     return this.isCached(url) ? this.sortedCiphersByUrl.get(url).getLastUsed() : null;
   }
 

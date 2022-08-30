@@ -1,16 +1,14 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, from, map, concatMap, Observable, firstValueFrom } from "rxjs";
 
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
 import { LogService } from "../../abstractions/log.service";
-import { SearchService } from "../../abstractions/search.service";
 import { SettingsService } from "../../abstractions/settings.service";
 import { StateService } from "../../abstractions/state.service";
 import { CipherType } from "../../enums/cipherType";
 import { FieldType } from "../../enums/fieldType";
 import { UriMatchType } from "../../enums/uriMatchType";
-import { sequentialize } from "../../misc/sequentialize";
 import { Utils } from "../../misc/utils";
 import { CipherData } from "../../models/data/cipherData";
 import { Attachment } from "../../models/domain/attachment";
@@ -51,7 +49,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     private cryptoService: CryptoService,
     private settingsService: SettingsService,
     private i18nService: I18nService,
-    private searchService: () => SearchService,
     private logService: LogService,
     private stateService: StateService
   ) {
@@ -72,31 +69,18 @@ export class CipherService implements InternalCipherServiceAbstraction {
     });
   }
 
-  // TODO Cy: This should probably totally go away.
-  async setDecryptedCipherCache(value: CipherView[]) {
-    await this.stateService.setDecryptedCiphers(value);
-    // TODO Cy: This should be implemented by subscribing to the decrypted ciphers observable.
-    if (this.searchService != null) {
-      if (value == null) {
-        this.searchService().clearIndex();
-      } else {
-        this.searchService().indexCiphers();
-      }
-    }
-  }
-
   async encrypt(
     model: CipherView,
     key?: SymmetricCryptoKey,
     originalCipher: Cipher = null
   ): Promise<Cipher> {
-    // Adjust password history
     if (model.id != null) {
       if (originalCipher == null) {
         originalCipher = await this.get(model.id);
       }
       if (originalCipher != null) {
-        const existingCipher = await originalCipher.decrypt();
+        const existingCiphers = await this.decryptCiphers([originalCipher]);
+        const existingCipher = existingCiphers[0];
         model.passwordHistory = existingCipher.passwordHistory || [];
         if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
           if (
@@ -189,48 +173,16 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   async get(id: string): Promise<Cipher> {
     const ciphers = this._ciphers.getValue();
-
-    return ciphers.find((cipher) => cipher.id === id);
+    const response = ciphers.find((obj) => {
+      return obj.id === id;
+    });
+    return response;
   }
 
   async getAll(): Promise<Cipher[]> {
     const cipherMap = await this.stateService.getEncryptedCiphers();
     const response = Object.values(cipherMap || {}).map((c) => new Cipher(c));
     return response;
-  }
-
-  @sequentialize(() => "getAllDecrypted")
-  async getAllDecrypted(): Promise<CipherView[]> {
-    const userId = await this.stateService.getUserId();
-    if (this._cipherViews.getValue() != null) {
-      if (
-        this.searchService != null &&
-        (this.searchService().indexedEntityId ?? userId) !== userId
-      ) {
-        await this.searchService().indexCiphers(userId, this._cipherViews.getValue());
-      }
-      return this._cipherViews.getValue();
-    }
-
-    const decCiphers: CipherView[] = [];
-    const hasKey = await this.cryptoService.hasKey();
-    if (!hasKey) {
-      throw new Error("No key.");
-    }
-
-    const promises: Promise<number>[] = [];
-    const cipherMap = await this.stateService.getEncryptedCiphers();
-    const ciphers = Object.values(cipherMap || {}).map((c) => new Cipher(c));
-
-    ciphers.forEach(async (cipher) => {
-      promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
-    });
-
-    await Promise.all(promises);
-    decCiphers.sort(this.getLocaleSortingFunction());
-
-    await this.setDecryptedCipherCache(decCiphers);
-    return decCiphers;
   }
 
   getLocaleSortingFunction(): (a: CipherView, b: CipherView) => number {
@@ -270,122 +222,50 @@ export class CipherService implements InternalCipherServiceAbstraction {
     };
   }
 
-  async getAllDecryptedForGrouping(groupingId: string, folder = true): Promise<CipherView[]> {
-    const ciphers = await this.getAllDecrypted();
-
-    return ciphers.filter((cipher) => {
-      if (cipher.isDeleted) {
-        return false;
-      }
-      if (folder && cipher.folderId === groupingId) {
-        return true;
-      } else if (
-        !folder &&
-        cipher.collectionIds != null &&
-        cipher.collectionIds.indexOf(groupingId) > -1
-      ) {
-        return true;
-      }
-
-      return false;
-    });
+  getAllDecrypted$(): Observable<CipherView[]> {
+    return this.cipherViews$;
   }
 
-  async getAllDecryptedForUrl(
+  getAllDecryptedForGrouping$(groupingId: string, folder = true): Observable<CipherView[]> {
+    return this.cipherViews$.pipe(
+      map((ciphers) => {
+        return ciphers.filter((c) => {
+          if (c.isDeleted) {
+            return false;
+          }
+
+          return (
+            (folder && c.folderId === groupingId) ||
+            (!folder && c.collectionIds != null && c.collectionIds.indexOf(groupingId) !== -1)
+          );
+        });
+      })
+    );
+  }
+
+  getAllDecryptedForUrl$(
     url: string,
     includeOtherTypes?: CipherType[],
     defaultMatch: UriMatchType = null
-  ): Promise<CipherView[]> {
-    if (url == null && includeOtherTypes == null) {
-      return Promise.resolve([]);
-    }
-
+  ): Observable<CipherView[]> {
     const domain = Utils.getDomain(url);
-    const eqDomainsPromise = this.getEquivalentDomain(domain);
 
-    const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
-    const matchingDomains = result[0];
-    const ciphers = result[1];
-
-    defaultMatch = await this.getDefaultMatch(defaultMatch);
-
-    const cipherResponse = ciphers.filter((cipher) => {
-      if (cipher.deletedDate != null) {
-        return false;
-      }
-
-      this.includeOtherTypes(includeOtherTypes, cipher);
-
-      if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
-        for (let i = 0; i < cipher.login.uris.length; i++) {
-          const u = cipher.login.uris[i];
-          if (u.uri == null) {
-            continue;
-          }
-
-          const match = u.match == null ? defaultMatch : u.match;
-          switch (match) {
-            case UriMatchType.Domain:
-              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
-                if (DomainMatchBlacklist.has(u.domain)) {
-                  const domainUrlHost = Utils.getHost(url);
-                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
-                    return true;
-                  }
-                } else {
-                  return true;
-                }
-              }
-              break;
-            case UriMatchType.Host: {
-              const urlHost = Utils.getHost(url);
-              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-                return true;
-              }
-              break;
-            }
-            case UriMatchType.Exact:
-              if (url === u.uri) {
-                return true;
-              }
-              break;
-            case UriMatchType.StartsWith:
-              if (url.startsWith(u.uri)) {
-                return true;
-              }
-              break;
-            case UriMatchType.RegularExpression:
-              try {
-                const regex = new RegExp(u.uri, "i");
-                if (regex.test(url)) {
-                  return true;
-                }
-              } catch (e) {
-                this.logService.error(e);
-              }
-              break;
-            case UriMatchType.Never:
-            default:
-              break;
-          }
-        }
-      }
-
-      return false;
-    });
-
-    return cipherResponse;
+    return this.getEquivalentDomain$(domain).pipe(
+      concatMap((result) =>
+        this.filterAllDecrypteUrls$(includeOtherTypes, url, defaultMatch, domain, result)
+      )
+    );
   }
 
-  async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
+  getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
     return this.getCipherForUrl(url, true, false, autofillOnPageLoad);
   }
 
-  async getLastLaunchedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
+  getLastLaunchedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
     return this.getCipherForUrl(url, false, true, autofillOnPageLoad);
   }
 
-  async getNextCipherForUrl(url: string): Promise<CipherView> {
+  getNextCipherForUrl(url: string): Promise<CipherView> {
     return this.getCipherForUrl(url, false, false, false);
   }
 
@@ -500,6 +380,10 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(null, { userId: userId });
   }
 
+  async clearCache(): Promise<void> {
+    this._cipherViews.next([]);
+  }
+
   async delete(id: string | string[]): Promise<any> {
     const ciphers = await this.stateService.getEncryptedCiphers();
     if (ciphers == null) {
@@ -517,7 +401,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
       });
     }
 
-    await this.clear();
+    await this.clearCache();
     await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
@@ -536,7 +420,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
       }
     }
 
-    await this.clear();
+    await this.clearCache();
     await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
@@ -585,7 +469,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
       (id as string[]).forEach(setDeletedDate);
     }
 
-    await this.clear();
+    await this.clearCache();
     await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
   }
@@ -612,9 +496,92 @@ export class CipherService implements InternalCipherServiceAbstraction {
       clearDeletedDate(cipher as { id: string; revisionDate: string });
     }
 
-    await this.clear();
+    await this.clearCache();
     await this.updateObservables(ciphers);
     await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  private filterAllDecrypteUrls$(
+    includeOtherTypes: CipherType[],
+    url: string,
+    defaultMatch: UriMatchType,
+    domain: string,
+    matchingDomains: string[]
+  ): Observable<CipherView[]> {
+    return this.cipherViews$.pipe(
+      map((ciphers) => {
+        return ciphers.filter((cipher) => {
+          if (cipher.deletedDate != null) {
+            return false;
+          }
+
+          if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
+            return true;
+          }
+
+          if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
+            for (let i = 0; i < cipher.login.uris.length; i++) {
+              const u = cipher.login.uris[i];
+              if (u.uri == null) {
+                continue;
+              }
+
+              const match = u.match == null ? defaultMatch : u.match;
+              switch (match) {
+                case UriMatchType.Domain:
+                  if (
+                    domain != null &&
+                    u.domain != null &&
+                    matchingDomains.indexOf(u.domain) > -1
+                  ) {
+                    if (DomainMatchBlacklist.has(u.domain)) {
+                      const domainUrlHost = Utils.getHost(url);
+                      if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
+                        return true;
+                      }
+                    } else {
+                      return true;
+                    }
+                  }
+                  break;
+                case UriMatchType.Host: {
+                  const urlHost = Utils.getHost(url);
+                  if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
+                    return true;
+                  }
+                  break;
+                }
+                case UriMatchType.Exact:
+                  if (url === u.uri) {
+                    return true;
+                  }
+                  break;
+                case UriMatchType.StartsWith:
+                  if (url.startsWith(u.uri)) {
+                    return true;
+                  }
+                  break;
+                case UriMatchType.RegularExpression:
+                  try {
+                    const regex = new RegExp(u.uri, "i");
+                    if (regex.test(url)) {
+                      return true;
+                    }
+                  } catch (e) {
+                    this.logService.error(e);
+                  }
+                  break;
+                case UriMatchType.Never:
+                default:
+                  break;
+              }
+            }
+          }
+
+          return false;
+        });
+      })
+    );
   }
 
   private async encryptFields(fieldsModel: FieldView[], key: SymmetricCryptoKey): Promise<Field[]> {
@@ -891,18 +858,18 @@ export class CipherService implements InternalCipherServiceAbstraction {
     const cacheKey = autofillOnPageLoad ? "autofillOnPageLoad-" + url : url;
 
     if (!this.sortedCiphersCache.isCached(cacheKey)) {
-      let ciphers = await this.getAllDecryptedForUrl(url);
+      const ciphers = await firstValueFrom(this.getAllDecryptedForUrl$(url));
       if (!ciphers) {
         return null;
       }
 
       if (autofillOnPageLoad) {
         const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
-        ciphers = ciphers.filter(
-          (cipher) =>
-            cipher.login.autofillOnPageLoad ||
-            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
-        );
+        ciphers.filter((cipher) => {
+          cipher.login.autofillOnPageLoad ||
+            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false);
+        });
+
         if (ciphers.length === 0) {
           return null;
         }
@@ -918,41 +885,60 @@ export class CipherService implements InternalCipherServiceAbstraction {
     } else {
       return this.sortedCiphersCache.getNext(cacheKey);
     }
+
+    //   if (!this.sortedCiphersCache.isCached(cacheKey)) {
+    //     if (!ciphers) {
+    //       return null;
+    //     }
+
+    //     if (autofillOnPageLoad) {
+    //       ciphers.filter((cipher) => {
+    //         cipher.login.autofillOnPageLoad || (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
+    //       });
+
+    //       if (ciphers.length === 0) {
+    //         return null;
+    //       }
+    //     }
+
+    //     this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
+
+    //   }
+
+    //   if (lastLaunched) {
+    //     return this.sortedCiphersCache.getLastLaunched(cacheKey);
+    //   } else if (lastUsed) {
+    //     return this.sortedCiphersCache.getLastUsed(cacheKey);
+    //   } else {
+    //     return this.sortedCiphersCache.getNext(cacheKey);
+    //   }
+
+    // });
+
+    // return Response;
   }
 
-  private async getDefaultMatch(defaultMatch: UriMatchType) {
-    if (defaultMatch == null) {
-      defaultMatch = await this.stateService.getDefaultUriMatch();
-      if (defaultMatch == null) {
-        defaultMatch = UriMatchType.Domain;
-      }
-    }
-    return defaultMatch;
-  }
-
-  private getEquivalentDomain(domain: string) {
+  private getEquivalentDomain$(domain: string) {
     return domain == null
-      ? Promise.resolve([])
-      : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-          let matches: any[] = [];
-          eqDomains.forEach((eqDomain) => {
-            if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-              matches = matches.concat(eqDomain);
+      ? from(Promise.resolve([]))
+      : from(
+          Promise.resolve(this.settingsService.getEquivalentDomains()).then(
+            (eqDomains: any[][]) => {
+              let matches: any[] = [];
+              eqDomains.forEach((eqDomain) => {
+                if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+                  matches = matches.concat(eqDomain);
+                }
+              });
+
+              if (!matches.length) {
+                matches.push(domain);
+              }
+
+              return matches;
             }
-          });
-
-          if (!matches.length) {
-            matches.push(domain);
-          }
-
-          return matches;
-        });
-  }
-
-  private includeOtherTypes(includeOtherTypes?: CipherType[], cipher?: CipherView) {
-    if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
-      return true;
-    }
+          )
+        );
   }
 
   private async updateObservables(ciphersMap: { [id: string]: CipherData }) {
@@ -969,7 +955,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
     const decryptCipherPromises = ciphers.map((c) => c.decrypt());
     const decryptedCiphers = await Promise.all(decryptCipherPromises);
 
-    decryptedCiphers.sort(Utils.getSortFunction(this.i18nService, "name"));
+    decryptedCiphers.sort(this.getLocaleSortingFunction());
 
     return decryptedCiphers;
   }

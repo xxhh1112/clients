@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 import { CipherType } from "../../enums/cipherType";
 import { UriMatchType } from "../../enums/uriMatchType";
 import { CipherData } from "../../models/data/cipherData";
@@ -6,6 +8,7 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { CipherView } from "../../models/view/cipherView";
 
 export abstract class CipherService {
+  clearCache: () => Promise<void>;
   restore: (
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;
@@ -17,13 +20,13 @@ export abstract class CipherService {
   ) => Promise<Cipher>;
   get: (id: string) => Promise<Cipher>;
   getAll: () => Promise<Cipher[]>;
-  getAllDecrypted: () => Promise<CipherView[]>;
-  getAllDecryptedForGrouping: (groupingId: string, folder?: boolean) => Promise<CipherView[]>;
-  getAllDecryptedForUrl: (
+  getAllDecrypted$: () => Observable<CipherView[]>;
+  getAllDecryptedForGrouping$: (groupingId: string, folder?: boolean) => Observable<CipherView[]>;
+  getAllDecryptedForUrl$: (
     url: string,
     includeOtherTypes?: CipherType[],
     defaultMatch?: UriMatchType
-  ) => Promise<CipherView[]>;
+  ) => Observable<CipherView[]>;
   getLastUsedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
   getLastLaunchedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
   getNextCipherForUrl: (url: string) => Promise<CipherView>;
@@ -41,6 +44,6 @@ export abstract class CipherService {
 export abstract class InternalCipherService extends CipherService {
   upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
   replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
-  clear: (userId: string) => Promise<any>;
+  clear: (userId?: string) => Promise<any>;
   delete: (id: string | string[]) => Promise<any>;
 }
