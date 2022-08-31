@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, concatMap } from "rxjs";
 
 import { CipherService } from "../../abstractions/cipher.service";
 import { CryptoService } from "../../abstractions/crypto.service";
@@ -13,8 +13,8 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { FolderView } from "../../models/view/folderView";
 
 export class FolderService implements InternalFolderServiceAbstraction {
-  private _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
-  private _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
+  protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
+  protected _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
 
   folders$ = this._folders.asObservable();
   folderViews$ = this._folderViews.asObservable();
@@ -25,21 +25,25 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cipherService: CipherService,
     private stateService: StateService
   ) {
-    this.stateService.activeAccountUnlocked$.subscribe(async (unlocked) => {
-      if ((Utils.global as any).bitwardenContainerService == null) {
-        return;
-      }
+    this.stateService.activeAccountUnlocked$
+      .pipe(
+        concatMap(async (unlocked) => {
+          if (Utils.global.bitwardenContainerService == null) {
+            return;
+          }
 
-      if (!unlocked) {
-        this._folders.next([]);
-        this._folderViews.next([]);
-        return;
-      }
+          if (!unlocked) {
+            this._folders.next([]);
+            this._folderViews.next([]);
+            return;
+          }
 
-      const data = await this.stateService.getEncryptedFolders();
+          const data = await this.stateService.getEncryptedFolders();
 
-      await this.updateObservables(data);
-    });
+          await this.updateObservables(data);
+        })
+      )
+      .subscribe();
   }
 
   async clearCache(): Promise<void> {

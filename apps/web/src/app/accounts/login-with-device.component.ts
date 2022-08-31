@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 
 import { CaptchaProtectedComponent } from "@bitwarden/angular/components/captchaProtected.component";
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
@@ -29,6 +30,7 @@ export class LoginWithDeviceComponent
 {
   private accessCode: string;
   private privateKeyValue: ArrayBuffer;
+  private destroy$ = new Subject<void>();
   fingerPrint: string;
   email: string;
   resendNotification = false;
@@ -45,7 +47,7 @@ export class LoginWithDeviceComponent
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService,
     private appIdService: AppIdService,
-    private PasswordGenerationService: PasswordGenerationService,
+    private passwordGenerationService: PasswordGenerationService,
     private apiService: ApiService,
     private authService: AuthService,
     private logService: LogService,
@@ -63,9 +65,12 @@ export class LoginWithDeviceComponent
     }
 
     //gets signalR push notification
-    this.authService.getPushNotifcationObs$().subscribe((id) => {
-      this.confirmResponse(id, this.accessCode, this.privateKeyValue);
-    });
+    this.authService
+      .getPushNotifcationObs$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((id) => {
+        this.confirmResponse(id, this.accessCode, this.privateKeyValue);
+      });
   }
 
   async ngOnInit() {
@@ -85,7 +90,7 @@ export class LoginWithDeviceComponent
     ).join("-");
     const deviceIdentifier = await this.appIdService.getAppId();
     const publicKey = Utils.fromBufferToB64(this.keypair[0]);
-    const accessCode = await this.PasswordGenerationService.generatePassword({ length: 25 });
+    const accessCode = await this.passwordGenerationService.generatePassword({ length: 25 });
 
     const request = new PasswordlessCreateAuthRequest(
       this.email,
@@ -113,6 +118,8 @@ export class LoginWithDeviceComponent
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.anonymousHubService.stopHubConnection();
   }
 

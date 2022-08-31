@@ -1,19 +1,18 @@
 <div *ngIf="accountCreateOnly" class="">
-  <h1 class="tw-mt-12 tw-text-center tw-text-xl" *ngIf="!layout">{{ "createAccount" | i18n }}</h1>
+  <h1 class="tw-mt-12 tw-text-center tw-text-xl">{{ "createAccount" | i18n }}</h1>
   <div
     class="tw-min-w-xl tw-m-auto tw-max-w-xl tw-rounded tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-p-8"
   >
     <app-register-form
       [queryParamEmail]="email"
       [enforcedPolicyOptions]="enforcedPolicyOptions"
+      [referenceDataValue]="referenceData"
     ></app-register-form>
   </div>
 </div>
 <div *ngIf="!accountCreateOnly">
-  <div
-    class="tw-absolute tw--z-10 tw--mt-48 tw-h-96 tw-w-full tw--skew-y-3 tw-bg-background-alt2"
-  ></div>
-  <div class="tw-min-w-4xl tw-mx-auto tw-flex tw-max-w-screen-xl tw-px-4">
+  <div class="tw-absolute tw--z-10 tw--mt-48 tw-h-[28rem] tw-w-full tw-bg-background-alt2"></div>
+  <div class="tw-min-w-4xl tw-mx-auto tw-flex tw-max-w-screen-xl tw-gap-12 tw-px-4">
     <div class="tw-w-1/2">
       <img
         alt="Bitwarden"
@@ -21,14 +20,23 @@
         class="tw-mt-6"
         src="../../images/register-layout/logo-horizontal-white.svg"
       />
-      <!-- This is to for illustrative purposes and content will be replaced by marketing -->
+
       <div class="tw-pt-12">
-        <!-- Teams Body -->
-        <app-teams-content *ngIf="org === 'teams'"></app-teams-content>
-        <!-- Enterprise Body -->
-        <app-enterprise-content *ngIf="org === 'enterprise'"></app-enterprise-content>
-        <!-- Families Body -->
-        <app-families-content *ngIf="org === 'families'"></app-families-content>
+        <!-- Layout params are used by marketing to determine left-hand content -->
+        <app-default-content *ngIf="layout === 'default'"></app-default-content>
+        <app-teams-content *ngIf="layout === 'teams'"></app-teams-content>
+        <app-teams1-content *ngIf="layout === 'teams1'"></app-teams1-content>
+        <app-teams2-content *ngIf="layout === 'teams2'"></app-teams2-content>
+        <app-enterprise-content *ngIf="layout === 'enterprise'"></app-enterprise-content>
+        <app-enterprise1-content *ngIf="layout === 'enterprise1'"></app-enterprise1-content>
+        <app-enterprise2-content *ngIf="layout === 'enterprise2'"></app-enterprise2-content>
+        <app-cnet-enterprise-content
+          *ngIf="layout === 'cnetcmpgnent'"
+        ></app-cnet-enterprise-content>
+        <app-cnet-individual-content
+          *ngIf="layout === 'cnetcmpgnind'"
+        ></app-cnet-individual-content>
+        <app-cnet-teams-content *ngIf="layout === 'cnetcmpgnteams'"></app-cnet-teams-content>
       </div>
     </div>
     <div class="tw-w-1/2">
@@ -44,6 +52,7 @@
               <app-register-form
                 [isInTrialFlow]="true"
                 (createdAccount)="createdAccount($event)"
+                [referenceDataValue]="referenceData"
               ></app-register-form>
             </app-vertical-step>
             <app-vertical-step label="Organization Information" [subLabel]="orgInfoSubLabel">

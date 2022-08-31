@@ -73,7 +73,7 @@
     "extension_page": "script-src 'self' ; object-src 'self'"
   },
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+Y",
         "linux": "Ctrl+Shift+U"
@@ -124,5 +124,8 @@
     "default_title": "Bitwarden",
     "default_panel": "popup/index.html?uilocation=sidebar",
     "default_icon": "images/icon19.png"
+  },
+  "storage": {
+    "managed_schema": "managed_schema.json"
   }
 }

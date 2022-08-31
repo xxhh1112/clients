@@ -11,7 +11,8 @@ import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { DeviceType } from "@bitwarden/common/enums/deviceType";
 
 import { BrowserApi } from "../../browser/browserApi";
@@ -37,6 +38,7 @@ const RateUrls = {
   selector: "app-settings",
   templateUrl: "settings.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SettingsComponent implements OnInit {
   @ViewChild("vaultTimeoutActionSelect", { read: ElementRef, static: true })
   vaultTimeoutActionSelectRef: ElementRef;
@@ -56,6 +58,7 @@ export class SettingsComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private vaultTimeoutService: VaultTimeoutService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     public messagingService: MessagingService,
     private router: Router,
     private environmentService: EnvironmentService,
@@ -94,7 +97,7 @@ export class SettingsComponent implements OnInit {
       { name: this.i18nService.t("logOut"), value: "logOut" },
     ];
 
-    let timeout = await this.vaultTimeoutService.getVaultTimeout();
+    let timeout = await this.vaultTimeoutSettingsService.getVaultTimeout();
     if (timeout != null) {
       if (timeout === -2 && !showOnLocked) {
         timeout = -1;
@@ -102,6 +105,7 @@ export class SettingsComponent implements OnInit {
       this.vaultTimeout.setValue(timeout);
     }
     this.previousVaultTimeout = this.vaultTimeout.value;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.vaultTimeout.valueChanges.subscribe(async (value) => {
       await this.saveVaultTimeout(value);
     });
@@ -109,11 +113,11 @@ export class SettingsComponent implements OnInit {
     const action = await this.stateService.getVaultTimeoutAction();
     this.vaultTimeoutAction = action == null ? "lock" : action;
 
-    const pinSet = await this.vaultTimeoutService.isPinLockSet();
+    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
     this.pin = pinSet[0] || pinSet[1];
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
-    this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
+    this.biometric = await this.vaultTimeoutSettingsService.isBiometricLockSet();
     this.enableAutoBiometricsPrompt = !(await this.stateService.getDisableAutoBiometricsPrompt());
     this.showChangeMasterPass = !(await this.keyConnectorService.getUsesKeyConnector());
   }
@@ -146,7 +150,7 @@ export class SettingsComponent implements OnInit {
 
     this.previousVaultTimeout = this.vaultTimeout.value;
 
-    await this.vaultTimeoutService.setVaultTimeoutOptions(
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
@@ -185,7 +189,7 @@ export class SettingsComponent implements OnInit {
     }
 
     this.vaultTimeoutAction = newValue;
-    await this.vaultTimeoutService.setVaultTimeoutOptions(
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
@@ -203,7 +207,7 @@ export class SettingsComponent implements OnInit {
       this.pin = await ref.onClosedPromise();
     } else {
       await this.cryptoService.clearPinProtectedKey();
-      await this.vaultTimeoutService.clear();
+      await this.vaultTimeoutSettingsService.clear();
     }
   }
 
@@ -302,7 +306,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async lock() {
-    await this.vaultTimeoutService.lock(true);
+    await this.vaultTimeoutService.lock();
   }
 
   async logOut() {

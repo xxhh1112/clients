@@ -128,7 +128,7 @@
     "message": "Jatka"
   },
   "sendVerificationCode": {
-    "message": "Lähetä vahvistuskoodi sähköpostiisi"
+    "message": "Lähetä todennuskoodi sähköpostiisi"
   },
   "sendCode": {
     "message": "Lähetä koodi"
@@ -1031,7 +1031,7 @@
     "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
-    "message": "Klikkaus ponnahdusikkunan ulkopuolelle todennuskoodin sähköpostista noutoa varten sulkee ikkunan. Haluatko avata näkymän uuteen ikkunaan, jotta se pysyy avoinna?"
+    "message": "Painallus ponnahdusikkunan ulkopuolelle todennuskoodin sähköpostista noutoa varten sulkee ikkunan. Haluatko avata näkymän uuteen ikkunaan, jotta se pysyy avoinna?"
   },
   "popupU2fCloseMessage": {
     "message": "Tämä selain ei voi käsitellä U2F-pyyntöjä tässä ponnahdusikkunassa. Haluatko avata näkymän uuteen ikkunaan, jotta voit vahvistaa kirjautumisen U2F-todennuslaitteella?"
@@ -1968,6 +1968,9 @@
   "ssoKeyConnectorError": {
     "message": "Key Connector -virhe: Varmista, että Key Connector on käytettävissä ja toimii oikein."
   },
+  "premiumSubcriptionRequired": {
+    "message": "Premium-tilaus vaaditaan"
+  },
   "organizationIsDisabled": {
     "message": "Organisaatio on poistettu käytöstä."
   },
@@ -1976,5 +1979,23 @@
   },
   "cardBrandMir": {
     "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Kirjaudutaan palveluun $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Asetuksia on muokattu"
+  },
+  "environmentEditedClick": {
+    "message": "Paina tästä"
+  },
+  "environmentEditedReset": {
+    "message": "palauttaaksesi oletusasetukset"
   }
 }

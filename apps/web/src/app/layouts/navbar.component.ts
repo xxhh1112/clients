@@ -6,18 +6,19 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { Provider } from "@bitwarden/common/models/domain/provider";
 
-import { NavigationPermissionsService as OrgNavigationPermissionsService } from "../organizations/services/navigation-permissions.service";
+import { canAccessOrgAdmin } from "../organizations/navigation-permissions";
 
 @Component({
   selector: "app-navbar",
   templateUrl: "navbar.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class NavbarComponent implements OnInit {
   selfHosted = false;
   name: string;
@@ -69,9 +70,7 @@ export class NavbarComponent implements OnInit {
 
   async buildOrganizations() {
     const allOrgs = await this.organizationService.getAll();
-    return allOrgs
-      .filter((org) => OrgNavigationPermissionsService.canAccessAdmin(org))
-      .sort(Utils.getSortFunction(this.i18nService, "name"));
+    return allOrgs.filter(canAccessOrgAdmin).sort(Utils.getSortFunction(this.i18nService, "name"));
   }
 
   lock() {

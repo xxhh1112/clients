@@ -422,7 +422,7 @@
     "description": "Copy URI to clipboard"
   },
   "me": {
-    "message": "Me"
+    "message": "Аз"
   },
   "myVault": {
     "message": "Моят трезор"
@@ -5219,6 +5219,9 @@
         "example": "My Email"
       }
     }
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Изисква се платен абонамент"
   },
   "scim": {
     "message": "Удостоверяване чрез SCIM",

@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -19,6 +18,7 @@ import { GroupAddEditComponent } from "./group-add-edit.component";
   selector: "app-org-groups",
   templateUrl: "groups.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class GroupsComponent implements OnInit {
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
@@ -41,21 +41,16 @@ export class GroupsComponent implements OnInit {
     private i18nService: I18nService,
     private modalService: ModalService,
     private platformUtilsService: PlatformUtilsService,
-    private router: Router,
     private searchService: SearchService,
-    private logService: LogService,
-    private organizationService: OrganizationService
+    private logService: LogService
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
-      const organization = await this.organizationService.get(this.organizationId);
-      if (organization == null || !organization.useGroups) {
-        this.router.navigate(["/organizations", this.organizationId]);
-        return;
-      }
       await this.load();
+      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
         this.searchText = qParams.search;
       });
@@ -96,10 +91,12 @@ export class GroupsComponent implements OnInit {
       (comp) => {
         comp.organizationId = this.organizationId;
         comp.groupId = group != null ? group.id : null;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onSavedGroup.subscribe(() => {
           modal.close();
           this.load();
         });
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onDeletedGroup.subscribe(() => {
           modal.close();
           this.removeGroup(group);
@@ -147,6 +144,7 @@ export class GroupsComponent implements OnInit {
         comp.entityId = group.id;
         comp.entityName = group.name;
 
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onEditedUsers.subscribe(() => {
           modal.close();
         });

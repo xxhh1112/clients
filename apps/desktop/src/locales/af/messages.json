@@ -539,7 +539,7 @@
     "message": "Hoofwagwoord moet weer intevoer word."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Hoofwagwoord moet ten minste 8 karakters lank wees."
   },
   "masterPassDoesntMatch": {
     "message": "Hoofwagwoordbevestiging stem nie ooreen nie."
@@ -1394,19 +1394,19 @@
     "message": "Vergrendel by herbegin met hoofwagwoord"
   },
   "deleteAccount": {
-    "message": "Delete account"
+    "message": "Skrap rekening"
   },
   "deleteAccountDesc": {
-    "message": "Proceed below to delete your account and all vault data."
+    "message": "Gaan hieronder voort om u rekening en alle kluisdata te skrap."
   },
   "deleteAccountWarning": {
-    "message": "Deleting your account is permanent. It cannot be undone."
+    "message": "Skrap van u rekening is permanent. Dit kan nie ontdaan word nie."
   },
   "accountDeleted": {
-    "message": "Account deleted"
+    "message": "Rekening geskrap"
   },
   "accountDeletedDesc": {
-    "message": "Your account has been closed and all associated data has been deleted."
+    "message": "U rekening is gesluit en alle geassosieerde data is geskrap."
   },
   "preferences": {
     "message": "Voorkeure"
@@ -1979,14 +1979,17 @@
   "apiKey": {
     "message": "API-sleutel"
   },
+  "premiumSubcriptionRequired": {
+    "message": "Premie-intekening word vereis"
+  },
   "organizationIsDisabled": {
-    "message": "Organization is disabled."
+    "message": "Organisasie is gedeaktiveer."
   },
   "disabledOrganizationFilterError": {
-    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+    "message": "Items in gedeaktiveerde organisasies is ontoeganklik. Kontak u organisasie-eienaar vir bystand."
   },
   "neverLockWarning": {
-    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
+    "message": "Is u seker u wil die “Nooit”-opsie gebruik? Deur u vergrendelopsies op “Nooit” te stel word u kluis se enkripsie op u toestel bewaar. Indien u hierdie opsie gebruik moet u verseker dat u toestel behoorlik beskerm is."
   },
   "cardBrandMir": {
     "message": "Mir"

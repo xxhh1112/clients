@@ -17,7 +17,7 @@ on:
     branches:
       - 'master'
       - 'rc'
-      - 'hotfix-rc'
+      - 'hotfix-rc-web'
     paths:
       - 'apps/web/**'
       - 'libs/**'
@@ -182,7 +182,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Setup DCT
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc-web'
         id: setup-dct
         uses: bitwarden/gh-actions/setup-docker-trust@a8c384a05a974c05c48374c818b004be221d43ff
         with:
@@ -225,11 +225,11 @@ jobs:
         run: docker tag bitwarden/web bitwarden/web:dev
 
       - name: Tag hotfix branch
-        if: github.ref == 'refs/heads/hotfix-rc'
-        run: docker tag bitwarden/web bitwarden/web:hotfix-rc
+        if: github.ref == 'refs/heads/hotfix-rc-web'
+        run: docker tag bitwarden/web bitwarden/web:hotfix-rc-web
 
       - name: List Docker images
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc-web'
         run: docker images
 
       - name: Push rc image
@@ -247,14 +247,14 @@ jobs:
           DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: ${{ steps.setup-dct.outputs.dct-delegate-repo-passphrase }}
 
       - name: Push hotfix image
-        if: github.ref == 'refs/heads/hotfix-rc'
-        run: docker push bitwarden/web:hotfix-rc
+        if: github.ref == 'refs/heads/hotfix-rc-web'
+        run: docker push bitwarden/web:hotfix-rc-web
         env:
           DOCKER_CONTENT_TRUST: 1
           DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: ${{ steps.setup-dct.outputs.dct-delegate-repo-passphrase }}
 
       - name: Log out of Docker
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc-web'
         run: |
           docker logout
           echo "DOCKER_CONTENT_TRUST=0" >> $GITHUB_ENV
@@ -267,16 +267,23 @@ jobs:
       - name: Login to Azure ACR
         run: az acr login -n bitwardenqa
 
-      - name: Tag and Push RC to Azure ACR QA registry
+      - name: Tag and Push to Azure QA ACR
         env:
           REGISTRY: bitwardenqa.azurecr.io
         run: |
-          IMAGE_TAG=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")  # slash safe branch name
+          if [[ $(grep "pull" <<< "${GITHUB_REF}") ]]; then
+            IMAGE_TAG=$(echo "${GITHUB_HEAD_REF}" | sed "s#/#-#g")
+          else
+            IMAGE_TAG=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")
+          fi
+
           if [[ "$IMAGE_TAG" == "master" ]]; then
             IMAGE_TAG=dev
           fi
+
           docker tag bitwarden/web \
             $REGISTRY/web-sh:$IMAGE_TAG
+
           docker push $REGISTRY/web-sh:$IMAGE_TAG
 
       - name: Log out of Docker

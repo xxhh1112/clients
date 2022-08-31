@@ -8,7 +8,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { PlanSponsorshipType } from "@bitwarden/common/enums/planSponsorshipType";
 import { PlanType } from "@bitwarden/common/enums/planType";
 import { ProductType } from "@bitwarden/common/enums/productType";
@@ -22,6 +22,7 @@ import { DeleteOrganizationComponent } from "../settings/delete-organization.com
   selector: "families-for-enterprise-setup",
   templateUrl: "families-for-enterprise-setup.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class FamiliesForEnterpriseSetupComponent implements OnInit {
   @ViewChild(OrganizationPlansComponent, { static: false })
   set organizationPlansComponent(value: OrganizationPlansComponent) {
@@ -32,6 +33,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
     value.plan = PlanType.FamiliesAnnually;
     value.product = ProductType.Families;
     value.acceptingSponsorship = true;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     value.onSuccess.subscribe(this.onOrganizationCreateSuccess.bind(this));
   }
 
@@ -63,6 +65,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
 
   async ngOnInit() {
     document.body.classList.remove("layout_frontend");
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const error = qParams.token == null;
       if (error) {
@@ -130,6 +133,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
           (comp) => {
             comp.organizationId = organizationId;
             comp.deleteOrganizationRequestType = "InvalidFamiliesForEnterprise";
+            // eslint-disable-next-line rxjs-angular/prefer-takeuntil
             comp.onSuccess.subscribe(() => {
               this.router.navigate(["/"]);
             });

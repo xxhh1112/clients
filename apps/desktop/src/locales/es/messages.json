@@ -1979,6 +1979,9 @@
   "apiKey": {
     "message": "Clave API"
   },
+  "premiumSubcriptionRequired": {
+    "message": "Se requiere una Suscripción Premium"
+  },
   "organizationIsDisabled": {
     "message": "La organización está desactivada."
   },

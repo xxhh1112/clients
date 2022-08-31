@@ -1,7 +1,7 @@
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 
 import { BrowserApi } from "../browser/browserApi";
@@ -60,7 +60,7 @@ export default class CommandsBackground {
         await this.openPopup();
         break;
       case "lock_vault":
-        await this.vaultTimeoutService.lock(true);
+        await this.vaultTimeoutService.lock();
         break;
       default:
         break;

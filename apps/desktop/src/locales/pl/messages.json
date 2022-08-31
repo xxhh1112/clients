@@ -1403,7 +1403,7 @@
     "message": "Usunięcie konta jest nieodwracalne. Ta czynność nie może zostać cofnięta."
   },
   "accountDeleted": {
-    "message": "Konto usunięte"
+    "message": "Konto zostało usunięte"
   },
   "accountDeletedDesc": {
     "message": "Konto zostało zamknięte i wszystkie powiązane z nim dane zostały usunięte."
@@ -1978,6 +1978,9 @@
   },
   "apiKey": {
     "message": "Klucz interfejsu API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Wymagana jest subskrypcja Premium"
   },
   "organizationIsDisabled": {
     "message": "Organizacja jest wyłączona."

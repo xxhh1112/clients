@@ -560,7 +560,7 @@
     "message": "Ei näytettäviä kohteita."
   },
   "sendVerificationCode": {
-    "message": "Lähetä vahvistuskoodi sähköpostiisi"
+    "message": "Lähetä todennuskoodi sähköpostiisi"
   },
   "sendCode": {
     "message": "Lähetä koodi"
@@ -578,7 +578,7 @@
     "message": "Todennuskoodi vaaditaan."
   },
   "invalidVerificationCode": {
-    "message": "Virheellinen vahvistuskoodi"
+    "message": "Virheellinen todennuskoodi"
   },
   "continue": {
     "message": "Jatka"
@@ -1978,6 +1978,9 @@
   },
   "apiKey": {
     "message": "API-avain"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium-tilaus vaaditaan"
   },
   "organizationIsDisabled": {
     "message": "Organisaatio on poistettu käytöstä."
