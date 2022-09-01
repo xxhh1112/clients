@@ -5,20 +5,20 @@
         <div class="card-header">{{ "reporting" | i18n }}</div>
         <div class="list-group list-group-flush">
           <a
+            routerLink="events"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="organization.canAccessEventLogs"
+          >
+            {{ "eventLogs" | i18n }}
+          </a>
+          <a
             routerLink="reports"
             class="list-group-item"
             routerLinkActive="active"
             *ngIf="organization.canAccessReports"
           >
             {{ "reports" | i18n }}
-          </a>
-          <a
-            routerLink="events"
-            class="list-group-item"
-            routerLinkActive="active"
-            *ngIf="organization.canAccessEventLogs && accessEvents"
-          >
-            {{ "eventLogs" | i18n }}
           </a>
         </div>
       </div>
