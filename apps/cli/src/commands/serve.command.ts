@@ -130,6 +130,7 @@ export class ServeCommand {
       this.main.keyConnectorService,
       this.main.environmentService,
       this.main.syncService,
+      this.main.organizationApiService,
       async () => await this.main.logout()
     );
 

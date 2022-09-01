@@ -33,9 +33,10 @@ import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/pol
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { SystemService } from "@bitwarden/common/abstractions/system.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 
@@ -98,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private isIdle = false;
   private activeUserId: string = null;
 
-  private destroy$: Subject<void> = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private broadcasterService: BroadcasterService,
@@ -114,6 +115,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private vaultTimeoutService: VaultTimeoutService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private cryptoService: CryptoService,
     private logService: LogService,
     private messagingService: MessagingService,
@@ -170,12 +172,12 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loading = false;
             break;
           case "lockVault":
-            await this.vaultTimeoutService.lock(true, message.userId);
+            await this.vaultTimeoutService.lock(message.userId);
             break;
           case "lockAllVaults":
             for (const userId in this.stateService.accounts.getValue()) {
               if (userId != null) {
-                await this.vaultTimeoutService.lock(true, userId);
+                await this.vaultTimeoutService.lock(userId);
               }
             }
             break;
@@ -377,10 +379,12 @@ export class AppComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSaved.subscribe(() => {
       this.modal.close();
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -396,11 +400,13 @@ export class AppComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onSavedFolder.subscribe(async () => {
       this.modal.close();
       this.syncService.fullSync(false);
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -415,6 +421,7 @@ export class AppComponent implements OnInit, OnDestroy {
       (comp) => (comp.comingFromAddEdit = false)
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -466,7 +473,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.folderService.clear(userBeingLoggedOut),
       this.collectionService.clear(userBeingLoggedOut),
       this.passwordGenerationService.clear(userBeingLoggedOut),
-      this.vaultTimeoutService.clear(userBeingLoggedOut),
+      this.vaultTimeoutSettingsService.clear(userBeingLoggedOut),
       this.policyService.clear(userBeingLoggedOut),
       this.keyConnectorService.clear(),
     ]);
@@ -539,6 +546,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     [this.modal] = await this.modalService.openViewRef(type, ref);
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -593,7 +601,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (options[0] === timeout) {
         options[1] === "logOut"
           ? this.logOut(false, userId)
-          : await this.vaultTimeoutService.lock(true, userId);
+          : await this.vaultTimeoutService.lock(userId);
       }
     }
   }

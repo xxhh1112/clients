@@ -20,7 +20,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -216,6 +216,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async load() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       if (params.cipherId) {
         const cipherView = new CipherView();
@@ -458,9 +459,12 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.modal = modal;
 
     let madeAttachmentChanges = false;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onUploadedAttachment.subscribe(() => (madeAttachmentChanges = true));
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onDeletedAttachment.subscribe(() => (madeAttachmentChanges = true));
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.modal.onClosed.subscribe(async () => {
       this.modal = null;
       if (madeAttachmentChanges) {
@@ -482,11 +486,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onSharedCipher.subscribe(async () => {
       this.modal.close();
       this.viewCipher(cipher);
       await this.ciphersComponent.refresh();
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.modal.onClosed.subscribe(async () => {
       this.modal = null;
     });
@@ -504,10 +510,12 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSavedCollections.subscribe(() => {
       this.modal.close();
       this.viewCipher(cipher);
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.modal.onClosed.subscribe(async () => {
       this.modal = null;
     });
@@ -524,6 +532,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       (comp) => (comp.cipherId = cipher.id)
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.modal.onClosed.subscribe(async () => {
       this.modal = null;
     });
@@ -596,6 +605,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSelected.subscribe((value: string) => {
       this.modal.close();
       if (loginType) {
@@ -608,6 +618,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       }
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -629,15 +640,18 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onSavedFolder.subscribe(async (folder: FolderView) => {
       this.modal.close();
       await this.vaultFilterComponent.reloadCollectionsAndFolders(this.activeFilter);
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onDeletedFolder.subscribe(async (folder: FolderView) => {
       this.modal.close();
       await this.vaultFilterComponent.reloadCollectionsAndFolders(this.activeFilter);
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });

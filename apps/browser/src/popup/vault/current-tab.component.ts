@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -9,7 +10,7 @@ import { PasswordRepromptService } from "@bitwarden/common/abstractions/password
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -45,6 +46,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   private totpTimeout: number;
   private loadedTimeout: number;
   private searchTimeout: number;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
@@ -113,6 +115,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     window.clearTimeout(this.loadedTimeout);
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async refresh() {
@@ -231,6 +235,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
 
     this.cipherService
       .getAllDecryptedForUrl$(this.url, otherTypes.length > 0 ? otherTypes : null)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((result) => (ciphers = result));
 
     this.loginCiphers = [];

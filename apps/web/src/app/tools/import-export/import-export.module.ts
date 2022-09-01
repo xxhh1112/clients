@@ -7,18 +7,18 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ImportService } from "@bitwarden/common/services/import.service";
 
 import { LooseComponentsModule, SharedModule } from "../../shared";
 
 import { ExportComponent } from "./export.component";
+import { FilePasswordPromptComponent } from "./file-password-prompt.component";
 import { ImportExportRoutingModule } from "./import-export-routing.module";
 import { ImportComponent } from "./import.component";
 
 @NgModule({
   imports: [SharedModule, LooseComponentsModule, ImportExportRoutingModule],
-  declarations: [ImportComponent, ExportComponent],
+  declarations: [ImportComponent, ExportComponent, FilePasswordPromptComponent],
   providers: [
     {
       provide: ImportServiceAbstraction,
@@ -29,7 +29,6 @@ import { ImportComponent } from "./import.component";
         ApiService,
         I18nService,
         CollectionService,
-        PlatformUtilsService,
         CryptoService,
       ],
     },

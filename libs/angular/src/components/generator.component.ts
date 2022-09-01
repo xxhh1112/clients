@@ -74,11 +74,13 @@ export class GeneratorComponent implements OnInit {
       { name: "SimpleLogin", value: "simplelogin" },
       { name: "AnonAddy", value: "anonaddy" },
       { name: "Firefox Relay", value: "firefoxrelay" },
-      // { name: "FastMail", value: "fastmail" },
+      { name: "Fastmail", value: "fastmail" },
+      { name: "DuckDuckGo", value: "duckduckgo" },
     ];
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const passwordOptionsResponse = await this.passwordGenerationService.getOptions();
       this.passwordOptions = passwordOptionsResponse[0];

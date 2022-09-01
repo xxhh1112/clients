@@ -29,7 +29,7 @@ import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abs
 import { SendService as SendServiceAbstraction } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
-import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/abstractions/token.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
@@ -37,7 +37,8 @@ import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/comm
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -50,6 +51,7 @@ import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
+import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptService } from "@bitwarden/common/services/encrypt.service";
 import { EventService } from "@bitwarden/common/services/event.service";
@@ -57,6 +59,7 @@ import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
@@ -67,7 +70,7 @@ import { SearchService } from "@bitwarden/common/services/search.service";
 import { SendService } from "@bitwarden/common/services/send.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
-import { SyncService } from "@bitwarden/common/services/sync.service";
+import { SyncService } from "@bitwarden/common/services/sync/sync.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
 import { TokenService } from "@bitwarden/common/services/token.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
@@ -75,6 +78,8 @@ import { TwoFactorService } from "@bitwarden/common/services/twoFactor.service";
 import { UserVerificationApiService } from "@bitwarden/common/services/userVerification/userVerification-api.service";
 import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { UsernameGenerationService } from "@bitwarden/common/services/usernameGeneration.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
+import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
 
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
@@ -85,13 +90,17 @@ import { StateService as StateServiceAbstraction } from "../services/abstraction
 import AutofillService from "../services/autofill.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import { BrowserCryptoService } from "../services/browserCrypto.service";
+import BrowserLocalStorageService from "../services/browserLocalStorage.service";
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { FolderService } from "../services/folders/folder.service";
 import I18nService from "../services/i18n.service";
+import { KeyGenerationService } from "../services/keyGeneration.service";
+import { LocalBackedSessionStorageService } from "../services/localBackedSessionStorage.service";
+import { StateService } from "../services/state.service";
 import { VaultFilterService } from "../services/vaultFilter.service";
-import VaultTimeoutService from "../services/vaultTimeout.service";
+import VaultTimeoutService from "../services/vaultTimeout/vaultTimeout.service";
 
 import CommandsBackground from "./commands.background";
 import ContextMenusBackground from "./contextMenus.background";
@@ -100,17 +109,6 @@ import IconDetails from "./models/iconDetails";
 import { NativeMessagingBackground } from "./nativeMessaging.background";
 import NotificationBackground from "./notification.background";
 import RuntimeBackground from "./runtime.background";
-import { cryptoFunctionServiceFactory } from "./service_factories/crypto-function-service.factory";
-import { encryptServiceFactory } from "./service_factories/encrypt-service.factory";
-import { environmentServiceFactory } from "./service_factories/environment-service.factory";
-import { logServiceFactory } from "./service_factories/log-service.factory";
-import { stateMigrationServiceFactory } from "./service_factories/state-migration-service.factory";
-import { stateServiceFactory } from "./service_factories/state-service.factory";
-import {
-  diskStorageServiceFactory,
-  memoryStorageServiceFactory,
-  secureStorageServiceFactory,
-} from "./service_factories/storage-service.factory";
 import TabsBackground from "./tabs.background";
 import WebRequestBackground from "./webRequest.background";
 
@@ -133,6 +131,7 @@ export default class MainBackground {
   folderService: InternalFolderServiceAbstraction;
   collectionService: CollectionServiceAbstraction;
   vaultTimeoutService: VaultTimeoutServiceAbstraction;
+  vaultTimeoutSettingsService: VaultTimeoutSettingsServiceAbstraction;
   syncService: SyncServiceAbstraction;
   passwordGenerationService: PasswordGenerationServiceAbstraction;
   totpService: TotpServiceAbstraction;
@@ -205,43 +204,35 @@ export default class MainBackground {
     const logoutCallback = async (expired: boolean, userId?: string) =>
       await this.logout(expired, userId);
 
-    const services: Record<string, unknown> = {};
-    const factoryOptions = {
-      logServiceOptions: {
-        isDev: false,
-      },
-      cryptoFunctionServiceOptions: {
-        win: window,
-      },
-      stateMigrationServiceOptions: {
-        stateFactory: new StateFactory(GlobalState, Account),
-      },
-      stateServiceOptions: {
-        stateFactory: new StateFactory(GlobalState, Account),
-      },
-    };
-
     this.messagingService = isPrivateMode
       ? new BrowserMessagingPrivateModeBackgroundService()
       : new BrowserMessagingService();
-    this.logService = logServiceFactory(services, factoryOptions);
-    this.cryptoFunctionService = cryptoFunctionServiceFactory(services, factoryOptions);
-    this.storageService = diskStorageServiceFactory(services, factoryOptions);
-    this.secureStorageService = secureStorageServiceFactory(services, factoryOptions);
-    this.memoryStorageService = memoryStorageServiceFactory(services, {
-      ...factoryOptions,
-      encryptServiceOptions: {
-        logMacFailures: false,
-      },
-    });
-    this.stateMigrationService = stateMigrationServiceFactory(services, factoryOptions);
-    this.stateService = stateServiceFactory(services, {
-      ...factoryOptions,
-      encryptServiceOptions: { logMacFailures: false },
-    });
+    this.logService = new ConsoleLogService(false);
+    this.cryptoFunctionService = new WebCryptoFunctionService(window);
+    this.storageService = new BrowserLocalStorageService();
+    this.secureStorageService = new BrowserLocalStorageService();
+    this.memoryStorageService =
+      chrome.runtime.getManifest().manifest_version == 3
+        ? new LocalBackedSessionStorageService(
+            new EncryptService(this.cryptoFunctionService, this.logService, false),
+            new KeyGenerationService(this.cryptoFunctionService)
+          )
+        : new MemoryStorageService();
+    this.stateMigrationService = new StateMigrationService(
+      this.storageService,
+      this.secureStorageService,
+      new StateFactory(GlobalState, Account)
+    );
+    this.stateService = new StateService(
+      this.storageService,
+      this.secureStorageService,
+      this.memoryStorageService,
+      this.logService,
+      this.stateMigrationService,
+      new StateFactory(GlobalState, Account)
+    );
     this.platformUtilsService = new BrowserPlatformUtilsService(
       this.messagingService,
-      this.stateService,
       (clipboardValue, clearMs) => {
         if (this.systemService != null) {
           this.systemService.clearClipboard(clipboardValue, clearMs);
@@ -262,13 +253,7 @@ export default class MainBackground {
       }
     );
     this.i18nService = new I18nService(BrowserApi.getUILanguage(window));
-    this.encryptService = encryptServiceFactory(services, {
-      ...factoryOptions,
-      encryptServiceOptions: {
-        logMacFailures: true,
-      },
-      alwaysInitializeNewService: true,
-    }); // Update encrypt service with new instances
+    this.encryptService = new EncryptService(this.cryptoFunctionService, this.logService, true);
     this.cryptoService = new BrowserCryptoService(
       this.cryptoFunctionService,
       this.encryptService,
@@ -278,12 +263,7 @@ export default class MainBackground {
     );
     this.tokenService = new TokenService(this.stateService);
     this.appIdService = new AppIdService(this.storageService);
-    this.environmentService = environmentServiceFactory(services, {
-      ...factoryOptions,
-      encryptServiceOptions: {
-        logMacFailures: false,
-      },
-    });
+    this.environmentService = new BrowserEnvironmentService(this.stateService, this.logService);
     this.apiService = new ApiService(
       this.tokenService,
       this.platformUtilsService,
@@ -378,6 +358,13 @@ export default class MainBackground {
       this.i18nService
     );
 
+    this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
+      this.cryptoService,
+      this.tokenService,
+      this.policyService,
+      this.stateService
+    );
+
     this.vaultTimeoutService = new VaultTimeoutService(
       this.cipherService,
       this.folderService,
@@ -386,14 +373,14 @@ export default class MainBackground {
       this.platformUtilsService,
       this.messagingService,
       this.searchService,
-      this.tokenService,
-      this.policyService,
       this.keyConnectorService,
       this.stateService,
       this.authService,
+      this.vaultTimeoutSettingsService,
       lockedCallback,
       logoutCallback
     );
+
     this.providerService = new ProviderService(this.stateService);
     this.syncService = new SyncService(
       this.apiService,
@@ -658,7 +645,7 @@ export default class MainBackground {
       this.collectionService.clear(userId),
       this.policyService.clear(userId),
       this.passwordGenerationService.clear(userId),
-      this.vaultTimeoutService.clear(userId),
+      this.vaultTimeoutSettingsService.clear(userId),
       this.keyConnectorService.clear(),
       this.vaultFilterService.clear(),
     ]);

@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, concatMap } from "rxjs";
 
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 
@@ -26,21 +26,25 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cipherService: InternalCipherService,
     private stateService: StateService
   ) {
-    this.stateService.activeAccountUnlocked$.subscribe(async (unlocked) => {
-      if ((Utils.global as any).bitwardenContainerService == null) {
-        return;
-      }
+    this.stateService.activeAccountUnlocked$
+      .pipe(
+        concatMap(async (unlocked) => {
+          if (Utils.global.bitwardenContainerService == null) {
+            return;
+          }
 
-      if (!unlocked) {
-        this._folders.next([]);
-        this._folderViews.next([]);
-        return;
-      }
+          if (!unlocked) {
+            this._folders.next([]);
+            this._folderViews.next([]);
+            return;
+          }
 
-      const data = await this.stateService.getEncryptedFolders();
+          const data = await this.stateService.getEncryptedFolders();
 
-      await this.updateObservables(data);
-    });
+          await this.updateObservables(data);
+        })
+      )
+      .subscribe();
   }
 
   async clearCache(): Promise<void> {

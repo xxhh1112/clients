@@ -22,44 +22,6 @@ import { ContainerService } from "@bitwarden/common/services/container.service";
 
 import { mockEnc } from "../utils";
 
-// describe("Cipher Service", () => {
-//   let cryptoService: SubstituteOf<CryptoService>;
-//   let apiService: SubstituteOf<ApiService>;
-//   let fileUploadService: SubstituteOf<FileUploadService>;
-//   let cipherService: SubstituteOf<InternalCipherService>;
-
-//   let cipherApiAttachmentService: CipherApiAttachmentService;
-
-//   beforeEach(() => {
-//     cryptoService = Substitute.for<CryptoService>();
-//     apiService = Substitute.for<ApiService>();
-//     fileUploadService = Substitute.for<FileUploadService>();
-//     cipherService = Substitute.for<InternalCipherService>();
-
-//     cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
-//     cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
-
-//     cipherApiAttachmentService = new CipherApiAttachmentService(
-//       cipherService,
-//       apiService,
-//       cryptoService,
-//       fileUploadService
-//     );
-//   });
-
-//   it("attachments upload encrypted file contents", async () => {
-//     const fileName = "filename";
-//     const fileData = new Uint8Array(10).buffer;
-//     cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
-
-//     await cipherApiAttachmentService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
-
-//     fileUploadService
-//       .received(1)
-//       .uploadCipherAttachment(Arg.any(), Arg.any(), new EncString(ENCRYPTED_TEXT), ENCRYPTED_BYTES);
-//   });
-// });
-
 describe("Cipher Service", () => {
   let cipherService: CipherService;
   let activeAccountUnlocked: BehaviorSubject<boolean>;

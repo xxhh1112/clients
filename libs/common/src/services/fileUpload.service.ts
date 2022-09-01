@@ -21,7 +21,7 @@ export class FileUploadService implements FileUploadServiceAbstraction {
     private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
   ) {
     this.azureFileUploadService = new AzureFileUploadService(logService);
-    this.bitwardenFileUploadService = new BitwardenFileUploadService(apiService);
+    this.bitwardenFileUploadService = new BitwardenFileUploadService();
   }
 
   async uploadSendFile(

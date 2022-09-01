@@ -7,13 +7,14 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { ProviderSetupRequest } from "@bitwarden/common/models/request/provider/providerSetupRequest";
 
 @Component({
   selector: "provider-setup",
   templateUrl: "setup.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SetupComponent implements OnInit {
   loading = true;
   authed = false;
@@ -38,6 +39,7 @@ export class SetupComponent implements OnInit {
 
   ngOnInit() {
     document.body.classList.remove("layout_frontend");
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const error = qParams.providerId == null || qParams.email == null || qParams.token == null;
 

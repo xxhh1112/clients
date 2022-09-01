@@ -52,21 +52,25 @@ export class CipherService implements InternalCipherServiceAbstraction {
     private logService: LogService,
     private stateService: StateService
   ) {
-    this.stateService.activeAccountUnlocked$.subscribe(async (unlocked) => {
-      if ((Utils.global as any).bitwardenContainerService == null) {
-        return;
-      }
+    this.stateService.activeAccountUnlocked$
+      .pipe(
+        concatMap(async (unlocked) => {
+          if (Utils.global.bitwardenContainerService == null) {
+            return;
+          }
 
-      if (!unlocked) {
-        this._ciphers.next([]);
-        this._cipherViews.next([]);
-        return;
-      }
+          if (!unlocked) {
+            this._ciphers.next([]);
+            this._cipherViews.next([]);
+            return;
+          }
 
-      const data = await this.stateService.getEncryptedCiphers();
+          const data = await this.stateService.getEncryptedCiphers();
 
-      await this.updateObservables(data);
-    });
+          await this.updateObservables(data);
+        })
+      )
+      .subscribe();
   }
 
   async encrypt(
@@ -887,37 +891,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     } else {
       return this.sortedCiphersCache.getNext(cacheKey);
     }
-
-    //   if (!this.sortedCiphersCache.isCached(cacheKey)) {
-    //     if (!ciphers) {
-    //       return null;
-    //     }
-
-    //     if (autofillOnPageLoad) {
-    //       ciphers.filter((cipher) => {
-    //         cipher.login.autofillOnPageLoad || (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
-    //       });
-
-    //       if (ciphers.length === 0) {
-    //         return null;
-    //       }
-    //     }
-
-    //     this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
-
-    //   }
-
-    //   if (lastLaunched) {
-    //     return this.sortedCiphersCache.getLastLaunched(cacheKey);
-    //   } else if (lastUsed) {
-    //     return this.sortedCiphersCache.getLastUsed(cacheKey);
-    //   } else {
-    //     return this.sortedCiphersCache.getNext(cacheKey);
-    //   }
-
-    // });
-
-    // return Response;
   }
 
   private getEquivalentDomain$(domain: string) {
