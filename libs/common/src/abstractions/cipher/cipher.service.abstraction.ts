@@ -8,7 +8,7 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { CipherView } from "../../models/view/cipherView";
 
 export abstract class CipherService {
-  clearCache: () => Promise<void>;
+  clearCache: (userId?: string) => Promise<void>;
   restore: (
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;

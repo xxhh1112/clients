@@ -125,7 +125,7 @@ export class ExportService implements ExportServiceAbstraction {
     );
 
     promises.push(
-      this.cipherService.getAllDecrypted().then((ciphers) => {
+      firstValueFrom(this.cipherService.getAllDecrypted$()).then((ciphers) => {
         decCiphers = ciphers.filter((f) => f.deletedDate == null);
       })
     );

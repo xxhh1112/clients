@@ -1,4 +1,5 @@
 import * as lunr from "lunr";
+import { firstValueFrom } from "rxjs";
 
 import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
 import { I18nService } from "../abstractions/i18n.service";
@@ -95,7 +96,7 @@ export class SearchService implements SearchServiceAbstraction {
       extractor: (c: CipherView) => this.attachmentExtractor(c, true),
     });
     builder.field("organizationid", { extractor: (c: CipherView) => c.organizationId });
-    ciphers = ciphers || (await this.cipherService.getAllDecrypted());
+    ciphers = ciphers || (await firstValueFrom(this.cipherService.getAllDecrypted$()));
     ciphers.forEach((c) => builder.add(c));
     this.index = builder.build();
 
@@ -118,7 +119,7 @@ export class SearchService implements SearchServiceAbstraction {
     }
 
     if (ciphers == null) {
-      ciphers = await this.cipherService.getAllDecrypted();
+      ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
     }
 
     if (filter != null && Array.isArray(filter) && filter.length > 0) {

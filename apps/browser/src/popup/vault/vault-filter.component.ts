@@ -166,7 +166,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async loadCiphers() {
-    this.allCiphers = await this.cipherService.getAllDecrypted();
+    this.allCiphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
+
     if (!this.hasLoadedAllCiphers) {
       this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
     }

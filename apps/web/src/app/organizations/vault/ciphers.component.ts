@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
@@ -68,7 +69,7 @@ export class CiphersComponent extends BaseCiphersComponent {
         this.organization.id
       );
     } else {
-      this.allCiphers = (await this.cipherService.getAllDecrypted()).filter(
+      this.allCiphers = (await firstValueFrom(this.cipherService.getAllDecrypted$())).filter(
         (c) => c.organizationId === this.organization.id
       );
     }

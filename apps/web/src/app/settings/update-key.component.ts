@@ -91,7 +91,7 @@ export class UpdateKeyComponent {
       request.folders.push(new FolderWithIdRequest(folder));
     }
 
-    const ciphers = await this.cipherService.getAllDecrypted();
+    const ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
     for (let i = 0; i < ciphers.length; i++) {
       if (ciphers[i].organizationId != null) {
         continue;

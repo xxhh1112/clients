@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -43,6 +44,6 @@ export class UnsecuredWebsitesReportComponent extends CipherReportComponent impl
   }
 
   protected getAllCiphers(): Promise<CipherView[]> {
-    return this.cipherService.getAllDecrypted();
+    return firstValueFrom(this.cipherService.getAllDecrypted$());
   }
 }

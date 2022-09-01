@@ -45,7 +45,7 @@ export class VaultFilterService {
     const transformation = async (storedFolders: FolderView[]) => {
       let folders: FolderView[];
       if (organizationId != null) {
-        const ciphers = await this.cipherService.getAllDecrypted();
+        const ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
         const orgCiphers = ciphers.filter((c) => c.organizationId == organizationId);
         folders = storedFolders.filter(
           (f) =>

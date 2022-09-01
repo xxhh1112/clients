@@ -72,7 +72,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
   async encrypt(
     model: CipherView,
     key?: SymmetricCryptoKey,
-    originalCipher: Cipher = null
+    originalCipher?: Cipher
   ): Promise<Cipher> {
     if (model.id != null) {
       if (originalCipher == null) {
@@ -380,8 +380,10 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(null, { userId: userId });
   }
 
-  async clearCache(): Promise<void> {
+  async clearCache(userId?: string): Promise<void> {
+    await this.stateService.setDecryptedCiphers(null, { userId: userId });
     this._cipherViews.next([]);
+    this.sortedCiphersCache.clear();
   }
 
   async delete(id: string | string[]): Promise<any> {

@@ -211,15 +211,7 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
         injector: Injector,
         logService: LogService,
         stateService: StateServiceAbstraction
-      ) =>
-        new CipherService(
-          cryptoService,
-          settingsService,
-          i18nService,
-          () => injector.get(SearchServiceAbstraction),
-          logService,
-          stateService
-        ),
+      ) => new CipherService(cryptoService, settingsService, i18nService, logService, stateService),
       deps: [
         CryptoServiceAbstraction,
         SettingsServiceAbstraction,

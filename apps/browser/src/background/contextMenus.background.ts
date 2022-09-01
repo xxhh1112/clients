@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -107,10 +109,11 @@ export default class ContextMenusBackground {
 
     let cipher: CipherView;
     if (id === this.noopCommandSuffix) {
-      const ciphers = await this.cipherService.getAllDecryptedForUrl(tab.url);
-      cipher = ciphers.find((c) => c.reprompt === CipherRepromptType.None);
+      this.cipherService.getAllDecryptedForUrl$(tab.url).subscribe((ciphers) => {
+        cipher = ciphers.find((c) => c.reprompt === CipherRepromptType.None);
+      });
     } else {
-      const ciphers = await this.cipherService.getAllDecrypted();
+      const ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
       cipher = ciphers.find((c) => c.id === id);
     }
 

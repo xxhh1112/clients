@@ -77,7 +77,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
   async rotateEncKeyClicked() {
     if (this.rotateEncKey) {
-      const ciphers = await this.cipherService.getAllDecrypted();
+      const ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
       let hasOldAttachments = false;
       if (ciphers != null) {
         for (let i = 0; i < ciphers.length; i++) {
@@ -206,7 +206,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       request.folders.push(new FolderWithIdRequest(folder));
     }
 
-    const ciphers = await this.cipherService.getAllDecrypted();
+    const ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
     for (let i = 0; i < ciphers.length; i++) {
       if (ciphers[i].organizationId != null) {
         continue;

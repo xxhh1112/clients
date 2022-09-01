@@ -1,8 +1,11 @@
+import { take } from "rxjs/operators";
+
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 export default class WebRequestBackground {
   private pendingAuthRequests: any[] = [];
@@ -69,11 +72,13 @@ export default class WebRequestBackground {
     }
 
     try {
-      const ciphers = await this.cipherService.getAllDecryptedForUrl(
-        domain,
-        null,
-        UriMatchType.Host
-      );
+      let ciphers: CipherView[] = null;
+
+      this.cipherService
+        .getAllDecryptedForUrl$(domain, null, UriMatchType.Host)
+        .pipe(take(1))
+        .subscribe((ciphersResponse) => (ciphers = ciphersResponse));
+
       if (ciphers == null || ciphers.length !== 1) {
         error();
         return;

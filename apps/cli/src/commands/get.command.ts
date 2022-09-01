@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
@@ -108,7 +110,7 @@ export class GetCommand extends DownloadCommand {
         decCipher = await cipher.decrypt();
       }
     } else if (id.trim() !== "") {
-      let ciphers = await this.cipherService.getAllDecrypted();
+      let ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
       ciphers = this.searchService.searchCiphersBasic(ciphers, id);
       if (ciphers.length > 1) {
         return ciphers;

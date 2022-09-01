@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -65,7 +66,7 @@ export class ExposedPasswordsReportComponent extends CipherReportComponent imple
   }
 
   protected getAllCiphers(): Promise<CipherView[]> {
-    return this.cipherService.getAllDecrypted();
+    return firstValueFrom(this.cipherService.getAllDecrypted$());
   }
 
   protected canManageCipher(c: CipherView): boolean {

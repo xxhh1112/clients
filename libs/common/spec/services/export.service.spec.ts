@@ -1,5 +1,5 @@
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -15,6 +15,7 @@ import { Login } from "@bitwarden/common/models/domain/login";
 import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipherWithIdsExport";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { LoginView } from "@bitwarden/common/models/view/loginView";
+import { CipherApiService } from "@bitwarden/common/services/cipher/cipher-api.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 
 import { BuildTestObject, GetUniqueString } from "../utils";
@@ -90,6 +91,7 @@ describe("ExportService", () => {
   let cipherService: SubstituteOf<CipherService>;
   let folderService: SubstituteOf<FolderService>;
   let cryptoService: SubstituteOf<CryptoService>;
+  let cipherApiService: SubstituteOf<CipherApiService>;
 
   beforeEach(() => {
     apiService = Substitute.for<ApiService>();
@@ -97,6 +99,7 @@ describe("ExportService", () => {
     cipherService = Substitute.for<CipherService>();
     folderService = Substitute.for<FolderService>();
     cryptoService = Substitute.for<CryptoService>();
+    cipherApiService = Substitute.for<CipherApiService>();
 
     folderService.folderViews$.returns(new BehaviorSubject([]));
     folderService.folders$.returns(new BehaviorSubject([]));
@@ -106,12 +109,14 @@ describe("ExportService", () => {
       cipherService,
       apiService,
       cryptoService,
-      cryptoFunctionService
+      cryptoFunctionService,
+      cipherApiService
     );
   });
 
   it("exports unecrypted user ciphers", async () => {
-    cipherService.getAllDecrypted().resolves(UserCipherViews.slice(0, 1));
+    await firstValueFrom(cipherService.getAllDecrypted$());
+    UserCipherViews.slice(0, 1);
 
     const actual = await exportService.getExport("json");
 
@@ -127,7 +132,7 @@ describe("ExportService", () => {
   });
 
   it("does not unecrypted export trashed user items", async () => {
-    cipherService.getAllDecrypted().resolves(UserCipherViews);
+    await firstValueFrom(cipherService.getAllDecrypted$()); //.resolves(UserCipherViews);
 
     const actual = await exportService.getExport("json");
 
@@ -159,7 +164,8 @@ describe("ExportService", () => {
         data.encryptedString.returns("encData");
 
         jest.spyOn(Utils, "fromBufferToB64").mockReturnValue(salt);
-        cipherService.getAllDecrypted().resolves(UserCipherViews.slice(0, 1));
+        await firstValueFrom(cipherService.getAllDecrypted$());
+        UserCipherViews.slice(0, 1);
 
         exportString = await exportService.getPasswordProtectedExport(password);
         exportObject = JSON.parse(exportString);

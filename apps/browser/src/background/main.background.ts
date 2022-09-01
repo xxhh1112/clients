@@ -301,7 +301,6 @@ export default class MainBackground {
       this.cryptoService,
       this.settingsService,
       this.i18nService,
-      () => this.searchService,
       this.logService,
       this.stateService
     );
@@ -836,14 +835,19 @@ export default class MainBackground {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus === AuthenticationStatus.Unlocked) {
       try {
-        const ciphers = await this.cipherService.getAllDecryptedForUrl(url);
-        ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
+        let ciphers: CipherView[];
 
-        if (contextMenuEnabled) {
-          ciphers.forEach((cipher) => {
-            this.loadLoginContextMenuOptions(cipher);
-          });
-        }
+        this.cipherService.getAllDecryptedForUrl$(url).subscribe((cupherResponse) => {
+          ciphers = cupherResponse.sort((a, b) =>
+            this.cipherService.sortCiphersByLastUsedThenName(a, b)
+          );
+
+          if (contextMenuEnabled) {
+            ciphers.forEach((cipher) => {
+              this.loadLoginContextMenuOptions(cipher);
+            });
+          }
+        });
 
         const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
         let theText = "";

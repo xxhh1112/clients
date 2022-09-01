@@ -227,10 +227,11 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       otherTypes.push(CipherType.Identity);
     }
 
-    const ciphers = await this.cipherService.getAllDecryptedForUrl(
-      this.url,
-      otherTypes.length > 0 ? otherTypes : null
-    );
+    let ciphers: CipherView[] = null;
+
+    this.cipherService
+      .getAllDecryptedForUrl$(this.url, otherTypes.length > 0 ? otherTypes : null)
+      .subscribe((result) => (ciphers = result));
 
     this.loginCiphers = [];
     this.cardCiphers = [];

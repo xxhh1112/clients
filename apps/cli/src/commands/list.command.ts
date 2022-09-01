@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -57,9 +59,9 @@ export class ListCommand {
     let ciphers: CipherView[];
     options.trash = options.trash || false;
     if (options.url != null && options.url.trim() !== "") {
-      ciphers = await this.cipherService.getAllDecryptedForUrl(options.url);
+      ciphers = await firstValueFrom(this.cipherService.getAllDecryptedForUrl$(options.url));
     } else {
-      ciphers = await this.cipherService.getAllDecrypted();
+      ciphers = await firstValueFrom(this.cipherService.getAllDecrypted$());
     }
 
     if (
