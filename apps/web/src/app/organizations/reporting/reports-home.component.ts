@@ -19,8 +19,8 @@ export class ReportsHomeComponent implements OnInit, OnDestroy {
   constructor(private stateService: StateService, router: Router) {
     router.events
       .pipe(
-        takeUntil(this.destrory$),
-        filter((event) => event instanceof NavigationEnd)
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destrory$)
       )
       .subscribe((event) => {
         this.homepage = (event as NavigationEnd).urlAfterRedirects.endsWith("/reports");

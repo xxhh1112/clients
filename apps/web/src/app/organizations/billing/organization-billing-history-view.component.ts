@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { BillingHistoryResponse } from "@bitwarden/common/models/response/billingHistoryResponse";
-import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 
 @Component({
   selector: "app-org-billing-history-view",
@@ -15,7 +15,10 @@ export class OrgBillingHistoryViewComponent implements OnInit {
   billing: BillingHistoryResponse;
   organizationId: string;
 
-  constructor(private orgApiService: OrganizationApiService, private route: ActivatedRoute) {}
+  constructor(
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
@@ -31,7 +34,7 @@ export class OrgBillingHistoryViewComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.billing = await this.orgApiService.getBilling(this.organizationId);
+    this.billing = await this.organizationApiService.getBilling(this.organizationId);
     this.loading = false;
   }
 }
