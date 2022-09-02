@@ -1,5 +1,5 @@
 import {
-  Directive,
+  Component,
   EventEmitter,
   InjectionToken,
   Injector,
@@ -8,14 +8,20 @@ import {
   Output,
 } from "@angular/core";
 
+import {
+  VaultFilterSection,
+  VaultFilterType,
+} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
-import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section";
 import { VaultFilter } from "../models/vault-filter.model";
 
-@Directive()
-export class FilterSectionComponent implements OnInit {
+@Component({
+  selector: "app-filter-section",
+  templateUrl: "vault-filter-section.component.html",
+})
+export class VaultFilterSectionComponent implements OnInit {
   @Input() activeFilter: VaultFilter;
 
   @Input() data: TreeNode<VaultFilterType>;

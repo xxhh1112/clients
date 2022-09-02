@@ -1,50 +1,77 @@
-import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
-import { VaultFilterComponent as BaseVaultFilterComponent } from "@bitwarden/angular/vault/vault-filter/components/vault-filter.component";
 import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
 import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
-import { VaultFilterLabel } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
-import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
+import {
+  VaultFilterLabel,
+  VaultFilterList,
+} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { OrganizationOptionsComponent } from "./organization-filter/organization-options.component";
+import { VaultFilter } from "./shared/models/vault-filter.model";
 
 @Component({
-  selector: "./app-vault-filter",
+  selector: "app-vault-filter",
   templateUrl: "vault-filter.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
+export class VaultFilterComponent implements OnInit, OnDestroy {
+  filters?: VaultFilterList;
+  @Input() activeFilter: VaultFilter = new VaultFilter();
+  @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onSearchTextChanged = new EventEmitter<string>();
-  @Output() onAddFolder = new EventEmitter();
-  @Output() onEditFolder = new EventEmitter<FolderFilter>();
+  @Output() onAddFolder = new EventEmitter<never>();
+  @Output() onEditFolder = new EventEmitter<FolderView>();
 
+  isLoaded = false;
   searchPlaceholder = this.calculateSearchBarLocalizationString(this.activeFilter);
   searchText = "";
-
+  collapsedFilterNodes: Set<string>;
   currentFilterCollections: CollectionView[] = [];
 
-  destroy$: Subject<void>;
+  protected destroy$: Subject<void> = new Subject<void>();
+
+  get filtersList() {
+    return this.filters ? Object.values(this.filters) : [];
+  }
 
   constructor(
-    vaultFilterService: VaultFilterService,
-    i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService
+    protected vaultFilterService: VaultFilterService,
+    protected i18nService: I18nService,
+    protected platformUtilsService: PlatformUtilsService
   ) {
-    super(vaultFilterService, i18nService, platformUtilsService);
-
     this.loadSubscriptions();
   }
 
+  async ngOnInit(): Promise<void> {
+    this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
+    this.vaultFilterService.collapsedFilterNodes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((nodes) => {
+        this.collapsedFilterNodes = nodes;
+      });
+
+    await this.buildAllFilters();
+    this.isLoaded = true;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   protected loadSubscriptions() {
+    // Removes invalid folder selection when folders change
     this.vaultFilterService.filteredFolders$
       .pipe(
         switchMap(async (folders) => {
@@ -63,6 +90,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
       )
       .subscribe();
 
+    // Removes invalid collection selection when collections change
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {
@@ -85,18 +113,20 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
       .subscribe();
   }
 
-  async ngOnInit() {
-    await super.ngOnInit();
-    await this.buildAllFilters();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   searchTextChanged() {
     this.onSearchTextChanged.emit(this.searchText);
+  }
+
+  async reloadOrganizations() {
+    if (this.filters) {
+      this.filters.organizationFilter.data$ =
+        await this.vaultFilterService.buildNestedOrganizations();
+    }
+  }
+
+  // TODO: Remove when collections is refactored with observables
+  async reloadCollections() {
+    await this.vaultFilterService.reloadCollections();
   }
 
   protected async applyVaultFilter(filter: VaultFilter) {

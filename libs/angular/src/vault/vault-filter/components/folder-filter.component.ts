@@ -35,8 +35,8 @@ export class FolderFilterComponent {
 
   applyFilter(folder: FolderView) {
     this.activeFilter.resetFilter();
-    // this.activeFilter.selectedFolder = true;
-    // this.activeFilter.selectedFolderId = folder.id;
+    this.activeFilter.selectedFolder = true;
+    this.activeFilter.selectedFolderId = folder.id;
     this.onFilterChange.emit(this.activeFilter);
   }
 

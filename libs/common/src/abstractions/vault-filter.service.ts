@@ -4,6 +4,7 @@ import { CipherTypeFilter } from "@bitwarden/angular/src/vault/vault-filter/mode
 import { FolderFilter } from "@bitwarden/angular/src/vault/vault-filter/models/folder-filter.model";
 import { OrganizationFilter } from "@bitwarden/angular/src/vault/vault-filter/models/organization-filter.model";
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
+import { DynamicTreeNode } from "@bitwarden/angular/vault/vault-filter/models/dynamic-tree-node.model";
 
 import { Organization } from "../models/domain/organization";
 import { TreeNode } from "../models/domain/treeNode";
@@ -29,6 +30,19 @@ export abstract class VaultFilterService {
   buildNestedTrash: () => Observable<TreeNode<CipherTypeFilter>>;
   getNestedFolder: (id: string) => Promise<TreeNode<FolderFilter>>;
   getNestedCollection: (id: string) => Promise<TreeNode<CollectionFilter>>;
+  checkForSingleOrganizationPolicy: () => Promise<boolean>;
+  checkForPersonalOwnershipPolicy: () => Promise<boolean>;
+}
+
+/**
+ * @deprecated August 30 2022: Use new VaultFilterService with observables
+ */
+export abstract class DeprecatedVaultFilterService {
+  buildOrganizations: () => Promise<Organization[]>;
+  buildNestedFolders: (organizationId?: string) => Observable<DynamicTreeNode<FolderView>>;
+  buildCollections: (organizationId?: string) => Promise<DynamicTreeNode<CollectionView>>;
+  buildCollapsedFilterNodes: () => Promise<Set<string>>;
+  storeCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;
   checkForSingleOrganizationPolicy: () => Promise<boolean>;
   checkForPersonalOwnershipPolicy: () => Promise<boolean>;
 }

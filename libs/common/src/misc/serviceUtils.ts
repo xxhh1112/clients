@@ -70,4 +70,21 @@ export class ServiceUtils {
     }
     return null;
   }
+
+  static getTreeNodeObjectFromList(
+    nodeTree: TreeNode<ITreeNodeObject>[],
+    id: string
+  ): TreeNode<ITreeNodeObject> {
+    for (let i = 0; i < nodeTree.length; i++) {
+      if (nodeTree[i].node.id === id) {
+        return nodeTree[i];
+      } else if (nodeTree[i].children != null) {
+        const node = ServiceUtils.getTreeNodeObjectFromList(nodeTree[i].children, id);
+        if (node !== null) {
+          return node;
+        }
+      }
+    }
+    return null;
+  }
 }

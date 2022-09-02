@@ -2,7 +2,7 @@ import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeN
 
 export class DynamicTreeNode<T extends ITreeNodeObject> {
   fullList: T[];
-  nestedList: TreeNode<T>;
+  nestedList: TreeNode<T>[];
 
   hasId(id: string): boolean {
     return this.fullList != null && this.fullList.filter((i: T) => i.id === id).length > 0;

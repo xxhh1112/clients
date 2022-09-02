@@ -1,7 +1,6 @@
 import { Component, Inject } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { OptionsInput } from "@bitwarden/angular/vault/vault-filter/components/filter-section.component";
 import { VaultFilterType } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -16,6 +15,7 @@ import { Policy } from "@bitwarden/common/models/domain/policy";
 import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/models/request/organizationUserResetPasswordEnrollmentRequest";
 
 import { EnrollMasterPasswordReset } from "../../../organizations/users/enroll-master-password-reset.component";
+import { OptionsInput } from "../shared/components/vault-filter-section.component";
 
 @Component({
   selector: "app-organization-options",

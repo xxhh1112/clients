@@ -2,11 +2,11 @@ import { NgModule } from "@angular/core";
 
 import { SharedModule } from "../../../shared";
 
-import { FilterSectionComponent } from "./vault-filter-section.component";
+import { VaultFilterSectionComponent } from "./components/vault-filter-section.component";
 
 @NgModule({
   imports: [SharedModule],
-  declarations: [FilterSectionComponent],
-  exports: [SharedModule, FilterSectionComponent],
+  declarations: [VaultFilterSectionComponent],
+  exports: [SharedModule, VaultFilterSectionComponent],
 })
 export class VaultFilterSharedModule {}

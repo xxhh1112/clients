@@ -16,7 +16,7 @@ export class StatusFilterComponent {
 
   applyFilter(cipherStatus: CipherStatus) {
     this.activeFilter.resetFilter();
-    // this.activeFilter.status = cipherStatus;
+    this.activeFilter.status = cipherStatus;
     this.onFilterChange.emit(this.activeFilter);
   }
 }

@@ -1,50 +1,61 @@
-import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { firstValueFrom, Observable } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
-import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { DeprecatedVaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { ITreeNodeObject } from "@bitwarden/common/models/domain/treeNode";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-import { OrganizationFilter } from "../models/organization-filter.model";
-import { VaultFilterList } from "../models/vault-filter-section";
+import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 import { VaultFilter } from "../models/vault-filter.model";
 
+// TODO: Replace with refactored web vault filter component
+// and refactor desktop/browser vault filters
 @Directive()
-export class VaultFilterComponent implements OnInit, OnDestroy {
+export class VaultFilterComponent implements OnInit {
   @Input() activeFilter: VaultFilter = new VaultFilter();
-  @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
-  @Input() filters?: VaultFilterList;
+  @Input() hideFolders = false;
+  @Input() hideCollections = false;
+  @Input() hideFavorites = false;
+  @Input() hideTrash = false;
+  @Input() hideOrganizations = false;
+
+  @Output() onFilterChange = new EventEmitter<VaultFilter>();
+  @Output() onAddFolder = new EventEmitter<never>();
+  @Output() onEditFolder = new EventEmitter<FolderView>();
 
   isLoaded = false;
   collapsedFilterNodes: Set<string>;
+  organizations: Organization[];
+  activePersonalOwnershipPolicy: boolean;
+  activeSingleOrganizationPolicy: boolean;
+  collections: DynamicTreeNode<CollectionView>;
+  folders$: Observable<DynamicTreeNode<FolderView>>;
 
-  destroy$: Subject<void>;
+  constructor(protected vaultFilterService: DeprecatedVaultFilterService) {}
 
-  constructor(
-    protected vaultFilterService: VaultFilterService,
-    protected i18nService: I18nService,
-    protected platformUtilsService: PlatformUtilsService
-  ) {}
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  get displayCollections() {
+    return this.collections?.fullList != null && this.collections.fullList.length > 0;
   }
 
   async ngOnInit(): Promise<void> {
     this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
-    this.vaultFilterService.collapsedFilterNodes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((nodes) => {
-        this.collapsedFilterNodes = nodes;
-      });
-
+    this.organizations = await this.vaultFilterService.buildOrganizations();
+    if (this.organizations != null && this.organizations.length > 0) {
+      this.activePersonalOwnershipPolicy =
+        await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+      this.activeSingleOrganizationPolicy =
+        await this.vaultFilterService.checkForSingleOrganizationPolicy();
+    }
+    this.folders$ = await this.vaultFilterService.buildNestedFolders();
+    this.collections = await this.initCollections();
     this.isLoaded = true;
   }
 
-  get filtersList() {
-    return this.filters ? Object.values(this.filters) : [];
+  // overwritten in web for organization vaults
+  async initCollections() {
+    return await this.vaultFilterService.buildCollections();
   }
 
   async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
@@ -56,32 +67,64 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
+  async applyFilter(filter: VaultFilter) {
+    if (filter.refreshCollectionsAndFolders) {
+      await this.reloadCollectionsAndFolders(filter);
+      filter = await this.pruneInvalidatedFilterSelections(filter);
+    }
+    this.onFilterChange.emit(filter);
+  }
+
+  async reloadCollectionsAndFolders(filter: VaultFilter) {
+    this.folders$ = await this.vaultFilterService.buildNestedFolders(filter.selectedOrganizationId);
+    this.collections = filter.myVaultOnly
+      ? null
+      : await this.vaultFilterService.buildCollections(filter.selectedOrganizationId);
+  }
+
   async reloadOrganizations() {
-    if (this.filters) {
-      this.filters.organizationFilter.data$ =
-        await this.vaultFilterService.buildNestedOrganizations();
+    this.organizations = await this.vaultFilterService.buildOrganizations();
+    this.activePersonalOwnershipPolicy =
+      await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+    this.activeSingleOrganizationPolicy =
+      await this.vaultFilterService.checkForSingleOrganizationPolicy();
+  }
+
+  addFolder() {
+    this.onAddFolder.emit();
+  }
+
+  editFolder(folder: FolderView) {
+    this.onEditFolder.emit(folder);
+  }
+
+  protected async pruneInvalidatedFilterSelections(filter: VaultFilter): Promise<VaultFilter> {
+    filter = await this.pruneInvalidFolderSelection(filter);
+    filter = this.pruneInvalidCollectionSelection(filter);
+    return filter;
+  }
+
+  protected async pruneInvalidFolderSelection(filter: VaultFilter): Promise<VaultFilter> {
+    if (
+      filter.selectedFolder &&
+      !(await firstValueFrom(this.folders$))?.hasId(filter.selectedFolderId)
+    ) {
+      filter.selectedFolder = false;
+      filter.selectedFolderId = null;
     }
+    return filter;
   }
 
-  // TODO: Remove when collections is refactored with observables
-  async reloadCollections() {
-    await this.vaultFilterService.reloadCollections();
-  }
-
-  protected async applyVaultFilter(filter: VaultFilter) {
-    this.activeFilterChanged.emit(filter);
-  }
-
-  applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
-    if (!orgNode.node.enabled) {
-      return;
+  protected pruneInvalidCollectionSelection(filter: VaultFilter): VaultFilter {
+    if (
+      filter.myVaultOnly ||
+      (filter.selectedCollection &&
+        filter.selectedCollectionId != null &&
+        !this.collections?.hasId(filter.selectedCollectionId))
+    ) {
+      filter.selectedCollection = false;
+      filter.selectedCollectionId = null;
     }
-    const filter = this.activeFilter;
-    filter.resetOrganization();
-    filter.selectedOrganizationNode = orgNode;
-    this.vaultFilterService.updateOrganizationFilter(orgNode.node);
-    await this.reloadCollections();
-
-    await this.applyVaultFilter(filter);
-  };
+    return filter;
+  }
 }

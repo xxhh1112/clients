@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatestWith, mergeMap, switchMap, takeUntil } from "rxjs";
 
-import { VaultFilterService as BaseVaultFilterService } from "@bitwarden/angular/vault/vault-filter/services/vault-filter.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -15,6 +14,8 @@ import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+
+import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/vault-filter.service";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
