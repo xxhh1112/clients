@@ -318,9 +318,14 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        type: this.activeFilter.selectedCipherTypeNode?.node.type,
+        type:
+          this.activeFilter.selectedCipherTypeNode?.node.type !== "all" &&
+          this.activeFilter.selectedCipherTypeNode?.node.type !== "favorites" &&
+          this.activeFilter.selectedCipherTypeNode?.node.type !== "trash"
+            ? this.activeFilter.selectedCipherTypeNode?.node.type
+            : null,
         collectionId: this.activeFilter.selectedCollectionNode?.node.id,
-        deleted: this.deleted ? true : null,
+        deleted: this.activeFilter.selectedCipherTypeNode?.node.type === "trash" ? true : null,
       };
     }
 
