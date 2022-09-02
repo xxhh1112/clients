@@ -1,5 +1,6 @@
 export type Flags = {
   showTrial?: boolean;
+  secretsManager?: boolean;
 };
 
 export type FlagName = keyof Flags;
