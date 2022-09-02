@@ -6,7 +6,6 @@ import { CipherService } from "@bitwarden/common/services/cipher/cipher.service"
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { EncryptService } from "@bitwarden/common/services/encrypt.service";
 import NoOpEventService from "@bitwarden/common/services/noOpEvent.service";
-import { SearchService } from "@bitwarden/common/services/search.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
@@ -85,19 +84,14 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
   await i18nService.init();
 
   // Don't love this pt.1
-  let searchService: SearchService = null;
 
   const cipherService = new CipherService(
     cryptoService,
     settingsService,
     i18nService,
-    () => searchService, // Don't love this pt.2
     logService,
     stateService
   );
-
-  // Don't love this pt.3
-  searchService = new SearchService(cipherService, logService, i18nService);
 
   // TODO: Remove this before we encourage anyone to start using this
   const eventService = new NoOpEventService();

@@ -1,5 +1,6 @@
+import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+
 import { AuthService } from "../../abstractions/auth.service";
-import { CipherService } from "../../abstractions/cipher.service";
 import { CollectionService } from "../../abstractions/collection.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { FolderService } from "../../abstractions/folder/folder.service.abstraction";
@@ -16,7 +17,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
   private inited = false;
 
   constructor(
-    private cipherService: CipherService,
+    private cipherService: InternalCipherService,
     private folderService: FolderService,
     private collectionService: CollectionService,
     private cryptoService: CryptoService,

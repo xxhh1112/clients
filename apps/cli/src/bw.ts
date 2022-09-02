@@ -202,17 +202,12 @@ export class Main {
 
     this.settingsService = new SettingsService(this.stateService);
 
-    this.fileUploadService = new FileUploadService(
-      this.logService,
-      this.apiService,
-      this.cipherApiAttachmentService
-    );
+    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
 
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
       this.i18nService,
-      null,
       this.logService,
       this.stateService
     );
@@ -290,13 +285,11 @@ export class Main {
       this.platformUtilsService,
       this.messagingService,
       this.searchService,
-      this.tokenService,
-      this.policyService,
       this.keyConnectorService,
       this.stateService,
       this.authService,
-      lockedCallback,
-      null
+      this.vaultTimeoutSettingsService,
+      lockedCallback
     );
 
     this.syncService = new SyncService(
@@ -315,6 +308,7 @@ export class Main {
       this.organizationService,
       this.providerService,
       this.folderApiService,
+      this.cipherApiService,
       async (expired: boolean) => await this.logout()
     );
 

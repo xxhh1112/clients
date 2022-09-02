@@ -272,11 +272,7 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired)
     );
     this.settingsService = new SettingsService(this.stateService);
-    this.fileUploadService = new FileUploadService(
-      this.logService,
-      this.apiService,
-      this.cipherApiAttachmentService
-    );
+    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,

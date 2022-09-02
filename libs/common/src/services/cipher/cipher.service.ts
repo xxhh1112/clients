@@ -1,4 +1,6 @@
-import { BehaviorSubject, from, map, concatMap, Observable, firstValueFrom } from "rxjs";
+import { BehaviorSubject, map, concatMap, Observable, firstValueFrom } from "rxjs";
+
+import { AccountSettingsSettings } from "@bitwarden/common/models/domain/account";
 
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
@@ -895,24 +897,22 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private getEquivalentDomain$(domain: string) {
     return domain == null
-      ? from(Promise.resolve([]))
-      : from(
-          Promise.resolve(this.settingsService.getEquivalentDomains()).then(
-            (eqDomains: any[][]) => {
-              let matches: any[] = [];
-              eqDomains.forEach((eqDomain) => {
-                if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-                  matches = matches.concat(eqDomain);
-                }
-              });
-
-              if (!matches.length) {
-                matches.push(domain);
+      ? null
+      : this.settingsService.settings$.pipe(
+          map((eqDomains: AccountSettingsSettings) => {
+            let matches: string[] = [];
+            eqDomains.equivalentDomains.forEach((eqDomain: string[]) => {
+              if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+                matches = matches.concat(eqDomain);
               }
+            });
 
-              return matches;
+            if (!matches.length) {
+              matches.push(domain);
             }
-          )
+
+            return matches;
+          })
         );
   }
 
