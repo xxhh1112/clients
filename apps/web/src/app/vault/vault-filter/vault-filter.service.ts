@@ -48,7 +48,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   );
   nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => {
-      return collections ? this.getAllNestedCollections(collections) : null;
+      return this.getAllNestedCollections(collections);
     })
   );
 
@@ -137,21 +137,9 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
 
   async buildNestedOrganizations(): Promise<Observable<TreeNode<OrganizationFilter>>> {
     const orgs = (await this.organizationService.getAll()) as OrganizationFilter[];
-    const head = new Organization() as OrganizationFilter;
-    head.enabled = true;
-    const headNode = new TreeNode<OrganizationFilter>(head, null, "allVaults", "AllVaults");
+    const headNode = this.getOrganizationFilterHead();
     if (!(await this.checkForPersonalOwnershipPolicy())) {
-      const myVault = new Organization() as OrganizationFilter;
-      myVault.id = "MyVault";
-      myVault.icon = "bwi-user";
-      myVault.enabled = true;
-      myVault.hideOptions = true;
-      myVault.hideOptions = true;
-      const myVaultNode = new TreeNode<OrganizationFilter>(
-        myVault,
-        null,
-        this.i18nService.t("myVault")
-      );
+      const myVaultNode = this.getOrganizationFilterMyVault();
       headNode.children.push(myVaultNode);
     }
     if (await this.checkForSingleOrganizationPolicy()) {
@@ -159,17 +147,32 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     }
     orgs.forEach((filter) => {
       filter.icon = "bwi-business";
-      const node = new TreeNode<OrganizationFilter>(filter, head, filter.name);
+      const node = new TreeNode<OrganizationFilter>(filter, headNode.node, filter.name);
       headNode.children.push(node);
     });
     return of(headNode);
+  }
+
+  protected getOrganizationFilterHead(): TreeNode<OrganizationFilter> {
+    const head = new Organization() as OrganizationFilter;
+    head.enabled = true;
+    return new TreeNode<OrganizationFilter>(head, null, "allVaults", "AllVaults");
+  }
+
+  protected getOrganizationFilterMyVault(): TreeNode<OrganizationFilter> {
+    const myVault = new Organization() as OrganizationFilter;
+    myVault.id = "MyVault";
+    myVault.icon = "bwi-user";
+    myVault.enabled = true;
+    myVault.hideOptions = true;
+    return new TreeNode<OrganizationFilter>(myVault, null, this.i18nService.t("myVault"));
   }
 
   buildNestedTypes(
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
   ): Observable<TreeNode<CipherTypeFilter>> {
-    const headNode = new TreeNode<CipherTypeFilter>(head, null, "allItems", "AllItems");
+    const headNode = this.getTypesFilterHead(head);
     array.forEach((filter) => {
       const node = new TreeNode<CipherTypeFilter>(filter, head, filter.name);
       headNode.children.push(node);
@@ -177,14 +180,12 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     return of(headNode);
   }
 
+  protected getTypesFilterHead(head: CipherTypeFilter): TreeNode<CipherTypeFilter> {
+    return new TreeNode<CipherTypeFilter>(head, null, "allItems", "AllItems");
+  }
+
   buildNestedTrash(): Observable<TreeNode<CipherTypeFilter>> {
-    const head: CipherTypeFilter = {
-      id: "headTrash",
-      name: "HeadTrash",
-      type: "trash",
-      icon: "bwi-trash",
-    };
-    const headNode = new TreeNode<CipherTypeFilter>(head, null);
+    const headNode = this.getTrashFilterHead();
     const node = new TreeNode<CipherTypeFilter>(
       {
         id: "trash",
@@ -196,6 +197,16 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     );
     headNode.children.push(node);
     return of(headNode);
+  }
+
+  protected getTrashFilterHead(): TreeNode<CipherTypeFilter> {
+    const head: CipherTypeFilter = {
+      id: "headTrash",
+      name: "HeadTrash",
+      type: "trash",
+      icon: "bwi-trash",
+    };
+    return new TreeNode<CipherTypeFilter>(head, null);
   }
 
   // TODO: Use observable once collections is refactored
@@ -219,24 +230,30 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     return collections;
   }
 
-  protected getAllNestedCollections(collections: CollectionView[]): TreeNode<CollectionFilter> {
-    const nodes: TreeNode<CollectionFilter>[] = [];
-    collections.forEach((c) => {
-      const collectionCopy = new CollectionView() as CollectionFilter;
-      collectionCopy.id = c.id;
-      collectionCopy.organizationId = c.organizationId;
-      collectionCopy.icon = "bwi-collection";
-      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
-    });
-
-    const head = new CollectionView() as CollectionFilter;
-    const headNode = new TreeNode<CollectionFilter>(head, null, "collections", "AllCollections");
-    nodes.forEach((n) => {
-      n.parent = head;
-      headNode.children.push(n);
-    });
+  protected getAllNestedCollections(collections?: CollectionView[]): TreeNode<CollectionFilter> {
+    const headNode = this.getCollectionFilterHead();
+    if (collections) {
+      const nodes: TreeNode<CollectionFilter>[] = [];
+      collections.forEach((c) => {
+        const collectionCopy = new CollectionView() as CollectionFilter;
+        collectionCopy.id = c.id;
+        collectionCopy.organizationId = c.organizationId;
+        collectionCopy.icon = "bwi-collection";
+        const parts =
+          c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+        ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
+      });
+      nodes.forEach((n) => {
+        n.parent = headNode.node;
+        headNode.children.push(n);
+      });
+    }
     return headNode;
+  }
+
+  protected getCollectionFilterHead(): TreeNode<CollectionFilter> {
+    const head = new CollectionView() as CollectionFilter;
+    return new TreeNode<CollectionFilter>(head, null, "collections", "AllCollections");
   }
 
   async getNestedFolder(id: string): Promise<TreeNode<FolderFilter>> {
@@ -265,24 +282,31 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     return folders;
   }
 
-  protected getAllNestedFolders(folders: FolderView[]): TreeNode<FolderFilter> {
-    const nodes: TreeNode<FolderFilter>[] = [];
-    folders.forEach((f) => {
-      const folderCopy = new FolderView() as FolderFilter;
-      folderCopy.id = f.id;
-      folderCopy.revisionDate = f.revisionDate;
-      folderCopy.icon = "bwi-folder";
-      const parts = f.name != null ? f.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-      ServiceUtils.nestedTraverse(nodes, 0, parts, folderCopy, null, NestingDelimiter);
-    });
+  protected getAllNestedFolders(folders?: FolderView[]): TreeNode<FolderFilter> {
+    const headNode = this.getFolderFilterHead();
+    if (folders) {
+      const nodes: TreeNode<FolderFilter>[] = [];
+      folders.forEach((f) => {
+        const folderCopy = new FolderView() as FolderFilter;
+        folderCopy.id = f.id;
+        folderCopy.revisionDate = f.revisionDate;
+        folderCopy.icon = "bwi-folder";
+        const parts =
+          f.name != null ? f.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+        ServiceUtils.nestedTraverse(nodes, 0, parts, folderCopy, null, NestingDelimiter);
+      });
 
-    const head = new FolderView() as FolderFilter;
-    const headNode = new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
-    nodes.forEach((n) => {
-      n.parent = head;
-      headNode.children.push(n);
-    });
+      nodes.forEach((n) => {
+        n.parent = headNode.node;
+        headNode.children.push(n);
+      });
+    }
     return headNode;
+  }
+
+  protected getFolderFilterHead(): TreeNode<FolderFilter> {
+    const head = new FolderView() as FolderFilter;
+    return new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
