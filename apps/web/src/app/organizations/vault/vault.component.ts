@@ -52,8 +52,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   eventsModalRef: ViewContainerRef;
 
   organization: Organization;
-  // collectionId: string = null;
-  // type: CipherType = null;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
