@@ -20,10 +20,6 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
 export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
   private _organization: Organization;
 
-  get organization() {
-    return this._organization;
-  }
-
   destroy$: Subject<void>;
 
   constructor(
@@ -79,7 +75,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   }
 
   async buildAllFilters() {
-    this.vaultFilterService.updateOrganizationFilter(this.organization);
+    this.vaultFilterService.updateOrganizationFilter(this._organization);
 
     this.filters = {
       [VaultFilterLabel.TypeFilter]: {
