@@ -9,7 +9,6 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-
 import { VaultFilter } from "./vault-filter.model";
 
 describe("VaultFilter", () => {

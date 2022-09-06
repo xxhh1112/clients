@@ -18,7 +18,6 @@ import { StatusFilterComponent } from "./filters/status-filter.component";
 import { TypeFilterComponent } from "./filters/type-filter.component";
 import { VaultFilterComponent } from "./vault-filter.component";
 
-
 @NgModule({
   imports: [BrowserModule, JslibModule],
   declarations: [
