@@ -1,24 +1,16 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "src/app/shared";
+import { SharedModule } from "src/app/shared/shared.module";
 
-import { FilterComponent } from "../layout/filter.component";
-import { HeaderComponent } from "../layout/header.component";
-import { NewMenuComponent } from "../layout/new.menu.component";
+import { SecretsSharedModule } from "../shared/secretsshared.module";
 
 import { SecretsListComponent } from "./secrets-list.component";
 import { SecretsRoutingModule } from "./secrets-routing.module";
 import { SecretsComponent } from "./secrets.component";
 
 @NgModule({
-  imports: [SharedModule, SecretsRoutingModule],
-  declarations: [
-    SecretsComponent,
-    SecretsListComponent,
-    HeaderComponent,
-    FilterComponent,
-    NewMenuComponent,
-  ],
+  imports: [SharedModule, SecretsRoutingModule, SecretsSharedModule],
+  declarations: [SecretsComponent, SecretsListComponent],
   providers: [],
 })
 export class SecretsModule {}
