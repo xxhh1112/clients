@@ -35,6 +35,7 @@ import { BulkRemoveComponent as OrgBulkRemoveComponent } from "../organizations/
 import { BulkRestoreRevokeComponent as OrgBulkRestoreRevokeComponent } from "../organizations/manage/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent as OrgBulkStatusComponent } from "../organizations/manage/bulk/bulk-status.component";
 import { CollectionAddEditComponent as OrgCollectionAddEditComponent } from "../organizations/manage/collection-add-edit.component";
+import { CollectionEditDialogComponent as OrgCollectionEditDialogComponent } from "../organizations/manage/collection-edit-dialog/collection-edit-dialog.components";
 import { CollectionsComponent as OrgManageCollectionsComponent } from "../organizations/manage/collections.component";
 import { EntityEventsComponent as OrgEntityEventsComponent } from "../organizations/manage/entity-events.component";
 import { EventsComponent as OrgEventsComponent } from "../organizations/manage/events.component";
@@ -224,6 +225,7 @@ import { SharedModule } from ".";
     OrgBulkRestoreRevokeComponent,
     OrgBulkRemoveComponent,
     OrgBulkStatusComponent,
+    OrgCollectionEditDialogComponent,
     OrgCollectionAddEditComponent,
     OrgCollectionsComponent,
     OrgEntityEventsComponent,

@@ -19,8 +19,10 @@ import {
 } from "@bitwarden/common/models/response/collectionResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { DialogService } from "@bitwarden/components";
 
 import { CollectionAddEditComponent } from "./collection-add-edit.component";
+import { CollectionEditDialogComponent } from "./collection-edit-dialog/collection-edit-dialog.components";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
@@ -56,7 +58,8 @@ export class CollectionsComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private logService: LogService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -114,6 +117,10 @@ export class CollectionsComponent implements OnInit {
     }
     this.pagedCollectionsCount = this.pagedCollections.length;
     this.didScroll = this.pagedCollections.length > this.pageSize;
+  }
+
+  async new_edit(collection: CollectionView) {
+    this.dialogService.open(CollectionEditDialogComponent);
   }
 
   async edit(collection: CollectionView) {

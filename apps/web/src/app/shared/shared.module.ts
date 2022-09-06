@@ -14,6 +14,7 @@ import {
   FormFieldModule,
   MenuModule,
   IconModule,
+  DialogModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -30,6 +31,7 @@ import "./locales";
   imports: [
     CommonModule,
     DragDropModule,
+    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,
@@ -48,6 +50,7 @@ import "./locales";
   exports: [
     CommonModule,
     DragDropModule,
+    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,
