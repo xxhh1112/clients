@@ -1,6 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
+import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ButtonModule, DialogModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
@@ -17,7 +18,7 @@ export default {
   component: CollectionEditDialogComponent,
   decorators: [
     moduleMetadata({
-      imports: [PreloadedEnglishI18nModule, DialogModule, ButtonModule],
+      imports: [JslibModule, PreloadedEnglishI18nModule, DialogModule, ButtonModule],
       providers: [
         {
           provide: DialogRef,
