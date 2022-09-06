@@ -5,7 +5,10 @@ import { ButtonModule, DialogModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
-import { CollectionEditDialogComponent } from "./collection-edit-dialog.components";
+import {
+  CollectionEditDialogComponent,
+  CollectionEditDialogParams,
+} from "./collection-edit-dialog.components";
 
 class DialogRefMock implements Partial<DialogRef> {}
 
@@ -20,18 +23,25 @@ export default {
           provide: DialogRef,
           useClass: DialogRefMock,
         },
-        {
-          provide: DIALOG_DATA,
-          useValue: {},
-        },
       ],
     }),
   ],
-  args: {},
+  args: {
+    collectionId: "collectionId",
+  } as CollectionEditDialogParams,
 } as Meta;
 
-const Template: Story<CollectionEditDialogComponent> = (args: CollectionEditDialogComponent) => ({
-  props: args,
+function paramsProvider(params: CollectionEditDialogParams) {
+  return {
+    provide: DIALOG_DATA,
+    useValue: params,
+  };
+}
+
+const Template: Story<CollectionEditDialogComponent> = (args: CollectionEditDialogParams) => ({
+  moduleMetadata: {
+    providers: [paramsProvider(args)],
+  },
   template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
 });
 
