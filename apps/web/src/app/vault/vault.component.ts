@@ -376,9 +376,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         favorites:
           this.activeFilter.selectedCipherTypeNode?.node.type === "favorites" ? true : null,
         type:
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "all" &&
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "favorites" &&
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "trash"
+          this.activeFilter.selectedCipherTypeNode?.node.type in CipherType
             ? this.activeFilter.selectedCipherTypeNode?.node.type
             : null,
         folderId: this.activeFilter.selectedFolderNode?.node.id,

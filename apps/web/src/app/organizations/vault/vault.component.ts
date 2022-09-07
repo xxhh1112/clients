@@ -317,9 +317,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (queryParams == null) {
       queryParams = {
         type:
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "all" &&
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "favorites" &&
-          this.activeFilter.selectedCipherTypeNode?.node.type !== "trash"
+          this.activeFilter.selectedCipherTypeNode?.node.type in CipherType
             ? this.activeFilter.selectedCipherTypeNode?.node.type
             : null,
         collectionId: this.activeFilter.selectedCollectionNode?.node.id,
