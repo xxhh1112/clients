@@ -65,9 +65,9 @@ export class VaultFilterSectionComponent implements OnInit {
       return this.activeFilter.selectedOrganizationNode == filterNode;
     }
     return (
-      this.activeFilter.selectedCipherTypeNode?.node.id === filterNode?.node.id ||
-      this.activeFilter.selectedFolderNode?.node.id === filterNode?.node.id ||
-      this.activeFilter.selectedCollectionNode?.node.id === filterNode?.node.id
+      this.activeFilter.getCipherTypeId === filterNode?.node.id ||
+      this.activeFilter.getFolderId === filterNode?.node.id ||
+      this.activeFilter.getCollectionId === filterNode?.node.id
     );
   }
 

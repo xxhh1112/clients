@@ -24,7 +24,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
@@ -174,11 +173,10 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async applyVaultFilter(filter: VaultFilter) {
     this.activeFilter = filter;
-    this.ciphersComponent.showAddNew =
-      this.activeFilter.selectedCipherTypeNode?.node.id !== "trash";
+    this.ciphersComponent.showAddNew = !this.activeFilter.isDeleted;
     await this.ciphersComponent.reload(
       this.activeFilter.buildFilter(),
-      this.activeFilter.selectedCipherTypeNode?.node.id === "trash"
+      this.activeFilter.isDeleted
     );
     this.go();
   }
@@ -297,9 +295,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const component = await this.editCipher(null);
-    if (this.activeFilter.selectedCipherTypeNode?.node?.type in CipherType) {
-      component.type = this.activeFilter.selectedCipherTypeNode?.node.type as CipherType;
-    }
+    component.type = this.activeFilter.getCipherType;
     if (
       this.activeFilter.selectedOrganizationNode &&
       this.activeFilter.selectedOrganizationNode?.node?.id !== "MyVault"
@@ -309,13 +305,11 @@ export class VaultComponent implements OnInit, OnDestroy {
         (c) => !c.readOnly && c.id != null
       );
     }
-    const selectedCol = this.activeFilter.selectedCollectionNode?.node;
-    if (selectedCol && selectedCol.id && selectedCol.id !== "AllCollections") {
-      component.collectionIds = [selectedCol.id];
+    const selectedColId = this.activeFilter.getCollectionId;
+    if (selectedColId && selectedColId !== "AllCollections") {
+      component.collectionIds = [selectedColId];
     }
-    if (this.activeFilter.selectedFolderNode) {
-      component.folderId = this.activeFilter.selectedFolderNode?.node?.id;
-    }
+    component.folderId = this.activeFilter.getFolderId;
   }
 
   async editCipher(cipher: CipherView) {
@@ -373,15 +367,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        favorites:
-          this.activeFilter.selectedCipherTypeNode?.node.type === "favorites" ? true : null,
-        type:
-          this.activeFilter.selectedCipherTypeNode?.node.type in CipherType
-            ? this.activeFilter.selectedCipherTypeNode?.node.type
-            : null,
-        folderId: this.activeFilter.selectedFolderNode?.node.id,
-        collectionId: this.activeFilter.selectedCollectionNode?.node.id,
-        deleted: this.activeFilter.selectedCipherTypeNode?.node.type === "trash" ? true : null,
+        favorites: this.activeFilter.isFavorites,
+        type: this.activeFilter.getCipherType,
+        folderId: this.activeFilter.getFolderId,
+        collectionId: this.activeFilter.getCollectionId,
+        deleted: this.activeFilter.isDeleted,
       };
     }
 

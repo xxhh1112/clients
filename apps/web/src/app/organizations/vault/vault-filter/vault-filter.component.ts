@@ -40,9 +40,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
       .pipe(
         switchMap(async (collections) => {
           if (this.activeFilter.selectedCollectionNode) {
-            if (
-              !collections.find((f) => f.id === this.activeFilter.selectedCollectionNode?.node.id)
-            ) {
+            if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
               const filter = this.activeFilter;
               filter.resetFilter();
               filter.selectedCollectionNode = (await firstValueFrom(

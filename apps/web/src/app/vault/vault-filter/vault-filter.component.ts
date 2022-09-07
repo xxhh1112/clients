@@ -76,7 +76,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(async (folders) => {
           if (this.activeFilter.selectedFolderNode) {
-            if (!folders.find((f) => f.id === this.activeFilter.selectedFolderNode?.node.id)) {
+            if (!folders.find((f) => f.id === this.activeFilter.getFolderId)) {
               const filter = this.activeFilter;
               filter.resetFilter();
               filter.selectedCipherTypeNode = (await firstValueFrom(
@@ -96,9 +96,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         switchMap(async (collections) => {
           this.currentFilterCollections = collections;
           if (this.activeFilter.selectedCollectionNode) {
-            if (
-              !collections.find((f) => f.id === this.activeFilter.selectedCollectionNode?.node.id)
-            ) {
+            if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
               const filter = this.activeFilter;
               filter.resetFilter();
               filter.selectedCipherTypeNode = (await firstValueFrom(
