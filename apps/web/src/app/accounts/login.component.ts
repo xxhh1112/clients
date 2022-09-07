@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -33,6 +32,11 @@ export class LoginComponent extends BaseLoginComponent {
   showResetPasswordAutoEnrollWarning = false;
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
+  validatedEmail = false;
+
+  get loggedEmail() {
+    return this.formGroup.get("email")?.value;
+  }
 
   constructor(
     authService: AuthService,
@@ -43,7 +47,6 @@ export class LoginComponent extends BaseLoginComponent {
     environmentService: EnvironmentService,
     passwordGenerationService: PasswordGenerationService,
     cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService,
     private policyApiService: PolicyApiServiceAbstraction,
     private policyService: InternalPolicyService,
     logService: LogService,
@@ -96,9 +99,13 @@ export class LoginComponent extends BaseLoginComponent {
         });
         this.routerService.setPreviousUrl(route.toString());
       }
+
       await super.ngOnInit();
-      const rememberEmail = await this.stateService.getRememberEmail();
-      this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
+
+      //check if email is remembered
+      if (this.loggedEmail) {
+        this.validatedEmail = true;
+      }
     });
 
     const invite = await this.stateService.getOrganizationInvitation();
@@ -188,6 +195,13 @@ export class LoginComponent extends BaseLoginComponent {
     this.router.navigate(["/login-with-device"], { state: { email: email } });
   }
 
+  validateEmail() {
+    const emailInvalid = this.formGroup.get("email").invalid;
+    if (!emailInvalid) {
+      this.toggleValidateEmail(true);
+    }
+  }
+
   private getPasswordStrengthUserInput() {
     const email = this.formGroup.get("email")?.value;
     let userInput: string[] = [];
@@ -202,5 +216,9 @@ export class LoginComponent extends BaseLoginComponent {
       );
     }
     return userInput;
+  }
+
+  private toggleValidateEmail(value: boolean) {
+    this.validatedEmail = value;
   }
 }

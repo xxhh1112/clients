@@ -16,7 +16,7 @@
       <div
         class="tw-mt-3 tw-rounded-md tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-p-6"
       >
-        <ng-container *ngIf="true; else loginPage">
+        <ng-container *ngIf="!validatedEmail; else loginPage">
           <div class="tw-mb-3">
             <bit-form-field>
               <bit-label>{{ "emailAddress" | i18n }}</bit-label>
@@ -46,6 +46,7 @@
               buttonType="primary"
               class="tw-w-full"
               [disabled]="form.loading"
+              (click)="validateEmail()"
             >
               <span> {{ "continue" | i18n }} </span>
             </button>
@@ -63,7 +64,7 @@
   </div>
 </form>
 
-<ng-template #loginPage>
+<ng-template [formGroup]="formGroup" #loginPage>
   <div class="tw-mb-3">
     <bit-form-field>
       <bit-label>{{ "masterPass" | i18n }}</bit-label>
@@ -121,4 +122,11 @@
       {{ "enterpriseSingleSignOn" | i18n }}
     </a>
   </div>
+
+  <hr />
+
+  <p class="tw-m-0 tw-text-sm">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
+  <a class="tw-mt-6" [routerLink]="[]" (click)="toggleValidateEmail(false)">{{
+    "notYou" | i18n
+  }}</a>
 </ng-template>
