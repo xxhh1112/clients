@@ -5,10 +5,7 @@ import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/c
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
 import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
-import {
-  VaultFilterLabel,
-  VaultFilterList,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
+import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
@@ -181,28 +178,25 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   };
 
   calculateSearchBarLocalizationString(vaultFilter: VaultFilter): string {
-    if (vaultFilter.selectedCipherTypeNode?.node.type === "favorites") {
+    if (vaultFilter.isFavorites) {
       return "searchFavorites";
     }
-    if (vaultFilter.selectedCipherTypeNode?.node.type === "trash") {
+    if (vaultFilter.isDeleted) {
       return "searchTrash";
     }
-    if (
-      vaultFilter.selectedCipherTypeNode?.node.type != null &&
-      vaultFilter.selectedCipherTypeNode?.node.type !== "all"
-    ) {
+    if (vaultFilter.getCipherStatus != null && vaultFilter.getCipherStatus !== "all") {
       return "searchType";
     }
     if (vaultFilter.selectedFolderNode?.node) {
       return "searchFolder";
     }
-    if (vaultFilter.selectedCollectionNode?.node.id) {
+    if (vaultFilter.selectedCollectionNode?.node) {
       return "searchCollection";
     }
-    if (vaultFilter.selectedOrganizationNode?.node.id === "MyVault") {
+    if (vaultFilter.getOrganizationId === "MyVault") {
       return "searchMyVault";
     }
-    if (vaultFilter.selectedOrganizationNode?.node.id) {
+    if (vaultFilter.getOrganizationId) {
       return "searchOrganization";
     }
 
@@ -210,105 +204,131 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async buildAllFilters() {
+    let builderFilter = {} as VaultFilterList;
+    builderFilter = await this.addOrganizationFilter(builderFilter);
+    builderFilter = await this.addTypeFilter(builderFilter);
+    builderFilter = await this.addFolderFilter(builderFilter);
+    builderFilter = await this.addCollectionFilter(builderFilter);
+    builderFilter = await this.addTrashFilter(builderFilter);
+
+    this.filters = builderFilter;
+  }
+
+  protected async addOrganizationFilter(filter: VaultFilterList) {
     const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
     const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
 
-    this.filters = {
-      [VaultFilterLabel.OrganizationFilter]: {
-        data$: await this.vaultFilterService.buildNestedOrganizations(),
-        header: {
-          showHeader: !(singleOrgPolicy && personalVaultPolicy),
-          isSelectable: true,
-        },
-        action: this.applyOrganizationFilter,
-        options: !personalVaultPolicy
-          ? {
-              component: OrganizationOptionsComponent,
-            }
-          : null,
-        add: !singleOrgPolicy
-          ? {
-              text: "newOrganization",
-              route: "/create-organization",
-            }
-          : null,
-        divider: true,
+    filter.organizationFilter = {
+      data$: await this.vaultFilterService.buildNestedOrganizations(),
+      header: {
+        showHeader: !(singleOrgPolicy && personalVaultPolicy),
+        isSelectable: true,
       },
-      [VaultFilterLabel.TypeFilter]: {
-        data$: await this.vaultFilterService.buildNestedTypes(
-          { id: "all", name: "allItems", type: "all", icon: "" },
-          [
-            {
-              id: "favorites",
-              name: this.i18nService.t("favorites"),
-              type: "favorites",
-              icon: "bwi-star",
-            },
-            {
-              id: "login",
-              name: this.i18nService.t("typeLogin"),
-              type: CipherType.Login,
-              icon: "bwi-globe",
-            },
-            {
-              id: "card",
-              name: this.i18nService.t("typeCard"),
-              type: CipherType.Card,
-              icon: "bwi-credit-card",
-            },
-            {
-              id: "identity",
-              name: this.i18nService.t("typeIdentity"),
-              type: CipherType.Identity,
-              icon: "bwi-id-card",
-            },
-            {
-              id: "note",
-              name: this.i18nService.t("typeSecureNote"),
-              type: CipherType.SecureNote,
-              icon: "bwi-sticky-note",
-            },
-          ]
-        ),
-        header: {
-          showHeader: true,
-          isSelectable: true,
-          defaultSelection: true,
-        },
-        action: this.applyTypeFilter,
+      action: this.applyOrganizationFilter,
+      options: !personalVaultPolicy
+        ? {
+            component: OrganizationOptionsComponent,
+          }
+        : null,
+      add: !singleOrgPolicy
+        ? {
+            text: "newOrganization",
+            route: "/create-organization",
+          }
+        : null,
+      divider: true,
+    };
+    return filter;
+  }
+
+  protected async addTypeFilter(filter: VaultFilterList) {
+    filter.typeFilter = {
+      data$: await this.vaultFilterService.buildNestedTypes(
+        { id: "all", name: "allItems", type: "all", icon: "" },
+        [
+          {
+            id: "favorites",
+            name: this.i18nService.t("favorites"),
+            type: "favorites",
+            icon: "bwi-star",
+          },
+          {
+            id: "login",
+            name: this.i18nService.t("typeLogin"),
+            type: CipherType.Login,
+            icon: "bwi-globe",
+          },
+          {
+            id: "card",
+            name: this.i18nService.t("typeCard"),
+            type: CipherType.Card,
+            icon: "bwi-credit-card",
+          },
+          {
+            id: "identity",
+            name: this.i18nService.t("typeIdentity"),
+            type: CipherType.Identity,
+            icon: "bwi-id-card",
+          },
+          {
+            id: "note",
+            name: this.i18nService.t("typeSecureNote"),
+            type: CipherType.SecureNote,
+            icon: "bwi-sticky-note",
+          },
+        ]
+      ),
+      header: {
+        showHeader: true,
+        isSelectable: true,
+        defaultSelection: true,
       },
-      [VaultFilterLabel.FolderFilter]: {
-        data$: this.vaultFilterService.nestedFolders$,
-        header: {
-          showHeader: true,
-          isSelectable: false,
-        },
-        action: await this.applyFolderFilter,
-        edit: {
-          text: "editFolder",
-          action: this.editFolder,
-        },
-        add: {
-          text: "Add Folder",
-          action: this.addFolder,
-        },
+      action: this.applyTypeFilter,
+    };
+    return filter;
+  }
+
+  protected async addFolderFilter(filter: VaultFilterList) {
+    filter.folderFilter = {
+      data$: this.vaultFilterService.nestedFolders$,
+      header: {
+        showHeader: true,
+        isSelectable: false,
       },
-      [VaultFilterLabel.CollectionFilter]: {
-        data$: this.vaultFilterService.nestedCollections$,
-        header: {
-          showHeader: true,
-          isSelectable: true,
-        },
-        action: this.applyCollectionFilter,
+      action: await this.applyFolderFilter,
+      edit: {
+        text: "editFolder",
+        action: this.editFolder,
       },
-      [VaultFilterLabel.TrashFilter]: {
-        data$: this.vaultFilterService.buildNestedTrash(),
-        header: {
-          showHeader: false,
-          isSelectable: true,
-        },
-        action: this.applyTypeFilter,
+      add: {
+        text: "Add Folder",
+        action: this.addFolder,
       },
     };
+    return filter;
+  }
+
+  protected async addCollectionFilter(filter: VaultFilterList) {
+    filter.collectionFilter = {
+      data$: this.vaultFilterService.nestedCollections$,
+      header: {
+        showHeader: true,
+        isSelectable: true,
+      },
+      action: this.applyCollectionFilter,
+    };
+    return filter;
+  }
+
+  protected async addTrashFilter(filter: VaultFilterList) {
+    filter.trashFilter = {
+      data$: this.vaultFilterService.buildNestedTrash(),
+      header: {
+        showHeader: false,
+        isSelectable: true,
+      },
+      action: this.applyTypeFilter,
+    };
+    return filter;
   }
 }

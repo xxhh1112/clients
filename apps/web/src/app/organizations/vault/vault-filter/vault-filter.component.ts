@@ -2,11 +2,10 @@ import { Component, OnDestroy } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
-import { VaultFilterLabel } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
+import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
@@ -75,65 +74,11 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   async buildAllFilters() {
     this.vaultFilterService.updateOrganizationFilter(this._organization);
 
-    this.filters = {
-      [VaultFilterLabel.TypeFilter]: {
-        data$: await this.vaultFilterService.buildNestedTypes(
-          { id: "all", name: "allItems", type: "all", icon: "" },
-          [
-            {
-              id: "favorites",
-              name: this.i18nService.t("favorites"),
-              type: "favorites",
-              icon: "bwi-star",
-            },
-            {
-              id: "login",
-              name: this.i18nService.t("typeLogin"),
-              type: CipherType.Login,
-              icon: "bwi-globe",
-            },
-            {
-              id: "card",
-              name: this.i18nService.t("typeCard"),
-              type: CipherType.Card,
-              icon: "bwi-credit-card",
-            },
-            {
-              id: "identity",
-              name: this.i18nService.t("typeIdentity"),
-              type: CipherType.Identity,
-              icon: "bwi-id-card",
-            },
-            {
-              id: "note",
-              name: this.i18nService.t("typeSecureNote"),
-              type: CipherType.SecureNote,
-              icon: "bwi-sticky-note",
-            },
-          ]
-        ),
-        header: {
-          showHeader: true,
-          isSelectable: true,
-        },
-        action: this.applyTypeFilter,
-      },
-      [VaultFilterLabel.CollectionFilter]: {
-        data$: this.vaultFilterService.nestedCollections$,
-        header: {
-          showHeader: true,
-          isSelectable: true,
-        },
-        action: this.applyCollectionFilter,
-      },
-      [VaultFilterLabel.TrashFilter]: {
-        data$: this.vaultFilterService.buildNestedTrash(),
-        header: {
-          showHeader: false,
-          isSelectable: true,
-        },
-        action: this.applyTypeFilter,
-      },
-    };
+    let builderFilter = {} as VaultFilterList;
+    builderFilter = await this.addTypeFilter(builderFilter);
+    builderFilter = await this.addCollectionFilter(builderFilter);
+    builderFilter = await this.addTrashFilter(builderFilter);
+
+    this.filters = builderFilter;
   }
 }

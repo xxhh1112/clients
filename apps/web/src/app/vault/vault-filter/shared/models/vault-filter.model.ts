@@ -1,4 +1,7 @@
-import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
+import {
+  CipherStatus,
+  CipherTypeFilter,
+} from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
 import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
@@ -24,10 +27,18 @@ export class VaultFilter {
     return this.selectedCipherTypeNode?.node.type === "trash" ? true : null;
   }
 
+  get getOrganizationId(): string {
+    return this.selectedOrganizationNode?.node.id;
+  }
+
   get getCipherType(): CipherType {
     return this.selectedCipherTypeNode?.node.type in CipherType
       ? (this.selectedCipherTypeNode?.node.type as CipherType)
       : null;
+  }
+
+  get getCipherStatus(): CipherStatus {
+    return this.selectedCipherTypeNode?.node.type;
   }
 
   get getCipherTypeId(): string {
