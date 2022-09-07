@@ -2,10 +2,14 @@ import { CollectionService as CollectionServiceAbstraction } from "../abstractio
 import { CryptoService } from "../abstractions/crypto.service";
 import { I18nService } from "../abstractions/i18n.service";
 import { StateService } from "../abstractions/state.service";
+import { ServiceUtils } from "../misc/serviceUtils";
 import { Utils } from "../misc/utils";
 import { CollectionData } from "../models/data/collectionData";
 import { Collection } from "../models/domain/collection";
+import { TreeNode } from "../models/domain/treeNode";
 import { CollectionView } from "../models/view/collectionView";
+
+const NestingDelimiter = "/";
 
 export class CollectionService implements CollectionServiceAbstraction {
   constructor(
@@ -85,6 +89,34 @@ export class CollectionService implements CollectionServiceAbstraction {
 
     await this.stateService.setDecryptedCollections(decryptedCollections);
     return decryptedCollections;
+  }
+
+  /**
+   * @deprecated August 30 2022: Moved to new Vault Filter Service
+   * Remove when Desktop and Browser are updated
+   */
+  async getAllNested(collections: CollectionView[] = null): Promise<TreeNode<CollectionView>[]> {
+    if (collections == null) {
+      collections = await this.getAllDecrypted();
+    }
+    const nodes: TreeNode<CollectionView>[] = [];
+    collections.forEach((c) => {
+      const collectionCopy = new CollectionView();
+      collectionCopy.id = c.id;
+      collectionCopy.organizationId = c.organizationId;
+      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
+    });
+    return nodes;
+  }
+
+  /**
+   * @deprecated August 30 2022: Moved to new Vault Filter Service
+   * Remove when Desktop and Browser are updated
+   */
+  async getNested(id: string): Promise<TreeNode<CollectionView>> {
+    const collections = await this.getAllNested();
+    return ServiceUtils.getTreeNodeObjectFromList(collections, id) as TreeNode<CollectionView>;
   }
 
   async upsert(collection: CollectionData | CollectionData[]): Promise<any> {
