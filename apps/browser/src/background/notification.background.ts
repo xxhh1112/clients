@@ -221,12 +221,11 @@ export default class NotificationBackground {
       return;
     }
 
-    let usernameMatches: CipherView[];
-    this.cipherService.getAllDecryptedForUrl$(loginInfo.url).subscribe((ciphers) => {
-      usernameMatches = ciphers.filter(
-        (c) => c.login.username != null && c.login.username.toLowerCase() === normalizedUsername
-      );
-    });
+    const usernameMatches = (
+      await firstValueFrom(this.cipherService.getAllDecryptedForUrl$(loginInfo.url))
+    ).filter(
+      (c) => c.login.username != null && c.login.username.toLowerCase() === normalizedUsername
+    );
 
     if (usernameMatches.length === 0) {
       if (disabledAddLogin) {
@@ -285,22 +284,20 @@ export default class NotificationBackground {
     }
 
     let id: string = null;
-
-    this.cipherService.getAllDecryptedForUrl$(changeData.url).subscribe((ciphers) => {
-      if (changeData.currentPassword != null) {
-        const passwordMatches = ciphers.filter(
-          (c) => c.login.password === changeData.currentPassword
-        );
-        if (passwordMatches.length === 1) {
-          id = passwordMatches[0].id;
-        }
-      } else if (ciphers.length === 1) {
-        id = ciphers[0].id;
+    const ciphers = await firstValueFrom(this.cipherService.getAllDecryptedForUrl$(changeData.url));
+    if (changeData.currentPassword != null) {
+      const passwordMatches = ciphers.filter(
+        (c) => c.login.password === changeData.currentPassword
+      );
+      if (passwordMatches.length === 1) {
+        id = passwordMatches[0].id;
       }
-      if (id != null) {
-        this.pushChangePasswordToQueue(id, loginDomain, changeData.newPassword, tab);
-      }
-    });
+    } else if (ciphers.length === 1) {
+      id = ciphers[0].id;
+    }
+    if (id != null) {
+      this.pushChangePasswordToQueue(id, loginDomain, changeData.newPassword, tab);
+    }
   }
 
   private async pushChangePasswordToQueue(
@@ -363,15 +360,12 @@ export default class NotificationBackground {
 
         // If the vault was locked, check if a cipher needs updating instead of creating a new one
         const addLoginMessage = queueMessage as AddLoginQueueMessage;
-        let usernameMatches: CipherView[] = null;
-
-        this.cipherService.getAllDecryptedForUrl$(addLoginMessage.uri).subscribe((ciphers) => {
-          usernameMatches = ciphers.filter(
-            (c) =>
-              c.login.username != null &&
-              c.login.username.toLowerCase() === addLoginMessage.username
-          );
-        });
+        const usernameMatches = (
+          await firstValueFrom(this.cipherService.getAllDecryptedForUrl$(addLoginMessage.uri))
+        ).filter(
+          (c) =>
+            c.login.username != null && c.login.username.toLowerCase() === addLoginMessage.username
+        );
 
         if (usernameMatches.length >= 1) {
           await this.updateCipher(usernameMatches[0], addLoginMessage.password);

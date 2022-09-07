@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { firstValueFrom } from "rxjs";
 
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -46,7 +46,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   private totpTimeout: number;
   private loadedTimeout: number;
   private searchTimeout: number;
-  private destroy$ = new Subject<void>();
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
@@ -115,8 +114,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     window.clearTimeout(this.loadedTimeout);
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   async refresh() {
@@ -231,12 +228,9 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       otherTypes.push(CipherType.Identity);
     }
 
-    let ciphers: CipherView[] = null;
-
-    this.cipherService
-      .getAllDecryptedForUrl$(this.url, otherTypes.length > 0 ? otherTypes : null)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => (ciphers = result));
+    const ciphers = await firstValueFrom(
+      this.cipherService.getAllDecryptedForUrl$(this.url, otherTypes.length > 0 ? otherTypes : null)
+    );
 
     this.loginCiphers = [];
     this.cardCiphers = [];

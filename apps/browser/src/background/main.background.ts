@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -818,19 +820,19 @@ export default class MainBackground {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus === AuthenticationStatus.Unlocked) {
       try {
-        let ciphers: CipherView[];
+        const ciphersResponse = await firstValueFrom(
+          this.cipherService.getAllDecryptedForUrl$(url)
+        );
 
-        this.cipherService.getAllDecryptedForUrl$(url).subscribe((cupherResponse) => {
-          ciphers = cupherResponse.sort((a, b) =>
-            this.cipherService.sortCiphersByLastUsedThenName(a, b)
-          );
+        const ciphers = ciphersResponse.sort((a, b) =>
+          this.cipherService.sortCiphersByLastUsedThenName(a, b)
+        );
 
-          if (contextMenuEnabled) {
-            ciphers.forEach((cipher) => {
-              this.loadLoginContextMenuOptions(cipher);
-            });
-          }
-        });
+        if (contextMenuEnabled) {
+          ciphers.forEach((cipher) => {
+            this.loadLoginContextMenuOptions(cipher);
+          });
+        }
 
         const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
         let theText = "";
