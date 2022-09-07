@@ -298,9 +298,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.type = this.activeFilter.getCipherType;
     if (
       this.activeFilter.selectedOrganizationNode &&
-      this.activeFilter.selectedOrganizationNode?.node?.id !== "MyVault"
+      this.activeFilter.getOrganizationId !== "MyVault"
     ) {
-      component.organizationId = this.activeFilter.selectedOrganizationNode.node.id;
+      component.organizationId = this.activeFilter.getOrganizationId;
       component.collections = this.filterComponent.currentFilterCollections.filter(
         (c) => !c.readOnly && c.id != null
       );

@@ -70,38 +70,38 @@ export class VaultFilter {
   buildFilter(): VaultFilterFunction {
     return (cipher) => {
       let cipherPassesFilter = true;
-      if (this.selectedCipherTypeNode) {
-        if (this.selectedCipherTypeNode.node.type === "favorites" && cipherPassesFilter) {
-          cipherPassesFilter = cipher.favorite;
-        } else if (this.selectedCipherTypeNode.node.type === "trash" && cipherPassesFilter) {
-          cipherPassesFilter = cipher.isDeleted;
-        } else if (this.selectedCipherTypeNode.node.type != "all" && cipherPassesFilter) {
-          cipherPassesFilter = cipher.type === this.selectedCipherTypeNode.node.type;
-        }
+      if (this.isFavorites && cipherPassesFilter) {
+        cipherPassesFilter = cipher.favorite;
+      }
+      if (this.isDeleted && cipherPassesFilter) {
+        cipherPassesFilter = cipher.isDeleted;
+      }
+      if (this.getCipherType && cipherPassesFilter) {
+        cipherPassesFilter = cipher.type === this.selectedCipherTypeNode.node.type;
       }
       if (this.selectedFolderNode) {
         // No folder
-        if (this.selectedFolderNode.node.id == null && cipherPassesFilter) {
-          cipherPassesFilter = cipher.folderId == null;
+        if (this.getFolderId === null && cipherPassesFilter) {
+          cipherPassesFilter = cipher.folderId === null;
         }
         // Folder
-        if (this.selectedFolderNode.node.id != null && cipherPassesFilter) {
+        if (this.getFolderId !== null && cipherPassesFilter) {
           cipherPassesFilter = cipher.folderId === this.selectedFolderNode.node.id;
         }
       }
       if (this.selectedCollectionNode) {
         // All Collections
-        if (this.selectedCollectionNode.node.id === "AllCollections" && cipherPassesFilter) {
+        if (this.getCollectionId === "AllCollections" && cipherPassesFilter) {
           cipherPassesFilter = false;
         }
         // Unassigned
-        if (this.selectedCollectionNode.node.id == null && cipherPassesFilter) {
+        if (this.getCollectionId === null && cipherPassesFilter) {
           cipherPassesFilter =
             cipher.organizationId != null &&
             (cipher.collectionIds == null || cipher.collectionIds.length === 0);
         }
         // Collection
-        if (this.selectedCollectionNode.node.id != null && cipherPassesFilter) {
+        if (this.getCollectionId !== null && cipherPassesFilter) {
           cipherPassesFilter =
             cipher.collectionIds != null &&
             cipher.collectionIds.includes(this.selectedCollectionNode.node.id);
@@ -109,11 +109,11 @@ export class VaultFilter {
       }
       if (this.selectedOrganizationNode) {
         // My Vault
-        if (this.selectedOrganizationNode.node.id === "MyVault" && cipherPassesFilter) {
+        if (this.getOrganizationId === "MyVault" && cipherPassesFilter) {
           cipherPassesFilter = cipher.organizationId === null;
         }
         // Organization
-        else if (this.selectedOrganizationNode.node.id != null && cipherPassesFilter) {
+        else if (this.getOrganizationId !== null && cipherPassesFilter) {
           cipherPassesFilter = cipher.organizationId === this.selectedOrganizationNode.node.id;
         }
       }
