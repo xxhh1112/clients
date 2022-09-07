@@ -644,9 +644,6 @@
   "newAccountCreated": {
     "message": "新しいアカウントを作成しました！今すぐログインできます。"
   },
-  "trialAccountCreated": {
-    "message": "アカウントを正常に作成しました。"
-  },
   "masterPassSent": {
     "message": "あなたのマスターパスワードのヒントを記載したメールを送信しました。"
   },
@@ -1250,8 +1247,8 @@
   "enabled": {
     "message": "有効化されました"
   },
-  "restoreAccess": {
-    "message": "アクセスを復元する"
+  "activate": {
+    "message": "有効にする"
   },
   "premium": {
     "message": "プレミアム版",
@@ -1278,8 +1275,8 @@
   "disable": {
     "message": "無効化"
   },
-  "revokeAccess": {
-    "message": "アクセスを取り消す"
+  "deactivate": {
+    "message": "無効にする"
   },
   "twoStepLoginProviderEnabled": {
     "message": "この二段階認証プロバイダは、あなたのアカウントで有効になっています。"
@@ -1672,12 +1669,6 @@
   "billing": {
     "message": "料金"
   },
-  "billingPlanLabel": {
-    "message": "請求プラン"
-  },
-  "paymentType": {
-    "message": "支払い方法"
-  },
   "accountCredit": {
     "message": "アカウント クレジット",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1794,9 +1785,6 @@
   "year": {
     "message": "年"
   },
-  "yr": {
-    "message": "年"
-  },
   "month": {
     "message": "月"
   },
@@ -1824,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "請求情報"
-  },
-  "billingTrialSubLabel": {
-    "message": "7日間の無料トライアルの間は請求されません。"
   },
   "creditCard": {
     "message": "クレジットカード"
@@ -2184,35 +2169,11 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "$PLAN$ に Bitwarden を登録していただきありがとうございます！",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "$PLAN$ の7日間の無料トライアルは、7日後に有料サブスクリプションに変換されます。",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "あなたのチームの請求メールアドレスに確認メールを送信しました。 "
-  },
   "monthly": {
     "message": "1ヶ月"
   },
   "annually": {
     "message": "1年"
-  },
-  "annual": {
-    "message": "年間"
   },
   "basePrice": {
     "message": "基本価格"
@@ -2280,11 +2241,11 @@
   "removeUserConfirmation": {
     "message": "本当にこのユーザーを削除してもよろしいですか？"
   },
-  "removeOrgUserConfirmation": {
-    "message": "メンバーが削除されると、メンバーは組織データにアクセスできなくなり、この操作は元に戻せません。 メンバーを組織に追加するには、再度招待して追加する必要があります。"
+  "deactivateUserConfirmation": {
+    "message": "メンバーはもう組織へのアクセス権を持っていませんが、個々の保管庫にアクセスすることはできます。"
   },
-  "revokeUserConfirmation": {
-    "message": "メンバーのアクセスが取り消されると、組織データにアクセスできなくなります。メンバーアクセスをすばやく復元するには、取り消し済みタブに移動してください。"
+  "activateUserConfirmation": {
+    "message": "このユーザーを有効にして、組織へのアクセスを許可してもよろしいですか？"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "警告! このユーザーは暗号化を管理するためにキー コネクタが必要です。 このユーザーを組織から削除すると、アカウントが完全に無効になります。この操作は元に戻せません。続行しますか？"
@@ -2631,8 +2592,8 @@
       }
     }
   },
-  "removeUserIdAccess": {
-    "message": "$ID$ のアクセスを削除",
+  "deactivatedUserId": {
+    "message": "ユーザー $ID$ を無効化しました。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2640,8 +2601,8 @@
       }
     }
   },
-  "revokedUserId": {
-    "message": "$ID$ の組織へのアクセスを取り消しました。",
+  "activatedUserId": {
+    "message": "ユーザー $ID$ を有効化しました。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2649,8 +2610,8 @@
       }
     }
   },
-  "restoredUserId": {
-    "message": "$ID$ の組織へのアクセスを復元しました。",
+  "deactivateUserId": {
+    "message": "ユーザー $ID$ を無効にしますか？",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2658,8 +2619,8 @@
       }
     }
   },
-  "revokeUserId": {
-    "message": "$ID$ のアクセスを取り消し",
+  "activateUserId": {
+    "message": "ユーザー $ID$ を有効にしますか？",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3127,7 +3088,7 @@
     }
   },
   "subscriptionMaxReached": {
-    "message": "サブスクリプションを調整すると、請求の合計が日割りで変更されます。サブスクリプションのユーザー数を増やさずに、$COUNT$以上のユーザーを招待することはできません。",
+    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. You cannot invite more than $COUNT$ users without increasing your subscription seats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3723,8 +3684,8 @@
   "disabled": {
     "message": "無効"
   },
-  "revoked": {
-    "message": "取り消し済み"
+  "deactivated": {
+    "message": "無効化済み"
   },
   "sendLink": {
     "message": "Send リンク",
@@ -3870,7 +3831,7 @@
     "message": "招待状を受け取ることができません。新しい招待状を送信するよう組織の管理者に依頼してください。"
   },
   "emergencyInviteAcceptFailedShort": {
-    "message": "招待を受けることができません。$DESCRIPTION$",
+    "message": "Unable to accept invitation. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
@@ -3879,7 +3840,7 @@
     }
   },
   "emergencyInviteAcceptedDesc": {
-    "message": "本人確認後、このユーザーの緊急時オプションにアクセスすることができます。その際には電子メールが送信されます。"
+    "message": "You can access the emergency options for this user after your identity has been confirmed. We'll send you an email when that happens."
   },
   "requestAccess": {
     "message": "アクセス権の要求"
@@ -4327,26 +4288,26 @@
   "removeUsersWarning": {
     "message": "次のユーザーを削除してもよろしいですか？プロセスは完了まで数秒かかることがあり、中断またはキャンセルすることはできません。"
   },
-  "removeOrgUsersConfirmation": {
-    "message": "メンバーが削除されると、メンバーは組織データにアクセスできなくなり、この操作は元に戻せません。 メンバーを組織に追加するには、再度招待して追加する必要があります。完了するまで数秒かかることがあり、中断またはキャンセルすることはできません。"
+  "deactivateUsersWarning": {
+    "message": "次のメンバーを無効にしてもよろしいですか？ 彼らはもう組織にアクセスすることはできませんが、個々の保管庫にアクセスすることはできます。 プロセスは完了するまで数秒かかることがあり、中断またはキャンセルすることはできません。"
   },
-  "revokeUsersWarning": {
-    "message": "メンバーのアクセスが取り消されると、組織データにアクセスできなくなります。アクセスをすばやく復元するには、取り消し済みタブに移動してください。 完了するまで数秒かかることがあり、中断またはキャンセルすることはできません。"
+  "activateUsersWarning": {
+    "message": "次のメンバーを有効にして組織へのアクセスを許可しますか？ プロセスは完了するまで数秒かかることがあり、中断またはキャンセルすることはできません。"
   },
   "theme": {
-    "message": "テーマ"
+    "message": "Theme"
   },
   "themeDesc": {
     "message": "Choose a theme for your web vault."
   },
   "themeSystem": {
-    "message": "システムのテーマを使用する。"
+    "message": "Use System Theme"
   },
   "themeDark": {
-    "message": "ダーク"
+    "message": "Dark"
   },
   "themeLight": {
-    "message": "ライト"
+    "message": "Light"
   },
   "confirmSelected": {
     "message": "選択を確認"
@@ -4363,11 +4324,11 @@
   "bulkRemovedMessage": {
     "message": "削除しました "
   },
-  "bulkRevokedMessage": {
-    "message": "組織へのアクセスを取り消しました"
+  "bulkDeactivatedMessage": {
+    "message": "無効化しました"
   },
-  "bulkRestoredMessage": {
-    "message": "組織へのアクセスを復元しました"
+  "bulkActivatedMessage": {
+    "message": "有効化しました"
   },
   "bulkFilteredMessage": {
     "message": "除外します。このアクションには適用されません。"
@@ -4378,11 +4339,11 @@
   "removeUsers": {
     "message": "ユーザーを削除"
   },
-  "revokeUsers": {
-    "message": "ユーザーを取り消す"
+  "deactivateUsers": {
+    "message": "ユーザーを無効化"
   },
-  "restoreUsers": {
-    "message": "ユーザーの復元"
+  "activateUsers": {
+    "message": "ユーザーを有効化"
   },
   "error": {
     "message": "エラー"
@@ -4406,7 +4367,7 @@
     "message": "The provider has been set up."
   },
   "clients": {
-    "message": "クライアント"
+    "message": "Clients"
   },
   "providerAdmin": {
     "message": "Provider Admin"
@@ -4793,6 +4754,9 @@
   },
   "sponsorshipCreated": {
     "message": "Sponsorship Created"
+  },
+  "revoke": {
+    "message": "Revoke"
   },
   "emailSent": {
     "message": "Email Sent"
@@ -5220,63 +5184,6 @@
       }
     }
   },
-  "premiumSubcriptionRequired": {
-    "message": "プレミアム版が必要です"
-  },
-  "scim": {
-    "message": "SCIM プロビジョニング",
-    "description": "The text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimDescription": {
-    "message": "SCIM プロビジョニングにより、ユーザーとグループを希望する ID プロバイダーで自動的にプロビジョニングします。",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDesc": {
-    "message": "SCIM を有効にする",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDescHelpText": {
-    "message": "URL と SCIM API キーを設定して、ご希望の ID プロバイダーを設定します",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimApiKeyHelperText": {
-    "message": "この API キーは、組織内のユーザーを管理するためのアクセス権を持っています。慎重に取り扱ってください。"
-  },
-  "copyScimKey": {
-    "message": "SCIM API キーをクリップボードにコピー",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKey": {
-    "message": "SCIM API キーをローテーション",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKeyWarning": {
-    "message": "SCIM API キーをローテーションさせてもよろしいですか？現在のキーでは動作しなくなります。",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateKey": {
-    "message": "キーをローテーション"
-  },
-  "scimApiKey": {
-    "message": "SCIM API キー",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "copyScimUrl": {
-    "message": "SCIM エンドポイント URL をクリップボードにコピー",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimUrl": {
-    "message": "SCIM URL",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimApiKeyRotated": {
-    "message": "SCIM API キーのローテーションに成功しました",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "scimSettingsSaved": {
-    "message": "SCIM 設定を保存しました。",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
   "inputRequired": {
     "message": "入力が必要です。"
   },
@@ -5306,11 +5213,5 @@
   },
   "on": {
     "message": "オン"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "ユーザー数"
   }
 }
