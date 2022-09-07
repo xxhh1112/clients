@@ -5337,6 +5337,15 @@
   "project":{
     "message": "Project"
   },
+  "editProject":{
+    "message": "Edit Project"
+  },
+  "deleteProject":{
+    "message": "Delete Project"
+  },
+  "deleteProjects":{
+    "message": "Delete Projects"
+  },
   "secret":{
     "message": "Secret"
   },

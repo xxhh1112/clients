@@ -9,9 +9,8 @@
           [indeterminate]="selection.hasValue() && !isAllSelected()"
         />
       </th>
-      <th bitCell>{{ "name" | i18n }}</th>
-      <th bitCell>{{ "projects" | i18n }}</th>
-      <th bitCell>{{ "lastEdited" | i18n }}</th>
+      <th bitCell class="tw-w-10/12">{{ "name" | i18n }}</th>
+      <th bitCell class="tw-w-2/12">{{ "lastEdited" | i18n }}</th>
       <th bitCell class="tw-w-0">
         <button
           class="tw-rounded tw-border tw-border-transparent tw-bg-transparent tw-text-main hover:tw-border-secondary-700 focus:tw-border-secondary-700"
@@ -32,12 +31,8 @@
         />
       </td>
       <td bitCell>
-        <i class="bwi bwi-key tw-text-xl tw-text-muted" aria-hidden="true"></i>
+        <i class="bwi bwi-folder tw-text-xl tw-text-muted" aria-hidden="true"></i>
         {{ project.name }}
-      </td>
-      <td bitCell>
-        <!-- TODO dynamically add project badge associated with specific project once projects are implemented-->
-        <span bitBadge badgeType="secondary"> web app </span>
       </td>
       <td bitCell>{{ project.revisionDate | date: "medium" }}</td>
       <td bitCell>
@@ -53,14 +48,6 @@
         <button type="button" bitMenuItem (click)="this.editProjectEvent.emit(projectId)">
           <i class="bwi bwi-fw bwi-pencil tw-text-xl" aria-hidden="true"></i>
           {{ "editProject" | i18n }}
-        </button>
-        <button type="button" bitMenuItem (click)="this.copyProjectNameEvent.emit(projectId)">
-          <i class="bwi bwi-fw bwi-clone tw-text-xl" aria-hidden="true"></i>
-          {{ "copyProjectName" | i18n }}
-        </button>
-        <button type="button" bitMenuItem (click)="this.copyProjectValueEvent.emit(projectId)">
-          <i class="bwi bwi-fw bwi-clone tw-text-xl" aria-hidden="true"></i>
-          {{ "copyProjectValue" | i18n }}
         </button>
         <button type="button" bitMenuItem (click)="this.projectsEvent.emit(projectId)">
           <i class="bwi bwi-fw bwi-sitemap tw-text-xl" aria-hidden="true"></i>

@@ -6,7 +6,7 @@ export class ProjectResponse extends BaseResponse {
   name: string;
   creationDate: string;
   revisionDate: string;
-  deletedDate: string;
+  //deletedDate: string;
 
   constructor(response: any) {
     super(response);
@@ -15,6 +15,6 @@ export class ProjectResponse extends BaseResponse {
     this.name = this.getResponseProperty("Key");
     this.creationDate = this.getResponseProperty("CreationDate");
     this.revisionDate = this.getResponseProperty("RevisionDate");
-    this.deletedDate = this.getResponseProperty("DeletedDate");
+    //this.deletedDate = this.getResponseProperty("DeletedDate");
   }
 }
