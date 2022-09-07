@@ -2376,6 +2376,12 @@
   "editCollection": {
     "message": "Edit Collection"
   },
+  "collectionInfo": {
+    "message": "Collection info"
+  },
+  "access": {
+    "message": "Access"
+  },
   "deleteCollectionConfirmation": {
     "message": "Are you sure you want to delete this collection?"
   },

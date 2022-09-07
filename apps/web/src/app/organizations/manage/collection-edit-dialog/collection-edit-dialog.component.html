@@ -1,9 +1,16 @@
 <bit-dialog>
   <span bit-dialog-title
     >{{ "editCollection" | i18n }}
-    <span class="tw-text-sm tw-normal-case tw-text-muted">Collection name</span></span
-  >
-  <span bit-dialog-content> </span>
+    <span class="tw-text-sm tw-normal-case tw-text-muted">Collection name</span>
+  </span>
+  <span bit-dialog-content>
+    <bit-tab-group label="Main Content Tabs">
+      <bit-tab [label]="'collectionInfo' | i18n">
+        <input type="text" />
+      </bit-tab>
+      <bit-tab [label]="'access' | i18n"> </bit-tab>
+    </bit-tab-group>
+  </span>
   <div bit-dialog-footer class="tw-flex tw-flex-row tw-gap-2">
     <button bitButton buttonType="primary" (click)="dialogRef.close()">Save</button>
     <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
