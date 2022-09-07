@@ -1,5 +1,5 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction as CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
@@ -26,7 +26,7 @@ type legacyServerAttachmentFileUploadRequest = {
   key: EncString;
 };
 
-export class CipherApiAttachmentService implements CipherApiAttachmentServiceAbstraction {
+export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
   constructor(
     private cipherService: InternalCipherService,
     private apiService: ApiService,

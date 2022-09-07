@@ -6,7 +6,7 @@ import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-export class CipherApiAttachmentServiceAbstraction {
+export class CipherAttachmentApiServiceAbstraction {
   putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
   /**
    * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.

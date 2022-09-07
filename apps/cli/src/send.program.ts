@@ -153,7 +153,7 @@ export class SendProgram extends Program {
           this.main.searchService,
           this.main.apiService,
           this.main.organizationService,
-          this.main.cipherApiAttachmentService
+          this.main.cipherAttachmentService
         );
         const response = await cmd.run("template", object, null);
         this.processResponse(response);

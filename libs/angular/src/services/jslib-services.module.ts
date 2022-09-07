@@ -10,9 +10,9 @@ import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstr
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import {
   CipherService as CipherServiceAbstraction,
   InternalCipherService,
@@ -68,8 +68,8 @@ import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
-import { CipherApiAttachmentService } from "@bitwarden/common/services/cipher/cipher-api-attachment.service";
 import { CipherApiService } from "@bitwarden/common/services/cipher/cipher-api.service";
+import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 import { CipherService } from "@bitwarden/common/services/cipher/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
@@ -108,7 +108,7 @@ import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
 
-import { CipherApiAdminService } from "./../../../common/src/services/cipher/cipher-api-admin.service";
+import { CipherAdminService } from "./../../../common/src/services/cipher/cipher-admin.service";
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
@@ -239,13 +239,13 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       deps: [CipherServiceAbstraction, ApiServiceAbstraction, StateServiceAbstraction],
     },
     {
-      provide: CipherApiAdminServiceAbstraction,
-      useClass: CipherApiAdminService,
+      provide: CipherAdminServiceAbstraction,
+      useClass: CipherAdminService,
       deps: [ApiServiceAbstraction],
     },
     {
-      provide: CipherApiAttachmentServiceAbstraction,
-      useClass: CipherApiAttachmentService,
+      provide: CipherAttachmentApiServiceAbstraction,
+      useClass: CipherAttachmentApiService,
       deps: [
         CipherServiceAbstraction,
         ApiServiceAbstraction,

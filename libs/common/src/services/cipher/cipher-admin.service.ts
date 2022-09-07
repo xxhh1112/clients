@@ -1,12 +1,12 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherAdminServiceAbstraction as CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
 import { CipherCollectionsRequest } from "@bitwarden/common/models/request/cipherCollectionsRequest";
 import { CipherCreateRequest } from "@bitwarden/common/models/request/cipherCreateRequest";
 import { CipherRequest } from "@bitwarden/common/models/request/cipherRequest";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 
-export class CipherApiAdminService implements CipherApiAdminServiceAbstraction {
+export class CipherAdminService implements CipherAdminServiceAbstraction {
   constructor(private apiService: ApiService) {}
 
   async getCipherAdmin(id: string): Promise<CipherResponse> {

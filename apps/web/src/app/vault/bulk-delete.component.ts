@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -23,7 +23,7 @@ export class BulkDeleteComponent {
     private cipherApiService: CipherApiServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private cipherApiAdminService: CipherApiAdminServiceAbstraction
+    private cipherAdminService: CipherAdminServiceAbstraction
   ) {}
 
   async submit() {
@@ -54,9 +54,9 @@ export class BulkDeleteComponent {
   private async deleteCiphersAdmin() {
     const deleteRequest = new CipherBulkDeleteRequest(this.cipherIds, this.organization.id);
     if (this.permanent) {
-      this.formPromise = await this.cipherApiAdminService.deleteManyCiphersAdmin(deleteRequest);
+      this.formPromise = await this.cipherAdminService.deleteManyCiphersAdmin(deleteRequest);
     } else {
-      this.formPromise = await this.cipherApiAdminService.putDeleteManyCiphersAdmin(deleteRequest);
+      this.formPromise = await this.cipherAdminService.putDeleteManyCiphersAdmin(deleteRequest);
     }
   }
 }

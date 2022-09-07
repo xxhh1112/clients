@@ -4,8 +4,8 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
@@ -111,7 +111,7 @@ export class Main {
   broadcasterService: BroadcasterService;
   folderApiService: FolderApiService;
   userVerificationApiService: UserVerificationApiService;
-  cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
+  cipherAttachmentService: CipherAttachmentApiServiceAbstraction;
   cipherApiService: CipherApiServiceAbstraction;
 
   constructor() {
@@ -163,7 +163,13 @@ export class Main {
       new StateFactory(GlobalState, Account)
     );
 
-    this.instantiateStateService();
+    this.cryptoService = new CryptoService(
+      this.cryptoFunctionService,
+      this.encryptService,
+      this.platformUtilsService,
+      this.logService,
+      this.stateService
+    );
 
     this.appIdService = new AppIdService(this.storageService);
     this.tokenService = new TokenService(this.stateService);
@@ -181,7 +187,7 @@ export class Main {
       this.platformUtilsService,
       this.environmentService,
       this.appIdService,
-      async (expired: boolean) => await this.logout(),
+      async () => await this.logout(),
       customUserAgent
     );
     this.containerService = new ContainerService(this.cryptoService);
@@ -191,7 +197,7 @@ export class Main {
     this.fileUploadService = new FileUploadService(
       this.logService,
       this.apiService,
-      this.cipherApiAttachmentService
+      this.cipherAttachmentService
     );
 
     this.cipherService = new CipherService(
@@ -245,19 +251,65 @@ export class Main {
       this.logService,
       this.organizationService,
       this.cryptoFunctionService,
-      async (expired: boolean) => await this.logout()
+      async () => await this.logout()
     );
 
     this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
 
-    this.instantiateAuthService();
+    this.authService = new AuthService(
+      this.cryptoService,
+      this.apiService,
+      this.tokenService,
+      this.appIdService,
+      this.platformUtilsService,
+      this.messagingService,
+      this.logService,
+      this.keyConnectorService,
+      this.environmentService,
+      this.stateService,
+      this.twoFactorService,
+      this.i18nService
+    );
 
     const lockedCallback = async () =>
       await this.cryptoService.clearStoredKey(KeySuffixOptions.Auto);
 
-    this.instantiateVaultTimeOutService(lockedCallback);
+    this.vaultTimeoutService = new VaultTimeoutService(
+      this.cipherService,
+      this.folderService,
+      this.collectionService,
+      this.cryptoService,
+      this.platformUtilsService,
+      this.messagingService,
+      this.searchService,
+      this.tokenService,
+      this.policyService,
+      this.keyConnectorService,
+      this.stateService,
+      this.authService,
+      lockedCallback,
+      null
+    );
 
-    this.instantiateSyncService();
+    this.syncService = new SyncService(
+      this.apiService,
+      this.settingsService,
+      this.folderService,
+      this.cipherService,
+      this.cryptoService,
+      this.collectionService,
+      this.messagingService,
+      this.policyService,
+      this.sendService,
+      this.logService,
+      this.keyConnectorService,
+      this.stateService,
+      this.organizationService,
+      this.providerService,
+      this.folderApiService,
+      this.cipherApiService,
+      async () => await this.logout()
+    );
 
     this.passwordGenerationService = new PasswordGenerationService(
       this.cryptoService,
@@ -295,74 +347,6 @@ export class Main {
       this.cryptoService,
       this.i18nService,
       this.userVerificationApiService
-    );
-  }
-
-  private instantiateStateService() {
-    this.cryptoService = new CryptoService(
-      this.cryptoFunctionService,
-      this.encryptService,
-      this.platformUtilsService,
-      this.logService,
-      this.stateService
-    );
-  }
-
-  private instantiateSyncService() {
-    this.syncService = new SyncService(
-      this.apiService,
-      this.settingsService,
-      this.folderService,
-      this.cipherService,
-      this.cryptoService,
-      this.collectionService,
-      this.messagingService,
-      this.policyService,
-      this.sendService,
-      this.logService,
-      this.keyConnectorService,
-      this.stateService,
-      this.organizationService,
-      this.providerService,
-      this.folderApiService,
-      this.cipherApiService,
-      async (expired: boolean) => await this.logout()
-    );
-  }
-
-  private instantiateVaultTimeOutService(lockedCallback: () => Promise<void>) {
-    this.vaultTimeoutService = new VaultTimeoutService(
-      this.cipherService,
-      this.folderService,
-      this.collectionService,
-      this.cryptoService,
-      this.platformUtilsService,
-      this.messagingService,
-      this.searchService,
-      this.tokenService,
-      this.policyService,
-      this.keyConnectorService,
-      this.stateService,
-      this.authService,
-      lockedCallback,
-      null
-    );
-  }
-
-  private instantiateAuthService() {
-    this.authService = new AuthService(
-      this.cryptoService,
-      this.apiService,
-      this.tokenService,
-      this.appIdService,
-      this.platformUtilsService,
-      this.messagingService,
-      this.logService,
-      this.keyConnectorService,
-      this.environmentService,
-      this.stateService,
-      this.twoFactorService,
-      this.i18nService
     );
   }
 

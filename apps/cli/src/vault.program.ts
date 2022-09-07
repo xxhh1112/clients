@@ -197,7 +197,7 @@ export class VaultProgram extends Program {
       this.main.searchService,
       this.main.apiService,
       this.main.organizationService,
-      this.main.cipherApiAttachmentService
+      this.main.cipherAttachmentService
     );
   }
 
@@ -237,7 +237,7 @@ export class VaultProgram extends Program {
           this.main.apiService,
           this.main.folderApiService,
           this.main.cipherApiService,
-          this.main.cipherApiAttachmentService
+          this.main.cipherAttachmentService
         );
         const response = await command.run(object, encodedJson, cmd);
         this.processResponse(response);
@@ -327,7 +327,7 @@ export class VaultProgram extends Program {
           this.main.apiService,
           this.main.folderApiService,
           this.main.cipherApiService,
-          this.main.cipherApiAttachmentService
+          this.main.cipherAttachmentService
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
@@ -393,7 +393,7 @@ export class VaultProgram extends Program {
         await this.exitIfLocked();
         const command = new ShareCommand(
           this.main.cipherService,
-          this.main.cipherApiAttachmentService
+          this.main.cipherAttachmentService
         );
         const response = await command.run(id, organizationId, encodedJson);
         this.processResponse(response);

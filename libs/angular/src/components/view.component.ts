@@ -12,8 +12,8 @@ import {
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -82,7 +82,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     private logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction,
+    protected cipherAttachmentService: CipherAttachmentApiServiceAbstraction,
     protected cipherApiService: CipherApiServiceAbstraction
   ) {}
 
@@ -350,7 +350,7 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.cipherApiAttachmentService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherAttachmentService.getAttachmentData(
         this.cipher.id,
         attachment.id
       );

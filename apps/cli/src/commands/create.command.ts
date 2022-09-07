@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
@@ -32,7 +32,7 @@ export class CreateCommand {
     private apiService: ApiService,
     private folderApiService: FolderApiServiceAbstraction,
     private cipherApiService: CipherApiServiceAbstraction,
-    private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
+    private cipherAttachmentService: CipherAttachmentApiServiceAbstraction
   ) {}
 
   async run(
@@ -138,7 +138,7 @@ export class CreateCommand {
     }
 
     try {
-      await this.cipherApiAttachmentService.saveAttachmentRawWithServer(
+      await this.cipherAttachmentService.saveAttachmentRawWithServer(
         cipher,
         fileName,
         new Uint8Array(fileBuf).buffer

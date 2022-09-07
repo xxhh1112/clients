@@ -66,7 +66,7 @@ export class ServeCommand {
       this.main.searchService,
       this.main.apiService,
       this.main.organizationService,
-      this.main.cipherApiAttachmentService
+      this.main.cipherAttachmentService
     );
     this.listCommand = new ListCommand(
       this.main.cipherService,
@@ -84,7 +84,7 @@ export class ServeCommand {
       this.main.apiService,
       this.main.folderApiService,
       this.main.cipherApiService,
-      this.main.cipherApiAttachmentService
+      this.main.cipherAttachmentService
     );
     this.editCommand = new EditCommand(
       this.main.cipherService,
@@ -112,13 +112,13 @@ export class ServeCommand {
       this.main.apiService,
       this.main.folderApiService,
       this.main.cipherApiService,
-      this.main.cipherApiAttachmentService
+      this.main.cipherAttachmentService
     );
     this.confirmCommand = new ConfirmCommand(this.main.apiService, this.main.cryptoService);
     this.restoreCommand = new RestoreCommand(this.main.cipherService, this.main.cipherApiService);
     this.shareCommand = new ShareCommand(
       this.main.cipherService,
-      this.main.cipherApiAttachmentService
+      this.main.cipherAttachmentService
     );
     this.lockCommand = new LockCommand(this.main.vaultTimeoutService);
     this.unlockCommand = new UnlockCommand(

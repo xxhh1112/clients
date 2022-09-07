@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -39,7 +39,7 @@ export class AttachmentsComponent implements OnInit {
     protected logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
+    protected cipherAttachmentService: CipherAttachmentApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -143,7 +143,7 @@ export class AttachmentsComponent implements OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.cipherApiAttachmentService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherAttachmentService.getAttachmentData(
         this.cipher.id,
         attachment.id,
         this.emergencyAccessId
@@ -244,7 +244,7 @@ export class AttachmentsComponent implements OnInit {
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
           const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
-          this.cipherDomain = await this.cipherApiAttachmentService.saveAttachmentRawWithServer(
+          this.cipherDomain = await this.cipherAttachmentService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
             decBuf,
@@ -286,10 +286,10 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherApiAttachmentService.saveAttachmentWithServer(this.cipherDomain, file);
+    return this.cipherAttachmentService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
   protected deleteCipherAttachment(attachmentId: string) {
-    return this.cipherApiAttachmentService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
+    return this.cipherAttachmentService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
   }
 }

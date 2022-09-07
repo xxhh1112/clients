@@ -47,11 +47,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     private logService: LogService,
     private stateService: StateService
   ) {}
-  shareWithServer: (
-    cipher: CipherView,
-    organizationId: string,
-    collectionIds: string[]
-  ) => Promise<any>;
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
     const decryptedCiphers = await this.stateService.getDecryptedCiphers();
@@ -410,20 +405,42 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     const domain = Utils.getDomain(url);
-    const eqDomainsPromise = this.getEquivalentDomain(domain);
+    const eqDomainsPromise =
+      domain == null
+        ? Promise.resolve([])
+        : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
+            let matches: any[] = [];
+            eqDomains.forEach((eqDomain) => {
+              if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+                matches = matches.concat(eqDomain);
+              }
+            });
+
+            if (!matches.length) {
+              matches.push(domain);
+            }
+
+            return matches;
+          });
 
     const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
     const matchingDomains = result[0];
     const ciphers = result[1];
 
-    defaultMatch = await this.getDefaultMatch(defaultMatch);
+    if (defaultMatch == null) {
+      defaultMatch = await this.stateService.getDefaultUriMatch();
+      if (defaultMatch == null) {
+        defaultMatch = UriMatchType.Domain;
+      }
+    }
 
     return ciphers.filter((cipher) => {
       if (cipher.deletedDate != null) {
         return false;
       }
-
-      this.includeOtherTypes(includeOtherTypes, cipher);
+      if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
+        return true;
+      }
 
       if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
         for (let i = 0; i < cipher.login.uris.length; i++) {
@@ -643,15 +660,23 @@ export class CipherService implements InternalCipherServiceAbstraction {
   }
 
   sortCiphersByLastUsed(a: CipherView, b: CipherView): number {
-    const aLastUsed = this.getLastUsed(a);
-    const bLastUsed = this.getLastUsed(b);
-    const bothNotNull = this.ValidateLastUsedNotNull(aLastUsed, bLastUsed);
+    const aLastUsed =
+      a.localData && a.localData.lastUsedDate ? (a.localData.lastUsedDate as number) : null;
+    const bLastUsed =
+      b.localData && b.localData.lastUsedDate ? (b.localData.lastUsedDate as number) : null;
 
-    if (this.validateaLastUsed(bothNotNull, aLastUsed, bLastUsed)) {
+    const bothNotNull = aLastUsed != null && bLastUsed != null;
+    if (bothNotNull && aLastUsed < bLastUsed) {
+      return 1;
+    }
+    if (aLastUsed != null && bLastUsed == null) {
       return -1;
     }
 
-    if (this.validatebLastUsed(bLastUsed, aLastUsed, bothNotNull)) {
+    if (bothNotNull && aLastUsed > bLastUsed) {
+      return -1;
+    }
+    if (bLastUsed != null && aLastUsed == null) {
       return 1;
     }
 
@@ -716,22 +741,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  private validateaLastUsed(bothNotNull: boolean, aLastUsed: number, bLastUsed: number) {
-    return (bothNotNull && aLastUsed > bLastUsed) || (aLastUsed != null && bLastUsed == null);
-  }
-
-  private validatebLastUsed(bLastUsed: number, aLastUsed: number, bothNotNull: boolean) {
-    return (bLastUsed != null && aLastUsed == null) || (bothNotNull && aLastUsed < bLastUsed);
-  }
-
-  private ValidateLastUsedNotNull(aLastUsed: number, bLastUsed: number) {
-    return aLastUsed != null && bLastUsed != null;
-  }
-
-  private getLastUsed(a: CipherView) {
-    return a.localData && a.localData.lastUsedDate ? (a.localData.lastUsedDate as number) : null;
-  }
-
   private async encryptObjProperty<V extends View, D extends Domain>(
     model: V,
     obj: D,
@@ -769,103 +778,87 @@ export class CipherService implements InternalCipherServiceAbstraction {
   private async encryptCipherData(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
     switch (cipher.type) {
       case CipherType.Login:
-        await this.cipherTypeLogin(cipher, model, key);
-        return;
-      case CipherType.SecureNote:
-        this.cipherTypeSecureNote(cipher, model);
-        return;
-      case CipherType.Card:
-        await this.cipherTypeCard(cipher, model, key);
-        return;
-      case CipherType.Identity:
-        await this.cipherTypeIdentity(cipher, model, key);
-        return;
-      default:
-        throw new Error("Unknown cipher type.");
-    }
-  }
-
-  private async cipherTypeIdentity(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.identity = new Identity();
-    await this.encryptObjProperty(
-      model.identity,
-      cipher.identity,
-      {
-        title: null,
-        firstName: null,
-        middleName: null,
-        lastName: null,
-        address1: null,
-        address2: null,
-        address3: null,
-        city: null,
-        state: null,
-        postalCode: null,
-        country: null,
-        company: null,
-        email: null,
-        phone: null,
-        ssn: null,
-        username: null,
-        passportNumber: null,
-        licenseNumber: null,
-      },
-      key
-    );
-  }
-
-  private async cipherTypeCard(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.card = new Card();
-    await this.encryptObjProperty(
-      model.card,
-      cipher.card,
-      {
-        cardholderName: null,
-        brand: null,
-        number: null,
-        expMonth: null,
-        expYear: null,
-        code: null,
-      },
-      key
-    );
-  }
-
-  private cipherTypeSecureNote(cipher: Cipher, model: CipherView) {
-    cipher.secureNote = new SecureNote();
-    cipher.secureNote.type = model.secureNote.type;
-  }
-
-  private async cipherTypeLogin(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
-    cipher.login = new Login();
-    cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;
-    cipher.login.autofillOnPageLoad = model.login.autofillOnPageLoad;
-    await this.encryptObjProperty(
-      model.login,
-      cipher.login,
-      {
-        username: null,
-        password: null,
-        totp: null,
-      },
-      key
-    );
-
-    if (model.login.uris != null) {
-      cipher.login.uris = [];
-      for (let i = 0; i < model.login.uris.length; i++) {
-        const loginUri = new LoginUri();
-        loginUri.match = model.login.uris[i].match;
+        cipher.login = new Login();
+        cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;
+        cipher.login.autofillOnPageLoad = model.login.autofillOnPageLoad;
         await this.encryptObjProperty(
-          model.login.uris[i],
-          loginUri,
+          model.login,
+          cipher.login,
           {
-            uri: null,
+            username: null,
+            password: null,
+            totp: null,
           },
           key
         );
-        cipher.login.uris.push(loginUri);
-      }
+
+        if (model.login.uris != null) {
+          cipher.login.uris = [];
+          for (let i = 0; i < model.login.uris.length; i++) {
+            const loginUri = new LoginUri();
+            loginUri.match = model.login.uris[i].match;
+            await this.encryptObjProperty(
+              model.login.uris[i],
+              loginUri,
+              {
+                uri: null,
+              },
+              key
+            );
+            cipher.login.uris.push(loginUri);
+          }
+        }
+        return;
+      case CipherType.SecureNote:
+        cipher.secureNote = new SecureNote();
+        cipher.secureNote.type = model.secureNote.type;
+        return;
+      case CipherType.Card:
+        cipher.card = new Card();
+        await this.encryptObjProperty(
+          model.card,
+          cipher.card,
+          {
+            cardholderName: null,
+            brand: null,
+            number: null,
+            expMonth: null,
+            expYear: null,
+            code: null,
+          },
+          key
+        );
+        return;
+      case CipherType.Identity:
+        cipher.identity = new Identity();
+        await this.encryptObjProperty(
+          model.identity,
+          cipher.identity,
+          {
+            title: null,
+            firstName: null,
+            middleName: null,
+            lastName: null,
+            address1: null,
+            address2: null,
+            address3: null,
+            city: null,
+            state: null,
+            postalCode: null,
+            country: null,
+            company: null,
+            email: null,
+            phone: null,
+            ssn: null,
+            username: null,
+            passportNumber: null,
+            licenseNumber: null,
+          },
+          key
+        );
+        return;
+      default:
+        throw new Error("Unknown cipher type.");
     }
   }
 
@@ -878,12 +871,22 @@ export class CipherService implements InternalCipherServiceAbstraction {
     const cacheKey = autofillOnPageLoad ? "autofillOnPageLoad-" + url : url;
 
     if (!this.sortedCiphersCache.isCached(cacheKey)) {
-      const ciphers = await this.getAllDecryptedForUrl(url);
+      let ciphers = await this.getAllDecryptedForUrl(url);
       if (!ciphers) {
         return null;
       }
 
-      await this.autofillOnPageLoad(autofillOnPageLoad, ciphers);
+      if (autofillOnPageLoad) {
+        const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
+        ciphers = ciphers.filter(
+          (cipher) =>
+            cipher.login.autofillOnPageLoad ||
+            (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
+        );
+        if (ciphers.length === 0) {
+          return null;
+        }
+      }
 
       this.sortedCiphersCache.addCiphers(cacheKey, ciphers);
     }
@@ -897,22 +900,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
   }
 
-  private async autofillOnPageLoad(
-    autofillOnPageLoad: boolean,
-    ciphers: CipherView[]
-  ): Promise<CipherView> {
-    if (autofillOnPageLoad) {
-      const autofillOnPageLoadDefault = await this.stateService.getAutoFillOnPageLoadDefault();
-      ciphers = ciphers.filter(
-        (cipher) =>
-          cipher.login.autofillOnPageLoad ||
-          (cipher.login.autofillOnPageLoad == null && autofillOnPageLoadDefault !== false)
-      );
-      if (ciphers.length === 0) {
-        return null;
-      }
-    }
-  }
   private async clearEncryptedCiphersState(userId?: string) {
     await this.stateService.setEncryptedCiphers(null, { userId: userId });
   }
@@ -924,40 +911,5 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
   private clearSortedCiphers() {
     this.sortedCiphersCache.clear();
-  }
-
-  private async getDefaultMatch(defaultMatch: UriMatchType) {
-    if (defaultMatch == null) {
-      defaultMatch = await this.stateService.getDefaultUriMatch();
-      if (defaultMatch == null) {
-        defaultMatch = UriMatchType.Domain;
-      }
-    }
-    return defaultMatch;
-  }
-
-  private getEquivalentDomain(domain: string) {
-    return domain == null
-      ? Promise.resolve([])
-      : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-          let matches: any[] = [];
-          eqDomains.forEach((eqDomain) => {
-            if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-              matches = matches.concat(eqDomain);
-            }
-          });
-
-          if (!matches.length) {
-            matches.push(domain);
-          }
-
-          return matches;
-        });
-  }
-
-  private includeOtherTypes(includeOtherTypes?: CipherType[], cipher?: CipherView) {
-    if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
-      return true;
-    }
   }
 }

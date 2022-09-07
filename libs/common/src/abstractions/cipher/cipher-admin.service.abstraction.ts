@@ -4,7 +4,7 @@ import { CipherCreateRequest } from "@bitwarden/common/models/request/cipherCrea
 import { CipherRequest } from "@bitwarden/common/models/request/cipherRequest";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 
-export class CipherApiAdminServiceAbstraction {
+export class CipherAdminServiceAbstraction {
   putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   getCipherAdmin: (id: string) => Promise<CipherResponse>;
 

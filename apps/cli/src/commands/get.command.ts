@@ -1,6 +1,6 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -55,7 +55,7 @@ export class GetCommand extends DownloadCommand {
     private searchService: SearchService,
     private apiService: ApiService,
     private organizationService: OrganizationService,
-    private cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction
+    private cipherAttachmentService: CipherAttachmentApiServiceAbstraction
   ) {
     super(cryptoService);
   }
@@ -330,7 +330,7 @@ export class GetCommand extends DownloadCommand {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.cipherApiAttachmentService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherAttachmentService.getAttachmentData(
         cipher.id,
         attachments[0].id
       );

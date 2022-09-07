@@ -56,7 +56,7 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
   const stateService: AbstractStateService = new StateService(
     storageService,
     secureStorageService,
-    memoryStorageService, // AbstractStorageService
+    memoryStorageService,
     logService,
     stateMigrationService,
     stateFactory
@@ -64,16 +64,11 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
 
   await stateService.init();
 
-  const platformUtils = new BrowserPlatformUtilsService(
-    null, // MessagingService
-    stateService,
-    null, // clipboardWriteCallback
-    null // biometricCallback
-  );
+  const platformUtils = new BrowserPlatformUtilsService(null, stateService, null, null);
 
   const cryptoService = new BrowserCryptoService(
     cryptoFunctionService,
-    null, // AbstractEncryptService
+    null,
     platformUtils,
     logService,
     stateService
@@ -106,23 +101,23 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
   const autofillService = new AutofillService(
     cipherService,
     stateService,
-    null, // TotpService
+    null,
     eventService,
     logService
   );
 
   const authService = new AuthService(
-    cryptoService, // CryptoService
-    null, // ApiService
-    null, // TokenService
-    null, // AppIdService
+    cryptoService,
+    null,
+    null,
+    null,
     platformUtils,
-    null, // MessagingService
+    null,
     logService,
-    null, // KeyConnectorService
-    null, // EnvironmentService
+    null,
+    null,
     stateService,
-    null, // TwoFactorService
+    null,
     i18nService
   );
 

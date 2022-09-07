@@ -2,10 +2,10 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
-import { CipherApiAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-admin.service.abstraction";
-import { CipherApiAttachmentServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api-attachment.service.abstraction";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
-import { InternalCipherService as InternalCiherServiceAbstractio } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { InternalCipherService as InternalCipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -129,7 +129,7 @@ export default class MainBackground {
   apiService: ApiServiceAbstraction;
   environmentService: BrowserEnvironmentService;
   settingsService: SettingsServiceAbstraction;
-  cipherService: InternalCiherServiceAbstractio;
+  cipherService: InternalCipherServiceAbstraction;
   folderService: InternalFolderServiceAbstraction;
   collectionService: CollectionServiceAbstraction;
   vaultTimeoutService: VaultTimeoutServiceAbstraction;
@@ -162,9 +162,9 @@ export default class MainBackground {
   folderApiService: FolderApiServiceAbstraction;
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
-  cipherApiAttachmentService: CipherApiAttachmentServiceAbstraction;
+  cipherAttachmentService: CipherAttachmentApiServiceAbstraction;
   cipherApiService: CipherApiServiceAbstraction;
-  cipherApiAdminService: CipherApiAdminServiceAbstraction;
+  cipherAdminService: CipherAdminServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -295,7 +295,7 @@ export default class MainBackground {
     this.fileUploadService = new FileUploadService(
       this.logService,
       this.apiService,
-      this.cipherApiAttachmentService
+      this.cipherAttachmentService
     );
     this.cipherService = new CipherService(
       this.cryptoService,
