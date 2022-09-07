@@ -92,14 +92,8 @@
   </div>
 
   <div class="tw-mb-3 tw-flex tw-space-x-4">
-    <button
-      bitButton
-      buttonType="primary"
-      type="submit"
-      class="tw-w-full"
-      [disabled]="form.loading"
-    >
-      <span> <i class="bwi bwi-sign-in"></i> {{ "logIn" | i18n }} </span>
+    <button bitButton buttonType="primary" type="submit" class="tw-w-full" [loading]="form.loading">
+      <span> {{ "loginWithMaterPassword" | i18n }} </span>
     </button>
   </div>
 
@@ -110,7 +104,7 @@
       buttonType="secondary"
       class="tw-w-full"
       (click)="startPasswordlessLogin()"
-      [disabled]="form.loading"
+      [loading]="form.loading"
     >
       <span> <i class="bwi bwi-mobile"></i> {{ "loginWithDevice" | i18n }} </span>
     </button>
@@ -125,8 +119,8 @@
 
   <hr />
 
-  <p class="tw-m-0 tw-text-sm">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
-  <a class="tw-mt-6" [routerLink]="[]" (click)="toggleValidateEmail(false)">{{
-    "notYou" | i18n
-  }}</a>
+  <div class="tw-m-0 tw-text-sm">
+    <p class="tw-mb-1">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
+    <a [routerLink]="[]" (click)="toggleValidateEmail(false)">{{ "notYou" | i18n }}</a>
+  </div>
 </ng-template>
