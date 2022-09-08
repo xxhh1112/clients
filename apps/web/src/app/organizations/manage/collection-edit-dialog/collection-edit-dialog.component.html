@@ -1,7 +1,7 @@
-<bit-dialog>
+<bit-dialog *ngIf="!loading">
   <span bit-dialog-title
     >{{ "editCollection" | i18n }}
-    <span class="tw-text-sm tw-normal-case tw-text-muted">Collection name</span>
+    <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collectionView.name }}</span>
   </span>
   <span bit-dialog-content>
     <bit-tab-group label="Main Content Tabs">
