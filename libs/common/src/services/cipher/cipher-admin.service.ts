@@ -1,5 +1,5 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherAdminServiceAbstraction as CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
+import { CipherAdminService as CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
 import { CipherCollectionsRequest } from "@bitwarden/common/models/request/cipherCollectionsRequest";
 import { CipherCreateRequest } from "@bitwarden/common/models/request/cipherCreateRequest";
