@@ -54,6 +54,7 @@
         {{ trashCleanupWarning }}
       </app-callout>
       <app-org-vault-ciphers
+        [activeFilter]="activeFilter"
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"
         (onAddCipher)="addCipher()"

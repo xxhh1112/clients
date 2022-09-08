@@ -1,13 +1,85 @@
 <ng-container *ngIf="isPaging() ? pagedCiphers : ciphers as filteredCiphers">
   <table
     class="table table-hover table-list table-ciphers"
-    *ngIf="filteredCiphers.length"
+    *ngIf="filteredCiphers.length || activeFilter.selectedCollectionNode?.children.length"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
     (scrolled)="loadMore()"
   >
+    <thead>
+      <tr>
+        <th class="table-list-checkbox" colspan="2">
+          <input class="tw-inline" type="checkbox" (change)="selectAll($event.target.checked)" />
+          <p class="tw-inline">All</p>
+        </th>
+        <th>Name</th>
+        <th>Groups</th>
+        <th class="table-list-options tw-text-right">
+          <button
+            [bitMenuTriggerFor]="cipherOptions"
+            class="tw-border-none tw-bg-transparent tw-text-main"
+            type="button"
+            appA11yTitle="{{ 'options' | i18n }}"
+          >
+            <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
+          </button>
+          <bit-menu #cipherOptions>
+            <ng-container>
+              <button class="dropdown-item" bitMenuItem>
+                <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
+                {{ "editItem" | i18n }}
+              </button>
+              <button class="dropdown-item" bitMenuItem>
+                <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+                {{ "access" | i18n }}
+              </button>
+              <button class="dropdown-item text-danger" bitMenuItem>
+                <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
+                {{ "delete" | i18n }}
+              </button>
+            </ng-container>
+          </bit-menu>
+        </th>
+      </tr>
+    </thead>
     <tbody>
+      <ng-container *ngIf="activeFilter.selectedCollectionNode">
+        <tr *ngFor="let col of activeFilter.selectedCollectionNode?.children">
+          <td class="table-list-checkbox">
+            <input type="checkbox" appStopProp />
+          </td>
+          <td class="table-list-icon">
+            <div class="icon" aria-hidden="true">
+              <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
+            </div>
+          </td>
+          <td class="reduced-lh wrap">{{ col.node.name }}</td>
+          <td></td>
+          <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
+            <button
+              [bitMenuTriggerFor]="cipherOptions"
+              class="tw-border-none tw-bg-transparent tw-text-main"
+              type="button"
+              appA11yTitle="{{ 'options' | i18n }}"
+            >
+              <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
+            </button>
+            <bit-menu #cipherOptions>
+              <ng-container>
+                <button bitMenuItem>
+                  <i class="bwi bwi-fw bwi-clone" aria-hidden="true"></i>
+                  {{ "copyUsername" | i18n }}
+                </button>
+                <button bitMenuItem>
+                  <i class="bwi bwi-fw bwi-clone" aria-hidden="true"></i>
+                  {{ "copyPassword" | i18n }}
+                </button>
+              </ng-container>
+            </bit-menu>
+          </td>
+        </tr>
+      </ng-container>
       <tr *ngFor="let c of filteredCiphers">
         <td (click)="checkCipher(c)" class="table-list-checkbox">
           <input type="checkbox" [(ngModel)]="c.checked" appStopProp />
@@ -132,7 +204,10 @@
       </tr>
     </tbody>
   </table>
-  <div class="no-items" *ngIf="!filteredCiphers.length">
+  <div
+    class="no-items"
+    *ngIf="!filteredCiphers.length && !activeFilter.selectedCollectionNode?.children.length"
+  >
     <ng-container *ngIf="!loaded">
       <i
         class="bwi bwi-spinner bwi-spin text-muted"

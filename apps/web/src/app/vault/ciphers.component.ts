@@ -18,6 +18,8 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
+import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
+
 const MaxCheckedCount = 500;
 
 @Component({
@@ -26,6 +28,7 @@ const MaxCheckedCount = 500;
 })
 export class CiphersComponent extends BaseCiphersComponent implements OnDestroy {
   @Input() showAddNew = true;
+  @Input() activeFilter: VaultFilter;
   @Output() onAttachmentsClicked = new EventEmitter<CipherView>();
   @Output() onShareClicked = new EventEmitter<CipherView>();
   @Output() onCollectionsClicked = new EventEmitter<CipherView>();
