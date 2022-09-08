@@ -5340,6 +5340,9 @@
   "editProject":{
     "message": "Edit Project"
   },
+  "viewProject":{
+    "message": "View Project"
+  },
   "deleteProject":{
     "message": "Delete Project"
   },
