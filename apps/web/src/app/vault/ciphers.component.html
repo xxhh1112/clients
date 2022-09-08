@@ -54,7 +54,11 @@
               <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
             </div>
           </td>
-          <td class="reduced-lh wrap">{{ col.node.name }}</td>
+          <td class="reduced-lh wrap">
+            <button bitLink [linkType]="secondary" (click)="navigateCollection(col)">
+              {{ col.node.name }}
+            </button>
+          </td>
           <td></td>
           <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
             <button

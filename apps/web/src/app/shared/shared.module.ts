@@ -16,6 +16,7 @@ import {
   MenuModule,
   TabsModule,
   IconModule,
+  LinkModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -43,6 +44,7 @@ import "./locales";
     ToastrModule,
     BadgeModule,
     ButtonModule,
+    LinkModule,
     MenuModule,
     FormFieldModule,
     SubmitButtonModule,
@@ -63,6 +65,7 @@ import "./locales";
     ToastrModule,
     BadgeModule,
     ButtonModule,
+    LinkModule,
     MenuModule,
     FormFieldModule,
     SubmitButtonModule,
