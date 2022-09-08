@@ -367,11 +367,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        favorites: this.activeFilter.isFavorites,
+        favorites: this.activeFilter.isFavorites || null,
         type: this.activeFilter.getCipherType,
         folderId: this.activeFilter.getFolderId,
         collectionId: this.activeFilter.getCollectionId,
-        deleted: this.activeFilter.isDeleted,
+        deleted: this.activeFilter.isDeleted || null,
       };
     }
 
