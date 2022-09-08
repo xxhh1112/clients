@@ -33,7 +33,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
     masterPassword: ["", [Validators.required, Validators.minLength(8)]],
-    rememberEmail: [true],
+    rememberEmail: [false],
   });
 
   protected twoFactorRoute = "2fa";
