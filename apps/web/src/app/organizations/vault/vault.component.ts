@@ -310,7 +310,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       queryParams = {
         type: this.activeFilter.getCipherType,
         collectionId: this.activeFilter.getCollectionId,
-        deleted: this.activeFilter.isDeleted,
+        deleted: this.activeFilter.isDeleted || null,
       };
     }
 
