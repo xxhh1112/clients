@@ -16,7 +16,7 @@ export class ProjectApiService {
   ): Promise<ListResponse<ProjectResponse>> {
     const r = await this.apiService.send(
       "GET",
-      "/organizations/" + organizationId + "/secrets",
+      "/organizations/" + organizationId + "/projects",
       null,
       true,
       true
