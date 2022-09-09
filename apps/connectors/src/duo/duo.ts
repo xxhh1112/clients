@@ -1,6 +1,6 @@
 ﻿import * as DuoWebSDK from "duo_web_sdk";
 
-import { getQsParam } from "./common";
+import { getQsParam } from "../common";
 
 require("./duo.scss");
 

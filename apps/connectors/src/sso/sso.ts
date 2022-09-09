@@ -1,4 +1,4 @@
-﻿import { getQsParam } from "./common";
+import { getQsParam } from "../common";
 
 require("./sso.scss");
 

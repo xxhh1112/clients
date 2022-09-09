@@ -1,4 +1,5 @@
-import { b64Decode, getQsParam } from "./common";
+import { b64Decode, getQsParam } from "../common";
+
 import { buildDataString, parseWebauthnJson } from "./common-webauthn";
 
 require("./webauthn.scss");
