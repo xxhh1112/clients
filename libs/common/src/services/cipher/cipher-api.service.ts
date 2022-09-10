@@ -11,7 +11,6 @@ import { CipherCollectionsRequest } from "@bitwarden/common/models/request/ciphe
 import { ImportCiphersRequest } from "@bitwarden/common/models/request/importCiphersRequest";
 import { ImportOrganizationCiphersRequest } from "@bitwarden/common/models/request/importOrganizationCiphersRequest";
 import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
-import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
@@ -150,22 +149,6 @@ export class CipherApiService implements CipherApiServiceAbstraction {
     }
   }
 
-  async getEventsCipher(
-    id: string,
-    start: string,
-    end: string,
-    token: string
-  ): Promise<ListResponse<EventResponse>> {
-    const r = await this.apiService.send(
-      "GET",
-      this.addEventParameters("/ciphers/" + id + "/events", start, end, token),
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, EventResponse);
-  }
-
   async saveWithServer(cipher: Cipher): Promise<any> {
     let response: CipherResponse;
     if (cipher.id == null) {
@@ -274,20 +257,5 @@ export class CipherApiService implements CipherApiServiceAbstraction {
     await this.putCipherCollections(cipher.id, request);
     const data = cipher.toCipherData();
     await this.cipherService.upsert(data);
-  }
-
-  private addEventParameters(base: string, start: string, end: string, token: string) {
-    if (start != null) {
-      base += "?start=" + start;
-    }
-    if (end != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "end=" + end;
-    }
-    if (token != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "continuationToken=" + token;
-    }
-    return base;
   }
 }

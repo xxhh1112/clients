@@ -10,7 +10,6 @@ import { ImportCiphersRequest } from "@bitwarden/common/models/request/importCip
 import { ImportOrganizationCiphersRequest } from "@bitwarden/common/models/request/importOrganizationCiphersRequest";
 import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
@@ -38,12 +37,6 @@ export class CipherApiServiceAbstraction {
   ) => Promise<ListResponse<CipherResponse>>;
   nativeFetch: (request: Request) => Promise<Response>;
   getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
-  getEventsCipher: (
-    id: string,
-    start: string,
-    end: string,
-    token: string
-  ) => Promise<ListResponse<EventResponse>>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
 
   shareManyWithServer: (
