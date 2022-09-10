@@ -45,7 +45,6 @@ export abstract class CipherService {
 
 export abstract class InternalCipherService extends CipherService {
   upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
-  replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
   clear: (userId: string) => Promise<any>;
   delete: (id: string | string[]) => Promise<any>;
 }

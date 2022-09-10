@@ -606,11 +606,6 @@ export class CipherService implements InternalCipherServiceAbstraction {
         ciphers[c.id] = c;
       });
     }
-
-    await this.replace(ciphers);
-  }
-
-  async replace(ciphers: { [id: string]: CipherData }): Promise<any> {
     await this.clearDecryptedCiphersState();
     await this.stateService.setEncryptedCiphers(ciphers);
   }
