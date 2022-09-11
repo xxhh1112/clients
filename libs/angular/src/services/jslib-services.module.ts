@@ -10,7 +10,6 @@ import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstr
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import {
@@ -108,7 +107,6 @@ import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
 
-import { CipherAdminService } from "./../../../common/src/services/cipher/cipher-admin.service";
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
@@ -237,11 +235,6 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       provide: CipherApiServiceAbstraction,
       useClass: CipherApiService,
       deps: [CipherServiceAbstraction, ApiServiceAbstraction, StateServiceAbstraction],
-    },
-    {
-      provide: CipherAdminServiceAbstraction,
-      useClass: CipherAdminService,
-      deps: [ApiServiceAbstraction],
     },
     {
       provide: CipherAttachmentApiServiceAbstraction,

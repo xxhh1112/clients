@@ -16,7 +16,7 @@ export class FileUploadService implements FileUploadServiceAbstraction {
   private bitwardenFileUploadService: BitwardenFileUploadService;
 
   constructor(
-    private logService: LogService,
+    logService: LogService,
     private apiService: ApiService,
     private cipherAttachmentService: CipherAttachmentApiServiceAbstraction
   ) {

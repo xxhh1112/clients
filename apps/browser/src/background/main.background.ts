@@ -2,7 +2,6 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
-import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalCipherService as InternalCipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -164,7 +163,6 @@ export default class MainBackground {
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   cipherAttachmentService: CipherAttachmentApiServiceAbstraction;
   cipherApiService: CipherApiServiceAbstraction;
-  cipherAdminService: CipherAdminServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;

@@ -30,7 +30,6 @@ export class CipherAttachmentApiServiceAbstraction {
     data: FormData,
     organizationId: string
   ) => Promise<any>;
-  nativeFetch: (request: Request) => Promise<Response>;
   saveAttachmentRawWithServer: (
     cipher: Cipher,
     filename: string,

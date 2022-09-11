@@ -141,10 +141,6 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     return new AttachmentResponse(r);
   }
 
-  nativeFetch(request: Request): Promise<Response> {
-    return fetch(request);
-  }
-
   async shareWithServer(
     cipher: CipherView,
     organizationId: string,
@@ -311,7 +307,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     cipherId: string,
     organizationId: string
   ): Promise<any> {
-    const attachmentResponse = await this.nativeFetch(
+    const attachmentResponse = await this.apiService.nativeFetch(
       new Request(attachmentView.url, { cache: "no-store" })
     );
     if (attachmentResponse.status !== 200) {

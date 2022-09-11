@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -34,7 +34,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     apiService: ApiService,
     logService: LogService,
     fileDownloadService: FileDownloadService,
-    private cipherAdminService: CipherAdminServiceAbstraction,
+    private cipherApiService: CipherApiServiceAbstraction,
     cipherAttachmentService: CipherAttachmentApiServiceAbstraction
   ) {
     super(
@@ -59,7 +59,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return await super.loadCipher();
     }
-    const response = await this.cipherAdminService.getCipherAdmin(this.cipherId);
+    const response = await this.cipherApiService.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 

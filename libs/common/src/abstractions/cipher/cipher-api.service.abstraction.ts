@@ -27,6 +27,16 @@ export class CipherApiServiceAbstraction {
   putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
   postImportCiphers: (request: ImportCiphersRequest) => Promise<any>;
+  putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
+  getCipherAdmin: (id: string) => Promise<CipherResponse>;
+
+  postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
+  putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
+  deleteCipherAdmin: (id: string) => Promise<any>;
+  deleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
+  putDeleteCipherAdmin: (id: string) => Promise<any>;
+  putDeleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
+  putRestoreCipherAdmin: (id: string) => Promise<CipherResponse>;
   postImportOrganizationCiphers: (
     organizationId: string,
     request: ImportOrganizationCiphersRequest
@@ -35,7 +45,6 @@ export class CipherApiServiceAbstraction {
   putRestoreManyCiphers: (
     request: CipherBulkRestoreRequest
   ) => Promise<ListResponse<CipherResponse>>;
-  nativeFetch: (request: Request) => Promise<Response>;
   getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
 
