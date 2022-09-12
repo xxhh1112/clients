@@ -3,9 +3,6 @@ import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
 import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
@@ -15,19 +12,10 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
   selector: "app-organization-vault-filter",
   templateUrl: "../../../vault/vault-filter/vault-filter.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
   private _organization: Organization;
 
   destroy$: Subject<void>;
-
-  constructor(
-    vaultFilterService: VaultFilterService,
-    i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService
-  ) {
-    super(vaultFilterService, i18nService, platformUtilsService);
-  }
 
   ngOnDestroy() {
     this.destroy$.next();
