@@ -87,4 +87,9 @@ export class RegisterFormComponent extends BaseRegisterComponent {
 
     await super.submit(false);
   }
+
+  protected setCaptchaToken(token: string) {
+    this.captchaToken = token;
+    this.submit();
+  }
 }

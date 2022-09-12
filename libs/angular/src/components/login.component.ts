@@ -14,12 +14,13 @@ import { Utils } from "@bitwarden/common/misc/utils";
 import { AuthResult } from "@bitwarden/common/models/domain/authResult";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 
-import { CaptchaProtectedComponent } from "./captchaProtected.component";
-
 @Directive()
-export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
+export class LoginComponent implements OnInit {
   @Input() email = "";
   @Input() rememberEmail = true;
+
+  protected captchaSiteKey?: string;
+  protected captchaToken?: string;
 
   masterPassword = "";
   showPassword = false;
@@ -37,17 +38,15 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   constructor(
     protected authService: AuthService,
     protected router: Router,
-    platformUtilsService: PlatformUtilsService,
-    i18nService: I18nService,
+    protected platformUtilsService: PlatformUtilsService,
+    protected i18nService: I18nService,
     protected stateService: StateService,
-    environmentService: EnvironmentService,
+    protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationService,
     protected cryptoFunctionService: CryptoFunctionService,
     protected logService: LogService,
     protected ngZone: NgZone
-  ) {
-    super(environmentService, i18nService, platformUtilsService);
-  }
+  ) {}
 
   get selfHostedDomain() {
     return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
@@ -69,8 +68,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   }
 
   async submit() {
-    await this.setupCaptcha();
-
     if (this.email == null || this.email === "") {
       this.platformUtilsService.showToast(
         "error",
@@ -110,7 +107,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       } else {
         await this.stateService.setRememberedEmail(null);
       }
-      if (this.handleCaptchaRequired(response)) {
+      if (!Utils.isNullOrWhitespace(response.captchaSiteKey)) {
+        this.captchaSiteKey = response.captchaSiteKey;
         return;
       } else if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
@@ -192,5 +190,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     document
       .getElementById(this.email == null || this.email === "" ? "email" : "masterPassword")
       .focus();
+  }
+
+  protected setCaptchaToken(token: string) {
+    this.captchaToken = token;
+    this.submit();
   }
 }

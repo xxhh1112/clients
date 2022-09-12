@@ -17,6 +17,7 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
@@ -24,12 +25,13 @@ import { RegisterRequest } from "@bitwarden/common/models/request/registerReques
 
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 
-import { CaptchaProtectedComponent } from "./captchaProtected.component";
-
 @Directive()
-export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   @Input() isInTrialFlow = false;
   @Output() createdAccount = new EventEmitter<string>();
+
+  protected captchaSiteKey?: string;
+  protected captchaToken?: string;
 
   showPassword = false;
   formPromise: Promise<any>;
@@ -75,21 +77,19 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     protected formBuilder: UntypedFormBuilder,
     protected authService: AuthService,
     protected router: Router,
-    i18nService: I18nService,
+    protected i18nService: I18nService,
     protected cryptoService: CryptoService,
     protected apiService: ApiService,
     protected stateService: StateService,
-    platformUtilsService: PlatformUtilsService,
+    protected platformUtilsService: PlatformUtilsService,
     protected passwordGenerationService: PasswordGenerationService,
-    environmentService: EnvironmentService,
+    protected environmentService: EnvironmentService,
     protected logService: LogService
   ) {
-    super(environmentService, i18nService, platformUtilsService);
     this.showTerms = !platformUtilsService.isSelfHost();
   }
-
-  async ngOnInit() {
-    this.setupCaptcha();
+  ngOnInit(): void {
+    throw new Error("Method not implemented.");
   }
 
   async submit(showToast = true) {
@@ -291,5 +291,14 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       return { captchaRequired: true };
     }
     return { captchaRequired: false };
+  }
+
+  private handleCaptchaRequired(response: any): boolean {
+    if (Utils.isNullOrWhitespace(response.captchaSiteKey)) {
+      return false;
+    }
+
+    this.captchaSiteKey = response.captchaSiteKey;
+    return true;
   }
 }

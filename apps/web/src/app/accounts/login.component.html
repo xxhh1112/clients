@@ -64,8 +64,9 @@
             />
             <label class="form-check-label" for="rememberEmail">{{ "rememberEmail" | i18n }}</label>
           </div>
-          <div class="mb-n3" [hidden]="!showCaptcha()">
-            <iframe id="hcaptcha_iframe" height="80"></iframe>
+          <div class="mb-n3" *ngIf="captchaSiteKey">
+            <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
+            </app-captcha>
           </div>
           <hr />
           <div class="d-flex">

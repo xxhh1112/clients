@@ -1,16 +1,22 @@
-import { Directive, Input } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CaptchaIFrame } from "@bitwarden/common/misc/captcha_iframe";
-import { Utils } from "@bitwarden/common/misc/utils";
 
-@Directive()
-export abstract class CaptchaProtectedComponent {
-  @Input() captchaSiteKey: string = null;
-  captchaToken: string = null;
-  captcha: CaptchaIFrame;
+/**
+ * HCaptcha component, shows the captcha and emits an event when the captcha is solved.
+ */
+@Component({
+  selector: "app-captcha",
+  template: `<iframe id="hcaptcha_iframe" height="80"></iframe>`,
+})
+export class CaptchaComponent implements OnInit, OnDestroy {
+  @Input() siteKey: string;
+  @Output() captchaSolved = new EventEmitter<string>();
+
+  private captcha: CaptchaIFrame;
 
   constructor(
     protected environmentService: EnvironmentService,
@@ -18,7 +24,7 @@ export abstract class CaptchaProtectedComponent {
     protected platformUtilsService: PlatformUtilsService
   ) {}
 
-  async setupCaptcha() {
+  ngOnInit(): void {
     const webVaultUrl = this.environmentService.getWebVaultUrl();
 
     this.captcha = new CaptchaIFrame(
@@ -26,7 +32,7 @@ export abstract class CaptchaProtectedComponent {
       webVaultUrl,
       this.i18nService,
       (token: string) => {
-        this.captchaToken = token;
+        this.captchaSolved.emit(token);
       },
       (error: string) => {
         this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), error);
@@ -35,19 +41,10 @@ export abstract class CaptchaProtectedComponent {
         this.platformUtilsService.showToast("info", this.i18nService.t("info"), info);
       }
     );
+    this.captcha.init(this.siteKey);
   }
 
-  showCaptcha() {
-    return !Utils.isNullOrWhitespace(this.captchaSiteKey);
-  }
-
-  protected handleCaptchaRequired(response: { captchaSiteKey: string }): boolean {
-    if (Utils.isNullOrWhitespace(response.captchaSiteKey)) {
-      return false;
-    }
-
-    this.captchaSiteKey = response.captchaSiteKey;
-    this.captcha.init(response.captchaSiteKey);
-    return true;
+  ngOnDestroy(): void {
+    this.captcha.cleanup();
   }
 }
