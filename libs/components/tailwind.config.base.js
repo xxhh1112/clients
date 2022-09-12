@@ -80,6 +80,7 @@ module.exports = {
       },
       maxWidth: ({ theme }) => ({
         ...theme("width"),
+        "90vw": "90vw",
       }),
     },
   },
