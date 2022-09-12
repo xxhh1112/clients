@@ -242,6 +242,13 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
     const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
 
+    const optionsComponent = !personalVaultPolicy
+      ? { component: OrganizationOptionsComponent }
+      : null;
+    const addAction = !singleOrgPolicy
+      ? { text: "newOrganization", route: "/create-organization" }
+      : null;
+
     filter.organizationFilter = {
       data$: await this.vaultFilterService.buildNestedOrganizations(),
       header: {
@@ -249,19 +256,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         isSelectable: true,
       },
       action: this.applyOrganizationFilter,
-      options: !personalVaultPolicy
-        ? {
-            component: OrganizationOptionsComponent,
-          }
-        : null,
-      add: !singleOrgPolicy
-        ? {
-            text: "newOrganization",
-            route: "/create-organization",
-          }
-        : null,
+      options: optionsComponent,
+      add: addAction,
       divider: true,
     };
+
     return filter;
   }
 
