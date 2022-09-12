@@ -68,40 +68,20 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected loadSubscriptions() {
-    // Removes invalid folder selection when folders change
     this.vaultFilterService.filteredFolders$
       .pipe(
         switchMap(async (folders) => {
-          if (this.activeFilter.selectedFolderNode) {
-            if (!folders.find((f) => f.id === this.activeFilter.getFolderId)) {
-              const filter = this.activeFilter;
-              filter.resetFilter();
-              filter.selectedCipherTypeNode = (await firstValueFrom(
-                this.filters?.typeFilter.data$
-              )) as TreeNode<CipherTypeFilter>;
-              await this.applyVaultFilter(filter);
-            }
-          }
+          this.removeInvalidFolderSelection(folders);
         }),
         takeUntil(this.destroy$)
       )
       .subscribe();
 
-    // Removes invalid collection selection when collections change
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {
           this.currentFilterCollections = collections;
-          if (this.activeFilter.selectedCollectionNode) {
-            if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
-              const filter = this.activeFilter;
-              filter.resetFilter();
-              filter.selectedCipherTypeNode = (await firstValueFrom(
-                this.filters?.typeFilter?.data$
-              )) as TreeNode<CipherTypeFilter>;
-              await this.applyVaultFilter(filter);
-            }
-          }
+          this.removeInvalidCollectionSelection(collections);
         }),
         takeUntil(this.destroy$)
       )
@@ -219,6 +199,32 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
 
     return "searchVault";
+  }
+
+  protected async removeInvalidFolderSelection(folders: FolderView[]) {
+    if (this.activeFilter.selectedFolderNode) {
+      if (!folders.find((f) => f.id === this.activeFilter.getFolderId)) {
+        const filter = this.activeFilter;
+        filter.resetFilter();
+        filter.selectedCipherTypeNode = (await firstValueFrom(
+          this.filters?.typeFilter.data$
+        )) as TreeNode<CipherTypeFilter>;
+        await this.applyVaultFilter(filter);
+      }
+    }
+  }
+
+  protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
+    if (this.activeFilter.selectedCollectionNode) {
+      if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
+        const filter = this.activeFilter;
+        filter.resetFilter();
+        filter.selectedCipherTypeNode = (await firstValueFrom(
+          this.filters?.typeFilter?.data$
+        )) as TreeNode<CipherTypeFilter>;
+        await this.applyVaultFilter(filter);
+      }
+    }
   }
 
   async buildAllFilters() {
