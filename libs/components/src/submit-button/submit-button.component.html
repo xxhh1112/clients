@@ -1,4 +1,10 @@
-<button bitButton type="submit" [buttonType]="buttonType" [disabled]="loading || disabled">
+<button
+  bitButton
+  type="submit"
+  [buttonType]="buttonType"
+  [disabled]="loading || disabled"
+  [block]="block"
+>
   <span class="tw-relative">
     <span [ngClass]="{ 'tw-invisible': loading }">
       <ng-content></ng-content>

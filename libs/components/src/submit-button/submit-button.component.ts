@@ -10,4 +10,5 @@ export class SubmitButtonComponent {
   @Input() buttonType: ButtonTypes = "primary";
   @Input() disabled = false;
   @Input() loading: boolean;
+  @Input() block = false;
 }
