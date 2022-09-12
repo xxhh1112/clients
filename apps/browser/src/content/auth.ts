@@ -28,26 +28,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return exportFunction(wrapped, wWindow);
   }
 
-  const addAuthPopup = async () => {
+  const addAuthPopup = async (onAbort: () => void) => {
     const el = document.createElement("div");
     el.innerHTML = authPopupHtml;
     document.body.appendChild(el);
+    el.onclick = () => {
+      el.remove();
+      onAbort();
+    };
     return el;
   };
 
-  const create = async (options?: CredentialCreationOptions) => {
+  const create = (options?: CredentialCreationOptions) => {
     console.log("[call] create()", options);
 
-    addAuthPopup();
+    return new Promise((resolve, reject) => {
+      function fallback() {
+        reject(new Error("Auth aborted by user"));
+      }
 
-    await Messenger.sendMessageToBackground(MessageType.AUTH, {});
+      addAuthPopup(fallback);
 
-    // const result = await window.navigator.credentials.create(options);
+      Messenger.sendMessageToBackground(MessageType.AUTH, {});
+      // const result = await window.navigator.credentials.create(options);
 
-    // console.log("[return] create()", result);
+      // console.log("[return] create()", result);
 
-    // return result;
-    throw new Error("Native fallback disabled");
+      // return result;
+      // throw new Error("Native fallback disabled");
+      // resolve(undefined);
+    });
   };
 
   const get = async (options?: CredentialCreationOptions) => {
