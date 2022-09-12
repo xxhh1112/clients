@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 
+import { authPopupHtml } from "./auth_popup";
+import { MessageType, Messenger } from "./messenger";
+
 declare function cloneInto<T>(object: T, window: Window): T;
 declare function exportFunction<T extends unknown[], R>(
   f: (...args: T) => R,
@@ -25,14 +28,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return exportFunction(wrapped, wWindow);
   }
 
+  const addAuthPopup = async () => {
+    const el = document.createElement("div");
+    el.innerHTML = authPopupHtml;
+    document.body.appendChild(el);
+  };
+
   const create = async (options?: CredentialCreationOptions) => {
     console.log("[call] create()", options);
 
-    const result = await window.navigator.credentials.create(options);
+    addAuthPopup();
 
-    console.log("[return] create()", result);
+    // await Messenger.sendMessageToBackground(MessageType.AUTH, {
+    //   message: "Hello Background",
+    // });
 
-    return result;
+    // const result = await window.navigator.credentials.create(options);
+
+    // console.log("[return] create()", result);
+
+    // return result;
+    throw new Error("Native fallback disabled");
   };
 
   const get = async (options?: CredentialCreationOptions) => {
@@ -45,8 +61,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return result;
   };
 
+  wWindow.addAuthPopup = exportAsyncFunction(addAuthPopup);
   wCredentials.create = exportAsyncFunction(create);
   wCredentials.get = exportAsyncFunction(get);
 
-  console.log("Bitwarden credentials implementation active");
+  /* Commands */
+
+  browser.runtime.onMessage.addListener((message, sender) => {
+    const { type, data } = message;
+    console.log("content-script received:", type, data);
+    // return this.requests.get(type)(sender, data);
+  });
+
+  console.log("Bitwarden credentials implementation active", browser.browserAction);
 });

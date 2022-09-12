@@ -1,4 +1,5 @@
 import MainBackground from "./background/main.background";
+// import { MessageType, Messenger } from "./content/messenger";
 import { onCommandListener } from "./listeners/onCommandListener";
 import { onInstallListener } from "./listeners/onInstallListener";
 
@@ -13,3 +14,12 @@ if (manifest.manifest_version === 3) {
     // Finished bootstrapping
   });
 }
+
+browser.runtime.onMessage.addListener((message, sender) => {
+  const { type, data } = message;
+  console.log("background received:", type, data);
+
+  // if (type === MessageType.AUTH) {
+
+  // }
+});
