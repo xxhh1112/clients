@@ -10,7 +10,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
@@ -110,6 +110,15 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   searchTextChanged() {
     this.onSearchTextChanged.emit(this.searchText);
+  }
+
+  async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
+    if (this.collapsedFilterNodes.has(node.id)) {
+      this.collapsedFilterNodes.delete(node.id);
+    } else {
+      this.collapsedFilterNodes.add(node.id);
+    }
+    await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
   async reloadOrganizations() {
