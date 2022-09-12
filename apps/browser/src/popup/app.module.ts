@@ -89,6 +89,7 @@ import { SetPinComponent } from "./components/set-pin.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
+import { PocAuthComponent } from "./poc-auth/poc-auth.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "./send/efflux-dates.component";
 import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
@@ -194,6 +195,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     ServicesModule,
   ],
   declarations: [
+    PocAuthComponent,
     ActionButtonsComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,

@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const el = document.createElement("div");
     el.innerHTML = authPopupHtml;
     document.body.appendChild(el);
+    return el;
   };
 
   const create = async (options?: CredentialCreationOptions) => {
@@ -39,9 +40,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     addAuthPopup();
 
-    // await Messenger.sendMessageToBackground(MessageType.AUTH, {
-    //   message: "Hello Background",
-    // });
+    await Messenger.sendMessageToBackground(MessageType.AUTH, {});
 
     // const result = await window.navigator.credentials.create(options);
 

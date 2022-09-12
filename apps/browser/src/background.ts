@@ -1,4 +1,5 @@
 import MainBackground from "./background/main.background";
+import { MessageType } from "./content/messenger";
 // import { MessageType, Messenger } from "./content/messenger";
 import { onCommandListener } from "./listeners/onCommandListener";
 import { onInstallListener } from "./listeners/onInstallListener";
@@ -17,9 +18,9 @@ if (manifest.manifest_version === 3) {
 
 browser.runtime.onMessage.addListener((message, sender) => {
   const { type, data } = message;
-  console.log("background received:", type, data);
+  // console.log("background received:", type, data);
 
-  // if (type === MessageType.AUTH) {
-
-  // }
+  if (type === MessageType.AUTH) {
+    browser.browserAction.setPopup({ popup: "popup/index.html#/auth" });
+  }
 });

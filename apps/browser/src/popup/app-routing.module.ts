@@ -19,6 +19,7 @@ import { TwoFactorComponent } from "./accounts/two-factor.component";
 import { UpdateTempPasswordComponent } from "./accounts/update-temp-password.component";
 import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
+import { PocAuthComponent } from "./poc-auth/poc-auth.component";
 import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
 import { SendTypeComponent } from "./send/send-type.component";
@@ -58,6 +59,10 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [UnauthGuard],
     data: { state: "home" },
+  },
+  {
+    path: "auth",
+    component: PocAuthComponent,
   },
   {
     path: "login",
