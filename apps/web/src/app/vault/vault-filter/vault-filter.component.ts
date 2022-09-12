@@ -319,7 +319,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         showHeader: true,
         isSelectable: false,
       },
-      action: await this.applyFolderFilter,
+      action: this.applyFolderFilter,
       edit: {
         text: "editFolder",
         action: this.editFolder,
