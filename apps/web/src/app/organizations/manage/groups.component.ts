@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -18,8 +19,7 @@ import { GroupAddEditComponent } from "./group-add-edit.component";
   selector: "app-org-groups",
   templateUrl: "groups.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
   usersModalRef: ViewContainerRef;
@@ -34,6 +34,7 @@ export class GroupsComponent implements OnInit {
   protected pageSize = 100;
 
   private pagedGroupsCount = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -46,15 +47,30 @@ export class GroupsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.params.subscribe(async (params) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-      this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-        this.searchText = qParams.search;
-      });
-    });
+    this.route.parent.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          await this.load();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.route.queryParams
+      .pipe(
+        first(),
+        concatMap(async (qParams) => {
+          this.searchText = qParams.search;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async load() {
@@ -91,13 +107,11 @@ export class GroupsComponent implements OnInit {
       (comp) => {
         comp.organizationId = this.organizationId;
         comp.groupId = group != null ? group.id : null;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onSavedGroup.subscribe(() => {
+        comp.onSavedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
           this.load();
         });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onDeletedGroup.subscribe(() => {
+        comp.onDeletedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
           this.removeGroup(group);
         });
@@ -144,15 +158,14 @@ export class GroupsComponent implements OnInit {
         comp.entityId = group.id;
         comp.entityName = group.name;
 
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onEditedUsers.subscribe(() => {
+        comp.onEditedUsers.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
         });
       }
     );
   }
 
-  async resetPaging() {
+  resetPaging() {
     this.pagedGroups = [];
     this.loadMore();
   }
