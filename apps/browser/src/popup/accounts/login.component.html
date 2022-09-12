@@ -58,7 +58,7 @@
             </button>
           </div>
         </div>
-        <div class="mb-n3" *ngIf="captchaSiteKey">
+        <div class="box-content-row" *ngIf="captchaSiteKey">
           <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
           </app-captcha>
         </div>

@@ -120,7 +120,7 @@
         </div>
       </div>
     </ng-container>
-    <div *ngIf="captchaSiteKey">
+    <div class="box-content-row" *ngIf="captchaSiteKey">
       <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
       </app-captcha>
     </div>
