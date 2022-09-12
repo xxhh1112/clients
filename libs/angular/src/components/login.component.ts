@@ -1,5 +1,5 @@
 import { Directive, NgZone, OnInit } from "@angular/core";
-import { UntypedFormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { take } from "rxjs/operators";
 
@@ -52,7 +52,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     protected cryptoFunctionService: CryptoFunctionService,
     protected logService: LogService,
     protected ngZone: NgZone,
-    protected formBuilder: UntypedFormBuilder,
+    protected formBuilder: FormBuilder,
     protected formValidationErrorService: FormValidationErrorsService
   ) {
     super(environmentService, i18nService, platformUtilsService);
