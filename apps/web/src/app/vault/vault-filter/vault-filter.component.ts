@@ -193,8 +193,17 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     if (vaultFilter.isDeleted) {
       return "searchTrash";
     }
-    if (vaultFilter.getCipherStatus != null && vaultFilter.getCipherStatus !== "all") {
-      return "searchType";
+    if (vaultFilter.getCipherType === CipherType.Login) {
+      return "searchLogin";
+    }
+    if (vaultFilter.getCipherType === CipherType.Card) {
+      return "searchCard";
+    }
+    if (vaultFilter.getCipherType === CipherType.Identity) {
+      return "searchIdentity";
+    }
+    if (vaultFilter.getCipherType === CipherType.SecureNote) {
+      return "searchSecureNote";
     }
     if (vaultFilter.selectedFolderNode?.node) {
       return "searchFolder";
