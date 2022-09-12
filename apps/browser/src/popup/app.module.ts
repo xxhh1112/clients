@@ -4,6 +4,7 @@ import { LayoutModule } from "@angular/cdk/layout";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { CurrencyPipe, DatePipe, registerLocaleData } from "@angular/common";
+import localeAr from "@angular/common/locales/ar";
 import localeAz from "@angular/common/locales/az";
 import localeBe from "@angular/common/locales/be";
 import localeBg from "@angular/common/locales/bg";
@@ -93,6 +94,7 @@ import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
 import { SendTypeComponent } from "./send/send-type.component";
 import { ServicesModule } from "./services/services.module";
+import { AboutComponent } from "./settings/about.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
@@ -116,6 +118,7 @@ import { VaultSelectComponent } from "./vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "./vault/view-custom-fields.component";
 import { ViewComponent } from "./vault/view.component";
 
+registerLocaleData(localeAr, "ar");
 registerLocaleData(localeAz, "az");
 registerLocaleData(localeBe, "be");
 registerLocaleData(localeBg, "bg");
@@ -240,6 +243,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     ViewCustomFieldsComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
+    AboutComponent,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
