@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -26,7 +26,7 @@ import { RegisterRequest } from "@bitwarden/common/models/request/registerReques
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 
 @Directive()
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   @Input() isInTrialFlow = false;
   @Output() createdAccount = new EventEmitter<string>();
 
@@ -87,9 +87,6 @@ export class RegisterComponent implements OnInit {
     protected logService: LogService
   ) {
     this.showTerms = !platformUtilsService.isSelfHost();
-  }
-  ngOnInit(): void {
-    throw new Error("Method not implemented.");
   }
 
   async submit(showToast = true) {
