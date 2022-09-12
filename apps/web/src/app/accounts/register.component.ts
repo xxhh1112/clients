@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -28,7 +28,7 @@ import { RouterService } from "../core";
   templateUrl: "register.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class RegisterComponent extends BaseRegisterComponent {
+export class RegisterComponent extends BaseRegisterComponent implements OnInit {
   email = "";
   showCreateOrgMessage = false;
   layout = "";
@@ -134,7 +134,5 @@ export class RegisterComponent extends BaseRegisterComponent {
         this.policies
       );
     }
-
-    await super.ngOnInit();
   }
 }
