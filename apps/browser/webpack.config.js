@@ -132,6 +132,7 @@ const config = {
     "popup/polyfills": "./src/popup/polyfills.ts",
     "popup/main": "./src/popup/main.ts",
     background: "./src/background.ts",
+    "content/auth": "./src/content/auth.ts",
     "content/autofill": "./src/content/autofill.js",
     "content/autofiller": "./src/content/autofiller.ts",
     "content/notificationBar": "./src/content/notificationBar.ts",

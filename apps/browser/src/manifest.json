@@ -18,6 +18,7 @@
     {
       "all_frames": true,
       "js": [
+        "content/auth.js",
         "content/autofill.js",
         "content/autofiller.js",
         "content/notificationBar.js",
