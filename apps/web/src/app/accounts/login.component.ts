@@ -1,5 +1,5 @@
 import { Component, NgZone } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -51,7 +51,7 @@ export class LoginComponent extends BaseLoginComponent {
     protected stateService: StateService,
     private messagingService: MessagingService,
     private routerService: RouterService,
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService
   ) {
     super(

@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy, ViewChild, ViewContainerRef } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
@@ -50,7 +50,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     ngZone: NgZone,
     private messagingService: MessagingService,
     logService: LogService,
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService
   ) {
     super(

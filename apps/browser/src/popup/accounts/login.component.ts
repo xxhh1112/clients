@@ -1,5 +1,5 @@
 import { Component, NgZone } from "@angular/core";
-import { UntypedFormBuilder } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
@@ -33,7 +33,7 @@ export class LoginComponent extends BaseLoginComponent {
     syncService: SyncService,
     logService: LogService,
     ngZone: NgZone,
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService
   ) {
     super(
