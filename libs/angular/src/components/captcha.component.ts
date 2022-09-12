@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -12,7 +12,7 @@ import { IFrameComponent } from "@bitwarden/common/misc/iframe_component";
   selector: "app-captcha",
   template: `<iframe [id]="id" height="80"></iframe>`,
 })
-export class CaptchaComponent implements OnInit, OnDestroy {
+export class CaptchaComponent implements AfterViewInit, OnDestroy {
   @Input() siteKey: string;
   @Output() captchaSolved = new EventEmitter<string>();
 
@@ -27,7 +27,7 @@ export class CaptchaComponent implements OnInit, OnDestroy {
     protected platformUtilsService: PlatformUtilsService
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     const webVaultUrl = this.environmentService.getWebVaultUrl();
 
     this.iframeHandler = new IFrameComponent(
