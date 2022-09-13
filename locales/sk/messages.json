@@ -644,9 +644,6 @@
   "newAccountCreated": {
     "message": "Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť."
   },
-  "trialAccountCreated": {
-    "message": "Účet bol úspešne vytvorený."
-  },
   "masterPassSent": {
     "message": "Poslali sme vám email s nápoveďou k hlavnému heslu."
   },
@@ -677,9 +674,6 @@
   },
   "invalidMasterPassword": {
     "message": "Neplatné hlavné heslo"
-  },
-  "invalidFilePassword": {
-    "message": "Neplatné heslo súboru, použite heslo, ktoré ste zadali pri vytváraní exportného súboru."
   },
   "lockNow": {
     "message": "Uzamknúť teraz"
@@ -892,48 +886,6 @@
   },
   "fileFormat": {
     "message": "Formát Súboru"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Tento export súborov bude chránený heslom a na dešifrovanie bude potrebné heslo súboru."
-  },
-  "exportPasswordDescription": {
-    "message": "Toto heslo sa použije na export a import tohto súboru"
-  },
-  "confirmMasterPassword": {
-    "message": "Potvrdiť hlavné heslo"
-  },
-  "confirmFormat": {
-    "message": "Potvrdiť formát"
-  },
-  "filePassword": {
-    "message": "Heslo súboru"
-  },
-  "confirmFilePassword": {
-    "message": "Potvrdiť heslo súboru"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Na ochranu exportu využíva šifrovanie vášho účtu Bitwarden, nie hlavné heslo. Tento export je možné importovať len do aktuálneho účtu. Použite ho na vytvorenie zálohy, ktorú nie je možné použiť inde."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Na ochranu exportu vytvorte heslo vygenerované používateľom. Použite ho na vytvorenie exportu, ktorý možno použiť v iných účtoch."
-  },
-  "fileTypeHeading": {
-    "message": "Typ súboru"
-  },
-  "accountBackup": {
-    "message": "Zálohovanie účtu"
-  },
-  "passwordProtected": {
-    "message": "Chránené heslom"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "\"Heslo súboru\" a \"Potvrdiť heslo súboru\" sa nezhodujú."
-  },
-  "confirmVaultImport": {
-    "message": "Potvrdiť importu trezoru"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Tento súbor je chránený heslom. Ak chcete importovať údaje, zadajte heslo súboru."
   },
   "exportSuccess": {
     "message": "Dáta z vášho trezora boli exportované."
@@ -1295,8 +1247,8 @@
   "enabled": {
     "message": "Povolené"
   },
-  "restoreAccess": {
-    "message": "Obnoviť prístup"
+  "activate": {
+    "message": "Aktivovať"
   },
   "premium": {
     "message": "Prémium",
@@ -1323,8 +1275,8 @@
   "disable": {
     "message": "Vypnúť"
   },
-  "revokeAccess": {
-    "message": "Zrušiť prístup"
+  "deactivate": {
+    "message": "Deaktivovať"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Tento poskytovateľ overenia je povolený pre váš účet."
@@ -1717,12 +1669,6 @@
   "billing": {
     "message": "Fakturácia"
   },
-  "billingPlanLabel": {
-    "message": "Plán fakturácie"
-  },
-  "paymentType": {
-    "message": "Typ platby"
-  },
   "accountCredit": {
     "message": "Kredit na konte",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1839,9 +1785,6 @@
   "year": {
     "message": "rok"
   },
-  "yr": {
-    "message": "r."
-  },
   "month": {
     "message": "mesiac"
   },
@@ -1869,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "Fakturačné údaje"
-  },
-  "billingTrialSubLabel": {
-    "message": "Počas 7-dňovej bezplatnej skúšobnej lehoty sa z vašej platobnej metódy nebudú účtovať žiadne poplatky."
   },
   "creditCard": {
     "message": "Kreditná Karta"
@@ -2229,35 +2169,11 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "Ďakujeme vám, že ste si predplatili $PLAN$!",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "Vaša 7-dňová bezplatná skúšobná verzia $PLAN$ bude po 7 dňoch prevedená na platené predplatné.",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "Poslali sme potvrdzujúci e-mail na fakturačný e-mail vášho tímu na adresu "
-  },
   "monthly": {
     "message": "Mesačne"
   },
   "annually": {
     "message": "Ročne"
-  },
-  "annual": {
-    "message": "Ročný"
   },
   "basePrice": {
     "message": "Základná cena"
@@ -2325,11 +2241,11 @@
   "removeUserConfirmation": {
     "message": "Skutočne chcete odobrať tohto užívateľa?"
   },
-  "removeOrgUserConfirmation": {
-    "message": "Keď je člen odstránený, nemá už prístup k údajom organizácie a tento krok je nezvratný. Ak chcete člena opäť pridať do organizácie, musíte ho pozvať a znovu prijať."
+  "deactivateUserConfirmation": {
+    "message": "Člen už nebude mať prístup do organizácie, ale stále bude mať prístup do svojho individuálneho trezoru."
   },
-  "revokeUserConfirmation": {
-    "message": "Keď je člen odvolaný, nemá už prístup k údajom organizácie. Ak chcete rýchlo obnoviť prístup člena, prejdite na kartu Zrušený prístup."
+  "activateUserConfirmation": {
+    "message": "Naozaj chcete aktivovať tohto používateľa a udeliť mu prístup do organizácie?"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Upozornenie! Tento používateľ potrebuje na správu svojho šifrovania aplikáciu Key Connector. Odstránením tohto používateľa z vašej organizácie sa jeho účet natrvalo deaktivuje. Túto akciu nie je možné vrátiť späť. Chcete pokračovať?"
@@ -2676,8 +2592,8 @@
       }
     }
   },
-  "removeUserIdAccess": {
-    "message": "Odstrániť prístup pre $ID$",
+  "deactivatedUserId": {
+    "message": "Deaktivovaný používateľ $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2685,8 +2601,8 @@
       }
     }
   },
-  "revokedUserId": {
-    "message": "Zrušený prístup k organizácii pre $ID$.",
+  "activatedUserId": {
+    "message": "Aktivovaný používateľ $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2694,8 +2610,8 @@
       }
     }
   },
-  "restoredUserId": {
-    "message": "Obnovený prístup k organizácii pre $ID$.",
+  "deactivateUserId": {
+    "message": "Deaktivovať používateľa $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2703,8 +2619,8 @@
       }
     }
   },
-  "revokeUserId": {
-    "message": "Zrušiť prístup pre $ID$",
+  "activateUserId": {
+    "message": "Aktivovať používateľa $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3768,8 +3684,8 @@
   "disabled": {
     "message": "Vypnuté"
   },
-  "revoked": {
-    "message": "Zrušený prístup"
+  "deactivated": {
+    "message": "Deaktivovaný"
   },
   "sendLink": {
     "message": "Odkaz na Send",
@@ -4372,11 +4288,11 @@
   "removeUsersWarning": {
     "message": "Naozaj chcete odstrániť týchto používateľov? Dokončenie procesu môže trvať niekoľko sekúnd a nie je možné ho prerušiť ani zrušiť."
   },
-  "removeOrgUsersConfirmation": {
-    "message": "Po odstránení člena (členov) už nemajú prístup k údajom organizácie a tento krok je nezvratný. Ak chcete člena pridať späť do organizácie, musíte ho pozvať a znovu prihlásiť. Tento proces môže trvať niekoľko sekúnd a nie je možné ho prerušiť ani zrušiť."
+  "deactivateUsersWarning": {
+    "message": "Naozaj chcete deaktivovať týchto členov? Už nebudú mať prístup do organizácie, ale stále budú mať prístup do svojich individuálnych trezorov. Dokončenie procesu môže trvať niekoľko sekúnd a nie je možné ho prerušiť ani zrušiť."
   },
-  "revokeUsersWarning": {
-    "message": "Keď je člen(-ovia) odvolaný(-í), nemá(-ajú) už prístup k údajom organizácie. Ak chcete rýchlo obnoviť prístup člena, prejdite na kartu Zrušený prístup. Dokončenie procesu môže trvať niekoľko sekúnd a nie je možné ho prerušiť ani zrušiť."
+  "activateUsersWarning": {
+    "message": "Naozaj chcete aktivovať týchto členov a udeliť im prístup do organizácie? Dokončenie procesu môže trvať niekoľko sekúnd a nie je možné ho prerušiť ani zrušiť."
   },
   "theme": {
     "message": "Motív"
@@ -4408,11 +4324,11 @@
   "bulkRemovedMessage": {
     "message": "Odstránenie úspešné"
   },
-  "bulkRevokedMessage": {
-    "message": "Prístup k organizácii úspešne zrušený"
+  "bulkDeactivatedMessage": {
+    "message": "Úspešne deaktivovaný"
   },
-  "bulkRestoredMessage": {
-    "message": "Prístup k organizácii úspešne obnovený"
+  "bulkActivatedMessage": {
+    "message": "Úspešne aktivovaný"
   },
   "bulkFilteredMessage": {
     "message": "Vylúčené, neplatí pre túto akciu."
@@ -4423,11 +4339,11 @@
   "removeUsers": {
     "message": "Odstrániť používateľov"
   },
-  "revokeUsers": {
-    "message": "Odvolať používateľov"
+  "deactivateUsers": {
+    "message": "Deaktivovať používateľov"
   },
-  "restoreUsers": {
-    "message": "Obnoviť používateľov"
+  "activateUsers": {
+    "message": "Aktivovať používateľov"
   },
   "error": {
     "message": "Chyba"
@@ -4735,22 +4651,22 @@
     "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
-    "message": "Bitwarden pre Rodiny zadarmo"
+    "message": "Free Bitwarden Families"
   },
   "sponsoredFamiliesEligible": {
-    "message": "Vy a vaša rodina máte bezplatne k dispozícii Bitwarden pre Rodiny. Uplatnite si túto možnosť s vaším osobným emailom aby ste mali dáta v bezpečí aj keď nie ste v práci."
+    "message": "You and your family are eligible for Free Bitwarden Families. Redeem with your personal email to keep your data secure even when you are not at work."
   },
   "sponsoredFamiliesEligibleCard": {
-    "message": "Využite bezplatný plán Bitwarden pre Rodiny aby ste mali dáta v bezpečí aj keď nie ste v práci."
+    "message": "Redeem your Free Bitwarden for Families plan today to keep your data secure even when you are not at work."
   },
   "sponsoredFamiliesInclude": {
-    "message": "Bitwarden plán pre Rodiny zahŕňa"
+    "message": "The Bitwarden for Families plan include"
   },
   "sponsoredFamiliesPremiumAccess": {
-    "message": "Prémiový prístup pre maximálne 6 používateľov"
+    "message": "Premium access for up to 6 users"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "Zdieľané zbierky pre Rodinné heslá"
+    "message": "Shared collections for Family secrets"
   },
   "badToken": {
     "message": "The link is no longer valid. Please have the sponsor resend the offer."
@@ -4822,10 +4738,10 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Bezplatný plán pre Rodiny"
+    "message": "Free Families Plan"
   },
   "redeemNow": {
-    "message": "Uplatniť Teraz"
+    "message": "Redeem Now"
   },
   "recipient": {
     "message": "Príjemca"
@@ -4838,6 +4754,9 @@
   },
   "sponsorshipCreated": {
     "message": "Sponsorship Created"
+  },
+  "revoke": {
+    "message": "Odvolať"
   },
   "emailSent": {
     "message": "Email Odoslaný"
@@ -5056,7 +4975,7 @@
     }
   },
   "formErrorSummarySingle": {
-    "message": "Jedno pole vyššie vyžaduje vašu pozornosť."
+    "message": "1 field above needs your attention."
   },
   "fieldRequiredError": {
     "message": "$FIELDNAME$ je povinné.",
@@ -5125,7 +5044,7 @@
     "message": "História platieb"
   },
   "backToReports": {
-    "message": "Späť na Reporty"
+    "message": "Back to Reports"
   },
   "organizationPicker": {
     "message": "Výber organizácie"
@@ -5265,63 +5184,6 @@
       }
     }
   },
-  "premiumSubcriptionRequired": {
-    "message": "Vyžaduje sa predplatné Prémium"
-  },
-  "scim": {
-    "message": "SCIM Provisioning",
-    "description": "The text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimDescription": {
-    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDesc": {
-    "message": "Enable SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDescHelpText": {
-    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimApiKeyHelperText": {
-    "message": "This API key has access to manage users within your organization. It should be kept secret."
-  },
-  "copyScimKey": {
-    "message": "Copy the SCIM API Key to your clipboard",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKey": {
-    "message": "Obnovte SCIM API kľúč",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKeyWarning": {
-    "message": "Are you sure you want to rotate the SCIM API Key? The current key will no longer work for any existing integrations.",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateKey": {
-    "message": "Obnoviť kľúč"
-  },
-  "scimApiKey": {
-    "message": "SCIM API kľúč",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "copyScimUrl": {
-    "message": "Copy the SCIM endpoint URL to your clipboard",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimUrl": {
-    "message": "SCIM URL",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimApiKeyRotated": {
-    "message": "The SCIM API Key has been successfully rotated",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "scimSettingsSaved": {
-    "message": "SCIM settings have been saved successfully",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
   "inputRequired": {
     "message": "Vstup je povinný."
   },
@@ -5351,11 +5213,5 @@
   },
   "on": {
     "message": "Zapnuté"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Počet používateľov"
   }
 }

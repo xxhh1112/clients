@@ -422,7 +422,7 @@
     "description": "Copy URI to clipboard"
   },
   "me": {
-    "message": "Аз"
+    "message": "Me"
   },
   "myVault": {
     "message": "Моят трезор"
@@ -644,9 +644,6 @@
   "newAccountCreated": {
     "message": "Абонаментът ви бе създаден. Вече можете да се впишете."
   },
-  "trialAccountCreated": {
-    "message": "Регистрацията е създадена успешно."
-  },
   "masterPassSent": {
     "message": "Изпратихме ви писмо с подсказка за главната ви парола."
   },
@@ -677,9 +674,6 @@
   },
   "invalidMasterPassword": {
     "message": "Грешна главна парола"
-  },
-  "invalidFilePassword": {
-    "message": "Неправилна парола за файла. Използвайте паролата, която сте въвели при създаването на изнесения файл."
   },
   "lockNow": {
     "message": "Заключване сега"
@@ -892,48 +886,6 @@
   },
   "fileFormat": {
     "message": "Формат на файла"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Изнесеният файл ще бъде защитен с парола, която ще бъде необходима за дешифриране на файла."
-  },
-  "exportPasswordDescription": {
-    "message": "Парола ще се използва при изнасянето и при внасянето на този файл"
-  },
-  "confirmMasterPassword": {
-    "message": "Потвърждаване на главната парола"
-  },
-  "confirmFormat": {
-    "message": "Потвърждаване на формата"
-  },
-  "filePassword": {
-    "message": "Парола на файла"
-  },
-  "confirmFilePassword": {
-    "message": "Потвърждаване на паролата на файла"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Използва шифроването на Вашата регистрация в Битуорден, а не главната Ви парола, като защита на изнесения файл. Той може да бъде внесен само в текущата регистрация. Използвайте тази възможност, за да направите резервно копие, което не може да се ползва другаде."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Създайте потребителска парола за защита на изнесения файл. Използвайте тази възможност, за да изнесете информацията във файл, който да може да се ползва и в други регистрации."
-  },
-  "fileTypeHeading": {
-    "message": "Тип на файла"
-  },
-  "accountBackup": {
-    "message": "Резервно копие на регистрацията"
-  },
-  "passwordProtected": {
-    "message": "Защитен с парола"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "Дънните в полетата „Парола на файла“ и „Потвърждаване на паролата на файла“ не съвпадат."
-  },
-  "confirmVaultImport": {
-    "message": "Потвърждаване на внасянето на трезора"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Този файл е защитен с парола. Трябва да въведете паролата, за да могат данните да бъдат внесени."
   },
   "exportSuccess": {
     "message": "Данните от трезора ви са изнесени."
@@ -1295,8 +1247,8 @@
   "enabled": {
     "message": "Включено"
   },
-  "restoreAccess": {
-    "message": "Възстановяване на достъпа"
+  "activate": {
+    "message": "Активиране"
   },
   "premium": {
     "message": "Платен",
@@ -1323,8 +1275,8 @@
   "disable": {
     "message": "Изключване"
   },
-  "revokeAccess": {
-    "message": "Отнемане на достъпа"
+  "deactivate": {
+    "message": "Деактивиране"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Този доставчик на двустепенно удостоверяване е включен за абонамента ви."
@@ -1717,12 +1669,6 @@
   "billing": {
     "message": "Заплащане"
   },
-  "billingPlanLabel": {
-    "message": "Платежен план"
-  },
-  "paymentType": {
-    "message": "Вид плащане"
-  },
   "accountCredit": {
     "message": "Кредит по абонамента",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1839,9 +1785,6 @@
   "year": {
     "message": "година"
   },
-  "yr": {
-    "message": "година"
-  },
   "month": {
     "message": "месец"
   },
@@ -1869,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "Информация за фактуриране"
-  },
-  "billingTrialSubLabel": {
-    "message": "Няма да получите задължение за плащане по време на 7-дневния пробен период."
   },
   "creditCard": {
     "message": "Кредитна карта"
@@ -2229,35 +2169,11 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "Благодарим Ви, че се регистрирахте в Битуорден и избрахте плана $PLAN$!",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "След като Вашият 7-дневен безплатен пробен период на плана $PLAN$ изтече, той ще бъде превърнат в платен абонамент.",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "Изпратихме Ви е-писмо за потвърждение до е-пощата на екипа Ви, на адрес: "
-  },
   "monthly": {
     "message": "Месечно"
   },
   "annually": {
     "message": "Годишно"
-  },
-  "annual": {
-    "message": "Annual"
   },
   "basePrice": {
     "message": "Базова цена"
@@ -2325,11 +2241,11 @@
   "removeUserConfirmation": {
     "message": "Сигурни ли сте, че искате да изтриете този потребител?"
   },
-  "removeOrgUserConfirmation": {
-    "message": "Когато член бъде премахнат, той вече няма да има достъп до данните на организацията. Това действие е необратимо. Ако след това искате да върнете потребителя в организацията, той трябва отново да бъде поканен и въведен в нея."
+  "deactivateUserConfirmation": {
+    "message": "Този член вече няма да има достъп до организацията, но ще продължи да има достъп до собствения си трезор."
   },
-  "revokeUserConfirmation": {
-    "message": "Когато достъпът на член бъде отнет, той няма да може да разполага с данните в организацията. Ако искате да върнете достъпа му, идете в раздела „Отнет достъп“."
+  "activateUserConfirmation": {
+    "message": "Наистина ли искате да активирате този потребител, давайки му така достъп до организацията?"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Внимание! Този потребител има нужда от конектор за ключове, за да управлява шифроването си. Ако премахнете потребителя от организацията, ще заключите завинаги достъпа му до неговата регистрация. Това действие е необратимо. Наистина ли искате да продължите?"
@@ -2676,8 +2592,8 @@
       }
     }
   },
-  "removeUserIdAccess": {
-    "message": "Премахване на достъпа на $ID$",
+  "deactivatedUserId": {
+    "message": "Деактивиран потребител: $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2685,8 +2601,8 @@
       }
     }
   },
-  "revokedUserId": {
-    "message": "Достъпът на $ID$ до организацията е отнет.",
+  "activatedUserId": {
+    "message": "Активиран потребител: $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2694,8 +2610,8 @@
       }
     }
   },
-  "restoredUserId": {
-    "message": "Достъпът на $ID$ до организацията е възстановен.",
+  "deactivateUserId": {
+    "message": "Деактивиране на потребител $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2703,8 +2619,8 @@
       }
     }
   },
-  "revokeUserId": {
-    "message": "Отнемане на достъпа на $ID$",
+  "activateUserId": {
+    "message": "Активиране на потребител $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3303,7 +3219,7 @@
     "message": "Организацията е изключена."
   },
   "disabledOrganizationFilterError": {
-    "message": "Записите в изключени организации не са достъпни. Свържете се със собственика на организацията си за помощ."
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "Изтекъл лиценз."
@@ -3430,13 +3346,13 @@
     "message": "Дублиране"
   },
   "masterPassPolicyTitle": {
-    "message": "Изисквания за главната парола"
+    "message": "Master password requirements"
   },
   "masterPassPolicyDesc": {
     "message": "Задаване на минимална сила на главната парола."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "Изискване на двустепенно удостоверяване"
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Изискване от потребителите да включат двустепенно удостоверяване за личните си абонаменти."
@@ -3768,8 +3684,8 @@
   "disabled": {
     "message": "Изключено"
   },
-  "revoked": {
-    "message": "Отнет достъп"
+  "deactivated": {
+    "message": "Деактивиран"
   },
   "sendLink": {
     "message": "Изпращане на връзката",
@@ -4372,11 +4288,11 @@
   "removeUsersWarning": {
     "message": "Наистина ли искате да премахнете следните потребители? Процесът може да отнеме няколко секунди и не може да бъде прекъснат или отменен."
   },
-  "removeOrgUsersConfirmation": {
-    "message": "Когато член бъде премахнат, той вече няма да има достъп до данните на организацията. Това действие е необратимо. Ако след това искате да върнете потребителя в организацията, той трябва отново да бъде поканен и въведен в нея. Процесът може да отнеме няколко секунди и не трябва да бъде прекъсван."
+  "deactivateUsersWarning": {
+    "message": "Наистина ли искате да деактивирате следните членове? Те вече няма да имат достъп до организацията, но ще продължат да имат достъп до собствените си трезори. Процедурата ще отнеме няколко секунди и не трябва да бъде прекъсвана или отменяна."
   },
-  "revokeUsersWarning": {
-    "message": "Когато достъпът на член бъде отнет, той няма да може да разполага с данните в организацията. Ако искате да върнете достъпа му, идете в раздела „Отнет достъп“. Процесът може да отнеме няколко секунди и не трябва да бъде прекъсван."
+  "activateUsersWarning": {
+    "message": "Наистина ли искате да активирате следните потребители, давайки им така достъп до организацията? Процесът може да отнеме няколко секунди и не може да бъде прекъснат или отменен."
   },
   "theme": {
     "message": "Облик"
@@ -4408,11 +4324,11 @@
   "bulkRemovedMessage": {
     "message": "Успешно премахване"
   },
-  "bulkRevokedMessage": {
-    "message": "Достъпът до организацията е отнет успешно"
+  "bulkDeactivatedMessage": {
+    "message": "Успешно деактивиране"
   },
-  "bulkRestoredMessage": {
-    "message": "Достъпът до организацията е възстановен успешно"
+  "bulkActivatedMessage": {
+    "message": "Успешно активиране"
   },
   "bulkFilteredMessage": {
     "message": "Изключени като неподходящи за това действие."
@@ -4423,11 +4339,11 @@
   "removeUsers": {
     "message": "Премахване на потребителите"
   },
-  "revokeUsers": {
-    "message": "Отнемане на достъпа на потребители"
+  "deactivateUsers": {
+    "message": "Деактивиране на потребители"
   },
-  "restoreUsers": {
-    "message": "Възстановяване на достъпа на потребители"
+  "activateUsers": {
+    "message": "Активиране на потребители"
   },
   "error": {
     "message": "Грешка"
@@ -4838,6 +4754,9 @@
   },
   "sponsorshipCreated": {
     "message": "Sponsorship Created"
+  },
+  "revoke": {
+    "message": "Revoke"
   },
   "emailSent": {
     "message": "Писмото е изпратено"
@@ -5265,63 +5184,6 @@
       }
     }
   },
-  "premiumSubcriptionRequired": {
-    "message": "Изисква се платен абонамент"
-  },
-  "scim": {
-    "message": "Удостоверяване чрез SCIM",
-    "description": "The text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimDescription": {
-    "message": "Предоставете на потребителите и групите си автоматично удостоверяване със своя предпочитан доставчик на удостоверителни данни като използвате удостоверяване чрез SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDesc": {
-    "message": "Включване на SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDescHelpText": {
-    "message": "Задайте предпочитания си доставчик на удостоверителни данни като настроите адреса и ключа за API на SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimApiKeyHelperText": {
-    "message": "Този ключ за API предоставя достъп за управление на потребителите в организацията Ви. Трябва да го пазите в тайна."
-  },
-  "copyScimKey": {
-    "message": "Копиране на ключа за API на SCIM в буфера",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKey": {
-    "message": "Смяна на ключа за API на SCIM",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKeyWarning": {
-    "message": "Наистина ли искате да смените ключа за API на SCIM? Текущият ключ ще спре да работи за вече настроените интеграции.",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateKey": {
-    "message": "Смяна на ключа"
-  },
-  "scimApiKey": {
-    "message": "Ключ за API на SCIM",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "copyScimUrl": {
-    "message": "Копиране на адреса на SCIM в буфера",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimUrl": {
-    "message": "Адрес на SCIM",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimApiKeyRotated": {
-    "message": "Ключът за API на SCIM беше сменен успешно",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "scimSettingsSaved": {
-    "message": "Настройките за SCIM бяха запазени успешно",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
   "inputRequired": {
     "message": "Полето е задължтелно да бъде попълнено."
   },
@@ -5347,15 +5209,9 @@
     }
   },
   "turnOn": {
-    "message": "Включване"
+    "message": "Turn on"
   },
   "on": {
-    "message": "Включено"
-  },
-  "cardBrandMir": {
-    "message": "Мир"
-  },
-  "numberOfUsers": {
-    "message": "Брой потребители"
+    "message": "On"
   }
 }

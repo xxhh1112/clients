@@ -644,9 +644,6 @@
   "newAccountCreated": {
     "message": "Ditt nya konto har skapats! Du kan nu logga in."
   },
-  "trialAccountCreated": {
-    "message": "Account created successfully."
-  },
   "masterPassSent": {
     "message": "Vi har skickat ett e-postmeddelande till dig med din huvudlösenordsledtråd."
   },
@@ -677,9 +674,6 @@
   },
   "invalidMasterPassword": {
     "message": "Ogiltigt huvudlösenord"
-  },
-  "invalidFilePassword": {
-    "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
     "message": "Lås nu"
@@ -892,48 +886,6 @@
   },
   "fileFormat": {
     "message": "Filformat"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
-  },
-  "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
-  },
-  "confirmMasterPassword": {
-    "message": "Confirm Master Password"
-  },
-  "confirmFormat": {
-    "message": "Confirm Format"
-  },
-  "filePassword": {
-    "message": "File Password"
-  },
-  "confirmFilePassword": {
-    "message": "Confirm File Password"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
-  },
-  "fileTypeHeading": {
-    "message": "File Type"
-  },
-  "accountBackup": {
-    "message": "Account Backup"
-  },
-  "passwordProtected": {
-    "message": "Password Protected"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm File Password“ do not match."
-  },
-  "confirmVaultImport": {
-    "message": "Confirm Vault Import"
-  },
-  "confirmVaultImportDesc": {
-    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "Ditt valv har exporterats."
@@ -1295,8 +1247,8 @@
   "enabled": {
     "message": "Aktiverad"
   },
-  "restoreAccess": {
-    "message": "Restore Access"
+  "activate": {
+    "message": "Aktivera"
   },
   "premium": {
     "message": "Premium",
@@ -1323,8 +1275,8 @@
   "disable": {
     "message": "Inaktivera"
   },
-  "revokeAccess": {
-    "message": "Revoke Access"
+  "deactivate": {
+    "message": "Inaktivera"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Denna metod för tvåstegsverifiering är aktiverad på ditt konto."
@@ -1717,12 +1669,6 @@
   "billing": {
     "message": "Fakturering"
   },
-  "billingPlanLabel": {
-    "message": "Faktureringsplan"
-  },
-  "paymentType": {
-    "message": "Payment Type"
-  },
   "accountCredit": {
     "message": "Kontokredit",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1839,9 +1785,6 @@
   "year": {
     "message": "år"
   },
-  "yr": {
-    "message": "år"
-  },
   "month": {
     "message": "månad"
   },
@@ -1869,9 +1812,6 @@
   },
   "billingInformation": {
     "message": "Faktureringsuppgifter"
-  },
-  "billingTrialSubLabel": {
-    "message": "Your payment method will not be charged during the 7 day free trial."
   },
   "creditCard": {
     "message": "Kreditkort"
@@ -2229,35 +2169,11 @@
       }
     }
   },
-  "trialThankYou": {
-    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialPaidInfoMessage": {
-    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
-    "placeholders": {
-      "plan": {
-        "content": "$1",
-        "example": "Teams"
-      }
-    }
-  },
-  "trialConfirmationEmail": {
-    "message": "We've sent a confirmation email to your team's billing email at "
-  },
   "monthly": {
     "message": "Månadsvis"
   },
   "annually": {
     "message": "Årligen"
-  },
-  "annual": {
-    "message": "Annual"
   },
   "basePrice": {
     "message": "Baspris"
@@ -2325,11 +2241,11 @@
   "removeUserConfirmation": {
     "message": "Är du säker på att du vill ta bort denna användare?"
   },
-  "removeOrgUserConfirmation": {
-    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
+  "deactivateUserConfirmation": {
+    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
   },
-  "revokeUserConfirmation": {
-    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
+  "activateUserConfirmation": {
+    "message": "Are you sure you want to activate this user, granting them access to the organization?"
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
@@ -2676,8 +2592,8 @@
       }
     }
   },
-  "removeUserIdAccess": {
-    "message": "Remove $ID$ access",
+  "deactivatedUserId": {
+    "message": "Deactivated user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2685,8 +2601,8 @@
       }
     }
   },
-  "revokedUserId": {
-    "message": "Revoked organization access for $ID$.",
+  "activatedUserId": {
+    "message": "Activated user $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2694,8 +2610,8 @@
       }
     }
   },
-  "restoredUserId": {
-    "message": "Restored organization access for $ID$.",
+  "deactivateUserId": {
+    "message": "Deactivate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2703,8 +2619,8 @@
       }
     }
   },
-  "revokeUserId": {
-    "message": "Revoke $ID$ access",
+  "activateUserId": {
+    "message": "Activate user $ID$?",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3768,8 +3684,8 @@
   "disabled": {
     "message": "Inaktiverad"
   },
-  "revoked": {
-    "message": "Revoked"
+  "deactivated": {
+    "message": "Deactivated"
   },
   "sendLink": {
     "message": "Länk till Send",
@@ -4372,11 +4288,11 @@
   "removeUsersWarning": {
     "message": "Är du säker på att du vill ta bort följande användare? Processen kan ta några sekunder att slutföra och kan inte pausas eller avbrytas."
   },
-  "removeOrgUsersConfirmation": {
-    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "deactivateUsersWarning": {
+    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
-  "revokeUsersWarning": {
-    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "activateUsersWarning": {
+    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Tema"
@@ -4408,11 +4324,11 @@
   "bulkRemovedMessage": {
     "message": "Tog bort"
   },
-  "bulkRevokedMessage": {
-    "message": "Revoked organization access successfully"
+  "bulkDeactivatedMessage": {
+    "message": "Deactivated successfully"
   },
-  "bulkRestoredMessage": {
-    "message": "Restored organization access successfully"
+  "bulkActivatedMessage": {
+    "message": "Activated successfully"
   },
   "bulkFilteredMessage": {
     "message": "Exkluderad, inte tillämplig för denna åtgärd."
@@ -4423,11 +4339,11 @@
   "removeUsers": {
     "message": "Ta bort användare"
   },
-  "revokeUsers": {
-    "message": "Revoke Users"
+  "deactivateUsers": {
+    "message": "Inaktivera användare"
   },
-  "restoreUsers": {
-    "message": "Återställ användare"
+  "activateUsers": {
+    "message": "Aktivera användare"
   },
   "error": {
     "message": "Fel"
@@ -4838,6 +4754,9 @@
   },
   "sponsorshipCreated": {
     "message": "Sponsorship Created"
+  },
+  "revoke": {
+    "message": "Återkalla"
   },
   "emailSent": {
     "message": "Email Sent"
@@ -5265,63 +5184,6 @@
       }
     }
   },
-  "premiumSubcriptionRequired": {
-    "message": "Premium subscription required"
-  },
-  "scim": {
-    "message": "SCIM Provisioning",
-    "description": "The text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimDescription": {
-    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDesc": {
-    "message": "Enable SCIM",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimEnabledCheckboxDescHelpText": {
-    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
-  "scimApiKeyHelperText": {
-    "message": "This API key has access to manage users within your organization. It should be kept secret."
-  },
-  "copyScimKey": {
-    "message": "Copy the SCIM API Key to your clipboard",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKey": {
-    "message": "Rotate the SCIM API Key",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateScimKeyWarning": {
-    "message": "Are you sure you want to rotate the SCIM API Key? The current key will no longer work for any existing integrations.",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "rotateKey": {
-    "message": "Rotate Key"
-  },
-  "scimApiKey": {
-    "message": "SCIM API Key",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "copyScimUrl": {
-    "message": "Copy the SCIM endpoint URL to your clipboard",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimUrl": {
-    "message": "SCIM URL",
-    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
-  },
-  "scimApiKeyRotated": {
-    "message": "The SCIM API Key has been successfully rotated",
-    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
-  },
-  "scimSettingsSaved": {
-    "message": "SCIM settings have been saved successfully",
-    "description": "the text, 'SCIM', is an acronymn and should not be translated."
-  },
   "inputRequired": {
     "message": "Input is required."
   },
@@ -5351,11 +5213,5 @@
   },
   "on": {
     "message": "On"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
-  "numberOfUsers": {
-    "message": "Antal användare"
   }
 }
