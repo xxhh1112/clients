@@ -1,9 +1,9 @@
 <bit-dialog *ngIf="!loading">
-  <span bit-dialog-title
+  <span bitDialogTitle
     >{{ "editCollection" | i18n }}
     <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collectionView.name }}</span>
   </span>
-  <span bit-dialog-content>
+  <span bitDialogContent>
     <bit-tab-group label="Main Content Tabs">
       <bit-tab [label]="'collectionInfo' | i18n">
         <form [formGroup]="formGroup" (ngSubmit)="submit()">
@@ -30,7 +30,7 @@
       <bit-tab [label]="'access' | i18n"> </bit-tab>
     </bit-tab-group>
   </span>
-  <div bit-dialog-footer class="tw-flex tw-flex-row tw-gap-2">
+  <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
     <button bitButton buttonType="primary" (click)="dialogRef.close()">Save</button>
     <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
   </div>
