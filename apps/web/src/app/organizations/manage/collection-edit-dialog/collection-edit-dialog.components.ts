@@ -52,6 +52,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
           this.loading = false;
         });
     } else {
+      this.loading = false;
       this.collectionView = new CollectionView();
     }
   }

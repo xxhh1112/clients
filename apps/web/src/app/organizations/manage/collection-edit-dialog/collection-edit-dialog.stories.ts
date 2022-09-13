@@ -2,6 +2,7 @@ import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { ButtonModule, DialogModule, FormFieldModule, TabsModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
@@ -31,11 +32,15 @@ export default {
           provide: DialogRef,
           useClass: DialogRefMock,
         },
+        {
+          provide: CollectionService,
+          useValue: undefined,
+        },
       ],
     }),
   ],
   args: {
-    collectionId: "collectionId",
+    collectionId: undefined,
   } as CollectionEditDialogParams,
 } as Meta;
 
