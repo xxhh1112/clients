@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
+import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";

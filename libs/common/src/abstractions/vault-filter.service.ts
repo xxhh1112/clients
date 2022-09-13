@@ -1,9 +1,11 @@
 import { Observable } from "rxjs";
 
-import { CipherTypeFilter } from "@bitwarden/angular/src/vault/vault-filter/models/cipher-filter.model";
-import { FolderFilter } from "@bitwarden/angular/src/vault/vault-filter/models/folder-filter.model";
-import { OrganizationFilter } from "@bitwarden/angular/src/vault/vault-filter/models/organization-filter.model";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
+import {
+  CipherTypeFilter,
+  FolderFilter,
+  OrganizationFilter,
+  CollectionFilter,
+} from "@bitwarden/angular/src/vault/vault-filter/models/cipher-filter.model";
 import { DynamicTreeNode } from "@bitwarden/angular/vault/vault-filter/models/dynamic-tree-node.model";
 
 import { Organization } from "../models/domain/organization";

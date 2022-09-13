@@ -12,7 +12,7 @@ import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
+import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";

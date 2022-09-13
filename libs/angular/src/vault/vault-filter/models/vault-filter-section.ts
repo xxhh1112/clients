@@ -2,10 +2,12 @@ import { Observable } from "rxjs";
 
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
-import { CipherTypeFilter } from "./cipher-filter.model";
-import { CollectionFilter } from "./collection-filter.model";
-import { FolderFilter } from "./folder-filter.model";
-import { OrganizationFilter } from "./organization-filter.model";
+import {
+  CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
+} from "./cipher-filter.model";
 
 export type VaultFilterType =
   | OrganizationFilter
