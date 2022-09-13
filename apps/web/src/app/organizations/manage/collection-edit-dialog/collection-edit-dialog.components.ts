@@ -1,10 +1,11 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { of, switchMap, takeUntil, Subject } from "rxjs";
 
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { BitValidators } from "@bitwarden/components";
 
 export interface CollectionEditDialogParams {
   collectionId: string;
@@ -20,7 +21,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
   loading = true;
   collectionView?: CollectionView;
   formGroup = this.formBuilder.group({
-    name: ["", Validators.pattern(/^[^/]+$/)],
+    name: ["", BitValidators.forbiddenCharacters(["/", "@", "%"])],
     externalId: "",
     parent: "",
   });
