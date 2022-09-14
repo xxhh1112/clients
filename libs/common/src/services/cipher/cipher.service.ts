@@ -432,7 +432,7 @@ export class CipherService implements InternalCipherServiceAbstraction {
           const match = u.match == null ? defaultMatch : u.match;
 
           try {
-            LoginUriView.cipherAppliesToUrl(match, domain, matchingDomains, u, url);
+            return LoginUriView.cipherAppliesToUrl(match, domain, matchingDomains, u, url);
           } catch (e) {
             this.logService.error(e);
           }

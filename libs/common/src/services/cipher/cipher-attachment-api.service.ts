@@ -300,6 +300,30 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     });
   }
 
+  async renewAttachmentUploadUrl(
+    id: string,
+    attachmentId: string
+  ): Promise<AttachmentUploadDataResponse> {
+    const r = await this.apiService.send(
+      "GET",
+      "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
+      null,
+      true,
+      true
+    );
+    return new AttachmentUploadDataResponse(r);
+  }
+
+  postAttachmentFile(id: string, attachmentId: string, data: FormData): Promise<any> {
+    return this.apiService.send(
+      "POST",
+      "/ciphers/" + id + "/attachment/" + attachmentId,
+      data,
+      true,
+      false
+    );
+  }
+
   // Helpers
 
   private async shareAttachmentWithServer(

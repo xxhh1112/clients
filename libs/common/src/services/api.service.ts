@@ -92,7 +92,6 @@ import { VerifyBankRequest } from "../models/request/verifyBankRequest";
 import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
 import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
-import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
@@ -555,26 +554,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   deleteSend(id: string): Promise<any> {
     return this.send("DELETE", "/sends/" + id, null, true, false);
-  }
-
-  // Attachments APIs
-
-  async renewAttachmentUploadUrl(
-    id: string,
-    attachmentId: string
-  ): Promise<AttachmentUploadDataResponse> {
-    const r = await this.send(
-      "GET",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
-      null,
-      true,
-      true
-    );
-    return new AttachmentUploadDataResponse(r);
-  }
-
-  postAttachmentFile(id: string, attachmentId: string, data: FormData): Promise<any> {
-    return this.send("POST", "/ciphers/" + id + "/attachment/" + attachmentId, data, true, false);
   }
 
   // Collections APIs

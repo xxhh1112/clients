@@ -83,7 +83,6 @@ import { VerifyBankRequest } from "../models/request/verifyBankRequest";
 import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
 import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
-import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import { BillingResponse } from "../models/response/billingResponse";
@@ -243,11 +242,6 @@ export abstract class ApiService {
     apiUrl?: string
   ) => Promise<SendFileDownloadDataResponse>;
   renewSendFileUploadUrl: (sendId: string, fileId: string) => Promise<SendFileUploadDataResponse>;
-  renewAttachmentUploadUrl: (
-    id: string,
-    attachmentId: string
-  ) => Promise<AttachmentUploadDataResponse>;
-  postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
 
   getCollectionDetails: (
     organizationId: string,

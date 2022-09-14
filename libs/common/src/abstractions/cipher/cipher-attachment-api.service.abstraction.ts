@@ -52,4 +52,10 @@ export class CipherAttachmentApiServiceAbstraction {
     attachmentId: string,
     emergencyAccessId?: string
   ) => Promise<AttachmentResponse>;
+
+  renewAttachmentUploadUrl: (
+    id: string,
+    attachmentId: string
+  ) => Promise<AttachmentUploadDataResponse>;
+  postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
 }
