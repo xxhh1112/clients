@@ -18,10 +18,10 @@ export interface CollectionEditDialogParams {
 export class CollectionEditDialogComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
-  loading = true;
-  collectionView?: CollectionView;
+  collection?: CollectionView;
+  nestOptions: CollectionView[] = [];
   formGroup = this.formBuilder.group({
-    name: ["", BitValidators.forbiddenCharacters(["/", "@", "%"])],
+    name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
     parent: "",
   });
@@ -32,33 +32,41 @@ export class CollectionEditDialogComponent implements OnDestroy {
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
     collectionService: CollectionService
   ) {
-    if (this.params.collectionId) {
-      of(0)
-        .pipe(
-          switchMap(async () => {
-            const collection = await collectionService.get(params.collectionId);
-            const [view] = await collectionService.decryptMany([collection]);
-            return view;
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe((view) => {
-          this.collectionView = view;
+    of(0)
+      .pipe(
+        switchMap(() => collectionService.getAllDecrypted()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((collections) => {
+        if (params.collectionId) {
+          this.collection = collections.find((c) => c.id === this.collectionId);
+          this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
+
+          if (!this.collection) {
+            throw new Error("Could not find collection to edit.");
+          }
+
+          const nameParts = this.collection.name.split("/");
+          const name = nameParts[nameParts.length - 1];
+          const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : undefined;
+
           this.formGroup.patchValue({
-            name: view.name,
-            externalId: view.externalId,
-            parent: "",
+            name,
+            externalId: this.collection.externalId,
+            parent,
           });
-          this.loading = false;
-        });
-    } else {
-      this.loading = false;
-      this.collectionView = new CollectionView();
-    }
+        } else {
+          this.nestOptions = collections;
+        }
+      });
   }
 
   get collectionId() {
     return this.params.collectionId;
+  }
+
+  get loading() {
+    return this.params.collectionId && !this.collection;
   }
 
   submit() {

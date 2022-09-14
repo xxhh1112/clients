@@ -1,7 +1,7 @@
 <bit-dialog *ngIf="!loading">
   <span bitDialogTitle
     >{{ "editCollection" | i18n }}
-    <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collectionView.name }}</span>
+    <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection?.name }}</span>
   </span>
   <span bitDialogContent>
     <bit-tab-group label="Main Content Tabs">
@@ -21,8 +21,10 @@
           <bit-form-field>
             <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
             <select bitInput>
-              <option>Select</option>
-              <option>Other</option>
+              <option [ngValue]="undefined">-</option>
+              <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
+                {{ collection.name }}
+              </option>
             </select>
           </bit-form-field>
         </form>
