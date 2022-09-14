@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { ImportService } from "@bitwarden/common/abstractions/import.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -14,6 +15,7 @@ import { ImportComponent } from "../../../tools/import-export/import.component";
   selector: "app-org-import",
   templateUrl: "../../../tools/import-export/import.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class OrganizationImportComponent extends ImportComponent {
   organizationName: string;
 
@@ -25,12 +27,22 @@ export class OrganizationImportComponent extends ImportComponent {
     platformUtilsService: PlatformUtilsService,
     policyService: PolicyService,
     private organizationService: OrganizationService,
-    logService: LogService
+    logService: LogService,
+    modalService: ModalService
   ) {
-    super(i18nService, importService, router, platformUtilsService, policyService, logService);
+    super(
+      i18nService,
+      importService,
+      router,
+      platformUtilsService,
+      policyService,
+      logService,
+      modalService
+    );
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       this.successNavigate = ["organizations", this.organizationId, "vault"];

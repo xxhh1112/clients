@@ -32,10 +32,17 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f  # v1
-        with:
-          keyvault: "bitwarden-qa-kv"
-          secrets: "qa-aks-kubectl-credentials"
+        env:
+          KEYVAULT: bitwarden-qa-kv
+          SECRETS: |
+            qa-aks-kubectl-credentials
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "::set-output name=$i::$VALUE"
+          done
 
       - name: Login with qa-aks-kubectl-credentials SP
         uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010  # v1.1
@@ -81,7 +88,7 @@ jobs:
           environment-url: http://vault.qa.bitwarden.pw
           environment: 'Web Vault - QA'
           description: 'Deployment from branch ${{ github.ref_name }}'
-      
+
       - name: Update deployment status to In Progress
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
@@ -94,7 +101,7 @@ jobs:
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
 
       - name: Download latest cloud asset
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web

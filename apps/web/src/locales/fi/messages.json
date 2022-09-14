@@ -678,6 +678,9 @@
   "invalidMasterPassword": {
     "message": "Virheellinen pääsalasana"
   },
+  "invalidFilePassword": {
+    "message": "Tiedoston salasana on virheellinen. Käytä vientitiedoston luonnin yhteydessä syötettyä salasanaa."
+  },
   "lockNow": {
     "message": "Lukitse nyt"
   },
@@ -889,6 +892,48 @@
   },
   "fileFormat": {
     "message": "Tiedostomuoto"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Tämä vientitiedosto on suojattu salasanalla, joka on syötettävä ja salauksen purkamiseksi."
+  },
+  "exportPasswordDescription": {
+    "message": "Tätä salasanaa käytetään tämän tiedoston viennissä ja tuonnissa"
+  },
+  "confirmMasterPassword": {
+    "message": "Vahvista pääsalasana"
+  },
+  "confirmFormat": {
+    "message": "Vahvista muoto"
+  },
+  "filePassword": {
+    "message": "Tiedoston salasana"
+  },
+  "confirmFilePassword": {
+    "message": "Vahvista tiedoston salasana"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Salaa vienti tilisi salausavaimella, joka rajoittaa sen tuonnin vain tälle Bitwarden-tilille."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Salaa vienti salasanalla, joka mahdollistaa sen tuonnin mille tahansa Bitwarden-tilille."
+  },
+  "fileTypeHeading": {
+    "message": "Tiedostotyyppi"
+  },
+  "accountBackup": {
+    "message": "Tilin varmuuskopiointi"
+  },
+  "passwordProtected": {
+    "message": "Salasanasuojattu"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Tiedoston salasana\" ja \"Vahvista tiedoston salasana\" eivät täsmää."
+  },
+  "confirmVaultImport": {
+    "message": "Vahvista holvin tuonti"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Tiedosto on salasanasuojattu. Syötä tiedoston salasana tuodaksesi tiedot."
   },
   "exportSuccess": {
     "message": "Holvisi tiedot on viety."
@@ -1676,7 +1721,7 @@
     "message": "Laskutussuunnitelma"
   },
   "paymentType": {
-    "message": "Maksun tyyppi"
+    "message": "Maksutapa"
   },
   "accountCredit": {
     "message": "Tilin saldo",
@@ -2203,7 +2248,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "Olemme lähettäneet tiimillesi vahvistussähköpostin osoitteeseen "
+    "message": "Olemme lähettäneet vahvistusviestin tiimisi laskutussähköpostiosoitteeseen "
   },
   "monthly": {
     "message": "Kuukausittainen"
@@ -2641,7 +2686,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Jäsenen $ID$ organisaation käyttöoikeus on peruttu.",
+    "message": "Jäsenen $ID$ organisaation käyttöoikeus peruttiin.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4331,7 +4376,7 @@
     "message": "Kun jäseniä poistetaan, heillä ei ole enää pääsyä organisaation tietoihin, eikä poistoa ole mahdollista perua. Jos haluat lisätä jäsenen takaisin organisaatioon, hänet on kutsuttava ja perehdytettävä uudelleen. Käsittely voi kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
   },
   "revokeUsersWarning": {
-    "message": "Kun jäsenien käyttöoikeus perutaan, heillä ei ole enää pääsyä organisaation tietoihin. Voit palauttaa käyttöoikeudet nopeasti Perutut-välilehdeltä. Käsittely voi kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
+    "message": "Kun jäsenien käyttöoikeudet perutaan, heillä ei ole enää pääsyä organisaation tietoihin. Voit palauttaa käyttöoikeudet nopeasti Perutut-välilehdeltä. Käsittely voi kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
   },
   "theme": {
     "message": "Teema"
@@ -4364,7 +4409,7 @@
     "message": "Poisto onnistui."
   },
   "bulkRevokedMessage": {
-    "message": "Organisaation käyttöoikeuden peruminen onnistui"
+    "message": "Organisaation käyttöoikeus peruttiin onnistuneesti"
   },
   "bulkRestoredMessage": {
     "message": "Organisaation käyttöoikeuden palautus onnistui"
@@ -4379,10 +4424,10 @@
     "message": "Poista käyttäjiä"
   },
   "revokeUsers": {
-    "message": "Peru jäsenien käyttöoikeudet"
+    "message": "Peru käyttäjiä"
   },
   "restoreUsers": {
-    "message": "Palauta jäsenien käyttöoikeudet"
+    "message": "Palauta käyttäjiä"
   },
   "error": {
     "message": "Virhe"
@@ -4810,7 +4855,7 @@
     "message": "Key Connector URL"
   },
   "sendVerificationCode": {
-    "message": "Lähetä vahvistuskoodi sähköpostiisi"
+    "message": "Lähetä todennuskoodi sähköpostiisi"
   },
   "sendCode": {
     "message": "Lähetä koodi"
@@ -5111,17 +5156,17 @@
     "message": "Käyttäjätunnuksen tyyppi"
   },
   "plusAddressedEmail": {
-    "message": "Plus-osoitteinen sähköposti",
+    "message": "Plus+merkkinen sähköposti",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Käytä sähköpostipalvelusi aliosoiteominaisuuksia."
   },
   "catchallEmail": {
-    "message": "Catch-all-sähköpostiosoite"
+    "message": "Catch-all-sähköposti"
   },
   "catchallEmailDesc": {
-    "message": "Käytä verkkotunnuksellesi määritettyä catch-all-postilaatikkoa."
+    "message": "Käytä verkkotunnuksesi catch-all-postilaatikkoa."
   },
   "random": {
     "message": "Satunnainen",
@@ -5187,7 +5232,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Välitykseen käytetty sähköpostialias"
+    "message": "Sähköpostialias välitykseen"
   },
   "forwardedEmailDesc": {
     "message": "Luo sähköpostialias ulkoisella ohjauspalvelulla."

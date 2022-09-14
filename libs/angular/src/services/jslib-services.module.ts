@@ -1,4 +1,4 @@
-import { InjectionToken, Injector, LOCALE_ID, NgModule } from "@angular/core";
+import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
@@ -12,6 +12,8 @@ import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstrac
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
+import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/common/abstractions/environment.service";
@@ -30,6 +32,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { OrganizationService as OrganizationServiceAbstraction } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -45,14 +48,15 @@ import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
-import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/abstractions/token.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/abstractions/twoFactor.service";
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/globalState";
@@ -64,6 +68,8 @@ import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
+import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
+import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
 import { EncryptService } from "@bitwarden/common/services/encrypt.service";
@@ -77,6 +83,7 @@ import { FormValidationErrorsService } from "@bitwarden/common/services/formVali
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationService } from "@bitwarden/common/services/organization.service";
+import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
 import { PolicyApiService } from "@bitwarden/common/services/policy/policy-api.service";
 import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
@@ -86,14 +93,15 @@ import { SendService } from "@bitwarden/common/services/send.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateService } from "@bitwarden/common/services/state.service";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
-import { SyncService } from "@bitwarden/common/services/sync.service";
+import { SyncService } from "@bitwarden/common/services/sync/sync.service";
 import { TokenService } from "@bitwarden/common/services/token.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
 import { TwoFactorService } from "@bitwarden/common/services/twoFactor.service";
 import { UserVerificationApiService } from "@bitwarden/common/services/userVerification/userVerification-api.service";
 import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { UsernameGenerationService } from "@bitwarden/common/services/usernameGeneration.service";
-import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
 
 import { AuthGuard } from "../guards/auth.guard";
@@ -101,23 +109,21 @@ import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
 
 import { BroadcasterService } from "./broadcaster.service";
+import {
+  WINDOW,
+  MEMORY_STORAGE,
+  SECURE_STORAGE,
+  STATE_FACTORY,
+  STATE_SERVICE_USE_CACHE,
+  LOGOUT_CALLBACK,
+  LOCKED_CALLBACK,
+  LOCALES_DIRECTORY,
+  SYSTEM_LANGUAGE,
+  LOG_MAC_FAILURES,
+} from "./injection-tokens";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
 import { ValidationService } from "./validation.service";
-
-export const WINDOW = new InjectionToken<Window>("WINDOW");
-export const MEMORY_STORAGE = new InjectionToken<AbstractStorageService>("MEMORY_STORAGE");
-export const SECURE_STORAGE = new InjectionToken<AbstractStorageService>("SECURE_STORAGE");
-export const STATE_FACTORY = new InjectionToken<StateFactory>("STATE_FACTORY");
-export const STATE_SERVICE_USE_CACHE = new InjectionToken<boolean>("STATE_SERVICE_USE_CACHE");
-export const LOGOUT_CALLBACK = new InjectionToken<(expired: boolean, userId?: string) => void>(
-  "LOGOUT_CALLBACK"
-);
-export const LOCKED_CALLBACK = new InjectionToken<() => void>("LOCKED_CALLBACK");
-export const CLIENT_TYPE = new InjectionToken<boolean>("CLIENT_TYPE");
-export const LOCALES_DIRECTORY = new InjectionToken<string>("LOCALES_DIRECTORY");
-export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
-export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
 
 @NgModule({
   declarations: [],
@@ -343,6 +349,16 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       deps: [StateServiceAbstraction],
     },
     {
+      provide: VaultTimeoutSettingsServiceAbstraction,
+      useClass: VaultTimeoutSettingsService,
+      deps: [
+        CryptoServiceAbstraction,
+        TokenServiceAbstraction,
+        PolicyServiceAbstraction,
+        StateServiceAbstraction,
+      ],
+    },
+    {
       provide: VaultTimeoutServiceAbstraction,
       useClass: VaultTimeoutService,
       deps: [
@@ -353,11 +369,10 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
         PlatformUtilsServiceAbstraction,
         MessagingServiceAbstraction,
         SearchServiceAbstraction,
-        TokenServiceAbstraction,
-        PolicyServiceAbstraction,
         KeyConnectorServiceAbstraction,
         StateServiceAbstraction,
         AuthServiceAbstraction,
+        VaultTimeoutSettingsServiceAbstraction,
         LOCKED_CALLBACK,
         LOGOUT_CALLBACK,
       ],
@@ -388,6 +403,7 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
         CipherServiceAbstraction,
         ApiServiceAbstraction,
         CryptoServiceAbstraction,
+        CryptoFunctionServiceAbstraction,
       ],
     },
     {
@@ -511,6 +527,21 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
     {
       provide: UserVerificationApiServiceAbstraction,
       useClass: UserVerificationApiService,
+      deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: OrganizationApiServiceAbstraction,
+      useClass: OrganizationApiService,
+      deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: ConfigServiceAbstraction,
+      useClass: ConfigService,
+      deps: [StateServiceAbstraction, ConfigApiServiceAbstraction],
+    },
+    {
+      provide: ConfigApiServiceAbstraction,
+      useClass: ConfigApiService,
       deps: [ApiServiceAbstraction],
     },
   ],
