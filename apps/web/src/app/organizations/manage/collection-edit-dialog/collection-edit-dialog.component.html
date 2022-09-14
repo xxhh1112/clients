@@ -1,7 +1,12 @@
 <bit-dialog *ngIf="!loading">
-  <span bitDialogTitle
-    >{{ "editCollection" | i18n }}
-    <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection?.name }}</span>
+  <span bitDialogTitle>
+    <ng-container *ngIf="collection; else newCollectionTitle">
+      {{ "editCollection" | i18n }}
+      <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection.name }}</span>
+    </ng-container>
+    <ng-template #newCollectionTitle>
+      {{ "newCollection" | i18n }}
+    </ng-template>
   </span>
   <span bitDialogContent>
     <form [formGroup]="formGroup" (ngSubmit)="submit()">
