@@ -4,33 +4,28 @@
     <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection?.name }}</span>
   </span>
   <span bitDialogContent>
-    <bit-tab-group label="Main Content Tabs">
-      <bit-tab [label]="'collectionInfo' | i18n">
-        <form [formGroup]="formGroup" (ngSubmit)="submit()">
-          <bit-form-field>
-            <bit-label>{{ "name" | i18n }}</bit-label>
-            <input bitInput formControlName="name" required />
-          </bit-form-field>
+    <form [formGroup]="formGroup" (ngSubmit)="submit()">
+      <bit-form-field>
+        <bit-label>{{ "name" | i18n }}</bit-label>
+        <input bitInput formControlName="name" required />
+      </bit-form-field>
 
-          <bit-form-field>
-            <bit-label>{{ "externalId" | i18n }}</bit-label>
-            <input bitInput formControlName="externalId" />
-            <bit-hint>{{ "externalIdDesc" | i18n }}</bit-hint>
-          </bit-form-field>
+      <bit-form-field>
+        <bit-label>{{ "externalId" | i18n }}</bit-label>
+        <input bitInput formControlName="externalId" />
+        <bit-hint>{{ "externalIdDesc" | i18n }}</bit-hint>
+      </bit-form-field>
 
-          <bit-form-field>
-            <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
-            <select bitInput>
-              <option [ngValue]="undefined">-</option>
-              <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
-                {{ collection.name }}
-              </option>
-            </select>
-          </bit-form-field>
-        </form>
-      </bit-tab>
-      <bit-tab [label]="'access' | i18n"> </bit-tab>
-    </bit-tab-group>
+      <bit-form-field>
+        <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
+        <select bitInput>
+          <option [ngValue]="undefined">-</option>
+          <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
+            {{ collection.name }}
+          </option>
+        </select>
+      </bit-form-field>
+    </form>
   </span>
   <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
     <button bitButton buttonType="primary" (click)="dialogRef.close()">Save</button>
