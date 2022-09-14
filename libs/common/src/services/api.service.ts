@@ -1791,22 +1791,6 @@ export class ApiService implements ApiServiceAbstraction {
     return new ListResponse(r, EventResponse);
   }
 
-  async getEventsCipher(
-    id: string,
-    start: string,
-    end: string,
-    token: string
-  ): Promise<ListResponse<EventResponse>> {
-    const r = await this.send(
-      "GET",
-      this.addEventParameters("/ciphers/" + id + "/events", start, end, token),
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, EventResponse);
-  }
-
   async getEventsOrganization(
     id: string,
     start: string,
@@ -2302,6 +2286,21 @@ export class ApiService implements ApiServiceAbstraction {
     }
   }
 
+  addEventParameters(base: string, start: string, end: string, token: string): string {
+    if (start != null) {
+      base += "?start=" + start;
+    }
+    if (end != null) {
+      base += base.indexOf("?") > -1 ? "&" : "?";
+      base += "end=" + end;
+    }
+    if (token != null) {
+      base += base.indexOf("?") > -1 ? "&" : "?";
+      base += "continuationToken=" + token;
+    }
+    return base;
+  }
+
   private async handleError(
     response: Response,
     tokenError: boolean,
@@ -2340,21 +2339,6 @@ export class ApiService implements ApiServiceAbstraction {
       return "include";
     }
     return undefined;
-  }
-
-  private addEventParameters(base: string, start: string, end: string, token: string) {
-    if (start != null) {
-      base += "?start=" + start;
-    }
-    if (end != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "end=" + end;
-    }
-    if (token != null) {
-      base += base.indexOf("?") > -1 ? "&" : "?";
-      base += "continuationToken=" + token;
-    }
-    return base;
   }
 
   private isJsonResponse(response: Response): boolean {

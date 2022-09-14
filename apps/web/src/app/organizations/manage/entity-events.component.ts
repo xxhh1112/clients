@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -40,7 +41,8 @@ export class EntityEventsComponent implements OnInit {
     private eventService: EventService,
     private platformUtilsService: PlatformUtilsService,
     private userNamePipe: UserNamePipe,
-    private logService: LogService
+    private logService: LogService,
+    private cipherApiService: CipherApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -101,7 +103,7 @@ export class EntityEventsComponent implements OnInit {
           clearExisting ? null : this.continuationToken
         );
       } else {
-        promise = this.apiService.getEventsCipher(
+        promise = this.cipherApiService.getEventsCipher(
           this.entityId,
           dates[0],
           dates[1],

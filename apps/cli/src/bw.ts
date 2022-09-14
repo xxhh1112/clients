@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalCipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
@@ -113,6 +114,7 @@ export class Main {
   userVerificationApiService: UserVerificationApiService;
   cipherAttachmentService: CipherAttachmentApiServiceAbstraction;
   cipherApiService: CipherApiServiceAbstraction;
+  cipherAdminService: CipherAdminServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -333,7 +335,7 @@ export class Main {
       this.apiService,
       this.cryptoService,
       this.cryptoFunctionService,
-      this.cipherApiService
+      this.cipherAdminService
     );
 
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);

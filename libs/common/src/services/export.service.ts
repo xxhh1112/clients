@@ -1,7 +1,7 @@
 import * as papa from "papaparse";
 import { firstValueFrom } from "rxjs";
 
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 
 import { ApiService } from "../abstractions/api.service";
 import { CipherService } from "../abstractions/cipher/cipher.service.abstraction";
@@ -37,7 +37,7 @@ export class ExportService implements ExportServiceAbstraction {
     private apiService: ApiService,
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService,
-    private cipherApiService: CipherApiServiceAbstraction
+    private cipherAdminService: CipherAdminServiceAbstraction
   ) {}
 
   async getExport(format: ExportFormat = "csv", organizationId?: string): Promise<string> {
@@ -354,7 +354,7 @@ export class ExportService implements ExportServiceAbstraction {
     );
 
     promises.push(
-      this.cipherApiService.getCiphersOrganization(organizationId).then((c) => {
+      this.cipherAdminService.getCiphersOrganization(organizationId).then((c) => {
         const cipherPromises: any = [];
         if (c != null && c.data != null && c.data.length > 0) {
           c.data

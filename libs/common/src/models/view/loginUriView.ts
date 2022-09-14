@@ -22,6 +22,10 @@ const CanLaunchWhitelist = [
   "androidapp://",
 ];
 
+const DomainMatchBlacklist = new Map<string, Set<string>>([
+  ["google.com", new Set(["script.google.com"])],
+]);
+
 export class LoginUriView implements View {
   match: UriMatchType = null;
 
@@ -129,5 +133,62 @@ export class LoginUriView implements View {
 
   static fromJSON(obj: Partial<Jsonify<LoginUriView>>): LoginUriView {
     return Object.assign(new LoginUriView(), obj);
+  }
+
+  static cipherAppliesToUrl(
+    match: UriMatchType,
+    domain: string,
+    matchingDomains: any[],
+    loginUrl: LoginUriView,
+    url: string
+  ): boolean {
+    switch (match) {
+      case UriMatchType.Domain: {
+        if (
+          domain != null &&
+          loginUrl.domain != null &&
+          matchingDomains.indexOf(loginUrl.domain) > -1
+        ) {
+          if (DomainMatchBlacklist.has(loginUrl.domain)) {
+            const domainUrlHost = Utils.getHost(url);
+            if (!DomainMatchBlacklist.get(loginUrl.domain).has(domainUrlHost)) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        }
+        break;
+      }
+      case UriMatchType.Host: {
+        const urlHost = Utils.getHost(url);
+        if (urlHost != null && urlHost === Utils.getHost(loginUrl.uri)) {
+          return true;
+        }
+        break;
+      }
+      case UriMatchType.Exact: {
+        if (url === loginUrl.uri) {
+          return true;
+        }
+        break;
+      }
+      case UriMatchType.StartsWith: {
+        if (url.startsWith(loginUrl.uri)) {
+          return true;
+        }
+        break;
+      }
+      case UriMatchType.RegularExpression: {
+        const regex = new RegExp(loginUrl.uri, "i");
+        if (regex.test(url)) {
+          return true;
+        }
+        break;
+      }
+      case UriMatchType.Never:
+      default:
+        break;
+    }
   }
 }

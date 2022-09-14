@@ -564,12 +564,6 @@ export abstract class ApiService {
   deleteProviderOrganization: (providerId: string, organizationId: string) => Promise<any>;
 
   getEvents: (start: string, end: string, token: string) => Promise<ListResponse<EventResponse>>;
-  getEventsCipher: (
-    id: string,
-    start: string,
-    end: string,
-    token: string
-  ) => Promise<ListResponse<EventResponse>>;
   getEventsOrganization: (
     id: string,
     start: string,
@@ -637,4 +631,5 @@ export abstract class ApiService {
   ) => Promise<void>;
   getKeyConnectorAlive: (keyConnectorUrl: string) => Promise<void>;
   getOrganizationExport: (organizationId: string) => Promise<OrganizationExportResponse>;
+  addEventParameters: (base: string, start: string, end: string, token: string) => string;
 }

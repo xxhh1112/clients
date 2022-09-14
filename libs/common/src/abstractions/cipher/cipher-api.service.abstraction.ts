@@ -10,13 +10,13 @@ import { ImportCiphersRequest } from "@bitwarden/common/models/request/importCip
 import { ImportOrganizationCiphersRequest } from "@bitwarden/common/models/request/importOrganizationCiphersRequest";
 import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
+import { EventResponse } from "@bitwarden/common/models/response/eventResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
 export class CipherApiServiceAbstraction {
   getCipher: (id: string) => Promise<CipherResponse>;
   getFullCipherDetails: (id: string) => Promise<CipherResponse>;
-  getCiphersOrganization: (organizationId: string) => Promise<ListResponse<CipherResponse>>;
   postCipher: (request: CipherRequest) => Promise<CipherResponse>;
   postCipherCreate: (request: CipherCreateRequest) => Promise<CipherResponse>;
   putCipher: (id: string, request: CipherRequest) => Promise<CipherResponse>;
@@ -27,16 +27,12 @@ export class CipherApiServiceAbstraction {
   putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
   postImportCiphers: (request: ImportCiphersRequest) => Promise<any>;
-  putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
-  getCipherAdmin: (id: string) => Promise<CipherResponse>;
-
-  postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
-  putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
-  deleteCipherAdmin: (id: string) => Promise<any>;
-  deleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putDeleteCipherAdmin: (id: string) => Promise<any>;
-  putDeleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putRestoreCipherAdmin: (id: string) => Promise<CipherResponse>;
+  getEventsCipher: (
+    id: string,
+    start: string,
+    end: string,
+    token: string
+  ) => Promise<ListResponse<EventResponse>>;
   postImportOrganizationCiphers: (
     organizationId: string,
     request: ImportOrganizationCiphersRequest
@@ -45,7 +41,6 @@ export class CipherApiServiceAbstraction {
   putRestoreManyCiphers: (
     request: CipherBulkRestoreRequest
   ) => Promise<ListResponse<CipherResponse>>;
-  getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
 
   shareManyWithServer: (

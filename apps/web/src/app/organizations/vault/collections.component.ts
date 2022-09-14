@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -26,7 +27,8 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     i18nService: I18nService,
     cipherService: CipherService,
     logService: LogService,
-    cipherApiService: CipherApiServiceAbstraction
+    cipherApiService: CipherApiServiceAbstraction,
+    private cipherAdminService: CipherAdminServiceAbstraction
   ) {
     super(
       collectionService,
@@ -43,7 +45,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     if (!this.organization.canViewAllCollections) {
       return await super.loadCipher();
     }
-    const response = await this.cipherApiService.getCipherAdmin(this.cipherId);
+    const response = await this.cipherAdminService.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 
@@ -64,7 +66,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
   protected saveCollections() {
     if (this.organization.canEditAnyCollection) {
       const request = new CipherCollectionsRequest(this.cipherDomain.collectionIds);
-      return this.cipherApiService.putCipherCollectionsAdmin(this.cipherId, request);
+      return this.cipherAdminService.putCipherCollectionsAdmin(this.cipherId, request);
     } else {
       return super.saveCollections();
     }

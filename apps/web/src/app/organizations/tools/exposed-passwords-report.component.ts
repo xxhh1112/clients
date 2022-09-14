@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-api.service.abstraction";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherService } from "@bitwarden/common/abstractions/cipher/cipher.service.abstraction";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
@@ -31,7 +31,7 @@ export class ExposedPasswordsReportComponent extends BaseExposedPasswordsReportC
     private organizationService: OrganizationService,
     private route: ActivatedRoute,
     passwordRepromptService: PasswordRepromptService,
-    private cipherApiService: CipherApiServiceAbstraction
+    private cipherAdminService: CipherAdminServiceAbstraction
   ) {
     super(
       cipherService,
@@ -52,7 +52,7 @@ export class ExposedPasswordsReportComponent extends BaseExposedPasswordsReportC
   }
 
   getAllCiphers(): Promise<CipherView[]> {
-    return this.cipherApiService.getAllFromApiForOrganization(this.organization.id);
+    return this.cipherAdminService.getAllFromApiForOrganization(this.organization.id);
   }
 
   canManageCipher(c: CipherView): boolean {

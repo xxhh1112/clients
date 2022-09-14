@@ -1,3 +1,5 @@
+import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
+
 import { InternalCipherService as InternalCipherServiceAbstraction } from "../../abstractions/cipher/cipher.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -29,10 +31,6 @@ import { CipherView } from "../../models/view/cipherView";
 import { FieldView } from "../../models/view/fieldView";
 import { PasswordHistoryView } from "../../models/view/passwordHistoryView";
 import { View } from "../../models/view/view";
-
-const DomainMatchBlacklist = new Map<string, Set<string>>([
-  ["google.com", new Set(["script.google.com"])],
-]);
 
 export class CipherService implements InternalCipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
@@ -405,27 +403,9 @@ export class CipherService implements InternalCipherServiceAbstraction {
     }
 
     const domain = Utils.getDomain(url);
-    const eqDomainsPromise =
-      domain == null
-        ? Promise.resolve([])
-        : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-            let matches: any[] = [];
-            eqDomains.forEach((eqDomain) => {
-              if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-                matches = matches.concat(eqDomain);
-              }
-            });
 
-            if (!matches.length) {
-              matches.push(domain);
-            }
-
-            return matches;
-          });
-
-    const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
-    const matchingDomains = result[0];
-    const ciphers = result[1];
+    const matchingDomains = await this.getEquivalentDomains(domain);
+    const ciphers = await this.getAllDecrypted();
 
     if (defaultMatch == null) {
       defaultMatch = await this.stateService.getDefaultUriMatch();
@@ -450,49 +430,11 @@ export class CipherService implements InternalCipherServiceAbstraction {
           }
 
           const match = u.match == null ? defaultMatch : u.match;
-          switch (match) {
-            case UriMatchType.Domain:
-              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
-                if (DomainMatchBlacklist.has(u.domain)) {
-                  const domainUrlHost = Utils.getHost(url);
-                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
-                    return true;
-                  }
-                } else {
-                  return true;
-                }
-              }
-              break;
-            case UriMatchType.Host: {
-              const urlHost = Utils.getHost(url);
-              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-                return true;
-              }
-              break;
-            }
-            case UriMatchType.Exact:
-              if (url === u.uri) {
-                return true;
-              }
-              break;
-            case UriMatchType.StartsWith:
-              if (url.startsWith(u.uri)) {
-                return true;
-              }
-              break;
-            case UriMatchType.RegularExpression:
-              try {
-                const regex = new RegExp(u.uri, "i");
-                if (regex.test(url)) {
-                  return true;
-                }
-              } catch (e) {
-                this.logService.error(e);
-              }
-              break;
-            case UriMatchType.Never:
-            default:
-              break;
+
+          try {
+            LoginUriView.cipherAppliesToUrl(match, domain, matchingDomains, u, url);
+          } catch (e) {
+            this.logService.error(e);
           }
         }
       }
@@ -606,6 +548,11 @@ export class CipherService implements InternalCipherServiceAbstraction {
         ciphers[c.id] = c;
       });
     }
+    await this.clearDecryptedCiphersState();
+    await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  async replace(ciphers: { [id: string]: CipherData }): Promise<any> {
     await this.clearDecryptedCiphersState();
     await this.stateService.setEncryptedCiphers(ciphers);
   }
@@ -734,6 +681,25 @@ export class CipherService implements InternalCipherServiceAbstraction {
 
     await this.clearCache();
     await this.stateService.setEncryptedCiphers(ciphers);
+  }
+
+  private getEquivalentDomains(domain: string): Promise<any[]> {
+    return domain == null
+      ? Promise.resolve([])
+      : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
+          let matches: any[] = [];
+          eqDomains.forEach((eqDomain) => {
+            if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+              matches = matches.concat(eqDomain);
+            }
+          });
+
+          if (!matches.length) {
+            matches.push(domain);
+          }
+
+          return matches;
+        });
   }
 
   private async encryptObjProperty<V extends View, D extends Domain>(
