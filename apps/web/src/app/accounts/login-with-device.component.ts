@@ -17,7 +17,8 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { PasswordlessLogInCredentials, PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
 @Component({
@@ -125,20 +126,20 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
     const response = await this.apiService.getAuthResponse(requestId, accessCode);
+    console.log(response);
     if (response.requestApproved) {
-      //const decKey = await this.cryptoService.rsaDecrypt(response.key, this.keypair[1]);
+      const decKey = await this.cryptoService.rsaDecrypt(response.key, this.keypair[1]);
       const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
         response.masterPasswordHash,
-        privateKeyVal
+        this.keypair[1]
       );
-      const masterPassword = Utils.fromBufferToB64(decMasterPasswordHash);
-      // const key = new SymmetricCryptoKey(decKey);
-      // const localHashedPassword = Utils.fromBufferToB64(decMasterPasswordHash);
-
+      const key = new SymmetricCryptoKey(decKey);
+      const localHashedPassword = Utils.fromBufferToB64(decMasterPasswordHash);
+      console.log('key::', key.encKeyB64);
+      console.log('hashedPassword::', localHashedPassword);
       try {
-        const credentials = new PasswordLogInCredentials(this.email, masterPassword);
+        const credentials = new PasswordlessLogInCredentials(this.email, localHashedPassword, key);
         await this.authService.logIn(credentials);
-
         const disableFavicon = await this.stateService.getDisableFavicon();
         await this.stateService.setDisableFavicon(!!disableFavicon);
         if (this.onSuccessfulLogin != null) {

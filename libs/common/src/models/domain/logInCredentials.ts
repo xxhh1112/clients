@@ -37,10 +37,8 @@ export class PasswordlessLogInCredentials {
 
   constructor(
     public email: string,
-    public accessCode: string,
-    public authRequestId: string,
-    public key: SymmetricCryptoKey,
-    public localHashedPassword: string,
-    public masterPassword: string
-  ) {}
+    public masterPasswordHashB64: string,
+    public decKey: SymmetricCryptoKey,
+    public twoFactor?: TokenRequestTwoFactor) {
+    }
 }

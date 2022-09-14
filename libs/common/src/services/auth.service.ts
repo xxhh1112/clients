@@ -18,6 +18,7 @@ import { AuthenticationType } from "../enums/authenticationType";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
 import { ApiLogInStrategy } from "../misc/logInStrategies/apiLogin.strategy";
+import { PasswordlessLogInStrategy } from "../misc/logInStrategies/passwordlessLogin.strategy";
 import { PasswordLogInStrategy } from "../misc/logInStrategies/passwordLogin.strategy";
 import { SsoLogInStrategy } from "../misc/logInStrategies/ssoLogin.strategy";
 import { AuthResult } from "../models/domain/authResult";
@@ -46,7 +47,7 @@ export class AuthService implements AuthServiceAbstraction {
       : null;
   }
 
-  private logInStrategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
+  private logInStrategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy;
   private sessionTimeout: any;
 
   private pushNotificationSubject = new Subject<string>();
@@ -75,7 +76,7 @@ export class AuthService implements AuthServiceAbstraction {
   ): Promise<AuthResult> {
     this.clearState();
 
-    let strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
+    let strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy;
 
     switch (credentials.type) {
       case AuthenticationType.Password:
@@ -122,7 +123,7 @@ export class AuthService implements AuthServiceAbstraction {
         );
         break;
       case AuthenticationType.Passwordless:
-        strategy = new ApiLogInStrategy(
+        strategy = new PasswordlessLogInStrategy(
           this.cryptoService,
           this.apiService,
           this.tokenService,
@@ -132,8 +133,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
-          this.environmentService,
-          this.keyConnectorService
+          this
         );
         break;
     }
@@ -239,7 +239,7 @@ export class AuthService implements AuthServiceAbstraction {
     return this.pushNotificationSubject.asObservable();
   }
 
-  private saveState(strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy) {
+  private saveState(strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy) {
     this.logInStrategy = strategy;
     this.startSessionTimeout();
   }
