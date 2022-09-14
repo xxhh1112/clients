@@ -80,12 +80,17 @@ export class FileUploadService implements FileUploadServiceAbstraction {
           await this.bitwardenFileUploadService.upload(
             encryptedFileName.encryptedString,
             encryptedFileData,
-            (fd) => this.apiService.postAttachmentFile(response.id, uploadData.attachmentId, fd)
+            (fd) =>
+              this.cipherAttachmentService.postAttachmentFile(
+                response.id,
+                uploadData.attachmentId,
+                fd
+              )
           );
           break;
         case FileUploadType.Azure: {
           const renewalCallback = async () => {
-            const renewalResponse = await this.apiService.renewAttachmentUploadUrl(
+            const renewalResponse = await this.cipherAttachmentService.renewAttachmentUploadUrl(
               response.id,
               uploadData.attachmentId
             );
