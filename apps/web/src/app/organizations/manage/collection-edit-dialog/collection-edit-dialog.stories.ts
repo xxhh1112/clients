@@ -1,8 +1,11 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { ReactiveFormsModule } from "@angular/forms";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { Utils } from "@bitwarden/common/src/misc/utils";
 import { ButtonModule, DialogModule, FormFieldModule, TabsModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
@@ -11,6 +14,11 @@ import {
   CollectionEditDialogComponent,
   CollectionEditDialogParams,
 } from "./collection-edit-dialog.components";
+
+interface ProviderData {
+  collectionId: string;
+  collections: CollectionView[];
+}
 
 class DialogRefMock implements Partial<DialogRef> {}
 
@@ -26,6 +34,7 @@ export default {
         ButtonModule,
         TabsModule,
         FormFieldModule,
+        ReactiveFormsModule,
       ],
       providers: [
         {
@@ -39,23 +48,53 @@ export default {
       ],
     }),
   ],
-  args: {
-    collectionId: undefined,
-  } as CollectionEditDialogParams,
 } as Meta;
 
-function paramsProvider(params: CollectionEditDialogParams) {
-  return {
-    provide: DIALOG_DATA,
-    useValue: params,
-  };
-}
+let collections = Array.from({ length: 10 }, (x, i) => createCollection(`Collection ${i}`));
+collections = collections.concat(
+  collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`))
+);
 
-const Template: Story<CollectionEditDialogComponent> = (args: CollectionEditDialogParams) => ({
+const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
+  args: CollectionEditDialogParams
+) => ({
   moduleMetadata: {
-    providers: [paramsProvider(args)],
+    providers: providers({ collectionId: undefined, collections }),
   },
   template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
 });
 
-export const Edit = Template.bind({});
+export const NewCollection = NewCollectionTemplate.bind({});
+
+const ExistingCollectionTemplate: Story<CollectionEditDialogComponent> = (
+  args: CollectionEditDialogParams
+) => ({
+  moduleMetadata: {
+    providers: providers({ collectionId: collections[collections.length - 1].id, collections }),
+  },
+  template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
+});
+
+export const ExistingCollection = ExistingCollectionTemplate.bind({});
+
+function providers(data: ProviderData) {
+  return [
+    {
+      provide: DIALOG_DATA,
+      useValue: { collectionId: data.collectionId } as CollectionEditDialogParams,
+    },
+    {
+      provide: CollectionService,
+      useValue: {
+        getAllDecrypted: () => Promise.resolve(data.collections),
+      } as Partial<CollectionService>,
+    },
+  ];
+}
+
+function createCollection(name: string, id = Utils.newGuid()) {
+  const collection = new CollectionView();
+  collection.id = id;
+  collection.name = name;
+  return collection;
+}
