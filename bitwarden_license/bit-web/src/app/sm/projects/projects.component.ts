@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ProjectApiService } from "./project-api.service";
+import { ProjectService } from "./project-api.service";
 import { ProjectResponse } from "./responses/project.response";
 
 @Component({
@@ -13,7 +13,7 @@ export class ProjectsComponent implements OnInit {
 
   projects: ProjectResponse[];
 
-  constructor(private route: ActivatedRoute, private projectsApiService: ProjectApiService) {}
+  constructor(private route: ActivatedRoute, private projectsApiService: ProjectService) {}
 
   ngOnInit() {
     this.route.params.subscribe(async (params: any) => {
