@@ -8,7 +8,7 @@ import { ProjectResponse } from "./responses/project.response";
 @Injectable({
   providedIn: "any",
 })
-export class ProjectApiService {
+export class ProjectService {
   constructor(private apiService: ApiService) {}
 
   async getProjectsByOrganizationId(
