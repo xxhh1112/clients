@@ -4,7 +4,7 @@ import { SharedModule } from "src/app/shared";
 
 import { LayoutComponent } from "./layout/layout.component";
 import { NavigationComponent } from "./layout/navigation.component";
-import { SecretsSharedModule } from "./shared/secretsshared.module";
+import { SecretsSharedModule } from "./shared/sm-shared.module";
 import { SecretsManagerRoutingModule } from "./sm-routing.module";
 import { SMGuard } from "./sm.guard";
 

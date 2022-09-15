@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { SharedModule } from "src/app/shared/shared.module";
 
-import { SecretsSharedModule } from "../shared/secretsshared.module";
+import { SecretsSharedModule } from "../shared/sm-shared.module";
 
 import { SecretsListComponent } from "./secrets-list.component";
 import { SecretsRoutingModule } from "./secrets-routing.module";
