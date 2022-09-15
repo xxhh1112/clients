@@ -17,6 +17,7 @@ import {
 
 interface ProviderData {
   collectionId: string;
+  organizationId: string;
   collections: CollectionView[];
 }
 
@@ -50,16 +51,17 @@ export default {
   ],
 } as Meta;
 
+const organizationId = Utils.newGuid();
 let collections = Array.from({ length: 10 }, (x, i) => createCollection(`Collection ${i}`));
 collections = collections.concat(
   collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`))
 );
 
 const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
-  args: CollectionEditDialogParams
+  args: CollectionEditDialogComponent
 ) => ({
   moduleMetadata: {
-    providers: providers({ collectionId: undefined, collections }),
+    providers: providers({ collectionId: undefined, organizationId, collections }),
   },
   template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
 });
@@ -67,10 +69,14 @@ const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
 export const NewCollection = NewCollectionTemplate.bind({});
 
 const ExistingCollectionTemplate: Story<CollectionEditDialogComponent> = (
-  args: CollectionEditDialogParams
+  args: CollectionEditDialogComponent
 ) => ({
   moduleMetadata: {
-    providers: providers({ collectionId: collections[collections.length - 1].id, collections }),
+    providers: providers({
+      collectionId: collections[collections.length - 1].id,
+      organizationId,
+      collections,
+    }),
   },
   template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
 });

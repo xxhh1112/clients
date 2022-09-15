@@ -9,6 +9,7 @@ import { BitValidators } from "@bitwarden/components";
 
 export interface CollectionEditDialogParams {
   collectionId: string;
+  organizationId: string;
 }
 
 @Component({

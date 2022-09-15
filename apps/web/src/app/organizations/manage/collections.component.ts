@@ -121,7 +121,7 @@ export class CollectionsComponent implements OnInit {
 
   async new_edit(collection: CollectionView) {
     this.dialogService.open(CollectionEditDialogComponent, {
-      data: { collectionId: collection.id },
+      data: { collectionId: collection.id, organizationId: collection.organizationId },
     });
   }
 
