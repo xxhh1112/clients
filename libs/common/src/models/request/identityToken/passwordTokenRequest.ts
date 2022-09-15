@@ -4,7 +4,6 @@ import { CaptchaProtectedRequest } from "../captchaProtectedRequest";
 import { DeviceRequest } from "../deviceRequest";
 
 import { TokenRequest } from "./tokenRequest";
-import { TokenRequestPasswordless } from "./tokenRequestPasswordless";
 import { TokenRequestTwoFactor } from "./tokenRequestTwoFactor";
 
 export class PasswordTokenRequest extends TokenRequest implements CaptchaProtectedRequest {
@@ -13,10 +12,9 @@ export class PasswordTokenRequest extends TokenRequest implements CaptchaProtect
     public masterPasswordHash: string,
     public captchaResponse: string,
     protected twoFactor: TokenRequestTwoFactor,
-    device?: DeviceRequest,
-    protected passwordless?: TokenRequestPasswordless
+    device?: DeviceRequest
   ) {
-    super(twoFactor, device, passwordless);
+    super(twoFactor, device);
   }
 
   toIdentityToken(clientId: ClientType) {
