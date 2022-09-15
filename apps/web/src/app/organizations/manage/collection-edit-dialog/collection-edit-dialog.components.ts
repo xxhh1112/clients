@@ -35,7 +35,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
   ) {
     of(0)
       .pipe(
-        switchMap(() => collectionService.getAllDecrypted()),
+        switchMap(() => collectionService.getAllAdminDecrypted(params.organizationId)),
         takeUntil(this.destroy$)
       )
       .subscribe((collections) => {

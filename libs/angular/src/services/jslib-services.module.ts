@@ -274,7 +274,13 @@ import { ValidationService } from "./validation.service";
     {
       provide: CollectionServiceAbstraction,
       useClass: CollectionService,
-      deps: [CryptoServiceAbstraction, I18nServiceAbstraction, StateServiceAbstraction],
+      deps: [
+        ApiServiceAbstraction,
+        OrganizationServiceAbstraction,
+        CryptoServiceAbstraction,
+        I18nServiceAbstraction,
+        StateServiceAbstraction,
+      ],
     },
     {
       provide: EnvironmentServiceAbstraction,
