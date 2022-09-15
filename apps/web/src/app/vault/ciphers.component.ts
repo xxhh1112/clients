@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
+import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -34,7 +34,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onAttachmentsClicked = new EventEmitter<CipherView>();
   @Output() onShareClicked = new EventEmitter<CipherView>();
-  @Output() onCollectionsClicked = new EventEmitter<CipherView>();
+  @Output() onEditCollectionsClicked = new EventEmitter<CipherView>();
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
 
@@ -146,8 +146,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.onShareClicked.emit(c);
   }
 
-  collections(c: CipherView) {
-    this.onCollectionsClicked.emit(c);
+  editCollections(c: CipherView) {
+    this.onEditCollectionsClicked.emit(c);
   }
 
   navigateCollection(node: TreeNode<CollectionFilter>) {

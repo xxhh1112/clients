@@ -185,7 +185,11 @@
               <i class="bwi bwi-fw bwi-arrow-circle-right" aria-hidden="true"></i>
               {{ "moveToOrganization" | i18n }}
             </button>
-            <button bitMenuItem *ngIf="c.organizationId && !c.isDeleted" (click)="collections(c)">
+            <button
+              bitMenuItem
+              *ngIf="c.organizationId && !c.isDeleted"
+              (click)="editCollections(c)"
+            >
               <i class="bwi bwi-fw bwi-collection" aria-hidden="true"></i>
               {{ "collections" | i18n }}
             </button>
