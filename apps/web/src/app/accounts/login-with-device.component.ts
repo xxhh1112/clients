@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
+
 import { CaptchaProtectedComponent } from "@bitwarden/angular/components/captchaProtected.component";
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -16,8 +17,8 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { PasswordlessLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
 @Component({
@@ -103,14 +104,18 @@ export class LoginWithDeviceComponent
 
     this.fingerPrint = fingerprint;
 
-    const reqResponse = await this.apiService.postAuthRequest(request);
+    try {
+      const reqResponse = await this.apiService.postAuthRequest(request);
 
-    if (reqResponse.id) {
-      this.anonymousHubService.createHubConnection(reqResponse.id);
+      if (reqResponse.id) {
+        this.anonymousHubService.createHubConnection(reqResponse.id);
+
+        this.accessCode = accessCode;
+        this.privateKeyValue = this.keypair[1];
+      }
+    } catch (e) {
+      this.logService.error(e);
     }
-
-    this.accessCode = accessCode;
-    this.privateKeyValue = this.keypair[1];
 
     setTimeout(() => {
       this.resendNotification = true;

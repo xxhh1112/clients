@@ -8,7 +8,6 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { TokenService } from "../../abstractions/token.service";
 import { TwoFactorService } from "../../abstractions/twoFactor.service";
-import { HashPurpose } from "../../enums/hashPurpose";
 import { AuthResult } from "../../models/domain/authResult";
 import { PasswordlessLogInCredentials } from "../../models/domain/logInCredentials";
 import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";

@@ -22,8 +22,9 @@
 
       <div class="tw-mb-6">
         <h4 class="tw-font-semibold">{{ "fingerprintPhraseHeader" | i18n }}</h4>
-
-        <code class="">{{ fingerPrint }}</code>
+        <p>
+          <code>{{ fingerPrint }}</code>
+        </p>
       </div>
 
       <div class="tw-my-10" *ngIf="resendNotification">
@@ -35,7 +36,7 @@
       <hr />
 
       <div class="tw-text-light tw-mt-3">
-        <p>{{ "loginWithDevciceEnabledInfo" | i18n }}</p>
+        {{ "loginWithDevciceEnabledInfo" | i18n }}
         <a routerLink="/login">{{ "viewAllLoginOptions" | i18n }}</a>
       </div>
     </div>

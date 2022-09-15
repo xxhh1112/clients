@@ -1,4 +1,5 @@
 import { DeviceRequest } from "../deviceRequest";
+
 import { TokenRequestTwoFactor } from "./tokenRequestTwoFactor";
 
 export abstract class TokenRequest {
