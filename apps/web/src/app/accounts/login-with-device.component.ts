@@ -130,6 +130,7 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
     const response = await this.apiService.getAuthResponse(requestId, accessCode);
+
     if (response.requestApproved) {
       const decKey = await this.cryptoService.rsaDecrypt(response.key, privateKeyVal);
       const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
