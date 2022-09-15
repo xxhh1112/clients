@@ -277,9 +277,21 @@
   "searchFavorites": {
     "message": "Search Favorites"
   },
-  "searchType": {
-    "message": "Search Type",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Search Logins",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Search Cards",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Search Identities",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Search Secure Notes",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Search Vault"

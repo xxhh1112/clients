@@ -11,10 +11,12 @@ import {
   map,
 } from "rxjs";
 
-import { CipherTypeFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/collection-filter.model";
-import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/folder-filter.model";
-import { OrganizationFilter } from "@bitwarden/angular/vault/vault-filter/models/organization-filter.model";
+import {
+  CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
+} from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
