@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
-
 import { CaptchaProtectedComponent } from "@bitwarden/angular/components/captchaProtected.component";
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -18,7 +17,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthRequestType } from "@bitwarden/common/enums/authRequestType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { PasswordlessLogInCredentials, PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
+import { PasswordlessLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
 @Component({
@@ -126,19 +125,22 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
     const response = await this.apiService.getAuthResponse(requestId, accessCode);
-    console.log(response);
     if (response.requestApproved) {
-      const decKey = await this.cryptoService.rsaDecrypt(response.key, this.keypair[1]);
+      const decKey = await this.cryptoService.rsaDecrypt(response.key, privateKeyVal);
       const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
         response.masterPasswordHash,
-        this.keypair[1]
+        privateKeyVal
       );
       const key = new SymmetricCryptoKey(decKey);
-      const localHashedPassword = Utils.fromBufferToB64(decMasterPasswordHash);
-      console.log('key::', key.encKeyB64);
-      console.log('hashedPassword::', localHashedPassword);
+      const localHashedPassword = Utils.fromBufferToUtf8(decMasterPasswordHash);
       try {
-        const credentials = new PasswordlessLogInCredentials(this.email, localHashedPassword, key);
+        const credentials = new PasswordlessLogInCredentials(
+          this.email,
+          accessCode,
+          requestId,
+          key,
+          localHashedPassword
+        );
         await this.authService.logIn(credentials);
         const disableFavicon = await this.stateService.getDisableFavicon();
         await this.stateService.setDisableFavicon(!!disableFavicon);

@@ -70,21 +70,18 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   async logIn(credentials: PasswordlessLogInCredentials) {
-    const { email, masterPasswordHashB64, decKey, twoFactor } = credentials;
-
-    let hashedPassword: string = null;
-    this.localHashedPassword = masterPasswordHashB64
-    this.key = decKey
-    hashedPassword = masterPasswordHashB64
+    this.localHashedPassword = credentials.localPasswordHash;
+    this.key = credentials.decKey;
 
     this.tokenRequest = new PasswordTokenRequest(
-      email,
-      hashedPassword,
+      credentials.email,
+      credentials.accessCode,
       null,
-      await this.buildTwoFactor(twoFactor),
+      await this.buildTwoFactor(credentials.twoFactor),
       await this.buildDeviceRequest()
     );
 
+    this.tokenRequest.setPasswordlessAccessCode(credentials.authRequestId);
     return this.startLogIn();
   }
 }

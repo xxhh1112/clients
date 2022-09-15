@@ -47,7 +47,11 @@ export class AuthService implements AuthServiceAbstraction {
       : null;
   }
 
-  private logInStrategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy;
+  private logInStrategy:
+    | ApiLogInStrategy
+    | PasswordLogInStrategy
+    | SsoLogInStrategy
+    | PasswordlessLogInStrategy;
   private sessionTimeout: any;
 
   private pushNotificationSubject = new Subject<string>();
@@ -76,7 +80,11 @@ export class AuthService implements AuthServiceAbstraction {
   ): Promise<AuthResult> {
     this.clearState();
 
-    let strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy;
+    let strategy:
+      | ApiLogInStrategy
+      | PasswordLogInStrategy
+      | SsoLogInStrategy
+      | PasswordlessLogInStrategy;
 
     switch (credentials.type) {
       case AuthenticationType.Password:
@@ -239,7 +247,13 @@ export class AuthService implements AuthServiceAbstraction {
     return this.pushNotificationSubject.asObservable();
   }
 
-  private saveState(strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy | PasswordlessLogInStrategy) {
+  private saveState(
+    strategy:
+      | ApiLogInStrategy
+      | PasswordLogInStrategy
+      | SsoLogInStrategy
+      | PasswordlessLogInStrategy
+  ) {
     this.logInStrategy = strategy;
     this.startSessionTimeout();
   }
