@@ -1,4 +1,4 @@
-<bit-dialog *ngIf="!loading">
+<bit-dialog *ngIf="!loading; else spinner">
   <span bitDialogTitle>
     <ng-container *ngIf="collection; else newCollectionTitle">
       {{ "editCollection" | i18n }}
@@ -37,3 +37,6 @@
     <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
   </div>
 </bit-dialog>
+<ng-template #spinner>
+  <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
+</ng-template>
