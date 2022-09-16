@@ -7,15 +7,12 @@ import { DeviceType } from "../enums/deviceType";
 import { OrganizationConnectionType } from "../enums/organizationConnectionType";
 import { Utils } from "../misc/utils";
 import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
-import { AttachmentRequest } from "../models/request/attachmentRequest";
 import { BitPayInvoiceRequest } from "../models/request/bitPayInvoiceRequest";
 import { CipherBulkDeleteRequest } from "../models/request/cipherBulkDeleteRequest";
 import { CipherBulkMoveRequest } from "../models/request/cipherBulkMoveRequest";
-import { CipherBulkShareRequest } from "../models/request/cipherBulkShareRequest";
 import { CipherCollectionsRequest } from "../models/request/cipherCollectionsRequest";
 import { CipherCreateRequest } from "../models/request/cipherCreateRequest";
 import { CipherRequest } from "../models/request/cipherRequest";
-import { CipherShareRequest } from "../models/request/cipherShareRequest";
 import { CollectionRequest } from "../models/request/collectionRequest";
 import { DeleteRecoverRequest } from "../models/request/deleteRecoverRequest";
 import { DeviceRequest } from "../models/request/deviceRequest";
@@ -90,8 +87,6 @@ import { UpdateTwoFactorYubioOtpRequest } from "../models/request/updateTwoFacto
 import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
 import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
-import { AttachmentResponse } from "../models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
 import { RegisterResponse } from "../models/response/authentication/registerResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
@@ -625,15 +620,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("PUT", "/ciphers/move", request, true, false);
   }
 
-  async putShareCipher(id: string, request: CipherShareRequest): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/share", request, true, true);
-    return new CipherResponse(r);
-  }
-
-  putShareCiphers(request: CipherBulkShareRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/share", request, true, false);
-  }
-
   putCipherCollections(id: string, request: CipherCollectionsRequest): Promise<any> {
     return this.send("PUT", "/ciphers/" + id + "/collections", request, true, false);
   }
@@ -701,95 +687,6 @@ export class ApiService implements ApiServiceAbstraction {
   ): Promise<ListResponse<CipherResponse>> {
     const r = await this.send("PUT", "/ciphers/restore", request, true, true);
     return new ListResponse<CipherResponse>(r, CipherResponse);
-  }
-
-  // Attachments APIs
-
-  async getAttachmentData(
-    cipherId: string,
-    attachmentId: string,
-    emergencyAccessId?: string
-  ): Promise<AttachmentResponse> {
-    const path =
-      (emergencyAccessId != null ? "/emergency-access/" + emergencyAccessId + "/" : "/ciphers/") +
-      cipherId +
-      "/attachment/" +
-      attachmentId;
-    const r = await this.send("GET", path, null, true, true);
-    return new AttachmentResponse(r);
-  }
-
-  async postCipherAttachment(
-    id: string,
-    request: AttachmentRequest
-  ): Promise<AttachmentUploadDataResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment/v2", request, true, true);
-    return new AttachmentUploadDataResponse(r);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment", data, true, true);
-    return new CipherResponse(r);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentAdminLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/" + id + "/attachment-admin", data, true, true);
-    return new CipherResponse(r);
-  }
-
-  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
-    return this.send("DELETE", "/ciphers/" + id + "/attachment/" + attachmentId, null, true, false);
-  }
-
-  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-      null,
-      true,
-      false
-    );
-  }
-
-  postShareCipherAttachment(
-    id: string,
-    attachmentId: string,
-    data: FormData,
-    organizationId: string
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/share?organizationId=" + organizationId,
-      data,
-      true,
-      false
-    );
-  }
-
-  async renewAttachmentUploadUrl(
-    id: string,
-    attachmentId: string
-  ): Promise<AttachmentUploadDataResponse> {
-    const r = await this.send(
-      "GET",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
-      null,
-      true,
-      true
-    );
-    return new AttachmentUploadDataResponse(r);
-  }
-
-  postAttachmentFile(id: string, attachmentId: string, data: FormData): Promise<any> {
-    return this.send("POST", "/ciphers/" + id + "/attachment/" + attachmentId, data, true, false);
   }
 
   // Collections APIs

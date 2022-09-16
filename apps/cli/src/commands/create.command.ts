@@ -21,6 +21,8 @@ import { FolderResponse } from "../models/response/folderResponse";
 import { OrganizationCollectionResponse } from "../models/response/organizationCollectionResponse";
 import { CliUtils } from "../utils";
 
+import { CipherAttachmentApiServiceAbstraction } from "./../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
+
 export class CreateCommand {
   constructor(
     private cipherService: CipherService,
@@ -28,7 +30,8 @@ export class CreateCommand {
     private stateService: StateService,
     private cryptoService: CryptoService,
     private apiService: ApiService,
-    private folderApiService: FolderApiServiceAbstraction
+    private folderApiService: FolderApiServiceAbstraction,
+    private cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
   ) {}
 
   async run(
@@ -134,7 +137,7 @@ export class CreateCommand {
     }
 
     try {
-      await this.cipherService.saveAttachmentRawWithServer(
+      await this.cipherAttachmentApiService.saveAttachmentRawWithServer(
         cipher,
         fileName,
         new Uint8Array(fileBuf).buffer

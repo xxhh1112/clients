@@ -6,6 +6,7 @@ import { first } from "rxjs/operators";
 import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/angular/components/attachments.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -22,7 +23,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   openedAttachmentsInPopup: boolean;
 
   constructor(
-    cipherService: CipherService,
+    private cipherService: CipherService,
+    cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction,
     i18nService: I18nService,
     cryptoService: CryptoService,
     platformUtilsService: PlatformUtilsService,
@@ -34,7 +36,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     fileDownloadService: FileDownloadService
   ) {
     super(
-      cipherService,
+      cipherAttachmentApiService,
       i18nService,
       cryptoService,
       platformUtilsService,
@@ -49,6 +51,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
+      this.cipherPromise = this.cipherService.get(params.cipherId);
       this.cipherId = params.cipherId;
       await this.init();
     });

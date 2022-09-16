@@ -4,8 +4,13 @@ import { Response } from "@bitwarden/node/cli/models/response";
 import { CipherResponse } from "../models/response/cipherResponse";
 import { CliUtils } from "../utils";
 
+import { CipherAttachmentApiServiceAbstraction } from "./../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
+
 export class ShareCommand {
-  constructor(private cipherService: CipherService) {}
+  constructor(
+    private cipherService: CipherService,
+    private cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
+  ) {}
 
   async run(id: string, organizationId: string, requestJson: string): Promise<Response> {
     if (process.env.BW_SERVE !== "true" && (requestJson == null || requestJson === "")) {
@@ -47,7 +52,7 @@ export class ShareCommand {
     }
     const cipherView = await cipher.decrypt();
     try {
-      await this.cipherService.shareWithServer(cipherView, organizationId, req);
+      await this.cipherAttachmentApiService.shareWithServer(cipherView, organizationId, req);
       const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt();
       const res = new CipherResponse(decCipher);

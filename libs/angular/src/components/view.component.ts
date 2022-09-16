@@ -9,10 +9,10 @@ import {
   Output,
 } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
@@ -76,7 +76,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     protected ngZone: NgZone,
     protected changeDetectorRef: ChangeDetectorRef,
     protected eventService: EventService,
-    protected apiService: ApiService,
+    protected cipheeAttachmentApiService: CipherAttachmentApiServiceAbstraction,
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     protected stateService: StateService,
@@ -349,7 +349,7 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.apiService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipheeAttachmentApiService.getAttachmentData(
         this.cipher.id,
         attachment.id
       );

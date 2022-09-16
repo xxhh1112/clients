@@ -34,27 +34,6 @@ export abstract class CipherService {
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
-  shareWithServer: (
-    cipher: CipherView,
-    organizationId: string,
-    collectionIds: string[]
-  ) => Promise<any>;
-  shareManyWithServer: (
-    ciphers: CipherView[],
-    organizationId: string,
-    collectionIds: string[]
-  ) => Promise<any>;
-  saveAttachmentWithServer: (
-    cipher: Cipher,
-    unencryptedFile: any,
-    admin?: boolean
-  ) => Promise<Cipher>;
-  saveAttachmentRawWithServer: (
-    cipher: Cipher,
-    filename: string,
-    data: ArrayBuffer,
-    admin?: boolean
-  ) => Promise<Cipher>;
   saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
   upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
   replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
@@ -64,7 +43,6 @@ export abstract class CipherService {
   deleteWithServer: (id: string) => Promise<any>;
   deleteManyWithServer: (ids: string[]) => Promise<any>;
   deleteAttachment: (id: string, attachmentId: string) => Promise<void>;
-  deleteAttachmentWithServer: (id: string, attachmentId: string) => Promise<void>;
   sortCiphersByLastUsed: (a: any, b: any) => number;
   sortCiphersByLastUsedThenName: (a: any, b: any) => number;
   getLocaleSortingFunction: () => (a: CipherView, b: CipherView) => number;
