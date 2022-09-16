@@ -2,14 +2,14 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { SecretResponse } from "./responses/secret.response";
+import { SecretListView } from "@bitwarden/common/models/view/secretListView";
 
 @Component({
   selector: "sm-secrets-list",
   templateUrl: "./secrets-list.component.html",
 })
 export class SecretsListComponent implements OnDestroy {
-  @Input() secrets: SecretResponse[];
+  @Input() secrets: SecretListView[];
 
   @Output() editSecretEvent = new EventEmitter<string>();
   @Output() copySecretNameEvent = new EventEmitter<string>();

@@ -1,33 +1,45 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subject } from "rxjs";
-import { switchMap, takeUntil } from "rxjs/operators";
+import { combineLatestWith, startWith, Subject, switchMap, takeUntil } from "rxjs";
 
-import { SecretResponse } from "./responses/secret.response";
-import { SecretApiService } from "./secret-api.service";
+import { SecretListView } from "@bitwarden/common/models/view/secretListView";
+import { DialogService } from "@bitwarden/components";
+
+import {
+  OperationType,
+  SecretDialogComponent,
+  SecretOperation,
+} from "./dialog/secret-dialog.component";
+import { SecretService } from "./secret.service";
 
 @Component({
   selector: "sm-secrets",
   templateUrl: "./secrets.component.html",
 })
 export class SecretsComponent implements OnInit, OnDestroy {
+  secrets: SecretListView[];
+
   private organizationId: string;
   private destroy$ = new Subject<void>();
 
-  secrets: SecretResponse[];
-
-  constructor(private route: ActivatedRoute, private secretsApiService: SecretApiService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private secretService: SecretService,
+    private dialogService: DialogService
+  ) {}
 
   ngOnInit() {
-    this.route.params
+    this.secretService.secret$
       .pipe(
-        switchMap(async (params) => {
+        startWith(null),
+        combineLatestWith(this.route.params),
+        switchMap(async ([_, params]) => {
           this.organizationId = params.organizationId;
-          await this.getSecrets();
+          return await this.getSecrets();
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe((secrets: SecretListView[]) => (this.secrets = secrets));
   }
 
   ngOnDestroy(): void {
@@ -35,9 +47,17 @@ export class SecretsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private async getSecrets() {
-    this.secrets = (
-      await this.secretsApiService.getSecretsByOrganizationId(this.organizationId)
-    ).data;
+  private async getSecrets(): Promise<SecretListView[]> {
+    return await this.secretService.getSecrets(this.organizationId);
+  }
+
+  openEditSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretOperation>(SecretDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        operation: OperationType.Edit,
+        secretId: secretId,
+      },
+    });
   }
 }
