@@ -45,6 +45,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   userHasPremiumAccess = false;
   organizations: Organization[] = [];
   profileName: string;
+  showOrganizationBadge = true;
 
   private didScroll = false;
   private pagedCiphersCount = 0;

@@ -14,7 +14,12 @@
           <p class="tw-inline">All</p>
         </th>
         <th>Name</th>
-        <th>Groups</th>
+        <th>
+          <ng-container *ngIf="showOrganizationBadge">{{ "owner" | i18n }}</ng-container>
+          <ng-container *ngIf="!showOrganizationBadge">
+            {{ (activeFilter.selectedCollectionNode ? "group" : "collection") | i18n }}
+          </ng-container>
+        </th>
         <th class="table-list-options tw-text-right">
           <button
             [bitMenuTriggerFor]="cipherOptions"
@@ -59,7 +64,7 @@
               {{ col.node.name }}
             </button>
           </td>
-          <td></td>
+          <td class="tw-w-72"></td>
           <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
             <button
               [bitMenuTriggerFor]="cipherOptions"
@@ -121,13 +126,22 @@
           <br />
           <small appStopProp>{{ c.subTitle }}</small>
         </td>
-        <td *ngIf="organizations.length > 0 && !organization" class="tw-w-28">
-          <app-org-badge
-            organizationName="{{ c.organizationId | orgNameFromId: organizations }}"
-            profileName="{{ profileName }}"
-            (onOrganizationClicked)="onOrganizationClicked(c.organizationId)"
-          >
-          </app-org-badge>
+        <td class="tw-w-72">
+          <ng-container *ngIf="showOrganizationBadge">
+            <app-org-badge
+              organizationName="{{ c.organizationId | orgNameFromId: organizations }}"
+              profileName="{{ profileName }}"
+              (onOrganizationClicked)="onOrganizationClicked(c.organizationId)"
+            >
+            </app-org-badge>
+          </ng-container>
+          <ng-container *ngIf="!showOrganizationBadge && !activeFilter.selectedCollectionNode">
+            <app-collection-badge
+              *ngIf="c.collectionIds"
+              [collectionIds]="c.collectionIds"
+              [collections]="collections"
+            ></app-collection-badge>
+          </ng-container>
         </td>
         <td class="table-list-options">
           <button

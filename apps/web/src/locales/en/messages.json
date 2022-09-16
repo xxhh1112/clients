@@ -451,6 +451,12 @@
   "vaultItems": {
     "message": "Vault Items"
   },
+  "group": {
+    "message": "Group"
+  },
+  "collection": {
+    "message": "Collection"
+  },
   "moveSelectedToOrg": {
     "message": "Move Selected to Organization"
   },
