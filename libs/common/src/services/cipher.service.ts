@@ -3,7 +3,6 @@ import { firstValueFrom } from "rxjs";
 import { ApiService } from "../abstractions/api.service";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CryptoService } from "../abstractions/crypto.service";
-import { FileUploadService } from "../abstractions/fileUpload.service";
 import { I18nService } from "../abstractions/i18n.service";
 import { LogService } from "../abstractions/log.service";
 import { SearchService } from "../abstractions/search.service";
@@ -56,7 +55,6 @@ export class CipherService implements CipherServiceAbstraction {
     private cryptoService: CryptoService,
     private settingsService: SettingsService,
     private apiService: ApiService,
-    private fileUploadService: FileUploadService,
     private i18nService: I18nService,
     private searchService: () => SearchService,
     private logService: LogService,

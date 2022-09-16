@@ -271,7 +271,6 @@ export default class MainBackground {
       this.cryptoService,
       this.settingsService,
       this.apiService,
-      this.fileUploadService,
       this.i18nService,
       () => this.searchService,
       this.logService,

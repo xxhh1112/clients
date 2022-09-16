@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -8,15 +8,15 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
-import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
-
 @Directive()
 export class ShareComponent implements OnInit {
   @Input() cipherId: string;
+  @Input() cipherDomain: Cipher;
   @Input() organizationId: string;
   @Output() onSharedCipher = new EventEmitter();
 
@@ -31,7 +31,6 @@ export class ShareComponent implements OnInit {
     protected collectionService: CollectionService,
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
-    protected cipherService: CipherService,
     private logService: LogService,
     protected organizationService: OrganizationService,
     protected cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
@@ -49,8 +48,7 @@ export class ShareComponent implements OnInit {
       .sort(Utils.getSortFunction(this.i18nService, "name"))
       .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed);
 
-    const cipherDomain = await this.cipherService.get(this.cipherId);
-    this.cipher = await cipherDomain.decrypt();
+    this.cipher = await this.cipherDomain.decrypt();
     if (this.organizationId == null && this.organizations.length > 0) {
       this.organizationId = this.organizations[0].id;
     }
@@ -81,8 +79,7 @@ export class ShareComponent implements OnInit {
       return;
     }
 
-    const cipherDomain = await this.cipherService.get(this.cipherId);
-    const cipherView = await cipherDomain.decrypt();
+    const cipherView = await this.cipherDomain.decrypt();
     const orgName =
       this.organizations.find((o) => o.id === this.organizationId)?.name ??
       this.i18nService.t("organization");

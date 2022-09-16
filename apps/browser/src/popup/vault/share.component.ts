@@ -9,6 +9,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 @Component({
   selector: "app-vault-share",
@@ -21,18 +22,19 @@ export class ShareComponent extends BaseShareComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     logService: LogService,
-    cipherService: CipherService,
+    private cipherService: CipherService,
     private route: ActivatedRoute,
     private router: Router,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
   ) {
     super(
       collectionService,
       platformUtilsService,
       i18nService,
-      cipherService,
       logService,
-      organizationService
+      organizationService,
+      cipherAttachmentApiService
     );
   }
 
@@ -43,6 +45,7 @@ export class ShareComponent extends BaseShareComponent {
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
+      this.cipherDomain = await this.cipherService.get(params.cipherId);
       this.cipherId = params.cipherId;
       await this.load();
     });

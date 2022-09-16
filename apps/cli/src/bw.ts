@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums/clientType";
@@ -17,6 +18,7 @@ import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
+import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
@@ -113,7 +115,7 @@ export class Main {
   folderApiService: FolderApiService;
   userVerificationApiService: UserVerificationApiService;
   organizationApiService: OrganizationApiServiceAbstraction;
-
+  cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction;
   constructor() {
     let p = null;
     const relativeDataDir = path.join(path.dirname(process.execPath), "bw-data");
@@ -203,11 +205,17 @@ export class Main {
       this.cryptoService,
       this.settingsService,
       this.apiService,
-      this.fileUploadService,
       this.i18nService,
       null,
       this.logService,
       this.stateService
+    );
+
+    this.cipherAttachmentApiService = new CipherAttachmentApiService(
+      this.cipherService,
+      this.apiService,
+      this.cryptoService,
+      this.logService
     );
 
     this.broadcasterService = new BroadcasterService();
