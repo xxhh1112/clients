@@ -161,8 +161,8 @@ import { TwoFactorEmailResponse } from "../models/response/twoFactorEmailRespons
 import { TwoFactorProviderResponse } from "../models/response/twoFactorProviderResponse";
 import { TwoFactorRecoverResponse } from "../models/response/twoFactorRescoverResponse";
 import {
-  TwoFactorWebAuthnResponse,
   ChallengeResponse,
+  TwoFactorWebAuthnResponse,
 } from "../models/response/twoFactorWebAuthnResponse";
 import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyResponse";
 import { UserKeyResponse } from "../models/response/userKeyResponse";
@@ -916,7 +916,7 @@ export class ApiService implements ApiServiceAbstraction {
     return new GroupDetailsResponse(r);
   }
 
-  async getGroups(organizationId: string): Promise<ListResponse<GroupResponse>> {
+  async getGroups(organizationId: string): Promise<ListResponse<GroupDetailsResponse>> {
     const r = await this.send(
       "GET",
       "/organizations/" + organizationId + "/groups",
@@ -924,7 +924,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true
     );
-    return new ListResponse(r, GroupResponse);
+    return new ListResponse(r, GroupDetailsResponse);
   }
 
   async getGroupUsers(organizationId: string, id: string): Promise<string[]> {
@@ -982,6 +982,20 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       false
     );
+  }
+
+  async deleteManyGroups(
+    organizationId: string,
+    request: OrganizationUserBulkRequest
+  ): Promise<ListResponse<GroupResponse>> {
+    const r = await this.send(
+      "DELETE",
+      "/organizations/" + organizationId + "/groups",
+      request,
+      true,
+      true
+    );
+    return new ListResponse(r, GroupResponse);
   }
 
   deleteGroupUser(organizationId: string, id: string, organizationUserId: string): Promise<any> {

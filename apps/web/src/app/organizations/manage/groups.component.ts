@@ -3,17 +3,33 @@ import { ActivatedRoute } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
+import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
+import { CollectionData } from "@bitwarden/common/models/data/collectionData";
+import { Collection } from "@bitwarden/common/models/domain/collection";
+import { OrganizationUserBulkRequest } from "@bitwarden/common/models/request/organizationUserBulkRequest";
+import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
+import { GroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 import { EntityUsersComponent } from "./entity-users.component";
 import { GroupAddEditComponent } from "./group-add-edit.component";
+
+type CollectionViewMap = {
+  [id: string]: CollectionView;
+};
+
+type GroupDetailsView = Partial<GroupDetailsResponse> & {
+  checked?: boolean;
+  collectionNames?: string[];
+};
 
 @Component({
   selector: "app-org-groups",
@@ -26,15 +42,44 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   loading = true;
   organizationId: string;
-  groups: GroupResponse[];
-  pagedGroups: GroupResponse[];
-  searchText: string;
+  groups: GroupDetailsView[];
+  collectionMap: CollectionViewMap = {};
+  selectAll = false;
 
   protected didScroll = false;
   protected pageSize = 100;
+  protected maxCollections = 2;
 
   private pagedGroupsCount = 0;
+  private pagedGroups: GroupDetailsView[];
+  private searchedGroups: GroupDetailsView[];
+  private _searchText: string;
   private destroy$ = new Subject<void>();
+
+  get searchText() {
+    return this._searchText;
+  }
+  set searchText(value: string) {
+    this._searchText = value;
+    // Manually update as we are not using the search pipe in the template
+    this.updateSearchedGroups();
+  }
+
+  /**
+   * The list of groups that should be visible in the table.
+   * This is needed as there are two modes (paging/searching) and
+   * we need a reference to the currently visible groups for
+   * the Select All checkbox
+   */
+  get visibleGroups() {
+    if (this.isPaging()) {
+      return this.pagedGroups;
+    }
+    if (this.isSearching()) {
+      return this.searchedGroups;
+    }
+    return this.groups;
+  }
 
   constructor(
     private apiService: ApiService,
@@ -43,7 +88,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
-    private logService: LogService
+    private logService: LogService,
+    private collectionService: CollectionService,
+    private searchPipe: SearchPipe
   ) {}
 
   async ngOnInit() {
@@ -51,6 +98,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       .pipe(
         concatMap(async (params) => {
           this.organizationId = params.organizationId;
+          await this.loadCollections();
           await this.load();
         }),
         takeUntil(this.destroy$)
@@ -76,10 +124,36 @@ export class GroupsComponent implements OnInit, OnDestroy {
   async load() {
     const response = await this.apiService.getGroups(this.organizationId);
     const groups = response.data != null && response.data.length > 0 ? response.data : [];
-    groups.sort(Utils.getSortFunction(this.i18nService, "name"));
-    this.groups = groups;
+    this.groups = groups
+      .sort(Utils.getSortFunction(this.i18nService, "name"))
+      .map<GroupDetailsView>((g) => ({
+        ...g,
+        checked: false,
+        collectionNames: g.collections
+          .map((c) => this.collectionMap[c.id]?.name)
+          .sort(this.i18nService.collator?.compare),
+      }));
     this.resetPaging();
+    this.updateSearchedGroups();
     this.loading = false;
+  }
+
+  private updateSearchedGroups() {
+    if (this.searchService.isSearchable(this.searchText)) {
+      // Making use of the pipe in the component as we need know which groups where filtered
+      this.searchedGroups = this.searchPipe.transform(this.groups, this.searchText, "name", "id");
+    }
+  }
+
+  async loadCollections() {
+    const response = await this.apiService.getCollections(this.organizationId);
+    const collections = response.data.map(
+      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
+    );
+    const decryptedCollections = await this.collectionService.decryptMany(collections);
+
+    // Convert to an object using collection Ids as keys for faster name lookups
+    decryptedCollections.forEach((c) => (this.collectionMap[c.id] = c));
   }
 
   loadMore() {
@@ -100,7 +174,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
-  async edit(group: GroupResponse) {
+  async edit(group: GroupDetailsResponse) {
     const [modal] = await this.modalService.openViewRef(
       GroupAddEditComponent,
       this.addEditModalRef,
@@ -113,7 +187,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         });
         comp.onDeletedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
-          this.removeGroup(group);
+          this.removeGroup(group.id);
         });
       }
     );
@@ -123,7 +197,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.edit(null);
   }
 
-  async delete(group: GroupResponse) {
+  async delete(group: GroupDetailsResponse) {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteGroupConfirmation"),
       group.name,
@@ -142,13 +216,45 @@ export class GroupsComponent implements OnInit, OnDestroy {
         null,
         this.i18nService.t("deletedGroupId", group.name)
       );
-      this.removeGroup(group);
+      this.removeGroup(group.id);
     } catch (e) {
       this.logService.error(e);
     }
   }
 
-  async users(group: GroupResponse) {
+  async deleteAllSelected() {
+    const groupsToDelete = this.groups.filter((g) => g.checked);
+
+    if (groupsToDelete.length == 0) {
+      return;
+    }
+
+    const deleteMessage = groupsToDelete.map((g) => g.name).join(", ");
+    const confirmed = await this.platformUtilsService.showDialog(
+      deleteMessage,
+      this.i18nService.t("deleteMultipleGroupsConfirmation", groupsToDelete.length.toString()),
+      this.i18nService.t("yes"),
+      this.i18nService.t("no"),
+      "warning"
+    );
+    if (!confirmed) {
+      return false;
+    }
+
+    try {
+      const result = await this.apiService.deleteManyGroups(
+        this.organizationId,
+        new OrganizationUserBulkRequest(groupsToDelete.map((g) => g.id))
+      );
+      this.platformUtilsService.showToast("success", null, `Delete ${result.data.length} groups!`);
+
+      groupsToDelete.forEach((g) => this.removeGroup(g.id));
+    } catch (e) {
+      this.logService.error(e);
+    }
+  }
+
+  async users(group: GroupDetailsResponse) {
     const [modal] = await this.modalService.openViewRef(
       EntityUsersComponent,
       this.usersModalRef,
@@ -174,6 +280,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
     return this.searchService.isSearchable(this.searchText);
   }
 
+  check(group: GroupDetailsView) {
+    group.checked = !group.checked;
+  }
+
+  toggleAllVisible(event: Event) {
+    this.visibleGroups.forEach((g) => (g.checked = (event.target as HTMLInputElement).checked));
+  }
+
   isPaging() {
     const searching = this.isSearching();
     if (searching && this.didScroll) {
@@ -182,11 +296,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
     return !searching && this.groups && this.groups.length > this.pageSize;
   }
 
-  private removeGroup(group: GroupResponse) {
-    const index = this.groups.indexOf(group);
+  private removeGroup(id: string) {
+    const index = this.groups.findIndex((g) => g.id === id);
     if (index > -1) {
       this.groups.splice(index, 1);
       this.resetPaging();
+      this.updateSearchedGroups();
     }
   }
 }

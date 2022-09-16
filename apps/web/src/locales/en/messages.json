@@ -2326,6 +2326,15 @@
   "deleteGroupConfirmation": {
     "message": "Are you sure you want to delete this group?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Are you sure you want to remove this user?"
   },
@@ -5370,5 +5379,14 @@
   },
   "numberOfUsers": {
     "message": "Number of users"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
   }
 }
