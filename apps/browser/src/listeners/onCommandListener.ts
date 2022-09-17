@@ -91,7 +91,6 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
     cryptoService,
     settingsService,
     null, // ApiService
-    null, // FileUploadService,
     i18nService,
     () => searchService, // Don't love this pt.2
     logService,

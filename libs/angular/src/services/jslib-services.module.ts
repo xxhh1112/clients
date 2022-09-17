@@ -207,7 +207,6 @@ import { ValidationService } from "./validation.service";
         cryptoService: CryptoServiceAbstraction,
         settingsService: SettingsServiceAbstraction,
         apiService: ApiServiceAbstraction,
-        fileUploadService: FileUploadServiceAbstraction,
         i18nService: I18nServiceAbstraction,
         injector: Injector,
         logService: LogService,

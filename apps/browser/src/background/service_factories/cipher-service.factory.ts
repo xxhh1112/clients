@@ -5,10 +5,7 @@ import { CipherService } from "@bitwarden/common/services/cipher.service";
 import { apiServiceFactory, ApiServiceInitOptions } from "./api-service.factory";
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
-import {
-  FileUploadServiceInitOptions,
-  fileUploadServiceFactory,
-} from "./file-upload-service.factory";
+import { FileUploadServiceInitOptions } from "./file-upload-service.factory";
 import { i18nServiceFactory, I18nServiceInitOptions } from "./i18n-service.factory";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import { SettingsServiceInitOptions, settingsServiceFactory } from "./settings-service.factory";
@@ -42,7 +39,6 @@ export function cipherServiceFactory(
         await cryptoServiceFactory(cache, opts),
         await settingsServiceFactory(cache, opts),
         await apiServiceFactory(cache, opts),
-        await fileUploadServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
         opts.cipherServiceOptions.searchServiceFactory === undefined
           ? () => cache.searchService

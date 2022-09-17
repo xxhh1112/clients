@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/components/view.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -26,6 +25,7 @@ import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
 import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
@@ -60,10 +60,10 @@ export class ViewComponent extends BaseViewComponent {
     private autofillService: AutofillService,
     private messagingService: MessagingService,
     private popupUtilsService: PopupUtilsService,
-    apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
   ) {
     super(
       cipherService,
@@ -78,7 +78,7 @@ export class ViewComponent extends BaseViewComponent {
       ngZone,
       changeDetectorRef,
       eventService,
-      apiService,
+      cipherAttachmentApiService,
       passwordRepromptService,
       logService,
       stateService,
