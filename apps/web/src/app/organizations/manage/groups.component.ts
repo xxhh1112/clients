@@ -253,7 +253,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.organizationId,
         new OrganizationUserBulkRequest(groupsToDelete.map((g) => g.id))
       );
-      this.platformUtilsService.showToast("success", null, `Delete ${result.data.length} groups!`);
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("deletedManyGroups", result.data.length.toString())
+      );
 
       groupsToDelete.forEach((g) => this.removeGroup(g.id));
     } catch (e) {
