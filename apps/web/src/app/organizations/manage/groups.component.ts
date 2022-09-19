@@ -26,7 +26,7 @@ type CollectionViewMap = {
   [id: string]: CollectionView;
 };
 
-interface IGroupDetailsView extends IGroupDetailsResponse {
+interface IGroupDetailsRow extends IGroupDetailsResponse {
   /**
    * True if the group is selected in the table
    */
@@ -49,7 +49,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   loading = true;
   organizationId: string;
-  groups: IGroupDetailsView[];
+  groups: IGroupDetailsRow[];
   collectionMap: CollectionViewMap = {};
 
   protected didScroll = false;
@@ -57,8 +57,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   protected maxCollections = 2;
 
   private pagedGroupsCount = 0;
-  private pagedGroups: IGroupDetailsView[];
-  private searchedGroups: IGroupDetailsView[];
+  private pagedGroups: IGroupDetailsRow[];
+  private searchedGroups: IGroupDetailsRow[];
   private _searchText: string;
   private destroy$ = new Subject<void>();
 
@@ -77,7 +77,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
    * we need a reference to the currently visible groups for
    * the Select All checkbox
    */
-  get visibleGroups(): IGroupDetailsView[] {
+  get visibleGroups(): IGroupDetailsRow[] {
     if (this.isPaging()) {
       return this.pagedGroups;
     }
@@ -132,7 +132,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     const groups = response.data != null && response.data.length > 0 ? response.data : [];
     this.groups = groups
       .sort(Utils.getSortFunction(this.i18nService, "name"))
-      .map<IGroupDetailsView>((g) => ({
+      .map<IGroupDetailsRow>((g) => ({
         ...g,
         checked: false,
         collectionNames: g.collections
@@ -180,7 +180,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
-  async edit(group: IGroupDetailsView) {
+  async edit(group: IGroupDetailsRow) {
     const [modal] = await this.modalService.openViewRef(
       GroupAddEditComponent,
       this.addEditModalRef,
@@ -203,7 +203,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.edit(null);
   }
 
-  async delete(group: IGroupDetailsView) {
+  async delete(group: IGroupDetailsRow) {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteGroupConfirmation"),
       group.name,
@@ -264,7 +264,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async users(group: IGroupDetailsView) {
+  async users(group: IGroupDetailsRow) {
     const [modal] = await this.modalService.openViewRef(
       EntityUsersComponent,
       this.usersModalRef,
@@ -290,7 +290,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     return this.searchService.isSearchable(this.searchText);
   }
 
-  check(group: IGroupDetailsView) {
+  check(group: IGroupDetailsRow) {
     group.checked = !group.checked;
   }
 
