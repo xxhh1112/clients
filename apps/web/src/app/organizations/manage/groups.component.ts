@@ -16,7 +16,7 @@ import { CollectionData } from "@bitwarden/common/models/data/collectionData";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { OrganizationUserBulkRequest } from "@bitwarden/common/models/request/organizationUserBulkRequest";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
-import { GroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
+import { IGroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 import { EntityUsersComponent } from "./entity-users.component";
@@ -26,10 +26,17 @@ type CollectionViewMap = {
   [id: string]: CollectionView;
 };
 
-type GroupDetailsView = Partial<GroupDetailsResponse> & {
+interface IGroupDetailsView extends IGroupDetailsResponse {
+  /**
+   * True if the group is selected in the table
+   */
   checked?: boolean;
+
+  /**
+   * A list of collection names the group has access to
+   */
   collectionNames?: string[];
-};
+}
 
 @Component({
   selector: "app-org-groups",
@@ -42,7 +49,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   loading = true;
   organizationId: string;
-  groups: GroupDetailsView[];
+  groups: IGroupDetailsView[];
   collectionMap: CollectionViewMap = {};
   selectAll = false;
 
@@ -51,8 +58,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   protected maxCollections = 2;
 
   private pagedGroupsCount = 0;
-  private pagedGroups: GroupDetailsView[];
-  private searchedGroups: GroupDetailsView[];
+  private pagedGroups: IGroupDetailsView[];
+  private searchedGroups: IGroupDetailsView[];
   private _searchText: string;
   private destroy$ = new Subject<void>();
 
@@ -71,7 +78,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
    * we need a reference to the currently visible groups for
    * the Select All checkbox
    */
-  get visibleGroups() {
+  get visibleGroups(): IGroupDetailsView[] {
     if (this.isPaging()) {
       return this.pagedGroups;
     }
@@ -126,7 +133,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     const groups = response.data != null && response.data.length > 0 ? response.data : [];
     this.groups = groups
       .sort(Utils.getSortFunction(this.i18nService, "name"))
-      .map<GroupDetailsView>((g) => ({
+      .map<IGroupDetailsView>((g) => ({
         ...g,
         checked: false,
         collectionNames: g.collections
@@ -174,7 +181,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
-  async edit(group: GroupDetailsResponse) {
+  async edit(group: IGroupDetailsView) {
     const [modal] = await this.modalService.openViewRef(
       GroupAddEditComponent,
       this.addEditModalRef,
@@ -197,7 +204,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.edit(null);
   }
 
-  async delete(group: GroupDetailsResponse) {
+  async delete(group: IGroupDetailsView) {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteGroupConfirmation"),
       group.name,
@@ -254,7 +261,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async users(group: GroupDetailsResponse) {
+  async users(group: IGroupDetailsView) {
     const [modal] = await this.modalService.openViewRef(
       EntityUsersComponent,
       this.usersModalRef,
@@ -280,7 +287,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     return this.searchService.isSearchable(this.searchText);
   }
 
-  check(group: GroupDetailsView) {
+  check(group: IGroupDetailsView) {
     group.checked = !group.checked;
   }
 

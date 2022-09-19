@@ -1,7 +1,15 @@
 import { BaseResponse } from "./baseResponse";
 import { SelectionReadOnlyResponse } from "./selectionReadOnlyResponse";
 
-export class GroupResponse extends BaseResponse {
+export interface IGroupResponse {
+  id: string;
+  organizationId: string;
+  name: string;
+  accessAll: boolean;
+  externalId: string;
+}
+
+export class GroupResponse extends BaseResponse implements IGroupResponse {
   id: string;
   organizationId: string;
   name: string;
@@ -18,7 +26,11 @@ export class GroupResponse extends BaseResponse {
   }
 }
 
-export class GroupDetailsResponse extends GroupResponse {
+export interface IGroupDetailsResponse extends IGroupResponse {
+  collections: SelectionReadOnlyResponse[];
+}
+
+export class GroupDetailsResponse extends GroupResponse implements IGroupDetailsResponse {
   collections: SelectionReadOnlyResponse[] = [];
 
   constructor(response: any) {
