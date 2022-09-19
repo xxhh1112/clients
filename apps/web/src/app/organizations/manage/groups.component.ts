@@ -14,7 +14,7 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CollectionData } from "@bitwarden/common/models/data/collectionData";
 import { Collection } from "@bitwarden/common/models/domain/collection";
-import { OrganizationUserBulkRequest } from "@bitwarden/common/models/request/organizationUserBulkRequest";
+import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 import { IGroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
@@ -51,7 +51,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   organizationId: string;
   groups: IGroupDetailsView[];
   collectionMap: CollectionViewMap = {};
-  selectAll = false;
 
   protected didScroll = false;
   protected pageSize = 100;
@@ -251,7 +250,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     try {
       const result = await this.apiService.deleteManyGroups(
         this.organizationId,
-        new OrganizationUserBulkRequest(groupsToDelete.map((g) => g.id))
+        new OrganizationGroupBulkRequest(groupsToDelete.map((g) => g.id))
       );
       this.platformUtilsService.showToast(
         "success",

@@ -1,3 +1,5 @@
+import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
+
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
 import { AppIdService } from "../abstractions/appId.service";
 import { EnvironmentService } from "../abstractions/environment.service";
@@ -986,7 +988,7 @@ export class ApiService implements ApiServiceAbstraction {
 
   async deleteManyGroups(
     organizationId: string,
-    request: OrganizationUserBulkRequest
+    request: OrganizationGroupBulkRequest
   ): Promise<ListResponse<GroupResponse>> {
     const r = await this.send(
       "DELETE",

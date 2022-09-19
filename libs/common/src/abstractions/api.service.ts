@@ -1,3 +1,5 @@
+import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
+
 import { OrganizationConnectionType } from "../enums/organizationConnectionType";
 import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
 import { AttachmentRequest } from "../models/request/attachmentRequest";
@@ -342,7 +344,7 @@ export abstract class ApiService {
   deleteGroup: (organizationId: string, id: string) => Promise<any>;
   deleteManyGroups: (
     organizationId: string,
-    request: OrganizationUserBulkRequest
+    request: OrganizationGroupBulkRequest
   ) => Promise<ListResponse<GroupResponse>>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
 
