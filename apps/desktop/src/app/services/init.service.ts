@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
 
-import { WINDOW } from "@bitwarden/angular/services/jslib-services.module";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/common/abstractions/environment.service";
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
@@ -9,12 +10,12 @@ import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstrac
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
-import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/abstractions/twoFactor.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EventService } from "@bitwarden/common/services/event.service";
-import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 
 import { I18nService } from "../../services/i18n.service";
 import { NativeMessagingService } from "../../services/nativeMessaging.service";
@@ -34,7 +35,8 @@ export class InitService {
     private stateService: StateServiceAbstraction,
     private cryptoService: CryptoServiceAbstraction,
     private nativeMessagingService: NativeMessagingService,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private encryptService: AbstractEncryptService
   ) {}
 
   init() {
@@ -65,7 +67,7 @@ export class InitService {
         await this.stateService.setInstalledVersion(currentVersion);
       }
 
-      const containerService = new ContainerService(this.cryptoService);
+      const containerService = new ContainerService(this.cryptoService, this.encryptService);
       containerService.attachToGlobal(this.win);
     };
   }

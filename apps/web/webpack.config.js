@@ -209,6 +209,12 @@ const devServer =
             secure: false,
             changeOrigin: true,
           },
+          "/icons": {
+            target: envConfig.dev?.proxyIcons,
+            pathRewrite: { "^/icons": "" },
+            secure: false,
+            changeOrigin: true,
+          },
         },
         headers: (req) => {
           if (!req.originalUrl.includes("connector.html")) {
@@ -265,7 +271,9 @@ const devServer =
                     https://*.braintree-api.com
                     https://*.blob.core.windows.net
                     https://app.simplelogin.io/api/alias/random/new
-                    https://app.anonaddy.com/api/v1/aliases;
+                    https://quack.duckduckgo.com/api/email/addresses
+                    https://app.anonaddy.com/api/v1/aliases
+                    https://api.fastmail.com/jmap/api;
                   object-src
                     'self'
                     blob:;`,

@@ -678,6 +678,9 @@
   "invalidMasterPassword": {
     "message": "Ongeldige hoofwagwoord"
   },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
+  },
   "lockNow": {
     "message": "Vergrendel nou"
   },
@@ -889,6 +892,48 @@
   },
   "fileFormat": {
     "message": "Lêerformaat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "exportPasswordDescription": {
+    "message": "This password will be used to export and import this file"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirm Master Password"
+  },
+  "confirmFormat": {
+    "message": "Confirm Format"
+  },
+  "filePassword": {
+    "message": "File Password"
+  },
+  "confirmFilePassword": {
+    "message": "Confirm File Password"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "fileTypeHeading": {
+    "message": "File Type"
+  },
+  "accountBackup": {
+    "message": "Account Backup"
+  },
+  "passwordProtected": {
+    "message": "Password Protected"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm File Password“ do not match."
+  },
+  "confirmVaultImport": {
+    "message": "Confirm Vault Import"
+  },
+  "confirmVaultImportDesc": {
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "U kluisdata is uitgestuur."
@@ -5232,7 +5277,7 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDesc": {
-    "message": "Enable SCIM",
+    "message": "Aktiveer SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
@@ -5255,26 +5300,26 @@
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateKey": {
-    "message": "Rotate Key"
+    "message": "Roteer sleutel"
   },
   "scimApiKey": {
-    "message": "SCIM API Key",
+    "message": "SCIM API-sleutel",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {
-    "message": "Copy the SCIM endpoint URL to your clipboard",
+    "message": "Kopieer die SCIM-eindpunt se bronadres na u knipbord",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimUrl": {
-    "message": "SCIM URL",
+    "message": "SCIM-bronadres",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
-    "message": "The SCIM API Key has been successfully rotated",
+    "message": "Die SCIM API-sleutel is suksesvol geroteer",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "scimSettingsSaved": {
-    "message": "SCIM settings have been saved successfully",
+    "message": "SCIM-instellings is suksesvol bewaar",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
@@ -5311,6 +5356,6 @@
     "message": "Mir"
   },
   "numberOfUsers": {
-    "message": "Number of users"
+    "message": "Aantal gebruikers"
   }
 }

@@ -2,11 +2,8 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
 import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/guards/unauth.guard";
-import {
-  JslibServicesModule,
-  MEMORY_STORAGE,
-  SECURE_STORAGE,
-} from "@bitwarden/angular/services/jslib-services.module";
+import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/injection-tokens";
+import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -41,13 +38,14 @@ import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
@@ -235,6 +233,11 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: UserVerificationService,
       useFactory: getBgService<UserVerificationService>("userVerificationService"),
+      deps: [],
+    },
+    {
+      provide: VaultTimeoutSettingsService,
+      useFactory: getBgService<VaultTimeoutSettingsService>("vaultTimeoutSettingsService"),
       deps: [],
     },
     {

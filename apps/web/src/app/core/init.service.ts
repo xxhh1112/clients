@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
 
-import { WINDOW } from "@bitwarden/angular/services/jslib-services.module";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import {
   EnvironmentService as EnvironmentServiceAbstraction,
@@ -12,10 +13,10 @@ import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstrac
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/abstractions/twoFactor.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EventService as EventLoggingService } from "@bitwarden/common/services/event.service";
-import { VaultTimeoutService as VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout.service";
+import { VaultTimeoutService as VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 
 import { I18nService } from "./i18n.service";
 
@@ -31,7 +32,8 @@ export class InitService {
     private twoFactorService: TwoFactorServiceAbstraction,
     private stateService: StateServiceAbstraction,
     private cryptoService: CryptoServiceAbstraction,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private encryptService: AbstractEncryptService
   ) {}
 
   init() {
@@ -51,7 +53,7 @@ export class InitService {
       const htmlEl = this.win.document.documentElement;
       htmlEl.classList.add("locale_" + this.i18nService.translationLocale);
       await this.themingService.monitorThemeChanges();
-      const containerService = new ContainerService(this.cryptoService);
+      const containerService = new ContainerService(this.cryptoService, this.encryptService);
       containerService.attachToGlobal(this.win);
     };
   }

@@ -13,7 +13,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 
 import { EnvironmentComponent } from "./environment.component";
 
@@ -102,13 +102,16 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       this.environmentModal
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onShown.subscribe(() => {
       this.showingModal = true;
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onClosed.subscribe(() => {
       this.showingModal = false;
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSaved.subscribe(() => {
       modal.close();
     });

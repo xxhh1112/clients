@@ -699,7 +699,7 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "Виберіть організацію, до якої ви бажаєте перемістити цей запис. При переміщенні до організації власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення."
+    "message": "Виберіть організацію, до якої ви бажаєте перемістити цей запис. Переміщуючи до організації, власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення."
   },
   "learnMore": {
     "message": "Докладніше"
@@ -1919,7 +1919,7 @@
     "message": "Тип імені користувача"
   },
   "plusAddressedEmail": {
-    "message": "Плюс адреса електронної пошти",
+    "message": "Адреса е-пошти з плюсом",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
@@ -1997,5 +1997,32 @@
   },
   "environmentEditedReset": {
     "message": "щоб скинути налаштування"
+  },
+  "serverVersion": {
+    "message": "Версія сервера"
+  },
+  "selfHosted": {
+    "message": "Власне розміщення"
+  },
+  "thirdParty": {
+    "message": "Сторонній"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Під'єднано до стороннього сервера $SERVERNAME$. Будь ласка, перевірте помилки з використанням офіційного сервера, або повідомте про них сторонньому серверу.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "востаннє відвідано $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
   }
 }

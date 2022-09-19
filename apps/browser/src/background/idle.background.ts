@@ -1,5 +1,5 @@
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 
 import { StateService } from "../services/abstractions/state.service";
 
@@ -48,7 +48,7 @@ export default class IdleBackground {
             if (action === "logOut") {
               await this.vaultTimeoutService.logOut();
             } else {
-              await this.vaultTimeoutService.lock(true);
+              await this.vaultTimeoutService.lock();
             }
           }
         }
