@@ -29,7 +29,10 @@ import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import {
+  CollectionGroupDetailsView,
+  CollectionView,
+} from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 const NestingDelimiter = "/";
@@ -241,6 +244,9 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
         collectionCopy.id = c.id;
         collectionCopy.organizationId = c.organizationId;
         collectionCopy.icon = "bwi-collection";
+        if (c instanceof CollectionGroupDetailsView) {
+          collectionCopy.groups = c.groups;
+        }
         const parts =
           c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
         ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);

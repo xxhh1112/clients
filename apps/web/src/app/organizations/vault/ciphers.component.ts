@@ -13,6 +13,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
@@ -27,6 +28,7 @@ export class CiphersComponent extends BaseCiphersComponent {
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
   organization: Organization;
+  groups: GroupResponse[] = [];
   accessEvents = false;
   showOrganizationBadge = false;
 
@@ -62,6 +64,7 @@ export class CiphersComponent extends BaseCiphersComponent {
   }
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
+    this.groups = (await this.apiService.getGroups(this.organization.id)).data;
     this.deleted = deleted || false;
     if (this.organization.canEditAnyCollection) {
       this.accessEvents = this.organization.useEvents;

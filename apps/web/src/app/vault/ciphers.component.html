@@ -64,7 +64,15 @@
               {{ col.node.name }}
             </button>
           </td>
-          <td class="tw-w-72"></td>
+          <td class="tw-w-72">
+            <ng-container *ngIf="!showOrganizationBadge && activeFilter.selectedCollectionNode">
+              <app-group-badge
+                *ngIf="col.node.groups"
+                [selectedGroups]="col.node.groups"
+                [allGroups]="groups"
+              ></app-group-badge>
+            </ng-container>
+          </td>
           <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
             <button
               [bitMenuTriggerFor]="cipherOptions"

@@ -312,6 +312,9 @@ export abstract class ApiService {
   getUserCollections: () => Promise<ListResponse<CollectionResponse>>;
   getCollections: (organizationId: string) => Promise<ListResponse<CollectionResponse>>;
   getCollectionUsers: (organizationId: string, id: string) => Promise<SelectionReadOnlyResponse[]>;
+  getCollectionsWithDetails: (
+    orgId: string
+  ) => Promise<ListResponse<CollectionGroupDetailsResponse>>;
   postCollection: (
     organizationId: string,
     request: CollectionRequest
