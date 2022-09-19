@@ -5388,5 +5388,8 @@
         "example": "5"
       }
     }
+  },
+  "editInfo": {
+    "message": "Edit Info"
   }
 }
