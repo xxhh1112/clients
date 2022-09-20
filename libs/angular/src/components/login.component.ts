@@ -3,6 +3,8 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { take } from "rxjs/operators";
 
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -29,6 +31,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   onSuccessfulLoginNavigate: () => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
+  showLoginWithDevice: boolean;
 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
@@ -42,6 +45,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   protected alwaysRememberEmail = false;
 
   constructor(
+    protected apiService: ApiService,
+    protected appIdService: AppIdService,
     protected authService: AuthService,
     protected router: Router,
     platformUtilsService: PlatformUtilsService,
@@ -75,6 +80,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     if (!this.alwaysRememberEmail) {
       const rememberEmail = (await this.stateService.getRememberedEmail()) != null;
       this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
+    }
+
+    if (email) {
+      await this.getLoginWithDevice(email);
     }
   }
 
@@ -211,6 +220,16 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   private errorTag(error: AllValidationErrors): string {
     const name = error.errorName.charAt(0).toUpperCase() + error.errorName.slice(1);
     return `${error.controlName}${name}`;
+  }
+
+  private async getLoginWithDevice(email: string) {
+    try {
+      const deviceIdentifier = await this.appIdService.getAppId();
+      const res = await this.apiService.getKnownDevice(email, deviceIdentifier);
+      this.showLoginWithDevice = res;
+    } catch (e) {
+      this.showLoginWithDevice = false;
+    }
   }
 
   protected focusInput() {
