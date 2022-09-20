@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { lastValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -22,7 +23,11 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { DialogService } from "@bitwarden/components";
 
 import { CollectionAddEditComponent } from "./collection-add-edit.component";
-import { CollectionEditDialogComponent } from "./collection-edit-dialog/collection-edit-dialog.components";
+import {
+  CollectionEditDialogComponent,
+  CollectionEditDialogResult,
+  CollectionEditDialogResultType,
+} from "./collection-edit-dialog/collection-edit-dialog.components";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
@@ -120,9 +125,17 @@ export class CollectionsComponent implements OnInit {
   }
 
   async new_edit(collection: CollectionView) {
-    this.dialogService.open(CollectionEditDialogComponent, {
+    const dialog = this.dialogService.open(CollectionEditDialogComponent, {
       data: { collectionId: collection.id, organizationId: collection.organizationId },
     });
+
+    const result = (await lastValueFrom(dialog.closed)) as CollectionEditDialogResult | undefined;
+    if (
+      result?.type === CollectionEditDialogResultType.Saved ||
+      result?.type === CollectionEditDialogResultType.Deleted
+    ) {
+      this.load();
+    }
   }
 
   async edit(collection: CollectionView) {

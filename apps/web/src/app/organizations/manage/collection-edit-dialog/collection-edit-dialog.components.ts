@@ -13,9 +13,15 @@ export interface CollectionEditDialogParams {
   organizationId: string;
 }
 
-// export interface CollectionEditDialogResult {}
+export enum CollectionEditDialogResultType {
+  Saved,
+  Canceled,
+  Deleted,
+}
 
-// export enum CollectionEditDialogResultType {}
+export interface CollectionEditDialogResult {
+  type: CollectionEditDialogResultType;
+}
 
 @Component({
   selector: "app-collection-edit-dialog",
@@ -92,11 +98,15 @@ export class CollectionEditDialogComponent implements OnDestroy {
     const collection = await this.collectionService.encrypt(collectionView);
     await this.collectionApiService.save(collection);
 
-    this.dialogRef.close();
+    this.close({ type: CollectionEditDialogResultType.Saved });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private close(result: CollectionEditDialogResult) {
+    this.dialogRef.close(result);
   }
 }
