@@ -34,7 +34,6 @@ export class EmergencyAccessAttachmentsComponent extends BaseAttachmentsComponen
       i18nService,
       cryptoService,
       platformUtilsService,
-      apiService,
       window,
       logService,
       stateService,

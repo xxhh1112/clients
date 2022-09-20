@@ -236,20 +236,13 @@ export abstract class ApiService {
 
   getCipher: (id: string) => Promise<CipherResponse>;
   getFullCipherDetails: (id: string) => Promise<CipherResponse>;
-  getCipherAdmin: (id: string) => Promise<CipherResponse>;
-  getCiphersOrganization: (organizationId: string) => Promise<ListResponse<CipherResponse>>;
   postCipher: (request: CipherRequest) => Promise<CipherResponse>;
   postCipherCreate: (request: CipherCreateRequest) => Promise<CipherResponse>;
-  postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
   putCipher: (id: string, request: CipherRequest) => Promise<CipherResponse>;
-  putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
   deleteCipher: (id: string) => Promise<any>;
-  deleteCipherAdmin: (id: string) => Promise<any>;
   deleteManyCiphers: (request: CipherBulkDeleteRequest) => Promise<any>;
-  deleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
   putMoveCiphers: (request: CipherBulkMoveRequest) => Promise<any>;
   putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
-  putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
   postImportCiphers: (request: ImportCiphersRequest) => Promise<any>;
   postImportOrganizationCiphers: (
@@ -257,11 +250,8 @@ export abstract class ApiService {
     request: ImportOrganizationCiphersRequest
   ) => Promise<any>;
   putDeleteCipher: (id: string) => Promise<any>;
-  putDeleteCipherAdmin: (id: string) => Promise<any>;
   putDeleteManyCiphers: (request: CipherBulkDeleteRequest) => Promise<any>;
-  putDeleteManyCiphersAdmin: (request: CipherBulkDeleteRequest) => Promise<any>;
   putRestoreCipher: (id: string) => Promise<CipherResponse>;
-  putRestoreCipherAdmin: (id: string) => Promise<CipherResponse>;
   putRestoreManyCiphers: (
     request: CipherBulkRestoreRequest
   ) => Promise<ListResponse<CipherResponse>>;

@@ -28,13 +28,16 @@ import { CollectionView } from "../models/view/collectionView";
 import { EventView } from "../models/view/eventView";
 import { FolderView } from "../models/view/folderView";
 
+import { CipherAdminServiceAbstraction } from "./../abstractions/cipher/cipher-admin.service.abstraction";
+
 export class ExportService implements ExportServiceAbstraction {
   constructor(
     private folderService: FolderService,
     private cipherService: CipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
-    private cryptoFunctionService: CryptoFunctionService
+    private cryptoFunctionService: CryptoFunctionService,
+    private cipherAdminService: CipherAdminServiceAbstraction
   ) {}
 
   async getExport(format: ExportFormat = "csv", organizationId?: string): Promise<string> {
@@ -351,7 +354,7 @@ export class ExportService implements ExportServiceAbstraction {
     );
 
     promises.push(
-      this.apiService.getCiphersOrganization(organizationId).then((c) => {
+      this.cipherAdminService.getOrganizationCiphers(organizationId).then((c) => {
         const cipherPromises: any = [];
         if (c != null && c.data != null && c.data.length > 0) {
           c.data

@@ -559,22 +559,6 @@ export class ApiService implements ApiServiceAbstraction {
     return new CipherResponse(r);
   }
 
-  async getCipherAdmin(id: string): Promise<CipherResponse> {
-    const r = await this.send("GET", "/ciphers/" + id + "/admin", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async getCiphersOrganization(organizationId: string): Promise<ListResponse<CipherResponse>> {
-    const r = await this.send(
-      "GET",
-      "/ciphers/organization-details?organizationId=" + organizationId,
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, CipherResponse);
-  }
-
   async postCipher(request: CipherRequest): Promise<CipherResponse> {
     const r = await this.send("POST", "/ciphers", request, true, true);
     return new CipherResponse(r);
@@ -585,18 +569,8 @@ export class ApiService implements ApiServiceAbstraction {
     return new CipherResponse(r);
   }
 
-  async postCipherAdmin(request: CipherCreateRequest): Promise<CipherResponse> {
-    const r = await this.send("POST", "/ciphers/admin", request, true, true);
-    return new CipherResponse(r);
-  }
-
   async putCipher(id: string, request: CipherRequest): Promise<CipherResponse> {
     const r = await this.send("PUT", "/ciphers/" + id, request, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putCipherAdmin(id: string, request: CipherRequest): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/admin", request, true, true);
     return new CipherResponse(r);
   }
 
@@ -604,16 +578,8 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("DELETE", "/ciphers/" + id, null, true, false);
   }
 
-  deleteCipherAdmin(id: string): Promise<any> {
-    return this.send("DELETE", "/ciphers/" + id + "/admin", null, true, false);
-  }
-
   deleteManyCiphers(request: CipherBulkDeleteRequest): Promise<any> {
     return this.send("DELETE", "/ciphers", request, true, false);
-  }
-
-  deleteManyCiphersAdmin(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("DELETE", "/ciphers/admin", request, true, false);
   }
 
   putMoveCiphers(request: CipherBulkMoveRequest): Promise<any> {
@@ -622,10 +588,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   putCipherCollections(id: string, request: CipherCollectionsRequest): Promise<any> {
     return this.send("PUT", "/ciphers/" + id + "/collections", request, true, false);
-  }
-
-  putCipherCollectionsAdmin(id: string, request: CipherCollectionsRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/collections-admin", request, true, false);
   }
 
   postPurgeCiphers(
@@ -660,25 +622,12 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("PUT", "/ciphers/" + id + "/delete", null, true, false);
   }
 
-  putDeleteCipherAdmin(id: string): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/delete-admin", null, true, false);
-  }
-
   putDeleteManyCiphers(request: CipherBulkDeleteRequest): Promise<any> {
     return this.send("PUT", "/ciphers/delete", request, true, false);
   }
 
-  putDeleteManyCiphersAdmin(request: CipherBulkDeleteRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/delete-admin", request, true, false);
-  }
-
   async putRestoreCipher(id: string): Promise<CipherResponse> {
     const r = await this.send("PUT", "/ciphers/" + id + "/restore", null, true, true);
-    return new CipherResponse(r);
-  }
-
-  async putRestoreCipherAdmin(id: string): Promise<CipherResponse> {
-    const r = await this.send("PUT", "/ciphers/" + id + "/restore-admin", null, true, true);
     return new CipherResponse(r);
   }
 

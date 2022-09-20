@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -33,7 +33,6 @@ export class CiphersComponent extends BaseCiphersComponent {
     searchService: SearchService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
-    cipherService: CipherService,
     eventService: EventService,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
@@ -41,20 +40,21 @@ export class CiphersComponent extends BaseCiphersComponent {
     stateService: StateService,
     organizationService: OrganizationService,
     tokenService: TokenService,
-    private apiService: ApiService
+    private cipherAdminService: CipherAdminServiceAbstraction,
+    cipherService: CipherService
   ) {
     super(
       searchService,
       i18nService,
       platformUtilsService,
-      cipherService,
       eventService,
       totpService,
       stateService,
       passwordRepromptService,
       logService,
       organizationService,
-      tokenService
+      tokenService,
+      cipherService
     );
   }
 
@@ -62,7 +62,9 @@ export class CiphersComponent extends BaseCiphersComponent {
     this.deleted = deleted || false;
     if (this.organization.canEditAnyCollection) {
       this.accessEvents = this.organization.useEvents;
-      this.allCiphers = await this.cipherService.getAllFromApiForOrganization(this.organization.id);
+      this.allCiphers = await this.cipherAdminService.getOrganizationCipherViews(
+        this.organization.id
+      );
     } else {
       this.allCiphers = (await this.cipherService.getAllDecrypted()).filter(
         (c) => c.organizationId === this.organization.id
@@ -95,8 +97,8 @@ export class CiphersComponent extends BaseCiphersComponent {
       return super.deleteCipher(id, this.deleted);
     }
     return this.deleted
-      ? this.apiService.deleteCipherAdmin(id)
-      : this.apiService.putDeleteCipherAdmin(id);
+      ? this.cipherAdminService.deleteCipherAdmin(id)
+      : this.cipherAdminService.putDeleteCipherAdmin(id);
   }
 
   protected showFixOldAttachments(c: CipherView) {

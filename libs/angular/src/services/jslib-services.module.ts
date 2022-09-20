@@ -11,6 +11,7 @@ import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstr
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
@@ -68,6 +69,7 @@ import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
+import { CipherAdminService } from "@bitwarden/common/services/cipher/cipher-admin.service";
 import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
@@ -235,6 +237,11 @@ import { ValidationService } from "./validation.service";
       provide: CipherAttachmentApiServiceAbstraction,
       useClass: CipherAttachmentApiService,
       deps: [CipherServiceAbstraction, ApiServiceAbstraction, CryptoServiceAbstraction, LogService],
+    },
+    {
+      provide: CipherAdminServiceAbstraction,
+      useClass: CipherAdminService,
+      deps: [ApiServiceAbstraction, I18nServiceAbstraction],
     },
     {
       provide: FolderServiceAbstraction,

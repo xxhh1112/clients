@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
@@ -63,7 +63,7 @@ export class DeleteOrganizationComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private userVerificationService: UserVerificationService,
     private logService: LogService,
-    private cipherService: CipherService,
+    private cipherAdminService: CipherAdminServiceAbstraction,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
@@ -98,7 +98,7 @@ export class DeleteOrganizationComponent implements OnInit {
   private async buildOrganizationContentSummary(): Promise<OrganizationContentSummary> {
     const organizationContentSummary = new OrganizationContentSummary();
     const organizationItems = (
-      await this.cipherService.getAllFromApiForOrganization(this.organizationId)
+      await this.cipherAdminService.getOrganizationCipherViews(this.organizationId)
     ).filter((item) => item.deletedDate == null);
 
     if (organizationItems.length < 1) {

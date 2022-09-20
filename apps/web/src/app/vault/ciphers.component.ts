@@ -48,14 +48,14 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     searchService: SearchService,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
-    protected cipherService: CipherService,
     protected eventService: EventService,
     protected totpService: TotpService,
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     private organizationService: OrganizationService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    protected cipherService: CipherService
   ) {
     super(searchService);
   }

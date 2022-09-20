@@ -25,13 +25,14 @@ export abstract class CipherService {
     includeOtherTypes?: CipherType[],
     defaultMatch?: UriMatchType
   ) => Promise<CipherView[]>;
-  getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
   getLastUsedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
   getLastLaunchedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
   getNextCipherForUrl: (url: string) => Promise<CipherView>;
   updateLastUsedIndexForUrl: (url: string) => void;
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
+  softDeleteWithServer: (id: string) => Promise<any>;
+  deleteWithServer: (id: string) => Promise<any>;
   saveNeverDomain: (domain: string) => Promise<void>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
   saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
@@ -40,18 +41,16 @@ export abstract class CipherService {
   clear: (userId: string) => Promise<any>;
   moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
   delete: (id: string | string[]) => Promise<any>;
-  deleteWithServer: (id: string) => Promise<any>;
-  deleteManyWithServer: (ids: string[]) => Promise<any>;
   deleteAttachment: (id: string, attachmentId: string) => Promise<void>;
   sortCiphersByLastUsed: (a: any, b: any) => number;
   sortCiphersByLastUsedThenName: (a: any, b: any) => number;
   getLocaleSortingFunction: () => (a: CipherView, b: CipherView) => number;
   softDelete: (id: string | string[]) => Promise<any>;
-  softDeleteWithServer: (id: string) => Promise<any>;
   softDeleteManyWithServer: (ids: string[]) => Promise<any>;
+  deleteManyWithServer: (ids: string[]) => Promise<any>;
+  restoreManyWithServer: (ids: string[]) => Promise<any>;
+  restoreWithServer: (id: string) => Promise<any>;
   restore: (
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;
-  restoreWithServer: (id: string) => Promise<any>;
-  restoreManyWithServer: (ids: string[]) => Promise<any>;
 }

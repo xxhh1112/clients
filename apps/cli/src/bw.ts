@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
@@ -116,6 +117,7 @@ export class Main {
   userVerificationApiService: UserVerificationApiService;
   organizationApiService: OrganizationApiServiceAbstraction;
   cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction;
+  cipherAdminService: CipherAdminServiceAbstraction;
   constructor() {
     let p = null;
     const relativeDataDir = path.join(path.dirname(process.execPath), "bw-data");
@@ -346,7 +348,8 @@ export class Main {
       this.cipherService,
       this.apiService,
       this.cryptoService,
-      this.cryptoFunctionService
+      this.cryptoFunctionService,
+      this.cipherAdminService
     );
 
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);

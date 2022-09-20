@@ -1,6 +1,5 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -38,7 +37,6 @@ export class AttachmentsComponent implements OnInit {
     protected i18nService: I18nService,
     protected cryptoService: CryptoService,
     protected platformUtilsService: PlatformUtilsService,
-    protected apiService: ApiService,
     protected win: Window,
     protected logService: LogService,
     protected stateService: StateService,

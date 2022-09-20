@@ -4,7 +4,6 @@ import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/angular/components/attachments.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -28,7 +27,6 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     i18nService: I18nService,
     cryptoService: CryptoService,
     platformUtilsService: PlatformUtilsService,
-    apiService: ApiService,
     private location: Location,
     private route: ActivatedRoute,
     stateService: StateService,
@@ -40,7 +38,6 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
       i18nService,
       cryptoService,
       platformUtilsService,
-      apiService,
       window,
       logService,
       stateService,
