@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -16,6 +17,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { BulkDeleteComponent } from "src/app/vault/bulk-delete.component";
 
 import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";
 
@@ -42,6 +44,7 @@ export class CiphersComponent extends BaseCiphersComponent {
     eventService: EventService,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
+    modalService: ModalService,
     logService: LogService,
     stateService: StateService,
     organizationService: OrganizationService,
@@ -57,6 +60,7 @@ export class CiphersComponent extends BaseCiphersComponent {
       totpService,
       stateService,
       passwordRepromptService,
+      modalService,
       logService,
       organizationService,
       tokenService
@@ -107,5 +111,36 @@ export class CiphersComponent extends BaseCiphersComponent {
 
   protected showFixOldAttachments(c: CipherView) {
     return this.organization.canEditAnyCollection && c.hasOldAttachments;
+  }
+
+  async bulkDelete() {
+    if (!(await this.repromptCipher())) {
+      return;
+    }
+
+    const selectedIds = this.getSelectedIds();
+    if (selectedIds.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
+      );
+      return;
+    }
+
+    const [modal] = await this.modalService.openViewRef(
+      BulkDeleteComponent,
+      this.bulkDeleteModalRef,
+      (comp) => {
+        comp.permanent = this.deleted;
+        comp.cipherIds = selectedIds;
+        comp.organization = this.organization;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+        comp.onDeleted.subscribe(async () => {
+          modal.close();
+          await this.refresh();
+        });
+      }
+    );
   }
 }

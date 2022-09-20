@@ -7,17 +7,22 @@
     [infiniteScrollDisabled]="!isPaging()"
     (scrolled)="loadMore()"
   >
-    <thead>
+    <thead class="">
       <tr>
         <th class="table-list-checkbox" colspan="2">
-          <input class="tw-inline" type="checkbox" (change)="selectAll($event.target.checked)" />
+          <input
+            class="tw-inline"
+            type="checkbox"
+            (change)="selectAll($event.target.checked)"
+            [(ngModel)]="isAllChecked"
+          />
           <p class="tw-inline">All</p>
         </th>
         <th>Name</th>
         <th>
           <ng-container *ngIf="showOrganizationBadge">{{ "owner" | i18n }}</ng-container>
           <ng-container *ngIf="!showOrganizationBadge">
-            {{ (activeFilter.selectedCollectionNode ? "group" : "collection") | i18n }}
+            {{ (activeFilter.selectedCollectionNode ? "groups" : "collections") | i18n }}
           </ng-container>
         </th>
         <th class="table-list-options tw-text-right">
@@ -31,17 +36,33 @@
           </button>
           <bit-menu #cipherOptions>
             <ng-container>
-              <button class="dropdown-item" bitMenuItem>
-                <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
-                {{ "editItem" | i18n }}
+              <button
+                class="dropdown-item"
+                appStopClick
+                (click)="bulkMove()"
+                *ngIf="!activeFilter.isDeleted && !organization"
+              >
+                <i class="bwi bwi-fw bwi-folder" aria-hidden="true"></i>
+                {{ "moveSelected" | i18n }}
               </button>
-              <button class="dropdown-item" bitMenuItem>
-                <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
-                {{ "access" | i18n }}
+              <button
+                class="dropdown-item"
+                appStopClick
+                (click)="bulkShare()"
+                *ngIf="!activeFilter.isDeleted && !organization"
+              >
+                <i class="bwi bwi-fw bwi-arrow-circle-right" aria-hidden="true"></i>
+                {{ "moveSelectedToOrg" | i18n }}
               </button>
-              <button class="dropdown-item text-danger" bitMenuItem>
+              <button class="dropdown-item" (click)="bulkRestore()" *ngIf="activeFilter.isDeleted">
+                <i class="bwi bwi-fw bwi-undo" aria-hidden="true"></i>
+                {{ "restoreSelected" | i18n }}
+              </button>
+              <button class="dropdown-item text-danger" (click)="bulkDelete()">
                 <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
-                {{ "delete" | i18n }}
+                {{
+                  (activeFilter.isDeleted ? "permanentlyDeleteSelected" : "deleteSelected") | i18n
+                }}
               </button>
             </ng-container>
           </bit-menu>
@@ -52,7 +73,7 @@
       <ng-container *ngIf="activeFilter.selectedCollectionNode">
         <tr *ngFor="let col of activeFilter.selectedCollectionNode?.children">
           <td class="table-list-checkbox">
-            <input type="checkbox" appStopProp />
+            <input type="checkbox" [(ngModel)]="col.checked" appStopProp />
           </td>
           <td class="table-list-icon">
             <div class="icon" aria-hidden="true">
@@ -73,28 +94,7 @@
               ></app-group-badge>
             </ng-container>
           </td>
-          <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
-            <button
-              [bitMenuTriggerFor]="cipherOptions"
-              class="tw-border-none tw-bg-transparent tw-text-main"
-              type="button"
-              appA11yTitle="{{ 'options' | i18n }}"
-            >
-              <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
-            </button>
-            <bit-menu #cipherOptions>
-              <ng-container>
-                <button bitMenuItem>
-                  <i class="bwi bwi-fw bwi-clone" aria-hidden="true"></i>
-                  {{ "copyUsername" | i18n }}
-                </button>
-                <button bitMenuItem>
-                  <i class="bwi bwi-fw bwi-clone" aria-hidden="true"></i>
-                  {{ "copyPassword" | i18n }}
-                </button>
-              </ng-container>
-            </bit-menu>
-          </td>
+          <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right"></td>
         </tr>
       </ng-container>
       <tr *ngFor="let c of filteredCiphers">
@@ -255,3 +255,7 @@
     </ng-container>
   </div>
 </ng-container>
+<ng-template #bulkDeleteTemplate></ng-template>
+<ng-template #bulkRestoreTemplate></ng-template>
+<ng-template #bulkMoveTemplate></ng-template>
+<ng-template #bulkShareTemplate></ng-template>

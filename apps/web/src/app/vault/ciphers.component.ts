@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from "@angular/core";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
@@ -19,8 +27,13 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { BulkDeleteComponent } from "./bulk-delete.component";
 
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
+import { BulkRestoreComponent } from "./bulk-restore.component";
+import { BulkShareComponent } from "./bulk-share.component";
+import { BulkMoveComponent } from "./bulk-move.component";
 
 const MaxCheckedCount = 500;
 
@@ -38,6 +51,15 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
 
+  @ViewChild("bulkDeleteTemplate", { read: ViewContainerRef, static: true })
+  bulkDeleteModalRef: ViewContainerRef;
+  @ViewChild("bulkRestoreTemplate", { read: ViewContainerRef, static: true })
+  bulkRestoreModalRef: ViewContainerRef;
+  @ViewChild("bulkMoveTemplate", { read: ViewContainerRef, static: true })
+  bulkMoveModalRef: ViewContainerRef;
+  @ViewChild("bulkShareTemplate", { read: ViewContainerRef, static: true })
+  bulkShareModalRef: ViewContainerRef;
+
   pagedCiphers: CipherView[] = [];
   pageSize = 200;
   cipherType = CipherType;
@@ -47,6 +69,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   profileName: string;
   showOrganizationBadge = true;
 
+  protected isAllChecked = false;
   private didScroll = false;
   private pagedCiphersCount = 0;
   private refreshing = false;
@@ -60,6 +83,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected totpService: TotpService,
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
+    protected modalService: ModalService,
     private logService: LogService,
     private organizationService: OrganizationService,
     private tokenService: TokenService
@@ -69,6 +93,14 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
   ngOnDestroy() {
     this.selectAll(false);
+  }
+
+  async applyFilter(filter: (cipher: CipherView) => boolean = null) {
+    this.isAllChecked = false;
+    this.activeFilter.selectedCollectionNode?.children?.forEach((col) => {
+      (col as any).checked = false;
+    });
+    await super.applyFilter(filter);
   }
 
   // load() is called after the page loads and the first sync has completed.
@@ -200,6 +232,36 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.actionPromise = null;
   }
 
+  async bulkDelete() {
+    if (!(await this.repromptCipher())) {
+      return;
+    }
+
+    const selectedIds = this.getSelectedIds();
+    if (selectedIds.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
+      );
+      return;
+    }
+
+    const [modal] = await this.modalService.openViewRef(
+      BulkDeleteComponent,
+      this.bulkDeleteModalRef,
+      (comp) => {
+        comp.permanent = this.deleted;
+        comp.cipherIds = selectedIds;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+        comp.onDeleted.subscribe(async () => {
+          modal.close();
+          await this.refresh();
+        });
+      }
+    );
+  }
+
   async restore(c: CipherView): Promise<boolean> {
     if (this.actionPromise != null || !c.isDeleted) {
       return;
@@ -224,6 +286,93 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       this.logService.error(e);
     }
     this.actionPromise = null;
+  }
+
+  async bulkRestore() {
+    if (!(await this.repromptCipher())) {
+      return;
+    }
+
+    const selectedIds = this.getSelectedIds();
+    if (selectedIds.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
+      );
+      return;
+    }
+
+    const [modal] = await this.modalService.openViewRef(
+      BulkRestoreComponent,
+      this.bulkRestoreModalRef,
+      (comp) => {
+        comp.cipherIds = selectedIds;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+        comp.onRestored.subscribe(async () => {
+          modal.close();
+          await this.refresh();
+        });
+      }
+    );
+  }
+
+  async bulkShare() {
+    if (!(await this.repromptCipher())) {
+      return;
+    }
+
+    const selectedCiphers = this.getSelected();
+    if (selectedCiphers.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
+      );
+      return;
+    }
+
+    const [modal] = await this.modalService.openViewRef(
+      BulkShareComponent,
+      this.bulkShareModalRef,
+      (comp) => {
+        comp.ciphers = selectedCiphers;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+        comp.onShared.subscribe(async () => {
+          modal.close();
+          await this.refresh();
+        });
+      }
+    );
+  }
+
+  async bulkMove() {
+    if (!(await this.repromptCipher())) {
+      return;
+    }
+
+    const selectedIds = this.getSelectedIds();
+    if (selectedIds.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
+      );
+      return;
+    }
+
+    const [modal] = await this.modalService.openViewRef(
+      BulkMoveComponent,
+      this.bulkMoveModalRef,
+      (comp) => {
+        comp.cipherIds = selectedIds;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+        comp.onMoved.subscribe(async () => {
+          modal.close();
+          await this.refresh();
+        });
+      }
+    );
   }
 
   async copy(cipher: CipherView, value: string, typeI18nKey: string, aType: string) {
@@ -261,6 +410,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   selectAll(select: boolean) {
     if (select) {
       this.selectAll(false);
+    }
+    if (this.activeFilter.selectedCollectionNode) {
+      this.activeFilter.selectedCollectionNode.children.forEach((col) => {
+        (col as any).checked = select;
+      });
     }
     const selectCount =
       select && this.ciphers.length > MaxCheckedCount ? MaxCheckedCount : this.ciphers.length;
@@ -310,10 +464,19 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     return c.hasOldAttachments && c.organizationId == null;
   }
 
-  protected async repromptCipher(c: CipherView) {
-    return (
-      c.reprompt === CipherRepromptType.None ||
-      (await this.passwordRepromptService.showPasswordPrompt())
-    );
+  protected async repromptCipher(c?: CipherView) {
+    if (c) {
+      return (
+        c.reprompt === CipherRepromptType.None ||
+        (await this.passwordRepromptService.showPasswordPrompt())
+      );
+    } else {
+      const selectedCiphers = this.getSelected();
+      const notProtected = !selectedCiphers.find(
+        (cipher) => cipher.reprompt !== CipherRepromptType.None
+      );
+
+      return notProtected || (await this.passwordRepromptService.showPasswordPrompt());
+    }
   }
 }
