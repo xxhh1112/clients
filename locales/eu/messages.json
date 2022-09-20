@@ -425,7 +425,7 @@
     "message": "Ni"
   },
   "myVault": {
-    "message": "Kutxa Gotorra"
+    "message": "Nire Kutxa Gotorra"
   },
   "allVaults": {
     "message": "Kutxa Gotor guztiak"
@@ -678,9 +678,6 @@
   "invalidMasterPassword": {
     "message": "Master pasahitz baliogabea"
   },
-  "invalidFilePassword": {
-    "message": "Fitxategi pasahitzak ez du balio; mesedez, erabili esportazio fitxategia sortzean sartutako pasahitza."
-  },
   "lockNow": {
     "message": "Blokeatu orain"
   },
@@ -892,48 +889,6 @@
   },
   "fileFormat": {
     "message": "Fitxategiaren formatua"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Fitxategien esportazio hori pasahitzaren bidez babestuta egongo da eta deszifratzeko fitxategi pasahitza beharko da."
-  },
-  "exportPasswordDescription": {
-    "message": "Fitxategi hau esportatu eta inportatzeko erabiliko da pasahitz hau"
-  },
-  "confirmMasterPassword": {
-    "message": "Pasahitz nagusia baieztatu"
-  },
-  "confirmFormat": {
-    "message": "Formatua baieztatu"
-  },
-  "filePassword": {
-    "message": "Fitxategi pasahitza"
-  },
-  "confirmFilePassword": {
-    "message": "Fitxategi pasahitza berretsi"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Erabili zure kontuaren zifratze-gakoa esportazioa zifratzeko eta inportazioa egungo Bitwarden kontura bakarrik mugatzeko."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Erabili pasahitza esportazioa zifratzeko eta Bitwardeneko edozein kontutara inportatzean deszifratzeko."
-  },
-  "fileTypeHeading": {
-    "message": "Fitxategi mota"
-  },
-  "accountBackup": {
-    "message": "Kontuaren segurtasun kopia"
-  },
-  "passwordProtected": {
-    "message": "Pasahitz babestua"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“Fitxategi pasahitza” eta “Fitxategi pasahitza berretsi” ez datoz bat."
-  },
-  "confirmVaultImport": {
-    "message": "Berretsi kutxa gotorra inportatzea"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Fitxategi hau pasahitzez babestuta dago. Sartu fitxategiaren pasahitza datuak inportatzeko."
   },
   "exportSuccess": {
     "message": "Zure kutxa gotorra esportatu da."

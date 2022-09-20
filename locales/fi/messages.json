@@ -678,9 +678,6 @@
   "invalidMasterPassword": {
     "message": "Virheellinen pääsalasana"
   },
-  "invalidFilePassword": {
-    "message": "Tiedoston salasana on virheellinen. Käytä vientitiedoston luonnin yhteydessä syötettyä salasanaa."
-  },
   "lockNow": {
     "message": "Lukitse nyt"
   },
@@ -892,48 +889,6 @@
   },
   "fileFormat": {
     "message": "Tiedostomuoto"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Tämä vientitiedosto on suojattu salasanalla, joka on syötettävä ja salauksen purkamiseksi."
-  },
-  "exportPasswordDescription": {
-    "message": "Tätä salasanaa käytetään tämän tiedoston viennissä ja tuonnissa"
-  },
-  "confirmMasterPassword": {
-    "message": "Vahvista pääsalasana"
-  },
-  "confirmFormat": {
-    "message": "Vahvista muoto"
-  },
-  "filePassword": {
-    "message": "Tiedoston salasana"
-  },
-  "confirmFilePassword": {
-    "message": "Vahvista tiedoston salasana"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Salaa vienti tilisi salausavaimella, joka rajoittaa sen tuonnin vain tälle Bitwarden-tilille."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Salaa vienti salasanalla, joka mahdollistaa sen tuonnin mille tahansa Bitwarden-tilille."
-  },
-  "fileTypeHeading": {
-    "message": "Tiedostotyyppi"
-  },
-  "accountBackup": {
-    "message": "Tilin varmuuskopiointi"
-  },
-  "passwordProtected": {
-    "message": "Salasanasuojattu"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "\"Tiedoston salasana\" ja \"Vahvista tiedoston salasana\" eivät täsmää."
-  },
-  "confirmVaultImport": {
-    "message": "Vahvista holvin tuonti"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Tiedosto on salasanasuojattu. Syötä tiedoston salasana tuodaksesi tiedot."
   },
   "exportSuccess": {
     "message": "Holvisi tiedot on viety."
@@ -5156,17 +5111,17 @@
     "message": "Käyttäjätunnuksen tyyppi"
   },
   "plusAddressedEmail": {
-    "message": "Plus+merkkinen sähköposti",
+    "message": "Plus-osoitteinen sähköposti",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Käytä sähköpostipalvelusi aliosoiteominaisuuksia."
   },
   "catchallEmail": {
-    "message": "Catch-all-sähköposti"
+    "message": "Catch-all-sähköpostiosoite"
   },
   "catchallEmailDesc": {
-    "message": "Käytä verkkotunnuksesi catch-all-postilaatikkoa."
+    "message": "Käytä verkkotunnuksellesi määritettyä catch-all-postilaatikkoa."
   },
   "random": {
     "message": "Satunnainen",
@@ -5232,7 +5187,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Sähköpostialias välitykseen"
+    "message": "Välitykseen käytetty sähköpostialias"
   },
   "forwardedEmailDesc": {
     "message": "Luo sähköpostialias ulkoisella ohjauspalvelulla."
@@ -5273,7 +5228,7 @@
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
-    "message": "Provisioi käyttäjät ja ryhmät haluamasi tunnistustietojen tarjoajan kanssa SCIM-provisioinnilla",
+    "message": "Provisioi käyttäjät ja ryhmät suosimasi tunnistustietojen tarjoajan kanssa SCIM-provisioinnilla",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDesc": {
@@ -5281,7 +5236,7 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
-    "message": "Määritä haluamasi tunnistustietojen tarjoaja määrittämällä URL-osoite ja SCIM API -avain",
+    "message": "Määritä haluamasi SAML-tunnistustietojen tarjoaja määrittämällä URL-osoite ja SCIM API-avain",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimApiKeyHelperText": {

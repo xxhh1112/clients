@@ -678,9 +678,6 @@
   "invalidMasterPassword": {
     "message": "Ongeldig hoofdwachtwoord"
   },
-  "invalidFilePassword": {
-    "message": "Onjuist bestandswachtwoord, gebruik het wachtwoord dat je hebt ingevoerd bij het aanmaken van het exportbestand."
-  },
   "lockNow": {
     "message": "Nu vergrendelen"
   },
@@ -892,48 +889,6 @@
   },
   "fileFormat": {
     "message": "Bestandsindeling"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Deze bestandsexport wordt met een wachtwoord beveiligd en vereist het bestandswachtwoord om te decoderen."
-  },
-  "exportPasswordDescription": {
-    "message": "Dit wachtwoord wordt gebruikt om dit bestand te exporteren en te importeren"
-  },
-  "confirmMasterPassword": {
-    "message": "Nieuw hoofdwachtwoord bevestigen"
-  },
-  "confirmFormat": {
-    "message": "Formaat bevestigen"
-  },
-  "filePassword": {
-    "message": "Bestandswachtwoord"
-  },
-  "confirmFilePassword": {
-    "message": "Bestandswachtwoord bevestigen"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Maakt gebruik van Bitwarden-accountversleuteling, niet het hoofdwachtwoord, om de export te beveiligen. Je kunt deze export alleen importeren in het huidige account. Gebruik dit om een back-up te maken die je elders niet kunt gebruiken."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Maak een door de gebruiker gegenereerd wachtwoord aan om de export te beschermen. Gebruik dit om een export te maken die je in andere accounts kunt gebruiken."
-  },
-  "fileTypeHeading": {
-    "message": "Bestandstype"
-  },
-  "accountBackup": {
-    "message": "Account back-up"
-  },
-  "passwordProtected": {
-    "message": "Beveiligd met wachtwoord"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "\"Bestandswachtwoord\" en \"Bestandswachtwoord bevestigen\" komen niet overeen."
-  },
-  "confirmVaultImport": {
-    "message": "Kluisimport bevestigen"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Dit bestand is beveiligd met een wachtwoord. Voer het bestandswachtwoord in om gegevens te importeren."
   },
   "exportSuccess": {
     "message": "Je kluisgegevens zijn geëxporteerd."
@@ -1296,7 +1251,7 @@
     "message": "Ingeschakeld"
   },
   "restoreAccess": {
-    "message": "Toegang herstellen"
+    "message": "Restore Access"
   },
   "premium": {
     "message": "Premium",
@@ -1324,7 +1279,7 @@
     "message": "Uitschakelen"
   },
   "revokeAccess": {
-    "message": "Toegang intrekken"
+    "message": "Revoke Access"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Deze tweestapsaanmeldingsaanbieder is geactiveerd voor je account."
@@ -2326,10 +2281,10 @@
     "message": "Weet je zeker dat je deze gebruiker wilt verwijderen?"
   },
   "removeOrgUserConfirmation": {
-    "message": "Na het verwijderen heeft een lid onherroepelijk geen toegang meer tot de gegevens van de organisatie. Om een lid opnieuw aan de organisatie toe te voegen, moet je deze uitnodigen en opnieuw on-boarden."
+    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
   },
   "revokeUserConfirmation": {
-    "message": "Na het intrekken van toegang heeft een lid geen toegang meer tot de gegevens van de organisatie. Om de toegang snel te herstellen, ga je naar het tabblad Ingetrokken."
+    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Waarschuwing! Deze gebruiker vereist de Key Connector om de versleuteling te beheren. Als je deze gebruiker uit je organisatie verwijdert, wordt zijn account permanent uitgeschakeld. Deze actie kan niet ongedaan worden gemaakt. Wil je doorgaan?"
@@ -2677,7 +2632,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "Toegang $ID$ verwijderen",
+    "message": "Remove $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2686,7 +2641,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Toegang tot de organisatie ingetrokken voor $ID$.",
+    "message": "Revoked organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2695,7 +2650,7 @@
     }
   },
   "restoredUserId": {
-    "message": "Toegang tot de organisatie hersteld voor $ID$.",
+    "message": "Restored organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2704,7 +2659,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Toegang $ID$ intrekken",
+    "message": "Revoke $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3769,7 +3724,7 @@
     "message": "Uitgeschakeld"
   },
   "revoked": {
-    "message": "Ingetrokken"
+    "message": "Revoked"
   },
   "sendLink": {
     "message": "Send-koppeling",
@@ -4373,10 +4328,10 @@
     "message": "Weet je zeker dat je de volgende gebruikers wilt verwijderen? Dit proces duurt enkele seconden en kan niet worden onderbroken of geannuleerd."
   },
   "removeOrgUsersConfirmation": {
-    "message": "Na het verwijderen hebben leden onherroepelijk geen toegang meer tot de gegevens van de organisatie. Om een lid opnieuw aan de organisatie toe te voegen, moet je deze uitnodigen en opnieuw on-boarden. Dit proces neemt een paar seconden in beslag en je kunt het niet interrumperen of annuleren."
+    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "revokeUsersWarning": {
-    "message": "Na het intrekken van toegang hebben leden geen toegang meer tot de gegevens van de organisatie. Om de toegang snel te herstellen, ga je naar het tabblad Ingetrokken. Dit proces neemt een paar seconden in beslag en je kunt het niet interrumperen of annuleren."
+    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Thema"
@@ -4409,10 +4364,10 @@
     "message": "Succesvol verwijderd"
   },
   "bulkRevokedMessage": {
-    "message": "Toegang tot de organisatie ingetrokkeb"
+    "message": "Revoked organization access successfully"
   },
   "bulkRestoredMessage": {
-    "message": "Toegang tot de organisatie hersteld"
+    "message": "Restored organization access successfully"
   },
   "bulkFilteredMessage": {
     "message": "Uitgezonderd, niet van toepassing voor deze actie."
@@ -4424,10 +4379,10 @@
     "message": "Gebruikers verwijderen"
   },
   "revokeUsers": {
-    "message": "Gebruikers intrekken"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
-    "message": "Gebruikers herstellen"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Fout"
@@ -4849,7 +4804,7 @@
     "message": "Sponsoring verwijderd"
   },
   "ssoKeyConnectorError": {
-    "message": "Key-connector fout: zorg ervoor dat Key-connector beschikbaar is en werkt."
+    "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "keyConnectorUrl": {
     "message": "Key Connector URL"
@@ -5156,17 +5111,17 @@
     "message": "Type gebruikersnaam"
   },
   "plusAddressedEmail": {
-    "message": "E-mailadres-met-plus",
+    "message": "Plus Addressed Email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Gebruik de subadressen van je e-mailprovider."
+    "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
     "message": "Catch-all e-mail"
   },
   "catchallEmailDesc": {
-    "message": "Gebruik de catch-all inbox van je domein."
+    "message": "Use your domain's configured catch-all inbox."
   },
   "random": {
     "message": "Willekeurig",

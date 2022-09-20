@@ -678,9 +678,6 @@
   "invalidMasterPassword": {
     "message": "Неверный мастер-пароль"
   },
-  "invalidFilePassword": {
-    "message": "Неверный пароль к файлу. Используйте пароль, введенный при создании файла экспорта."
-  },
   "lockNow": {
     "message": "Заблокировать сейчас"
   },
@@ -892,48 +889,6 @@
   },
   "fileFormat": {
     "message": "Формат файла"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Экспорт этого файла будет защищен паролем, и для расшифровки потребуется пароль файла."
-  },
-  "exportPasswordDescription": {
-    "message": "Этот пароль будет использоваться для экспорта и импорта этого файла"
-  },
-  "confirmMasterPassword": {
-    "message": "Подтвердите мастер-пароль"
-  },
-  "confirmFormat": {
-    "message": "Подтвердить формат"
-  },
-  "filePassword": {
-    "message": "Пароль к файлу"
-  },
-  "confirmFilePassword": {
-    "message": "Подтвердить пароль к файлу"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Используйте ключ шифрования своей учетной записи, чтобы зашифровать экспорт и ограничить импорт только текущей учетной записью Bitwarden."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Установите пароль для шифрования экспорта и импортируйте его в любую учетную запись Bitwarden, используя пароль для расшифровки."
-  },
-  "fileTypeHeading": {
-    "message": "Тип файла"
-  },
-  "accountBackup": {
-    "message": "Резервное копирование аккаунта"
-  },
-  "passwordProtected": {
-    "message": "Пароль защищен"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "\"Пароль к файлу\" и \"Подтверждение пароля к файлу\" не совпадают."
-  },
-  "confirmVaultImport": {
-    "message": "Подтвердить импорт хранилища"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Этот файл защищен паролем. Пожалуйста, введите пароль файла для импорта данных."
   },
   "exportSuccess": {
     "message": "Данные вашего хранилища экспортированы."
@@ -1235,7 +1190,7 @@
     "message": "Доменные правила"
   },
   "domainRulesDesc": {
-    "message": "Если у вас есть тот же логин на нескольких разных доменах сайта, вы можете отметить сайт как \"эквивалентный\". \"Глобальные\" - это домены, созданные для вас Bitwarden."
+    "message": "Если у вас есть тот же логин на нескольких разных доменах веб-сайта, вы можете отметить веб-сайт как \"эквивалентный\". \"Глобальные\" - это домены, созданные для вас Bitwarden."
   },
   "globalEqDomains": {
     "message": "Глобальные эквивалентные домены"
@@ -1256,7 +1211,7 @@
     "message": "Новый пользовательский домен"
   },
   "newCustomDomainDesc": {
-    "message": "Введите список доменов, разделенных запятыми. Допускаются только базовые домены. Не вводите субдомены. Например, вводите \"google.com\" вместо \"www.google.com\". Также вы можете ввести \"androidapp://package.name\", чтобы связать приложение Android с другими доменами сайта."
+    "message": "Введите список доменов, разделенных запятыми. Допускаются только базовые домены. Не вводите субдомены. Например, вводите \"google.com\" вместо \"www.google.com\". Также вы можете ввести \"androidapp://package.name\", чтобы связать приложение Android с другими доменами веб-сайта."
   },
   "customDomainX": {
     "message": "Пользовательский домен $INDEX$",
@@ -1700,7 +1655,7 @@
     "message": "Скомпрометированные данные"
   },
   "website": {
-    "message": "Сайт"
+    "message": "Веб-сайт"
   },
   "affectedUsers": {
     "message": "Затронутых пользователей"
@@ -5156,11 +5111,11 @@
     "message": "Тип имени пользователя"
   },
   "plusAddressedEmail": {
-    "message": "Субадресованные email",
+    "message": "Плюс-адресованные email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Используйте возможности субадресации вашей электронной почты."
+    "message": "Использовать возможности суб-адресации вашего провайдера электронной почты."
   },
   "catchallEmail": {
     "message": "Catch-all-адрес электронной почты"
@@ -5350,7 +5305,7 @@
     "message": "Включить"
   },
   "on": {
-    "message": "Вкл"
+    "message": "Вкл."
   },
   "cardBrandMir": {
     "message": "Mir"

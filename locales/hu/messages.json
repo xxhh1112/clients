@@ -678,9 +678,6 @@
   "invalidMasterPassword": {
     "message": "A mesterjelszó érvénytelen."
   },
-  "invalidFilePassword": {
-    "message": "Érvénytelen a fájl jelszó. Használjuk az exportálás fájl létrehozásakor megadott jelszót."
-  },
   "lockNow": {
     "message": "Zárolás most"
   },
@@ -892,48 +889,6 @@
   },
   "fileFormat": {
     "message": "Fájlformátum"
-  },
-  "fileEncryptedExportWarningDesc": {
-    "message": "Ez a fájl exportálás jelszóval védett és a visszafejtéshez a fájl jelszó megadása szükséges."
-  },
-  "exportPasswordDescription": {
-    "message": "Ezt a jelszó kerül használatba a fájl exportálására és importálására."
-  },
-  "confirmMasterPassword": {
-    "message": "Mesterjelszó megerősítése"
-  },
-  "confirmFormat": {
-    "message": "Formátum megerősítése"
-  },
-  "filePassword": {
-    "message": "Fájl jelszó"
-  },
-  "confirmFilePassword": {
-    "message": "Fájl jelszó megerősítés"
-  },
-  "accountBackupOptionDescription": {
-    "message": "Az exportálás védelme érdekében a Bitwarden fiók titkosítását használjuk, nem a mesterjelszót. Ez az exportálás csak az aktuális fiókba importálható. Ezzel máshol nem használható biztonsági másolatot hozhatunk létre."
-  },
-  "passwordProtectedOptionDescription": {
-    "message": "Hozzunk létre egy felhasználó által generált jelszót az exportálás védelme érdekében. Ezzel más fiókokban is használható exportálást hozhatunk létre."
-  },
-  "fileTypeHeading": {
-    "message": "Fájltípus"
-  },
-  "accountBackup": {
-    "message": "Fiók biztonsági másolat"
-  },
-  "passwordProtected": {
-    "message": "Jelszóval védett"
-  },
-  "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "A “Fájl jelszó”  és a  “Fájl jelszó megerősítés“ nem egyezik."
-  },
-  "confirmVaultImport": {
-    "message": "Széf importálás megerősítése"
-  },
-  "confirmVaultImportDesc": {
-    "message": "Ez a fájl jelszóval védett. Adjuk meg a fájl jelszót az adatok importálásához."
   },
   "exportSuccess": {
     "message": "A széfadatok exportálásra kerültek."
@@ -1215,7 +1170,7 @@
     "message": "Felismerhető kép megjelenítése minden bejelentkezés mellett."
   },
   "enableGravatars": {
-    "message": "Gravatarok megjelenítése",
+    "message": "Gravatarok engedélyezése",
     "description": "Use avatar images loaded from gravatar.com."
   },
   "enableGravatarsDesc": {
@@ -3433,7 +3388,7 @@
     "message": "Mesterjelszó követelmények"
   },
   "masterPassPolicyDesc": {
-    "message": "A minimális követelmények beállítása a mesterjelszó hosszához."
+    "message": "A minimális követelmények beállítása a mesterjelszó hozzához."
   },
   "twoStepLoginPolicyTitle": {
     "message": "Kétlépéses bejelentkezés szükséges"
@@ -3994,10 +3949,10 @@
     "message": "Egy vállalati házirend miatt korlátozásra került az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül."
   },
   "disableSend": {
-    "message": "Send letiltása"
+    "message": "Küdlés letiltása"
   },
   "disableSendPolicyDesc": {
-    "message": "Ne engedjük a felhasználóknak a Bitwarden Send létrehozását vagy szerkesztését. A meglévő küldés törlése továbbra is megengedett.",
+    "message": "Ne engedjük a felhasználóknak a Bitwarden Küldés létrehozását vagy szerkesztését. A meglévő küldés törlése továbbra is megengedett.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -4319,7 +4274,7 @@
     "message": "A regisztráció lehetővé teszi a szervezet adminisztrátorainak a saját mesterjelszó megváltoztatását. Biztosan feliratkozunk?"
   },
   "resetPasswordPolicy": {
-    "message": "Mesterjelszó alaphelyzetbe állítás"
+    "message": "Mesterjelszó alaphelyzetbe állítása"
   },
   "resetPasswordPolicyDescription": {
     "message": "A szervezet adminisztrátorai alaphelyzetbe állíthatják a szervezet mesterjelszavát."
@@ -4603,16 +4558,16 @@
     "message": "A széf időkorlátja túllépi a szervezet által beállított korlátozást."
   },
   "vaultCustomTimeoutMinimum": {
-    "message": "A minimális egyedi időkifutás 1 perc."
+    "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "A széf időkifutás nincs az engedélyezett intervallunban."
+    "message": "Vault Timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
-    "message": "A személyes széf exportálás eltávolítása"
+    "message": "A személyes széf exportálás nem engedélyezett."
   },
   "disablePersonalVaultExportDesc": {
-    "message": "A tagok nem exportálhatnak személyes széf adatokat."
+    "message": "Biztosan leválasztjuk ezt a szervezetet? A szervezet továbbra is fennáll, de már nem a szolgáltató kezeli."
   },
   "vaultExportDisabled": {
     "message": "A széf exportálás nem engedélyezett."
@@ -4900,11 +4855,11 @@
     "message": "A beüzemeléskor a konfiguráció mentésre kerül és a tagok hitelesíthetnek az azonosítási szolgáltató hitelesítő adataival."
   },
   "ssoPolicyHelpStart": {
-    "message": "Használat:",
+    "message": "Engedélyezzük az",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
-    "message": "önálló bejekentkezés hitelesítés szükséges",
+    "message": "SSO hitelesítési szabályzat",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -4912,7 +4867,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "A kulcscsatlakozó visszafejtésének beállításához SSO hitelesítés és egy önálló szervezeti szabályzat szükséges."
+    "message": "A kulcscsatlakozó visszafejtésének beállításához SSO hitelesítés és egy szervezeti szabályzat szükséges."
   },
   "memberDecryptionOption": {
     "message": "Tagi visszafejtési opciók"
