@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -36,6 +38,8 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   private deferFocus: boolean = null;
 
   constructor(
+    apiService: ApiService,
+    appIdService: AppIdService,
     authService: AuthService,
     router: Router,
     i18nService: I18nService,
@@ -54,6 +58,8 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     formValidationErrorService: FormValidationErrorsService
   ) {
     super(
+      apiService,
+      appIdService,
       authService,
       router,
       platformUtilsService,
