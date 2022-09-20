@@ -32,6 +32,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
   showLoginWithDevice: boolean;
+  validatedEmail = false;
 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
@@ -80,10 +81,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     if (!this.alwaysRememberEmail) {
       const rememberEmail = (await this.stateService.getRememberedEmail()) != null;
       this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
-    }
-
-    if (email) {
-      await this.getLoginWithDevice(email);
     }
   }
 
@@ -164,6 +161,14 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     }
   }
 
+  async validateEmail() {
+    const emailInvalid = this.formGroup.get("email").invalid;
+    if (!emailInvalid) {
+      this.toggleValidateEmail(true);
+      await this.getLoginWithDevice(this.formGroup.get("email").value);
+    }
+  }
+
   async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
     // Generate necessary sso params
     const passwordOptions: any = {
@@ -230,6 +235,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     } catch (e) {
       this.showLoginWithDevice = false;
     }
+  }
+
+  private toggleValidateEmail(value: boolean) {
+    this.validatedEmail = value;
   }
 
   protected focusInput() {

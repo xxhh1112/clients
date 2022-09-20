@@ -34,7 +34,6 @@ export class LoginComponent extends BaseLoginComponent {
   showResetPasswordAutoEnrollWarning = false;
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
-  validatedEmail = false;
 
   get loggedEmail() {
     return this.formGroup.get("email")?.value;
@@ -110,7 +109,7 @@ export class LoginComponent extends BaseLoginComponent {
 
       //check if email is remembered
       if (this.loggedEmail) {
-        this.validatedEmail = true;
+        this.validateEmail();
       }
     });
 
@@ -201,13 +200,6 @@ export class LoginComponent extends BaseLoginComponent {
     this.router.navigate(["/login-with-device"], { state: { email: email } });
   }
 
-  validateEmail() {
-    const emailInvalid = this.formGroup.get("email").invalid;
-    if (!emailInvalid) {
-      this.toggleValidateEmail(true);
-    }
-  }
-
   private getPasswordStrengthUserInput() {
     const email = this.formGroup.get("email")?.value;
     let userInput: string[] = [];
@@ -222,9 +214,5 @@ export class LoginComponent extends BaseLoginComponent {
       );
     }
     return userInput;
-  }
-
-  private toggleValidateEmail(value: boolean) {
-    this.validatedEmail = value;
   }
 }
