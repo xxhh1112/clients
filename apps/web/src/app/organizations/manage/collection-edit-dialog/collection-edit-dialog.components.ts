@@ -83,6 +83,10 @@ export class CollectionEditDialogComponent implements OnDestroy {
   }
 
   async submit() {
+    if (this.formGroup.invalid) {
+      return;
+    }
+
     const collectionView = new CollectionView();
     collectionView.id = this.params.collectionId;
     collectionView.organizationId = this.params.organizationId;
