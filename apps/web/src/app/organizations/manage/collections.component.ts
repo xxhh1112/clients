@@ -124,9 +124,18 @@ export class CollectionsComponent implements OnInit {
     this.didScroll = this.pagedCollections.length > this.pageSize;
   }
 
-  async new_edit(collection: CollectionView) {
+  async new_edit(collection?: CollectionView) {
+    const canCreate = collection == undefined && this.canCreate;
+    const canEdit = collection != undefined && this.canEdit(collection);
+    const canDelete = collection != undefined && this.canDelete(collection);
+
+    if (!(canCreate || canEdit || canDelete)) {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("missingPermissions"));
+      return;
+    }
+
     const dialog = this.dialogService.open(CollectionEditDialogComponent, {
-      data: { collectionId: collection.id, organizationId: collection.organizationId },
+      data: { collectionId: collection?.id, organizationId: this.organizationId },
     });
 
     const result = (await lastValueFrom(dialog.closed)) as CollectionEditDialogResult | undefined;
@@ -168,6 +177,10 @@ export class CollectionsComponent implements OnInit {
         });
       }
     );
+  }
+
+  new_add() {
+    this.new_edit();
   }
 
   add() {
