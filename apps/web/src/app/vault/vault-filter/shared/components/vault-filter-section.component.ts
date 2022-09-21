@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  InjectionToken,
-  Injector,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { Component, EventEmitter, InjectionToken, Injector, Input, Output } from "@angular/core";
 
 import {
   VaultFilterSection,
@@ -21,7 +13,7 @@ import { VaultFilter } from "../models/vault-filter.model";
   selector: "app-filter-section",
   templateUrl: "vault-filter-section.component.html",
 })
-export class VaultFilterSectionComponent implements OnInit {
+export class VaultFilterSectionComponent {
   @Input() activeFilter: VaultFilter;
 
   @Input() data: TreeNode<VaultFilterType>;
@@ -37,12 +29,6 @@ export class VaultFilterSectionComponent implements OnInit {
   private injectors = new Map<string, Injector>();
 
   constructor(private injector: Injector) {}
-
-  async ngOnInit() {
-    if (this.header.defaultSelection) {
-      await this.onFilterSelect(this.filterHeader);
-    }
-  }
 
   get filterHeader() {
     return this.data;

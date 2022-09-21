@@ -54,11 +54,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
-  // This is a hack to avoid redundant api calls that fetch OrganizationVaultFilterComponent collections
-  // When it makes sense to do so we should leverage some other communication method for change events that isn't directly tied to the query param for organizationId
-  // i.e. exposing the VaultFiltersService to the OrganizationSwitcherComponent to make relevant updates from a change event instead of just depending on the router
-  firstLoad = true;
-
   constructor(
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
@@ -107,13 +102,6 @@ export class VaultComponent implements OnInit, OnDestroy {
             });
           });
         }
-
-        if (this.firstLoad) {
-          await this.vaultFilterComponent.initCollections(this.organization);
-        } else {
-          this.vaultFilterComponent.updateOrganizationFilter(this.organization);
-        }
-        this.firstLoad = false;
 
         await this.ciphersComponent.reload(
           this.activeFilter.buildFilter(),

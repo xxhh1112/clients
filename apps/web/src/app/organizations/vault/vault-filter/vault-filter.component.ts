@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
@@ -13,10 +13,29 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
   selector: "app-organization-vault-filter",
   templateUrl: "../../../vault/vault-filter/vault-filter.component.html",
 })
-export class VaultFilterComponent extends BaseVaultFilterComponent implements OnDestroy {
-  private _organization: Organization;
-
+export class VaultFilterComponent extends BaseVaultFilterComponent implements OnInit, OnDestroy {
+  @Input() set organization(value: Organization) {
+    if (value && value !== this._organization) {
+      this._organization = value;
+      this.initCollections(value);
+    }
+  }
+  _organization: Organization;
   destroy$: Subject<void>;
+
+  // override to allow for async init when org loads
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async ngOnInit(): Promise<void> {}
+
+  async initCollections(org: Organization) {
+    await this.buildAllFilters();
+    if (!this.activeFilter.selectedCipherTypeNode) {
+      this.applyCollectionFilter(
+        (await firstValueFrom(this.filters?.collectionFilter.data$)) as TreeNode<CollectionFilter>
+      );
+    }
+    this.isLoaded = true;
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
@@ -38,23 +57,6 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  async initCollections(org: Organization) {
-    this._organization = org;
-    await this.reloadCollections();
-    this.applyCollectionFilter(
-      (await firstValueFrom(this.filters?.collectionFilter.data$)) as TreeNode<CollectionFilter>
-    );
-  }
-
-  async updateOrganizationFilter(org: Organization) {
-    this.vaultFilterService.updateOrganizationFilter(org);
-    await this.reloadCollections();
-  }
-
-  async reloadCollections() {
-    await this.vaultFilterService.reloadCollections();
   }
 
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {

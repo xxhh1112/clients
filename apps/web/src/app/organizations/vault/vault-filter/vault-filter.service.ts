@@ -78,12 +78,6 @@ export class VaultFilterService extends BaseVaultFilterService {
       .subscribe(this._filteredCollections);
   }
 
-  async reloadCollections(org?: Organization) {
-    this.collectionViews$.next(
-      await this.loadCollections(org ?? this._organizationFilter.getValue())
-    );
-  }
-
   protected async loadCollections(org: Organization) {
     if (org?.permissions && org?.canEditAnyCollection) {
       return await this.loadAdminCollections(org);

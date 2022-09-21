@@ -33,7 +33,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   @Output() onEditFolder = new EventEmitter<FolderView>();
 
   isLoaded = false;
-  searchPlaceholder = this.calculateSearchBarLocalizationString(this.activeFilter);
+  searchPlaceholder = "";
   searchText = "";
   collapsedFilterNodes: Set<string>;
   currentFilterCollections: CollectionView[] = [];
@@ -53,14 +53,10 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.collapsedFilterNodes = await this.vaultFilterService.buildCollapsedFilterNodes();
-    this.vaultFilterService.collapsedFilterNodes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((nodes) => {
-        this.collapsedFilterNodes = nodes;
-      });
-
     await this.buildAllFilters();
+    await this.applyTypeFilter(
+      (await firstValueFrom(this.filters?.typeFilter.data$)) as TreeNode<CipherTypeFilter>
+    );
     this.isLoaded = true;
   }
 
@@ -312,7 +308,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       header: {
         showHeader: true,
         isSelectable: true,
-        defaultSelection: true,
       },
       action: this.applyTypeFilter,
     };
