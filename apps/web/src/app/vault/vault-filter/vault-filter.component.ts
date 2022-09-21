@@ -70,6 +70,12 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected loadSubscriptions() {
+    this.vaultFilterService.collapsedFilterNodes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((nodes) => {
+        this.collapsedFilterNodes = nodes;
+      });
+
     this.vaultFilterService.filteredFolders$
       .pipe(
         switchMap(async (folders) => {

@@ -9,6 +9,7 @@ import {
   Subject,
   takeUntil,
   map,
+  switchMap,
 } from "rxjs";
 
 import {
@@ -37,7 +38,10 @@ const NestingDelimiter = "/";
 @Injectable()
 export class VaultFilterService implements VaultFilterServiceAbstraction, OnDestroy {
   protected _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
-  collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.asObservable();
+  collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.pipe(
+    switchMap(async (nodes) => nodes ?? (await this.buildCollapsedFilterNodes()))
+  );
+
   protected _filteredFolders = new BehaviorSubject<FolderView[]>(null);
   filteredFolders$: Observable<FolderView[]> = this._filteredFolders.asObservable();
   protected _filteredCollections = new BehaviorSubject<CollectionView[]>(null);

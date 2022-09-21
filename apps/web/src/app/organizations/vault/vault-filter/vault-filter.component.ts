@@ -5,6 +5,7 @@ import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/c
 import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/vault-filter.component";
 
@@ -23,19 +24,16 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   }
 
   protected loadSubscriptions() {
+    this.vaultFilterService.collapsedFilterNodes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((nodes) => {
+        this.collapsedFilterNodes = nodes;
+      });
+
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {
-          if (this.activeFilter.selectedCollectionNode) {
-            if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
-              const filter = this.activeFilter;
-              filter.resetFilter();
-              filter.selectedCollectionNode = (await firstValueFrom(
-                this.filters?.collectionFilter.data$
-              )) as TreeNode<CollectionFilter>;
-              await this.applyVaultFilter(filter);
-            }
-          }
+          this.removeInvalidCollectionSelection(collections);
         }),
         takeUntil(this.destroy$)
       )
@@ -57,6 +55,19 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
 
   async reloadCollections() {
     await this.vaultFilterService.reloadCollections();
+  }
+
+  protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
+    if (this.activeFilter.selectedCollectionNode) {
+      if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
+        const filter = this.activeFilter;
+        filter.resetFilter();
+        filter.selectedCollectionNode = (await firstValueFrom(
+          this.filters?.collectionFilter.data$
+        )) as TreeNode<CollectionFilter>;
+        await this.applyVaultFilter(filter);
+      }
+    }
   }
 
   async buildAllFilters() {
