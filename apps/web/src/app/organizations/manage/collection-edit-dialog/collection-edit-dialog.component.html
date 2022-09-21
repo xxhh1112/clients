@@ -24,7 +24,7 @@
       <bit-form-field>
         <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
         <select bitInput formControlName="parent">
-          <option [ngValue]="undefined">-</option>
+          <option [ngValue]="null">-</option>
           <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
             {{ collection.name }}
           </option>

@@ -1,11 +1,15 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Provider } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
+import { action } from "@storybook/addon-actions";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CollectionApiService } from "@bitwarden/common/src/abstractions/collection/collection-api.service.abstraction";
 import { Utils } from "@bitwarden/common/src/misc/utils";
+import { Collection } from "@bitwarden/common/src/models/domain/collection";
 import { ButtonModule, DialogModule, FormFieldModule, TabsModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
@@ -21,8 +25,6 @@ interface ProviderData {
   collections: CollectionView[];
 }
 
-class DialogRefMock implements Partial<DialogRef> {}
-
 export default {
   title: "Web/Collections/Edit dialog",
   component: CollectionEditDialogComponent,
@@ -36,16 +38,6 @@ export default {
         TabsModule,
         FormFieldModule,
         ReactiveFormsModule,
-      ],
-      providers: [
-        {
-          provide: DialogRef,
-          useClass: DialogRefMock,
-        },
-        {
-          provide: CollectionService,
-          useValue: undefined,
-        },
       ],
     }),
   ],
@@ -87,15 +79,48 @@ function providers(data: ProviderData) {
   return [
     {
       provide: DIALOG_DATA,
-      useValue: { collectionId: data.collectionId } as CollectionEditDialogParams,
+      useValue: {
+        collectionId: data.collectionId,
+        organizationId: data.organizationId,
+      } as CollectionEditDialogParams,
+    },
+    {
+      provide: DialogRef,
+      useClass: MockDialogRef,
     },
     {
       provide: CollectionService,
-      useValue: {
-        getAllDecrypted: () => Promise.resolve(data.collections),
-      } as Partial<CollectionService>,
+      useValue: new MockCollectionService(data.collections),
     },
-  ];
+    {
+      provide: CollectionApiService,
+      useClass: MockCollectionApiService,
+    },
+  ] as Provider[];
+}
+
+class MockDialogRef implements Partial<DialogRef> {
+  close = action("DialogRef.close");
+}
+
+class MockCollectionService implements Partial<CollectionService> {
+  private encryptAction = action("CollectionService.encrypt");
+
+  constructor(private collections: CollectionView[]) {}
+
+  getAllAdminDecrypted = () => Promise.resolve(this.collections);
+
+  async encrypt(model: CollectionView) {
+    this.encryptAction(model);
+    return new Collection({
+      ...model,
+      name: `<encrypted: "${model.name}">`,
+    });
+  }
+}
+
+class MockCollectionApiService implements Partial<CollectionApiService> {
+  save = action("CollectionApiService.save") as () => Promise<unknown>;
 }
 
 function createCollection(name: string, id = Utils.newGuid()) {

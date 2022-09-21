@@ -35,7 +35,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
   formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
-    parent: "",
+    parent: null as string | null,
   });
 
   constructor(
@@ -59,9 +59,9 @@ export class CollectionEditDialogComponent implements OnDestroy {
             throw new Error("Could not find collection to edit.");
           }
 
-          const nameParts = this.collection.name.split("/");
+          const nameParts = this.collection.name?.split("/");
           const name = nameParts[nameParts.length - 1];
-          const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : undefined;
+          const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
           this.formGroup.patchValue({
             name,
