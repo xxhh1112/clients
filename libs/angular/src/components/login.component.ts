@@ -29,6 +29,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   onSuccessfulLoginNavigate: () => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
+  selfHosted = false;
 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
@@ -56,6 +57,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     protected formValidationErrorService: FormValidationErrorsService
   ) {
     super(environmentService, i18nService, platformUtilsService);
+    this.selfHosted = platformUtilsService.isSelfHost();
   }
 
   get selfHostedDomain() {
