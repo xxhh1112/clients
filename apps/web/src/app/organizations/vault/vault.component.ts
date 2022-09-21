@@ -216,12 +216,12 @@ export class VaultComponent implements OnInit, OnDestroy {
   async addCipher() {
     const component = await this.editCipher(null);
     component.organizationId = this.organization.id;
-    component.type = this.activeFilter.getCipherType;
+    component.type = this.activeFilter.cipherType;
     component.collections = this.vaultFilterComponent.currentFilterCollections.filter(
       (c) => !c.readOnly && c.id != null
     );
-    if (this.activeFilter.getCollectionId) {
-      component.collectionIds = [this.activeFilter.getCollectionId];
+    if (this.activeFilter.collectionId) {
+      component.collectionIds = [this.activeFilter.collectionId];
     }
   }
 
@@ -296,8 +296,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   private go(queryParams: any = null) {
     if (queryParams == null) {
       queryParams = {
-        type: this.activeFilter.getCipherType,
-        collectionId: this.activeFilter.getCollectionId,
+        type: this.activeFilter.cipherType,
+        collectionId: this.activeFilter.collectionId,
         deleted: this.activeFilter.isDeleted || null,
       };
     }

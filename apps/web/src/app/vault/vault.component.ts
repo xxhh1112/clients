@@ -295,21 +295,21 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const component = await this.editCipher(null);
-    component.type = this.activeFilter.getCipherType;
+    component.type = this.activeFilter.cipherType;
     if (
       this.activeFilter.selectedOrganizationNode &&
-      this.activeFilter.getOrganizationId !== "MyVault"
+      this.activeFilter.organizationId !== "MyVault"
     ) {
-      component.organizationId = this.activeFilter.getOrganizationId;
+      component.organizationId = this.activeFilter.organizationId;
       component.collections = this.filterComponent.currentFilterCollections.filter(
         (c) => !c.readOnly && c.id != null
       );
     }
-    const selectedColId = this.activeFilter.getCollectionId;
+    const selectedColId = this.activeFilter.collectionId;
     if (selectedColId && selectedColId !== "AllCollections") {
       component.collectionIds = [selectedColId];
     }
-    component.folderId = this.activeFilter.getFolderId;
+    component.folderId = this.activeFilter.folderId;
   }
 
   async editCipher(cipher: CipherView) {
@@ -368,9 +368,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (queryParams == null) {
       queryParams = {
         favorites: this.activeFilter.isFavorites || null,
-        type: this.activeFilter.getCipherType,
-        folderId: this.activeFilter.getFolderId,
-        collectionId: this.activeFilter.getCollectionId,
+        type: this.activeFilter.cipherType,
+        folderId: this.activeFilter.folderId,
+        collectionId: this.activeFilter.collectionId,
         deleted: this.activeFilter.isDeleted || null,
       };
     }

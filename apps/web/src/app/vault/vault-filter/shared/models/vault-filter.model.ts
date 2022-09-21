@@ -27,29 +27,29 @@ export class VaultFilter {
     return this.selectedCipherTypeNode?.node.type === "trash" ? true : null;
   }
 
-  get getOrganizationId(): string {
+  get organizationId(): string {
     return this.selectedOrganizationNode?.node.id;
   }
 
-  get getCipherType(): CipherType {
+  get cipherType(): CipherType {
     return this.selectedCipherTypeNode?.node.type in CipherType
       ? (this.selectedCipherTypeNode?.node.type as CipherType)
       : null;
   }
 
-  get getCipherStatus(): CipherStatus {
+  get cipherStatus(): CipherStatus {
     return this.selectedCipherTypeNode?.node.type;
   }
 
-  get getCipherTypeId(): string {
+  get cipherTypeId(): string {
     return this.selectedCipherTypeNode?.node.id;
   }
 
-  get getFolderId(): string {
+  get folderId(): string {
     return this.selectedFolderNode?.node.id;
   }
 
-  get getCollectionId(): string {
+  get collectionId(): string {
     return this.selectedCollectionNode?.node.id;
   }
 
@@ -76,32 +76,32 @@ export class VaultFilter {
       if (this.isDeleted && cipherPassesFilter) {
         cipherPassesFilter = cipher.isDeleted;
       }
-      if (this.getCipherType && cipherPassesFilter) {
+      if (this.cipherType && cipherPassesFilter) {
         cipherPassesFilter = cipher.type === this.selectedCipherTypeNode.node.type;
       }
       if (this.selectedFolderNode) {
         // No folder
-        if (this.getFolderId === null && cipherPassesFilter) {
+        if (this.folderId === null && cipherPassesFilter) {
           cipherPassesFilter = cipher.folderId === null;
         }
         // Folder
-        if (this.getFolderId !== null && cipherPassesFilter) {
+        if (this.folderId !== null && cipherPassesFilter) {
           cipherPassesFilter = cipher.folderId === this.selectedFolderNode.node.id;
         }
       }
       if (this.selectedCollectionNode) {
         // All Collections
-        if (this.getCollectionId === "AllCollections" && cipherPassesFilter) {
+        if (this.collectionId === "AllCollections" && cipherPassesFilter) {
           cipherPassesFilter = false;
         }
         // Unassigned
-        if (this.getCollectionId === null && cipherPassesFilter) {
+        if (this.collectionId === null && cipherPassesFilter) {
           cipherPassesFilter =
             cipher.organizationId != null &&
             (cipher.collectionIds == null || cipher.collectionIds.length === 0);
         }
         // Collection
-        if (this.getCollectionId !== null && cipherPassesFilter) {
+        if (this.collectionId !== null && cipherPassesFilter) {
           cipherPassesFilter =
             cipher.collectionIds != null &&
             cipher.collectionIds.includes(this.selectedCollectionNode.node.id);
@@ -109,11 +109,11 @@ export class VaultFilter {
       }
       if (this.selectedOrganizationNode) {
         // My Vault
-        if (this.getOrganizationId === "MyVault" && cipherPassesFilter) {
+        if (this.organizationId === "MyVault" && cipherPassesFilter) {
           cipherPassesFilter = cipher.organizationId === null;
         }
         // Organization
-        else if (this.getOrganizationId !== null && cipherPassesFilter) {
+        else if (this.organizationId !== null && cipherPassesFilter) {
           cipherPassesFilter = cipher.organizationId === this.selectedOrganizationNode.node.id;
         }
       }

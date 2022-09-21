@@ -51,9 +51,9 @@ export class VaultFilterSectionComponent {
       return this.activeFilter.selectedOrganizationNode == filterNode;
     }
     return (
-      this.activeFilter.getCipherTypeId === filterNode?.node.id ||
-      this.activeFilter.getFolderId === filterNode?.node.id ||
-      this.activeFilter.getCollectionId === filterNode?.node.id
+      this.activeFilter.cipherTypeId === filterNode?.node.id ||
+      this.activeFilter.folderId === filterNode?.node.id ||
+      this.activeFilter.collectionId === filterNode?.node.id
     );
   }
 

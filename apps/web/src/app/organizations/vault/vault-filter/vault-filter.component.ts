@@ -61,7 +61,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
 
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
     if (this.activeFilter.selectedCollectionNode) {
-      if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
+      if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
         filter.selectedCollectionNode = (await firstValueFrom(

@@ -177,16 +177,16 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     if (vaultFilter.isDeleted) {
       return "searchTrash";
     }
-    if (vaultFilter.getCipherType === CipherType.Login) {
+    if (vaultFilter.cipherType === CipherType.Login) {
       return "searchLogin";
     }
-    if (vaultFilter.getCipherType === CipherType.Card) {
+    if (vaultFilter.cipherType === CipherType.Card) {
       return "searchCard";
     }
-    if (vaultFilter.getCipherType === CipherType.Identity) {
+    if (vaultFilter.cipherType === CipherType.Identity) {
       return "searchIdentity";
     }
-    if (vaultFilter.getCipherType === CipherType.SecureNote) {
+    if (vaultFilter.cipherType === CipherType.SecureNote) {
       return "searchSecureNote";
     }
     if (vaultFilter.selectedFolderNode?.node) {
@@ -195,10 +195,10 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     if (vaultFilter.selectedCollectionNode?.node) {
       return "searchCollection";
     }
-    if (vaultFilter.getOrganizationId === "MyVault") {
+    if (vaultFilter.organizationId === "MyVault") {
       return "searchMyVault";
     }
-    if (vaultFilter.getOrganizationId) {
+    if (vaultFilter.organizationId) {
       return "searchOrganization";
     }
 
@@ -207,7 +207,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async removeInvalidFolderSelection(folders: FolderView[]) {
     if (this.activeFilter.selectedFolderNode) {
-      if (!folders.find((f) => f.id === this.activeFilter.getFolderId)) {
+      if (!folders.find((f) => f.id === this.activeFilter.folderId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
         filter.selectedCipherTypeNode = (await firstValueFrom(
@@ -220,7 +220,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
     if (this.activeFilter.selectedCollectionNode) {
-      if (!collections.find((f) => f.id === this.activeFilter.getCollectionId)) {
+      if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
         filter.selectedCipherTypeNode = (await firstValueFrom(
