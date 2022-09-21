@@ -97,21 +97,15 @@ export class CollectionService implements CollectionServiceAbstraction {
   }
 
   async getAllAdminDecrypted(organizationId: string): Promise<CollectionView[]> {
-    const organization = await this.organizationService.get(organizationId);
-
-    if (organization.canEditAnyCollection) {
-      const collectionResponse = await this.apiService.getCollections(organizationId);
-      if (collectionResponse?.data == null || collectionResponse.data.length === 0) {
-        return [];
-      }
-
-      const domainCollections = collectionResponse.data.map(
-        (r: CollectionDetailsResponse) => new Collection(new CollectionData(r))
-      );
-      return await this.decryptMany(domainCollections);
+    const collectionResponse = await this.apiService.getCollections(organizationId);
+    if (collectionResponse?.data == null || collectionResponse.data.length === 0) {
+      return [];
     }
 
-    return await this.getAllDecrypted();
+    const domainCollections = collectionResponse.data.map(
+      (r: CollectionDetailsResponse) => new Collection(new CollectionData(r))
+    );
+    return await this.decryptMany(domainCollections);
   }
 
   async getAllNested(collections: CollectionView[] = null): Promise<TreeNode<CollectionView>[]> {
