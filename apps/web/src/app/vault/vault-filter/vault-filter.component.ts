@@ -23,7 +23,6 @@ import { VaultFilter } from "./shared/models/vault-filter.model";
   selector: "app-vault-filter",
   templateUrl: "vault-filter.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class VaultFilterComponent implements OnInit, OnDestroy {
   filters?: VaultFilterList;
   @Input() activeFilter: VaultFilter = new VaultFilter();
