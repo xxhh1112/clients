@@ -1,30 +1,43 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { combineLatestWith, startWith, Subject, switchMap, takeUntil } from "rxjs";
 
-import { ProjectService } from "./project-api.service";
-import { ProjectResponse } from "./responses/project.response";
+import { ProjectListView } from "@bitwarden/common/models/view/projectListView";
+
+import { ProjectService } from "./project.service";
 
 @Component({
   selector: "sm-projects",
   templateUrl: "./projects.component.html",
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
+  projects: ProjectListView[];
+
   private organizationId: string;
+  private destroy$ = new Subject<void>();
 
-  projects: ProjectResponse[];
-
-  constructor(private route: ActivatedRoute, private projectsApiService: ProjectService) {}
+  constructor(private route: ActivatedRoute, private projectService: ProjectService) {}
 
   ngOnInit() {
-    this.route.params.subscribe(async (params: any) => {
-      this.organizationId = params.organizationId;
-      await this.getProjects();
-    });
+    this.projectService.project$
+      .pipe(
+        startWith(null),
+        combineLatestWith(this.route.params),
+        switchMap(async ([_, params]) => {
+          this.organizationId = params.organizationId;
+          return await this.getProjects();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((projects: ProjectListView[]) => (this.projects = projects));
   }
 
-  private async getProjects() {
-    this.projects = (
-      await this.projectsApiService.getProjectsByOrganizationId(this.organizationId)
-    ).data;
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private async getProjects(): Promise<ProjectListView[]> {
+    return await this.projectService.getProjects(this.organizationId);
   }
 }
