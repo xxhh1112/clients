@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return el;
   };
 
-  const create = (options?: CredentialCreationOptions) => {
+  const create = (options?: CredentialCreationOptions): Promise<Credential | null> => {
     console.log("[call] create()", options);
 
     return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return result;
   };
 
-  wWindow.addAuthPopup = exportAsyncFunction(addAuthPopup);
+  (wWindow as any).addAuthPopup = exportAsyncFunction(addAuthPopup); // dev purposes
   wCredentials.create = exportAsyncFunction(create);
   wCredentials.get = exportAsyncFunction(get);
 
