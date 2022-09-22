@@ -1,12 +1,9 @@
 import { Component, EventEmitter, InjectionToken, Injector, Input, Output } from "@angular/core";
 
-import {
-  VaultFilterSection,
-  VaultFilterType,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
+import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";
 import { VaultFilter } from "../models/vault-filter.model";
 
 @Component({

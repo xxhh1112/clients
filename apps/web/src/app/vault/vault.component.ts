@@ -12,7 +12,6 @@ import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -37,6 +36,7 @@ import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
+import { FolderFilter } from "./vault-filter/shared/models/vault-filter.type";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";

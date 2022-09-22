@@ -12,13 +12,6 @@ import {
   switchMap,
 } from "rxjs";
 
-import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/vault-filter.service";
-import {
-  CipherTypeFilter,
-  CollectionFilter,
-  FolderFilter,
-  OrganizationFilter,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -32,6 +25,15 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
+
+import {
+  FolderFilter,
+  CollectionFilter,
+  OrganizationFilter,
+  CipherTypeFilter,
+} from "../shared/models/vault-filter.type";
+
+import { VaultFilterService as VaultFilterServiceAbstraction } from "./abstractions/vault-filter.service";
 
 const NestingDelimiter = "/";
 

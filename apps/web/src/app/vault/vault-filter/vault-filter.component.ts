@@ -1,14 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
-import { VaultFilterService } from "@bitwarden/angular/abstractions/vault-filter.service";
-import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
-import {
-  CipherTypeFilter,
-  CollectionFilter,
-  FolderFilter,
-  OrganizationFilter,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -17,7 +9,15 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { OrganizationOptionsComponent } from "./organization-filter/organization-options.component";
+import { VaultFilterService } from "./services/abstractions/vault-filter.service";
+import { VaultFilterList } from "./shared/models/vault-filter-section.type";
 import { VaultFilter } from "./shared/models/vault-filter.model";
+import {
+  CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
+} from "./shared/models/vault-filter.type";
 
 @Component({
   selector: "app-vault-filter",

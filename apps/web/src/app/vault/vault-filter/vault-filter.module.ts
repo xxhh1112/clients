@@ -1,12 +1,11 @@
 import { NgModule } from "@angular/core";
 
-import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/vault-filter.service";
-
 import { LinkSsoComponent } from "./organization-filter/link-sso.component";
 import { OrganizationOptionsComponent } from "./organization-filter/organization-options.component";
+import { VaultFilterService as VaultFilterServiceAbstraction } from "./services/abstractions/vault-filter.service";
+import { VaultFilterService } from "./services/vault-filter.service";
 import { VaultFilterSharedModule } from "./shared/vault-filter-shared.module";
 import { VaultFilterComponent } from "./vault-filter.component";
-import { VaultFilterService } from "./vault-filter.service";
 
 @NgModule({
   imports: [VaultFilterSharedModule],

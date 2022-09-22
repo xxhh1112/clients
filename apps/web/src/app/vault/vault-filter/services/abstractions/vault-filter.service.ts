@@ -1,16 +1,16 @@
 import { Observable } from "rxjs";
 
-import {
-  CipherTypeFilter,
-  FolderFilter,
-  OrganizationFilter,
-  CollectionFilter,
-} from "@bitwarden/angular/src/vault/vault-filter/models/vault-filter.type";
+import { Organization } from "@bitwarden/common/src/models/domain/organization";
+import { TreeNode } from "@bitwarden/common/src/models/domain/treeNode";
+import { CollectionView } from "@bitwarden/common/src/models/view/collectionView";
+import { FolderView } from "@bitwarden/common/src/models/view/folderView";
 
-import { Organization } from "../../../common/src/models/domain/organization";
-import { TreeNode } from "../../../common/src/models/domain/treeNode";
-import { CollectionView } from "../../../common/src/models/view/collectionView";
-import { FolderView } from "../../../common/src/models/view/folderView";
+import {
+  FolderFilter,
+  CollectionFilter,
+  OrganizationFilter,
+  CipherTypeFilter,
+} from "../../shared/models/vault-filter.type";
 
 export abstract class VaultFilterService {
   collapsedFilterNodes$: Observable<Set<string>>;

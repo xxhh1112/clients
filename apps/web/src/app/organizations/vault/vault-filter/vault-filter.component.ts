@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
-import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+
+import { VaultFilterList } from "src/app/vault/vault-filter/shared/models/vault-filter-section.type";
+import { CollectionFilter } from "src/app/vault/vault-filter/shared/models/vault-filter.type";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/vault-filter.component";
 

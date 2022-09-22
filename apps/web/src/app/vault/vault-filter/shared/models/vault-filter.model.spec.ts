@@ -1,9 +1,3 @@
-import {
-  CipherTypeFilter,
-  CollectionFilter,
-  FolderFilter,
-  OrganizationFilter,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
@@ -12,6 +6,12 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { VaultFilter } from "./vault-filter.model";
+import {
+  CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
+} from "./vault-filter.type";
 
 describe("VaultFilter", () => {
   describe("filterFunction", () => {

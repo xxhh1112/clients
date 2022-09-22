@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/vault-filter.service";
+import { VaultFilterService as VaultFilterServiceAbstraction } from "src/app/vault/vault-filter/services/abstractions/vault-filter.service";
 
 import { VaultFilterSharedModule } from "../../../vault/vault-filter/shared/vault-filter-shared.module";
 

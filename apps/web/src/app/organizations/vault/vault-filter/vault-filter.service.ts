@@ -15,7 +15,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
-import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/vault-filter.service";
+import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
