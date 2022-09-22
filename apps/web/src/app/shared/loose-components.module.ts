@@ -6,7 +6,6 @@ import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
 import { LockComponent } from "../accounts/lock.component";
-import { LoginComponent } from "../accounts/login.component";
 import { RecoverDeleteComponent } from "../accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../accounts/recover-two-factor.component";
 import { RegisterFormModule } from "../accounts/register-form/register-form.module";
@@ -150,8 +149,6 @@ import { OrganizationBadgeModule } from "../vault/organization-badge/organizatio
 import { ShareComponent } from "../vault/share.component";
 import { VaultFilterModule } from "../vault/vault-filter/vault-filter.module";
 
-import { LoginWithDeviceComponent } from "./../accounts/login-with-device.component";
-
 import { SharedModule } from ".";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
@@ -212,8 +209,6 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
-    LoginWithDeviceComponent,
     MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,
@@ -358,8 +353,6 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
-    LoginWithDeviceComponent,
     MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,

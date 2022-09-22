@@ -22,7 +22,7 @@ import { Policy } from "@bitwarden/common/models/domain/policy";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
 
-import { RouterService, StateService } from "../core";
+import { RouterService, StateService } from "../../core";
 
 @Component({
   selector: "app-login",

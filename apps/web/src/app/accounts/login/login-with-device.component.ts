@@ -20,8 +20,7 @@ import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordlessLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
-
-import { AuthRequestResponse } from "./../../../../../libs/common/src/models/response/authRequestResponse";
+import { AuthRequestResponse } from "@bitwarden/common/models/response/authRequestResponse";
 
 @Component({
   selector: "app-login-with-device",
