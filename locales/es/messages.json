@@ -678,6 +678,9 @@
   "invalidMasterPassword": {
     "message": "Contraseña maestra no válida"
   },
+  "invalidFilePassword": {
+    "message": "Contraseña de archivo no válida, por favor utilice la contraseña que introdujo cuando creó el archivo de exportación."
+  },
   "lockNow": {
     "message": "Bloquear ahora"
   },
@@ -889,6 +892,48 @@
   },
   "fileFormat": {
     "message": "Formato de archivo"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Este archivo de exportación estará protegido por contraseña y requerirá la contraseña del archivo para descifrar."
+  },
+  "exportPasswordDescription": {
+    "message": "Esta contraseña se utilizará para exportar e importar este archivo"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirmar contraseña maestra"
+  },
+  "confirmFormat": {
+    "message": "Confirmar formato"
+  },
+  "filePassword": {
+    "message": "Contraseña del archivo"
+  },
+  "confirmFilePassword": {
+    "message": "Confirmar contraseña del archivo"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Aproveche el cifrado de su cuenta de Bitwarden, no la contraseña maestra, para proteger la exportación. Esta exportación sólo puede importarse a la cuenta actual. Utilice esto para crear una copia de seguridad que no se puede utilizar en otro lugar."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Crear una contraseña generada por el usuario para proteger la exportación. Utilice esto para crear una exportación que pueda ser usada en otras cuentas."
+  },
+  "fileTypeHeading": {
+    "message": "Tipo de archivo"
+  },
+  "accountBackup": {
+    "message": "Copia de seguridad de la cuenta"
+  },
+  "passwordProtected": {
+    "message": "Protegida con contraseña"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“Contraseña del archivo” y “Confirmar contraseña del archivo” no coinciden."
+  },
+  "confirmVaultImport": {
+    "message": "Confirmar importación de la bóveda"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Este archivo está protegido por contraseña. Introduzca la contraseña del archivo para importar datos."
   },
   "exportSuccess": {
     "message": "El contenido de tu caja fuerte ha sido exportado."
@@ -3301,10 +3346,10 @@
     "message": "También rotar la clave de encriptación de mi cuenta"
   },
   "rotateEncKeyTitle": {
-    "message": "Rotar clave de encriptación"
+    "message": "Actualizar clave de cifrado"
   },
   "rotateEncKeyConfirmation": {
-    "message": "¿Está seguro de que desea rotar la clave de encriptación de su cuenta?"
+    "message": "¿Está seguro de que desea regenerar la clave de encriptación de su cuenta?"
   },
   "attachmentsNeedFix": {
     "message": "Este elemento tiene archivos adjuntos antiguos que deben ser corregidos."
@@ -3361,7 +3406,7 @@
     "message": "Ver Clave API"
   },
   "rotateApiKey": {
-    "message": "Rotar clave API"
+    "message": "Regenerar clave API"
   },
   "selectOneCollection": {
     "message": "Debes seleccionar al menos una colección."
@@ -4684,16 +4729,16 @@
     "message": "Permitir peticiones de cierre de sesión"
   },
   "idpSignAuthenticationRequests": {
-    "message": "Sign authentication requests"
+    "message": "Solicitud de inicio de sesión"
   },
   "ssoSettingsSaved": {
     "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
-    "message": "Free Bitwarden Families"
+    "message": "Familias Bitwarden gratis"
   },
   "sponsoredFamiliesEligible": {
-    "message": "You and your family are eligible for Free Bitwarden Families. Redeem with your personal email to keep your data secure even when you are not at work."
+    "message": "Usted y su familia son elegibles para Familias Bitwarden Gratis. Canjeé con su correo electrónico personal para mantener tus datos seguros incluso cuando no estés en el trabajo."
   },
   "sponsoredFamiliesEligibleCard": {
     "message": "Redeem your Free Bitwarden for Families plan today to keep your data secure even when you are not at work."
@@ -4711,7 +4756,7 @@
     "message": "The link is no longer valid. Please have the sponsor resend the offer."
   },
   "reclaimedFreePlan": {
-    "message": "Reclaimed free plan"
+    "message": "Plan gratis canjeado"
   },
   "redeem": {
     "message": "Canjear"
@@ -4726,13 +4771,13 @@
     "message": "Enter your personal email to redeem Bitwarden Families"
   },
   "sponsoredFamiliesLeaveCopy": {
-    "message": "If you remove an offer or are removed from the sponsoring organization, your Families sponsorship will expire at the next renewal date."
+    "message": "Si eliminas una oferta o la eliminas de la organización patrocinadora, el patrocinio de tu familia caducará en la próxima fecha de renovación."
   },
   "acceptBitwardenFamiliesHelp": {
-    "message": "Accept offer for an existing organization or create a new Families organization."
+    "message": "Aceptar oferta para una organización existente o crear una nueva organización familiar."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
+    "message": "Se le ha ofrecido una organización gratuita del Plan de Familias Bitwarden. Para continuar, necesita iniciar sesión en la cuenta que recibió la oferta."
   },
   "sponsoredFamiliesAcceptFailed": {
     "message": "No se puede aceptar la oferta. Por favor, reenvíe el correo electrónico de la oferta desde su cuenta de empresa e inténtelo de nuevo."
@@ -4939,10 +4984,10 @@
     "message": "Generar el token de sincronización de facturación"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
+    "message": "Copia y pega este token en la configuración de la sincronización de facturación de tu propia organización."
   },
   "billingSyncCanAccess": {
-    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
+    "message": "Su token de sincronización de facturación puede acceder y editar la configuración de suscripción de esta organización."
   },
   "manageBillingSync": {
     "message": "Administrar la sincronización de facturación"
@@ -4954,16 +4999,16 @@
     "message": "Generar token"
   },
   "rotateToken": {
-    "message": "Rotar token"
+    "message": "Regenerar token"
   },
   "rotateBillingSyncTokenWarning": {
-    "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
+    "message": "Si continúa, necesitará reconfigurar la sincronización de facturación en su servidor autoalojado."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the Billing Sync Token will invalidate the previous token."
+    "message": "Rotar el token de sincronización de facturación invalidará el token anterior."
   },
   "selfHostingTitle": {
-    "message": "Self-Hosting"
+    "message": "Autoalojamiento"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
@@ -4972,7 +5017,7 @@
     "message": "Token rotado."
   },
   "billingSync": {
-    "message": "Billing Sync"
+    "message": "Facturación sincronizada"
   },
   "billingSyncDesc": {
     "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
@@ -4981,7 +5026,7 @@
     "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing Sync Token"
+    "message": "Token de sincronización de facturación"
   },
   "active": {
     "message": "Activo"
@@ -5187,7 +5232,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Alias de Correo Reenviado"
   },
   "forwardedEmailDesc": {
     "message": "Generar un alias de correo electrónico mediante un servicio de reenvío externo."
@@ -5228,7 +5273,7 @@
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
-    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
+    "message": "Provisionar automáticamente a los usuarios y grupos con su proveedor de identidad preferido a través de la provisión SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDesc": {
@@ -5236,14 +5281,14 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
-    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
+    "message": "Configura tu proveedor de identidad preferido configurando la URL y la clave API SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimApiKeyHelperText": {
-    "message": "This API key has access to manage users within your organization. It should be kept secret."
+    "message": "Esta clave API tiene acceso para administrar usuarios dentro de su organización. Debe mantenerse en secreto."
   },
   "copyScimKey": {
-    "message": "Copy the SCIM API Key to your clipboard",
+    "message": "Copiar la clave de la API de SCIM al portapapeles",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {
@@ -5255,14 +5300,14 @@
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateKey": {
-    "message": "Rotar clave"
+    "message": "Regenerar clave"
   },
   "scimApiKey": {
     "message": "Clave API SCIM",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {
-    "message": "Copy the SCIM endpoint URL to your clipboard",
+    "message": "Copiar la URL del endpoint SCIM al portapapeles",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimUrl": {
@@ -5311,6 +5356,6 @@
     "message": "Mir"
   },
   "numberOfUsers": {
-    "message": "Number of users"
+    "message": "Número de usuarios"
   }
 }
