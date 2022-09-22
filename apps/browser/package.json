@@ -20,5 +20,12 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:watch:all": "jest --watchAll"
+  },
+  "dependencies": {
+    "elliptic": "^6.5.4",
+    "soft-u2f": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.14"
   }
 }

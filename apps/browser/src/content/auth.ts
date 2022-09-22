@@ -1,13 +1,16 @@
 /* eslint-disable no-console */
 
 import { authPopupHtml } from "./auth_popup";
+import { createCredential } from "./auth_sign";
 import { MessageType, Messenger } from "./messenger";
 
-declare function cloneInto<T>(object: T, window: Window): T;
+declare function cloneInto<T>(object: T, window: Window, options?: object): T;
 declare function exportFunction<T extends unknown[], R>(
   f: (...args: T) => R,
   window: Window
 ): (...args: T) => R;
+
+const ENABLE_FALLBACK = true;
 
 document.addEventListener("DOMContentLoaded", (event) => {
   const wWindow = (window as any).wrappedJSObject as Window;
@@ -18,7 +21,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return new window.Promise(async (resolve, reject) => {
         try {
           const result = await f(...args);
-          resolve(cloneInto(result, window));
+          resolve(result);
+          // Credentials can't be cloned
+          // resolve(cloneInto(result, window));
         } catch (ex) {
           reject(cloneInto(ex, window));
         }
@@ -39,24 +44,39 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return el;
   };
 
-  const create = (options?: CredentialCreationOptions): Promise<Credential | null> => {
+  let onApprove: () => void | undefined;
+
+  const create = (options: CredentialCreationOptions): Promise<Credential | null> => {
     console.log("[call] create()", options);
 
-    return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
       function fallback() {
-        reject(new Error("Auth aborted by user"));
+        if (!ENABLE_FALLBACK) {
+          return reject(new Error("Authentication aborted by user"));
+        }
+
+        window.navigator.credentials
+          .create(options)
+          .then((credential) => {
+            console.log("[fallback-auth] [successful]", credential);
+            resolve(credential);
+          })
+          .catch((err) => {
+            console.log("[fallback-auth] [failed]", err);
+            reject(err);
+          });
       }
 
-      addAuthPopup(fallback);
+      const popup = await addAuthPopup(fallback);
 
       Messenger.sendMessageToBackground(MessageType.AUTH, {});
-      // const result = await window.navigator.credentials.create(options);
 
-      // console.log("[return] create()", result);
-
-      // return result;
-      // throw new Error("Native fallback disabled");
-      // resolve(undefined);
+      onApprove = async () => {
+        const result = await createCredential(options);
+        popup.remove();
+        resolve(cloneInto(result, window, { cloneFunctions: true }));
+      };
     });
   };
 
@@ -75,12 +95,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
   wCredentials.get = exportAsyncFunction(get);
 
   /* Commands */
-
   browser.runtime.onMessage.addListener((message, sender) => {
     const { type, data } = message;
     console.log("content-script received:", type, data);
+
+    if (type === "auth-approve" && onApprove) {
+      onApprove();
+    }
     // return this.requests.get(type)(sender, data);
   });
+
+  // console.log("userScripts", browser.userScripts.register);
+  // const registeredUserScript = browser.userScripts.register({
+  //   allFrames: true,
+  //   matches: ["http://*/*", "https://*/*", "file:///*"],
+  //   js: [{ code: 'alert("yo");' }],
+  // });
+  // console.log("registeredUserScript", registeredUserScript);
 
   console.log("Bitwarden credentials implementation active", browser.browserAction);
 });

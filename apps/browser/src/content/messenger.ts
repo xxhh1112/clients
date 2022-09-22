@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 export enum MessageType {
   AUTH = "auth",
+  AUTH_APPROVE = "auth-approve",
+  AUTH_APPROVE_POPUP = "auth-approve-popup",
 }
 
 export const Messenger = {

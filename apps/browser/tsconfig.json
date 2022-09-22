@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "emitDecoratorMetadata": true,
@@ -15,6 +16,7 @@
     }
   },
   "angularCompilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "preserveWhitespaces": true
   },
   "include": ["src"]
