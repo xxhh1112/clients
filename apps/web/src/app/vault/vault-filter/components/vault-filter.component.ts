@@ -8,16 +8,17 @@ import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeN
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-import { OrganizationOptionsComponent } from "./organization-filter/organization-options.component";
-import { VaultFilterService } from "./services/abstractions/vault-filter.service";
-import { VaultFilterList } from "./shared/models/vault-filter-section.type";
-import { VaultFilter } from "./shared/models/vault-filter.model";
+import { VaultFilterService } from "../services/abstractions/vault-filter.service";
+import { VaultFilterList } from "../shared/models/vault-filter-section.type";
+import { VaultFilter } from "../shared/models/vault-filter.model";
 import {
   CipherTypeFilter,
   CollectionFilter,
   FolderFilter,
   OrganizationFilter,
-} from "./shared/models/vault-filter.type";
+} from "../shared/models/vault-filter.type";
+
+import { OrganizationOptionsComponent } from "./organization-options.component";
 
 @Component({
   selector: "app-vault-filter",

@@ -35,9 +35,9 @@ import { CiphersComponent } from "./ciphers.component";
 import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
+import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { FolderFilter } from "./vault-filter/shared/models/vault-filter.type";
-import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";
 

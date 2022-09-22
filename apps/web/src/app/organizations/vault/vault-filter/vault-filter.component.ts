@@ -8,11 +8,11 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { VaultFilterList } from "src/app/vault/vault-filter/shared/models/vault-filter-section.type";
 import { CollectionFilter } from "src/app/vault/vault-filter/shared/models/vault-filter.type";
 
-import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/vault-filter.component";
+import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/components/vault-filter.component";
 
 @Component({
   selector: "app-organization-vault-filter",
-  templateUrl: "../../../vault/vault-filter/vault-filter.component.html",
+  templateUrl: "../../../vault/vault-filter/components/vault-filter.component.html",
 })
 export class VaultFilterComponent extends BaseVaultFilterComponent implements OnInit, OnDestroy {
   @Input() set organization(value: Organization) {
