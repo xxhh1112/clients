@@ -50,14 +50,10 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
 
   nestedFolders$: Observable<TreeNode<FolderFilter>> = this.filteredFolders$.pipe(
-    map((folders) => {
-      return this.getAllNestedFolders(folders);
-    })
+    map((folders) => this.getAllNestedFolders(folders))
   );
   nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
-    map((collections) => {
-      return this.getAllNestedCollections(collections);
-    })
+    map((collections) => this.getAllNestedCollections(collections))
   );
 
   protected _organizationFilter = new BehaviorSubject<Organization>(null);
