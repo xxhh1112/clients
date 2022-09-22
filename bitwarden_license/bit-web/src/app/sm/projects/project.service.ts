@@ -86,11 +86,7 @@ export class ProjectService {
     projectView.organizationId = projectResponse.organizationId;
     projectView.creationDate = projectResponse.creationDate;
     projectView.revisionDate = projectResponse.revisionDate;
-
-    const [name] = await Promise.all([
-      this.encryptService.decryptToUtf8(new EncString(projectResponse.name), orgKey),
-    ]);
-    projectView.name = name;
+    projectView.name = await this.encryptService.decryptToUtf8(new EncString(projectResponse.name), orgKey);
     return projectView;
   }
 
