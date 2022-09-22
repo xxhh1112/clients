@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { of, switchMap, takeUntil, Subject } from "rxjs";
 
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { CollectionApiService } from "@bitwarden/common/abstractions/collection/collection-api.service.abstraction";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { BitValidators } from "@bitwarden/components";
@@ -42,12 +42,12 @@ export class CollectionEditDialogComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
-    private collectionService: CollectionService,
+    private collectionService: CollectionAdminService,
     private collectionApiService: CollectionApiService
   ) {
     of(0)
       .pipe(
-        switchMap(() => collectionService.getAllAdminDecrypted(params.organizationId)),
+        switchMap(() => collectionService.getAllDecrypted(params.organizationId)),
         takeUntil(this.destroy$)
       )
       .subscribe((collections) => {
