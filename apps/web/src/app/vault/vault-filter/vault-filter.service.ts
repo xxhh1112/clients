@@ -12,6 +12,7 @@ import {
   switchMap,
 } from "rxjs";
 
+import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/vault-filter.service";
 import {
   CipherTypeFilter,
   CollectionFilter,
@@ -25,7 +26,6 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { VaultFilterService as VaultFilterServiceAbstraction } from "@bitwarden/common/abstractions/vault-filter.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
