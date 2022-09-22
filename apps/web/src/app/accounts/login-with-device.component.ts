@@ -21,6 +21,8 @@ import { PasswordlessLogInCredentials } from "@bitwarden/common/models/domain/lo
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/models/request/passwordlessCreateAuthRequest";
 
+import { AuthRequestResponse } from "./../../../../../libs/common/src/models/response/authRequestResponse";
+
 @Component({
   selector: "app-login-with-device",
   templateUrl: "login-with-device.component.html",
@@ -29,19 +31,17 @@ export class LoginWithDeviceComponent
   extends CaptchaProtectedComponent
   implements OnInit, OnDestroy
 {
-  private accessCode: string;
-  private privateKeyValue: ArrayBuffer;
   private destroy$ = new Subject<void>();
-  fingerPrint: string;
   email: string;
-  resendNotification = false;
+  showResendNotification = false;
+  passwordlessRequest: PasswordlessCreateAuthRequest;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
-  private keypair: [ArrayBuffer, ArrayBuffer];
+  private authRequestKeyPair: [publicKey: ArrayBuffer, privateKey: ArrayBuffer];
 
   constructor(
     private router: Router,
@@ -70,7 +70,7 @@ export class LoginWithDeviceComponent
       .getPushNotifcationObs$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((id) => {
-        this.confirmResponse(id, this.accessCode, this.privateKeyValue);
+        this.confirmResponse(id);
       });
   }
 
@@ -84,41 +84,21 @@ export class LoginWithDeviceComponent
   }
 
   async startPasswordlessLogin() {
-    this.resendNotification = false;
-    this.keypair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
-    const fingerprint = await (
-      await this.cryptoService.getFingerprint(this.email, this.keypair[0])
-    ).join("-");
-    const deviceIdentifier = await this.appIdService.getAppId();
-    const publicKey = Utils.fromBufferToB64(this.keypair[0]);
-    const accessCode = await this.passwordGenerationService.generatePassword({ length: 25 });
-
-    const request = new PasswordlessCreateAuthRequest(
-      this.email,
-      deviceIdentifier,
-      publicKey,
-      AuthRequestType.AuthenticateAndUnlock,
-      accessCode,
-      fingerprint
-    );
-
-    this.fingerPrint = fingerprint;
+    this.showResendNotification = false;
 
     try {
-      const reqResponse = await this.apiService.postAuthRequest(request);
+      this.buildAuthRequest();
+      const reqResponse = await this.apiService.postAuthRequest(this.passwordlessRequest);
 
       if (reqResponse.id) {
         this.anonymousHubService.createHubConnection(reqResponse.id);
-
-        this.accessCode = accessCode;
-        this.privateKeyValue = this.keypair[1];
       }
     } catch (e) {
       this.logService.error(e);
     }
 
     setTimeout(() => {
-      this.resendNotification = true;
+      this.showResendNotification = true;
     }, 12000);
   }
 
@@ -128,39 +108,69 @@ export class LoginWithDeviceComponent
     this.anonymousHubService.stopHubConnection();
   }
 
-  private async confirmResponse(requestId: string, accessCode: string, privateKeyVal: ArrayBuffer) {
-    const response = await this.apiService.getAuthResponse(requestId, accessCode);
-
-    if (response.requestApproved) {
-      const decKey = await this.cryptoService.rsaDecrypt(response.key, privateKeyVal);
-      const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
-        response.masterPasswordHash,
-        privateKeyVal
+  private async confirmResponse(requestId: string) {
+    try {
+      const response = await this.apiService.getAuthResponse(
+        requestId,
+        this.passwordlessRequest.accessCode
       );
-      const key = new SymmetricCryptoKey(decKey);
-      const localHashedPassword = Utils.fromBufferToUtf8(decMasterPasswordHash);
-      try {
-        const credentials = new PasswordlessLogInCredentials(
-          this.email,
-          accessCode,
-          requestId,
-          key,
-          localHashedPassword
-        );
-        await this.authService.logIn(credentials);
-        const disableFavicon = await this.stateService.getDisableFavicon();
-        await this.stateService.setDisableFavicon(!!disableFavicon);
-        if (this.onSuccessfulLogin != null) {
-          this.onSuccessfulLogin();
-        }
-        if (this.onSuccessfulLoginNavigate != null) {
-          this.onSuccessfulLoginNavigate();
-        } else {
-          this.router.navigate([this.successRoute]);
-        }
-      } catch (error) {
-        this.logService.error(error);
+
+      if (!response.requestApproved) {
+        return;
       }
+
+      const credentials = await this.buildLoginCredntials(requestId, response);
+      await this.authService.logIn(credentials);
+      if (this.onSuccessfulLogin != null) {
+        this.onSuccessfulLogin();
+      }
+      if (this.onSuccessfulLoginNavigate != null) {
+        this.onSuccessfulLoginNavigate();
+      } else {
+        this.router.navigate([this.successRoute]);
+      }
+    } catch (error) {
+      this.logService.error(error);
     }
+  }
+
+  private async buildAuthRequest() {
+    this.authRequestKeyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
+    const fingerprint = await (
+      await this.cryptoService.getFingerprint(this.email, this.authRequestKeyPair[0])
+    ).join("-");
+    const deviceIdentifier = await this.appIdService.getAppId();
+    const publicKey = Utils.fromBufferToB64(this.authRequestKeyPair[0]);
+    const accessCode = await this.passwordGenerationService.generatePassword({ length: 25 });
+
+    this.passwordlessRequest = new PasswordlessCreateAuthRequest(
+      this.email,
+      deviceIdentifier,
+      publicKey,
+      AuthRequestType.AuthenticateAndUnlock,
+      accessCode,
+      fingerprint
+    );
+  }
+
+  private async buildLoginCredntials(
+    requestId: string,
+    response: AuthRequestResponse
+  ): Promise<PasswordlessLogInCredentials> {
+    const decKey = await this.cryptoService.rsaDecrypt(response.key, this.authRequestKeyPair[1]);
+    const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
+      response.masterPasswordHash,
+      this.authRequestKeyPair[1]
+    );
+    const key = new SymmetricCryptoKey(decKey);
+    const localHashedPassword = Utils.fromBufferToUtf8(decMasterPasswordHash);
+
+    return new PasswordlessLogInCredentials(
+      this.email,
+      this.passwordlessRequest.accessCode,
+      requestId,
+      key,
+      localHashedPassword
+    );
   }
 }
