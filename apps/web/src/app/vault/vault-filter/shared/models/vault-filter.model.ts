@@ -4,7 +4,7 @@ import {
   CollectionFilter,
   FolderFilter,
   OrganizationFilter,
-} from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
+} from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";

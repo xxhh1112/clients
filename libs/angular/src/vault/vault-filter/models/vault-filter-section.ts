@@ -7,7 +7,7 @@ import {
   CollectionFilter,
   FolderFilter,
   OrganizationFilter,
-} from "./cipher-filter.model";
+} from "./vault-filter.type";
 
 export type VaultFilterType =
   | OrganizationFilter

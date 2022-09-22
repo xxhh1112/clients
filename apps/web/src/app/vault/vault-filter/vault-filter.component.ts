@@ -2,13 +2,13 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angu
 import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { VaultFilterService } from "@bitwarden/angular/abstractions/vault-filter.service";
+import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import {
   CipherTypeFilter,
   CollectionFilter,
   FolderFilter,
   OrganizationFilter,
-} from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
-import { VaultFilterList } from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
+} from "@bitwarden/angular/vault/vault-filter/models/vault-filter.type";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";

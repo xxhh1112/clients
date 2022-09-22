@@ -5,7 +5,7 @@ import {
   FolderFilter,
   OrganizationFilter,
   CollectionFilter,
-} from "@bitwarden/angular/src/vault/vault-filter/models/cipher-filter.model";
+} from "@bitwarden/angular/src/vault/vault-filter/models/vault-filter.type";
 
 import { Organization } from "../../../common/src/models/domain/organization";
 import { TreeNode } from "../../../common/src/models/domain/treeNode";
