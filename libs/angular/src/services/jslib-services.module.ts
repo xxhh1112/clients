@@ -1,6 +1,5 @@
 import { InjectionToken, Injector, LOCALE_ID, NgModule } from "@angular/core";
 
-import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/deprecated-vault-filter.service";
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
@@ -104,7 +103,6 @@ import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFu
 import { AuthGuard } from "../guards/auth.guard";
 import { LockGuard } from "../guards/lock.guard";
 import { UnauthGuard } from "../guards/unauth.guard";
-import { VaultFilterService } from "../vault/vault-filter/services/vault-filter.service";
 
 import { BroadcasterService } from "./broadcaster.service";
 import { ModalService } from "./modal.service";
@@ -528,19 +526,6 @@ export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
       provide: UserVerificationApiServiceAbstraction,
       useClass: UserVerificationApiService,
       deps: [ApiServiceAbstraction],
-    },
-    {
-      provide: DeprecatedVaultFilterServiceAbstraction,
-      useClass: VaultFilterService,
-      deps: [
-        StateServiceAbstraction,
-        OrganizationServiceAbstraction,
-        FolderServiceAbstraction,
-        CipherServiceAbstraction,
-        CollectionServiceAbstraction,
-        PolicyServiceAbstraction,
-        I18nServiceAbstraction,
-      ],
     },
     {
       provide: OrganizationApiServiceAbstraction,
