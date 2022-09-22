@@ -86,7 +86,7 @@ export class LoginWithDeviceComponent
     this.showResendNotification = false;
 
     try {
-      this.buildAuthRequest();
+      await this.buildAuthRequest();
       const reqResponse = await this.apiService.postAuthRequest(this.passwordlessRequest);
 
       if (reqResponse.id) {
