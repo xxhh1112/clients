@@ -37,7 +37,7 @@ import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
-import { FolderFilter } from "./vault-filter/shared/models/vault-filter.type";
+import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
 
 const BroadcasterSubscriptionId = "VaultComponent";
 
@@ -182,8 +182,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async applyOrganizationFilter(orgId: string) {
+    if (orgId == null) {
+      orgId = "MyVault";
+    }
     const orgs = await firstValueFrom(this.filterComponent.filters.organizationFilter.data$);
-    const orgNode = ServiceUtils.getTreeNodeObject(orgs, orgId) as TreeNode<FolderFilter>;
+    const orgNode = ServiceUtils.getTreeNodeObject(orgs, orgId) as TreeNode<OrganizationFilter>;
     this.filterComponent.filters?.organizationFilter?.action(orgNode);
   }
 

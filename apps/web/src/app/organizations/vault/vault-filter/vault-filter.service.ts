@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, combineLatestWith, mergeMap, switchMap, takeUntil } from "rxjs";
+import { combineLatestWith, mergeMap, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -19,9 +19,7 @@ import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vau
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
-  protected collectionViews$: BehaviorSubject<CollectionView[]> = new BehaviorSubject<
-    CollectionView[]
-  >(null);
+  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   constructor(
     stateService: StateService,

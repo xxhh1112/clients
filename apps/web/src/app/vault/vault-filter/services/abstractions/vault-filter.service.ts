@@ -16,21 +16,18 @@ export abstract class VaultFilterService {
   collapsedFilterNodes$: Observable<Set<string>>;
   filteredFolders$: Observable<FolderView[]>;
   filteredCollections$: Observable<CollectionView[]>;
-  nestedFolders$: Observable<TreeNode<FolderFilter>>;
-  nestedCollections$: Observable<TreeNode<CollectionFilter>>;
+  organizationTree$: Observable<TreeNode<OrganizationFilter>>;
+  folderTree$: Observable<TreeNode<FolderFilter>>;
+  collectionTree$: Observable<TreeNode<CollectionFilter>>;
   reloadCollections: () => Promise<void>;
-  buildCollapsedFilterNodes: () => Promise<Set<string>>;
+  reloadOrganizations: () => Promise<void>;
   storeCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;
-  ensureVaultFiltersAreExpanded: () => Promise<void>;
+  expandOrgFilter: () => Promise<void>;
   updateOrganizationFilter: (organization: Organization) => void;
-  buildNestedOrganizations: () => Promise<Observable<TreeNode<OrganizationFilter>>>;
-  buildNestedTypes: (
+  buildTypeTree: (
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
   ) => Observable<TreeNode<CipherTypeFilter>>;
-  buildNestedTrash: () => Observable<TreeNode<CipherTypeFilter>>;
-  getNestedFolder: (id: string) => Promise<TreeNode<FolderFilter>>;
-  getNestedCollection: (id: string) => Promise<TreeNode<CollectionFilter>>;
   checkForSingleOrganizationPolicy: () => Promise<boolean>;
   checkForPersonalOwnershipPolicy: () => Promise<boolean>;
 }

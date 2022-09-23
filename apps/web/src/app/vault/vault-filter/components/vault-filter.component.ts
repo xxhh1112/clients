@@ -105,10 +105,10 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
+  // Remove when organizations is refactored with observables
   async reloadOrganizations() {
     if (this.filters) {
-      this.filters.organizationFilter.data$ =
-        await this.vaultFilterService.buildNestedOrganizations();
+      await this.vaultFilterService.reloadOrganizations();
     }
   }
 
@@ -123,7 +123,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
-    if (!orgNode.node.enabled) {
+    if (!orgNode?.node.enabled) {
       this.platformUtilsService.showToast(
         "error",
         null,
@@ -133,11 +133,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     const filter = this.activeFilter;
     filter.resetOrganization();
-    if (orgNode.node.id !== "AllVaults") {
+    if (orgNode?.node.id !== "AllVaults") {
       filter.selectedOrganizationNode = orgNode;
     }
     this.vaultFilterService.updateOrganizationFilter(orgNode.node);
-    await this.vaultFilterService.ensureVaultFiltersAreExpanded();
+    await this.vaultFilterService.expandOrgFilter();
     await this.applyVaultFilter(filter);
   };
 
@@ -254,7 +254,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       : null;
 
     filter.organizationFilter = {
-      data$: await this.vaultFilterService.buildNestedOrganizations(),
+      data$: this.vaultFilterService.organizationTree$,
       header: {
         showHeader: !(singleOrgPolicy && personalVaultPolicy),
         isSelectable: true,
@@ -270,8 +270,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async addTypeFilter(filter: VaultFilterList) {
     filter.typeFilter = {
-      data$: await this.vaultFilterService.buildNestedTypes(
-        { id: "all", name: "allItems", type: "all", icon: "" },
+      data$: this.vaultFilterService.buildTypeTree(
+        { id: "AllItems", name: "allItems", type: "all", icon: "" },
         [
           {
             id: "favorites",
@@ -316,7 +316,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async addFolderFilter(filter: VaultFilterList) {
     filter.folderFilter = {
-      data$: this.vaultFilterService.nestedFolders$,
+      data$: this.vaultFilterService.folderTree$,
       header: {
         showHeader: true,
         isSelectable: false,
@@ -336,7 +336,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async addCollectionFilter(filter: VaultFilterList) {
     filter.collectionFilter = {
-      data$: this.vaultFilterService.nestedCollections$,
+      data$: this.vaultFilterService.collectionTree$,
       header: {
         showHeader: true,
         isSelectable: true,
@@ -348,7 +348,22 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async addTrashFilter(filter: VaultFilterList) {
     filter.trashFilter = {
-      data$: this.vaultFilterService.buildNestedTrash(),
+      data$: this.vaultFilterService.buildTypeTree(
+        {
+          id: "headTrash",
+          name: "HeadTrash",
+          type: "trash",
+          icon: "bwi-trash",
+        },
+        [
+          {
+            id: "trash",
+            name: this.i18nService.t("trash"),
+            type: "trash",
+            icon: "bwi-trash",
+          },
+        ]
+      ),
       header: {
         showHeader: false,
         isSelectable: true,

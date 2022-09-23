@@ -45,7 +45,7 @@ export class VaultFilterSectionComponent {
 
   isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
     if (this.isOrganizationFilter) {
-      return this.activeFilter.selectedOrganizationNode == filterNode;
+      return this.activeFilter.organizationId === filterNode?.node.id;
     }
     return (
       this.activeFilter.cipherTypeId === filterNode?.node.id ||
