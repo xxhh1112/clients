@@ -65,7 +65,11 @@
             <label class="form-check-label" for="rememberEmail">{{ "rememberEmail" | i18n }}</label>
           </div>
           <div class="mb-n3" *ngIf="captchaSiteKey">
-            <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
+            <app-captcha
+              [siteKey]="captchaSiteKey"
+              [solved]="captchaSolved"
+              (onSolved)="setCaptchaToken($event)"
+            >
             </app-captcha>
           </div>
           <hr />

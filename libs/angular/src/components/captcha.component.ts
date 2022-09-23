@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { IFrameComponent } from "@bitwarden/common/misc/iframe_component";
 
@@ -14,17 +15,26 @@ import { IFrameComponent } from "@bitwarden/common/misc/iframe_component";
 })
 export class CaptchaComponent implements AfterViewInit, OnDestroy {
   @Input() siteKey: string;
-  @Output() captchaSolved = new EventEmitter<string>();
+
+  @Input() set solved(val: boolean) {
+    if (!val && this.initialized) {
+      this.logService.debug("CaptchaComponent: Resetting captcha");
+      this.iframeHandler?.sendMessage("reload");
+    }
+  }
+  @Output() onSolved = new EventEmitter<string>();
 
   private iframeHandler: IFrameComponent;
 
   private readonly connectorUrl = "captcha-connector.html";
   protected readonly id = "hcaptcha_iframe";
+  private initialized = false;
 
   constructor(
     protected environmentService: EnvironmentService,
     protected i18nService: I18nService,
-    protected platformUtilsService: PlatformUtilsService
+    protected platformUtilsService: PlatformUtilsService,
+    protected logService: LogService
   ) {}
 
   ngAfterViewInit(): void {
@@ -36,7 +46,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
       this.connectorUrl,
       this.id,
       (token: string) => {
-        this.captchaSolved.emit(token);
+        this.onSolved.emit(token);
       },
       (error: string) => {
         this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), error);
@@ -58,6 +68,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
     };
     const params = this.iframeHandler.createParams(data, 1);
     this.iframeHandler.initComponent(params);
+    this.initialized = true;
   }
 
   ngOnDestroy(): void {

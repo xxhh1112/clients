@@ -21,6 +21,11 @@ export class LoginComponent implements OnInit {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
+  private hasBypassToken: boolean;
+
+  get captchaSolved() {
+    return this.captchaToken != undefined;
+  }
 
   masterPassword = "";
   showPassword = false;
@@ -135,6 +140,12 @@ export class LoginComponent implements OnInit {
         }
       }
     } catch (e) {
+      if (e.response?.CaptchaBypassToken) {
+        this.hasBypassToken = true;
+        this.captchaToken = e.response.CaptchaBypassToken;
+      } else if (!this.hasBypassToken) {
+        this.captchaToken = undefined;
+      }
       this.logService.error(e);
     }
   }
