@@ -374,24 +374,4 @@ describe("Cipher Attachment Service", () => {
     expect(apiServiceSpy.send).toBeCalledTimes(1);
     expect(apiServiceSpy.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
   });
-
-  it("Should test shareManyWithServer", async () => {
-    const ciphers: CipherView[] = [];
-    const organizationId = "organizationId";
-    const collectionIds: string[] = ["collectionIds", "collectionIds1"];
-    const encCiphers: Cipher[] = [];
-    const request = new CipherBulkShareRequest(encCiphers, collectionIds);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    await cipherAttachmentApiService.shareManyWithServer(ciphers, organizationId, collectionIds);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
-  });
 });
