@@ -60,4 +60,13 @@ export class SecretsComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  openNewSecretDialog() {
+    this.dialogService.open<unknown, SecretOperation>(SecretDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        operation: OperationType.Add,
+      },
+    });
+  }
 }

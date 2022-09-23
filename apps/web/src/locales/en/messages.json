@@ -5409,6 +5409,18 @@
   "secretCreated":{
     "message":"Secret created"
   },
+  "newSecret":{
+    "message":"New Secret"
+  },
+  "importSecrets":{
+    "message":"Import Secrets"
+  },
+  "secretsEmptyListTitle":{
+    "message":"Nothing to show yet"
+  },
+  "secretsEmptyListMessage":{
+    "message": "Add a new secret or import secrets to get started"
+  },
   "searchSecrets":{
     "message":"Search Secrets"
   }
