@@ -18,9 +18,7 @@ if (manifest.manifest_version === 3) {
 }
 
 browser.runtime.onMessage.addListener(async (message, sender) => {
-  const { type, data } = message;
-
-  console.log("background received:", type, data);
+  const { type } = message;
 
   if (type === MessageType.AUTH) {
     browser.browserAction.setPopup({ popup: "popup/index.html#/auth" });

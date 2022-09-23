@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       Messenger.sendMessageToBackground(MessageType.AUTH, {});
 
       onApprove = async () => {
-        const result = await createCredential(options);
+        const result = await createCredential(options, window.location.origin);
         popup.remove();
         resolve(cloneInto(result, window, { cloneFunctions: true }));
       };
@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return result;
   };
 
-  (wWindow as any).addAuthPopup = exportAsyncFunction(addAuthPopup); // dev purposes
   wCredentials.create = exportAsyncFunction(create);
   wCredentials.get = exportAsyncFunction(get);
 
@@ -102,16 +101,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (type === "auth-approve" && onApprove) {
       onApprove();
     }
-    // return this.requests.get(type)(sender, data);
   });
-
-  // console.log("userScripts", browser.userScripts.register);
-  // const registeredUserScript = browser.userScripts.register({
-  //   allFrames: true,
-  //   matches: ["http://*/*", "https://*/*", "file:///*"],
-  //   js: [{ code: 'alert("yo");' }],
-  // });
-  // console.log("registeredUserScript", registeredUserScript);
 
   console.log("Bitwarden credentials implementation active", browser.browserAction);
 });
