@@ -12,7 +12,10 @@ module.exports = {
   corePlugins: { preflight: false },
   theme: {
     colors: {
-      transparent: colors.transparent,
+      transparent: {
+        DEFAULT: colors.transparent,
+        hover: "var(--color-transparent-hover)",
+      },
       current: colors.current,
       black: colors.black,
       primary: {
@@ -77,6 +80,9 @@ module.exports = {
       width: {
         "50vw": "50vw",
         "75vw": "75vw",
+      },
+      maxWidth: {
+        "90vw": "90vw",
       },
     },
   },
