@@ -918,7 +918,7 @@
     "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "Τύπος αρχείου"
+    "message": "File Type"
   },
   "accountBackup": {
     "message": "Account Backup"
@@ -1721,7 +1721,7 @@
     "message": "Billing Plan"
   },
   "paymentType": {
-    "message": "Τύπος πληρωμής"
+    "message": "Payment Type"
   },
   "accountCredit": {
     "message": "Λογαριασμός Πίστωσης",
@@ -4424,10 +4424,10 @@
     "message": "Αφαίρεση Χρηστών"
   },
   "revokeUsers": {
-    "message": "Ανάκληση χρηστών"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
-    "message": "Επαναφορά χρηστών"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Σφάλμα"
@@ -5116,13 +5116,13 @@
     "message": "Master Password"
   },
   "security": {
-    "message": "Ασφάλεια"
+    "message": "Security"
   },
   "keys": {
-    "message": "Κλειδιά"
+    "message": "Keys"
   },
   "billingHistory": {
-    "message": "Ιστορικό χρέωσης"
+    "message": "Billing History"
   },
   "backToReports": {
     "message": "Επιστροφή στις Αναφορές"
@@ -5135,7 +5135,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountSettings": {
-    "message": "Ρυθμίσεις λογαριασμού"
+    "message": "Account Settings"
   },
   "generator": {
     "message": "Γεννήτρια"
@@ -5303,7 +5303,7 @@
     "message": "Rotate Key"
   },
   "scimApiKey": {
-    "message": "Κλειδί API SCIM",
+    "message": "SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {
@@ -5347,7 +5347,7 @@
     }
   },
   "turnOn": {
-    "message": "Ενεργοποίηση"
+    "message": "Turn on"
   },
   "on": {
     "message": "On"
