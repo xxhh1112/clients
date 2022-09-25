@@ -569,6 +569,7 @@ export default class MainBackground {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
         await this.setIcon();
+        await this.refreshBadgeAndMenu(true);
         this.fullSync(true);
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
