@@ -160,11 +160,7 @@ export class BrowserApi {
   }
 
   static reloadExtension(win: Window) {
-    if (win != null) {
-      return (win.location as any).reload(true);
-    } else {
-      return chrome.runtime.reload();
-    }
+    return chrome.runtime.reload();
   }
 
   static reloadOpenWindows() {
