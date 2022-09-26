@@ -6,6 +6,10 @@ import { SecretListView } from "@bitwarden/common/models/view/secretListView";
 import { DialogService } from "@bitwarden/components";
 
 import {
+  SecretDeleteDialogComponent,
+  SecretDeleteOperation,
+} from "./dialog/secret-delete.component";
+import {
   OperationType,
   SecretDialogComponent,
   SecretOperation,
@@ -57,6 +61,14 @@ export class SecretsComponent implements OnInit, OnDestroy {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         secretId: secretId,
+      },
+    });
+  }
+
+  openDeleteSecret(secretIds: string[]) {
+    this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
+      data: {
+        secretIds: secretIds,
       },
     });
   }

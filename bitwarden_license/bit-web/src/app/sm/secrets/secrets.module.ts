@@ -6,6 +6,7 @@ import { FilterComponent } from "../layout/filter.component";
 import { HeaderComponent } from "../layout/header.component";
 import { NewMenuComponent } from "../layout/new-menu.component";
 
+import { SecretDeleteDialogComponent } from "./dialog/secret-delete.component";
 import { SecretDialogComponent } from "./dialog/secret-dialog.component";
 import { SecretsListComponent } from "./secrets-list.component";
 import { SecretsRoutingModule } from "./secrets-routing.module";
@@ -17,6 +18,7 @@ import { SecretsComponent } from "./secrets.component";
     SecretsComponent,
     SecretsListComponent,
     SecretDialogComponent,
+    SecretDeleteDialogComponent,
     HeaderComponent,
     FilterComponent,
     NewMenuComponent,

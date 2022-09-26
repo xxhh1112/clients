@@ -5423,5 +5423,14 @@
   },
   "searchSecrets":{
     "message":"Search Secrets"
+  },
+  "softDeleteSecretWarning":{
+    "message":"Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast":{
+    "message":"Secrets sent to trash"
+  },
+  "softDeleteSuccessToast":{
+    "message":"Secret sent to trash"
   }
 }

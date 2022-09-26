@@ -9,14 +9,22 @@ import { SecretListView } from "@bitwarden/common/models/view/secretListView";
   templateUrl: "./secrets-list.component.html",
 })
 export class SecretsListComponent implements OnDestroy {
-  @Input() secrets: SecretListView[];
+  @Input()
+  get secrets(): SecretListView[] {
+    return this._secrets;
+  }
+  set secrets(secrets: SecretListView[]) {
+    this.selection.clear();
+    this._secrets = secrets;
+  }
+  private _secrets: SecretListView[];
 
   @Output() editSecretEvent = new EventEmitter<string>();
   @Output() copySecretNameEvent = new EventEmitter<string>();
   @Output() copySecretValueEvent = new EventEmitter<string>();
   @Output() projectsEvent = new EventEmitter<string>();
-  @Output() deleteSecretEvent = new EventEmitter<string>();
   @Output() onSecretCheckedEvent = new EventEmitter<string[]>();
+  @Output() deleteSecretsEvent = new EventEmitter<string[]>();
   @Output() newSecretEvent = new EventEmitter();
   @Output() importSecretsEvent = new EventEmitter();
 
@@ -45,5 +53,11 @@ export class SecretsListComponent implements OnDestroy {
     this.isAllSelected()
       ? this.selection.clear()
       : this.selection.select(...this.secrets.map((s) => s.id));
+  }
+
+  bulkDeleteSecrets() {
+    if (this.selection.selected.length >= 1) {
+      this.deleteSecretsEvent.emit(this.selection.selected);
+    }
   }
 }
