@@ -2,7 +2,6 @@ import { Injectable, OnDestroy } from "@angular/core";
 import {
   BehaviorSubject,
   combineLatestWith,
-  mergeMap,
   Observable,
   of,
   Subject,
@@ -84,7 +83,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(([folders, org]) => {
+        switchMap(([folders, org]) => {
           return this.filterFolders(folders, org);
         }),
         takeUntil(this.destroy$)
@@ -95,7 +94,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     this.collectionViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(([collections, org]) => {
+        switchMap(([collections, org]) => {
           return this.filterCollections(collections, org);
         }),
         takeUntil(this.destroy$)

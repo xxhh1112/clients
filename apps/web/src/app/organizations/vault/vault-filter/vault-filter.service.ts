@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { combineLatestWith, mergeMap, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { combineLatestWith, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -46,7 +46,7 @@ export class VaultFilterService extends BaseVaultFilterService {
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(async ([folders, org]) => {
+        switchMap(async ([folders, org]) => {
           return this.filterFolders(folders, org);
         }),
         takeUntil(this.destroy$)
@@ -64,7 +64,7 @@ export class VaultFilterService extends BaseVaultFilterService {
     this.collectionViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(async ([collections, org]) => {
+        switchMap(async ([collections, org]) => {
           if (org?.permissions && org?.canEditAnyCollection) {
             return collections;
           } else {
