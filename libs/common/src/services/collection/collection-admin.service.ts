@@ -18,43 +18,6 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
     return await this.decryptMany(organizationId, collectionResponse.data);
   }
 
-  async decryptMany(
-    organizationId: string,
-    collections: CollectionResponse[]
-  ): Promise<CollectionAdminView[]> {
-    const orgKey = await this.cryptoService.getOrgKey(organizationId);
-
-    const promises = collections.map(async (c) => {
-      const view = new CollectionAdminView();
-      view.id = c.id;
-      view.name = await this.cryptoService.decryptToUtf8(new EncString(c.name), orgKey);
-      view.externalId = c.externalId;
-      view.organizationId = c.organizationId;
-      return view;
-    });
-
-    return await Promise.all(promises);
-  }
-
-  async encrypt(model: CollectionAdminView): Promise<CollectionRequest> {
-    if (model.organizationId == null) {
-      throw new Error("Collection has no organization id.");
-    }
-    const key = await this.cryptoService.getOrgKey(model.organizationId);
-    if (key == null) {
-      throw new Error("No key for this collection's organization.");
-    }
-    const collection = new CollectionRequest();
-    collection.externalId = model.externalId;
-    collection.name = (await this.cryptoService.encrypt(model.name, key)).encryptedString;
-    collection.groups = collection.groups.map((group) => ({
-      id: group.id,
-      hidePasswords: group.hidePasswords,
-      readOnly: group.readOnly,
-    }));
-    return collection;
-  }
-
   async save(collection: CollectionAdminView): Promise<unknown> {
     const request = await this.encrypt(collection);
 
@@ -73,5 +36,46 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
     // TODO: Implement upsert when in PS-1083: Collection Service refactors
     // await this.collectionService.upsert(data);
     return;
+  }
+
+  async remove(organizationId: string, collectionId: string): Promise<void> {
+    await this.apiService.deleteCollection(organizationId, collectionId);
+  }
+
+  private async decryptMany(
+    organizationId: string,
+    collections: CollectionResponse[]
+  ): Promise<CollectionAdminView[]> {
+    const orgKey = await this.cryptoService.getOrgKey(organizationId);
+
+    const promises = collections.map(async (c) => {
+      const view = new CollectionAdminView();
+      view.id = c.id;
+      view.name = await this.cryptoService.decryptToUtf8(new EncString(c.name), orgKey);
+      view.externalId = c.externalId;
+      view.organizationId = c.organizationId;
+      return view;
+    });
+
+    return await Promise.all(promises);
+  }
+
+  private async encrypt(model: CollectionAdminView): Promise<CollectionRequest> {
+    if (model.organizationId == null) {
+      throw new Error("Collection has no organization id.");
+    }
+    const key = await this.cryptoService.getOrgKey(model.organizationId);
+    if (key == null) {
+      throw new Error("No key for this collection's organization.");
+    }
+    const collection = new CollectionRequest();
+    collection.externalId = model.externalId;
+    collection.name = (await this.cryptoService.encrypt(model.name, key)).encryptedString;
+    collection.groups = collection.groups.map((group) => ({
+      id: group.id,
+      hidePasswords: group.hidePasswords,
+      readOnly: group.readOnly,
+    }));
+    return collection;
   }
 }

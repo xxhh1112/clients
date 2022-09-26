@@ -4,6 +4,8 @@ import { FormBuilder } from "@angular/forms";
 import { of, switchMap, takeUntil, Subject } from "rxjs";
 
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { BitValidators } from "@bitwarden/components";
@@ -42,7 +44,9 @@ export class CollectionEditDialogComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
-    private collectionService: CollectionAdminService
+    private collectionService: CollectionAdminService,
+    private i18nService: I18nService,
+    private platformUtilsService: PlatformUtilsService
   ) {
     of(0)
       .pipe(
@@ -101,6 +105,24 @@ export class CollectionEditDialogComponent implements OnDestroy {
     await this.collectionService.save(collectionView);
 
     this.close({ type: CollectionEditDialogResultType.Saved });
+  }
+
+  async remove() {
+    const confirmed = await this.platformUtilsService.showDialog(
+      this.i18nService.t("deleteCollectionConfirmation"),
+      this.collection?.name,
+      this.i18nService.t("yes"),
+      this.i18nService.t("no"),
+      "warning"
+    );
+
+    if (!confirmed && this.params.collectionId) {
+      return false;
+    }
+
+    await this.collectionService.remove(this.params.organizationId, this.params.collectionId);
+
+    this.close({ type: CollectionEditDialogResultType.Deleted });
   }
 
   ngOnDestroy(): void {

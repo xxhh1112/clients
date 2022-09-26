@@ -14,6 +14,7 @@ import {
   FormFieldModule,
   MenuModule,
   IconModule,
+  IconButtonModule,
   DialogModule,
   TabsModule,
 } from "@bitwarden/components";
@@ -67,6 +68,7 @@ import "./locales";
     MenuModule,
     FormFieldModule,
     IconModule,
+    IconButtonModule,
     TabsModule,
   ],
   providers: [DatePipe],

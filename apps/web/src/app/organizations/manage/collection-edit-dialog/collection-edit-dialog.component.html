@@ -33,7 +33,14 @@
     </span>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
       <button type="submit" bitButton buttonType="primary">Save</button>
-      <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
+      <button type="button" bitButton buttonType="secondary" bitDialogClose>Cancel</button>
+      <button
+        type="button"
+        bitIconButton="bwi-trash"
+        buttonType="danger"
+        class="tw-ml-auto"
+        (click)="remove()"
+      ></button>
     </div>
   </bit-dialog>
   <ng-template #spinner>
