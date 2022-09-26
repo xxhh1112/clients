@@ -209,22 +209,22 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
 
   protected buildCollectionTree(collections?: CollectionView[]): TreeNode<CollectionFilter> {
     const headNode = this.getCollectionFilterHead();
-    if (collections) {
-      const nodes: TreeNode<CollectionFilter>[] = [];
-      collections.forEach((c) => {
-        const collectionCopy = new CollectionView() as CollectionFilter;
-        collectionCopy.id = c.id;
-        collectionCopy.organizationId = c.organizationId;
-        collectionCopy.icon = "bwi-collection";
-        const parts =
-          c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-        ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
-      });
-      nodes.forEach((n) => {
-        n.parent = headNode.node;
-        headNode.children.push(n);
-      });
+    if (!collections) {
+      return headNode;
     }
+    const nodes: TreeNode<CollectionFilter>[] = [];
+    collections.forEach((c) => {
+      const collectionCopy = new CollectionView() as CollectionFilter;
+      collectionCopy.id = c.id;
+      collectionCopy.organizationId = c.organizationId;
+      collectionCopy.icon = "bwi-collection";
+      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
+    });
+    nodes.forEach((n) => {
+      n.parent = headNode.node;
+      headNode.children.push(n);
+    });
     return headNode;
   }
 
@@ -254,23 +254,23 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
 
   protected buildFolderTree(folders?: FolderView[]): TreeNode<FolderFilter> {
     const headNode = this.getFolderFilterHead();
-    if (folders) {
-      const nodes: TreeNode<FolderFilter>[] = [];
-      folders.forEach((f) => {
-        const folderCopy = new FolderView() as FolderFilter;
-        folderCopy.id = f.id;
-        folderCopy.revisionDate = f.revisionDate;
-        folderCopy.icon = "bwi-folder";
-        const parts =
-          f.name != null ? f.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-        ServiceUtils.nestedTraverse(nodes, 0, parts, folderCopy, null, NestingDelimiter);
-      });
-
-      nodes.forEach((n) => {
-        n.parent = headNode.node;
-        headNode.children.push(n);
-      });
+    if (!folders) {
+      return headNode;
     }
+    const nodes: TreeNode<FolderFilter>[] = [];
+    folders.forEach((f) => {
+      const folderCopy = new FolderView() as FolderFilter;
+      folderCopy.id = f.id;
+      folderCopy.revisionDate = f.revisionDate;
+      folderCopy.icon = "bwi-folder";
+      const parts = f.name != null ? f.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+      ServiceUtils.nestedTraverse(nodes, 0, parts, folderCopy, null, NestingDelimiter);
+    });
+
+    nodes.forEach((n) => {
+      n.parent = headNode.node;
+      headNode.children.push(n);
+    });
     return headNode;
   }
 
