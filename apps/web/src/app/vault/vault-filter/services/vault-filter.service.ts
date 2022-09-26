@@ -198,13 +198,9 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     storedCollections: CollectionView[],
     org?: Organization
   ): Promise<CollectionView[]> {
-    let collections: CollectionView[];
-    if (org?.id != null) {
-      collections = storedCollections.filter((c) => c.organizationId === org?.id);
-    } else {
-      collections = storedCollections;
-    }
-    return collections;
+    return org?.id != null
+      ? storedCollections.filter((c) => c.organizationId === org.id)
+      : storedCollections;
   }
 
   protected buildCollectionTree(collections?: CollectionView[]): TreeNode<CollectionFilter> {
