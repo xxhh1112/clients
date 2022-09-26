@@ -678,6 +678,9 @@
   "invalidMasterPassword": {
     "message": "Password principale errata"
   },
+  "invalidFilePassword": {
+    "message": "Password errata, usa la password che hai inserito alla creazione del file di esportazione."
+  },
   "lockNow": {
     "message": "Blocca"
   },
@@ -889,6 +892,48 @@
   },
   "fileFormat": {
     "message": "Formato file"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Il file esportato sarà crittato, sarà necessaria una password per decrittare il file."
+  },
+  "exportPasswordDescription": {
+    "message": "La password sarà utilizzata per importare ed esportare il file"
+  },
+  "confirmMasterPassword": {
+    "message": "Conferma password principale"
+  },
+  "confirmFormat": {
+    "message": "Conferma formato"
+  },
+  "filePassword": {
+    "message": "Password del file"
+  },
+  "confirmFilePassword": {
+    "message": "Conferma password del file"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Utilizza la chiave di crittografia del tuo account per crittare l'esportazione e limitare l'import all'attuale account Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Imposta una password per crittare l'esportazione e importala in qualsiasi account Bitwarden, utilizzando la password impostata."
+  },
+  "fileTypeHeading": {
+    "message": "Tipo di file"
+  },
+  "accountBackup": {
+    "message": "Backup dell'account"
+  },
+  "passwordProtected": {
+    "message": "Protetto da password"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "La password del file e la password inserita nel campo di conferma non corrispondono."
+  },
+  "confirmVaultImport": {
+    "message": "Conferma importazione della cassaforte"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Questo file è protetto da password. Inserisci la password del file per importare i dati."
   },
   "exportSuccess": {
     "message": "I dati della tua cassaforte sono stati esportati."

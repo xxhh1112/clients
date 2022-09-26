@@ -21,6 +21,7 @@ import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInC
 import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
 import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
+import { RegisterResponse } from "@bitwarden/common/models/response/authentication/registerResponse";
 
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 
@@ -32,7 +33,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   @Output() createdAccount = new EventEmitter<string>();
 
   showPassword = false;
-  formPromise: Promise<any>;
+  formPromise: Promise<RegisterResponse>;
   referenceData: ReferenceEventRequest;
   showTerms = true;
   showErrorSummary = false;
@@ -68,6 +69,10 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   protected successRoute = "login";
 
+  protected accountCreated = false;
+
+  protected captchaBypassToken: string = null;
+
   constructor(
     protected formValidationErrorService: FormValidationErrorsService,
     protected formBuilder: UntypedFormBuilder,
@@ -92,100 +97,34 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   async submit(showToast = true) {
     let email = this.formGroup.get("email")?.value;
-    let name = this.formGroup.get("name")?.value;
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
-    const hint = this.formGroup.get("hint")?.value;
-
-    this.formGroup.markAllAsTouched();
-    this.showErrorSummary = true;
-
-    if (this.formGroup.get("acceptPolicies").hasError("required")) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("acceptPoliciesRequired")
-      );
-      return;
-    }
-
-    //web
-    if (this.formGroup.invalid && !showToast) {
-      return;
-    }
-
-    //desktop, browser
-    if (this.formGroup.invalid && showToast) {
-      const errorText = this.getErrorToastMessage();
-      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
-      return;
-    }
-
-    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
-      const result = await this.platformUtilsService.showDialog(
-        this.i18nService.t("weakMasterPasswordDesc"),
-        this.i18nService.t("weakMasterPassword"),
-        this.i18nService.t("yes"),
-        this.i18nService.t("no"),
-        "warning"
-      );
-      if (!result) {
-        return;
-      }
-    }
-
-    name = name === "" ? null : name;
     email = email.trim().toLowerCase();
-    const kdf = DEFAULT_KDF_TYPE;
-    const kdfIterations = DEFAULT_KDF_ITERATIONS;
-    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
-    const encKey = await this.cryptoService.makeEncKey(key);
-    const hashedPassword = await this.cryptoService.hashPassword(masterPassword, key);
-    const keys = await this.cryptoService.makeKeyPair(encKey[0]);
-    const request = new RegisterRequest(
-      email,
-      name,
-      hashedPassword,
-      hint,
-      encKey[1].encryptedString,
-      kdf,
-      kdfIterations,
-      this.referenceData,
-      this.captchaToken
-    );
-    request.keys = new KeysRequest(keys[0], keys[1].encryptedString);
-    const orgInvite = await this.stateService.getOrganizationInvitation();
-    if (orgInvite != null && orgInvite.token != null && orgInvite.organizationUserId != null) {
-      request.token = orgInvite.token;
-      request.organizationUserId = orgInvite.organizationUserId;
-    }
-
+    let name = this.formGroup.get("name")?.value;
+    name = name === "" ? null : name; // Why do we do this?
+    const masterPassword = this.formGroup.get("masterPassword")?.value;
     try {
-      this.formPromise = this.apiService.postRegister(request);
-      try {
-        await this.formPromise;
-      } catch (e) {
-        if (this.handleCaptchaRequired(e)) {
+      if (!this.accountCreated) {
+        const registerResponse = await this.registerAccount(
+          await this.buildRegisterRequest(email, masterPassword, name),
+          showToast
+        );
+        if (!registerResponse.successful) {
           return;
-        } else {
-          throw e;
         }
+        this.captchaBypassToken = registerResponse.captchaBypassToken;
+        this.accountCreated = true;
       }
-
       if (this.isInTrialFlow) {
-        this.platformUtilsService.showToast(
-          "success",
-          null,
-          this.i18nService.t("trialAccountCreated")
-        );
-        //login user here
-        const credentials = new PasswordLogInCredentials(
-          email,
-          masterPassword,
-          this.captchaToken,
-          null
-        );
-        await this.authService.logIn(credentials);
-
+        if (!this.accountCreated) {
+          this.platformUtilsService.showToast(
+            "success",
+            null,
+            this.i18nService.t("trialAccountCreated")
+          );
+        }
+        const loginResponse = await this.logIn(email, masterPassword, this.captchaBypassToken);
+        if (loginResponse.captchaRequired) {
+          return;
+        }
         this.createdAccount.emit(this.formGroup.get("email")?.value);
       } else {
         this.platformUtilsService.showToast(
@@ -246,5 +185,115 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
       return !ctrlValue && this.showTerms ? { required: true } : null;
     };
+  }
+
+  private async validateRegistration(showToast: boolean): Promise<{ isValid: boolean }> {
+    this.formGroup.markAllAsTouched();
+    this.showErrorSummary = true;
+
+    if (this.formGroup.get("acceptPolicies").hasError("required")) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("acceptPoliciesRequired")
+      );
+      return { isValid: false };
+    }
+
+    //web
+    if (this.formGroup.invalid && !showToast) {
+      return { isValid: false };
+    }
+
+    //desktop, browser
+    if (this.formGroup.invalid && showToast) {
+      const errorText = this.getErrorToastMessage();
+      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
+      return { isValid: false };
+    }
+
+    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
+      const result = await this.platformUtilsService.showDialog(
+        this.i18nService.t("weakMasterPasswordDesc"),
+        this.i18nService.t("weakMasterPassword"),
+        this.i18nService.t("yes"),
+        this.i18nService.t("no"),
+        "warning"
+      );
+      if (!result) {
+        return { isValid: false };
+      }
+    }
+    return { isValid: true };
+  }
+
+  private async buildRegisterRequest(
+    email: string,
+    masterPassword: string,
+    name: string
+  ): Promise<RegisterRequest> {
+    const hint = this.formGroup.get("hint")?.value;
+    const kdf = DEFAULT_KDF_TYPE;
+    const kdfIterations = DEFAULT_KDF_ITERATIONS;
+    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
+    const encKey = await this.cryptoService.makeEncKey(key);
+    const hashedPassword = await this.cryptoService.hashPassword(masterPassword, key);
+    const keys = await this.cryptoService.makeKeyPair(encKey[0]);
+    const request = new RegisterRequest(
+      email,
+      name,
+      hashedPassword,
+      hint,
+      encKey[1].encryptedString,
+      kdf,
+      kdfIterations,
+      this.referenceData,
+      this.captchaToken
+    );
+    request.keys = new KeysRequest(keys[0], keys[1].encryptedString);
+    const orgInvite = await this.stateService.getOrganizationInvitation();
+    if (orgInvite != null && orgInvite.token != null && orgInvite.organizationUserId != null) {
+      request.token = orgInvite.token;
+      request.organizationUserId = orgInvite.organizationUserId;
+    }
+    return request;
+  }
+
+  private async registerAccount(
+    request: RegisterRequest,
+    showToast: boolean
+  ): Promise<{ successful: boolean; captchaBypassToken?: string }> {
+    if (!(await this.validateRegistration(showToast)).isValid) {
+      return { successful: false };
+    }
+    this.formPromise = this.apiService.postRegister(request);
+    try {
+      const response = await this.formPromise;
+      return { successful: true, captchaBypassToken: response.captchaBypassToken };
+    } catch (e) {
+      if (this.handleCaptchaRequired(e)) {
+        return { successful: false };
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  private async logIn(
+    email: string,
+    masterPassword: string,
+    captchaBypassToken: string
+  ): Promise<{ captchaRequired: boolean }> {
+    const credentials = new PasswordLogInCredentials(
+      email,
+      masterPassword,
+      captchaBypassToken,
+      null
+    );
+    const loginResponse = await this.authService.logIn(credentials);
+    if (this.handleCaptchaRequired(loginResponse)) {
+      return { captchaRequired: true };
+    }
+    return { captchaRequired: false };
   }
 }

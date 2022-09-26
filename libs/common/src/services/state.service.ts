@@ -16,10 +16,12 @@ import { CollectionData } from "../models/data/collectionData";
 import { EncryptedOrganizationKeyData } from "../models/data/encryptedOrganizationKeyData";
 import { EventData } from "../models/data/eventData";
 import { FolderData } from "../models/data/folderData";
+import { LocalData } from "../models/data/localData";
 import { OrganizationData } from "../models/data/organizationData";
 import { PolicyData } from "../models/data/policyData";
 import { ProviderData } from "../models/data/providerData";
 import { SendData } from "../models/data/sendData";
+import { ServerConfigData } from "../models/data/server-config.data";
 import {
   Account,
   AccountData,
@@ -1747,12 +1749,16 @@ export class StateService<
     );
   }
 
-  async getLocalData(options?: StorageOptions): Promise<any> {
+  async getLocalData(options?: StorageOptions): Promise<{ [cipherId: string]: LocalData }> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.data?.localData;
   }
-  async setLocalData(value: string, options?: StorageOptions): Promise<void> {
+
+  async setLocalData(
+    value: { [cipherId: string]: LocalData },
+    options?: StorageOptions
+  ): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
@@ -2270,6 +2276,23 @@ export class StateService<
       globals,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
+  }
+
+  async setServerConfig(value: ServerConfigData, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.serverConfig = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getServerConfig(options: StorageOptions): Promise<ServerConfigData> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.serverConfig;
   }
 
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {

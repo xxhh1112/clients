@@ -209,6 +209,12 @@ const devServer =
             secure: false,
             changeOrigin: true,
           },
+          "/icons": {
+            target: envConfig.dev?.proxyIcons,
+            pathRewrite: { "^/icons": "" },
+            secure: false,
+            changeOrigin: true,
+          },
         },
         headers: (req) => {
           if (!req.originalUrl.includes("connector.html")) {
@@ -229,7 +235,7 @@ const devServer =
                     https://*.paypal.com
                     'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
                     'sha256-JVRXyYPueLWdwGwY9m/7u4QlZ1xeQdqUj2t8OVIzZE4=';
-                    'sha256-0xHKHIT3+e2Gknxsm/cpErSprhL+o254L/y5bljg74U='
+                    'sha256-or0p3LaHetJ4FRq+flVORVFFNsOjQGWrDvX8Jf7ACWg='
                   img-src
                     'self'
                     data:
@@ -267,7 +273,7 @@ const devServer =
                     https://app.simplelogin.io/api/alias/random/new
                     https://quack.duckduckgo.com/api/email/addresses
                     https://app.anonaddy.com/api/v1/aliases
-                    https://api.fastmail.com/jmap/api;
+                    https://api.fastmail.com;
                   object-src
                     'self'
                     blob:;`,

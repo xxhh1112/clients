@@ -1577,7 +1577,7 @@
     "message": "На жаль, зараз інтеграція з браузером підтримується лише у версії для Mac з App Store."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "На жаль, зараз інтеграція з браузером не підтримується у версії з Windows Store."
+    "message": "На жаль, зараз інтеграція з браузером не підтримується у версії з Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
     "message": "На жаль, зараз інтеграція з браузером не підтримується у версії для Linux."
@@ -1930,7 +1930,7 @@
     "message": "Тип імені користувача"
   },
   "plusAddressedEmail": {
-    "message": "Плюс адреса електронної пошти",
+    "message": "Адреса е-пошти з плюсом",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
@@ -1993,5 +1993,8 @@
   },
   "cardBrandMir": {
     "message": "Mir"
+  },
+  "vault": {
+    "message": "Vault"
   }
 }

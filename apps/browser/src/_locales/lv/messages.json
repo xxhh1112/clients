@@ -1997,5 +1997,32 @@
   },
   "environmentEditedReset": {
     "message": "lai atiestatītu pirmsuzstādītos iestatījumus"
+  },
+  "serverVersion": {
+    "message": "Servera versija"
+  },
+  "selfHosted": {
+    "message": "Pašizvietots"
+  },
+  "thirdParty": {
+    "message": "Trešās puses"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Savienots ar trešās puses izvietotu serveri $SERVERNAME$. Lūgums pārbaudīt nepilnību esamību oficiālajā serverī vai ziņot par tām trešās puses servera uzturētājiem.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "pēdējoreiz manīts $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
   }
 }

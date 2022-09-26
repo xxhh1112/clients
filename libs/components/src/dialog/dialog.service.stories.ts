@@ -2,11 +2,15 @@ import { DialogModule, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
-import { ButtonModule } from "../button";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { DialogCloseDirective } from "./dialog-close.directive";
+import { ButtonModule } from "../button";
+import { I18nMockService } from "../utils/i18n-mock.service";
+
 import { DialogService } from "./dialog.service";
 import { DialogComponent } from "./dialog/dialog.component";
+import { DialogCloseDirective } from "./directives/dialog-close.directive";
+import { DialogTitleContainerDirective } from "./directives/dialog-title-container.directive";
 
 interface Animal {
   animal: string;
@@ -32,13 +36,13 @@ class StoryDialogComponent {
   selector: "story-dialog-content",
   template: `
     <bit-dialog [dialogSize]="large">
-      <span bit-dialog-title>Dialog Title</span>
-      <span bit-dialog-content>
+      <span bitDialogTitle>Dialog Title</span>
+      <span bitDialogContent>
         Dialog body text goes here.
         <br />
         Animal: {{ animal }}
       </span>
-      <div bit-dialog-footer class="tw-flex tw-flex-row tw-gap-2">
+      <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
         <button bitButton buttonType="primary" (click)="dialogRef.close()">Save</button>
         <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
       </div>
@@ -58,9 +62,24 @@ export default {
   component: StoryDialogComponent,
   decorators: [
     moduleMetadata({
-      declarations: [DialogComponent, StoryDialogContentComponent, DialogCloseDirective],
+      declarations: [
+        DialogCloseDirective,
+        DialogComponent,
+        DialogTitleContainerDirective,
+        StoryDialogContentComponent,
+      ],
       imports: [ButtonModule, DialogModule],
-      providers: [DialogService],
+      providers: [
+        DialogService,
+        {
+          provide: I18nService,
+          useFactory: () => {
+            return new I18nMockService({
+              close: "Close",
+            });
+          },
+        },
+      ],
     }),
   ],
   parameters: {

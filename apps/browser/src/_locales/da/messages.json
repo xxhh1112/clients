@@ -1997,5 +1997,32 @@
   },
   "environmentEditedReset": {
     "message": "for at nulstille til forudkonfigurerede indstillinger"
+  },
+  "serverVersion": {
+    "message": "Server version"
+  },
+  "selfHosted": {
+    "message": "Selv-hostet"
+  },
+  "thirdParty": {
+    "message": "Tredjepart"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Forbundet til tredjepartsserverimplementering, $SERVERNAME$. Kontrollér venligst fejl ved hjælp af den officielle server, eller rapportér dem til tredjepartsserveren.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "sidst set den $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
   }
 }
