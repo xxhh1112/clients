@@ -229,24 +229,6 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     return new Cipher(cData);
   }
 
-  private async throwErrorOnSaveAttachmentRawWithServer(
-    e: any,
-    response: CipherResponse,
-    attachmentFileUpload: legacyServerAttachmentFileUploadRequest
-  ) {
-    if (
-      (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
-      (e as ErrorResponse).statusCode === 405
-    ) {
-      response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
-    } else if (e instanceof ErrorResponse) {
-      throw new Error((e as ErrorResponse).getSingleMessage());
-    } else {
-      throw e;
-    }
-    return response;
-  }
-
   /**
    * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
    * This method still exists for backward compatibility with old server versions.
@@ -409,6 +391,24 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
   }
 
   // Helpers
+
+  private async throwErrorOnSaveAttachmentRawWithServer(
+    e: any,
+    response: CipherResponse,
+    attachmentFileUpload: legacyServerAttachmentFileUploadRequest
+  ) {
+    if (
+      (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
+      (e as ErrorResponse).statusCode === 405
+    ) {
+      response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
+    } else if (e instanceof ErrorResponse) {
+      throw new Error((e as ErrorResponse).getSingleMessage());
+    } else {
+      throw e;
+    }
+    return response;
+  }
 
   private async shareAttachmentWithServer(
     attachmentView: AttachmentView,
