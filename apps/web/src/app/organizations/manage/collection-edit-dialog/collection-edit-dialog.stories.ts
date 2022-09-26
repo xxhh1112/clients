@@ -6,10 +6,10 @@ import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CollectionApiService } from "@bitwarden/common/abstractions/collection/collection-api.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Collection } from "@bitwarden/common/models/domain/collection";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { CollectionApiService } from "@bitwarden/common/src/abstractions/collection/collection-api.service.abstraction";
-import { Utils } from "@bitwarden/common/src/misc/utils";
-import { Collection } from "@bitwarden/common/src/models/domain/collection";
 import { ButtonModule, DialogModule, FormFieldModule, TabsModule } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";

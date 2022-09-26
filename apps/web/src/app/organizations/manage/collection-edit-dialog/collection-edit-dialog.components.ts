@@ -4,7 +4,7 @@ import { FormBuilder } from "@angular/forms";
 import { of, switchMap, takeUntil, Subject } from "rxjs";
 
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
-import { CollectionApiService } from "@bitwarden/common/abstractions/collection/collection-api.service.abstraction";
+import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { BitValidators } from "@bitwarden/components";
 
@@ -42,12 +42,11 @@ export class CollectionEditDialogComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
-    private collectionService: CollectionAdminService,
-    private collectionApiService: CollectionApiService
+    private collectionService: CollectionAdminService
   ) {
     of(0)
       .pipe(
-        switchMap(() => collectionService.getAllDecrypted(params.organizationId)),
+        switchMap(() => collectionService.getAll(params.organizationId)),
         takeUntil(this.destroy$)
       )
       .subscribe((collections) => {
@@ -87,7 +86,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
       return;
     }
 
-    const collectionView = new CollectionView();
+    const collectionView = new CollectionAdminView();
     collectionView.id = this.params.collectionId;
     collectionView.organizationId = this.params.organizationId;
     collectionView.externalId = this.formGroup.controls.externalId.value;
@@ -99,8 +98,7 @@ export class CollectionEditDialogComponent implements OnDestroy {
       collectionView.name = this.formGroup.controls.name.value;
     }
 
-    const collection = await this.collectionService.encrypt(collectionView);
-    await this.collectionApiService.save(collection);
+    await this.collectionService.save(collectionView);
 
     this.close({ type: CollectionEditDialogResultType.Saved });
   }

@@ -1,8 +1,13 @@
-import { Collection } from "@bitwarden/common/models/domain/collection";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
+import { CollectionResponse } from "@bitwarden/common/models/response/collectionResponse";
+import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 
 export class CollectionAdminService {
-  getAllDecrypted: (organizationId: string) => Promise<CollectionView[]>;
-  decryptMany: (collections: Collection[]) => Promise<CollectionView[]>;
-  encrypt: (model: CollectionView) => Promise<Collection>;
+  getAll: (organizationId: string) => Promise<CollectionAdminView[]>;
+  decryptMany: (
+    organizationId: string,
+    collections: CollectionResponse[]
+  ) => Promise<CollectionAdminView[]>;
+  encrypt: (model: CollectionAdminView) => Promise<CollectionRequest>;
+  save: (collection: CollectionAdminView) => Promise<unknown>;
 }

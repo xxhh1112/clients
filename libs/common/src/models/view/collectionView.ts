@@ -1,6 +1,6 @@
 import { Collection } from "../domain/collection";
 import { ITreeNodeObject } from "../domain/treeNode";
-import { CollectionGroupDetailsResponse } from "../response/collectionResponse";
+import { CollectionResponse } from "../response/collectionResponse";
 
 import { View } from "./view";
 
@@ -12,7 +12,7 @@ export class CollectionView implements View, ITreeNodeObject {
   readOnly: boolean = null;
   hidePasswords: boolean = null;
 
-  constructor(c?: Collection | CollectionGroupDetailsResponse) {
+  constructor(c?: Collection | CollectionResponse) {
     if (!c) {
       return;
     }
