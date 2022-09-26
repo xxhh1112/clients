@@ -154,7 +154,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
       headNode.children.push(myVaultNode);
     }
     if (await this.checkForSingleOrganizationPolicy()) {
-      orgs.length = 1;
+      orgs = orgs.slice(1);
     }
     if (orgs) {
       orgs.forEach((org) => {
