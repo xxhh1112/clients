@@ -6,7 +6,6 @@ import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
 import { LockComponent } from "../accounts/lock.component";
-import { LoginComponent } from "../accounts/login.component";
 import { RecoverDeleteComponent } from "../accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../accounts/recover-two-factor.component";
 import { RegisterFormModule } from "../accounts/register-form/register-form.module";
@@ -207,7 +206,6 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
     MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,
@@ -351,7 +349,6 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
     MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,

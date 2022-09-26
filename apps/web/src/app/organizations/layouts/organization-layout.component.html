@@ -1,29 +1,23 @@
 <app-navbar></app-navbar>
-<div class="org-nav" *ngIf="organization">
+<div class="org-nav !tw-h-32" *ngIf="organization">
   <div class="container d-flex">
     <div class="d-flex flex-column">
       <app-organization-switcher
         class="my-auto pl-1"
         [activeOrganization]="organization"
       ></app-organization-switcher>
-      <bit-tab-group class="-tw-mb-px">
-        <bit-tab-item [route]="['vault']">{{ "vault" | i18n }}</bit-tab-item>
-        <bit-tab-item *ngIf="showMembersTab" [route]="['members']">{{
-          "members" | i18n
-        }}</bit-tab-item>
-        <bit-tab-item *ngIf="showGroupsTab" [route]="['groups']">{{
-          "groups" | i18n
-        }}</bit-tab-item>
-        <bit-tab-item *ngIf="showReportsTab" [route]="[reportRoute]">{{
+      <bit-tab-nav-bar class="-tw-mb-px">
+        <bit-tab-link route="vault">{{ "vault" | i18n }}</bit-tab-link>
+        <bit-tab-link *ngIf="showMembersTab" route="members">{{ "members" | i18n }}</bit-tab-link>
+        <bit-tab-link *ngIf="showGroupsTab" route="groups">{{ "groups" | i18n }}</bit-tab-link>
+        <bit-tab-link *ngIf="showReportsTab" [route]="reportRoute">{{
           reportTabLabel | i18n
-        }}</bit-tab-item>
-        <bit-tab-item *ngIf="showBillingTab" [route]="['billing']">{{
-          "billing" | i18n
-        }}</bit-tab-item>
-        <bit-tab-item *ngIf="showSettingsTab" [route]="['settings']">{{
+        }}</bit-tab-link>
+        <bit-tab-link *ngIf="showBillingTab" route="billing">{{ "billing" | i18n }}</bit-tab-link>
+        <bit-tab-link *ngIf="showSettingsTab" route="settings">{{
           "settings" | i18n
-        }}</bit-tab-item>
-      </bit-tab-group>
+        }}</bit-tab-link>
+      </bit-tab-nav-bar>
     </div>
   </div>
 </div>
