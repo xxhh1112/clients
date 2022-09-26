@@ -22,6 +22,8 @@ import { Policy } from "@bitwarden/common/models/domain/policy";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
 
+import { flagEnabled } from "src/utils/flags";
+
 import { RouterService, StateService } from "../../core";
 
 @Component({
@@ -33,6 +35,7 @@ export class LoginComponent extends BaseLoginComponent {
   showResetPasswordAutoEnrollWarning = false;
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
+  showPasswordless = false;
 
   constructor(
     authService: AuthService,
@@ -72,6 +75,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.messagingService.send("setFullWidth");
     };
     this.onSuccessfulLoginNavigate = this.goAfterLogIn;
+    this.showPasswordless = flagEnabled("showPasswordless");
   }
 
   async ngOnInit() {
