@@ -11,11 +11,7 @@ import {
   canAccessGroupsTab,
   canAccessMembersTab,
   canAccessOrgAdmin,
-  canAccessSettingsTab,
 } from "./navigation-permissions";
-import { AccountComponent } from "./settings/account.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { TwoFactorSetupComponent } from "./settings/two-factor-setup.component";
 import { VaultModule } from "./vault/vault.module";
 
 const routes: Routes = [
@@ -34,18 +30,7 @@ const routes: Routes = [
       },
       {
         path: "settings",
-        component: SettingsComponent,
-        canActivate: [OrganizationPermissionsGuard],
-        data: { organizationPermissions: canAccessSettingsTab },
-        children: [
-          { path: "", pathMatch: "full", redirectTo: "account" },
-          { path: "account", component: AccountComponent, data: { titleId: "organizationInfo" } },
-          {
-            path: "two-factor",
-            component: TwoFactorSetupComponent,
-            data: { titleId: "twoStepLogin" },
-          },
-        ],
+        loadChildren: () => import("./settings").then((m) => m.OrganizationSettingsModule),
       },
       {
         path: "members",
