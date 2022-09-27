@@ -8,7 +8,7 @@ import { NewMenuComponent } from "../layout/new-menu.component";
 
 @NgModule({
   imports: [SharedModule],
-  exports: [HeaderComponent, FilterComponent, NewMenuComponent],
+  exports: [HeaderComponent, FilterComponent, NewMenuComponent, SharedModule],
   declarations: [HeaderComponent, FilterComponent, NewMenuComponent],
   providers: [],
   bootstrap: [],

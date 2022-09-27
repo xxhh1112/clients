@@ -17,6 +17,8 @@
           buttonType="main"
           title="{{ 'options' | i18n }}"
           [bitMenuTriggerFor]="tableMenu"
+          [attr.title]="'options' | i18n"
+          [attr.aria-label]="'options' | i18n"
         ></button>
       </th>
     </tr>
@@ -38,8 +40,11 @@
       <td bitCell>
         <button
           bitIconButton="bwi-ellipsis-v"
+          buttonType="main"
           [bitMenuTriggerFor]="projectMenu"
           title="{{ 'options' | i18n }}"
+          [attr.title]="'options' | i18n"
+          [attr.aria-label]="'options' | i18n"
         ></button>
       </td>
       <bit-menu #projectMenu>
