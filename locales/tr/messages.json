@@ -597,7 +597,7 @@
     "message": "Ana parola, kasanıza ulaşmak için kullanacağınız paroladır. Ana parolanızı unutmamanız çok önemlidir. Unutursanız parolalarınızı asla kurtaramazsınız."
   },
   "masterPassImportant": {
-    "message": "Ana şifreler, unutursanız kurtarılamaz!"
+    "message": "Master passwords cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz."
@@ -679,7 +679,7 @@
     "message": "Geçersiz ana parola"
   },
   "invalidFilePassword": {
-    "message": "Geçersiz dosya şifresi, lütfen dışa aktarma dosyasını oluştururken girdiğiniz şifreyi kullanın."
+    "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
     "message": "Şimdi kilitle"
@@ -894,46 +894,46 @@
     "message": "Dosya biçimi"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Bu dosya dışa aktarma, şifre korumalı olacak ve şifrenin çözülmesi için dosya şifresi gerektirecek."
+    "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription": {
-    "message": "Bu şifre, bu dosyayı dışa ve içe aktarmak için kullanılacaktır"
+    "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Ana Şifreyi Onayla"
+    "message": "Confirm Master Password"
   },
   "confirmFormat": {
-    "message": "Biçimi Onayla"
+    "message": "Confirm Format"
   },
   "filePassword": {
-    "message": "Dosya Şifresi"
+    "message": "File Password"
   },
   "confirmFilePassword": {
-    "message": "Dosya Şifresini Onayla"
+    "message": "Confirm File Password"
   },
   "accountBackupOptionDescription": {
-    "message": "Dışa aktarmayı şifrelemek ve içe aktarmayı yalnızca geçerli Bitwarden hesabıyla kısıtlamak için hesap çözme anahtarınızı kullanın."
+    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Dışa aktarmayı şifrelemek için bir şifre belirleyin ve şifre çözme parolasını kullanarak herhangi bir Bitwarden hesabına içe aktarın."
+    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "Dosya Tipi"
+    "message": "File Type"
   },
   "accountBackup": {
-    "message": "Hesap Yedeği"
+    "message": "Account Backup"
   },
   "passwordProtected": {
-    "message": "Şifre Korumalı"
+    "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "\"Dosya şifresi\" ve \"Dosya Şifresini Onayla\" eşleşmiyor."
+    "message": "“File password”  and “Confirm File Password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Kasayı İçe Aktarmayı Onaylayın"
+    "message": "Confirm Vault Import"
   },
   "confirmVaultImportDesc": {
-    "message": "Bu dosya şifre korumalıdır. Verileri içe aktarmak için lütfen dosya şifresini girin."
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "Kasadaki verileriniz dışa aktarıldı."
@@ -1296,7 +1296,7 @@
     "message": "Etkin"
   },
   "restoreAccess": {
-    "message": "Erişimi geri yükle"
+    "message": "Restore Access"
   },
   "premium": {
     "message": "Premium",
@@ -1324,7 +1324,7 @@
     "message": "Devre dışı bırak"
   },
   "revokeAccess": {
-    "message": "Erişimi iptal et"
+    "message": "Revoke Access"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Bu iki aşamalı giriş sağlayıcısı hesabınızda etkin durumda."
@@ -1871,7 +1871,7 @@
     "message": "Fatura Bilgileri"
   },
   "billingTrialSubLabel": {
-    "message": "7 günlük ücretsiz deneme süresi boyunca ödeme yönteminizden ücret alınmayacaktır."
+    "message": "Your payment method will not be charged during the 7 day free trial."
   },
   "creditCard": {
     "message": "Kredi kartı"
@@ -2230,7 +2230,7 @@
     }
   },
   "trialThankYou": {
-    "message": "$PLAN$ karşılığında Bitwarden'a kaydolduğunuz için teşekkür ederiz!",
+    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2239,7 +2239,7 @@
     }
   },
   "trialPaidInfoMessage": {
-    "message": "$PLAN$ 7 günlük ücretsiz denemeniz, 7 gün sonra ücretli aboneliğe dönüştürülecektir.",
+    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2248,7 +2248,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "Ekibinizin şu adresteki faturalandırma e-postasına bir onay e-postası gönderdik "
+    "message": "We've sent a confirmation email to your team's billing email at "
   },
   "monthly": {
     "message": "Aylık"
@@ -2326,10 +2326,10 @@
     "message": "Bu kullanıcıyı silmek istediğinizden emin misiniz?"
   },
   "removeOrgUserConfirmation": {
-    "message": "Bir üye kaldırıldığında, artık kuruluş verilerine erişimi olmaz ve bu işlem geri alınamaz. Üyeyi kuruluşa geri eklemek için davet edilmeleri ve tekrar katılmaları gerekir."
+    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
   },
   "revokeUserConfirmation": {
-    "message": "Bir üye feshedildiğinde, artık kuruluş verilerine erişimi olmaz. Üye erişimini hızlı bir şekilde geri yüklemek için İptal Edildi sekmesine gidin."
+    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Uyarı! Bu kullanıcı, şifrelemelerini yönetmek için Key Connector'a ihtiyaç duyuyor. Bu kullanıcıyı kuruluşunuzdan çıkarırsanız hesabı kalıcı olarak devre dışı kalacaktır. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?"
@@ -2677,7 +2677,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "$ID$ Erişimini kaldır",
+    "message": "Remove $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2686,7 +2686,7 @@
     }
   },
   "revokedUserId": {
-    "message": "$ID$ İçin kuruluş erişimi iptal edildi.",
+    "message": "Revoked organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2695,7 +2695,7 @@
     }
   },
   "restoredUserId": {
-    "message": "$ID$ İçin kuruluş erişimi geri yüklendi.",
+    "message": "Restored organization access for $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2704,7 +2704,7 @@
     }
   },
   "revokeUserId": {
-    "message": "$ID$ Erişimini iptal et",
+    "message": "Revoke $ID$ access",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2950,7 +2950,7 @@
     "message": "Eğer hesabınıza iki aşamalı doğrulama ile erişimde bir sorun yaşıyorsanız, kurtarma kodunuz ile iki aşamalı doğrulama özelliğini kapatabilirsiniz."
   },
   "recoverAccountTwoStep": {
-    "message": "İki-Adımlı Hesap Girişini Kurtar"
+    "message": "Recover Account Two-Step Login"
   },
   "twoStepRecoverDisabled": {
     "message": "İki aşamalı doğrulama hesabınızda devre dışı bırakıldı."
@@ -3289,7 +3289,7 @@
     "message": "4 saat"
   },
   "onRefresh": {
-    "message": "Tarayıcıda yenileme"
+    "message": "On browser refresh"
   },
   "dateUpdated": {
     "message": "Güncelleme",
@@ -3436,13 +3436,13 @@
     "message": "Ana parola gücü için minimum gereksinimleri ayarlayın."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "İki adımlı giriş gereklidir"
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Kullanıcıların hesaplarında iki aşamalı giriş kullanmalarını zorunlu tutun."
   },
   "twoStepLoginPolicyWarning": {
-    "message": "Sahip veya Yönetici olmayan ve hesapları için iki adımlı oturum açma özelliğini açmamış kuruluş üyeleri kuruluştan çıkarılır ve kendilerine değişiklik hakkında bilgi veren bir e-posta gönderilir."
+    "message": "Organization members who are not Owners or Administrators and do not have two-step login turned on for their account will be removed from the organization and will receive an email notifying them about the change."
   },
   "twoStepLoginPolicyUserWarning": {
     "message": "İki aşamalı girişin etkinleştirilmesi gereken bir kuruluşa üyesisiniz. İki aşamalı giriş sağlayıcılarının tümünü devre dışı bırakırsanız bu kuruluşlardan otomatik olarak kaldırılırsınız."
@@ -3660,7 +3660,7 @@
     "message": "SSO bağlantısını kes"
   },
   "unlinkSsoConfirmation": {
-    "message": "Bu kuruluş için TOA bağlantısını kaldırmak istediğinizden emin misiniz?"
+    "message": "Are you sure you want to unlink SSO for this organization?"
   },
   "linkSso": {
     "message": "SSO bağla"
@@ -3769,7 +3769,7 @@
     "message": "Devre dışı"
   },
   "revoked": {
-    "message": "İptal Edildi"
+    "message": "Revoked"
   },
   "sendLink": {
     "message": "Send bağlantısı",
@@ -4118,7 +4118,7 @@
     "message": "Bir kuruluş ilkesi sahiplik seçeneklerinizi etkiliyor."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "Bir kuruluş politikası, öğeleri kişisel kasanıza içe aktarmayı devre dışı bıraktı."
+    "message": "An organization policy has disabled importing items into your personal vault."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Kuruluş kullanıcıları için kişisel sahipliği kapatma"
@@ -4277,7 +4277,7 @@
     }
   },
   "eventResetSsoLink": {
-    "message": "$ID$ kullanıcısı için Toa bağlantısını sıfırla",
+    "message": "Reset Sso link for user $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4373,10 +4373,10 @@
     "message": "Aşağıdaki kullanıcıları kaldırmak istediğinize emin misiniz? İşlemin tamamlanması birkaç saniye sürer ve durdurulamaz veya iptal edilemez."
   },
   "removeOrgUsersConfirmation": {
-    "message": "Üye(ler) kaldırıldığında, artık organizasyon verilerine erişimleri olmaz ve bu işlem geri alınamaz. Üyeyi kuruluşa geri eklemek için davet edilmeleri ve tekrar katılmaları gerekir. İşlemin tamamlanması birkaç saniye sürebilir ve kesintiye uğratılamaz veya iptal edilemez."
+    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "revokeUsersWarning": {
-    "message": "Üye(ler) iptal edildiğinde, artık organizasyon verilerine erişimleri olmaz. Üye erişimini hızlı bir şekilde geri yüklemek için İptal Edildi sekmesine gidin. İşlemin tamamlanması birkaç saniye sürebilir ve kesintiye uğratılamaz veya iptal edilemez."
+    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Tema"
@@ -4409,10 +4409,10 @@
     "message": "Başarıyla kaldırıldı"
   },
   "bulkRevokedMessage": {
-    "message": "Kuruluş erişimi başarıyla iptal edildi"
+    "message": "Revoked organization access successfully"
   },
   "bulkRestoredMessage": {
-    "message": "Kuruluş erişimi başarıyla geri yüklendi"
+    "message": "Restored organization access successfully"
   },
   "bulkFilteredMessage": {
     "message": "İstisna. Bu eylem için geçerli değildir."
@@ -4424,10 +4424,10 @@
     "message": "Kullanıcıları kaldır"
   },
   "revokeUsers": {
-    "message": "Kullanıcıları İptal Et"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
-    "message": "Kullanıcıları geri yükle"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Hata"
@@ -4439,10 +4439,10 @@
     "message": "Sağlayıcı kurulumu"
   },
   "setupProviderLoginDesc": {
-    "message": "Yeni bir sağlayıcı kurmaya davet edildiniz. Devam etmek için oturum açmanız veya yeni bir Bitwarden hesabı oluşturmanız gerekir."
+    "message": "You've been invited to setup a new provider. To continue, you need to log in or create a new Bitwarden account."
   },
   "setupProviderDesc": {
-    "message": "Sağlayıcı kurulumunu tamamlamak için lütfen aşağıdaki ayrıntıları girin. Herhangi bir sorunuz varsa Müşteri Desteği ile iletişime geçin."
+    "message": "Please enter the details below to complete the provider setup. Contact Customer Support if you have any questions."
   },
   "providerName": {
     "message": "Sağlayıcı adı"
@@ -4457,16 +4457,16 @@
     "message": "Sağlayıcı yöneticisi"
   },
   "providerAdminDesc": {
-    "message": "Sağlayıcınızın tüm yönlerini yönetebilen ve müşteri organizasyonlarına erişebilen ve yönetebilen en yüksek erişimli kullanıcı."
+    "message": "The highest access user that can manage all aspects of your provider as well as access and manage client organizations."
   },
   "serviceUser": {
     "message": "Hizmet kullanıcısı"
   },
   "serviceUserDesc": {
-    "message": "Hizmet kullanıcıları, tüm istemci kuruluşlara erişebilir ve bunları yönetebilir."
+    "message": "Service users can access and manage all client organizations."
   },
   "providerInviteUserDesc": {
-    "message": "Aşağıya Bitwarden hesabının e-posta adresini girerek sağlayıcınıza yeni bir kullanıcı davet edin. Halihazırda bir Bitwarden hesabı yoksa yeni bir hesap oluşturması istenecektir."
+    "message": "Invite a new user to your provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "joinProvider": {
     "message": "Sağlayıcıya katıl"
@@ -4490,7 +4490,7 @@
     "message": "Yeni müşteri kuruluşu"
   },
   "newClientOrganizationDesc": {
-    "message": "Sağlayıcı olarak sizinle ilişkilendirilecek yeni bir müşteri organizasyonu oluşturun. Bu kuruluşa erişebilecek ve yönetebileceksiniz."
+    "message": "Create a new client organization that will be associated with you as the provider. You will be able to access and manage this organization."
   },
   "addExistingOrganization": {
     "message": "Mevcut kuruluşu ekle"
@@ -4499,7 +4499,7 @@
     "message": "Sağlayıcım"
   },
   "addOrganizationConfirmation": {
-    "message": "$PROVIDER$'a müşteri olarak $ORGANIZATION$ eklemek istediğinizden emin misiniz?",
+    "message": "Are you sure you want to add $ORGANIZATION$ as a client to $PROVIDER$?",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4548,7 +4548,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Bu organizasyonu ayırmak istediğinizden emin misiniz? Kuruluş var olmaya devam edecek, ancak artık sağlayıcı tarafından yönetilmeyecek."
+    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
   },
   "add": {
     "message": "Ekle"
@@ -4569,7 +4569,7 @@
     "message": "Kasa zaman aşımı"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Üyeler için maksimum kasa zaman aşımı ayarlayın."
+    "message": "Set a maximum vault timeout for members."
   },
   "maximumVaultTimeoutLabel": {
     "message": "Maksimum kasa zaman aşımı"
@@ -4603,10 +4603,10 @@
     "message": "Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor."
   },
   "vaultCustomTimeoutMinimum": {
-    "message": "Minimum özel zaman aşımı 1 dakikadır."
+    "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Kasa Zaman Aşımı izin verilen aralıkta değil."
+    "message": "Vault Timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
     "message": "Kişisel kasayı dışa aktarmayı devre dışı bırak"
@@ -4657,25 +4657,25 @@
     "message": "OIDC yönlendirme davranışı"
   },
   "getClaimsFromUserInfoEndpoint": {
-    "message": "Kullanıcı bilgileri uç noktasından hak talepleri alın"
+    "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Özel Kapsamlar"
+    "message": "Custom Scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Özel Kullanıcı Kimliği Talep Türleri"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "E-posta Talep Türleri"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Özel Ad Talep Türleri"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "İstenen Kimlik Doğrulama Bağlam Sınıfı Referans değerleri"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Yanıt Olarak Beklenen \"acr\" Talep Değeri"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
     "message": "SP varlık kimliği"
@@ -4699,7 +4699,7 @@
     "message": "Minimum gelen imza algoritması"
   },
   "spWantAssertionsSigned": {
-    "message": "İmzalı assertions'lar bekleyin"
+    "message": "Expect signed assertions"
   },
   "spValidateCertificates": {
     "message": "Sertifikaları doğrula"
@@ -4717,28 +4717,28 @@
     "message": "Tek çıkış (SLO) servis URL'si"
   },
   "idpX509PublicCert": {
-    "message": "X509 Genel Sertifika"
+    "message": "X509 Public Certificate"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Çıkış imza algoritması"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
-    "message": "İstenmeyen kimlik doğrulama yanıtına izin ver"
+    "message": "Allow unsolicited authentication response"
   },
   "idpAllowOutboundLogoutRequests": {
-    "message": "Çıkış isteklerine izin ver"
+    "message": "Allow outbound logout requests"
   },
   "idpSignAuthenticationRequests": {
-    "message": "İmza doğrulama istekleri"
+    "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Tek Oturum Açma yapılandırması kaydedildi."
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Ücretsiz Bitwarden Aile"
   },
   "sponsoredFamiliesEligible": {
-    "message": "Siz ve aileniz Ücretsiz Bitwarden Aileleri için uygunsunuz. Verilerinizi işte olmadığınızda bile güvende tutmak için kişisel e-postanızla kullanın."
+    "message": "You and your family are eligible for Free Bitwarden Families. Redeem with your personal email to keep your data secure even when you are not at work."
   },
   "sponsoredFamiliesEligibleCard": {
     "message": "Verilerinizi evde de güvenle depolamak için Ücretsiz Bitwarden Aile paketinizi hemen kullanmaya başlayın."
@@ -4750,10 +4750,10 @@
     "message": "6 kullanıcı için premium erişim"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "Aile sırları için paylaşılan koleksiyonlar"
+    "message": "Shared collections for Family secrets"
   },
   "badToken": {
-    "message": "Bağlantı artık geçerli değil. Lütfen sponsorun teklifi yeniden göndermesini sağlayın."
+    "message": "The link is no longer valid. Please have the sponsor resend the offer."
   },
   "reclaimedFreePlan": {
     "message": "Ücretsiz paket kullanıldı"
@@ -4762,25 +4762,25 @@
     "message": "Kullan"
   },
   "sponsoredFamiliesSelectOffer": {
-    "message": "Sponsor olmasını istediğiniz kuruluşu seçin"
+    "message": "Select the organization you would like sponsored"
   },
   "familiesSponsoringOrgSelect": {
-    "message": "Hangi Ücretsiz Aileler teklifinden yararlanmak istersiniz?"
+    "message": "Which Free Families offer would you like to redeem?"
   },
   "sponsoredFamiliesEmail": {
-    "message": "Bitwarden Families kullanmak için kişisel e-postanızı girin"
+    "message": "Enter your personal email to redeem Bitwarden Families"
   },
   "sponsoredFamiliesLeaveCopy": {
     "message": "Sponsor kuruluştan ayrılır veya çıkarılırsanız Aile paketiniz ödeme döneminin sonunda sonra erecektir."
   },
   "acceptBitwardenFamiliesHelp": {
-    "message": "Mevcut bir kuruluş için teklifi kabul edin veya yeni bir Aile kuruluşu oluşturun."
+    "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
     "message": "Ücretsiz Bitwarden Aile Paketi Kuruluşuna davet edildiniz. Devam etmek için bu teklifi alan hesaba giriş yapmanız gerekiyor."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Teklif kabul edilemiyor. Lütfen kurumsal hesabınızdan teklif e-postasını yeniden gönderin ve tekrar deneyin."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Teklif kabul edilemedi. $DESCRIPTION$",
@@ -4795,13 +4795,13 @@
     "message": "Ücretsiz Bitwarden Aile'yi kabul et"
   },
   "sponsoredFamiliesOfferRedeemed": {
-    "message": "Ücretsiz Bitwarden Families teklifi başarıyla kullanıldı"
+    "message": "Free Bitwarden Families offer successfully redeemed"
   },
   "redeemed": {
     "message": "Kullanıldı"
   },
   "redeemedAccount": {
-    "message": "Kullanılmış Hesap"
+    "message": "Redeemed Account"
   },
   "revokeAccount": {
     "message": "$NAME$ hesabını iptal et",
@@ -4813,7 +4813,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Sponsorluk e-postasını $NAME$ sponsorluğuna yeniden gönder",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4834,7 +4834,7 @@
     "message": "Sponsorluğu kaldır"
   },
   "removeSponsorshipConfirmation": {
-    "message": "Bir sponsorluğu kaldırdıktan sonra, bu abonelikten ve ilgili faturalardan siz sorumlu olacaksınız. Devam etmek istediğine emin misin?"
+    "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
     "message": "Sponsorluk oluştur"
@@ -4843,13 +4843,13 @@
     "message": "E-posta gönderildi"
   },
   "revokeSponsorshipConfirmation": {
-    "message": "Bu hesap kaldırıldıktan sonra, fatura döneminin sonunda Aile planı sponsorluğu sona erecektir. Mevcut olanın süresi dolana kadar yeni bir sponsorluk teklifinden yararlanamazsınız. Devam etmek istediğine emin misin?"
+    "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
     "message": "Sponsorluk kaldırdıldı"
   },
   "ssoKeyConnectorError": {
-    "message": "Anahtar Bağlayıcı hatası: Anahtar Bağlayıcının mevcut olduğundan ve doğru çalıştığından emin olun."
+    "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "keyConnectorUrl": {
     "message": "Key Connector adresi"
@@ -4897,7 +4897,7 @@
     "message": "SSO doğrulamasına izin ver"
   },
   "allowSsoDesc": {
-    "message": "Ayarlandıktan sonra yapılandırmanız kaydedilecek ve üyeler, Kimlik Sağlayıcı kimlik bilgilerini kullanarak kimliklerini doğrulayabilecektir."
+    "message": "Once set up, your configuration will be saved and members will be able to authenticate using their Identity Provider credentials."
   },
   "ssoPolicyHelpStart": {
     "message": "Tüm üyelerin SSO ile giriş yapmasını zorunlu tutmak için",
@@ -4915,7 +4915,7 @@
     "message": "Key Connector ile çözmeyi kurmak için \"SSO kimlik doğrulama\" ve \"tek kuruluş\" ilkeleri gereklidir."
   },
   "memberDecryptionOption": {
-    "message": "Üye Şifre Çözme Seçenekleri"
+    "message": "Member Decryption Options"
   },
   "memberDecryptionPassDesc": {
     "message": "Kimlik doğrulamanın ardından üyeler ana parolalarını kullanarak kasadaki verilere erişebilecekler."
@@ -4924,10 +4924,10 @@
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Oturum Açma ile TOA'yı kendi kendine barındırılan şifre çözme anahtarı sunucunuza bağlayın. Bu seçeneği kullanarak üyelerin kasa verilerinin şifresini çözmek için Ana şifrelerini kullanmaları gerekmez. Kurulum yardımı için Bitwarden Destek ile iletişime geçin."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"TOA ve Anahtar Bağlayıcı Şifre Çözme ile Oturum Açma\" etkinleştirildi. Bu politika yalnızca Sahipler ve Yöneticiler için geçerli olacaktır."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
     "message": "SSO etkinleştirildi"
@@ -4942,19 +4942,19 @@
     "message": "Key Connector devre dışı bırakıldı"
   },
   "keyConnectorWarning": {
-    "message": "Üyeler Anahtar Bağlayıcı'yı kullanmaya başladığında, Kuruluşunuz Ana şifresi şifre çözmeye geri dönemez. Yalnızca bir anahtar sunucuyu dağıtma ve yönetme konusunda rahatsanız devam edin."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Key Connector'a taşındı"
   },
   "paymentSponsored": {
-    "message": "Lütfen kuruluşla ilişkilendirmek için bir ödeme yöntemi sağlayın. Merak etmeyin, ek özellikler seçmediğiniz veya sponsorluğunuz sona ermediği sürece sizden hiçbir ücret talep etmeyeceğiz. "
+    "message": "Please provide a payment method to associate with the organization. Don't worry, we won't charge you anything unless you select additional features or your sponsorship expires. "
   },
   "orgCreatedSponsorshipInvalid": {
-    "message": "Sponsorluk teklifinin süresi doldu. 7 günlük deneme sürenizin sonunda ücret ödememek için oluşturduğunuz organizasyonu silebilirsiniz. Aksi takdirde, kuruluşu korumak ve faturalandırma sorumluluğunu üstlenmek için bu istemi kapatabilirsiniz."
+    "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "Yeni Aileler Kuruluşu"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
     "message": "Teklifi kabul et"
@@ -4978,55 +4978,55 @@
     "message": "Sponsorluk ile ÜCRETSİZ"
   },
   "viewBillingSyncToken": {
-    "message": "Faturalandırma Eşitleme Anahtarını Görüntüle"
+    "message": "View Billing Sync Token"
   },
   "generateBillingSyncToken": {
-    "message": "Faturalandırma Eşitleme Anahtarı Oluştur"
+    "message": "Generate Billing Sync Token"
   },
   "copyPasteBillingSync": {
-    "message": "Bu anahtarı kopyalayıp şirket içinde barındırılan kuruluşunuzun Faturalandırma Eşitleme ayarlarına yapıştırın."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Faturalandırma Eşitleme anahtarınız bu kuruluşun abonelik ayarlarına erişebilir ve bunları düzenleyebilir."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Faturalandırma Eşitlemesini Yönet"
+    "message": "Manage Billing Sync"
   },
   "setUpBillingSync": {
-    "message": "Faturalandırma Eşitlemesini Ayarla"
+    "message": "Set Up Billing Sync"
   },
   "generateToken": {
-    "message": "Anahtar Üret"
+    "message": "Generate Token"
   },
   "rotateToken": {
-    "message": "Anahtar Yenile"
+    "message": "Rotate Token"
   },
   "rotateBillingSyncTokenWarning": {
-    "message": "Devam ederseniz, kendi kendine barındırılan sunucunuzda faturalandırma eşitlemesini yeniden kurmanız gerekecek."
+    "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Faturalandırma Senkronizasyonu Anahtarını yenilemek, önceki anahtarı geçersiz kılar."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Kendi Kendine Barındırılan"
+    "message": "Self-Hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
-    "message": "Kuruluşunuzu kendi sunucunuzda kurmak için lisans dosyanızı yüklemeniz gerekir. Kendi kendine barındırılan kuruluşunuz için Ücretsiz Aile planlarını ve gelişmiş faturalandırma özelliklerini desteklemek için faturalandırma eşitlemesini ayarlamanız gerekir."
+    "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Anahtar yenilendi."
+    "message": "Token rotated."
   },
   "billingSync": {
-    "message": "Faturalandırma Eşitlemesi"
+    "message": "Billing Sync"
   },
   "billingSyncDesc": {
-    "message": "Faturalandırma Eşitlemesi, şirket içinde barındırılan Bitwarden'ınızı Bitwarden bulut sunucusuna bağlayarak üyeler için Ücretsiz Aile planları ve gelişmiş faturalandırma özellikleri sağlar."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "Bu formu doldurmak için bulut kuruluşunuzun abonelik ayarlarından bir Faturalandırma Eşitleme Anahtarı gerekir."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Faturalandırma Eşitleme Anahtarı"
+    "message": "Billing Sync Token"
   },
   "active": {
     "message": "Aktif"
@@ -5071,13 +5071,13 @@
     "message": "zorunlu"
   },
   "idpSingleSignOnServiceUrlRequired": {
-    "message": "Varlık Kimliği bir URL değilse gereklidir."
+    "message": "Required if Entity ID is not a URL."
   },
   "openIdOptionalCustomizations": {
     "message": "İsteğe Bağlı Özelleştirmeler"
   },
   "openIdAuthorityRequired": {
-    "message": "Yetki geçerli değilse gereklidir."
+    "message": "Required if Authority is not valid."
   },
   "separateMultipleWithComma": {
     "message": "Birden fazla değeri virgülle ayırabilirsiniz."
@@ -5179,10 +5179,10 @@
     "message": "Servis"
   },
   "unknownCipher": {
-    "message": "Bilinmeyen Öğe, bu öğeye erişmek için izin istemeniz gerekebilir."
+    "message": "Unknown Item, you may need to request permission to access this item."
   },
   "cannotSponsorSelf": {
-    "message": "Aktif hesap için kullanamazsınız. Farklı bir e-posta girin."
+    "message": "You cannot redeem for the active account. Enter a different email."
   },
   "revokeWhenExpired": {
     "message": "Süre sonu: $DATE$",
@@ -5194,7 +5194,7 @@
     }
   },
   "awaitingSyncSingular": {
-    "message": "Anahtar $DAYS$ gün önce yenilendi. Şirket içinde barındırılan kuruluş ayarlarınızda faturalandırma eşitleme anahtarını güncelleyin.",
+    "message": "Token rotated $DAYS$ day ago. Update the billing sync token in your self-hosted organization settings.",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -5203,7 +5203,7 @@
     }
   },
   "awaitingSyncPlural": {
-    "message": "Anahtar $DAYS$ gün önce yenilendi. Şirket içinde barındırılan kuruluş ayarlarınızda faturalandırma eşitleme anahtarını güncelleyin.",
+    "message": "Token rotated $DAYS$ days ago. Update the billing sync token in your self-hosted organization settings.",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -5216,7 +5216,7 @@
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
-    "message": "Kendi kendine barındırılan sponsorluklar eşitlendi."
+    "message": "Self-hosted sponsorships synced."
   },
   "billingManagedByProvider": {
     "message": "Yönetici: $PROVIDER$",
@@ -5251,13 +5251,13 @@
     "message": "Cihaz doğrulamasını etkinleştir"
   },
   "deviceVerificationDesc": {
-    "message": "Etkinleştirildiğinde, tanınmayan bir cihazdan oturum açarken e-posta adresinize doğrulama kodları gönderilir"
+    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
   },
   "updatedDeviceVerification": {
     "message": "Cihaz doğrulaması güncellendi"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Cihaz Doğrulamayı etkinleştirmek istediğinizden emin misiniz? Doğrulama kodu e-postaları şu adrese gelecek: $EMAIL$",
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5269,67 +5269,67 @@
     "message": "Premium abonelik gerekli"
   },
   "scim": {
-    "message": "SCIM Sağlama",
+    "message": "SCIM Provisioning",
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
-    "message": "SCIM sağlama yoluyla tercih ettiğiniz kimlik sağlayıcıyla kullanıcıları ve grupları otomatik olarak sağlayın",
+    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDesc": {
-    "message": "SCIM'i etkinleştir",
+    "message": "Enable SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
-    "message": "URL'yi ve SCIM API Anahtarını yapılandırarak tercih ettiğiniz kimlik sağlayıcısını ayarlayın",
+    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimApiKeyHelperText": {
-    "message": "Bu API anahtarı, kuruluşunuzdaki kullanıcıları yönetme erişimine sahiptir. Gizli tutulmalıdır."
+    "message": "This API key has access to manage users within your organization. It should be kept secret."
   },
   "copyScimKey": {
-    "message": "SCIM API Anahtarını panonuza kopyalayın",
+    "message": "Copy the SCIM API Key to your clipboard",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {
-    "message": "SCIM API Anahtarını yenileyin",
+    "message": "Rotate the SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKeyWarning": {
-    "message": "SCIM API Anahtarını yenilemek istediğinizden emin misiniz? Geçerli anahtar, mevcut tüm entegrasyonlar için artık çalışmayacaktır.",
+    "message": "Are you sure you want to rotate the SCIM API Key? The current key will no longer work for any existing integrations.",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateKey": {
-    "message": "Anahtarı Yenile"
+    "message": "Rotate Key"
   },
   "scimApiKey": {
-    "message": "SCIM API Anahtarı",
+    "message": "SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {
-    "message": "SCIM uç noktası URL'sini panonuza kopyalayın",
+    "message": "Copy the SCIM endpoint URL to your clipboard",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimUrl": {
-    "message": "SCIM URL'si",
+    "message": "SCIM URL",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
-    "message": "SCIM API Anahtarı başarıyla yenilendi",
+    "message": "The SCIM API Key has been successfully rotated",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "scimSettingsSaved": {
-    "message": "SCIM ayarları başarıyla kaydedildi",
+    "message": "SCIM settings have been saved successfully",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
     "message": "Girdi gerekli."
   },
   "inputEmail": {
-    "message": "Girdi bir e-posta adresi değil."
+    "message": "Input is not an email-address."
   },
   "inputMinLength": {
-    "message": "Giriş, en az $COUNT$ karakter uzunluğunda olmalıdır.",
+    "message": "Input must be at least $COUNT$ characters long.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5338,7 +5338,7 @@
     }
   },
   "fieldsNeedAttention": {
-    "message": "Üstteki $COUNT$ alan(lar) la ilgilenmeniz gerekiyor.",
+    "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
       "count": {
         "content": "$1",

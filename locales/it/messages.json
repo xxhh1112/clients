@@ -679,7 +679,7 @@
     "message": "Password principale errata"
   },
   "invalidFilePassword": {
-    "message": "Password errata, usa la password che hai inserito alla creazione del file di esportazione."
+    "message": "Password errata, usa la password che hai inserito quando hai creato il file di esportazione."
   },
   "lockNow": {
     "message": "Blocca"
@@ -894,46 +894,46 @@
     "message": "Formato file"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Il file esportato sarà crittato, sarà necessaria una password per decrittare il file."
+    "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription": {
-    "message": "La password sarà utilizzata per importare ed esportare il file"
+    "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Conferma password principale"
+    "message": "Confirm Master Password"
   },
   "confirmFormat": {
-    "message": "Conferma formato"
+    "message": "Confirm Format"
   },
   "filePassword": {
-    "message": "Password del file"
+    "message": "File Password"
   },
   "confirmFilePassword": {
-    "message": "Conferma password del file"
+    "message": "Confirm File Password"
   },
   "accountBackupOptionDescription": {
-    "message": "Utilizza la chiave di crittografia del tuo account per crittare l'esportazione e limitare l'import all'attuale account Bitwarden."
+    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Imposta una password per crittare l'esportazione e importala in qualsiasi account Bitwarden, utilizzando la password impostata."
+    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "Tipo di file"
+    "message": "File Type"
   },
   "accountBackup": {
-    "message": "Backup dell'account"
+    "message": "Account Backup"
   },
   "passwordProtected": {
-    "message": "Protetto da password"
+    "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "La password del file e la password inserita nel campo di conferma non corrispondono."
+    "message": "“File password”  and “Confirm File Password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Conferma importazione della cassaforte"
+    "message": "Confirm Vault Import"
   },
   "confirmVaultImportDesc": {
-    "message": "Questo file è protetto da password. Inserisci la password del file per importare i dati."
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "I dati della tua cassaforte sono stati esportati."

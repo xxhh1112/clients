@@ -1273,11 +1273,24 @@
   "twoStepLogin": {
     "message": "Two-step login"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Two-step Login Enforcement"
+  },
   "twoStepLoginDesc": {
     "message": "Secure your account by requiring an additional step when logging in."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Require two-step login for your organization's users by configuring providers at the organization level."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Two-step Login Policy"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "To enforce Two-step Login through Duo, use the options below."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Enabling two-step login can permanently lock you out of your Bitwarden account. A recovery code allows you to access your account in the event that you can no longer use your normal two-step login provider (ex. you lose your device). Bitwarden support will not be able to assist you if you lose access to your account. We recommend you write down or print the recovery code and keep it in a safe place."
@@ -1524,6 +1537,10 @@
   },
   "reportsDesc": {
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
     "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
@@ -2970,6 +2987,9 @@
   "myOrganization": {
     "message": "My Organization"
   },
+  "organizationInfo": {
+    "message": "Organization Info"
+  },
   "deleteOrganization": {
     "message": "Delete Organization"
   },
@@ -3655,6 +3675,12 @@
   },
   "ssoIdentifierRequired": {
     "message": "Organization Identifier is required."
+  },
+  "ssoIdentifier": {
+    "message": "SSO Identifier"
+  },
+  "ssoIdentifierHint": {
+    "message": "Provide this ID to your members to login with SSO."
   },
   "unlinkSso": {
     "message": "Unlink SSO"
@@ -5337,6 +5363,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Input must not exceed $COUNT$ characters in length.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
@@ -5351,6 +5386,12 @@
   },
   "on": {
     "message": "On"
+  },
+  "members": {
+    "message": "Members"
+  },
+  "reporting": {
+    "message": "Reporting"
   },
   "cardBrandMir": {
     "message": "Mir"
