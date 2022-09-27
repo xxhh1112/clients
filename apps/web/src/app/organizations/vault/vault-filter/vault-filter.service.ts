@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { combineLatestWith, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -20,6 +19,8 @@ import {
   CollectionView,
 } from "@bitwarden/common/models/view/collectionView";
 
+import { CollectionFilter } from "src/app/vault/vault-filter/shared/models/vault-filter.type";
+
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 
 @Injectable()
@@ -27,9 +28,7 @@ export class VaultFilterService extends BaseVaultFilterService {
   protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
-    map((collections) => {
-      return this.getAllNestedCollections(collections);
-    })
+    map((collections) => this.buildCollectionTree(collections))
   );
 
   constructor(

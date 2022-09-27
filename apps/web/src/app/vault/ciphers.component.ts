@@ -10,7 +10,6 @@ import {
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -34,6 +33,7 @@ import { BulkMoveComponent } from "./bulk-move.component";
 import { BulkRestoreComponent } from "./bulk-restore.component";
 import { BulkShareComponent } from "./bulk-share.component";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
+import { CollectionFilter } from "./vault-filter/shared/models/vault-filter.type";
 
 const MaxCheckedCount = 500;
 
