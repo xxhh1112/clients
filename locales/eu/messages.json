@@ -425,7 +425,7 @@
     "message": "Ni"
   },
   "myVault": {
-    "message": "Nire Kutxa Gotorra"
+    "message": "Kutxa Gotorra"
   },
   "allVaults": {
     "message": "Kutxa Gotor guztiak"
@@ -4056,6 +4056,12 @@
   },
   "permissions": {
     "message": "Baimenak"
+  },
+  "managerPermissions": {
+    "message": "Manager Permissions"
+  },
+  "adminPermissions": {
+    "message": "Admin Permissions"
   },
   "accessEventLogs": {
     "message": "Sarreren erregistroak"
