@@ -6,6 +6,7 @@
           <div class="inner-content">
             <app-organization-vault-filter
               #vaultFilter
+              [organization]="organization"
               [activeFilter]="activeFilter"
               (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"

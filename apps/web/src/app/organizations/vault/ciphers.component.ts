@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -17,6 +17,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+
 import { BulkDeleteComponent } from "src/app/vault/bulk-delete.component";
 
 import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";
@@ -25,7 +26,7 @@ import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.co
   selector: "app-org-vault-ciphers",
   templateUrl: "../../vault/ciphers.component.html",
 })
-export class CiphersComponent extends BaseCiphersComponent {
+export class CiphersComponent extends BaseCiphersComponent implements OnDestroy {
   @Input() collections: CollectionView[];
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
@@ -65,6 +66,10 @@ export class CiphersComponent extends BaseCiphersComponent {
       organizationService,
       tokenService
     );
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {

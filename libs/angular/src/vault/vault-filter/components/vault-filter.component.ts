@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Observable } from "rxjs";
 
-import { DeprecatedVaultFilterService } from "@bitwarden/common/abstractions/vault-filter.service";
+import { DeprecatedVaultFilterService } from "@bitwarden/angular/abstractions/deprecated-vault-filter.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";

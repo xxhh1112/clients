@@ -1,13 +1,13 @@
 import { Observable } from "rxjs";
 
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { TreeNode } from "@bitwarden/common/src/models/domain/treeNode";
 
 import {
   CipherTypeFilter,
   CollectionFilter,
   FolderFilter,
   OrganizationFilter,
-} from "./cipher-filter.model";
+} from "./vault-filter.type";
 
 export type VaultFilterType =
   | OrganizationFilter
@@ -28,7 +28,6 @@ export type VaultFilterSection = {
   header: {
     showHeader: boolean;
     isSelectable: boolean;
-    defaultSelection?: boolean;
   };
   action: (filterNode: TreeNode<VaultFilterType>) => Promise<void>;
   edit?: {

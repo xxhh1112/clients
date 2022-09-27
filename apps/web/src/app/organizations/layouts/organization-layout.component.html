@@ -14,7 +14,7 @@
         <bit-tab-item *ngIf="showGroupsTab" [route]="['groups']">{{
           "groups" | i18n
         }}</bit-tab-item>
-        <bit-tab-item *ngIf="showReportsTab" [route]="['reporting']">{{
+        <bit-tab-item *ngIf="showReportsTab" [route]="[reportRoute]">{{
           reportTabLabel | i18n
         }}</bit-tab-item>
         <bit-tab-item *ngIf="showBillingTab" [route]="['billing']">{{

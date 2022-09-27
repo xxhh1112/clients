@@ -12,7 +12,6 @@ import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { FolderFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -36,8 +35,9 @@ import { CiphersComponent } from "./ciphers.component";
 import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
+import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
-import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
+import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
 
 const BroadcasterSubscriptionId = "VaultComponent";
 
@@ -182,8 +182,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async applyOrganizationFilter(orgId: string) {
+    if (orgId == null) {
+      orgId = "MyVault";
+    }
     const orgs = await firstValueFrom(this.filterComponent.filters.organizationFilter.data$);
-    const orgNode = ServiceUtils.getTreeNodeObject(orgs, orgId) as TreeNode<FolderFilter>;
+    const orgNode = ServiceUtils.getTreeNodeObject(orgs, orgId) as TreeNode<OrganizationFilter>;
     this.filterComponent.filters?.organizationFilter?.action(orgNode);
   }
 
@@ -295,21 +298,21 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const component = await this.editCipher(null);
-    component.type = this.activeFilter.getCipherType;
+    component.type = this.activeFilter.cipherType;
     if (
       this.activeFilter.selectedOrganizationNode &&
-      this.activeFilter.getOrganizationId !== "MyVault"
+      this.activeFilter.organizationId !== "MyVault"
     ) {
-      component.organizationId = this.activeFilter.getOrganizationId;
+      component.organizationId = this.activeFilter.organizationId;
       component.collections = this.filterComponent.currentFilterCollections.filter(
         (c) => !c.readOnly && c.id != null
       );
     }
-    const selectedColId = this.activeFilter.getCollectionId;
+    const selectedColId = this.activeFilter.collectionId;
     if (selectedColId && selectedColId !== "AllCollections") {
       component.collectionIds = [selectedColId];
     }
-    component.folderId = this.activeFilter.getFolderId;
+    component.folderId = this.activeFilter.folderId;
   }
 
   async editCipher(cipher: CipherView) {
@@ -368,9 +371,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (queryParams == null) {
       queryParams = {
         favorites: this.activeFilter.isFavorites || null,
-        type: this.activeFilter.getCipherType,
-        folderId: this.activeFilter.getFolderId,
-        collectionId: this.activeFilter.getCollectionId,
+        type: this.activeFilter.cipherType,
+        folderId: this.activeFilter.folderId,
+        collectionId: this.activeFilter.collectionId,
         deleted: this.activeFilter.isDeleted || null,
       };
     }

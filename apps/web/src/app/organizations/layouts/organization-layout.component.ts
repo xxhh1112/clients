@@ -1,5 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
@@ -20,9 +21,10 @@ const BroadcasterSubscriptionId = "OrganizationLayoutComponent";
   templateUrl: "organization-layout.component.html",
 })
 export class OrganizationLayoutComponent implements OnInit, OnDestroy {
-  organization: Organization;
-  businessTokenPromise: Promise<any>;
   private organizationId: string;
+  private destroy$ = new Subject<void>();
+
+  organization: Organization;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,11 +35,16 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     document.body.classList.remove("layout_frontend");
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.params.subscribe(async (params: any) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params: any) => {
+          this.organizationId = params.organizationId;
+          await this.load();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
       this.ngZone.run(async () => {
         switch (message.command) {
@@ -51,6 +58,8 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async load() {
@@ -79,5 +88,9 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
 
   get reportTabLabel(): string {
     return this.organization.useEvents ? "reporting" : "reports";
+  }
+
+  get reportRoute(): string {
+    return this.organization.useEvents ? "reporting/events" : "reporting/reports";
   }
 }

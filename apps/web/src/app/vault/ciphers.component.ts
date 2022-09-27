@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -27,13 +28,12 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { BulkDeleteComponent } from "./bulk-delete.component";
 
-import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
+import { BulkDeleteComponent } from "./bulk-delete.component";
+import { BulkMoveComponent } from "./bulk-move.component";
 import { BulkRestoreComponent } from "./bulk-restore.component";
 import { BulkShareComponent } from "./bulk-share.component";
-import { BulkMoveComponent } from "./bulk-move.component";
+import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 
 const MaxCheckedCount = 500;
 

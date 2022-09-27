@@ -451,6 +451,9 @@
   "vaultItems": {
     "message": "Vault Items"
   },
+  "filter": {
+    "message": "Filter"
+  },
   "moveSelectedToOrg": {
     "message": "Move Selected to Organization"
   },

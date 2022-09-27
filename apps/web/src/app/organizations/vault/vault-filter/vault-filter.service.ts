@@ -1,13 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  BehaviorSubject,
-  combineLatestWith,
-  map,
-  mergeMap,
-  Observable,
-  switchMap,
-  takeUntil,
-} from "rxjs";
+import { combineLatestWith, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
 import { CollectionFilter } from "@bitwarden/angular/vault/vault-filter/models/cipher-filter.model";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -28,13 +20,11 @@ import {
   CollectionView,
 } from "@bitwarden/common/models/view/collectionView";
 
-import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/vault-filter.service";
+import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
-  protected collectionViews$: BehaviorSubject<CollectionView[]> = new BehaviorSubject<
-    CollectionView[]
-  >(null);
+  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => {
@@ -67,7 +57,7 @@ export class VaultFilterService extends BaseVaultFilterService {
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(async ([folders, org]) => {
+        switchMap(async ([folders, org]) => {
           return this.filterFolders(folders, org);
         }),
         takeUntil(this.destroy$)
@@ -85,7 +75,7 @@ export class VaultFilterService extends BaseVaultFilterService {
     this.collectionViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
-        mergeMap(async ([collections, org]) => {
+        switchMap(async ([collections, org]) => {
           if (org?.permissions && org?.canEditAnyCollection) {
             return collections;
           } else {
@@ -95,12 +85,6 @@ export class VaultFilterService extends BaseVaultFilterService {
         takeUntil(this.destroy$)
       )
       .subscribe(this._filteredCollections);
-  }
-
-  async reloadCollections(org?: Organization) {
-    this.collectionViews$.next(
-      await this.loadCollections(org ?? this._organizationFilter.getValue())
-    );
   }
 
   protected async loadCollections(org: Organization) {

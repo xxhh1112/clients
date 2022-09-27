@@ -1,27 +1,16 @@
-import {
-  Component,
-  EventEmitter,
-  InjectionToken,
-  Injector,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { Component, EventEmitter, InjectionToken, Injector, Input, Output } from "@angular/core";
 
-import {
-  VaultFilterSection,
-  VaultFilterType,
-} from "@bitwarden/angular/vault/vault-filter/models/vault-filter-section";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
 
+import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";
 import { VaultFilter } from "../models/vault-filter.model";
 
 @Component({
   selector: "app-filter-section",
   templateUrl: "vault-filter-section.component.html",
 })
-export class VaultFilterSectionComponent implements OnInit {
+export class VaultFilterSectionComponent {
   @Input() activeFilter: VaultFilter;
 
   @Input() data: TreeNode<VaultFilterType>;
@@ -37,12 +26,6 @@ export class VaultFilterSectionComponent implements OnInit {
   private injectors = new Map<string, Injector>();
 
   constructor(private injector: Injector) {}
-
-  async ngOnInit() {
-    if (this.header.defaultSelection) {
-      await this.onFilterSelect(this.filterHeader);
-    }
-  }
 
   get filterHeader() {
     return this.data;
@@ -62,12 +45,12 @@ export class VaultFilterSectionComponent implements OnInit {
 
   isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
     if (this.isOrganizationFilter) {
-      return this.activeFilter.selectedOrganizationNode == filterNode;
+      return this.activeFilter.organizationId === filterNode?.node.id;
     }
     return (
-      this.activeFilter.getCipherTypeId === filterNode?.node.id ||
-      this.activeFilter.getFolderId === filterNode?.node.id ||
-      this.activeFilter.getCollectionId === filterNode?.node.id
+      this.activeFilter.cipherTypeId === filterNode?.node.id ||
+      this.activeFilter.folderId === filterNode?.node.id ||
+      this.activeFilter.collectionId === filterNode?.node.id
     );
   }
 
