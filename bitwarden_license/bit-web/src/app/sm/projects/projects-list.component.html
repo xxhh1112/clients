@@ -13,11 +13,11 @@
       <th bitCell>{{ "lastEdited" | i18n }}</th>
       <th bitCell class="tw-w-0">
         <button
-          class="tw-rounded tw-border tw-border-transparent tw-bg-transparent tw-text-main hover:tw-border-secondary-700 focus:tw-border-secondary-700"
+          bitIconButton="bwi-ellipsis-v"
+          buttonType="main"
+          title="{{ 'options' | i18n }}"
           [bitMenuTriggerFor]="tableMenu"
-        >
-          <i class="bwi bwi-ellipsis-v tw-text-xl" aria-hidden="true"></i>
-        </button>
+        ></button>
       </th>
     </tr>
   </ng-container>
@@ -37,11 +37,10 @@
       <td bitCell>{{ project.revisionDate | date: "medium" }}</td>
       <td bitCell>
         <button
-          class="tw-rounded tw-border tw-border-transparent tw-bg-transparent tw-text-main hover:tw-border-secondary-700 focus:tw-border-secondary-700"
+          bitIconButton="bwi-ellipsis-v"
           [bitMenuTriggerFor]="projectMenu"
-        >
-          <i class="bwi bwi-ellipsis-v tw-text-xl" aria-hidden="true"></i>
-        </button>
+          title="{{ 'options' | i18n }}"
+        ></button>
       </td>
       <bit-menu #projectMenu>
         <button type="button" bitMenuItem (click)="editProjectEvent.emit(project.Id)">
