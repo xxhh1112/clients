@@ -1,10 +1,10 @@
-import { CollectionGroupDetailsResponse } from "../response/collectionResponse";
+import { CollectionGroupDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 
 import { CollectionGroupSelectionView } from "./collection-group-selection-view";
 import { CollectionView } from "./collectionView";
 
 export class CollectionAdminView extends CollectionView {
-  readonly groups: CollectionGroupSelectionView[] = [];
+  groups: CollectionGroupSelectionView[] = [];
 
   constructor(response?: CollectionGroupDetailsResponse) {
     super(response);
