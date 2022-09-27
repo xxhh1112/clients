@@ -11,6 +11,7 @@ import {
 export type Flags = {
   showTrial?: boolean;
   secretsManager?: boolean;
+  showPasswordless?: boolean;
 } & SharedFlags;
 
 // required to avoid linting errors when there are no flags
