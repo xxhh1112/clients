@@ -51,7 +51,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
-      this.cipherPromise = this.cipherService.get(params.cipherId);
+      this.cipherObject = await this.cipherService.get(params.cipherId);
       this.cipherId = params.cipherId;
       await this.init();
     });

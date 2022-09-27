@@ -17,13 +17,12 @@ import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abs
 
 @Directive()
 export class AttachmentsComponent implements OnInit {
-  @Input() cipherPromise: Promise<Cipher>;
-  @Input() cipherId: string;
+  @Input() cipherObject: Cipher;
   @Output() onUploadedAttachment = new EventEmitter();
   @Output() onDeletedAttachment = new EventEmitter();
   @Output() onReuploadedAttachment = new EventEmitter();
 
-  //cipherId: string;
+  cipherId: string;
   cipher: CipherView;
   cipherDomain: Cipher;
   hasUpdatedKey: boolean;
@@ -191,6 +190,7 @@ export class AttachmentsComponent implements OnInit {
   protected async init() {
     this.cipherDomain = await this.loadCipher();
     this.cipher = await this.cipherDomain.decrypt();
+    this.cipherId = this.cipherObject?.id;
 
     this.hasUpdatedKey = await this.cryptoService.hasEncKey();
     const canAccessPremium = await this.stateService.getCanAccessPremium();
@@ -285,7 +285,7 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected loadCipher() {
-    return this.cipherPromise;
+    return Promise.resolve(this.cipherObject);
   }
 
   protected saveCipherAttachment(file: File) {
