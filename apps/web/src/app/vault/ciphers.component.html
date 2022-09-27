@@ -86,6 +86,14 @@
             </button>
           </td>
           <td class="tw-w-72">
+            <ng-container *ngIf="showOrganizationBadge">
+              <app-org-badge
+                organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
+                profileName="{{ profileName }}"
+                (onOrganizationClicked)="onOrganizationClicked(col.node.organizationId)"
+              >
+              </app-org-badge>
+            </ng-container>
             <ng-container *ngIf="!showOrganizationBadge && activeFilter.selectedCollectionNode">
               <app-group-badge
                 *ngIf="col.node.groups"
