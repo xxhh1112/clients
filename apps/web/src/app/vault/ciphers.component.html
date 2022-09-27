@@ -73,7 +73,7 @@
       <ng-container *ngIf="activeFilter.selectedCollectionNode">
         <tr *ngFor="let col of activeFilter.selectedCollectionNode?.children">
           <td class="table-list-checkbox">
-            <input type="checkbox" [(ngModel)]="col.checked" appStopProp />
+            <input *ngIf="organization" type="checkbox" [(ngModel)]="col.checked" appStopProp />
           </td>
           <td class="table-list-icon">
             <div class="icon" aria-hidden="true">

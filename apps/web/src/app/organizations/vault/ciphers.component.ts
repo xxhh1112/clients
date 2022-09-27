@@ -22,6 +22,8 @@ import { BulkDeleteComponent } from "src/app/vault/bulk-delete.component";
 
 import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";
 
+const MaxCheckedCount = 500;
+
 @Component({
   selector: "app-org-vault-ciphers",
   templateUrl: "../../vault/ciphers.component.html",
@@ -116,6 +118,22 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
   protected showFixOldAttachments(c: CipherView) {
     return this.organization.canEditAnyCollection && c.hasOldAttachments;
+  }
+
+  selectAll(select: boolean) {
+    if (select) {
+      this.selectAll(false);
+    }
+    if (this.activeFilter.selectedCollectionNode) {
+      this.activeFilter.selectedCollectionNode.children.forEach((col) => {
+        (col as any).checked = select;
+      });
+    }
+    const selectCount =
+      select && this.ciphers.length > MaxCheckedCount ? MaxCheckedCount : this.ciphers.length;
+    for (let i = 0; i < selectCount; i++) {
+      this.checkCipher(this.ciphers[i], select);
+    }
   }
 
   async bulkDelete() {

@@ -411,11 +411,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     if (select) {
       this.selectAll(false);
     }
-    if (this.activeFilter.selectedCollectionNode) {
-      this.activeFilter.selectedCollectionNode.children.forEach((col) => {
-        (col as any).checked = select;
-      });
-    }
     const selectCount =
       select && this.ciphers.length > MaxCheckedCount ? MaxCheckedCount : this.ciphers.length;
     for (let i = 0; i < selectCount; i++) {
