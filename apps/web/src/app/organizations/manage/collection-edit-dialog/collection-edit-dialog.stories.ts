@@ -5,12 +5,17 @@ import { action } from "@storybook/addon-actions";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { CollectionApiService } from "@bitwarden/common/abstractions/collection/collection-api.service.abstraction";
+import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Collection } from "@bitwarden/common/models/domain/collection";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { ButtonModule, DialogModule, FormFieldModule, TabsModule } from "@bitwarden/components";
+import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
+import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
+import {
+  ButtonModule,
+  DialogModule,
+  FormFieldModule,
+  IconButtonModule,
+  TabsModule,
+} from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
@@ -22,7 +27,7 @@ import {
 interface ProviderData {
   collectionId: string;
   organizationId: string;
-  collections: CollectionView[];
+  collections: CollectionAdminView[];
 }
 
 export default {
@@ -38,6 +43,7 @@ export default {
         TabsModule,
         FormFieldModule,
         ReactiveFormsModule,
+        IconButtonModule,
       ],
     }),
   ],
@@ -89,12 +95,14 @@ function providers(data: ProviderData) {
       useClass: MockDialogRef,
     },
     {
-      provide: CollectionService,
-      useValue: new MockCollectionService(data.collections),
+      provide: CollectionAdminService,
+      useValue: new MockCollectionAdminService(data.collections, data.collectionId),
     },
     {
-      provide: CollectionApiService,
-      useClass: MockCollectionApiService,
+      provide: PlatformUtilsService,
+      useValue: {
+        showDialog: action("PlatformUtilsService.show") as () => Promise<unknown>,
+      } as Partial<PlatformUtilsService>,
     },
   ] as Provider[];
 }
@@ -103,28 +111,23 @@ class MockDialogRef implements Partial<DialogRef> {
   close = action("DialogRef.close");
 }
 
-class MockCollectionService implements Partial<CollectionService> {
-  private encryptAction = action("CollectionService.encrypt");
+class MockCollectionAdminService implements Partial<CollectionAdminService> {
+  constructor(private collections: CollectionAdminView[], private collectionId: string) {}
 
-  constructor(private collections: CollectionView[]) {}
+  private saveAction = action("CollectionApiService.save");
 
-  getAllAdminDecrypted = () => Promise.resolve(this.collections);
+  getAll = () => Promise.resolve(this.collections);
 
-  async encrypt(model: CollectionView) {
-    this.encryptAction(model);
-    return new Collection({
-      ...model,
-      name: `<encrypted: "${model.name}">`,
-    });
+  get = () => Promise.resolve(this.collections.find((c) => c.id === this.collectionId));
+
+  async save(...args: unknown[]) {
+    this.saveAction(args);
+    await Utils.delay(1500);
   }
 }
 
-class MockCollectionApiService implements Partial<CollectionApiService> {
-  save = action("CollectionApiService.save") as () => Promise<unknown>;
-}
-
 function createCollection(name: string, id = Utils.newGuid()) {
-  const collection = new CollectionView();
+  const collection = new CollectionAdminView();
   collection.id = id;
   collection.name = name;
   return collection;
