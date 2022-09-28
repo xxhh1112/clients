@@ -14,12 +14,9 @@
       buttonType="main"
       size="default"
       bitDialogClose
-      class="tw-border-0 tw-bg-transparent tw-p-0"
-      title="{{ 'close' | i18n }}"
-      attr.aria-label="{{ 'close' | i18n }}"
-    >
-      <i class="bwi bwi-close tw-text-xs tw-font-bold tw-text-main" aria-hidden="true"></i>
-    </button>
+      [attr.title]="'close' | i18n"
+      [attr.aria-label]="'close' | i18n"
+    ></button>
   </div>
 
   <div class="tw-overflow-y-auto tw-p-4 tw-pb-8">
