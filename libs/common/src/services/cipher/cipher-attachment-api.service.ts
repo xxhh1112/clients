@@ -3,7 +3,6 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CipherAttachmentApiServiceAbstraction as CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { FileUploadType } from "@bitwarden/common/enums/fileUploadType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
@@ -20,9 +19,6 @@ import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
-import { AzureFileUploadService } from "../azureFileUpload.service";
-import { BitwardenFileUploadService } from "../bitwardenFileUpload.service";
-
 type legacyServerAttachmentFileUploadRequest = {
   admin: boolean;
   cipherId: string;
@@ -32,18 +28,12 @@ type legacyServerAttachmentFileUploadRequest = {
 };
 
 export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
-  private azureFileUploadService: AzureFileUploadService;
-  private bitwardenFileUploadService: BitwardenFileUploadService;
-
   constructor(
     private cipherService: CipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
     logService: LogService
-  ) {
-    this.azureFileUploadService = new AzureFileUploadService(logService);
-    this.bitwardenFileUploadService = new BitwardenFileUploadService();
-  }
+  ) {}
 
   async deleteAttachmentWithServer(id: string, attachmentId: string): Promise<void> {
     try {
@@ -344,50 +334,6 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
       throw e;
     }
     await this.cipherService.upsert(encCiphers.map((c) => c.toCipherData()));
-  }
-
-  async uploadCipherAttachment(
-    admin: boolean,
-    uploadData: AttachmentUploadDataResponse,
-    encryptedFileName: EncString,
-    encryptedFileData: EncArrayBuffer
-  ) {
-    const response = admin ? uploadData.cipherMiniResponse : uploadData.cipherResponse;
-    try {
-      switch (uploadData.fileUploadType) {
-        case FileUploadType.Direct:
-          await this.bitwardenFileUploadService.upload(
-            encryptedFileName.encryptedString,
-            encryptedFileData,
-            (fd) => this.postAttachmentFile(response.id, uploadData.attachmentId, fd)
-          );
-          break;
-        case FileUploadType.Azure: {
-          const renewalCallback = async () => {
-            const renewalResponse = await this.renewAttachmentUploadUrl(
-              response.id,
-              uploadData.attachmentId
-            );
-            return renewalResponse.url;
-          };
-          await this.azureFileUploadService.upload(
-            uploadData.url,
-            encryptedFileData,
-            renewalCallback
-          );
-          break;
-        }
-        default:
-          throw new Error("Unknown file upload type.");
-      }
-    } catch (e) {
-      if (admin) {
-        await this.deleteCipherAttachmentAdmin(response.id, uploadData.attachmentId);
-      } else {
-        await this.deleteCipherAttachment(response.id, uploadData.attachmentId);
-      }
-      throw e;
-    }
   }
 
   // Helpers

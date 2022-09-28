@@ -1,6 +1,4 @@
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
-import { EncString } from "@bitwarden/common/models/domain/encString";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
@@ -66,12 +64,5 @@ export class CipherAttachmentApiServiceAbstraction {
     ciphers: CipherView[],
     organizationId: string,
     collectionIds: string[]
-  ) => Promise<any>;
-
-  uploadCipherAttachment: (
-    admin: boolean,
-    uploadData: AttachmentUploadDataResponse,
-    fileName: EncString,
-    encryptedFileData: EncArrayBuffer
   ) => Promise<any>;
 }
