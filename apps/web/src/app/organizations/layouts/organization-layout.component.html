@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div class="org-nav !tw-h-32" *ngIf="organization">
+<div class="org-nav !tw-h-32" *ngIf="organization$ | async as organization">
   <div class="container d-flex">
     <div class="d-flex flex-column">
       <app-organization-switcher
@@ -8,13 +8,21 @@
       ></app-organization-switcher>
       <bit-tab-nav-bar class="-tw-mb-px">
         <bit-tab-link route="vault">{{ "vault" | i18n }}</bit-tab-link>
-        <bit-tab-link *ngIf="showMembersTab" route="members">{{ "members" | i18n }}</bit-tab-link>
-        <bit-tab-link *ngIf="showGroupsTab" route="groups">{{ "groups" | i18n }}</bit-tab-link>
-        <bit-tab-link *ngIf="showReportsTab" [route]="reportRoute">{{
-          reportTabLabel | i18n
+        <bit-tab-link *ngIf="canShowMembersTab(organization)" route="members">{{
+          "members" | i18n
         }}</bit-tab-link>
-        <bit-tab-link *ngIf="showBillingTab" route="billing">{{ "billing" | i18n }}</bit-tab-link>
-        <bit-tab-link *ngIf="showSettingsTab" route="settings">{{
+        <bit-tab-link *ngIf="canShowGroupsTab(organization)" route="groups">{{
+          "groups" | i18n
+        }}</bit-tab-link>
+        <bit-tab-link
+          *ngIf="canShowReportsTab(organization)"
+          [route]="getReportRoute(organization)"
+          >{{ getReportTabLabel(organization) | i18n }}</bit-tab-link
+        >
+        <bit-tab-link *ngIf="canShowBillingTab(organization)" route="billing">{{
+          "billing" | i18n
+        }}</bit-tab-link>
+        <bit-tab-link *ngIf="canShowSettingsTab(organization)" route="settings">{{
           "settings" | i18n
         }}</bit-tab-link>
       </bit-tab-nav-bar>

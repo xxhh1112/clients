@@ -2,16 +2,16 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/guards/auth.guard";
+import {
+  canAccessOrgAdmin,
+  canAccessGroupsTab,
+  canAccessMembersTab,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 
 import { OrganizationPermissionsGuard } from "./guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "./layouts/organization-layout.component";
 import { GroupsComponent } from "./manage/groups.component";
 import { PeopleComponent } from "./manage/people.component";
-import {
-  canAccessGroupsTab,
-  canAccessMembersTab,
-  canAccessOrgAdmin,
-} from "./navigation-permissions";
 import { VaultModule } from "./vault/vault.module";
 
 const routes: Routes = [

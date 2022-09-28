@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { canAccessSettingsTab } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
-import { canAccessSettingsTab } from "../navigation-permissions";
 import { PoliciesComponent } from "../policies";
 
 import { AccountComponent } from "./account.component";
