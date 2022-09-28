@@ -16,9 +16,9 @@ export interface CollectionEditDialogParams {
 }
 
 export enum CollectionEditDialogResultType {
-  Saved,
-  Canceled,
-  Deleted,
+  Saved = "saved",
+  Canceled = "canceled",
+  Deleted = "deleted",
 }
 
 export interface CollectionEditDialogResult {
@@ -83,6 +83,10 @@ export class CollectionEditDialogComponent implements OnDestroy {
 
   get loading() {
     return this.params.collectionId && !this.collection;
+  }
+
+  async cancel() {
+    this.close({ type: CollectionEditDialogResultType.Canceled });
   }
 
   async submit() {
