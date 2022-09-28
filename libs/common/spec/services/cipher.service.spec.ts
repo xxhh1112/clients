@@ -20,7 +20,6 @@ import { CipherService } from "@bitwarden/common/services/cipher.service";
 
 import { mockEnc } from "../utils";
 
-
 const ENCRYPTED_TEXT = "This data has been encrypted";
 const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
 
