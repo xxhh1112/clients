@@ -12,7 +12,7 @@ import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
-
+import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 @Directive()
@@ -41,7 +41,8 @@ export class AttachmentsComponent implements OnInit {
     protected win: Window,
     protected logService: LogService,
     protected stateService: StateService,
-    protected fileDownloadService: FileDownloadService
+    protected fileDownloadService: FileDownloadService,
+    protected fileUploadService: FileUploadServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -247,7 +248,7 @@ export class AttachmentsComponent implements OnInit {
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
           const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
-          this.cipherDomain = await this.cipherAttachmentApiService.saveAttachmentRawWithServer(
+          this.cipherDomain = await this.fileUploadService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
             decBuf,
@@ -289,7 +290,7 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherAttachmentApiService.saveAttachmentWithServer(this.cipherDomain, file);
+    return this.fileUploadService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
   protected deleteCipherAttachment(attachmentId: string) {

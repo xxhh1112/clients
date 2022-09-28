@@ -21,7 +21,7 @@ import { FolderResponse } from "../models/response/folderResponse";
 import { OrganizationCollectionResponse } from "../models/response/organizationCollectionResponse";
 import { CliUtils } from "../utils";
 
-import { CipherAttachmentApiServiceAbstraction } from "./../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 
 export class CreateCommand {
   constructor(
@@ -31,7 +31,7 @@ export class CreateCommand {
     private cryptoService: CryptoService,
     private apiService: ApiService,
     private folderApiService: FolderApiServiceAbstraction,
-    private cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction
+    private fileUploadService: FileUploadService
   ) {}
 
   async run(
@@ -137,7 +137,7 @@ export class CreateCommand {
     }
 
     try {
-      await this.cipherAttachmentApiService.saveAttachmentRawWithServer(
+      await this.fileUploadService.saveAttachmentRawWithServer(
         cipher,
         fileName,
         new Uint8Array(fileBuf).buffer

@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/angular/components/attachments.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -26,7 +27,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     platformUtilsService: PlatformUtilsService,
     apiService: ApiService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    fileUploadService: FileUploadServiceAbstraction
   ) {
     super(
       cipherAttachmentApiService,
@@ -37,7 +39,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
       window,
       logService,
       stateService,
-      fileDownloadService
+      fileDownloadService,
+      fileUploadService
     );
   }
 

@@ -11,7 +11,7 @@ import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
-
+import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { AttachmentsComponent as BaseAttachmentsComponent } from "../../vault/attachments.component";
 
 import { CipherAttachmentApiServiceAbstraction } from "./../../../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
@@ -32,7 +32,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     platformUtilsService: PlatformUtilsService,
     apiService: ApiService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    fileUploadService: FileUploadServiceAbstraction
   ) {
     super(
       cipherAttachmentApiService,
@@ -42,7 +43,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
       platformUtilsService,
       apiService,
       logService,
-      fileDownloadService
+      fileDownloadService,
+      fileUploadService
     );
   }
 
@@ -61,7 +63,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.cipherAttachmentApiService.saveAttachmentWithServer(
+    return this.fileUploadService.saveAttachmentWithServer(
       this.cipherDomain,
       file,
       this.organization.canEditAnyCollection

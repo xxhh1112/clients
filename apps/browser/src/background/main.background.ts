@@ -108,6 +108,7 @@ import NotificationBackground from "./notification.background";
 import RuntimeBackground from "./runtime.background";
 import TabsBackground from "./tabs.background";
 import WebRequestBackground from "./webRequest.background";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
@@ -158,6 +159,7 @@ export default class MainBackground {
   folderApiService: FolderApiServiceAbstraction;
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
+  cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -266,7 +268,13 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired)
     );
     this.settingsService = new SettingsService(this.stateService);
-    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
+    this.fileUploadService = new FileUploadService(
+      this.logService,
+      this.apiService,
+      this.cipherAttachmentApiService,
+      this.cipherService,
+      this.cryptoService
+    );
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,

@@ -83,7 +83,7 @@ export class ServeCommand {
       this.main.cryptoService,
       this.main.apiService,
       this.main.folderApiService,
-      this.main.cipherAttachmentApiService
+      this.main.fileUploadService
     );
     this.editCommand = new EditCommand(
       this.main.cipherService,

@@ -1,4 +1,3 @@
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
 import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
@@ -10,16 +9,6 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 export class CipherAttachmentApiServiceAbstraction {
   putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
   putShareCiphers: (request: CipherBulkShareRequest) => Promise<any>;
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  postCipherAttachmentLegacy: (id: string, data: FormData) => Promise<CipherResponse>;
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  postCipherAttachmentAdminLegacy: (id: string, data: FormData) => Promise<CipherResponse>;
   postCipherAttachment: (
     id: string,
     request: AttachmentRequest
@@ -32,22 +21,11 @@ export class CipherAttachmentApiServiceAbstraction {
     data: FormData,
     organizationId: string
   ) => Promise<any>;
-  saveAttachmentRawWithServer: (
-    cipher: Cipher,
-    filename: string,
-    data: ArrayBuffer,
-    admin?: boolean
-  ) => Promise<Cipher>;
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
     collectionIds: string[]
   ) => Promise<any>;
-  saveAttachmentWithServer: (
-    cipher: Cipher,
-    unencryptedFile: any,
-    admin?: boolean
-  ) => Promise<Cipher>;
   deleteAttachmentWithServer: (id: string, attachmentId: string) => Promise<void>;
   getAttachmentData: (
     cipherId: string,
