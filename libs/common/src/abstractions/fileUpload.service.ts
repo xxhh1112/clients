@@ -1,4 +1,5 @@
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
+
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
 import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
