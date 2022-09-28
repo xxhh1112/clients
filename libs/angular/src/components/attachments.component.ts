@@ -3,6 +3,7 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -12,7 +13,7 @@ import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
+
 import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 @Directive()

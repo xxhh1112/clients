@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -11,7 +12,7 @@ import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
-import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
+
 import { AttachmentsComponent as BaseAttachmentsComponent } from "../../vault/attachments.component";
 
 import { CipherAttachmentApiServiceAbstraction } from "./../../../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
