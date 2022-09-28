@@ -1570,6 +1570,12 @@
   "enableBrowserIntegrationDesc": {
     "message": "Nabigatzailean biometria erabiltzen da."
   },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Allow DuckDuckGo browser integration"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+  },
   "browserIntegrationUnsupportedTitle": {
     "message": "Ez da nabigatzailearen integrazioa onartzen"
   },
@@ -1596,6 +1602,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Ziurtatu bistaratutako hatz-marka digitala nabigatzailearen gehigarrian agertzen den hatz-marka digitalaren berdina dela."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wants to connect to Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Would you like to approve this request?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "If you did not initiate this request, do not approve it."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometria desgaitua"
@@ -1631,7 +1652,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "Nire kutxa gotorra"
+    "message": "Kutxa gotorra"
   },
   "text": {
     "message": "Testua"
@@ -1993,5 +2014,8 @@
   },
   "cardBrandMir": {
     "message": "Mir"
+  },
+  "vault": {
+    "message": "Kutxa gotorra"
   }
 }

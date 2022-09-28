@@ -573,7 +573,7 @@
     "message": "Skapa konto"
   },
   "startTrial": {
-    "message": "Start Trial"
+    "message": "Påbörja utvärdering"
   },
   "logIn": {
     "message": "Logga in"
@@ -4056,6 +4056,12 @@
   },
   "permissions": {
     "message": "Behörigheter"
+  },
+  "managerPermissions": {
+    "message": "Manager Permissions"
+  },
+  "adminPermissions": {
+    "message": "Admin Permissions"
   },
   "accessEventLogs": {
     "message": "Åtkomst till händelseloggar"

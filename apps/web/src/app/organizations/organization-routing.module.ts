@@ -2,20 +2,16 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/guards/auth.guard";
+import {
+  canAccessOrgAdmin,
+  canAccessGroupsTab,
+  canAccessMembersTab,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 
 import { OrganizationPermissionsGuard } from "./guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "./layouts/organization-layout.component";
 import { GroupsComponent } from "./manage/groups.component";
 import { PeopleComponent } from "./manage/people.component";
-import {
-  canAccessGroupsTab,
-  canAccessMembersTab,
-  canAccessOrgAdmin,
-  canAccessSettingsTab,
-} from "./navigation-permissions";
-import { AccountComponent } from "./settings/account.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { TwoFactorSetupComponent } from "./settings/two-factor-setup.component";
 import { VaultModule } from "./vault/vault.module";
 
 const routes: Routes = [
@@ -34,18 +30,7 @@ const routes: Routes = [
       },
       {
         path: "settings",
-        component: SettingsComponent,
-        canActivate: [OrganizationPermissionsGuard],
-        data: { organizationPermissions: canAccessSettingsTab },
-        children: [
-          { path: "", pathMatch: "full", redirectTo: "account" },
-          { path: "account", component: AccountComponent, data: { titleId: "organizationInfo" } },
-          {
-            path: "two-factor",
-            component: TwoFactorSetupComponent,
-            data: { titleId: "twoStepLogin" },
-          },
-        ],
+        loadChildren: () => import("./settings").then((m) => m.OrganizationSettingsModule),
       },
       {
         path: "members",

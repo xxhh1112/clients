@@ -1570,6 +1570,12 @@
   "enableBrowserIntegrationDesc": {
     "message": "Folosit pentru biometrie în browser."
   },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Permiteți integrarea de browser DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Utilizați seiful Bitwarden atunci când navigați cu DuckDuckGo."
+  },
   "browserIntegrationUnsupportedTitle": {
     "message": "Integrarea browserului nu este acceptată"
   },
@@ -1577,7 +1583,7 @@
     "message": "Din păcate, integrarea browserului este acceptată numai în versiunea Mac App Store pentru moment."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Din păcate, integrarea browserului nu este acceptată în prezent în versiunea Windows Store."
+    "message": "Din păcate, integrarea browserului nu este susținută în prezent în versiunea Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
     "message": "Din păcate, integrarea browserului nu este acceptată în prezent în versiunea Linux."
@@ -1596,6 +1602,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Vă rugăm să vă asigurați că amprenta afișată este identică cu amprenta indicată în extensia browserului."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ vrea să se conecteze la Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Vreți să aprobați această solicitare?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Dacă nu ați inițiat această solicitare, nu o aprobați."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometria nu a fost activată"
@@ -1993,5 +2014,8 @@
   },
   "cardBrandMir": {
     "message": "Mir"
+  },
+  "vault": {
+    "message": "Seif"
   }
 }

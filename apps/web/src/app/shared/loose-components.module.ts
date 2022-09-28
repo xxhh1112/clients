@@ -6,7 +6,6 @@ import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
 import { LockComponent } from "../accounts/lock.component";
-import { LoginComponent } from "../accounts/login.component";
 import { RecoverDeleteComponent } from "../accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../accounts/recover-two-factor.component";
 import { RegisterFormModule } from "../accounts/register-form/register-form.module";
@@ -43,29 +42,10 @@ import { GroupAddEditComponent as OrgGroupAddEditComponent } from "../organizati
 import { GroupsComponent as OrgGroupsComponent } from "../organizations/manage/groups.component";
 import { ManageComponent as OrgManageComponent } from "../organizations/manage/manage.component";
 import { PeopleComponent as OrgPeopleComponent } from "../organizations/manage/people.component";
-import { PoliciesComponent as OrgPoliciesComponent } from "../organizations/manage/policies.component";
-import { PolicyEditComponent as OrgPolicyEditComponent } from "../organizations/manage/policy-edit.component";
 import { ResetPasswordComponent as OrgResetPasswordComponent } from "../organizations/manage/reset-password.component";
 import { UserAddEditComponent as OrgUserAddEditComponent } from "../organizations/manage/user-add-edit.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../organizations/manage/user-confirm.component";
 import { UserGroupsComponent as OrgUserGroupsComponent } from "../organizations/manage/user-groups.component";
-import { DisableSendPolicyComponent } from "../organizations/policies/disable-send.component";
-import { MasterPasswordPolicyComponent } from "../organizations/policies/master-password.component";
-import { PasswordGeneratorPolicyComponent } from "../organizations/policies/password-generator.component";
-import { PersonalOwnershipPolicyComponent } from "../organizations/policies/personal-ownership.component";
-import { RequireSsoPolicyComponent } from "../organizations/policies/require-sso.component";
-import { ResetPasswordPolicyComponent } from "../organizations/policies/reset-password.component";
-import { SendOptionsPolicyComponent } from "../organizations/policies/send-options.component";
-import { SingleOrgPolicyComponent } from "../organizations/policies/single-org.component";
-import { TwoFactorAuthenticationPolicyComponent } from "../organizations/policies/two-factor-authentication.component";
-import { AccountComponent as OrgAccountComponent } from "../organizations/settings/account.component";
-import { AdjustSubscription } from "../organizations/settings/adjust-subscription.component";
-import { ChangePlanComponent } from "../organizations/settings/change-plan.component";
-import { DeleteOrganizationComponent } from "../organizations/settings/delete-organization.component";
-import { DownloadLicenseComponent } from "../organizations/settings/download-license.component";
-import { ImageSubscriptionHiddenComponent as OrgSubscriptionHiddenComponent } from "../organizations/settings/image-subscription-hidden.component";
-import { SettingsComponent as OrgSettingComponent } from "../organizations/settings/settings.component";
-import { TwoFactorSetupComponent as OrgTwoFactorSetupComponent } from "../organizations/settings/two-factor-setup.component";
 import { AcceptFamilySponsorshipComponent } from "../organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "../organizations/sponsorships/families-for-enterprise-setup.component";
 import { ExposedPasswordsReportComponent as OrgExposedPasswordsReportComponent } from "../organizations/tools/exposed-passwords-report.component";
@@ -173,7 +153,6 @@ import { SharedModule } from ".";
     AddEditCustomFieldsComponent,
     AdjustPaymentComponent,
     AdjustStorageComponent,
-    AdjustSubscription,
     ApiKeyComponent,
     AttachmentsComponent,
     BillingSyncKeyComponent,
@@ -185,15 +164,11 @@ import { SharedModule } from ".";
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,
-    ChangePlanComponent,
     CollectionsComponent,
     CreateOrganizationComponent,
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
-    DeleteOrganizationComponent,
-    DisableSendPolicyComponent,
     DomainRulesComponent,
-    DownloadLicenseComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -207,12 +182,9 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
-    MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,
     OrganizationSwitcherComponent,
-    OrgAccountComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
@@ -232,14 +204,9 @@ import { SharedModule } from ".";
     OrgManageCollectionsComponent,
     OrgManageComponent,
     OrgPeopleComponent,
-    OrgPoliciesComponent,
-    OrgPolicyEditComponent,
     OrgResetPasswordComponent,
     OrgReusedPasswordsReportComponent,
-    OrgSettingComponent,
     OrgToolsComponent,
-    OrgTwoFactorSetupComponent,
-    OrgSubscriptionHiddenComponent,
     OrgUnsecuredWebsitesReportComponent,
     OrgUserAddEditComponent,
     OrgUserConfirmComponent,
@@ -247,12 +214,10 @@ import { SharedModule } from ".";
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
-    PasswordGeneratorPolicyComponent,
     PasswordRepromptComponent,
     UserVerificationPromptComponent,
     PaymentComponent,
     PaymentMethodComponent,
-    PersonalOwnershipPolicyComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
     PremiumComponent,
@@ -263,25 +228,20 @@ import { SharedModule } from ".";
     RecoverTwoFactorComponent,
     RegisterComponent,
     RemovePasswordComponent,
-    RequireSsoPolicyComponent,
-    ResetPasswordPolicyComponent,
     SecurityComponent,
     SecurityKeysComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
-    SendOptionsPolicyComponent,
     SetPasswordComponent,
     SettingsComponent,
     ShareComponent,
-    SingleOrgPolicyComponent,
     SponsoredFamiliesComponent,
     SponsoringOrgRowComponent,
     SsoComponent,
     SubscriptionComponent,
     TaxInfoComponent,
     ToolsComponent,
-    TwoFactorAuthenticationPolicyComponent,
     TwoFactorAuthenticatorComponent,
     TwoFactorComponent,
     TwoFactorDuoComponent,
@@ -318,7 +278,6 @@ import { SharedModule } from ".";
     AddEditCustomFieldsComponent,
     AdjustPaymentComponent,
     AdjustStorageComponent,
-    AdjustSubscription,
     ApiKeyComponent,
     AttachmentsComponent,
     BulkActionsComponent,
@@ -329,15 +288,11 @@ import { SharedModule } from ".";
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,
-    ChangePlanComponent,
     CollectionsComponent,
     CreateOrganizationComponent,
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
-    DeleteOrganizationComponent,
-    DisableSendPolicyComponent,
     DomainRulesComponent,
-    DownloadLicenseComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -351,12 +306,9 @@ import { SharedModule } from ".";
     FrontendLayoutComponent,
     HintComponent,
     LockComponent,
-    LoginComponent,
-    MasterPasswordPolicyComponent,
     NavbarComponent,
     NestedCheckboxComponent,
     OrganizationSwitcherComponent,
-    OrgAccountComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
@@ -376,13 +328,9 @@ import { SharedModule } from ".";
     OrgManageCollectionsComponent,
     OrgManageComponent,
     OrgPeopleComponent,
-    OrgPoliciesComponent,
-    OrgPolicyEditComponent,
     OrgResetPasswordComponent,
     OrgReusedPasswordsReportComponent,
-    OrgSettingComponent,
     OrgToolsComponent,
-    OrgTwoFactorSetupComponent,
     OrgUnsecuredWebsitesReportComponent,
     OrgUserAddEditComponent,
     OrgUserConfirmComponent,
@@ -390,11 +338,9 @@ import { SharedModule } from ".";
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
-    PasswordGeneratorPolicyComponent,
     PasswordRepromptComponent,
     PaymentComponent,
     PaymentMethodComponent,
-    PersonalOwnershipPolicyComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
     PremiumComponent,
@@ -405,25 +351,20 @@ import { SharedModule } from ".";
     RecoverTwoFactorComponent,
     RegisterComponent,
     RemovePasswordComponent,
-    RequireSsoPolicyComponent,
-    ResetPasswordPolicyComponent,
     SecurityComponent,
     SecurityKeysComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
-    SendOptionsPolicyComponent,
     SetPasswordComponent,
     SettingsComponent,
     ShareComponent,
-    SingleOrgPolicyComponent,
     SponsoredFamiliesComponent,
     SponsoringOrgRowComponent,
     SsoComponent,
     SubscriptionComponent,
     TaxInfoComponent,
     ToolsComponent,
-    TwoFactorAuthenticationPolicyComponent,
     TwoFactorAuthenticatorComponent,
     TwoFactorComponent,
     TwoFactorDuoComponent,
