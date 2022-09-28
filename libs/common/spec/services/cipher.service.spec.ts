@@ -7,10 +7,19 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
+import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { EncString } from "@bitwarden/common/models/domain/encString";
+import { Identity } from "@bitwarden/common/models/domain/identity";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { IdentityView } from "@bitwarden/common/models/view/identityView";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
+
+import { mockEnc } from "../utils";
+
 
 const ENCRYPTED_TEXT = "This data has been encrypted";
 const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
@@ -49,22 +58,48 @@ describe("Cipher Service", () => {
     );
   });
 
-  it("encrypt", async () => {
-    const model = new CipherView();
-    model.id = "2";
-    model.name = "Test Folder";
+  describe("encrypt", () => {
+    it("encrypt", async () => {
+      const model = new CipherView();
+      model.id = "2";
+      model.name = "Test Cipher";
+      model.organizationId = Utils.newGuid();
+      model.type = CipherType.SecureNote;
+      model.collectionIds = [Utils.newGuid()];
+      model.revisionDate = null;
 
-    cryptoService.encrypt(Arg.any()).resolves(new EncString("ENC"));
-    cryptoService.decryptToUtf8(Arg.any()).resolves("DEC");
+      // let originalCipher: Cipher = new Cipher()
+      const cipher = new Cipher();
+      cipher.id = "2";
+      cipher.organizationId = "orgId";
+      cipher.folderId = "folderId";
+      cipher.edit = true;
+      cipher.viewPassword = true;
+      cipher.organizationUseTotp = true;
+      cipher.favorite = false;
+      cipher.revisionDate = new Date("2022-01-31T12:00:00.000Z");
+      cipher.type = CipherType.Identity;
+      cipher.name = mockEnc("EncryptedString");
+      cipher.notes = mockEnc("EncryptedString");
+      cipher.deletedDate = null;
+      cipher.reprompt = CipherRepromptType.None;
 
-    const result = await cipherService.encrypt(model);
+      const identityView = new IdentityView();
+      identityView.firstName = "firstName";
+      identityView.lastName = "lastName";
 
-    expect(result).toEqual({
-      id: "2",
-      name: {
-        encryptedString: "ENC",
-        encryptionType: 0,
-      },
+      const identity = Substitute.for<Identity>();
+      identity.decrypt(Arg.any(), Arg.any()).resolves(identityView);
+      cipher.identity = identity;
+
+      cryptoService.encrypt(Arg.any()).resolves(new EncString("ENC"));
+      cryptoService.decryptToUtf8(Arg.any()).resolves("DEC");
+
+      const result = await cipherService.encrypt(model, null, cipher);
+
+      expect(result.id).toEqual("2");
+      expect(result.collectionIds).toEqual(model.collectionIds);
+      expect(result.organizationId).toEqual(model.organizationId);
     });
   });
 });
