@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Käyttöoikeudet"
   },
-  "managerPermissions": {
-    "message": "Valvojan oikeudet"
-  },
-  "adminPermissions": {
-    "message": "Ylläpitäjän oikeudet"
-  },
   "accessEventLogs": {
     "message": "Tapahtumalokien käyttö"
   },

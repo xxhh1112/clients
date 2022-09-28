@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Õigused"
   },
-  "managerPermissions": {
-    "message": "Manager Permissions"
-  },
-  "adminPermissions": {
-    "message": "Admin Permissions"
-  },
   "accessEventLogs": {
     "message": "Ligipääs sündmuste logile"
   },

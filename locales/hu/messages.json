@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Jogosultságok"
   },
-  "managerPermissions": {
-    "message": "Jogosultságok kezelése"
-  },
-  "adminPermissions": {
-    "message": "Adminisztrátori jogosultságok"
-  },
   "accessEventLogs": {
     "message": "Eseménynapló elérése"
   },

@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Permissions"
   },
-  "managerPermissions": {
-    "message": "Manager Permissions"
-  },
-  "adminPermissions": {
-    "message": "Admin Permissions"
-  },
   "accessEventLogs": {
     "message": "Access Event Logs"
   },

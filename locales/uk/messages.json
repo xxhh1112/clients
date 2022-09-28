@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Дозволи"
   },
-  "managerPermissions": {
-    "message": "Дозволи менеджера"
-  },
-  "adminPermissions": {
-    "message": "Дозволи адміністратора"
-  },
   "accessEventLogs": {
     "message": "Доступ до журналів подій"
   },

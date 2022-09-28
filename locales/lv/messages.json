@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Atļaujas"
   },
-  "managerPermissions": {
-    "message": "Pārvaldnieka atļaujas"
-  },
-  "adminPermissions": {
-    "message": "Administratora atļaujas"
-  },
   "accessEventLogs": {
     "message": "Piekļūt notikumu žurnāla ierakstiem"
   },

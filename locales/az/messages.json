@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "İcazələr"
   },
-  "managerPermissions": {
-    "message": "Menecer icazələri"
-  },
-  "adminPermissions": {
-    "message": "Admin icazələri"
-  },
   "accessEventLogs": {
     "message": "Tədbir jurnalına müraciət"
   },

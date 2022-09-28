@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Berechtigungen"
   },
-  "managerPermissions": {
-    "message": "Manager-Berechtigungen"
-  },
-  "adminPermissions": {
-    "message": "Administrator-Berechtigungen"
-  },
   "accessEventLogs": {
     "message": "Zugriff auf Ereignisprotokolle"
   },

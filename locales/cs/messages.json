@@ -4057,12 +4057,6 @@
   "permissions": {
     "message": "Oprávnění"
   },
-  "managerPermissions": {
-    "message": "Manager Permissions"
-  },
-  "adminPermissions": {
-    "message": "Admin Permissions"
-  },
   "accessEventLogs": {
     "message": "Přístup k logům"
   },
