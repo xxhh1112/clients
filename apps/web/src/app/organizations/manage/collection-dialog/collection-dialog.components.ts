@@ -26,8 +26,8 @@ export interface CollectionEditDialogResult {
 }
 
 @Component({
-  selector: "app-collection-edit-dialog",
-  templateUrl: "collection-edit-dialog.component.html",
+  selector: "app-collection-dialog",
+  templateUrl: "collection-dialog.component.html",
 })
 export class CollectionEditDialogComponent implements OnDestroy {
   private destroy$ = new Subject<void>();

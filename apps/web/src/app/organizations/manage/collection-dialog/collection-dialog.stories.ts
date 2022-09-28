@@ -22,7 +22,7 @@ import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18
 import {
   CollectionEditDialogComponent,
   CollectionEditDialogParams,
-} from "./collection-edit-dialog.components";
+} from "./collection-dialog.components";
 
 interface ProviderData {
   collectionId: string;
@@ -61,7 +61,7 @@ const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
   moduleMetadata: {
     providers: providers({ collectionId: undefined, organizationId, collections }),
   },
-  template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
+  template: `<app-collection-dialog></app-collection-dialog>`,
 });
 
 export const NewCollection = NewCollectionTemplate.bind({});
@@ -76,7 +76,7 @@ const ExistingCollectionTemplate: Story<CollectionEditDialogComponent> = (
       collections,
     }),
   },
-  template: `<app-collection-edit-dialog></app-collection-edit-dialog>`,
+  template: `<app-collection-dialog></app-collection-dialog>`,
 });
 
 export const ExistingCollection = ExistingCollectionTemplate.bind({});

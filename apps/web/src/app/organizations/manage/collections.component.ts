@@ -27,7 +27,7 @@ import {
   CollectionEditDialogComponent,
   CollectionEditDialogResult,
   CollectionEditDialogResultType,
-} from "./collection-edit-dialog/collection-edit-dialog.components";
+} from "./collection-dialog/collection-dialog.components";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
