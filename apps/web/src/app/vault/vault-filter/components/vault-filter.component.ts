@@ -126,8 +126,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  searchTextChanged() {
-    this.onSearchTextChanged.emit(this.searchText);
+  searchTextChanged(t: string) {
+    if (t) {
+      this.searchText = t;
+      this.onSearchTextChanged.emit(t);
+    }
   }
 
   async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
