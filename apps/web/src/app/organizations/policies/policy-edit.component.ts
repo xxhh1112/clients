@@ -17,7 +17,7 @@ import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { PolicyRequest } from "@bitwarden/common/models/request/policyRequest";
 import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
 
-import { BasePolicy, BasePolicyComponent } from "../policies/base-policy.component";
+import { BasePolicy, BasePolicyComponent } from "../policies";
 
 @Component({
   selector: "app-policy-edit",

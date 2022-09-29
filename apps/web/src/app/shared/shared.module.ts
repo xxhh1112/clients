@@ -13,10 +13,10 @@ import {
   CalloutModule,
   FormFieldModule,
   MenuModule,
+  TabsModule,
   IconModule,
   IconButtonModule,
   DialogModule,
-  TabsModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application

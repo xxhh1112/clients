@@ -114,7 +114,7 @@ export class PeopleComponent
 
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.parent.params.subscribe(async (params) => {
+    this.route.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       const organization = await this.organizationService.get(this.organizationId);
       this.accessEvents = organization.useEvents;

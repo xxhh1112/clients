@@ -28,7 +28,7 @@ export class TabListItemDirective implements FocusableOption {
   @HostBinding("class")
   get classList(): string[] {
     return this.baseClassList
-      .concat(this.active ? this.activeClassList : [])
+      .concat(this.active ? this.activeClassList : ["!tw-text-main"])
       .concat(this.disabled ? this.disabledClassList : []);
   }
 
