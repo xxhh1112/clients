@@ -1,5 +1,8 @@
+import { concatMap, distinctUntilKeyChanged, filter } from "rxjs";
+
 import { StateService } from "../abstractions/state.service";
 import { TokenService as TokenServiceAbstraction } from "../abstractions/token.service";
+import { VaultTimeoutSettingsService } from "../abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { Utils } from "../misc/utils";
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 
@@ -23,7 +26,34 @@ export class TokenService implements TokenServiceAbstraction {
     return decodedToken;
   }
 
-  constructor(private stateService: StateService) {}
+  constructor(
+    private stateService: StateService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService
+  ) {
+    // Move token storage location when vault timeout action changes
+    this.vaultTimeoutSettingsService.vaultTimeoutOptions$
+      .pipe(
+        distinctUntilKeyChanged("action"),
+        filter(
+          (options) =>
+            (options.timeout != null || options.timeout === 0) && options.action === "logOut"
+        ),
+        concatMap(async (_) => {
+          const token = await this.getToken();
+          const refreshToken = await this.getRefreshToken();
+          const clientId = await this.getClientId();
+          const clientSecret = await this.getClientSecret();
+
+          await this.clearToken();
+
+          await this.setToken(token);
+          await this.setRefreshToken(refreshToken);
+          await this.setClientId(clientId);
+          await this.setClientSecret(clientSecret);
+        })
+      )
+      .subscribe();
+  }
 
   async setTokens(
     accessToken: string,
@@ -38,7 +68,7 @@ export class TokenService implements TokenServiceAbstraction {
     }
   }
 
-  async setClientId(clientId: string): Promise<any> {
+  async setClientId(clientId: string): Promise<void> {
     return await this.stateService.setApiKeyClientId(clientId);
   }
 
@@ -46,7 +76,7 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.getApiKeyClientId();
   }
 
-  async setClientSecret(clientSecret: string): Promise<any> {
+  async setClientSecret(clientSecret: string): Promise<void> {
     return await this.stateService.setApiKeyClientSecret(clientSecret);
   }
 
@@ -62,7 +92,7 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.getAccessToken();
   }
 
-  async setRefreshToken(refreshToken: string): Promise<any> {
+  async setRefreshToken(refreshToken: string): Promise<void> {
     return await this.stateService.setRefreshToken(refreshToken);
   }
 
@@ -82,7 +112,7 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.setTwoFactorToken(null);
   }
 
-  async clearToken(userId?: string): Promise<any> {
+  async clearToken(userId?: string): Promise<void> {
     await this.stateService.setAccessToken(null, { userId: userId });
     await this.stateService.setRefreshToken(null, { userId: userId });
     await this.stateService.setApiKeyClientId(null, { userId: userId });

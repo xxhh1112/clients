@@ -35,3 +35,7 @@ export function makeStaticByteArray(length: number, start = 0) {
   }
   return arr;
 }
+
+export async function awaitConcatMap() {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
