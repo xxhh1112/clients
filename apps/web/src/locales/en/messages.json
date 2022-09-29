@@ -296,6 +296,12 @@
   "searchVault": {
     "message": "Search Vault"
   },
+  "searchMyVault": {
+    "message": "Search My Vault"
+  },
+  "searchOrganization": {
+    "message": "Search Organization"
+  },
   "allItems": {
     "message": "All Items"
   },

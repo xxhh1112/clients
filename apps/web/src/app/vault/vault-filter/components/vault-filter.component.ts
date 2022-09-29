@@ -33,7 +33,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   @Output() onEditFolder = new EventEmitter<FolderView>();
 
   isLoaded = false;
-  searchPlaceholder = "";
   searchText = "";
   collapsedFilterNodes: Set<string>;
   currentFilterCollections: CollectionView[] = [];
@@ -42,6 +41,41 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   get filtersList() {
     return this.filters ? Object.values(this.filters) : [];
+  }
+
+  get searchPlaceholder() {
+    if (this.activeFilter.isFavorites) {
+      return "searchFavorites";
+    }
+    if (this.activeFilter.isDeleted) {
+      return "searchTrash";
+    }
+    if (this.activeFilter.cipherType === CipherType.Login) {
+      return "searchLogin";
+    }
+    if (this.activeFilter.cipherType === CipherType.Card) {
+      return "searchCard";
+    }
+    if (this.activeFilter.cipherType === CipherType.Identity) {
+      return "searchIdentity";
+    }
+    if (this.activeFilter.cipherType === CipherType.SecureNote) {
+      return "searchSecureNote";
+    }
+    if (this.activeFilter.selectedFolderNode?.node) {
+      return "searchFolder";
+    }
+    if (this.activeFilter.selectedCollectionNode?.node) {
+      return "searchCollection";
+    }
+    if (this.activeFilter.organizationId === "MyVault") {
+      return "searchMyVault";
+    }
+    if (this.activeFilter.organizationId) {
+      return "searchOrganization";
+    }
+
+    return "searchVault";
   }
 
   constructor(
@@ -118,7 +152,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected async applyVaultFilter(filter: VaultFilter) {
-    this.searchPlaceholder = this.calculateSearchBarLocalizationString(filter);
     this.activeFilterChanged.emit(filter);
   }
 
@@ -169,41 +202,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   editFolder = async (folder: FolderFilter): Promise<void> => {
     this.onEditFolder.emit(folder);
   };
-
-  calculateSearchBarLocalizationString(vaultFilter: VaultFilter): string {
-    if (vaultFilter.isFavorites) {
-      return "searchFavorites";
-    }
-    if (vaultFilter.isDeleted) {
-      return "searchTrash";
-    }
-    if (vaultFilter.cipherType === CipherType.Login) {
-      return "searchLogin";
-    }
-    if (vaultFilter.cipherType === CipherType.Card) {
-      return "searchCard";
-    }
-    if (vaultFilter.cipherType === CipherType.Identity) {
-      return "searchIdentity";
-    }
-    if (vaultFilter.cipherType === CipherType.SecureNote) {
-      return "searchSecureNote";
-    }
-    if (vaultFilter.selectedFolderNode?.node) {
-      return "searchFolder";
-    }
-    if (vaultFilter.selectedCollectionNode?.node) {
-      return "searchCollection";
-    }
-    if (vaultFilter.organizationId === "MyVault") {
-      return "searchMyVault";
-    }
-    if (vaultFilter.organizationId) {
-      return "searchOrganization";
-    }
-
-    return "searchVault";
-  }
 
   protected async removeInvalidFolderSelection(folders: FolderView[]) {
     if (this.activeFilter.selectedFolderNode) {
