@@ -5,10 +5,10 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
-import { VaultFilterList } from "src/app/vault/vault-filter/shared/models/vault-filter-section.type";
-import { CollectionFilter } from "src/app/vault/vault-filter/shared/models/vault-filter.type";
-
 import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/components/vault-filter.component";
+import { VaultFilterList } from "../../../vault/vault-filter/shared/models/vault-filter-section.type";
+import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
+
 
 @Component({
   selector: "app-organization-vault-filter",

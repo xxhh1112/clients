@@ -7,13 +7,12 @@ import { FolderService } from "@bitwarden/common/abstractions/folder/folder.serv
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
-
-import { StateService } from "src/app/core";
 
 import { VaultFilterService } from "./vault-filter.service";
 
