@@ -154,7 +154,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     await this.vaultFilterService.reloadCollections();
   }
 
-  protected async applyVaultFilter(filter: VaultFilter) {
+  protected applyVaultFilter(filter: VaultFilter) {
     this.activeFilterChanged.emit(filter);
   }
 
@@ -174,28 +174,28 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     this.vaultFilterService.updateOrganizationFilter(orgNode.node);
     await this.vaultFilterService.expandOrgFilter();
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedCipherTypeNode = filterNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedFolderNode = folderNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedCollectionNode = collectionNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   addFolder = async (): Promise<void> => {
@@ -214,7 +214,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         filter.selectedCipherTypeNode = (await firstValueFrom(
           this.filters?.typeFilter.data$
         )) as TreeNode<CipherTypeFilter>;
-        await this.applyVaultFilter(filter);
+        this.applyVaultFilter(filter);
       }
     }
   }
@@ -227,7 +227,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         filter.selectedCipherTypeNode = (await firstValueFrom(
           this.filters?.typeFilter?.data$
         )) as TreeNode<CipherTypeFilter>;
-        await this.applyVaultFilter(filter);
+        this.applyVaultFilter(filter);
       }
     }
   }
