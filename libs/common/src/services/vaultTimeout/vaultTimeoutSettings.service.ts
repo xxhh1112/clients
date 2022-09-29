@@ -1,17 +1,39 @@
+import { concatMap, distinctUntilChanged, filter, Subject } from "rxjs";
+
 import { CryptoService } from "../../abstractions/crypto.service";
 import { PolicyService } from "../../abstractions/policy/policy.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
-import { TokenService } from "../../abstractions/token.service";
-import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "../../abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import {
+  VaultTimeoutSettings,
+  VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction,
+} from "../../abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { PolicyType } from "../../enums/policyType";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
+  private _vaultTimeoutOptions = new Subject<VaultTimeoutSettings>();
+  vaultTimeoutOptions$ = this._vaultTimeoutOptions.asObservable();
+
   constructor(
     private cryptoService: CryptoService,
-    private tokenService: TokenService,
     private policyService: PolicyService,
     private stateService: StateService
-  ) {}
+  ) {
+    this.stateService.activeAccount$
+      .pipe(
+        filter((userId) => userId != null),
+        distinctUntilChanged(),
+        concatMap(async (userId) => {
+          if (userId == null) {
+            return;
+          }
+
+          const timeout = await this.stateService.getVaultTimeout({ userId });
+          const action = await this.stateService.getVaultTimeoutAction({ userId });
+          this._vaultTimeoutOptions.next({ timeout: timeout, action: action });
+        })
+      )
+      .subscribe();
+  }
 
   async setVaultTimeoutOptions(timeout: number, action: string): Promise<void> {
     await this.stateService.setVaultTimeout(timeout);
@@ -37,6 +59,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     await this.tokenService.setClientSecret(clientSecret);
 
     await this.cryptoService.toggleKey();
+    this._vaultTimeoutOptions.next({ timeout: timeout, action: action });
   }
 
   async isPinLockSet(): Promise<[boolean, boolean]> {
@@ -52,6 +75,18 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   async getVaultTimeout(userId?: string): Promise<number> {
     const vaultTimeout = await this.stateService.getVaultTimeout({ userId: userId });
 
+    await this.validateVaultPolicies(userId, vaultTimeout);
+
+    return vaultTimeout;
+  }
+
+  async clear(userId?: string): Promise<void> {
+    await this.stateService.setEverBeenUnlocked(false, { userId: userId });
+    await this.stateService.setDecryptedPinProtected(null, { userId: userId });
+    await this.stateService.setProtectedPin(null, { userId: userId });
+  }
+
+  private async validateVaultPolicies(userId: string, vaultTimeout: number) {
     if (
       await this.policyService.policyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)
     ) {
@@ -70,13 +105,5 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
       return timeout;
     }
-
-    return vaultTimeout;
-  }
-
-  async clear(userId?: string): Promise<void> {
-    await this.stateService.setEverBeenUnlocked(false, { userId: userId });
-    await this.stateService.setDecryptedPinProtected(null, { userId: userId });
-    await this.stateService.setProtectedPin(null, { userId: userId });
   }
 }
