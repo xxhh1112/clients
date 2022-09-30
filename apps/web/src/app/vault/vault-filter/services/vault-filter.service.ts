@@ -9,6 +9,7 @@ import {
   map,
   switchMap,
   ReplaySubject,
+  firstValueFrom,
 } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -124,7 +125,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
 
   protected async buildCollapsedFilterNodes(): Promise<Set<string>> {
     const nodes = new Set(await this.stateService.getCollapsedGroupings());
-    this._collapsedFilterNodes.next(nodes);
     return nodes;
   }
 
@@ -137,7 +137,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   async expandOrgFilter() {
-    const collapsedFilterNodes = await this.buildCollapsedFilterNodes();
+    const collapsedFilterNodes = await firstValueFrom(this.collapsedFilterNodes$);
     if (!collapsedFilterNodes.has("AllVaults")) {
       return;
     }
