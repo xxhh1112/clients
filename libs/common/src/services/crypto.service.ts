@@ -1,4 +1,5 @@
 import * as bigInt from "big-integer";
+import { BehaviorSubject, concatMap, of, switchMap } from "rxjs";
 
 import { AbstractEncryptService } from "../abstractions/abstractEncrypt.service";
 import { CryptoService as CryptoServiceAbstraction } from "../abstractions/crypto.service";
@@ -6,6 +7,8 @@ import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
 import { LogService } from "../abstractions/log.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { StateService } from "../abstractions/state.service";
+import { SyncNotifierService } from "../abstractions/sync/syncNotifier.service.abstraction";
+import { VaultTimeoutSettingsService } from "../abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { EncryptionType } from "../enums/encryptionType";
 import { HashPurpose } from "../enums/hashPurpose";
 import { KdfType } from "../enums/kdfType";
@@ -23,13 +26,22 @@ import { ProfileProviderOrganizationResponse } from "../models/response/profileP
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
 
 export class CryptoService implements CryptoServiceAbstraction {
+  masterKey$ = new BehaviorSubject<SymmetricCryptoKey>(null);
+  organizationKeys$ = new BehaviorSubject(new Map<string, SymmetricCryptoKey>([]));
+  providerKeys$ = new BehaviorSubject(new Map<string, SymmetricCryptoKey>([]));
+
   constructor(
     private cryptoFunctionService: CryptoFunctionService,
     private encryptService: AbstractEncryptService,
     protected platformUtilService: PlatformUtilsService,
     protected logService: LogService,
-    protected stateService: StateService
-  ) {}
+    protected stateService: StateService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
+    private syncNotifierService: SyncNotifierService
+  ) {
+    this.listenToVaultTimeoutSettings();
+    this.listenToSync();
+  }
 
   async setKey(key: SymmetricCryptoKey, userId?: string): Promise<any> {
     await this.stateService.setCryptoMasterKey(key, { userId: userId });
@@ -808,5 +820,42 @@ export class CryptoService implements CryptoServiceAbstraction {
     const symmetricCryptoKey = new SymmetricCryptoKey(decEncKey);
     await this.stateService.setDecryptedCryptoSymmetricKey(symmetricCryptoKey);
     return symmetricCryptoKey;
+  }
+
+  private listenToVaultTimeoutSettings() {
+    this.stateService.activeAccountUnlocked$
+      .pipe(
+        switchMap((unlocked) => {
+          if (!unlocked) {
+            this.masterKey$.next(null);
+            this.organizationKeys$.next(new Map<string, SymmetricCryptoKey>([]));
+            this.providerKeys$.next(new Map<string, SymmetricCryptoKey>([]));
+            return of(null);
+          }
+
+          return this.vaultTimeoutSettingsService.vaultTimeoutOptions$.pipe();
+        }),
+        concatMap(async (settings) => {
+          if (!settings) {
+            return;
+          }
+
+          await this.toggleKey();
+        })
+      )
+      .subscribe();
+  }
+
+  private listenToSync() {
+    this.syncNotifierService.syncCompletedSuccessfully$
+      .pipe(
+        concatMap(async ({ data }) => {
+          await this.setEncKey(data.profile.key);
+          await this.setEncPrivateKey(data.profile.privateKey);
+          await this.setOrgKeys(data.profile.organizations, data.profile.providerOrganizations);
+          await this.setProviderKeys(data.profile.providers);
+        })
+      )
+      .subscribe();
   }
 }

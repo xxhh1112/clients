@@ -1,6 +1,5 @@
 import { concatMap, distinctUntilChanged, filter, Subject } from "rxjs";
 
-import { CryptoService } from "../../abstractions/crypto.service";
 import { PolicyService } from "../../abstractions/policy/policy.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
 import {
@@ -13,11 +12,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   private _vaultTimeoutOptions = new Subject<VaultTimeoutSettings>();
   vaultTimeoutOptions$ = this._vaultTimeoutOptions.asObservable();
 
-  constructor(
-    private cryptoService: CryptoService,
-    private policyService: PolicyService,
-    private stateService: StateService
-  ) {
+  constructor(private policyService: PolicyService, private stateService: StateService) {
     this.stateService.activeAccount$
       .pipe(
         filter((userId) => userId != null),
@@ -39,7 +34,6 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     await this.stateService.setVaultTimeout(timeout);
 
     await this.stateService.setVaultTimeoutAction(action);
-    await this.cryptoService.toggleKey();
     this._vaultTimeoutOptions.next({ timeout: timeout, action: action });
   }
 

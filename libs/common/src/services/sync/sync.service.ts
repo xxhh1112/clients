@@ -1,7 +1,6 @@
 import { ApiService } from "../../abstractions/api.service";
 import { CipherService } from "../../abstractions/cipher.service";
 import { CollectionService } from "../../abstractions/collection.service";
-import { CryptoService } from "../../abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "../../abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService } from "../../abstractions/folder/folder.service.abstraction";
 import { KeyConnectorService } from "../../abstractions/keyConnector.service";
@@ -42,7 +41,6 @@ export class SyncService implements SyncServiceAbstraction {
     private settingsService: SettingsService,
     private folderService: InternalFolderService,
     private cipherService: CipherService,
-    private cryptoService: CryptoService,
     private collectionService: CollectionService,
     private messagingService: MessagingService,
     private policyService: InternalPolicyService,
@@ -304,10 +302,6 @@ export class SyncService implements SyncServiceAbstraction {
       throw new Error("Stamp has changed");
     }
 
-    await this.cryptoService.setEncKey(response.key);
-    await this.cryptoService.setEncPrivateKey(response.privateKey);
-    await this.cryptoService.setProviderKeys(response.providers);
-    await this.cryptoService.setOrgKeys(response.organizations, response.providerOrganizations);
     await this.stateService.setSecurityStamp(response.securityStamp);
     await this.stateService.setEmailVerified(response.emailVerified);
     await this.stateService.setHasPremiumPersonally(response.premiumPersonally);

@@ -4,20 +4,12 @@ import { KeySuffixOptions } from "../enums/keySuffixOptions";
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
 import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
-import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
-import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
 
 export abstract class CryptoService {
   setKey: (key: SymmetricCryptoKey) => Promise<any>;
   setKeyHash: (keyHash: string) => Promise<void>;
   setEncKey: (encKey: string) => Promise<void>;
   setEncPrivateKey: (encPrivateKey: string) => Promise<void>;
-  setOrgKeys: (
-    orgs: ProfileOrganizationResponse[],
-    providerOrgs: ProfileProviderOrganizationResponse[]
-  ) => Promise<void>;
-  setProviderKeys: (orgs: ProfileProviderResponse[]) => Promise<void>;
   getKey: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<SymmetricCryptoKey>;
   getKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<SymmetricCryptoKey>;
   getKeyHash: () => Promise<string>;
