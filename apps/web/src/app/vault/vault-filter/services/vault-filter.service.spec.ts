@@ -5,7 +5,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -26,6 +26,7 @@ describe("vault filter service", () => {
   let collectionService: MockProxy<CollectionService>;
   let policyService: MockProxy<PolicyService>;
   let i18nService: MockProxy<I18nService>;
+  let organizations: ReplaySubject<Organization[]>;
   let folderViews: ReplaySubject<FolderView[]>;
 
   beforeEach(() => {
@@ -37,8 +38,10 @@ describe("vault filter service", () => {
     policyService = mock<PolicyService>();
     i18nService = mock<I18nService>();
 
+    organizations = new ReplaySubject<Organization[]>(1);
     folderViews = new ReplaySubject<FolderView[]>(1);
 
+    organizationService.organizations$ = organizations;
     folderService.folderViews$ = folderViews;
 
     vaultFilterService = new VaultFilterService(
@@ -76,8 +79,7 @@ describe("vault filter service", () => {
   describe("organizations", () => {
     beforeEach(() => {
       const storedOrgs = [createOrganization("1", "org1"), createOrganization("2", "org2")];
-      organizationService.getAll.mockResolvedValue(storedOrgs);
-      vaultFilterService.reloadOrganizations();
+      organizations.next(storedOrgs);
     });
 
     it("returns a nested tree", async () => {
@@ -92,7 +94,6 @@ describe("vault filter service", () => {
       policyService.policyAppliesToUser
         .calledWith(PolicyType.PersonalOwnership)
         .mockResolvedValue(true);
-      vaultFilterService.reloadOrganizations();
 
       const tree = await firstValueFrom(vaultFilterService.organizationTree$);
 
@@ -102,7 +103,6 @@ describe("vault filter service", () => {
 
     it("returns 1 organization and My Vault if single organization policy is enabled", async () => {
       policyService.policyAppliesToUser.calledWith(PolicyType.SingleOrg).mockResolvedValue(true);
-      vaultFilterService.reloadOrganizations();
 
       const tree = await firstValueFrom(vaultFilterService.organizationTree$);
 
@@ -116,7 +116,6 @@ describe("vault filter service", () => {
       policyService.policyAppliesToUser
         .calledWith(PolicyType.PersonalOwnership)
         .mockResolvedValue(true);
-      vaultFilterService.reloadOrganizations();
 
       const tree = await firstValueFrom(vaultFilterService.organizationTree$);
 

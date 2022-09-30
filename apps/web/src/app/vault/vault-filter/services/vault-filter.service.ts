@@ -16,7 +16,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -44,7 +44,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     switchMap(async (nodes) => nodes ?? (await this.buildCollapsedFilterNodes()))
   );
 
-  // TODO: Remove when organizations is refactored with observables
   protected _organizations = new ReplaySubject<Organization[]>(1);
   organizationTree$: Observable<TreeNode<OrganizationFilter>> = this._organizations.pipe(
     switchMap((orgs) => this.buildOrganizationTree(orgs))
@@ -81,6 +80,10 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   protected loadSubscriptions() {
+    this.organizationService.organizations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this._organizations);
+
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
@@ -111,11 +114,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   // TODO: Remove once collections is refactored with observables
   async reloadCollections() {
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
-  }
-
-  // TODO: Remove once organizations is refactored with observables
-  async reloadOrganizations() {
-    this._organizations.next(await this.organizationService.getAll());
   }
 
   async storeCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
