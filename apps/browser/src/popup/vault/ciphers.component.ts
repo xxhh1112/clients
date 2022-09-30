@@ -10,7 +10,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -19,9 +19,8 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
-import { BrowserComponentState } from "src/models/browserComponentState";
-
 import { BrowserApi } from "../../browser/browserApi";
+import { BrowserComponentState } from "../../models/browserComponentState";
 import { StateService } from "../../services/abstractions/state.service";
 import { VaultFilterService } from "../../services/vaultFilter.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
@@ -78,7 +77,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   async ngOnInit() {
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
-    this.showOrganizations = await this.organizationService.hasOrganizations();
+    this.showOrganizations = this.organizationService.hasOrganizations();
     this.vaultFilter = this.vaultFilterService.getVaultFilter();
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
