@@ -52,6 +52,8 @@ export class U2FDevice {
     }
     */
 
+    // <authData>
+
     // Much of this code is adapted from https://github.com/sbweeden/fido2-postman-clients/blob/92aec0f41eca76c0f92db8a6e87cf46aa3a2de1c/globals/fidoutils.js
     const authData = [];
 
@@ -59,6 +61,7 @@ export class U2FDevice {
       await crypto.subtle.digest({ name: "SHA-256" }, encoder.encode(options.publicKey.rp.id))
     );
     authData.push(...rpIdHash);
+    console.log("rpIdHash", rpIdHash);
 
     /*
      * flags
@@ -71,10 +74,18 @@ export class U2FDevice {
     const attestationFormat = "packed" as string;
     const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;
     authData.push(flags);
+    console.log("flags", flags);
 
     // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
     const now = new Date().getTime() / 1000;
     authData.push(
+      ((now & 0xff000000) >> 24) & 0xff,
+      ((now & 0x00ff0000) >> 16) & 0xff,
+      ((now & 0x0000ff00) >> 8) & 0xff,
+      now & 0x000000ff
+    );
+    console.log(
+      "now",
       ((now & 0xff000000) >> 24) & 0xff,
       ((now & 0x00ff0000) >> 16) & 0xff,
       ((now & 0x0000ff00) >> 8) & 0xff,
@@ -87,6 +98,14 @@ export class U2FDevice {
     // Use 0 because we're self-signing at the moment
     const aaguid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     attestedCredentialData.push(...aaguid);
+    console.log("aaguid", aaguid);
+
+    // credentialIdLength (2 bytes) and credential Id
+    const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
+    attestedCredentialData.push(...credentialIdLength);
+    attestedCredentialData.push(...rawId);
+    console.log("credentialIdLength", credentialIdLength);
+    console.log("rawId", rawId);
 
     const publicKeyJwk = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
     // COSE format of the EC256 key
@@ -97,11 +116,7 @@ export class U2FDevice {
       "-2": b64toBA(publicKeyJwk.x),
       "-3": b64toBA(publicKeyJwk.y),
     };
-
-    // credentialIdLength (2 bytes) and credential Id
-    const lenArray = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
-    attestedCredentialData.push(...lenArray);
-    attestedCredentialData.push(...rawId);
+    console.log("credPublicKeyCOSE", credPublicKeyCOSE);
 
     // credential public key - take bytes from CBOR encoded COSE key
     const credPublicKeyBytes = bytesFromArray(
@@ -110,8 +125,12 @@ export class U2FDevice {
       -1
     );
     attestedCredentialData.push(...credPublicKeyBytes);
+    console.log("credPublicKeyBytes", credPublicKeyBytes);
 
     authData.push(...attestedCredentialData);
+    console.log("attestedCredentialData", attestedCredentialData);
+
+    // </authData>
 
     const sigBase = authData.concat(clientDataHash);
     const signature = await window.crypto.subtle.sign(
