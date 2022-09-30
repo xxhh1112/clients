@@ -9,7 +9,7 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { VaultFilterService } from "../services/abstractions/vault-filter.service";
-import { VaultFilterList } from "../shared/models/vault-filter-section.type";
+import { VaultFilterList, VaultFilterSection } from "../shared/models/vault-filter-section.type";
 import { VaultFilter } from "../shared/models/vault-filter.model";
 import {
   CipherTypeFilter,
@@ -210,17 +210,17 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async buildAllFilters() {
-    let builderFilter = {} as VaultFilterList;
-    builderFilter = await this.addOrganizationFilter(builderFilter);
-    builderFilter = await this.addTypeFilter(builderFilter);
-    builderFilter = await this.addFolderFilter(builderFilter);
-    builderFilter = await this.addCollectionFilter(builderFilter);
-    builderFilter = await this.addTrashFilter(builderFilter);
+    const builderFilter = {} as VaultFilterList;
+    builderFilter.organizationFilter = await this.addOrganizationFilter();
+    builderFilter.typeFilter = await this.addTypeFilter();
+    builderFilter.folderFilter = await this.addFolderFilter();
+    builderFilter.collectionFilter = await this.addCollectionFilter();
+    builderFilter.trashFilter = await this.addTrashFilter();
 
     this.filters = builderFilter;
   }
 
-  protected async addOrganizationFilter(filter: VaultFilterList) {
+  protected async addOrganizationFilter(): Promise<VaultFilterSection> {
     const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
     const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
 
@@ -231,7 +231,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       ? { text: "newOrganization", route: "/create-organization" }
       : null;
 
-    filter.organizationFilter = {
+    const orgFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.organizationTree$,
       header: {
         showHeader: !(singleOrgPolicy && personalVaultPolicy),
@@ -243,11 +243,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       divider: true,
     };
 
-    return filter;
+    return orgFilterSection;
   }
 
-  protected async addTypeFilter(filter: VaultFilterList) {
-    filter.typeFilter = {
+  protected async addTypeFilter(): Promise<VaultFilterSection> {
+    const typeFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         { id: "AllItems", name: "allItems", type: "all", icon: "" },
         [
@@ -289,11 +289,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyTypeFilter,
     };
-    return filter;
+    return typeFilterSection;
   }
 
-  protected async addFolderFilter(filter: VaultFilterList) {
-    filter.folderFilter = {
+  protected async addFolderFilter(): Promise<VaultFilterSection> {
+    const folderFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.folderTree$,
       header: {
         showHeader: true,
@@ -309,11 +309,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         action: this.addFolder,
       },
     };
-    return filter;
+    return folderFilterSection;
   }
 
-  protected async addCollectionFilter(filter: VaultFilterList) {
-    filter.collectionFilter = {
+  protected async addCollectionFilter(): Promise<VaultFilterSection> {
+    const collectionFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.collectionTree$,
       header: {
         showHeader: true,
@@ -321,11 +321,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyCollectionFilter,
     };
-    return filter;
+    return collectionFilterSection;
   }
 
-  protected async addTrashFilter(filter: VaultFilterList) {
-    filter.trashFilter = {
+  protected async addTrashFilter(): Promise<VaultFilterSection> {
+    const trashFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         {
           id: "headTrash",
@@ -348,6 +348,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyTypeFilter,
     };
-    return filter;
+    return trashFilterSection;
   }
 }

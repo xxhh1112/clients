@@ -61,7 +61,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
         filter.selectedCollectionNode = (await firstValueFrom(
           this.filters?.collectionFilter.data$
         )) as TreeNode<CollectionFilter>;
-        await this.applyVaultFilter(filter);
+        this.applyVaultFilter(filter);
       }
     }
   }
@@ -69,10 +69,10 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   async buildAllFilters() {
     this.vaultFilterService.updateOrganizationFilter(this._organization);
 
-    let builderFilter = {} as VaultFilterList;
-    builderFilter = await this.addTypeFilter(builderFilter);
-    builderFilter = await this.addCollectionFilter(builderFilter);
-    builderFilter = await this.addTrashFilter(builderFilter);
+    const builderFilter = {} as VaultFilterList;
+    builderFilter.typeFilter = await this.addTypeFilter();
+    builderFilter.collectionFilter = await this.addCollectionFilter();
+    builderFilter.trashFilter = await this.addTrashFilter();
 
     this.filters = builderFilter;
   }
