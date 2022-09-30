@@ -10,7 +10,7 @@ type SyncCompletedEventArgsBase<T extends boolean> = SyncEventArgsBase<"Complete
   successfully: T;
 };
 
-type SyncSuccessfullyCompletedEventArgs = SyncCompletedEventArgsBase<true> & {
+export type SyncSuccessfullyCompletedEventArgs = SyncCompletedEventArgsBase<true> & {
   data: SyncResponse;
 };
 

@@ -1,11 +1,10 @@
-import { BehaviorSubject, concatMap, filter } from "rxjs";
+import { BehaviorSubject, concatMap } from "rxjs";
 
 import { OrganizationService as OrganizationServiceAbstraction } from "../../abstractions/organization/organization.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
 import { SyncNotifierService } from "../../abstractions/sync/syncNotifier.service.abstraction";
 import { OrganizationData } from "../../models/data/organizationData";
 import { Organization } from "../../models/domain/organization";
-import { isSuccessfullyCompleted } from "../../types/syncEventArgs";
 
 export class OrganizationService implements OrganizationServiceAbstraction {
   private _organizations = new BehaviorSubject<Organization[]>([]);
@@ -30,9 +29,8 @@ export class OrganizationService implements OrganizationServiceAbstraction {
       )
       .subscribe();
 
-    this.syncNotifierService.sync$
+    this.syncNotifierService.syncCompletedSuccessfully$
       .pipe(
-        filter(isSuccessfullyCompleted),
         concatMap(async ({ data }) => {
           const { profile } = data;
           const organizations: { [id: string]: OrganizationData } = {};

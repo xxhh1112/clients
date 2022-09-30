@@ -1,8 +1,9 @@
 import { Observable } from "rxjs";
 
-import { SyncEventArgs } from "../../types/syncEventArgs";
+import { SyncEventArgs, SyncSuccessfullyCompletedEventArgs } from "../../types/syncEventArgs";
 
 export abstract class SyncNotifierService {
   sync$: Observable<SyncEventArgs>;
+  syncCompletedSuccessfully$: Observable<SyncSuccessfullyCompletedEventArgs>;
   next: (event: SyncEventArgs) => void;
 }
