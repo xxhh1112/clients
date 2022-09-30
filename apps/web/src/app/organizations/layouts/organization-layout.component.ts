@@ -1,10 +1,6 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, Subject, takeUntil } from "rxjs";
-
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { map, mergeMap, Observable, Subject, takeUntil } from "rxjs";
 
 import {
   canAccessBillingTab,
@@ -12,85 +8,67 @@ import {
   canAccessMembersTab,
   canAccessReportingTab,
   canAccessSettingsTab,
-} from "../navigation-permissions";
-
-const BroadcasterSubscriptionId = "OrganizationLayoutComponent";
+  getOrganizationById,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "app-organization-layout",
   templateUrl: "organization-layout.component.html",
 })
 export class OrganizationLayoutComponent implements OnInit, OnDestroy {
-  private organizationId: string;
-  private destroy$ = new Subject<void>();
+  organization$: Observable<Organization>;
 
-  organization: Organization;
+  private _destroy = new Subject<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private organizationService: OrganizationService,
-    private broadcasterService: BroadcasterService,
-    private ngZone: NgZone
-  ) {}
+  constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 
   ngOnInit() {
     document.body.classList.remove("layout_frontend");
-    this.route.params
-      .pipe(
-        concatMap(async (params: any) => {
-          this.organizationId = params.organizationId;
-          await this.load();
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
 
-    this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-      this.ngZone.run(async () => {
-        switch (message.command) {
-          case "updatedOrgLicense":
-            await this.load();
-            break;
-        }
-      });
-    });
+    this.organization$ = this.route.params
+      .pipe(takeUntil(this._destroy))
+      .pipe<string>(map((p) => p.organizationId))
+      .pipe(
+        mergeMap((id) => {
+          return this.organizationService.organizations$
+            .pipe(takeUntil(this._destroy))
+            .pipe(getOrganizationById(id));
+        })
+      );
   }
 
   ngOnDestroy() {
-    this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
-  async load() {
-    this.organization = await this.organizationService.get(this.organizationId);
+  canShowSettingsTab(organization: Organization): boolean {
+    return canAccessSettingsTab(organization);
   }
 
-  get showSettingsTab(): boolean {
-    return canAccessSettingsTab(this.organization);
+  canShowMembersTab(organization: Organization): boolean {
+    return canAccessMembersTab(organization);
   }
 
-  get showMembersTab(): boolean {
-    return canAccessMembersTab(this.organization);
+  canShowGroupsTab(organization: Organization): boolean {
+    return canAccessGroupsTab(organization);
   }
 
-  get showGroupsTab(): boolean {
-    return canAccessGroupsTab(this.organization);
+  canShowReportsTab(organization: Organization): boolean {
+    return canAccessReportingTab(organization);
   }
 
-  get showReportsTab(): boolean {
-    return canAccessReportingTab(this.organization);
+  canShowBillingTab(organization: Organization): boolean {
+    return canAccessBillingTab(organization);
   }
 
-  get showBillingTab(): boolean {
-    return canAccessBillingTab(this.organization);
+  getReportTabLabel(organization: Organization): string {
+    return organization.useEvents ? "reporting" : "reports";
   }
 
-  get reportTabLabel(): string {
-    return this.organization.useEvents ? "reporting" : "reports";
-  }
-
-  get reportRoute(): string {
-    return this.organization.useEvents ? "reporting/events" : "reporting/reports";
+  getReportRoute(organization: Organization): string {
+    return organization.useEvents ? "reporting/events" : "reporting/reports";
   }
 }

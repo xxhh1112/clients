@@ -1,8 +1,17 @@
 <div class="tabbed-header">
-  <h1>{{ "twoStepLogin" | i18n }}</h1>
+  <h1 *ngIf="!organizationId">{{ "twoStepLogin" | i18n }}</h1>
+  <h1 *ngIf="organizationId">{{ "twoStepLoginEnforcement" | i18n }}</h1>
 </div>
 <p *ngIf="!organizationId">{{ "twoStepLoginDesc" | i18n }}</p>
-<p *ngIf="organizationId">{{ "twoStepLoginOrganizationDesc" | i18n }}</p>
+<ng-container *ngIf="organizationId">
+  <p>
+    {{ "twoStepLoginOrganizationDescStart" | i18n }}
+    <a routerLink="../policies">{{ "twoStepLoginPolicy" | i18n }}.</a>
+    <br />
+    {{ "twoStepLoginOrganizationDuoDesc" | i18n }}
+  </p>
+  <p>{{ "twoStepLoginOrganizationSsoDesc" | i18n }}</p>
+</ng-container>
 <bit-callout type="warning" *ngIf="!organizationId">
   <p>{{ "twoStepLoginRecoveryWarning" | i18n }}</p>
   <button bitButton buttonType="secondary" (click)="recoveryCode()">
@@ -55,7 +64,13 @@
     </div>
   </li>
 </ul>
-<form *ngIf="!loading" #form (ngSubmit)="submit()" [appApiAction]="formPromise" ngNativeValidate>
+<form
+  *ngIf="!loading && !organizationId"
+  #form
+  (ngSubmit)="submit()"
+  [appApiAction]="formPromise"
+  ngNativeValidate
+>
   <div class="row">
     <div class="col-12">
       <h2 class="mt-5 spaced-header">
@@ -77,9 +92,15 @@
         </div>
         <small class="form-text text-muted">{{ "deviceVerificationDesc" | i18n }}</small>
       </div>
-      <bit-submit-button [loading]="form.loading" *ngIf="isDeviceVerificationSectionEnabled">
+      <button
+        type="submit"
+        buttonType="primary"
+        bitButton
+        [loading]="form.loading"
+        *ngIf="isDeviceVerificationSectionEnabled"
+      >
         {{ "save" | i18n }}
-      </bit-submit-button>
+      </button>
     </div>
   </div>
 </form>

@@ -1,9 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { canAccessBillingTab } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+
 import { PaymentMethodComponent } from "../../settings/payment-method.component";
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
-import { canAccessBillingTab } from "../navigation-permissions";
 
 import { OrgBillingHistoryViewComponent } from "./organization-billing-history-view.component";
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";
