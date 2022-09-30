@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Zaloguj się lub utwórz nowe konto, aby uzyskać dostęp do Twojego bezpiecznego sejfu."
   },
+  "loginWithDevice": {
+    "message": "Zaloguj się za pomocą urządzenia"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji mobilnej Bitwarden. Potrzebujesz innej opcji?"
+  },
   "createAccount": {
     "message": "Utwórz konto"
+  },
+  "newAroundHere": {
+    "message": "Jesteś tu nowy(a)?"
   },
   "startTrial": {
     "message": "Rozpocznij okres próbny"
   },
   "logIn": {
     "message": "Zaloguj się"
+  },
+  "logInInitiated": {
+    "message": "Logowanie rozpoczęte"
   },
   "submit": {
     "message": "Wyślij"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Wymagane jest ponowne wpisanie hasła głównego."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Hasło główne musi zawierać co najmniej 8 znaków."
   },
   "masterPassDoesntMatch": {
@@ -645,7 +657,7 @@
     "message": "Konto zostało utworzone! Teraz możesz się zalogować."
   },
   "trialAccountCreated": {
-    "message": "Konto zostało pomyślnie utworzone."
+    "message": "Konto zostało utworzone."
   },
   "masterPassSent": {
     "message": "Wysłaliśmy Tobie wiadomość e-mail z podpowiedzią do hasła głównego."
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "Nie należysz do żadnej organizacji. Organizacje pozwalają na bezpieczne udostępnianie elementów innym użytkownikom."
+  },
+  "notificationSentDevice": {
+    "message": "Powiadomienie zostało wysłane na twoje urządzenie."
   },
   "versionNumber": {
     "message": "Wersja $VERSION_NUMBER$",
@@ -918,7 +933,7 @@
     "message": "Utwórz hasło wygenerowane przez użytkownika, aby chronić eksport. Użyj tego, aby utworzyć eksport, który może być używany na innych kontach."
   },
   "fileTypeHeading": {
-    "message": "Typ Pliku"
+    "message": "Rodzaj pliku"
   },
   "accountBackup": {
     "message": "Kopia zapasowa konta"
@@ -1324,7 +1339,7 @@
     "message": "Wyłącz"
   },
   "revokeAccess": {
-    "message": "Odwołaj dostęp"
+    "message": "Unieważnij dostęp"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Ten dostawca logowania dwustopniowego jest już włączony na koncie."
@@ -1840,7 +1855,7 @@
     "message": "rok"
   },
   "yr": {
-    "message": "r."
+    "message": "rok"
   },
   "month": {
     "message": "miesiąc"
@@ -2257,7 +2272,7 @@
     "message": "Rocznie"
   },
   "annual": {
-    "message": "Raz w roku"
+    "message": "Rocznie"
   },
   "basePrice": {
     "message": "Cena netto"
@@ -2329,7 +2344,7 @@
     "message": "Gdy członek zostanie usunięty, nie ma już dostępu do danych organizacji, a ta czynność jest nieodwracalna. Aby ponownie dodać członka do organizacji, należy go zaprosić i ponownie wprowadzić."
   },
   "revokeUserConfirmation": {
-    "message": "Gdy członek zostanie odwołany, nie ma już dostępu do danych organizacji. Aby szybko przywrócić dostęp członków, przejdź do karty Odwołani."
+    "message": "Jeśli użytkownik zostanie unieważniony, nie będzie miał dostępu do danych organizacji. Aby przywrócić dostęp użytkownika, przejdź do karty Unieważnieni."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Ostrzeżenie! Ten użytkownik wymaga serwera Key Connector do zarządzania szyfrowaniem. Usunięcie tego użytkownika z organizacji spowoduje trwałe wyłączenie jego konta. Nie możesz cofnąć tej akcji. Czy chcesz kontynuować?"
@@ -2532,6 +2547,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Zobacz wszystkie sposoby logowania"
+  },
   "viewedItemId": {
     "message": "Wyświetlono element $ID$.",
     "placeholders": {
@@ -2686,7 +2704,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Odwołano dostęp organizacji dla $ID$.",
+    "message": "Dostęp do organizacji dla użytkownika $ID$ został unieważniony.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2704,7 +2722,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Odwołano dostęp $ID$",
+    "message": "Unieważnij dostęp dla użytkownika $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3372,6 +3390,12 @@
     "message": "Aby zapewnić integralność kluczy szyfrowania, zweryfikuj unikalny identyfikator użytkownika, zanim przejdziesz dalej.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Upewnij się, że twój sejf jest odblokowany i unikalny identyfikator konta pasuje do drugiego urządzenia."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Unikalny identyfikator konta"
+  },
   "dontAskFingerprintAgain": {
     "message": "Nie pytaj ponownie o weryfikację unikalnego identyfikatora konta dla zaproszonych użytkowników (niezalecane)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -3769,7 +3793,7 @@
     "message": "Wyłączone"
   },
   "revoked": {
-    "message": "Odwołani"
+    "message": "Unieważnieni"
   },
   "sendLink": {
     "message": "Link wysyłki",
@@ -4056,6 +4080,12 @@
   },
   "permissions": {
     "message": "Uprawnienia"
+  },
+  "managerPermissions": {
+    "message": "Menedżer uprawnień"
+  },
+  "adminPermissions": {
+    "message": "Administrator uprawnień"
   },
   "accessEventLogs": {
     "message": "Dostęp do dziennika zdarzeń"
@@ -4366,6 +4396,9 @@
   "reinviteSelected": {
     "message": "Wyślij ponownie zaproszenia"
   },
+  "resendNotification": {
+    "message": "Wyślij ponownie powiadomienie"
+  },
   "noSelectedUsersApplicable": {
     "message": "Ta akcja nie dotyczy żadnych zaznaczonych użytkowników."
   },
@@ -4376,7 +4409,7 @@
     "message": "Kiedy członek (członkowie) zostaje usunięty, nie ma już dostępu do danych organizacji i działanie to jest nieodwracalne. Aby dodać członka z powrotem do organizacji, musi on zostać ponownie zaproszony i włączony do organizacji. Proces ten może trwać kilka sekund i nie może być przerwany ani anulowany."
   },
   "revokeUsersWarning": {
-    "message": "Gdy członek (członkowie) zostanie odwołany, nie ma już dostępu do danych organizacji. Aby szybko przywrócić dostęp do danych członka, przejdź do zakładki Odwołano. Proces ten może potrwać kilka sekund i nie można go przerwać ani anulować."
+    "message": "Jeśli użytkownicy zostaną unieważnieni, nie będą mieli dostępu do danych organizacji. Aby przywrócić dostęp użytkownika, przejdź do karty Unieważnieni. Proces może potrwać kilka sekund i nie można go przerwać lub anulować."
   },
   "theme": {
     "message": "Motyw"
@@ -4409,7 +4442,7 @@
     "message": "Usunięto"
   },
   "bulkRevokedMessage": {
-    "message": "Odwołano dostęp do organizacji"
+    "message": "Dostęp do organizacji został unieważniony"
   },
   "bulkRestoredMessage": {
     "message": "Przywrócono dostęp do organizacji"
@@ -4424,7 +4457,7 @@
     "message": "Usuń użytkowników"
   },
   "revokeUsers": {
-    "message": "Odwołaj użytkowników"
+    "message": "Unieważnij użytkowników"
   },
   "restoreUsers": {
     "message": "Przywróć użytkowników"

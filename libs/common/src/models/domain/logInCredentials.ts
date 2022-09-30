@@ -1,4 +1,5 @@
 import { AuthenticationType } from "../../enums/authenticationType";
+import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { TokenRequestTwoFactor } from "../request/identityToken/tokenRequestTwoFactor";
 
 export class PasswordLogInCredentials {
@@ -28,4 +29,17 @@ export class ApiLogInCredentials {
   readonly type = AuthenticationType.Api;
 
   constructor(public clientId: string, public clientSecret: string) {}
+}
+
+export class PasswordlessLogInCredentials {
+  readonly type = AuthenticationType.Passwordless;
+
+  constructor(
+    public email: string,
+    public accessCode: string,
+    public authRequestId: string,
+    public decKey: SymmetricCryptoKey,
+    public localPasswordHash: string,
+    public twoFactor?: TokenRequestTwoFactor
+  ) {}
 }

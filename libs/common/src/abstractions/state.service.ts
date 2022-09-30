@@ -139,6 +139,8 @@ export abstract class StateService<T extends Account = Account> {
   setDontShowCardsCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDontShowIdentitiesCurrentTab: (options?: StorageOptions) => Promise<boolean>;
   setDontShowIdentitiesCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
+  setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getEmail: (options?: StorageOptions) => Promise<string>;
   setEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getEmailVerified: (options?: StorageOptions) => Promise<boolean>;
@@ -158,6 +160,11 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEnableCloseToTray: (options?: StorageOptions) => Promise<boolean>;
   setEnableCloseToTray: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getEnableDuckDuckGoBrowserIntegration: (options?: StorageOptions) => Promise<boolean>;
+  setEnableDuckDuckGoBrowserIntegration: (
+    value: boolean,
+    options?: StorageOptions
+  ) => Promise<void>;
   getEnableFullWidth: (options?: StorageOptions) => Promise<boolean>;
   setEnableFullWidth: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableGravitars: (options?: StorageOptions) => Promise<boolean>;
@@ -266,7 +273,13 @@ export abstract class StateService<T extends Account = Account> {
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use OrganizationService
+   */
   getOrganizations: (options?: StorageOptions) => Promise<{ [id: string]: OrganizationData }>;
+  /**
+   * @deprecated Do not call this directly, use OrganizationService
+   */
   setOrganizations: (
     value: { [id: string]: OrganizationData },
     options?: StorageOptions
