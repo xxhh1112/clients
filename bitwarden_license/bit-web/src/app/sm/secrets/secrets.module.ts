@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "src/app/shared/shared.module";
+import { SharedModule } from "@bitwarden/web-vault/app/shared/shared.module";
 
 import { SecretsSharedModule } from "../shared/sm-shared.module";
 

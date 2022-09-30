@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "src/app/shared";
+import { SharedModule } from "@bitwarden/web-vault/app/shared";
 
 import { FilterComponent } from "../layout/filter.component";
 import { HeaderComponent } from "../layout/header.component";
