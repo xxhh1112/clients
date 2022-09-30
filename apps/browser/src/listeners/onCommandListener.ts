@@ -75,7 +75,9 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
     null, // AbstractEncryptService
     platformUtils,
     logService,
-    stateService
+    stateService,
+    null,
+    null
   );
 
   const settingsService = new SettingsService(stateService);

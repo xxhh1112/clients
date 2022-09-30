@@ -13,6 +13,14 @@ import {
   PlatformUtilsServiceInitOptions,
 } from "./platform-utils-service.factory";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";
+import {
+  syncNotifierServiceFactory,
+  SyncNotifierServiceInitOptions,
+} from "./sync-notifier-service.factory";
+import {
+  vaultTimeoutSettingsServiceFactory,
+  VaultTimeoutSettingsServiceInitOptions,
+} from "./vault-timeout-settings-service.factory";
 
 type CryptoServiceFactoryOptions = FactoryOptions;
 
@@ -21,7 +29,9 @@ export type CryptoServiceInitOptions = CryptoServiceFactoryOptions &
   EncryptServiceInitOptions &
   PlatformUtilsServiceInitOptions &
   LogServiceInitOptions &
-  StateServiceInitOptions;
+  StateServiceInitOptions &
+  VaultTimeoutSettingsServiceInitOptions &
+  SyncNotifierServiceInitOptions;
 
 export function cryptoServiceFactory(
   cache: { cryptoService?: AbstractCryptoService } & CachedServices,
@@ -37,7 +47,9 @@ export function cryptoServiceFactory(
         await encryptServiceFactory(cache, opts),
         await platformUtilsServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
-        await stateServiceFactory(cache, opts)
+        await stateServiceFactory(cache, opts),
+        await vaultTimeoutSettingsServiceFactory(cache, opts),
+        await syncNotifierServiceFactory(cache, opts)
       )
   );
 }

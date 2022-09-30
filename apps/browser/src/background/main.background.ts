@@ -251,14 +251,25 @@ export default class MainBackground {
     );
     this.i18nService = new I18nService(BrowserApi.getUILanguage(window));
     this.encryptService = new EncryptService(this.cryptoFunctionService, this.logService, true);
+    this.syncNotifierService = new SyncNotifierService();
+    this.organizationService = new OrganizationService(this.stateService, this.syncNotifierService);
+    this.policyService = new PolicyService(this.stateService, this.organizationService);
+
+    this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
+      this.policyService,
+      this.stateService
+    );
+
     this.cryptoService = new BrowserCryptoService(
       this.cryptoFunctionService,
       this.encryptService,
       this.platformUtilsService,
       this.logService,
-      this.stateService
+      this.stateService,
+      this.vaultTimeoutSettingsService,
+      this.syncNotifierService
     );
-    this.tokenService = new TokenService(this.stateService);
+    this.tokenService = new TokenService(this.stateService, this.vaultTimeoutSettingsService);
     this.appIdService = new AppIdService(this.storageService);
     this.environmentService = new BrowserEnvironmentService(this.stateService, this.logService);
     this.apiService = new ApiService(
@@ -301,9 +312,6 @@ export default class MainBackground {
       this.cryptoFunctionService,
       this.stateService
     );
-    this.syncNotifierService = new SyncNotifierService();
-    this.organizationService = new OrganizationService(this.stateService, this.syncNotifierService);
-    this.policyService = new PolicyService(this.stateService, this.organizationService);
     this.policyApiService = new PolicyApiService(
       this.policyService,
       this.apiService,
@@ -355,13 +363,6 @@ export default class MainBackground {
       this.i18nService
     );
 
-    this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
-      this.cryptoService,
-      this.tokenService,
-      this.policyService,
-      this.stateService
-    );
-
     this.vaultTimeoutService = new VaultTimeoutService(
       this.cipherService,
       this.folderService,
@@ -384,7 +385,6 @@ export default class MainBackground {
       this.settingsService,
       this.folderService,
       this.cipherService,
-      this.cryptoService,
       this.collectionService,
       this.messagingService,
       this.policyService,
