@@ -9,7 +9,6 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault
 import { VaultFilterList } from "../../../vault/vault-filter/shared/models/vault-filter-section.type";
 import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
 
-
 @Component({
   selector: "app-organization-vault-filter",
   templateUrl: "../../../vault/vault-filter/components/vault-filter.component.html",
@@ -44,12 +43,6 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   }
 
   protected loadSubscriptions() {
-    this.vaultFilterService.collapsedFilterNodes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((nodes) => {
-        this.collapsedFilterNodes = nodes;
-      });
-
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {

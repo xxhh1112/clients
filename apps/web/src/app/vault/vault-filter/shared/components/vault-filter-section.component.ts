@@ -1,7 +1,9 @@
-import { Component, EventEmitter, InjectionToken, Injector, Input, Output } from "@angular/core";
+import { Component, InjectionToken, Injector, Input, OnDestroy } from "@angular/core";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { Subject, takeUntil } from "rxjs";
+import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
 
 import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";
 import { VaultFilter } from "../models/vault-filter.model";
@@ -10,7 +12,9 @@ import { VaultFilter } from "../models/vault-filter.model";
   selector: "app-filter-section",
   templateUrl: "vault-filter-section.component.html",
 })
-export class VaultFilterSectionComponent {
+export class VaultFilterSectionComponent implements OnDestroy {
+  private destroy$: Subject<void>;
+
   @Input() activeFilter: VaultFilter;
 
   @Input() data: TreeNode<VaultFilterType>;
@@ -20,12 +24,23 @@ export class VaultFilterSectionComponent {
   @Input() add?: VaultFilterSection["add"];
   @Input() options?: VaultFilterSection["options"];
   @Input() divider?: boolean;
-  @Input() nodeCollapsedState: Set<string>;
-  @Output() nodeCollapsedStateChange = new EventEmitter<ITreeNodeObject>();
+
+  collapsedFilterNodes: Set<string> = new Set();
 
   private injectors = new Map<string, Injector>();
 
-  constructor(private injector: Injector) {}
+  constructor(private vaultFilterService: VaultFilterService, private injector: Injector) {
+    this.vaultFilterService.collapsedFilterNodes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((nodes) => {
+        this.collapsedFilterNodes = nodes;
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   get filterHeader() {
     return this.data;
@@ -83,11 +98,16 @@ export class VaultFilterSectionComponent {
   }
 
   isCollapsed(node: ITreeNodeObject) {
-    return this.nodeCollapsedState.has(node.id);
+    return this.collapsedFilterNodes.has(node.id);
   }
 
   async toggleCollapse(node: ITreeNodeObject) {
-    this.nodeCollapsedStateChange.emit(node);
+    if (this.collapsedFilterNodes.has(node.id)) {
+      this.collapsedFilterNodes.delete(node.id);
+    } else {
+      this.collapsedFilterNodes.add(node.id);
+    }
+    await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
   // an injector is necessary to pass data into a dynamic component

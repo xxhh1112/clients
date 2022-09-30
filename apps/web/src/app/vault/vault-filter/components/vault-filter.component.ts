@@ -4,7 +4,7 @@ import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
@@ -34,7 +34,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   isLoaded = false;
   searchText = "";
-  collapsedFilterNodes: Set<string>;
   currentFilterCollections: CollectionView[] = [];
 
   protected destroy$: Subject<void> = new Subject<void>();
@@ -100,12 +99,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected loadSubscriptions() {
-    this.vaultFilterService.collapsedFilterNodes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((nodes) => {
-        this.collapsedFilterNodes = nodes;
-      });
-
     this.vaultFilterService.filteredFolders$
       .pipe(
         switchMap(async (folders) => {
@@ -131,15 +124,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       this.searchText = t;
       this.onSearchTextChanged.emit(t);
     }
-  }
-
-  async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
-    if (this.collapsedFilterNodes.has(node.id)) {
-      this.collapsedFilterNodes.delete(node.id);
-    } else {
-      this.collapsedFilterNodes.add(node.id);
-    }
-    await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
   // Remove when organizations is refactored with observables
