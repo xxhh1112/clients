@@ -4,16 +4,13 @@
       class="toggle-button"
       (click)="toggleCollapse(headerNode.node)"
       [attr.aria-expanded]="!isCollapsed(headerNode.node)"
-      aria-controls="folder-filters"
+      aria-controls="sub-filters"
       title="{{ 'toggleCollapse' | i18n }}"
     >
       <i
         class="bwi bwi-fw"
         aria-hidden="true"
-        [ngClass]="{
-          'bwi-angle-right': isCollapsed(headerNode.node),
-          'bwi-angle-down': !isCollapsed(headerNode.node)
-        }"
+        [ngClass]="isCollapsed(headerNode.node) ? 'bwi-angle-right' : 'bwi-angle-down'"
       ></i>
     </button>
     <button
