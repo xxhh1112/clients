@@ -231,19 +231,16 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     storedFolders: FolderView[],
     org?: Organization
   ): Promise<FolderView[]> {
-    let folders: FolderView[];
-    if (org?.id != null) {
-      const ciphers = await this.cipherService.getAllDecrypted();
-      const orgCiphers = ciphers.filter((c) => c.organizationId == org?.id);
-      folders = storedFolders.filter(
-        (f) =>
-          orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
-          ciphers.filter((c) => c.folderId == f.id).length < 1
-      );
-    } else {
-      folders = storedFolders;
+    if (org?.id == null) {
+      return storedFolders;
     }
-    return folders;
+    const ciphers = await this.cipherService.getAllDecrypted();
+    const orgCiphers = ciphers.filter((c) => c.organizationId == org?.id);
+    return storedFolders.filter(
+      (f) =>
+        orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
+        ciphers.filter((c) => c.folderId == f.id).length < 1
+    );
   }
 
   protected buildFolderTree(folders?: FolderView[]): TreeNode<FolderFilter> {
