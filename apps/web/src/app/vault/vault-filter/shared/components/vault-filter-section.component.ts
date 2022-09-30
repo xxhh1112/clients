@@ -1,10 +1,10 @@
 import { Component, InjectionToken, Injector, Input, OnDestroy } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { Subject, takeUntil } from "rxjs";
-import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
 
+import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
 import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";
 import { VaultFilter } from "../models/vault-filter.model";
 
@@ -13,18 +13,20 @@ import { VaultFilter } from "../models/vault-filter.model";
   templateUrl: "vault-filter-section.component.html",
 })
 export class VaultFilterSectionComponent implements OnDestroy {
-  private destroy$: Subject<void>;
+  private destroy$ = new Subject<void>();
+  private _section: VaultFilterSection;
 
   @Input() activeFilter: VaultFilter;
+  @Input() set section(value: VaultFilterSection) {
+    if (value && value !== this._section) {
+      this._section = value;
+      this._section?.data$?.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+        this.data = data;
+      });
+    }
+  }
 
-  @Input() data: TreeNode<VaultFilterType>;
-  @Input() header: VaultFilterSection["header"];
-  @Input() action: VaultFilterSection["action"];
-  @Input() edit?: VaultFilterSection["edit"];
-  @Input() add?: VaultFilterSection["add"];
-  @Input() options?: VaultFilterSection["options"];
-  @Input() divider?: boolean;
-
+  data: TreeNode<VaultFilterType>;
   collapsedFilterNodes: Set<string> = new Set();
 
   private injectors = new Map<string, Injector>();
@@ -42,8 +44,12 @@ export class VaultFilterSectionComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  get filterHeader() {
+  get headerNode() {
     return this.data;
+  }
+
+  get headerInfo() {
+    return this._section.header;
   }
 
   get filters() {
@@ -70,31 +76,35 @@ export class VaultFilterSectionComponent implements OnDestroy {
   }
 
   async onFilterSelect(filterNode: TreeNode<VaultFilterType>) {
-    await this.action(filterNode);
+    await this._section?.action(filterNode);
   }
 
-  get showEdit() {
-    return this.edit;
+  get editInfo() {
+    return this._section?.edit;
   }
 
-  async onEdit(filterNode: TreeNode<VaultFilterType>) {
-    await this.edit?.action(filterNode.node);
+  onEdit(filterNode: TreeNode<VaultFilterType>) {
+    this._section?.edit?.action(filterNode.node);
+  }
+
+  get addInfo() {
+    return this._section.add;
   }
 
   get showAddButton() {
-    return this.add && !this.add.route;
+    return this._section.add && !this._section.add.route;
   }
 
   get showAddLink() {
-    return this.add && this.add.route;
+    return this._section.add && this._section.add.route;
   }
 
   async onAdd() {
-    await this.add?.action();
+    this._section?.add?.action();
   }
 
-  get showOptions() {
-    return this.options;
+  get optionsInfo() {
+    return this._section?.options;
   }
 
   isCollapsed(node: ITreeNodeObject) {

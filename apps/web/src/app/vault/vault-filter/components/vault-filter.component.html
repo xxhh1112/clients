@@ -27,17 +27,7 @@
       />
       <ng-container *ngFor="let f of filtersList">
         <div class="filter">
-          <app-filter-section
-            [activeFilter]="activeFilter"
-            [data]="f.data$ | async"
-            [header]="f.header"
-            [action]="f.action"
-            [edit]="f.edit"
-            [add]="f.add"
-            [options]="f.options"
-            [divider]="f.divider"
-          >
-          </app-filter-section>
+          <app-filter-section [activeFilter]="activeFilter" [section]="f"> </app-filter-section>
         </div>
       </ng-container>
     </div>
