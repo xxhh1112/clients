@@ -65,10 +65,10 @@ export class VaultFilterService extends BaseVaultFilterService {
       .pipe(
         combineLatestWith(this._organizationFilter),
         switchMap(async ([collections, org]) => {
-          if (org?.permissions && org?.canEditAnyCollection) {
+          if (org?.canUseAdminCollections) {
             return collections;
           } else {
-            await this.filterCollections(collections, org);
+            return await this.filterCollections(collections, org);
           }
         }),
         takeUntil(this.destroy$)

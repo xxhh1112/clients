@@ -8,6 +8,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -22,6 +23,7 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 
+import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/vault-filter/shared/models/vault-filter.model";
 import { EntityEventsComponent } from "../manage/entity-events.component";
 
@@ -57,6 +59,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
+    private vaultFilterService: VaultFilterService,
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
     private syncService: SyncService,
@@ -121,7 +124,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           if (cipherId) {
             if (
               // Handle users with implicit collection access since they use the admin endpoint
-              this.organization.canEditAnyCollection ||
+              this.organization.canUseAdminCollections ||
               (await this.cipherService.get(cipherId)) != null
             ) {
               this.editCipherId(cipherId);
@@ -192,16 +195,13 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async editCipherCollections(cipher: CipherView) {
+    const currCollections = await firstValueFrom(this.vaultFilterService.filteredCollections$);
     const [modal] = await this.modalService.openViewRef(
       CollectionsComponent,
       this.collectionsModalRef,
       (comp) => {
-        if (this.organization.canEditAnyCollection) {
-          comp.collectionIds = cipher.collectionIds;
-          comp.collections = this.vaultFilterComponent.currentFilterCollections.filter(
-            (c) => !c.readOnly && c.id != null
-          );
-        }
+        comp.collectionIds = cipher.collectionIds;
+        comp.collections = currCollections.filter((c) => !c.readOnly && c.id != null);
         comp.organization = this.organization;
         comp.cipherId = cipher.id;
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
@@ -217,9 +217,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     const component = await this.editCipher(null);
     component.organizationId = this.organization.id;
     component.type = this.activeFilter.cipherType;
-    component.collections = this.vaultFilterComponent.currentFilterCollections.filter(
-      (c) => !c.readOnly && c.id != null
-    );
+    component.collections = (
+      await firstValueFrom(this.vaultFilterService.filteredCollections$)
+    ).filter((c) => !c.readOnly && c.id != null);
     if (this.activeFilter.collectionId) {
       component.collectionIds = [this.activeFilter.collectionId];
     }
@@ -273,13 +273,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     const component = await this.editCipher(cipher);
     component.cloneMode = true;
     component.organizationId = this.organization.id;
-    if (this.organization.canEditAnyCollection) {
-      component.collections = this.vaultFilterComponent.currentFilterCollections.filter(
-        (c) => !c.readOnly && c.id != null
-      );
-    }
-    // Regardless of Admin state, the collection Ids need to passed manually as they are not assigned value
-    // in the add-edit componenet
+    component.collections = (
+      await firstValueFrom(this.vaultFilterService.filteredCollections$)
+    ).filter((c) => !c.readOnly && c.id != null);
     component.collectionIds = cipher.collectionIds;
   }
 

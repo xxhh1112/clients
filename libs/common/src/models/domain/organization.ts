@@ -137,6 +137,10 @@ export class Organization {
     );
   }
 
+  get canUseAdminCollections() {
+    return this.canEditAnyCollection;
+  }
+
   get canDeleteAnyCollection() {
     return (
       this.isAdmin ||

@@ -36,6 +36,7 @@ import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
+import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
 
@@ -82,6 +83,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private stateService: StateService,
     private organizationService: OrganizationService,
+    private vaultFilterService: VaultFilterService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
@@ -231,7 +233,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.messagingService.send("premiumRequired");
       return;
     } else if (cipher.organizationId != null) {
-      const org = await this.organizationService.get(cipher.organizationId);
+      const org = this.organizationService.get(cipher.organizationId);
       if (org != null && (org.maxStorageGb == null || org.maxStorageGb === 0)) {
         this.messagingService.send("upgradeOrganization", {
           organizationId: cipher.organizationId,
@@ -299,9 +301,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.type = this.activeFilter.cipherType;
     if (this.activeFilter.organizationId !== "MyVault") {
       component.organizationId = this.activeFilter.organizationId;
-      component.collections = this.filterComponent.currentFilterCollections.filter(
-        (c) => !c.readOnly && c.id != null
-      );
+      component.collections = (
+        await firstValueFrom(this.vaultFilterService.filteredCollections$)
+      ).filter((c) => !c.readOnly && c.id != null);
     }
     const selectedColId = this.activeFilter.collectionId;
     if (selectedColId !== "AllCollections") {
