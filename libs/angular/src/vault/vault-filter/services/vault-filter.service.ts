@@ -76,33 +76,11 @@ export class VaultFilterService implements DeprecatedVaultFilterServiceAbstracti
     } else {
       collections = storedCollections;
     }
-    const nestedCollections = await this.getAllCollectionsNested(collections);
+    const nestedCollections = await this.collectionService.getAllNested(collections);
     return new DynamicTreeNode<CollectionView>({
       fullList: collections,
       nestedList: nestedCollections,
     });
-  }
-
-  protected async getAllCollectionsNested(
-    collections: CollectionView[] = null
-  ): Promise<TreeNode<CollectionView>[]> {
-    if (collections == null) {
-      collections = await this.collectionService.getAllDecrypted();
-    }
-    const nodes: TreeNode<CollectionView>[] = [];
-    collections.forEach((c) => {
-      const collectionCopy = new CollectionView();
-      collectionCopy.id = c.id;
-      collectionCopy.organizationId = c.organizationId;
-      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
-    });
-    return nodes;
-  }
-
-  async getCollectionNested(id: string): Promise<TreeNode<CollectionView>> {
-    const collections = await this.getAllCollectionsNested();
-    return ServiceUtils.getTreeNodeObjectFromList(collections, id) as TreeNode<CollectionView>;
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
