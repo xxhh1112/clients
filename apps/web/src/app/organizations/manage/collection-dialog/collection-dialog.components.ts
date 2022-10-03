@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
-import { Component, Inject, OnDestroy } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { of, switchMap, takeUntil, Subject } from "rxjs";
+import { from, takeUntil, Subject } from "rxjs";
 
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -29,7 +29,7 @@ export interface CollectionEditDialogResult {
   selector: "app-collection-dialog",
   templateUrl: "collection-dialog.component.html",
 })
-export class CollectionEditDialogComponent implements OnDestroy {
+export class CollectionEditDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   collection?: CollectionView;
@@ -47,14 +47,13 @@ export class CollectionEditDialogComponent implements OnDestroy {
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService
-  ) {
-    of(0)
-      .pipe(
-        switchMap(() => collectionService.getAll(params.organizationId)),
-        takeUntil(this.destroy$)
-      )
+  ) {}
+
+  ngOnInit() {
+    from(this.collectionService.getAll(this.params.organizationId))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((collections) => {
-        if (params.collectionId) {
+        if (this.params.collectionId) {
           this.collection = collections.find((c) => c.id === this.collectionId);
           this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
 
