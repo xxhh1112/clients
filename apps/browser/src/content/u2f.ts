@@ -1,4 +1,5 @@
-import * as cbor from "cbor-js";
+// import * as cbor from "cbor-js";
+import { CBOR as cbor } from "cbor-redux";
 import randombytes from "randombytes";
 
 import { b64toBA } from "./conv-utils/base64";
@@ -26,8 +27,7 @@ export class U2FDevice {
         origin,
       })
     );
-    const clientDataHash = crypto.subtle.digest({ name: "SHA-256" }, clientData);
-
+    const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
     const keyPair = await crypto.subtle.generateKey(
       {
         name: "ECDSA",
@@ -36,6 +36,15 @@ export class U2FDevice {
       true,
       ["sign", "verify"]
     );
+
+    // const keyPair = await crypto.subtle.generateKey(
+    //   {
+    //     name: "ECDSA",
+    //     namedCurve: "P-256",
+    //   },
+    //   true,
+    //   ["sign", "verify"]
+    // );
 
     /*
     CBOR Example (real example from using my own Yubikey)
@@ -55,20 +64,20 @@ export class U2FDevice {
     // <authData>
 
     // Much of this code is adapted from https://github.com/sbweeden/fido2-postman-clients/blob/92aec0f41eca76c0f92db8a6e87cf46aa3a2de1c/globals/fidoutils.js
-    const authData = [];
+    const authData: Array<number> = [];
 
     const rpIdHash = new Uint8Array(
       await crypto.subtle.digest({ name: "SHA-256" }, encoder.encode(options.publicKey.rp.id))
     );
     authData.push(...rpIdHash);
-    console.log("rpIdHash", rpIdHash);
+    console.log("rpIdHash", options.publicKey.rp.id, rpIdHash);
 
     /*
      * flags
      *  - conditionally set UV, UP and indicate attested credential data is present
      *  - Note we never set UV for fido-u2f
      */
-    const up = false;
+    const up = true;
     const uv = false;
     // const attestationFormat = "fido-u2f";
     const attestationFormat = "packed" as string;
@@ -93,7 +102,7 @@ export class U2FDevice {
     );
 
     // attestedCredentialData
-    const attestedCredentialData = [];
+    const attestedCredentialData: Array<number> = [];
 
     // Use 0 because we're self-signing at the moment
     const aaguid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -109,30 +118,35 @@ export class U2FDevice {
 
     const publicKeyJwk = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
     // COSE format of the EC256 key
-    const credPublicKeyCOSE = {
-      "1": 2, // kty
-      "3": -7, // alg
-      "-1": 1, // crv
-      "-2": b64toBA(publicKeyJwk.x),
-      "-3": b64toBA(publicKeyJwk.y),
-    };
-    console.log("credPublicKeyCOSE", credPublicKeyCOSE);
+    const keyX = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.x)));
+    const keyY = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.y)));
+    // const credPublicKeyCOSE = {
+    //   "1": 2, // kty
+    //   "3": -7, // alg
+    //   "-1": 1, // crv
+    //   "-2": keyX,
+    //   "-3": keyY,
+    // };
+    // const coseBytes = new Uint8Array(cbor.encode(credPublicKeyCOSE));
+    // I can't get `cbor-redux` to encode in CTAP2 canonical CBOR. So we do it manually:
+    const coseBytes = new Uint8Array(77);
+    coseBytes.set([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20], 0);
+    coseBytes.set(keyX, 10);
+    coseBytes.set([0x22, 0x58, 0x20], 10 + 32);
+    coseBytes.set(keyY, 10 + 32 + 3);
 
-    // credential public key - take bytes from CBOR encoded COSE key
-    const credPublicKeyBytes = bytesFromArray(
-      new Uint8Array(cbor.encode(credPublicKeyCOSE)),
-      0,
-      -1
-    );
+    // credential public key - convert to array from CBOR encoded COSE key
+    const credPublicKeyBytes = bytesFromArray(coseBytes, 0, -1);
     attestedCredentialData.push(...credPublicKeyBytes);
-    console.log("credPublicKeyBytes", credPublicKeyBytes);
+    console.log("coseBytes", coseBytes);
+    console.log("coseBytes", Converters.bytesToHex(coseBytes));
 
     authData.push(...attestedCredentialData);
     console.log("attestedCredentialData", attestedCredentialData);
 
     // </authData>
 
-    const sigBase = authData.concat(clientDataHash);
+    const sigBase = new Uint8Array([...authData, ...new Uint8Array(clientDataHash)]);
     const signature = await window.crypto.subtle.sign(
       {
         name: "ECDSA",
@@ -153,11 +167,27 @@ export class U2FDevice {
       })
     );
 
+    console.log("attestationObject", Converters.bytesToHex(attestationObject));
+
     // this.keys[keyId] = {
     //   key: keyPair,
     //   appID: rpId,
     //   userID: userId,
     // };
+
+    const binaryResponse = new Uint8Array(
+      cbor.encode({
+        id: keyId,
+        rawId: rawId,
+        type: "public-key",
+        response: {
+          clientDataJSON: clientData,
+          attestationObject: attestationObject,
+        } as AuthenticatorAttestationResponse,
+      })
+    );
+
+    console.log("binaryResponse", Converters.bytesToHex(binaryResponse));
 
     return {
       id: keyId,

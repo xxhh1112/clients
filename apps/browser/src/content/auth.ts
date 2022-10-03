@@ -75,7 +75,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
       onApprove = async () => {
         const result = await createCredential(options, window.location.origin);
         popup.remove();
-        resolve(cloneInto(result, window, { cloneFunctions: true }));
+        const cloned = cloneInto(result, window, { cloneFunctions: true });
+        console.log("clonedResult", cloned);
+        resolve(cloned);
       };
     });
   };
