@@ -9,7 +9,11 @@ import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { VaultFilterService } from "../services/abstractions/vault-filter.service";
-import { VaultFilterList, VaultFilterSection } from "../shared/models/vault-filter-section.type";
+import {
+  VaultFilterList,
+  VaultFilterSection,
+  VaultFilterType,
+} from "../shared/models/vault-filter-section.type";
 import { VaultFilter } from "../shared/models/vault-filter.model";
 import {
   CipherTypeFilter,
@@ -183,14 +187,17 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.onEditFolder.emit(folder);
   };
 
+  async getDefaultFilter(): Promise<TreeNode<VaultFilterType>> {
+    return await firstValueFrom(this.filters?.typeFilter.data$);
+  }
+
   protected async removeInvalidFolderSelection(folders: FolderView[]) {
     if (this.activeFilter.selectedFolderNode) {
       if (!folders.find((f) => f.id === this.activeFilter.folderId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
-        filter.selectedCipherTypeNode = (await firstValueFrom(
-          this.filters?.typeFilter.data$
-        )) as TreeNode<CipherTypeFilter>;
+        filter.selectedCipherTypeNode =
+          (await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>;
         this.applyVaultFilter(filter);
       }
     }
@@ -201,9 +208,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
-        filter.selectedCipherTypeNode = (await firstValueFrom(
-          this.filters?.typeFilter?.data$
-        )) as TreeNode<CipherTypeFilter>;
+        filter.selectedCipherTypeNode =
+          (await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>;
         this.applyVaultFilter(filter);
       }
     }

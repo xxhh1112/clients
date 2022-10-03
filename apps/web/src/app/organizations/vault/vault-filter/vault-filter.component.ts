@@ -6,7 +6,10 @@ import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 import { VaultFilterComponent as BaseVaultFilterComponent } from "../../../vault/vault-filter/components/vault-filter.component";
-import { VaultFilterList } from "../../../vault/vault-filter/shared/models/vault-filter-section.type";
+import {
+  VaultFilterList,
+  VaultFilterType,
+} from "../../../vault/vault-filter/shared/models/vault-filter-section.type";
 import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
 
 @Component({
@@ -16,8 +19,11 @@ import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vaul
 export class VaultFilterComponent extends BaseVaultFilterComponent implements OnInit, OnDestroy {
   @Input() set organization(value: Organization) {
     if (value && value !== this._organization) {
+      if (!this._organization) {
+        this.initCollections(value);
+      }
       this._organization = value;
-      this.initCollections(value);
+      this.vaultFilterService.updateOrganizationFilter(this._organization);
     }
   }
   _organization: Organization;
@@ -25,21 +31,19 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
 
   // override to allow for async init when org loads
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async ngOnInit(): Promise<void> {}
-
-  async initCollections(org: Organization) {
-    await this.buildAllFilters();
-    if (!this.activeFilter.selectedCipherTypeNode) {
-      this.applyCollectionFilter(
-        (await firstValueFrom(this.filters?.collectionFilter.data$)) as TreeNode<CollectionFilter>
-      );
-    }
-    this.isLoaded = true;
-  }
+  async ngOnInit() {}
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  async initCollections(org: Organization) {
+    await this.buildAllFilters();
+    if (!this.activeFilter.selectedCipherTypeNode) {
+      this.applyCollectionFilter((await this.getDefaultFilter()) as TreeNode<CollectionFilter>);
+    }
+    this.isLoaded = true;
   }
 
   protected loadSubscriptions() {
@@ -56,12 +60,10 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
     if (this.activeFilter.selectedCollectionNode) {
       if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
-        const filter = this.activeFilter;
-        filter.resetFilter();
-        filter.selectedCollectionNode = (await firstValueFrom(
-          this.filters?.collectionFilter.data$
-        )) as TreeNode<CollectionFilter>;
-        this.applyVaultFilter(filter);
+        this.activeFilter.resetFilter();
+        this.activeFilter.selectedCollectionNode =
+          (await this.getDefaultFilter()) as TreeNode<CollectionFilter>;
+        this.applyVaultFilter(this.activeFilter);
       }
     }
   }
@@ -75,5 +77,9 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
     builderFilter.trashFilter = await this.addTrashFilter();
 
     this.filters = builderFilter;
+  }
+
+  async getDefaultFilter(): Promise<TreeNode<VaultFilterType>> {
+    return await firstValueFrom(this.filters?.collectionFilter.data$);
   }
 }
