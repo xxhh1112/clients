@@ -1,19 +1,18 @@
-import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
-import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
-
 import { ApiService } from "../abstractions/api.service";
 import { CipherService } from "../abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "../abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { CryptoService } from "../abstractions/crypto.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "../abstractions/fileUpload.service";
 import { LogService } from "../abstractions/log.service";
 import { FileUploadType } from "../enums/fileUploadType";
+import { CipherData } from "../models/data/cipherData";
+import { Cipher } from "../models/domain/cipher";
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
+import { AttachmentRequest } from "../models/request/attachmentRequest";
 import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
+import { CipherResponse } from "../models/response/cipherResponse";
+import { ErrorResponse } from "../models/response/errorResponse";
 import { SendFileUploadDataResponse } from "../models/response/sendFileUploadDataResponse";
 
 import { AzureFileUploadService } from "./azureFileUpload.service";

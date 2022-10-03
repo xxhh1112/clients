@@ -1,10 +1,10 @@
-import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
-import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
-import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
-import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachmentUploadDataResponse";
-import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { AttachmentRequest } from "./../../models/request/attachmentRequest";
+import { CipherBulkShareRequest } from "./../../models/request/cipherBulkShareRequest";
+import { CipherShareRequest } from "./../../models/request/cipherShareRequest";
+import { AttachmentResponse } from "./../../models/response/attachmentResponse";
+import { AttachmentUploadDataResponse } from "./../../models/response/attachmentUploadDataResponse";
+import { CipherResponse } from "./../../models/response/cipherResponse";
+import { CipherView } from "./../../models/view/cipherView";
 
 export class CipherAttachmentApiServiceAbstraction {
   putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
