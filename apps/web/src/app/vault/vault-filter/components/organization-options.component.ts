@@ -15,7 +15,7 @@ import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/commo
 
 import { EnrollMasterPasswordReset } from "../../../organizations/users/enroll-master-password-reset.component";
 import { OptionsInput } from "../shared/components/vault-filter-section.component";
-import { VaultFilterType } from "../shared/models/vault-filter-section.type";
+import { OrganizationFilter } from "../shared/models/vault-filter.type";
 
 @Component({
   selector: "app-organization-options",
@@ -25,10 +25,9 @@ export class OrganizationOptionsComponent {
   actionPromise: Promise<void | boolean>;
   policies: Policy[];
   loaded = false;
-  organization: Organization;
 
   constructor(
-    @Inject(OptionsInput) injectedOrg: VaultFilterType,
+    @Inject(OptionsInput) private organization: OrganizationFilter,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private apiService: ApiService,
@@ -37,9 +36,7 @@ export class OrganizationOptionsComponent {
     private modalService: ModalService,
     private logService: LogService,
     private organizationApiService: OrganizationApiServiceAbstraction
-  ) {
-    this.organization = injectedOrg as any;
-  }
+  ) {}
 
   async ngOnInit() {
     await this.load();
