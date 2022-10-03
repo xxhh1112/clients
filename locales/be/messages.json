@@ -65,7 +65,7 @@
     "message": "Код бяспекі (CVV)"
   },
   "identityName": {
-    "message": "Імя пасведчання"
+    "message": "Імя"
   },
   "company": {
     "message": "Кампанія"
@@ -233,7 +233,7 @@
     "message": "Праверце, ці не скампраметаваны пароль."
   },
   "passwordExposed": {
-    "message": "Гэты пароль быў скампраметаваны наступную колькасць разоў: $VALUE$. Вы павінны змяніць яго.",
+    "message": "Гэты пароль быў скампраметаваны $VALUE$ раз(-ы/-оў). Вы павінны змяніць яго.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -398,27 +398,27 @@
     }
   },
   "copyValue": {
-    "message": "Скапіяваць значэнне",
+    "message": "Капіяваць значэнне",
     "description": "Copy value to clipboard"
   },
   "copyPassword": {
-    "message": "Скапіяваць пароль",
+    "message": "Капіяваць пароль",
     "description": "Copy password to clipboard"
   },
   "copyUsername": {
-    "message": "Скапіяваць імя карыстальніка",
+    "message": "Капіяваць імя карыстальніка",
     "description": "Copy username to clipboard"
   },
   "copyNumber": {
-    "message": "Скапіяваць нумар",
+    "message": "Капіяваць нумар",
     "description": "Copy credit card number"
   },
   "copySecurityCode": {
-    "message": "Скапіяваць код бяспекі",
+    "message": "Капіяваць код бяспекі",
     "description": "Copy credit card security code (CVV)"
   },
   "copyUri": {
-    "message": "Скапіяваць URI",
+    "message": "Капіяваць URI",
     "description": "Copy URI to clipboard"
   },
   "me": {
@@ -569,26 +569,14 @@
   "loginOrCreateNewAccount": {
     "message": "Увайдзіце або стварыце новы ўліковы запіс для доступу да бяспечнага сховішча."
   },
-  "loginWithDevice": {
-    "message": "Увайсці з прыладай"
-  },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Неабходна ўключыць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Неабходны іншы варыянт?"
-  },
   "createAccount": {
     "message": "Стварыць уліковы запіс"
-  },
-  "newAroundHere": {
-    "message": "Упершыню тут?"
   },
   "startTrial": {
     "message": "Пачаць выпрабавальны перыяд"
   },
   "logIn": {
     "message": "Увайсці"
-  },
-  "logInInitiated": {
-    "message": "Ініцыяваны ўваход"
   },
   "submit": {
     "message": "Адправіць"
@@ -647,7 +635,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
-  "masterPasswordMinlength": {
+  "masterPasswordMinLength": {
     "message": "Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў."
   },
   "masterPassDoesntMatch": {
@@ -660,7 +648,7 @@
     "message": "Уліковы запіс паспяхова створаны."
   },
   "masterPassSent": {
-    "message": "Мы адправілі вам на электронную пошту падказку да асноўнага пароля."
+    "message": "Мы адправілі вам на электронную пошту падказку для асноўнага пароля."
   },
   "unexpectedError": {
     "message": "Адбылася нечаканая памылка."
@@ -675,7 +663,7 @@
     "message": "Разблакіраваць"
   },
   "loggedInAsEmailOn": {
-    "message": "Вы ўвайшлі як $EMAIL$ у $HOSTNAME$.",
+    "message": "Вы ўвайшлі як $HOSTNAME$ у $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -716,9 +704,6 @@
   },
   "noOrganizationsList": {
     "message": "Вы не належыце да ніводнай арганізацыі. Арганізацыі дазваляюць бяспечна абменьвацца элементамі з іншымі карыстальнікамі."
-  },
-  "notificationSentDevice": {
-    "message": "Апавяшчэнне было адпраўлена на вашу прыладу."
   },
   "versionNumber": {
     "message": "Версія $VERSION_NUMBER$",
@@ -882,7 +867,7 @@
     "message": "Праверачны код (TOTP)"
   },
   "copyVerificationCode": {
-    "message": "Скапіяваць праверачны код"
+    "message": "Капіяваць праверачны код"
   },
   "warning": {
     "message": "Папярэджанне"
@@ -1318,10 +1303,10 @@
     "description": "Premium Membership"
   },
   "premiumMembership": {
-    "message": "Прэміяльны статус"
+    "message": "Прэміяльны ўдзельнік"
   },
   "premiumRequired": {
-    "message": "Патрабуецца прэміяльны статус"
+    "message": "Патрабуецца прэміум"
   },
   "premiumRequiredDesc": {
     "message": "Для выкарыстання гэтай функцыі патрабуецца прэміяльны статус."
@@ -1771,7 +1756,7 @@
     "message": "Вы абнавіліся да прэміяльнай версіі."
   },
   "premiumUpgradeUnlockFeatures": {
-    "message": "Абнавіце свой уліковы запіс да прэміяльнага статусу і разблакіруйце некаторыя цудоўныя дадатковыя функцыі."
+    "message": "Абнавіце свой уліковы запіс да платнай версіі і разблакіруйце некаторыя цудоўныя дадатковыя функцыі."
   },
   "premiumSignUpStorage": {
     "message": "1 ГБ зашыфраванага сховішча для далучаных файлаў."
@@ -2060,7 +2045,7 @@
     }
   },
   "uploadLicenseFilePremium": {
-    "message": "Для паляпшэння вашага ўліковага запісу да прэміяльнага статусу вам неабходна запампаваць сапраўдны файл з ліцэнзіяй."
+    "message": "Для паляпшэння вашага ўліковага запісу да прэміяльнага ўдзельніка вам неабходна запампаваць сапраўдны файл з ліцэнзіяй."
   },
   "uploadLicenseFileOrg": {
     "message": "Для стварэння арганізацыі, якая будзе размешчана на лакальным хостынгу, вам неабходна запампаваць сапраўдны файл з ліцэнзіяй."
@@ -2287,19 +2272,19 @@
     "message": "Ваша арганізацыя была абноўлена."
   },
   "leave": {
-    "message": "Выйсці"
+    "message": "Пакінуць"
   },
   "leaveOrganizationConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выйсці з гэтай арганізацыі?"
+    "message": "Вы ўпэўнены, што хочаце пакінуць гэту арганізацыю?"
   },
   "leftOrganization": {
-    "message": "Вы выйшлі з арганізацыі."
+    "message": "Вы пакінулі арганізацыю."
   },
   "defaultCollection": {
     "message": "Прадвызначаная калекцыя"
   },
   "getHelp": {
-    "message": "Атрымаць даведку"
+    "message": "Атрымаць дапамогу"
   },
   "getApps": {
     "message": "Атрымаць праграмы"
@@ -2546,9 +2531,6 @@
         "example": "'Google'"
       }
     }
-  },
-  "viewAllLoginOptions": {
-    "message": "Паглядзець усе варыянты ўваходу"
   },
   "viewedItemId": {
     "message": "Прагледжаны элемент $ID$.",
@@ -3336,7 +3318,7 @@
     "message": "Уладальнік"
   },
   "whoOwnsThisItem": {
-    "message": "Каму належыць гэты элемент?"
+    "message": "Хто валодае гэтым элементам?"
   },
   "strong": {
     "message": "Надзейны",
@@ -3383,18 +3365,12 @@
     "message": "У вашым сховішчы ёсць старыя далучаныя файлы, якія неабходна выправіць перад тым, як змяніць ключ шыфравання ўліковага запісу."
   },
   "yourAccountsFingerprint": {
-    "message": "Фраза адбітку пальца вашага ўліковага запісу",
+    "message": "Фраза адбітку вашага ўліковага запісу",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintEnsureIntegrityVerify": {
     "message": "Для забеспячэння цэласнасці вашых ключоў шыфравання, калі ласка, праверце фразу адбітка пальца карыстальніка.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
-  },
-  "fingerprintMatchInfo": {
-    "message": "Пераканайцеся, што ваша сховішча разблакіравана, а фраза адбітка пальца супадае з іншай прыладай."
-  },
-  "fingerprintPhraseHeader": {
-    "message": "Фраза адбітка пальца"
   },
   "dontAskFingerprintAgain": {
     "message": "Ніколі не пытаць пра праверку фразы адбітку пальца для запрошаных карыстальнікаў (не рэкамендуецца)",
@@ -3478,7 +3454,7 @@
     "message": "Адна або больш палітык арганізацыі ўплывае на налады генератара."
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Адна або больш палітык арганізацыі патрабуе, каб ваш асноўны пароль адпавядаў наступным патрабаванням:"
+    "message": "Згодна з адной або некалькімі палітыкамі арганізацыі асноўны пароль павінен адпавядаць наступным патрабаванням:"
   },
   "policyInEffectMinComplexity": {
     "message": "Мінімальны ўзровень складанасці $SCORE$",
@@ -3558,7 +3534,7 @@
     "message": "Назаўсёды выдаліць элементы"
   },
   "permanentlyDeleteItemConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце назаўсёды выдаліць гэты элемент?"
+    "message": "Вы ўпэўнены, што хочаце назаўсёды выдаліць гэтыя элементы?"
   },
   "permanentlyDeletedItem": {
     "message": "Элемент выдалены назаўсёды"
@@ -3768,14 +3744,14 @@
     "message": "Дата завяршэння"
   },
   "expirationDateDesc": {
-    "message": "Калі прызначана, то доступ да гэтага Send міне ў азначаную дату і час.",
+    "message": "Калі зададзена, то доступ да гэтага Send міне ў азначаную дату і час.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
     "message": "Максімальная колькасць доступаў"
   },
   "maxAccessCountDesc": {
-    "message": "Калі прызначана, то карыстальнікі больш не змогуць атрымаць доступ да гэтага Send пасля таго, як будзе дасягнута максімальная колькасць зваротаў.",
+    "message": "Калі зададзена, то карыстальнікі больш не змогуць атрымаць доступ да гэтага Send пасля таго, як будзе дасягнута максімальная колькасць зваротаў.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
@@ -3800,7 +3776,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLink": {
-    "message": "Скапіяваць спасылку на Send",
+    "message": "Капіяваць спасылку на Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "removePassword": {
@@ -3833,7 +3809,7 @@
     "message": "Пратэрмінавана"
   },
   "searchSends": {
-    "message": "Пошук у Send'ах",
+    "message": "Пошук Send'аў",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPassword": {
@@ -4080,12 +4056,6 @@
   },
   "permissions": {
     "message": "Дазволы"
-  },
-  "managerPermissions": {
-    "message": "Дазволы менеджара"
-  },
-  "adminPermissions": {
-    "message": "Дазволы адміністратара"
   },
   "accessEventLogs": {
     "message": "Доступ да журналаў з падзеямі"
@@ -4340,7 +4310,7 @@
     "message": "гэты карыстальнік"
   },
   "resetPasswordMasterPasswordPolicyInEffect": {
-    "message": "Адна або больш палітык арганізацыі патрабуе, каб асноўны пароль адпавядаў наступным патрабаванням:"
+    "message": "Згодна з адной або некалькімі палітыкамі арганізацыі асноўны пароль павінен адпавядаць наступным патрабаванням:"
   },
   "resetPasswordSuccess": {
     "message": "Пароль паспяхова скінуты!"
@@ -4395,9 +4365,6 @@
   },
   "reinviteSelected": {
     "message": "Паўторна адправіць запрашэнні"
-  },
-  "resendNotification": {
-    "message": "Адправіць апавяшчэнне паўторна"
   },
   "noSelectedUsersApplicable": {
     "message": "Гэта дзеянне нельга ўжыць для ніводнага з выбраных карыстальнікаў."
@@ -4918,7 +4885,7 @@
     }
   },
   "leaveOrganization": {
-    "message": "Выйсці з арганізацыі"
+    "message": "Пакінуць арганізацыю"
   },
   "removeMasterPassword": {
     "message": "Выдаліць асноўны пароль"
@@ -5044,7 +5011,7 @@
     "message": "Уласнае размяшчэнне"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
-    "message": "Для наладжвання арганізацыі на вашым уласным серверы, вам неабходна будзе загрузіць файл з ліцэнзіяй. Для падтрымкі тарыфных планаў Bitwarden Families і пашыраных магчымасцей выстаўлення рахункаў для вашай арганізацыі, вам неабходна наладзіць плацежную сінхранізацыю."
+    "message": "Для наладжвання арганізацыі на вашым уласным серверы, вам неабходна будзе загрузіць файл з ліцэнзіяй. Для падтрымкі тарыфных планаў Bitwarden Families і пашыраных магчымасцяў выстаўлення рахункаў для вашай арганізацыі, вам неабходна наладзіць плацежную сінхранізацыю."
   },
   "billingSyncApiKeyRotated": {
     "message": "Токен зменены."
@@ -5189,11 +5156,11 @@
     "message": "Тып імя карыстальніка"
   },
   "plusAddressedEmail": {
-    "message": "Адрасы электроннай пошты з плюсам",
+    "message": "Плюс адрасы электроннай пошты",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Выкарыстоўвайце магчымасці пададрасацыі вашага пастаўшчыка паслуг электроннай пошты."
+    "message": "Выкарыстоўваць магчымасці пададрасацыі вашага пастаўшчыка паслуг электроннай пошты."
   },
   "catchallEmail": {
     "message": "Адрас для ўсёй пошты дамена"
@@ -5321,7 +5288,7 @@
     "message": "Гэты ключ API мае доступ да кіравання карыстальнікаў у межах вашай арганізацыі. Яго неабходна захоўваць у надзейным месцы."
   },
   "copyScimKey": {
-    "message": "Скапіяваць ключ API для SCIM у буфер абмену",
+    "message": "Капіяваць ключ API для SCIM у буфер абмену",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {

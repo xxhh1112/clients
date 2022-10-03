@@ -569,26 +569,14 @@
   "loginOrCreateNewAccount": {
     "message": "Accedi o crea un nuovo account per accedere alla tua cassaforte."
   },
-  "loginWithDevice": {
-    "message": "Log in with device"
-  },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
-  },
   "createAccount": {
     "message": "Crea account"
-  },
-  "newAroundHere": {
-    "message": "New around here?"
   },
   "startTrial": {
     "message": "Inizia il periodo di prova"
   },
   "logIn": {
     "message": "Accedi"
-  },
-  "logInInitiated": {
-    "message": "Log in initiated"
   },
   "submit": {
     "message": "Invia"
@@ -647,8 +635,8 @@
   "confirmMasterPasswordRequired": {
     "message": "È necessario reinserire la password principale."
   },
-  "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+  "masterPasswordMinLength": {
+    "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -716,9 +704,6 @@
   },
   "noOrganizationsList": {
     "message": "Non appartieni ad alcuna organizzazione. Le organizzazioni ti consentono di condividere oggetti in modo sicuro con altri utenti."
-  },
-  "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
   },
   "versionNumber": {
     "message": "Versione $VERSION_NUMBER$",
@@ -2547,9 +2532,6 @@
       }
     }
   },
-  "viewAllLoginOptions": {
-    "message": "View all log in options"
-  },
   "viewedItemId": {
     "message": "Elemento visualizzato $ID$.",
     "placeholders": {
@@ -3390,12 +3372,6 @@
     "message": "Per garantire l'integrità delle tue chiavi di cifratura, verifica la frase impronta dell'utente prima di continuare.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
-  "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
-  },
-  "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
-  },
   "dontAskFingerprintAgain": {
     "message": "Non chiedere di verificare di nuovo la frase impronta",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4081,12 +4057,6 @@
   "permissions": {
     "message": "Permessi"
   },
-  "managerPermissions": {
-    "message": "Manager Permissions"
-  },
-  "adminPermissions": {
-    "message": "Admin Permissions"
-  },
   "accessEventLogs": {
     "message": "Accedi ai log degli eventi"
   },
@@ -4395,9 +4365,6 @@
   },
   "reinviteSelected": {
     "message": "Invia nuovamente l'invito"
-  },
-  "resendNotification": {
-    "message": "Resend notification"
   },
   "noSelectedUsersApplicable": {
     "message": "Questa azione non è applicabile a nessuno degli utenti selezionati."

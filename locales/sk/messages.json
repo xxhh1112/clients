@@ -569,26 +569,14 @@
   "loginOrCreateNewAccount": {
     "message": "Prihláste sa, alebo vytvorte nový účet pre prístup k vášmu bezpečnému trezoru."
   },
-  "loginWithDevice": {
-    "message": "Prihlásenie pomocou zariadenia"
-  },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Prihlásenie pomocou zariadenia musí byť povolené v nastaveniach mobilnej aplikácie Biwarden. Potrebujete inú možnosť?"
-  },
   "createAccount": {
     "message": "Vytvoriť účet"
-  },
-  "newAroundHere": {
-    "message": "Ste tu nový?"
   },
   "startTrial": {
     "message": "Začať skúšobné obdobie"
   },
   "logIn": {
     "message": "Prihlásiť sa"
-  },
-  "logInInitiated": {
-    "message": "Iniciované prihlásenie"
   },
   "submit": {
     "message": "Potvrdiť"
@@ -647,7 +635,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
   },
-  "masterPasswordMinlength": {
+  "masterPasswordMinLength": {
     "message": "Hlavné heslo musí mať aspoň 8 znakov."
   },
   "masterPassDoesntMatch": {
@@ -716,9 +704,6 @@
   },
   "noOrganizationsList": {
     "message": "Nie ste členom žiadnej organizácie. Organizácie umožňujú bezpečne zdieľať položky s ostatnými používateľmi."
-  },
-  "notificationSentDevice": {
-    "message": "Do vášho zariadenia bolo odoslané upozornenie."
   },
   "versionNumber": {
     "message": "Verzia $VERSION_NUMBER$",
@@ -1538,14 +1523,14 @@
     "message": "Reporty"
   },
   "reportsDesc": {
-    "message": "Identifikujte a opravte bezpečnostné nedostatky kliknutím na reporty nižšie.",
+    "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
     "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Nezabezpečené stránky"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "URL, ktoré začínajú s http:// nepoužívajú najlepšie dostupné šifrovanie. Upravte URL prihlásenia pre tieto kontá na https:// pre bezpečnejšie surfovanie na internete."
+    "message": "URLs that start with http:// don’t use the best available encryption. Change the Login URIs for these accounts to https:// for safer browsing."
   },
   "unsecuredWebsitesFound": {
     "message": "Našli sa nezabezpečené stránky"
@@ -1590,7 +1575,7 @@
     "message": "Uniknuté heslá"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Heslá odhalené pri úniku dát sú pre útočníkov jednoduchým cieľom. Zmeňte tieto heslá aby ste sa vyhli možnému vlámaniu."
+    "message": "Passwords exposed in a data breach are easy targets for attackers. Change these passwords to prevent potential break-ins."
   },
   "exposedPasswordsFound": {
     "message": "Našli sme uniknuté heslá"
@@ -1623,7 +1608,7 @@
     "message": "Slabé heslá"
   },
   "weakPasswordsReportDesc": {
-    "message": "Jednoduché heslá môže útočník ľahko uhádnuť. Vymeňte tieto heslá za silné s použitím Generátora Hesiel."
+    "message": "Weak passwords can be easily guessed by attackers. Change these passwords to strong ones using the Password Generator."
   },
   "weakPasswordsFound": {
     "message": "Našli sa slabé heslá"
@@ -1644,7 +1629,7 @@
     "message": "Viacnásobne použité heslá"
   },
   "reusedPasswordsReportDesc": {
-    "message": "Opakované používanie hesiel uľahčuje útočníkom vlámať sa do viacerých účtov. Zmeňte si tieto heslá tak aby bolo každé unikátne."
+    "message": "Reusing passwords makes it easier for attackers to break into multiple accounts. Change these passwords so that each is unique."
   },
   "reusedPasswordsFound": {
     "message": "Našli sa viacnásobne použité heslá"
@@ -2547,9 +2532,6 @@
       }
     }
   },
-  "viewAllLoginOptions": {
-    "message": "Zobraziť všetky možnosti prihlásenia"
-  },
   "viewedItemId": {
     "message": "Položka $ID$ zobrazená.",
     "placeholders": {
@@ -3390,12 +3372,6 @@
     "message": "Na zabezpečenie integrity šifrovacích kľúčov, skontrolujte frázu odtlačku používateľa pred tým než budete pokračovať.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
-  "fingerprintMatchInfo": {
-    "message": "Skontrolujte, či je trezor odomknutý a či sa fráza odtlačku prsta zhoduje s druhým zariadením."
-  },
-  "fingerprintPhraseHeader": {
-    "message": "Fráza odtlačku prsta"
-  },
   "dontAskFingerprintAgain": {
     "message": "Nepýtať sa pozvaných používateľov na overenie frázy odtlačku. (neodporúča sa)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4081,12 +4057,6 @@
   "permissions": {
     "message": "Povolenia"
   },
-  "managerPermissions": {
-    "message": "Oprávnenia manažéra"
-  },
-  "adminPermissions": {
-    "message": "Oprávnenia správcu"
-  },
   "accessEventLogs": {
     "message": "Prístup k protokolom udalostí"
   },
@@ -4395,9 +4365,6 @@
   },
   "reinviteSelected": {
     "message": "Znovu poslať pozvánky"
-  },
-  "resendNotification": {
-    "message": "Znova odoslať upozornenie"
   },
   "noSelectedUsersApplicable": {
     "message": "Táto akcia sa nevzťahuje na žiadneho z vybraných používateľov."

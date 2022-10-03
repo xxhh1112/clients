@@ -569,26 +569,14 @@
   "loginOrCreateNewAccount": {
     "message": "Для доступу до сховища увійдіть в обліковий запис, або створіть новий."
   },
-  "loginWithDevice": {
-    "message": "Увійти з пристроєм"
-  },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Необхідно увімкнути вхід з пристроєм у налаштуваннях мобільної програми Bitwarden. Потрібен інший варіант?"
-  },
   "createAccount": {
     "message": "Створити обліковий запис"
-  },
-  "newAroundHere": {
-    "message": "Виконуєте вхід вперше?"
   },
   "startTrial": {
     "message": "Почати пробний період"
   },
   "logIn": {
     "message": "Увійти"
-  },
-  "logInInitiated": {
-    "message": "Ініційовано вхід"
   },
   "submit": {
     "message": "Відправити"
@@ -647,7 +635,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Необхідно повторно ввести головний пароль."
   },
-  "masterPasswordMinlength": {
+  "masterPasswordMinLength": {
     "message": "Довжина головного пароля має бути принаймні 8 символів."
   },
   "masterPassDoesntMatch": {
@@ -716,9 +704,6 @@
   },
   "noOrganizationsList": {
     "message": "Ви не входите до жодної організації. Організації дозволяють безпечно обмінюватися елементами з іншими користувачами."
-  },
-  "notificationSentDevice": {
-    "message": "Сповіщення було надіслано на ваш пристрій."
   },
   "versionNumber": {
     "message": "Версія $VERSION_NUMBER$",
@@ -2547,9 +2532,6 @@
       }
     }
   },
-  "viewAllLoginOptions": {
-    "message": "Переглянути всі варіанти входу"
-  },
   "viewedItemId": {
     "message": "Переглянуто запис $ID$.",
     "placeholders": {
@@ -3390,12 +3372,6 @@
     "message": "Для забезпечення цілісності ваших ключів шифрування, будь ласка, засвідчіть фразу відбитку пальця користувача.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
-  "fingerprintMatchInfo": {
-    "message": "Переконайтеся, що ваше сховище розблоковане, а фраза відбитка збігається з іншим пристроєм."
-  },
-  "fingerprintPhraseHeader": {
-    "message": "Фраза відбитка"
-  },
   "dontAskFingerprintAgain": {
     "message": "Ніколи не питати про засвідчення фрази відбитку для запрошених користувачів (Не рекомендовано)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4081,12 +4057,6 @@
   "permissions": {
     "message": "Дозволи"
   },
-  "managerPermissions": {
-    "message": "Дозволи менеджера"
-  },
-  "adminPermissions": {
-    "message": "Дозволи адміністратора"
-  },
   "accessEventLogs": {
     "message": "Доступ до журналів подій"
   },
@@ -4395,9 +4365,6 @@
   },
   "reinviteSelected": {
     "message": "Повторно надіслати запрошення"
-  },
-  "resendNotification": {
-    "message": "Надіслати сповіщення ще раз"
   },
   "noSelectedUsersApplicable": {
     "message": "Ця дія не застосовується для жодного з вибраних користувачів."
