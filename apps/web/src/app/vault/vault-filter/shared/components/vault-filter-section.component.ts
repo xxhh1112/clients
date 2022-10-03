@@ -63,10 +63,8 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
   }
 
   isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
-    if (this.isOrganizationFilter) {
-      return this.activeFilter.organizationId === filterNode?.node.id;
-    }
     return (
+      this.activeFilter.organizationId === filterNode?.node.id ||
       this.activeFilter.cipherTypeId === filterNode?.node.id ||
       this.activeFilter.folderId === filterNode?.node.id ||
       this.activeFilter.collectionId === filterNode?.node.id
