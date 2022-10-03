@@ -9,7 +9,7 @@
           [indeterminate]="selection.hasValue() && !isAllSelected()"
         />
       </th>
-      <th bitCell>{{ "name" | i18n }}</th>
+      <th bitCell colspan="2">{{ "name" | i18n }}</th>
       <th bitCell>{{ "lastEdited" | i18n }}</th>
       <th bitCell class="tw-w-0">
         <button
@@ -32,10 +32,10 @@
           [checked]="selection.isSelected(project.id)"
         />
       </td>
-      <td bitCell>
+      <td bitCell class="tw-w-0 tw-pr-0">
         <i class="bwi bwi-folder tw-text-xl tw-text-muted" aria-hidden="true"></i>
-        {{ project.name }}
       </td>
+      <td bitCell>{{ project.name }}</td>
       <td bitCell>{{ project.revisionDate | date: "medium" }}</td>
       <td bitCell>
         <button
