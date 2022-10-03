@@ -464,16 +464,14 @@ export class EventService {
   private formatGroupId(ev: EventResponse) {
     const shortId = this.getShortId(ev.groupId);
     const a = this.makeAnchor(shortId);
-    a.setAttribute(
-      "href",
-      "#/organizations/" + ev.organizationId + "/manage/groups?search=" + shortId
-    );
+    a.setAttribute("href", "#/organizations/" + ev.organizationId + "/groups?search=" + shortId);
     return a.outerHTML;
   }
 
   private formatCollectionId(ev: EventResponse) {
     const shortId = this.getShortId(ev.collectionId);
     const a = this.makeAnchor(shortId);
+    // TODO: Update view/edit collection link after EC-14 is completed
     a.setAttribute(
       "href",
       "#/organizations/" + ev.organizationId + "/manage/collections?search=" + shortId
@@ -488,7 +486,7 @@ export class EventService {
       "href",
       "#/organizations/" +
         ev.organizationId +
-        "/manage/people?search=" +
+        "/members?search=" +
         shortId +
         "&viewEvents=" +
         ev.organizationUserId
