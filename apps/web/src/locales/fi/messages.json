@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Kirjaudu sisään tai luo uusi tili päästäksesi salattuun holviisi."
   },
+  "loginWithDevice": {
+    "message": "Laitteella kirjautuminen"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Laitteella kirjautuminen oltava käytössä Biwarden-mobiilisovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
+  },
   "createAccount": {
     "message": "Luo tili"
+  },
+  "newAroundHere": {
+    "message": "Oletko uusi täällä?"
   },
   "startTrial": {
     "message": "Aloita kokeilu"
   },
   "logIn": {
     "message": "Kirjaudu sisään"
+  },
+  "logInInitiated": {
+    "message": "Kirjautuminen aloitettu"
   },
   "submit": {
     "message": "Jatka"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Pääsalasanan uudelleensyöttö vaaditaan."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Pääsalasanan tulee sisältää ainakin 8 merkkiä."
   },
   "masterPassDoesntMatch": {
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "Et kuulu mihinkään organisaatioon. Organisaatioiden avulla voit jakaa kohteita turvallisesti muiden käyttäjien kanssa."
+  },
+  "notificationSentDevice": {
+    "message": "Laitteellesi on lähetetty ilmoitus."
   },
   "versionNumber": {
     "message": "Versio $VERSION_NUMBER$",
@@ -2248,7 +2263,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "Olemme lähettäneet vahvistusviestin tiimisi laskutussähköpostiosoitteeseen "
+    "message": "Olemme lähettäneet sähköpostivahvistuksen tiimisi laskutusoitteeseen "
   },
   "monthly": {
     "message": "Kuukausittainen"
@@ -2326,10 +2341,10 @@
     "message": "Haluatko varmasti poistaa käyttäjän?"
   },
   "removeOrgUserConfirmation": {
-    "message": "Kun jäsen poistetaan, hänellä ei ole enää pääsyä organisaation tietoihin, eikä poistoa ole mahdollista perua. Jos haluat lisätä jäsenen takaisin organisaatioon, hänet on kutsuttava ja perehdytettävä uudelleen."
+    "message": "Poisteltulla jäsenellä ei ole enää organisaation tietojen käyttöoikeutta, eikä poiston peruminen ole mahdollista. Jos jäsen halutaan palauttaa organisaatioon, hänet on kutsuttava ja määritettävä uudelleen."
   },
   "revokeUserConfirmation": {
-    "message": "Kun jäsenen käyttöoikeus perutaan, hänellä ei ole enää pääsyä organisaation tietoihin. Voit palauttaa käyttöoikeuden nopeasti Perutut-välilehdeltä."
+    "message": "Perutulla jäsenellä ei ole enää organisaation tietojen käyttöoikeutta. Käyttöoikeus voidaan palauttaa nopeasti Perutut-välilehdeltä."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Varoitus! Tämä käyttäjä tarvitsee salauksensa hallintaan Key Connectoria. Käyttäjän poistaminen organisaatiostasi poistaa heidän tilinsä käytöstä pysvästi. Toimenpide on pysyvä, eikä sen peruminen ole mahdollista. Haluatko jatkaa?"
@@ -2395,10 +2410,10 @@
     "message": "Hae"
   },
   "invited": {
-    "message": "Kutsuttu"
+    "message": "Kutsutut"
   },
   "accepted": {
-    "message": "Hyväksytty"
+    "message": "Hyväksytyt"
   },
   "confirmed": {
     "message": "Vahvistettu"
@@ -2531,6 +2546,9 @@
         "example": "'Google'"
       }
     }
+  },
+  "viewAllLoginOptions": {
+    "message": "Näytä kaikki kirjautumisvaihtoehdot"
   },
   "viewedItemId": {
     "message": "Kohdetta $ID$ tarkasteltu.",
@@ -2686,7 +2704,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Jäsenen $ID$ organisaation käyttöoikeus peruttiin.",
+    "message": "Käyttäjän $ID$ organisaation käyttöoikeus on peruttu.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2704,7 +2722,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Peru jäsenen $ID$ käyttöoikeus",
+    "message": "Peru käyttäjän $ID$ käyttöoikeus",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3372,6 +3390,12 @@
     "message": "Varmistaaksesi salausavaintesi eheyden, vahvista käyttäjän tunnistelauseke ennen kuin jatkat.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Varmista, että holvisi on avattu ja tunnistelauseke vastaa kyseistä laitetta."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Tunnistelauseke"
+  },
   "dontAskFingerprintAgain": {
     "message": "Älä koskaan kehota vahvistamaan kutsuttujen käyttäjien tunnistelausekkeita (ei suositella)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4023,7 +4047,7 @@
     "message": "Käytäntöä ei pakoteta käyttöön niille organisaation käyttäjille, joilla on organisaation käytäntöjen hallintaoikeudet."
   },
   "disableHideEmail": {
-    "message": "Näytä jäsenen sähköpostiosoite aina vastaanottajien kanssa, kun luodaan tai muokataan Sendiä.",
+    "message": "Näytä jäsenen sähköpostiosoite aina vastaanottajien ohessa, kun Send luodaan tai sitä muokataan.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -4056,6 +4080,12 @@
   },
   "permissions": {
     "message": "Käyttöoikeudet"
+  },
+  "managerPermissions": {
+    "message": "Valvojan oikeudet"
+  },
+  "adminPermissions": {
+    "message": "Ylläpitäjän oikeudet"
   },
   "accessEventLogs": {
     "message": "Tapahtumalokien käyttö"
@@ -4366,17 +4396,20 @@
   "reinviteSelected": {
     "message": "Lähetä kutsut uudelleen"
   },
+  "resendNotification": {
+    "message": "Lähetä ilmoitus uudelleen"
+  },
   "noSelectedUsersApplicable": {
     "message": "Toiminto ei koske valittuja käyttäjiä."
   },
   "removeUsersWarning": {
-    "message": "Haluatko varmasti poistaa seuraavat käyttäjät? Toiminto saattaa kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
+    "message": "Haluatko varmasti poistaa seuraavat käyttäjät? Käsittely voi kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
   },
   "removeOrgUsersConfirmation": {
-    "message": "Kun jäseniä poistetaan, heillä ei ole enää pääsyä organisaation tietoihin, eikä poistoa ole mahdollista perua. Jos haluat lisätä jäsenen takaisin organisaatioon, hänet on kutsuttava ja perehdytettävä uudelleen. Käsittely voi kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
+    "message": "Poisteltuilla jäsenillä ei ole enää organisaation tietojen käyttöoikeutta, eikä poiston peruminen ole mahdollista. Jos jäsniä halutaan palauttaa organisaatioon, heidät on kutsuttava ja määritettävä uudelleen. Käsittely voi kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
   },
   "revokeUsersWarning": {
-    "message": "Kun jäsenien käyttöoikeudet perutaan, heillä ei ole enää pääsyä organisaation tietoihin. Voit palauttaa käyttöoikeudet nopeasti Perutut-välilehdeltä. Käsittely voi kestää muutamia sekunteja, eikä sitä ole mahdollista keskeyttää tai perua."
+    "message": "Perutuilla jäsenillä ei ole enää organisaation tietojen käyttöoikeutta. Käyttöoikeudet voidaan palauttaa nopeasti Perutut-välilehdeltä. Käsittely voi kestää muutamia sekunteja, eikä sen keskeytys tai peruminen ole mahdollista."
   },
   "theme": {
     "message": "Teema"

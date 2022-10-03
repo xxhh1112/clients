@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Güvenli kasanıza ulaşmak için giriş yapın veya yeni bir hesap oluşturun."
   },
+  "loginWithDevice": {
+    "message": "Cihaz ile Giriş Yap"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Cihazla oturum açma, Bitwarden mobil uygulamasının ayarlarında etkinleştirilmelidir. Başka bir seçeneğe mi ihtiyacınız var?"
+  },
   "createAccount": {
     "message": "Hesap aç"
+  },
+  "newAroundHere": {
+    "message": "Buralarda yeni misiniz?"
   },
   "startTrial": {
     "message": "Denemeyi başlat"
   },
   "logIn": {
     "message": "Giriş yap"
+  },
+  "logInInitiated": {
+    "message": "Oturum açma başlatıldı"
   },
   "submit": {
     "message": "Gönder"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Ana parolayı yeniden yazmalısınız."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
   },
   "masterPassDoesntMatch": {
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "Herhangi bir kuruluşa dahil değilsiniz. Kuruluşlar, kayıtlarınızı diğer kullanıcılarla güvenli bir şekilde paylaşmanıza olanak verir."
+  },
+  "notificationSentDevice": {
+    "message": "Cihazınıza bir bildirim gönderildi."
   },
   "versionNumber": {
     "message": "Sürüm $VERSION_NUMBER$",
@@ -2428,7 +2443,7 @@
     "message": "Kuruluşunuzda atanmış koleksiyonlara erişimi olan normal bir kullanıcı."
   },
   "manager": {
-    "message": "Yönetici"
+    "message": "Yetkili"
   },
   "managerDesc": {
     "message": "Yetkililer kuruluşunuzdaki kendilerine atanmış koleksiyonlara erişebilir ve onları yönetebilir."
@@ -2531,6 +2546,9 @@
         "example": "'Google'"
       }
     }
+  },
+  "viewAllLoginOptions": {
+    "message": "Tüm oturum açma seçeneklerini gör"
   },
   "viewedItemId": {
     "message": "$ID$ kaydı görüntülendi.",
@@ -3372,6 +3390,12 @@
     "message": "Şifreleme anahtarlarınızın bütünlüğünü sağlamak için, devam etmeden önce lütfen kullanıcının parmak izi ifadesini doğrulayın.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Lütfen kasanızın kilidinin açık olduğundan ve Parmak İzi ifadesinin diğer cihazla eşleştiğinden emin olun."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Parmak izi ifadesi"
+  },
   "dontAskFingerprintAgain": {
     "message": "Parmak izi ifadesini doğrulamamı bir daha isteme",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4057,6 +4081,12 @@
   "permissions": {
     "message": "İzinler"
   },
+  "managerPermissions": {
+    "message": "Yetkili İzinleri"
+  },
+  "adminPermissions": {
+    "message": "Yönetici İzinleri"
+  },
   "accessEventLogs": {
     "message": "Olay günlüklerine erişme"
   },
@@ -4365,6 +4395,9 @@
   },
   "reinviteSelected": {
     "message": "Davetleri yeniden gönder"
+  },
+  "resendNotification": {
+    "message": "Bildirimi Tekrar Yolla"
   },
   "noSelectedUsersApplicable": {
     "message": "Bu eylem seçilen kullanıcılardan hiçbirine uygulanamıyor."

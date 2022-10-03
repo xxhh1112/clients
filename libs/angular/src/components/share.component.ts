@@ -1,10 +1,11 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -12,20 +13,23 @@ import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
 
 @Directive()
-export class ShareComponent implements OnInit {
+export class ShareComponent implements OnInit, OnDestroy {
   @Input() cipherId: string;
   @Input() cipherDomain: Cipher;
   @Input() organizationId: string;
   @Output() onSharedCipher = new EventEmitter();
 
-  formPromise: Promise<any>;
+  formPromise: Promise<void>;
   cipher: CipherView;
-  collections: CollectionView[] = [];
-  organizations: Organization[] = [];
+  collections: Checkable<CollectionView>[] = [];
+  organizations$: Observable<Organization[]>;
 
-  protected writeableCollections: CollectionView[] = [];
+  protected writeableCollections: Checkable<CollectionView>[] = [];
+
+  private _destroy = new Subject<void>();
 
   constructor(
     protected collectionService: CollectionService,
@@ -40,23 +44,36 @@ export class ShareComponent implements OnInit {
     await this.load();
   }
 
+  ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
+  }
+
   async load() {
     const allCollections = await this.collectionService.getAllDecrypted();
     this.writeableCollections = allCollections.map((c) => c).filter((c) => !c.readOnly);
-    const orgs = await this.organizationService.getAll();
-    this.organizations = orgs
-      .sort(Utils.getSortFunction(this.i18nService, "name"))
-      .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed);
+
+    this.organizations$ = this.organizationService.organizations$.pipe(
+      map((orgs) => {
+        return orgs
+          .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed)
+          .sort(Utils.getSortFunction(this.i18nService, "name"));
+      })
+    );
+
+    this.organizations$.pipe(takeUntil(this._destroy)).subscribe((orgs) => {
+      if (this.organizationId == null && orgs.length > 0) {
+        this.organizationId = orgs[0].id;
+      }
+    });
 
     this.cipher = await this.cipherDomain.decrypt();
-    if (this.organizationId == null && this.organizations.length > 0) {
-      this.organizationId = this.organizations[0].id;
-    }
+
     this.filterCollections();
   }
 
   filterCollections() {
-    this.writeableCollections.forEach((c) => ((c as any).checked = false));
+    this.writeableCollections.forEach((c) => (c.checked = false));
     if (this.organizationId == null || this.writeableCollections.length === 0) {
       this.collections = [];
     } else {
@@ -67,9 +84,7 @@ export class ShareComponent implements OnInit {
   }
 
   async submit(): Promise<boolean> {
-    const selectedCollectionIds = this.collections
-      .filter((c) => !!(c as any).checked)
-      .map((c) => c.id);
+    const selectedCollectionIds = this.collections.filter(isChecked).map((c) => c.id);
     if (selectedCollectionIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -80,9 +95,9 @@ export class ShareComponent implements OnInit {
     }
 
     const cipherView = await this.cipherDomain.decrypt();
+    const orgs = await firstValueFrom(this.organizations$);
     const orgName =
-      this.organizations.find((o) => o.id === this.organizationId)?.name ??
-      this.i18nService.t("organization");
+      orgs.find((o) => o.id === this.organizationId)?.name ?? this.i18nService.t("organization");
 
     try {
       this.formPromise = this.cipherAttachmentApiService
@@ -106,7 +121,7 @@ export class ShareComponent implements OnInit {
   get canSave() {
     if (this.collections != null) {
       for (let i = 0; i < this.collections.length; i++) {
-        if ((this.collections[i] as any).checked) {
+        if (this.collections[i].checked) {
           return true;
         }
       }
