@@ -5461,10 +5461,10 @@
     "message":"Import Secrets"
   },
   "secretsEmptyListTitle":{
-    "message":"Nothing to show yet"
+    "message":"No secrets to show"
   },
   "secretsEmptyListMessage":{
-    "message": "Add a new secret or import secrets to get started"
+    "message": "To get started, add a new secret or import secrets."
   },
   "searchSecrets":{
     "message":"Search Secrets"
