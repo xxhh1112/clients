@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { LooseComponentsModule } from "src/app/shared";
-
+import { LooseComponentsModule } from "../../shared/loose-components.module";
 import { SharedModule } from "../../shared/shared.module";
 
 import { CiphersComponent } from "./ciphers.component";

@@ -219,6 +219,16 @@ describe("VaultFilter", () => {
 
         expect(result).toBe(false);
       });
+
+      it("should return false when filtering by All Collections", () => {
+        const filterFunction = createFilterFunction({
+          selectedCollectionNode: createCollectionFilterNode({ id: "AllCollections" }),
+        });
+
+        const result = filterFunction(cipher);
+
+        expect(result).toBe(false);
+      });
     });
 
     describe("given an unassigned organizational cipher (with organization, without collection)", () => {
