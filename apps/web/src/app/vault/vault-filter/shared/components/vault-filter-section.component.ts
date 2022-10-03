@@ -1,4 +1,4 @@
-import { Component, InjectionToken, Injector, Input, OnDestroy } from "@angular/core";
+import { Component, InjectionToken, Injector, Input, OnDestroy, OnInit } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -12,19 +12,11 @@ import { VaultFilter } from "../models/vault-filter.model";
   selector: "app-filter-section",
   templateUrl: "vault-filter-section.component.html",
 })
-export class VaultFilterSectionComponent implements OnDestroy {
+export class VaultFilterSectionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  private _section: VaultFilterSection;
 
   @Input() activeFilter: VaultFilter;
-  @Input() set section(value: VaultFilterSection) {
-    if (value && value !== this._section) {
-      this._section = value;
-      this._section?.data$?.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-        this.data = data;
-      });
-    }
-  }
+  @Input() section: VaultFilterSection;
 
   data: TreeNode<VaultFilterType>;
   collapsedFilterNodes: Set<string> = new Set();
@@ -39,6 +31,12 @@ export class VaultFilterSectionComponent implements OnDestroy {
       });
   }
 
+  ngOnInit() {
+    this.section?.data$?.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.data = data;
+    });
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -49,7 +47,7 @@ export class VaultFilterSectionComponent implements OnDestroy {
   }
 
   get headerInfo() {
-    return this._section.header;
+    return this.section.header;
   }
 
   get filters() {
@@ -76,35 +74,39 @@ export class VaultFilterSectionComponent implements OnDestroy {
   }
 
   async onFilterSelect(filterNode: TreeNode<VaultFilterType>) {
-    await this._section?.action(filterNode);
+    await this.section?.action(filterNode);
   }
 
   get editInfo() {
-    return this._section?.edit;
+    return this.section?.edit;
   }
 
   onEdit(filterNode: TreeNode<VaultFilterType>) {
-    this._section?.edit?.action(filterNode.node);
+    this.section?.edit?.action(filterNode.node);
   }
 
   get addInfo() {
-    return this._section.add;
+    return this.section.add;
   }
 
   get showAddButton() {
-    return this._section.add && !this._section.add.route;
+    return this.section.add && !this.section.add.route;
   }
 
   get showAddLink() {
-    return this._section.add && this._section.add.route;
+    return this.section.add && this.section.add.route;
   }
 
   async onAdd() {
-    this._section?.add?.action();
+    this.section?.add?.action();
   }
 
   get optionsInfo() {
-    return this._section?.options;
+    return this.section?.options;
+  }
+
+  get divider() {
+    return this.section?.divider;
   }
 
   isCollapsed(node: ITreeNodeObject) {
