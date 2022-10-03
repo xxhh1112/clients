@@ -133,11 +133,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO: Remove when collections is refactored with observables
-  async reloadCollections() {
-    await this.vaultFilterService.reloadCollections();
-  }
-
   protected applyVaultFilter(filter: VaultFilter) {
     this.activeFilterChanged.emit(filter);
   }

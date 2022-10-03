@@ -104,7 +104,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
-      this.filterComponent.reloadCollections();
+      await this.vaultFilterService.reloadCollections();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
       const cipherId = getCipherIdFromParams(params);
@@ -146,7 +146,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             case "syncCompleted":
               if (message.successfully) {
                 await Promise.all([
-                  this.filterComponent.reloadCollections(),
+                  this.vaultFilterService.reloadCollections(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
                 this.changeDetectorRef.detectChanges();

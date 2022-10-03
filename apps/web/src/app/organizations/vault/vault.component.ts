@@ -95,7 +95,7 @@ export class VaultComponent implements OnInit, OnDestroy {
                 case "syncCompleted":
                   if (message.successfully) {
                     await Promise.all([
-                      this.vaultFilterComponent.reloadCollections(),
+                      this.vaultFilterService.reloadCollections(),
                       this.ciphersComponent.refresh(),
                     ]);
                     this.changeDetectorRef.detectChanges();
