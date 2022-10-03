@@ -27,6 +27,4 @@ export abstract class VaultFilterService {
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
   ) => Observable<TreeNode<CipherTypeFilter>>;
-  checkForSingleOrganizationPolicy: () => Promise<boolean>;
-  checkForPersonalOwnershipPolicy: () => Promise<boolean>;
 }

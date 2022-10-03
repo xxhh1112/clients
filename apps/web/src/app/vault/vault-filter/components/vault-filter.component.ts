@@ -3,7 +3,9 @@ import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
@@ -83,6 +85,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   constructor(
     protected vaultFilterService: VaultFilterService,
+    protected policyService: PolicyService,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService
   ) {
@@ -227,8 +230,10 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected async addOrganizationFilter(): Promise<VaultFilterSection> {
-    const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
-    const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+    const singleOrgPolicy = await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+    const personalVaultPolicy = await this.policyService.policyAppliesToUser(
+      PolicyType.PersonalOwnership
+    );
 
     const optionsComponent = !personalVaultPolicy
       ? { component: OrganizationOptionsComponent }

@@ -147,11 +147,11 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     orgs?: Organization[]
   ): Promise<TreeNode<OrganizationFilter>> {
     const headNode = this.getOrganizationFilterHead();
-    if (!(await this.checkForPersonalOwnershipPolicy())) {
+    if (!(await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership))) {
       const myVaultNode = this.getOrganizationFilterMyVault();
       headNode.children.push(myVaultNode);
     }
-    if (await this.checkForSingleOrganizationPolicy()) {
+    if (await this.policyService.policyAppliesToUser(PolicyType.SingleOrg)) {
       orgs = orgs.slice(0, 1);
     }
     if (orgs) {
@@ -268,13 +268,5 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   protected getFolderFilterHead(): TreeNode<FolderFilter> {
     const head = new FolderView() as FolderFilter;
     return new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
-  }
-
-  async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
-  }
-
-  async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
   }
 }
