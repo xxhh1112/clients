@@ -40,7 +40,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   isLoaded = false;
   searchText = "";
-  currentFilterCollections: CollectionView[] = [];
 
   protected destroy$: Subject<void> = new Subject<void>();
 
@@ -118,7 +117,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {
-          this.currentFilterCollections = collections;
           this.removeInvalidCollectionSelection(collections);
         }),
         takeUntil(this.destroy$)
@@ -191,7 +189,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async removeInvalidFolderSelection(folders: FolderView[]) {
     if (this.activeFilter.selectedFolderNode) {
-      if (!folders.find((f) => f.id === this.activeFilter.folderId)) {
+      if (!folders.some((f) => f.id === this.activeFilter.folderId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
         filter.selectedCipherTypeNode =
@@ -203,7 +201,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
     if (this.activeFilter.selectedCollectionNode) {
-      if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
+      if (!collections.some((f) => f.id === this.activeFilter.collectionId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
         filter.selectedCipherTypeNode =
