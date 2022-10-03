@@ -1,7 +1,7 @@
-import { CipherService } from "../cipher.service";
-import { CryptoService } from "../crypto.service";
-
+import { ApiService } from "./../../abstractions/api.service";
+import { CipherService } from "./../../abstractions/cipher.service";
 import { CipherAttachmentApiServiceAbstraction } from "./../../abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { CryptoService } from "./../../abstractions/crypto.service";
 import { LogService } from "./../../abstractions/log.service";
 import { Utils } from "./../../misc/utils";
 import { CipherData } from "./../../models/data/cipherData";
@@ -18,7 +18,6 @@ import { CipherResponse } from "./../../models/response/cipherResponse";
 import { ErrorResponse } from "./../../models/response/errorResponse";
 import { AttachmentView } from "./../../models/view/attachmentView";
 import { CipherView } from "./../../models/view/cipherView";
-import { ApiService } from "./../api.service";
 
 export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
   constructor(
