@@ -1,4 +1,4 @@
-import Substitute, { Arg } from "@fluffy-spoon/substitute";
+import { Substitute, Arg } from "@fluffy-spoon/substitute";
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
@@ -225,6 +225,10 @@ describe("EncString", () => {
       const encString = new EncString(EncryptionType.AesCbc256_B64, "data", "iv");
 
       expect(encString.toJSON()).toBe(encString.encryptedString);
+    });
+
+    it("returns null if object is null", () => {
+      expect(EncString.fromJSON(null)).toBeNull();
     });
   });
 });

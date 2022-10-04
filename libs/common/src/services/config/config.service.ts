@@ -1,11 +1,10 @@
 import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
 
-import { ServerConfigData } from "@bitwarden/common/models/data/server-config.data";
-
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { ServerConfig } from "../../abstractions/config/server-config";
 import { StateService } from "../../abstractions/state.service";
+import { ServerConfigData } from "../../models/data/server-config.data";
 
 export class ConfigService implements ConfigServiceAbstraction {
   private _serverConfig = new BehaviorSubject<ServerConfig | null>(null);
@@ -48,14 +47,16 @@ export class ConfigService implements ConfigServiceAbstraction {
   }
 
   private async fetchServerConfig(): Promise<ServerConfig> {
-    const response = await this.configApiService.get();
-    const data = new ServerConfigData(response);
+    try {
+      const response = await this.configApiService.get();
 
-    if (data != null) {
-      await this.stateService.setServerConfig(data);
-      return new ServerConfig(data);
+      if (response != null) {
+        const data = new ServerConfigData(response);
+        await this.stateService.setServerConfig(data);
+        return new ServerConfig(data);
+      }
+    } catch {
+      return null;
     }
-
-    return null;
   }
 }
