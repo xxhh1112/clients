@@ -1,5 +1,5 @@
-import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CollectionAdminView } from "../../models/view/collection-admin-view";
+import { CollectionView } from "../../models/view/collectionView";
 
 export class CollectionAdminService {
   getAll: (organizationId: string) => Promise<CollectionView[]>;

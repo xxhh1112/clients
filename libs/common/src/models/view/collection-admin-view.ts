@@ -1,4 +1,4 @@
-import { CollectionGroupDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
+import { CollectionGroupDetailsResponse } from "../../models/response/collectionResponse";
 
 import { CollectionGroupSelectionView } from "./collection-group-selection-view";
 import { CollectionView } from "./collectionView";

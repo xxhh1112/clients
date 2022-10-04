@@ -1,14 +1,14 @@
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CollectionAdminService as CollectionAdminServiceAbstraction } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
+import { ApiService } from "../../abstractions/api.service";
+import { CollectionAdminService as CollectionAdminServiceAbstraction } from "../../abstractions/collection/collection-admin.service.abstraction";
+import { CryptoService } from "../../abstractions/crypto.service";
+import { EncString } from "../../models/domain/encString";
+import { CollectionRequest } from "../../models/request/collectionRequest";
 import {
   CollectionGroupDetailsResponse,
   CollectionResponse,
-} from "@bitwarden/common/models/response/collectionResponse";
-import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+} from "../../models/response/collectionResponse";
+import { CollectionAdminView } from "../../models/view/collection-admin-view";
+import { CollectionView } from "../../models/view/collectionView";
 
 export class CollectionAdminService implements CollectionAdminServiceAbstraction {
   constructor(private apiService: ApiService, private cryptoService: CryptoService) {}
