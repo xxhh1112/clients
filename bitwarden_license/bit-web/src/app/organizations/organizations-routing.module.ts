@@ -4,10 +4,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "@bitwarden/angular/guards/auth.guard";
 import { canAccessSettingsTab } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-
-import { OrganizationPermissionsGuard } from "src/app/organizations/guards/org-permissions.guard";
-import { OrganizationLayoutComponent } from "src/app/organizations/layouts/organization-layout.component";
-import { SettingsComponent } from "src/app/organizations/settings/settings.component";
+import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/organizations/guards/org-permissions.guard";
+import { OrganizationLayoutComponent } from "@bitwarden/web-vault/app/organizations/layouts/organization-layout.component";
+import { SettingsComponent } from "@bitwarden/web-vault/app/organizations/settings/settings.component";
 
 import { ScimComponent } from "./manage/scim.component";
 import { SsoComponent } from "./manage/sso.component";

@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 
 import { PolicyType } from "@bitwarden/common/enums/policyType";
-
-import { BasePolicy, BasePolicyComponent } from "src/app/organizations/policies";
+import {
+  BasePolicy,
+  BasePolicyComponent,
+} from "@bitwarden/web-vault/app/organizations/policies/base-policy.component";
 
 export class DisablePersonalVaultExportPolicy extends BasePolicy {
   name = "disablePersonalVaultExport";
