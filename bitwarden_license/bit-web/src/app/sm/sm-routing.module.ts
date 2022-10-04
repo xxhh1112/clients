@@ -8,6 +8,7 @@ import { LayoutComponent } from "./layout/layout.component";
 import { NavigationComponent } from "./layout/navigation.component";
 import { ProjectsModule } from "./projects/projects.module";
 import { SecretsModule } from "./secrets/secrets.module";
+import { ServiceAccountsModule } from "./service-accounts/service-accounts.module";
 import { SMGuard } from "./sm.guard";
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: "projects",
         loadChildren: () => ProjectsModule,
+      },
+      {
+        path: "serviceAccounts",
+        loadChildren: () => ServiceAccountsModule,
       },
       {
         path: "",

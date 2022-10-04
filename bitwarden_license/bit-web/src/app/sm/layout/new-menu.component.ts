@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
@@ -18,7 +18,7 @@ import {
   selector: "sm-new-menu",
   templateUrl: "./new-menu.component.html",
 })
-export class NewMenuComponent implements OnInit {
+export class NewMenuComponent implements OnInit, OnDestroy {
   private organizationId: string;
   private destroy$: Subject<void> = new Subject<void>();
 

@@ -1,7 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "@bitwarden/web-vault/app/shared/shared.module";
-
 import { SecretsSharedModule } from "../shared/sm-shared.module";
 
 import { SecretDeleteDialogComponent } from "./dialog/secret-delete.component";
@@ -11,7 +9,7 @@ import { SecretsRoutingModule } from "./secrets-routing.module";
 import { SecretsComponent } from "./secrets.component";
 
 @NgModule({
-  imports: [SharedModule, SecretsRoutingModule, SecretsSharedModule],
+  imports: [SecretsSharedModule, SecretsRoutingModule],
   declarations: [
     SecretsComponent,
     SecretsListComponent,

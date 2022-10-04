@@ -5460,6 +5460,9 @@
   "newSecret":{
     "message":"New Secret"
   },
+  "newServiceAccount":{
+    "message":"New Service Account"
+  },
   "importSecrets":{
     "message":"Import Secrets"
   },
@@ -5469,8 +5472,26 @@
   "secretsEmptyListMessage":{
     "message": "To get started, add a new secret or import secrets."
   },
+  "serviceAccountsEmptyListTitle":{
+    "message":"Nothing to show yet"
+  },
+  "serviceAccountsEmptyListMessage":{
+    "message": "Create a new Service Account to get started automating secret access."
+  },
   "searchSecrets":{
     "message":"Search Secrets"
+  },
+  "deleteServiceAccounts":{
+    "message":"Delete Service Accounts"
+  },
+  "deleteServiceAccount":{
+    "message":"Delete Service Account"
+  },
+  "viewServiceAccount":{
+    "message":"View Service Account"
+  },
+  "searchServiceAccounts":{
+    "message":"Search Service Accounts"
   },
   "addProject":{
     "message": "Add Project"

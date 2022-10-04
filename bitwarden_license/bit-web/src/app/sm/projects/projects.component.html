@@ -2,6 +2,6 @@
 <sm-projects-list
   (newProjectEvent)="openNewProjectDialog()"
   (editProjectEvent)="openEditProject($event)"
-  [projects]="projects | async"
+  [projects]="projects$ | async"
 >
 </sm-projects-list>

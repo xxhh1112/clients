@@ -17,7 +17,7 @@ import { ProjectService } from "./project.service";
   templateUrl: "./projects.component.html",
 })
 export class ProjectsComponent implements OnInit {
-  projects: Observable<ProjectListView[]>;
+  projects$: Observable<ProjectListView[]>;
 
   private organizationId: string;
 
@@ -28,7 +28,7 @@ export class ProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.projects = this.projectService.project$.pipe(
+    this.projects$ = this.projectService.project$.pipe(
       startWith(null),
       combineLatestWith(this.route.params),
       switchMap(async ([_, params]) => {
