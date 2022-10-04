@@ -4521,6 +4521,10 @@
   "clients": {
     "message": "Clients"
   },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
+  },
   "providerAdmin": {
     "message": "Provider Admin"
   },
@@ -5449,5 +5453,17 @@
   },
   "numberOfUsers": {
     "message": "Number of users"
+  },
+  "from": {
+    "message": "From"
+  },
+  "to": {
+    "message": "To"
+  },
+  "member": {
+    "message": "Member"
+  },
+  "update": {
+    "message": "Update"
   }
 }

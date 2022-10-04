@@ -11,7 +11,9 @@
           "**/reports/*",
           "**/app/shared/*",
           "**/organizations/settings/*",
-          "**/organizations/policies/*"
+          "**/organizations/policies/*",
+          "@bitwarden/web-vault/*",
+          "src/**/*"
         ]
       }
     ]
