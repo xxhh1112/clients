@@ -447,7 +447,7 @@ export default class MainBackground {
     );
 
     const systemUtilsServiceReloadCallback = () => {
-      BrowserApi.reloadExtension(window);
+      BrowserApi.reloadExtension();
       return Promise.resolve();
     };
 

@@ -159,7 +159,7 @@ export class BrowserApi {
     return chrome.i18n.getUILanguage();
   }
 
-  static reloadExtension(win: Window) {
+  static reloadExtension() {
     return chrome.runtime.reload();
   }
 
