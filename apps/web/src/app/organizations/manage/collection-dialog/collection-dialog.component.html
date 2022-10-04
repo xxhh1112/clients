@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" (ngSubmit)="submit()">
-  <bit-dialog *ngIf="!loading; else spinner">
+  <bit-dialog disablePadding *ngIf="!loading; else spinner">
     <span bitDialogTitle>
       <ng-container *ngIf="collection; else newCollectionTitle">
         {{ "editCollection" | i18n }}
