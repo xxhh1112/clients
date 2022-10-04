@@ -17,7 +17,7 @@ export class AccountApiServiceImplementation implements AccountApiService {
     try {
       const verificationRequest = await this.userVerificationService.buildRequest(verification);
       await this.apiService.send("DELETE", "/accounts", verificationRequest, true, false);
-      await this.accountService.delete();
+      this.accountService.delete();
     } catch (e) {
       this.logService.error(e);
       throw e;
