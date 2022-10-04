@@ -153,7 +153,7 @@
           </ng-container>
           <ng-container *ngIf="!showOrganizationBadge && !activeFilter.selectedCollectionNode">
             <app-collection-badge
-              *ngIf="c.collectionIds"
+              *ngIf="c.collectionIds && collections"
               [collectionIds]="c.collectionIds"
               [collections]="collections"
             ></app-collection-badge>

@@ -56,7 +56,7 @@
       </app-callout>
       <app-org-vault-ciphers
         [activeFilter]="activeFilter"
-        [collections]="vaultFilterComponent.currentFilterCollections"
+        [collections]="vaultFilterService.filteredCollections$ | async"
         (activeFilterChanged)="applyVaultFilter($event)"
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"
