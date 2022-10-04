@@ -203,13 +203,7 @@ export class Main {
 
     this.settingsService = new SettingsService(this.stateService);
 
-    this.fileUploadService = new FileUploadService(
-      this.logService,
-      this.apiService,
-      this.cipherAttachmentApiService,
-      this.cipherService,
-      this.cryptoService
-    );
+    this.fileUploadService = new FileUploadService(this.logService, this.apiService);
 
     this.cipherService = new CipherService(
       this.cryptoService,
@@ -225,6 +219,7 @@ export class Main {
       this.cipherService,
       this.apiService,
       this.cryptoService,
+      this.fileUploadService,
       this.logService
     );
 

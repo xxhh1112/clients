@@ -64,7 +64,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.fileUploadService.saveAttachmentWithServer(
+    return this.cipherAttachmentApiService.saveAttachmentWithServer(
       this.cipherDomain,
       file,
       this.organization.canEditAnyCollection
@@ -75,7 +75,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.deleteCipherAttachment(attachmentId);
     }
-    return this.cipherAttachmentApiService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
+    return this.fileUploadService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
   }
 
   protected showFixOldAttachments(attachment: AttachmentView) {

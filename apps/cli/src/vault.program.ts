@@ -232,7 +232,7 @@ export class VaultProgram extends Program {
           this.main.cryptoService,
           this.main.apiService,
           this.main.folderApiService,
-          this.main.fileUploadService
+          this.main.cipherAttachmentApiService
         );
         const response = await command.run(object, encodedJson, cmd);
         this.processResponse(response);

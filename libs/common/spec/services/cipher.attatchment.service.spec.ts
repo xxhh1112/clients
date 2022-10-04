@@ -3,6 +3,7 @@ import { mock, mockReset } from "jest-mock-extended";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
@@ -19,6 +20,7 @@ describe("Cipher Attachment Service", () => {
   const cryptoService = mock<CryptoService>();
   const apiService = mock<ApiService>();
   const cipherService = mock<CipherService>();
+  const fileUploadService = mock<FileUploadService>();
   const logService = mock<LogService>();
 
   let cipherAttachmentApiService: CipherAttachmentApiService;
@@ -30,11 +32,13 @@ describe("Cipher Attachment Service", () => {
     mockReset(cryptoService);
     mockReset(logService);
     mockReset(cipherService);
+    mockReset(fileUploadService);
 
     cipherAttachmentApiService = new CipherAttachmentApiService(
       cipherService,
       apiService,
       cryptoService,
+      fileUploadService,
       logService
     );
   });
@@ -44,15 +48,12 @@ describe("Cipher Attachment Service", () => {
       const attachmentId = "attachmentId";
 
       const response: any = {};
-      apiService.send.mockReturnValue(response);
+      fileUploadService.deleteCipherAttachment.mockReturnValue(response);
       await cipherAttachmentApiService.deleteAttachmentWithServer(id, attachmentId);
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "DELETE",
-        "/ciphers/" + id + "/attachment/" + attachmentId,
-        null,
-        true,
-        false
+      expect(fileUploadService.deleteCipherAttachment).toBeCalledTimes(1);
+      expect(fileUploadService.deleteCipherAttachment).toHaveBeenCalledWith(
+        "test1",
+        "attachmentId"
       );
     });
   });
@@ -91,48 +92,6 @@ describe("Cipher Attachment Service", () => {
       const result = await cipherAttachmentApiService.putShareCiphers(request);
       expect(apiService.send).toBeCalledTimes(1);
       expect(apiService.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
-      expect(result).toEqual(response);
-    });
-  });
-
-  describe("deleteCipherAttachment", () => {
-    it("it should send delete call to server", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await cipherAttachmentApiService.deleteCipherAttachment(id, attachmentId);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "DELETE",
-        "/ciphers/" + id + "/attachment/" + attachmentId,
-        null,
-        true,
-        false
-      );
-      expect(result).toEqual(response);
-    });
-  });
-
-  describe("deleteCipherAttachmentAdmin", () => {
-    it("it should send delete call to server for admin", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await cipherAttachmentApiService.deleteCipherAttachmentAdmin(id, attachmentId);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "DELETE",
-        "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-        null,
-        true,
-        false
-      );
       expect(result).toEqual(response);
     });
   });
@@ -185,50 +144,6 @@ describe("Cipher Attachment Service", () => {
         "POST",
         "/ciphers/" + id + "/attachment/v2",
         request,
-        true,
-        true
-      );
-      expect(result).toEqual(expectedResponse);
-    });
-  });
-
-  describe("postAttachmentFile", () => {
-    it("it should send Post with attachment data to the server", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-      const data: FormData = new FormData();
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await cipherAttachmentApiService.postAttachmentFile(id, attachmentId, data);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "POST",
-        "/ciphers/" + id + "/attachment/" + attachmentId,
-        data,
-        true,
-        false
-      );
-      expect(result).toEqual(response);
-    });
-  });
-
-  describe("renewAttachmentUploadUrl", () => {
-    it("it should send get request to Server for renew AttachmentUploaded Url ", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await cipherAttachmentApiService.renewAttachmentUploadUrl(id, attachmentId);
-      const expectedResponse = new AttachmentUploadDataResponse(response);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "GET",
-        "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
-        null,
         true,
         true
       );

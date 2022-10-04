@@ -238,7 +238,13 @@ import { ValidationService } from "./validation.service";
     {
       provide: CipherAttachmentApiServiceAbstraction,
       useClass: CipherAttachmentApiService,
-      deps: [CipherServiceAbstraction, ApiServiceAbstraction, CryptoServiceAbstraction, LogService],
+      deps: [
+        CipherServiceAbstraction,
+        ApiServiceAbstraction,
+        CryptoServiceAbstraction,
+        FileUploadServiceAbstraction,
+        LogService,
+      ],
     },
     {
       provide: FolderServiceAbstraction,

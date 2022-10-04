@@ -1,3 +1,4 @@
+import { Cipher } from "./../../models/domain/cipher";
 import { AttachmentRequest } from "./../../models/request/attachmentRequest";
 import { CipherBulkShareRequest } from "./../../models/request/cipherBulkShareRequest";
 import { CipherShareRequest } from "./../../models/request/cipherShareRequest";
@@ -13,8 +14,7 @@ export class CipherAttachmentApiServiceAbstraction {
     id: string,
     request: AttachmentRequest
   ) => Promise<AttachmentUploadDataResponse>;
-  deleteCipherAttachment: (id: string, attachmentId: string) => Promise<any>;
-  deleteCipherAttachmentAdmin: (id: string, attachmentId: string) => Promise<any>;
+
   postShareCipherAttachment: (
     id: string,
     attachmentId: string,
@@ -33,14 +33,21 @@ export class CipherAttachmentApiServiceAbstraction {
     emergencyAccessId?: string
   ) => Promise<AttachmentResponse>;
 
-  renewAttachmentUploadUrl: (
-    id: string,
-    attachmentId: string
-  ) => Promise<AttachmentUploadDataResponse>;
-  postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
   shareManyWithServer: (
     ciphers: CipherView[],
     organizationId: string,
     collectionIds: string[]
   ) => Promise<any>;
+
+  saveAttachmentRawWithServer: (
+    cipher: Cipher,
+    filename: string,
+    data: ArrayBuffer,
+    admin?: boolean
+  ) => Promise<Cipher>;
+  saveAttachmentWithServer: (
+    cipher: Cipher,
+    unencryptedFile: any,
+    admin?: boolean
+  ) => Promise<Cipher>;
 }

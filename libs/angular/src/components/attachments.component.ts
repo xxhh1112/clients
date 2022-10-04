@@ -249,7 +249,7 @@ export class AttachmentsComponent implements OnInit {
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
           const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
-          this.cipherDomain = await this.fileUploadService.saveAttachmentRawWithServer(
+          this.cipherDomain = await this.cipherAttachmentApiService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
             decBuf,
@@ -291,7 +291,7 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected saveCipherAttachment(file: File) {
-    return this.fileUploadService.saveAttachmentWithServer(this.cipherDomain, file);
+    return this.cipherAttachmentApiService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
   protected deleteCipherAttachment(attachmentId: string) {
