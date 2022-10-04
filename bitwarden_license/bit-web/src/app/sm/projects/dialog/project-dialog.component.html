@@ -1,0 +1,19 @@
+<form #form [formGroup]="formGroup" (ngSubmit)="submit()" [appApiAction]="formPromise">
+  <bit-dialog dialogSize="small">
+    <span bitDialogTitle>{{ title | i18n }}</span>
+    <span bitDialogContent>
+      <bit-form-field>
+        <bit-label>{{ "projectName" | i18n }}</bit-label>
+        <input formControlName="name" bitInput />
+      </bit-form-field>
+    </span>
+    <div bitDialogFooter class="tw-flex tw-gap-2">
+      <button bitButton [loading]="form.loading">
+        {{ "save" | i18n }}
+      </button>
+      <button bitButton buttonType="secondary" bitDialogClose (click)="dialogRef.close()">
+        {{ "cancel" | i18n }}
+      </button>
+    </div>
+  </bit-dialog>
+</form>

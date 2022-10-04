@@ -48,15 +48,15 @@
         ></button>
       </td>
       <bit-menu #projectMenu>
-        <button type="button" bitMenuItem (click)="editProjectEvent.emit(project.Id)">
+        <button type="button" bitMenuItem (click)="editProjectEvent.emit(project.id)">
           <i class="bwi bwi-fw bwi-pencil tw-text-xl" aria-hidden="true"></i>
           {{ "editProject" | i18n }}
         </button>
-        <button type="button" bitMenuItem (click)="viewProjectEvent.emit(project.Id)">
+        <button type="button" bitMenuItem (click)="viewProjectEvent.emit(project.id)">
           <i class="bwi bwi-fw bwi-eye tw-text-xl" aria-hidden="true"></i>
           {{ "viewProject" | i18n }}
         </button>
-        <button type="button" bitMenuItem (click)="deleteProjectEvent.emit(project.Id)">
+        <button type="button" bitMenuItem (click)="deleteProjectEvent.emit(project.id)">
           <i class="bwi bwi-fw bwi-trash tw-text-xl tw-text-danger" aria-hidden="true"></i>
           <span class="tw-text-danger">{{ "deleteProject" | i18n }}</span>
         </button>

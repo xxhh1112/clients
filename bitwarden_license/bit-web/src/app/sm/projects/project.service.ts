@@ -18,8 +18,7 @@ import { ProjectResponse } from "./responses/project.response";
   providedIn: "root",
 })
 export class ProjectService {
-  protected _project: Subject<ProjectView> = new Subject();
-
+  protected _project = new Subject<ProjectView>();
   project$ = this._project.asObservable();
 
   constructor(
@@ -74,7 +73,8 @@ export class ProjectService {
   ): Promise<ProjectRequest> {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = new ProjectRequest();
-    request.name = await Promise.all([this.encryptService.encrypt(projectView.name, orgKey)]);
+    request.name = await this.encryptService.encrypt(projectView.name, orgKey);
+
     return request;
   }
 
@@ -90,6 +90,7 @@ export class ProjectService {
       new EncString(projectResponse.name),
       orgKey
     );
+
     return projectView;
   }
 

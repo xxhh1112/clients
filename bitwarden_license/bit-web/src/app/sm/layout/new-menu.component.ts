@@ -5,6 +5,10 @@ import { Subject, takeUntil } from "rxjs";
 import { DialogService } from "@bitwarden/components";
 
 import {
+  ProjectDialogComponent,
+  ProjectOperation,
+} from "../projects/dialog/project-dialog.component";
+import {
   OperationType,
   SecretDialogComponent,
   SecretOperation,
@@ -33,6 +37,15 @@ export class NewMenuComponent implements OnInit {
 
   openSecretDialog() {
     this.dialogService.open<unknown, SecretOperation>(SecretDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        operation: OperationType.Add,
+      },
+    });
+  }
+
+  openProjectDialog() {
+    this.dialogService.open<unknown, ProjectOperation>(ProjectDialogComponent, {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
