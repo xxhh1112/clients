@@ -3,13 +3,19 @@ import { firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { VaultFilterService } from "../services/abstractions/vault-filter.service";
-import { VaultFilterList } from "../shared/models/vault-filter-section.type";
+import {
+  VaultFilterList,
+  VaultFilterSection,
+  VaultFilterType,
+} from "../shared/models/vault-filter-section.type";
 import { VaultFilter } from "../shared/models/vault-filter.model";
 import {
   CipherTypeFilter,
@@ -33,10 +39,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   @Output() onEditFolder = new EventEmitter<FolderView>();
 
   isLoaded = false;
-  searchPlaceholder = "";
   searchText = "";
-  collapsedFilterNodes: Set<string>;
-  currentFilterCollections: CollectionView[] = [];
 
   protected destroy$: Subject<void> = new Subject<void>();
 
@@ -44,8 +47,44 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     return this.filters ? Object.values(this.filters) : [];
   }
 
+  get searchPlaceholder() {
+    if (this.activeFilter.isFavorites) {
+      return "searchFavorites";
+    }
+    if (this.activeFilter.isDeleted) {
+      return "searchTrash";
+    }
+    if (this.activeFilter.cipherType === CipherType.Login) {
+      return "searchLogin";
+    }
+    if (this.activeFilter.cipherType === CipherType.Card) {
+      return "searchCard";
+    }
+    if (this.activeFilter.cipherType === CipherType.Identity) {
+      return "searchIdentity";
+    }
+    if (this.activeFilter.cipherType === CipherType.SecureNote) {
+      return "searchSecureNote";
+    }
+    if (this.activeFilter.selectedFolderNode?.node) {
+      return "searchFolder";
+    }
+    if (this.activeFilter.selectedCollectionNode?.node) {
+      return "searchCollection";
+    }
+    if (this.activeFilter.organizationId === "MyVault") {
+      return "searchMyVault";
+    }
+    if (this.activeFilter.organizationId) {
+      return "searchOrganization";
+    }
+
+    return "searchVault";
+  }
+
   constructor(
     protected vaultFilterService: VaultFilterService,
+    protected policyService: PolicyService,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService
   ) {
@@ -66,12 +105,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   protected loadSubscriptions() {
-    this.vaultFilterService.collapsedFilterNodes$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((nodes) => {
-        this.collapsedFilterNodes = nodes;
-      });
-
     this.vaultFilterService.filteredFolders$
       .pipe(
         switchMap(async (folders) => {
@@ -84,7 +117,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.vaultFilterService.filteredCollections$
       .pipe(
         switchMap(async (collections) => {
-          this.currentFilterCollections = collections;
           this.removeInvalidCollectionSelection(collections);
         }),
         takeUntil(this.destroy$)
@@ -92,33 +124,14 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  searchTextChanged() {
-    this.onSearchTextChanged.emit(this.searchText);
-  }
-
-  async toggleFilterNodeCollapseState(node: ITreeNodeObject) {
-    if (this.collapsedFilterNodes.has(node.id)) {
-      this.collapsedFilterNodes.delete(node.id);
-    } else {
-      this.collapsedFilterNodes.add(node.id);
-    }
-    await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
-  }
-
-  // Remove when organizations is refactored with observables
-  async reloadOrganizations() {
-    if (this.filters) {
-      await this.vaultFilterService.reloadOrganizations();
+  searchTextChanged(t: string) {
+    if (t) {
+      this.searchText = t;
+      this.onSearchTextChanged.emit(t);
     }
   }
 
-  // TODO: Remove when collections is refactored with observables
-  async reloadCollections() {
-    await this.vaultFilterService.reloadCollections();
-  }
-
-  protected async applyVaultFilter(filter: VaultFilter) {
-    this.searchPlaceholder = this.calculateSearchBarLocalizationString(filter);
+  protected applyVaultFilter(filter: VaultFilter) {
     this.activeFilterChanged.emit(filter);
   }
 
@@ -138,28 +151,28 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     this.vaultFilterService.updateOrganizationFilter(orgNode.node);
     await this.vaultFilterService.expandOrgFilter();
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyTypeFilter = async (filterNode: TreeNode<CipherTypeFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedCipherTypeNode = filterNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyFolderFilter = async (folderNode: TreeNode<FolderFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedFolderNode = folderNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   applyCollectionFilter = async (collectionNode: TreeNode<CollectionFilter>): Promise<void> => {
     const filter = this.activeFilter;
     filter.resetFilter();
     filter.selectedCollectionNode = collectionNode;
-    await this.applyVaultFilter(filter);
+    this.applyVaultFilter(filter);
   };
 
   addFolder = async (): Promise<void> => {
@@ -170,81 +183,50 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.onEditFolder.emit(folder);
   };
 
-  calculateSearchBarLocalizationString(vaultFilter: VaultFilter): string {
-    if (vaultFilter.isFavorites) {
-      return "searchFavorites";
-    }
-    if (vaultFilter.isDeleted) {
-      return "searchTrash";
-    }
-    if (vaultFilter.cipherType === CipherType.Login) {
-      return "searchLogin";
-    }
-    if (vaultFilter.cipherType === CipherType.Card) {
-      return "searchCard";
-    }
-    if (vaultFilter.cipherType === CipherType.Identity) {
-      return "searchIdentity";
-    }
-    if (vaultFilter.cipherType === CipherType.SecureNote) {
-      return "searchSecureNote";
-    }
-    if (vaultFilter.selectedFolderNode?.node) {
-      return "searchFolder";
-    }
-    if (vaultFilter.selectedCollectionNode?.node) {
-      return "searchCollection";
-    }
-    if (vaultFilter.organizationId === "MyVault") {
-      return "searchMyVault";
-    }
-    if (vaultFilter.organizationId) {
-      return "searchOrganization";
-    }
-
-    return "searchVault";
+  async getDefaultFilter(): Promise<TreeNode<VaultFilterType>> {
+    return await firstValueFrom(this.filters?.typeFilter.data$);
   }
 
   protected async removeInvalidFolderSelection(folders: FolderView[]) {
     if (this.activeFilter.selectedFolderNode) {
-      if (!folders.find((f) => f.id === this.activeFilter.folderId)) {
+      if (!folders.some((f) => f.id === this.activeFilter.folderId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
-        filter.selectedCipherTypeNode = (await firstValueFrom(
-          this.filters?.typeFilter.data$
-        )) as TreeNode<CipherTypeFilter>;
-        await this.applyVaultFilter(filter);
+        filter.selectedCipherTypeNode =
+          (await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>;
+        this.applyVaultFilter(filter);
       }
     }
   }
 
   protected async removeInvalidCollectionSelection(collections: CollectionView[]) {
     if (this.activeFilter.selectedCollectionNode) {
-      if (!collections.find((f) => f.id === this.activeFilter.collectionId)) {
+      if (!collections.some((f) => f.id === this.activeFilter.collectionId)) {
         const filter = this.activeFilter;
         filter.resetFilter();
-        filter.selectedCipherTypeNode = (await firstValueFrom(
-          this.filters?.typeFilter?.data$
-        )) as TreeNode<CipherTypeFilter>;
-        await this.applyVaultFilter(filter);
+        filter.selectedCipherTypeNode =
+          (await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>;
+        this.applyVaultFilter(filter);
       }
     }
   }
 
   async buildAllFilters() {
-    let builderFilter = {} as VaultFilterList;
-    builderFilter = await this.addOrganizationFilter(builderFilter);
-    builderFilter = await this.addTypeFilter(builderFilter);
-    builderFilter = await this.addFolderFilter(builderFilter);
-    builderFilter = await this.addCollectionFilter(builderFilter);
-    builderFilter = await this.addTrashFilter(builderFilter);
+    const builderFilter = {} as VaultFilterList;
+    builderFilter.organizationFilter = await this.addOrganizationFilter();
+    builderFilter.typeFilter = await this.addTypeFilter();
+    builderFilter.folderFilter = await this.addFolderFilter();
+    builderFilter.collectionFilter = await this.addCollectionFilter();
+    builderFilter.trashFilter = await this.addTrashFilter();
 
     this.filters = builderFilter;
   }
 
-  protected async addOrganizationFilter(filter: VaultFilterList) {
-    const singleOrgPolicy = await this.vaultFilterService.checkForSingleOrganizationPolicy();
-    const personalVaultPolicy = await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+  protected async addOrganizationFilter(): Promise<VaultFilterSection> {
+    const singleOrgPolicy = await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+    const personalVaultPolicy = await this.policyService.policyAppliesToUser(
+      PolicyType.PersonalOwnership
+    );
 
     const optionsComponent = !personalVaultPolicy
       ? { component: OrganizationOptionsComponent }
@@ -253,7 +235,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       ? { text: "newOrganization", route: "/create-organization" }
       : null;
 
-    filter.organizationFilter = {
+    const orgFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.organizationTree$,
       header: {
         showHeader: !(singleOrgPolicy && personalVaultPolicy),
@@ -265,11 +247,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       divider: true,
     };
 
-    return filter;
+    return orgFilterSection;
   }
 
-  protected async addTypeFilter(filter: VaultFilterList) {
-    filter.typeFilter = {
+  protected async addTypeFilter(): Promise<VaultFilterSection> {
+    const typeFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         { id: "AllItems", name: "allItems", type: "all", icon: "" },
         [
@@ -311,11 +293,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyTypeFilter,
     };
-    return filter;
+    return typeFilterSection;
   }
 
-  protected async addFolderFilter(filter: VaultFilterList) {
-    filter.folderFilter = {
+  protected async addFolderFilter(): Promise<VaultFilterSection> {
+    const folderFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.folderTree$,
       header: {
         showHeader: true,
@@ -331,11 +313,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         action: this.addFolder,
       },
     };
-    return filter;
+    return folderFilterSection;
   }
 
-  protected async addCollectionFilter(filter: VaultFilterList) {
-    filter.collectionFilter = {
+  protected async addCollectionFilter(): Promise<VaultFilterSection> {
+    const collectionFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.collectionTree$,
       header: {
         showHeader: true,
@@ -343,11 +325,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyCollectionFilter,
     };
-    return filter;
+    return collectionFilterSection;
   }
 
-  protected async addTrashFilter(filter: VaultFilterList) {
-    filter.trashFilter = {
+  protected async addTrashFilter(): Promise<VaultFilterSection> {
+    const trashFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         {
           id: "headTrash",
@@ -370,6 +352,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       },
       action: this.applyTypeFilter,
     };
-    return filter;
+    return trashFilterSection;
   }
 }

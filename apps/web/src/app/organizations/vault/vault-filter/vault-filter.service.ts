@@ -6,7 +6,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CollectionGroupDetailsData } from "@bitwarden/common/models/data/collectionData";
@@ -75,10 +75,10 @@ export class VaultFilterService extends BaseVaultFilterService {
       .pipe(
         combineLatestWith(this._organizationFilter),
         switchMap(async ([collections, org]) => {
-          if (org?.permissions && org?.canEditAnyCollection) {
+          if (org?.canUseAdminCollections) {
             return collections;
           } else {
-            await this.filterCollections(collections, org);
+            return await this.filterCollections(collections, org);
           }
         }),
         takeUntil(this.destroy$)

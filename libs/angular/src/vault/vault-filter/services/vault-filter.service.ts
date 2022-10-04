@@ -5,7 +5,7 @@ import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -38,8 +38,8 @@ export class VaultFilterService implements DeprecatedVaultFilterServiceAbstracti
     return new Set(await this.stateService.getCollapsedGroupings());
   }
 
-  async buildOrganizations(): Promise<Organization[]> {
-    return await this.organizationService.getAll();
+  buildOrganizations(): Promise<Organization[]> {
+    return this.organizationService.getAll();
   }
 
   buildNestedFolders(organizationId?: string): Observable<DynamicTreeNode<FolderView>> {
@@ -76,33 +76,11 @@ export class VaultFilterService implements DeprecatedVaultFilterServiceAbstracti
     } else {
       collections = storedCollections;
     }
-    const nestedCollections = await this.getAllCollectionsNested(collections);
+    const nestedCollections = await this.collectionService.getAllNested(collections);
     return new DynamicTreeNode<CollectionView>({
       fullList: collections,
       nestedList: nestedCollections,
     });
-  }
-
-  protected async getAllCollectionsNested(
-    collections: CollectionView[] = null
-  ): Promise<TreeNode<CollectionView>[]> {
-    if (collections == null) {
-      collections = await this.collectionService.getAllDecrypted();
-    }
-    const nodes: TreeNode<CollectionView>[] = [];
-    collections.forEach((c) => {
-      const collectionCopy = new CollectionView();
-      collectionCopy.id = c.id;
-      collectionCopy.organizationId = c.organizationId;
-      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
-    });
-    return nodes;
-  }
-
-  async getCollectionNested(id: string): Promise<TreeNode<CollectionView>> {
-    const collections = await this.getAllCollectionsNested();
-    return ServiceUtils.getTreeNodeObjectFromList(collections, id) as TreeNode<CollectionView>;
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {

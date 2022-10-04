@@ -18,29 +18,16 @@
     <div class="card-body">
       <input
         type="search"
-        placeholder="{{ (searchPlaceholder | i18n) || ('searchVault' | i18n) }}"
+        placeholder="{{ searchPlaceholder | i18n }}"
         id="search"
         class="form-control"
-        [(ngModel)]="searchText"
-        (input)="searchTextChanged()"
+        (input)="searchTextChanged($event.target.value)"
         autocomplete="off"
         appAutofocus
       />
       <ng-container *ngFor="let f of filtersList">
         <div class="filter">
-          <app-filter-section
-            [activeFilter]="activeFilter"
-            [data]="f.data$ | async"
-            [header]="f.header"
-            [action]="f.action"
-            [edit]="f.edit"
-            [add]="f.add"
-            [options]="f.options"
-            [divider]="f.divider"
-            [nodeCollapsedState]="collapsedFilterNodes"
-            (nodeCollapsedStateChange)="toggleFilterNodeCollapseState($event)"
-          >
-          </app-filter-section>
+          <app-filter-section [activeFilter]="activeFilter" [section]="f"> </app-filter-section>
         </div>
       </ng-container>
     </div>

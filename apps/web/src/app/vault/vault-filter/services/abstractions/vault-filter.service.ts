@@ -20,7 +20,6 @@ export abstract class VaultFilterService {
   folderTree$: Observable<TreeNode<FolderFilter>>;
   collectionTree$: Observable<TreeNode<CollectionFilter>>;
   reloadCollections: () => Promise<void>;
-  reloadOrganizations: () => Promise<void>;
   storeCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;
   expandOrgFilter: () => Promise<void>;
   updateOrganizationFilter: (organization: Organization) => void;
@@ -28,6 +27,4 @@ export abstract class VaultFilterService {
     head: CipherTypeFilter,
     array: CipherTypeFilter[]
   ) => Observable<TreeNode<CipherTypeFilter>>;
-  checkForSingleOrganizationPolicy: () => Promise<boolean>;
-  checkForPersonalOwnershipPolicy: () => Promise<boolean>;
 }

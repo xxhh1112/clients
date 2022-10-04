@@ -78,7 +78,7 @@ export class VaultFilter {
         cipherPassesFilter = cipher.isDeleted;
       }
       if (this.cipherType && cipherPassesFilter) {
-        cipherPassesFilter = cipher.type === this.selectedCipherTypeNode.node.type;
+        cipherPassesFilter = cipher.type === this.cipherType;
       }
       if (this.selectedFolderNode) {
         // No folder
@@ -87,7 +87,7 @@ export class VaultFilter {
         }
         // Folder
         if (this.folderId !== null && cipherPassesFilter) {
-          cipherPassesFilter = cipher.folderId === this.selectedFolderNode.node.id;
+          cipherPassesFilter = cipher.folderId === this.folderId;
         }
       }
       if (this.selectedCollectionNode) {
@@ -104,8 +104,7 @@ export class VaultFilter {
         // Collection
         if (this.collectionId !== null && cipherPassesFilter) {
           cipherPassesFilter =
-            cipher.collectionIds != null &&
-            cipher.collectionIds.includes(this.selectedCollectionNode.node.id);
+            cipher.collectionIds != null && cipher.collectionIds.includes(this.collectionId);
         }
       }
       if (this.selectedOrganizationNode) {
@@ -115,7 +114,7 @@ export class VaultFilter {
         }
         // Organization
         else if (this.organizationId !== null && cipherPassesFilter) {
-          cipherPassesFilter = cipher.organizationId === this.selectedOrganizationNode.node.id;
+          cipherPassesFilter = cipher.organizationId === this.organizationId;
         }
       }
       return cipherPassesFilter;

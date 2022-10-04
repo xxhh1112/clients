@@ -17,7 +17,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -36,6 +36,7 @@ import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
+import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
 
@@ -82,6 +83,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private stateService: StateService,
     private organizationService: OrganizationService,
+    private vaultFilterService: VaultFilterService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
@@ -102,8 +104,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
-      this.filterComponent.reloadCollections();
-      this.filterComponent.reloadOrganizations();
+      await this.vaultFilterService.reloadCollections();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
       const cipherId = getCipherIdFromParams(params);
@@ -145,8 +146,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             case "syncCompleted":
               if (message.successfully) {
                 await Promise.all([
-                  this.filterComponent.reloadCollections(),
-                  this.filterComponent.reloadOrganizations(),
+                  this.vaultFilterService.reloadCollections(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
                 ]);
                 this.changeDetectorRef.detectChanges();
@@ -233,7 +233,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.messagingService.send("premiumRequired");
       return;
     } else if (cipher.organizationId != null) {
-      const org = await this.organizationService.get(cipher.organizationId);
+      const org = this.organizationService.get(cipher.organizationId);
       if (org != null && (org.maxStorageGb == null || org.maxStorageGb === 0)) {
         this.messagingService.send("upgradeOrganization", {
           organizationId: cipher.organizationId,
@@ -299,17 +299,14 @@ export class VaultComponent implements OnInit, OnDestroy {
   async addCipher() {
     const component = await this.editCipher(null);
     component.type = this.activeFilter.cipherType;
-    if (
-      this.activeFilter.selectedOrganizationNode &&
-      this.activeFilter.organizationId !== "MyVault"
-    ) {
+    if (this.activeFilter.organizationId !== "MyVault") {
       component.organizationId = this.activeFilter.organizationId;
-      component.collections = this.filterComponent.currentFilterCollections.filter(
-        (c) => !c.readOnly && c.id != null
-      );
+      component.collections = (
+        await firstValueFrom(this.vaultFilterService.filteredCollections$)
+      ).filter((c) => !c.readOnly && c.id != null);
     }
     const selectedColId = this.activeFilter.collectionId;
-    if (selectedColId && selectedColId !== "AllCollections") {
+    if (selectedColId !== "AllCollections") {
       component.collectionIds = [selectedColId];
     }
     component.folderId = this.activeFilter.folderId;

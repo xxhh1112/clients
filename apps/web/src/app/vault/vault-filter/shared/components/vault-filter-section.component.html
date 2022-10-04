@@ -1,53 +1,50 @@
 <ng-container *ngIf="filters && filters.length">
-  <div *ngIf="header.showHeader" class="filter-heading">
+  <div *ngIf="headerInfo.showHeader" class="filter-heading">
     <button
       class="toggle-button"
-      (click)="toggleCollapse(filterHeader.node)"
-      [attr.aria-expanded]="!isCollapsed(filterHeader.node)"
-      appA11yTitle="{{ 'toggleCollapse' | i18n }}: {{ filterHeader.node.name | i18n }}"
+      (click)="toggleCollapse(headerNode.node)"
+      [attr.aria-expanded]="!isCollapsed(headerNode.node)"
+      appA11yTitle="{{ 'toggleCollapse' | i18n }}: {{ headerNode.node.name | i18n }}"
       aria-controls="sub-filters"
     >
       <i
         class="bwi bwi-fw"
         aria-hidden="true"
-        [ngClass]="{
-          'bwi-angle-right': isCollapsed(filterHeader.node),
-          'bwi-angle-down': !isCollapsed(filterHeader.node)
-        }"
+        [ngClass]="isCollapsed(headerNode.node) ? 'bwi-angle-right' : 'bwi-angle-down'"
       ></i>
     </button>
     <button
-      *ngIf="header.isSelectable"
+      *ngIf="headerInfo.isSelectable"
       appA11yTitle="{{ isOrganization ? 'vault' : ('filter' | i18n) }}: {{
-        filterHeader.node.name | i18n
+        headerNode.node.name | i18n
       }}"
       class="filter-button"
-      (click)="onFilterSelect(filterHeader)"
+      (click)="onFilterSelect(headerNode)"
     >
       <h3
         [ngClass]="{
-          active: isAllVaultsSelected || isNodeSelected(filterHeader)
+          active: isAllVaultsSelected || isNodeSelected(headerNode)
         }"
       >
-        &nbsp;{{ filterHeader.node.name | i18n }}
+        &nbsp;{{ headerNode.node.name | i18n }}
       </h3>
     </button>
-    <h3 *ngIf="!header.isSelectable" class="filter-title">
-      &nbsp;{{ filterHeader.node.name | i18n }}
+    <h3 *ngIf="!headerInfo.isSelectable" class="filter-title">
+      &nbsp;{{ headerNode.node.name | i18n }}
     </h3>
 
     <button
       *ngIf="showAddButton"
       (click)="onAdd()"
       class="text-muted ml-auto add-button"
-      appA11yTitle="{{ add.text | i18n }}"
+      appA11yTitle="{{ addInfo.text | i18n }}"
     >
       <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
     </button>
   </div>
   <ul
-    id="{{ filterHeader.node.name }}-filters"
-    *ngIf="!isCollapsed(filterHeader.node)"
+    id="{{ headerNode.node.name }}-filters"
+    *ngIf="!isCollapsed(headerNode.node)"
     class="filter-options"
   >
     <ng-template #recursiveFilters let-filters>
@@ -91,10 +88,10 @@
           </button>
           <span class="ml-auto">
             <button
-              *ngIf="showEdit && f.node.id"
+              *ngIf="editInfo && f.node.id"
               class="edit-button"
               (click)="onEdit(f)"
-              appA11yTitle="{{ edit.text | i18n }}"
+              appA11yTitle="{{ editInfo.text | i18n }}"
             >
               <i class="bwi bwi-pencil bwi-fw" aria-hidden="true"></i>
             </button>
@@ -104,13 +101,13 @@
               aria-label="{{ 'organizationIsDisabled' | i18n }}"
               appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
             ></i
-            ><ng-container *ngIf="options && !f.node.hideOptions"
+            ><ng-container *ngIf="optionsInfo && !f.node.hideOptions"
               ><button [bitMenuTriggerFor]="optionsMenu" class="filter-options-icon">
                 <i class="bwi bwi-ellipsis-v" aria-hidden="true"></i>
               </button>
               <bit-menu class="filter-organization-options" #optionsMenu>
                 <ng-container
-                  *ngComponentOutlet="options.component; injector: createInjector(f.node)"
+                  *ngComponentOutlet="optionsInfo.component; injector: createInjector(f.node)"
                 ></ng-container>
               </bit-menu>
             </ng-container>
@@ -131,9 +128,9 @@
     ></ng-container>
     <li class="filter-option" *ngIf="showAddLink">
       <span class="filter-buttons">
-        <a href="#" routerLink="{{ add.route }}" class="filter-button">
+        <a href="#" routerLink="{{ addInfo.route }}" class="filter-button">
           <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
-          &nbsp;{{ add.text | i18n }}
+          &nbsp;{{ addInfo.text | i18n }}
         </a>
       </span>
     </li>

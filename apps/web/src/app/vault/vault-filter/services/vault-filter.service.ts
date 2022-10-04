@@ -9,13 +9,14 @@ import {
   map,
   switchMap,
   ReplaySubject,
+  firstValueFrom,
 } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -46,7 +47,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     switchMap(async (nodes) => nodes ?? (await this.buildCollapsedFilterNodes()))
   );
 
-  // TODO: Remove when organizations is refactored with observables
   protected _organizations = new ReplaySubject<Organization[]>(1);
   organizationTree$: Observable<TreeNode<OrganizationFilter>> = this._organizations.pipe(
     switchMap((orgs) => this.buildOrganizationTree(orgs))
@@ -83,6 +83,10 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   protected loadSubscriptions() {
+    this.organizationService.organizations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this._organizations);
+
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
@@ -115,11 +119,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
   }
 
-  // TODO: Remove once organizations is refactored with observables
-  async reloadOrganizations() {
-    this._organizations.next(await this.organizationService.getAll());
-  }
-
   async storeCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
     await this.stateService.setCollapsedGroupings(Array.from(collapsedFilterNodes));
     this._collapsedFilterNodes.next(collapsedFilterNodes);
@@ -127,7 +126,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
 
   protected async buildCollapsedFilterNodes(): Promise<Set<string>> {
     const nodes = new Set(await this.stateService.getCollapsedGroupings());
-    this._collapsedFilterNodes.next(nodes);
     return nodes;
   }
 
@@ -140,7 +138,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   async expandOrgFilter() {
-    const collapsedFilterNodes = await this.buildCollapsedFilterNodes();
+    const collapsedFilterNodes = await firstValueFrom(this.collapsedFilterNodes$);
     if (!collapsedFilterNodes.has("AllVaults")) {
       return;
     }
@@ -152,12 +150,12 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     orgs?: Organization[]
   ): Promise<TreeNode<OrganizationFilter>> {
     const headNode = this.getOrganizationFilterHead();
-    if (!(await this.checkForPersonalOwnershipPolicy())) {
+    if (!(await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership))) {
       const myVaultNode = this.getOrganizationFilterMyVault();
       headNode.children.push(myVaultNode);
     }
-    if (await this.checkForSingleOrganizationPolicy()) {
-      orgs = orgs.slice(1);
+    if (await this.policyService.policyAppliesToUser(PolicyType.SingleOrg)) {
+      orgs = orgs.slice(0, 1);
     }
     if (orgs) {
       orgs.forEach((org) => {
@@ -239,19 +237,16 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     storedFolders: FolderView[],
     org?: Organization
   ): Promise<FolderView[]> {
-    let folders: FolderView[];
-    if (org?.id != null) {
-      const ciphers = await this.cipherService.getAllDecrypted();
-      const orgCiphers = ciphers.filter((c) => c.organizationId == org?.id);
-      folders = storedFolders.filter(
-        (f) =>
-          orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
-          ciphers.filter((c) => c.folderId == f.id).length < 1
-      );
-    } else {
-      folders = storedFolders;
+    if (org?.id == null) {
+      return storedFolders;
     }
-    return folders;
+    const ciphers = await this.cipherService.getAllDecrypted();
+    const orgCiphers = ciphers.filter((c) => c.organizationId == org?.id);
+    return storedFolders.filter(
+      (f) =>
+        orgCiphers.filter((oc) => oc.folderId == f.id).length > 0 ||
+        ciphers.filter((c) => c.folderId == f.id).length < 1
+    );
   }
 
   protected buildFolderTree(folders?: FolderView[]): TreeNode<FolderFilter> {
@@ -279,13 +274,5 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   protected getFolderFilterHead(): TreeNode<FolderFilter> {
     const head = new FolderView() as FolderFilter;
     return new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
-  }
-
-  async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
-  }
-
-  async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
   }
 }
