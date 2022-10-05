@@ -49,6 +49,7 @@ import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
+import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
@@ -272,6 +273,7 @@ export default class MainBackground {
     );
     this.settingsService = new SettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
+
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
@@ -281,6 +283,15 @@ export default class MainBackground {
       this.logService,
       this.stateService
     );
+
+    this.cipherAttachmentApiService = new CipherAttachmentApiService(
+      this.cipherService,
+      this.apiService,
+      this.cryptoService,
+      this.fileUploadService,
+      this.logService
+    );
+
     this.folderService = new FolderService(
       this.cryptoService,
       this.i18nService,

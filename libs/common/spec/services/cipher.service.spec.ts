@@ -10,6 +10,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { CipherData } from "@bitwarden/common/models/data/cipherData";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
 import { EncString } from "@bitwarden/common/models/domain/encString";
@@ -43,6 +44,10 @@ describe("Cipher Service", () => {
     searchService = Substitute.for<SearchService>();
     logService = Substitute.for<LogService>();
 
+    stateService.getEncryptedCiphers().resolves({
+      "1": cipherData("1", "test"),
+    });
+
     cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
     cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
 
@@ -67,7 +72,6 @@ describe("Cipher Service", () => {
       model.collectionIds = [Utils.newGuid()];
       model.revisionDate = null;
 
-      // let originalCipher: Cipher = new Cipher()
       const cipher = new Cipher();
       cipher.id = "2";
       cipher.organizationId = "orgId";
@@ -96,9 +100,71 @@ describe("Cipher Service", () => {
 
       const result = await cipherService.encrypt(model, null, cipher);
 
-      expect(result.id).toEqual("2");
-      expect(result.collectionIds).toEqual(model.collectionIds);
-      expect(result.organizationId).toEqual(model.organizationId);
+      expect(result).toEqual({
+        id: "2",
+        folderId: null,
+        favorite: false,
+        organizationId: model.organizationId,
+        type: 2,
+        collectionIds: model.collectionIds,
+        revisionDate: null,
+        reprompt: 0,
+        secureNote: {
+          type: null,
+        },
+        fields: null,
+        passwordHistory: null,
+        attachments: null,
+        notes: null,
+        name: {
+          encryptedString: "This data has been encrypted",
+          encryptionType: 0,
+        },
+      });
     });
   });
+
+  describe("get", () => {
+    it("exists", async () => {
+      const result = await cipherService.get("1");
+
+      expect(result).toEqual({
+        id: "1",
+        organizationId: null,
+        folderId: null,
+        name: {
+          encryptedString: "test",
+          encryptionType: 0,
+        },
+        notes: null,
+        type: undefined,
+        favorite: undefined,
+        organizationUseTotp: undefined,
+        edit: undefined,
+        viewPassword: true,
+        revisionDate: null,
+        collectionIds: undefined,
+        localData: [],
+        deletedDate: null,
+        reprompt: undefined,
+        attachments: null,
+        fields: null,
+        passwordHistory: null,
+      });
+    });
+
+    it("not exists", async () => {
+      const result = await cipherService.get("2");
+
+      expect(result).toBe(null);
+    });
+  });
+
+  function cipherData(id: string, name: string) {
+    const data = new CipherData({} as any);
+    data.id = id;
+    data.name = name;
+
+    return data;
+  }
 });
