@@ -1,0 +1,34 @@
+# Development resources
+
+## Demo
+### Basic testing of webauthn
+Gives ok error messages
+https://demo.yubico.com/webauthn-technical/registration
+
+### A bit more advanced testing utility of webauthn
+Gives absolutely no helpful error messages but it has more toggles
+and you can actually specify a username
+https://webauthn.io/
+
+### Advanced testing utility
+Very good error messages. Source code available to dig into errors.
+Also supports discoverable credentials (resident keys) - though I haven't tested it yet.
+https://webauthn.lubu.ch/_test/client.html
+
+## Communication debugging
+
+## Demo/Communication debugging
+Decodes all of the CBOR messages and displays them as JSON.
+Very helpful to easily see what is actually communicated.
+Also decodes the enum values inside the COSE wrapped keys
+https://webauthn.me/debugger
+
+### CBOR Decode utility
+If you need to create your own binary messages then this tool
+is very helpful to actually understand the structure of the binary CTAP messages
+https://cbor.nemo157.com/
+
+## Documentation
+Yeah we're unfortunately not dodging this one.
+https://www.w3.org/TR/webauthn
+
