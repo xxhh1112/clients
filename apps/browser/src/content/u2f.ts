@@ -3,6 +3,8 @@ import { CBOR as cbor } from "cbor-redux";
 import randombytes from "randombytes";
 
 import { b64toBA } from "./conv-utils/base64";
+import { subarray } from "./conv-utils/util";
+import { joseToDer } from "./ecdsa-sig-formatter";
 import { Converters } from "./u2f/converters";
 
 interface Key {
@@ -18,15 +20,25 @@ export class U2FDevice {
     const encoder = new TextEncoder();
     const rawId = randombytes(16) as Uint8Array;
     const keyId = coerceToBase64Url(rawId);
+    const rawChallenge = new Uint8Array(options.publicKey.challenge as any); // TODO: fix type
+    console.log("rawChallenge", rawChallenge);
+    console.log(
+      "Converters.Uint8ArrayToBase64(rawChallenge)",
+      Converters.Uint8ArrayToBase64(rawChallenge)
+    );
+    console.log(
+      "Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge))",
+      Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge))
+    );
+
     const clientData = encoder.encode(
       JSON.stringify({
         type: "webauthn.create",
-        challenge: Converters.base64ToBase64URL(
-          Converters.Uint8ArrayToBase64(options.publicKey.challenge)
-        ),
+        challenge: Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge)),
         origin,
       })
     );
+    console.log("clientData", clientData);
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
     const keyPair = await crypto.subtle.generateKey(
       {
@@ -136,7 +148,7 @@ export class U2FDevice {
     coseBytes.set(keyY, 10 + 32 + 3);
 
     // credential public key - convert to array from CBOR encoded COSE key
-    const credPublicKeyBytes = bytesFromArray(coseBytes, 0, -1);
+    const credPublicKeyBytes = subarray(coseBytes, 0, -1);
     attestedCredentialData.push(...credPublicKeyBytes);
     console.log("coseBytes", coseBytes);
     console.log("coseBytes", Converters.bytesToHex(coseBytes));
@@ -147,21 +159,45 @@ export class U2FDevice {
     // </authData>
 
     const sigBase = new Uint8Array([...authData, ...new Uint8Array(clientDataHash)]);
-    const signature = await window.crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: { name: "SHA-256" },
-      },
-      keyPair.privateKey,
-      new Uint8Array(sigBase)
+    const p1336_signature = new Uint8Array(
+      await window.crypto.subtle.sign(
+        {
+          name: "ECDSA",
+          hash: { name: "SHA-256" },
+        },
+        keyPair.privateKey,
+        new Uint8Array(sigBase)
+      )
     );
+    // const r = p1336_signature.subarray(0, p1336_signature.length / 2); // constructor denied, don't know why
+    // const s = p1336_signature.subarray(p1336_signature.length / 2);
+    // const r = subarray(p1336_signature, 0, p1336_signature.length / 2);
+    // const s = subarray(p1336_signature, p1336_signature.length / 2, -1);
+
+    // const asn1Der_signature = new Uint8Array(2 + 2 + r.length + 2 + s.length);
+    // // SEQUENCE (total length)
+    // asn1Der_signature.set([0x30, asn1Der_signature.length - 2], 0);
+    // // INTEGER (length of r)
+    // asn1Der_signature.set([0x20, r.length], 2);
+    // // binary data: r
+    // asn1Der_signature.set(r, 2 + 2);
+    // // INTEGER (length of s)
+    // asn1Der_signature.set([0x20, s.length], 2 + 2 + r.length);
+    // // binary data: s
+    // asn1Der_signature.set(s, 2 + 2 + r.length + 2);
+
+    const asn1Der_signature = joseToDer(p1336_signature, "ES256");
+
+    // console.log("r", r);
+    // console.log("s", s);
+    console.log("asn1Der_signature", Converters.bytesToHex(asn1Der_signature));
 
     const attestationObject = new Uint8Array(
       cbor.encode({
         fmt: attestationFormat,
         attStmt: {
           alg: -7,
-          sig: new Uint8Array(signature), // FIX: This doesn't seem to be getting formatted correctly
+          sig: asn1Der_signature,
         },
         authData: new Uint8Array(authData),
       })
@@ -233,23 +269,4 @@ function coerceToBase64Url(thing: any) {
   thing = thing.replace(/\+/g, "-").replace(/\//g, "_").replace(/=*$/g, "");
 
   return thing;
-}
-
-/**
- * Extracts the bytes from an array beginning at index start, and continuing until
- * index end-1 or the end of the array is reached. Pass -1 for end if you want to
- * parse till the end of the array.
- */
-function bytesFromArray(o: string | any[] | Uint8Array, start: number, end: number) {
-  // o may be a normal array of bytes, or it could be a JSON encoded Uint8Array
-  let len = o.length;
-  if (len == null) {
-    len = Object.keys(o).length;
-  }
-
-  const result = [];
-  for (let i = start; (end == -1 || i < end) && i < len; i++) {
-    result.push(o[i]);
-  }
-  return result;
 }

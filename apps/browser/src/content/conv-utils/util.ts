@@ -55,3 +55,22 @@ export function cbit(x: number) {
   }
   return r;
 }
+
+/**
+ * Extracts the bytes from an array beginning at index start, and continuing until
+ * index end-1 or the end of the array is reached. Pass -1 for end if you want to
+ * parse till the end of the array.
+ */
+export function subarray(o: string | any[] | Uint8Array, start: number, end = -1) {
+  // o may be a normal array of bytes, or it could be a JSON encoded Uint8Array
+  let len = o.length;
+  if (len == null) {
+    len = Object.keys(o).length;
+  }
+
+  const result = [];
+  for (let i = start; (end == -1 || i < end) && i < len; i++) {
+    result.push(o[i]);
+  }
+  return result;
+}
