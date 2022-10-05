@@ -90,7 +90,7 @@ export class U2FDevice {
      *  - Note we never set UV for fido-u2f
      */
     const up = true;
-    const uv = false;
+    const uv = true;
     // const attestationFormat = "fido-u2f";
     const attestationFormat = "packed" as string;
     const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;

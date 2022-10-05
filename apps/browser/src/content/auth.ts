@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const result = await createCredential(options, window.location.origin);
         popup.remove();
         const cloned = cloneInto(result, window, { cloneFunctions: true });
+        cloned.getClientExtensionResults = exportFunction(() => cloneInto({}, window), window);
         console.log("clonedResult", cloned);
         resolve(cloned);
       };
