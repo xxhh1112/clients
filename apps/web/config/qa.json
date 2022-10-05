@@ -11,6 +11,6 @@
   },
   "flags": {
     "showTrial": true,
-    "showPasswordless": true
+    "showPasswordless": false
   }
 }
