@@ -1,10 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "src/app/shared";
-
-import { FilterComponent } from "../layout/filter.component";
-import { HeaderComponent } from "../layout/header.component";
-import { NewMenuComponent } from "../layout/new-menu.component";
+import { SecretsSharedModule } from "../shared/sm-shared.module";
 
 import { SecretDeleteDialogComponent } from "./dialog/secret-delete.component";
 import { SecretDialogComponent } from "./dialog/secret-dialog.component";
@@ -13,15 +9,12 @@ import { SecretsRoutingModule } from "./secrets-routing.module";
 import { SecretsComponent } from "./secrets.component";
 
 @NgModule({
-  imports: [SharedModule, SecretsRoutingModule],
+  imports: [SecretsSharedModule, SecretsRoutingModule],
   declarations: [
     SecretsComponent,
     SecretsListComponent,
     SecretDialogComponent,
     SecretDeleteDialogComponent,
-    HeaderComponent,
-    FilterComponent,
-    NewMenuComponent,
   ],
   providers: [],
 })

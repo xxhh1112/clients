@@ -572,8 +572,8 @@
   "loginWithDevice" : {
     "message": "Log in with device"
   },
-  "loginWithDevciceEnabledInfo": {
-    "message": "Log in with device must be enabled in the settings of the Biwarden mobile app. Need another option?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
   },
   "createAccount": {
     "message": "Create Account"
@@ -5418,11 +5418,26 @@
   "project":{
     "message": "Project"
   },
+  "editProject":{
+    "message": "Edit Project"
+  },
+  "viewProject":{
+    "message": "View Project"
+  },
+  "deleteProject":{
+    "message": "Delete Project"
+  },
+  "deleteProjects":{
+    "message": "Delete Projects"
+  },
   "secret":{
     "message": "Secret"
   },
   "serviceAccount":{
     "message": "Service Account"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
   },
   "serviceAccounts":{
     "message": "Service Accounts"
@@ -5445,17 +5460,56 @@
   "newSecret":{
     "message":"New Secret"
   },
+  "newServiceAccount":{
+    "message":"New Service Account"
+  },
   "importSecrets":{
     "message":"Import Secrets"
   },
   "secretsEmptyListTitle":{
-    "message":"Nothing to show yet"
+    "message":"No secrets to show"
   },
   "secretsEmptyListMessage":{
-    "message": "Add a new secret or import secrets to get started"
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsEmptyListTitle":{
+    "message":"Nothing to show yet"
+  },
+  "serviceAccountsEmptyListMessage":{
+    "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets":{
     "message":"Search Secrets"
+  },
+  "deleteServiceAccounts":{
+    "message":"Delete Service Accounts"
+  },
+  "deleteServiceAccount":{
+    "message":"Delete Service Account"
+  },
+  "viewServiceAccount":{
+    "message":"View Service Account"
+  },
+  "searchServiceAccounts":{
+    "message":"Search Service Accounts"
+  },
+  "addProject":{
+    "message": "Add Project"
+  },
+  "projectEdited":{
+    "message":"Project edited"
+  },
+  "projectSaved":{
+    "message":"Project saved"
+  },
+  "projectCreated":{
+    "message":"Project created"
+  },
+  "projectName":{
+    "message":"Project Name"
+  },
+  "newProject":{
+    "message":"New Project"
   },
   "softDeleteSecretWarning":{
     "message":"Deleting secrets can affect existing integrations."

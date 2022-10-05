@@ -1,6 +1,8 @@
 <div class="tw-flex tw-items-center tw-gap-3">
   <h1 class="tw-text-3x tw-font-semibold">{{ title | i18n }}</h1>
-  <input bitInput class="search tw-ml-auto tw-w-1/4" placeholder="{{ searchTitle | i18n }}" />
+  <div class="tw-ml-auto tw-w-1/4">
+    <input bitInput class="search tw-w-full" placeholder="{{ searchTitle | i18n }}" />
+  </div>
   <sm-new-menu></sm-new-menu>
   <sm-filter></sm-filter>
 </div>

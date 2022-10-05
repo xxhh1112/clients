@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatestWith, startWith, Subject, switchMap, takeUntil } from "rxjs";
+import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
 import { SecretListView } from "@bitwarden/common/models/view/secretListView";
 import { DialogService } from "@bitwarden/components";
@@ -20,11 +20,10 @@ import { SecretService } from "./secret.service";
   selector: "sm-secrets",
   templateUrl: "./secrets.component.html",
 })
-export class SecretsComponent implements OnInit, OnDestroy {
-  secrets: SecretListView[];
+export class SecretsComponent implements OnInit {
+  secrets$: Observable<SecretListView[]>;
 
   private organizationId: string;
-  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -33,22 +32,14 @@ export class SecretsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.secretService.secret$
-      .pipe(
-        startWith(null),
-        combineLatestWith(this.route.params),
-        switchMap(async ([_, params]) => {
-          this.organizationId = params.organizationId;
-          return await this.getSecrets();
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((secrets: SecretListView[]) => (this.secrets = secrets));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.secrets$ = this.secretService.secret$.pipe(
+      startWith(null),
+      combineLatestWith(this.route.params),
+      switchMap(async ([_, params]) => {
+        this.organizationId = params.organizationId;
+        return await this.getSecrets();
+      })
+    );
   }
 
   private async getSecrets(): Promise<SecretListView[]> {

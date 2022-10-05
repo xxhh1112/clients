@@ -5,8 +5,7 @@ import { AccountService } from "@bitwarden/common/abstractions/account/account.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-
-import { Verification } from "../../../../../libs/common/src/types/verification";
+import { Verification } from "@bitwarden/common/types/verification";
 
 @Component({
   selector: "app-delete-account",

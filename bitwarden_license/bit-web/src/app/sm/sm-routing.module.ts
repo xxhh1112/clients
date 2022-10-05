@@ -1,12 +1,14 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { OrganizationPermissionsGuard } from "src/app/organizations/guards/org-permissions.guard";
-import { buildFlaggedRoute } from "src/app/oss-routing.module";
+import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/organizations/guards/org-permissions.guard";
+import { buildFlaggedRoute } from "@bitwarden/web-vault/app/oss-routing.module";
 
 import { LayoutComponent } from "./layout/layout.component";
 import { NavigationComponent } from "./layout/navigation.component";
+import { ProjectsModule } from "./projects/projects.module";
 import { SecretsModule } from "./secrets/secrets.module";
+import { ServiceAccountsModule } from "./service-accounts/service-accounts.module";
 import { SMGuard } from "./sm.guard";
 
 const routes: Routes = [
@@ -23,6 +25,14 @@ const routes: Routes = [
       {
         path: "secrets",
         loadChildren: () => SecretsModule,
+      },
+      {
+        path: "projects",
+        loadChildren: () => ProjectsModule,
+      },
+      {
+        path: "serviceAccounts",
+        loadChildren: () => ServiceAccountsModule,
       },
       {
         path: "",
