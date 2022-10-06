@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, from, mergeMap, Observable } from "rxjs";
+import { firstValueFrom, mergeMap, Observable, from } from "rxjs";
 
+import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/deprecated-vault-filter.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -19,7 +20,7 @@ import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService {
+export class VaultFilterService implements DeprecatedVaultFilterServiceAbstraction {
   constructor(
     protected stateService: StateService,
     protected organizationService: OrganizationService,
@@ -106,6 +107,6 @@ export class VaultFilterService {
     const folders = await this.getAllFoldersNested(
       await firstValueFrom(this.folderService.folderViews$)
     );
-    return ServiceUtils.getTreeNodeObject(folders, id) as TreeNode<FolderView>;
+    return ServiceUtils.getTreeNodeObjectFromList(folders, id) as TreeNode<FolderView>;
   }
 }

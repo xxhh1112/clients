@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Observable } from "rxjs";
 
+import { DeprecatedVaultFilterService } from "@bitwarden/angular/abstractions/deprecated-vault-filter.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { ITreeNodeObject } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
@@ -8,8 +9,9 @@ import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 import { VaultFilter } from "../models/vault-filter.model";
-import { VaultFilterService } from "../services/vault-filter.service";
 
+// TODO: Replace with refactored web vault filter component
+// and refactor desktop/browser vault filters
 @Directive()
 export class VaultFilterComponent implements OnInit {
   @Input() activeFilter: VaultFilter = new VaultFilter();
@@ -31,7 +33,7 @@ export class VaultFilterComponent implements OnInit {
   collections: DynamicTreeNode<CollectionView>;
   folders$: Observable<DynamicTreeNode<FolderView>>;
 
-  constructor(protected vaultFilterService: VaultFilterService) {}
+  constructor(protected vaultFilterService: DeprecatedVaultFilterService) {}
 
   get displayCollections() {
     return this.collections?.fullList != null && this.collections.fullList.length > 0;

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -14,6 +14,8 @@ import { Policy } from "@bitwarden/common/models/domain/policy";
 import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/models/request/organizationUserResetPasswordEnrollmentRequest";
 
 import { EnrollMasterPasswordReset } from "../../../organizations/users/enroll-master-password-reset.component";
+import { OptionsInput } from "../shared/components/vault-filter-section.component";
+import { OrganizationFilter } from "../shared/models/vault-filter.type";
 
 @Component({
   selector: "app-organization-options",
@@ -24,9 +26,8 @@ export class OrganizationOptionsComponent {
   policies: Policy[];
   loaded = false;
 
-  @Input() organization: Organization;
-
   constructor(
+    @Inject(OptionsInput) private organization: OrganizationFilter,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private apiService: ApiService,
