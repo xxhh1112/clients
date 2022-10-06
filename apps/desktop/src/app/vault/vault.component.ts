@@ -484,7 +484,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal, childComponent] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      (comp) => (comp.cipherId = cipher.id)
+      async (comp) => (comp.cipherDomain = await this.cipherService.get(cipher.id))
     );
     this.modal = modal;
 

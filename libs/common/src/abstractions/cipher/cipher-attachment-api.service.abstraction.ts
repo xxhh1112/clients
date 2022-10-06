@@ -50,4 +50,6 @@ export class CipherAttachmentApiServiceAbstraction {
     unencryptedFile: any,
     admin?: boolean
   ) => Promise<Cipher>;
+  deleteCipherAttachmentAdmin: (id: string, attachmentId: string) => Promise<any>;
+  deleteCipherAttachment: (id: string, attachmentId: string) => Promise<any>;
 }

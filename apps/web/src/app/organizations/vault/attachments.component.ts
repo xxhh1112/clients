@@ -4,7 +4,6 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -32,8 +31,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     platformUtilsService: PlatformUtilsService,
     apiService: ApiService,
     logService: LogService,
-    fileDownloadService: FileDownloadService,
-    private fileUploadService: FileUploadService
+    fileDownloadService: FileDownloadService
   ) {
     super(
       cipherAttachmentApiService,
@@ -55,7 +53,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
 
   protected async loadCipher() {
     if (!this.organization.canEditAnyCollection) {
-      return await super.loadCipher();
+      return this.cipherDomain;
     }
     const response = await this.apiService.getCipherAdmin(this.cipherDomain.id);
     return new Cipher(new CipherData(response));
@@ -73,7 +71,10 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.deleteCipherAttachment(attachmentId);
     }
-    return this.fileUploadService.deleteCipherAttachmentAdmin(this.cipherDomain.id, attachmentId);
+    return this.cipherAttachmentApiService.deleteCipherAttachmentAdmin(
+      this.cipherDomain.id,
+      attachmentId
+    );
   }
 
   protected showFixOldAttachments(attachment: AttachmentView) {

@@ -31,7 +31,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
 
   async deleteAttachmentWithServer(id: string, attachmentId: string): Promise<void> {
     try {
-      await this.fileUploadService.deleteCipherAttachment(id, attachmentId);
+      await this.deleteCipherAttachment(id, attachmentId);
     } catch (e) {
       return Promise.reject((e as ErrorResponse).getSingleMessage());
     }
@@ -166,8 +166,9 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     };
 
     let response: CipherResponse;
+    let uploadDataResponse: AttachmentUploadDataResponse;
     try {
-      const uploadDataResponse = await this.postCipherAttachment(cipher.id, request);
+      uploadDataResponse = await this.postCipherAttachment(cipher.id, request);
       response = admin ? uploadDataResponse.cipherMiniResponse : uploadDataResponse.cipherResponse;
       await this.fileUploadService.uploadCipherAttachment(
         admin,
@@ -176,6 +177,11 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
         encData
       );
     } catch (e) {
+      if (admin) {
+        await this.deleteCipherAttachmentAdmin(response.id, uploadDataResponse.attachmentId);
+      } else {
+        await this.deleteCipherAttachment(response.id, uploadDataResponse.attachmentId);
+      }
       await this.throwErrorOnSaveAttachmentRawWithServer(e);
     }
 
@@ -207,6 +213,25 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
         reject("Error reading file.");
       };
     });
+  }
+  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
+    return this.apiService.send(
+      "DELETE",
+      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
+      null,
+      true,
+      false
+    );
+  }
+
+  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
+    return this.apiService.send(
+      "DELETE",
+      "/ciphers/" + id + "/attachment/" + attachmentId,
+      null,
+      true,
+      false
+    );
   }
 
   // Helpers

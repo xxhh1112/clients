@@ -17,7 +17,6 @@ import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
 
 @Directive()
 export class ShareComponent implements OnInit, OnDestroy {
-  @Input() cipherId: string;
   @Input() cipherDomain: Cipher;
   @Input() organizationId: string;
   @Output() onSharedCipher = new EventEmitter();

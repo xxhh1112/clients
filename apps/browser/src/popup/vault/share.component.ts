@@ -41,12 +41,11 @@ export class ShareComponent extends BaseShareComponent {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.onSharedCipher.subscribe(() => {
-      this.router.navigate(["view-cipher", { cipherId: this.cipherId }]);
+      this.router.navigate(["view-cipher", { cipherId: this.cipherDomain.id }]);
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       this.cipherDomain = await this.cipherService.get(params.cipherId);
-      this.cipherId = params.cipherId;
       await this.load();
     });
   }

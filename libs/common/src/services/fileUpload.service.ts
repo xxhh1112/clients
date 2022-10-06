@@ -97,12 +97,7 @@ export class FileUploadService implements FileUploadServiceAbstraction {
           throw new Error("Unknown file upload type.");
       }
     } catch (e) {
-      if (admin) {
-        await this.deleteCipherAttachmentAdmin(response.id, uploadData.attachmentId);
-      } else {
-        await this.deleteCipherAttachment(response.id, uploadData.attachmentId);
-      }
-      throw e;
+      throw new e();
     }
   }
 
@@ -128,25 +123,5 @@ export class FileUploadService implements FileUploadServiceAbstraction {
       true
     );
     return new AttachmentUploadDataResponse(r);
-  }
-
-  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
-    return this.apiService.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-      null,
-      true,
-      false
-    );
-  }
-
-  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
-    return this.apiService.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      null,
-      true,
-      false
-    );
   }
 }

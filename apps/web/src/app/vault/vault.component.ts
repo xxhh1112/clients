@@ -245,8 +245,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      (comp) => {
-        comp.cipherId = cipher.id;
+      async (comp) => {
+        comp.cipherDomain = await this.cipherService.get(cipher.id);
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onSharedCipher.subscribe(async () => {
           modal.close();

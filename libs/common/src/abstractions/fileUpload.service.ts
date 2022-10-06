@@ -16,11 +16,4 @@ export abstract class FileUploadService {
     fileName: EncString,
     encryptedFileData: EncArrayBuffer
   ) => Promise<any>;
-  postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
-  renewAttachmentUploadUrl: (
-    id: string,
-    attachmentId: string
-  ) => Promise<AttachmentUploadDataResponse>;
-  deleteCipherAttachmentAdmin: (id: string, attachmentId: string) => Promise<any>;
-  deleteCipherAttachment: (id: string, attachmentId: string) => Promise<any>;
 }
