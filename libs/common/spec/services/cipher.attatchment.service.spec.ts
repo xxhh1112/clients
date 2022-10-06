@@ -48,13 +48,58 @@ describe("Cipher Attachment Service", () => {
       const attachmentId = "attachmentId";
 
       const response: any = {};
-      fileUploadService.deleteCipherAttachment.mockReturnValue(response);
+      apiService.send.mockReturnValue(response);
       await cipherAttachmentApiService.deleteAttachmentWithServer(id, attachmentId);
-      expect(fileUploadService.deleteCipherAttachment).toBeCalledTimes(1);
-      expect(fileUploadService.deleteCipherAttachment).toHaveBeenCalledWith(
-        "test1",
-        "attachmentId"
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId,
+        null,
+        true,
+        false
       );
+    });
+  });
+
+  describe("deleteCipherAttachment", () => {
+    it("it should send delete call to server", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
+
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.deleteCipherAttachment(id, attachmentId);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId,
+        null,
+        true,
+        false
+      );
+      expect(result).toEqual(response);
+    });
+  });
+
+  describe("deleteCipherAttachmentAdmin", () => {
+    it("it should send delete call to server for admin", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
+
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.deleteCipherAttachmentAdmin(id, attachmentId);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
+        null,
+        true,
+        false
+      );
+      expect(result).toEqual(response);
     });
   });
 

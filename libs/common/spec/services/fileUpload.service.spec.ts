@@ -17,48 +17,6 @@ describe("File Upload Service", () => {
     fileUploadService = new FileUploadService(logService, apiService);
   });
 
-  describe("deleteCipherAttachment", () => {
-    it("it should send delete call to server", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await fileUploadService.deleteCipherAttachment(id, attachmentId);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "DELETE",
-        "/ciphers/" + id + "/attachment/" + attachmentId,
-        null,
-        true,
-        false
-      );
-      expect(result).toEqual(response);
-    });
-  });
-
-  describe("deleteCipherAttachmentAdmin", () => {
-    it("it should send delete call to server for admin", async () => {
-      const id = "test1";
-      const attachmentId = "attachmentId";
-
-      const response: any = {};
-      apiService.send.mockReturnValue(response);
-      const result = await fileUploadService.deleteCipherAttachmentAdmin(id, attachmentId);
-
-      expect(apiService.send).toBeCalledTimes(1);
-      expect(apiService.send).toHaveBeenCalledWith(
-        "DELETE",
-        "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-        null,
-        true,
-        false
-      );
-      expect(result).toEqual(response);
-    });
-  });
-
   describe("postAttachmentFile", () => {
     it("it should send Post with attachment data to the server", async () => {
       const id = "test1";
