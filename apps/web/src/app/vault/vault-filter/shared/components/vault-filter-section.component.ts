@@ -117,7 +117,7 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
     } else {
       this.collapsedFilterNodes.add(node.id);
     }
-    await this.vaultFilterService.storeCollapsedFilterNodes(this.collapsedFilterNodes);
+    await this.vaultFilterService.setCollapsedFilterNodes(this.collapsedFilterNodes);
   }
 
   // an injector is necessary to pass data into a dynamic component

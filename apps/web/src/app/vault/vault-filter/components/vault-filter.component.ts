@@ -92,7 +92,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.buildAllFilters();
+    this.filters = await this.buildAllFilters();
     await this.applyTypeFilter(
       (await firstValueFrom(this.filters?.typeFilter.data$)) as TreeNode<CipherTypeFilter>
     );
@@ -125,10 +125,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   searchTextChanged(t: string) {
-    if (t) {
-      this.searchText = t;
-      this.onSearchTextChanged.emit(t);
-    }
+    this.searchText = t;
+    this.onSearchTextChanged.emit(t);
   }
 
   protected applyVaultFilter(filter: VaultFilter) {
@@ -149,7 +147,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     if (orgNode?.node.id !== "AllVaults") {
       filter.selectedOrganizationNode = orgNode;
     }
-    this.vaultFilterService.updateOrganizationFilter(orgNode.node);
+    this.vaultFilterService.setOrganizationFilter(orgNode.node);
     await this.vaultFilterService.expandOrgFilter();
     this.applyVaultFilter(filter);
   };
@@ -211,15 +209,14 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  async buildAllFilters() {
+  async buildAllFilters(): Promise<VaultFilterList> {
     const builderFilter = {} as VaultFilterList;
     builderFilter.organizationFilter = await this.addOrganizationFilter();
     builderFilter.typeFilter = await this.addTypeFilter();
     builderFilter.folderFilter = await this.addFolderFilter();
     builderFilter.collectionFilter = await this.addCollectionFilter();
     builderFilter.trashFilter = await this.addTrashFilter();
-
-    this.filters = builderFilter;
+    return builderFilter;
   }
 
   protected async addOrganizationFilter(): Promise<VaultFilterSection> {
@@ -228,9 +225,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       PolicyType.PersonalOwnership
     );
 
-    const optionsComponent = !personalVaultPolicy
-      ? { component: OrganizationOptionsComponent }
-      : null;
     const addAction = !singleOrgPolicy
       ? { text: "newOrganization", route: "/create-organization" }
       : null;
@@ -242,7 +236,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         isSelectable: true,
       },
       action: this.applyOrganizationFilter,
-      options: optionsComponent,
+      options: { component: OrganizationOptionsComponent },
       add: addAction,
       divider: true,
     };

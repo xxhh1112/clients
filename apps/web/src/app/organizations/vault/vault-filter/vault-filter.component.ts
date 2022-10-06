@@ -19,31 +19,24 @@ import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vaul
 export class VaultFilterComponent extends BaseVaultFilterComponent implements OnInit, OnDestroy {
   @Input() set organization(value: Organization) {
     if (value && value !== this._organization) {
-      if (!this._organization) {
-        this.initCollections(value);
-      }
       this._organization = value;
-      this.vaultFilterService.updateOrganizationFilter(this._organization);
+      this.vaultFilterService.setOrganizationFilter(this._organization);
     }
   }
   _organization: Organization;
   destroy$: Subject<void>;
 
-  // override to allow for async init when org loads
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async ngOnInit() {}
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  async initCollections(org: Organization) {
-    await this.buildAllFilters();
+  async ngOnInit() {
+    this.filters = await this.buildAllFilters();
     if (!this.activeFilter.selectedCipherTypeNode) {
       this.applyCollectionFilter((await this.getDefaultFilter()) as TreeNode<CollectionFilter>);
     }
     this.isLoaded = true;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   protected loadSubscriptions() {
@@ -68,15 +61,12 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
     }
   }
 
-  async buildAllFilters() {
-    this.vaultFilterService.updateOrganizationFilter(this._organization);
-
+  async buildAllFilters(): Promise<VaultFilterList> {
     const builderFilter = {} as VaultFilterList;
     builderFilter.typeFilter = await this.addTypeFilter();
     builderFilter.collectionFilter = await this.addCollectionFilter();
     builderFilter.trashFilter = await this.addTrashFilter();
-
-    this.filters = builderFilter;
+    return builderFilter;
   }
 
   async getDefaultFilter(): Promise<TreeNode<VaultFilterType>> {

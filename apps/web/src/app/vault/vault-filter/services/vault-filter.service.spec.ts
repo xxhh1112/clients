@@ -1,5 +1,5 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { firstValueFrom, ReplaySubject } from "rxjs";
+import { firstValueFrom, ReplaySubject, take } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -58,13 +58,13 @@ describe("vault filter service", () => {
   describe("collapsed filter nodes", () => {
     const nodes = new Set(["1", "2"]);
     it("updates observable when saving", (complete) => {
-      vaultFilterService.collapsedFilterNodes$.subscribe((value) => {
+      vaultFilterService.collapsedFilterNodes$.pipe(take(1)).subscribe((value) => {
         if (value === nodes) {
           complete();
         }
       });
 
-      vaultFilterService.storeCollapsedFilterNodes(nodes);
+      vaultFilterService.setCollapsedFilterNodes(nodes);
     });
 
     it("loads from state on initialization", async () => {
@@ -125,11 +125,12 @@ describe("vault filter service", () => {
   });
 
   describe("folders", () => {
-    describe("filtered folders", () => {
-      it("returns folders filtered by current organization", async () => {
+    describe("filtered folders with organization", () => {
+      beforeEach(() => {
         // Org must be updated before folderService else the subscription uses the null org default value
-        vaultFilterService.updateOrganizationFilter(createOrganization("org test id", "Test Org"));
-
+        vaultFilterService.setOrganizationFilter(createOrganization("org test id", "Test Org"));
+      });
+      it("returns folders filtered by current organization", async () => {
         const storedCiphers = [
           createCipherView("1", "org test id", "folder test id"),
           createCipherView("2", "non matching org id", "non matching folder id"),
@@ -169,7 +170,7 @@ describe("vault filter service", () => {
   describe("collections", () => {
     describe("filtered collections", () => {
       it("returns collections filtered by current organization", async () => {
-        vaultFilterService.updateOrganizationFilter(createOrganization("org test id", "Test Org"));
+        vaultFilterService.setOrganizationFilter(createOrganization("org test id", "Test Org"));
 
         const storedCollections = [
           createCollectionView("1", "collection 1", "org test id"),

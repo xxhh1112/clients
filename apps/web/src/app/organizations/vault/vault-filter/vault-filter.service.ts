@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { combineLatestWith, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { combineLatestWith, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -12,24 +12,17 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CollectionGroupDetailsData } from "@bitwarden/common/models/data/collectionData";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionGroupDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 import {
   CollectionGroupDetailsView,
   CollectionView,
 } from "@bitwarden/common/models/view/collectionView";
 
-import { CollectionFilter } from "src/app/vault/vault-filter/shared/models/vault-filter.type";
-
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
   protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
-
-  nestedCollections$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
-    map((collections) => this.buildCollectionTree(collections))
-  );
 
   constructor(
     stateService: StateService,

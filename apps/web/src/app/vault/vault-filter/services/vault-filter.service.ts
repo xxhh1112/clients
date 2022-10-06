@@ -44,13 +44,13 @@ const NestingDelimiter = "/";
 export class VaultFilterService implements VaultFilterServiceAbstraction, OnDestroy {
   protected _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
   collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.pipe(
-    switchMap(async (nodes) => nodes ?? (await this.buildCollapsedFilterNodes()))
+    switchMap(async (nodes) => nodes ?? (await this.getCollapsedFilterNodes()))
   );
 
-  protected _organizations = new ReplaySubject<Organization[]>(1);
-  organizationTree$: Observable<TreeNode<OrganizationFilter>> = this._organizations.pipe(
-    switchMap((orgs) => this.buildOrganizationTree(orgs))
-  );
+  organizationTree$: Observable<TreeNode<OrganizationFilter>> =
+    this.organizationService.organizations$.pipe(
+      switchMap((orgs) => this.buildOrganizationTree(orgs))
+    );
 
   protected _filteredFolders = new ReplaySubject<FolderView[]>(1);
   filteredFolders$: Observable<FolderView[]> = this._filteredFolders.asObservable();
@@ -83,10 +83,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   protected loadSubscriptions() {
-    this.organizationService.organizations$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(this._organizations);
-
     this.folderService.folderViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
@@ -119,17 +115,17 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
   }
 
-  async storeCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
+  async setCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
     await this.stateService.setCollapsedGroupings(Array.from(collapsedFilterNodes));
     this._collapsedFilterNodes.next(collapsedFilterNodes);
   }
 
-  protected async buildCollapsedFilterNodes(): Promise<Set<string>> {
+  protected async getCollapsedFilterNodes(): Promise<Set<string>> {
     const nodes = new Set(await this.stateService.getCollapsedGroupings());
     return nodes;
   }
 
-  updateOrganizationFilter(organization: Organization) {
+  setOrganizationFilter(organization: Organization) {
     if (organization?.id != "AllVaults") {
       this._organizationFilter.next(organization);
     } else {
@@ -143,7 +139,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
       return;
     }
     collapsedFilterNodes.delete("AllVaults");
-    await this.storeCollapsedFilterNodes(collapsedFilterNodes);
+    await this.setCollapsedFilterNodes(collapsedFilterNodes);
   }
 
   protected async buildOrganizationTree(

@@ -102,7 +102,11 @@ export class VaultFilter {
             (cipher.collectionIds == null || cipher.collectionIds.length === 0);
         }
         // Collection
-        if (this.collectionId !== null && cipherPassesFilter) {
+        if (
+          this.collectionId !== null &&
+          this.collectionId !== "AllCollections" &&
+          cipherPassesFilter
+        ) {
           cipherPassesFilter =
             cipher.collectionIds != null && cipher.collectionIds.includes(this.collectionId);
         }
