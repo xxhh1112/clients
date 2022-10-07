@@ -73,15 +73,15 @@
       </ng-container>
       <ng-container body>
         <tr bitRow *ngFor="let g of visibleGroups">
-          <td bitCell (click)="check(g)">
+          <td bitCell (click)="check(g)" class="tw-cursor-pointer">
             <input type="checkbox" [(ngModel)]="g.checked" />
           </td>
-          <td bitCell class="tw-text-lg tw-font-bold" (click)="edit(g)">
+          <td bitCell class="tw-cursor-pointer tw-text-lg tw-font-bold" (click)="edit(g)">
             <button (click)="edit(g)" bitLink>
               {{ g.name }}
             </button>
           </td>
-          <td bitCell (click)="edit(g)">
+          <td bitCell (click)="edit(g)" class="tw-cursor-pointer">
             <span
               *ngFor="let cName of g.collectionNames.slice(0, maxCollections); let last = last"
               bitBadge
