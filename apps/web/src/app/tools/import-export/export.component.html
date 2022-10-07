@@ -92,10 +92,15 @@
               id="filePassword"
               formControlName="filePassword"
               name="password"
+            />
+            <button
+              type="button"
               appA11yTitle="{{ 'toggleVisibility' | i18n }}"
               [attr.aria-pressed]="showFilePassword"
-            />
-            <button type="button" bitSuffix bitButton (click)="toggleFilePassword()">
+              bitSuffix
+              bitButton
+              (click)="toggleFilePassword()"
+            >
               <i
                 aria-hidden="true"
                 class="bwi bwi-lg bwi-eye"
@@ -115,13 +120,13 @@
               id="confirmFilePassword"
               formControlName="confirmFilePassword"
               name="confirmFilePassword"
-              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-              [attr.aria-pressed]="showConfirmFilePassword"
             />
             <button type="button" bitSuffix bitButton (click)="toggleConfirmFilePassword()">
               <i
                 aria-hidden="true"
                 class="bwi bwi-lg bwi-eye"
+                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                [attr.aria-pressed]="showConfirmFilePassword"
                 [ngClass]="{
                   'bwi-eye': !showConfirmFilePassword,
                   'bwi-eye-slash': showConfirmFilePassword
