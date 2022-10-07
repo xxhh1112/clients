@@ -21,15 +21,6 @@ export class U2FDevice {
     const rawId = randombytes(16) as Uint8Array;
     const keyId = coerceToBase64Url(rawId);
     const rawChallenge = new Uint8Array(options.publicKey.challenge as any); // TODO: fix type
-    console.log("rawChallenge", rawChallenge);
-    console.log(
-      "Converters.Uint8ArrayToBase64(rawChallenge)",
-      Converters.Uint8ArrayToBase64(rawChallenge)
-    );
-    console.log(
-      "Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge))",
-      Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge))
-    );
 
     const clientData = encoder.encode(
       JSON.stringify({
@@ -38,7 +29,6 @@ export class U2FDevice {
         origin,
       })
     );
-    console.log("clientData", clientData);
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
     const keyPair = await crypto.subtle.generateKey(
       {
@@ -82,7 +72,6 @@ export class U2FDevice {
       await crypto.subtle.digest({ name: "SHA-256" }, encoder.encode(options.publicKey.rp.id))
     );
     authData.push(...rpIdHash);
-    console.log("rpIdHash", options.publicKey.rp.id, rpIdHash);
 
     /*
      * flags
@@ -95,18 +84,10 @@ export class U2FDevice {
     const attestationFormat = "packed" as string;
     const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;
     authData.push(flags);
-    console.log("flags", flags);
 
     // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
     const now = new Date().getTime() / 1000;
     authData.push(
-      ((now & 0xff000000) >> 24) & 0xff,
-      ((now & 0x00ff0000) >> 16) & 0xff,
-      ((now & 0x0000ff00) >> 8) & 0xff,
-      now & 0x000000ff
-    );
-    console.log(
-      "now",
       ((now & 0xff000000) >> 24) & 0xff,
       ((now & 0x00ff0000) >> 16) & 0xff,
       ((now & 0x0000ff00) >> 8) & 0xff,
@@ -119,14 +100,11 @@ export class U2FDevice {
     // Use 0 because we're self-signing at the moment
     const aaguid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     attestedCredentialData.push(...aaguid);
-    console.log("aaguid", aaguid);
 
     // credentialIdLength (2 bytes) and credential Id
     const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
     attestedCredentialData.push(...credentialIdLength);
     attestedCredentialData.push(...rawId);
-    console.log("credentialIdLength", credentialIdLength);
-    console.log("rawId", rawId);
 
     const publicKeyJwk = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
     // COSE format of the EC256 key
@@ -150,11 +128,8 @@ export class U2FDevice {
     // credential public key - convert to array from CBOR encoded COSE key
     const credPublicKeyBytes = subarray(coseBytes, 0, -1);
     attestedCredentialData.push(...credPublicKeyBytes);
-    console.log("coseBytes", coseBytes);
-    console.log("coseBytes", Converters.bytesToHex(coseBytes));
 
     authData.push(...attestedCredentialData);
-    console.log("attestedCredentialData", attestedCredentialData);
 
     // </authData>
 
@@ -188,10 +163,6 @@ export class U2FDevice {
 
     const asn1Der_signature = joseToDer(p1336_signature, "ES256");
 
-    // console.log("r", r);
-    // console.log("s", s);
-    console.log("asn1Der_signature", Converters.bytesToHex(asn1Der_signature));
-
     const attestationObject = new Uint8Array(
       cbor.encode({
         fmt: attestationFormat,
@@ -203,27 +174,23 @@ export class U2FDevice {
       })
     );
 
-    console.log("attestationObject", Converters.bytesToHex(attestationObject));
-
     // this.keys[keyId] = {
     //   key: keyPair,
     //   appID: rpId,
     //   userID: userId,
     // };
 
-    const binaryResponse = new Uint8Array(
-      cbor.encode({
-        id: keyId,
-        rawId: rawId,
-        type: "public-key",
-        response: {
-          clientDataJSON: clientData,
-          attestationObject: attestationObject,
-        } as AuthenticatorAttestationResponse,
-      })
-    );
-
-    console.log("binaryResponse", Converters.bytesToHex(binaryResponse));
+    // const binaryResponse = new Uint8Array(
+    //   cbor.encode({
+    //     id: keyId,
+    //     rawId: rawId,
+    //     type: "public-key",
+    //     response: {
+    //       clientDataJSON: clientData,
+    //       attestationObject: attestationObject,
+    //     } as AuthenticatorAttestationResponse,
+    //   })
+    // );
 
     return {
       id: keyId,
