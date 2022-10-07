@@ -29,18 +29,22 @@ import {
   CollectionDetailsResponse,
   CollectionResponse,
 } from "@bitwarden/common/models/response/collectionResponse";
-import { IGroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
+import { GroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
-import { EntityUsersComponent } from "./entity-users.component";
 import { GroupAddEditComponent } from "./group-add-edit.component";
 
 type CollectionViewMap = {
   [id: string]: CollectionView;
 };
 
-interface IGroupDetailsRow extends IGroupDetailsResponse {
+type GroupDetailsRow = {
+  /**
+   * Details used for displaying group information
+   */
+  details: GroupDetailsResponse;
+
   /**
    * True if the group is selected in the table
    */
@@ -50,7 +54,7 @@ interface IGroupDetailsRow extends IGroupDetailsResponse {
    * A list of collection names the group has access to
    */
   collectionNames?: string[];
-}
+};
 
 @Component({
   selector: "app-org-groups",
@@ -63,16 +67,15 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   loading = true;
   organizationId: string;
-  groups: IGroupDetailsRow[];
-  collectionMap: CollectionViewMap = {};
+  groups: GroupDetailsRow[];
 
   protected didScroll = false;
   protected pageSize = 100;
   protected maxCollections = 2;
 
   private pagedGroupsCount = 0;
-  private pagedGroups: IGroupDetailsRow[];
-  private searchedGroups: IGroupDetailsRow[];
+  private pagedGroups: GroupDetailsRow[];
+  private searchedGroups: GroupDetailsRow[];
   private _searchText: string;
   private destroy$ = new Subject<void>();
   private refreshGroups$ = new BehaviorSubject<void>(null);
@@ -92,7 +95,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
    * we need a reference to the currently visible groups for
    * the Select All checkbox
    */
-  get visibleGroups(): IGroupDetailsRow[] {
+  get visibleGroups(): GroupDetailsRow[] {
     if (this.isPaging()) {
       return this.pagedGroups;
     }
@@ -136,8 +139,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
         map(([collectionMap, groups]) => {
           return groups
             .sort(Utils.getSortFunction(this.i18nService, "name"))
-            .map<IGroupDetailsRow>((g) => ({
-              ...g,
+            .map<GroupDetailsRow>((g) => ({
+              details: g,
               checked: false,
               collectionNames: g.collections
                 .map((c) => collectionMap[c.id]?.name)
@@ -169,26 +172,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  async toCollectionMap(response: ListResponse<CollectionResponse>) {
-    const collections = response.data.map(
-      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
-    );
-    const decryptedCollections = await this.collectionService.decryptMany(collections);
-
-    // Convert to an object using collection Ids as keys for faster name lookups
-    const collectionMap: CollectionViewMap = {};
-    decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
-
-    return collectionMap;
-  }
-
-  private updateSearchedGroups() {
-    if (this.searchService.isSearchable(this.searchText)) {
-      // Making use of the pipe in the component as we need know which groups where filtered
-      this.searchedGroups = this.searchPipe.transform(this.groups, this.searchText, "name", "id");
-    }
-  }
-
   loadMore() {
     if (!this.groups || this.groups.length <= this.pageSize) {
       return;
@@ -207,20 +190,20 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
-  async edit(group: IGroupDetailsRow) {
+  async edit(groupRow: GroupDetailsRow) {
     const [modal] = await this.modalService.openViewRef(
       GroupAddEditComponent,
       this.addEditModalRef,
       (comp) => {
         comp.organizationId = this.organizationId;
-        comp.groupId = group != null ? group.id : null;
+        comp.groupId = groupRow != null ? groupRow.details.id : null;
         comp.onSavedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
           this.refreshGroups$.next();
         });
         comp.onDeletedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
-          this.removeGroup(group.id);
+          this.removeGroup(groupRow.details.id);
         });
       }
     );
@@ -230,10 +213,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.edit(null);
   }
 
-  async delete(group: IGroupDetailsRow) {
+  async delete(groupRow: GroupDetailsRow) {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteGroupConfirmation"),
-      group.name,
+      groupRow.details.name,
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
       "warning"
@@ -243,13 +226,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
 
     try {
-      await this.apiService.deleteGroup(this.organizationId, group.id);
+      await this.apiService.deleteGroup(this.organizationId, groupRow.details.id);
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("deletedGroupId", group.name)
+        this.i18nService.t("deletedGroupId", groupRow.details.name)
       );
-      this.removeGroup(group.id);
+      this.removeGroup(groupRow.details.id);
     } catch (e) {
       this.logService.error(e);
     }
@@ -262,7 +245,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const deleteMessage = groupsToDelete.map((g) => g.name).join(", ");
+    const deleteMessage = groupsToDelete.map((g) => g.details.name).join(", ");
     const confirmed = await this.platformUtilsService.showDialog(
       deleteMessage,
       this.i18nService.t("deleteMultipleGroupsConfirmation", groupsToDelete.length.toString()),
@@ -277,7 +260,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     try {
       const result = await this.apiService.deleteManyGroups(
         this.organizationId,
-        new OrganizationGroupBulkRequest(groupsToDelete.map((g) => g.id))
+        new OrganizationGroupBulkRequest(groupsToDelete.map((g) => g.details.id))
       );
       this.platformUtilsService.showToast(
         "success",
@@ -285,27 +268,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.i18nService.t("deletedManyGroups", result.data.length.toString())
       );
 
-      groupsToDelete.forEach((g) => this.removeGroup(g.id));
+      groupsToDelete.forEach((g) => this.removeGroup(g.details.id));
     } catch (e) {
       this.logService.error(e);
     }
-  }
-
-  async users(group: IGroupDetailsRow) {
-    const [modal] = await this.modalService.openViewRef(
-      EntityUsersComponent,
-      this.usersModalRef,
-      (comp) => {
-        comp.organizationId = this.organizationId;
-        comp.entity = "group";
-        comp.entityId = group.id;
-        comp.entityName = group.name;
-
-        comp.onEditedUsers.pipe(takeUntil(this.destroy$)).subscribe(() => {
-          modal.close();
-        });
-      }
-    );
   }
 
   resetPaging() {
@@ -317,8 +283,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     return this.searchService.isSearchable(this.searchText);
   }
 
-  check(group: IGroupDetailsRow) {
-    group.checked = !group.checked;
+  check(groupRow: GroupDetailsRow) {
+    groupRow.checked = !groupRow.checked;
   }
 
   toggleAllVisible(event: Event) {
@@ -334,11 +300,31 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   private removeGroup(id: string) {
-    const index = this.groups.findIndex((g) => g.id === id);
+    const index = this.groups.findIndex((g) => g.details.id === id);
     if (index > -1) {
       this.groups.splice(index, 1);
       this.resetPaging();
       this.updateSearchedGroups();
+    }
+  }
+
+  private async toCollectionMap(response: ListResponse<CollectionResponse>) {
+    const collections = response.data.map(
+      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
+    );
+    const decryptedCollections = await this.collectionService.decryptMany(collections);
+
+    // Convert to an object using collection Ids as keys for faster name lookups
+    const collectionMap: CollectionViewMap = {};
+    decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
+
+    return collectionMap;
+  }
+
+  private updateSearchedGroups() {
+    if (this.searchService.isSearchable(this.searchText)) {
+      // Making use of the pipe in the component as we need know which groups where filtered
+      this.searchedGroups = this.searchPipe.transform(this.groups, this.searchText, "name", "id");
     }
   }
 }

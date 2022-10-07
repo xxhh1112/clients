@@ -77,7 +77,7 @@
           </td>
           <td bitCell class="tw-cursor-pointer tw-text-lg tw-font-bold" (click)="edit(g)">
             <button (click)="edit(g)" bitLink>
-              {{ g.name }}
+              {{ g.details.name }}
             </button>
           </td>
           <td bitCell (click)="edit(g)" class="tw-cursor-pointer">
@@ -129,5 +129,4 @@
     </bit-table>
   </ng-container>
   <ng-template #addEdit></ng-template>
-  <ng-template #usersTemplate></ng-template>
 </div>
