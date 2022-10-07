@@ -53,13 +53,12 @@
           <th bitCell>{{ "collections" | i18n }}</th>
           <th bitCell class="tw-w-10">
             <button
-              class="tw-border-none tw-bg-transparent tw-text-muted"
+              class="tw-border-none tw-bg-transparent tw-font-bold tw-text-muted"
               [bitMenuTriggerFor]="headerMenu"
               type="button"
+              bitIconButton="bwi-ellipsis-v"
               appA11yTitle="{{ 'options' | i18n }}"
-            >
-              <i aria-hidden="true" class="bwi bwi-ellipsis-v bwi-lg tw-font-bold"></i>
-            </button>
+            ></button>
 
             <bit-menu #headerMenu>
               <button type="button" bitMenuItem (click)="deleteAllSelected()">
@@ -101,12 +100,12 @@
           </td>
           <td bitCell>
             <button
-              class="tw-border-none tw-bg-transparent tw-text-muted"
+              class="tw-border-none tw-bg-transparent tw-font-bold tw-text-muted"
               [bitMenuTriggerFor]="rowMenu"
               type="button"
-            >
-              <i aria-hidden="true" class="bwi bwi-ellipsis-v bwi-lg tw-font-bold"></i>
-            </button>
+              bitIconButton="bwi-ellipsis-v"
+              appA11yTitle="{{ 'options' | i18n }}"
+            ></button>
 
             <bit-menu #rowMenu>
               <button type="button" bitMenuItem (click)="edit(g)">
