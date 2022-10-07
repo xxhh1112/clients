@@ -159,6 +159,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     const decryptedCollections = await this.collectionService.decryptMany(collections);
 
     // Convert to an object using collection Ids as keys for faster name lookups
+    this.collectionMap = {};
     decryptedCollections.forEach((c) => (this.collectionMap[c.id] = c));
   }
 
