@@ -30,7 +30,6 @@ import { I18nPipe } from "./pipes/i18n.pipe";
 import { SearchCiphersPipe } from "./pipes/search-ciphers.pipe";
 import { SearchPipe } from "./pipes/search.pipe";
 import { UserNamePipe } from "./pipes/user-name.pipe";
-import { UserTypePipe } from "./pipes/user-type.pipe";
 import { PasswordStrengthComponent } from "./shared/components/password-strength/password-strength.component";
 
 @NgModule({
@@ -73,7 +72,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     LaunchClickDirective,
     UserNamePipe,
     PasswordStrengthComponent,
-    UserTypePipe,
   ],
   exports: [
     A11yInvalidDirective,
@@ -106,6 +104,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     UserNamePipe,
     PasswordStrengthComponent,
   ],
-  providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe, UserTypePipe],
+  providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe],
 })
 export class JslibModule {}

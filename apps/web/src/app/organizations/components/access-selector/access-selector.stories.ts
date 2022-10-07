@@ -13,13 +13,13 @@ import {
   TabsModule,
 } from "@bitwarden/components";
 
-import { PreloadedEnglishI18nModule } from "../../tests/preloaded-english-i18n.module";
+import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
 import { AccessSelectorComponent } from "./access-selector.component";
 import { AccessItemType, AccessItemView } from "./access-selector.models";
 
 export default {
-  title: "Web/Access Selector",
+  title: "Web/Organizations/Access Selector",
   decorators: [
     moduleMetadata({
       declarations: [AccessSelectorComponent],
