@@ -6,23 +6,23 @@ import { b64toBA } from "./conv-utils/base64";
 import { subarray } from "./conv-utils/util";
 import { joseToDer } from "./ecdsa-sig-formatter";
 import { Converters } from "./u2f/converters";
+import { CredentialId } from "./u2f/credential-id";
 
 const STANDARD_ATTESTATION_FORMAT = "packed";
 
-interface Key {
-  key: CryptoKeyPair;
-  appID: string;
-  userID: BufferSource;
+interface BitCredential {
+  credentialId: CredentialId;
+  keyPair: CryptoKeyPair;
+  origin: string;
 }
 
 export class U2FDevice {
-  keys: Record<string, Key> = {};
+  credentials = new Map<string, BitCredential>();
 
   async register(options: CredentialCreationOptions, origin: string): Promise<PublicKeyCredential> {
     const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
-    const rawId = randombytes(16) as Uint8Array;
-    const keyId = coerceToBase64Url(rawId);
+    const credentialId = new CredentialId(randombytes(16) as Uint8Array);
     const rawChallenge = new Uint8Array(options.publicKey.challenge as any); // TODO: fix type
 
     const clientData = encoder.encode(
@@ -32,7 +32,6 @@ export class U2FDevice {
         origin,
       })
     );
-    const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
     const keyPair = await crypto.subtle.generateKey(
       {
         name: "ECDSA",
@@ -68,24 +67,13 @@ export class U2FDevice {
 
     const authData = await generateAuthData({
       rpId: options.publicKey.rp.id,
-      rawId,
+      credentialId,
       userPresence: true,
       userVerification: false,
       keyPair,
       attestationFormat: STANDARD_ATTESTATION_FORMAT,
     });
 
-    const sigBase = new Uint8Array([...authData, ...new Uint8Array(clientDataHash)]);
-    const p1336_signature = new Uint8Array(
-      await window.crypto.subtle.sign(
-        {
-          name: "ECDSA",
-          hash: { name: "SHA-256" },
-        },
-        keyPair.privateKey,
-        new Uint8Array(sigBase)
-      )
-    );
     // const r = p1336_signature.subarray(0, p1336_signature.length / 2); // constructor denied, don't know why
     // const s = p1336_signature.subarray(p1336_signature.length / 2);
     // const r = subarray(p1336_signature, 0, p1336_signature.length / 2);
@@ -103,7 +91,11 @@ export class U2FDevice {
     // // binary data: s
     // asn1Der_signature.set(s, 2 + 2 + r.length + 2);
 
-    const asn1Der_signature = joseToDer(p1336_signature, "ES256");
+    const asn1Der_signature = await generateSignature({
+      authData,
+      clientData,
+      keyPair,
+    });
 
     const attestationObject = new Uint8Array(
       cbor.encode({
@@ -112,7 +104,7 @@ export class U2FDevice {
           alg: -7,
           sig: asn1Der_signature,
         },
-        authData: new Uint8Array(authData),
+        authData,
       })
     );
 
@@ -134,9 +126,11 @@ export class U2FDevice {
     //   })
     // );
 
+    this.credentials.set(credentialId.encoded, { credentialId, keyPair, origin });
+
     return {
-      id: keyId,
-      rawId: rawId,
+      id: credentialId.encoded,
+      rawId: credentialId.raw,
       type: "public-key",
       response: {
         clientDataJSON: clientData,
@@ -145,44 +139,71 @@ export class U2FDevice {
       getClientExtensionResults: () => ({}),
     };
   }
-}
 
-// Taken from common-webauthn.ts
-function coerceToBase64Url(thing: any) {
-  // Array or ArrayBuffer to Uint8Array
-  if (Array.isArray(thing)) {
-    thing = Uint8Array.from(thing);
-  }
+  async get(options: CredentialRequestOptions, origin: string): Promise<PublicKeyCredential> {
+    const credential = this.getCredential(options.publicKey.allowCredentials);
 
-  if (thing instanceof ArrayBuffer) {
-    thing = new Uint8Array(thing);
-  }
-
-  // Uint8Array to base64
-  if (thing instanceof Uint8Array) {
-    let str = "";
-    const len = thing.byteLength;
-
-    for (let i = 0; i < len; i++) {
-      str += String.fromCharCode(thing[i]);
+    if (credential === undefined) {
+      throw new Error("No valid credentials found");
     }
-    thing = window.btoa(str);
+
+    if (credential.origin !== origin) {
+      throw new Error("Not allowed: Origin mismatch");
+    }
+
+    const encoder = new TextEncoder();
+    const rawChallenge = new Uint8Array(options.publicKey.challenge as any); // TODO: fix type
+    const clientData = encoder.encode(
+      JSON.stringify({
+        type: "webauthn.get",
+        challenge: Converters.base64ToBase64URL(Converters.Uint8ArrayToBase64(rawChallenge)),
+        origin,
+      })
+    );
+
+    const authData = await generateAuthData({
+      credentialId: credential.credentialId,
+      rpId: options.publicKey.rpId,
+      userPresence: true,
+      userVerification: false,
+    });
+
+    const signature = await generateSignature({
+      authData,
+      clientData,
+      keyPair: credential.keyPair,
+    });
+
+    return {
+      id: credential.credentialId.encoded,
+      rawId: credential.credentialId.raw,
+      type: "public-key",
+      response: {
+        authenticatorData: authData,
+        clientDataJSON: clientData,
+        signature,
+        userHandle: null, // only needed for discoverable credentials
+      } as AuthenticatorAssertionResponse,
+      getClientExtensionResults: () => ({}),
+    };
   }
 
-  if (typeof thing !== "string") {
-    throw new Error("could not coerce to string");
+  private getCredential(allowCredentials: PublicKeyCredentialDescriptor[]) {
+    let credential: BitCredential | undefined;
+    for (const allowedCredential of allowCredentials) {
+      const id = new CredentialId(allowedCredential.id);
+      if (this.credentials.has(id.encoded)) {
+        credential = this.credentials.get(id.encoded);
+        break;
+      }
+    }
+    return credential;
   }
-
-  // base64 to base64url
-  // NOTE: "=" at the end of challenge is optional, strip it off here
-  thing = thing.replace(/\+/g, "-").replace(/\//g, "_").replace(/=*$/g, "");
-
-  return thing;
 }
 
 interface AuthDataParams {
   rpId: string;
-  rawId: Uint8Array;
+  credentialId: CredentialId;
   userPresence: boolean;
   userVerification: boolean;
   keyPair?: CryptoKeyPair;
@@ -200,15 +221,12 @@ async function generateAuthData(params: AuthDataParams) {
   );
   authData.push(...rpIdHash);
 
-  /*
-   * flags
-   *  - conditionally set UV, UP and indicate attested credential data is present
-   *  - Note we never set UV for fido-u2f
-   */
-  const up = params.userPresence;
-  const uv = params.userVerification;
-  const attestationFormat = params.attestationFormat ?? "packed";
-  const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;
+  const flags = authDataFlags({
+    extensionData: false,
+    attestationData: params.keyPair !== undefined,
+    userVerification: params.userVerification,
+    userPresence: params.userPresence,
+  });
   authData.push(flags);
 
   // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
@@ -228,12 +246,10 @@ async function generateAuthData(params: AuthDataParams) {
   attestedCredentialData.push(...aaguid);
 
   // credentialIdLength (2 bytes) and credential Id
-  const credentialIdLength = [
-    (params.rawId.length - (params.rawId.length & 0xff)) / 256,
-    params.rawId.length & 0xff,
-  ];
+  const rawId = params.credentialId.raw;
+  const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
   attestedCredentialData.push(...credentialIdLength);
-  attestedCredentialData.push(...params.rawId);
+  attestedCredentialData.push(...rawId);
 
   if (params.keyPair) {
     const publicKeyJwk = await crypto.subtle.exportKey("jwk", params.keyPair.publicKey);
@@ -263,4 +279,58 @@ async function generateAuthData(params: AuthDataParams) {
   }
 
   return new Uint8Array(authData);
+}
+
+interface SignatureParams {
+  authData: Uint8Array;
+  clientData: Uint8Array;
+  keyPair: CryptoKeyPair;
+}
+
+async function generateSignature(params: SignatureParams) {
+  const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, params.clientData);
+  const sigBase = new Uint8Array([...params.authData, ...new Uint8Array(clientDataHash)]);
+  const p1336_signature = new Uint8Array(
+    await window.crypto.subtle.sign(
+      {
+        name: "ECDSA",
+        hash: { name: "SHA-256" },
+      },
+      params.keyPair.privateKey,
+      sigBase
+    )
+  );
+
+  const asn1Der_signature = joseToDer(p1336_signature, "ES256");
+
+  return asn1Der_signature;
+}
+
+interface Flags {
+  extensionData: boolean;
+  attestationData: boolean;
+  userVerification: boolean;
+  userPresence: boolean;
+}
+
+function authDataFlags(options: Flags): number {
+  let flags = 0;
+
+  if (options.extensionData) {
+    flags |= 0b1000000;
+  }
+
+  if (options.attestationData) {
+    flags |= 0b01000000;
+  }
+
+  if (options.userVerification) {
+    flags |= 0b00000100;
+  }
+
+  if (options.userPresence) {
+    flags |= 0b00000001;
+  }
+
+  return flags;
 }

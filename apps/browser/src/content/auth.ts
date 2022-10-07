@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import { authPopupHtml } from "./auth_popup";
-import { createCredential } from "./auth_sign";
 import { MessageType, Messenger } from "./messenger";
+import { U2FDevice } from "./u2f";
 
 declare function cloneInto<T>(object: T, window: Window, options?: object): T;
 declare function exportFunction<T extends unknown[], R>(
@@ -13,6 +13,7 @@ declare function exportFunction<T extends unknown[], R>(
 const ENABLE_FALLBACK = true;
 
 document.addEventListener("DOMContentLoaded", (event) => {
+  const device = new U2FDevice();
   const wWindow = (window as any).wrappedJSObject as Window;
   const wCredentials = wWindow.navigator.credentials;
 
@@ -73,7 +74,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       Messenger.sendMessageToBackground(MessageType.AUTH, {});
 
       onApprove = async () => {
-        const result = await createCredential(options, window.location.origin);
+        const result = await device.register(options, window.location.origin);
         popup.remove();
         const cloned = cloneInto(result, window, { cloneFunctions: true });
         cloned.getClientExtensionResults = exportFunction(() => cloneInto({}, window), window);
@@ -111,13 +112,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       onApprove = async () => {
         popup.remove();
-        reject("Not implemented");
-        // const result = await createCredential(options, window.location.origin);
-        // popup.remove();
-        // const cloned = cloneInto(result, window, { cloneFunctions: true });
-        // cloned.getClientExtensionResults = exportFunction(() => cloneInto({}, window), window);
-        // console.log("clonedResult", cloned);
-        // resolve(cloned);
+        const result = await device.get(options, window.location.origin);
+        const cloned = cloneInto(result, window, { cloneFunctions: true });
+        cloned.getClientExtensionResults = exportFunction(() => cloneInto({}, window), window);
+        console.log("clonedResult", cloned);
+        resolve(cloned);
       };
     });
   };
