@@ -17,12 +17,13 @@ import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18
 
 import { AccessSelectorComponent } from "./access-selector.component";
 import { AccessItemType, AccessItemView } from "./access-selector.models";
+import { UserTypePipe } from "./user-type.pipe";
 
 export default {
   title: "Web/Organizations/Access Selector",
   decorators: [
     moduleMetadata({
-      declarations: [AccessSelectorComponent],
+      declarations: [AccessSelectorComponent, UserTypePipe],
       imports: [
         ButtonModule,
         FormFieldModule,
@@ -149,7 +150,7 @@ Members.args = {
   selectorHelpText: "Some helper text describing what this does",
   emptySelectionText: "No members added",
   disabled: false,
-  initialValue: [{ id: "3g" }, { id: "0g" }],
+  initialValue: [{ id: "2m" }, { id: "0m" }],
   items: sampleMembers,
 };
 
