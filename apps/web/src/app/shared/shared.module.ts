@@ -8,6 +8,7 @@ import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
+  AvatarModule,
   BadgeModule,
   ButtonModule,
   CalloutModule,
@@ -48,6 +49,7 @@ import "./locales";
     IconModule,
     TabsModule,
     TableModule,
+    AvatarModule,
   ],
   exports: [
     CommonModule,
@@ -68,6 +70,7 @@ import "./locales";
     IconModule,
     TabsModule,
     TableModule,
+    AvatarModule,
   ],
   providers: [DatePipe],
   bootstrap: [],

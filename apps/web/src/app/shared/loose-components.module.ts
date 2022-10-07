@@ -19,6 +19,7 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
+import { AccessSelectorModule } from "../components/access-selector";
 import { NestedCheckboxComponent } from "../components/nested-checkbox.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
@@ -129,10 +130,17 @@ import { ShareComponent } from "../vault/share.component";
 
 import { SharedModule } from ".";
 
+
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
 @NgModule({
-  imports: [SharedModule, OrganizationBadgeModule, OrganizationCreateModule, RegisterFormModule],
+  imports: [
+    SharedModule,
+    OrganizationBadgeModule,
+    OrganizationCreateModule,
+    RegisterFormModule,
+    AccessSelectorModule,
+  ],
   declarations: [
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
