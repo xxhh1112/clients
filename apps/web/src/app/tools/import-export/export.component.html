@@ -87,11 +87,12 @@
           <bit-form-field class="tw-w-full">
             <bit-label>{{ "filePassword" | i18n }}</bit-label>
             <input
-              id="encrypted_export_input_file_password"
               bitInput
               type="{{ showFilePassword ? 'text' : 'password' }}"
               formControlName="filePassword"
               name="password"
+              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+              [attr.aria-pressed]="showFilePassword"
             />
             <button type="button" bitSuffix bitButton (click)="toggleFilePassword()">
               <i
@@ -108,12 +109,13 @@
           <bit-form-field class="tw-w-full">
             <bit-label>{{ "confirmFilePassword" | i18n }}</bit-label>
             <input
-              id="encrypted_export_input_confirm_file_password"
               bitInput
               type="{{ showConfirmFilePassword ? 'text' : 'password' }}"
               id="confirmFilePassword"
               formControlName="confirmFilePassword"
               name="confirmFilePassword"
+              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+              [attr.aria-pressed]="showConfirmFilePassword"
             />
             <button type="button" bitSuffix bitButton (click)="toggleConfirmFilePassword()">
               <i
