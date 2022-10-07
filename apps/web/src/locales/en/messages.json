@@ -277,12 +277,30 @@
   "searchFavorites": {
     "message": "Search Favorites"
   },
-  "searchType": {
-    "message": "Search Type",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Search Logins",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Search Cards",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Search Identities",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Search Secure Notes",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Search Vault"
+  },
+  "searchMyVault": {
+    "message": "Search My Vault"
+  },
+  "searchOrganization": {
+    "message": "Search Organization"
   },
   "allItems": {
     "message": "All Items"
@@ -2354,15 +2372,6 @@
   "deleteGroupConfirmation": {
     "message": "Are you sure you want to delete this group?"
   },
-  "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
-      }
-    }
-  },
   "removeUserConfirmation": {
     "message": "Are you sure you want to remove this user?"
   },
@@ -2376,10 +2385,10 @@
     "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
   },
   "externalId": {
-    "message": "External ID"
+    "message": "External Id"
   },
   "externalIdDesc": {
-    "message": "External ID is an unencrypted reference used by the Bitwarden Directory Connector or API."
+    "message": "The external id can be used as a reference or to link this resource to an external system such as a user directory."
   },
   "accessControl": {
     "message": "Access Control"
@@ -2708,15 +2717,6 @@
       "id": {
         "content": "$1",
         "example": "Developers"
-      }
-    }
-  },
-  "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
       }
     }
   },
@@ -4530,6 +4530,10 @@
   "clients": {
     "message": "Clients"
   },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
+  },
   "providerAdmin": {
     "message": "Provider Admin"
   },
@@ -5450,70 +5454,16 @@
   "numberOfUsers": {
     "message": "Number of users"
   },
-  "plusNMore": {
-    "message": "+ $QUANTITY$ more",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "5"
-      }
-    }
+  "from": {
+    "message": "From"
   },
-  "editInfo": {
-    "message": "Edit Info"
-  },
-  "groupInfo": {
-    "message": "Group info"
-  },
-  "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
-  },
-  "editGroupCollectionsDesc": {
-    "message": "Grant access to collections by adding them to this group."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "selectCollections": {
-    "message": "Select collections"
+  "to": {
+    "message": "To"
   },
   "member": {
     "message": "Member"
   },
-  "role": {
-    "message": "Role"
-  },
-  "removeMember": {
-    "message": "Remove member"
-  },
-  "collection": {
-    "message": "Collection"
-  },
-  "permission": {
-    "message": "Permission"
-  },
-  "canView": {
-    "message": "Can view"
-  },
-  "canViewExceptPass": {
-    "message": "Can view, except passwords"
-  },
-  "canEdit": {
-    "message": "Can edit"
-  },
-  "canEditExceptPass": {
-    "message": "Can edit, except passwords"
-  },
-  "noCollectionsAdded": {
-    "message": "No collections added"
-  },
-  "noMembersAdded": {
-    "message": "No members added"
+  "update": {
+    "message": "Update"
   }
 }
