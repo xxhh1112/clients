@@ -4125,6 +4125,9 @@
   "permissions": {
     "message": "Permissions"
   },
+  "permission": {
+    "message": "Permission"
+  },
   "managerPermissions": {
     "message": "Manager Permissions"
   },
@@ -5465,5 +5468,20 @@
   },
   "update": {
     "message": "Update"
+  },
+  "role": {
+    "message": "Role"
+  },
+  "canView": {
+    "message": "Can view"
+  },
+  "canViewExceptPass": {
+    "message": "Can view, except passwords"
+  },
+  "canEdit": {
+    "message": "Can edit"
+  },
+  "canEditExceptPass": {
+    "message": "Can edit, except passwords"
   }
 }
