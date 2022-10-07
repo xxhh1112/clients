@@ -7,6 +7,8 @@ import { subarray } from "./conv-utils/util";
 import { joseToDer } from "./ecdsa-sig-formatter";
 import { Converters } from "./u2f/converters";
 
+const STANDARD_ATTESTATION_FORMAT = "packed";
+
 interface Key {
   key: CryptoKeyPair;
   appID: string;
@@ -17,6 +19,7 @@ export class U2FDevice {
   keys: Record<string, Key> = {};
 
   async register(options: CredentialCreationOptions, origin: string): Promise<PublicKeyCredential> {
+    const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
     const rawId = randombytes(16) as Uint8Array;
     const keyId = coerceToBase64Url(rawId);
@@ -63,75 +66,14 @@ export class U2FDevice {
     }
     */
 
-    // <authData>
-
-    // Much of this code is adapted from https://github.com/sbweeden/fido2-postman-clients/blob/92aec0f41eca76c0f92db8a6e87cf46aa3a2de1c/globals/fidoutils.js
-    const authData: Array<number> = [];
-
-    const rpIdHash = new Uint8Array(
-      await crypto.subtle.digest({ name: "SHA-256" }, encoder.encode(options.publicKey.rp.id))
-    );
-    authData.push(...rpIdHash);
-
-    /*
-     * flags
-     *  - conditionally set UV, UP and indicate attested credential data is present
-     *  - Note we never set UV for fido-u2f
-     */
-    const up = true;
-    const uv = true;
-    // const attestationFormat = "fido-u2f";
-    const attestationFormat = "packed" as string;
-    const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;
-    authData.push(flags);
-
-    // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
-    const now = new Date().getTime() / 1000;
-    authData.push(
-      ((now & 0xff000000) >> 24) & 0xff,
-      ((now & 0x00ff0000) >> 16) & 0xff,
-      ((now & 0x0000ff00) >> 8) & 0xff,
-      now & 0x000000ff
-    );
-
-    // attestedCredentialData
-    const attestedCredentialData: Array<number> = [];
-
-    // Use 0 because we're self-signing at the moment
-    const aaguid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    attestedCredentialData.push(...aaguid);
-
-    // credentialIdLength (2 bytes) and credential Id
-    const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
-    attestedCredentialData.push(...credentialIdLength);
-    attestedCredentialData.push(...rawId);
-
-    const publicKeyJwk = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
-    // COSE format of the EC256 key
-    const keyX = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.x)));
-    const keyY = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.y)));
-    // const credPublicKeyCOSE = {
-    //   "1": 2, // kty
-    //   "3": -7, // alg
-    //   "-1": 1, // crv
-    //   "-2": keyX,
-    //   "-3": keyY,
-    // };
-    // const coseBytes = new Uint8Array(cbor.encode(credPublicKeyCOSE));
-    // I can't get `cbor-redux` to encode in CTAP2 canonical CBOR. So we do it manually:
-    const coseBytes = new Uint8Array(77);
-    coseBytes.set([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20], 0);
-    coseBytes.set(keyX, 10);
-    coseBytes.set([0x22, 0x58, 0x20], 10 + 32);
-    coseBytes.set(keyY, 10 + 32 + 3);
-
-    // credential public key - convert to array from CBOR encoded COSE key
-    const credPublicKeyBytes = subarray(coseBytes, 0, -1);
-    attestedCredentialData.push(...credPublicKeyBytes);
-
-    authData.push(...attestedCredentialData);
-
-    // </authData>
+    const authData = await generateAuthData({
+      rpId: options.publicKey.rp.id,
+      rawId,
+      userPresence: true,
+      userVerification: false,
+      keyPair,
+      attestationFormat: STANDARD_ATTESTATION_FORMAT,
+    });
 
     const sigBase = new Uint8Array([...authData, ...new Uint8Array(clientDataHash)]);
     const p1336_signature = new Uint8Array(
@@ -236,4 +178,89 @@ function coerceToBase64Url(thing: any) {
   thing = thing.replace(/\+/g, "-").replace(/\//g, "_").replace(/=*$/g, "");
 
   return thing;
+}
+
+interface AuthDataParams {
+  rpId: string;
+  rawId: Uint8Array;
+  userPresence: boolean;
+  userVerification: boolean;
+  keyPair?: CryptoKeyPair;
+  attestationFormat?: "packed" | "fido-u2f";
+}
+
+async function generateAuthData(params: AuthDataParams) {
+  const encoder = new TextEncoder();
+
+  // Much of this code is adapted from https://github.com/sbweeden/fido2-postman-clients/blob/92aec0f41eca76c0f92db8a6e87cf46aa3a2de1c/globals/fidoutils.js
+  const authData: Array<number> = [];
+
+  const rpIdHash = new Uint8Array(
+    await crypto.subtle.digest({ name: "SHA-256" }, encoder.encode(params.rpId))
+  );
+  authData.push(...rpIdHash);
+
+  /*
+   * flags
+   *  - conditionally set UV, UP and indicate attested credential data is present
+   *  - Note we never set UV for fido-u2f
+   */
+  const up = params.userPresence;
+  const uv = params.userVerification;
+  const attestationFormat = params.attestationFormat ?? "packed";
+  const flags = (up ? 0x01 : 0x00) | (uv && attestationFormat != "fido-u2f" ? 0x04 : 0x00) | 0x40;
+  authData.push(flags);
+
+  // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
+  const now = new Date().getTime() / 1000;
+  authData.push(
+    ((now & 0xff000000) >> 24) & 0xff,
+    ((now & 0x00ff0000) >> 16) & 0xff,
+    ((now & 0x0000ff00) >> 8) & 0xff,
+    now & 0x000000ff
+  );
+
+  // attestedCredentialData
+  const attestedCredentialData: Array<number> = [];
+
+  // Use 0 because we're self-signing at the moment
+  const aaguid = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  attestedCredentialData.push(...aaguid);
+
+  // credentialIdLength (2 bytes) and credential Id
+  const credentialIdLength = [
+    (params.rawId.length - (params.rawId.length & 0xff)) / 256,
+    params.rawId.length & 0xff,
+  ];
+  attestedCredentialData.push(...credentialIdLength);
+  attestedCredentialData.push(...params.rawId);
+
+  if (params.keyPair) {
+    const publicKeyJwk = await crypto.subtle.exportKey("jwk", params.keyPair.publicKey);
+    // COSE format of the EC256 key
+    const keyX = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.x)));
+    const keyY = new Uint8Array(b64toBA(Converters.base64URLToBase64(publicKeyJwk.y)));
+    // const credPublicKeyCOSE = {
+    //   "1": 2, // kty
+    //   "3": -7, // alg
+    //   "-1": 1, // crv
+    //   "-2": keyX,
+    //   "-3": keyY,
+    // };
+    // const coseBytes = new Uint8Array(cbor.encode(credPublicKeyCOSE));
+    // I can't get `cbor-redux` to encode in CTAP2 canonical CBOR. So we do it manually:
+    const coseBytes = new Uint8Array(77);
+    coseBytes.set([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20], 0);
+    coseBytes.set(keyX, 10);
+    coseBytes.set([0x22, 0x58, 0x20], 10 + 32);
+    coseBytes.set(keyY, 10 + 32 + 3);
+
+    // credential public key - convert to array from CBOR encoded COSE key
+    const credPublicKeyBytes = subarray(coseBytes, 0, -1);
+    attestedCredentialData.push(...credPublicKeyBytes);
+
+    authData.push(...attestedCredentialData);
+  }
+
+  return new Uint8Array(authData);
 }

@@ -83,14 +83,43 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   };
 
-  const get = async (options?: CredentialCreationOptions) => {
+  const get = async (options?: CredentialRequestOptions): Promise<Credential | null> => {
     console.log("[call] get()", options);
 
-    const result = await window.navigator.credentials.get(options);
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
+      function fallback() {
+        if (!ENABLE_FALLBACK) {
+          return reject(new Error("Authentication aborted by user"));
+        }
 
-    console.log("[return] get()", result);
+        window.navigator.credentials
+          .get(options)
+          .then((credential) => {
+            console.log("[fallback-auth] [successful]", credential);
+            resolve(credential);
+          })
+          .catch((err) => {
+            console.log("[fallback-auth] [failed]", err);
+            reject(err);
+          });
+      }
 
-    return result;
+      const popup = await addAuthPopup(fallback);
+
+      Messenger.sendMessageToBackground(MessageType.AUTH, {});
+
+      onApprove = async () => {
+        popup.remove();
+        reject("Not implemented");
+        // const result = await createCredential(options, window.location.origin);
+        // popup.remove();
+        // const cloned = cloneInto(result, window, { cloneFunctions: true });
+        // cloned.getClientExtensionResults = exportFunction(() => cloneInto({}, window), window);
+        // console.log("clonedResult", cloned);
+        // resolve(cloned);
+      };
+    });
   };
 
   wCredentials.create = exportAsyncFunction(create);
