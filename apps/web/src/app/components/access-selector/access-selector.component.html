@@ -1,0 +1,93 @@
+<div class="tw-flex">
+  <bit-form-field *ngIf="usePermissions">
+    <bit-label>{{ "permission" | i18n }}</bit-label>
+    <select
+      bitInput
+      [disabled]="disabled"
+      [(ngModel)]="initialPermission"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <option *ngFor="let p of permissionList" [value]="p.perm">
+        {{ p.labelId | i18n }}
+      </option>
+    </select>
+  </bit-form-field>
+
+  <bit-form-field class="tw-ml-3 tw-flex-grow">
+    <bit-label>{{ selectorLabelText }}</bit-label>
+    <!--TODO: Swap with CL NgSelect-->
+    <select bitInput (change)="selectItem($event)" (blur)="handleOnTouch()" [disabled]="disabled">
+      <option disabled selected value="">-- Type to filter not implemented yet --</option>
+      <option *ngFor="let m of selectionList.deselectedItems" [value]="m.id">
+        {{ m.listName }}
+      </option>
+    </select>
+    <bit-hint *ngIf="selectorHelpText">{{ selectorHelpText }}</bit-hint>
+  </bit-form-field>
+</div>
+
+<bit-table [formGroup]="formGroup">
+  <ng-container header>
+    <tr>
+      <th bitCell>{{ columnHeader }}</th>
+      <th bitCell *ngIf="usePermissions">{{ "permission" | i18n }}</th>
+      <th bitCell *ngIf="showMemberRoles">{{ "role" | i18n }}</th>
+      <th bitCell style="width: 50px"></th>
+    </tr>
+  </ng-container>
+  <ng-container body formArrayName="items">
+    <tr bitRow *ngFor="let item of selectionList.selectedItems; let i = index" [formGroupName]="i">
+      <td bitCell [ngSwitch]="item.type">
+        <div class="tw-flex tw-items-center" *ngSwitchCase="itemType.MEMBER">
+          <bit-avatar class="tw-mr-3" text="{{ item.labelName || item.email }}"></bit-avatar>
+          <div class="tw-flex tw-flex-col">
+            <div>
+              {{ item.labelName || item.email }}
+              <span *ngIf="item.status == 0" bitBadge badgeType="secondary">
+                {{ "invited" | i18n }}
+              </span>
+            </div>
+            <div class="tw-text-muted" *ngIf="item.labelName">{{ item.email }}</div>
+          </div>
+        </div>
+
+        <div class="tw-flex tw-items-center tw-text-lg" *ngSwitchDefault>
+          <i class="bwi tw-mr-2" [ngClass]="itemIcon(item)" aria-hidden="true"></i>
+          <span>{{ item.labelName }}</span>
+        </div>
+      </td>
+
+      <td bitCell *ngIf="usePermissions">
+        <label class="sr-only" [for]="'permission' + i">{{ "permission" | i18n }}</label>
+        <select
+          bitInput
+          class="tw-w-72 !tw-rounded tw-border-0 !tw-bg-transparent tw-font-bold"
+          formControlName="permission"
+          [id]="'permission' + i"
+        >
+          <option *ngFor="let p of permissionList" [value]="p.perm">
+            {{ p.labelId | i18n }}
+          </option>
+        </select>
+      </td>
+
+      <td bitCell *ngIf="showMemberRoles">
+        {{ item.role | userType: "-" }}
+      </td>
+
+      <td bitCell>
+        <button
+          type="button"
+          bitIconButton="bwi-close"
+          buttonType="muted"
+          appA11yTitle="{{ 'remove' | i18n }}"
+          [disabled]="disabled"
+          (click)="selectionList.deselectItem(item.id)"
+        ></button>
+      </td>
+    </tr>
+    <tr *ngIf="selectionList.selectedItems.length == 0">
+      <td bitCell>{{ emptySelectionText }}</td>
+    </tr>
+  </ng-container>
+</bit-table>
