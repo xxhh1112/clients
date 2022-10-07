@@ -59,7 +59,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
-    private vaultFilterService: VaultFilterService,
+    protected vaultFilterService: VaultFilterService,
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
     private syncService: SyncService,

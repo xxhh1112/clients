@@ -18,8 +18,7 @@ import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
-import { BulkDeleteComponent } from "src/app/vault/bulk-delete.component";
-
+import { BulkDeleteComponent } from "../../vault/bulk-delete.component";
 import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";
 
 const MaxCheckedCount = 500;
