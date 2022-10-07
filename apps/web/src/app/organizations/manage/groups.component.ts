@@ -1,6 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, Subject, takeUntil } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  concatMap,
+  from,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs";
 import { first } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
@@ -15,8 +25,12 @@ import { Utils } from "@bitwarden/common/misc/utils";
 import { CollectionData } from "@bitwarden/common/models/data/collectionData";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
-import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
+import {
+  CollectionDetailsResponse,
+  CollectionResponse,
+} from "@bitwarden/common/models/response/collectionResponse";
 import { IGroupDetailsResponse } from "@bitwarden/common/models/response/groupResponse";
+import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 
 import { EntityUsersComponent } from "./entity-users.component";
@@ -61,6 +75,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private searchedGroups: IGroupDetailsRow[];
   private _searchText: string;
   private destroy$ = new Subject<void>();
+  private refreshGroups$ = new BehaviorSubject<void>(null);
 
   get searchText() {
     return this._searchText;
@@ -100,16 +115,43 @@ export class GroupsComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.route.parent.params
+    this.route.params
       .pipe(
-        concatMap(async (params) => {
-          this.organizationId = params.organizationId;
-          await this.loadCollections();
-          await this.load();
+        tap((params) => (this.organizationId = params.organizationId)),
+        switchMap(() =>
+          combineLatest([
+            // collectionMap
+            from(this.apiService.getCollections(this.organizationId)).pipe(
+              concatMap((response) => this.toCollectionMap(response))
+            ),
+            // groups
+            this.refreshGroups$.pipe(
+              switchMap(() => this.apiService.getGroups(this.organizationId)),
+              map((response) =>
+                response.data != null && response.data.length > 0 ? response.data : []
+              )
+            ),
+          ])
+        ),
+        map(([collectionMap, groups]) => {
+          return groups
+            .sort(Utils.getSortFunction(this.i18nService, "name"))
+            .map<IGroupDetailsRow>((g) => ({
+              ...g,
+              checked: false,
+              collectionNames: g.collections
+                .map((c) => collectionMap[c.id]?.name)
+                .sort(this.i18nService.collator?.compare),
+            }));
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe((groups) => {
+        this.groups = groups;
+        this.resetPaging();
+        this.updateSearchedGroups();
+        this.loading = false;
+      });
 
     this.route.queryParams
       .pipe(
@@ -127,21 +169,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  async load() {
-    const response = await this.apiService.getGroups(this.organizationId);
-    const groups = response.data != null && response.data.length > 0 ? response.data : [];
-    this.groups = groups
-      .sort(Utils.getSortFunction(this.i18nService, "name"))
-      .map<IGroupDetailsRow>((g) => ({
-        ...g,
-        checked: false,
-        collectionNames: g.collections
-          .map((c) => this.collectionMap[c.id]?.name)
-          .sort(this.i18nService.collator?.compare),
-      }));
-    this.resetPaging();
-    this.updateSearchedGroups();
-    this.loading = false;
+  async toCollectionMap(response: ListResponse<CollectionResponse>) {
+    const collections = response.data.map(
+      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
+    );
+    const decryptedCollections = await this.collectionService.decryptMany(collections);
+
+    // Convert to an object using collection Ids as keys for faster name lookups
+    const collectionMap: CollectionViewMap = {};
+    decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
+
+    return collectionMap;
   }
 
   private updateSearchedGroups() {
@@ -149,18 +187,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
       // Making use of the pipe in the component as we need know which groups where filtered
       this.searchedGroups = this.searchPipe.transform(this.groups, this.searchText, "name", "id");
     }
-  }
-
-  async loadCollections() {
-    const response = await this.apiService.getCollections(this.organizationId);
-    const collections = response.data.map(
-      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
-    );
-    const decryptedCollections = await this.collectionService.decryptMany(collections);
-
-    // Convert to an object using collection Ids as keys for faster name lookups
-    this.collectionMap = {};
-    decryptedCollections.forEach((c) => (this.collectionMap[c.id] = c));
   }
 
   loadMore() {
@@ -190,7 +216,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         comp.groupId = group != null ? group.id : null;
         comp.onSavedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
-          this.load();
+          this.refreshGroups$.next();
         });
         comp.onDeletedGroup.pipe(takeUntil(this.destroy$)).subscribe(() => {
           modal.close();
