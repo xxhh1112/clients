@@ -13,6 +13,7 @@ const STANDARD_ATTESTATION_FORMAT = "packed";
 interface BitCredential {
   credentialId: CredentialId;
   keyPair: CryptoKeyPair;
+  rpId: string;
   origin: string;
 }
 
@@ -69,7 +70,7 @@ export class U2FDevice {
       rpId: options.publicKey.rp.id,
       credentialId,
       userPresence: true,
-      userVerification: false,
+      userVerification: true,
       keyPair,
       attestationFormat: STANDARD_ATTESTATION_FORMAT,
     });
@@ -126,7 +127,12 @@ export class U2FDevice {
     //   })
     // );
 
-    this.credentials.set(credentialId.encoded, { credentialId, keyPair, origin });
+    this.credentials.set(credentialId.encoded, {
+      credentialId,
+      keyPair,
+      origin,
+      rpId: options.publicKey.rp.id,
+    });
 
     return {
       id: credentialId.encoded,
@@ -141,7 +147,15 @@ export class U2FDevice {
   }
 
   async get(options: CredentialRequestOptions, origin: string): Promise<PublicKeyCredential> {
-    const credential = this.getCredential(options.publicKey.allowCredentials);
+    let credential: BitCredential | undefined;
+
+    if (options.publicKey.allowCredentials && options.publicKey.allowCredentials.length > 0) {
+      // We're looking for regular non-resident keys
+      credential = this.getCredential(options.publicKey.allowCredentials);
+    } else {
+      // We're looking for a resident key
+      credential = this.getCredentialByRp(options.publicKey.rpId);
+    }
 
     if (credential === undefined) {
       throw new Error("No valid credentials found");
@@ -165,7 +179,7 @@ export class U2FDevice {
       credentialId: credential.credentialId,
       rpId: options.publicKey.rpId,
       userPresence: true,
-      userVerification: false,
+      userVerification: true,
     });
 
     const signature = await generateSignature({
@@ -188,7 +202,9 @@ export class U2FDevice {
     };
   }
 
-  private getCredential(allowCredentials: PublicKeyCredentialDescriptor[]) {
+  private getCredential(
+    allowCredentials: PublicKeyCredentialDescriptor[]
+  ): BitCredential | undefined {
     let credential: BitCredential | undefined;
     for (const allowedCredential of allowCredentials) {
       const id = new CredentialId(allowedCredential.id);
@@ -198,6 +214,15 @@ export class U2FDevice {
       }
     }
     return credential;
+  }
+
+  private getCredentialByRp(rpId: string): BitCredential | undefined {
+    for (const credential of this.credentials.values()) {
+      if (credential.rpId === rpId) {
+        return credential;
+      }
+    }
+    return undefined;
   }
 }
 

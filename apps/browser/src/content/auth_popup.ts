@@ -10,6 +10,7 @@ export const authPopupHtml = `
       background: rgb(0 0 0 / 0.6);
       align-items: center;
       justify-content: center;
+      z-index: 9999999999;
     }
 
     .bit-auth {
