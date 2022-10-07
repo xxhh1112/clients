@@ -15,6 +15,7 @@ interface BitCredential {
   keyPair: CryptoKeyPair;
   rpId: string;
   origin: string;
+  userHandle: Uint8Array;
 }
 
 export class U2FDevice {
@@ -132,6 +133,7 @@ export class U2FDevice {
       keyPair,
       origin,
       rpId: options.publicKey.rp.id,
+      userHandle: new Uint8Array(options.publicKey.user.id as ArrayBuffer),
     });
 
     return {
@@ -196,7 +198,7 @@ export class U2FDevice {
         authenticatorData: authData,
         clientDataJSON: clientData,
         signature,
-        userHandle: null, // only needed for discoverable credentials
+        userHandle: credential.userHandle,
       } as AuthenticatorAssertionResponse,
       getClientExtensionResults: () => ({}),
     };
