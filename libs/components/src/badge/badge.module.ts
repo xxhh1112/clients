@@ -1,11 +1,13 @@
-import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
+import { SharedModule } from "../shared";
+
+import { BadgeListComponent } from "./badge-list.component";
 import { BadgeDirective } from "./badge.directive";
 
 @NgModule({
-  imports: [CommonModule],
-  exports: [BadgeDirective],
-  declarations: [BadgeDirective],
+  imports: [SharedModule],
+  exports: [BadgeDirective, BadgeListComponent],
+  declarations: [BadgeDirective, BadgeListComponent],
 })
 export class BadgeModule {}

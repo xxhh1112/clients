@@ -1,0 +1,12 @@
+<span
+  *ngFor="let item of filteredItems; let last = last"
+  bitBadge
+  [badgeType]="badgeType"
+  class="tw-mx-1"
+>
+  {{ item }}
+  <span class="sr-only" *ngIf="!last">, </span>
+</span>
+<span *ngIf="isFiltered" bitBadge [badgeType]="badgeType" class="tw-mx-1">
+  {{ "plusNMore" | i18n: (items.length - filteredItems.length).toString() }}
+</span>

@@ -1,2 +1,2 @@
-export * from "./badge.directive";
+export { BadgeDirective } from "./badge.directive";
 export * from "./badge.module";

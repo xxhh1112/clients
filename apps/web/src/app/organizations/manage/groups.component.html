@@ -81,22 +81,11 @@
             </button>
           </td>
           <td bitCell (click)="edit(g)" class="tw-cursor-pointer">
-            <span
-              *ngFor="let cName of g.collectionNames.slice(0, maxCollections); let last = last"
-              bitBadge
-              badgeType="secondary"
-              class="tw-mx-1"
-            >
-              {{ cName }} <span class="sr-only" *ngIf="!last">, </span>
-            </span>
-            <span
-              *ngIf="g.collectionNames.length > maxCollections"
-              bitBadge
-              badgeType="secondary"
-              class="tw-mx-1"
-            >
-              {{ "plusNMore" | i18n: (g.collectionNames.length - maxCollections).toString() }}
-            </span>
+            <bit-badge-list
+              [items]="g.collectionNames"
+              [maxItems]="2"
+              badgeType="warning"
+            ></bit-badge-list>
           </td>
           <td bitCell>
             <button
