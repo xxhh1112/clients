@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -24,7 +25,8 @@ export class FolderAddEditComponent implements OnInit {
     protected folderApiService: FolderApiServiceAbstraction,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
-    private logService: LogService
+    private logService: LogService,
+    private cryptoService: CryptoService
   ) {}
 
   async ngOnInit() {
@@ -90,7 +92,7 @@ export class FolderAddEditComponent implements OnInit {
       this.editMode = true;
       this.title = this.i18nService.t("editFolder");
       const folder = await this.folderService.get(this.folderId);
-      this.folder = await folder.decrypt();
+      this.folder = await this.cryptoService.decrypt(FolderView, folder);
     } else {
       this.title = this.i18nService.t("addFolder");
     }

@@ -14,6 +14,7 @@ import { sequentialize } from "../misc/sequentialize";
 import { Utils } from "../misc/utils";
 import { EEFLongWordList } from "../misc/wordlist";
 import { EncryptedOrganizationKeyData } from "../models/data/encryptedOrganizationKeyData";
+import Domain from "../models/domain/domainBase";
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
 import { BaseEncryptedOrganizationKey } from "../models/domain/encryptedOrganizationKey";
@@ -21,6 +22,7 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
+import { DecryptableView, DecryptableDecryptType } from "../models/view/folderView";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -676,6 +678,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     return true;
+  }
+
+  async decrypt<T extends DecryptableView, D extends Domain>(
+    view: DecryptableDecryptType<T, D>,
+    model: D
+  ): Promise<T> {
+    const key = await this.getKeyForUserEncryption();
+    return view.decrypt(this, key, model);
   }
 
   // ---HELPERS---
