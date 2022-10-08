@@ -684,7 +684,12 @@ export class CryptoService implements CryptoServiceAbstraction {
     view: DecryptableDecryptType<T, D>,
     model: D
   ): Promise<T> {
-    const key = await this.getKeyForUserEncryption();
+    // If the item has an organizationId, use the org key, otherwise use the user key
+    const orgId: string = (model as any).organizationId;
+    const key = Utils.isNullOrWhitespace(orgId)
+      ? await this.getKeyForUserEncryption()
+      : await this.getOrgKey(orgId);
+
     return view.decrypt(this, key, model);
   }
 
