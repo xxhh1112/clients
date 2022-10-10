@@ -263,7 +263,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
 
     const fd = new FormData();
 
-    this.creatBlobObject(decBuf, encFileName, key);
+    this.createBlobObject(decBuf, encFileName, key);
 
     try {
       await this.postShareCipherAttachment(cipherId, attachmentView.id, fd, organizationId);
@@ -272,7 +272,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     }
   }
 
-  private async creatBlobObject(
+  private async createBlobObject(
     decBuf: ArrayBuffer,
     encFileName: EncString,
     key: SymmetricCryptoKey
