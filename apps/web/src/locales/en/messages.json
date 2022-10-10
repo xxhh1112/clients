@@ -5436,9 +5436,6 @@
   "serviceAccount":{
     "message": "Service Account"
   },
-  "newServiceAccount": {
-    "message": "New Service Account"
-  },
   "serviceAccounts":{
     "message": "Service Accounts"
   },
@@ -5516,6 +5513,24 @@
   },
   "softDeletesSuccessToast":{
     "message":"Secrets sent to trash"
+  },
+  "serviceAccountCreated":{
+    "message":"Service Account Created"
+  },
+  "smAccess":{
+    "message":"Access"
+  },
+  "projectCommaSecret":{
+    "message":"Project, Secret"
+  },
+  "serviceAccountName":{
+    "message": "Service account name"
+  },
+  "newSaSelectAccess":{
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter":{
+    "message": "Type to Filter"
   },
   "softDeleteSuccessToast":{
     "message":"Secret sent to trash"

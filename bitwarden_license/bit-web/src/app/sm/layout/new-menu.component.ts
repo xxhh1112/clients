@@ -13,6 +13,10 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../secrets/dialog/secret-dialog.component";
+import {
+  ServiceAccountDialogComponent,
+  ServiceAccountOperation,
+} from "../service-accounts/dialog/service-account-dialog.component";
 
 @Component({
   selector: "sm-new-menu",
@@ -49,6 +53,14 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+      },
+    });
+  }
+
+  openServiceAccountDialog() {
+    this.dialogService.open<unknown, ServiceAccountOperation>(ServiceAccountDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
       },
     });
   }

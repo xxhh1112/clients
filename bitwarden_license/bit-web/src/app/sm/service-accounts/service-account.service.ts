@@ -9,6 +9,7 @@ import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCry
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { ServiceAccountView } from "@bitwarden/common/models/view/service-account-view";
 
+import { ServiceAccountRequest } from "./requests/service-account.request";
 import { ServiceAccountResponse } from "./responses/service-account.response";
 
 @Injectable({
@@ -37,8 +38,32 @@ export class ServiceAccountService {
     return await this.createServiceAccountViews(organizationId, results.data);
   }
 
+  async create(organizationId: string, serviceAccountView: ServiceAccountView) {
+    const orgKey = await this.getOrganizationKey(organizationId);
+    const request = await this.getServiceAccountRequest(orgKey, serviceAccountView);
+    const r = await this.apiService.send(
+      "POST",
+      "/organizations/" + organizationId + "/service-accounts",
+      request,
+      true,
+      true
+    );
+    this._serviceAccount.next(
+      await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r))
+    );
+  }
+
   private async getOrganizationKey(organizationId: string): Promise<SymmetricCryptoKey> {
     return await this.cryptoService.getOrgKey(organizationId);
+  }
+
+  private async getServiceAccountRequest(
+    organizationKey: SymmetricCryptoKey,
+    serviceAccountView: ServiceAccountView
+  ) {
+    const request = new ServiceAccountRequest();
+    request.name = await this.encryptService.encrypt(serviceAccountView.name, organizationKey);
+    return request;
   }
 
   private async createServiceAccountView(

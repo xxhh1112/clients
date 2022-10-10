@@ -3,7 +3,12 @@ import { ActivatedRoute } from "@angular/router";
 import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
 import { ServiceAccountView } from "@bitwarden/common/models/view/service-account-view";
+import { DialogService } from "@bitwarden/components";
 
+import {
+  ServiceAccountDialogComponent,
+  ServiceAccountOperation,
+} from "./dialog/service-account-dialog.component";
 import { ServiceAccountService } from "./service-account.service";
 
 @Component({
@@ -17,6 +22,7 @@ export class ServiceAccountsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private dialogService: DialogService,
     private serviceAccountService: ServiceAccountService
   ) {}
 
@@ -30,6 +36,15 @@ export class ServiceAccountsComponent implements OnInit {
       })
     );
   }
+
+  openNewServiceAccountDialog() {
+    this.dialogService.open<unknown, ServiceAccountOperation>(ServiceAccountDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+      },
+    });
+  }
+
   private async getServiceAccounts(): Promise<ServiceAccountView[]> {
     return await this.serviceAccountService.getServiceAccounts(this.organizationId);
   }
