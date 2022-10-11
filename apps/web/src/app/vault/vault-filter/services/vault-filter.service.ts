@@ -52,19 +52,25 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
       switchMap((orgs) => this.buildOrganizationTree(orgs))
     );
 
-  protected _filteredFolders = new ReplaySubject<FolderView[]>(1);
-  filteredFolders$: Observable<FolderView[]> = this._filteredFolders.asObservable();
-  protected _filteredCollections = new ReplaySubject<CollectionView[]>(1);
-  filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
+  protected _organizationFilter = new BehaviorSubject<Organization>(null);
 
+  filteredFolders$: Observable<FolderView[]> = this.folderService.folderViews$.pipe(
+    combineLatestWith(this._organizationFilter),
+    switchMap(([folders, org]) => {
+      return this.filterFolders(folders, org);
+    })
+  );
   folderTree$: Observable<TreeNode<FolderFilter>> = this.filteredFolders$.pipe(
     map((folders) => this.buildFolderTree(folders))
   );
+
+  protected _filteredCollections = new ReplaySubject<CollectionView[]>(1);
+  filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
+
   collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => this.buildCollectionTree(collections))
   );
 
-  protected _organizationFilter = new BehaviorSubject<Organization>(null);
   protected destroy$: Subject<void> = new Subject<void>();
 
   // TODO: Remove once collections is refactored with observables
@@ -83,17 +89,6 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   }
 
   protected loadSubscriptions() {
-    this.folderService.folderViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(([folders, org]) => {
-          return this.filterFolders(folders, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredFolders);
-
-    // TODO: Use collectionService once collections is refactored
     this.collectionViews$
       .pipe(
         combineLatestWith(this._organizationFilter),
