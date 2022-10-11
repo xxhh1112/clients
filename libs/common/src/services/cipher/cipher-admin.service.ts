@@ -1,16 +1,15 @@
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
-import { CipherCollectionsRequest } from "@bitwarden/common/models/request/cipherCollectionsRequest";
-import { CipherCreateRequest } from "@bitwarden/common/models/request/cipherCreateRequest";
-import { CipherRequest } from "@bitwarden/common/models/request/cipherRequest";
-import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-
+import { ApiService } from "./../../abstractions/api.service";
+import { CipherAdminServiceAbstraction } from "./../../abstractions/cipher/cipher-admin.service.abstraction";
+import { I18nService } from "./../../abstractions/i18n.service";
+import { CipherData } from "./../../models/data/cipherData";
+import { Cipher } from "./../../models/domain/cipher";
+import { CipherBulkDeleteRequest } from "./../../models/request/cipherBulkDeleteRequest";
+import { CipherCollectionsRequest } from "./../../models/request/cipherCollectionsRequest";
+import { CipherCreateRequest } from "./../../models/request/cipherCreateRequest";
+import { CipherRequest } from "./../../models/request/cipherRequest";
+import { CipherResponse } from "./../../models/response/cipherResponse";
+import { ListResponse } from "./../../models/response/listResponse";
+import { CipherView } from "./../../models/view/cipherView";
 import { Utils } from "./utils";
 
 export class CipherAdminService implements CipherAdminServiceAbstraction {

@@ -1,5 +1,6 @@
-import Substitute, { SubstituteOf } from "@fluffy-spoon/substitute";
+import { mock, mockReset } from "jest-mock-extended";
 
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
@@ -9,246 +10,200 @@ import { CipherRequest } from "@bitwarden/common/models/request/cipherRequest";
 import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
 import { CipherAdminService } from "@bitwarden/common/services/cipher/cipher-admin.service";
 
-jest.mock("@bitwarden/common/abstractions/api.service");
-
 describe("Cipher Admin Service", () => {
-  let apiServiceSpy: any;
-  let i18nService: SubstituteOf<I18nService>;
+  const apiService = mock<ApiService>();
+  const i18nService = mock<I18nService>();
 
-  let cipherAadminService: CipherAdminService;
+  let cipherAdminService: CipherAdminService;
 
   beforeEach(() => {
-    i18nService = Substitute.for<I18nService>();
+    mockReset(apiService);
+    mockReset(i18nService);
 
-    apiServiceSpy = {
-      send: jest.fn(),
-    };
+    cipherAdminService = new CipherAdminService(apiService, i18nService);
+  });
+  describe("getOrganizationCipherViews", () => {
+    it("it should send get call to server to retrieve cipher-views", async () => {
+      const organizationId = "organizationId";
 
-    cipherAadminService = new CipherAdminService(apiServiceSpy, i18nService);
+      const response: any = [];
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.getOrganizationCipherViews(organizationId);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "GET",
+        "/ciphers/organization-details?organizationId=" + organizationId,
+        null,
+        true,
+        true
+      );
+    });
   });
 
-  it("Should test getOrganizationCipherViews", async () => {
-    const organizationId = "organizationId";
+  describe("putCipherCollectionsAdmin", () => {
+    it("it should send put call to server to update cipherCollections", async () => {
+      const id = "testId";
+      const request = new CipherCollectionsRequest(["collectionIds"]);
 
-    const response: any = [];
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = [];
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.putCipherCollectionsAdmin(id, request);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/" + id + "/collections-admin",
+        request,
+        true,
+        false
       );
-    const result = await cipherAadminService.getOrganizationCipherViews(organizationId);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "GET",
-      "/ciphers/organization-details?organizationId=" + organizationId,
-      null,
-      true,
-      true
-    );
+    });
   });
 
-  it("Should test putCipherCollectionsAdmin", async () => {
-    const id = "testId";
-    const request = new CipherCollectionsRequest(["collectionIds"]);
-
-    const response: any = [];
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("getCipherAdmin", () => {
+    it("it should send get call to server to retrieve cipher-admin", async () => {
+      const id = "testId";
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.getCipherAdmin(id);
+      const expectedResult = new CipherResponse(response);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(expectedResult);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "GET",
+        "/ciphers/" + id + "/admin",
+        null,
+        true,
+        true
       );
-    const result = await cipherAadminService.putCipherCollectionsAdmin(id, request);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/" + id + "/collections-admin",
-      request,
-      true,
-      false
-    );
+    });
   });
 
-  it("Should test getCipherAdmin", async () => {
-    const id = "testId";
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAadminService.getCipherAdmin(id);
-    const expectedResult = new CipherResponse(response);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(expectedResult);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "GET",
-      "/ciphers/" + id + "/admin",
-      null,
-      true,
-      true
-    );
+  describe("postCipherAdmin", () => {
+    it("it should send post call to server", async () => {
+      const cipher: Cipher = new Cipher();
+      const request = new CipherCreateRequest(cipher);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.postCipherAdmin(request);
+      const expectedResult = new CipherResponse(response);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(expectedResult);
+      expect(apiService.send).toHaveBeenCalledWith("POST", "/ciphers/admin", request, true, true);
+    });
   });
 
-  it("Should test postCipherAdmin", async () => {
-    const cipher: Cipher = new Cipher();
-    const request = new CipherCreateRequest(cipher);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("putCipherAdmin", () => {
+    it("it should send put call to server", async () => {
+      const id = "testId";
+      const cipher: Cipher = new Cipher();
+      const request = new CipherRequest(cipher);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.putCipherAdmin(id, request);
+      const expectedResult = new CipherResponse(response);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(expectedResult);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/" + id + "/admin",
+        request,
+        true,
+        true
       );
-    const result = await cipherAadminService.postCipherAdmin(request);
-    const expectedResult = new CipherResponse(response);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(expectedResult);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith("POST", "/ciphers/admin", request, true, true);
+    });
   });
 
-  it("Should test putCipherAdmin", async () => {
-    const id = "testId";
-    const cipher: Cipher = new Cipher();
-    const request = new CipherRequest(cipher);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("deleteCipherAdmin", () => {
+    it("it should send delete call to server", async () => {
+      const id = "testId";
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.deleteCipherAdmin(id);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/admin",
+        null,
+        true,
+        false
       );
-    const result = await cipherAadminService.putCipherAdmin(id, request);
-    const expectedResult = new CipherResponse(response);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(expectedResult);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/" + id + "/admin",
-      request,
-      true,
-      true
-    );
+    });
   });
 
-  it("Should test deleteCipherAdmin", async () => {
-    const id = "testId";
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("deleteManyCiphersAdmin", () => {
+    it("it should send delete call to server to delete many cipher", async () => {
+      const request: CipherBulkDeleteRequest = new CipherBulkDeleteRequest(["collectionIds"]);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.deleteManyCiphersAdmin(request);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/admin",
+        request,
+        true,
+        false
       );
-    const result = await cipherAadminService.deleteCipherAdmin(id);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "DELETE",
-      "/ciphers/" + id + "/admin",
-      null,
-      true,
-      false
-    );
+    });
   });
 
-  it("Should test deleteManyCiphersAdmin", async () => {
-    const request: CipherBulkDeleteRequest = new CipherBulkDeleteRequest(["collectionIds"]);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("putDeleteCipherAdmin", () => {
+    it("it should send put call to server to delete cipher", async () => {
+      const id = "testId";
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.putDeleteCipherAdmin(id);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/" + id + "/delete-admin",
+        null,
+        true,
+        false
       );
-    const result = await cipherAadminService.deleteManyCiphersAdmin(request);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "DELETE",
-      "/ciphers/admin",
-      request,
-      true,
-      false
-    );
+    });
   });
 
-  it("Should test putDeleteCipherAdmin", async () => {
-    const id = "testId";
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+  describe("putDeleteManyCiphersAdmin", () => {
+    it("it should send put call to server to delete many cipher", async () => {
+      const request: CipherBulkDeleteRequest = new CipherBulkDeleteRequest(["collectionIds"]);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.putDeleteManyCiphersAdmin(request);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(response);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/delete-admin",
+        request,
+        true,
+        false
       );
-    const result = await cipherAadminService.putDeleteCipherAdmin(id);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/" + id + "/delete-admin",
-      null,
-      true,
-      false
-    );
+    });
   });
 
-  it("Should test putDeleteManyCiphersAdmin", async () => {
-    const request: CipherBulkDeleteRequest = new CipherBulkDeleteRequest(["collectionIds"]);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAadminService.putDeleteManyCiphersAdmin(request);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(response);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/delete-admin",
-      request,
-      true,
-      false
-    );
-  });
+  describe("putRestoreCipherAdmin", () => {
+    it("it should send put call to server to restore cipher", async () => {
+      const id = "testId";
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAdminService.putRestoreCipherAdmin(id);
+      const expectedResult = new CipherResponse(response);
 
-  it("Should test putRestoreCipherAdmin", async () => {
-    const id = "testId";
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(result).toEqual(expectedResult);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/" + id + "/restore-admin",
+        null,
+        true,
+        true
       );
-    const result = await cipherAadminService.putRestoreCipherAdmin(id);
-    const expectedResult = new CipherResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(result).toEqual(expectedResult);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/" + id + "/restore-admin",
-      null,
-      true,
-      true
-    );
+    });
   });
 });

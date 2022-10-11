@@ -20,6 +20,7 @@ import { AuthService } from "@bitwarden/common/services/auth.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
 import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
+import { CipherAdminService } from "@bitwarden/common/services/cipher/cipher-admin.service";
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
@@ -224,6 +225,8 @@ export class Main {
       this.fileUploadService,
       this.logService
     );
+
+    this.cipherAdminService = new CipherAdminService(this.apiService, this.i18nService);
 
     this.broadcasterService = new BroadcasterService();
 

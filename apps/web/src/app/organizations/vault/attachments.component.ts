@@ -54,7 +54,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return this.cipherDomain;
     }
-    const response = await this.apiService.getCipherAdmin(this.cipherDomain.id);
+    const response = await this.cipherAdminService.getCipherAdmin(this.cipherDomain.id);
     return new Cipher(new CipherData(response));
   }
 

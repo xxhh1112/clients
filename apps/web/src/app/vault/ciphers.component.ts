@@ -30,7 +30,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() onShareClicked = new EventEmitter<CipherView>();
   @Output() onCollectionsClicked = new EventEmitter<CipherView>();
   @Output() onCloneClicked = new EventEmitter<CipherView>();
-  @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
+  @Output() onOrganizationBadgeClicked = new EventEmitter<string>();
 
   pagedCiphers: CipherView[] = [];
   pageSize = 200;
@@ -284,7 +284,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   }
 
   onOrganizationClicked(organizationId: string) {
-    this.onOrganzationBadgeClicked.emit(organizationId);
+    this.onOrganizationBadgeClicked.emit(organizationId);
   }
 
   protected deleteCipher(id: string, permanent: boolean) {

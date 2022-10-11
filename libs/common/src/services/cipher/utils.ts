@@ -1,12 +1,12 @@
-import { CipherType } from "@bitwarden/common/enums/cipherType";
-
 import { I18nService } from "../../abstractions/i18n.service";
 
+import { CipherType } from "./../../enums/cipherType";
+
 export class Utils {
-  static inited = false;
+  static initiated = false;
 
   static init() {
-    if (Utils.inited) {
+    if (Utils.initiated) {
       return;
     }
   }
