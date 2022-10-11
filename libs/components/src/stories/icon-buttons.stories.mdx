@@ -1,0 +1,30 @@
+import { Meta, Story } from "@storybook/addon-docs/";
+
+<Meta title="Common/Icon Buttons" />
+
+# Icon buttons
+
+This is an example of design docs containing embedded stories.
+
+### Example
+
+Default primary buttons look like this
+
+<Story id="component-library-icon-button--single" />
+
+Sometimes this button can be used for refreshing, it will then have a loading state like this
+
+**Note:** Specifying args doesn't seem to be supported when using embedded stories :(
+
+<Story
+  id="component-library-icon-button--single"
+  args={{ loading: true, bitIconButton: "bwi-trash" }}
+/>
+
+Here is an example of all different types
+
+<Story id="component-library-icon-button--all-default" />
+
+## Iconography
+
+For more information see [Icons](?path=/story/common-icons--page).

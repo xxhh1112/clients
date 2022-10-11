@@ -80,12 +80,34 @@ const Template: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) =
   `,
 });
 
-export const Default = Template.bind({});
-Default.args = {
+export const AllDefault = Template.bind({});
+AllDefault.args = {
   size: "default",
 };
 
-export const Small = Template.bind({});
-Small.args = {
+export const AllSmall = Template.bind({});
+AllSmall.args = {
   size: "small",
+};
+
+const SingleTemplate: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
+  props: args,
+  template: `
+    <button
+      [bitIconButton]="bitIconButton"
+      [buttonType]="buttonType"
+      [size]="size"
+      [loading]="loading"
+      [title]="title"
+      [attr.aria-label]="ariaLabel"></button>
+  `,
+});
+export const Single = SingleTemplate.bind({});
+Single.args = {
+  bitIconButton: "bwi-star",
+  buttonType: "primary",
+  size: "default",
+  loading: false,
+  title: "Example icon button",
+  ariaLabel: "Example icon button",
 };
