@@ -15,13 +15,13 @@
 
   <bit-form-field class="tw-ml-3 tw-flex-grow">
     <bit-label>{{ selectorLabelText }}</bit-label>
-    <!--TODO: Swap with CL NgSelect-->
-    <select bitInput (change)="selectItem($event)" (blur)="handleOnTouch()" [disabled]="disabled">
-      <option disabled selected value="">-- Type to filter not implemented yet --</option>
-      <option *ngFor="let m of selectionList.deselectedItems" [value]="m.id">
-        {{ m.listName }}
-      </option>
-    </select>
+    <bit-multi-select
+      class="tw-w-full"
+      [baseItems]="selectionList.deselectedItems"
+      [removeSelectedItems]="true"
+      [disabled]="disabled"
+      (onItemsConfirmed)="selectItems($event)"
+    ></bit-multi-select>
     <bit-hint *ngIf="selectorHelpText">{{ selectorHelpText }}</bit-hint>
   </bit-form-field>
 </div>
@@ -58,7 +58,7 @@
         <div class="tw-flex tw-items-center tw-text-sm" *ngSwitchDefault>
           <i
             class="bwi tw-mr-3 tw-px-0.5 tw-text-2xl"
-            [ngClass]="itemIcon(item)"
+            [ngClass]="item.icon || itemIcon(item)"
             aria-hidden="true"
           ></i>
           <span>{{ item.labelName }}</span>

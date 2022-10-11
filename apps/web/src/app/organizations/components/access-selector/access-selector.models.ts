@@ -2,6 +2,7 @@ import { OrganizationUserStatusType } from "@bitwarden/common/enums/organization
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
 import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selectionReadOnlyResponse";
+import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
 /**
  * Permission options that replace/correspond with readOnly and hidePassword server fields.
@@ -28,37 +29,18 @@ export enum AccessItemType {
  * and then joined back with the base type.
  */
 export type AccessItemView =
-  | {
-      /**
-       * Unique identifier of the item being selected
-       */
-      id: string;
-
-      /**
-       * Text that be displayed in the ngSelect list items
-       */
-      listName: string;
-
-      /**
-       * Text that will be displayed in the ngSelect selection option badge
-       */
-      labelName: string;
-
-      /**
-       * Optional string to group items by a parent in the ngSelect component
-       */
-      parentGrouping?: string;
-    } & (
-      | {
-          type: AccessItemType.COLLECTION | AccessItemType.GROUP;
-        }
-      | {
-          type: AccessItemType.MEMBER; // Members have a few extra details required to display, so they're added here
-          email: string;
-          role: OrganizationUserType;
-          status: OrganizationUserStatusType;
-        }
-    );
+  | SelectItemView &
+      (
+        | {
+            type: AccessItemType.COLLECTION | AccessItemType.GROUP;
+          }
+        | {
+            type: AccessItemType.MEMBER; // Members have a few extra details required to display, so they're added here
+            email: string;
+            role: OrganizationUserType;
+            status: OrganizationUserStatusType;
+          }
+      );
 
 /**
  * A type that is emitted as a value for the ngControl

@@ -4,6 +4,7 @@ import { Subject, takeUntil } from "rxjs";
 
 import { FormSelectionList } from "@bitwarden/angular/utils/FormSelectionList";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
 import {
   AccessItemType,
@@ -69,7 +70,13 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   }
 
   set items(val: AccessItemView[]) {
-    this.selectionList.populateItems(val, this.selectionList.formArray.getRawValue() ?? []);
+    this.selectionList.populateItems(
+      val.map((m) => {
+        m.icon = m.icon ?? this.itemIcon(m); // Ensure an icon is set
+        return m;
+      }),
+      this.selectionList.formArray.getRawValue() ?? []
+    );
   }
 
   /**
@@ -185,11 +192,8 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this.destroy$.complete();
   }
 
-  selectItem(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const addedId = target.value;
-    this.selectionList.selectItem(addedId);
-    target.value = "";
+  selectItems(items: SelectItemView[]) {
+    this.selectionList.selectItems(items.map((i) => i.id));
   }
 
   itemIcon(item: AccessItemView) {

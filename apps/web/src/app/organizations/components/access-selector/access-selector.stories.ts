@@ -67,6 +67,7 @@ const itemsFactory = (n: number, type: AccessItemType) => {
       case AccessItemType.COLLECTION:
         item.labelName = item.listName = `Collection ${id}`;
         item.id = item.id + "c";
+        item.parentGrouping = "Collection Parent Group " + ((id % 2) + 1);
         break;
       case AccessItemType.GROUP:
         item.labelName = item.listName = `Group ${id}`;
@@ -76,7 +77,7 @@ const itemsFactory = (n: number, type: AccessItemType) => {
         item.id = item.id + "m";
         item.email = `member${id}@email.com`;
         item.status = id % 3 == 0 ? 0 : 2;
-        item.labelName = item.status == 2 ? `Member ${id}` : "";
+        item.labelName = item.status == 2 ? `Member ${id}` : item.email;
         item.listName = item.status == 2 ? `${item.labelName} (${item.email})` : item.email;
         item.role = id % 5;
         break;
