@@ -39,20 +39,28 @@
     <tr bitRow *ngFor="let item of selectionList.selectedItems; let i = index" [formGroupName]="i">
       <td bitCell [ngSwitch]="item.type">
         <div class="tw-flex tw-items-center" *ngSwitchCase="itemType.MEMBER">
-          <bit-avatar class="tw-mr-3" text="{{ item.labelName || item.email }}"></bit-avatar>
+          <bit-avatar
+            size="small"
+            class="tw-mr-3"
+            text="{{ item.labelName || item.email }}"
+          ></bit-avatar>
           <div class="tw-flex tw-flex-col">
-            <div>
+            <div class="tw-text-sm">
               {{ item.labelName || item.email }}
               <span *ngIf="item.status == 0" bitBadge badgeType="secondary">
                 {{ "invited" | i18n }}
               </span>
             </div>
-            <div class="tw-text-muted" *ngIf="item.labelName">{{ item.email }}</div>
+            <div class="tw-text-xs tw-text-muted" *ngIf="item.labelName">{{ item.email }}</div>
           </div>
         </div>
 
-        <div class="tw-flex tw-items-center tw-text-lg" *ngSwitchDefault>
-          <i class="bwi tw-mr-2" [ngClass]="itemIcon(item)" aria-hidden="true"></i>
+        <div class="tw-flex tw-items-center tw-text-sm" *ngSwitchDefault>
+          <i
+            class="bwi tw-mr-3 tw-px-0.5 tw-text-2xl"
+            [ngClass]="itemIcon(item)"
+            aria-hidden="true"
+          ></i>
           <span>{{ item.labelName }}</span>
         </div>
       </td>
