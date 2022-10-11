@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, mergeMap, Observable, from } from "rxjs";
+import { firstValueFrom, from, mergeMap, Observable } from "rxjs";
 
-import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "@bitwarden/angular/abstractions/deprecated-vault-filter.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -15,6 +14,7 @@ import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
+import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "../../../abstractions/deprecated-vault-filter.service";
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 
 const NestingDelimiter = "/";
@@ -84,11 +84,15 @@ export class VaultFilterService implements DeprecatedVaultFilterServiceAbstracti
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.SingleOrg)
+    );
   }
 
   async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    );
   }
 
   protected async getAllFoldersNested(folders: FolderView[]): Promise<TreeNode<FolderView>[]> {

@@ -55,6 +55,13 @@ export class ExportComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.DisablePersonalVaultExport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this.disabledByPolicy = policyAppliesToActiveUser;
+      });
+
     await this.checkExportDisabled();
 
     merge(
@@ -71,9 +78,6 @@ export class ExportComponent implements OnInit, OnDestroy {
   }
 
   async checkExportDisabled() {
-    this.disabledByPolicy = await this.policyService.policyAppliesToUser(
-      PolicyType.DisablePersonalVaultExport
-    );
     if (this.disabledByPolicy) {
       this.exportForm.disable();
     }
@@ -117,6 +121,7 @@ export class ExportComponent implements OnInit, OnDestroy {
       await this.userVerificationService.verifyUser(secret);
     } catch (e) {
       this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), e.message);
+      return;
     }
 
     this.doExport();
