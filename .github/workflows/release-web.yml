@@ -167,7 +167,7 @@ jobs:
         uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build-web.yml
-          path: apps/web
+          path: apps/web/build
           workflow_conclusion: success
           branch: master
           artifacts: web-*-cloud-COMMERCIAL.zip
