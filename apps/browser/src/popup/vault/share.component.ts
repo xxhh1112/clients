@@ -8,7 +8,7 @@ import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstrac
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 @Component({
@@ -41,12 +41,11 @@ export class ShareComponent extends BaseShareComponent {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.onSharedCipher.subscribe(() => {
-      this.router.navigate(["view-cipher", { cipherId: this.cipherId }]);
+      this.router.navigate(["view-cipher", { cipherId: this.cipherDomain.id }]);
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       this.cipherDomain = await this.cipherService.get(params.cipherId);
-      this.cipherId = params.cipherId;
       await this.load();
     });
   }

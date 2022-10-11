@@ -1,49 +1,33 @@
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { CipherAttachmentApiServiceAbstraction as CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { FileUploadType } from "@bitwarden/common/enums/fileUploadType";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
-import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
-import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
-import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachmentUploadDataResponse";
-import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
-import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-
-import { AzureFileUploadService } from "../azureFileUpload.service";
-import { BitwardenFileUploadService } from "../bitwardenFileUpload.service";
-
-type legacyServerAttachmentFileUploadRequest = {
-  admin: boolean;
-  cipherId: string;
-  encFileName: EncString;
-  encData: EncArrayBuffer;
-  key: EncString;
-};
+import { ApiService } from "./../../abstractions/api.service";
+import { CipherService } from "./../../abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "./../../abstractions/cipher/cipher-attachment-api.service.abstraction";
+import { CryptoService } from "./../../abstractions/crypto.service";
+import { FileUploadService } from "./../../abstractions/fileUpload.service";
+import { LogService } from "./../../abstractions/log.service";
+import { Utils } from "./../../misc/utils";
+import { CipherData } from "./../../models/data/cipherData";
+import { Cipher } from "./../../models/domain/cipher";
+import { EncArrayBuffer } from "./../../models/domain/encArrayBuffer";
+import { EncString } from "./../../models/domain/encString";
+import { SymmetricCryptoKey } from "./../../models/domain/symmetricCryptoKey";
+import { AttachmentRequest } from "./../../models/request/attachmentRequest";
+import { CipherBulkShareRequest } from "./../../models/request/cipherBulkShareRequest";
+import { CipherShareRequest } from "./../../models/request/cipherShareRequest";
+import { AttachmentResponse } from "./../../models/response/attachmentResponse";
+import { AttachmentUploadDataResponse } from "./../../models/response/attachmentUploadDataResponse";
+import { CipherResponse } from "./../../models/response/cipherResponse";
+import { ErrorResponse } from "./../../models/response/errorResponse";
+import { AttachmentView } from "./../../models/view/attachmentView";
+import { CipherView } from "./../../models/view/cipherView";
 
 export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
-  private azureFileUploadService: AzureFileUploadService;
-  private bitwardenFileUploadService: BitwardenFileUploadService;
-
   constructor(
     private cipherService: CipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
+    private fileUploadService: FileUploadService,
     logService: LogService
-  ) {
-    this.azureFileUploadService = new AzureFileUploadService(logService);
-    this.bitwardenFileUploadService = new BitwardenFileUploadService();
-  }
+  ) {}
 
   async deleteAttachmentWithServer(id: string, attachmentId: string): Promise<void> {
     try {
@@ -61,56 +45,6 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
 
   putShareCiphers(request: CipherBulkShareRequest): Promise<any> {
     return this.apiService.send("PUT", "/ciphers/share", request, true, false);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.apiService.send(
-      "POST",
-      "/ciphers/" + id + "/attachment",
-      data,
-      true,
-      true
-    );
-    return new CipherResponse(r);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async postCipherAttachmentAdminLegacy(id: string, data: FormData): Promise<CipherResponse> {
-    const r = await this.apiService.send(
-      "POST",
-      "/ciphers/" + id + "/attachment-admin",
-      data,
-      true,
-      true
-    );
-    return new CipherResponse(r);
-  }
-
-  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
-    return this.apiService.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      null,
-      true,
-      false
-    );
-  }
-
-  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
-    return this.apiService.send(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-      null,
-      true,
-      false
-    );
   }
 
   postShareCipherAttachment(
@@ -182,140 +116,6 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     await this.cipherService.upsert(data);
   }
 
-  async saveAttachmentRawWithServer(
-    cipher: Cipher,
-    filename: string,
-    data: ArrayBuffer,
-    admin = false
-  ): Promise<Cipher> {
-    const key = await this.cryptoService.getOrgKey(cipher.organizationId);
-    const encFileName = await this.cryptoService.encrypt(filename, key);
-
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
-    const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
-
-    const request: AttachmentRequest = {
-      key: dataEncKey[1].encryptedString,
-      fileName: encFileName.encryptedString,
-      fileSize: encData.buffer.byteLength,
-      adminRequest: admin,
-    };
-
-    let response: CipherResponse;
-    try {
-      const uploadDataResponse = await this.postCipherAttachment(cipher.id, request);
-      response = admin ? uploadDataResponse.cipherMiniResponse : uploadDataResponse.cipherResponse;
-      await this.uploadCipherAttachment(admin, uploadDataResponse, encFileName, encData);
-    } catch (e) {
-      const attachmentFileUpload: legacyServerAttachmentFileUploadRequest = {
-        admin: admin,
-        cipherId: cipher.id,
-        encFileName: encFileName,
-        encData: encData,
-        key: dataEncKey[1],
-      };
-
-      response = await this.throwErrorOnSaveAttachmentRawWithServer(
-        e,
-        response,
-        attachmentFileUpload
-      );
-    }
-
-    const cData = new CipherData(response, cipher.collectionIds);
-    if (!admin) {
-      await this.cipherService.upsert(cData);
-    }
-    return new Cipher(cData);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async legacyServerAttachmentFileUpload(request: legacyServerAttachmentFileUploadRequest) {
-    const fd = new FormData();
-    try {
-      const blob = new Blob([request.encData.buffer], { type: "application/octet-stream" });
-      fd.append("key", request.key.encryptedString);
-      fd.append("data", blob, request.encFileName.encryptedString);
-    } catch (e) {
-      if (Utils.isNode && !Utils.isBrowser) {
-        fd.append("key", request.key.encryptedString);
-        fd.append(
-          "data",
-          Buffer.from(request.encData.buffer) as any,
-          {
-            filepath: request.encFileName.encryptedString,
-            contentType: "application/octet-stream",
-          } as any
-        );
-      } else {
-        throw e;
-      }
-    }
-
-    let response: CipherResponse;
-    try {
-      if (request.admin) {
-        response = await this.postCipherAttachmentAdminLegacy(request.cipherId, fd);
-      } else {
-        response = await this.postCipherAttachmentLegacy(request.cipherId, fd);
-      }
-    } catch (e) {
-      throw new Error((e as ErrorResponse).getSingleMessage());
-    }
-
-    return response;
-  }
-
-  saveAttachmentWithServer(cipher: Cipher, unencryptedFile: any, admin = false): Promise<Cipher> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(unencryptedFile);
-      reader.onload = async (evt: any) => {
-        try {
-          const cData = await this.saveAttachmentRawWithServer(
-            cipher,
-            unencryptedFile.name,
-            evt.target.result,
-            admin
-          );
-          resolve(cData);
-        } catch (e) {
-          reject(e);
-        }
-      };
-      reader.onerror = () => {
-        reject("Error reading file.");
-      };
-    });
-  }
-
-  async renewAttachmentUploadUrl(
-    id: string,
-    attachmentId: string
-  ): Promise<AttachmentUploadDataResponse> {
-    const r = await this.apiService.send(
-      "GET",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
-      null,
-      true,
-      true
-    );
-    return new AttachmentUploadDataResponse(r);
-  }
-
-  postAttachmentFile(id: string, attachmentId: string, data: FormData): Promise<any> {
-    return this.apiService.send(
-      "POST",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      data,
-      true,
-      false
-    );
-  }
-
   async shareManyWithServer(
     ciphers: CipherView[],
     organizationId: string,
@@ -346,68 +146,102 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     await this.cipherService.upsert(encCiphers.map((c) => c.toCipherData()));
   }
 
-  async uploadCipherAttachment(
-    admin: boolean,
-    uploadData: AttachmentUploadDataResponse,
-    encryptedFileName: EncString,
-    encryptedFileData: EncArrayBuffer
-  ) {
-    const response = admin ? uploadData.cipherMiniResponse : uploadData.cipherResponse;
+  async saveAttachmentRawWithServer(
+    cipher: Cipher,
+    filename: string,
+    data: ArrayBuffer,
+    admin = false
+  ): Promise<Cipher> {
+    const key = await this.cryptoService.getOrgKey(cipher.organizationId);
+    const encFileName = await this.cryptoService.encrypt(filename, key);
+
+    const dataEncKey = await this.cryptoService.makeEncKey(key);
+    const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
+
+    const request: AttachmentRequest = {
+      key: dataEncKey[1].encryptedString,
+      fileName: encFileName.encryptedString,
+      fileSize: encData.buffer.byteLength,
+      adminRequest: admin,
+    };
+
+    let response: CipherResponse;
+    let uploadDataResponse: AttachmentUploadDataResponse;
     try {
-      switch (uploadData.fileUploadType) {
-        case FileUploadType.Direct:
-          await this.bitwardenFileUploadService.upload(
-            encryptedFileName.encryptedString,
-            encryptedFileData,
-            (fd) => this.postAttachmentFile(response.id, uploadData.attachmentId, fd)
-          );
-          break;
-        case FileUploadType.Azure: {
-          const renewalCallback = async () => {
-            const renewalResponse = await this.renewAttachmentUploadUrl(
-              response.id,
-              uploadData.attachmentId
-            );
-            return renewalResponse.url;
-          };
-          await this.azureFileUploadService.upload(
-            uploadData.url,
-            encryptedFileData,
-            renewalCallback
-          );
-          break;
-        }
-        default:
-          throw new Error("Unknown file upload type.");
-      }
+      uploadDataResponse = await this.postCipherAttachment(cipher.id, request);
+      response = admin ? uploadDataResponse.cipherMiniResponse : uploadDataResponse.cipherResponse;
+      await this.fileUploadService.uploadCipherAttachment(
+        admin,
+        uploadDataResponse,
+        encFileName,
+        encData
+      );
     } catch (e) {
       if (admin) {
-        await this.deleteCipherAttachmentAdmin(response.id, uploadData.attachmentId);
+        await this.deleteCipherAttachmentAdmin(response.id, uploadDataResponse.attachmentId);
       } else {
-        await this.deleteCipherAttachment(response.id, uploadData.attachmentId);
+        await this.deleteCipherAttachment(response.id, uploadDataResponse.attachmentId);
       }
-      throw e;
+      await this.throwErrorOnSaveAttachmentRawWithServer(e);
     }
+
+    const cData = new CipherData(response, cipher.collectionIds);
+    if (!admin) {
+      await this.cipherService.upsert(cData);
+    }
+    return new Cipher(cData);
+  }
+
+  saveAttachmentWithServer(cipher: Cipher, unencryptedFile: any, admin = false): Promise<Cipher> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(unencryptedFile);
+      reader.onload = async (evt: any) => {
+        try {
+          const cData = await this.saveAttachmentRawWithServer(
+            cipher,
+            unencryptedFile.name,
+            evt.target.result,
+            admin
+          );
+          resolve(cData);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.onerror = () => {
+        reject("Error reading file.");
+      };
+    });
+  }
+  deleteCipherAttachmentAdmin(id: string, attachmentId: string): Promise<any> {
+    return this.apiService.send(
+      "DELETE",
+      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
+      null,
+      true,
+      false
+    );
+  }
+
+  deleteCipherAttachment(id: string, attachmentId: string): Promise<any> {
+    return this.apiService.send(
+      "DELETE",
+      "/ciphers/" + id + "/attachment/" + attachmentId,
+      null,
+      true,
+      false
+    );
   }
 
   // Helpers
 
-  private async throwErrorOnSaveAttachmentRawWithServer(
-    e: any,
-    response: CipherResponse,
-    attachmentFileUpload: legacyServerAttachmentFileUploadRequest
-  ) {
-    if (
-      (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
-      (e as ErrorResponse).statusCode === 405
-    ) {
-      response = await this.legacyServerAttachmentFileUpload(attachmentFileUpload);
-    } else if (e instanceof ErrorResponse) {
+  private async throwErrorOnSaveAttachmentRawWithServer(e: any) {
+    if (e instanceof ErrorResponse) {
       throw new Error((e as ErrorResponse).getSingleMessage());
     } else {
       throw e;
     }
-    return response;
   }
 
   private async shareAttachmentWithServer(
@@ -429,7 +263,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
 
     const fd = new FormData();
 
-    this.creatBlobObject(decBuf, encFileName, key);
+    this.createBlobObject(decBuf, encFileName, key);
 
     try {
       await this.postShareCipherAttachment(cipherId, attachmentView.id, fd, organizationId);
@@ -438,7 +272,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     }
   }
 
-  private async creatBlobObject(
+  private async createBlobObject(
     decBuf: ArrayBuffer,
     encFileName: EncString,
     key: SymmetricCryptoKey

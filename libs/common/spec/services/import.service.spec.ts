@@ -1,4 +1,5 @@
-import Substitute, { SubstituteOf } from "@fluffy-spoon/substitute";
+// eslint-disable-next-line no-restricted-imports
+import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";

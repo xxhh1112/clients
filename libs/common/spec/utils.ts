@@ -1,4 +1,5 @@
-import Substitute, { Arg } from "@fluffy-spoon/substitute";
+// eslint-disable-next-line no-restricted-imports
+import { Substitute, Arg } from "@fluffy-spoon/substitute";
 
 import { EncString } from "@bitwarden/common/models/domain/encString";
 
@@ -35,3 +36,8 @@ export function makeStaticByteArray(length: number, start = 0) {
   }
   return arr;
 }
+
+/**
+ * Use to mock a return value of a static fromJSON method.
+ */
+export const mockFromJson = (stub: any) => (stub + "_fromJSON") as any;

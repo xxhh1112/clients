@@ -4,7 +4,7 @@
     "browser": true,
     "webextensions": true
   },
-  "plugins": ["@typescript-eslint", "rxjs", "rxjs-angular"],
+  "plugins": ["@typescript-eslint", "rxjs", "rxjs-angular", "import"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": ["./tsconfig.eslint.json"],
@@ -18,6 +18,16 @@
     "prettier",
     "plugin:rxjs/recommended"
   ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
   "rules": {
     "@typescript-eslint/no-explicit-any": "off", // TODO: This should be re-enabled
     "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
@@ -63,8 +73,69 @@
       {
         "message": "Calling `svgIcon` directly is not allowed",
         "selector": "CallExpression[callee.name='svgIcon']"
+      },
+      {
+        "message": "Accessing FormGroup using `get` is not allowed, use `.value` instead",
+        "selector": "ChainExpression[expression.object.callee.property.name='get'][expression.property.name='value']"
       }
     ],
-    "curly": ["error", "all"]
-  }
+    "curly": ["error", "all"],
+    "import/namespace": ["off"], // This doesn't resolve namespace imports correctly, but TS will throw for this anyway
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          // Do not allow angular/node/electron code to be imported into common
+          {
+            "target": "./libs/common/**/*",
+            "from": "./libs/angular/**/*"
+          },
+          {
+            "target": "./libs/common/**/*",
+            "from": "./libs/node/**/*"
+          },
+          {
+            "target": "./libs/common/**/*",
+            "from": "./libs/electron/**/*"
+          }
+        ]
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      { "patterns": ["src/**/*"], "paths": ["@fluffy-spoon/substitute"] }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["libs/common/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/common/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["libs/components/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/components/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["libs/angular/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/angular/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["libs/node/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/node/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["libs/electron/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/electron/*", "src/**/*"] }]
+      }
+    }
+  ]
 }

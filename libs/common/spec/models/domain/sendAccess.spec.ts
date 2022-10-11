@@ -1,4 +1,5 @@
-import Substitute, { Arg } from "@fluffy-spoon/substitute";
+// eslint-disable-next-line no-restricted-imports
+import { Substitute, Arg } from "@fluffy-spoon/substitute";
 
 import { SendType } from "@bitwarden/common/enums/sendType";
 import { SendAccess } from "@bitwarden/common/models/domain/sendAccess";

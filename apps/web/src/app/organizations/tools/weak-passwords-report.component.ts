@@ -5,7 +5,7 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";

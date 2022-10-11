@@ -76,7 +76,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     protected ngZone: NgZone,
     protected changeDetectorRef: ChangeDetectorRef,
     protected eventService: EventService,
-    protected cipheeAttachmentApiService: CipherAttachmentApiServiceAbstraction,
+    protected cipherAttachmentApiService: CipherAttachmentApiServiceAbstraction,
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     protected stateService: StateService,
@@ -349,7 +349,7 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     let url: string;
     try {
-      const attachmentDownloadResponse = await this.cipheeAttachmentApiService.getAttachmentData(
+      const attachmentDownloadResponse = await this.cipherAttachmentApiService.getAttachmentData(
         this.cipher.id,
         attachment.id
       );

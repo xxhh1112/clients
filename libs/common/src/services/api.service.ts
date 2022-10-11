@@ -51,6 +51,7 @@ import { OrganizationUserUpdateGroupsRequest } from "../models/request/organizat
 import { OrganizationUserUpdateRequest } from "../models/request/organizationUserUpdateRequest";
 import { PasswordHintRequest } from "../models/request/passwordHintRequest";
 import { PasswordRequest } from "../models/request/passwordRequest";
+import { PasswordlessCreateAuthRequest } from "../models/request/passwordlessCreateAuthRequest";
 import { PaymentRequest } from "../models/request/paymentRequest";
 import { PreloginRequest } from "../models/request/preloginRequest";
 import { ProviderAddOrganizationRequest } from "../models/request/provider/providerAddOrganizationRequest";
@@ -87,6 +88,7 @@ import { UpdateTwoFactorYubioOtpRequest } from "../models/request/updateTwoFacto
 import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
 import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
 import { ApiKeyResponse } from "../models/response/apiKeyResponse";
+import { AuthRequestResponse } from "../models/response/authRequestResponse";
 import { RegisterResponse } from "../models/response/authentication/registerResponse";
 import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
 import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
@@ -258,6 +260,17 @@ export class ApiService implements ApiServiceAbstraction {
     } catch (e) {
       return Promise.reject(null);
     }
+  }
+
+  async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
+    const r = await this.send("POST", "/auth-requests/", request, false, true);
+    return new AuthRequestResponse(r);
+  }
+
+  async getAuthResponse(id: string, accessCode: string): Promise<AuthRequestResponse> {
+    const path = `/auth-requests/${id}/response?code=${accessCode}`;
+    const r = await this.send("GET", path, null, false, true);
+    return new AuthRequestResponse(r);
   }
 
   // Account APIs
@@ -2169,7 +2182,9 @@ export class ApiService implements ApiServiceAbstraction {
     requestInit.headers = headers;
     const response = await this.fetch(new Request(requestUrl, requestInit));
 
-    if (hasResponse && response.status === 200) {
+    const responseType = response.headers.get("content-type");
+    const responseIsJson = responseType != null && responseType.indexOf("application/json") !== -1;
+    if (hasResponse && response.status === 200 && responseIsJson) {
       const responseJson = await response.json();
       return responseJson;
     } else if (response.status !== 200) {

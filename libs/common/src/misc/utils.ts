@@ -1,9 +1,8 @@
 /* eslint-disable no-useless-escape */
 import * as tldjs from "tldjs";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-
 import { AbstractEncryptService } from "../abstractions/abstractEncrypt.service";
+import { CryptoService } from "../abstractions/crypto.service";
 import { I18nService } from "../abstractions/i18n.service";
 
 const nodeURL = typeof window === "undefined" ? require("url") : null;
@@ -99,6 +98,9 @@ export class Utils {
   }
 
   static fromByteStringToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
     const arr = new Uint8Array(str.length);
     for (let i = 0; i < str.length; i++) {
       arr[i] = str.charCodeAt(i);
@@ -307,8 +309,11 @@ export class Utils {
     return map;
   }
 
-  static getSortFunction(i18nService: I18nService, prop: string) {
-    return (a: any, b: any) => {
+  static getSortFunction<T>(
+    i18nService: I18nService,
+    prop: { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
+  ): (a: T, b: T) => number {
+    return (a, b) => {
       if (a[prop] == null && b[prop] != null) {
         return -1;
       }
@@ -319,9 +324,10 @@ export class Utils {
         return 0;
       }
 
+      // The `as unknown as string` here is unfortunate because typescript doesn't property understand that the return of T[prop] will be a string
       return i18nService.collator
-        ? i18nService.collator.compare(a[prop], b[prop])
-        : a[prop].localeCompare(b[prop]);
+        ? i18nService.collator.compare(a[prop] as unknown as string, b[prop] as unknown as string)
+        : (a[prop] as unknown as string).localeCompare(b[prop] as unknown as string);
     };
   }
 
@@ -331,6 +337,12 @@ export class Utils {
 
   static isNullOrEmpty(str: string): boolean {
     return str == null || typeof str !== "string" || str == "";
+  }
+
+  static isPromise(obj: any): obj is Promise<unknown> {
+    return (
+      obj != undefined && typeof obj["then"] === "function" && typeof obj["catch"] === "function"
+    );
   }
 
   static nameOf<T>(name: string & keyof T) {

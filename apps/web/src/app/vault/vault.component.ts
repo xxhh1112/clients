@@ -17,7 +17,7 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -221,8 +221,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
-      (comp) => {
-        comp.cipherId = cipher.id;
+      async (comp) => {
+        comp.cipherDomain = await this.cipherService.get(cipher.id);
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onUploadedAttachment.subscribe(() => (madeAttachmentChanges = true));
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
@@ -245,8 +245,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      (comp) => {
-        comp.cipherId = cipher.id;
+      async (comp) => {
+        comp.cipherDomain = await this.cipherService.get(cipher.id);
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onSharedCipher.subscribe(async () => {
           modal.close();

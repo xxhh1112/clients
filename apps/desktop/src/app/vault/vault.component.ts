@@ -14,6 +14,7 @@ import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -98,7 +99,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private totpService: TotpService,
     private passwordRepromptService: PasswordRepromptService,
     private stateService: StateService,
-    private searchBarService: SearchBarService
+    private searchBarService: SearchBarService,
+    private cipherService: CipherService
   ) {}
 
   async ngOnInit() {
@@ -454,7 +456,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal, childComponent] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
-      (comp) => (comp.cipherId = cipher.id)
+      async (comp) => (comp.cipherDomain = await this.cipherService.get(cipher.id))
     );
     this.modal = modal;
 
@@ -482,7 +484,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     const [modal, childComponent] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      (comp) => (comp.cipherId = cipher.id)
+      async (comp) => (comp.cipherDomain = await this.cipherService.get(cipher.id))
     );
     this.modal = modal;
 

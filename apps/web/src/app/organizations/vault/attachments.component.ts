@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 
 import { CipherAdminServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-admin.service.abstraction";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,8 +14,6 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
 
 import { AttachmentsComponent as BaseAttachmentsComponent } from "../../vault/attachments.component";
-
-import { CipherAttachmentApiServiceAbstraction } from "./../../../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 @Component({
   selector: "app-org-vault-attachments",
@@ -53,9 +52,9 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
 
   protected async loadCipher() {
     if (!this.organization.canEditAnyCollection) {
-      return await super.loadCipher();
+      return this.cipherDomain;
     }
-    const response = await this.cipherAdminService.getCipherAdmin(this.cipherId);
+    const response = await this.apiService.getCipherAdmin(this.cipherDomain.id);
     return new Cipher(new CipherData(response));
   }
 
@@ -71,7 +70,10 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.deleteCipherAttachment(attachmentId);
     }
-    return this.cipherAttachmentApiService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
+    return this.cipherAttachmentApiService.deleteCipherAttachmentAdmin(
+      this.cipherDomain.id,
+      attachmentId
+    );
   }
 
   protected showFixOldAttachments(attachment: AttachmentView) {

@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Pieraksties vai izveido jaunu kontu, lai piekļūtu drošajai glabātavai!"
   },
+  "loginWithDevice": {
+    "message": "Pierakstīties ar ierīci"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
+  },
   "createAccount": {
     "message": "Izveidot kontu"
+  },
+  "newAroundHere": {
+    "message": "Jauns šeit?"
   },
   "startTrial": {
     "message": "Uzsākt izmēģinājumu"
   },
   "logIn": {
     "message": "Pierakstīties"
+  },
+  "logInInitiated": {
+    "message": "Uzsākta pierakstīšanās"
   },
   "submit": {
     "message": "Iesniegt"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Ir nepieciešama galvenās paroles atkārtota ievadīšana."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai."
   },
   "masterPassDoesntMatch": {
@@ -679,7 +691,7 @@
     "message": "Nederīga galvenā parole"
   },
   "invalidFilePassword": {
-    "message": "Invalid file password, please use the password you entered when you created the export file."
+    "message": "Nederīga datnes parole, lūgums izmantot to paroli, kas tika ievadīta izdošanas datnes izveidošanas brīdī."
   },
   "lockNow": {
     "message": "Aizslēgt"
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "Tu neesi iekļauts nevienā apvienībā. Apvienības sniedz iespēju droši kopīgot vienumus ar citiem lietotājiem."
+  },
+  "notificationSentDevice": {
+    "message": "Uz ierīci ir nosūtīts paziņojums."
   },
   "versionNumber": {
     "message": "Laidiens $VERSION_NUMBER$",
@@ -894,46 +909,46 @@
     "message": "Datnes veids"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Šī datņu izdošana būs aizsargāta ar paroli, un būs nepieciešama datnes parole, lai to atšifrētu."
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Šī parole tiks izmantota, lai izdotu un ievietotu šo datni"
   },
   "confirmMasterPassword": {
-    "message": "Confirm Master Password"
+    "message": "Apstiprināt galveno paroli"
   },
   "confirmFormat": {
-    "message": "Confirm Format"
+    "message": "Apstiprināt veidolu"
   },
   "filePassword": {
-    "message": "File Password"
+    "message": "Datnes parole"
   },
   "confirmFilePassword": {
-    "message": "Confirm File Password"
+    "message": "Apstiprināt datnes paroli"
   },
   "accountBackupOptionDescription": {
-    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Jāizmanto konta šifrēšanas atslēga, lai šifrētu izdošanu un ierobežotu ievietošanu tikai pašreizējā Bitwarden kontā."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Uzstādīt paroli, lai šifrētu izdošanu un tad to ievietotu jebkurā Bitwarden kontā, izmantojot atšifrēšanas paroli."
   },
   "fileTypeHeading": {
-    "message": "File Type"
+    "message": "Datnes veids"
   },
   "accountBackup": {
-    "message": "Account Backup"
+    "message": "Konta rezerves kopija"
   },
   "passwordProtected": {
-    "message": "Password Protected"
+    "message": "Aizsargāts ar paroli"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm File Password“ do not match."
+    "message": "\"Datnes parole\" un \"Apstiprināt datnes paroli\" vērtības nesakrīt."
   },
   "confirmVaultImport": {
-    "message": "Confirm Vault Import"
+    "message": "Apstiprināt glabātavas satura ievietošanu"
   },
   "confirmVaultImportDesc": {
-    "message": "This file is password-protected. Please enter the file password to import data."
+    "message": "Šī datne ir aizsargāta ar paroli. Lūgums ievadīt datnes paroli, lai ievietotu datus."
   },
   "exportSuccess": {
     "message": "Glabātavas saturs ir izgūts."
@@ -2532,6 +2547,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Apskatīt visas pierakstīšanās iespējas"
+  },
   "viewedItemId": {
     "message": "Skatīts vienums $ID$.",
     "placeholders": {
@@ -3372,6 +3390,12 @@
     "message": "Lai pārliecinātos par šifrēšanas atslēgu neskartību, lūgums pirms turpināšanas pārbaudīt lietotāja atpazīšanas vārdkopu.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Jāpārliecinās, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Atpazīšanas vārdkopa"
+  },
   "dontAskFingerprintAgain": {
     "message": "Vairs nevaicāt pārbaudīt atpazīšanas vārdkopu",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4057,6 +4081,12 @@
   "permissions": {
     "message": "Atļaujas"
   },
+  "managerPermissions": {
+    "message": "Pārvaldnieka atļaujas"
+  },
+  "adminPermissions": {
+    "message": "Administratora atļaujas"
+  },
   "accessEventLogs": {
     "message": "Piekļūt notikumu žurnāla ierakstiem"
   },
@@ -4366,6 +4396,9 @@
   "reinviteSelected": {
     "message": "Atkārtoti nosūtīt uzaicinājumus"
   },
+  "resendNotification": {
+    "message": "Atkārtoti nosūtīt paziņojumu"
+  },
   "noSelectedUsersApplicable": {
     "message": "Šī darbība nav attiecināma uz nevienu no atlasītajiem lietotājiem."
   },
@@ -4560,10 +4593,10 @@
     "message": "Atjaunināt galveno paroli"
   },
   "updateMasterPasswordWarning": {
-    "message": "Apvienības pārvaldnieks nesen nomainīja galveno paroli. Lai piekļūtu glabātavai, tā ir jāatjaunina. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pierakstīšanās. Esošās sesijas citās iekārtās var turpināt darboties līdz vienai stundai."
+    "message": "Apvienības pārvaldnieks nesen nomainīja galveno paroli. Lai piekļūtu glabātavai, tā ir jāatjaunina. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pierakstīšanās. Esošās sesijas citās ierīcēs var turpināt darboties līdz vienai stundai."
   },
   "masterPasswordInvalidWarning": {
-    "message": "Galvenā parole neatbilst apvienības nosacījumu prasībām. Lai pievienotos apvienībai, ir nepieciešams atjaunināt galveno paroli. Turpinot notiks izrakstīšanās no pašreizējās sesijas, pieprasot atkal pierakstīties. Esošās sesijas citās iekārtās var turpināt darboties līdz vienai stundai."
+    "message": "Galvenā parole neatbilst apvienības nosacījumu prasībām. Lai pievienotos apvienībai, ir nepieciešams atjaunināt galveno paroli. Turpinot notiks izrakstīšanās no pašreizējās sesijas, pieprasot atkal pierakstīties. Esošās sesijas citās ierīcēs var turpināt darboties līdz vienai stundai."
   },
   "maximumVaultTimeout": {
     "message": "Glabātavas noildze"

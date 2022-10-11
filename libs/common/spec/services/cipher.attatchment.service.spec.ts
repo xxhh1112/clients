@@ -1,7 +1,9 @@
-import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { mock, mockReset } from "jest-mock-extended";
 
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
 import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
@@ -13,365 +15,227 @@ import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 
 import { Cipher } from "./../../src/models/domain/cipher";
-jest.mock("@bitwarden/common/abstractions/api.service");
 
 describe("Cipher Attachment Service", () => {
-  let cryptoService: SubstituteOf<CryptoService>;
-  let apiServiceSpy: any;
-  let cipherService: SubstituteOf<CipherService>;
-  let logService: SubstituteOf<LogService>;
+  const cryptoService = mock<CryptoService>();
+  const apiService = mock<ApiService>();
+  const cipherService = mock<CipherService>();
+  const fileUploadService = mock<FileUploadService>();
+  const logService = mock<LogService>();
 
   let cipherAttachmentApiService: CipherAttachmentApiService;
 
   const cipher: CipherView = new CipherView();
 
   beforeEach(() => {
-    cryptoService = Substitute.for<CryptoService>();
-    logService = Substitute.for<LogService>();
-    cipherService = Substitute.for<CipherService>();
-
-    apiServiceSpy = {
-      send: jest.fn(),
-    };
+    mockReset(apiService);
+    mockReset(cryptoService);
+    mockReset(logService);
+    mockReset(cipherService);
+    mockReset(fileUploadService);
 
     cipherAttachmentApiService = new CipherAttachmentApiService(
       cipherService,
-      apiServiceSpy,
+      apiService,
       cryptoService,
+      fileUploadService,
       logService
     );
   });
+  describe("deleteAttachmentWithServer", () => {
+    it("it should send delete call to server", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
 
-  it("Should test deleteAttachmentWithServer", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
-
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      await cipherAttachmentApiService.deleteAttachmentWithServer(id, attachmentId);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId,
+        null,
+        true,
+        false
       );
-    await cipherAttachmentApiService.deleteAttachmentWithServer(id, attachmentId);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      null,
-      true,
-      false
-    );
+    });
   });
 
-  it("Should test putShareCipher", async () => {
-    cipher.id = "test1";
-    cipher.organizationId = "organizationId";
-    const encCipher = await cipherService.encrypt(cipher);
-    const request = new CipherShareRequest(encCipher);
+  describe("deleteCipherAttachment", () => {
+    it("it should send delete call to server", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.deleteCipherAttachment(id, attachmentId);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId,
+        null,
+        true,
+        false
       );
-    const result = await cipherAttachmentApiService.putShareCipher(cipher.id, request);
-    const expectedResponse = new CipherResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "PUT",
-      "/ciphers/test1/share",
-      request,
-      true,
-      true
-    );
-    expect(result).toEqual(expectedResponse);
+      expect(result).toEqual(response);
+    });
   });
 
-  it("Should test putShareCiphers", async () => {
-    const encCiphers: Cipher[] = [];
-    const collectionIds: string[] = ["collectionIds"];
-    const request = new CipherBulkShareRequest(encCiphers, collectionIds);
+  describe("deleteCipherAttachmentAdmin", () => {
+    it("it should send delete call to server for admin", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.deleteCipherAttachmentAdmin(id, attachmentId);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "DELETE",
+        "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
+        null,
+        true,
+        false
       );
-    const result = await cipherAttachmentApiService.putShareCiphers(request);
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
-    expect(result).toEqual(response);
+      expect(result).toEqual(response);
+    });
   });
 
-  it("Should test postCipherAttachmentLegacy", async () => {
-    const id = "test1";
-    const data: FormData = new FormData();
+  describe("putShareCipher", () => {
+    it("it should send put call to server for a cipher sharing", async () => {
+      cipher.id = "test1";
+      cipher.organizationId = "organizationId";
+      const request = new CipherShareRequest(new Cipher());
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.putShareCipher(cipher.id, request);
+      const expectedResponse = new CipherResponse(response);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "PUT",
+        "/ciphers/test1/share",
+        request,
+        true,
+        true
       );
-    const result = await cipherAttachmentApiService.postCipherAttachmentLegacy(id, data);
-    const expectedResponse = new CipherResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "POST",
-      "/ciphers/" + id + "/attachment",
-      data,
-      true,
-      true
-    );
-    expect(result).toEqual(expectedResponse);
+      expect(result).toEqual(expectedResponse);
+    });
   });
 
-  it("Should test postCipherAttachmentAdminLegacy", async () => {
-    const id = "test1";
-    const data: FormData = new FormData();
+  describe("putShareCiphers", () => {
+    it("it should send put call to server for bulk cipher sharing", async () => {
+      const encCiphers: Cipher[] = [];
+      const collectionIds: string[] = ["collectionIds"];
+      const request = new CipherBulkShareRequest(encCiphers, collectionIds);
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAttachmentApiService.postCipherAttachmentAdminLegacy(id, data);
-    const expectedResponse = new CipherResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "POST",
-      "/ciphers/" + id + "/attachment-admin",
-      data,
-      true,
-      true
-    );
-    expect(result).toEqual(expectedResponse);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.putShareCiphers(request);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
+      expect(result).toEqual(response);
+    });
   });
 
-  it("Should test deleteCipherAttachment", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
+  describe("postShareCipherAttachment", () => {
+    it("it should send Post call to server for a cipher sharing", async () => {
+      const id = "test1";
+      const attachmentId = "attachmentId";
+      const data: FormData = new FormData();
+      const organizationId = "organizationId";
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.postShareCipherAttachment(
+        id,
+        attachmentId,
+        data,
+        organizationId
       );
-    const result = await cipherAttachmentApiService.deleteCipherAttachment(id, attachmentId);
 
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      null,
-      true,
-      false
-    );
-    expect(result).toEqual(response);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "POST",
+        "/ciphers/" +
+          id +
+          "/attachment/" +
+          attachmentId +
+          "/share?organizationId=" +
+          organizationId,
+        data,
+        true,
+        false
+      );
+      expect(result).toEqual(response);
+    });
   });
 
-  it("Should test deleteCipherAttachmentAdmin", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
+  describe("postCipherAttachment", () => {
+    it("it should send Post call to server", async () => {
+      const id = "test1";
+      const request: AttachmentRequest = new AttachmentRequest();
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.postCipherAttachment(id, request);
+      const expectedResponse = new AttachmentUploadDataResponse(response);
+
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith(
+        "POST",
+        "/ciphers/" + id + "/attachment/v2",
+        request,
+        true,
+        true
       );
-    const result = await cipherAttachmentApiService.deleteCipherAttachmentAdmin(id, attachmentId);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "DELETE",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/admin",
-      null,
-      true,
-      false
-    );
-    expect(result).toEqual(response);
+      expect(result).toEqual(expectedResponse);
+    });
   });
 
-  it("Should test postShareCipherAttachment", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
-    const data: FormData = new FormData();
-    const organizationId = "organizationId";
+  describe("getAttachmentData", () => {
+    it("it should send get request to Server to emergency-access attachment ", async () => {
+      const cipherId = "test1";
+      const attachmentId = "attachmentId";
+      const emergencyAccessId = "emergencyAccessId";
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
+      const path =
+        (emergencyAccessId != null ? "/emergency-access/" + emergencyAccessId + "/" : "/ciphers/") +
+        cipherId +
+        "/attachment/" +
+        attachmentId;
+
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      const result = await cipherAttachmentApiService.getAttachmentData(
+        cipherId,
+        attachmentId,
+        emergencyAccessId
       );
-    const result = await cipherAttachmentApiService.postShareCipherAttachment(
-      id,
-      attachmentId,
-      data,
-      organizationId
-    );
+      const expectedResponse = new AttachmentResponse(response);
 
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "POST",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/share?organizationId=" + organizationId,
-      data,
-      true,
-      false
-    );
-    expect(result).toEqual(response);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith("GET", path, null, true, true);
+      expect(result).toEqual(expectedResponse);
+    });
   });
 
-  it("Should test postCipherAttachment", async () => {
-    const id = "test1";
-    const request: AttachmentRequest = new AttachmentRequest();
+  describe("shareManyWithServer", () => {
+    it("it should send Put request to Serve with list of collectionIds", async () => {
+      const ciphers: CipherView[] = [];
+      const organizationId = "organizationId";
+      const collectionIds: string[] = ["collectionIds", "collectionIds1"];
+      const encCiphers: Cipher[] = [];
+      const request = new CipherBulkShareRequest(encCiphers, collectionIds);
+      const response: any = {};
+      apiService.send.mockReturnValue(response);
+      await cipherAttachmentApiService.shareManyWithServer(ciphers, organizationId, collectionIds);
 
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAttachmentApiService.postCipherAttachment(id, request);
-    const expectedResponse = new AttachmentUploadDataResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "POST",
-      "/ciphers/" + id + "/attachment/v2",
-      request,
-      true,
-      true
-    );
-    expect(result).toEqual(expectedResponse);
-  });
-
-  it("Should test postAttachmentFile", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
-    const data: FormData = new FormData();
-
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAttachmentApiService.postAttachmentFile(id, attachmentId, data);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "POST",
-      "/ciphers/" + id + "/attachment/" + attachmentId,
-      data,
-      true,
-      false
-    );
-    expect(result).toEqual(response);
-  });
-
-  it("Should test renewAttachmentUploadUrl", async () => {
-    const id = "test1";
-    const attachmentId = "attachmentId";
-
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAttachmentApiService.renewAttachmentUploadUrl(id, attachmentId);
-    const expectedResponse = new AttachmentUploadDataResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith(
-      "GET",
-      "/ciphers/" + id + "/attachment/" + attachmentId + "/renew",
-      null,
-      true,
-      true
-    );
-    expect(result).toEqual(expectedResponse);
-  });
-
-  it("Should test getAttachmentData", async () => {
-    const cipherId = "test1";
-    const attachmentId = "attachmentId";
-    const emergencyAccessId = "emergencyAccessId";
-
-    const path =
-      (emergencyAccessId != null ? "/emergency-access/" + emergencyAccessId + "/" : "/ciphers/") +
-      cipherId +
-      "/attachment/" +
-      attachmentId;
-
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    const result = await cipherAttachmentApiService.getAttachmentData(
-      cipherId,
-      attachmentId,
-      emergencyAccessId
-    );
-    const expectedResponse = new AttachmentResponse(response);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith("GET", path, null, true, true);
-    expect(result).toEqual(expectedResponse);
-  });
-
-  it("Should test shareManyWithServer", async () => {
-    const ciphers: CipherView[] = [];
-    const organizationId = "organizationId";
-    const collectionIds: string[] = ["collectionIds", "collectionIds1"];
-    const encCiphers: Cipher[] = [];
-    const request = new CipherBulkShareRequest(encCiphers, collectionIds);
-    const response: any = {};
-    jest
-      .spyOn(apiServiceSpy, "send")
-      .mockImplementation(
-        (method: string, path: string, body: any, authed: boolean, hasResponse: boolean) => {
-          return response;
-        }
-      );
-    await cipherAttachmentApiService.shareManyWithServer(ciphers, organizationId, collectionIds);
-
-    expect(apiServiceSpy.send).toBeCalledTimes(1);
-    expect(apiServiceSpy.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
+      expect(apiService.send).toBeCalledTimes(1);
+      expect(apiService.send).toHaveBeenCalledWith("PUT", "/ciphers/share", request, true, false);
+    });
   });
 });

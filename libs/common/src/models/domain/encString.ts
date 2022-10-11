@@ -1,8 +1,7 @@
 import { Jsonify } from "type-fest";
 
-import { IEncrypted } from "@bitwarden/common/interfaces/IEncrypted";
-
 import { EncryptionType } from "../../enums/encryptionType";
+import { IEncrypted } from "../../interfaces/IEncrypted";
 import { Utils } from "../../misc/utils";
 
 import { SymmetricCryptoKey } from "./symmetricCryptoKey";
@@ -45,6 +44,10 @@ export class EncString implements IEncrypted {
   }
 
   static fromJSON(obj: Jsonify<EncString>): EncString {
+    if (obj == null) {
+      return null;
+    }
+
     return new EncString(obj);
   }
 
