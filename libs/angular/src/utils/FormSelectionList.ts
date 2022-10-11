@@ -40,11 +40,13 @@ export class FormSelectionList<
   allItems: TItem[] = [];
   /**
    * Sorted list of selected items
+   * Immutable and should be recreated whenever a modification is made
    */
   selectedItems: TItem[] = [];
 
   /**
    * Sorted list of deselected items
+   * Immutable and should be recreated whenever a modification is made
    */
   deselectedItems: TItem[] = [];
 
@@ -111,12 +113,23 @@ export class FormSelectionList<
 
     const selectedOption = this.deselectedItems[index];
 
+    // Note: Changes to the deselected/selected arrays must create a new copy of the array
+    // in order for Angular's Change Detection to pick up the modification (i.e. treat the arrays as immutable)
+
     // Remove from the list of deselected options
-    this.deselectedItems.splice(index, 1);
+    this.deselectedItems = [
+      ...this.deselectedItems.slice(0, index),
+      ...this.deselectedItems.slice(index + 1),
+    ];
 
     // Insert into the sorted selected options list
     const sortedInsertIndex = findSortedIndex(this.selectedItems, selectedOption, this.compareFn);
-    this.selectedItems.splice(sortedInsertIndex, 0, selectedOption);
+
+    this.selectedItems = [
+      ...this.selectedItems.slice(0, sortedInsertIndex),
+      selectedOption,
+      ...this.selectedItems.slice(sortedInsertIndex),
+    ];
 
     const newControl = this.controlFactory(selectedOption);
 
@@ -145,8 +158,14 @@ export class FormSelectionList<
 
     const deselectedOption = this.selectedItems[index];
 
+    // Note: Changes to the deselected/selected arrays must create a new copy of the array
+    // in order for Angular's Change Detection to pick up the modification (i.e. treat the arrays as immutable)
+
     // Remove from the list of selected items (and FormArray)
-    this.selectedItems.splice(index, 1);
+    this.selectedItems = [
+      ...this.selectedItems.slice(0, index),
+      ...this.selectedItems.slice(index + 1),
+    ];
     this.formArray.removeAt(index);
 
     // Insert into the sorted deselected array
@@ -155,7 +174,12 @@ export class FormSelectionList<
       deselectedOption,
       this.compareFn
     );
-    this.deselectedItems.splice(sortedInsertIndex, 0, deselectedOption);
+
+    this.deselectedItems = [
+      ...this.deselectedItems.slice(0, sortedInsertIndex),
+      deselectedOption,
+      ...this.deselectedItems.slice(sortedInsertIndex),
+    ];
   }
 
   /**
