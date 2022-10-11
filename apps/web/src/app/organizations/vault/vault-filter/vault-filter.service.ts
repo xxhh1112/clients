@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { combineLatestWith, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { filter, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -12,6 +12,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CollectionGroupDetailsData } from "@bitwarden/common/models/data/collectionData";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionGroupDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
 import {
   CollectionGroupDetailsView,
@@ -19,10 +20,17 @@ import {
 } from "@bitwarden/common/models/view/collectionView";
 
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
+import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService {
-  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
+  private _collections = new ReplaySubject<CollectionGroupDetailsView[]>(1);
+
+  filteredCollections$: Observable<CollectionView[]> = this._collections.asObservable();
+
+  collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
+    map((collections) => this.buildCollectionTree(collections))
+  );
 
   constructor(
     stateService: StateService,
@@ -46,46 +54,21 @@ export class VaultFilterService extends BaseVaultFilterService {
   }
 
   protected loadSubscriptions() {
-    this.folderService.folderViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(async ([folders, org]) => {
-          return this.filterFolders(folders, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredFolders);
-
     this._organizationFilter
       .pipe(
+        filter((org) => org != null),
         switchMap((org) => {
           return this.loadCollections(org);
-        })
-      )
-      .subscribe(this.collectionViews$);
-
-    this.collectionViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(async ([collections, org]) => {
-          if (org?.canUseAdminCollections) {
-            return collections;
-          } else {
-            return await this.filterCollections(collections, org);
-          }
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(this._filteredCollections);
+      .subscribe((collections) => {
+        this._collections.next(collections);
+      });
   }
 
   protected async loadCollections(org: Organization) {
-    if (org?.permissions && org?.canEditAnyCollection) {
-      return await this.loadAdminCollections(org);
-    } else {
-      // TODO: remove when collections is refactored with observables
-      return await this.collectionService.getAllDecrypted();
-    }
+    return await this.loadAdminCollections(org);
   }
 
   async loadAdminCollections(org: Organization): Promise<CollectionGroupDetailsView[]> {

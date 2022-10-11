@@ -68,7 +68,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
   protected destroy$: Subject<void> = new Subject<void>();
 
   // TODO: Remove once collections is refactored with observables
-  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
+  private collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   constructor(
     protected stateService: StateService,
