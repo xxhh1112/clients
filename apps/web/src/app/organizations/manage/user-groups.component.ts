@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { GroupApiServiceAbstraction, GroupResponse } from "@bitwarden/common/abstractions/group";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUpdateGroupsRequest } from "@bitwarden/common/models/request/organizationUserUpdateGroupsRequest";
-import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
 
 @Component({
   selector: "app-user-groups",
@@ -24,13 +24,14 @@ export class UserGroupsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private groupApiService: GroupApiServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService
   ) {}
 
   async ngOnInit() {
-    const groupsResponse = await this.apiService.getGroups(this.organizationId);
+    const groupsResponse = await this.groupApiService.getAll(this.organizationId);
     const groups = groupsResponse.data.map((r) => r);
     groups.sort(Utils.getSortFunction(this.i18nService, "name"));
     this.groups = groups;
