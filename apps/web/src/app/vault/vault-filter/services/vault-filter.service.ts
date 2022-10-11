@@ -1,11 +1,9 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   combineLatestWith,
   Observable,
   of,
-  Subject,
-  takeUntil,
   map,
   switchMap,
   ReplaySubject,
@@ -41,7 +39,7 @@ import { VaultFilterService as VaultFilterServiceAbstraction } from "./abstracti
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService implements VaultFilterServiceAbstraction, OnDestroy {
+export class VaultFilterService implements VaultFilterServiceAbstraction {
   protected _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
   collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.pipe(
     switchMap(async (nodes) => nodes ?? (await this.getCollapsedFilterNodes()))
@@ -64,17 +62,18 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     map((folders) => this.buildFolderTree(folders))
   );
 
-  protected _filteredCollections = new ReplaySubject<CollectionView[]>(1);
-  filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
-
+  // TODO: Remove once collections is refactored with observables
+  // replace with collection service observable
+  private collectionViews$ = new ReplaySubject<CollectionView[]>(1);
+  filteredCollections$: Observable<CollectionView[]> = this.collectionViews$.pipe(
+    combineLatestWith(this._organizationFilter),
+    switchMap(([collections, org]) => {
+      return this.filterCollections(collections, org);
+    })
+  );
   collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => this.buildCollectionTree(collections))
   );
-
-  protected destroy$: Subject<void> = new Subject<void>();
-
-  // TODO: Remove once collections is refactored with observables
-  private collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   constructor(
     protected stateService: StateService,
@@ -84,26 +83,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     protected collectionService: CollectionService,
     protected policyService: PolicyService,
     protected i18nService: I18nService
-  ) {
-    this.loadSubscriptions();
-  }
-
-  protected loadSubscriptions() {
-    this.collectionViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(([collections, org]) => {
-          return this.filterCollections(collections, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredCollections);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ) {}
 
   // TODO: Remove once collections is refactored with observables
   async reloadCollections() {

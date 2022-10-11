@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { filter, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { Injectable, OnDestroy } from "@angular/core";
+import { filter, map, Observable, ReplaySubject, Subject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -23,7 +23,8 @@ import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vau
 import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
 
 @Injectable()
-export class VaultFilterService extends BaseVaultFilterService {
+export class VaultFilterService extends BaseVaultFilterService implements OnDestroy {
+  private destroy$ = new Subject<void>();
   private _collections = new ReplaySubject<CollectionGroupDetailsView[]>(1);
 
   filteredCollections$: Observable<CollectionView[]> = this._collections.asObservable();
@@ -51,6 +52,7 @@ export class VaultFilterService extends BaseVaultFilterService {
       policyService,
       i18nService
     );
+    this.loadSubscriptions();
   }
 
   protected loadSubscriptions() {
@@ -93,5 +95,10 @@ export class VaultFilterService extends BaseVaultFilterService {
       collections.push(noneCollection);
     }
     return collections;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
