@@ -16,6 +16,7 @@ import { Login } from "@bitwarden/common/models/domain/login";
 import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipherWithIdsExport";
 import { CipherView } from "@bitwarden/common/models/view/cipherView";
 import { LoginView } from "@bitwarden/common/models/view/loginView";
+import { CipherAdminService } from "@bitwarden/common/services/cipher/cipher-admin.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 
 import { BuildTestObject, GetUniqueString } from "../utils";
@@ -91,6 +92,7 @@ describe("ExportService", () => {
   let cipherService: SubstituteOf<CipherService>;
   let folderService: SubstituteOf<FolderService>;
   let cryptoService: SubstituteOf<CryptoService>;
+  let cipherAdminService: SubstituteOf<CipherAdminService>;
 
   beforeEach(() => {
     apiService = Substitute.for<ApiService>();
@@ -98,6 +100,7 @@ describe("ExportService", () => {
     cipherService = Substitute.for<CipherService>();
     folderService = Substitute.for<FolderService>();
     cryptoService = Substitute.for<CryptoService>();
+    cipherAdminService = Substitute.for<CipherAdminService>();
 
     folderService.folderViews$.returns(new BehaviorSubject([]));
     folderService.folders$.returns(new BehaviorSubject([]));
@@ -107,11 +110,12 @@ describe("ExportService", () => {
       cipherService,
       apiService,
       cryptoService,
-      cryptoFunctionService
+      cryptoFunctionService,
+      cipherAdminService
     );
   });
 
-  it("exports unecrypted user ciphers", async () => {
+  it("exports unencrypted user ciphers", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews.slice(0, 1));
 
     const actual = await exportService.getExport("json");
@@ -127,7 +131,7 @@ describe("ExportService", () => {
     expectEqualCiphers(UserCipherDomains.slice(0, 1), actual);
   });
 
-  it("does not unecrypted export trashed user items", async () => {
+  it("does not unencrypted export trashed user items", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews);
 
     const actual = await exportService.getExport("json");
