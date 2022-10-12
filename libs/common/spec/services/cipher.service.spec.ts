@@ -64,7 +64,7 @@ describe("Cipher Service", () => {
   });
 
   describe("encrypt", () => {
-    it("encrypt", async () => {
+    it("it should encrypt cipher", async () => {
       const model = new CipherView();
       model.id = "2";
       model.name = "Test Cipher";
