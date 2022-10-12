@@ -76,7 +76,7 @@ export class VaultFilterService extends BaseVaultFilterService implements OnDest
   async loadAdminCollections(org: Organization): Promise<CollectionGroupDetailsView[]> {
     let collections: CollectionGroupDetailsView[] = [];
     if (org?.permissions && org?.canEditAnyCollection) {
-      const collectionResponse = await this.apiService.getCollectionsWithDetails(org.id);
+      const collectionResponse = await this.apiService.getManyCollectionsWithDetails(org.id);
       if (collectionResponse?.data != null && collectionResponse.data.length) {
         const collectionDomains = collectionResponse.data.map(
           (r: CollectionGroupDetailsResponse) => new Collection(new CollectionGroupDetailsData(r))
