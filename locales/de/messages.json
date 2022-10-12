@@ -678,6 +678,9 @@
   "invalidMasterPassword": {
     "message": "Ungültiges Master-Passwort"
   },
+  "invalidFilePassword": {
+    "message": "Ungültiges Dateipasswort. Bitte verwende das Passwort, das du beim Erstellen der Exportdatei eingegeben hast."
+  },
   "lockNow": {
     "message": "Jetzt sperren"
   },
@@ -889,6 +892,48 @@
   },
   "fileFormat": {
     "message": "Dateiformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Dieser Datei-Export ist passwortgeschützt und erfordert das Dateipasswort zum Entschlüsseln."
+  },
+  "exportPasswordDescription": {
+    "message": "Dieses Passwort wird verwendet, um diese Datei zu exportieren und zu importieren"
+  },
+  "confirmMasterPassword": {
+    "message": "Master-Passwort bestätigen"
+  },
+  "confirmFormat": {
+    "message": "Format bestätigen"
+  },
+  "filePassword": {
+    "message": "Dateipasswort"
+  },
+  "confirmFilePassword": {
+    "message": "Dateipasswort bestätigen"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Nutze den Verschlüsselungscode deines Kontos, um den Export zu verschlüsseln und den Import allein auf das aktuelle Bitwarden-Konto zu beschränken."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Lege ein Passwort fest, um den Export zu verschlüsseln und ihn in ein beliebiges Bitwarden-Konto zu importieren, wobei das Passwort zum Entschlüsseln genutzt wird."
+  },
+  "fileTypeHeading": {
+    "message": "Dateityp"
+  },
+  "accountBackup": {
+    "message": "Konto-Sicherung"
+  },
+  "passwordProtected": {
+    "message": "Passwortgeschützt"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "„Dateipasswort“ und „Dateipasswort bestätigen“ stimmen nicht überein."
+  },
+  "confirmVaultImport": {
+    "message": "Tresor-Import bestätigen"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Diese Datei ist passwortgeschützt. Bitte gebe das Dateipasswort ein, um Daten zu importieren."
   },
   "exportSuccess": {
     "message": "Ihre Daten wurden exportiert."

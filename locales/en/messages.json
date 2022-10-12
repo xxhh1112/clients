@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Log in or create a new account to access your secure vault."
   },
+  "loginWithDevice" : {
+    "message": "Log in with device"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
+  },
   "createAccount": {
     "message": "Create Account"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
   },
   "startTrial": {
     "message": "Start Trial"
   },
   "logIn": {
     "message": "Log In"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
   },
   "submit": {
     "message": "Submit"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Master password retype is required."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
@@ -678,6 +690,9 @@
   "invalidMasterPassword": {
     "message": "Invalid master password"
   },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
+  },
   "lockNow": {
     "message": "Lock Now"
   },
@@ -701,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "You do not belong to any organizations. Organizations allow you to securely share items with other users."
+  },
+  "notificationSentDevice":{
+    "message": "A notification has been sent to your device."
   },
   "versionNumber": {
     "message": "Version $VERSION_NUMBER$",
@@ -889,6 +907,48 @@
   },
   "fileFormat": {
     "message": "File Format"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "exportPasswordDescription": {
+    "message": "This password will be used to export and import this file"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirm Master Password"
+  },
+  "confirmFormat": {
+    "message": "Confirm Format"
+  },
+  "filePassword": {
+    "message": "File Password"
+  },
+  "confirmFilePassword": {
+    "message": "Confirm File Password"
+  },
+  "accountBackupOptionDescription": {
+    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "fileTypeHeading": {
+    "message": "File Type"
+  },
+  "accountBackup": {
+    "message": "Account Backup"
+  },
+  "passwordProtected": {
+    "message": "Password Protected"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm File Password“ do not match."
+  },
+  "confirmVaultImport": {
+    "message": "Confirm Vault Import"
+  },
+  "confirmVaultImportDesc": {
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "Your vault data has been exported."
@@ -2487,6 +2547,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "View all log in options"
+  },
   "viewedItemId": {
     "message": "Viewed item $ID$.",
     "placeholders": {
@@ -3327,6 +3390,12 @@
     "message": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
   "dontAskFingerprintAgain": {
     "message": "Never prompt to verify fingerprint phrases for invited users (Not recommended)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -4012,6 +4081,12 @@
   "permissions": {
     "message": "Permissions"
   },
+  "managerPermissions": {
+    "message": "Manager Permissions"
+  },
+  "adminPermissions": {
+    "message": "Admin Permissions"
+  },
   "accessEventLogs": {
     "message": "Access Event Logs"
   },
@@ -4320,6 +4395,9 @@
   },
   "reinviteSelected": {
     "message": "Resend Invitations"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
   },
   "noSelectedUsersApplicable": {
     "message": "This action is not applicable to any of the selected users."
