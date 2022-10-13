@@ -156,7 +156,7 @@
             >
             <span class="totp-code">{{ totpCodeFormatted }}</span>
           </div>
-          <span class="totp-countdown">
+          <span class="totp-countdown" aria-hidden="true">
             <span class="totp-sec">{{ totpSec }}</span>
             <svg>
               <g>
@@ -176,10 +176,17 @@
               type="button"
               class="row-btn"
               appStopClick
-              appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
+              title="{{ 'copyVerificationCode' | i18n }}"
               (click)="copy(totpCode, 'verificationCodeTotp', 'TOTP')"
             >
               <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+              <span class="sr-only">{{ "copyValue" | i18n }}</span>
+              <span
+                class="sr-only exists-only-on-parent-focus"
+                aria-live="polite"
+                aria-atomic="true"
+                >{{ totpSec }}</span
+              >
             </button>
           </div>
         </div>
@@ -614,6 +621,10 @@
       <div>
         <b class="font-weight-semibold">{{ "dateUpdated" | i18n }}:</b>
         {{ cipher.revisionDate | date: "medium" }}
+      </div>
+      <div *ngIf="cipher.creationDate">
+        <b class="font-weight-semibold">{{ "dateCreated" | i18n }}:</b>
+        {{ cipher.creationDate | date: "medium" }}
       </div>
       <div *ngIf="cipher.passwordRevisionDisplayDate">
         <b class="font-weight-semibold">{{ "datePasswordUpdated" | i18n }}:</b>

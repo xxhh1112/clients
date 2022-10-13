@@ -18,6 +18,7 @@ import {
   DialogModule,
   TabsModule,
   IconButtonModule,
+  AsyncActionsModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -55,6 +56,7 @@ import "./locales";
   ],
   exports: [
     CommonModule,
+    AsyncActionsModule,
     DragDropModule,
     FormsModule,
     InfiniteScrollModule,

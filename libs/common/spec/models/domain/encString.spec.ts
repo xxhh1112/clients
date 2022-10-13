@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Substitute, Arg } from "@fluffy-spoon/substitute";
 import { mock, MockProxy } from "jest-mock-extended";
 
@@ -225,6 +226,10 @@ describe("EncString", () => {
       const encString = new EncString(EncryptionType.AesCbc256_B64, "data", "iv");
 
       expect(encString.toJSON()).toBe(encString.encryptedString);
+    });
+
+    it("returns null if object is null", () => {
+      expect(EncString.fromJSON(null)).toBeNull();
     });
   });
 });
