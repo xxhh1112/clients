@@ -213,14 +213,6 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this.pauseChangeNotification = false;
   }
 
-  protected handleBlur() {
-    if (!this.notifyOnTouch) {
-      return;
-    }
-
-    this.notifyOnTouch();
-  }
-
   ngOnInit() {
     // Watch the internal formArray for changes and propagate them
     this.selectionList.formArray.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((v) => {
@@ -236,14 +228,24 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this.destroy$.complete();
   }
 
-  selectItems(items: SelectItemView[]) {
+  protected handleBlur() {
+    if (!this.notifyOnTouch) {
+      return;
+    }
+
+    this.notifyOnTouch();
+  }
+
+  protected selectItems(items: SelectItemView[]) {
     this.pauseChangeNotification = true;
     this.selectionList.selectItems(items.map((i) => i.id));
     this.pauseChangeNotification = false;
-    this.notifyOnChange(this.selectionList.formArray.value);
+    if (this.notifyOnChange != undefined) {
+      this.notifyOnChange(this.selectionList.formArray.value);
+    }
   }
 
-  itemIcon(item: AccessItemView) {
+  protected itemIcon(item: AccessItemView) {
     switch (item.type) {
       case AccessItemType.COLLECTION:
         return "bwi-collection";
@@ -254,11 +256,11 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     }
   }
 
-  permissionLabelId(perm: CollectionPermission) {
+  protected permissionLabelId(perm: CollectionPermission) {
     return this.permissionList.find((p) => p.perm == perm)?.labelId;
   }
 
-  accessAllLabelId(item: AccessItemView) {
+  protected accessAllLabelId(item: AccessItemView) {
     return item.type == AccessItemType.GROUP ? "groupAccessAll" : "memberAccessAll";
   }
 
