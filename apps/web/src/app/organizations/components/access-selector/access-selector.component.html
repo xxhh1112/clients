@@ -47,19 +47,15 @@
     >
       <td bitCell [ngSwitch]="item.type">
         <div class="tw-flex tw-items-center" *ngSwitchCase="itemType.MEMBER">
-          <bit-avatar
-            size="small"
-            class="tw-mr-3"
-            text="{{ item.labelName || item.email }}"
-          ></bit-avatar>
+          <bit-avatar size="small" class="tw-mr-3" text="{{ item.labelName }}"></bit-avatar>
           <div class="tw-flex tw-flex-col">
             <div class="tw-text-sm">
-              {{ item.labelName || item.email }}
+              {{ item.labelName }}
               <span *ngIf="item.status == 0" bitBadge badgeType="secondary">
                 {{ "invited" | i18n }}
               </span>
             </div>
-            <div class="tw-text-xs tw-text-muted" *ngIf="item.labelName">{{ item.email }}</div>
+            <div class="tw-text-xs tw-text-muted" *ngIf="item.status != 0">{{ item.email }}</div>
           </div>
         </div>
 
