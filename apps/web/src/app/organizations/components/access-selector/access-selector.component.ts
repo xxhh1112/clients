@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, OnDestroy, OnInit } from "@angular/core";
-import { ControlValueAccessor, FormBuilder, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
 import { FormSelectionList } from "@bitwarden/angular/utils/FormSelectionList";
@@ -12,6 +12,13 @@ import {
   AccessItemView,
   CollectionPermission,
 } from "./access-selector.models";
+
+/**
+ * - 'hidden' = No perm controls or column present. No perm values are emitted.
+ * - 'readonly = No perm controls. Column rendered an if available on an item. No perm values are emitted
+ * - 'edit' = Perm Controls and column present. Perm values are emitted.
+ */
+type PermissionMode = "hidden" | "readonly" | "edit";
 
 @Component({
   selector: "bit-access-selector",
@@ -28,6 +35,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   private destroy$ = new Subject<void>();
   private notifyOnChange: (v: unknown) => void;
   private notifyOnTouch: () => void;
+  private pauseChangeNotification: boolean;
 
   /**
    * The internal selection list that tracks the value of this form control / component.
@@ -35,11 +43,25 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    * @protected
    */
   protected selectionList = new FormSelectionList<AccessItemView, AccessItemValue>((item) => {
-    return this.formBuilder.group({
+    const permControl = this.formBuilder.control(this.initialPermission);
+
+    const fg = this.formBuilder.group({
       id: item.id,
       type: item.type,
-      permission: new FormControl<CollectionPermission>(this.initialPermission),
+      permission: permControl,
     });
+
+    // Disable entire row form group if readonly
+    if (item.readonly) {
+      fg.disable();
+    }
+
+    // Disable permission control if accessAllItems is enabled
+    if (item.accessAllItems) {
+      permControl.disable();
+    }
+
+    return fg;
   }, this._itemComparator.bind(this));
 
   /**
@@ -70,31 +92,38 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   }
 
   set items(val: AccessItemView[]) {
+    const selected = (this.selectionList.formArray.getRawValue() ?? []).concat(
+      val.filter((m) => m.readonly)
+    );
     this.selectionList.populateItems(
       val.map((m) => {
         m.icon = m.icon ?? this.itemIcon(m); // Ensure an icon is set
         return m;
       }),
-      this.selectionList.formArray.getRawValue() ?? []
+      selected
     );
   }
 
   /**
-   * Flag for if the permission form controls should be present
+   * Permission mode that controls if the permission form controls and column should be present.
    */
   @Input()
-  get usePermissions(): boolean {
-    return this._usePermissions;
+  get permissionMode(): PermissionMode {
+    return this._permissionMode;
   }
 
-  set usePermissions(value: boolean) {
-    this._usePermissions = value;
+  set permissionMode(value: PermissionMode) {
+    this._permissionMode = value;
     // Toggle any internal permission controls
     for (const control of this.selectionList.formArray.controls) {
-      value ? control.get("permission").enable() : control.get("permission").disable();
+      if (value == "edit") {
+        control.get("permission").enable();
+      } else {
+        control.get("permission").disable();
+      }
     }
   }
-  private _usePermissions: boolean;
+  private _permissionMode: PermissionMode = "hidden";
 
   /**
    * Column header for the selected items table
@@ -120,6 +149,11 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    * Flag for if the member roles column should be present
    */
   @Input() showMemberRoles: boolean;
+
+  /**
+   * Flag for if the group column should be present
+   */
+  @Input() showGroupColumn: boolean;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -150,11 +184,19 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
   /** Required for NG_VALUE_ACCESSOR */
   writeValue(selectedItems: AccessItemValue[]): void {
+    // Modifying the selection list, mistakenly fires valueChanges in the
+    // internal form array, so we need to know to pause external notification
+    this.pauseChangeNotification = true;
+
     // Always clear the internal selection list on a new value
     this.selectionList.deselectAll();
 
+    // We need to also select any read only items to appear in the table
+    this.selectionList.selectItems(this.items.filter((m) => m.readonly).map((m) => m.id));
+
     // If the new value is null, then we're done
     if (selectedItems == null) {
+      this.pauseChangeNotification = false;
       return;
     }
 
@@ -167,9 +209,11 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     for (const value of selectedItems) {
       this.selectionList.selectItem(value.id, value);
     }
+
+    this.pauseChangeNotification = false;
   }
 
-  protected handleOnTouch() {
+  protected handleBlur() {
     if (!this.notifyOnTouch) {
       return;
     }
@@ -180,7 +224,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   ngOnInit() {
     // Watch the internal formArray for changes and propagate them
     this.selectionList.formArray.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((v) => {
-      if (!this.notifyOnChange) {
+      if (!this.notifyOnChange || this.pauseChangeNotification) {
         return;
       }
       this.notifyOnChange(v);
@@ -193,7 +237,10 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   }
 
   selectItems(items: SelectItemView[]) {
+    this.pauseChangeNotification = true;
     this.selectionList.selectItems(items.map((i) => i.id));
+    this.pauseChangeNotification = false;
+    this.notifyOnChange(this.selectionList.formArray.value);
   }
 
   itemIcon(item: AccessItemView) {
@@ -207,10 +254,21 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     }
   }
 
+  permissionLabelId(perm: CollectionPermission) {
+    return this.permissionList.find((p) => p.perm == perm)?.labelId;
+  }
+
+  accessAllLabelId(item: AccessItemView) {
+    return item.type == AccessItemType.GROUP ? "groupAccessAll" : "memberAccessAll";
+  }
+
   private _itemComparator(a: AccessItemView, b: AccessItemView) {
     if (a.type != b.type) {
       return a.type - b.type;
     }
-    return this.i18nService.collator.compare(a.listName + a.labelName, b.listName + b.labelName);
+    return this.i18nService.collator.compare(
+      a.listName + a.labelName + a.readonly,
+      b.listName + b.labelName + b.readonly
+    );
   }
 }

@@ -3,6 +3,8 @@ import { action } from "@storybook/addon-actions";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
+import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import {
   AvatarModule,
   BadgeModule,
@@ -16,7 +18,7 @@ import {
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
 import { AccessSelectorComponent } from "./access-selector.component";
-import { AccessItemType, AccessItemView } from "./access-selector.models";
+import { AccessItemType, AccessItemView, CollectionPermission } from "./access-selector.models";
 import { UserTypePipe } from "./user-type.pipe";
 
 export default {
@@ -87,7 +89,6 @@ const itemsFactory = (n: number, type: AccessItemType) => {
   });
 };
 
-const sampleCollections = itemsFactory(5, AccessItemType.COLLECTION);
 const sampleMembers = itemsFactory(10, AccessItemType.MEMBER);
 const sampleGroups = itemsFactory(6, AccessItemType.GROUP);
 
@@ -107,31 +108,64 @@ const StandaloneAccessSelectorTemplate: Story<AccessSelectorComponent> = (
               [items]="items"
               [disabled]="disabled"
               [columnHeader]="columnHeader"
+              [showGroupColumn]="showGroupColumn"
               [selectorLabelText]="selectorLabelText"
               [selectorHelpText]="selectorHelpText"
               [emptySelectionText]="emptySelectionText"
-              [usePermissions]="usePermissions"
+              [permissionMode]="permissionMode"
               [showMemberRoles]="showMemberRoles"
             ></bit-access-selector>
 `,
 });
 
-export const Collections = StandaloneAccessSelectorTemplate.bind({});
-Collections.args = {
-  usePermissions: true,
+const memberCollectionAccessItems = itemsFactory(3, AccessItemType.COLLECTION).concat([
+  {
+    id: "c1-group1",
+    type: AccessItemType.COLLECTION,
+    labelName: "Collection 1",
+    listName: "Collection 1",
+    viaGroupName: "Group 1",
+    readonlyPermission: CollectionPermission.VIEW,
+    readonly: true,
+  },
+  {
+    id: "c1-group2",
+    type: AccessItemType.COLLECTION,
+    labelName: "Collection 1",
+    listName: "Collection 1",
+    viaGroupName: "Group 2",
+    readonlyPermission: CollectionPermission.VIEW_EXCEPT_PASSWORDS,
+    readonly: true,
+  },
+]);
+
+export const MemberCollectionAccess = StandaloneAccessSelectorTemplate.bind({});
+MemberCollectionAccess.args = {
+  permissionMode: "edit",
   showMemberRoles: false,
+  showGroupColumn: true,
   columnHeader: "Collection",
   selectorLabelText: "Select Collections",
   selectorHelpText: "Some helper text describing what this does",
   emptySelectionText: "No collections added",
   disabled: false,
   initialValue: [],
-  items: sampleCollections,
+  items: memberCollectionAccessItems,
+};
+MemberCollectionAccess.story = {
+  parameters: {
+    docs: {
+      storyDescription: `
+        Example of an access selector for modifying the collections a member has access to.
+        Includes examples of a readonly group and member that cannot be edited.
+      `,
+    },
+  },
 };
 
-export const Groups = StandaloneAccessSelectorTemplate.bind({});
-Groups.args = {
-  usePermissions: false,
+export const MemberGroupAccess = StandaloneAccessSelectorTemplate.bind({});
+MemberGroupAccess.args = {
+  permissionMode: "readonly",
   showMemberRoles: false,
   columnHeader: "Groups",
   selectorLabelText: "Select Groups",
@@ -139,12 +173,29 @@ Groups.args = {
   emptySelectionText: "No groups added",
   disabled: false,
   initialValue: [{ id: "3g" }, { id: "0g" }],
-  items: sampleGroups,
+  items: itemsFactory(4, AccessItemType.GROUP).concat([
+    {
+      id: "admin",
+      type: AccessItemType.GROUP,
+      listName: "Admin Group",
+      labelName: "Admin Group",
+      accessAllItems: true,
+    },
+  ]),
+};
+MemberGroupAccess.story = {
+  parameters: {
+    docs: {
+      storyDescription: `
+        Example of an access selector for selecting which groups an individual member belongs too.
+      `,
+    },
+  },
 };
 
-export const Members = StandaloneAccessSelectorTemplate.bind({});
-Members.args = {
-  usePermissions: false,
+export const GroupMembersAccess = StandaloneAccessSelectorTemplate.bind({});
+GroupMembersAccess.args = {
+  permissionMode: "hidden",
   showMemberRoles: true,
   columnHeader: "Members",
   selectorLabelText: "Select Members",
@@ -154,10 +205,19 @@ Members.args = {
   initialValue: [{ id: "2m" }, { id: "0m" }],
   items: sampleMembers,
 };
+GroupMembersAccess.story = {
+  parameters: {
+    docs: {
+      storyDescription: `
+        Example of an access selector for selecting which members belong to an specific group.
+      `,
+    },
+  },
+};
 
-export const GroupsAndMembers = StandaloneAccessSelectorTemplate.bind({});
-GroupsAndMembers.args = {
-  usePermissions: true,
+export const CollectionAccess = StandaloneAccessSelectorTemplate.bind({});
+CollectionAccess.args = {
+  permissionMode: "edit",
   showMemberRoles: false,
   columnHeader: "Groups/Members",
   selectorLabelText: "Select groups and members",
@@ -165,8 +225,40 @@ GroupsAndMembers.args = {
     "Permissions set for a member will replace permissions set by that member's group",
   emptySelectionText: "No members or groups added",
   disabled: false,
-  initialValue: [{ id: "3g" }, { id: "0m" }],
-  items: sampleGroups.concat(sampleMembers),
+  initialValue: [
+    { id: "3g", permission: CollectionPermission.EDIT_EXCEPT_PASSWORDS },
+    { id: "0m", permission: CollectionPermission.VIEW },
+  ],
+  items: sampleGroups.concat(sampleMembers).concat([
+    {
+      id: "admin-group",
+      type: AccessItemType.GROUP,
+      listName: "Admin Group",
+      labelName: "Admin Group",
+      accessAllItems: true,
+      readonly: true,
+    },
+    {
+      id: "admin-member",
+      type: AccessItemType.MEMBER,
+      listName: "Admin Member (admin@email.com)",
+      labelName: "Admin Member",
+      status: OrganizationUserStatusType.Confirmed,
+      role: OrganizationUserType.Admin,
+      email: "admin@email.com",
+      accessAllItems: true,
+      readonly: true,
+    },
+  ]),
+};
+GroupMembersAccess.story = {
+  parameters: {
+    docs: {
+      storyDescription: `
+        Example of an access selector for selecting which members/groups have access to a specific collection.
+      `,
+    },
+  },
 };
 
 const fb = new FormBuilder();
@@ -188,7 +280,7 @@ const ReactiveFormAccessSelectorTemplate: Story<AccessSelectorComponent> = (
               [selectorLabelText]="selectorLabelText"
               [selectorHelpText]="selectorHelpText"
               [emptySelectionText]="emptySelectionText"
-              [usePermissions]="usePermissions"
+              [permissionMode]="permissionMode"
               [showMemberRoles]="showMemberRoles"
             ></bit-access-selector>
             <button type="submit" bitButton buttonType="primary" class="tw-mt-5">Submit</button>
@@ -199,7 +291,7 @@ const ReactiveFormAccessSelectorTemplate: Story<AccessSelectorComponent> = (
 export const ReactiveForm = ReactiveFormAccessSelectorTemplate.bind({});
 ReactiveForm.args = {
   formObj: fb.group({ formItems: [[{ id: "1g" }]] }),
-  usePermissions: true,
+  permissionMode: "edit",
   showMemberRoles: false,
   columnHeader: "Groups/Members",
   selectorLabelText: "Select groups and members",

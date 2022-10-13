@@ -27,12 +27,35 @@ export enum AccessItemType {
  * Currently, it supports Collections, Groups, and Members. Members require some additional
  * details to render in the AccessSelectorComponent so their type is defined separately
  * and then joined back with the base type.
+ *
  */
 export type AccessItemView =
-  | SelectItemView &
-      (
+  | SelectItemView & {
+      /**
+       * Flag that this group/member can access all items.
+       * This will disable the permission editor for this item.
+       */
+      accessAllItems?: boolean;
+
+      /**
+       * Flag that this item cannot be modified.
+       * This will disable the permission editor and will keep
+       * the item always selected.
+       */
+      readonly?: boolean;
+
+      /**
+       * Optional permission that will be rendered for this
+       * item if it set to readonly.
+       */
+      readonlyPermission?: CollectionPermission;
+    } & (
         | {
-            type: AccessItemType.COLLECTION | AccessItemType.GROUP;
+            type: AccessItemType.COLLECTION;
+            viaGroupName?: string;
+          }
+        | {
+            type: AccessItemType.GROUP;
           }
         | {
             type: AccessItemType.MEMBER; // Members have a few extra details required to display, so they're added here
