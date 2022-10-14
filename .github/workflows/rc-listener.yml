@@ -9,4 +9,4 @@ on:
 jobs:
   call-web-build:
     if: ${{ endsWith(github.ref, 'rc') }}
-    uses: bitwarden/clients/.github/workflows/build-web.yml@${{github.ref_name}}
+    uses: bitwarden/clients/.github/workflows/build-web.yml@testbranch-rc
