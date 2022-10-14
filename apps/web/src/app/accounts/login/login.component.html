@@ -71,8 +71,11 @@
         <hr />
 
         <div *ngIf="captchaSiteKey">
-          <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
-          </app-captcha>
+          <app-captcha
+            [siteKey]="captchaSiteKey"
+            [solved]="captchaSolved"
+            (onSolved)="setCaptchaToken($event)"
+          ></app-captcha>
         </div>
 
         <div class="tw-mb-3 tw-flex tw-space-x-4">

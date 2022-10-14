@@ -48,6 +48,9 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
+  protected get captchaSolved() {
+    return this.captchaToken != undefined;
+  }
 
   constructor(
     protected authService: AuthService,
@@ -192,34 +195,39 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
   }
 
   async doSubmit() {
-    this.formPromise = this.authService.logInTwoFactor(
-      new TokenRequestTwoFactor(this.selectedProviderType, this.token, this.remember),
-      this.captchaToken
-    );
-    const response: AuthResult = await this.formPromise;
-    const disableFavicon = await this.stateService.getDisableFavicon();
-    await this.stateService.setDisableFavicon(!!disableFavicon);
-    if (Utils.isNullOrWhitespace(response.captchaSiteKey)) {
-      this.captchaSiteKey = response.captchaSiteKey;
-      return;
-    }
-    if (this.onSuccessfulLogin != null) {
-      this.onSuccessfulLogin();
-    }
-    if (response.resetMasterPassword) {
-      this.successRoute = "set-password";
-    }
-    if (response.forcePasswordReset) {
-      this.successRoute = "update-temp-password";
-    }
-    if (this.onSuccessfulLoginNavigate != null) {
-      this.onSuccessfulLoginNavigate();
-    } else {
-      this.router.navigate([this.successRoute], {
-        queryParams: {
-          identifier: this.identifier,
-        },
-      });
+    try {
+      this.formPromise = this.authService.logInTwoFactor(
+        new TokenRequestTwoFactor(this.selectedProviderType, this.token, this.remember),
+        this.captchaToken
+      );
+      const response: AuthResult = await this.formPromise;
+      const disableFavicon = await this.stateService.getDisableFavicon();
+      await this.stateService.setDisableFavicon(!!disableFavicon);
+      if (!Utils.isNullOrWhitespace(response.captchaSiteKey)) {
+        this.captchaSiteKey = response.captchaSiteKey;
+        return;
+      }
+      if (this.onSuccessfulLogin != null) {
+        this.onSuccessfulLogin();
+      }
+      if (response.resetMasterPassword) {
+        this.successRoute = "set-password";
+      }
+      if (response.forcePasswordReset) {
+        this.successRoute = "update-temp-password";
+      }
+      if (this.onSuccessfulLoginNavigate != null) {
+        this.onSuccessfulLoginNavigate();
+      } else {
+        this.router.navigate([this.successRoute], {
+          queryParams: {
+            identifier: this.identifier,
+          },
+        });
+      }
+    } catch (e) {
+      this.logService.debug(e);
+      this.captchaToken = undefined;
     }
   }
 

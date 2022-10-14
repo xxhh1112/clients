@@ -31,8 +31,7 @@ export class LoginComponent implements OnInit {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
-
-  get captchaSolved() {
+  protected get captchaSolved() {
     return this.captchaToken != undefined;
   }
 
