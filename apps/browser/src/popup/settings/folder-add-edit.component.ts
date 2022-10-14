@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { FolderAddEditComponent as BaseFolderAddEditComponent } from "@bitwarden/angular/components/folder-add-edit.component";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -22,9 +23,17 @@ export class FolderAddEditComponent extends BaseFolderAddEditComponent {
     platformUtilsService: PlatformUtilsService,
     private router: Router,
     private route: ActivatedRoute,
-    logService: LogService
+    logService: LogService,
+    cryptoService: CryptoService
   ) {
-    super(folderService, folderApiService, i18nService, platformUtilsService, logService);
+    super(
+      folderService,
+      folderApiService,
+      i18nService,
+      platformUtilsService,
+      logService,
+      cryptoService
+    );
   }
 
   async ngOnInit() {

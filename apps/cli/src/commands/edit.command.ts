@@ -9,6 +9,7 @@ import { CollectionExport } from "@bitwarden/common/models/export/collectionExpo
 import { FolderExport } from "@bitwarden/common/models/export/folderExport";
 import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
@@ -123,13 +124,13 @@ export class EditCommand {
       return Response.notFound();
     }
 
-    let folderView = await folder.decrypt();
+    let folderView = await this.cryptoService.decrypt(FolderView, folder);
     folderView = FolderExport.toView(req, folderView);
-    const encFolder = await this.folderService.encrypt(folderView);
+    const encFolder = await this.cryptoService.encryptView(folderView);
     try {
       await this.folderApiService.save(encFolder);
       const updatedFolder = await this.folderService.get(folder.id);
-      const decFolder = await updatedFolder.decrypt();
+      const decFolder = await this.cryptoService.decrypt(FolderView, updatedFolder);
       const res = new FolderResponse(decFolder);
       return Response.success(res);
     } catch (e) {

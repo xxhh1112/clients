@@ -13,6 +13,7 @@ import { CollectionExport } from "@bitwarden/common/models/export/collectionExpo
 import { FolderExport } from "@bitwarden/common/models/export/folderExport";
 import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
+import { FolderView } from "@bitwarden/common/models/view/folderView";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
@@ -148,11 +149,11 @@ export class CreateCommand {
   }
 
   private async createFolder(req: FolderExport) {
-    const folder = await this.folderService.encrypt(FolderExport.toView(req));
+    const folder = await this.cryptoService.encryptView(FolderExport.toView(req));
     try {
       await this.folderApiService.save(folder);
       const newFolder = await this.folderService.get(folder.id);
-      const decFolder = await newFolder.decrypt();
+      const decFolder = await this.cryptoService.decrypt(FolderView, newFolder);
       const res = new FolderResponse(decFolder);
       return Response.success(res);
     } catch (e) {
