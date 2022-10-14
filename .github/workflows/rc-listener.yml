@@ -1,0 +1,16 @@
+# Triggers when a branch is created, if the branch is an `rc` branch, then trigger all the build workflows
+---
+name: RC Listener
+
+on:
+  create: {}  # create: doesn't support branch/tag filtering
+
+
+jobs:
+  validate-branch:
+    name: Validate branch
+    runs-on: "ubuntu-20.04"
+    if: ${{ endsWith(github.ref, 'rc') }}
+    steps:
+      - name: Test run
+        run: echo "${{ github.ref }} is an RC branch, triggering all the build workflows"
