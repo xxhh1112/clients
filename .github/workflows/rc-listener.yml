@@ -10,3 +10,4 @@ jobs:
   call-web-build:
     if: ${{ endsWith(github.ref, 'rc') }}
     uses: bitwarden/clients/.github/workflows/build-web.yml@testbranch-rc
+    secrets: inherit
