@@ -7,10 +7,6 @@ on:
 
 
 jobs:
-  validate-branch:
-    name: Validate branch
-    runs-on: "ubuntu-20.04"
+  call-web-build:
     if: ${{ endsWith(github.ref, 'rc') }}
-    steps:
-      - name: Test run
-        run: echo "${{ github.ref }} is an RC branch, triggering all the build workflows"
+    uses: bitwarden/clients/.github/workflows/build-web.yml@${{ github.ref_name }}
