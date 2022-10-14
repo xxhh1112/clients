@@ -1,3 +1,5 @@
+import { Jsonify } from "type-fest";
+
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
 import { CipherData } from "../data/cipherData";
@@ -36,6 +38,7 @@ export class Cipher extends Domain {
   fields: Field[];
   passwordHistory: Password[];
   collectionIds: string[];
+  creationDate: Date;
   deletedDate: Date;
   reprompt: CipherRepromptType;
 
@@ -70,6 +73,7 @@ export class Cipher extends Domain {
     this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
     this.collectionIds = obj.collectionIds;
     this.localData = localData;
+    this.creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
     this.deletedDate = obj.deletedDate != null ? new Date(obj.deletedDate) : null;
     this.reprompt = obj.reprompt;
 
@@ -198,6 +202,7 @@ export class Cipher extends Domain {
     c.revisionDate = this.revisionDate != null ? this.revisionDate.toISOString() : null;
     c.type = this.type;
     c.collectionIds = this.collectionIds;
+    c.creationDate = this.creationDate != null ? this.creationDate.toISOString() : null;
     c.deletedDate = this.deletedDate != null ? this.deletedDate.toISOString() : null;
     c.reprompt = this.reprompt;
 
@@ -233,5 +238,49 @@ export class Cipher extends Domain {
       c.passwordHistory = this.passwordHistory.map((ph) => ph.toPasswordHistoryData());
     }
     return c;
+  }
+
+  static fromJSON(obj: Jsonify<Cipher>) {
+    if (obj == null) {
+      return null;
+    }
+
+    const domain = new Cipher();
+    const name = EncString.fromJSON(obj.name);
+    const notes = EncString.fromJSON(obj.notes);
+    const revisionDate = obj.revisionDate == null ? null : new Date(obj.revisionDate);
+    const deletedDate = obj.deletedDate == null ? null : new Date(obj.deletedDate);
+    const attachments = obj.attachments?.map((a: any) => Attachment.fromJSON(a));
+    const fields = obj.fields?.map((f: any) => Field.fromJSON(f));
+    const passwordHistory = obj.passwordHistory?.map((ph: any) => Password.fromJSON(ph));
+
+    Object.assign(domain, obj, {
+      name,
+      notes,
+      revisionDate,
+      deletedDate,
+      attachments,
+      fields,
+      passwordHistory,
+    });
+
+    switch (obj.type) {
+      case CipherType.Card:
+        domain.card = Card.fromJSON(obj.card);
+        break;
+      case CipherType.Identity:
+        domain.identity = Identity.fromJSON(obj.identity);
+        break;
+      case CipherType.Login:
+        domain.login = Login.fromJSON(obj.login);
+        break;
+      case CipherType.SecureNote:
+        domain.secureNote = SecureNote.fromJSON(obj.secureNote);
+        break;
+      default:
+        break;
+    }
+
+    return domain;
   }
 }

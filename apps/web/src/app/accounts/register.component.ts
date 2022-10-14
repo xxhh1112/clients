@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
@@ -27,14 +28,14 @@ import { RouterService } from "../core";
   selector: "app-register",
   templateUrl: "register.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class RegisterComponent extends BaseRegisterComponent implements OnInit {
+export class RegisterComponent extends BaseRegisterComponent implements OnInit, OnDestroy {
   email = "";
   showCreateOrgMessage = false;
   layout = "";
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
 
   private policies: Policy[];
+  private destroy$ = new Subject<void>();
 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
@@ -130,9 +131,17 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit {
     }
 
     if (this.policies != null) {
-      this.enforcedPolicyOptions = await this.policyService.getMasterPasswordPolicyOptions(
-        this.policies
-      );
+      this.policyService
+        .masterPasswordPolicyOptions$(this.policies)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((enforcedPasswordPolicyOptions) => {
+          this.enforcedPolicyOptions = enforcedPasswordPolicyOptions;
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -72,7 +72,7 @@ export class RegisterFormComponent extends BaseRegisterComponent implements OnIn
       this.enforcedPolicyOptions != null &&
       !this.policyService.evaluateMasterPassword(
         this.passwordStrengthResult.score,
-        this.formGroup.get("masterPassword")?.value,
+        this.formGroup.value.masterPassword,
         this.enforcedPolicyOptions
       )
     ) {

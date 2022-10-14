@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let email = this.formGroup.get("email")?.value;
+    let email = this.formGroup.value.email;
     if (email == null || email === "") {
       email = await this.stateService.getRememberedEmail();
       this.formGroup.get("email")?.setValue(email);
@@ -85,9 +85,7 @@ export class LoginComponent implements OnInit {
   }
 
   async submit(showToast = true) {
-    const email = this.formGroup.get("email").value;
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
-    const rememberEmail = this.formGroup.get("rememberEmail")?.value;
+    const data = this.formGroup.value;
 
     this.formGroup.markAllAsTouched();
 
@@ -105,15 +103,15 @@ export class LoginComponent implements OnInit {
 
     try {
       const credentials = new PasswordLogInCredentials(
-        email,
-        masterPassword,
+        data.email,
+        data.masterPassword,
         this.captchaToken,
         null
       );
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
-      if (rememberEmail || this.alwaysRememberEmail) {
-        await this.stateService.setRememberedEmail(email);
+      if (data.rememberEmail || this.alwaysRememberEmail) {
+        await this.stateService.setRememberedEmail(data.email);
       } else {
         await this.stateService.setRememberedEmail(null);
       }
@@ -220,7 +218,7 @@ export class LoginComponent implements OnInit {
   }
 
   protected focusInput() {
-    const email = this.formGroup.get("email")?.value;
+    const email = this.formGroup.value.email;
     document.getElementById(email == null || email === "" ? "email" : "masterPassword").focus();
   }
 
