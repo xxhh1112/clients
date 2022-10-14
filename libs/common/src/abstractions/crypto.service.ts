@@ -8,9 +8,10 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
-import { DecryptableView, DecryptableDecryptType } from "../models/view/folderView";
+import { DecryptViewType, Encryptable } from "../models/view/folderView";
 
 export abstract class CryptoService {
+  encryptView: <D, V extends Encryptable<D>>(folder: V) => Promise<D>;
   setKey: (key: SymmetricCryptoKey) => Promise<any>;
   setKeyHash: (keyHash: string) => Promise<void>;
   setEncKey: (encKey: string) => Promise<void>;
@@ -87,8 +88,5 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
 
-  decrypt: <T extends DecryptableView, D extends Domain>(
-    view: DecryptableDecryptType<T, D>,
-    model: D
-  ) => Promise<T>;
+  decrypt: <V, D extends Domain>(view: DecryptViewType<V, D>, model: D) => Promise<V>;
 }

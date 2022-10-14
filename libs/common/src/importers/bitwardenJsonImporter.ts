@@ -5,6 +5,7 @@ import { ImportResult } from "../models/domain/importResult";
 import { CipherWithIdExport } from "../models/export/cipherWithIdsExport";
 import { CollectionWithIdExport } from "../models/export/collectionWithIdExport";
 import { FolderWithIdExport } from "../models/export/folderWithIdExport";
+import { FolderView } from "../models/view/folderView";
 
 import { BaseImporter } from "./baseImporter";
 import { Importer } from "./importer";
@@ -74,7 +75,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
         const folder = FolderWithIdExport.toDomain(f);
         if (folder != null) {
           folder.id = null;
-          const view = await folder.decrypt();
+          const view = await this.cryptoService.decrypt(FolderView, folder);
           groupingsMap.set(f.id, this.result.folders.length);
           this.result.folders.push(view);
         }

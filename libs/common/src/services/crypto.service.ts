@@ -22,7 +22,7 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
-import { DecryptableView, DecryptableDecryptType } from "../models/view/folderView";
+import { DecryptViewType, Encryptable } from "../models/view/folderView";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -680,10 +680,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  async decrypt<T extends DecryptableView, D extends Domain>(
-    view: DecryptableDecryptType<T, D>,
-    model: D
-  ): Promise<T> {
+  async decrypt<V, D extends Domain>(view: DecryptViewType<V, D>, model: D): Promise<V> {
     // If the item has an organizationId, use the org key, otherwise use the user key
     const orgId: string = (model as any).organizationId;
     const key = Utils.isNullOrWhitespace(orgId)
@@ -691,6 +688,15 @@ export class CryptoService implements CryptoServiceAbstraction {
       : await this.getOrgKey(orgId);
 
     return view.decrypt(this, key, model);
+  }
+
+  async encryptView<V extends Encryptable<D>, D>(view: V): Promise<D> {
+    const orgId: string = (view as any).organizationId;
+    const key = Utils.isNullOrWhitespace(orgId)
+      ? await this.getKeyForUserEncryption()
+      : await this.getOrgKey(orgId);
+
+    return view.encrypt(this, key);
   }
 
   // ---HELPERS---

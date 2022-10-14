@@ -1,26 +1,19 @@
 import { Jsonify } from "type-fest";
 
 import { CryptoService } from "../../abstractions/crypto.service";
-import Domain from "../domain/domainBase";
 import { Folder } from "../domain/folder";
 import { SymmetricCryptoKey } from "../domain/symmetricCryptoKey";
 import { ITreeNodeObject } from "../domain/treeNode";
 
-import { View } from "./view";
-
-export type DecryptableDecryptType<T, D> = {
+export type DecryptViewType<T, D> = {
   decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: D): T;
 };
 
-export abstract class DecryptableView extends View {
-  static decrypt: <T extends DecryptableView, D extends Domain>(
-    cryptoService: CryptoService,
-    key: SymmetricCryptoKey,
-    model: D
-  ) => Promise<T>;
+export interface Encryptable<D> {
+  encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<D>;
 }
 
-export class FolderView implements DecryptableView, ITreeNodeObject {
+export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   id: string = null;
   name: string = null;
   revisionDate: Date = null;
@@ -32,6 +25,15 @@ export class FolderView implements DecryptableView, ITreeNodeObject {
 
     this.id = f.id;
     this.revisionDate = f.revisionDate;
+  }
+
+  async encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<Folder> {
+    const folder = new Folder();
+    folder.id = this.id;
+    folder.name = await cryptoService.encrypt(this.name, key);
+    folder.revisionDate = this.revisionDate;
+
+    return folder;
   }
 
   static async decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: Folder) {

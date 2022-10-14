@@ -9,7 +9,6 @@ import { Utils } from "../../misc/utils";
 import { CipherData } from "../../models/data/cipherData";
 import { FolderData } from "../../models/data/folderData";
 import { Folder } from "../../models/domain/folder";
-import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { FolderView } from "../../models/view/folderView";
 
 export class FolderService implements InternalFolderServiceAbstraction {
@@ -48,14 +47,6 @@ export class FolderService implements InternalFolderServiceAbstraction {
 
   async clearCache(): Promise<void> {
     this._folderViews.next([]);
-  }
-
-  // TODO: This should be moved to EncryptService or something
-  async encrypt(model: FolderView, key?: SymmetricCryptoKey): Promise<Folder> {
-    const folder = new Folder();
-    folder.id = model.id;
-    folder.name = await this.cryptoService.encrypt(model.name, key);
-    return folder;
   }
 
   async get(id: string): Promise<Folder> {
@@ -153,7 +144,7 @@ export class FolderService implements InternalFolderServiceAbstraction {
   }
 
   private async decryptFolders(folders: Folder[]) {
-    const decryptFolderPromises = folders.map((f) => f.decrypt());
+    const decryptFolderPromises = folders.map((f) => this.cryptoService.decrypt(FolderView, f));
     const decryptedFolders = await Promise.all(decryptFolderPromises);
 
     decryptedFolders.sort(Utils.getSortFunction(this.i18nService, "name"));
