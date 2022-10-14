@@ -2,8 +2,8 @@
 name: Build Web
 
 on:
-  repository_dispatch: 
-    types: [deploy-service]
+  workflow_call:
+    inputs: {}
   pull_request:
     branches-ignore:
       - 'l10n_master'
@@ -20,6 +20,7 @@ on:
       - 'master'
       - 'rc'
       - 'hotfix-rc-web'
+      - 'testbranch-rc'
     paths:
       - 'apps/web/**'
       - 'libs/**'
