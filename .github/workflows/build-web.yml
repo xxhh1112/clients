@@ -20,6 +20,7 @@ on:
       - 'master'
       - 'rc'
       - 'hotfix-rc-web'
+      - 'testbranch-rc'
     paths:
       - 'apps/web/**'
       - 'libs/**'
