@@ -6,7 +6,6 @@ import { FolderService } from "@bitwarden/common/abstractions/folder/folder.serv
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { Folder } from "@bitwarden/common/models/domain/folder";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
 @Directive()
@@ -45,7 +44,7 @@ export class FolderAddEditComponent implements OnInit {
     }
 
     try {
-      const folder = await this.cryptoService.encryptView<Folder, FolderView>(this.folder);
+      const folder = await this.cryptoService.encryptView(this.folder);
       this.formPromise = this.folderApiService.save(folder);
       await this.formPromise;
       this.platformUtilsService.showToast(

@@ -5,13 +5,7 @@ import { Folder } from "../domain/folder";
 import { SymmetricCryptoKey } from "../domain/symmetricCryptoKey";
 import { ITreeNodeObject } from "../domain/treeNode";
 
-export type DecryptViewType<T, D> = {
-  decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: D): T;
-};
-
-export interface Encryptable<D> {
-  encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<D>;
-}
+import { Encryptable } from "./encryptable";
 
 export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   id: string = null;

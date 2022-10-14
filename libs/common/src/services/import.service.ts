@@ -71,7 +71,6 @@ import { UpmCsvImporter } from "../importers/upmCsvImporter";
 import { YotiCsvImporter } from "../importers/yotiCsvImporter";
 import { ZohoVaultCsvImporter } from "../importers/zohoVaultCsvImporter";
 import { Utils } from "../misc/utils";
-import { Folder } from "../models/domain/folder";
 import { ImportResult } from "../models/domain/importResult";
 import { CipherRequest } from "../models/request/cipherRequest";
 import { CollectionRequest } from "../models/request/collectionRequest";
@@ -81,7 +80,6 @@ import { ImportOrganizationCiphersRequest } from "../models/request/importOrgani
 import { KvpRequest } from "../models/request/kvpRequest";
 import { ErrorResponse } from "../models/response/errorResponse";
 import { CipherView } from "../models/view/cipherView";
-import { FolderView } from "../models/view/folderView";
 
 export class ImportService implements ImportServiceAbstraction {
   featuredImportOptions = featuredImportOptions as readonly ImportOption[];
@@ -295,9 +293,7 @@ export class ImportService implements ImportServiceAbstraction {
       }
       if (importResult.folders != null) {
         for (let i = 0; i < importResult.folders.length; i++) {
-          const f = await this.cryptoService.encryptView<Folder, FolderView>(
-            importResult.folders[i]
-          );
+          const f = await this.cryptoService.encryptView(importResult.folders[i]);
           request.folders.push(new FolderRequest(f));
         }
       }

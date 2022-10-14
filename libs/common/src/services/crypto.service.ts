@@ -22,7 +22,7 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
-import { DecryptViewType, Encryptable } from "../models/view/folderView";
+import { Decryptable, Encryptable, EncryptableDomain } from "../models/view/encryptable";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -680,7 +680,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  async decrypt<V, D extends Domain>(view: DecryptViewType<V, D>, model: D): Promise<V> {
+  async decrypt<V, D extends Domain>(view: Decryptable<V, D>, model: D): Promise<V> {
     // If the item has an organizationId, use the org key, otherwise use the user key
     const orgId: string = (model as any).organizationId;
     const key = Utils.isNullOrWhitespace(orgId)
@@ -690,7 +690,9 @@ export class CryptoService implements CryptoServiceAbstraction {
     return view.decrypt(this, key, model);
   }
 
-  async encryptView<V extends Encryptable<D>, D>(view: V): Promise<D> {
+  async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
+    view: V
+  ): Promise<EncryptableDomain<V>> {
     const orgId: string = (view as any).organizationId;
     const key = Utils.isNullOrWhitespace(orgId)
       ? await this.getKeyForUserEncryption()
