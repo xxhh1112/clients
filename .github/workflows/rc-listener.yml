@@ -4,7 +4,6 @@ name: RC Listener
 
 on:
   create: {}  # create: doesn't support branch/tag filtering
-  push: {}
 
 
 jobs:
