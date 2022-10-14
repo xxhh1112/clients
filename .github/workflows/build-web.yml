@@ -2,6 +2,8 @@
 name: Build Web
 
 on:
+  repository_dispatch: 
+    types: [deploy-service]
   pull_request:
     branches-ignore:
       - 'l10n_master'
