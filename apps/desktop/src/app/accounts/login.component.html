@@ -62,7 +62,8 @@
         <div class="box-content">
           <app-captcha
             [siteKey]="captchaSiteKey"
-            (captchaSolved)="setCaptchaToken($event)"
+            [solved]="captchaSolved"
+            (onSolved)="setCaptchaToken($event)"
             style="margin-top: 20px"
           ></app-captcha>
           <div class="box-content-row">

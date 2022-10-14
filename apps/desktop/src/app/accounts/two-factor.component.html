@@ -103,8 +103,11 @@
     <div class="box last" *ngIf="captchaSiteKey">
       <div class="box-content">
         <div class="box-content-row">
-          <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
-          </app-captcha>
+          <app-captcha
+            [siteKey]="captchaSiteKey"
+            [solved]="captchaSolved"
+            (onSolved)="setCaptchaToken($event)"
+          ></app-captcha>
           <button class="btn block" type="button" routerLink="/accessibility-cookie">
             <i class="bwi bwi-universal-access" aria-hidden="true"></i>
             {{ "loadAccessibilityCookie" | i18n }}

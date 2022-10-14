@@ -108,8 +108,11 @@
       </div>
     </div>
     <div *ngIf="captchaSiteKey">
-      <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
-      </app-captcha>
+      <app-captcha
+        [siteKey]="captchaSiteKey"
+        [solved]="captchaSolved"
+        (onSolved)="setCaptchaToken($event)"
+      ></app-captcha>
     </div>
     <div class="box last" *ngIf="showTerms">
       <div class="box-content">

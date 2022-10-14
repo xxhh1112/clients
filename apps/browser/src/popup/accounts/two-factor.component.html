@@ -121,8 +121,11 @@
       </div>
     </ng-container>
     <div class="box-content-row" *ngIf="captchaSiteKey">
-      <app-captcha [siteKey]="captchaSiteKey" (captchaSolved)="setCaptchaToken($event)">
-      </app-captcha>
+      <app-captcha
+        [siteKey]="captchaSiteKey"
+        [solved]="captchaSolved"
+        (onSolved)="setCaptchaToken($event)"
+      ></app-captcha>
     </div>
     <div class="content" *ngIf="selectedProviderType == null">
       <p class="text-center">{{ "noTwoStepProviders" | i18n }}</p>
