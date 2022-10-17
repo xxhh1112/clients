@@ -40,7 +40,7 @@ jobs:
     uses: bitwarden/clients/.github/workflows/build-cli.yml@hotfix-rc-cli
     secrets: inherit
 
-  # browser Builds
+  # Browser Builds
   call-browser-build-rc:
     if: ${{ github.ref == 'refs/heads/testbranch-rc' }}
     uses: bitwarden/clients/.github/workflows/build-browser.yml@testbranch-rc

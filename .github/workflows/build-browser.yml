@@ -2,6 +2,8 @@
 name: Build Browser
 
 on:
+  workflow_call:
+    inputs: {}
   pull_request:
     branches-ignore:
       - 'l10n_master'
