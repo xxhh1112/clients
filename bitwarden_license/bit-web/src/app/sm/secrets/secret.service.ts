@@ -6,7 +6,8 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncString } from "@bitwarden/common/models/domain/encString";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
+import { SecretWithProjectsListResponse } from "@bitwarden/common/models/response/secretWithProjectsListResponse";
+import { ProjectsMappedToSecret } from "@bitwarden/common/models/view/projectsMappedToSecret";
 import { SecretListView } from "@bitwarden/common/models/view/secretListView";
 import { SecretView } from "@bitwarden/common/models/view/secretView";
 
@@ -42,8 +43,9 @@ export class SecretService {
       true,
       true
     );
-    const results = new ListResponse(r, SecretListItemResponse);
-    return await this.createSecretsListView(organizationId, results.data);
+
+    const results = new SecretWithProjectsListResponse(r, SecretListItemResponse);
+    return await this.createSecretsListView(organizationId, results.secrets, results.projects);
   }
 
   async create(organizationId: string, secretView: SecretView) {
@@ -127,7 +129,8 @@ export class SecretService {
 
   private async createSecretsListView(
     organizationId: string,
-    secrets: SecretListItemResponse[]
+    secrets: SecretListItemResponse[],
+    projects: ProjectsMappedToSecret[]
   ): Promise<SecretListView[]> {
     const orgKey = await this.getOrganizationKey(organizationId);
     return await Promise.all(
@@ -141,6 +144,7 @@ export class SecretService {
         );
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
+        secretListView.projects = projects; //Narrow this down to the ones that match it
         return secretListView;
       })
     );
