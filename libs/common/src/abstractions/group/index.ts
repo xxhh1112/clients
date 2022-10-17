@@ -1,2 +1,2 @@
-export * from "./group-api.service.abstraction";
+export * from "./group.service.abstraction";
 export * from "./responses/groupResponse";

@@ -27,7 +27,7 @@ import {
   InternalFolderService,
 } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "@bitwarden/common/abstractions/formValidationErrors.service";
-import { GroupApiServiceAbstraction } from "@bitwarden/common/abstractions/group";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -84,7 +84,7 @@ import { FileUploadService } from "@bitwarden/common/services/fileUpload.service
 import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
-import { GroupApiService } from "@bitwarden/common/services/group/group-api.service";
+import { GroupService } from "@bitwarden/common/services/group/group.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
@@ -564,8 +564,8 @@ import { ValidationService } from "./validation.service";
       deps: [EnvironmentServiceAbstraction, AuthServiceAbstraction, LogService],
     },
     {
-      provide: GroupApiServiceAbstraction,
-      useClass: GroupApiService,
+      provide: GroupServiceAbstraction,
+      useClass: GroupService,
       deps: [ApiServiceAbstraction],
     },
   ],

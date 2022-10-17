@@ -17,10 +17,7 @@ import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import {
-  GroupApiServiceAbstraction,
-  GroupDetailsResponse,
-} from "@bitwarden/common/abstractions/group";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -34,6 +31,7 @@ import {
 } from "@bitwarden/common/models/response/collectionResponse";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { GroupView } from "@bitwarden/common/models/view/groupView";
 
 import { GroupAddEditComponent } from "./group-add-edit.component";
 
@@ -45,7 +43,7 @@ type GroupDetailsRow = {
   /**
    * Details used for displaying group information
    */
-  details: GroupDetailsResponse;
+  details: GroupView;
 
   /**
    * True if the group is selected in the table
@@ -108,7 +106,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private groupApiService: GroupApiServiceAbstraction,
+    private groupApiService: GroupServiceAbstraction,
     private route: ActivatedRoute,
     private i18nService: I18nService,
     private modalService: ModalService,
@@ -131,10 +129,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
             ),
             // groups
             this.refreshGroups$.pipe(
-              switchMap(() => this.groupApiService.getAll(this.organizationId)),
-              map((response) =>
-                response.data != null && response.data.length > 0 ? response.data : []
-              )
+              switchMap(() => this.groupApiService.getAll(this.organizationId))
             ),
           ])
         ),
@@ -267,7 +262,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("deletedManyGroups", result.data.length.toString())
+        this.i18nService.t("deletedManyGroups", result.length.toString())
       );
 
       groupsToDelete.forEach((g) => this.removeGroup(g.details.id));

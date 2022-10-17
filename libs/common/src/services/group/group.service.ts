@@ -1,13 +1,14 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import {
-  GroupApiServiceAbstraction,
   GroupDetailsResponse,
   GroupResponse,
+  GroupServiceAbstraction,
 } from "@bitwarden/common/abstractions/group";
 import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
 import { ListResponse } from "@bitwarden/common/models/response/listResponse";
+import { GroupView } from "@bitwarden/common/models/view/groupView";
 
-export class GroupApiService implements GroupApiServiceAbstraction {
+export class GroupService implements GroupServiceAbstraction {
   constructor(private apiService: ApiService) {}
 
   async delete(orgId: string, groupId: string): Promise<void> {
@@ -20,7 +21,7 @@ export class GroupApiService implements GroupApiServiceAbstraction {
     );
   }
 
-  async deleteMany(orgId: string, groupIds: string[]): Promise<ListResponse<GroupResponse>> {
+  async deleteMany(orgId: string, groupIds: string[]): Promise<GroupView[]> {
     const request = new OrganizationGroupBulkRequest(groupIds);
 
     const r = await this.apiService.send(
@@ -30,11 +31,12 @@ export class GroupApiService implements GroupApiServiceAbstraction {
       true,
       true
     );
+    const listResponse = new ListResponse(r, GroupResponse);
 
-    return new ListResponse(r, GroupResponse);
+    return listResponse.data?.map((gr) => GroupView.fromResponse(gr)) ?? [];
   }
 
-  async get(orgId: string, groupId: string): Promise<GroupDetailsResponse> {
+  async get(orgId: string, groupId: string): Promise<GroupView> {
     const r = await this.apiService.send(
       "GET",
       "/organizations/" + orgId + "/groups/" + groupId + "/details",
@@ -43,10 +45,10 @@ export class GroupApiService implements GroupApiServiceAbstraction {
       true
     );
 
-    return new GroupDetailsResponse(r);
+    return GroupView.fromResponse(new GroupDetailsResponse(r));
   }
 
-  async getAll(orgId: string): Promise<ListResponse<GroupDetailsResponse>> {
+  async getAll(orgId: string): Promise<GroupView[]> {
     const r = await this.apiService.send(
       "GET",
       "/organizations/" + orgId + "/groups",
@@ -55,6 +57,8 @@ export class GroupApiService implements GroupApiServiceAbstraction {
       true
     );
 
-    return new ListResponse(r, GroupDetailsResponse);
+    const listResponse = new ListResponse(r, GroupDetailsResponse);
+
+    return listResponse.data?.map((gr) => GroupView.fromResponse(gr)) ?? [];
   }
 }

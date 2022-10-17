@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { GroupApiServiceAbstraction } from "@bitwarden/common/abstractions/group";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -35,7 +35,7 @@ export class GroupAddEditComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private groupApiService: GroupApiServiceAbstraction,
+    private groupApiService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
