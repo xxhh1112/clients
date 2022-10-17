@@ -1,12 +1,12 @@
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { ApiService } from "../../abstractions/api.service";
 import {
   GroupDetailsResponse,
   GroupResponse,
   GroupServiceAbstraction,
-} from "@bitwarden/common/abstractions/group";
-import { OrganizationGroupBulkRequest } from "@bitwarden/common/models/request/OrganizationGroupBulkRequest";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { GroupView } from "@bitwarden/common/models/view/groupView";
+} from "../../abstractions/group";
+import { ListResponse } from "../../models/response/listResponse";
+import { GroupView } from "../../models/view/groupView";
+import { OrganizationGroupBulkRequest } from "../../services/group/requests/OrganizationGroupBulkRequest";
 
 export class GroupService implements GroupServiceAbstraction {
   constructor(private apiService: ApiService) {}

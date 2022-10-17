@@ -1,4 +1,4 @@
-import { GroupView } from "@bitwarden/common/models/view/groupView";
+import { GroupView } from "../../models/view/groupView";
 
 export class GroupServiceAbstraction {
   delete: (orgId: string, groupId: string) => Promise<void>;
