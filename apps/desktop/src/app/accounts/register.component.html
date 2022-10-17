@@ -100,8 +100,8 @@
             <div class="box-content-row">
               <app-captcha
                 [siteKey]="captchaSiteKey"
-                [solved]="captchaSolved"
-                (onSolved)="setCaptchaToken($event)"
+                [token]="captchaToken"
+                (tokenChange)="setCaptchaToken($event)"
               ></app-captcha>
               <button class="btn block" type="button" routerLink="/accessibility-cookie">
                 <i class="bwi bwi-universal-access" aria-hidden="true"></i>

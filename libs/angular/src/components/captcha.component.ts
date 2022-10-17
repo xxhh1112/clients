@@ -5,6 +5,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { IFrameComponent } from "@bitwarden/common/misc/iframe_component";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 /**
  * HCaptcha component, shows the captcha and emits an event when the captcha is solved.
@@ -16,18 +17,19 @@ import { IFrameComponent } from "@bitwarden/common/misc/iframe_component";
 export class CaptchaComponent implements AfterViewInit, OnDestroy {
   @Input() siteKey: string;
 
-  @Input() set solved(val: boolean) {
-    if (!val && this.initialized) {
+  @Input() set token(token: string | undefined) {
+    // Reset the captcha status if  the token is set to undefined.
+    if (Utils.isNullOrWhitespace(token) && this.initialized) {
       this.logService.debug("CaptchaComponent: Resetting captcha");
       this.iframeHandler?.sendMessage("reload");
     }
   }
-  @Output() onSolved = new EventEmitter<string>();
+  @Output() tokenChange = new EventEmitter<string>();
 
   private iframeHandler: IFrameComponent;
 
-  private readonly connectorUrl = "captcha-connector.html";
   protected readonly id = "hcaptcha_iframe";
+  private readonly connectorUrl = "captcha-connector.html";
   private initialized = false;
 
   constructor(
@@ -46,7 +48,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
       this.connectorUrl,
       this.id,
       (token: string) => {
-        this.onSolved.emit(token);
+        this.tokenChange.emit(token);
       },
       (error: string) => {
         this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), error);

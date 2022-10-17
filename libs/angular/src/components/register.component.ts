@@ -33,9 +33,6 @@ export class RegisterComponent {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
-  protected get captchaSolved() {
-    return this.captchaToken != undefined;
-  }
 
   showPassword = false;
   formPromise: Promise<RegisterResponse>;
@@ -136,6 +133,8 @@ export class RegisterComponent {
       }
     } catch (e) {
       this.logService.error(e);
+
+      // Invalidate the captcha
       this.captchaToken = undefined;
     }
   }

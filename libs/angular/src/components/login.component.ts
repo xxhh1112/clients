@@ -31,9 +31,6 @@ export class LoginComponent implements OnInit {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
-  protected get captchaSolved() {
-    return this.captchaToken != undefined;
-  }
 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
@@ -142,8 +139,10 @@ export class LoginComponent implements OnInit {
         }
       }
     } catch (e) {
-      this.captchaToken = undefined;
       this.logService.error(e);
+
+      // Invalidate the captcha
+      this.captchaToken = undefined;
     }
   }
 

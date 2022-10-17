@@ -48,9 +48,6 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
 
   protected captchaSiteKey?: string;
   protected captchaToken?: string;
-  protected get captchaSolved() {
-    return this.captchaToken != undefined;
-  }
 
   constructor(
     protected authService: AuthService,
@@ -227,6 +224,8 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
       }
     } catch (e) {
       this.logService.debug(e);
+
+      // Invalidate the captcha
       this.captchaToken = undefined;
     }
   }

@@ -89,8 +89,8 @@
     <div *ngIf="captchaSiteKey">
       <app-captcha
         [siteKey]="captchaSiteKey"
-        [solved]="captchaSolved"
-        (onSolved)="setCaptchaToken($event)"
+        [token]="captchaToken"
+        (tokenChange)="setCaptchaToken($event)"
       ></app-captcha>
     </div>
 
