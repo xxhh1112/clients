@@ -9,8 +9,8 @@ jobs:
 
   # Web Builds
   call-web-build-rc:
-    if: ${{ github.ref == 'refs/heads/rc' }}
-    uses: bitwarden/clients/.github/workflows/build-web.yml@rc
+    if: ${{ github.ref == 'refs/heads/testbranch-rc' }}
+    uses: bitwarden/clients/.github/workflows/build-web.yml@testbranch-rc
     secrets: inherit
 
   call-web-build-hotfix:
@@ -20,8 +20,8 @@ jobs:
 
   # Desktop Builds
   call-desktop-build-rc:
-    if: ${{ github.ref == 'refs/heads/rc' }}
-    uses: bitwarden/clients/.github/workflows/build-desktop.yml@rc
+    if: ${{ github.ref == 'refs/heads/testbranch-rc' }}
+    uses: bitwarden/clients/.github/workflows/build-desktop.yml@testbranch-rc
     secrets: inherit
 
   call-desktop-build-hotfix:
@@ -31,8 +31,8 @@ jobs:
 
   # CLI Builds
   call-cli-build-rc:
-    if: ${{ github.ref == 'refs/heads/rc' }}
-    uses: bitwarden/clients/.github/workflows/build-cli.yml@rc
+    if: ${{ github.ref == 'refs/heads/testbranch-rc' }}
+    uses: bitwarden/clients/.github/workflows/build-cli.yml@testbranch-rc
     secrets: inherit
 
   call-cli-build-hotfix:
@@ -42,8 +42,8 @@ jobs:
 
   # browser Builds
   call-browser-build-rc:
-    if: ${{ github.ref == 'refs/heads/rc' }}
-    uses: bitwarden/clients/.github/workflows/build-browser.yml@rc
+    if: ${{ github.ref == 'refs/heads/testbranch-rc' }}
+    uses: bitwarden/clients/.github/workflows/build-browser.yml@testbranch-rc
     secrets: inherit
 
   call-browser-build-hotfix:
