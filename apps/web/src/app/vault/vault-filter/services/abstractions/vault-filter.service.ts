@@ -20,6 +20,7 @@ export abstract class VaultFilterService {
   folderTree$: Observable<TreeNode<FolderFilter>>;
   collectionTree$: Observable<TreeNode<CollectionFilter>>;
   reloadCollections: () => Promise<void>;
+  getCollectionNodeFromTree: (id: string) => Promise<TreeNode<CollectionFilter>>;
   setCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;
   expandOrgFilter: () => Promise<void>;
   setOrganizationFilter: (organization: Organization) => void;

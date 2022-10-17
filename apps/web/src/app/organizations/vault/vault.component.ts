@@ -82,7 +82,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.params.subscribe(async (params: any) => {
       this.organization = this.organizationService.get(params.organizationId);
-      this.ciphersComponent.organization = this.organization;
 
       /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {

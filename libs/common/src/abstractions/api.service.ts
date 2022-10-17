@@ -10,6 +10,7 @@ import { CipherCollectionsRequest } from "../models/request/cipherCollectionsReq
 import { CipherCreateRequest } from "../models/request/cipherCreateRequest";
 import { CipherRequest } from "../models/request/cipherRequest";
 import { CipherShareRequest } from "../models/request/cipherShareRequest";
+import { CollectionBulkDeleteRequest } from "../models/request/collectionBulkDeleteRequest";
 import { CollectionRequest } from "../models/request/collectionRequest";
 import { DeleteRecoverRequest } from "../models/request/deleteRecoverRequest";
 import { DeviceVerificationRequest } from "../models/request/deviceVerificationRequest";
@@ -336,6 +337,7 @@ export abstract class ApiService {
     request: CollectionRequest
   ) => Promise<CollectionResponse>;
   deleteCollection: (organizationId: string, id: string) => Promise<any>;
+  deleteManyCollections: (request: CollectionBulkDeleteRequest) => Promise<any>;
   deleteCollectionUser: (
     organizationId: string,
     id: string,

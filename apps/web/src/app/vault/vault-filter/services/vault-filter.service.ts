@@ -90,6 +90,11 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
   }
 
+  async getCollectionNodeFromTree(id: string) {
+    const collections = await firstValueFrom(this.collectionTree$);
+    return ServiceUtils.getTreeNodeObject(collections, id) as TreeNode<CollectionFilter>;
+  }
+
   async setCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
     await this.stateService.setCollapsedGroupings(Array.from(collapsedFilterNodes));
     this._collapsedFilterNodes.next(collapsedFilterNodes);

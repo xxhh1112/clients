@@ -69,13 +69,13 @@ export class VaultFilterService extends BaseVaultFilterService implements OnDest
       });
   }
 
-  protected async loadCollections(org: Organization) {
-    return await this.loadAdminCollections(org);
+  async reloadCollections() {
+    this._collections.next(await this.loadCollections(this._organizationFilter.getValue()));
   }
 
-  async loadAdminCollections(org: Organization): Promise<CollectionGroupDetailsView[]> {
+  protected async loadCollections(org: Organization): Promise<CollectionGroupDetailsView[]> {
     let collections: CollectionGroupDetailsView[] = [];
-    if (org?.permissions && org?.canEditAnyCollection) {
+    if (org?.permissions && org?.canViewAssignedCollections) {
       const collectionResponse = await this.apiService.getManyCollectionsWithDetails(org.id);
       if (collectionResponse?.data != null && collectionResponse.data.length) {
         const collectionDomains = collectionResponse.data.map(

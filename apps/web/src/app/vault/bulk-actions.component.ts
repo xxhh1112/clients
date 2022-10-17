@@ -44,7 +44,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.ciphersComponent.getSelectedIds();
+    const selectedIds = this.ciphersComponent.getSelectedCipherIds();
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -75,7 +75,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.ciphersComponent.getSelectedIds();
+    const selectedIds = this.ciphersComponent.getSelectedCipherIds();
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -104,7 +104,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCiphers = this.ciphersComponent.getSelected();
+    const selectedCiphers = this.ciphersComponent.getSelectedCiphers();
     if (selectedCiphers.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -133,7 +133,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.ciphersComponent.getSelectedIds();
+    const selectedIds = this.ciphersComponent.getSelectedCipherIds();
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -162,7 +162,7 @@ export class BulkActionsComponent {
   }
 
   private async promptPassword() {
-    const selectedCiphers = this.ciphersComponent.getSelected();
+    const selectedCiphers = this.ciphersComponent.getSelectedCiphers();
     const notProtected = !selectedCiphers.find(
       (cipher) => cipher.reprompt !== CipherRepromptType.None
     );

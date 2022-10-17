@@ -73,7 +73,12 @@
       <ng-container *ngIf="activeFilter.selectedCollectionNode">
         <tr *ngFor="let col of activeFilter.selectedCollectionNode?.children">
           <td class="table-list-checkbox">
-            <input *ngIf="organization" type="checkbox" [(ngModel)]="col.checked" appStopProp />
+            <input
+              *ngIf="organization && col.node.name !== 'Unassigned'"
+              type="checkbox"
+              [(ngModel)]="col.checked"
+              appStopProp
+            />
           </td>
           <td class="table-list-icon">
             <div class="icon" aria-hidden="true">
@@ -102,7 +107,45 @@
               ></app-group-badge>
             </ng-container>
           </td>
-          <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right"></td>
+          <td class="table-list-options tw-mr-0 tw-ml-auto tw-text-right">
+            <button
+              *ngIf="organization && col.node.name !== 'Unassigned'"
+              [bitMenuTriggerFor]="collectionOptions"
+              class="tw-border-none tw-bg-transparent tw-text-main"
+              type="button"
+              appA11yTitle="{{ 'options' | i18n }}"
+            >
+              <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
+            </button>
+            <bit-menu #collectionOptions>
+              <button
+                *ngIf="organization?.canEditAssignedCollections"
+                bitMenuItem
+                (click)="editCollectionInfo(col.node)"
+              >
+                <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
+                {{ "editInfo" | i18n }}
+              </button>
+              <button
+                *ngIf="organization?.canEditAssignedCollections"
+                bitMenuItem
+                (click)="editCollectionAccess(col.node)"
+              >
+                <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+                {{ "access" | i18n }}
+              </button>
+              <button
+                *ngIf="organization?.canDeleteAssignedCollections"
+                bitMenuItem
+                (click)="deleteCollection(col.node)"
+              >
+                <span class="tw-text-danger">
+                  <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
+                  {{ "delete" | i18n }}
+                </span>
+              </button>
+            </bit-menu>
+          </td>
         </tr>
       </ng-container>
       <tr *ngFor="let c of filteredCiphers">
@@ -231,7 +274,7 @@
               <i class="bwi bwi-fw bwi-undo" aria-hidden="true"></i>
               {{ "restore" | i18n }}
             </button>
-            <button bitMenuItem (click)="delete(c)">
+            <button bitMenuItem (click)="deleteCipher(c)">
               <span class="tw-text-danger">
                 <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
                 {{ (c.isDeleted ? "permanentlyDelete" : "delete") | i18n }}

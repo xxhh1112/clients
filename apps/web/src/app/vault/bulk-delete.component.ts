@@ -6,6 +6,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
+import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collectionBulkDeleteRequest";
 
 @Component({
   selector: "app-vault-bulk-delete",
@@ -13,6 +14,7 @@ import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipher
 })
 export class BulkDeleteComponent {
   @Input() cipherIds: string[] = [];
+  @Input() collectionIds: string[] = [];
   @Input() permanent = false;
   @Input() organization: Organization;
   @Output() onDeleted = new EventEmitter();
@@ -27,36 +29,60 @@ export class BulkDeleteComponent {
   ) {}
 
   async submit() {
+    let deleteCiphersPromise: Promise<void>;
     if (!this.organization || !this.organization.canEditAnyCollection) {
-      await this.deleteCiphers();
+      deleteCiphersPromise = this.deleteCiphers();
     } else {
-      await this.deleteCiphersAdmin();
+      deleteCiphersPromise = this.deleteCiphersAdmin();
     }
 
+    this.formPromise = Promise.all([deleteCiphersPromise, this.deleteCollections()]);
     await this.formPromise;
 
     this.onDeleted.emit();
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t(this.permanent ? "permanentlyDeletedItems" : "deletedItems")
-    );
-  }
-
-  private async deleteCiphers() {
-    if (this.permanent) {
-      this.formPromise = await this.cipherService.deleteManyWithServer(this.cipherIds);
-    } else {
-      this.formPromise = await this.cipherService.softDeleteManyWithServer(this.cipherIds);
+    if (this.cipherIds.length) {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t(this.permanent ? "permanentlyDeletedItems" : "deletedItems")
+      );
+    }
+    if (this.collectionIds.length) {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("deletedCollections")
+      );
     }
   }
 
-  private async deleteCiphersAdmin() {
+  private async deleteCiphers(): Promise<any> {
+    if (this.permanent) {
+      await this.cipherService.deleteManyWithServer(this.cipherIds);
+    } else {
+      await this.cipherService.softDeleteManyWithServer(this.cipherIds);
+    }
+  }
+
+  private async deleteCiphersAdmin(): Promise<any> {
     const deleteRequest = new CipherBulkDeleteRequest(this.cipherIds, this.organization.id);
     if (this.permanent) {
-      this.formPromise = await this.apiService.deleteManyCiphersAdmin(deleteRequest);
+      return await this.apiService.deleteManyCiphersAdmin(deleteRequest);
     } else {
-      this.formPromise = await this.apiService.putDeleteManyCiphersAdmin(deleteRequest);
+      return await this.apiService.putDeleteManyCiphersAdmin(deleteRequest);
     }
+  }
+
+  private async deleteCollections(): Promise<any> {
+    if (!this.organization.canDeleteAssignedCollections) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("missingPermissions")
+      );
+      return;
+    }
+    const deleteRequest = new CollectionBulkDeleteRequest(this.collectionIds, this.organization.id);
+    return await this.apiService.deleteManyCollections(deleteRequest);
   }
 }

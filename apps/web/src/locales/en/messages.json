@@ -566,6 +566,12 @@
   "deletedFolder": {
     "message": "Deleted folder"
   },
+  "editInfo": {
+    "message": "Edit Info"
+  },
+  "access": {
+    "message": "Access"
+  },
   "loggedOut": {
     "message": "Logged out"
   },
@@ -865,13 +871,25 @@
     "message": "Edit the collections that this item is being shared with. Only organization users with access to these collections will be able to see this item."
   },
   "deleteSelectedItemsDesc": {
-    "message": "You have selected $COUNT$ item(s) to delete. Are you sure you want to delete all of these items?",
+    "message": "$COUNT$ item(s) will be sent to trash.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "150"
       }
     }
+  },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ collection(s) will be permanently deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Choose a folder that you would like to move the $COUNT$ selected item(s) to.",
@@ -2677,6 +2695,9 @@
         "example": "Server Passwords"
       }
     }
+  },
+  "deletedCollections": {
+    "message": "Deleted collections"
   },
   "deletedCollectionId": {
     "message": "Deleted collection $ID$.",

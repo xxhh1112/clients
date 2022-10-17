@@ -15,10 +15,18 @@
         </button>
       </div>
       <div class="modal-body">
-        {{
-          (permanent ? "permanentlyDeleteSelectedItemsDesc" : "deleteSelectedItemsDesc")
-            | i18n: cipherIds.length
-        }}
+        <ng-container *ngIf="!permanent">
+          <span *ngIf="cipherIds?.length">
+            {{ "deleteSelectedItemsDesc" | i18n: cipherIds.length }}
+          </span>
+          <span *ngIf="collectionIds?.length">
+            {{ "deleteSelectedCollectionsDesc" | i18n: collectionIds.length }}
+          </span>
+          {{ "deleteSelectedConfirmation" | i18n }}
+        </ng-container>
+        <ng-container *ngIf="permanent">
+          {{ "permanentlyDeleteSelectedItemsDesc" | i18n: cipherIds.length }}
+        </ng-container>
       </div>
       <div class="modal-footer">
         <button
