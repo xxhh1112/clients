@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 
 import { BadgeTypes } from "./badge.directive";
 
@@ -6,43 +6,30 @@ import { BadgeTypes } from "./badge.directive";
   selector: "bit-badge-list",
   templateUrl: "badge-list.component.html",
 })
-export class BadgeListComponent {
-  private _maxItems: number | null = null;
-  private _items: string[] = [];
+export class BadgeListComponent implements OnChanges {
+  private _maxItems: number;
 
   protected filteredItems: string[] = [];
+  protected isFiltered = false;
 
   @Input() badgeType: BadgeTypes = "primary";
+  @Input() items: string[] = [];
 
   @Input()
-  get maxItems(): number | null {
+  get maxItems(): number | undefined {
     return this._maxItems;
   }
 
-  set maxItems(value: number | null) {
-    this._maxItems = value == null ? null : Math.max(1, value);
-    this.updateFilteredItems();
+  set maxItems(value: number | undefined) {
+    this._maxItems = value == undefined ? undefined : Math.max(1, value);
   }
 
-  @Input()
-  get items(): string[] {
-    return this._items;
-  }
-
-  set items(value: string[]) {
-    this._items = value;
-    this.updateFilteredItems();
-  }
-
-  protected get isFiltered(): boolean {
-    return this._items.length > this.filteredItems.length;
-  }
-
-  private updateFilteredItems() {
-    if (this.maxItems == null) {
-      this.filteredItems = this._items;
+  ngOnChanges() {
+    if (this.maxItems == undefined) {
+      this.filteredItems = this.items;
     } else {
-      this.filteredItems = this._items.slice(0, this.maxItems);
+      this.filteredItems = this.items.slice(0, this.maxItems);
     }
+    this.isFiltered = this.items.length > this.filteredItems.length;
   }
 }
