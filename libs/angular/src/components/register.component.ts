@@ -305,4 +305,9 @@ export class RegisterComponent {
     this.captchaSiteKey = response.captchaSiteKey;
     return true;
   }
+
+  protected setCaptchaToken(token: string) {
+    this.captchaToken = token;
+    this.submit();
+  }
 }

@@ -86,9 +86,4 @@ export class RegisterFormComponent extends BaseRegisterComponent implements OnIn
 
     await super.submit(false);
   }
-
-  protected setCaptchaToken(token: string) {
-    this.captchaToken = token;
-    this.submit();
-  }
 }
