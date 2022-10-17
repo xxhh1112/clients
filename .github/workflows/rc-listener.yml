@@ -5,9 +5,48 @@ name: RC Listener
 on:
   create: {}  # create: doesn't support branch/tag filtering
 
-
 jobs:
-  call-web-build:
-    if: ${{ endsWith(github.ref, 'rc') }}
-    uses: bitwarden/clients/.github/workflows/build-web.yml@testbranch-rc
+
+  # Web Builds
+  call-web-build-rc:
+    if: ${{ github.ref == 'refs/heads/rc' }}
+    uses: bitwarden/clients/.github/workflows/build-web.yml@rc
+    secrets: inherit
+
+  call-web-build-hotfix:
+    if: ${{ github.ref == 'refs/heads/hotfix-rc-web' }}
+    uses: bitwarden/clients/.github/workflows/build-web.yml@hotfix-rc-web
+    secrets: inherit
+
+  # Desktop Builds
+  call-desktop-build-rc:
+    if: ${{ github.ref == 'refs/heads/rc' }}
+    uses: bitwarden/clients/.github/workflows/build-desktop.yml@rc
+    secrets: inherit
+
+  call-desktop-build-hotfix:
+    if: ${{ github.ref == 'refs/heads/hotfix-rc-desktop' }}
+    uses: bitwarden/clients/.github/workflows/build-desktop.yml@hotfix-rc-desktop
+    secrets: inherit
+
+  # CLI Builds
+  call-cli-build-rc:
+    if: ${{ github.ref == 'refs/heads/rc' }}
+    uses: bitwarden/clients/.github/workflows/build-cli.yml@rc
+    secrets: inherit
+
+  call-cli-build-hotfix:
+    if: ${{ github.ref == 'refs/heads/hotfix-rc-cli' }}
+    uses: bitwarden/clients/.github/workflows/build-cli.yml@hotfix-rc-cli
+    secrets: inherit
+
+  # browser Builds
+  call-browser-build-rc:
+    if: ${{ github.ref == 'refs/heads/rc' }}
+    uses: bitwarden/clients/.github/workflows/build-browser.yml@rc
+    secrets: inherit
+
+  call-browser-build-hotfix:
+    if: ${{ github.ref == 'refs/heads/hotfix-rc-browser' }}
+    uses: bitwarden/clients/.github/workflows/build-browser.yml@hotfix-rc-browser
     secrets: inherit
