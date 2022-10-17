@@ -10,7 +10,6 @@ import { TokenService } from "../../abstractions/token.service";
 import { TwoFactorService } from "../../abstractions/twoFactor.service";
 import { AuthResult } from "../../models/domain/authResult";
 import { PasswordlessLogInCredentials } from "../../models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
 import { PasswordTokenRequest } from "../../models/request/identityToken/passwordTokenRequest";
 import { TokenRequestTwoFactor } from "../../models/request/identityToken/tokenRequestTwoFactor";
 
@@ -21,15 +20,16 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     return this.tokenRequest.email;
   }
 
-  get masterPasswordHash() {
-    return this.tokenRequest.masterPasswordHash;
+  get accessCode() {
+    return this.passwordlessCreds.accessCode;
+  }
+
+  get authRequestId() {
+    return this.passwordlessCreds.authRequestId;
   }
 
   tokenRequest: PasswordTokenRequest;
-
-  private localHashedPassword: string;
-  private key: SymmetricCryptoKey;
-
+  passwordlessCreds: PasswordlessLogInCredentials;
   constructor(
     cryptoService: CryptoService,
     apiService: ApiService,
@@ -56,8 +56,8 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   async onSuccessfulLogin() {
-    await this.cryptoService.setKey(this.key);
-    await this.cryptoService.setKeyHash(this.localHashedPassword);
+    await this.cryptoService.setKey(this.passwordlessCreds.decKey);
+    await this.cryptoService.setKeyHash(this.passwordlessCreds.localPasswordHash);
   }
 
   async logInTwoFactor(
@@ -69,8 +69,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   async logIn(credentials: PasswordlessLogInCredentials) {
-    this.localHashedPassword = credentials.localPasswordHash;
-    this.key = credentials.decKey;
+    this.passwordlessCreds = credentials;
 
     this.tokenRequest = new PasswordTokenRequest(
       credentials.email,
