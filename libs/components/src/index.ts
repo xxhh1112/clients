@@ -1,4 +1,5 @@
 export * from "./badge";
+export * from "./badge-list";
 export * from "./banner";
 export * from "./button";
 export * from "./callout";

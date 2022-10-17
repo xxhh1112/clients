@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from "@angular/core";
 
-import { BadgeTypes } from "./badge.directive";
+import { BadgeTypes } from "../badge";
 
 @Component({
   selector: "bit-badge-list",

@@ -8,6 +8,7 @@ import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
+  BadgeListModule,
   BadgeModule,
   ButtonModule,
   CalloutModule,
@@ -44,6 +45,7 @@ import "./locales";
     CalloutModule,
     ToastrModule,
     BadgeModule,
+    BadgeListModule,
     ButtonModule,
     MenuModule,
     FormFieldModule,
@@ -62,6 +64,7 @@ import "./locales";
     ReactiveFormsModule,
     RouterModule,
     BadgeModule,
+    BadgeListModule,
     ButtonModule,
     CalloutModule,
     ToastrModule,

@@ -1,29 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-
-import { SharedModule } from "../shared";
-import { I18nMockService } from "../utils/i18n-mock.service";
-
-import { BadgeListComponent } from "./badge-list.component";
 import { BadgeDirective, BadgeTypes } from "./badge.directive";
 
 export default {
   title: "Component Library/Badge",
   decorators: [
     moduleMetadata({
-      imports: [SharedModule],
-      declarations: [BadgeDirective, BadgeListComponent],
-      providers: [
-        {
-          provide: I18nService,
-          useFactory: () => {
-            return new I18nMockService({
-              plusNMore: (n) => `+ ${n} more`,
-            });
-          },
-        },
-      ],
+      imports: [CommonModule],
+      declarations: [BadgeDirective],
     }),
   ],
   args: {
@@ -80,17 +65,4 @@ Warning.args = {
 export const Info = Template.bind({});
 Info.args = {
   badgeType: "info",
-};
-
-const ListTemplate: Story<BadgeListComponent> = (args: BadgeListComponent) => ({
-  props: args,
-  template: `
-  <bit-badge-list [badgeType]="badgeType" [maxItems]="maxItems" [items]="items"></bit-badge-list>`,
-});
-
-export const BadgeList = ListTemplate.bind({});
-BadgeList.args = {
-  badgeType: "info",
-  maxItems: 3,
-  items: ["Badge 1", "Badge 2", "Badge 3", "Badge 4", "Badge 5"],
 };
