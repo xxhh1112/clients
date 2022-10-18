@@ -1,5 +1,5 @@
-import { GroupResponse } from "@bitwarden/common/abstractions/group";
-import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selectionReadOnlyResponse";
+import { GroupResponse } from "../../abstractions/group";
+import { SelectionReadOnlyResponse } from "../../models/response/selectionReadOnlyResponse";
 
 import { View } from "./view";
 

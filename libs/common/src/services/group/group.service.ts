@@ -6,7 +6,8 @@ import {
 } from "../../abstractions/group";
 import { ListResponse } from "../../models/response/listResponse";
 import { GroupView } from "../../models/view/groupView";
-import { OrganizationGroupBulkRequest } from "../../services/group/requests/OrganizationGroupBulkRequest";
+
+import { OrganizationGroupBulkRequest } from "./requests/organizationGroupBulkRequest";
 
 export class GroupService implements GroupServiceAbstraction {
   constructor(private apiService: ApiService) {}
