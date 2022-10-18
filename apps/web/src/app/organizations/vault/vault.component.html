@@ -6,8 +6,9 @@
           <div class="inner-content">
             <app-organization-vault-filter
               #vaultFilter
+              [organization]="organization"
               [activeFilter]="activeFilter"
-              (onFilterChange)="applyVaultFilter($event)"
+              (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"
             ></app-organization-vault-filter>
           </div>
@@ -32,7 +33,7 @@
         <div class="ml-auto d-flex">
           <app-vault-bulk-actions
             [ciphersComponent]="ciphersComponent"
-            [deleted]="deleted"
+            [deleted]="activeFilter.isDeleted"
             [organization]="organization"
           >
           </app-vault-bulk-actions>
@@ -40,13 +41,17 @@
             type="button"
             class="btn btn-outline-primary btn-sm ml-auto"
             (click)="addCipher()"
-            *ngIf="!deleted"
+            *ngIf="!activeFilter.isDeleted"
           >
             <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>{{ "addItem" | i18n }}
           </button>
         </div>
       </div>
-      <app-callout type="warning" *ngIf="deleted" icon="bwi bwi-exclamation-triangle">
+      <app-callout
+        type="warning"
+        *ngIf="activeFilter.isDeleted"
+        icon="bwi bwi-exclamation-triangle"
+      >
         {{ trashCleanupWarning }}
       </app-callout>
       <app-org-vault-ciphers

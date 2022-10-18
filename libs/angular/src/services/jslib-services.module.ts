@@ -1,7 +1,5 @@
 import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
-import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
-import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service.abstraction";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service.abstraction";
@@ -58,6 +56,7 @@ import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/comm
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
+import { ValidationService as ValidationServiceAbstraction } from "@bitwarden/common/abstractions/validation.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
@@ -106,6 +105,7 @@ import { TwoFactorService } from "@bitwarden/common/services/twoFactor.service";
 import { UserVerificationApiService } from "@bitwarden/common/services/userVerification/userVerification-api.service";
 import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { UsernameGenerationService } from "@bitwarden/common/services/usernameGeneration.service";
+import { ValidationService } from "@bitwarden/common/services/validation.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
@@ -129,12 +129,12 @@ import {
 } from "./injection-tokens";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
-import { ValidationService } from "./validation.service";
+import { ThemingService } from "./theming/theming.service";
+import { AbstractThemingService } from "./theming/theming.service.abstraction";
 
 @NgModule({
   declarations: [],
   providers: [
-    ValidationService,
     AuthGuard,
     UnauthGuard,
     LockGuard,
@@ -562,6 +562,11 @@ import { ValidationService } from "./validation.service";
       provide: AnonymousHubServiceAbstraction,
       useClass: AnonymousHubService,
       deps: [EnvironmentServiceAbstraction, AuthServiceAbstraction, LogService],
+    },
+    {
+      provide: ValidationServiceAbstraction,
+      useClass: ValidationService,
+      deps: [I18nServiceAbstraction, PlatformUtilsServiceAbstraction],
     },
     {
       provide: GroupServiceAbstraction,

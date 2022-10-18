@@ -2,7 +2,6 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { InputsFieldMatch } from "@bitwarden/angular/validators/inputsFieldMatch.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -24,6 +23,7 @@ import { RegisterRequest } from "@bitwarden/common/models/request/registerReques
 import { RegisterResponse } from "@bitwarden/common/models/response/authentication/registerResponse";
 
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
+import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
@@ -96,11 +96,11 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   }
 
   async submit(showToast = true) {
-    let email = this.formGroup.get("email")?.value;
+    let email = this.formGroup.value.email;
     email = email.trim().toLowerCase();
-    let name = this.formGroup.get("name")?.value;
+    let name = this.formGroup.value.name;
     name = name === "" ? null : name; // Why do we do this?
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
+    const masterPassword = this.formGroup.value.masterPassword;
     try {
       if (!this.accountCreated) {
         const registerResponse = await this.registerAccount(
@@ -125,7 +125,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
         if (loginResponse.captchaRequired) {
           return;
         }
-        this.createdAccount.emit(this.formGroup.get("email")?.value);
+        this.createdAccount.emit(this.formGroup.value.email);
       } else {
         this.platformUtilsService.showToast(
           "success",
@@ -232,7 +232,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     masterPassword: string,
     name: string
   ): Promise<RegisterRequest> {
-    const hint = this.formGroup.get("hint")?.value;
+    const hint = this.formGroup.value.hint;
     const kdf = DEFAULT_KDF_TYPE;
     const kdfIterations = DEFAULT_KDF_ITERATIONS;
     const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
