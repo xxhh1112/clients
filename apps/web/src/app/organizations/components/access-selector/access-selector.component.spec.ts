@@ -15,7 +15,7 @@ import { SelectItemView } from "@bitwarden/components/src/multi-select/models/se
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
-import { AccessSelectorComponent } from "./access-selector.component";
+import { AccessSelectorComponent, PermissionMode } from "./access-selector.component";
 import { AccessItemType, CollectionPermission } from "./access-selector.models";
 import { UserTypePipe } from "./user-type.pipe";
 
@@ -109,7 +109,7 @@ describe("AccessSelectorComponent", () => {
       const mockChange = jest.fn();
       let expectedCalls = 0;
       component.registerOnChange(mockChange);
-      component.permissionMode = "edit";
+      component.permissionMode = PermissionMode.EDIT;
 
       // Simulate selecting an item
       component.selectItems([{ id: "123" } as any]);

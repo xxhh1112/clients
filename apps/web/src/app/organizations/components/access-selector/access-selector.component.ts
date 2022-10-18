@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnDestroy, OnInit } from "@angular/core";
 import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
-import { FormSelectionList } from "@bitwarden/angular/utils/FormSelectionList";
+import { FormSelectionList } from "@bitwarden/angular/utils/form-selection-list";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
@@ -13,12 +13,22 @@ import {
   CollectionPermission,
 } from "./access-selector.models";
 
-/**
- * - 'hidden' = No perm controls or column present. No perm values are emitted.
- * - 'readonly = No perm controls. Column rendered an if available on an item. No perm values are emitted
- * - 'edit' = Perm Controls and column present. Perm values are emitted.
- */
-type PermissionMode = "hidden" | "readonly" | "edit";
+export enum PermissionMode {
+  /**
+   * No permission controls or column present. No permission values are emitted.
+   */
+  HIDDEN = "hidden",
+
+  /**
+   * No permission controls. Column rendered an if available on an item. No permission values are emitted
+   */
+  READONLY = "readonly",
+
+  /**
+   * Permission Controls and column present. Permission values are emitted.
+   */
+  EDIT = "edit",
+}
 
 @Component({
   selector: "bit-access-selector",
@@ -43,12 +53,12 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    * @protected
    */
   protected selectionList = new FormSelectionList<AccessItemView, AccessItemValue>((item) => {
-    const permControl = this.formBuilder.control(this.initialPermission);
+    const permissionControl = this.formBuilder.control(this.initialPermission);
 
     const fg = this.formBuilder.group({
       id: item.id,
       type: item.type,
-      permission: permControl,
+      permission: permissionControl,
     });
 
     // Disable entire row form group if readonly
@@ -58,7 +68,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
     // Disable permission control if accessAllItems is enabled
     if (item.accessAllItems) {
-      permControl.disable();
+      permissionControl.disable();
     }
 
     return fg;
@@ -116,14 +126,14 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this._permissionMode = value;
     // Toggle any internal permission controls
     for (const control of this.selectionList.formArray.controls) {
-      if (value == "edit") {
+      if (value == PermissionMode.EDIT) {
         control.get("permission").enable();
       } else {
         control.get("permission").disable();
       }
     }
   }
-  private _permissionMode: PermissionMode = "hidden";
+  private _permissionMode: PermissionMode = PermissionMode.HIDDEN;
 
   /**
    * Column header for the selected items table
@@ -262,6 +272,10 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
   protected accessAllLabelId(item: AccessItemView) {
     return item.type == AccessItemType.GROUP ? "groupAccessAll" : "memberAccessAll";
+  }
+
+  protected canEditItemPermission(item: AccessItemView) {
+    return this.permissionMode == PermissionMode.EDIT && !item.readonly && !item.accessAllItems;
   }
 
   private _itemComparator(a: AccessItemView, b: AccessItemView) {
