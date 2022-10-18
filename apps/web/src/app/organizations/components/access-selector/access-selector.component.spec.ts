@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
+import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import {
   AvatarModule,
   BadgeModule,
@@ -80,7 +82,7 @@ describe("AccessSelectorComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("itemSelection", () => {
+  describe("item selection", () => {
     beforeEach(() => {
       component.items = [
         {
@@ -93,48 +95,156 @@ describe("AccessSelectorComponent", () => {
       fixture.detectChanges();
     });
 
-    it("should have no items selected initially", () => {
+    it("should show the empty row when nothing is selected", () => {
       const emptyTableCell = fixture.nativeElement.querySelector("tbody tr td");
       expect(emptyTableCell?.textContent).toEqual("Nothing selected");
     });
 
-    it("should show one selected value", () => {
+    it("should show one row when one value is selected", () => {
       component.selectItems([{ id: "123" } as any]);
       fixture.detectChanges();
       const firstColSpan = fixture.nativeElement.querySelector("tbody tr td span");
       expect(firstColSpan.textContent).toEqual("Group 1");
     });
 
-    it("should emit when the internal value changes", () => {
+    it("should emit value change when a value is selected", () => {
+      // Arrange
       const mockChange = jest.fn();
-      let expectedCalls = 0;
       component.registerOnChange(mockChange);
       component.permissionMode = PermissionMode.EDIT;
 
-      // Simulate selecting an item
+      // Act
       component.selectItems([{ id: "123" } as any]);
-      expectedCalls++;
 
-      expect(mockChange.mock.calls.length).toEqual(expectedCalls);
+      // Assert
+      expect(mockChange.mock.calls.length).toEqual(1);
       expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
+    });
 
-      // Simulate modifying that item
+    it("should emit value change when a row is modified", () => {
+      // Arrange
+      const mockChange = jest.fn();
+      component.permissionMode = PermissionMode.EDIT;
+      component.selectItems([{ id: "123" } as any]);
+      component.registerOnChange(mockChange); // Register change listener after setup
+
+      // Act
       component.changeSelectedItemPerm(0, CollectionPermission.EDIT);
-      expectedCalls++;
 
-      expect(mockChange.mock.calls.length).toEqual(expectedCalls);
+      // Assert
+      expect(mockChange.mock.calls.length).toEqual(1);
       expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
       expect(mockChange.mock.lastCall[0]).toHaveProperty(
         "[0].permission",
         CollectionPermission.EDIT
       );
+    });
 
-      // Simulate deselecting that item
+    it("should emit value change when a row is removed", () => {
+      // Arrange
+      const mockChange = jest.fn();
+      component.permissionMode = PermissionMode.EDIT;
+      component.selectItems([{ id: "123" } as any]);
+      component.registerOnChange(mockChange); // Register change listener after setup
+
+      // Act
       component.deselectItem("123");
-      expectedCalls++;
 
-      expect(mockChange.mock.calls.length).toEqual(expectedCalls);
+      // Assert
+      expect(mockChange.mock.calls.length).toEqual(1);
       expect(mockChange.mock.lastCall[0].length).toEqual(0);
     });
+
+    it("should emit permission values when in edit mode", () => {
+      // Arrange
+      const mockChange = jest.fn();
+      component.registerOnChange(mockChange);
+      component.permissionMode = PermissionMode.EDIT;
+
+      // Act
+      component.selectItems([{ id: "123" } as any]);
+
+      // Assert
+      expect(mockChange.mock.calls.length).toEqual(1);
+      expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
+      expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].permission");
+    });
+
+    it("should not emit permission values when not in edit mode", () => {
+      // Arrange
+      const mockChange = jest.fn();
+      component.registerOnChange(mockChange);
+      component.permissionMode = PermissionMode.HIDDEN;
+
+      // Act
+      component.selectItems([{ id: "123" } as any]);
+
+      // Assert
+      expect(mockChange.mock.calls.length).toEqual(1);
+      expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
+      expect(mockChange.mock.lastCall[0]).not.toHaveProperty("[0].permission");
+    });
+  });
+
+  describe("column rendering", () => {
+    beforeEach(() => {
+      component.items = [
+        {
+          id: "g1",
+          type: AccessItemType.GROUP,
+          labelName: "Group 1",
+          listName: "Group 1",
+        },
+        {
+          id: "m1",
+          type: AccessItemType.MEMBER,
+          labelName: "Member 1",
+          listName: "Member 1 (member1@email.com)",
+          email: "member1@email.com",
+          role: OrganizationUserType.Manager,
+          status: OrganizationUserStatusType.Confirmed,
+        },
+      ];
+      fixture.detectChanges();
+    });
+
+    test.each([true, false])("should show the role column when enabled", (columnEnabled) => {
+      // Act
+      component.showMemberRoles = columnEnabled;
+      fixture.detectChanges();
+
+      // Assert
+      const colHeading = fixture.nativeElement.querySelector("#roleColHeading");
+      expect(!!colHeading).toEqual(columnEnabled);
+    });
+
+    test.each([true, false])("should show the group column when enabled", (columnEnabled) => {
+      // Act
+      component.showGroupColumn = columnEnabled;
+      fixture.detectChanges();
+
+      // Assert
+      const colHeading = fixture.nativeElement.querySelector("#groupColHeading");
+      expect(!!colHeading).toEqual(columnEnabled);
+    });
+
+    const permissionColumnCases = [
+      [PermissionMode.HIDDEN, false],
+      [PermissionMode.EDIT, false],
+      [PermissionMode.READONLY, true],
+    ];
+
+    test.each(permissionColumnCases)(
+      "should show the permission column when enabled",
+      (mode: PermissionMode, shouldShowColumn) => {
+        // Act
+        component.permissionMode = mode;
+        fixture.detectChanges();
+
+        // Assert
+        const colHeading = fixture.nativeElement.querySelector("#permissionColHeading");
+        expect(!!colHeading).toEqual(shouldShowColumn);
+      }
+    );
   });
 });

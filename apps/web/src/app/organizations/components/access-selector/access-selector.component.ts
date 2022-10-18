@@ -67,7 +67,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     }
 
     // Disable permission control if accessAllItems is enabled
-    if (item.accessAllItems) {
+    if (item.accessAllItems || this.permissionMode != PermissionMode.EDIT) {
       permissionControl.disable();
     }
 

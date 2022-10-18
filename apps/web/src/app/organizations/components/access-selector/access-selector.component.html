@@ -32,9 +32,11 @@
   <ng-container header>
     <tr>
       <th bitCell>{{ columnHeader }}</th>
-      <th bitCell *ngIf="permissionMode != 'hidden'">{{ "permission" | i18n }}</th>
-      <th bitCell *ngIf="showMemberRoles">{{ "role" | i18n }}</th>
-      <th bitCell *ngIf="showGroupColumn">{{ "group" | i18n }}</th>
+      <th bitCell id="permissionColHeading" *ngIf="permissionMode != 'hidden'">
+        {{ "permission" | i18n }}
+      </th>
+      <th bitCell id="roleColHeading" *ngIf="showMemberRoles">{{ "role" | i18n }}</th>
+      <th bitCell id="groupColHeading" *ngIf="showGroupColumn">{{ "group" | i18n }}</th>
       <th bitCell style="width: 50px"></th>
     </tr>
   </ng-container>
