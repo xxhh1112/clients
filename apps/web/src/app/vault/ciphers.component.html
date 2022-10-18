@@ -196,9 +196,9 @@
           </ng-container>
           <ng-container *ngIf="!showOrganizationBadge && !activeFilter.selectedCollectionNode">
             <app-collection-badge
-              *ngIf="c.collectionIds && collections"
+              *ngIf="c.collectionIds"
               [collectionIds]="c.collectionIds"
-              [collections]="collections"
+              [collections]="vaultFilterService.filteredCollections$ | async"
             ></app-collection-badge>
           </ng-container>
         </td>

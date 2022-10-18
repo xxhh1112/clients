@@ -57,7 +57,6 @@
       <app-org-vault-ciphers
         [activeFilter]="activeFilter"
         [organization]="organization"
-        [collections]="vaultFilterService.filteredCollections$ | async"
         (activeFilterChanged)="applyVaultFilter($event)"
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"

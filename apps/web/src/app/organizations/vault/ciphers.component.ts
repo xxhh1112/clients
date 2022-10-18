@@ -40,7 +40,6 @@ const MaxCheckedCount = 500;
 })
 export class CiphersComponent extends BaseCiphersComponent implements OnDestroy, OnChanges {
   @Input() organization: Organization;
-  @Input() collections: CollectionView[];
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
   groups: GroupResponse[] = [];
