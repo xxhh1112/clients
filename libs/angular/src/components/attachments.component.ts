@@ -17,7 +17,7 @@ import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abs
 
 @Directive()
 export class AttachmentsComponent implements OnInit {
-  @Input() cipherDomain: Cipher;
+  @Input() cipherDomain: Cipher = new Cipher();
   @Output() onUploadedAttachment = new EventEmitter();
   @Output() onDeletedAttachment = new EventEmitter();
   @Output() onReuploadedAttachment = new EventEmitter();
