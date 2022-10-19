@@ -14,9 +14,9 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/enums/twoFactorProviderType";
 import { WebAuthnIFrame } from "@bitwarden/common/misc/webauthn_iframe";
-import { AuthResult } from "@bitwarden/common/models/domain/authResult";
-import { TokenRequestTwoFactor } from "@bitwarden/common/models/request/identityToken/tokenRequestTwoFactor";
-import { TwoFactorEmailRequest } from "@bitwarden/common/models/request/twoFactorEmailRequest";
+import { AuthResult } from "@bitwarden/common/models/domain/auth-result";
+import { TokenTwoFactorRequest } from "@bitwarden/common/models/request/identity-token/token-two-factor.request";
+import { TwoFactorEmailRequest } from "@bitwarden/common/models/request/two-factor-email.request";
 import { TwoFactorProviders } from "@bitwarden/common/services/twoFactor.service";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
@@ -194,7 +194,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
 
   async doSubmit() {
     this.formPromise = this.authService.logInTwoFactor(
-      new TokenRequestTwoFactor(this.selectedProviderType, this.token, this.remember),
+      new TokenTwoFactorRequest(this.selectedProviderType, this.token, this.remember),
       this.captchaToken
     );
     const response: AuthResult = await this.formPromise;

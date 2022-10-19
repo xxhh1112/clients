@@ -1,8 +1,11 @@
 import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
-import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service.abstraction";
-import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service.abstraction";
+import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service";
+import {
+  InternalAccountService,
+  AccountService as AccountServiceAbstraction,
+} from "@bitwarden/common/abstractions/account/account.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
@@ -62,9 +65,9 @@ import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarde
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Account } from "@bitwarden/common/models/domain/account";
-import { GlobalState } from "@bitwarden/common/models/domain/globalState";
-import { AccountApiService } from "@bitwarden/common/services/account/account-api.service";
-import { AccountService } from "@bitwarden/common/services/account/account.service";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { AccountApiServiceImplementation } from "@bitwarden/common/services/account/account-api.service";
+import { AccountServiceImplementation } from "@bitwarden/common/services/account/account.service";
 import { AnonymousHubService } from "@bitwarden/common/services/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
@@ -274,18 +277,22 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     },
     {
       provide: AccountApiServiceAbstraction,
-      useClass: AccountApiService,
-      deps: [ApiServiceAbstraction],
+      useClass: AccountApiServiceImplementation,
+      deps: [
+        ApiServiceAbstraction,
+        UserVerificationServiceAbstraction,
+        LogService,
+        InternalAccountService,
+      ],
     },
     {
       provide: AccountServiceAbstraction,
-      useClass: AccountService,
-      deps: [
-        AccountApiServiceAbstraction,
-        UserVerificationServiceAbstraction,
-        MessagingServiceAbstraction,
-        LogService,
-      ],
+      useClass: AccountServiceImplementation,
+      deps: [MessagingServiceAbstraction, LogService],
+    },
+    {
+      provide: InternalAccountService,
+      useExisting: AccountServiceAbstraction,
     },
     { provide: LogService, useFactory: () => new ConsoleLogService(false) },
     {

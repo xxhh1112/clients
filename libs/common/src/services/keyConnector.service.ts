@@ -8,11 +8,11 @@ import { StateService } from "../abstractions/state.service";
 import { TokenService } from "../abstractions/token.service";
 import { OrganizationUserType } from "../enums/organizationUserType";
 import { Utils } from "../misc/utils";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
-import { KeyConnectorUserKeyRequest } from "../models/request/keyConnectorUserKeyRequest";
-import { KeysRequest } from "../models/request/keysRequest";
-import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { SetKeyConnectorKeyRequest } from "../models/request/account/set-key-connector-key.request";
+import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user-key.request";
+import { KeysRequest } from "../models/request/keys.request";
+import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 export class KeyConnectorService implements KeyConnectorServiceAbstraction {
   constructor(

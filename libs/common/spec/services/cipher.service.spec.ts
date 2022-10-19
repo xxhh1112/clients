@@ -11,13 +11,13 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
+import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
-import { EncString } from "@bitwarden/common/models/domain/encString";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Identity } from "@bitwarden/common/models/domain/identity";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { IdentityView } from "@bitwarden/common/models/view/identityView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { IdentityView } from "@bitwarden/common/models/view/identity.view";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
 
 import { mockEnc } from "../utils";

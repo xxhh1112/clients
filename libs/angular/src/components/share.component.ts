@@ -11,8 +11,8 @@ import { OrganizationUserStatusType } from "@bitwarden/common/enums/organization
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
 
 @Directive()

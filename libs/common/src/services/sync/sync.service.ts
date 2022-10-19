@@ -15,24 +15,24 @@ import { StateService } from "../../abstractions/state.service";
 import { SyncService as SyncServiceAbstraction } from "../../abstractions/sync/sync.service.abstraction";
 import { SyncNotifierService } from "../../abstractions/sync/syncNotifier.service.abstraction";
 import { sequentialize } from "../../misc/sequentialize";
-import { CipherData } from "../../models/data/cipherData";
-import { CollectionData } from "../../models/data/collectionData";
-import { FolderData } from "../../models/data/folderData";
-import { PolicyData } from "../../models/data/policyData";
-import { ProviderData } from "../../models/data/providerData";
-import { SendData } from "../../models/data/sendData";
-import { CipherResponse } from "../../models/response/cipherResponse";
-import { CollectionDetailsResponse } from "../../models/response/collectionResponse";
-import { DomainsResponse } from "../../models/response/domainsResponse";
-import { FolderResponse } from "../../models/response/folderResponse";
+import { CipherData } from "../../models/data/cipher.data";
+import { CollectionData } from "../../models/data/collection.data";
+import { FolderData } from "../../models/data/folder.data";
+import { PolicyData } from "../../models/data/policy.data";
+import { ProviderData } from "../../models/data/provider.data";
+import { SendData } from "../../models/data/send.data";
+import { CipherResponse } from "../../models/response/cipher.response";
+import { CollectionDetailsResponse } from "../../models/response/collection.response";
+import { DomainsResponse } from "../../models/response/domains.response";
+import { FolderResponse } from "../../models/response/folder.response";
 import {
   SyncCipherNotification,
   SyncFolderNotification,
   SyncSendNotification,
-} from "../../models/response/notificationResponse";
-import { PolicyResponse } from "../../models/response/policyResponse";
-import { ProfileResponse } from "../../models/response/profileResponse";
-import { SendResponse } from "../../models/response/sendResponse";
+} from "../../models/response/notification.response";
+import { PolicyResponse } from "../../models/response/policy.response";
+import { ProfileResponse } from "../../models/response/profile.response";
+import { SendResponse } from "../../models/response/send.response";
 
 export class SyncService implements SyncServiceAbstraction {
   syncInProgress = false;
