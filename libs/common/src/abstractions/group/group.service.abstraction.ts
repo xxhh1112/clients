@@ -1,4 +1,4 @@
-import { GroupView } from "../../models/view/groupView";
+import { GroupView } from "../../models/view/group-view";
 
 export class GroupServiceAbstraction {
   delete: (orgId: string, groupId: string) => Promise<void>;

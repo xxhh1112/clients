@@ -12,7 +12,7 @@ import { EncString } from "@bitwarden/common/models/domain/encString";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
 import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
-import { GroupView } from "@bitwarden/common/models/view/groupView";
+import { GroupView } from "@bitwarden/common/models/view/group-view";
 
 @Component({
   selector: "app-collection-add-edit",

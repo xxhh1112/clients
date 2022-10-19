@@ -161,7 +161,7 @@ import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyRes
 import { UserKeyResponse } from "../models/response/userKeyResponse";
 import { SendAccessView } from "../models/view/sendAccessView";
 
-import { GroupResponse } from "./group/responses/groupResponse";
+import { GroupResponse } from "./group/responses/group-response";
 
 export abstract class ApiService {
   send: (

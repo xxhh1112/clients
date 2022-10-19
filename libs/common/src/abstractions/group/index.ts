@@ -1,2 +1,2 @@
 export * from "./group.service.abstraction";
-export * from "./responses/groupResponse";
+export * from "./responses/group-response";
