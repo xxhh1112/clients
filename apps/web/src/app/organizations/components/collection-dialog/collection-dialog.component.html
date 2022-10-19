@@ -33,7 +33,15 @@
             </select>
           </bit-form-field>
         </bit-tab>
-        <bit-tab label="{{ 'access' | i18n }}">Not implemented</bit-tab>
+        <bit-tab label="{{ 'access' | i18n }}">
+          <bit-access-selector
+            permissionMode="edit"
+            [columnHeader]="'groupsAndMembersColumnHeader' | i18n"
+            [selectorLabelText]="'selectGroupsAndMembers' | i18n"
+            [selectorHelpText]="'userPermissionOverrideHelper' | i18n"
+            [emptySelectionText]="'noMembersOrGroupsAdded' | i18n"
+          ></bit-access-selector>
+        </bit-tab>
       </bit-tab-group>
     </div>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">

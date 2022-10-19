@@ -15,21 +15,21 @@ export interface CollectionEditDialogParams {
   organizationId: string;
 }
 
-export enum CollectionEditDialogResultType {
+export enum CollectionDialogResultType {
   Saved = "saved",
   Canceled = "canceled",
   Deleted = "deleted",
 }
 
-export interface CollectionEditDialogResult {
-  type: CollectionEditDialogResultType;
+export interface CollectionDialogResult {
+  type: CollectionDialogResultType;
 }
 
 @Component({
   selector: "app-collection-dialog",
   templateUrl: "collection-dialog.component.html",
 })
-export class CollectionEditDialogComponent implements OnInit, OnDestroy {
+export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   collection?: CollectionView;
@@ -85,7 +85,7 @@ export class CollectionEditDialogComponent implements OnInit, OnDestroy {
   }
 
   async cancel() {
-    this.close({ type: CollectionEditDialogResultType.Canceled });
+    this.close({ type: CollectionDialogResultType.Canceled });
   }
 
   async submit() {
@@ -107,7 +107,7 @@ export class CollectionEditDialogComponent implements OnInit, OnDestroy {
 
     await this.collectionService.save(collectionView);
 
-    this.close({ type: CollectionEditDialogResultType.Saved });
+    this.close({ type: CollectionDialogResultType.Saved });
   }
 
   async remove() {
@@ -125,7 +125,7 @@ export class CollectionEditDialogComponent implements OnInit, OnDestroy {
 
     await this.collectionService.remove(this.params.organizationId, this.params.collectionId);
 
-    this.close({ type: CollectionEditDialogResultType.Deleted });
+    this.close({ type: CollectionDialogResultType.Deleted });
   }
 
   ngOnDestroy(): void {
@@ -133,7 +133,7 @@ export class CollectionEditDialogComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private close(result: CollectionEditDialogResult) {
+  private close(result: CollectionDialogResult) {
     this.dialogRef.close(result);
   }
 }

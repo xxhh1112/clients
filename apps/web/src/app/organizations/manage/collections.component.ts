@@ -22,12 +22,13 @@ import { ListResponse } from "@bitwarden/common/models/response/listResponse";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { DialogService } from "@bitwarden/components";
 
-import { CollectionAddEditComponent } from "./collection-add-edit.component";
 import {
-  CollectionEditDialogComponent,
-  CollectionEditDialogResult,
-  CollectionEditDialogResultType,
-} from "./collection-dialog/collection-dialog.components";
+  CollectionDialogComponent,
+  CollectionDialogResult,
+  CollectionDialogResultType,
+} from "../components/collection-dialog";
+
+import { CollectionAddEditComponent } from "./collection-add-edit.component";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
@@ -134,14 +135,14 @@ export class CollectionsComponent implements OnInit {
       return;
     }
 
-    const dialog = this.dialogService.open(CollectionEditDialogComponent, {
+    const dialog = this.dialogService.open(CollectionDialogComponent, {
       data: { collectionId: collection?.id, organizationId: this.organizationId },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as CollectionEditDialogResult | undefined;
+    const result = (await lastValueFrom(dialog.closed)) as CollectionDialogResult | undefined;
     if (
-      result?.type === CollectionEditDialogResultType.Saved ||
-      result?.type === CollectionEditDialogResultType.Deleted
+      result?.type === CollectionDialogResultType.Saved ||
+      result?.type === CollectionDialogResultType.Deleted
     ) {
       this.load();
     }

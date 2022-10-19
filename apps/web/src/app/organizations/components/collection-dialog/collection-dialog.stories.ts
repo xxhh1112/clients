@@ -20,9 +20,9 @@ import {
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
 import {
-  CollectionEditDialogComponent,
+  CollectionDialogComponent,
   CollectionEditDialogParams,
-} from "./collection-dialog.components";
+} from "./collection-dialog.component";
 
 interface ProviderData {
   collectionId: string;
@@ -32,7 +32,7 @@ interface ProviderData {
 
 export default {
   title: "Web/Collections/Edit dialog",
-  component: CollectionEditDialogComponent,
+  component: CollectionDialogComponent,
   decorators: [
     moduleMetadata({
       imports: [
@@ -55,8 +55,8 @@ collections = collections.concat(
   collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`))
 );
 
-const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
-  args: CollectionEditDialogComponent
+const NewCollectionTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
 ) => ({
   moduleMetadata: {
     providers: providers({ collectionId: undefined, organizationId, collections }),
@@ -66,8 +66,8 @@ const NewCollectionTemplate: Story<CollectionEditDialogComponent> = (
 
 export const NewCollection = NewCollectionTemplate.bind({});
 
-const ExistingCollectionTemplate: Story<CollectionEditDialogComponent> = (
-  args: CollectionEditDialogComponent
+const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
 ) => ({
   moduleMetadata: {
     providers: providers({
