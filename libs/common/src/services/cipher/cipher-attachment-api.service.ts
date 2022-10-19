@@ -1,3 +1,17 @@
+import { CipherData } from "@bitwarden/common/models/data/cipher.data";
+import { Cipher } from "@bitwarden/common/models/domain/cipher";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { AttachmentRequest } from "@bitwarden/common/models/request/attachment.request";
+import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
+import { CipherShareRequest } from "@bitwarden/common/models/request/cipher-share.request";
+import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "@bitwarden/common/models/response/attachment.response";
+import { CipherResponse } from "@bitwarden/common/models/response/cipher.response";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { AttachmentView } from "@bitwarden/common/models/view/attachment.view";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { ApiService } from "./../../abstractions/api.service";
 import { CipherService } from "./../../abstractions/cipher.service";
 import { CipherAttachmentApiServiceAbstraction } from "./../../abstractions/cipher/cipher-attachment-api.service.abstraction";
@@ -5,20 +19,6 @@ import { CryptoService } from "./../../abstractions/crypto.service";
 import { FileUploadService } from "./../../abstractions/fileUpload.service";
 import { LogService } from "./../../abstractions/log.service";
 import { Utils } from "./../../misc/utils";
-import { CipherData } from "./../../models/data/cipherData";
-import { Cipher } from "./../../models/domain/cipher";
-import { EncArrayBuffer } from "./../../models/domain/encArrayBuffer";
-import { EncString } from "./../../models/domain/encString";
-import { SymmetricCryptoKey } from "./../../models/domain/symmetricCryptoKey";
-import { AttachmentRequest } from "./../../models/request/attachmentRequest";
-import { CipherBulkShareRequest } from "./../../models/request/cipherBulkShareRequest";
-import { CipherShareRequest } from "./../../models/request/cipherShareRequest";
-import { AttachmentResponse } from "./../../models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "./../../models/response/attachmentUploadDataResponse";
-import { CipherResponse } from "./../../models/response/cipherResponse";
-import { ErrorResponse } from "./../../models/response/errorResponse";
-import { AttachmentView } from "./../../models/view/attachmentView";
-import { CipherView } from "./../../models/view/cipherView";
 
 export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
   constructor(
