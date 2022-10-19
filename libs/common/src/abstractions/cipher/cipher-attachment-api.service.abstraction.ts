@@ -1,11 +1,11 @@
 import { Cipher } from "./../../models/domain/cipher";
-import { AttachmentRequest } from "./../../models/request/attachmentRequest";
-import { CipherBulkShareRequest } from "./../../models/request/cipherBulkShareRequest";
-import { CipherShareRequest } from "./../../models/request/cipherShareRequest";
-import { AttachmentResponse } from "./../../models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "./../../models/response/attachmentUploadDataResponse";
-import { CipherResponse } from "./../../models/response/cipherResponse";
-import { CipherView } from "./../../models/view/cipherView";
+import { AttachmentRequest } from "./../../models/request/attachment.request";
+import { CipherBulkShareRequest } from "./../../models/request/cipher-bulk-share.request";
+import { CipherShareRequest } from "./../../models/request/cipher-share.request";
+import { AttachmentUploadDataResponse } from "./../../models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "./../../models/response/attachment.response";
+import { CipherResponse } from "./../../models/response/cipher.response";
+import { CipherView } from "./../../models/view/cipher.view";
 
 export class CipherAttachmentApiServiceAbstraction {
   putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
