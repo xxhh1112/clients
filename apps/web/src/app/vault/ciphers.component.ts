@@ -62,7 +62,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   bulkShareModalRef: ViewContainerRef;
 
   pagedCiphers: CipherView[] = [];
-  pageSize = 200;
+  pagedCollections: TreeNode<CollectionFilter>[] = [];
   cipherType = CipherType;
   actionPromise: Promise<any>;
   userHasPremiumAccess = false;
@@ -70,10 +70,16 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   profileName: string;
   showOrganizationBadge = true;
 
+  protected pageSizeLimit = 200;
   protected isAllChecked = false;
   private didScroll = false;
-  private pagedCiphersCount = 0;
+  private currentPagedCiphersCount = 0;
+  private currentPagedCollectionsCount = 0;
   private refreshing = false;
+
+  get collections() {
+    return this.activeFilter?.selectedCollectionNode?.children;
+  }
 
   constructor(
     searchService: SearchService,
@@ -100,9 +106,14 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   async applyFilter(filter: (cipher: CipherView) => boolean = null) {
     this.selectAll(false);
     this.isAllChecked = false;
-    this.activeFilter.selectedCollectionNode?.children?.forEach((col) => {
+    this.collections?.forEach((col) => {
       (col as any).checked = false;
     });
+    this.pagedCollections = [];
+    if (!this.refreshing && this.isPaging()) {
+      this.currentPagedCollectionsCount = 0;
+      this.currentPagedCiphersCount = 0;
+    }
     await super.applyFilter(filter);
   }
 
@@ -115,24 +126,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.userHasPremiumAccess = await this.stateService.getCanAccessPremium();
   }
 
-  loadMore() {
-    if (this.ciphers.length <= this.pageSize) {
-      return;
-    }
-    const pagedLength = this.pagedCiphers.length;
-    let pagedSize = this.pageSize;
-    if (this.refreshing && pagedLength === 0 && this.pagedCiphersCount > this.pageSize) {
-      pagedSize = this.pagedCiphersCount;
-    }
-    if (this.ciphers.length > pagedLength) {
-      this.pagedCiphers = this.pagedCiphers.concat(
-        this.ciphers.slice(pagedLength, pagedLength + pagedSize)
-      );
-    }
-    this.pagedCiphersCount = this.pagedCiphers.length;
-    this.didScroll = this.pagedCiphers.length > this.pageSize;
-  }
-
   async refresh() {
     try {
       this.refreshing = true;
@@ -142,15 +135,58 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
   }
 
+  loadMore() {
+    // If we have less rows than the page size, we don't need to page anything
+    if (this.ciphers.length + (this.collections?.length || 0) <= this.pageSizeLimit) {
+      return;
+    }
+
+    let pageSpaceLeft = this.pageSizeLimit;
+    if (
+      this.refreshing &&
+      this.pagedCiphers.length + this.pagedCollections.length === 0 &&
+      this.currentPagedCiphersCount + this.currentPagedCollectionsCount > this.pageSizeLimit
+    ) {
+      // When we refresh, we want to load the previous amount of items, not restart the paging
+      pageSpaceLeft = this.currentPagedCiphersCount + this.currentPagedCollectionsCount;
+    }
+    // if there are still collections to show
+    if (this.collections?.length > this.pagedCollections.length) {
+      const collectionsToAdd = this.collections.slice(
+        this.pagedCollections.length,
+        this.currentPagedCollectionsCount + pageSpaceLeft
+      );
+      this.pagedCollections = this.pagedCollections.concat(collectionsToAdd);
+      // set the current count to the new count of paged collections
+      this.currentPagedCollectionsCount = this.pagedCollections.length;
+      // subtract the available page size by the amount of collections we just added, default to 0 if negative
+      pageSpaceLeft =
+        collectionsToAdd.length > pageSpaceLeft ? 0 : pageSpaceLeft - collectionsToAdd.length;
+    }
+    // if we have room left to show ciphers and we have ciphers to show
+    if (pageSpaceLeft > 0 && this.ciphers.length > this.pagedCiphers.length) {
+      this.pagedCiphers = this.pagedCiphers.concat(
+        this.ciphers.slice(this.pagedCiphers.length, this.currentPagedCiphersCount + pageSpaceLeft)
+      );
+      // set the current count to the new count of paged ciphers
+      this.currentPagedCiphersCount = this.pagedCiphers.length;
+    }
+    // set a flag if we actually loaded the second page while paging
+    this.didScroll = this.pagedCiphers.length + this.pagedCollections.length > this.pageSizeLimit;
+  }
+
   isPaging() {
     const searching = this.isSearching();
     if (searching && this.didScroll) {
       this.resetPaging();
     }
-    return !searching && this.ciphers.length > this.pageSize;
+    const totalRows =
+      this.ciphers.length + (this.activeFilter?.selectedCollectionNode?.children.length || 0);
+    return !searching && totalRows > this.pageSizeLimit;
   }
 
   async resetPaging() {
+    this.pagedCollections = [];
     this.pagedCiphers = [];
     this.loadMore();
   }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="isPaging() ? pagedCiphers : ciphers as filteredCiphers">
   <table
     class="table table-hover table-list table-ciphers"
-    *ngIf="filteredCiphers.length || activeFilter.selectedCollectionNode?.children.length"
+    *ngIf="filteredCiphers.length || collections?.length"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
@@ -70,8 +70,8 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="activeFilter.selectedCollectionNode">
-        <tr *ngFor="let col of activeFilter.selectedCollectionNode?.children">
+      <ng-container *ngIf="isPaging() ? pagedCollections : collections as filteredCollections">
+        <tr *ngFor="let col of filteredCollections">
           <td class="table-list-checkbox">
             <input
               *ngIf="organization && col.node.name !== 'Unassigned'"
@@ -285,10 +285,7 @@
       </tr>
     </tbody>
   </table>
-  <div
-    class="no-items"
-    *ngIf="!filteredCiphers.length && !activeFilter.selectedCollectionNode?.children.length"
-  >
+  <div class="no-items" *ngIf="!filteredCiphers.length && !collections?.length">
     <ng-container *ngIf="!loaded">
       <i
         class="bwi bwi-spinner bwi-spin text-muted"
