@@ -7,10 +7,10 @@
             <app-vault-filter
               #vaultFilter
               [activeFilter]="activeFilter"
-              (onFilterChange)="applyVaultFilter($event)"
-              (onAddFolder)="addFolder()"
-              (onEditFolder)="editFolder($event.id)"
+              (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"
+              (onAddFolder)="addFolder()"
+              (onEditFolder)="editFolder($event)"
             ></app-vault-filter>
           </div>
         </div>
@@ -34,24 +34,20 @@
         <div class="ml-auto d-flex">
           <app-vault-bulk-actions
             [ciphersComponent]="ciphersComponent"
-            [deleted]="activeFilter.status === 'trash'"
+            [deleted]="activeFilter.isDeleted"
           >
           </app-vault-bulk-actions>
           <button
             type="button"
             class="btn btn-outline-primary btn-sm"
             (click)="addCipher()"
-            *ngIf="activeFilter.status !== 'trash'"
+            *ngIf="!activeFilter.isDeleted"
           >
             <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>{{ "addItem" | i18n }}
           </button>
         </div>
       </div>
-      <app-callout
-        type="warning"
-        *ngIf="activeFilter.status === 'trash'"
-        icon="bwi-exclamation-triangle"
-      >
+      <app-callout type="warning" *ngIf="activeFilter.isDeleted" icon="bwi-exclamation-triangle">
         {{ trashCleanupWarning }}
       </app-callout>
       <app-vault-ciphers

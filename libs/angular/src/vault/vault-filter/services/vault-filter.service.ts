@@ -14,12 +14,13 @@ import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { FolderView } from "@bitwarden/common/models/view/folderView";
 
+import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "../../../abstractions/deprecated-vault-filter.service";
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService {
+export class VaultFilterService implements DeprecatedVaultFilterServiceAbstraction {
   constructor(
     protected stateService: StateService,
     protected organizationService: OrganizationService,
@@ -83,11 +84,15 @@ export class VaultFilterService {
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.SingleOrg)
+    );
   }
 
   async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    );
   }
 
   protected async getAllFoldersNested(folders: FolderView[]): Promise<TreeNode<FolderView>[]> {
@@ -106,6 +111,6 @@ export class VaultFilterService {
     const folders = await this.getAllFoldersNested(
       await firstValueFrom(this.folderService.folderViews$)
     );
-    return ServiceUtils.getTreeNodeObject(folders, id) as TreeNode<FolderView>;
+    return ServiceUtils.getTreeNodeObjectFromList(folders, id) as TreeNode<FolderView>;
   }
 }

@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { BillingHistoryResponse } from "@bitwarden/common/models/response/billingHistoryResponse";
@@ -8,12 +9,13 @@ import { BillingHistoryResponse } from "@bitwarden/common/models/response/billin
   selector: "app-org-billing-history-view",
   templateUrl: "organization-billing-history-view.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class OrgBillingHistoryViewComponent implements OnInit {
+export class OrgBillingHistoryViewComponent implements OnInit, OnDestroy {
   loading = false;
   firstLoaded = false;
   billing: BillingHistoryResponse;
   organizationId: string;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private organizationApiService: OrganizationApiServiceAbstraction,
@@ -21,12 +23,21 @@ export class OrgBillingHistoryViewComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.params.subscribe(async (params) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-      this.firstLoaded = true;
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          await this.load();
+          this.firstLoaded = true;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async load() {

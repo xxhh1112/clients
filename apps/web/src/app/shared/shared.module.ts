@@ -15,6 +15,7 @@ import {
   IconModule,
   IconButtonModule,
   DialogModule,
+  AsyncActionsModule,
   MenuModule,
   TableModule,
   TabsModule,
@@ -54,6 +55,7 @@ import "./locales";
   ],
   exports: [
     CommonModule,
+    AsyncActionsModule,
     DragDropModule,
     DialogModule,
     FormsModule,
