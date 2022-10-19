@@ -4143,6 +4143,9 @@
   "permissions": {
     "message": "Permissions"
   },
+  "permission": {
+    "message": "Permission"
+  },
   "managerPermissions": {
     "message": "Manager Permissions"
   },
@@ -5507,5 +5510,29 @@
   },
   "editInfo": {
     "message": "Edit Info"
+  },
+  "role": {
+    "message": "Role"
+  },
+  "canView": {
+    "message": "Can view"
+  },
+  "canViewExceptPass": {
+    "message": "Can view, except passwords"
+  },
+  "canEdit": {
+    "message": "Can edit"
+  },
+  "canEditExceptPass": {
+    "message": "Can edit, except passwords"
+  },
+  "group": {
+    "message": "Group"
+  },
+  "groupAccessAll": {
+    "message": "This group can access and modify all items."
+  },
+  "memberAccessAll": {
+    "message": "This member can access and modify all items."
   }
 }
