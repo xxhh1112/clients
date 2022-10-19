@@ -169,13 +169,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     }
   }
 
-  async deleteCipher(c: CipherView) {
-    if (!this.organization.canEditAnyCollection) {
-      return super.deleteCipher(c);
-    }
-    this.deleteCipherWithServer(c.id);
-  }
-
   getSelectedCollections(): TreeNode<CollectionFilter>[] {
     return this.activeFilter.selectedCollectionNode?.children.filter((c) => !!(c as any).checked);
   }
@@ -259,11 +252,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     );
   }
 
-  protected deleteCipherWithServer(id: string) {
+  protected deleteCipherWithServer(id: string, permanent: boolean) {
     if (!this.organization?.canEditAnyCollection) {
       return super.deleteCipherWithServer(id, this.deleted);
     }
-    return this.deleted
+    return permanent
       ? this.apiService.deleteCipherAdmin(id)
       : this.apiService.putDeleteCipherAdmin(id);
   }
