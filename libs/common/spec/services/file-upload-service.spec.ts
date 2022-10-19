@@ -2,8 +2,8 @@ import { mock, mockReset } from "jest-mock-extended";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
+import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 
 describe("File Upload Service", () => {
   const apiService = mock<ApiService>();

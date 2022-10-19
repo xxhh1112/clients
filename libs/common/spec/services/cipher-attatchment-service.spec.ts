@@ -4,25 +4,17 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
-// import { LogService } from "@bitwarden/common/abstractions/log.service";
-// import { AttachmentRequest } from "@bitwarden/common/models/request/attachmentRequest";
-// import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipherBulkShareRequest";
-// import { CipherShareRequest } from "@bitwarden/common/models/request/cipherShareRequest";
-// import { AttachmentResponse } from "@bitwarden/common/models/response/attachmentResponse";
-// import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachmentUploadDataResponse";
-// import { CipherResponse } from "@bitwarden/common/models/response/cipherResponse";
-// import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { AttachmentRequest } from "@bitwarden/common/models/request/attachment.request";
+import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
+import { CipherShareRequest } from "@bitwarden/common/models/request/cipher-share.request";
+import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "@bitwarden/common/models/response/attachment.response";
+import { CipherResponse } from "@bitwarden/common/models/response/cipher.response";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 
 import { Cipher } from "./../../src/models/domain/cipher";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { CipherShareRequest } from "@bitwarden/common/models/request/cipher-share.request";
-import { CipherResponse } from "@bitwarden/common/models/response/cipher.response";
-import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
-import { AttachmentRequest } from "@bitwarden/common/models/request/attachment.request";
-import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
-import { AttachmentResponse } from "@bitwarden/common/models/response/attachment.response";
 
 describe("Cipher Attachment Service", () => {
   const cryptoService = mock<CryptoService>();
