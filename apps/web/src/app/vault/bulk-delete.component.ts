@@ -29,14 +29,20 @@ export class BulkDeleteComponent {
   ) {}
 
   async submit() {
-    let deleteCiphersPromise: Promise<void>;
-    if (!this.organization || !this.organization.canEditAnyCollection) {
-      deleteCiphersPromise = this.deleteCiphers();
-    } else {
-      deleteCiphersPromise = this.deleteCiphersAdmin();
+    const deletePromises: Promise<void>[] = [];
+    if (this.cipherIds.length) {
+      if (!this.organization || !this.organization.canEditAnyCollection) {
+        deletePromises.push(this.deleteCiphers());
+      } else {
+        deletePromises.push(this.deleteCiphersAdmin());
+      }
     }
 
-    this.formPromise = Promise.all([deleteCiphersPromise, this.deleteCollections()]);
+    if (this.collectionIds.length) {
+      deletePromises.push(this.deleteCollections());
+    }
+
+    this.formPromise = Promise.all(deletePromises);
     await this.formPromise;
 
     this.onDeleted.emit();
