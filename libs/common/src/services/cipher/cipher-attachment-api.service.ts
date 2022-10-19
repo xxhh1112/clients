@@ -4,7 +4,7 @@ import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
 import { EncString } from "../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { AttachmentRequest } from "../../models/request/attachment.request";
-import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
+import { CipherBulkShareRequest } from "../../models/request/cipher-bulk-share.request";
 import { CipherShareRequest } from "../../models/request/cipher-share.request";
 import { AttachmentUploadDataResponse } from "../../models/response/attachment-upload-data.response";
 import { AttachmentResponse } from "../../models/response/attachment.response";
@@ -12,12 +12,12 @@ import { CipherResponse } from "../../models/response/cipher.response";
 import { ErrorResponse } from "../../models/response/error.response";
 import { AttachmentView } from "../../models/view/attachment.view";
 import { CipherView } from "../../models/view/cipher.view";
+
 import { ApiService } from "./../../abstractions/api.service";
 import { CipherService } from "./../../abstractions/cipher.service";
 import { CipherAttachmentApiServiceAbstraction } from "./../../abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "./../../abstractions/crypto.service";
 import { FileUploadService } from "./../../abstractions/fileUpload.service";
-import { LogService } from "./../../abstractions/log.service";
 import { Utils } from "./../../misc/utils";
 
 export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbstraction {
@@ -25,8 +25,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     private cipherService: CipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
-    private fileUploadService: FileUploadService,
-    logService: LogService
+    private fileUploadService: FileUploadService
   ) {}
 
   async deleteAttachmentWithServer(id: string, attachmentId: string): Promise<void> {

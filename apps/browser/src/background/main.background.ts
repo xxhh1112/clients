@@ -293,8 +293,7 @@ export default class MainBackground {
       this.cipherService,
       this.apiService,
       this.cryptoService,
-      this.fileUploadService,
-      this.logService
+      this.fileUploadService
     );
 
     this.folderService = new FolderService(
