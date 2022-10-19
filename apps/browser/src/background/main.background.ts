@@ -42,8 +42,8 @@ import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStat
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
-import { GlobalState } from "@bitwarden/common/models/domain/globalState";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -84,6 +84,7 @@ import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFu
 
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
+import { UpdateBadge } from "../listeners/update-badge";
 import { Account } from "../models/account";
 import { PopupUtilsService } from "../popup/services/popup-utils.service";
 import { AutofillService as AutofillServiceAbstraction } from "../services/abstractions/autofill.service";
@@ -186,15 +187,18 @@ export default class MainBackground {
   private syncTimeout: any;
   private isSafari: boolean;
   private nativeMessagingBackground: NativeMessagingBackground;
+  popupOnlyContext: boolean;
 
   constructor(public isPrivateMode: boolean = false) {
+    this.popupOnlyContext = isPrivateMode || BrowserApi.manifestVersion === 3;
+
     // Services
     const lockedCallback = async (userId?: string) => {
       if (this.notificationsService != null) {
         this.notificationsService.updateConnection(false);
       }
-      await this.setIcon();
-      await this.refreshBadgeAndMenu(true);
+      await this.refreshBadge();
+      await this.refreshMenu(true);
       if (this.systemService != null) {
         await this.systemService.clearPendingClipboard();
         await this.systemService.startProcessReload(this.authService);
@@ -204,7 +208,7 @@ export default class MainBackground {
     const logoutCallback = async (expired: boolean, userId?: string) =>
       await this.logout(expired, userId);
 
-    this.messagingService = isPrivateMode
+    this.messagingService = this.popupOnlyContext
       ? new BrowserMessagingPrivateModeBackgroundService()
       : new BrowserMessagingService();
     this.logService = new ConsoleLogService(false);
@@ -212,7 +216,7 @@ export default class MainBackground {
     this.storageService = new BrowserLocalStorageService();
     this.secureStorageService = new BrowserLocalStorageService();
     this.memoryStorageService =
-      chrome.runtime.getManifest().manifest_version == 3
+      BrowserApi.manifestVersion === 3
         ? new LocalBackedSessionStorageService(
             new EncryptService(this.cryptoFunctionService, this.logService, false),
             new KeyGenerationService(this.cryptoFunctionService)
@@ -250,7 +254,8 @@ export default class MainBackground {
 
           return promise.then((result) => result.response === "unlocked");
         }
-      }
+      },
+      window
     );
     this.i18nService = new I18nService(BrowserApi.getUILanguage(window));
     this.encryptService = new EncryptService(this.cryptoFunctionService, this.logService, true);
@@ -573,14 +578,12 @@ export default class MainBackground {
       // Set Private Mode windows to the default icon - they do not share state with the background page
       const privateWindows = await BrowserApi.getPrivateModeWindows();
       privateWindows.forEach(async (win) => {
-        await this.actionSetIcon(chrome.browserAction, "", win.id);
-        await this.actionSetIcon(this.sidebarAction, "", win.id);
+        await new UpdateBadge(self).setBadgeIcon("", win.id);
       });
 
       BrowserApi.onWindowCreated(async (win) => {
         if (win.incognito) {
-          await this.actionSetIcon(chrome.browserAction, "", win.id);
-          await this.actionSetIcon(this.sidebarAction, "", win.id);
+          await new UpdateBadge(self).setBadgeIcon("", win.id);
         }
       });
     }
@@ -588,7 +591,7 @@ export default class MainBackground {
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
-        await this.setIcon();
+        await this.refreshBadge();
         this.fullSync(true);
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
@@ -596,25 +599,11 @@ export default class MainBackground {
     });
   }
 
-  async setIcon() {
-    if ((!chrome.browserAction && !this.sidebarAction) || this.isPrivateMode) {
-      return;
-    }
-
-    const authStatus = await this.authService.getAuthStatus();
-
-    let suffix = "";
-    if (authStatus === AuthenticationStatus.LoggedOut) {
-      suffix = "_gray";
-    } else if (authStatus === AuthenticationStatus.Locked) {
-      suffix = "_locked";
-    }
-
-    await this.actionSetIcon(chrome.browserAction, suffix);
-    await this.actionSetIcon(this.sidebarAction, suffix);
+  async refreshBadge() {
+    await new UpdateBadge(self).run({ existingServices: this as any });
   }
 
-  async refreshBadgeAndMenu(forLocked = false) {
+  async refreshMenu(forLocked = false) {
     if (!chrome.windows || !chrome.contextMenus) {
       return;
     }
@@ -627,7 +616,7 @@ export default class MainBackground {
     }
 
     if (forLocked) {
-      await this.loadMenuAndUpdateBadgeForNoAccessState(!menuDisabled);
+      await this.loadMenuForNoAccessState(!menuDisabled);
       this.onUpdatedRan = this.onReplacedRan = false;
       return;
     }
@@ -663,8 +652,11 @@ export default class MainBackground {
       this.messagingService.send("doneLoggingOut", { expired: expired, userId: userId });
     }
 
-    await this.setIcon();
-    await this.refreshBadgeAndMenu(true);
+    if (BrowserApi.manifestVersion === 3) {
+      BrowserApi.sendMessage("updateBadge");
+    }
+    await this.refreshBadge();
+    await this.refreshMenu(true);
     await this.reseedStorage();
     this.notificationsService.updateConnection(false);
     await this.systemService.clearPendingClipboard();
@@ -812,17 +804,14 @@ export default class MainBackground {
   }
 
   private async contextMenuReady(tab: any, contextMenuEnabled: boolean) {
-    await this.loadMenuAndUpdateBadge(tab.url, tab.id, contextMenuEnabled);
+    await this.loadMenu(tab.url, tab.id, contextMenuEnabled);
     this.onUpdatedRan = this.onReplacedRan = false;
   }
 
-  private async loadMenuAndUpdateBadge(url: string, tabId: number, contextMenuEnabled: boolean) {
+  private async loadMenu(url: string, tabId: number, contextMenuEnabled: boolean) {
     if (!url || (!chrome.browserAction && !this.sidebarAction)) {
       return;
     }
-
-    this.actionSetBadgeBackgroundColor(chrome.browserAction);
-    this.actionSetBadgeBackgroundColor(this.sidebarAction);
 
     this.menuOptionsLoaded = [];
     const authStatus = await this.authService.getAuthStatus();
@@ -837,23 +826,9 @@ export default class MainBackground {
           });
         }
 
-        const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
-        let theText = "";
-
-        if (!disableBadgeCounter) {
-          if (ciphers.length > 0 && ciphers.length <= 9) {
-            theText = ciphers.length.toString();
-          } else if (ciphers.length > 0) {
-            theText = "9+";
-          }
-        }
-
         if (contextMenuEnabled && ciphers.length === 0) {
           await this.loadNoLoginsContextMenuOptions(this.i18nService.t("noMatchingLogins"));
         }
-
-        this.sidebarActionSetBadgeText(theText, tabId);
-        this.browserActionSetBadgeText(theText, tabId);
 
         return;
       } catch (e) {
@@ -861,25 +836,15 @@ export default class MainBackground {
       }
     }
 
-    await this.loadMenuAndUpdateBadgeForNoAccessState(contextMenuEnabled);
+    await this.loadMenuForNoAccessState(contextMenuEnabled);
   }
 
-  private async loadMenuAndUpdateBadgeForNoAccessState(contextMenuEnabled: boolean) {
+  private async loadMenuForNoAccessState(contextMenuEnabled: boolean) {
     if (contextMenuEnabled) {
       const authed = await this.stateService.getIsAuthenticated();
       await this.loadNoLoginsContextMenuOptions(
         this.i18nService.t(authed ? "unlockVaultMenu" : "loginToVaultMenu")
       );
-    }
-
-    const tabs = await BrowserApi.getActiveTabs();
-    if (tabs != null) {
-      tabs.forEach((tab) => {
-        if (tab.id != null) {
-          this.browserActionSetBadgeText("", tab.id);
-          this.sidebarActionSetBadgeText("", tab.id);
-        }
-      });
     }
   }
 
@@ -1034,44 +999,6 @@ export default class MainBackground {
     } else {
       return new Promise<void>((resolve) => {
         theAction.setIcon(options, () => resolve());
-      });
-    }
-  }
-
-  private actionSetBadgeBackgroundColor(action: any) {
-    if (action && action.setBadgeBackgroundColor) {
-      action.setBadgeBackgroundColor({ color: "#294e5f" });
-    }
-  }
-
-  private browserActionSetBadgeText(text: string, tabId: number) {
-    if (chrome.browserAction && chrome.browserAction.setBadgeText) {
-      chrome.browserAction.setBadgeText({
-        text: text,
-        tabId: tabId,
-      });
-    }
-  }
-
-  private sidebarActionSetBadgeText(text: string, tabId: number) {
-    if (!this.sidebarAction) {
-      return;
-    }
-
-    if (this.sidebarAction.setBadgeText) {
-      this.sidebarAction.setBadgeText({
-        text: text,
-        tabId: tabId,
-      });
-    } else if (this.sidebarAction.setTitle) {
-      let title = "Bitwarden";
-      if (text && text !== "") {
-        title += " [" + text + "]";
-      }
-
-      this.sidebarAction.setTitle({
-        title: title,
-        tabId: tabId,
       });
     }
   }

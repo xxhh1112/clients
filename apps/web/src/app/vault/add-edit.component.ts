@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -18,13 +18,13 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
+import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
 
 @Component({
   selector: "app-vault-add-edit",
   templateUrl: "add-edit.component.html",
 })
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnDestroy {
   canAccessPremium: boolean;
   totpCode: string;
   totpCodeFormatted: string;
@@ -95,6 +95,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
   }
 
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
+
   toggleFavorite() {
     this.cipher.favorite = !this.cipher.favorite;
   }
@@ -133,7 +137,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   async generatePassword(): Promise<boolean> {
     const confirmed = await super.generatePassword();
     if (confirmed) {
-      const options = (await this.passwordGenerationService.getOptions())[0];
+      const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
       this.cipher.login.password = await this.passwordGenerationService.generatePassword(options);
     }
     return confirmed;

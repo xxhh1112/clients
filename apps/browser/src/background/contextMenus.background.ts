@@ -7,7 +7,7 @@ import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { EventType } from "@bitwarden/common/enums/eventType";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { BrowserApi } from "../browser/browserApi";
 
@@ -66,7 +66,7 @@ export default class ContextMenusBackground {
   }
 
   private async generatePasswordToClipboard() {
-    const options = (await this.passwordGenerationService.getOptions())[0];
+    const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
     const password = await this.passwordGenerationService.generatePassword(options);
     this.platformUtilsService.copyToClipboard(password, { window: window });
     this.passwordGenerationService.addHistory(password);

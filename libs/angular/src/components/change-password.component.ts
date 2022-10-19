@@ -1,4 +1,5 @@
-import { Directive, OnInit } from "@angular/core";
+import { Directive, OnDestroy, OnInit } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -8,14 +9,14 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/enums/kdfType";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 
 @Directive()
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit, OnDestroy {
   masterPassword: string;
   masterPasswordRetype: string;
   formPromise: Promise<any>;
@@ -27,6 +28,8 @@ export class ChangePasswordComponent implements OnInit {
   protected email: string;
   protected kdf: KdfType;
   protected kdfIterations: number;
+
+  protected destroy$ = new Subject<void>();
 
   constructor(
     protected i18nService: I18nService,
@@ -40,7 +43,18 @@ export class ChangePasswordComponent implements OnInit {
 
   async ngOnInit() {
     this.email = await this.stateService.getEmail();
-    this.enforcedPolicyOptions ??= await this.policyService.getMasterPasswordPolicyOptions();
+    this.policyService
+      .masterPasswordPolicyOptions$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (enforcedPasswordPolicyOptions) =>
+          (this.enforcedPolicyOptions ??= enforcedPasswordPolicyOptions)
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async submit() {

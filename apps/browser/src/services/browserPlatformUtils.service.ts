@@ -19,7 +19,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   constructor(
     private messagingService: MessagingService,
     private clipboardWriteCallback: (clipboardValue: string, clearMs: number) => void,
-    private biometricCallback: () => Promise<boolean>
+    private biometricCallback: () => Promise<boolean>,
+    private win: Window & typeof globalThis
   ) {}
 
   getDevice(): DeviceType {
@@ -27,24 +28,17 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
       return this.deviceCache;
     }
 
-    if (
-      navigator.userAgent.indexOf(" Firefox/") !== -1 ||
-      navigator.userAgent.indexOf(" Gecko/") !== -1
-    ) {
+    if (BrowserPlatformUtilsService.isFirefox()) {
       this.deviceCache = DeviceType.FirefoxExtension;
-    } else if (
-      (self.opr && self.opr.addons) ||
-      self.opera ||
-      navigator.userAgent.indexOf(" OPR/") >= 0
-    ) {
+    } else if (BrowserPlatformUtilsService.isOpera(this.win)) {
       this.deviceCache = DeviceType.OperaExtension;
-    } else if (navigator.userAgent.indexOf(" Edg/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isEdge()) {
       this.deviceCache = DeviceType.EdgeExtension;
-    } else if (navigator.userAgent.indexOf(" Vivaldi/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isVivaldi()) {
       this.deviceCache = DeviceType.VivaldiExtension;
-    } else if (window.chrome && navigator.userAgent.indexOf(" Chrome/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isChrome(this.win)) {
       this.deviceCache = DeviceType.ChromeExtension;
-    } else if (navigator.userAgent.indexOf(" Safari/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isSafari(this.win)) {
       this.deviceCache = DeviceType.SafariExtension;
     }
 
@@ -60,24 +54,56 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return ClientType.Browser;
   }
 
+  static isFirefox(): boolean {
+    return (
+      navigator.userAgent.indexOf(" Firefox/") !== -1 ||
+      navigator.userAgent.indexOf(" Gecko/") !== -1
+    );
+  }
+
   isFirefox(): boolean {
     return this.getDevice() === DeviceType.FirefoxExtension;
+  }
+
+  static isChrome(win: Window & typeof globalThis): boolean {
+    return win.chrome && navigator.userAgent.indexOf(" Chrome/") !== -1;
   }
 
   isChrome(): boolean {
     return this.getDevice() === DeviceType.ChromeExtension;
   }
 
+  static isEdge(): boolean {
+    return navigator.userAgent.indexOf(" Edg/") !== -1;
+  }
+
   isEdge(): boolean {
     return this.getDevice() === DeviceType.EdgeExtension;
+  }
+
+  static isOpera(win: Window & typeof globalThis): boolean {
+    return (
+      (!!win.opr && !!win.opr.addons) || !!win.opera || navigator.userAgent.indexOf(" OPR/") >= 0
+    );
   }
 
   isOpera(): boolean {
     return this.getDevice() === DeviceType.OperaExtension;
   }
 
+  static isVivaldi(): boolean {
+    return navigator.userAgent.indexOf(" Vivaldi/") !== -1;
+  }
+
   isVivaldi(): boolean {
     return this.getDevice() === DeviceType.VivaldiExtension;
+  }
+
+  static isSafari(win: Window & typeof globalThis): boolean {
+    // Opera masquerades as Safari, so make sure we're not there first
+    return (
+      !BrowserPlatformUtilsService.isOpera(win) && navigator.userAgent.indexOf(" Safari/") !== -1
+    );
   }
 
   isSafari(): boolean {
@@ -178,8 +204,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   copyToClipboard(text: string, options?: any): void {
-    let win = window;
-    let doc = window.document;
+    let win = this.win;
+    let doc = this.win.document;
     if (options && (options.window || options.win)) {
       win = options.window || options.win;
       doc = win.document;
@@ -238,8 +264,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   async readFromClipboard(options?: any): Promise<string> {
-    let win = window;
-    let doc = window.document;
+    let win = this.win;
+    let doc = this.win.document;
     if (options && (options.window || options.win)) {
       win = options.window || options.win;
       doc = win.document;
@@ -335,7 +361,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   sidebarViewName(): string {
-    if (window.chrome.sidebarAction && this.isFirefox()) {
+    if (this.win.chrome.sidebarAction && this.isFirefox()) {
       return "sidebar";
     } else if (this.isOpera() && typeof opr !== "undefined" && opr.sidebarAction) {
       return "sidebar_panel";

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { takeUntil } from "rxjs";
 
 import { ChangePasswordComponent } from "@bitwarden/angular/components/change-password.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -11,17 +12,21 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/enums/kdfType";
-import { PolicyData } from "@bitwarden/common/models/data/policyData";
+import { PolicyData } from "@bitwarden/common/models/data/policy.data";
 import { Policy } from "@bitwarden/common/models/domain/policy";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { EmergencyAccessPasswordRequest } from "@bitwarden/common/models/request/emergencyAccessPasswordRequest";
-import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { EmergencyAccessPasswordRequest } from "@bitwarden/common/models/request/emergency-access-password.request";
+import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 
 @Component({
   selector: "emergency-access-takeover",
   templateUrl: "emergency-access-takeover.component.html",
 })
-export class EmergencyAccessTakeoverComponent extends ChangePasswordComponent implements OnInit {
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
+export class EmergencyAccessTakeoverComponent
+  extends ChangePasswordComponent
+  implements OnInit, OnDestroy
+{
   @Output() onDone = new EventEmitter();
   @Input() emergencyAccessId: string;
   @Input() name: string;
@@ -59,10 +64,17 @@ export class EmergencyAccessTakeoverComponent extends ChangePasswordComponent im
       const policies = response.data.map(
         (policyResponse: PolicyResponse) => new Policy(new PolicyData(policyResponse))
       );
-      this.enforcedPolicyOptions = await this.policyService.getMasterPasswordPolicyOptions(
-        policies
-      );
+
+      this.policyService
+        .masterPasswordPolicyOptions$(policies)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((enforcedPolicyOptions) => (this.enforcedPolicyOptions = enforcedPolicyOptions));
     }
+  }
+
+  // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   async submit() {

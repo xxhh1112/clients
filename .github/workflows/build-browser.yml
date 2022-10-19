@@ -144,7 +144,7 @@ jobs:
 
       - name: Build Manifest v3
         run: |
-          npm run dist:chrome:mv3
+          npm run dist:mv3
 
       - name: Gulp
         run: gulp ci
@@ -177,6 +177,13 @@ jobs:
           path: apps/browser/dist/dist-opera.zip
           if-no-files-found: error
 
+      - name: Upload Opera MV3 artifact
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
+        with:
+          name: dist-opera-MV3-${{ env._BUILD_NUMBER }}.zip
+          path: apps/browser/dist/dist-opera-mv3.zip
+          if-no-files-found: error
+          
       - name: Upload Chrome artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
         with:
@@ -188,7 +195,7 @@ jobs:
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
         with:
           name: dist-chrome-MV3-${{ env._BUILD_NUMBER }}.zip
-          path: apps/browser/dist/dist-chrome-MV3.zip
+          path: apps/browser/dist/dist-chrome-mv3.zip
           if-no-files-found: error
 
       - name: Upload Firefox artifact
@@ -203,6 +210,13 @@ jobs:
         with:
           name: dist-edge-${{ env._BUILD_NUMBER }}.zip
           path: apps/browser/dist/dist-edge.zip
+          if-no-files-found: error
+
+      - name: Upload Edge MV3 artifact
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
+        with:
+          name: dist-edge-MV3-${{ env._BUILD_NUMBER }}.zip
+          path: apps/browser/dist/dist-edge-mv3.zip
           if-no-files-found: error
 
       - name: Upload browser source
@@ -338,17 +352,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            crowdin-api-token
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
 
       - name: Upload Sources
         uses: crowdin/github-action@ecd7eb0ef6f3cfa16293c79e9cbc4bc5b5fd9c49  # v1.4.9
@@ -378,17 +385,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            github-pat-bitwarden-devops-bot-repo-scope
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "github-pat-bitwarden-devops-bot-repo-scope"
 
       - name: Extract branch name
         id: extract_branch
@@ -459,17 +459,10 @@ jobs:
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            devops-alerts-slack-webhook-url
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "devops-alerts-slack-webhook-url"
 
       - name: Notify Slack on failure
         uses: act10ns/slack@da3191ebe2e67f49b46880b4633f5591a96d1d33  # v1.5.0
