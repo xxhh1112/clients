@@ -15,6 +15,7 @@ export class SecretListItemResponse extends BaseResponse {
     this.name = this.getResponseProperty("Key");
     this.creationDate = this.getResponseProperty("CreationDate");
     this.revisionDate = this.getResponseProperty("RevisionDate");
-    this.projects = this.getResponseProperty("Projects");
+    const projectResponse = this.getResponseProperty("projects"); //TODO
+    this.projects = projectResponse; // == null ? null : projectResponse.map((k: any) => new ProjectsMappedToSecret(k));
   }
 }
