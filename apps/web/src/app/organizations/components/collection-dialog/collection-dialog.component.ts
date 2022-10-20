@@ -184,7 +184,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     this.close({ type: CollectionDialogResultType.Canceled });
   }
 
-  async submit() {
+  submit = async () => {
     if (this.formGroup.invalid) {
       return;
     }
@@ -204,9 +204,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     await this.collectionService.save(collectionView);
 
     this.close({ type: CollectionDialogResultType.Saved });
-  }
+  };
 
-  async remove() {
+  remove = async () => {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteCollectionConfirmation"),
       this.collection?.name,
@@ -222,7 +222,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     await this.collectionService.remove(this.params.organizationId, this.params.collectionId);
 
     this.close({ type: CollectionDialogResultType.Deleted });
-  }
+  };
 
   ngOnDestroy(): void {
     this.destroy$.next();
