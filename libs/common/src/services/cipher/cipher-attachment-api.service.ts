@@ -111,7 +111,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
     const encCipher = await this.cipherService.encrypt(cipher);
     const request = new CipherShareRequest(encCipher);
     const response = await this.putShareCipher(cipher.id, request);
-    const data = new CipherData(response, collectionIds);
+    const data = [new CipherData(response, collectionIds)];
     await this.cipherService.upsert(data);
   }
 

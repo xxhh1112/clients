@@ -219,8 +219,7 @@ export class Main {
       this.cipherService,
       this.apiService,
       this.cryptoService,
-      this.fileUploadService,
-      this.logService
+      this.fileUploadService
     );
 
     this.broadcasterService = new BroadcasterService();
