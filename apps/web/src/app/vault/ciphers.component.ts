@@ -81,8 +81,16 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     return this.activeFilter?.selectedCollectionNode?.children;
   }
 
-  get hideCollections() {
-    return !(this.searchText?.length > 2);
+  get showCollections() {
+    return this.filteredCollections && !(this.searchText?.length > 1);
+  }
+
+  get filteredCollections() {
+    return this.isPaging() ? this.pagedCollections : this.collections;
+  }
+
+  get filteredCiphers() {
+    return this.isPaging() ? this.pagedCiphers : this.ciphers;
   }
 
   constructor(

@@ -10,6 +10,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
   BadgeModule,
   ButtonModule,
+  IconButtonModule,
   CalloutModule,
   FormFieldModule,
   IconModule,
@@ -40,6 +41,7 @@ import "./locales";
     RouterModule,
     BadgeModule,
     ButtonModule,
+    IconButtonModule,
     CalloutModule,
     ToastrModule,
     BadgeModule,
@@ -61,6 +63,7 @@ import "./locales";
     RouterModule,
     BadgeModule,
     ButtonModule,
+    IconButtonModule,
     CalloutModule,
     ToastrModule,
     BadgeModule,
