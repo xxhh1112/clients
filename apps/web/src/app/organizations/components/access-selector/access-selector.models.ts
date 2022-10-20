@@ -8,16 +8,16 @@ import { SelectItemView } from "@bitwarden/components/src/multi-select/models/se
  * Permission options that replace/correspond with readOnly and hidePassword server fields.
  */
 export enum CollectionPermission {
-  VIEW = "view",
-  VIEW_EXCEPT_PASSWORDS = "viewExceptPass",
-  EDIT = "edit",
-  EDIT_EXCEPT_PASSWORDS = "editExceptPass",
+  View = "view",
+  ViewExceptPass = "viewExceptPass",
+  Edit = "edit",
+  EditExceptPass = "editExceptPass",
 }
 
 export enum AccessItemType {
-  COLLECTION,
-  GROUP,
-  MEMBER,
+  Collection,
+  Group,
+  Member,
 }
 
 /**
@@ -51,14 +51,14 @@ export type AccessItemView =
       readonlyPermission?: CollectionPermission;
     } & (
         | {
-            type: AccessItemType.COLLECTION;
+            type: AccessItemType.Collection;
             viaGroupName?: string;
           }
         | {
-            type: AccessItemType.GROUP;
+            type: AccessItemType.Group;
           }
         | {
-            type: AccessItemType.MEMBER; // Members have a few extra details required to display, so they're added here
+            type: AccessItemType.Member; // Members have a few extra details required to display, so they're added here
             email: string;
             role: OrganizationUserType;
             status: OrganizationUserStatusType;
@@ -81,13 +81,9 @@ export type AccessItemValue = {
  */
 export const convertToPermission = (value: SelectionReadOnlyResponse) => {
   if (value.readOnly) {
-    return value.hidePasswords
-      ? CollectionPermission.VIEW_EXCEPT_PASSWORDS
-      : CollectionPermission.VIEW;
+    return value.hidePasswords ? CollectionPermission.ViewExceptPass : CollectionPermission.View;
   } else {
-    return value.hidePasswords
-      ? CollectionPermission.EDIT_EXCEPT_PASSWORDS
-      : CollectionPermission.EDIT;
+    return value.hidePasswords ? CollectionPermission.EditExceptPass : CollectionPermission.Edit;
   }
 };
 
@@ -105,9 +101,7 @@ export const convertToSelectionReadOnly = (value: AccessItemValue) => {
 };
 
 const readOnly = (perm: CollectionPermission) =>
-  [CollectionPermission.VIEW, CollectionPermission.VIEW_EXCEPT_PASSWORDS].includes(perm);
+  [CollectionPermission.View, CollectionPermission.ViewExceptPass].includes(perm);
 
 const hidePassword = (perm: CollectionPermission) =>
-  [CollectionPermission.VIEW_EXCEPT_PASSWORDS, CollectionPermission.EDIT_EXCEPT_PASSWORDS].includes(
-    perm
-  );
+  [CollectionPermission.ViewExceptPass, CollectionPermission.EditExceptPass].includes(perm);

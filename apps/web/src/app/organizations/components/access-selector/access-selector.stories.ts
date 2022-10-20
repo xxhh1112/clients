@@ -66,16 +66,16 @@ const itemsFactory = (n: number, type: AccessItemType) => {
     } as AccessItemView;
 
     switch (item.type) {
-      case AccessItemType.COLLECTION:
+      case AccessItemType.Collection:
         item.labelName = item.listName = `Collection ${id}`;
         item.id = item.id + "c";
         item.parentGrouping = "Collection Parent Group " + ((id % 2) + 1);
         break;
-      case AccessItemType.GROUP:
+      case AccessItemType.Group:
         item.labelName = item.listName = `Group ${id}`;
         item.id = item.id + "g";
         break;
-      case AccessItemType.MEMBER:
+      case AccessItemType.Member:
         item.id = item.id + "m";
         item.email = `member${id}@email.com`;
         item.status = id % 3 == 0 ? 0 : 2;
@@ -89,8 +89,8 @@ const itemsFactory = (n: number, type: AccessItemType) => {
   });
 };
 
-const sampleMembers = itemsFactory(10, AccessItemType.MEMBER);
-const sampleGroups = itemsFactory(6, AccessItemType.GROUP);
+const sampleMembers = itemsFactory(10, AccessItemType.Member);
+const sampleGroups = itemsFactory(6, AccessItemType.Group);
 
 const StandaloneAccessSelectorTemplate: Story<AccessSelectorComponent> = (
   args: AccessSelectorComponent
@@ -118,23 +118,23 @@ const StandaloneAccessSelectorTemplate: Story<AccessSelectorComponent> = (
 `,
 });
 
-const memberCollectionAccessItems = itemsFactory(3, AccessItemType.COLLECTION).concat([
+const memberCollectionAccessItems = itemsFactory(3, AccessItemType.Collection).concat([
   {
     id: "c1-group1",
-    type: AccessItemType.COLLECTION,
+    type: AccessItemType.Collection,
     labelName: "Collection 1",
     listName: "Collection 1",
     viaGroupName: "Group 1",
-    readonlyPermission: CollectionPermission.VIEW,
+    readonlyPermission: CollectionPermission.View,
     readonly: true,
   },
   {
     id: "c1-group2",
-    type: AccessItemType.COLLECTION,
+    type: AccessItemType.Collection,
     labelName: "Collection 1",
     listName: "Collection 1",
     viaGroupName: "Group 2",
-    readonlyPermission: CollectionPermission.VIEW_EXCEPT_PASSWORDS,
+    readonlyPermission: CollectionPermission.ViewExceptPass,
     readonly: true,
   },
 ]);
@@ -173,10 +173,10 @@ MemberGroupAccess.args = {
   emptySelectionText: "No groups added",
   disabled: false,
   initialValue: [{ id: "3g" }, { id: "0g" }],
-  items: itemsFactory(4, AccessItemType.GROUP).concat([
+  items: itemsFactory(4, AccessItemType.Group).concat([
     {
       id: "admin",
-      type: AccessItemType.GROUP,
+      type: AccessItemType.Group,
       listName: "Admin Group",
       labelName: "Admin Group",
       accessAllItems: true,
@@ -226,13 +226,13 @@ CollectionAccess.args = {
   emptySelectionText: "No members or groups added",
   disabled: false,
   initialValue: [
-    { id: "3g", permission: CollectionPermission.EDIT_EXCEPT_PASSWORDS },
-    { id: "0m", permission: CollectionPermission.VIEW },
+    { id: "3g", permission: CollectionPermission.EditExceptPass },
+    { id: "0m", permission: CollectionPermission.View },
   ],
   items: sampleGroups.concat(sampleMembers).concat([
     {
       id: "admin-group",
-      type: AccessItemType.GROUP,
+      type: AccessItemType.Group,
       listName: "Admin Group",
       labelName: "Admin Group",
       accessAllItems: true,
@@ -240,7 +240,7 @@ CollectionAccess.args = {
     },
     {
       id: "admin-member",
-      type: AccessItemType.MEMBER,
+      type: AccessItemType.Member,
       listName: "Admin Member (admin@email.com)",
       labelName: "Admin Member",
       status: OrganizationUserStatusType.Confirmed,

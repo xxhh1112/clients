@@ -48,7 +48,7 @@
       [ngClass]="{ 'tw-text-muted': item.readonly }"
     >
       <td bitCell [ngSwitch]="item.type">
-        <div class="tw-flex tw-items-center" *ngSwitchCase="itemType.MEMBER">
+        <div class="tw-flex tw-items-center" *ngSwitchCase="itemType.Member">
           <bit-avatar size="small" class="tw-mr-3" text="{{ item.labelName }}"></bit-avatar>
           <div class="tw-flex tw-flex-col">
             <div class="tw-text-sm">

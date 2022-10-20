@@ -17,17 +17,17 @@ export enum PermissionMode {
   /**
    * No permission controls or column present. No permission values are emitted.
    */
-  HIDDEN = "hidden",
+  Hidden = "hidden",
 
   /**
    * No permission controls. Column rendered an if available on an item. No permission values are emitted
    */
-  READONLY = "readonly",
+  Readonly = "readonly",
 
   /**
    * Permission Controls and column present. Permission values are emitted.
    */
-  EDIT = "edit",
+  Edit = "edit",
 }
 
 @Component({
@@ -67,7 +67,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     }
 
     // Disable permission control if accessAllItems is enabled
-    if (item.accessAllItems || this.permissionMode != PermissionMode.EDIT) {
+    if (item.accessAllItems || this.permissionMode != PermissionMode.Edit) {
       permissionControl.disable();
     }
 
@@ -84,12 +84,12 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
   protected itemType = AccessItemType;
   protected permissionList = [
-    { perm: CollectionPermission.VIEW, labelId: "canView" },
-    { perm: CollectionPermission.VIEW_EXCEPT_PASSWORDS, labelId: "canViewExceptPass" },
-    { perm: CollectionPermission.EDIT, labelId: "canEdit" },
-    { perm: CollectionPermission.EDIT_EXCEPT_PASSWORDS, labelId: "canEditExceptPass" },
+    { perm: CollectionPermission.View, labelId: "canView" },
+    { perm: CollectionPermission.ViewExceptPass, labelId: "canViewExceptPass" },
+    { perm: CollectionPermission.Edit, labelId: "canEdit" },
+    { perm: CollectionPermission.EditExceptPass, labelId: "canEditExceptPass" },
   ];
-  protected initialPermission = CollectionPermission.VIEW;
+  protected initialPermission = CollectionPermission.View;
 
   disabled: boolean;
 
@@ -126,14 +126,14 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this._permissionMode = value;
     // Toggle any internal permission controls
     for (const control of this.selectionList.formArray.controls) {
-      if (value == PermissionMode.EDIT) {
+      if (value == PermissionMode.Edit) {
         control.get("permission").enable();
       } else {
         control.get("permission").disable();
       }
     }
   }
-  private _permissionMode: PermissionMode = PermissionMode.HIDDEN;
+  private _permissionMode: PermissionMode = PermissionMode.Hidden;
 
   /**
    * Column header for the selected items table
@@ -257,11 +257,11 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
   protected itemIcon(item: AccessItemView) {
     switch (item.type) {
-      case AccessItemType.COLLECTION:
+      case AccessItemType.Collection:
         return "bwi-collection";
-      case AccessItemType.GROUP:
+      case AccessItemType.Group:
         return "bwi-users";
-      case AccessItemType.MEMBER:
+      case AccessItemType.Member:
         return "bwi-user";
     }
   }
@@ -271,11 +271,11 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   }
 
   protected accessAllLabelId(item: AccessItemView) {
-    return item.type == AccessItemType.GROUP ? "groupAccessAll" : "memberAccessAll";
+    return item.type == AccessItemType.Group ? "groupAccessAll" : "memberAccessAll";
   }
 
   protected canEditItemPermission(item: AccessItemView) {
-    return this.permissionMode == PermissionMode.EDIT && !item.readonly && !item.accessAllItems;
+    return this.permissionMode == PermissionMode.Edit && !item.readonly && !item.accessAllItems;
   }
 
   private _itemComparator(a: AccessItemView, b: AccessItemView) {

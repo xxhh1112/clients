@@ -87,7 +87,7 @@ describe("AccessSelectorComponent", () => {
       component.items = [
         {
           id: "123",
-          type: AccessItemType.GROUP,
+          type: AccessItemType.Group,
           labelName: "Group 1",
           listName: "Group 1",
         },
@@ -111,7 +111,7 @@ describe("AccessSelectorComponent", () => {
       // Arrange
       const mockChange = jest.fn();
       component.registerOnChange(mockChange);
-      component.permissionMode = PermissionMode.EDIT;
+      component.permissionMode = PermissionMode.Edit;
 
       // Act
       component.selectItems([{ id: "123" } as any]);
@@ -124,26 +124,26 @@ describe("AccessSelectorComponent", () => {
     it("should emit value change when a row is modified", () => {
       // Arrange
       const mockChange = jest.fn();
-      component.permissionMode = PermissionMode.EDIT;
+      component.permissionMode = PermissionMode.Edit;
       component.selectItems([{ id: "123" } as any]);
       component.registerOnChange(mockChange); // Register change listener after setup
 
       // Act
-      component.changeSelectedItemPerm(0, CollectionPermission.EDIT);
+      component.changeSelectedItemPerm(0, CollectionPermission.Edit);
 
       // Assert
       expect(mockChange.mock.calls.length).toEqual(1);
       expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
       expect(mockChange.mock.lastCall[0]).toHaveProperty(
         "[0].permission",
-        CollectionPermission.EDIT
+        CollectionPermission.Edit
       );
     });
 
     it("should emit value change when a row is removed", () => {
       // Arrange
       const mockChange = jest.fn();
-      component.permissionMode = PermissionMode.EDIT;
+      component.permissionMode = PermissionMode.Edit;
       component.selectItems([{ id: "123" } as any]);
       component.registerOnChange(mockChange); // Register change listener after setup
 
@@ -159,7 +159,7 @@ describe("AccessSelectorComponent", () => {
       // Arrange
       const mockChange = jest.fn();
       component.registerOnChange(mockChange);
-      component.permissionMode = PermissionMode.EDIT;
+      component.permissionMode = PermissionMode.Edit;
 
       // Act
       component.selectItems([{ id: "123" } as any]);
@@ -174,7 +174,7 @@ describe("AccessSelectorComponent", () => {
       // Arrange
       const mockChange = jest.fn();
       component.registerOnChange(mockChange);
-      component.permissionMode = PermissionMode.HIDDEN;
+      component.permissionMode = PermissionMode.Hidden;
 
       // Act
       component.selectItems([{ id: "123" } as any]);
@@ -191,13 +191,13 @@ describe("AccessSelectorComponent", () => {
       component.items = [
         {
           id: "g1",
-          type: AccessItemType.GROUP,
+          type: AccessItemType.Group,
           labelName: "Group 1",
           listName: "Group 1",
         },
         {
           id: "m1",
-          type: AccessItemType.MEMBER,
+          type: AccessItemType.Member,
           labelName: "Member 1",
           listName: "Member 1 (member1@email.com)",
           email: "member1@email.com",
@@ -229,9 +229,9 @@ describe("AccessSelectorComponent", () => {
     });
 
     const permissionColumnCases = [
-      [PermissionMode.HIDDEN, false],
-      [PermissionMode.EDIT, false],
-      [PermissionMode.READONLY, true],
+      [PermissionMode.Hidden, false],
+      [PermissionMode.Edit, true],
+      [PermissionMode.Readonly, true],
     ];
 
     test.each(permissionColumnCases)(
