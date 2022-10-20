@@ -83,37 +83,49 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
+          const selectionsById = new Map(collectionDetails.groups.map((g) => [g.id, g]));
+
           this.accessItems = [].concat(
-            groups.map(
-              (g) =>
-                ({
-                  id: g.id,
+            groups.map((group) => {
+              if (group.accessAll) {
+                return {
+                  id: group.id,
                   type: AccessItemType.Group,
-                  labelName: g.name,
-                  listName: g.name,
-                  accessAllItems: g.accessAll,
-                } as AccessItemView)
-            )
-          );
+                  listName: group.name,
+                  labelName: group.name,
+                  accessAllItems: true,
+                  readonly: true,
+                } as AccessItemView;
+              }
 
-          const groupsById = new Map(groups.map((g) => [g.id, g]));
-
-          this.formGroup.patchValue({
-            name,
-            externalId: this.collection.externalId,
-            parent,
-            access: collectionDetails.groups.map((selection) => {
-              const group = groupsById.get(selection.id);
+              const selection = selectionsById.get(group.id);
+              if (selection == undefined) {
+                return {
+                  id: group.id,
+                  type: AccessItemType.Group,
+                  listName: group.name,
+                  labelName: group.name,
+                };
+              }
 
               return {
                 id: group.id,
                 type: AccessItemType.Group,
                 listName: group.name,
                 labelName: group.name,
-                accessAllItems: group.accessAll,
+                accessAllItems: false,
                 readonlyPermission: mapToCollectionPermission(selection),
-              };
-            }),
+              } as AccessItemView;
+            })
+          );
+
+          this.formGroup.patchValue({
+            name,
+            externalId: this.collection.externalId,
+            parent,
+            access: this.accessItems.filter(
+              (item) => item.accessAllItems || item.readonlyPermission != undefined
+            ),
           });
         } else {
           this.nestOptions = collections;
