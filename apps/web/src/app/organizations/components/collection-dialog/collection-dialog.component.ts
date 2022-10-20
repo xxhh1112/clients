@@ -32,12 +32,14 @@ export interface CollectionDialogResult {
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  test: any = [];
   collection?: CollectionView;
   nestOptions: CollectionView[] = [];
   formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
     parent: null as string | null,
+    formItems: [[{ id: "1g" }]],
   });
 
   constructor(

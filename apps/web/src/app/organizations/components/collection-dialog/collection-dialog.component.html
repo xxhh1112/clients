@@ -36,6 +36,8 @@
         <bit-tab label="{{ 'access' | i18n }}">
           <bit-access-selector
             permissionMode="edit"
+            formControlName="formItems"
+            [items]="[]"
             [columnHeader]="'groupsAndMembersColumnHeader' | i18n"
             [selectorLabelText]="'selectGroupsAndMembers' | i18n"
             [selectorHelpText]="'userPermissionOverrideHelper' | i18n"

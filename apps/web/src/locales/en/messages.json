@@ -5522,5 +5522,17 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
+  },
+  "groupsAndMembersColumnHeader": {
+    "message": "Members/Groups"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
   }
 }
