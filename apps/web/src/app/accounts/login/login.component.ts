@@ -1,6 +1,7 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
@@ -16,11 +17,11 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { PolicyData } from "@bitwarden/common/models/data/policyData";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
+import { PolicyData } from "@bitwarden/common/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
 import { Policy } from "@bitwarden/common/models/domain/policy";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
@@ -29,12 +30,13 @@ import { RouterService, StateService } from "../../core";
   selector: "app-login",
   templateUrl: "login.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class LoginComponent extends BaseLoginComponent {
+export class LoginComponent extends BaseLoginComponent implements OnInit, OnDestroy {
   showResetPasswordAutoEnrollWarning = false;
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
   showPasswordless = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     authService: AuthService,
@@ -128,14 +130,23 @@ export class LoginComponent extends BaseLoginComponent {
         this.showResetPasswordAutoEnrollWarning =
           resetPasswordPolicy[1] && resetPasswordPolicy[0].autoEnrollEnabled;
 
-        this.enforcedPasswordPolicyOptions =
-          await this.policyService.getMasterPasswordPolicyOptions(policyList);
+        this.policyService
+          .masterPasswordPolicyOptions$(policyList)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((enforcedPasswordPolicyOptions) => {
+            this.enforcedPasswordPolicyOptions = enforcedPasswordPolicyOptions;
+          });
       }
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   async goAfterLogIn() {
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
+    const masterPassword = this.formGroup.value.masterPassword;
 
     // Check master password against policy
     if (this.enforcedPasswordPolicyOptions != null) {
@@ -170,7 +181,7 @@ export class LoginComponent extends BaseLoginComponent {
   }
 
   async submit() {
-    const rememberEmail = this.formGroup.get("rememberEmail")?.value;
+    const rememberEmail = this.formGroup.value.rememberEmail;
 
     await this.stateService.setRememberEmail(rememberEmail);
     if (!rememberEmail) {
@@ -192,7 +203,7 @@ export class LoginComponent extends BaseLoginComponent {
   }
 
   private getPasswordStrengthUserInput() {
-    const email = this.formGroup.get("email")?.value;
+    const email = this.formGroup.value.email;
     let userInput: string[] = [];
     const atPosition = email.indexOf("@");
     if (atPosition > -1) {

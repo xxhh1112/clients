@@ -5,8 +5,8 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipherBulkDeleteRequest";
-import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collectionBulkDeleteRequest";
+import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipher-bulk-delete.request";
+import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collection-bulk-delete.request";
 
 @Component({
   selector: "app-vault-bulk-delete",

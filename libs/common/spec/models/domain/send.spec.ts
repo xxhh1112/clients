@@ -1,12 +1,13 @@
+// eslint-disable-next-line no-restricted-imports
 import { Substitute, Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { SendType } from "@bitwarden/common/enums/sendType";
-import { SendData } from "@bitwarden/common/models/data/sendData";
-import { EncString } from "@bitwarden/common/models/domain/encString";
+import { SendData } from "@bitwarden/common/models/data/send.data";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Send } from "@bitwarden/common/models/domain/send";
-import { SendText } from "@bitwarden/common/models/domain/sendText";
+import { SendText } from "@bitwarden/common/models/domain/send-text";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 
 import { makeStaticByteArray, mockEnc } from "../../utils";

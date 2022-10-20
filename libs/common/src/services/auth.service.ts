@@ -21,29 +21,48 @@ import { ApiLogInStrategy } from "../misc/logInStrategies/apiLogin.strategy";
 import { PasswordLogInStrategy } from "../misc/logInStrategies/passwordLogin.strategy";
 import { PasswordlessLogInStrategy } from "../misc/logInStrategies/passwordlessLogin.strategy";
 import { SsoLogInStrategy } from "../misc/logInStrategies/ssoLogin.strategy";
-import { AuthResult } from "../models/domain/authResult";
+import { AuthResult } from "../models/domain/auth-result";
 import {
   ApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
   PasswordlessLogInCredentials,
-} from "../models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
-import { PreloginRequest } from "../models/request/preloginRequest";
-import { ErrorResponse } from "../models/response/errorResponse";
-import { AuthRequestPushNotification } from "../models/response/notificationResponse";
+} from "../models/domain/log-in-credentials";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
+import { PreloginRequest } from "../models/request/prelogin.request";
+import { ErrorResponse } from "../models/response/error.response";
+import { AuthRequestPushNotification } from "../models/response/notification.response";
 
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
 
 export class AuthService implements AuthServiceAbstraction {
   get email(): string {
-    return this.logInStrategy instanceof PasswordLogInStrategy ? this.logInStrategy.email : null;
+    if (
+      this.logInStrategy instanceof PasswordLogInStrategy ||
+      this.logInStrategy instanceof PasswordlessLogInStrategy
+    ) {
+      return this.logInStrategy.email;
+    }
+
+    return null;
   }
 
   get masterPasswordHash(): string {
     return this.logInStrategy instanceof PasswordLogInStrategy
       ? this.logInStrategy.masterPasswordHash
+      : null;
+  }
+
+  get accessCode(): string {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy
+      ? this.logInStrategy.accessCode
+      : null;
+  }
+
+  get authRequestId(): string {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy
+      ? this.logInStrategy.authRequestId
       : null;
   }
 
@@ -155,7 +174,7 @@ export class AuthService implements AuthServiceAbstraction {
   }
 
   async logInTwoFactor(
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string
   ): Promise<AuthResult> {
     if (this.logInStrategy == null) {
@@ -194,6 +213,10 @@ export class AuthService implements AuthServiceAbstraction {
 
   authingWithPassword(): boolean {
     return this.logInStrategy instanceof PasswordLogInStrategy;
+  }
+
+  authingWithPasswordless(): boolean {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy;
   }
 
   async getAuthStatus(userId?: string): Promise<AuthenticationStatus> {

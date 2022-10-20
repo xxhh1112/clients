@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
+import { GroupResponse } from "@bitwarden/common/models/response/group.response";
 
 @Pipe({
   name: "groupNameFromId",

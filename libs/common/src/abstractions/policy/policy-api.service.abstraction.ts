@@ -1,9 +1,8 @@
 import { PolicyType } from "../../enums/policyType";
-import { MasterPasswordPolicyOptions } from "../../models/domain/masterPasswordPolicyOptions";
-import { Policy } from "../../models/domain/policy";
-import { PolicyRequest } from "../../models/request/policyRequest";
-import { ListResponse } from "../../models/response/listResponse";
-import { PolicyResponse } from "../../models/response/policyResponse";
+import { MasterPasswordPolicyOptions } from "../../models/domain/master-password-policy-options";
+import { PolicyRequest } from "../../models/request/policy.request";
+import { ListResponse } from "../../models/response/list.response";
+import { PolicyResponse } from "../../models/response/policy.response";
 
 export class PolicyApiServiceAbstraction {
   getPolicy: (organizationId: string, type: PolicyType) => Promise<PolicyResponse>;
@@ -18,7 +17,6 @@ export class PolicyApiServiceAbstraction {
     organizationId: string,
     userId: string
   ) => Promise<ListResponse<PolicyResponse>>;
-  getPolicyForOrganization: (policyType: PolicyType, organizationId: string) => Promise<Policy>;
   getMasterPasswordPoliciesForInvitedUsers: (orgId: string) => Promise<MasterPasswordPolicyOptions>;
   putPolicy: (organizationId: string, type: PolicyType, request: PolicyRequest) => Promise<any>;
 }

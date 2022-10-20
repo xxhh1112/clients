@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -13,8 +14,8 @@ import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.servi
 import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
 import { PasswordLogInStrategy } from "@bitwarden/common/misc/logInStrategies/passwordLogin.strategy";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { identityTokenResponseFactory } from "./logIn.strategy.spec";
 

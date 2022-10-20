@@ -14,8 +14,8 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
-import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
+import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 
 @Component({
   selector: "app-register-form",
@@ -73,7 +73,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       this.enforcedPolicyOptions != null &&
       !this.policyService.evaluateMasterPassword(
         this.passwordStrengthResult.score,
-        this.formGroup.get("masterPassword")?.value,
+        this.formGroup.value.masterPassword,
         this.enforcedPolicyOptions
       )
     ) {

@@ -234,6 +234,7 @@ const devServer =
                   'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
                   'sha256-JVRXyYPueLWdwGwY9m/7u4QlZ1xeQdqUj2t8OVIzZE4='
                   'sha256-or0p3LaHetJ4FRq+flVORVFFNsOjQGWrDvX8Jf7ACWg='
+                  'sha256-Oca9ZYU1dwNscIhdNV7tFBsr4oqagBhZx9/p4w8GOcg='
                 ;img-src
                   'self'
                   data:
@@ -268,6 +269,7 @@ const devServer =
                   https://client-analytics.braintreegateway.com
                   https://*.braintree-api.com
                   https://*.blob.core.windows.net
+                  http://127.0.0.1:10000
                   https://app.simplelogin.io/api/alias/random/new
                   https://quack.duckduckgo.com/api/email/addresses
                   https://app.anonaddy.com/api/v1/aliases

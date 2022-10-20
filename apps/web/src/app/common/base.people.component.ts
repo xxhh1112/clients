@@ -3,7 +3,6 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ValidationService } from "@bitwarden/angular/services/validation.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -11,14 +10,15 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
 import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organizationUserResponse";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/providerUserResponse";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
 import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
 

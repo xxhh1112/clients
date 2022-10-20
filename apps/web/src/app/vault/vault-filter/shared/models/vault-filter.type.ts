@@ -1,9 +1,9 @@
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 import { CipherType } from "@bitwarden/common/src/enums/cipherType";
 import { Organization } from "@bitwarden/common/src/models/domain/organization";
-import { ITreeNodeObject } from "@bitwarden/common/src/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/src/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/src/models/view/folderView";
+import { ITreeNodeObject } from "@bitwarden/common/src/models/domain/tree-node";
+import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/src/models/view/folder.view";
 
 export type CipherStatus = "all" | "favorites" | "trash" | CipherType;
 

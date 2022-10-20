@@ -1,3 +1,6 @@
+import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
+import { TabMessage } from "../types/tab-messages";
+
 export class BrowserApi {
   static isWebExtensionsApi: boolean = typeof browser !== "undefined";
   static isSafariApi: boolean =
@@ -8,11 +11,22 @@ export class BrowserApi {
   static isFirefoxOnAndroid: boolean =
     navigator.userAgent.indexOf("Firefox/") !== -1 && navigator.userAgent.indexOf("Android") !== -1;
 
+  static get manifestVersion() {
+    return chrome.runtime.getManifest().manifest_version;
+  }
+
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
     return await BrowserApi.tabsQueryFirst({
       active: true,
       windowId: chrome.windows.WINDOW_ID_CURRENT,
     });
+  }
+
+  static async getTab(tabId: number) {
+    if (tabId == null) {
+      return null;
+    }
+    return await chrome.tabs.get(tabId);
   }
 
   static async getTabFromCurrentWindow(): Promise<chrome.tabs.Tab> | null {
@@ -78,6 +92,14 @@ export class BrowserApi {
         resolve();
       });
     });
+  }
+
+  static sendTabsMessage<T = never>(
+    tabId: number,
+    message: TabMessage,
+    responseCallback?: (response: T) => void
+  ) {
+    chrome.tabs.sendMessage<TabMessage, T>(tabId, message, responseCallback);
   }
 
   static async getPrivateModeWindows(): Promise<browser.windows.Window[]> {
@@ -200,5 +222,17 @@ export class BrowserApi {
     return new Promise((resolve) => {
       chrome.runtime.getPlatformInfo(resolve);
     });
+  }
+
+  static getBrowserAction() {
+    return BrowserApi.manifestVersion === 3 ? chrome.action : chrome.browserAction;
+  }
+
+  static getSidebarAction(win: Window & typeof globalThis) {
+    return BrowserPlatformUtilsService.isSafari(win)
+      ? null
+      : typeof win.opr !== "undefined" && win.opr.sidebarAction
+      ? win.opr.sidebarAction
+      : win.chrome.sidebarAction;
   }
 }

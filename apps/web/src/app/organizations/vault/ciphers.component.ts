@@ -22,10 +22,10 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { GroupResponse } from "@bitwarden/common/models/response/groupResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { GroupResponse } from "@bitwarden/common/models/response/group.response";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { BulkDeleteComponent } from "../../vault/bulk-delete.component";
 import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";

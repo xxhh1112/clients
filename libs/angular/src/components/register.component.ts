@@ -16,11 +16,11 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
-import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
-import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
-import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
-import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
-import { RegisterResponse } from "@bitwarden/common/models/response/authentication/registerResponse";
+import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
+import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
+import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
+import { RegisterRequest } from "@bitwarden/common/models/request/register.request";
+import { RegisterResponse } from "@bitwarden/common/models/response/authentication/register.response";
 
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
@@ -96,11 +96,11 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   }
 
   async submit(showToast = true) {
-    let email = this.formGroup.get("email")?.value;
+    let email = this.formGroup.value.email;
     email = email.trim().toLowerCase();
-    let name = this.formGroup.get("name")?.value;
+    let name = this.formGroup.value.name;
     name = name === "" ? null : name; // Why do we do this?
-    const masterPassword = this.formGroup.get("masterPassword")?.value;
+    const masterPassword = this.formGroup.value.masterPassword;
     try {
       if (!this.accountCreated) {
         const registerResponse = await this.registerAccount(
@@ -125,7 +125,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
         if (loginResponse.captchaRequired) {
           return;
         }
-        this.createdAccount.emit(this.formGroup.get("email")?.value);
+        this.createdAccount.emit(this.formGroup.value.email);
       } else {
         this.platformUtilsService.showToast(
           "success",
@@ -232,7 +232,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     masterPassword: string,
     name: string
   ): Promise<RegisterRequest> {
-    const hint = this.formGroup.get("hint")?.value;
+    const hint = this.formGroup.value.hint;
     const kdf = DEFAULT_KDF_TYPE;
     const kdfIterations = DEFAULT_KDF_ITERATIONS;
     const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);

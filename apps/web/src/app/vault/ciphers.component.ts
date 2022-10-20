@@ -25,8 +25,8 @@ import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { BulkDeleteComponent } from "./bulk-delete.component";
 import { BulkMoveComponent } from "./bulk-move.component";

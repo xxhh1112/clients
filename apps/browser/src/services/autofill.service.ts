@@ -6,8 +6,8 @@ import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { FieldView } from "@bitwarden/common/models/view/fieldView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { FieldView } from "@bitwarden/common/models/view/field.view";
 
 import { BrowserApi } from "../browser/browserApi";
 import AutofillField from "../models/autofillField";
@@ -172,14 +172,10 @@ export default class AutofillService implements AutofillServiceInterface {
       } else {
         cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
       }
-
-      if (cipher == null) {
-        return null;
-      }
     }
 
-    if (cipher.reprompt !== CipherRepromptType.None) {
-      return;
+    if (cipher == null || cipher.reprompt !== CipherRepromptType.None) {
+      return null;
     }
 
     const totpCode = await this.doAutoFill({

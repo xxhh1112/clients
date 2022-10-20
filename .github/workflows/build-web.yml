@@ -119,11 +119,15 @@ jobs:
         working-directory: apps/web
         run: npm run ${{ matrix.npm_command }}
 
+      - name: Package artifact
+        working-directory: apps/web
+        run: zip -r web-${{ env._VERSION }}-${{ matrix.name }}.zip build
+
       - name: Upload ${{ matrix.name }} artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
         with:
           name: web-${{ env._VERSION }}-${{ matrix.name }}.zip
-          path: apps/web/build
+          path: apps/web/web-${{ env._VERSION }}-${{ matrix.name }}.zip
           if-no-files-found: error
 
   build-commercial-selfhost-image:
@@ -153,7 +157,11 @@ jobs:
         uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
           name: web-${{ env._VERSION }}-selfhosted-COMMERCIAL.zip
-          path: apps/web/build
+          path: apps/web
+
+      - name: Extract artifact
+        working-directory: apps/web
+        run: unzip web-${{ env._VERSION }}-selfhosted-COMMERCIAL.zip
 
       - name: Build Docker image
         working-directory: apps/web
@@ -268,7 +276,11 @@ jobs:
         uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
           name: web-${{ env._VERSION }}-${{ matrix.artifact_name }}.zip
-          path: apps/web/build
+          path: apps/web
+
+      - name: Extract artifact
+        working-directory: apps/web
+        run: unzip web-${{ env._VERSION }}-${{ matrix.artifact_name }}.zip
 
       - name: Build Docker image
         working-directory: apps/web
@@ -337,17 +349,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            crowdin-api-token
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
 
       - name: Upload Sources
         uses: crowdin/github-action@ecd7eb0ef6f3cfa16293c79e9cbc4bc5b5fd9c49  # v1.4.9
@@ -370,8 +375,8 @@ jobs:
       - cloc
       - setup
       - build-artifacts
-      - build-containers
       - build-commercial-selfhost-image
+      - build-containers
       - crowdin-push
     steps:
       - name: Check if any job failed
@@ -381,7 +386,7 @@ jobs:
           SETUP_STATUS: ${{ needs.setup.result }}
           ARTIFACT_STATUS: ${{ needs.build-artifacts.result }}
           BUILD_SELFHOST_STATUS: ${{ needs.build-commercial-selfhost-image.result }}
-          BUILD_QA_STATUS: ${{ needs.build-qa.result }}
+          BUILD_CONTAINERS_STATUS: ${{ needs.build-containers.result }}
           CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
         run: |
           if [ "$CLOC_STATUS" = "failure" ]; then
@@ -392,7 +397,7 @@ jobs:
               exit 1
           elif [ "$BUILD_SELFHOST_STATUS" = "failure" ]; then
               exit 1
-          elif [ "$BUILD_QA_STATUS" = "failure" ]; then
+          elif [ "$BUILD_CONTAINERS_STATUS" = "failure" ]; then
               exit 1
           elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
               exit 1
@@ -407,17 +412,10 @@ jobs:
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            devops-alerts-slack-webhook-url
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "devops-alerts-slack-webhook-url"
 
       - name: Notify Slack on failure
         uses: act10ns/slack@da3191ebe2e67f49b46880b4633f5591a96d1d33  # v1.5.1
