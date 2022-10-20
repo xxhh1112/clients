@@ -73,9 +73,10 @@
     <ng-container body>
       <ng-container *ngIf="showCollections">
         <tr bitRow *ngFor="let col of filteredCollections">
-          <td bitCell class="tw-w-10 tw-cursor-pointer">
+          <td bitCell class="tw-w-10">
             <input
               *ngIf="organization && col.node.name !== 'Unassigned'"
+              class="tw-cursor-pointer"
               type="checkbox"
               [(ngModel)]="col.checked"
               appStopProp
