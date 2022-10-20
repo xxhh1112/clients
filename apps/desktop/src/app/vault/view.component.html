@@ -422,6 +422,20 @@
         </div>
       </div>
     </div>
+    <div class="box" *ngIf="cipher.folderId">
+      <div class="box-content">
+        <div class="box-content-row">
+          <label
+            for="folderName"
+            class="draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, folder.name)"
+            >{{ "folder" | i18n }}</label
+          >
+          <input id="folderName" type="text" name="folderName" [value]="folder.name" readonly />
+        </div>
+      </div>
+    </div>
     <div class="box" *ngIf="cipher.notes">
       <h2 class="box-header">
         <span
@@ -474,6 +488,10 @@
         <div>
           <b class="font-weight-semibold">{{ "dateUpdated" | i18n }}:</b>
           {{ cipher.revisionDate | date: "medium" }}
+        </div>
+        <div *ngIf="cipher.creationDate">
+          <b class="font-weight-semibold">{{ "dateCreated" | i18n }}:</b>
+          {{ cipher.creationDate | date: "medium" }}
         </div>
         <div *ngIf="cipher.passwordRevisionDisplayDate">
           <b class="font-weight-semibold">{{ "datePasswordUpdated" | i18n }}:</b>

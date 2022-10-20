@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 
-import { TreeNode } from "@bitwarden/common/src/models/domain/treeNode";
+import { TreeNode } from "@bitwarden/common/src/models/domain/tree-node";
 
 import {
   CipherTypeFilter,

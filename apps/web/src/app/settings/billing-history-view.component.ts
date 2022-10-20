@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { BillingHistoryResponse } from "@bitwarden/common/models/response/billingHistoryResponse";
+import { BillingHistoryResponse } from "@bitwarden/common/models/response/billing-history.response";
 
 @Component({
   selector: "app-billing-history-view",

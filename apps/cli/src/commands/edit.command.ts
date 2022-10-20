@@ -4,11 +4,11 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherExport } from "@bitwarden/common/models/export/cipherExport";
-import { CollectionExport } from "@bitwarden/common/models/export/collectionExport";
-import { FolderExport } from "@bitwarden/common/models/export/folderExport";
-import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
+import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
+import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
+import { FolderExport } from "@bitwarden/common/models/export/folder.export";
+import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
