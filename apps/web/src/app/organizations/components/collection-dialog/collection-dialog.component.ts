@@ -3,6 +3,7 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { takeUntil, Subject, forkJoin, of } from "rxjs";
 
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group/group.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -52,6 +53,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
+    private apiService: ApiService,
     private organizationService: OrganizationService,
     private groupService: GroupServiceAbstraction,
     private collectionService: CollectionAdminService,
@@ -68,9 +70,14 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
         this.params.collectionId
       ),
       groups: this.groupService.getAll(this.params.organizationId),
+      users: this.apiService.getOrganizationUsers(this.params.organizationId),
+      collectionUsers: this.apiService.getCollectionUsers(
+        this.params.organizationId,
+        this.params.collectionId
+      ),
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ collections, collectionDetails, organization, groups }) => {
+      .subscribe(({ collections, collectionDetails, groups, users, collectionUsers }) => {
         if (this.params.collectionId) {
           this.collection = collections.find((c) => c.id === this.collectionId);
           this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
@@ -83,7 +90,8 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
-          const selectionsById = new Map(collectionDetails.groups.map((g) => [g.id, g]));
+          const groupSelectionsById = new Map(collectionDetails.groups.map((g) => [g.id, g]));
+          const userSelectionsById = new Map(collectionUsers.map((u) => [u.id, u]));
 
           this.accessItems = [].concat(
             groups.map((group) => {
@@ -98,7 +106,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 } as AccessItemView;
               }
 
-              const selection = selectionsById.get(group.id);
+              const selection = groupSelectionsById.get(group.id);
               if (selection == undefined) {
                 return {
                   id: group.id,
@@ -113,6 +121,37 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 type: AccessItemType.Group,
                 listName: group.name,
                 labelName: group.name,
+                accessAllItems: false,
+                readonlyPermission: mapToCollectionPermission(selection),
+              } as AccessItemView;
+            }),
+            users.data.map((user) => {
+              if (user.accessAll) {
+                return {
+                  id: user.id,
+                  type: AccessItemType.Member,
+                  listName: user.name,
+                  labelName: user.name,
+                  accessAllItems: true,
+                  readonly: true,
+                } as AccessItemView;
+              }
+
+              const selection = userSelectionsById.get(user.id);
+              if (selection == undefined) {
+                return {
+                  id: user.id,
+                  type: AccessItemType.Member,
+                  listName: user.name,
+                  labelName: user.name,
+                };
+              }
+
+              return {
+                id: user.id,
+                type: AccessItemType.Member,
+                listName: user.name,
+                labelName: user.name,
                 accessAllItems: false,
                 readonlyPermission: mapToCollectionPermission(selection),
               } as AccessItemView;
