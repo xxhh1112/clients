@@ -105,11 +105,6 @@ export class VaultComponent implements OnInit, OnDestroy {
           });
         }
 
-        await this.ciphersComponent.reload(
-          this.activeFilter.buildFilter(),
-          this.activeFilter.isDeleted
-        );
-
         if (qParams.viewEvents != null) {
           const cipher = this.ciphersComponent.ciphers.filter((c) => c.id === qParams.viewEvents);
           if (cipher.length > 0) {
