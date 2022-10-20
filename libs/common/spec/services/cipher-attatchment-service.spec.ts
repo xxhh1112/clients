@@ -4,24 +4,22 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
+import { AttachmentRequest } from "@bitwarden/common/models/request/attachment.request";
+import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
+import { CipherShareRequest } from "@bitwarden/common/models/request/cipher-share.request";
+import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "@bitwarden/common/models/response/attachment.response";
+import { CipherResponse } from "@bitwarden/common/models/response/cipher.response";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/cipher-attachment-api.service";
 
 import { Cipher } from "../../src/models/domain/cipher";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { CipherShareRequest } from "@bitwarden/common/models/request/cipher-share.request";
-import { CipherResponse } from "@bitwarden/common/models/response/cipher.response";
-import { CipherBulkShareRequest } from "@bitwarden/common/models/request/cipher-bulk-share.request";
-import { AttachmentRequest } from "@bitwarden/common/models/request/attachment.request";
-import { AttachmentUploadDataResponse } from "@bitwarden/common/models/response/attachment-upload-data.response";
-import { AttachmentResponse } from "@bitwarden/common/models/response/attachment.response";
 
 describe("Cipher Attachment Service", () => {
   const cryptoService = mock<CryptoService>();
   const apiService = mock<ApiService>();
   const cipherService = mock<CipherService>();
   const fileUploadService = mock<FileUploadService>();
-  const logService = mock<LogService>();
 
   let cipherAttachmentApiService: CipherAttachmentApiService;
 
@@ -30,7 +28,6 @@ describe("Cipher Attachment Service", () => {
   beforeEach(() => {
     mockReset(apiService);
     mockReset(cryptoService);
-    mockReset(logService);
     mockReset(cipherService);
     mockReset(fileUploadService);
 
@@ -38,8 +35,7 @@ describe("Cipher Attachment Service", () => {
       cipherService,
       apiService,
       cryptoService,
-      fileUploadService,
-      logService
+      fileUploadService
     );
   });
   describe("deleteAttachmentWithServer", () => {
