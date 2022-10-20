@@ -1,14 +1,19 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { from, takeUntil, Subject } from "rxjs";
+import { takeUntil, Subject, forkJoin, of } from "rxjs";
 
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group/group.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CollectionGroupSelectionView } from "@bitwarden/common/src/models/view/collection-group-selection-view";
 import { BitValidators } from "@bitwarden/components";
+
+import { AccessItemType, AccessItemView, CollectionPermission } from "../access-selector";
 
 export interface CollectionEditDialogParams {
   collectionId?: string;
@@ -35,26 +40,37 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   test: any = [];
   collection?: CollectionView;
   nestOptions: CollectionView[] = [];
+  accessItems: AccessItemView[] = [];
   formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
     parent: null as string | null,
-    formItems: [[{ id: "1g" }]],
+    access: [[] as AccessItemView[]],
   });
 
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
+    private organizationService: OrganizationService,
+    private groupService: GroupServiceAbstraction,
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService
   ) {}
 
   ngOnInit() {
-    from(this.collectionService.getAll(this.params.organizationId))
+    forkJoin({
+      organization: of(this.organizationService.get(this.params.organizationId)),
+      collections: this.collectionService.getAll(this.params.organizationId),
+      collectionDetails: this.collectionService.get(
+        this.params.organizationId,
+        this.params.collectionId
+      ),
+      groups: this.groupService.getAll(this.params.organizationId),
+    })
       .pipe(takeUntil(this.destroy$))
-      .subscribe((collections) => {
+      .subscribe(({ collections, collectionDetails, organization, groups }) => {
         if (this.params.collectionId) {
           this.collection = collections.find((c) => c.id === this.collectionId);
           this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
@@ -67,10 +83,37 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
+          this.accessItems = [].concat(
+            groups.map(
+              (g) =>
+                ({
+                  id: g.id,
+                  type: AccessItemType.Group,
+                  labelName: g.name,
+                  listName: g.name,
+                  accessAllItems: g.accessAll,
+                } as AccessItemView)
+            )
+          );
+
+          const groupsById = new Map(groups.map((g) => [g.id, g]));
+
           this.formGroup.patchValue({
             name,
             externalId: this.collection.externalId,
             parent,
+            access: collectionDetails.groups.map((selection) => {
+              const group = groupsById.get(selection.id);
+
+              return {
+                id: group.id,
+                type: AccessItemType.Group,
+                listName: group.name,
+                labelName: group.name,
+                accessAllItems: group.accessAll,
+                readonlyPermission: mapToCollectionPermission(selection),
+              };
+            }),
           });
         } else {
           this.nestOptions = collections;
@@ -137,5 +180,23 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
   private close(result: CollectionDialogResult) {
     this.dialogRef.close(result);
+  }
+}
+
+function mapToCollectionPermission(selection: CollectionGroupSelectionView): CollectionPermission {
+  if (selection.readOnly && selection.hidePasswords) {
+    return CollectionPermission.ViewExceptPass;
+  }
+
+  if (selection.readOnly && !selection.hidePasswords) {
+    return CollectionPermission.View;
+  }
+
+  if (!selection.readOnly && selection.hidePasswords) {
+    return CollectionPermission.EditExceptPass;
+  }
+
+  if (!selection.readOnly && !selection.hidePasswords) {
+    return CollectionPermission.Edit;
   }
 }
