@@ -1,13 +1,17 @@
-import { SelectionReadOnlyResponse } from "../response/selectionReadOnlyResponse";
-
 import { View } from "./view";
+
+interface SelectionResponseLike {
+  id: string;
+  readOnly: boolean;
+  hidePasswords: boolean;
+}
 
 export class CollectionGroupSelectionView extends View {
   readonly id: string;
   readonly readOnly: boolean;
   readonly hidePasswords: boolean;
 
-  constructor(response?: SelectionReadOnlyResponse) {
+  constructor(response?: SelectionResponseLike) {
     super();
 
     if (!response) {

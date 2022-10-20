@@ -6,8 +6,12 @@ import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
+import { CollectionGroupSelectionView } from "@bitwarden/common/models/view/collection-group-selection-view";
+import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
 import {
   ButtonModule,
@@ -18,6 +22,7 @@ import {
 } from "@bitwarden/components";
 
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
+import { AccessSelectorModule } from "../access-selector";
 
 import {
   CollectionDialogComponent,
@@ -28,6 +33,7 @@ interface ProviderData {
   collectionId: string;
   organizationId: string;
   collections: CollectionAdminView[];
+  groups: GroupView[];
 }
 
 export default {
@@ -44,22 +50,31 @@ export default {
         FormFieldModule,
         ReactiveFormsModule,
         IconButtonModule,
+        AccessSelectorModule,
       ],
     }),
   ],
 } as Meta;
 
 const organizationId = Utils.newGuid();
-let collections = Array.from({ length: 10 }, (x, i) => createCollection(`Collection ${i}`));
+const groups = Array.from({ length: 10 }, (x, i) => createGroup(`Group ${i}`));
+const groupSelection = new CollectionGroupSelectionView({
+  id: groups[0].id,
+  readOnly: false,
+  hidePasswords: false,
+});
+let collections = Array.from({ length: 10 }, (x, i) =>
+  createCollection(`Collection ${i}`, [groupSelection])
+);
 collections = collections.concat(
-  collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`))
+  collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`, [groupSelection]))
 );
 
 const NewCollectionTemplate: Story<CollectionDialogComponent> = (
   args: CollectionDialogComponent
 ) => ({
   moduleMetadata: {
-    providers: providers({ collectionId: undefined, organizationId, collections }),
+    providers: providers({ collectionId: undefined, organizationId, collections, groups }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
 });
@@ -74,6 +89,7 @@ const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
       collectionId: collections[collections.length - 1].id,
       organizationId,
       collections,
+      groups,
     }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
@@ -97,6 +113,16 @@ function providers(data: ProviderData) {
     {
       provide: CollectionAdminService,
       useValue: new MockCollectionAdminService(data.collections, data.collectionId),
+    },
+    {
+      provide: OrganizationService,
+      useValue: {
+        get: () => Promise.resolve({ useGroups: true }) as any,
+      } as Partial<OrganizationService>,
+    },
+    {
+      provide: GroupServiceAbstraction,
+      useValue: { getAll: () => Promise.resolve(data.groups) } as Partial<GroupServiceAbstraction>,
     },
     {
       provide: PlatformUtilsService,
@@ -126,9 +152,21 @@ class MockCollectionAdminService implements Partial<CollectionAdminService> {
   }
 }
 
-function createCollection(name: string, id = Utils.newGuid()) {
+function createCollection(
+  name: string,
+  collectionGroups: CollectionGroupSelectionView[],
+  id = Utils.newGuid()
+) {
   const collection = new CollectionAdminView();
   collection.id = id;
   collection.name = name;
+  collection.groups = collectionGroups;
   return collection;
+}
+
+function createGroup(name: string, id = Utils.newGuid()) {
+  const group = new GroupView();
+  group.id = id;
+  group.name = name;
+  return group;
 }
