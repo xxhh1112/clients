@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ProjectView } from "@bitwarden/common/models/view/projectView";
+import { ProjectView } from "@bitwarden/common/models/view/project.view";
 
 import { ProjectService } from "../../projects/project.service";
 

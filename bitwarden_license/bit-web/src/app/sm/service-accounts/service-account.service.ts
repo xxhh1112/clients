@@ -4,10 +4,10 @@ import { Subject } from "rxjs";
 import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { ServiceAccountView } from "@bitwarden/common/models/view/service-account-view";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { ServiceAccountView } from "@bitwarden/common/models/view/service-account.view";
 
 import { ServiceAccountRequest } from "./requests/service-account.request";
 import { ServiceAccountResponse } from "./responses/service-account.response";

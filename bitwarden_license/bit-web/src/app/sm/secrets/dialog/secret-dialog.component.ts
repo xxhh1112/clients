@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { SecretView } from "@bitwarden/common/models/view/secretView";
+import { SecretView } from "@bitwarden/common/models/view/secret.view";
 
 import { SecretService } from "../secret.service";
 

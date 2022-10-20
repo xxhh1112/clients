@@ -2,7 +2,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { SecretListView } from "@bitwarden/common/models/view/secretListView";
+import { SecretListView } from "@bitwarden/common/models/view/secret-list.view";
 
 @Component({
   selector: "sm-secrets-list",

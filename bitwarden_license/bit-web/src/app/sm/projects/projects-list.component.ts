@@ -2,7 +2,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { ProjectListView } from "@bitwarden/common/models/view/projectListView";
+import { ProjectListView } from "@bitwarden/common/models/view/project-list.view";
 
 @Component({
   selector: "sm-projects-list",
