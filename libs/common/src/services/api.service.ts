@@ -1,6 +1,7 @@
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
 import { AppIdService } from "../abstractions/appId.service";
 import { EnvironmentService } from "../abstractions/environment.service";
+import { GroupResponse } from "../abstractions/group";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { TokenService } from "../abstractions/token.service";
 import { DeviceType } from "../enums/deviceType";
@@ -113,7 +114,6 @@ import {
 } from "../models/response/emergencyAccessResponse";
 import { ErrorResponse } from "../models/response/errorResponse";
 import { EventResponse } from "../models/response/eventResponse";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/groupResponse";
 import { IdentityCaptchaResponse } from "../models/response/identityCaptchaResponse";
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 import { IdentityTwoFactorResponse } from "../models/response/identityTwoFactorResponse";
@@ -164,8 +164,8 @@ import { TwoFactorEmailResponse } from "../models/response/twoFactorEmailRespons
 import { TwoFactorProviderResponse } from "../models/response/twoFactorProviderResponse";
 import { TwoFactorRecoverResponse } from "../models/response/twoFactorRescoverResponse";
 import {
-  TwoFactorWebAuthnResponse,
   ChallengeResponse,
+  TwoFactorWebAuthnResponse,
 } from "../models/response/twoFactorWebAuthnResponse";
 import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyResponse";
 import { UserKeyResponse } from "../models/response/userKeyResponse";
@@ -920,28 +920,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Groups APIs
 
-  async getGroupDetails(organizationId: string, id: string): Promise<GroupDetailsResponse> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups/" + id + "/details",
-      null,
-      true,
-      true
-    );
-    return new GroupDetailsResponse(r);
-  }
-
-  async getGroups(organizationId: string): Promise<ListResponse<GroupResponse>> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups",
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, GroupResponse);
-  }
-
   async getGroupUsers(organizationId: string, id: string): Promise<string[]> {
     const r = await this.send(
       "GET",
@@ -984,16 +962,6 @@ export class ApiService implements ApiServiceAbstraction {
       "PUT",
       "/organizations/" + organizationId + "/groups/" + id + "/users",
       request,
-      true,
-      false
-    );
-  }
-
-  deleteGroup(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/organizations/" + organizationId + "/groups/" + id,
-      null,
       true,
       false
     );

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -34,6 +35,7 @@ export class GroupAddEditComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private groupApiService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
@@ -48,7 +50,7 @@ export class GroupAddEditComponent implements OnInit {
       this.editMode = true;
       this.title = this.i18nService.t("editGroup");
       try {
-        const group = await this.apiService.getGroupDetails(this.organizationId, this.groupId);
+        const group = await this.groupApiService.get(this.organizationId, this.groupId);
         this.access = group.accessAll ? "all" : "selected";
         this.name = group.name;
         this.externalId = group.externalId;
@@ -137,7 +139,7 @@ export class GroupAddEditComponent implements OnInit {
     }
 
     try {
-      this.deletePromise = this.apiService.deleteGroup(this.organizationId, this.groupId);
+      this.deletePromise = this.groupApiService.delete(this.organizationId, this.groupId);
       await this.deletePromise;
       this.platformUtilsService.showToast(
         "success",

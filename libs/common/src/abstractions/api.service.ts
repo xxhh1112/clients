@@ -104,7 +104,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../models/response/emergencyAccessResponse";
 import { EventResponse } from "../models/response/eventResponse";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/groupResponse";
 import { IdentityCaptchaResponse } from "../models/response/identityCaptchaResponse";
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 import { IdentityTwoFactorResponse } from "../models/response/identityTwoFactorResponse";
@@ -161,6 +160,8 @@ import {
 import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyResponse";
 import { UserKeyResponse } from "../models/response/userKeyResponse";
 import { SendAccessView } from "../models/view/sendAccessView";
+
+import { GroupResponse } from "./group/responses/group-response";
 
 export abstract class ApiService {
   send: (
@@ -339,13 +340,10 @@ export abstract class ApiService {
     organizationUserId: string
   ) => Promise<any>;
 
-  getGroupDetails: (organizationId: string, id: string) => Promise<GroupDetailsResponse>;
-  getGroups: (organizationId: string) => Promise<ListResponse<GroupResponse>>;
   getGroupUsers: (organizationId: string, id: string) => Promise<string[]>;
   postGroup: (organizationId: string, request: GroupRequest) => Promise<GroupResponse>;
   putGroup: (organizationId: string, id: string, request: GroupRequest) => Promise<GroupResponse>;
   putGroupUsers: (organizationId: string, id: string, request: string[]) => Promise<any>;
-  deleteGroup: (organizationId: string, id: string) => Promise<any>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
 
   getOrganizationUser: (
