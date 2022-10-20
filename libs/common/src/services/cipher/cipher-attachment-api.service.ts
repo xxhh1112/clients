@@ -186,7 +186,7 @@ export class CipherAttachmentApiService implements CipherAttachmentApiServiceAbs
 
     const cData = new CipherData(response, cipher.collectionIds);
     if (!admin) {
-      await this.cipherService.upsert(cData);
+      await this.cipherService.upsert([cData]);
     }
     return new Cipher(cData);
   }

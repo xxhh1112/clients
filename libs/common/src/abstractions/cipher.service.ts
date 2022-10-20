@@ -35,7 +35,7 @@ export abstract class CipherService {
   saveNeverDomain: (domain: string) => Promise<void>;
   saveWithServer: (cipher: Cipher) => Promise<any>;
   saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
-  upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
+  upsert: (ciphers: CipherData[]) => Promise<any>;
   replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
   clear: (userId: string) => Promise<any>;
   moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;

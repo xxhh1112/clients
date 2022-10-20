@@ -601,31 +601,26 @@ export class CipherService implements CipherServiceAbstraction {
       response = await this.apiService.putCipher(cipher.id, request);
     }
 
-    const data = new CipherData(response, cipher.collectionIds);
+    const data = [new CipherData(response, cipher.collectionIds)];
     await this.upsert(data);
   }
 
   async saveCollectionsWithServer(cipher: Cipher): Promise<any> {
     const request = new CipherCollectionsRequest(cipher.collectionIds);
     await this.apiService.putCipherCollections(cipher.id, request);
-    const data = cipher.toCipherData();
+    const data = [cipher.toCipherData()];
     await this.upsert(data);
   }
 
-  async upsert(cipher: CipherData | CipherData[]): Promise<any> {
+  async upsert(cipher: CipherData[]): Promise<any> {
     let ciphers = await this.stateService.getEncryptedCiphers();
     if (ciphers == null) {
       ciphers = {};
     }
 
-    if (cipher instanceof CipherData) {
-      const c = cipher as CipherData;
+    (cipher as CipherData[]).forEach((c) => {
       ciphers[c.id] = c;
-    } else {
-      (cipher as CipherData[]).forEach((c) => {
-        ciphers[c.id] = c;
-      });
-    }
+    });
 
     await this.replace(ciphers);
   }
