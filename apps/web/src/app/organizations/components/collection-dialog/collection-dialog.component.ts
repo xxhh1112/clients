@@ -123,7 +123,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 labelName: group.name,
                 accessAllItems: false,
                 readonlyPermission: mapToCollectionPermission(selection),
-              } as AccessItemView;
+              };
             }),
             users.data.map((user) => {
               if (user.accessAll) {
@@ -134,7 +134,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                   labelName: user.name,
                   accessAllItems: true,
                   readonly: true,
-                } as AccessItemView;
+                };
               }
 
               const selection = userSelectionsById.get(user.id);
@@ -154,7 +154,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 labelName: user.name,
                 accessAllItems: false,
                 readonlyPermission: mapToCollectionPermission(selection),
-              } as AccessItemView;
+              };
             })
           );
 
