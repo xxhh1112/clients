@@ -26,11 +26,12 @@ export interface SecretOperation {
 export class SecretDialogComponent implements OnInit {
   formPromise: Promise<any>;
 
-  formGroup = new FormGroup({
+  protected formGroup = new FormGroup({
     name: new FormControl("", [Validators.required]),
     value: new FormControl("", [Validators.required]),
     notes: new FormControl(""),
   });
+  protected loading = false;
 
   constructor(
     public dialogRef: DialogRef,
@@ -50,12 +51,14 @@ export class SecretDialogComponent implements OnInit {
   }
 
   async loadData() {
+    this.loading = true;
     const secret: SecretView = await this.secretService.getBySecretId(this.data.secretId);
+    this.loading = false;
     this.formGroup.setValue({ name: secret.name, value: secret.value, notes: secret.note });
   }
 
   get title() {
-    return this.data.operation === OperationType.Add ? "addSecret" : "editSecret";
+    return this.data.operation === OperationType.Add ? "newSecret" : "editSecret";
   }
 
   async submit() {
