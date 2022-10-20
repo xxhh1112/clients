@@ -6,6 +6,10 @@ import { ProjectListView } from "@bitwarden/common/models/view/project-list.view
 import { DialogService } from "@bitwarden/components";
 
 import {
+  ProjectDeleteDialogComponent,
+  ProjectDeleteOperation,
+} from "./dialog/project-delete-dialog.component";
+import {
   OperationType,
   ProjectDialogComponent,
   ProjectOperation,
@@ -57,6 +61,14 @@ export class ProjectsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+      },
+    });
+  }
+
+  openDeleteProjectDialog(event: ProjectListView[]) {
+    this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
+      data: {
+        projects: event,
       },
     });
   }

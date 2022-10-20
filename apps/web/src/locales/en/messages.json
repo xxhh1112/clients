@@ -5467,16 +5467,16 @@
   "importSecrets":{
     "message":"Import Secrets"
   },
-  "secretsEmptyListTitle":{
+  "secretsNoItemsTitle":{
     "message":"No secrets to show"
   },
-  "secretsEmptyListMessage":{
+  "secretsNoItemsMessage":{
     "message": "To get started, add a new secret or import secrets."
   },
-  "serviceAccountsEmptyListTitle":{
+  "serviceAccountsNoItemsTitle":{
     "message":"Nothing to show yet"
   },
-  "serviceAccountsEmptyListMessage":{
+  "serviceAccountsNoItemsMessage":{
     "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets":{
@@ -5535,6 +5535,63 @@
   },
   "newSaTypeToFilter":{
     "message": "Type to Filter"
+  },
+  "deleteProjectsToast":{
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast":{
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message":  "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message":  "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage":{
+    "message":  "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage":{
+    "message":  "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage":{
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle":{
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage":{
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired":{
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage":{
+    "message": "The following projects could not be deleted:"
   },
   "softDeleteSuccessToast":{
     "message":"Secret sent to trash"
