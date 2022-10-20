@@ -266,7 +266,7 @@ p.lead {
 form,
 .form {
   .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 1.25rem;
 
     &:last-child {
       margin-bottom: 0;
@@ -490,6 +490,18 @@ app-root > #loading,
 
 .rounded-circle {
   border-radius: 50% !important;
+}
+
+// Text selection styles
+// Set explicit selection styles (assumes primary accent color has sufficient
+// contrast against the background, so its inversion is also still readable)
+// and suppress user selection for most elements (to make it more app-like)
+
+::selection {
+  @include themify($themes) {
+    color: themed("backgroundColor");
+    background-color: themed("primaryAccentColor");
+  }
 }
 
 h1,

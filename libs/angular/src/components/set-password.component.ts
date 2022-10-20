@@ -16,11 +16,11 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
 import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/models/request/organizationUserResetPasswordEnrollmentRequest";
-import { SetPasswordRequest } from "@bitwarden/common/models/request/setPasswordRequest";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
+import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/models/request/organization-user-reset-password-enrollment.request";
+import { SetPasswordRequest } from "@bitwarden/common/models/request/set-password.request";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
