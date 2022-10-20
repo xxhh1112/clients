@@ -453,10 +453,11 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.modal.close();
     }
 
+    const cipherDomain = await this.cipherService.get(cipher.id);
     const [modal, childComponent] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
-      async (comp) => (comp.cipherDomain = await this.cipherService.get(cipher.id))
+      (comp) => (comp.cipherDomain = cipherDomain)
     );
     this.modal = modal;
 
@@ -480,11 +481,11 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (this.modal != null) {
       this.modal.close();
     }
-
+    const cipherDomain = await this.cipherService.get(cipher.id);
     const [modal, childComponent] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      async (comp) => (comp.cipherDomain = await this.cipherService.get(cipher.id))
+      (comp) => (comp.cipherDomain = cipherDomain)
     );
     this.modal = modal;
 

@@ -216,13 +216,13 @@ export class VaultComponent implements OnInit, OnDestroy {
         return;
       }
     }
-
+    const cipherDomain = await this.cipherService.get(cipher.id);
     let madeAttachmentChanges = false;
     const [modal] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
-      async (comp) => {
-        comp.cipherDomain = await this.cipherService.get(cipher.id);
+      (comp) => {
+        comp.cipherDomain = cipherDomain;
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onUploadedAttachment.subscribe(() => (madeAttachmentChanges = true));
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
@@ -242,11 +242,12 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async shareCipher(cipher: CipherView) {
+    const cipherDomain = await this.cipherService.get(cipher.id);
     const [modal] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
-      async (comp) => {
-        comp.cipherDomain = await this.cipherService.get(cipher.id);
+      (comp) => {
+        comp.cipherDomain = cipherDomain;
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onSharedCipher.subscribe(async () => {
           modal.close();

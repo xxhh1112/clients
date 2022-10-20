@@ -187,13 +187,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
 
     let madeAttachmentChanges = false;
-
+    const cipherDomain = await this.cipherService.get(cipher.id);
     const [modal] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
-      async (comp) => {
+      (comp) => {
         comp.organization = this.organization;
-        comp.cipherDomain = await this.cipherService.get(cipher.id);
+        comp.cipherDomain = cipherDomain;
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onUploadedAttachment.subscribe(() => (madeAttachmentChanges = true));
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
