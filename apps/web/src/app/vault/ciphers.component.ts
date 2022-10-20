@@ -72,13 +72,17 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
   protected pageSizeLimit = 200;
   protected isAllChecked = false;
-  private didScroll = false;
-  private currentPagedCiphersCount = 0;
-  private currentPagedCollectionsCount = 0;
-  private refreshing = false;
+  protected didScroll = false;
+  protected currentPagedCiphersCount = 0;
+  protected currentPagedCollectionsCount = 0;
+  protected refreshing = false;
 
   get collections() {
     return this.activeFilter?.selectedCollectionNode?.children;
+  }
+
+  get hideCollections() {
+    return !(this.searchText?.length > 2);
   }
 
   constructor(
