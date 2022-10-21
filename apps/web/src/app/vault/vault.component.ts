@@ -28,7 +28,7 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { UpdateKeyComponent } from "../settings/update-key.component";
-import { RoutedVaultFilterService } from "../shared/services/vault/routed-vault-filter.service";
+import { RoutedVaultFilterService } from "../shared/vault-filter/routed-vault-filter.service";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";

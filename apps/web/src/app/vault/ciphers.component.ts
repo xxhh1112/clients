@@ -18,7 +18,7 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
-import { RoutedVaultFilterService } from "../shared/services/vault/routed-vault-filter.service";
+import { RoutedVaultFilterService } from "../shared/vault-filter/routed-vault-filter.service";
 
 const MaxCheckedCount = 500;
 

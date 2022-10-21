@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { SharedModule, LooseComponentsModule } from "../shared";
+import { VaultFilterModule as NewVaultFilterModule } from "../shared/vault-filter/vault-filter.module";
 
 import { CiphersComponent } from "./ciphers.component";
 import { OrganizationBadgeModule } from "./organization-badge/organization-badge.module";
@@ -17,6 +18,7 @@ import { VaultComponent } from "./vault.component";
     PipesModule,
     SharedModule,
     LooseComponentsModule,
+    NewVaultFilterModule,
   ],
   declarations: [VaultComponent, CiphersComponent],
   exports: [VaultComponent],
