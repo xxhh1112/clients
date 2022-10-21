@@ -13,6 +13,7 @@ export class VaultFilterService extends BaseVaultFilterService {
 
   allVaults = "allVaults";
   myVault = "myVault";
+  firstLoad = true;
 
   constructor(
     stateService: StateService,
@@ -34,11 +35,20 @@ export class VaultFilterService extends BaseVaultFilterService {
     this.vaultFilter.selectedOrganizationId = null;
   }
 
-  getVaultFilter() {
+  async loadSavedVaultFilter() {
+    const savedFilter = await this.stateService.getVaultFilter();
+    await this.setVaultFilter(savedFilter);
+    this.firstLoad = false;
+  }
+
+  async getVaultFilter() {
+    if (this.firstLoad === true) {
+      await this.loadSavedVaultFilter();
+    }
     return this.vaultFilter;
   }
 
-  setVaultFilter(filter: string) {
+  async setVaultFilter(filter: string) {
     if (filter === this.allVaults) {
       this.vaultFilter.myVaultOnly = false;
       this.vaultFilter.selectedOrganizationId = null;
@@ -49,6 +59,7 @@ export class VaultFilterService extends BaseVaultFilterService {
       this.vaultFilter.myVaultOnly = false;
       this.vaultFilter.selectedOrganizationId = filter;
     }
+    await this.stateService.setVaultFilter(filter);
   }
 
   clear() {
