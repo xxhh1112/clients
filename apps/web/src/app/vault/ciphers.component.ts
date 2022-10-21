@@ -18,6 +18,8 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
+import { CipherProviderService } from "../shared/services/vault/cipher-provider.service";
+
 const MaxCheckedCount = 500;
 
 @Component({
@@ -55,7 +57,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected passwordRepromptService: PasswordRepromptService,
     private logService: LogService,
     private organizationService: OrganizationService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private cipherProvider: CipherProviderService
   ) {
     super(searchService);
   }

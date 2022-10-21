@@ -28,6 +28,10 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { UpdateKeyComponent } from "../settings/update-key.component";
+import {
+  CipherProviderService,
+  PersonalVaultCipherProviderService,
+} from "../shared/services/vault/cipher-provider.service";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
@@ -45,6 +49,7 @@ const BroadcasterSubscriptionId = "VaultComponent";
 @Component({
   selector: "app-vault",
   templateUrl: "vault.component.html",
+  providers: [{ provide: CipherProviderService, useClass: PersonalVaultCipherProviderService }],
 })
 export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild("vaultFilter", { static: true }) filterComponent: VaultFilterComponent;
