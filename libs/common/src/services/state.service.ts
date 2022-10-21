@@ -2231,6 +2231,23 @@ export class StateService<
     );
   }
 
+  async getVaultFilter(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.settings?.vaultFilter;
+  }
+
+  async setVaultFilter(value: string, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.vaultFilter = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
   async getVaultTimeout(options?: StorageOptions): Promise<number> {
     const accountVaultTimeout = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
