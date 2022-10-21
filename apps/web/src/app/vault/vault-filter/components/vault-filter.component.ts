@@ -93,7 +93,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.filters = await this.buildAllFilters();
-    this.applyTypeFilter((await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>);
+    this.activeFilter.selectedCipherTypeNode =
+      (await this.getDefaultFilter()) as TreeNode<CipherTypeFilter>;
     this.isLoaded = true;
   }
 
