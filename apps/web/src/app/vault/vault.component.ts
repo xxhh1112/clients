@@ -75,6 +75,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   collections$ = this.refresh$.pipe(
     switchMap(() => from(this.collectionService.getAllDecrypted()))
   );
+  ciphers$ = this.refresh$.pipe(switchMap(() => from(this.cipherService.getAllDecrypted())));
 
   constructor(
     private syncService: SyncService,
