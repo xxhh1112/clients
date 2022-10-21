@@ -2,9 +2,7 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable, Subject, takeUntil, tap } from "rxjs";
 
-export interface NewVaultFilterModel {
-  collectionId?: string;
-}
+import { NewVaultFilterModel } from "./vault-filter.model";
 
 @Injectable()
 export class RoutedVaultFilterService implements OnDestroy {

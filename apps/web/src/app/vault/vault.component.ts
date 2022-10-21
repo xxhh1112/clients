@@ -72,6 +72,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   activeFilter: VaultFilter = new VaultFilter();
 
   private refresh$ = new BehaviorSubject<void>(null);
+  filter$ = this.filterService.filter$;
   collections$ = this.refresh$.pipe(
     switchMap(() => from(this.collectionService.getAllDecrypted()))
   );
@@ -95,7 +96,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private vaultFilterService: VaultFilterService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private filterService?: RoutedVaultFilterService
   ) {}
 
   async ngOnInit() {
