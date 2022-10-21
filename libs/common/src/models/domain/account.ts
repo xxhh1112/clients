@@ -230,6 +230,7 @@ export class AccountSettings {
   pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>();
   protectedPin?: string;
   settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
+  vaultFilter?: string;
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
   serverConfig?: ServerConfigData;
