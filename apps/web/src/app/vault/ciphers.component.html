@@ -73,7 +73,7 @@
     <ng-container body>
       <ng-container *ngIf="showCollections">
         <tr bitRow *ngFor="let col of filteredCollections">
-          <td bitCell class="tw-w-10">
+          <td bitCell class="tw-w-10" (click)="selectCollection(col)">
             <input
               *ngIf="organization && col.node.name !== 'Unassigned'"
               class="tw-cursor-pointer"
@@ -82,17 +82,17 @@
               appStopProp
             />
           </td>
-          <td bitCell class="tw-w-10">
+          <td bitCell class="tw-w-10" (click)="selectCollection(col)">
             <div class="icon" aria-hidden="true">
               <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
             </div>
           </td>
-          <td bitCell class="tw-font-bold">
+          <td bitCell class="tw-font-bold" (click)="selectCollection(col)">
             <button bitLink [linkType]="secondary" (click)="navigateCollection(col)">
               {{ col.node.name }}
             </button>
           </td>
-          <td bitCell class="tw-w-72">
+          <td bitCell class="tw-w-72" (click)="selectCollection(col)">
             <ng-container *ngIf="showOrganizationBadge">
               <app-org-badge
                 organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"

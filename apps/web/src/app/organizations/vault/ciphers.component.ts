@@ -163,7 +163,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
           break;
         }
         if (col.node.name !== "Unassigned") {
-          (col as any).checked = select;
+          this.checkCollection(col, select);
           collectionsSelected++;
         }
       }
@@ -180,6 +180,14 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     for (let i = 0; i < selectCount; i++) {
       this.checkCipher(this.ciphers[i], select);
     }
+  }
+
+  selectCollection(c: TreeNode<CollectionFilter>) {
+    this.checkCollection(c);
+  }
+
+  checkCollection(c: TreeNode<CollectionFilter>, select?: boolean) {
+    (c as any).checked = select == null ? !(c as any).checked : select;
   }
 
   getSelectedCollections(): TreeNode<CollectionFilter>[] {

@@ -234,6 +234,10 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.onEditCollectionsClicked.emit(c);
   }
 
+  selectCollection(c: TreeNode<CollectionFilter>) {
+    this.navigateCollection(c);
+  }
+
   navigateCollection(node: TreeNode<CollectionFilter>) {
     const filter = this.activeFilter;
     filter.selectedCollectionNode = node;
