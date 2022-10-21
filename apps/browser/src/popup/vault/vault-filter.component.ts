@@ -151,9 +151,9 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async load() {
-    this.vaultFilter = this.vaultFilterService.getVaultFilter();
+    this.vaultFilter = await this.vaultFilterService.getVaultFilter();
 
-    this.updateSelectedOrg();
+    await this.updateSelectedOrg();
     await this.loadCollectionsAndFolders();
     await this.loadCiphers();
 
@@ -278,13 +278,13 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     if (this.showSearching) {
       await this.search();
     }
-    this.updateSelectedOrg();
+    await this.updateSelectedOrg();
     await this.loadCollectionsAndFolders();
     this.getCounts();
   }
 
-  updateSelectedOrg() {
-    this.vaultFilter = this.vaultFilterService.getVaultFilter();
+  async updateSelectedOrg() {
+    this.vaultFilter = await this.vaultFilterService.getVaultFilter();
     if (this.vaultFilter.selectedOrganizationId != null) {
       this.selectedOrganization = this.vaultFilter.selectedOrganizationId;
     } else {

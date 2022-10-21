@@ -100,6 +100,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.vaultFilter = await this.vaultFilterService.getVaultFilter();
     this.organizations$ = this.organizationService.organizations$
       .pipe(takeUntil(this._destroy))
       .pipe(map((orgs) => orgs.sort((a, b) => a.name.localeCompare(b.name))));
@@ -184,7 +185,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
     this.isOpen = false;
   }
 
-  selectOrganization(organization: Organization) {
+  async selectOrganization(organization: Organization) {
     if (!organization.enabled) {
       this.platformUtilsService.showToast(
         "error",
@@ -198,9 +199,9 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
       this.close();
     }
   }
-  selectAllVaults() {
+  async selectAllVaults() {
     this._selectedVault.next(this.i18nService.t(this.vaultFilterService.allVaults));
-    this.vaultFilterService.setVaultFilter(this.vaultFilterService.allVaults);
+    await this.vaultFilterService.setVaultFilter(this.vaultFilterService.allVaults);
     this.onVaultSelectionChanged.emit();
     this.close();
   }

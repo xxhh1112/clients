@@ -126,12 +126,12 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     await this.load();
   }
 
-  addCipher() {
+  async addCipher() {
     this.router.navigate(["/add-cipher"], {
       queryParams: {
         name: this.hostname,
         uri: this.url,
-        selectedVault: this.vaultFilterService.getVaultFilter().selectedOrganizationId,
+        selectedVault: (await this.vaultFilterService.getVaultFilter()).selectedOrganizationId,
       },
     });
   }
@@ -238,6 +238,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.loginCiphers = [];
     this.cardCiphers = [];
     this.identityCiphers = [];
+
+    await this.vaultFilterService.loadSavedVaultFilter();
 
     ciphers.forEach((c) => {
       if (!this.vaultFilterService.filterCipherForSelectedVault(c)) {

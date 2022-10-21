@@ -77,8 +77,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   async ngOnInit() {
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
-    this.showOrganizations = this.organizationService.hasOrganizations();
-    this.vaultFilter = this.vaultFilterService.getVaultFilter();
+    this.showOrganizations = await this.organizationService.hasOrganizations();
+    this.vaultFilter = await this.vaultFilterService.getVaultFilter();
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       if (this.applySavedState) {
@@ -253,7 +253,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
   }
 
   async changeVaultSelection() {
-    this.vaultFilter = this.vaultFilterService.getVaultFilter();
+    this.vaultFilter = await this.vaultFilterService.getVaultFilter();
     await this.load(this.buildFilter(), this.deleted);
   }
 
