@@ -18,7 +18,7 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
-import { CipherProviderService } from "../shared/services/vault/cipher-provider.service";
+import { RoutedVaultFilterService } from "../shared/services/vault/routed-vault-filter.service";
 
 const MaxCheckedCount = 500;
 
@@ -58,9 +58,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     private logService: LogService,
     private organizationService: OrganizationService,
     private tokenService: TokenService,
-    private cipherProvider: CipherProviderService
+    private filterService?: RoutedVaultFilterService
   ) {
     super(searchService);
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.filterService.filter$.subscribe();
   }
 
   ngOnDestroy() {

@@ -54,8 +54,7 @@ export class CiphersComponent extends BaseCiphersComponent {
       passwordRepromptService,
       logService,
       organizationService,
-      tokenService,
-      undefined
+      tokenService
     );
   }
 
