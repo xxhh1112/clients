@@ -1,1 +1,9 @@
-vault filter
+<h3>Collections</h3>
+{{ collections.length }}
+<ul>
+  <ng-container *ngFor="let collection of collections">
+    <li>
+      <a routerLink="." [queryParams]="{ collectionId: collection.id }">{{ collection.name }}</a>
+    </li>
+  </ng-container>
+</ul>

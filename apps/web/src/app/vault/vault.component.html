@@ -4,15 +4,15 @@
       <div class="groupings">
         <div class="content">
           <div class="inner-content">
-            <app-new-vault-filter></app-new-vault-filter>
-            <!-- <app-vault-filter
+            <app-new-vault-filter [collections]="collections$ | async"></app-new-vault-filter>
+            <app-vault-filter
               #vaultFilter
               [activeFilter]="activeFilter"
               (activeFilterChanged)="applyVaultFilter($event)"
               (onSearchTextChanged)="filterSearchText($event)"
               (onAddFolder)="addFolder()"
               (onEditFolder)="editFolder($event)"
-            ></app-vault-filter> -->
+            ></app-vault-filter>
           </div>
         </div>
       </div>

@@ -8,12 +8,13 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { firstValueFrom } from "rxjs";
-import { first } from "rxjs/operators";
+import { BehaviorSubject, firstValueFrom, from } from "rxjs";
+import { first, switchMap } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -70,6 +71,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
+  private refresh$ = new BehaviorSubject<void>(null);
+  collections$ = this.refresh$.pipe(
+    switchMap(() => from(this.collectionService.getAllDecrypted()))
+  );
+
   constructor(
     private syncService: SyncService,
     private route: ActivatedRoute,
@@ -87,7 +93,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private vaultFilterService: VaultFilterService,
     private cipherService: CipherService,
-    private passwordRepromptService: PasswordRepromptService
+    private passwordRepromptService: PasswordRepromptService,
+    private collectionService: CollectionService
   ) {}
 
   async ngOnInit() {
@@ -106,6 +113,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showPremiumCallout =
         !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
 
+      this.refresh$.next(); // remove after collection service uses observables
       await this.vaultFilterService.reloadCollections();
       this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
@@ -147,6 +155,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           switch (message.command) {
             case "syncCompleted":
               if (message.successfully) {
+                this.refresh$.next(); // remove after collection service uses observables
                 await Promise.all([
                   this.vaultFilterService.reloadCollections(),
                   this.ciphersComponent.load(this.ciphersComponent.filter),
