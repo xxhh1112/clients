@@ -10,7 +10,7 @@
 **/gulpfile.js
 
 apps/browser/config/config.js
-apps/browser/src/content/autofill.js
+apps/browser/src/content/autofill_collect.js
 apps/browser/src/scripts/duo.js
 
 apps/desktop/desktop_native

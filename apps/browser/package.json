@@ -19,6 +19,10 @@
     "dist:safari:dmg": "npm run build:prod && gulp dist:safari:dmg",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:watch:all": "jest --watchAll"
+    "test:watch:all": "jest --watchAll",
+    "test:autofill:build": "rimraf tests-autofill-out && ttsc -p tests-autofill/tsconfig.json",
+    "test:autofill:run": "playwright test --project=chromium --debug",
+    "test:autofill:autofill": "webpack -c ./tests-autofill/webpack.config.js",
+    "test:autofill": "npm run test:autofill:build && npm run test:autofill:run"
   }
 }

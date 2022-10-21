@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "../tests-autofill-out",
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "paths": {
+      "@bitwarden/common/*": ["../../../libs/common/src/*"],
+      "@bitwarden/angular/*": ["../../../libs/angular/src/*"],
+      "@bitwarden/browser/*": ["../src/*"]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
+  },
+  "files": ["../src/globals.d.ts"],
+  "include": ["./*.spec.ts", "../src/*"]
+}

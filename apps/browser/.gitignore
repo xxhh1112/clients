@@ -5,3 +5,5 @@ src/safari/safari/app/
 build.safariextension
 xcuserdata
 *.hmap
+
+tests-autofill-out

@@ -1,15 +1,18 @@
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { TabMessage } from "../types/tab-messages";
 
+const navigator = (global as any).navigator;
+
 export class BrowserApi {
   static isWebExtensionsApi: boolean = typeof browser !== "undefined";
   static isSafariApi: boolean =
-    navigator.userAgent.indexOf(" Safari/") !== -1 &&
-    navigator.userAgent.indexOf(" Chrome/") === -1 &&
-    navigator.userAgent.indexOf(" Chromium/") === -1;
+    navigator?.userAgent?.indexOf(" Safari/") !== -1 &&
+    navigator?.userAgent?.indexOf(" Chrome/") === -1 &&
+    navigator?.userAgent?.indexOf(" Chromium/") === -1;
   static isChromeApi: boolean = !BrowserApi.isSafariApi && typeof chrome !== "undefined";
   static isFirefoxOnAndroid: boolean =
-    navigator.userAgent.indexOf("Firefox/") !== -1 && navigator.userAgent.indexOf("Android") !== -1;
+    navigator?.userAgent?.indexOf("Firefox/") !== -1 &&
+    navigator?.userAgent?.indexOf("Android") !== -1;
 
   static get manifestVersion() {
     return chrome.runtime.getManifest().manifest_version;
