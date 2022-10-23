@@ -11,6 +11,7 @@ import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -147,6 +148,11 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     { provide: CipherService, useFactory: getBgService<CipherService>("cipherService"), deps: [] },
+    {
+      provide: CipherAttachmentApiServiceAbstraction,
+      useFactory: getBgService<CipherAttachmentApiServiceAbstraction>("cipherAttachmentApiService"),
+      deps: [],
+    },
     {
       provide: CryptoFunctionService,
       useFactory: getBgService<CryptoFunctionService>("cryptoFunctionService"),
