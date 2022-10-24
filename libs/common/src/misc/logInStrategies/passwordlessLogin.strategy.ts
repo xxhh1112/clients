@@ -10,9 +10,8 @@ import { TokenService } from "../../abstractions/token.service";
 import { TwoFactorService } from "../../abstractions/twoFactor.service";
 import { AuthResult } from "../../models/domain/auth-result";
 import { PasswordlessLogInCredentials } from "../../models/domain/log-in-credentials";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
-import { PasswordTokenRequest } from "../../models/request/identityToken/passwordTokenRequest";
-import { TokenRequestTwoFactor } from "../../models/request/identityToken/tokenRequestTwoFactor";
+import { PasswordTokenRequest } from "../../models/request/identity-token/password-token.request";
+import { TokenTwoFactorRequest } from "../../models/request/identity-token/token-two-factor.request";
 
 import { LogInStrategy } from "./logIn.strategy";
 
@@ -21,14 +20,16 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     return this.tokenRequest.email;
   }
 
-  get masterPasswordHash() {
-    return this.tokenRequest.masterPasswordHash;
+  get accessCode() {
+    return this.passwordlessCredentials.accessCode;
+  }
+
+  get authRequestId() {
+    return this.passwordlessCredentials.authRequestId;
   }
 
   tokenRequest: PasswordTokenRequest;
-
-  private localHashedPassword: string;
-  private key: SymmetricCryptoKey;
+  private passwordlessCredentials: PasswordlessLogInCredentials;
 
   constructor(
     cryptoService: CryptoService,
@@ -56,12 +57,12 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   async onSuccessfulLogin() {
-    await this.cryptoService.setKey(this.key);
-    await this.cryptoService.setKeyHash(this.localHashedPassword);
+    await this.cryptoService.setKey(this.passwordlessCredentials.decKey);
+    await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
   }
 
   async logInTwoFactor(
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string
   ): Promise<AuthResult> {
     this.tokenRequest.captchaResponse = captchaResponse ?? this.captchaBypassToken;
@@ -69,8 +70,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   async logIn(credentials: PasswordlessLogInCredentials) {
-    this.localHashedPassword = credentials.localPasswordHash;
-    this.key = credentials.decKey;
+    this.passwordlessCredentials = credentials;
 
     this.tokenRequest = new PasswordTokenRequest(
       credentials.email,

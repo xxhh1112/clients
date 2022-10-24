@@ -16,8 +16,8 @@ import { TwoFactorProviderType } from "@bitwarden/common/enums/twoFactorProvider
 import { Utils } from "@bitwarden/common/misc/utils";
 import { WebAuthnIFrame } from "@bitwarden/common/misc/webauthn_iframe";
 import { AuthResult } from "@bitwarden/common/models/domain/auth-result";
-import { TokenRequestTwoFactor } from "@bitwarden/common/models/request/identityToken/tokenRequestTwoFactor";
-import { TwoFactorEmailRequest } from "@bitwarden/common/models/request/twoFactorEmailRequest";
+import { TokenTwoFactorRequest } from "@bitwarden/common/models/request/identity-token/token-two-factor.request";
+import { TwoFactorEmailRequest } from "@bitwarden/common/models/request/two-factor-email.request";
 import { TwoFactorProviders } from "@bitwarden/common/services/twoFactor.service";
 
 @Directive()
@@ -194,7 +194,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
   async doSubmit() {
     try {
       this.formPromise = this.authService.logInTwoFactor(
-        new TokenRequestTwoFactor(this.selectedProviderType, this.token, this.remember),
+        new TokenTwoFactorRequest(this.selectedProviderType, this.token, this.remember),
         this.captchaToken
       );
       const response: AuthResult = await this.formPromise;
@@ -244,6 +244,8 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
       request.email = this.authService.email;
       request.masterPasswordHash = this.authService.masterPasswordHash;
       request.deviceIdentifier = await this.appIdService.getAppId();
+      request.authRequestAccessCode = this.authService.accessCode;
+      request.authRequestId = this.authService.authRequestId;
       this.emailPromise = this.apiService.postTwoFactorEmail(request);
       await this.emailPromise;
       if (doToast) {
@@ -281,7 +283,8 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
     return (
       this.authService.authingWithPassword() ||
       this.authService.authingWithSso() ||
-      this.authService.authingWithApiKey()
+      this.authService.authingWithApiKey() ||
+      this.authService.authingWithPasswordless()
     );
   }
 
