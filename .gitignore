@@ -41,3 +41,4 @@ coverage
 documentation.json
 .eslintcache
 storybook-static
+apps/browser/playwright-report/
