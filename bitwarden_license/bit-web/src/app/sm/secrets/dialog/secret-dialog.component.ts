@@ -24,8 +24,6 @@ export interface SecretOperation {
   templateUrl: "./secret-dialog.component.html",
 })
 export class SecretDialogComponent implements OnInit {
-  formPromise: Promise<any>;
-
   protected formGroup = new FormGroup({
     name: new FormControl("", [Validators.required]),
     value: new FormControl("", [Validators.required]),
@@ -61,7 +59,7 @@ export class SecretDialogComponent implements OnInit {
     return this.data.operation === OperationType.Add ? "newSecret" : "editSecret";
   }
 
-  async submit() {
+  submit = async () => {
     if (this.formGroup.invalid) {
       return;
     }
@@ -74,17 +72,15 @@ export class SecretDialogComponent implements OnInit {
       await this.updateSecret(secretView);
     }
     this.dialogRef.close();
-  }
+  };
 
   private async createSecret(secretView: SecretView) {
-    this.formPromise = this.secretService.create(this.data.organizationId, secretView);
-    await this.formPromise;
+    await this.secretService.create(this.data.organizationId, secretView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("secretCreated"));
   }
 
   private async updateSecret(secretView: SecretView) {
-    this.formPromise = this.secretService.update(this.data.organizationId, secretView);
-    await this.formPromise;
+    await this.secretService.update(this.data.organizationId, secretView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("secretEdited"));
   }
 

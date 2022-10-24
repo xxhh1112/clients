@@ -23,7 +23,6 @@ export interface ServiceAccountOperation {
 export class ServiceAccountDialogComponent implements OnInit {
   projects: ProjectListView[];
   secrets: SecretListView[];
-  formPromise: Promise<any>;
 
   formGroup = new FormGroup({
     name: new FormControl("", [Validators.required]),
@@ -44,24 +43,20 @@ export class ServiceAccountDialogComponent implements OnInit {
     this.secrets = await this.secretService.getSecrets(this.data.organizationId);
   }
 
-  async submit() {
+  submit = async () => {
     if (this.formGroup.invalid) {
       return;
     }
 
     const serviceAccountView = this.getServiceAccountView();
-    this.formPromise = this.serviceAccountService.create(
-      this.data.organizationId,
-      serviceAccountView
-    );
-    await this.formPromise;
+    await this.serviceAccountService.create(this.data.organizationId, serviceAccountView);
     this.platformUtilsService.showToast(
       "success",
       null,
       this.i18nService.t("serviceAccountCreated")
     );
     this.dialogRef.close();
-  }
+  };
 
   private getServiceAccountView() {
     const serviceAccountView = new ServiceAccountView();

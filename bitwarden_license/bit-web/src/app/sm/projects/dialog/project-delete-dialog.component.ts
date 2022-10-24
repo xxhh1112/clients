@@ -30,8 +30,6 @@ export interface ProjectDeleteOperation {
   templateUrl: "./project-delete-dialog.component.html",
 })
 export class ProjectDeleteDialogComponent implements OnInit {
-  formPromise: Promise<any>;
-
   formGroup = new FormGroup({
     confirmDelete: new FormControl("", [
       Validators.required,
