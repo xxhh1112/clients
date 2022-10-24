@@ -48,7 +48,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onAttachmentsClicked = new EventEmitter<CipherView>();
   @Output() onShareClicked = new EventEmitter<CipherView>();
-  @Output() onEditCollectionsClicked = new EventEmitter<CipherView>();
+  @Output() onEditCipherCollectionsClicked = new EventEmitter<CipherView>();
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
 
@@ -230,8 +230,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.onShareClicked.emit(c);
   }
 
-  editCollections(c: CipherView) {
-    this.onEditCollectionsClicked.emit(c);
+  editCipherCollections(c: CipherView) {
+    this.onEditCipherCollectionsClicked.emit(c);
   }
 
   selectCollection(c: TreeNode<CollectionFilter>) {
