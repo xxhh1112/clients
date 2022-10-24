@@ -1,5 +1,5 @@
 import { GroupResponse } from "../../abstractions/group";
-import { SelectionReadOnlyResponse } from "../../models/response/selectionReadOnlyResponse";
+import { SelectionReadOnlyResponse } from "../response/selection-read-only.response";
 
 import { View } from "./view";
 

@@ -1,15 +1,15 @@
 import { Observable } from "rxjs";
 
 import { Organization } from "@bitwarden/common/src/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/src/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/src/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/src/models/view/folderView";
+import { TreeNode } from "@bitwarden/common/src/models/domain/tree-node";
+import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/src/models/view/folder.view";
 
 import {
-  FolderFilter,
-  CollectionFilter,
-  OrganizationFilter,
   CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
 } from "../../shared/models/vault-filter.type";
 
 export abstract class VaultFilterService {

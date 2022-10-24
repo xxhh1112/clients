@@ -2,7 +2,7 @@ import { Component, InjectionToken, Injector, Input, OnDestroy, OnInit } from "@
 import { Subject, takeUntil } from "rxjs";
 
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/treeNode";
+import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/tree-node";
 
 import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
 import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";

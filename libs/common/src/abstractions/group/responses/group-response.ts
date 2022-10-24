@@ -1,5 +1,5 @@
-import { BaseResponse } from "../../../models/response/baseResponse";
-import { SelectionReadOnlyResponse } from "../../../models/response/selectionReadOnlyResponse";
+import { BaseResponse } from "../../../models/response/base.response";
+import { SelectionReadOnlyResponse } from "../../../models/response/selection-read-only.response";
 
 export class GroupResponse extends BaseResponse {
   id: string;

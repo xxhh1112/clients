@@ -1,7 +1,7 @@
-import { CollectionGroupDetailsResponse } from "../../models/response/collectionResponse";
+import { CollectionGroupDetailsResponse } from "../response/collection.response";
 
 import { CollectionGroupSelectionView } from "./collection-group-selection-view";
-import { CollectionView } from "./collectionView";
+import { CollectionView } from "./collection.view";
 
 export class CollectionAdminView extends CollectionView {
   groups: CollectionGroupSelectionView[] = [];

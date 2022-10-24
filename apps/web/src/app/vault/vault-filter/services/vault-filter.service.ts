@@ -2,14 +2,14 @@ import { Injectable, OnDestroy } from "@angular/core";
 import {
   BehaviorSubject,
   combineLatestWith,
+  firstValueFrom,
+  map,
   Observable,
   of,
-  Subject,
-  takeUntil,
-  map,
-  switchMap,
   ReplaySubject,
-  firstValueFrom,
+  Subject,
+  switchMap,
+  takeUntil,
 } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -22,15 +22,15 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
 import {
-  FolderFilter,
-  CollectionFilter,
-  OrganizationFilter,
   CipherTypeFilter,
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
 } from "../shared/models/vault-filter.type";
 
 import { VaultFilterService as VaultFilterServiceAbstraction } from "./abstractions/vault-filter.service";

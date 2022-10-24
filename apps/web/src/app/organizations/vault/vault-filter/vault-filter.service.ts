@@ -9,11 +9,11 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CollectionData } from "@bitwarden/common/models/data/collectionData";
+import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 

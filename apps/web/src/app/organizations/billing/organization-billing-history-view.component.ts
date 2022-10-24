@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
-import { BillingHistoryResponse } from "@bitwarden/common/models/response/billingHistoryResponse";
+import { BillingHistoryResponse } from "@bitwarden/common/models/response/billing-history.response";
 
 @Component({
   selector: "app-org-billing-history-view",

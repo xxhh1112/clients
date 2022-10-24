@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 
 import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 import { TransactionType } from "@bitwarden/common/enums/transactionType";
-import { BillingHistoryResponse } from "@bitwarden/common/models/response/billingHistoryResponse";
+import { BillingHistoryResponse } from "@bitwarden/common/models/response/billing-history.response";
 
 @Component({
   selector: "app-billing-history",

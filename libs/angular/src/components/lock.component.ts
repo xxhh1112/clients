@@ -17,9 +17,9 @@ import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaul
 import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { SecretVerificationRequest } from "@bitwarden/common/models/request/secret-verification.request";
 
 @Directive()
 export class LockComponent implements OnInit, OnDestroy {

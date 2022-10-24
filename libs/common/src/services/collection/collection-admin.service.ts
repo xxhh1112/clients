@@ -1,14 +1,14 @@
 import { ApiService } from "../../abstractions/api.service";
 import { CollectionAdminService as CollectionAdminServiceAbstraction } from "../../abstractions/collection/collection-admin.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
-import { EncString } from "../../models/domain/encString";
-import { CollectionRequest } from "../../models/request/collectionRequest";
+import { EncString } from "../../models/domain/enc-string";
+import { CollectionRequest } from "../../models/request/collection.request";
 import {
   CollectionGroupDetailsResponse,
   CollectionResponse,
-} from "../../models/response/collectionResponse";
+} from "../../models/response/collection.response";
 import { CollectionAdminView } from "../../models/view/collection-admin-view";
-import { CollectionView } from "../../models/view/collectionView";
+import { CollectionView } from "../../models/view/collection.view";
 
 export class CollectionAdminService implements CollectionAdminServiceAbstraction {
   constructor(private apiService: ApiService, private cryptoService: CryptoService) {}

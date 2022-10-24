@@ -10,8 +10,8 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { CollectionGroupSelectionView } from "@bitwarden/common/src/models/view/collection-group-selection-view";
+import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators } from "@bitwarden/components";
 
 import { AccessItemType, AccessItemView, CollectionPermission } from "../access-selector";

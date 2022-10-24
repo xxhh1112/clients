@@ -162,7 +162,7 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: web-*-cloud-COMMERCIAL.zip
 
-      - name: Download latest cloud asset
+      - name: Download latest cloud asset (Dry Run)
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -172,7 +172,6 @@ jobs:
           branch: master
           artifacts: web-*-cloud-COMMERCIAL.zip
 
-      # This should result in a build directory in the current working directory
       - name: Unzip build asset
         working-directory: apps/web
         run: unzip web-*-cloud-COMMERCIAL.zip

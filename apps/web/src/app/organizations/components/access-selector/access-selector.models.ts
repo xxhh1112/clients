@@ -1,7 +1,7 @@
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
-import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selectionReadOnlyResponse";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selection-read-only.response";
 import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
 /**

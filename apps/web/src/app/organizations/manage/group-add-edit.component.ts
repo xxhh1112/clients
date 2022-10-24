@@ -6,12 +6,12 @@ import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { CollectionData } from "@bitwarden/common/models/data/collectionData";
+import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
-import { GroupRequest } from "@bitwarden/common/models/request/groupRequest";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
-import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collectionResponse";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+import { GroupRequest } from "@bitwarden/common/models/request/group.request";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 @Component({
   selector: "app-group-add-edit",

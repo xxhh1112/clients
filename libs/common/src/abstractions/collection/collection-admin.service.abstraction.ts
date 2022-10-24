@@ -1,5 +1,5 @@
 import { CollectionAdminView } from "../../models/view/collection-admin-view";
-import { CollectionView } from "../../models/view/collectionView";
+import { CollectionView } from "../../models/view/collection.view";
 
 export class CollectionAdminService {
   getAll: (organizationId: string) => Promise<CollectionView[]>;
