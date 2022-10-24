@@ -3,6 +3,7 @@ import { CollectionAdminService as CollectionAdminServiceAbstraction } from "../
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EncString } from "../../models/domain/enc-string";
 import { CollectionRequest } from "../../models/request/collection.request";
+import { SelectionReadOnlyRequest } from "../../models/request/selection-read-only.request";
 import {
   CollectionGroupDetailsResponse,
   CollectionResponse,
@@ -98,11 +99,9 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
     const collection = new CollectionRequest();
     collection.externalId = model.externalId;
     collection.name = (await this.cryptoService.encrypt(model.name, key)).encryptedString;
-    collection.groups = collection.groups.map((group) => ({
-      id: group.id,
-      hidePasswords: group.hidePasswords,
-      readOnly: group.readOnly,
-    }));
+    collection.groups = model.groups.map(
+      (group) => new SelectionReadOnlyRequest(group.id, group.readOnly, group.hidePasswords)
+    );
     return collection;
   }
 }

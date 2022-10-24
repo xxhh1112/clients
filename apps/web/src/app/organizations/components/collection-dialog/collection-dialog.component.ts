@@ -10,11 +10,16 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
-import { CollectionGroupSelectionView } from "@bitwarden/common/src/models/view/collection-group-selection-view";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators } from "@bitwarden/components";
 
-import { AccessItemType, AccessItemView, CollectionPermission } from "../access-selector";
+import {
+  AccessItemType,
+  AccessItemValue,
+  AccessItemView,
+  convertToPermission,
+  convertToSelectionView,
+} from "../access-selector";
 
 export interface CollectionEditDialogParams {
   collectionId?: string;
@@ -46,7 +51,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
     parent: null as string | null,
-    access: [[] as AccessItemView[]],
+    access: [[] as AccessItemValue[]],
   });
 
   constructor(
@@ -122,7 +127,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 listName: group.name,
                 labelName: group.name,
                 accessAllItems: false,
-                readonlyPermission: mapToCollectionPermission(selection),
+                readonlyPermission: convertToPermission(selection),
               };
             }),
             users.data.map((user) => {
@@ -153,7 +158,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 listName: user.name,
                 labelName: user.name,
                 accessAllItems: false,
-                readonlyPermission: mapToCollectionPermission(selection),
+                readonlyPermission: convertToPermission(selection),
               };
             })
           );
@@ -193,6 +198,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     collectionView.id = this.params.collectionId;
     collectionView.organizationId = this.params.organizationId;
     collectionView.externalId = this.formGroup.controls.externalId.value;
+    collectionView.groups = this.formGroup.controls.access.value
+      .filter((v) => v.type === AccessItemType.Group)
+      .map(convertToSelectionView);
 
     const parent = this.formGroup.controls.parent.value;
     if (parent) {
@@ -231,23 +239,5 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
   private close(result: CollectionDialogResult) {
     this.dialogRef.close(result);
-  }
-}
-
-function mapToCollectionPermission(selection: CollectionGroupSelectionView): CollectionPermission {
-  if (selection.readOnly && selection.hidePasswords) {
-    return CollectionPermission.ViewExceptPass;
-  }
-
-  if (selection.readOnly && !selection.hidePasswords) {
-    return CollectionPermission.View;
-  }
-
-  if (!selection.readOnly && selection.hidePasswords) {
-    return CollectionPermission.EditExceptPass;
-  }
-
-  if (!selection.readOnly && !selection.hidePasswords) {
-    return CollectionPermission.Edit;
   }
 }

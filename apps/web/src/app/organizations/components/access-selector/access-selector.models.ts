@@ -1,8 +1,7 @@
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
-import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selection-read-only.response";
-import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
+import { CollectionGroupSelectionView } from "@bitwarden/common/models/view/collection-group-selection-view";
+import { SelectItemView } from "@bitwarden/components";
 
 /**
  * Permission options that replace/correspond with readOnly and hidePassword server fields.
@@ -79,7 +78,7 @@ export type AccessItemValue = {
  * for the dropdown in the AccessSelectorComponent
  * @param value
  */
-export const convertToPermission = (value: SelectionReadOnlyResponse) => {
+export const convertToPermission = (value: CollectionGroupSelectionView) => {
   if (value.readOnly) {
     return value.hidePasswords ? CollectionPermission.ViewExceptPass : CollectionPermission.View;
   } else {
@@ -92,12 +91,12 @@ export const convertToPermission = (value: SelectionReadOnlyResponse) => {
  * to determine the values for `readOnly` and `hidePassword`
  * @param value
  */
-export const convertToSelectionReadOnly = (value: AccessItemValue) => {
-  return new SelectionReadOnlyRequest(
-    value.id,
-    readOnly(value.permission),
-    hidePassword(value.permission)
-  );
+export const convertToSelectionView = (value: AccessItemValue) => {
+  return new CollectionGroupSelectionView({
+    id: value.id,
+    readOnly: readOnly(value.permission),
+    hidePasswords: hidePassword(value.permission),
+  });
 };
 
 const readOnly = (perm: CollectionPermission) =>
