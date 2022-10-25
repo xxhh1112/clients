@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
-import { first } from "rxjs/operators";
+import { first, withLatestFrom } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -73,70 +73,68 @@ export class VaultComponent implements OnInit, OnDestroy {
     private passwordRepromptService: PasswordRepromptService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.trashCleanupWarning = this.i18nService.t(
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
         : "trashCleanupWarning"
     );
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.params.subscribe(async (params: any) => {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.route.parent.params.subscribe((params) => {
       this.organization = this.organizationService.get(params.organizationId);
+    });
 
-      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-      this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-        this.ciphersComponent.searchText = this.vaultFilterComponent.searchText = qParams.search;
-        if (!this.organization.canViewAllCollections) {
-          await this.syncService.fullSync(false);
-          this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-            this.ngZone.run(async () => {
-              switch (message.command) {
-                case "syncCompleted":
-                  if (message.successfully) {
-                    await Promise.all([
-                      this.vaultFilterService.reloadCollections(),
-                      this.ciphersComponent.refresh(),
-                    ]);
-                    this.changeDetectorRef.detectChanges();
-                  }
-                  break;
-              }
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.route.queryParams.pipe(first()).subscribe((qParams) => {
+      this.ciphersComponent.searchText = this.vaultFilterComponent.searchText = qParams.search;
+    });
+
+    this.route.queryParams
+      // verify that the organization has been set
+      .pipe(withLatestFrom(this.route.parent.params))
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+      .subscribe(async ([qParams, params]) => {
+        const cipherId = getCipherIdFromParams(qParams);
+        if (cipherId) {
+          if (
+            // Handle users with implicit collection access since they use the admin endpoint
+            this.organization.canUseAdminCollections ||
+            (await this.cipherService.get(cipherId)) != null
+          ) {
+            this.editCipherId(cipherId);
+          } else {
+            this.platformUtilsService.showToast(
+              "error",
+              this.i18nService.t("errorOccurred"),
+              this.i18nService.t("unknownCipher")
+            );
+            this.router.navigate([], {
+              queryParams: { cipherId: null, itemId: null },
+              queryParamsHandling: "merge",
             });
-          });
-        }
-
-        if (qParams.viewEvents != null) {
-          const cipher = this.ciphersComponent.ciphers.filter((c) => c.id === qParams.viewEvents);
-          if (cipher.length > 0) {
-            this.viewEvents(cipher[0]);
           }
         }
+      });
 
-        /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-        this.route.queryParams.subscribe(async (params) => {
-          const cipherId = getCipherIdFromParams(params);
-          if (cipherId) {
-            if (
-              // Handle users with implicit collection access since they use the admin endpoint
-              this.organization.canUseAdminCollections ||
-              (await this.cipherService.get(cipherId)) != null
-            ) {
-              this.editCipherId(cipherId);
-            } else {
-              this.platformUtilsService.showToast(
-                "error",
-                this.i18nService.t("errorOccurred"),
-                this.i18nService.t("unknownCipher")
-              );
-              this.router.navigate([], {
-                queryParams: { cipherId: null, itemId: null },
-                queryParamsHandling: "merge",
-              });
-            }
+    if (!this.organization.canUseAdminCollections) {
+      await this.syncService.fullSync(false);
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+      this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+        this.ngZone.run(async () => {
+          switch (message.command) {
+            case "syncCompleted":
+              if (message.successfully) {
+                await Promise.all([
+                  this.vaultFilterService.reloadCollections(),
+                  this.ciphersComponent.refresh(),
+                ]);
+                this.changeDetectorRef.detectChanges();
+              }
+              break;
           }
         });
       });
-    });
+    }
   }
 
   ngOnDestroy() {
