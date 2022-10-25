@@ -30,7 +30,7 @@ export class BulkDeleteComponent {
 
   async submit() {
     const deletePromises: Promise<void>[] = [];
-    if (this.cipherIds.length) {
+    if (this.cipherIds) {
       if (!this.organization || !this.organization.canEditAnyCollection) {
         deletePromises.push(this.deleteCiphers());
       } else {
@@ -38,7 +38,7 @@ export class BulkDeleteComponent {
       }
     }
 
-    if (this.collectionIds.length) {
+    if (this.collectionIds) {
       deletePromises.push(this.deleteCollections());
     }
 
@@ -46,14 +46,14 @@ export class BulkDeleteComponent {
     await this.formPromise;
 
     this.onDeleted.emit();
-    if (this.cipherIds.length) {
+    if (this.cipherIds) {
       this.platformUtilsService.showToast(
         "success",
         null,
         this.i18nService.t(this.permanent ? "permanentlyDeletedItems" : "deletedItems")
       );
     }
-    if (this.collectionIds.length) {
+    if (this.collectionIds) {
       this.platformUtilsService.showToast(
         "success",
         null,
