@@ -9,8 +9,8 @@ import { CollectionAdminService } from "@bitwarden/common/abstractions/collectio
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { CollectionAccessSelectionView } from "@bitwarden/common/models/view/collection-access-selection-view";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
-import { CollectionGroupSelectionView } from "@bitwarden/common/models/view/collection-group-selection-view";
 import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
 import {
@@ -58,7 +58,7 @@ export default {
 
 const organizationId = Utils.newGuid();
 const groups = Array.from({ length: 10 }, (x, i) => createGroup(`Group ${i}`));
-const groupSelection = new CollectionGroupSelectionView({
+const groupSelection = new CollectionAccessSelectionView({
   id: groups[0].id,
   readOnly: false,
   hidePasswords: false,
@@ -154,7 +154,7 @@ class MockCollectionAdminService implements Partial<CollectionAdminService> {
 
 function createCollection(
   name: string,
-  collectionGroups: CollectionGroupSelectionView[],
+  collectionGroups: CollectionAccessSelectionView[],
   id = Utils.newGuid()
 ) {
   const collection = new CollectionAdminView();

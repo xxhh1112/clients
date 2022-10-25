@@ -1,6 +1,6 @@
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { CollectionGroupSelectionView } from "@bitwarden/common/models/view/collection-group-selection-view";
+import { CollectionAccessSelectionView } from "@bitwarden/common/models/view/collection-access-selection-view";
 import { SelectItemView } from "@bitwarden/components";
 
 /**
@@ -78,7 +78,7 @@ export type AccessItemValue = {
  * for the dropdown in the AccessSelectorComponent
  * @param value
  */
-export const convertToPermission = (value: CollectionGroupSelectionView) => {
+export const convertToPermission = (value: CollectionAccessSelectionView) => {
   if (value.readOnly) {
     return value.hidePasswords ? CollectionPermission.ViewExceptPass : CollectionPermission.View;
   } else {
@@ -92,7 +92,7 @@ export const convertToPermission = (value: CollectionGroupSelectionView) => {
  * @param value
  */
 export const convertToSelectionView = (value: AccessItemValue) => {
-  return new CollectionGroupSelectionView({
+  return new CollectionAccessSelectionView({
     id: value.id,
     readOnly: readOnly(value.permission),
     hidePasswords: hidePassword(value.permission),

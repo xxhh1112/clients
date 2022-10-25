@@ -1,10 +1,10 @@
 import { CollectionGroupDetailsResponse } from "../response/collection.response";
 
-import { CollectionGroupSelectionView } from "./collection-group-selection-view";
+import { CollectionAccessSelectionView } from "./collection-access-selection-view";
 import { CollectionView } from "./collection.view";
 
 export class CollectionAdminView extends CollectionView {
-  groups: CollectionGroupSelectionView[] = [];
+  groups: CollectionAccessSelectionView[] = [];
 
   constructor(response?: CollectionGroupDetailsResponse) {
     super(response);
@@ -14,7 +14,7 @@ export class CollectionAdminView extends CollectionView {
     }
 
     this.groups = response.groups
-      ? response.groups.map((g) => new CollectionGroupSelectionView(g))
+      ? response.groups.map((g) => new CollectionAccessSelectionView(g))
       : [];
   }
 }

@@ -6,7 +6,7 @@ interface SelectionResponseLike {
   hidePasswords: boolean;
 }
 
-export class CollectionGroupSelectionView extends View {
+export class CollectionAccessSelectionView extends View {
   readonly id: string;
   readonly readOnly: boolean;
   readonly hidePasswords: boolean;
