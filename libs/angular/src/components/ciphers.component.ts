@@ -25,7 +25,7 @@ export class CiphersComponent {
   constructor(protected searchService: SearchService) {}
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
-    this.deleted = deleted || false;
+    this.deleted = deleted ?? false;
     await this.applyFilter(filter);
     this.loaded = true;
   }
