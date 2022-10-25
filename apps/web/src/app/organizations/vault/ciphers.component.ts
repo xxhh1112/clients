@@ -92,7 +92,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
 
   async setOrganization() {
     this.groups = (await this.apiService.getGroups(this.organization?.id)).data;
-    this.allCiphers = await this.getCiphers();
+    this.allCiphers = await this.loadCiphers();
   }
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
@@ -103,12 +103,12 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
   }
 
   async refresh() {
-    this.allCiphers = await this.getCiphers();
+    this.allCiphers = await this.loadCiphers();
     await this.refreshCollections();
     super.refresh();
   }
 
-  async getCiphers(): Promise<CipherView[]> {
+  async loadCiphers(): Promise<CipherView[]> {
     if (this.organization?.canEditAnyCollection) {
       this.accessEvents = this.organization?.useEvents;
       return await this.cipherService.getAllFromApiForOrganization(this.organization?.id);
@@ -189,12 +189,12 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     (c as any).checked = select == null ? !(c as any).checked : select;
   }
 
-  getSelectedCollections(): TreeNode<CollectionFilter>[] {
+  get selectedCollections(): TreeNode<CollectionFilter>[] {
     return this.activeFilter.selectedCollectionNode?.children.filter((c) => !!(c as any).checked);
   }
 
-  getSelectedCollectionIds(): string[] {
-    return this.getSelectedCollections()?.map((c) => c.node.id);
+  get selectedCollectionIds(): string[] {
+    return this.selectedCollections?.map((c) => c.node.id);
   }
 
   async editCollectionInfo(c: CollectionView) {
@@ -244,7 +244,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     }
 
     const selectedCipherIds = this.getSelectedCipherIds();
-    const selectedCollectionIds = this.deleted ? null : this.getSelectedCollectionIds();
+    const selectedCollectionIds = this.deleted ? null : this.selectedCollectionIds;
 
     if (!selectedCipherIds?.length && !selectedCollectionIds?.length) {
       this.platformUtilsService.showToast(
