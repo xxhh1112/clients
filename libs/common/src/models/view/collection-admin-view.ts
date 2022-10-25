@@ -5,6 +5,7 @@ import { CollectionView } from "./collection.view";
 
 export class CollectionAdminView extends CollectionView {
   groups: CollectionAccessSelectionView[] = [];
+  users: CollectionAccessSelectionView[] = [];
 
   constructor(response?: CollectionGroupDetailsResponse) {
     super(response);
@@ -15,6 +16,10 @@ export class CollectionAdminView extends CollectionView {
 
     this.groups = response.groups
       ? response.groups.map((g) => new CollectionAccessSelectionView(g))
+      : [];
+
+    this.users = response.users
+      ? response.users.map((g) => new CollectionAccessSelectionView(g))
       : [];
   }
 }

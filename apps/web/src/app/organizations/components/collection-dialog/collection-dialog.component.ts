@@ -201,6 +201,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     collectionView.groups = this.formGroup.controls.access.value
       .filter((v) => v.type === AccessItemType.Group)
       .map(convertToSelectionView);
+    collectionView.users = this.formGroup.controls.access.value
+      .filter((v) => v.type === AccessItemType.Member)
+      .map(convertToSelectionView);
 
     const parent = this.formGroup.controls.parent.value;
     if (parent) {

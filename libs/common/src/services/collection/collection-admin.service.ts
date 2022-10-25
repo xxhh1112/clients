@@ -102,6 +102,9 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
     collection.groups = model.groups.map(
       (group) => new SelectionReadOnlyRequest(group.id, group.readOnly, group.hidePasswords)
     );
+    collection.users = model.users.map(
+      (user) => new SelectionReadOnlyRequest(user.id, user.readOnly, user.hidePasswords)
+    );
     return collection;
   }
 }
