@@ -44,7 +44,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
 
   groups: GroupResponse[] = [];
   accessEvents = false;
-  showOrganizationBadge = false;
 
   protected allCiphers: CipherView[] = [];
 

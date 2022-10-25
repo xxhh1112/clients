@@ -22,8 +22,8 @@
         </th>
         <th bitCell>{{ "name" | i18n }}</th>
         <th bitCell>
-          <ng-container *ngIf="showOrganizationBadge">{{ "owner" | i18n }}</ng-container>
-          <ng-container *ngIf="!showOrganizationBadge">
+          <ng-container *ngIf="!organization">{{ "owner" | i18n }}</ng-container>
+          <ng-container *ngIf="organization">
             {{ (activeFilter.selectedCollectionNode ? "groups" : "collections") | i18n }}
           </ng-container>
         </th>
@@ -93,7 +93,7 @@
             </button>
           </td>
           <td bitCell class="tw-w-72" (click)="selectCollection(col)">
-            <ng-container *ngIf="showOrganizationBadge">
+            <ng-container *ngIf="!organization">
               <app-org-badge
                 organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
                 profileName="{{ profileName }}"
@@ -101,7 +101,7 @@
               >
               </app-org-badge>
             </ng-container>
-            <ng-container *ngIf="!showOrganizationBadge && activeFilter.selectedCollectionNode">
+            <ng-container *ngIf="organization && activeFilter.selectedCollectionNode">
               <app-group-badge
                 *ngIf="col.node.groups"
                 [selectedGroups]="col.node.groups"
@@ -187,7 +187,7 @@
           <small appStopProp>{{ c.subTitle }}</small>
         </td>
         <td bitCell class="tw-w-72">
-          <ng-container *ngIf="showOrganizationBadge">
+          <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ c.organizationId | orgNameFromId: organizations }}"
               profileName="{{ profileName }}"
@@ -195,7 +195,7 @@
             >
             </app-org-badge>
           </ng-container>
-          <ng-container *ngIf="!showOrganizationBadge && !activeFilter.selectedCollectionNode">
+          <ng-container *ngIf="organization && !activeFilter.selectedCollectionNode">
             <app-collection-badge
               *ngIf="c.collectionIds"
               [collectionIds]="c.collectionIds"

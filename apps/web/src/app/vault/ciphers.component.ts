@@ -68,7 +68,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   userHasPremiumAccess = false;
   organizations: Organization[] = [];
   profileName: string;
-  showOrganizationBadge = true;
 
   protected pageSizeLimit = 200;
   protected isAllChecked = false;
