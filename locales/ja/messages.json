@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "ベースドメイン",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "ドメイン名",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "ホスト",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "記号の最小数",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "あいまいな文字を省く"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "先頭を大文字",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "数字を含む"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "消去する",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "アカウントを更新しました"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "インポートするファイルを選択"
   },
-  "chooseFile": {
-    "message": "ファイルを選択"
-  },
-  "noFileChosen": {
-    "message": "ファイルが選択されていません"
-  },
   "orCopyPasteFileContents": {
     "message": "またはインポートするファイルの中身をコピーして貼り付け"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "プレミアム版",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "プレミアム会員"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "以下のレポートをクリックして、オンラインアカウントのセキュリティギャップを特定して修正してください。",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "非セキュアウェブサイト調査"
@@ -1578,7 +1572,7 @@
     "message": "二段階認証を利用していないアイテムが見つかりました"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "保管庫内に二段階認証(ウェブサイトが対応しているかはtwofactorauth.orgによる情報)が設定されていない可能性がある$COUNT$個のウェブサイトが見つかりました。これらのアカウントをよりセキュアにするため、二段階認証を有効化すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "プレミアム版にアップグレード",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "プレミアム版にアップグレードされました。"
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "プラン",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "プラン変更",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "下記の情報を入力してアカウントを他のプランにアップグレードしてください。アカウントに有効な支払い方法が追加されていることを確認してください。",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "請求 #$NUMBER$",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4606,7 +4600,7 @@
     "message": "マスターパスワードが最近組織の管理者によって変更されました。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
   },
   "masterPasswordInvalidWarning": {
-    "message": "お客様のマスターパスワードは、当組織のポリシー要件を満たしていません。保管庫にアクセスするためには、今すぐマスターパスワードを更新する必要があります。この操作を行うと、現在のセッションからログアウトし、再度ログインする必要があります。他のデバイスのアクティブなセッションは、最大1時間までアクティブな状態を維持します。"
+    "message": "あなたのマスターパスワードは、この組織のポリシー要件を満たしていません。組織に参加するには、マスターパスワードを更新してください。 続行すると現在のセッションからログアウトするため、再ログインが必要です。 他のデバイスでのアクティブなセッションは、最大1時間アクティブになり続けることができます。"
   },
   "maximumVaultTimeout": {
     "message": "保管庫のタイムアウト"
@@ -4682,7 +4676,7 @@
     "message": "コールバックパス"
   },
   "signedOutCallbackPath": {
-    "message": "Signed out callback path"
+    "message": "Signed Out Callback Path"
   },
   "authority": {
     "message": "Authority"
@@ -4691,55 +4685,55 @@
     "message": "Client ID"
   },
   "clientSecret": {
-    "message": "Client secret"
+    "message": "Client Secret"
   },
   "metadataAddress": {
-    "message": "Metadata address"
+    "message": "Metadata Address"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDC Redirect Behavior"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Custom scopes"
+    "message": "Custom Scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
-    "message": "SP entity ID"
+    "message": "SP Entity ID"
   },
   "spMetadataUrl": {
     "message": "SAML 2.0 メタデータ URL"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID format"
+    "message": "Name ID Format"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing behavior"
+    "message": "Signing Behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum incoming signing algorithm"
+    "message": "Minimum Incoming Signing Algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4754,16 +4748,16 @@
     "message": "バインディングの種類"
   },
   "idpSingleSignOnServiceUrl": {
-    "message": "Single sign-on service URL"
+    "message": "Single Sign On Service URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single log-out service URL"
+    "message": "Single Log Out Service URL"
   },
   "idpX509PublicCert": {
-    "message": "X509 public certificate"
+    "message": "X509 Public Certificate"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4775,7 +4769,7 @@
     "message": "認証リクエストに署名する"
   },
   "ssoSettingsSaved": {
-    "message": "Single sign-on configuration saved"
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Bitwarden 家族向けプランを無償で"
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -5063,10 +5057,10 @@
     "message": "請求の同期"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
     "message": "請求同期トークン"

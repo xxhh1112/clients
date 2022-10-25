@@ -65,13 +65,13 @@
     "message": "Codice di sicurezza (CVV)"
   },
   "identityName": {
-    "message": "Nome identità"
+    "message": "Nome dell'identità"
   },
   "company": {
     "message": "Azienda"
   },
   "ssn": {
-    "message": "Numero di previdenza sociale/codice fiscale"
+    "message": "Codice fiscale/Previdenza sociale"
   },
   "passportNumber": {
     "message": "Numero del passaporto"
@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Dominio di base",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Nome dominio",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -425,7 +425,7 @@
     "message": "Io"
   },
   "myVault": {
-    "message": "Cassaforte"
+    "message": "La mia cassaforte"
   },
   "allVaults": {
     "message": "Tutte le Casseforti"
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimo di speciali",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Evita caratteri ambigui"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Rendi maiuscolo",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Includi numero"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Cancella",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Account aggiornato"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Seleziona il file da importare"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "oppure copia e incolla il contenuto del file da importare"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Abbonamento Premium"
@@ -1330,7 +1324,7 @@
     "message": "Abbonamento Premium richiesto"
   },
   "premiumRequiredDesc": {
-    "message": "Un abbonamento Premium è richiesto per utilizzare questa funzionalità."
+    "message": "Un abbonamento premium è richiesto per utilizzare questa funzionalità."
   },
   "youHavePremiumAccess": {
     "message": "Hai accesso premium"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identifica e chiudi i problemi di sicurezza dei tuoi account online cliccando sui report in basso.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Resoconto sui siti web non protetti"
@@ -1578,7 +1572,7 @@
     "message": "Accessi senza 2FA trovati"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Abbiamo trovato $COUNT$ siti web nella tua cassaforte che potrebbero non essere configurati con l'autenticazione a due fattori (secondo twofactorauth.org). Per proteggere ulteriormente questi account, è necessario abilitare l'autenticazione a due fattori.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Passa a Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Hai effettuato l'aggiornamento a Premium."
@@ -2326,7 +2320,7 @@
     "message": "Single Sign-On"
   },
   "editPolicy": {
-    "message": "Modifica policy"
+    "message": "Modifica politica"
   },
   "groups": {
     "message": "Gruppi"
@@ -2869,7 +2863,7 @@
     "message": "Modificare i gruppi a cui appartiene questo utente."
   },
   "invitedUsers": {
-    "message": "Invitato/i utente/i."
+    "message": "Utenti invitati."
   },
   "resendInvitation": {
     "message": "Invia nuovamente l'invito"
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Piano",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Cambia piano",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Aggiorna il tuo account a un altro piano fornendo le informazioni qui sotto. Assicurati di avere un metodo di pagamento attivo aggiunto all'account.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Fattura #$NUMBER$",
@@ -3670,7 +3664,7 @@
     "message": "Accedi usando il portale di accesso Single Sign-On della tua organizzazione. Inserisci l'identificativo della tua organizzazione per iniziare."
   },
   "enterpriseSingleSignOn": {
-    "message": "Accesso con il portale dell'organizzazione (SSO)"
+    "message": "Single Sign-On aziendale"
   },
   "ssoHandOff": {
     "message": "Puoi chiudere questa scheda e continuare nell'estensione."
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4497,7 +4491,7 @@
     "message": "Clienti"
   },
   "providerAdmin": {
-    "message": "Amministratore del provider"
+    "message": "Amministratore del fornitore"
   },
   "providerAdminDesc": {
     "message": "L'utente con privilegi di accesso più elevato che può gestire tutti gli aspetti del tuo fornitore nonché accedere e gestire le organizzazioni dei clienti."
@@ -4567,10 +4561,10 @@
     }
   },
   "providerIsDisabled": {
-    "message": "Il provider è disabilitato."
+    "message": "Il fornitore è disabilitato."
   },
   "providerUpdated": {
-    "message": "Provider aggiornato"
+    "message": "Fornitore aggiornato"
   },
   "yourProviderIs": {
     "message": "Il tuo fornitore è $PROVIDER$. Hanno privilegi amministrativi e di fatturazione per la tua organizzazione.",
@@ -4661,7 +4655,7 @@
     "message": "Esportazione cassaforte disabilitata"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale."
+    "message": "Una o più politiche di organizzazione ti impediscono di esportare la tua cassaforte personale."
   },
   "selectType": {
     "message": "Seleziona tipo di SSO"
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
