@@ -53,9 +53,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    * @protected
    */
   protected selectionList = new FormSelectionList<AccessItemView, AccessItemValue>((item) => {
-    const permissionControl = this.formBuilder.control(
-      item.readonlyPermission ?? this.initialPermission
-    );
+    const permissionControl = this.formBuilder.control(this.initialPermission);
 
     const fg = this.formBuilder.group({
       id: item.id,

@@ -95,9 +95,6 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
-          const groupSelectionsById = new Map(collectionDetails.groups.map((g) => [g.id, g]));
-          const userSelectionsById = new Map(collectionUsers.map((u) => [u.id, u]));
-
           this.accessItems = [].concat(
             groups.map((group) => {
               if (group.accessAll) {
@@ -111,23 +108,12 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 } as AccessItemView;
               }
 
-              const selection = groupSelectionsById.get(group.id);
-              if (selection == undefined) {
-                return {
-                  id: group.id,
-                  type: AccessItemType.Group,
-                  listName: group.name,
-                  labelName: group.name,
-                };
-              }
-
               return {
                 id: group.id,
                 type: AccessItemType.Group,
                 listName: group.name,
                 labelName: group.name,
                 accessAllItems: false,
-                readonlyPermission: convertToPermission(selection),
               };
             }),
             users.data.map((user) => {
@@ -142,34 +128,33 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 };
               }
 
-              const selection = userSelectionsById.get(user.id);
-              if (selection == undefined) {
-                return {
-                  id: user.id,
-                  type: AccessItemType.Member,
-                  listName: user.name,
-                  labelName: user.name,
-                };
-              }
-
               return {
                 id: user.id,
                 type: AccessItemType.Member,
                 listName: user.name,
                 labelName: user.name,
-                accessAllItems: false,
-                readonlyPermission: convertToPermission(selection),
               };
             })
+          );
+
+          const accessSelections = [].concat(
+            collectionDetails.groups.map<AccessItemValue>((selection) => ({
+              id: selection.id,
+              type: AccessItemType.Group,
+              permission: convertToPermission(selection),
+            })),
+            collectionUsers.map((selection) => ({
+              id: selection.id,
+              type: AccessItemType.Member,
+              permission: convertToPermission(selection),
+            }))
           );
 
           this.formGroup.patchValue({
             name,
             externalId: this.collection.externalId,
             parent,
-            access: this.accessItems.filter(
-              (item) => item.accessAllItems || item.readonlyPermission != undefined
-            ),
+            access: accessSelections,
           });
         } else {
           this.nestOptions = collections;
