@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Základná doména",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Názov domény",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Hostiteľ",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimum špec. znakov",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Vyhnúť sa zameniteľným znakom"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Prvé písmeno veľkým",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Zahrnúť číslo"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Vyčistiť",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Účet bol Aktualizovaný"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Vybrať súbor na import"
   },
-  "chooseFile": {
-    "message": "Vybrať súbor"
-  },
-  "noFileChosen": {
-    "message": "Nebol vybratý žiadny súbor"
-  },
   "orCopyPasteFileContents": {
     "message": "alebo kopírujte/vložte obsah súboru"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Prémium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Prémiové členstvo"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identifikujte a opravte bezpečnostné nedostatky kliknutím na reporty nižšie.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Nezabezpečené stránky"
@@ -1572,13 +1566,13 @@
     "message": "Neaktívne 2FA"
   },
   "inactive2faReportDesc": {
-    "message": "Two-step login adds a layer of protection to your accounts. Set up two-step login using Bitwarden authenticator for these accounts or use an alternative method."
+    "message": "Two-step Login adds a layer of protection to your accounts. Turn on Two-Step Login using Bitwarden Authenticator for these accounts or use an alternative method."
   },
   "inactive2faFound": {
     "message": "Našli sa prihlásenia bez dvojstupňového overenia"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Našli sme $COUNT$ stránok vo vašom trezore ktoré nie sú nastavené na použitie dvojstupňového overenia. (na základe údajov z twofactorauth.org) Aby ste vylepšili zabezpečenie týchto účtov, mali by ste povoliť dvojstupňové prihlásenie.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Prejsť na Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Povýšili ste na prémium."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Plán",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Navýšiť plán",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Upgrade your account to another plan be providing the information below. Please ensure that you have an active payment method added to the account.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktúra #$NUMBER$",
@@ -3670,7 +3664,7 @@
     "message": "Prihláste sa prostredníctvom jednotného prihlasovania (SSO) vašej organizácie. Najskôr zadajte identifikátor vašej organizácie."
   },
   "enterpriseSingleSignOn": {
-    "message": "Jednotné prihlásenie pre podniky (SSO)"
+    "message": "Prihlásenie cez prihlasovací formulár spoločnosti (SSO)"
   },
   "ssoHandOff": {
     "message": "Teraz môžete zavrieť túto kartu a pokračovať v rozšírení."
@@ -3826,7 +3820,7 @@
     "message": "Skryť moju emailovú adresu pred príjemcami."
   },
   "disableThisSend": {
-    "message": "Vypnúť tento Send, aby k nemu nikto nemal prístup.",
+    "message": "Vypnúť toto Odoslanie, aby k nemu nikto nemal prístup.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "allSends": {
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4038,7 +4032,7 @@
     "message": "Používatelia organizácie, ktorí môžu spravovať politiku organizácie, sú vyňatí z uplatňovania týchto zásad."
   },
   "sendDisabled": {
-    "message": "Send zakázaný",
+    "message": "Funkcia Send zakázaná",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -4706,19 +4700,19 @@
     "message": "Vlastné rozsahy"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
     "message": "ID subjektu SP"
@@ -4727,19 +4721,19 @@
     "message": "URL metadát SAML 2.0"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
     "message": "Formát názvu ID"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing behavior"
+    "message": "Signing Behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum incoming signing algorithm"
+    "message": "Minimum Incoming Signing Algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4751,19 +4745,19 @@
     "message": "ID subjektu"
   },
   "idpBindingType": {
-    "message": "Binding type"
+    "message": "Binding Type"
   },
   "idpSingleSignOnServiceUrl": {
-    "message": "Single sign-on service URL"
+    "message": "Single Sign On Service URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single log-out service URL"
+    "message": "Single Log Out Service URL"
   },
   "idpX509PublicCert": {
     "message": "Verejný certifikát X509"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4775,7 +4769,7 @@
     "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Single sign-on configuration saved"
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Bitwarden pre Rodiny zadarmo"
@@ -4820,17 +4814,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Unable to accept offer. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4844,7 +4838,7 @@
     "message": "Uplatnené"
   },
   "redeemedAccount": {
-    "message": "Account redeemed"
+    "message": "Redeemed Account"
   },
   "revokeAccount": {
     "message": "Revoke account $NAME$",
@@ -4856,7 +4850,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend sponsorship email to $NAME$ sponsorship",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4874,13 +4868,13 @@
     "message": "Príjemca"
   },
   "removeSponsorship": {
-    "message": "Remove sponsorship"
+    "message": "Remove Sponsorship"
   },
   "removeSponsorshipConfirmation": {
     "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
-    "message": "Sponsorship created"
+    "message": "Sponsorship Created"
   },
   "emailSent": {
     "message": "Email Odoslaný"
@@ -4889,7 +4883,7 @@
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
-    "message": "Sponsorship removed"
+    "message": "Sponsorship Removed"
   },
   "ssoKeyConnectorError": {
     "message": "Chyba Key Connector: uistite sa, že je Key Connector k dispozícii a funguje správne."
@@ -4958,19 +4952,19 @@
     "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
-    "message": "Member decryption options"
+    "message": "Member Decryption Options"
   },
   "memberDecryptionPassDesc": {
-    "message": "Once authenticated, members will decrypt vault data using their master passwords."
+    "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
   },
   "keyConnector": {
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
     "message": "SSO povolené"
@@ -4979,13 +4973,13 @@
     "message": "SSO zakázané"
   },
   "enabledKeyConnector": {
-    "message": "Key Connector activated"
+    "message": "Enabled Key Connector"
   },
   "disabledKeyConnector": {
-    "message": "Key Connector deactivated"
+    "message": "Disabled Key Connector"
   },
   "keyConnectorWarning": {
-    "message": "Once members begin using Key Connector, your organization cannot revert to master password decryption. Proceed only if you are comfortable deploying and managing a key server."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Migrated to Key Connector"
@@ -4997,13 +4991,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
     "message": "Prijať ponuku"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring organization"
+    "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
     "message": "Test"
@@ -5021,34 +5015,34 @@
     "message": "FREE with sponsorship"
   },
   "viewBillingSyncToken": {
-    "message": "View billing sync token"
+    "message": "View Billing Sync Token"
   },
   "generateBillingSyncToken": {
-    "message": "Generate billing sync token"
+    "message": "Generate Billing Sync Token"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your billing sync token can access and edit this organization's subscription settings."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Manage billing sync"
+    "message": "Manage Billing Sync"
   },
   "setUpBillingSync": {
-    "message": "Set up billing sync"
+    "message": "Set Up Billing Sync"
   },
   "generateToken": {
     "message": "Vygenerovať Token"
   },
   "rotateToken": {
-    "message": "Rotate token"
+    "message": "Rotate Token"
   },
   "rotateBillingSyncTokenWarning": {
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the billing sync token will invalidate the previous token."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
     "message": "Vlastný hosting"
@@ -5057,19 +5051,19 @@
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Token rotated"
+    "message": "Token rotated."
   },
   "billingSync": {
-    "message": "Billing sync"
+    "message": "Billing Sync"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing sync token"
+    "message": "Billing Sync Token"
   },
   "active": {
     "message": "Aktívny"
@@ -5078,13 +5072,13 @@
     "message": "Neaktívny"
   },
   "sentAwaitingSync": {
-    "message": "Sent (awaiting sync)"
+    "message": "Sent (Awaiting Sync)"
   },
   "sent": {
     "message": "Odoslané"
   },
   "requestRemoved": {
-    "message": "Removed (awaiting sync)"
+    "message": "Removed (Awaiting Sync)"
   },
   "requested": {
     "message": "Vyžiadané"
@@ -5117,7 +5111,7 @@
     "message": "Required if Entity ID is not a URL."
   },
   "openIdOptionalCustomizations": {
-    "message": "Optional customizations"
+    "message": "Optional Customizations"
   },
   "openIdAuthorityRequired": {
     "message": "Required if Authority is not valid."
@@ -5312,7 +5306,7 @@
     "message": "Vyžaduje sa predplatné Prémium"
   },
   "scim": {
-    "message": "SCIM provisioning",
+    "message": "SCIM Provisioning",
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
@@ -5331,7 +5325,7 @@
     "message": "This API key has access to manage users within your organization. It should be kept secret."
   },
   "copyScimKey": {
-    "message": "Copy the SCIM API key to your clipboard",
+    "message": "Copy the SCIM API Key to your clipboard",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {
@@ -5358,11 +5352,11 @@
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
-    "message": "SCIM API key successfully rotated",
+    "message": "The SCIM API Key has been successfully rotated",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "scimSettingsSaved": {
-    "message": "SCIM settings saved",
+    "message": "SCIM settings have been saved successfully",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {

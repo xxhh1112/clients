@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Base domain",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Domain Name",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimum special",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Avoid ambiguous characters"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Capitalise",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Include number"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Clear",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Account updated"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Select the import file"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "or copy/paste the import file contents"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Premium membership"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Unsecure Websites"
@@ -1578,7 +1572,7 @@
     "message": "Logins without 2FA found"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-factor authentication (according to twofactorauth.org). To further protect these accounts, you should enable two-factor authentication.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Go premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "You've upgraded to premium."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Plan",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Upgrade Plan",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Upgrade your account to another plan by providing the information below. Please ensure that you have an active payment method added to the account.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Invoice #$NUMBER$",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },

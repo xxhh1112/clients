@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Главни домен",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Име домена",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Хост",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Минимално Специјално",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Избегавај двосмислене карактере"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Прво слово велико",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Убаци број"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Очисти",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Налог ажуриран"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Одабрати датотеку за увоз"
   },
-  "chooseFile": {
-    "message": "Изабери датотеку"
-  },
-  "noFileChosen": {
-    "message": "Није изабрана ниједна датотека"
-  },
   "orCopyPasteFileContents": {
     "message": "или копирајте/налепите садржај датотеке за увоз"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Премијум",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Премијум чланство"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Идентификујте и затворите безбедносне празнине у вашим онлајн налозима кликом на извештаје у наставку.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Извештај о несигурним веб локацијама"
@@ -1578,7 +1572,7 @@
     "message": "Нађене пријаве без 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Насшли смо $COUNT$ сајта у вашем сефу који можда нису подешени са двофакторском потврдом идентитета (према twofactorauth.org). Да бисте додатно заштитили ове налоге, требало би да омогућите двостепену потврду идентитета.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Купи Премијум",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Надоградили сте на премијум."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "План",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Промените план",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Надоградите свој рачун на други план тако што ћете пружити информације у наставку. Обавезно проверите да имате активни начин плаћања на рачун.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Фактура #$NUMBER$",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4706,34 +4700,34 @@
     "message": "Прилагођен обим"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
-    "message": "SP entity ID"
+    "message": "SP Entity ID"
   },
   "spMetadataUrl": {
-    "message": "SAML 2.0 metadata URL"
+    "message": "SAML 2.0 Metadata URL"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID format"
+    "message": "Name ID Format"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
     "message": "Понашање пријављања"
@@ -4775,7 +4769,7 @@
     "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Single sign-on configuration saved"
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Бесплатно Bitwarden Families"
@@ -4820,17 +4814,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Није могуће прихватити понуду. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4856,7 +4850,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend sponsorship email to $NAME$ sponsorship",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4865,7 +4859,7 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Free Families plan"
+    "message": "Free Families Plan"
   },
   "redeemNow": {
     "message": "Откупи сада"
@@ -4967,10 +4961,10 @@
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
     "message": "SSO омогућен"
@@ -4985,7 +4979,7 @@
     "message": "Онемогућити Key Connector"
   },
   "keyConnectorWarning": {
-    "message": "Once members begin using Key Connector, your organization cannot revert to master password decryption. Proceed only if you are comfortable deploying and managing a key server."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Мигрирано на Key Connector"
@@ -4997,13 +4991,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
     "message": "Прихвати понуду"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring organization"
+    "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
     "message": "Тест"
@@ -5027,10 +5021,10 @@
     "message": "Генериши токен синхронизације наплате"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your billing sync token can access and edit this organization's subscription settings."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
     "message": "Управљати синхроизацију наплате"
@@ -5048,10 +5042,10 @@
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the billing sync token will invalidate the previous token."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-hosting"
+    "message": "Self-Hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
@@ -5063,10 +5057,10 @@
     "message": "Синхронизација наплате"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
     "message": "Синхронизација токена наплате"
@@ -5144,7 +5138,7 @@
     }
   },
   "exportingOrganizationVaultDescription": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Personal vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5275,7 +5269,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Forwarded email alias"
+    "message": "Forwarded Email Alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -5312,7 +5306,7 @@
     "message": "Premium претплата је потребна"
   },
   "scim": {
-    "message": "SCIM provisioning",
+    "message": "SCIM Provisioning",
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
@@ -5331,11 +5325,11 @@
     "message": "This API key has access to manage users within your organization. It should be kept secret."
   },
   "copyScimKey": {
-    "message": "Copy the SCIM API key to your clipboard",
+    "message": "Copy the SCIM API Key to your clipboard",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {
-    "message": "Rotate the SCIM API key",
+    "message": "Rotate the SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKeyWarning": {
@@ -5346,7 +5340,7 @@
     "message": "Променити кључ"
   },
   "scimApiKey": {
-    "message": "SCIM API key",
+    "message": "SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {
@@ -5358,11 +5352,11 @@
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
-    "message": "SCIM API key successfully rotated",
+    "message": "The SCIM API Key has been successfully rotated",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "scimSettingsSaved": {
-    "message": "SCIM settings saved",
+    "message": "SCIM settings have been saved successfully",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
@@ -5402,15 +5396,15 @@
     "message": "Број корисника"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Тип за филтрирање --"
+    "message": "-- Type to Filter --"
   },
   "multiSelectLoading": {
-    "message": "Преузимање опција..."
+    "message": "Retrieving options..."
   },
   "multiSelectNotFound": {
-    "message": "Ни једна ставка"
+    "message": "No items found"
   },
   "multiSelectClearAll": {
-    "message": "Обриши све"
+    "message": "Clear all"
   }
 }

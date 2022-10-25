@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Basisdomein",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Domeinnaam",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Gasheer",
@@ -452,7 +452,7 @@
     "message": "Kies alles"
   },
   "unselectAll": {
-    "message": "Unselect all"
+    "message": "Unselect All"
   },
   "launch": {
     "message": "Lanseer"
@@ -582,7 +582,7 @@
     "message": "Nuut hier rond?"
   },
   "startTrial": {
-    "message": "Start trial"
+    "message": "Start Trial"
   },
   "logIn": {
     "message": "Teken aan"
@@ -939,7 +939,7 @@
     "message": "Rekeningrugsteun"
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
     "message": "“Lêerwagwoord” en “Bevestig lêerwagwoord” stem nie ooreen nie."
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Min. aantal spesiaal",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Vermy dubbelsinnige karakters"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Maak beginhoofletters",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Voeg syfer toe"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Wis",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Rekening bygewerk"
@@ -1019,7 +1019,7 @@
     "message": "Verander e-pos"
   },
   "changeEmailTwoFactorWarning": {
-    "message": "Proceeding will change your account email address. It will not change the email address used for two-step login authentication. You can change this email address in the two-step login settings."
+    "message": "Proceeding will change your account email address. It will not change the email address used for two-factor authentication. You can change this email address in the Two-Step Login settings."
   },
   "newEmail": {
     "message": "Nuwe e-pos"
@@ -1103,16 +1103,16 @@
     "message": "Versigtig, hierdie aksies is onomkeerbaar!"
   },
   "deauthorizeSessions": {
-    "message": "Deauthorize sessions"
+    "message": "Deauthorize Sessions"
   },
   "deauthorizeSessionsDesc": {
     "message": "Concerned your account is logged in on another device? Proceed below to deauthorize all computers or devices that you have previously used. This security step is recommended if you previously used a public computer or accidentally saved your password on a device that isn't yours. This step will also clear all previously remembered two-step login sessions."
   },
   "deauthorizeSessionsWarning": {
-    "message": "Proceeding will also log you out of your current session, requiring you to log back in. You will also be prompted for two-step login again, if set up. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Proceeding will also log you out of your current session, requiring you to log back in. You will also be prompted for two-step login again, if enabled. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "sessionsDeauthorized": {
-    "message": "All sessions deauthorized"
+    "message": "All Sessions Deauthorized"
   },
   "purgeVault": {
     "message": "Ledig kluis"
@@ -1121,7 +1121,7 @@
     "message": "Organisasiekluis is geledig."
   },
   "vaultAccessedByProvider": {
-    "message": "Vault accessed by Provider."
+    "message": "Vault accessed by provider."
   },
   "purgeVaultDesc": {
     "message": "Proceed below to delete all items and folders in your vault. Items that belong to an organization that you share with will not be deleted."
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Kies die invoerlêer"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "of kopieer/plak die inhoude van die invoerlêer"
   },
@@ -1259,10 +1253,10 @@
     "message": "If you have the same login across multiple different website domains, you can mark the website as \"equivalent\". \"Global\" domains are ones already created for you by Bitwarden."
   },
   "globalEqDomains": {
-    "message": "Global equivalent domains"
+    "message": "Global Equivalent Domains"
   },
   "customEqDomains": {
-    "message": "Custom equivalent domains"
+    "message": "Custom Equivalent Domains"
   },
   "exclude": {
     "message": "Sluit uit"
@@ -1301,7 +1295,7 @@
     "message": "Vereis tweestapsaantekening vir die gebruikers van u organisasie deur aanbieders op organisatievlak in te stel."
   },
   "twoStepLoginRecoveryWarning": {
-    "message": "Setting up two-step login can permanently lock you out of your Bitwarden account. A recovery code allows you to access your account in the event that you can no longer use your normal two-step login provider (example: you lose your device). Bitwarden support will not be able to assist you if you lose access to your account. We recommend you write down or print the recovery code and keep it in a safe place."
+    "message": "Enabling two-step login can permanently lock you out of your Bitwarden account. A recovery code allows you to access your account in the event that you can no longer use your normal two-step login provider (ex. you lose your device). Bitwarden support will not be able to assist you if you lose access to your account. We recommend you write down or print the recovery code and keep it in a safe place."
   },
   "viewRecoveryCode": {
     "message": "Bekyk terugstelkode"
@@ -1317,11 +1311,11 @@
     "message": "Geaktiveer"
   },
   "restoreAccess": {
-    "message": "Restore access"
+    "message": "Restore Access"
   },
   "premium": {
     "message": "Premie",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Premie-lidmaatskap"
@@ -1345,7 +1339,7 @@
     "message": "Deaktiveer"
   },
   "revokeAccess": {
-    "message": "Revoke access"
+    "message": "Revoke Access"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Hierdie tweestapaantekenaanbieder is vir u rekening geaktiveer."
@@ -1387,10 +1381,10 @@
     "message": "In case you need to add it to another device, below is the QR code (or key) required by your authenticator app."
   },
   "twoStepDisableDesc": {
-    "message": "Are you sure you want to turn off this two-step login provider?"
+    "message": "Are you sure you want to disable this two-step login provider?"
   },
   "twoStepDisabled": {
-    "message": "Two-step login provider turned off."
+    "message": "Two-step login provider disabled."
   },
   "twoFactorYubikeyAdd": {
     "message": "Voeg ’n nuwe YubiKey tot u rekening toe"
@@ -1408,7 +1402,7 @@
     "message": "Bewaar die vorm."
   },
   "twoFactorYubikeyWarning": {
-    "message": "Due to platform limitations, YubiKeys cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when YubiKeys cannot be used. Supported platforms:"
+    "message": "Due to platform limitations, YubiKeys cannot be used on all Bitwarden applications. You should enable another two-step login provider so that you can access your account when YubiKeys cannot be used. Supported platforms:"
   },
   "twoFactorYubikeySupportUsb": {
     "message": "Web vault, desktop application, CLI, and all browser extensions on a device with a USB port that can accept your YubiKey."
@@ -1510,31 +1504,31 @@
     "message": "Bewaar die vorm."
   },
   "twoFactorU2fWarning": {
-    "message": "Due to platform limitations, FIDO U2F cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when FIDO U2F cannot be used. Supported platforms:"
+    "message": "Due to platform limitations, FIDO U2F cannot be used on all Bitwarden applications. You should enable another two-step login provider so that you can access your account when FIDO U2F cannot be used. Supported platforms:"
   },
   "twoFactorU2fSupportWeb": {
-    "message": "Web vault and browser extensions on a desktop/laptop with a U2F supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
+    "message": "Web vault and browser extensions on a desktop/laptop with a U2F enabled browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F enabled)."
   },
   "twoFactorU2fWaiting": {
     "message": "Waiting for you to touch the button on your security key"
   },
   "twoFactorU2fClickSave": {
-    "message": "Use the \"Save\" button below to activate this security key for two-step login."
+    "message": "Click the \"Save\" button below to enable this security key for two-step login."
   },
   "twoFactorU2fProblemReadingTryAgain": {
     "message": "There was a problem reading the security key. Try again."
   },
   "twoFactorWebAuthnWarning": {
-    "message": "Due to platform limitations, WebAuthn cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when WebAuthn cannot be used. Supported platforms:"
+    "message": "Due to platform limitations, WebAuthn cannot be used on all Bitwarden applications. You should enable another two-step login provider so that you can access your account when WebAuthn cannot be used. Supported platforms:"
   },
   "twoFactorWebAuthnSupportWeb": {
-    "message": "Web vault and browser extensions on a desktop/laptop with a WebAuthn supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
+    "message": "Web vault and browser extensions on a desktop/laptop with a WebAuthn enabled browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F enabled)."
   },
   "twoFactorRecoveryYourCode": {
     "message": "U herstelkode vir Bitwarden-tweestapaantekening"
   },
   "twoFactorRecoveryNoCode": {
-    "message": "You have not set up any two-step login providers yet. After you have set up a two-step login provider you can check back here for your recovery code."
+    "message": "You have not enabled any two-step login providers yet. After you have enabled a two-step login provider you can check back here for your recovery code."
   },
   "printCode": {
     "message": "Druk kode af",
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Onbeveiligde webwerwe"
@@ -1572,13 +1566,13 @@
     "message": "Onaktiewe tweestapaantekening"
   },
   "inactive2faReportDesc": {
-    "message": "Two-step login adds a layer of protection to your accounts. Set up two-step login using Bitwarden authenticator for these accounts or use an alternative method."
+    "message": "Two-step Login adds a layer of protection to your accounts. Turn on Two-Step Login using Bitwarden Authenticator for these accounts or use an alternative method."
   },
   "inactive2faFound": {
-    "message": "Logins without two-step login found"
+    "message": "Logins Without 2FA Found"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-factor authentication (according to 2fa.directory). To further protect these accounts, you should enable two-factor authentication.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1587,7 +1581,7 @@
     }
   },
   "noInactive2fa": {
-    "message": "No websites were found in your vault with a missing two-step login configuration."
+    "message": "No websites were found in your vault with a missing two-factor authentication configuration."
   },
   "instructions": {
     "message": "Instruksies"
@@ -1686,7 +1680,7 @@
     "message": "Gaan enige gebruikersname of e-posadresse wat u gebruik na."
   },
   "checkBreaches": {
-    "message": "Check breaches"
+    "message": "Check Breaches"
   },
   "breachUsernameNotFound": {
     "message": "$USERNAME$ is in geen bekende databreuke gevind nie.",
@@ -1715,7 +1709,7 @@
     }
   },
   "breachFound": {
-    "message": "Breached accounts found"
+    "message": "Breached Accounts Found"
   },
   "compromisedData": {
     "message": "Gekompromitteerde data"
@@ -1727,7 +1721,7 @@
     "message": "Gebruikers geraak"
   },
   "breachOccurred": {
-    "message": "Breach occurred"
+    "message": "Breach Occurred"
   },
   "breachReported": {
     "message": "Breuk gerapporteer"
@@ -1739,10 +1733,10 @@
     "message": "Fakturering"
   },
   "billingPlanLabel": {
-    "message": "Billing plan"
+    "message": "Billing Plan"
   },
   "paymentType": {
-    "message": "Payment type"
+    "message": "Payment Type"
   },
   "accountCredit": {
     "message": "Rekeningkrediet",
@@ -1771,13 +1765,13 @@
   },
   "goPremium": {
     "message": "Kry Premie",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "U het na premie opgegradeer."
   },
   "premiumUpgradeUnlockFeatures": {
-    "message": "Upgrade your account to a Premium membership and unlock some great additional features."
+    "message": "Upgrade your account to a premium membership and unlock some great additional features."
   },
   "premiumSignUpStorage": {
     "message": "1 GG geënkripteerde berging vir lêeraanhegsels."
@@ -1816,7 +1810,7 @@
     "message": "Premie-toegang"
   },
   "premiumAccessDesc": {
-    "message": "You can add Premium access to all members of your organization for $PRICE$ /$INTERVAL$.",
+    "message": "You can add premium access to all members of your organization for $PRICE$ /$INTERVAL$.",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1898,7 +1892,7 @@
     "message": "Kredietkaart"
   },
   "paypalClickSubmit": {
-    "message": "Select the PayPal button to log into your PayPal account, then click the Submit button below to continue."
+    "message": "Click the PayPal button to log into your PayPal account, then click the Submit button below to continue."
   },
   "cancelSubscription": {
     "message": "Kanselleer Intekening"
@@ -1913,7 +1907,7 @@
     "message": "Die intekening is gemerk vir kansellasie aan die einde van die huidige faktureringstydperk."
   },
   "reinstateSubscription": {
-    "message": "Reinstate subscription"
+    "message": "Reinstate Subscription"
   },
   "reinstateConfirmation": {
     "message": "Are you sure you want to remove the pending cancellation request and reinstate your subscription?"
@@ -1934,7 +1928,7 @@
     "message": "Status"
   },
   "nextCharge": {
-    "message": "Next charge"
+    "message": "Next Charge"
   },
   "details": {
     "message": "Details"
@@ -2024,10 +2018,10 @@
     }
   },
   "gbStorageAdd": {
-    "message": "GB of storage to add"
+    "message": "GB of Storage To Add"
   },
   "gbStorageRemove": {
-    "message": "GB of storage to remove"
+    "message": "GB of Storage To Remove"
   },
   "storageAddNote": {
     "message": "Adding storage will result in adjustments to your billing totals and immediately charge your payment method on file. The first charge will be prorated for the remainder of the current billing cycle."
@@ -2045,7 +2039,7 @@
     }
   },
   "contactSupport": {
-    "message": "Contact customer support"
+    "message": "Contact Customer Support"
   },
   "updatedPaymentMethod": {
     "message": "Betalingsmetode is bygewerk."
@@ -2066,7 +2060,7 @@
     }
   },
   "uploadLicenseFilePremium": {
-    "message": "To upgrade your account to a Premium membership you need to upload a valid license file."
+    "message": "To upgrade your account to a premium membership you need to upload a valid license file."
   },
   "uploadLicenseFileOrg": {
     "message": "To create an on-premise hosted organization you need to upload a valid license file."
@@ -2087,7 +2081,7 @@
     "message": "This account is owned by a business."
   },
   "billingEmail": {
-    "message": "Billing email"
+    "message": "Billing Email"
   },
   "businessName": {
     "message": "Besigheidnaam"
@@ -2099,7 +2093,7 @@
     "message": "Gebruikers"
   },
   "userSeats": {
-    "message": "User seats"
+    "message": "User Seats"
   },
   "additionalUserSeats": {
     "message": "Bykomende gebruikersplekke"
@@ -2224,7 +2218,7 @@
     "message": "On-premise hosting (optional)"
   },
   "usersGetPremium": {
-    "message": "Users get access to Premium features"
+    "message": "Users get access to Premium Features"
   },
   "controlAccessWithGroups": {
     "message": "Beheer gebruikertoegang met groepe"
@@ -2425,7 +2419,7 @@
     "message": "Bevestig"
   },
   "clientOwnerEmail": {
-    "message": "Client owner email"
+    "message": "Client Owner Email"
   },
   "owner": {
     "message": "Eienaar"
@@ -2500,7 +2494,7 @@
     "message": "Tweestapaantekening gedeaktiveer."
   },
   "recovered2fa": {
-    "message": "Account recovered from two-step login"
+    "message": "Recovered account from two-step login."
   },
   "failedLogin": {
     "message": "Login attempt failed with incorrect password."
@@ -2875,7 +2869,7 @@
     "message": "Stuur weer uitnodiging"
   },
   "resendEmail": {
-    "message": "Resend email"
+    "message": "Resend Email"
   },
   "hasBeenReinvited": {
     "message": "$USER$ is weer uitgenooi.",
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -2971,10 +2965,10 @@
     "message": "Onthou e-pos"
   },
   "recoverAccountTwoStepDesc": {
-    "message": "If you cannot access your account through your normal two-step login methods, you can use your two-step login recovery code to turn off all two-step providers on your account."
+    "message": "If you cannot access your account through your normal two-step login methods, you can use your two-step login recovery code to disable all two-step providers on your account."
   },
   "recoverAccountTwoStep": {
-    "message": "Recover account two-step login"
+    "message": "Recover Account Two-Step Login"
   },
   "twoStepRecoverDisabled": {
     "message": "Tweestapaantekenaanbieder vir u rekening is gedeaktiveer."
@@ -2989,7 +2983,7 @@
     "message": "If your account exists, we've sent you an email with further instructions."
   },
   "deleteRecoverConfirmDesc": {
-    "message": "You have requested to delete your Bitwarden account. Use the button below to confirm."
+    "message": "You have requested to delete your Bitwarden account. Click the button below to confirm."
   },
   "myOrganization": {
     "message": "My Organisasie"
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Pakket",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Verander Pakket",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Upgrade your account to another plan be providing the information below. Please ensure that you have an active payment method added to the account.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktuur #$NUMBER$",
@@ -3071,7 +3065,7 @@
     "message": "Payment with a bank account is only available to customers in the United States. You will be required to verify your bank account. We will make two micro-deposits within the next 1-2 business days. Enter these amounts on the organization's billing page to verify the bank account."
   },
   "verifyBankAccountFailureWarning": {
-    "message": "Failure to verify the bank account will result in a missed payment and your subscription being suspended."
+    "message": "Failure to verify the bank account will result in a missed payment and your subscription being disabled."
   },
   "verifiedBankAccount": {
     "message": "Bankrekening is bevestig."
@@ -3090,7 +3084,7 @@
     }
   },
   "routingNumber": {
-    "message": "Routing number",
+    "message": "Routing Number",
     "description": "Bank account routing number"
   },
   "accountNumber": {
@@ -3115,18 +3109,18 @@
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
   },
   "maxSeatLimit": {
-    "message": "Seat Limit (optional)",
+    "message": "Maximum Seat Limit (optional)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
     "message": "Max potential seat cost"
   },
   "addSeats": {
-    "message": "Add seats",
+    "message": "Add Seats",
     "description": "Seat = User Seat"
   },
   "removeSeats": {
-    "message": "Remove seats",
+    "message": "Remove Seats",
     "description": "Seat = User Seat"
   },
   "subscriptionDesc": {
@@ -3142,10 +3136,10 @@
     }
   },
   "limitSubscription": {
-    "message": "Limit subscription (optional)"
+    "message": "Limit Subscription (Optional)"
   },
   "subscriptionSeats": {
-    "message": "Subscription seats"
+    "message": "Subscription Seats"
   },
   "subscriptionUpdated": {
     "message": "Subscription updated"
@@ -3205,10 +3199,10 @@
     }
   },
   "seatsToAdd": {
-    "message": "Seats to add"
+    "message": "Seats To Add"
   },
   "seatsToRemove": {
-    "message": "Seats to remove"
+    "message": "Seats To Remove"
   },
   "seatsAddNote": {
     "message": "Adding user seats will result in adjustments to your billing totals and immediately charge your payment method on file. The first charge will be prorated for the remainder of the current billing cycle."
@@ -3331,7 +3325,7 @@
     "message": "Organisasie is gedeaktiveer."
   },
   "disabledOrganizationFilterError": {
-    "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
+    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
   "licenseIsExpired": {
     "message": "Lisensie het verstryk."
@@ -3476,10 +3470,10 @@
     "message": "Vereis tweestapaantekening op gebruikers se persoonlike rekeninge."
   },
   "twoStepLoginPolicyWarning": {
-    "message": "Organization members who are not owners or admins and do not have two-step login setup for their account will be removed from the organization and will receive an email notifying them about the change."
+    "message": "Organization members who are not Owners or Administrators and do not have two-step login turned on for their account will be removed from the organization and will receive an email notifying them about the change."
   },
   "twoStepLoginPolicyUserWarning": {
-    "message": "You are a member of an organization that requires two-step login to be setup on your user account. If you turn off all two-step login providers you will be automatically removed from these organizations."
+    "message": "You are a member of an organization that requires two-step login to be enabled on your user account. If you disable all two-step login providers you will be automatically removed from these organizations."
   },
   "passwordGeneratorPolicyDesc": {
     "message": "Stel minimum vereistes vir opstelling van wagwoordgenereerder."
@@ -3685,7 +3679,7 @@
     "message": "Ondernemingsbeleide"
   },
   "ssoValidationFailed": {
-    "message": "SSO validation failed"
+    "message": "SSO Validation Failed"
   },
   "ssoIdentifierRequired": {
     "message": "Organisasie-identifiseerder word benodig."
@@ -3709,22 +3703,22 @@
     "message": "U huidige organisasie het ’n beleid wat u nie toelaat om deel te neem aan meer as een organisasie nie. Kontak u organisasie se beheerders of teken aan met’n ander Bitwarden-rekening."
   },
   "singleOrgPolicyWarning": {
-    "message": "Organization members who are not owners or admins and are already a member of another organization will be removed from your organization."
+    "message": "Organization members who are not Owners or Administrators and are already a member of another organization will be removed from your organization."
   },
   "requireSso": {
     "message": "Enkelaantekenwaarmerking"
   },
   "requireSsoPolicyDesc": {
-    "message": "Require members to log in with the Enterprise single sign-on method."
+    "message": "Require members to log in with the Enterprise Single Sign-On method."
   },
   "prerequisite": {
     "message": "Voorvereiste"
   },
   "requireSsoPolicyReq": {
-    "message": "The single organization Enterprise policy must be turned on before activating this policy."
+    "message": "The Single Organization enterprise policy must be turned on before activating this policy."
   },
   "requireSsoPolicyReqError": {
-    "message": "Single organization policy not set up."
+    "message": "Single Organization policy not enabled."
   },
   "requireSsoExemption": {
     "message": "Organisasie-eienaars en -administrateurs is vrygestel van die afdwing van hierdie beleid."
@@ -3851,7 +3845,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
-    "message": "Don't know the password? Ask the sender for the password needed to access this Send.",
+    "message": "Don't know the password? Ask the Sender for the password needed to access this Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendHiddenByDefault": {
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4031,7 +4025,7 @@
     "message": "Deaktiveer Send"
   },
   "disableSendPolicyDesc": {
-    "message": "Do not allow members to create or edit Sends.",
+    "message": "Do not allow members to create or edit sends.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -4057,7 +4051,7 @@
     "message": "Organization users that can manage the organization's policies are exempt from this policy's enforcement."
   },
   "disableHideEmail": {
-    "message": "Always show member’s email address with recipients when creating or editing a Send.",
+    "message": "Always show member’s email address with recipients when creating or editing a send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -4098,13 +4092,13 @@
     "message": "Admin Permissions"
   },
   "accessEventLogs": {
-    "message": "Access event logs"
+    "message": "Access Event Logs"
   },
   "accessImportExport": {
-    "message": "Access import/export"
+    "message": "Access Import/Export"
   },
   "accessReports": {
-    "message": "Access reports"
+    "message": "Access Reports"
   },
   "missingPermissions": {
     "message": "You lack the necessary permissions to perform this action."
@@ -4146,7 +4140,7 @@
     "message": "Bestuur wagwoordherstel"
   },
   "disableRequiredError": {
-    "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
+    "message": "You must manually disable the $POLICYNAME$ policy before this policy can be disabled.",
     "placeholders": {
       "policyName": {
         "content": "$1",
@@ -4158,7 +4152,7 @@
     "message": "’n Organisasiebeleid beïnvloed u eienaarskapopsies."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has blocked importing items into your individual vault."
+    "message": "An organization policy has disabled importing items into your personal vault."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Deaktiveer persoonlike eienaarskap vir organisasiegebruikers"
@@ -4281,7 +4275,7 @@
     "message": "Ingeskryf vir wagwoordterugstel"
   },
   "withdrawPasswordReset": {
-    "message": "Withdraw from password reset"
+    "message": "Withdraw from Password Reset"
   },
   "enrollPasswordResetSuccess": {
     "message": "Suksesvol ingeskryf!"
@@ -4317,7 +4311,7 @@
     }
   },
   "eventResetSsoLink": {
-    "message": "Reset SSO link for user $ID$",
+    "message": "Reset Sso link for user $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4383,10 +4377,10 @@
     "message": "Hierdie organisasie het ’n ondernemingsbeleid wat u outomaties inskryf in die terugstel van u wagwoord. Inskrywing stel organisasiebeheerders in staat om u hoofwagwoord te wysig."
   },
   "resetPasswordOrgKeysError": {
-    "message": "Organization keys response is null"
+    "message": "Organization Keys response is null"
   },
   "resetPasswordDetailsError": {
-    "message": "Reset password details response is null"
+    "message": "Reset Password Details response is null"
   },
   "trashCleanupWarning": {
     "message": "Items wat vir langer as 30 dae in die asblik was sal outomaties geskrap word."
@@ -4467,10 +4461,10 @@
     "message": "Verwyder gebruikers"
   },
   "revokeUsers": {
-    "message": "Revoke users"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
-    "message": "Restore users"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Fout"
@@ -4485,7 +4479,7 @@
     "message": "U is genooi om ’n nuwe aanbieder op te stel. Om voort te gaan moet u aanteken of ’n nuwe Bitwarden-rekening skep."
   },
   "setupProviderDesc": {
-    "message": "Please enter the details below to complete the Provider setup. Contact Customer Support if you have any questions."
+    "message": "Please enter the details below to complete the provider setup. Contact Customer Support if you have any questions."
   },
   "providerName": {
     "message": "Aanbiedernaam"
@@ -4500,7 +4494,7 @@
     "message": "Aanbiederadmin"
   },
   "providerAdminDesc": {
-    "message": "The highest access user that can manage all aspects of your Provider as well as access and manage client organizations."
+    "message": "The highest access user that can manage all aspects of your provider as well as access and manage client organizations."
   },
   "serviceUser": {
     "message": "Diensgebruiker"
@@ -4509,19 +4503,19 @@
     "message": "Service users can access and manage all client organizations."
   },
   "providerInviteUserDesc": {
-    "message": "Invite a new user to your Provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
+    "message": "Invite a new user to your provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "joinProvider": {
     "message": "Join Provider"
   },
   "joinProviderDesc": {
-    "message": "You've been invited to join the Provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
+    "message": "You've been invited to join the provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "providerInviteAcceptFailed": {
-    "message": "Unable to accept invitation. Ask a Provider admin to send a new invitation."
+    "message": "Unable to accept invitation. Ask a provider admin to send a new invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "You can access this Provider once an administrator confirms your membership. We'll send you an email when that happens."
+    "message": "You can access this provider once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "providerUsersNeedConfirmed": {
     "message": "U het gebruikers wat die uitnodiging aanvaar het, maar nog bevestig moet word. Gebruikers sal nie toegang tot die aanbieder hê tot hulle bevestig is nie."
@@ -4530,13 +4524,13 @@
     "message": "Aanbieder"
   },
   "newClientOrganization": {
-    "message": "New client organization"
+    "message": "New Client Organization"
   },
   "newClientOrganizationDesc": {
-    "message": "Create a new client organization that will be associated with you as the Provider. You will be able to access and manage this organization."
+    "message": "Create a new client organization that will be associated with you as the provider. You will be able to access and manage this organization."
   },
   "addExistingOrganization": {
-    "message": "Add existing organization"
+    "message": "Add Existing Organization"
   },
   "myProvider": {
     "message": "My aanbieder"
@@ -4558,7 +4552,7 @@
     "message": "Organisasie is suksesvol tot die aanbieder toegevoeg"
   },
   "accessingUsingProvider": {
-    "message": "Accessing organization using Provider $PROVIDER$",
+    "message": "Accessing organization using provider $PROVIDER$",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4573,7 +4567,7 @@
     "message": "Aanbieder bygewerk"
   },
   "yourProviderIs": {
-    "message": "Your Provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
+    "message": "Your provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4582,7 +4576,7 @@
     }
   },
   "detachedOrganization": {
-    "message": "The organization $ORGANIZATION$ has been detached from your Provider.",
+    "message": "The organization $ORGANIZATION$ has been detached from your provider.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4591,7 +4585,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the Provider."
+    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
   },
   "add": {
     "message": "Voeg toe"
@@ -4615,10 +4609,10 @@
     "message": "Set a maximum vault timeout for members."
   },
   "maximumVaultTimeoutLabel": {
-    "message": "Maximum vault timeout"
+    "message": "Maximum Vault Timeout"
   },
   "invalidMaximumVaultTimeout": {
-    "message": "Invalid maximum vault timeout."
+    "message": "Invalid Maximum Vault Timeout."
   },
   "hours": {
     "message": "Uur"
@@ -4640,7 +4634,7 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Custom vault timeout"
+    "message": "Custom Vault Timeout"
   },
   "vaultTimeoutToLarge": {
     "message": "U kluisuittelling oorskry die beperking wat deur u organisasie daargestel is."
@@ -4649,7 +4643,7 @@
     "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault timeout is not within allowed range."
+    "message": "Vault Timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
     "message": "Deaktiveer uitstuur van persoonlike kluis"
@@ -4670,19 +4664,19 @@
     "message": "Tipe"
   },
   "openIdConnectConfig": {
-    "message": "OpenID connect configuration"
+    "message": "OpenID Connect Configuration"
   },
   "samlSpConfig": {
-    "message": "SAML service provider configuration"
+    "message": "SAML Service Provider Configuration"
   },
   "samlIdpConfig": {
-    "message": "SAML identity provider configuration"
+    "message": "SAML Identity Provider Configuration"
   },
   "callbackPath": {
-    "message": "Callback path"
+    "message": "Callback Path"
   },
   "signedOutCallbackPath": {
-    "message": "Signed out callback path"
+    "message": "Signed Out Callback Path"
   },
   "authority": {
     "message": "Authority"
@@ -4691,55 +4685,55 @@
     "message": "Client ID"
   },
   "clientSecret": {
-    "message": "Client secret"
+    "message": "Client Secret"
   },
   "metadataAddress": {
     "message": "Metadata-adres"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDC Redirect Behavior"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Custom scopes"
+    "message": "Custom Scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
-    "message": "SP entity ID"
+    "message": "SP Entity ID"
   },
   "spMetadataUrl": {
-    "message": "SAML 2.0 metadata URL"
+    "message": "SAML 2.0 Metadata URL"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID format"
+    "message": "Name ID Format"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing behavior"
+    "message": "Signing Behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum incoming signing algorithm"
+    "message": "Minimum Incoming Signing Algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4751,7 +4745,7 @@
     "message": "Entity ID"
   },
   "idpBindingType": {
-    "message": "Binding type"
+    "message": "Binding Type"
   },
   "idpSingleSignOnServiceUrl": {
     "message": "Enkelaantekendiensbronadres"
@@ -4763,7 +4757,7 @@
     "message": "X509 openbare sertifikaat"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4820,17 +4814,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Kan nie aanbod aanvaar nie. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4856,7 +4850,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend sponsorship email to $NAME$ sponsorship",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4883,7 +4877,7 @@
     "message": "Borgskap is geskep"
   },
   "emailSent": {
-    "message": "Email sent"
+    "message": "Email Sent"
   },
   "revokeSponsorshipConfirmation": {
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
@@ -4958,16 +4952,16 @@
     "message": "SSO-waarmerking en Enkelorganisasiebeleide word vereis om Key Connector-dekripsie op te stel."
   },
   "memberDecryptionOption": {
-    "message": "Member decryption options"
+    "message": "Member Decryption Options"
   },
   "memberDecryptionPassDesc": {
-    "message": "Once authenticated, members will decrypt vault data using their master passwords."
+    "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
   },
   "keyConnector": {
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
     "message": "“Teken aan met SSO en Key Connector-dekripsie” is geaktiveer. Heirdie beleid sal slegs op eienaars en admins toegepas word."
@@ -4997,7 +4991,7 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
     "message": "Aanvaar aanbod"
@@ -5021,22 +5015,22 @@
     "message": "GRATIS met borgskap"
   },
   "viewBillingSyncToken": {
-    "message": "View billing sync token"
+    "message": "View Billing Sync Token"
   },
   "generateBillingSyncToken": {
-    "message": "Generate billing sync token"
+    "message": "Generate Billing Sync Token"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your billing sync token can access and edit this organization's subscription settings."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Manage billing sync"
+    "message": "Manage Billing Sync"
   },
   "setUpBillingSync": {
-    "message": "Set up billing sync"
+    "message": "Set Up Billing Sync"
   },
   "generateToken": {
     "message": "Genereer teken"
@@ -5048,10 +5042,10 @@
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the billing sync token will invalidate the previous token."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-hosting"
+    "message": "Self-Hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
@@ -5063,13 +5057,13 @@
     "message": "Faktureringsinchronisering"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing sync token"
+    "message": "Billing Sync Token"
   },
   "active": {
     "message": "Aktief"
@@ -5312,7 +5306,7 @@
     "message": "Premium subscription required"
   },
   "scim": {
-    "message": "SCIM provisioning",
+    "message": "SCIM Provisioning",
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
@@ -5369,7 +5363,7 @@
     "message": "Input is required."
   },
   "inputEmail": {
-    "message": "Input is not an email address."
+    "message": "Input is not an email-address."
   },
   "inputMinLength": {
     "message": "Input must be at least $COUNT$ characters long.",

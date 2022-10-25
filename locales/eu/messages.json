@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Oinarrizko domeinua",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Domeinu izena",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Ostalaria",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Gutxieneko karaktere bereziak",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Saihestu karaktere anbiguoak"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Hasierako letra larria",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Sartu zenbakia"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Ezabatu",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Kontu eguneratua"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Hautatu inportazio fitxategia"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "edo kopiatu/pegatu inportazio fitxategiaren edukia"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Premium bazkidea"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identifikatu eta itxi lineako kontuetako segurtasun hutsuneak, ondorengo txostenetan klik eginez.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Webgune ez seguruak"
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Egin zaitez Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Premium egin zara."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Plana",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Eguneratu plana",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Eguneratu zure kontua beste plan batera, informazio hau emanez. Ziurtatu kontuan ordaintzeko metodo aktibo bat duzula.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "$NUMBER$ faktura",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },

@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Domain basis",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Nama Domain",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -573,7 +573,7 @@
     "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
   },
   "createAccount": {
     "message": "Buat Akun"
@@ -915,16 +915,16 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "Confirm Master Password"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "Confirm Format"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "File Password"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "Confirm File Password"
   },
   "accountBackupOptionDescription": {
     "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
@@ -933,19 +933,19 @@
     "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "File type"
+    "message": "File Type"
   },
   "accountBackup": {
-    "message": "Account backup"
+    "message": "Account Backup"
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "“File password”  and “Confirm File Password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Confirm vault import"
+    "message": "Confirm Vault Import"
   },
   "confirmVaultImportDesc": {
     "message": "This file is password-protected. Please enter the file password to import data."
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Karakter Khusus Minimum",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Hindari Karakter Ambigu"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Gunakan Huruf Besar",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Sertakan Digit"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Bersihkan",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Akun Diperbarui"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Pilih file impor"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "atau salin / tempel konten file impor"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Keanggotaan Premium"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identifikasi dan tutup celah keamanan di akun-akun online Anda dengan meng-klik laporan di bawah ini.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Laporan Situs Web Tidak Aman"
@@ -1578,7 +1572,7 @@
     "message": "Login Tanpa Ditemukan 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Kami menemukan $COUNT$ situs web di lemari besi Anda yang mungkin tidak dikonfigurasi dengan otentikasi dua faktor (menurut twofactorauth.org). Untuk lebih melindungi akun ini, Anda harus mengaktifkan otentikasi dua faktor.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Jadi Anggota Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Anda telah ditingkatkan ke premium."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Paket",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Ubah Paket",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Tingkatkan akun Anda ke paket lain dengan memberikan informasi di bawah ini. Harap pastikan bahwa Anda memiliki metode pembayaran aktif yang ditambahkan ke akun.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktur #$NUMBER$",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4125,10 +4119,10 @@
     "message": "Kelola Koleksi yang Ditugaskan"
   },
   "editAssignedCollections": {
-    "message": "Edit assigned collections"
+    "message": "Edit Assigned Collections"
   },
   "deleteAssignedCollections": {
-    "message": "Delete assigned collections"
+    "message": "Delete Assigned Collections"
   },
   "manageGroups": {
     "message": "Kelola Grup"
@@ -4146,7 +4140,7 @@
     "message": "Kelola Peyetelan Ulang Sandi"
   },
   "disableRequiredError": {
-    "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
+    "message": "You must manually disable the $POLICYNAME$ policy before this policy can be disabled.",
     "placeholders": {
       "policyName": {
         "content": "$1",
@@ -4158,7 +4152,7 @@
     "message": "Kebijakan organisasi memengaruhi opsi kepemilikan Anda."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has blocked importing items into your individual vault."
+    "message": "An organization policy has disabled importing items into your personal vault."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Nonaktifkan kepemilikan pribadi untuk pengguna organisasi"
@@ -4380,19 +4374,19 @@
     "message": "Ikutkan pengguna baru secara otomatis"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an Enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
   },
   "resetPasswordOrgKeysError": {
-    "message": "Organization keys response is null"
+    "message": "Organization Keys response is null"
   },
   "resetPasswordDetailsError": {
-    "message": "Reset password details response is null"
+    "message": "Reset Password Details response is null"
   },
   "trashCleanupWarning": {
-    "message": "Items that have been in trash more than 30 days will be automatically deleted."
+    "message": "Items that have been in Trash more than 30 days will be automatically deleted."
   },
   "trashCleanupWarningSelfHosted": {
-    "message": "Items that have been in trash for a while will be automatically deleted."
+    "message": "Items that have been in Trash for a while will be automatically deleted."
   },
   "passwordPrompt": {
     "message": "Pengingat ulang sandi utama"
@@ -4458,7 +4452,7 @@
     "message": "Restored organization access successfully"
   },
   "bulkFilteredMessage": {
-    "message": "Excluded, not applicable for this action"
+    "message": "Excluded, not applicable for this action."
   },
   "fingerprint": {
     "message": "Sidik Jari"
@@ -4470,28 +4464,28 @@
     "message": "Cabut Pengguna"
   },
   "restoreUsers": {
-    "message": "Restore users"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Galat"
   },
   "resetPasswordManageUsers": {
-    "message": "Manage users must also be granted with the manage password reset permission"
+    "message": "Manage Users must also be enabled with the Manage Password Reset permission"
   },
   "setupProvider": {
     "message": "Pengaturan Provider"
   },
   "setupProviderLoginDesc": {
-    "message": "You've been invited to setup a new Provider. To continue, you need to log in or create a new Bitwarden account."
+    "message": "You've been invited to setup a new provider. To continue, you need to log in or create a new Bitwarden account."
   },
   "setupProviderDesc": {
-    "message": "Please enter the details below to complete the Provider setup. Contact Customer Support if you have any questions."
+    "message": "Please enter the details below to complete the provider setup. Contact Customer Support if you have any questions."
   },
   "providerName": {
     "message": "Nama Provider"
   },
   "providerSetup": {
-    "message": "Provider successfully set up"
+    "message": "The provider has been set up."
   },
   "clients": {
     "message": "Klien"
@@ -4500,7 +4494,7 @@
     "message": "Admin Provider"
   },
   "providerAdminDesc": {
-    "message": "The highest access user that can manage all aspects of your Provider as well as access and manage client organizations."
+    "message": "The highest access user that can manage all aspects of your provider as well as access and manage client organizations."
   },
   "serviceUser": {
     "message": "Layanan Pengguna"
@@ -4509,22 +4503,22 @@
     "message": "Service users can access and manage all client organizations."
   },
   "providerInviteUserDesc": {
-    "message": "Invite a new user to your Provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
+    "message": "Invite a new user to your provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "joinProvider": {
     "message": "Gabung Provider"
   },
   "joinProviderDesc": {
-    "message": "You've been invited to join the Provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
+    "message": "You've been invited to join the provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "providerInviteAcceptFailed": {
-    "message": "Unable to accept invitation. Ask a Provider admin to send a new invitation."
+    "message": "Unable to accept invitation. Ask a provider admin to send a new invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "You can access this Provider once an administrator confirms your membership. We'll send you an email when that happens."
+    "message": "You can access this provider once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "providerUsersNeedConfirmed": {
-    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the Provider until they are confirmed."
+    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the provider until they are confirmed."
   },
   "provider": {
     "message": "Provider"
@@ -4533,7 +4527,7 @@
     "message": "Organisasi Klien Baru"
   },
   "newClientOrganizationDesc": {
-    "message": "Create a new client organization that will be associated with you as the Provider. You will be able to access and manage this organization."
+    "message": "Create a new client organization that will be associated with you as the provider. You will be able to access and manage this organization."
   },
   "addExistingOrganization": {
     "message": "Tambah Organisasi yang sudah ada"
@@ -4555,10 +4549,10 @@
     }
   },
   "organizationJoinedProvider": {
-    "message": "Organization was successfully added to the Provider"
+    "message": "Organization was successfully added to the provider"
   },
   "accessingUsingProvider": {
-    "message": "Accessing organization using Provider $PROVIDER$",
+    "message": "Accessing organization using provider $PROVIDER$",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4573,7 +4567,7 @@
     "message": "Provider diperbarui"
   },
   "yourProviderIs": {
-    "message": "Your Provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
+    "message": "Your provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4582,7 +4576,7 @@
     }
   },
   "detachedOrganization": {
-    "message": "The organization $ORGANIZATION$ has been detached from your Provider.",
+    "message": "The organization $ORGANIZATION$ has been detached from your provider.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4591,7 +4585,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the Provider."
+    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
   },
   "add": {
     "message": "Tambah"
@@ -4603,10 +4597,10 @@
     "message": "Perbarui Kata Sandi Utama"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "masterPasswordInvalidWarning": {
-    "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your Master Password does not meet the policy requirements of this organization. In order to join the organization, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
     "message": "Batas Waktu Brankas"
@@ -4627,7 +4621,7 @@
     "message": "Menit"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4640,7 +4634,7 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Custom vault timeout"
+    "message": "Custom Vault Timeout"
   },
   "vaultTimeoutToLarge": {
     "message": "Your vault timeout exceeds the restriction set by your organization."
@@ -4649,7 +4643,7 @@
     "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault timeout is not within allowed range."
+    "message": "Vault Timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
     "message": "Remove individual vault export"
@@ -4661,7 +4655,7 @@
     "message": "Ekspor Brankas Dinonaktifkan"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your individual vault."
+    "message": "One or more organization policies prevents you from exporting your personal vault."
   },
   "selectType": {
     "message": "Pilih Tipe SSO"
@@ -4670,19 +4664,19 @@
     "message": "Tipe"
   },
   "openIdConnectConfig": {
-    "message": "OpenID connect configuration"
+    "message": "OpenID Connect Configuration"
   },
   "samlSpConfig": {
-    "message": "SAML service provider configuration"
+    "message": "SAML Service Provider Configuration"
   },
   "samlIdpConfig": {
-    "message": "SAML identity provider configuration"
+    "message": "SAML Identity Provider Configuration"
   },
   "callbackPath": {
-    "message": "Callback path"
+    "message": "Callback Path"
   },
   "signedOutCallbackPath": {
-    "message": "Signed out callback path"
+    "message": "Signed Out Callback Path"
   },
   "authority": {
     "message": "Otoritas"
@@ -4697,28 +4691,28 @@
     "message": "Alamat Metadata"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDC Redirect Behavior"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Custom scopes"
+    "message": "Custom Scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
     "message": "ID Entitas SP"
@@ -4727,19 +4721,19 @@
     "message": "Metadata URL SAML 2.0"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID format"
+    "message": "Name ID Format"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing behavior"
+    "message": "Signing Behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum incoming signing algorithm"
+    "message": "Minimum Incoming Signing Algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4754,16 +4748,16 @@
     "message": "Tipe Binding"
   },
   "idpSingleSignOnServiceUrl": {
-    "message": "Single sign-on service URL"
+    "message": "Single Sign On Service URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single log-out service URL"
+    "message": "Single Log Out Service URL"
   },
   "idpX509PublicCert": {
     "message": "Sertifikat Publik X509"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4775,7 +4769,7 @@
     "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Single sign-on configuration saved"
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Free Bitwarden Families"
@@ -4820,17 +4814,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Unable to accept offer. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4844,7 +4838,7 @@
     "message": "Redeemed"
   },
   "redeemedAccount": {
-    "message": "Account redeemed"
+    "message": "Redeemed Account"
   },
   "revokeAccount": {
     "message": "Revoke account $NAME$",
@@ -4856,7 +4850,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend sponsorship email to $NAME$ sponsorship",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4865,22 +4859,22 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Free Families plan"
+    "message": "Free Families Plan"
   },
   "redeemNow": {
-    "message": "Redeem now"
+    "message": "Redeem Now"
   },
   "recipient": {
     "message": "Recipient"
   },
   "removeSponsorship": {
-    "message": "Remove sponsorship"
+    "message": "Remove Sponsorship"
   },
   "removeSponsorshipConfirmation": {
     "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
-    "message": "Sponsorship created"
+    "message": "Sponsorship Created"
   },
   "emailSent": {
     "message": "Email Terkirim"
@@ -4889,7 +4883,7 @@
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
-    "message": "Sponsorship removed"
+    "message": "Sponsorship Removed"
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
@@ -4931,10 +4925,10 @@
     "message": "Tinggalkan Organisasi"
   },
   "removeMasterPassword": {
-    "message": "Remove master password"
+    "message": "Remove Master Password"
   },
   "removedMasterPassword": {
-    "message": "Master password removed"
+    "message": "Master password removed."
   },
   "allowSso": {
     "message": "Izinkan autentikasi SSO"
@@ -4958,19 +4952,19 @@
     "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
-    "message": "Member decryption options"
+    "message": "Member Decryption Options"
   },
   "memberDecryptionPassDesc": {
-    "message": "Once authenticated, members will decrypt vault data using their master passwords."
+    "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
   },
   "keyConnector": {
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
     "message": "Aktifkan SSO"
@@ -4979,13 +4973,13 @@
     "message": "Matikan SSO"
   },
   "enabledKeyConnector": {
-    "message": "Key Connector activated"
+    "message": "Enabled Key Connector"
   },
   "disabledKeyConnector": {
-    "message": "Key Connector deactivated"
+    "message": "Disabled Key Connector"
   },
   "keyConnectorWarning": {
-    "message": "Once members begin using Key Connector, your organization cannot revert to master password decryption. Proceed only if you are comfortable deploying and managing a key server."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Migrated to Key Connector"
@@ -4997,13 +4991,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
-    "message": "Accept offer"
+    "message": "Accept Offer"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring organization"
+    "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
     "message": "Test"
@@ -5021,55 +5015,55 @@
     "message": "FREE with sponsorship"
   },
   "viewBillingSyncToken": {
-    "message": "View billing sync token"
+    "message": "View Billing Sync Token"
   },
   "generateBillingSyncToken": {
-    "message": "Generate billing sync token"
+    "message": "Generate Billing Sync Token"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your billing sync token can access and edit this organization's subscription settings."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Manage billing sync"
+    "message": "Manage Billing Sync"
   },
   "setUpBillingSync": {
-    "message": "Set up billing sync"
+    "message": "Set Up Billing Sync"
   },
   "generateToken": {
-    "message": "Generate token"
+    "message": "Generate Token"
   },
   "rotateToken": {
-    "message": "Rotate token"
+    "message": "Rotate Token"
   },
   "rotateBillingSyncTokenWarning": {
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the billing sync token will invalidate the previous token."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-hosting"
+    "message": "Self-Hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Token rotated"
+    "message": "Token rotated."
   },
   "billingSync": {
-    "message": "Billing sync"
+    "message": "Billing Sync"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing sync token"
+    "message": "Billing Sync Token"
   },
   "active": {
     "message": "Aktif"
@@ -5078,13 +5072,13 @@
     "message": "Inactive"
   },
   "sentAwaitingSync": {
-    "message": "Sent (awaiting sync)"
+    "message": "Sent (Awaiting Sync)"
   },
   "sent": {
     "message": "Sent"
   },
   "requestRemoved": {
-    "message": "Removed (awaiting sync)"
+    "message": "Removed (Awaiting Sync)"
   },
   "requested": {
     "message": "Requested"
@@ -5129,13 +5123,13 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting individual vault"
+    "message": "Exporting Personal Vault"
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Exporting Organization Vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5144,7 +5138,7 @@
     }
   },
   "exportingOrganizationVaultDescription": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Personal vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5153,7 +5147,7 @@
     }
   },
   "accessDenied": {
-    "message": "Access denied. You do not have permission to view this page."
+    "message": "Access Denied. You do not have permission to view this page."
   },
   "masterPassword": {
     "message": "Kata Sandi Utama"
@@ -5187,26 +5181,26 @@
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password type"
+    "message": "Password Type"
   },
   "regenerateUsername": {
-    "message": "Regenerate username"
+    "message": "Regenerate Username"
   },
   "generateUsername": {
-    "message": "Generate username"
+    "message": "Generate Username"
   },
   "usernameType": {
-    "message": "Username type"
+    "message": "Username Type"
   },
   "plusAddressedEmail": {
-    "message": "Plus addressed email",
+    "message": "Plus Addressed Email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all email"
+    "message": "Catch-all Email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -5216,13 +5210,13 @@
     "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
-    "message": "Random word"
+    "message": "Random Word"
   },
   "service": {
     "message": "Service"
   },
   "unknownCipher": {
-    "message": "Unknown item, you may need to request permission to access this item."
+    "message": "Unknown Item, you may need to request permission to access this item."
   },
   "cannotSponsorSelf": {
     "message": "You cannot redeem for the active account. Enter a different email."
@@ -5255,7 +5249,7 @@
     }
   },
   "lastSync": {
-    "message": "Last sync",
+    "message": "Last Sync",
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
@@ -5275,7 +5269,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Forwarded email alias"
+    "message": "Forwarded Email Alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -5285,7 +5279,7 @@
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API access token"
+    "message": "API Access Token"
   },
   "deviceVerification": {
     "message": "Verifikasi Perangkat"
@@ -5297,10 +5291,10 @@
     "message": "Jika diaktifkan, kode verifikasi akan dikirim ke alamat email Anda ketika login dari perangkat yang tidak dikenal"
   },
   "updatedDeviceVerification": {
-    "message": "Updated device verification"
+    "message": "Updated Device Verification"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5312,7 +5306,7 @@
     "message": "Premium subscription required"
   },
   "scim": {
-    "message": "SCIM provisioning",
+    "message": "SCIM Provisioning",
     "description": "The text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimDescription": {
@@ -5331,11 +5325,11 @@
     "message": "This API key has access to manage users within your organization. It should be kept secret."
   },
   "copyScimKey": {
-    "message": "Copy the SCIM API key to your clipboard",
+    "message": "Copy the SCIM API Key to your clipboard",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKey": {
-    "message": "Rotate the SCIM API key",
+    "message": "Rotate the SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateScimKeyWarning": {
@@ -5343,10 +5337,10 @@
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "rotateKey": {
-    "message": "Rotate key"
+    "message": "Rotate Key"
   },
   "scimApiKey": {
-    "message": "SCIM API key",
+    "message": "SCIM API Key",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "copyScimUrl": {

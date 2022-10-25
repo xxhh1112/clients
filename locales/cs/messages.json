@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Základní doména",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Název domény",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Host",
@@ -543,7 +543,7 @@
     "message": "Opravdu chcete tuto složku smazat?"
   },
   "deletedFolder": {
-    "message": "Složka byla smazána"
+    "message": "Složka byla smazána."
   },
   "loggedOut": {
     "message": "Odhlášení"
@@ -573,7 +573,7 @@
     "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
   },
   "createAccount": {
     "message": "Vytvořit účet"
@@ -915,16 +915,16 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "Confirm Master Password"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "Confirm Format"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "File Password"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "Confirm File Password"
   },
   "accountBackupOptionDescription": {
     "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
@@ -933,19 +933,19 @@
     "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "File type"
+    "message": "File Type"
   },
   "accountBackup": {
-    "message": "Account backup"
+    "message": "Account Backup"
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Password Protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "“File password”  and “Confirm File Password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Confirm vault import"
+    "message": "Confirm Vault Import"
   },
   "confirmVaultImportDesc": {
     "message": "This file is password-protected. Please enter the file password to import data."
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimální počet speciálních znaků",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Použít nezaměnitelné znaky"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Velká písmena na začátku slova",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Zahrnout číslo"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Vymazat",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Účet byl aktualizován"
@@ -1145,7 +1145,7 @@
     "message": "Smazání účtu je trvalé. Tuto akci nelze vrátit zpět."
   },
   "accountDeleted": {
-    "message": "Účet byl smazán"
+    "message": "Účet byl smazán."
   },
   "accountDeletedDesc": {
     "message": "Váš účet byl uzavřen a všechna související data byla smazána."
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Vyberte soubor pro import"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "nebo zkopírujte a vložte obsah souboru"
   },
@@ -1221,7 +1215,7 @@
     "message": "Customize your web vault experience."
   },
   "preferencesUpdated": {
-    "message": "Preferences saved"
+    "message": "Preferences updated"
   },
   "language": {
     "message": "Jazyk"
@@ -1317,11 +1311,11 @@
     "message": "Povoleno"
   },
   "restoreAccess": {
-    "message": "Restore access"
+    "message": "Restore Access"
   },
   "premium": {
     "message": "Prémium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Prémiové členství"
@@ -1345,7 +1339,7 @@
     "message": "Zakázat"
   },
   "revokeAccess": {
-    "message": "Revoke access"
+    "message": "Revoke Access"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Tento poskytovatel dvoufázového přihlášení byl povolen."
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Hlášení o nezabezpečených webech"
@@ -1739,10 +1733,10 @@
     "message": "Fakturace"
   },
   "billingPlanLabel": {
-    "message": "Billing plan"
+    "message": "Billing Plan"
   },
   "paymentType": {
-    "message": "Payment type"
+    "message": "Payment Type"
   },
   "accountCredit": {
     "message": "Kredit na účtu",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Přejděte na Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Povýšili jste na premium."
@@ -1974,7 +1968,7 @@
     }
   },
   "paymentMethod": {
-    "message": "Způsob Platby"
+    "message": "Způsob platby"
   },
   "noPaymentMethod": {
     "message": "Žádné způsoby platby."
@@ -2090,7 +2084,7 @@
     "message": "E-mailová adresa pro fakturaci"
   },
   "businessName": {
-    "message": "Název společnosti"
+    "message": "Název firmy"
   },
   "chooseYourPlan": {
     "message": "Vyberte plán"
@@ -2299,7 +2293,7 @@
     "message": "Opravdu chcete tuto organizaci opustit?"
   },
   "leftOrganization": {
-    "message": "Organizace byla opuštěna"
+    "message": "Organizace byla opuštěna."
   },
   "defaultCollection": {
     "message": "Výchozí kolekce"
@@ -2326,7 +2320,7 @@
     "message": "Jednotné přihlášení"
   },
   "editPolicy": {
-    "message": "Upravit zásady"
+    "message": "Upravit zásadu"
   },
   "groups": {
     "message": "Skupiny"
@@ -2353,7 +2347,7 @@
     "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
   },
   "removeUserConfirmationKeyConnector": {
-    "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently deactivate their account. This action cannot be undone. Do you want to proceed?"
+    "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
   },
   "externalId": {
     "message": "Externí ID"
@@ -2425,7 +2419,7 @@
     "message": "Potvrzeno"
   },
   "clientOwnerEmail": {
-    "message": "Client owner email"
+    "message": "Client Owner Email"
   },
   "owner": {
     "message": "Vlastník"
@@ -2875,7 +2869,7 @@
     "message": "Znovu poslat pozvánku"
   },
   "resendEmail": {
-    "message": "Resend email"
+    "message": "Resend Email"
   },
   "hasBeenReinvited": {
     "message": "Uživatel $USER$ byl znovu pozván.",
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Plán",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Změnit plán",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Povyšte svůj účet na jiný plán zadáním údajů níže. Ujistěte se prosím, že máte k účtu přidaný platný způsob platby.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktura #$NUMBER$",
@@ -3115,7 +3109,7 @@
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
   },
   "maxSeatLimit": {
-    "message": "Seat Limit (optional)",
+    "message": "Maximum Seat Limit (optional)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
@@ -3142,10 +3136,10 @@
     }
   },
   "limitSubscription": {
-    "message": "Limit subscription (optional)"
+    "message": "Limit Subscription (Optional)"
   },
   "subscriptionSeats": {
-    "message": "Subscription seats"
+    "message": "Subscription Seats"
   },
   "subscriptionUpdated": {
     "message": "Předplatné aktualizováno"
@@ -3437,10 +3431,10 @@
     "description": "'OAuth 2.0' is a programming protocol. It should probably not be translated."
   },
   "viewApiKey": {
-    "message": "Zobrazit klíč API"
+    "message": "Zobrazit API klíč"
   },
   "rotateApiKey": {
-    "message": "Změnit klíč API"
+    "message": "Změnit API klíč"
   },
   "selectOneCollection": {
     "message": "Musíte vybrat alespoň jednu kolekci."
@@ -3748,7 +3742,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Upravený Send",
+    "message": "Send upraven",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4110,10 +4104,10 @@
     "message": "You lack the necessary permissions to perform this action."
   },
   "manageAllCollections": {
-    "message": "Správa všech kolekcí"
+    "message": "Spravovat všechny kolekce"
   },
   "createNewCollections": {
-    "message": "Create new collections"
+    "message": "Create New Collections"
   },
   "editAnyCollection": {
     "message": "Upravit jakoukoliv kolekci"
@@ -4122,10 +4116,10 @@
     "message": "Odstranit jakoukoliv kolekci"
   },
   "manageAssignedCollections": {
-    "message": "Správa přiřazených kolekcí"
+    "message": "Spravovat přiřazené kolekce"
   },
   "editAssignedCollections": {
-    "message": "Edit assigned collections"
+    "message": "Edit Assigned Collections"
   },
   "deleteAssignedCollections": {
     "message": "Spravovat přiřazené kolekce"
@@ -4146,7 +4140,7 @@
     "message": "Správa obnovení hesla"
   },
   "disableRequiredError": {
-    "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
+    "message": "You must manually disable the $POLICYNAME$ policy before this policy can be disabled.",
     "placeholders": {
       "policyName": {
         "content": "$1",
@@ -4158,7 +4152,7 @@
     "message": "Zásady organizace ovlivňují možnosti vlastnictví."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has blocked importing items into your individual vault."
+    "message": "An organization policy has disabled importing items into your personal vault."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Zakázat osobní vlastnictví pro uživatele organizace"
@@ -4317,7 +4311,7 @@
     }
   },
   "eventResetSsoLink": {
-    "message": "Reset SSO link for user $ID$",
+    "message": "Reset Sso link for user $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4467,10 +4461,10 @@
     "message": "Odebrat uživatele"
   },
   "revokeUsers": {
-    "message": "Revoke users"
+    "message": "Revoke Users"
   },
   "restoreUsers": {
-    "message": "Restore users"
+    "message": "Restore Users"
   },
   "error": {
     "message": "Chyba"
@@ -4509,31 +4503,31 @@
     "message": "Servisní uživatelé mohou přistupovat ke všem klientským organizacím a spravovat je."
   },
   "providerInviteUserDesc": {
-    "message": "Invite a new user to your Provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
+    "message": "Invite a new user to your provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "joinProvider": {
     "message": "Join Provider"
   },
   "joinProviderDesc": {
-    "message": "You've been invited to join the Provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
+    "message": "You've been invited to join the provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "providerInviteAcceptFailed": {
-    "message": "Unable to accept invitation. Ask a Provider admin to send a new invitation."
+    "message": "Unable to accept invitation. Ask a provider admin to send a new invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "You can access this Provider once an administrator confirms your membership. We'll send you an email when that happens."
+    "message": "You can access this provider once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "providerUsersNeedConfirmed": {
-    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the Provider until they are confirmed."
+    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the provider until they are confirmed."
   },
   "provider": {
     "message": "Poskytovatel"
   },
   "newClientOrganization": {
-    "message": "New client organization"
+    "message": "New Client Organization"
   },
   "newClientOrganizationDesc": {
-    "message": "Create a new client organization that will be associated with you as the Provider. You will be able to access and manage this organization."
+    "message": "Create a new client organization that will be associated with you as the provider. You will be able to access and manage this organization."
   },
   "addExistingOrganization": {
     "message": "Přidat existující organizaci"
@@ -4555,10 +4549,10 @@
     }
   },
   "organizationJoinedProvider": {
-    "message": "Organization was successfully added to the Provider"
+    "message": "Organization was successfully added to the provider"
   },
   "accessingUsingProvider": {
-    "message": "Accessing organization using Provider $PROVIDER$",
+    "message": "Accessing organization using provider $PROVIDER$",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4567,13 +4561,13 @@
     }
   },
   "providerIsDisabled": {
-    "message": "Provider suspended"
+    "message": "Provider is disabled."
   },
   "providerUpdated": {
-    "message": "Provider saved"
+    "message": "Provider updated"
   },
   "yourProviderIs": {
-    "message": "Your Provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
+    "message": "Your provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4582,7 +4576,7 @@
     }
   },
   "detachedOrganization": {
-    "message": "The organization $ORGANIZATION$ has been detached from your Provider.",
+    "message": "The organization $ORGANIZATION$ has been detached from your provider.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4591,7 +4585,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the Provider."
+    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
   },
   "add": {
     "message": "Přidat"
@@ -4603,10 +4597,10 @@
     "message": "Aktualizovat hlavní heslo"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "masterPasswordInvalidWarning": {
-    "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your Master Password does not meet the policy requirements of this organization. In order to join the organization, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
     "message": "Časový limit trezoru"
@@ -4615,10 +4609,10 @@
     "message": "Nastavení maximálního časového limitu trezoru pro všechny uživatele."
   },
   "maximumVaultTimeoutLabel": {
-    "message": "Maximum vault timeout"
+    "message": "Maximum Vault Timeout"
   },
   "invalidMaximumVaultTimeout": {
-    "message": "Invalid maximum vault timeout."
+    "message": "Invalid Maximum Vault Timeout."
   },
   "hours": {
     "message": "Hodin"
@@ -4627,7 +4621,7 @@
     "message": "Minut"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4640,7 +4634,7 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Custom vault timeout"
+    "message": "Custom Vault Timeout"
   },
   "vaultTimeoutToLarge": {
     "message": "Your vault timeout exceeds the restriction set by your organization."
@@ -4649,7 +4643,7 @@
     "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault timeout is not within allowed range."
+    "message": "Vault Timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
     "message": "Remove individual vault export"
@@ -4658,31 +4652,31 @@
     "message": "Do not allow members to export their individual vault data."
   },
   "vaultExportDisabled": {
-    "message": "Vault export removed"
+    "message": "Vault Export Disabled"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your individual vault."
+    "message": "One or more organization policies prevents you from exporting your personal vault."
   },
   "selectType": {
-    "message": "Select SSO type"
+    "message": "Select SSO Type"
   },
   "type": {
     "message": "Typ"
   },
   "openIdConnectConfig": {
-    "message": "OpenID connect configuration"
+    "message": "OpenID Connect Configuration"
   },
   "samlSpConfig": {
-    "message": "SAML service provider configuration"
+    "message": "SAML Service Provider Configuration"
   },
   "samlIdpConfig": {
-    "message": "SAML identity provider configuration"
+    "message": "SAML Identity Provider Configuration"
   },
   "callbackPath": {
-    "message": "Callback path"
+    "message": "Callback Path"
   },
   "signedOutCallbackPath": {
-    "message": "Signed out callback path"
+    "message": "Signed Out Callback Path"
   },
   "authority": {
     "message": "Authority"
@@ -4691,55 +4685,55 @@
     "message": "Client ID"
   },
   "clientSecret": {
-    "message": "Client secret"
+    "message": "Client Secret"
   },
   "metadataAddress": {
-    "message": "Metadata address"
+    "message": "Metadata Address"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDC Redirect Behavior"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Custom scopes"
+    "message": "Custom Scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Custom User ID Claim Types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Email Claim Types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Custom Name Claim Types"
   },
   "acrValues": {
-    "message": "Requested authentication context class reference values"
+    "message": "Requested Authentication Context Class Reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" claim value in response"
+    "message": "Expected \"acr\" Claim Value In Response"
   },
   "spEntityId": {
-    "message": "SP entity ID"
+    "message": "SP Entity ID"
   },
   "spMetadataUrl": {
-    "message": "SAML 2.0 metadata URL"
+    "message": "SAML 2.0 Metadata URL"
   },
   "spAcsUrl": {
-    "message": "Assertion consumer service (ACS) URL"
+    "message": "Assertion Consumer Service (ACS) URL"
   },
   "spNameIdFormat": {
     "message": "Formát jména ID"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing behavior"
+    "message": "Signing Behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum incoming signing algorithm"
+    "message": "Minimum Incoming Signing Algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4751,19 +4745,19 @@
     "message": "ID subjektu"
   },
   "idpBindingType": {
-    "message": "Binding type"
+    "message": "Binding Type"
   },
   "idpSingleSignOnServiceUrl": {
-    "message": "Single sign-on service URL"
+    "message": "Single Sign On Service URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single log-out service URL"
+    "message": "Single Log Out Service URL"
   },
   "idpX509PublicCert": {
-    "message": "X509 public certificate"
+    "message": "X509 Public Certificate"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound signing algorithm"
+    "message": "Outbound Signing Algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4775,7 +4769,7 @@
     "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Single sign-on configuration saved"
+    "message": "Single Sign-On configuration was saved."
   },
   "sponsoredFamilies": {
     "message": "Free Bitwarden Families"
@@ -4820,17 +4814,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Unable to accept offer. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4844,7 +4838,7 @@
     "message": "Redeemed"
   },
   "redeemedAccount": {
-    "message": "Account redeemed"
+    "message": "Redeemed Account"
   },
   "revokeAccount": {
     "message": "Revoke account $NAME$",
@@ -4856,7 +4850,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend sponsorship email to $NAME$ sponsorship",
+    "message": "Resend Sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4865,31 +4859,31 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Free Families plan"
+    "message": "Free Families Plan"
   },
   "redeemNow": {
-    "message": "Redeem now"
+    "message": "Redeem Now"
   },
   "recipient": {
     "message": "Recipient"
   },
   "removeSponsorship": {
-    "message": "Remove sponsorship"
+    "message": "Remove Sponsorship"
   },
   "removeSponsorshipConfirmation": {
     "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
-    "message": "Sponsorship created"
+    "message": "Sponsorship Created"
   },
   "emailSent": {
-    "message": "Email sent"
+    "message": "Email Sent"
   },
   "revokeSponsorshipConfirmation": {
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
-    "message": "Sponsorship removed"
+    "message": "Sponsorship Removed"
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
@@ -4901,13 +4895,13 @@
     "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Send code"
+    "message": "Send Code"
   },
   "codeSent": {
-    "message": "Code sent"
+    "message": "Code Sent"
   },
   "verificationCode": {
-    "message": "Verification code"
+    "message": "Verification Code"
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
@@ -4928,13 +4922,13 @@
     }
   },
   "leaveOrganization": {
-    "message": "Leave organization"
+    "message": "Leave Organization"
   },
   "removeMasterPassword": {
-    "message": "Remove master password"
+    "message": "Remove Master Password"
   },
   "removedMasterPassword": {
-    "message": "Master password removed"
+    "message": "Master password removed."
   },
   "allowSso": {
     "message": "Allow SSO authentication"
@@ -4958,34 +4952,34 @@
     "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
-    "message": "Member decryption options"
+    "message": "Member Decryption Options"
   },
   "memberDecryptionPassDesc": {
-    "message": "Once authenticated, members will decrypt vault data using their master passwords."
+    "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
   },
   "keyConnector": {
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
+    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
   },
   "enabledSso": {
-    "message": "SSO turned on"
+    "message": "Enabled SSO"
   },
   "disabledSso": {
-    "message": "SSO turned on"
+    "message": "Disabled SSO"
   },
   "enabledKeyConnector": {
-    "message": "Key Connector activated"
+    "message": "Enabled Key Connector"
   },
   "disabledKeyConnector": {
-    "message": "Key Connector deactivated"
+    "message": "Disabled Key Connector"
   },
   "keyConnectorWarning": {
-    "message": "Once members begin using Key Connector, your organization cannot revert to master password decryption. Proceed only if you are comfortable deploying and managing a key server."
+    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Migrated to Key Connector"
@@ -4997,13 +4991,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "New Families Organization"
   },
   "acceptOffer": {
-    "message": "Accept offer"
+    "message": "Accept Offer"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring organization"
+    "message": "Sponsoring Organization"
   },
   "keyConnectorTest": {
     "message": "Test"
@@ -5021,55 +5015,55 @@
     "message": "FREE with sponsorship"
   },
   "viewBillingSyncToken": {
-    "message": "View billing sync token"
+    "message": "View Billing Sync Token"
   },
   "generateBillingSyncToken": {
-    "message": "Generate billing sync token"
+    "message": "Generate Billing Sync Token"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your billing sync token can access and edit this organization's subscription settings."
+    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Manage billing sync"
+    "message": "Manage Billing Sync"
   },
   "setUpBillingSync": {
-    "message": "Set up billing sync"
+    "message": "Set Up Billing Sync"
   },
   "generateToken": {
-    "message": "Generate token"
+    "message": "Generate Token"
   },
   "rotateToken": {
-    "message": "Rotate token"
+    "message": "Rotate Token"
   },
   "rotateBillingSyncTokenWarning": {
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the billing sync token will invalidate the previous token."
+    "message": "Rotating the Billing Sync Token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-hosting"
+    "message": "Self-Hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Token rotated"
+    "message": "Token rotated."
   },
   "billingSync": {
-    "message": "Billing sync"
+    "message": "Billing Sync"
   },
   "billingSyncDesc": {
-    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing sync token"
+    "message": "Billing Sync Token"
   },
   "active": {
     "message": "Active"
@@ -5078,13 +5072,13 @@
     "message": "Inactive"
   },
   "sentAwaitingSync": {
-    "message": "Sent (awaiting sync)"
+    "message": "Sent (Awaiting Sync)"
   },
   "sent": {
     "message": "Sent"
   },
   "requestRemoved": {
-    "message": "Removed (awaiting sync)"
+    "message": "Removed (Awaiting Sync)"
   },
   "requested": {
     "message": "Requested"
@@ -5117,7 +5111,7 @@
     "message": "Required if Entity ID is not a URL."
   },
   "openIdOptionalCustomizations": {
-    "message": "Optional customizations"
+    "message": "Optional Customizations"
   },
   "openIdAuthorityRequired": {
     "message": "Required if Authority is not valid."
@@ -5129,13 +5123,13 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting individual vault"
+    "message": "Exporting Personal Vault"
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Exporting Organization Vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5144,7 +5138,7 @@
     }
   },
   "exportingOrganizationVaultDescription": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Personal vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5153,10 +5147,10 @@
     }
   },
   "accessDenied": {
-    "message": "Access denied. You do not have permission to view this page."
+    "message": "Access Denied. You do not have permission to view this page."
   },
   "masterPassword": {
-    "message": "Master password"
+    "message": "Master Password"
   },
   "security": {
     "message": "Security"
@@ -5165,10 +5159,10 @@
     "message": "Keys"
   },
   "billingHistory": {
-    "message": "Billing history"
+    "message": "Billing History"
   },
   "backToReports": {
-    "message": "Back to reports"
+    "message": "Back to Reports"
   },
   "organizationPicker": {
     "message": "Organization picker"
@@ -5178,7 +5172,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountSettings": {
-    "message": "Account settings"
+    "message": "Account Settings"
   },
   "generator": {
     "message": "Generator"
@@ -5187,26 +5181,26 @@
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password type"
+    "message": "Password Type"
   },
   "regenerateUsername": {
-    "message": "Regenerate username"
+    "message": "Regenerate Username"
   },
   "generateUsername": {
-    "message": "Generate username"
+    "message": "Generate Username"
   },
   "usernameType": {
-    "message": "Username type"
+    "message": "Username Type"
   },
   "plusAddressedEmail": {
-    "message": "Plus addressed email",
+    "message": "Plus Addressed Email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all email"
+    "message": "Catch-all Email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -5216,13 +5210,13 @@
     "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
-    "message": "Random word"
+    "message": "Random Word"
   },
   "service": {
     "message": "Service"
   },
   "unknownCipher": {
-    "message": "Unknown item, you may need to request permission to access this item."
+    "message": "Unknown Item, you may need to request permission to access this item."
   },
   "cannotSponsorSelf": {
     "message": "You cannot redeem for the active account. Enter a different email."
@@ -5255,7 +5249,7 @@
     }
   },
   "lastSync": {
-    "message": "Last sync",
+    "message": "Last Sync",
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
@@ -5275,7 +5269,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Forwarded email alias"
+    "message": "Forwarded Email Alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -5285,22 +5279,22 @@
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API access token"
+    "message": "API Access Token"
   },
   "deviceVerification": {
-    "message": "Device verification"
+    "message": "Device Verification"
   },
   "enableDeviceVerification": {
-    "message": "Turn on device verification"
+    "message": "Enable Device Verification"
   },
   "deviceVerificationDesc": {
-    "message": "Verification codes are sent to your email address when logging in from an unrecognized device"
+    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
   },
   "updatedDeviceVerification": {
-    "message": "Updated device verification"
+    "message": "Updated Device Verification"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
+    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",

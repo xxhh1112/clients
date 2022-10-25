@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Alap domain",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Tartománynév",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Kiszolgáló",
@@ -209,7 +209,7 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Találatfelismerés",
+    "message": "Találat érzékelés",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
@@ -223,7 +223,7 @@
     "message": "Láthatóság váltása"
   },
   "toggleCollapse": {
-    "message": "Összecsukás/kinyitás",
+    "message": "Összezárás váltás",
     "description": "Toggling an expand/collapse state."
   },
   "generatePassword": {
@@ -269,13 +269,13 @@
     "message": "Szerkesztés"
   },
   "searchCollection": {
-    "message": "Keresés a gyűjteményben"
+    "message": "Gyűjtemény keresése"
   },
   "searchFolder": {
     "message": "Mappa keresése"
   },
   "searchFavorites": {
-    "message": "Keresés a kedvencek közt"
+    "message": "Kedvencek keresése"
   },
   "searchType": {
     "message": "Típus keresése",
@@ -324,7 +324,7 @@
     "message": "Gyűjtemények"
   },
   "firstName": {
-    "message": "Keresztnév"
+    "message": "Személynév"
   },
   "middleName": {
     "message": "Középső név"
@@ -452,13 +452,13 @@
     "message": "Összes kijelölése"
   },
   "unselectAll": {
-    "message": "Kijelölés megszüntetése"
+    "message": "Összes kijelölés megszüntetése"
   },
   "launch": {
     "message": "Indítás"
   },
   "newAttachment": {
-    "message": "Melléklet hozzáadása"
+    "message": "Új melléklet hozzáadása"
   },
   "deletedAttachment": {
     "message": "A melléklet törlésre került."
@@ -482,10 +482,10 @@
     "message": "Ez a funkció nem használható a titkosítási kulcs frissítéséig."
   },
   "addedItem": {
-    "message": "Elem hozzáadva"
+    "message": "Az elem hozzáadásra került."
   },
   "editedItem": {
-    "message": "Elem szerkesztve"
+    "message": "Az elem szerkesztésre került."
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ átkerült $ORGNAME$ szervezethez",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimális speciális",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Félreérthető karakterek mellőzése"
@@ -997,20 +997,20 @@
   },
   "capitalize": {
     "message": "Nagy kezdőbetű",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Tartalmazzon számot"
+    "message": "Szám is"
   },
   "passwordHistory": {
-    "message": "Jelszóelőzmények"
+    "message": "Jelszó előzmények"
   },
   "noPasswordsInList": {
     "message": "Nincsenek listázható jelszavak."
   },
   "clear": {
     "message": "Kiürítés",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "A fiók frissítésre került."
@@ -1040,7 +1040,7 @@
     "message": "A folytatásban a felhasználó kiléptetésre kerül a jelenlegi munkamenetből, szükséges az ismételt bejelentkezés. Más eszközökön aktív munkamenetek akár egy órán keresztül is aktívak maradhatnak."
   },
   "emailChanged": {
-    "message": "Email cím megváltoztatva"
+    "message": "Az email cím megváltozott."
   },
   "logBackIn": {
     "message": "Ismételten be kell jelentkezni."
@@ -1052,7 +1052,7 @@
     "message": "Mesterjelszó módosítása"
   },
   "masterPasswordChanged": {
-    "message": "Mesterjelszó megváltoztatva"
+    "message": "A mesterjelszó megváltozott."
   },
   "currentMasterPass": {
     "message": "Jelenlegi mesterjelszó"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Válasszuk ki az import fájlt"
   },
-  "chooseFile": {
-    "message": "Fájl kiválasztása"
-  },
-  "noFileChosen": {
-    "message": "Nincs kiválasztott fájl."
-  },
   "orCopyPasteFileContents": {
     "message": "vagy vágólapon vigyük be fájl tartalmat"
   },
@@ -1321,13 +1315,13 @@
   },
   "premium": {
     "message": "Prémium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Prémium tagság"
   },
   "premiumRequired": {
-    "message": "Prémium szükséges"
+    "message": "Prémium funkció szükséges"
   },
   "premiumRequiredDesc": {
     "message": "A funkció használatához prémium tagság szükséges."
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Az alábbi jelentésekre kattintva azonosítsuk és zárjuk le a webes kiókjaink biztonsági hiányosságait.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Nem-biztonságos webhelyek jelentés"
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Váltás Prémiumra",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Megtörtént az áttérés a Prémium verzióra."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Díjcsomag",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Díjcsomag változtatása",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "A fiók felminősítése másik díjcsomagra az alábbi megadott információ alapján. Ellenőrizzük a fiókhoz adott aktív fizetési módot.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "#$NUMBER$ számla",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4025,7 +4019,7 @@
     "message": "A szervezet tulajdonosai és adminisztrátorai mentesek az irányelv végrehajtása alól."
   },
   "personalOwnershipSubmitError": {
-    "message": "Egy vállalati házirend miatt korlátozásra került az elemek személyes tárolóba történő mentése. Módosítsa a Tulajdon opciót egy szervezetre és válasszon az elérhető gyűjtemények közül."
+    "message": "Egy vállalati házirend miatt korlátozásra került az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül."
   },
   "disableSend": {
     "message": "Send letiltása"
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
@@ -4880,7 +4874,7 @@
     "message": "A szponzorálás eltávolítása után felelősséget vállalunk az előfizetésért és a kapcsolódó számlákért. Biztosan folytatjuk?"
   },
   "sponsorshipCreated": {
-    "message": "A szponzoráció létrejött"
+    "message": "A szponzoráció létrejött."
   },
   "emailSent": {
     "message": "Az email elküldésre került."

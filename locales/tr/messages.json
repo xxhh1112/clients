@@ -38,7 +38,7 @@
     "message": "Parola"
   },
   "newPassword": {
-    "message": "Yeni Parola"
+    "message": "Yeni parola"
   },
   "passphrase": {
     "message": "Uzun söz"
@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Ana alan adı",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Alan adı",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Sunucu",
@@ -269,23 +269,23 @@
     "message": "Düzenle"
   },
   "searchCollection": {
-    "message": "Koleksiyon Ara"
+    "message": "Koleksiyonda ara"
   },
   "searchFolder": {
-    "message": "Klasör Ara"
+    "message": "Klasörde ara"
   },
   "searchFavorites": {
-    "message": "Favorilerde Ara"
+    "message": "Favorilerde ara"
   },
   "searchType": {
-    "message": "Arama Tipi",
+    "message": "Arama türü",
     "description": "Search item type"
   },
   "searchVault": {
     "message": "Kasada ara"
   },
   "allItems": {
-    "message": "Tüm Öğeler"
+    "message": "Tüm kayıtlar"
   },
   "favorites": {
     "message": "Favoriler"
@@ -303,7 +303,7 @@
     "message": "Kimlik"
   },
   "typeSecureNote": {
-    "message": "Güvenli Not"
+    "message": "Güvenli not"
   },
   "typeLoginPlural": {
     "message": "Hesaplar"
@@ -351,7 +351,7 @@
     "message": "İl / eyalet"
   },
   "zipPostalCode": {
-    "message": "Posta Kodu"
+    "message": "Posta kodu"
   },
   "country": {
     "message": "Ülke"
@@ -537,7 +537,7 @@
     "message": "Klasör düzenlendi"
   },
   "addedFolder": {
-    "message": "Klasör Eklendi"
+    "message": "Klasör eklendi"
   },
   "deleteFolderConfirmation": {
     "message": "Bu klasörü silmek istediğinizden emin misiniz?"
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "En az özel karakter",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Okurken karışabilecek karakterleri kullanma"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Baş harfleri büyük yap",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Rakam ekle"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Temizle",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Hesap güncellendi"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "İçe aktarma dosyasını seçin"
   },
-  "chooseFile": {
-    "message": "Dosya seç"
-  },
-  "noFileChosen": {
-    "message": "Dosya seçilmedi"
-  },
   "orCopyPasteFileContents": {
     "message": "veya içe aktarma dosyasının içeriğini kopyalayıp yapıştırın"
   },
@@ -1321,13 +1315,13 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
-    "message": "Premium Üyelik"
+    "message": "Premium üyelik"
   },
   "premiumRequired": {
-    "message": "Premium Gerekli"
+    "message": "Premium gerekli"
   },
   "premiumRequiredDesc": {
     "message": "Bu özelliği kullanmak için premium üyelik gereklidir."
@@ -1336,7 +1330,7 @@
     "message": "Premium erişiminiz var"
   },
   "alreadyPremiumFromOrg": {
-    "message": "Üyesi olduğunuz bir organizasyon nedeniyle premium özelliklere zaten erişiminiz var."
+    "message": "Üyesi olduğunuz kuruluş sayesinde premium özelliklere zaten erişiminiz var."
   },
   "manage": {
     "message": "Yönet"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Aşağıdaki raporlara tıklayarak çevrimiçi hesaplarınızdaki güvenlik açıklarını görün ve kapatın.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Güvensiz Web Siteleri"
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Premium'a geçin",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Premium'a yükselttiniz."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Paket",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Paketi yükselt",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Aşağıdaki bilgileri sağlayarak hesabınızı başka bir pakete yükseltin. Lütfen hesaba aktif bir ödeme yöntemi eklediğinizden emin olun.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Fatura no: $NUMBER$",
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },

@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Domini base",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "domainName": {
     "message": "Nom del domini",
-    "description": "Domain name. Example: website.com"
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Amfitrió",
@@ -425,7 +425,7 @@
     "message": "Jo"
   },
   "myVault": {
-    "message": "Caixa forta"
+    "message": "La meua caixa forta"
   },
   "allVaults": {
     "message": "Totes les caixes fortes"
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Mínim de caràcters especials",
-    "description": "Minimum special characters"
+    "description": "Minimum Special Characters"
   },
   "ambiguous": {
     "message": "Eviteu caràcters ambigus"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Majúscules inicials",
-    "description": "Make the first letter of a word uppercase."
+    "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
     "message": "Inclou número"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Esborra",
-    "description": "To clear something out. Example: To clear browser history."
+    "description": "To clear something out. example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Compte actualitzat"
@@ -1192,12 +1192,6 @@
   "selectImportFile": {
     "message": "Seleccioneu el fitxer d'importació"
   },
-  "chooseFile": {
-    "message": "Choose File"
-  },
-  "noFileChosen": {
-    "message": "No file chosen"
-  },
   "orCopyPasteFileContents": {
     "message": "o copieu/enganxeu el contingut dels fitxers d'importació"
   },
@@ -1321,7 +1315,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium membership"
+    "description": "Premium Membership"
   },
   "premiumMembership": {
     "message": "Subscripció Premium"
@@ -1545,7 +1539,7 @@
   },
   "reportsDesc": {
     "message": "Identifiqueu i tanqueu els forats de seguretat dels comptes en línia fent clic en els informes següents.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Llocs web no segurs"
@@ -1578,7 +1572,7 @@
     "message": "S'han trobat registres sense 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Hem trobat $COUNT$ llocs web a la vostra caixa forta que no es poden configurar amb l'autenticació de dos factors (d'acord amb twofactorauth.org). Per protegir encara més aquests comptes, haureu d'habilitar l'autenticació de dos factors.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1771,7 +1765,7 @@
   },
   "goPremium": {
     "message": "Fes-te Premium",
-    "description": "Another way of saying \"Get a Premium membership\""
+    "description": "Another way of saying \"Get a premium membership\""
   },
   "premiumUpdated": {
     "message": "Heu actualitzat a la versió premium."
@@ -2963,7 +2957,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3035,15 +3029,15 @@
   },
   "billingPlan": {
     "message": "Pla",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Canvi de pla",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Actualitzeu el compte a un altre pla proporcionant la informació següent. Assegureu-vos que heu afegit un mètode de pagament actiu al compte.",
-    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
+    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Factura #$NUMBER$",
@@ -3320,7 +3314,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Creat",
+    "message": "Created",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3953,7 +3947,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must set up 2FA on your user account before you can join this organization."
+        "example": "You must enable 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4446,7 +4440,7 @@
     "message": "Confirmat correctament."
   },
   "bulkReinviteMessage": {
-    "message": "Tornat a convidar correctament."
+    "message": "Reconvidat correctament."
   },
   "bulkRemovedMessage": {
     "message": "Suprimit correctament"
@@ -4658,7 +4652,7 @@
     "message": "Prohibeix als usuaris exportar les dades de la seua caixa forta privada."
   },
   "vaultExportDisabled": {
-    "message": "L'exportació de la caixa forta està Inhabilitada"
+    "message": "L'exportació de la caixa forta està inhabilitada"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta."
@@ -4830,7 +4824,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families organization."
+        "example": "You must have at least one existing Families Organization."
       }
     }
   },
