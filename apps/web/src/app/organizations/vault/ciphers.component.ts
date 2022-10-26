@@ -28,7 +28,7 @@ import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { BulkDeleteComponent } from "../../vault/bulk-delete.component";
-import { CiphersComponent as BaseCiphersComponent } from "../../vault/ciphers.component";
+import { CiphersComponent as BaseCiphersComponent, ItemRow } from "../../vault/ciphers.component";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
 
@@ -150,57 +150,50 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     return this.organization?.canEditAnyCollection && c.hasOldAttachments;
   }
 
-  selectAll(select: boolean) {
+  checkAll(select: boolean) {
     if (select) {
-      this.selectAll(false);
+      this.checkAll(false);
     }
 
-    let collectionsSelected = 0;
-    if (this.collections) {
-      for (const col of this.collections) {
-        if (collectionsSelected >= MaxCheckedCount) {
-          break;
-        }
-        if (col.node.name !== "Unassigned") {
-          this.checkCollection(col, select);
-          collectionsSelected++;
-        }
-      }
-    }
-
-    if (collectionsSelected >= MaxCheckedCount) {
+    const items: ItemRow[] = [...this.collections, ...this.ciphers];
+    if (!items) {
       return;
     }
 
-    const selectCount =
-      select && this.ciphers.length > MaxCheckedCount - collectionsSelected
-        ? MaxCheckedCount - collectionsSelected
-        : this.ciphers.length;
+    const selectCount = select && items.length > MaxCheckedCount ? MaxCheckedCount : items.length;
     for (let i = 0; i < selectCount; i++) {
-      this.checkCipher(this.ciphers[i], select);
+      this.checkRow(items[i], select);
     }
   }
 
-  selectCollection(c: TreeNode<CollectionFilter>) {
-    this.checkCollection(c);
+  selectRow(item: ItemRow) {
+    this.checkRow(item);
   }
 
-  checkCollection(c: TreeNode<CollectionFilter>, select?: boolean) {
-    (c as any).checked = select == null ? !(c as any).checked : select;
+  checkRow(item: ItemRow, select?: boolean) {
+    if (item instanceof TreeNode && item.node.name == "Unassigned") {
+      return;
+    }
+    item.checked = select ?? !item.checked;
   }
 
   get selectedCollections(): TreeNode<CollectionFilter>[] {
-    return this.activeFilter.selectedCollectionNode?.children.filter((c) => !!(c as any).checked);
+    if (!this.collections) {
+      return [];
+    }
+    return this.collections.filter((c) => !!(c as ItemRow).checked);
   }
 
   get selectedCollectionIds(): string[] {
-    return this.selectedCollections?.map((c) => c.node.id);
+    return this.selectedCollections.map((c) => c.node.id);
   }
 
+  // TODO: Connect to new collection modal
   async editCollectionInfo(c: CollectionView) {
     return;
   }
 
+  // TODO: Connect to new collection modal
   async editCollectionAccess(c: CollectionView) {
     return;
   }
@@ -243,7 +236,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       return;
     }
 
-    const selectedCipherIds = this.getSelectedCipherIds();
+    const selectedCipherIds = this.selectedCipherIds;
     const selectedCollectionIds = this.deleted ? null : this.selectedCollectionIds;
 
     if (!selectedCipherIds?.length && !selectedCollectionIds?.length) {

@@ -38,6 +38,8 @@ import { CollectionFilter } from "./vault-filter/shared/models/vault-filter.type
 
 const MaxCheckedCount = 500;
 
+export type ItemRow = (CipherView | TreeNode<CollectionFilter>) & { checked?: boolean };
+
 @Component({
   selector: "app-vault-ciphers",
   templateUrl: "ciphers.component.html",
@@ -77,7 +79,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   protected refreshing = false;
 
   get collections() {
-    return this.activeFilter?.selectedCollectionNode?.children;
+    return this.activeFilter?.selectedCollectionNode?.children ?? [];
   }
 
   get showCollections() {
@@ -111,11 +113,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   }
 
   ngOnDestroy() {
-    this.selectAll(false);
+    this.checkAll(false);
   }
 
   async applyFilter(filter: (cipher: CipherView) => boolean = null) {
-    this.selectAll(false);
+    this.checkAll(false);
     this.isAllChecked = false;
     this.collections?.forEach((col) => {
       (col as any).checked = false;
@@ -233,16 +235,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     this.onEditCipherCollectionsClicked.emit(c);
   }
 
-  selectCollection(c: TreeNode<CollectionFilter>) {
-    this.navigateCollection(c);
-  }
-
-  navigateCollection(node: TreeNode<CollectionFilter>) {
-    const filter = this.activeFilter;
-    filter.selectedCollectionNode = node;
-    this.activeFilterChanged.emit(filter);
-  }
-
   async clone(c: CipherView) {
     if (!(await this.repromptCipher(c))) {
       return;
@@ -291,7 +283,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedIds = this.getSelectedCipherIds();
+    const selectedIds = this.selectedCipherIds;
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -347,7 +339,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedIds = this.getSelectedCipherIds();
+    const selectedIds = this.selectedCipherIds;
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -376,7 +368,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedCiphers = this.getSelectedCiphers();
+    const selectedCiphers = this.selectedCiphers;
     if (selectedCiphers.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -405,7 +397,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedIds = this.getSelectedCipherIds();
+    const selectedIds = this.selectedCipherIds;
     if (selectedIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -461,30 +453,52 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
   }
 
-  selectAll(select: boolean) {
+  selectRow(item: ItemRow) {
+    if (item instanceof CipherView) {
+      this.checkRow(item);
+    } else if (item instanceof TreeNode) {
+      this.navigateCollection(item);
+    }
+  }
+
+  navigateCollection(node: TreeNode<CollectionFilter>) {
+    const filter = this.activeFilter;
+    filter.selectedCollectionNode = node;
+    this.activeFilterChanged.emit(filter);
+  }
+
+  checkAll(select: boolean) {
     if (select) {
-      this.selectAll(false);
+      this.checkAll(false);
     }
-    const selectCount =
-      select && this.ciphers.length > MaxCheckedCount ? MaxCheckedCount : this.ciphers.length;
+    const items: ItemRow[] = this.ciphers;
+    if (!items) {
+      return;
+    }
+
+    const selectCount = select && items.length > MaxCheckedCount ? MaxCheckedCount : items.length;
     for (let i = 0; i < selectCount; i++) {
-      this.checkCipher(this.ciphers[i], select);
+      this.checkRow(items[i], select);
     }
   }
 
-  checkCipher(c: CipherView, select?: boolean) {
-    (c as any).checked = select == null ? !(c as any).checked : select;
+  checkRow(item: ItemRow, select?: boolean) {
+    // Collections can't be managed in end user vault
+    if (!(item instanceof CipherView)) {
+      return;
+    }
+    item.checked = select ?? !item.checked;
   }
 
-  getSelectedCiphers(): CipherView[] {
-    if (this.ciphers == null) {
+  get selectedCiphers(): CipherView[] {
+    if (!this.ciphers) {
       return [];
     }
-    return this.ciphers.filter((c) => !!(c as any).checked);
+    return this.ciphers.filter((c) => !!(c as ItemRow).checked);
   }
 
-  getSelectedCipherIds(): string[] {
-    return this.getSelectedCiphers().map((c) => c.id);
+  get selectedCipherIds(): string[] {
+    return this.selectedCiphers.map((c) => c.id);
   }
 
   displayTotpCopyButton(cipher: CipherView) {
@@ -520,7 +534,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
         (await this.passwordRepromptService.showPasswordPrompt())
       );
     } else {
-      const selectedCiphers = this.getSelectedCiphers();
+      const selectedCiphers = this.selectedCiphers;
       const notProtected = !selectedCiphers.find(
         (cipher) => cipher.reprompt !== CipherRepromptType.None
       );

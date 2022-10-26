@@ -13,10 +13,11 @@
           <input
             class="tw-mr-2"
             type="checkbox"
-            (change)="selectAll($event.target.checked)"
+            id="checkAll"
+            (change)="checkAll($event.target.checked)"
             [(ngModel)]="isAllChecked"
           />
-          <label class="tw-mb-0 !tw-font-bold !tw-text-muted" for="selectAll">{{
+          <label class="tw-mb-0 !tw-font-bold !tw-text-muted" for="checkAll">{{
             "all" | i18n
           }}</label>
         </th>
@@ -73,7 +74,7 @@
     <ng-container body>
       <ng-container *ngIf="showCollections">
         <tr bitRow *ngFor="let col of filteredCollections">
-          <td bitCell class="tw-w-10" (click)="selectCollection(col)">
+          <td bitCell class="tw-w-10" (click)="selectRow(col)">
             <input
               *ngIf="organization && col.node.name !== 'Unassigned'"
               class="tw-cursor-pointer"
@@ -82,17 +83,17 @@
               appStopProp
             />
           </td>
-          <td bitCell class="tw-w-10" (click)="selectCollection(col)">
+          <td bitCell class="tw-w-10" (click)="selectRow(col)">
             <div class="icon" aria-hidden="true">
               <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
             </div>
           </td>
-          <td bitCell class="tw-font-bold" (click)="selectCollection(col)">
+          <td bitCell class="tw-font-bold" (click)="selectRow(col)">
             <button bitLink [linkType]="secondary" (click)="navigateCollection(col)">
               {{ col.node.name }}
             </button>
           </td>
-          <td bitCell class="tw-w-72" (click)="selectCollection(col)">
+          <td bitCell class="tw-w-72" (click)="selectRow(col)">
             <ng-container *ngIf="!organization">
               <app-org-badge
                 organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
@@ -150,13 +151,13 @@
         </tr>
       </ng-container>
       <tr bitRow *ngFor="let c of filteredCiphers">
-        <td bitCell class="tw-w-10" (click)="checkCipher(c)">
+        <td bitCell class="tw-w-10" (click)="selectRow(c)">
           <input type="checkbox" [(ngModel)]="c.checked" appStopProp />
         </td>
-        <td bitCell class="tw-w-10" (click)="checkCipher(c)">
+        <td bitCell class="tw-w-10" (click)="selectRow(c)">
           <app-vault-icon [cipher]="c"></app-vault-icon>
         </td>
-        <td bitCell (click)="checkCipher(c)">
+        <td bitCell (click)="selectRow(c)">
           <a
             appStopProp
             [routerLink]="[]"
