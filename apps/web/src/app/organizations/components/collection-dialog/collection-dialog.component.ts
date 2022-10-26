@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { takeUntil, Subject, forkJoin, of } from "rxjs";
+import { takeUntil, Subject, of, combineLatest } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
@@ -43,7 +43,7 @@ export interface CollectionDialogResult {
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  test: any = [];
+  loading = true;
   collection?: CollectionView;
   nestOptions: CollectionView[] = [];
   accessItems: AccessItemView[] = [];
@@ -67,22 +67,62 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    forkJoin({
+    combineLatest({
       organization: of(this.organizationService.get(this.params.organizationId)),
       collections: this.collectionService.getAll(this.params.organizationId),
-      collectionDetails: this.collectionService.get(
-        this.params.organizationId,
-        this.params.collectionId
-      ),
+      collectionDetails: this.params.collectionId
+        ? this.collectionService.get(this.params.organizationId, this.params.collectionId)
+        : of(null),
       groups: this.groupService.getAll(this.params.organizationId),
       users: this.apiService.getOrganizationUsers(this.params.organizationId),
-      collectionUsers: this.apiService.getCollectionUsers(
-        this.params.organizationId,
-        this.params.collectionId
-      ),
+      collectionUsers: this.params.collectionId
+        ? this.apiService.getCollectionUsers(this.params.organizationId, this.params.collectionId)
+        : of(null),
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ collections, collectionDetails, groups, users, collectionUsers }) => {
+        this.accessItems = [].concat(
+          groups.map((group) => {
+            if (group.accessAll) {
+              return {
+                id: group.id,
+                type: AccessItemType.Group,
+                listName: group.name,
+                labelName: group.name,
+                accessAllItems: true,
+                readonly: true,
+              } as AccessItemView;
+            }
+
+            return {
+              id: group.id,
+              type: AccessItemType.Group,
+              listName: group.name,
+              labelName: group.name,
+              accessAllItems: false,
+            };
+          }),
+          users.data.map((user) => {
+            if (user.accessAll) {
+              return {
+                id: user.id,
+                type: AccessItemType.Member,
+                listName: user.name,
+                labelName: user.name,
+                accessAllItems: true,
+                readonly: true,
+              };
+            }
+
+            return {
+              id: user.id,
+              type: AccessItemType.Member,
+              listName: user.name,
+              labelName: user.name,
+            };
+          })
+        );
+
         if (this.params.collectionId) {
           this.collection = collections.find((c) => c.id === this.collectionId);
           this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
@@ -95,60 +135,21 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
-          this.accessItems = [].concat(
-            groups.map((group) => {
-              if (group.accessAll) {
-                return {
-                  id: group.id,
-                  type: AccessItemType.Group,
-                  listName: group.name,
-                  labelName: group.name,
-                  accessAllItems: true,
-                  readonly: true,
-                } as AccessItemView;
-              }
-
-              return {
-                id: group.id,
+          let accessSelections: AccessItemValue[] = [];
+          if (collectionDetails) {
+            accessSelections = [].concat(
+              collectionDetails.groups.map<AccessItemValue>((selection) => ({
+                id: selection.id,
                 type: AccessItemType.Group,
-                listName: group.name,
-                labelName: group.name,
-                accessAllItems: false,
-              };
-            }),
-            users.data.map((user) => {
-              if (user.accessAll) {
-                return {
-                  id: user.id,
-                  type: AccessItemType.Member,
-                  listName: user.name,
-                  labelName: user.name,
-                  accessAllItems: true,
-                  readonly: true,
-                };
-              }
-
-              return {
-                id: user.id,
+                permission: convertToPermission(selection),
+              })),
+              collectionUsers.map((selection) => ({
+                id: selection.id,
                 type: AccessItemType.Member,
-                listName: user.name,
-                labelName: user.name,
-              };
-            })
-          );
-
-          const accessSelections = [].concat(
-            collectionDetails.groups.map<AccessItemValue>((selection) => ({
-              id: selection.id,
-              type: AccessItemType.Group,
-              permission: convertToPermission(selection),
-            })),
-            collectionUsers.map((selection) => ({
-              id: selection.id,
-              type: AccessItemType.Member,
-              permission: convertToPermission(selection),
-            }))
-          );
+                permission: convertToPermission(selection),
+              }))
+            );
+          }
 
           this.formGroup.patchValue({
             name,
@@ -159,15 +160,13 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
         } else {
           this.nestOptions = collections;
         }
+
+        this.loading = false;
       });
   }
 
   get collectionId() {
     return this.params.collectionId;
-  }
-
-  get loading() {
-    return this.params.collectionId && !this.collection;
   }
 
   async cancel() {
