@@ -54,4 +54,5 @@ export abstract class CipherService {
   ) => Promise<any>;
   restoreWithServer: (id: string) => Promise<any>;
   restoreManyWithServer: (ids: string[]) => Promise<any>;
+  updateWithServer: (cipher: Cipher) => Promise<any>;
 }

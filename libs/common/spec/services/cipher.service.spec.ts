@@ -10,7 +10,6 @@ import { SettingsService } from "@bitwarden/common/abstractions/settings.service
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
@@ -68,9 +67,9 @@ describe("Cipher Service", () => {
       const model = new CipherView();
       model.id = "2";
       model.name = "Test Cipher";
-      model.organizationId = Utils.newGuid();
+      model.organizationId = "954f918d-5d22-403b-86b9-f4d80667088e";
       model.type = CipherType.SecureNote;
-      model.collectionIds = [Utils.newGuid()];
+      model.collectionIds = ["b7a49396-9617-424f-a5fc-47f3e5fd9cf3"];
       model.revisionDate = null;
 
       const cipher = new Cipher();
@@ -105,11 +104,12 @@ describe("Cipher Service", () => {
         id: "2",
         folderId: null,
         favorite: false,
-        organizationId: model.organizationId,
+        organizationId: "954f918d-5d22-403b-86b9-f4d80667088e",
         type: 2,
-        collectionIds: model.collectionIds,
+        collectionIds: ["b7a49396-9617-424f-a5fc-47f3e5fd9cf3"],
         revisionDate: null,
         reprompt: 0,
+        edit: false,
         secureNote: {
           type: null,
         },
