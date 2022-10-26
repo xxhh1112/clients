@@ -25,7 +25,7 @@ export class CollectionDetailsResponse extends CollectionResponse {
   }
 }
 
-export class CollectionGroupDetailsResponse extends CollectionResponse {
+export class CollectionAccessDetailsResponse extends CollectionResponse {
   groups: SelectionReadOnlyResponse[] = [];
   users: SelectionReadOnlyResponse[] = [];
 

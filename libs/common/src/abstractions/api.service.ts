@@ -92,7 +92,7 @@ import { BillingPaymentResponse } from "../models/response/billing-payment.respo
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { CipherResponse } from "../models/response/cipher.response";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../models/response/collection.response";
 import { DeviceVerificationResponse } from "../models/response/device-verification.response";
@@ -315,7 +315,7 @@ export abstract class ApiService {
   getCollectionDetails: (
     organizationId: string,
     id: string
-  ) => Promise<CollectionGroupDetailsResponse>;
+  ) => Promise<CollectionAccessDetailsResponse>;
   getUserCollections: () => Promise<ListResponse<CollectionResponse>>;
   getCollections: (organizationId: string) => Promise<ListResponse<CollectionResponse>>;
   getCollectionUsers: (organizationId: string, id: string) => Promise<SelectionReadOnlyResponse[]>;

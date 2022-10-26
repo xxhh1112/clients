@@ -75,12 +75,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
         : of(null),
       groups: this.groupService.getAll(this.params.organizationId),
       users: this.apiService.getOrganizationUsers(this.params.organizationId),
-      collectionUsers: this.params.collectionId
-        ? this.apiService.getCollectionUsers(this.params.organizationId, this.params.collectionId)
-        : of(null),
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ collections, collectionDetails, groups, users, collectionUsers }) => {
+      .subscribe(({ collections, collectionDetails, groups, users }) => {
         this.accessItems = [].concat(
           groups.map((group) => {
             if (group.accessAll) {
@@ -143,7 +140,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
                 type: AccessItemType.Group,
                 permission: convertToPermission(selection),
               })),
-              collectionUsers.map((selection) => ({
+              collectionDetails.users.map((selection) => ({
                 id: selection.id,
                 type: AccessItemType.Member,
                 permission: convertToPermission(selection),

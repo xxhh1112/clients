@@ -5,7 +5,7 @@ import { EncString } from "../../models/domain/enc-string";
 import { CollectionRequest } from "../../models/request/collection.request";
 import { SelectionReadOnlyRequest } from "../../models/request/selection-read-only.request";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../../models/response/collection.response";
 import { CollectionAdminView } from "../../models/view/collection-admin-view";
@@ -67,7 +67,7 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
 
   private async decryptMany(
     organizationId: string,
-    collections: CollectionResponse[] | CollectionGroupDetailsResponse[]
+    collections: CollectionResponse[] | CollectionAccessDetailsResponse[]
   ): Promise<CollectionAdminView[]> {
     const orgKey = await this.cryptoService.getOrgKey(organizationId);
 
@@ -78,8 +78,9 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
       view.externalId = c.externalId;
       view.organizationId = c.organizationId;
 
-      if (isCollectionGroupDetailsResponse(c)) {
+      if (isCollectionAccessDetailsResponse(c)) {
         view.groups = c.groups;
+        view.users = c.users;
       }
 
       return view;
@@ -109,10 +110,10 @@ export class CollectionAdminService implements CollectionAdminServiceAbstraction
   }
 }
 
-function isCollectionGroupDetailsResponse(
-  response: CollectionResponse | CollectionGroupDetailsResponse
-): response is CollectionGroupDetailsResponse {
+function isCollectionAccessDetailsResponse(
+  response: CollectionResponse | CollectionAccessDetailsResponse
+): response is CollectionAccessDetailsResponse {
   const anyResponse = response as any;
 
-  return anyResponse?.groups instanceof Array;
+  return anyResponse?.groups instanceof Array && anyResponse?.users instanceof Array;
 }
