@@ -1,10 +1,9 @@
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { CipherResponse } from "../models/response/cipherResponse";
 import { CliUtils } from "../utils";
-
-import { CipherAttachmentApiServiceAbstraction } from "./../../../../libs/common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 export class ShareCommand {
   constructor(
