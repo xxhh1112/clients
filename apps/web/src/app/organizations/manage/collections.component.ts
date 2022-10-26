@@ -28,7 +28,6 @@ import {
   CollectionDialogResultType,
 } from "../components/collection-dialog";
 
-import { CollectionAddEditComponent } from "./collection-add-edit.component";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
@@ -125,7 +124,7 @@ export class CollectionsComponent implements OnInit {
     this.didScroll = this.pagedCollections.length > this.pageSize;
   }
 
-  async new_edit(collection?: CollectionView) {
+  async edit(collection?: CollectionView) {
     const canCreate = collection == undefined && this.canCreate;
     const canEdit = collection != undefined && this.canEdit(collection);
     const canDelete = collection != undefined && this.canDelete(collection);
@@ -146,42 +145,6 @@ export class CollectionsComponent implements OnInit {
     ) {
       this.load();
     }
-  }
-
-  async edit(collection: CollectionView) {
-    const canCreate = collection == null && this.canCreate;
-    const canEdit = collection != null && this.canEdit(collection);
-    const canDelete = collection != null && this.canDelete(collection);
-
-    if (!(canCreate || canEdit || canDelete)) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("missingPermissions"));
-      return;
-    }
-
-    const [modal] = await this.modalService.openViewRef(
-      CollectionAddEditComponent,
-      this.addEditModalRef,
-      (comp) => {
-        comp.organizationId = this.organizationId;
-        comp.collectionId = collection != null ? collection.id : null;
-        comp.canSave = canCreate || canEdit;
-        comp.canDelete = canDelete;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onSavedCollection.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onDeletedCollection.subscribe(() => {
-          modal.close();
-          this.removeCollection(collection);
-        });
-      }
-    );
-  }
-
-  new_add() {
-    this.new_edit();
   }
 
   add() {
