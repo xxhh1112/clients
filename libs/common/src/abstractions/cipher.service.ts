@@ -33,7 +33,7 @@ export abstract class CipherService {
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
-  saveWithServer: (cipher: Cipher) => Promise<any>;
+  createWithServer: (cipher: Cipher) => Promise<any>;
   saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
   upsert: (ciphers: CipherData[]) => Promise<any>;
   replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;

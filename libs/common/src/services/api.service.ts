@@ -12,6 +12,7 @@ import { CipherBulkDeleteRequest } from "../models/request/cipher-bulk-delete.re
 import { CipherBulkMoveRequest } from "../models/request/cipher-bulk-move.request";
 import { CipherCollectionsRequest } from "../models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../models/request/cipher-create.request";
+import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherRequest } from "../models/request/cipher.request";
 import { CollectionRequest } from "../models/request/collection.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
@@ -601,6 +602,11 @@ export class ApiService implements ApiServiceAbstraction {
 
   async putCipher(id: string, request: CipherRequest): Promise<CipherResponse> {
     const r = await this.send("PUT", "/ciphers/" + id, request, true, true);
+    return new CipherResponse(r);
+  }
+
+  async putPartialCipher(id: string, request: CipherPartialRequest): Promise<CipherResponse> {
+    const r = await this.send("PUT", "/ciphers/" + id + "/partial", request, true, true);
     return new CipherResponse(r);
   }
 
