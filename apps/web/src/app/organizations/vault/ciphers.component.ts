@@ -95,19 +95,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     this.allCiphers = await this.loadCiphers();
   }
 
-  async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
-    this.deleted = deleted ?? false;
-    await this.searchService.indexCiphers(this.organization?.id, this.allCiphers);
-    await this.applyFilter(filter);
-    this.loaded = true;
-  }
-
-  async refresh() {
-    this.allCiphers = await this.loadCiphers();
-    await this.refreshCollections();
-    super.refresh();
-  }
-
   async loadCiphers(): Promise<CipherView[]> {
     if (this.organization?.canEditAnyCollection) {
       this.accessEvents = this.organization?.useEvents;
@@ -129,19 +116,23 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     }
   }
 
-  async applyFilter(filter: (cipher: CipherView) => boolean = null) {
-    if (this.organization?.canViewAllCollections) {
-      await super.applyFilter(filter);
-    } else {
-      const f = (c: CipherView) =>
-        c.organizationId === this.organization?.id && (filter == null || filter(c));
-      await super.applyFilter(f);
-    }
+  async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
+    this.deleted = deleted ?? false;
+    await this.searchService.indexCiphers(this.organization?.id, this.allCiphers);
+    await this.applyFilter(filter);
+    this.loaded = true;
+  }
+
+  async refresh() {
+    this.allCiphers = await this.loadCiphers();
+    await this.refreshCollections();
+    super.refresh();
   }
 
   async search(timeout: number = null) {
     await super.search(timeout, this.allCiphers);
   }
+
   events(c: CipherView) {
     this.onEventsClicked.emit(c);
   }
