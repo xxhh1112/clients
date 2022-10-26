@@ -119,9 +119,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   async applyFilter(filter: (cipher: CipherView) => boolean = null) {
     this.checkAll(false);
     this.isAllChecked = false;
-    this.collections?.forEach((col) => {
-      (col as any).checked = false;
-    });
     this.pagedCollections = [];
     if (!this.refreshing && this.isPaging()) {
       this.currentPagedCollectionsCount = 0;
