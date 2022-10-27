@@ -22,6 +22,7 @@ import { OrganizationSubscriptionResponse } from "@bitwarden/common/models/respo
 import { BillingSyncKeyComponent } from "../../settings/billing-sync-key.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { SubscriptionHiddenIcon } from "./subscription-hidden.icon";
 
 @Component({
   selector: "app-org-subscription",
@@ -54,6 +55,8 @@ export class OrganizationSubscriptionComponent implements OnInit, OnDestroy {
   @ViewChild("rotateBillingSyncKeyTemplate", { read: ViewContainerRef, static: true })
   billingSyncKeyViewContainerRef: ViewContainerRef;
   billingSyncKeyRef: [ModalRef, BillingSyncKeyComponent];
+
+  subscriptionHiddenIcon = SubscriptionHiddenIcon;
 
   private destroy$ = new Subject<void>();
 

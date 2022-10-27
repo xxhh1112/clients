@@ -8,6 +8,7 @@ import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
+  AsyncActionsModule,
   AvatarModule,
   BadgeModule,
   ButtonModule,
@@ -15,7 +16,6 @@ import {
   FormFieldModule,
   IconButtonModule,
   IconModule,
-  AsyncActionsModule,
   MenuModule,
   TableModule,
   TabsModule,
