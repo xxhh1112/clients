@@ -3,6 +3,7 @@ import * as path from "path";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -20,7 +21,6 @@ import { CipherResponse } from "../models/response/cipherResponse";
 import { FolderResponse } from "../models/response/folderResponse";
 import { OrganizationCollectionResponse } from "../models/response/organizationCollectionResponse";
 import { CliUtils } from "../utils";
-import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 
 export class CreateCommand {
   constructor(
