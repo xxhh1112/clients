@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherAttachmentApiServiceAbstraction } from "@bitwarden/common/abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,11 +14,9 @@ import { ErrorResponse } from "@bitwarden/common/models/response/error.response"
 import { AttachmentView } from "@bitwarden/common/models/view/attachment.view";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
-import { CipherAttachmentApiServiceAbstraction } from "./../../../common/src/abstractions/cipher/cipher-attachment-api.service.abstraction";
-
 @Directive()
 export class AttachmentsComponent implements OnInit {
-  @Input() cipherDomain: Cipher = new Cipher();
+  @Input() cipherDomain: Cipher;
   @Output() onUploadedAttachment = new EventEmitter();
   @Output() onDeletedAttachment = new EventEmitter();
   @Output() onReuploadedAttachment = new EventEmitter();

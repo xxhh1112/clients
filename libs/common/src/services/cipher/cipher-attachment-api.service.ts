@@ -1,3 +1,4 @@
+import { CipherAttachmentApiServiceAbstraction } from "../../abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CipherData } from "../../models/data/cipher.data";
 import { Cipher } from "../../models/domain/cipher";
 import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
@@ -15,7 +16,6 @@ import { CipherView } from "../../models/view/cipher.view";
 
 import { ApiService } from "./../../abstractions/api.service";
 import { CipherService } from "./../../abstractions/cipher.service";
-import { CipherAttachmentApiServiceAbstraction } from "./../../abstractions/cipher/cipher-attachment-api.service.abstraction";
 import { CryptoService } from "./../../abstractions/crypto.service";
 import { FileUploadService } from "./../../abstractions/fileUpload.service";
 import { Utils } from "./../../misc/utils";
