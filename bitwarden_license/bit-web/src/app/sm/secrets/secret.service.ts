@@ -6,13 +6,13 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncString } from "@bitwarden/common/models/domain/encString";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { SecretWithProjectsListResponse } from "@bitwarden/common/models/response/secretWithProjectsListResponse";
-import { ProjectsMappedToSecret } from "@bitwarden/common/models/view/projectsMappedToSecret";
 import { SecretListView } from "@bitwarden/common/models/view/secretListView";
 import { SecretView } from "@bitwarden/common/models/view/secretView";
 
 import { SecretRequest } from "./requests/secret.request";
+import { ProjectsMappedToSecretResponse } from "./responses/projects-mapped-to-secret-response";
 import { SecretListItemResponse } from "./responses/secret-list-item.response";
+import { SecretWithProjectsListResponse } from "./responses/secret-with-projects-list-response";
 import { SecretResponse } from "./responses/secret.response";
 
 @Injectable({
@@ -44,7 +44,7 @@ export class SecretService {
       true
     );
 
-    const results = new SecretWithProjectsListResponse(r, SecretListItemResponse);
+    const results = new SecretWithProjectsListResponse(r);
     //results have all projects and secrets list
     return await this.createSecretsListView(organizationId, results.secrets, results.projects);
   }
@@ -131,7 +131,7 @@ export class SecretService {
   private async createSecretsListView(
     organizationId: string,
     secrets: SecretListItemResponse[],
-    projects: ProjectsMappedToSecret[]
+    projects: ProjectsMappedToSecretResponse[]
   ): Promise<SecretListView[]> {
     const orgKey = await this.getOrganizationKey(organizationId);
     return await Promise.all(

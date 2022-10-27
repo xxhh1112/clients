@@ -1,4 +1,5 @@
-import { ProjectsMappedToSecret } from "./projectsMappedToSecret";
+import { ProjectsMappedToSecretResponse } from "../../../../../bitwarden_license/bit-web/src/app/sm/secrets/responses/projects-mapped-to-secret-response";
+
 import { View } from "./view";
 
 export class SecretListView implements View {
@@ -7,5 +8,5 @@ export class SecretListView implements View {
   name: string;
   creationDate: string;
   revisionDate: string;
-  projects: ProjectsMappedToSecret[];
+  projects: ProjectsMappedToSecretResponse[];
 }

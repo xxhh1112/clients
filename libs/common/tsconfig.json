@@ -1,5 +1,10 @@
 {
   "extends": "../shared/tsconfig.libs",
-  "include": ["src", "spec"],
+  "include": [
+    "src",
+    "spec",
+    "../../bitwarden_license/bit-web/src/app/sm/secrets/responses/projectsMappedToSecret.ts",
+    "../../bitwarden_license/bit-web/src/app/sm/secrets/responses/secretWithProjectsListResponse.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

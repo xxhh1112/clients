@@ -1,6 +1,6 @@
-import { BaseResponse } from "../response/baseResponse";
+import { BaseResponse } from "../../../../../../../libs/common/src/models/response/baseResponse";
 
-export class ProjectsMappedToSecret extends BaseResponse {
+export class ProjectsMappedToSecretResponse extends BaseResponse {
   id: string;
   name: string;
 
