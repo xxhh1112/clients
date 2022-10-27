@@ -5395,6 +5395,18 @@
   "numberOfUsers": {
     "message": "Number of users"
   },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to Filter --"
+  },
+  "multiSelectLoading": {
+    "message": "Retrieving options..."
+  },
+  "multiSelectNotFound": {
+    "message": "No items found"
+  },
+  "multiSelectClearAll": {
+    "message": "Clear all"
+  },
   "projects":{
     "message": "Projects"
   },
@@ -5595,17 +5607,5 @@
   },
   "softDeleteSuccessToast":{
     "message":"Secret sent to trash"
-  },
-  "multiSelectPlaceholder": {
-    "message": "-- Type to Filter --"
-  },
-  "multiSelectLoading": {
-    "message": "Retrieving options..."
-  },
-  "multiSelectNotFound": {
-    "message": "No items found"
-  },
-  "multiSelectClearAll": {
-    "message": "Clear all"
   }
 }
