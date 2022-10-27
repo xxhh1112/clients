@@ -5,22 +5,18 @@ import { action } from "@storybook/addon-actions";
 import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
 import { CollectionAccessSelectionView } from "@bitwarden/common/models/view/collection-access-selection-view";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
-import {
-  ButtonModule,
-  DialogModule,
-  FormFieldModule,
-  IconButtonModule,
-  TabsModule,
-} from "@bitwarden/components";
 
+import { SharedModule } from "../../../shared/shared.module";
 import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 import { AccessSelectorModule } from "../access-selector";
 
@@ -34,6 +30,7 @@ interface ProviderData {
   organizationId: string;
   collections: CollectionAdminView[];
   groups: GroupView[];
+  users: OrganizationUserUserDetailsResponse[];
 }
 
 export default {
@@ -44,12 +41,8 @@ export default {
       imports: [
         JslibModule,
         PreloadedEnglishI18nModule,
-        DialogModule,
-        ButtonModule,
-        TabsModule,
-        FormFieldModule,
+        SharedModule,
         ReactiveFormsModule,
-        IconButtonModule,
         AccessSelectorModule,
       ],
     }),
@@ -58,23 +51,31 @@ export default {
 
 const organizationId = Utils.newGuid();
 const groups = Array.from({ length: 10 }, (x, i) => createGroup(`Group ${i}`));
+const users = Array.from({ length: 10 }, (x, i) => createUser(i));
 const groupSelection = new CollectionAccessSelectionView({
   id: groups[0].id,
   readOnly: false,
   hidePasswords: false,
 });
+const userSelection = new CollectionAccessSelectionView({
+  id: users[0].id,
+  readOnly: false,
+  hidePasswords: false,
+});
 let collections = Array.from({ length: 10 }, (x, i) =>
-  createCollection(`Collection ${i}`, [groupSelection])
+  createCollection(`Collection ${i}`, [groupSelection], [userSelection])
 );
 collections = collections.concat(
-  collections.map((c, i) => createCollection(`${c.name}/Sub-collection ${i}`, [groupSelection]))
+  collections.map((c, i) =>
+    createCollection(`${c.name}/Sub-collection ${i}`, [groupSelection], [userSelection])
+  )
 );
 
 const NewCollectionTemplate: Story<CollectionDialogComponent> = (
   args: CollectionDialogComponent
 ) => ({
   moduleMetadata: {
-    providers: providers({ collectionId: undefined, organizationId, collections, groups }),
+    providers: providers({ collectionId: undefined, organizationId, collections, groups, users }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
 });
@@ -90,6 +91,7 @@ const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
       organizationId,
       collections,
       groups,
+      users,
     }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
@@ -125,6 +127,12 @@ function providers(data: ProviderData) {
       useValue: { getAll: () => Promise.resolve(data.groups) } as Partial<GroupServiceAbstraction>,
     },
     {
+      provide: ApiService,
+      useValue: {
+        getOrganizationUsers: () => Promise.resolve({ data: data.users }),
+      },
+    },
+    {
       provide: PlatformUtilsService,
       useValue: {
         showDialog: action("PlatformUtilsService.show") as () => Promise<unknown>,
@@ -155,12 +163,14 @@ class MockCollectionAdminService implements Partial<CollectionAdminService> {
 function createCollection(
   name: string,
   collectionGroups: CollectionAccessSelectionView[],
+  collectionUsers: CollectionAccessSelectionView[],
   id = Utils.newGuid()
 ) {
   const collection = new CollectionAdminView();
   collection.id = id;
   collection.name = name;
   collection.groups = collectionGroups;
+  collection.users = collectionUsers;
   return collection;
 }
 
@@ -169,4 +179,13 @@ function createGroup(name: string, id = Utils.newGuid()) {
   group.id = id;
   group.name = name;
   return group;
+}
+
+function createUser(i: number, id = Utils.newGuid()) {
+  const user = new OrganizationUserUserDetailsResponse({});
+  user.name = `User ${i}`;
+  user.email = "user_${i}@email.com";
+  user.twoFactorEnabled = false;
+  user.usesKeyConnector = false;
+  return user;
 }
