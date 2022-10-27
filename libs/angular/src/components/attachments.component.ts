@@ -185,6 +185,7 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected async init() {
+    this.cipherDomain = await this.loadCipher();
     this.cipher = await this.cipherDomain.decrypt();
 
     this.hasUpdatedKey = await this.cryptoService.hasEncKey();
@@ -277,6 +278,10 @@ export class AttachmentsComponent implements OnInit {
     } catch (e) {
       this.logService.error(e);
     }
+  }
+
+  protected loadCipher() {
+    return Promise.resolve(this.cipherDomain);
   }
 
   protected saveCipherAttachment(file: File) {

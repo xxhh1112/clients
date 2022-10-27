@@ -53,7 +53,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
 
   protected async loadCipher() {
     if (!this.organization.canEditAnyCollection) {
-      return this.cipherDomain;
+      return super.cipherDomain;
     }
     const response = await this.apiService.getCipherAdmin(this.cipherDomain.id);
     return new Cipher(new CipherData(response));
