@@ -34,7 +34,7 @@ interface ProviderData {
 }
 
 export default {
-  title: "Web/Collections/Edit dialog",
+  title: "Web/Organizations/Collection Dialog",
   component: CollectionDialogComponent,
   decorators: [
     moduleMetadata({
