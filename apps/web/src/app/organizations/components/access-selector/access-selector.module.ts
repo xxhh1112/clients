@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "../../../shared";
+import { SharedModule } from "../../../shared/shared.module";
 
 import { AccessSelectorComponent } from "./access-selector.component";
 import { UserTypePipe } from "./user-type.pipe";
