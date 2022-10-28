@@ -59,7 +59,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: DialogRef,
+    public dialogRef: DialogRef<CollectionDialogResult>,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
     private apiService: ApiService,
     private organizationService: OrganizationService,
