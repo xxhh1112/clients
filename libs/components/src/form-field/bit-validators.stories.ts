@@ -22,7 +22,8 @@ export default {
           provide: I18nService,
           useFactory: () => {
             return new I18nMockService({
-              inputForbiddenCharacters: "The following characters are not allowed: $CHARACTERS$",
+              inputForbiddenCharacters: (chars) =>
+                `The following characters are not allowed: ${chars}`,
             });
           },
         },
