@@ -71,34 +71,6 @@ collections = collections.concat(
   )
 );
 
-const NewCollectionTemplate: Story<CollectionDialogComponent> = (
-  args: CollectionDialogComponent
-) => ({
-  moduleMetadata: {
-    providers: providers({ collectionId: undefined, organizationId, collections, groups, users }),
-  },
-  template: `<app-collection-dialog></app-collection-dialog>`,
-});
-
-export const NewCollection = NewCollectionTemplate.bind({});
-
-const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
-  args: CollectionDialogComponent
-) => ({
-  moduleMetadata: {
-    providers: providers({
-      collectionId: collections[collections.length - 1].id,
-      organizationId,
-      collections,
-      groups,
-      users,
-    }),
-  },
-  template: `<app-collection-dialog></app-collection-dialog>`,
-});
-
-export const ExistingCollection = ExistingCollectionTemplate.bind({});
-
 function providers(data: ProviderData) {
   return [
     {
@@ -189,3 +161,56 @@ function createUser(i: number, id = Utils.newGuid()) {
   user.usesKeyConnector = false;
   return user;
 }
+
+const NewCollectionTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
+) => ({
+  moduleMetadata: {
+    providers: providers({ collectionId: undefined, organizationId, collections, groups, users }),
+  },
+  template: `<app-collection-dialog></app-collection-dialog>`,
+});
+
+export const NewCollection = NewCollectionTemplate.bind({});
+
+const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
+) => ({
+  moduleMetadata: {
+    providers: providers({
+      collectionId: collections[collections.length - 1].id,
+      organizationId,
+      collections,
+      groups,
+      users,
+    }),
+  },
+  template: `<app-collection-dialog></app-collection-dialog>`,
+});
+
+export const ExistingCollection = ExistingCollectionTemplate.bind({});
+
+const NonExistingParentTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
+) => {
+  const collection = createCollection(
+    "Non existing parent/Collection",
+    [groupSelection],
+    [userSelection]
+  );
+
+  return {
+    moduleMetadata: {
+      providers: providers({
+        collectionId: collection.id,
+        organizationId,
+        collections: [collection, ...collections],
+        groups,
+        users,
+      }),
+    },
+    template: `<app-collection-dialog></app-collection-dialog>`,
+  };
+};
+
+export const NonExistingParentCollection = NonExistingParentTemplate.bind({});

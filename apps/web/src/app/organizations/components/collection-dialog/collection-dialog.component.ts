@@ -49,6 +49,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   collection?: CollectionView;
   nestOptions: CollectionView[] = [];
   accessItems: AccessItemView[] = [];
+  removedParentName: string | undefined;
   formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
@@ -147,6 +148,10 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const nameParts = this.collection.name?.split("/");
           const name = nameParts[nameParts.length - 1];
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
+
+          if (parent !== null && !this.nestOptions.find((c) => c.name === parent)) {
+            this.removedParentName = parent;
+          }
 
           let accessSelections: AccessItemValue[] = [];
           if (collectionDetails) {
