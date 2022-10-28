@@ -486,8 +486,8 @@
     </div>
   </div>
 
-  <bit-submit-button buttonType="primary" [loading]="form.loading">
+  <button type="submit" buttonType="primary" bitButton [loading]="form.loading">
     {{ "save" | i18n }}
-  </bit-submit-button>
+  </button>
   <bit-error-summary [formGroup]="ssoConfigForm"></bit-error-summary>
 </form>
