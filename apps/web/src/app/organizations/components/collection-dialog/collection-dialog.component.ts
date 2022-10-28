@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { takeUntil, Subject, of, combineLatest } from "rxjs";
+import { takeUntil, Subject, of, combineLatest, shareReplay, switchMap } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
@@ -69,13 +69,26 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(
+      shareReplay({ refCount: true, bufferSize: 1 })
+    );
+    const groups$ = organization$.pipe(
+      switchMap((organization) => {
+        if (!organization.useGroups) {
+          return of([]);
+        }
+
+        return this.groupService.getAll(this.params.organizationId);
+      })
+    );
+
     combineLatest({
-      organization: of(this.organizationService.get(this.params.organizationId)),
+      organization: organization$,
       collections: this.collectionService.getAll(this.params.organizationId),
       collectionDetails: this.params.collectionId
         ? this.collectionService.get(this.params.organizationId, this.params.collectionId)
         : of(null),
-      groups: this.groupService.getAll(this.params.organizationId),
+      groups: groups$,
       users: this.apiService.getOrganizationUsers(this.params.organizationId),
     })
       .pipe(takeUntil(this.destroy$))
