@@ -69,15 +69,15 @@
   <bit-table *ngIf="events && events.length">
     <ng-container header>
       <tr>
-        <th bitCell style="width: 210px">{{ "timestamp" | i18n }}</th>
-        <th bitCell style="width: 100px">{{ "client" | i18n }}</th>
-        <th bitCell style="width: 150px">{{ "member" | i18n }}</th>
+        <th bitCell>{{ "timestamp" | i18n }}</th>
+        <th bitCell>{{ "client" | i18n }}</th>
+        <th bitCell>{{ "member" | i18n }}</th>
         <th bitCell>{{ "event" | i18n }}</th>
       </tr>
     </ng-container>
     <ng-container body>
-      <tr bitRow *ngFor="let e of events">
-        <td bitCell>{{ e.date | date: "medium" }}</td>
+      <tr bitRow *ngFor="let e of events" alignContent="top">
+        <td bitCell class="tw-whitespace-nowrap">{{ e.date | date: "medium" }}</td>
         <td bitCell>
           <span title="{{ e.appName }}, {{ e.ip }}">{{ e.appName }}</span>
         </td>
