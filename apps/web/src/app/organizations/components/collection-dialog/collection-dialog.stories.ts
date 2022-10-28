@@ -32,6 +32,7 @@ interface ProviderData {
   collections: CollectionAdminView[];
   groups: GroupView[];
   users: OrganizationUserUserDetailsResponse[];
+  useGroups: boolean;
 }
 
 export default {
@@ -92,7 +93,7 @@ function providers(data: ProviderData) {
     {
       provide: OrganizationService,
       useValue: {
-        get: () => Promise.resolve({ useGroups: true }) as any,
+        get: () => ({ useGroups: data.useGroups } as any),
       } as Partial<OrganizationService>,
     },
     {
@@ -168,7 +169,14 @@ const NewCollectionTemplate: Story<CollectionDialogComponent> = (
   args: CollectionDialogComponent
 ) => ({
   moduleMetadata: {
-    providers: providers({ collectionId: undefined, organizationId, collections, groups, users }),
+    providers: providers({
+      collectionId: undefined,
+      organizationId,
+      collections,
+      groups,
+      users,
+      useGroups: true,
+    }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
 });
@@ -185,6 +193,7 @@ const ExistingCollectionTemplate: Story<CollectionDialogComponent> = (
       collections,
       groups,
       users,
+      useGroups: true,
     }),
   },
   template: `<app-collection-dialog></app-collection-dialog>`,
@@ -209,6 +218,7 @@ const NonExistingParentTemplate: Story<CollectionDialogComponent> = (
         collections: [collection, ...collections],
         groups,
         users,
+        useGroups: true,
       }),
     },
     template: `<app-collection-dialog></app-collection-dialog>`,
@@ -216,3 +226,21 @@ const NonExistingParentTemplate: Story<CollectionDialogComponent> = (
 };
 
 export const NonExistingParentCollection = NonExistingParentTemplate.bind({});
+
+const FreeOrganizationTemplate: Story<CollectionDialogComponent> = (
+  args: CollectionDialogComponent
+) => ({
+  moduleMetadata: {
+    providers: providers({
+      collectionId: collections[collections.length - 1].id,
+      organizationId,
+      collections,
+      groups,
+      users,
+      useGroups: false,
+    }),
+  },
+  template: `<app-collection-dialog></app-collection-dialog>`,
+});
+
+export const FreeOrganization = FreeOrganizationTemplate.bind({});
