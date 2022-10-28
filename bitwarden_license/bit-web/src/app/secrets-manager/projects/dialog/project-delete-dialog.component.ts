@@ -3,7 +3,6 @@ import { Component, Inject, OnInit } from "@angular/core";
 import {
   FormControl,
   FormGroup,
-  Validators,
   ValidationErrors,
   ValidatorFn,
   AbstractControl,
@@ -31,10 +30,7 @@ export interface ProjectDeleteOperation {
 })
 export class ProjectDeleteDialogComponent implements OnInit {
   formGroup = new FormGroup({
-    confirmDelete: new FormControl("", [
-      Validators.required,
-      this.matchConfirmationMessageValidator(),
-    ]),
+    confirmDelete: new FormControl("", [this.matchConfirmationMessageValidator()]),
   });
 
   constructor(
