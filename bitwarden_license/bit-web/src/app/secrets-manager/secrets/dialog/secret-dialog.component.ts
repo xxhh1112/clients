@@ -60,6 +60,8 @@ export class SecretDialogComponent implements OnInit {
   }
 
   submit = async () => {
+    this.formGroup.markAllAsTouched();
+
     if (this.formGroup.invalid) {
       return;
     }
