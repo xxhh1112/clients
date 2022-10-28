@@ -92,45 +92,22 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       .subscribe(({ organization, collections, collectionDetails, groups, users }) => {
         this.organization = organization;
         this.accessItems = [].concat(
-          groups.map((group) => {
-            if (group.accessAll) {
-              return {
-                id: group.id,
-                type: AccessItemType.Group,
-                listName: group.name,
-                labelName: group.name,
-                accessAllItems: true,
-                readonly: true,
-              } as AccessItemView;
-            }
-
-            return {
-              id: group.id,
-              type: AccessItemType.Group,
-              listName: group.name,
-              labelName: group.name,
-              accessAllItems: false,
-            };
-          }),
-          users.data.map((user) => {
-            if (user.accessAll) {
-              return {
-                id: user.id,
-                type: AccessItemType.Member,
-                listName: user.name,
-                labelName: user.name,
-                accessAllItems: true,
-                readonly: true,
-              };
-            }
-
-            return {
-              id: user.id,
-              type: AccessItemType.Member,
-              listName: user.name,
-              labelName: user.name,
-            };
-          })
+          groups.map((group) => ({
+            id: group.id,
+            type: AccessItemType.Group,
+            listName: group.name,
+            labelName: group.name,
+            accessAllItems: group.accessAll,
+            readonly: group.accessAll,
+          })),
+          users.data.map((user) => ({
+            id: user.id,
+            type: AccessItemType.Member,
+            listName: user.name,
+            labelName: user.name,
+            accessAllItems: user.accessAll,
+            readonly: user.accessAll,
+          }))
         );
 
         if (this.params.collectionId) {
