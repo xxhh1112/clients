@@ -44,13 +44,13 @@ export interface CollectionDialogResult {
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  loading = true;
-  organization?: Organization;
-  collection?: CollectionView;
-  nestOptions: CollectionView[] = [];
-  accessItems: AccessItemView[] = [];
-  removedParentName: string | undefined;
-  formGroup = this.formBuilder.group({
+  protected loading = true;
+  protected organization?: Organization;
+  protected collection?: CollectionView;
+  protected nestOptions: CollectionView[] = [];
+  protected accessItems: AccessItemView[] = [];
+  protected removedParentName: string | undefined;
+  protected formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
     parent: null as string | null,
@@ -58,9 +58,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private formBuilder: FormBuilder,
-    public dialogRef: DialogRef<CollectionDialogResult>,
     @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
+    private formBuilder: FormBuilder,
+    private dialogRef: DialogRef<CollectionDialogResult>,
     private apiService: ApiService,
     private organizationService: OrganizationService,
     private groupService: GroupServiceAbstraction,
@@ -183,15 +183,15 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       });
   }
 
-  get collectionId() {
+  protected get collectionId() {
     return this.params.collectionId;
   }
 
-  async cancel() {
+  protected async cancel() {
     this.close({ type: CollectionDialogResultType.Canceled });
   }
 
-  submit = async () => {
+  protected submit = async () => {
     if (this.formGroup.invalid) {
       return;
     }
@@ -219,7 +219,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     this.close({ type: CollectionDialogResultType.Saved });
   };
 
-  remove = async () => {
+  protected remove = async () => {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteCollectionConfirmation"),
       this.collection?.name,
