@@ -1,5 +1,8 @@
 <form [formGroup]="formGroup" [bitSubmit]="submit">
-  <bit-dialog disablePadding *ngIf="!loading; else spinner">
+  <ng-container *ngIf="loading" #spinner>
+    <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
+  </ng-container>
+  <bit-dialog disablePadding *ngIf="!loading">
     <span bitDialogTitle>
       <ng-container *ngIf="collection; else newCollectionTitle">
         {{ "editCollection" | i18n }}
@@ -75,7 +78,4 @@
       ></button>
     </div>
   </bit-dialog>
-  <ng-template #spinner>
-    <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
-  </ng-template>
 </form>
