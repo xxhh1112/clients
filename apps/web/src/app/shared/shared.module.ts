@@ -9,6 +9,7 @@ import { ToastrModule } from "ngx-toastr";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
   AsyncActionsModule,
+  AvatarModule,
   BadgeModule,
   ButtonModule,
   CalloutModule,
@@ -43,6 +44,7 @@ import "./locales";
     JslibModule,
 
     // Component library
+    AvatarModule,
     BadgeModule,
     ButtonModule,
     CalloutModule,
@@ -68,6 +70,7 @@ import "./locales";
 
     // Component library
     AsyncActionsModule,
+    AvatarModule,
     BadgeModule,
     ButtonModule,
     CalloutModule,

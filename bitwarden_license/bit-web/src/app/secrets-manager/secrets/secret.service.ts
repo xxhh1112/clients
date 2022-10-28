@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
@@ -26,7 +26,7 @@ export class SecretService {
   constructor(
     private cryptoService: CryptoService,
     private apiService: ApiService,
-    private encryptService: AbstractEncryptService
+    private encryptService: EncryptService
   ) {}
 
   async getBySecretId(secretId: string): Promise<SecretView> {

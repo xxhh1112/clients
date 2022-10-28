@@ -6,7 +6,7 @@
     "message": "Filtre"
   },
   "allItems": {
-    "message": "Alle elementer"
+    "message": "Alle emner"
   },
   "favorites": {
     "message": "Favoritter"
@@ -33,10 +33,10 @@
     "message": "Samlinger"
   },
   "searchVault": {
-    "message": "Søg i boks"
+    "message": "Søg i Boks"
   },
   "addItem": {
-    "message": "Tilføj element"
+    "message": "Tilføj emne"
   },
   "shared": {
     "message": "Delt"
@@ -67,7 +67,7 @@
     "message": "Vedhæftninger"
   },
   "viewItem": {
-    "message": "Vis element"
+    "message": "Vis emne"
   },
   "name": {
     "message": "Navn"
@@ -98,22 +98,22 @@
     "message": "Adgangssætning"
   },
   "editItem": {
-    "message": "Redigér element"
+    "message": "Redigér emne"
   },
   "emailAddress": {
     "message": "E-mailadresse"
   },
   "verificationCodeTotp": {
-    "message": "Verifikationskode (TOTP)"
+    "message": "Bekræftelseskode (TOTP)"
   },
   "website": {
-    "message": "Hjemmeside"
+    "message": "Websted"
   },
   "notes": {
     "message": "Notater"
   },
   "customFields": {
-    "message": "Brugerdefinerede felter"
+    "message": "Tilpassede felter"
   },
   "launch": {
     "message": "Kør"
@@ -163,7 +163,7 @@
     "message": "Pasnummer"
   },
   "licenseNumber": {
-    "message": "Kørekortnummer"
+    "message": "Licensnummer"
   },
   "email": {
     "message": "E-mail"
@@ -349,7 +349,7 @@
     "message": "Tilføjede element"
   },
   "editedItem": {
-    "message": "Redigerede element"
+    "message": "Regiderede element"
   },
   "deleteItem": {
     "message": "Slet element"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Stort begyndelsesbogstav",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Inkludér ciffer"
@@ -827,7 +827,7 @@
     "message": "Ugyldig hovedadgangskode"
   },
   "twoStepLoginConfirmation": {
-    "message": "To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, med en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?"
+    "message": "To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, med en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller email. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?"
   },
   "twoStepLogin": {
     "message": "To-trins login"
@@ -1267,7 +1267,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Oprettet",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -1989,7 +1989,7 @@
     "message": "Søg i min boks"
   },
   "forwardedEmail": {
-    "message": "Videresendt E-mail Alias"
+    "message": "Videresendt e-mail alias"
   },
   "forwardedEmailDesc": {
     "message": "Generér et e-mail alias med en ekstern viderestillingstjeneste."
