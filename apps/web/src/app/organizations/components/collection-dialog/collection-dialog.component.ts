@@ -9,6 +9,7 @@ import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group/gr
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators } from "@bitwarden/components";
@@ -44,6 +45,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   loading = true;
+  organization?: Organization;
   collection?: CollectionView;
   nestOptions: CollectionView[] = [];
   accessItems: AccessItemView[] = [];
@@ -77,7 +79,8 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       users: this.apiService.getOrganizationUsers(this.params.organizationId),
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ collections, collectionDetails, groups, users }) => {
+      .subscribe(({ organization, collections, collectionDetails, groups, users }) => {
+        this.organization = organization;
         this.accessItems = [].concat(
           groups.map((group) => {
             if (group.accessAll) {

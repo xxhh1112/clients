@@ -52,6 +52,7 @@
         Cancel
       </button>
       <button
+        *ngIf="organization.canDeleteAssignedCollections"
         type="button"
         bitIconButton="bwi-trash"
         buttonType="danger"
