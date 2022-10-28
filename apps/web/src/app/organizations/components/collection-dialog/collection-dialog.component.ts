@@ -27,14 +27,10 @@ export interface CollectionEditDialogParams {
   organizationId: string;
 }
 
-export enum CollectionDialogResultType {
+export enum CollectionDialogResult {
   Saved = "saved",
   Canceled = "canceled",
   Deleted = "deleted",
-}
-
-export interface CollectionDialogResult {
-  type: CollectionDialogResultType;
 }
 
 @Component({
@@ -188,7 +184,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   }
 
   protected async cancel() {
-    this.close({ type: CollectionDialogResultType.Canceled });
+    this.close(CollectionDialogResult.Canceled);
   }
 
   protected submit = async () => {
@@ -216,7 +212,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
     await this.collectionService.save(collectionView);
 
-    this.close({ type: CollectionDialogResultType.Saved });
+    this.close(CollectionDialogResult.Saved);
   };
 
   protected remove = async () => {
@@ -234,7 +230,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
     await this.collectionService.remove(this.params.organizationId, this.params.collectionId);
 
-    this.close({ type: CollectionDialogResultType.Deleted });
+    this.close(CollectionDialogResult.Deleted);
   };
 
   ngOnDestroy(): void {
