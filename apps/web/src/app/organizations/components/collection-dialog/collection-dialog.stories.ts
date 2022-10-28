@@ -9,6 +9,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
 import { CollectionAccessSelectionView } from "@bitwarden/common/models/view/collection-access-selection-view";
@@ -156,9 +157,10 @@ function createGroup(name: string, id = Utils.newGuid()) {
 function createUser(i: number, id = Utils.newGuid()) {
   const user = new OrganizationUserUserDetailsResponse({});
   user.name = `User ${i}`;
-  user.email = "user_${i}@email.com";
+  user.email = `user_${i}@email.com`;
   user.twoFactorEnabled = false;
   user.usesKeyConnector = false;
+  user.status = OrganizationUserStatusType.Accepted;
   return user;
 }
 

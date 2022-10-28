@@ -103,8 +103,11 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           users.data.map((user) => ({
             id: user.id,
             type: AccessItemType.Member,
-            listName: user.name,
-            labelName: user.name,
+            email: user.email,
+            role: user.type,
+            listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
+            labelName: user.name ?? user.email,
+            status: user.status,
             accessAllItems: user.accessAll,
             readonly: user.accessAll,
           }))
