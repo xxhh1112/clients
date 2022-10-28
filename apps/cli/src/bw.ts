@@ -22,7 +22,7 @@ import { CipherAttachmentApiService } from "@bitwarden/common/services/cipher/ci
 import { CollectionService } from "@bitwarden/common/services/collection.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
-import { EncryptService } from "@bitwarden/common/services/encrypt.service";
+import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
@@ -96,7 +96,7 @@ export class Main {
   exportService: ExportService;
   searchService: SearchService;
   cryptoFunctionService: NodeCryptoFunctionService;
-  encryptService: EncryptService;
+  encryptService: EncryptServiceImplementation;
   authService: AuthService;
   policyService: PolicyService;
   program: Program;
@@ -142,7 +142,11 @@ export class Main {
       (level) => process.env.BITWARDENCLI_DEBUG !== "true" && level <= LogLevelType.Info
     );
     this.cryptoFunctionService = new NodeCryptoFunctionService();
-    this.encryptService = new EncryptService(this.cryptoFunctionService, this.logService, true);
+    this.encryptService = new EncryptServiceImplementation(
+      this.cryptoFunctionService,
+      this.logService,
+      true
+    );
     this.storageService = new LowdbStorageService(this.logService, null, p, false, true);
     this.secureStorageService = new NodeEnvSecureStorageService(
       this.storageService,
@@ -212,7 +216,8 @@ export class Main {
       this.i18nService,
       null,
       this.logService,
-      this.stateService
+      this.stateService,
+      this.encryptService
     );
 
     this.cipherAttachmentApiService = new CipherAttachmentApiService(

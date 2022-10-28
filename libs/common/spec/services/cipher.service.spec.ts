@@ -3,6 +3,7 @@ import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
@@ -32,6 +33,7 @@ describe("Cipher Service", () => {
   let i18nService: SubstituteOf<I18nService>;
   let searchService: SubstituteOf<SearchService>;
   let logService: SubstituteOf<LogService>;
+  let encryptService: SubstituteOf<EncryptService>;
 
   let cipherService: CipherService;
 
@@ -43,6 +45,7 @@ describe("Cipher Service", () => {
     i18nService = Substitute.for<I18nService>();
     searchService = Substitute.for<SearchService>();
     logService = Substitute.for<LogService>();
+    encryptService = Substitute.for<EncryptService>();
 
     stateService.getEncryptedCiphers().resolves({
       "1": cipherData("1", "test"),
@@ -58,7 +61,8 @@ describe("Cipher Service", () => {
       i18nService,
       () => searchService,
       logService,
-      stateService
+      stateService,
+      encryptService
     );
   });
 
@@ -101,6 +105,7 @@ describe("Cipher Service", () => {
       const result = await cipherService.encrypt(model, null, cipher);
 
       expect(result).toEqual({
+        initializerKey: 0,
         id: "2",
         folderId: null,
         favorite: false,
@@ -130,6 +135,7 @@ describe("Cipher Service", () => {
       const result = await cipherService.get("1");
 
       expect(result).toEqual({
+        initializerKey: 0,
         id: "1",
         organizationId: null,
         folderId: null,

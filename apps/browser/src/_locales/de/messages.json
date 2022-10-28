@@ -342,7 +342,7 @@
     "message": "Identität verifizieren"
   },
   "yourVaultIsLocked": {
-    "message": "Dein Tresor ist gesperrt. Überprüfe dein Master-Passwort um fortzufahren."
+    "message": "Ihr Tresor ist gesperrt. Bestätigen Sie Ihre Identität um fortzufahren."
   },
   "unlock": {
     "message": "Entsperren"
