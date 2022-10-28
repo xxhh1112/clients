@@ -15,7 +15,7 @@
       type="button"
       *ngIf="this.canCreate"
       class="btn btn-sm btn-outline-primary ml-3"
-      (click)="new_add()"
+      (click)="add()"
     >
       <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
       {{ "newCollection" | i18n }}
@@ -70,7 +70,7 @@
                 href="#"
                 appStopClick
                 *ngIf="this.canEdit(c)"
-                (click)="new_edit(c)"
+                (click)="edit(c)"
               >
                 <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
                 {{ "edit" | i18n }}
