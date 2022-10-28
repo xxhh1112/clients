@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Прво слово велико",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Убаци број"
@@ -1267,7 +1267,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Креирано",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
