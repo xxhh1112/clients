@@ -20,7 +20,7 @@ import {
   AccessItemView,
   convertToPermission,
   convertToSelectionView,
-} from "../access-selector";
+} from "../../../components/access-selector";
 
 export interface CollectionEditDialogParams {
   collectionId?: string;

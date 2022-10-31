@@ -22,7 +22,7 @@ import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
 
-import { CollectionDialogComponent, CollectionDialogResult } from "../components/collection-dialog";
+import { CollectionDialogComponent, CollectionDialogResult } from "../shared";
 
 import { EntityUsersComponent } from "./entity-users.component";
 

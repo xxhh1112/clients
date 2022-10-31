@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
 
+import { CollectionDialogModule } from "./components/collection-dialog";
+
 @NgModule({
-  imports: [],
+  imports: [CollectionDialogModule],
+  exports: [CollectionDialogModule],
 })
 export class SharedOrganizationModule {}

@@ -17,9 +17,9 @@ import { CollectionAdminView } from "@bitwarden/common/models/view/collection-ad
 import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
 
-import { SharedModule } from "../../../shared/shared.module";
-import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
-import { AccessSelectorModule } from "../access-selector";
+import { SharedModule } from "../../../../shared/shared.module";
+import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
+import { AccessSelectorModule } from "../../../components/access-selector";
 
 import {
   CollectionDialogComponent,
