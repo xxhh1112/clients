@@ -26,8 +26,14 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { GroupResponse } from "@bitwarden/common/models/response/group.response";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { DialogService } from "@bitwarden/components";
+import { lastValueFrom } from "rxjs";
 
-import { BulkDeleteComponent } from "../../vault/bulk-delete.component";
+import {
+  BulkDeleteDialogComponent,
+  BulkDeleteDialogParams,
+  BulkDeleteDialogResult,
+} from "../../vault/bulk-delete-dialog.component";
 import { CiphersComponent as BaseCiphersComponent, ItemRow } from "../../vault/ciphers.component";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
@@ -56,6 +62,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     eventService: EventService,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
+    dialogService: DialogService,
     modalService: ModalService,
     logService: LogService,
     stateService: StateService,
@@ -73,6 +80,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       totpService,
       stateService,
       passwordRepromptService,
+      dialogService,
       modalService,
       logService,
       organizationService,
@@ -239,21 +247,23 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkDeleteComponent,
-      this.bulkDeleteModalRef,
-      (comp) => {
-        comp.permanent = this.deleted;
-        comp.cipherIds = selectedCipherIds;
-        comp.collectionIds = selectedCollectionIds;
-        comp.organization = this.organization;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onDeleted.subscribe(async () => {
-          modal.close();
-          await this.refresh();
-        });
-      }
-    );
+    const bulkDeleteParams: BulkDeleteDialogParams = {
+      permanent: this.deleted,
+      cipherIds: selectedCipherIds,
+      collectionIds: selectedCollectionIds,
+      organization: this.organization,
+    };
+
+    const dialog = this.dialogService.open(BulkDeleteDialogComponent, {
+      data: bulkDeleteParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
+    if (result === BulkDeleteDialogResult.Deleted) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   protected deleteCipherWithServer(id: string, permanent: boolean) {

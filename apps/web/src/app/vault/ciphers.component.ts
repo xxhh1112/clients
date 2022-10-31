@@ -27,8 +27,14 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { DialogService } from "@bitwarden/components";
+import { lastValueFrom } from "rxjs";
 
-import { BulkDeleteComponent } from "./bulk-delete.component";
+import {
+  BulkDeleteDialogComponent,
+  BulkDeleteDialogParams,
+  BulkDeleteDialogResult,
+} from "./bulk-delete-dialog.component";
 import { BulkMoveComponent } from "./bulk-move.component";
 import { BulkRestoreComponent } from "./bulk-restore.component";
 import { BulkShareComponent } from "./bulk-share.component";
@@ -104,6 +110,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected totpService: TotpService,
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
+    protected dialogService: DialogService,
     protected modalService: ModalService,
     protected logService: LogService,
     private organizationService: OrganizationService,
@@ -290,19 +297,21 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkDeleteComponent,
-      this.bulkDeleteModalRef,
-      (comp) => {
-        comp.permanent = this.deleted;
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onDeleted.subscribe(async () => {
-          modal.close();
-          await this.refresh();
-        });
-      }
-    );
+    const bulkDeleteParams: BulkDeleteDialogParams = {
+      permanent: this.deleted,
+      cipherIds: selectedIds,
+    };
+
+    const dialog = this.dialogService.open(BulkDeleteDialogComponent, {
+      data: bulkDeleteParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
+    if (result === BulkDeleteDialogResult.Deleted) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   async restore(c: CipherView): Promise<boolean> {

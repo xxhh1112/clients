@@ -118,7 +118,7 @@ import { AddEditCustomFieldsComponent } from "../vault/add-edit-custom-fields.co
 import { AddEditComponent } from "../vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/attachments.component";
 import { BulkActionsComponent } from "../vault/bulk-actions.component";
-import { BulkDeleteComponent } from "../vault/bulk-delete.component";
+import { BulkDeleteDialogComponent } from "../vault/bulk-delete-dialog.component";
 import { BulkMoveComponent } from "../vault/bulk-move.component";
 import { BulkRestoreComponent } from "../vault/bulk-restore.component";
 import { BulkShareComponent } from "../vault/bulk-share.component";
@@ -150,7 +150,7 @@ import { SharedModule } from ".";
     AttachmentsComponent,
     BillingSyncKeyComponent,
     BulkActionsComponent,
-    BulkDeleteComponent,
+    BulkDeleteDialogComponent,
     BulkMoveComponent,
     BulkRestoreComponent,
     BulkShareComponent,
@@ -274,7 +274,7 @@ import { SharedModule } from ".";
     ApiKeyComponent,
     AttachmentsComponent,
     BulkActionsComponent,
-    BulkDeleteComponent,
+    BulkDeleteDialogComponent,
     BulkMoveComponent,
     BulkRestoreComponent,
     BulkShareComponent,

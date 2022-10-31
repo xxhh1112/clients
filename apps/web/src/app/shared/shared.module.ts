@@ -20,6 +20,7 @@ import {
   MenuModule,
   TableModule,
   TabsModule,
+  DialogModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -54,6 +55,7 @@ import "./locales";
     TableModule,
     AvatarModule,
     IconButtonModule,
+    DialogModule,
   ],
   exports: [
     CommonModule,
@@ -76,6 +78,7 @@ import "./locales";
     TableModule,
     AvatarModule,
     IconButtonModule,
+    DialogModule,
   ],
   providers: [DatePipe],
   bootstrap: [],

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, Inject } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -8,29 +9,50 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipher-bulk-delete.request";
 import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collection-bulk-delete.request";
 
+export interface BulkDeleteDialogParams {
+  cipherIds?: string[];
+  collectionIds?: string[];
+  permanent?: boolean;
+  organization?: Organization;
+}
+
+export enum BulkDeleteDialogResult {
+  Deleted = "deleted",
+  Canceled = "canceled",
+}
 @Component({
   selector: "app-vault-bulk-delete",
-  templateUrl: "bulk-delete.component.html",
+  templateUrl: "bulk-delete-dialog.component.html",
 })
-export class BulkDeleteComponent {
-  @Input() cipherIds: string[] = [];
-  @Input() collectionIds: string[] = [];
-  @Input() permanent = false;
-  @Input() organization: Organization;
-  @Output() onDeleted = new EventEmitter();
+export class BulkDeleteDialogComponent {
+  cipherIds: string[];
+  collectionIds: string[];
+  permanent = false;
+  organization: Organization;
 
   formPromise: Promise<any>;
 
   constructor(
+    @Inject(DIALOG_DATA) params: BulkDeleteDialogParams,
+    private dialogRef: DialogRef<BulkDeleteDialogResult>,
     private cipherService: CipherService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private apiService: ApiService
-  ) {}
+  ) {
+    this.cipherIds = params.cipherIds ?? [];
+    this.collectionIds = params.collectionIds ?? [];
+    this.permanent = params.permanent;
+    this.organization = params.organization;
+  }
 
-  async submit() {
+  protected async cancel() {
+    this.close(BulkDeleteDialogResult.Canceled);
+  }
+
+  protected submit = async () => {
     const deletePromises: Promise<void>[] = [];
-    if (this.cipherIds) {
+    if (this.cipherIds.length) {
       if (!this.organization || !this.organization.canEditAnyCollection) {
         deletePromises.push(this.deleteCiphers());
       } else {
@@ -38,29 +60,29 @@ export class BulkDeleteComponent {
       }
     }
 
-    if (this.collectionIds) {
+    if (this.collectionIds.length && this.organization) {
       deletePromises.push(this.deleteCollections());
     }
 
     this.formPromise = Promise.all(deletePromises);
     await this.formPromise;
 
-    this.onDeleted.emit();
-    if (this.cipherIds) {
+    if (this.cipherIds.length) {
       this.platformUtilsService.showToast(
         "success",
         null,
         this.i18nService.t(this.permanent ? "permanentlyDeletedItems" : "deletedItems")
       );
     }
-    if (this.collectionIds) {
+    if (this.collectionIds.length) {
       this.platformUtilsService.showToast(
         "success",
         null,
         this.i18nService.t("deletedCollections")
       );
     }
-  }
+    this.close(BulkDeleteDialogResult.Deleted);
+  };
 
   private async deleteCiphers(): Promise<any> {
     if (this.permanent) {
@@ -90,5 +112,9 @@ export class BulkDeleteComponent {
     }
     const deleteRequest = new CollectionBulkDeleteRequest(this.collectionIds, this.organization.id);
     return await this.apiService.deleteManyCollections(deleteRequest);
+  }
+
+  private close(result: BulkDeleteDialogResult) {
+    this.dialogRef.close(result);
   }
 }
