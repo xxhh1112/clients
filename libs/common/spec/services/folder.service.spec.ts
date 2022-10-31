@@ -7,8 +7,6 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { FolderData } from "@bitwarden/common/models/data/folder.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { FolderView } from "@bitwarden/common/models/view/folder.view";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { StateService } from "@bitwarden/common/services/state.service";
@@ -41,25 +39,6 @@ describe("Folder Service", () => {
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
     folderService = new FolderService(cryptoService, i18nService, cipherService, stateService);
-  });
-
-  it("encrypt", async () => {
-    const model = new FolderView();
-    model.id = "2";
-    model.name = "Test Folder";
-
-    cryptoService.encrypt(Arg.any()).resolves(new EncString("ENC"));
-    cryptoService.decryptToUtf8(Arg.any()).resolves("DEC");
-
-    const result = await folderService.encrypt(model);
-
-    expect(result).toEqual({
-      id: "2",
-      name: {
-        encryptedString: "ENC",
-        encryptionType: 0,
-      },
-    });
   });
 
   describe("get", () => {

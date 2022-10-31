@@ -2,7 +2,7 @@ import { FolderData } from "@bitwarden/common/models/data/folder.data";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Folder } from "@bitwarden/common/models/domain/folder";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { mockFromJson } from "../../utils";
 
 describe("Folder", () => {
   let data: FolderData;
@@ -21,21 +21,6 @@ describe("Folder", () => {
     expect(field).toEqual({
       id: "id",
       name: { encryptedString: "encName", encryptionType: 0 },
-      revisionDate: new Date("2022-01-31T12:00:00.000Z"),
-    });
-  });
-
-  it("Decrypt", async () => {
-    const folder = new Folder();
-    folder.id = "id";
-    folder.name = mockEnc("encName");
-    folder.revisionDate = new Date("2022-01-31T12:00:00.000Z");
-
-    const view = await folder.decrypt();
-
-    expect(view).toEqual({
-      id: "id",
-      name: "encName",
       revisionDate: new Date("2022-01-31T12:00:00.000Z"),
     });
   });
