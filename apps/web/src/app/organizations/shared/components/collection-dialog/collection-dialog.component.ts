@@ -4,7 +4,6 @@ import { FormBuilder } from "@angular/forms";
 import { takeUntil, Subject, of, combineLatest, shareReplay, switchMap } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group/group.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
@@ -14,6 +13,7 @@ import { CollectionAdminView } from "@bitwarden/common/models/view/collection-ad
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators } from "@bitwarden/components";
 
+import { CollectionAdminService } from "../../../core";
 import {
   AccessItemType,
   AccessItemValue,

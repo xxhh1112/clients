@@ -1,17 +1,21 @@
-import { ApiService } from "../../abstractions/api.service";
-import { CollectionAdminService as CollectionAdminServiceAbstraction } from "../../abstractions/collection/collection-admin.service.abstraction";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { EncString } from "../../models/domain/enc-string";
-import { CollectionRequest } from "../../models/request/collection.request";
-import { SelectionReadOnlyRequest } from "../../models/request/selection-read-only.request";
+import { Injectable } from "@angular/core";
+
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 import {
   CollectionAccessDetailsResponse,
   CollectionResponse,
-} from "../../models/response/collection.response";
-import { CollectionAdminView } from "../../models/view/collection-admin-view";
-import { CollectionView } from "../../models/view/collection.view";
+} from "@bitwarden/common/models/response/collection.response";
+import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
-export class CollectionAdminService implements CollectionAdminServiceAbstraction {
+import { CoreOrganizationModule } from "../core-organization.module";
+
+@Injectable({ providedIn: CoreOrganizationModule })
+export class CollectionAdminService {
   constructor(private apiService: ApiService, private cryptoService: CryptoService) {}
 
   async getAll(organizationId: string): Promise<CollectionView[]> {

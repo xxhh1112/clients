@@ -6,7 +6,6 @@ import { Meta, Story, moduleMetadata } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CollectionAdminService } from "@bitwarden/common/abstractions/collection/collection-admin.service.abstraction";
 import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
@@ -19,6 +18,7 @@ import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platfor
 
 import { SharedModule } from "../../../../shared/shared.module";
 import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
+import { CollectionAdminService } from "../../../core";
 import { AccessSelectorModule } from "../access-selector";
 
 import {
