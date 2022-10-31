@@ -19,7 +19,7 @@ import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platfor
 
 import { SharedModule } from "../../../../shared/shared.module";
 import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
-import { AccessSelectorModule } from "../../../components/access-selector";
+import { AccessSelectorModule } from "../access-selector";
 
 import {
   CollectionDialogComponent,
