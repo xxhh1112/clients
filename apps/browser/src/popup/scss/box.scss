@@ -83,6 +83,11 @@
     margin: 5px 10px;
     font-size: $font-size-small;
 
+    button.btn {
+      font-size: $font-size-small;
+      padding: 0;
+    }
+
     @include themify($themes) {
       color: themed("mutedColor");
     }
@@ -691,4 +696,17 @@
       }
     }
   }
+}
+
+.truncate-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.truncate {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

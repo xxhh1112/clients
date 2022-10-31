@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Suurtäht",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Lisa number"
@@ -1265,6 +1265,10 @@
   "dateUpdated": {
     "message": "Uuendatud",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Parool on uuendatud",

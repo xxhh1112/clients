@@ -16,7 +16,8 @@ import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { Icons } from "@bitwarden/components";
 
 const MaxCheckedCount = 500;
 
@@ -39,6 +40,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   userHasPremiumAccess = false;
   organizations: Organization[] = [];
   profileName: string;
+  noItemIcon = Icons.Search;
 
   private didScroll = false;
   private pagedCiphersCount = 0;

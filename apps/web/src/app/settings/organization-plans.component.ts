@@ -1,6 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -16,13 +25,13 @@ import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 import { PlanType } from "@bitwarden/common/enums/planType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ProductType } from "@bitwarden/common/enums/productType";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { OrganizationCreateRequest } from "@bitwarden/common/models/request/organizationCreateRequest";
-import { OrganizationKeysRequest } from "@bitwarden/common/models/request/organizationKeysRequest";
-import { OrganizationUpgradeRequest } from "@bitwarden/common/models/request/organizationUpgradeRequest";
-import { ProviderOrganizationCreateRequest } from "@bitwarden/common/models/request/provider/providerOrganizationCreateRequest";
-import { PlanResponse } from "@bitwarden/common/models/response/planResponse";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { OrganizationCreateRequest } from "@bitwarden/common/models/request/organization-create.request";
+import { OrganizationKeysRequest } from "@bitwarden/common/models/request/organization-keys.request";
+import { OrganizationUpgradeRequest } from "@bitwarden/common/models/request/organization-upgrade.request";
+import { ProviderOrganizationCreateRequest } from "@bitwarden/common/models/request/provider/provider-organization-create.request";
+import { PlanResponse } from "@bitwarden/common/models/response/plan.response";
 
 import { PaymentComponent } from "./payment.component";
 import { TaxInfoComponent } from "./tax-info.component";
@@ -35,7 +44,7 @@ interface OnSuccessArgs {
   selector: "app-organization-plans",
   templateUrl: "organization-plans.component.html",
 })
-export class OrganizationPlansComponent implements OnInit {
+export class OrganizationPlansComponent implements OnInit, OnDestroy {
   @ViewChild(PaymentComponent) paymentComponent: PaymentComponent;
   @ViewChild(TaxInfoComponent) taxComponent: TaxInfoComponent;
 
@@ -72,6 +81,8 @@ export class OrganizationPlansComponent implements OnInit {
   });
 
   plans: PlanResponse[];
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -114,7 +125,19 @@ export class OrganizationPlansComponent implements OnInit {
       this.formGroup.controls.billingEmail.addValidators(Validators.required);
     }
 
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.SingleOrg)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this.singleOrgPolicyBlock = policyAppliesToActiveUser;
+      });
+
     this.loading = false;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get createOrganization() {
@@ -288,8 +311,6 @@ export class OrganizationPlansComponent implements OnInit {
   }
 
   async submit() {
-    this.singleOrgPolicyBlock = await this.userHasBlockingSingleOrgPolicy();
-
     if (this.singleOrgPolicyBlock) {
       return;
     }
@@ -351,10 +372,6 @@ export class OrganizationPlansComponent implements OnInit {
     } catch (e) {
       this.logService.error(e);
     }
-  }
-
-  private async userHasBlockingSingleOrgPolicy() {
-    return this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
   }
 
   private async updateOrganization(orgId: string) {

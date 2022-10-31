@@ -1,26 +1,29 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { PolicyData } from "@bitwarden/common/models/data/policyData";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
+import { PolicyData } from "@bitwarden/common/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
 import { Policy } from "@bitwarden/common/models/domain/policy";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { PolicyResponse } from "@bitwarden/common/models/response/policyResponse";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
@@ -29,23 +32,25 @@ import { RouterService, StateService } from "../../core";
   selector: "app-login",
   templateUrl: "login.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class LoginComponent extends BaseLoginComponent {
+export class LoginComponent extends BaseLoginComponent implements OnInit, OnDestroy {
   showResetPasswordAutoEnrollWarning = false;
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
   showPasswordless = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
+    apiService: ApiService,
+    appIdService: AppIdService,
     authService: AuthService,
     router: Router,
     i18nService: I18nService,
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
     platformUtilsService: PlatformUtilsService,
     environmentService: EnvironmentService,
     passwordGenerationService: PasswordGenerationService,
     cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService,
     private policyApiService: PolicyApiServiceAbstraction,
     private policyService: InternalPolicyService,
     logService: LogService,
@@ -54,9 +59,12 @@ export class LoginComponent extends BaseLoginComponent {
     private messagingService: MessagingService,
     private routerService: RouterService,
     formBuilder: FormBuilder,
-    formValidationErrorService: FormValidationErrorsService
+    formValidationErrorService: FormValidationErrorsService,
+    loginService: LoginService
   ) {
     super(
+      apiService,
+      appIdService,
       authService,
       router,
       platformUtilsService,
@@ -68,7 +76,9 @@ export class LoginComponent extends BaseLoginComponent {
       logService,
       ngZone,
       formBuilder,
-      formValidationErrorService
+      formValidationErrorService,
+      route,
+      loginService
     );
     this.onSuccessfulLogin = async () => {
       this.messagingService.send("setFullWidth");
@@ -80,9 +90,6 @@ export class LoginComponent extends BaseLoginComponent {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-      if (qParams.email != null && qParams.email.indexOf("@") > -1) {
-        this.formGroup.get("email")?.setValue(qParams.email);
-      }
       if (qParams.premium != null) {
         this.routerService.setPreviousUrl("/settings/premium");
       } else if (qParams.org != null) {
@@ -100,8 +107,6 @@ export class LoginComponent extends BaseLoginComponent {
         this.routerService.setPreviousUrl(route.toString());
       }
       await super.ngOnInit();
-      const rememberEmail = await this.stateService.getRememberEmail();
-      this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
     });
 
     const invite = await this.stateService.getOrganizationInvitation();
@@ -128,10 +133,19 @@ export class LoginComponent extends BaseLoginComponent {
         this.showResetPasswordAutoEnrollWarning =
           resetPasswordPolicy[1] && resetPasswordPolicy[0].autoEnrollEnabled;
 
-        this.enforcedPasswordPolicyOptions =
-          await this.policyService.getMasterPasswordPolicyOptions(policyList);
+        this.policyService
+          .masterPasswordPolicyOptions$(policyList)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((enforcedPasswordPolicyOptions) => {
+            this.enforcedPasswordPolicyOptions = enforcedPasswordPolicyOptions;
+          });
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async goAfterLogIn() {
@@ -165,6 +179,7 @@ export class LoginComponent extends BaseLoginComponent {
     if (previousUrl) {
       this.router.navigateByUrl(previousUrl);
     } else {
+      this.loginService.clearValues();
       this.router.navigate([this.successRoute]);
     }
   }

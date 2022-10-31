@@ -92,7 +92,7 @@
     "message": "Autouzupełnianie"
   },
   "generatePasswordCopied": {
-    "message": "Generuj hasło (do schowka)"
+    "message": "Wygeneruj hasło (do schowka)"
   },
   "copyElementIdentifier": {
     "message": "Kopiuj nazwę pola niestandardowego"
@@ -224,10 +224,10 @@
     "message": "Wybierz"
   },
   "generatePassword": {
-    "message": "Generuj hasło"
+    "message": "Wygeneruj hasło"
   },
   "regeneratePassword": {
-    "message": "Wygeneruj hasło ponownie"
+    "message": "Wygeneruj ponownie hasło"
   },
   "options": {
     "message": "Opcje"
@@ -494,7 +494,7 @@
     "message": "Logowanie dwustopniowe sprawia, że konto jest bardziej bezpieczne poprzez wymuszenie potwierdzenia logowania z innego urządzenia, takiego jak z klucza bezpieczeństwa, aplikacji uwierzytelniającej, wiadomości SMS, telefonu lub adresu e-mail. Logowanie dwustopniowe możesz włączyć w sejfie internetowym bitwarden.com. Czy chcesz przejść do tej strony?"
   },
   "editedFolder": {
-    "message": "Folder został zaktualizowany"
+    "message": "Folder został zapisany"
   },
   "deleteFolderConfirmation": {
     "message": "Czy na pewno chcesz usunąć ten folder?"
@@ -537,7 +537,7 @@
     "message": "Element został dodany"
   },
   "editedItem": {
-    "message": "Element został zaktualizowany"
+    "message": "Element został zapisany"
   },
   "deleteItemConfirmation": {
     "message": "Czy na pewno chcesz to usunąć?"
@@ -726,19 +726,19 @@
     "message": "Załącznik został usunięty"
   },
   "newAttachment": {
-    "message": "Dodaj załącznik"
+    "message": "Dodaj nowy załącznik"
   },
   "noAttachments": {
     "message": "Brak załączników."
   },
   "attachmentSaved": {
-    "message": "Załącznik został zapisany."
+    "message": "Załącznik został zapisany"
   },
   "file": {
     "message": "Plik"
   },
   "selectFile": {
-    "message": "Wybierz plik."
+    "message": "Wybierz plik"
   },
   "maxFileSize": {
     "message": "Maksymalny rozmiar pliku to 500 MB."
@@ -810,7 +810,7 @@
     "message": "Odświeżanie zostało zakończone"
   },
   "enableAutoTotpCopy": {
-    "message": "Kopiuj TOTP automatycznie"
+    "message": "Kopiuj kod TOTP automatycznie"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Jeśli dane logowania posiadają dołączony klucz uwierzytelniający TOTP, kod weryfikacyjny jest automatycznie kopiowany do schowka przy każdym autouzupełnianiu danych logowania."
@@ -951,7 +951,7 @@
     "message": "Adres URL serwera ikon"
   },
   "environmentSaved": {
-    "message": "Adresy URL środowiska zostały zapisane."
+    "message": "Adresy URL środowiska zostały zapisane"
   },
   "enableAutoFillOnPageLoad": {
     "message": "Włącz autouzupełnianie po załadowaniu strony"
@@ -1199,7 +1199,7 @@
     "message": "Tożsamość"
   },
   "passwordHistory": {
-    "message": "Historia haseł"
+    "message": "Historia hasła"
   },
   "back": {
     "message": "Powrót"
@@ -1310,6 +1310,10 @@
   "dateUpdated": {
     "message": "Zaktualizowano",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Utworzono",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Aktualizacja hasła",
@@ -1727,14 +1731,14 @@
     "message": "Obecna liczba dostępów"
   },
   "createSend": {
-    "message": "Utwórz nową wysyłkę",
+    "message": "Nowa wysyłka",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
     "message": "Nowe hasło"
   },
   "sendDisabled": {
-    "message": "Wysyłka została wyłączona",
+    "message": "Wysyłka została usunięta",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1746,7 +1750,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Wysyłka została zaktualizowana",
+    "message": "Wysyłka została zapisana",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinuxChromiumFileWarning": {
@@ -1816,10 +1820,10 @@
     "message": "Zaktualizuj hasło główne"
   },
   "updateMasterPasswordWarning": {
-    "message": "Hasło główne zostało zmienione przez administratora Twojej organizacji. Musisz je zaktualizować, aby uzyskać dostęp do sejfu. Ta czynność spowoduje wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę."
+    "message": "Twoje hasło główne zostało ostatnio zmienione przez administratora Twojej organizacji. Musisz je teraz zaktualizować, aby uzyskać dostęp do sejfu. W przypadku kontynuacji nastąpi wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatyczne rejestrowanie użytkowników do resetowania hasła"
+    "message": "Automatyczne rejestrowanie użytkowników"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego."
@@ -1853,7 +1857,7 @@
     "message": "Czas blokowania sejfu przekracza limit określony przez organizację."
   },
   "vaultExportDisabled": {
-    "message": "Eksportowanie sejfu zostało wyłączone"
+    "message": "Eksport sejfu wyłączony"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu."
@@ -1880,7 +1884,7 @@
     "message": "Usuń hasło główne"
   },
   "removedMasterPassword": {
-    "message": "Hasło główne zostało usunięte."
+    "message": "Hasło główne zostało usunięte"
   },
   "leaveOrganizationConfirmation": {
     "message": "Czy na pewno chcesz opuścić tę organizację?"

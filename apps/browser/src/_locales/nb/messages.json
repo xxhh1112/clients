@@ -491,7 +491,7 @@
     "message": "Du kan endre superpassordet ditt på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?"
   },
   "twoStepLoginConfirmation": {
-    "message": "2-trinnsinnlogging gjør kontoen din mer sikker, ved å kreve at du verifiserer din innlogging med en annen enhet, f.eks. en autentiseringsapp, SMS, E-post, telefonsamtale, eller sikkerhetsnøkkel. 2-trinnsinnlogging kan aktiveres på bitwarden.com-netthvelvet. Vil du besøke den nettsiden nå?"
+    "message": "2-trinnsinnlogging gjør kontoen din mer sikker, ved å kreve at du verifiserer din innlogging med en annen enhet, f.eks. en autentiseringsapp, SMS, e-post, telefonsamtale, eller sikkerhetsnøkkel. 2-trinnsinnlogging kan aktiveres i netthvelvet ditt på bitwarden.com. Vil du besøke bitwarden.com nå?"
   },
   "editedFolder": {
     "message": "Redigerte mappen"
@@ -534,7 +534,7 @@
     "message": "Ny URI"
   },
   "addedItem": {
-    "message": "La til gjenstanden"
+    "message": "La til element"
   },
   "editedItem": {
     "message": "Redigerte elementet"
@@ -783,13 +783,13 @@
     "message": "Prioritert kundestøtte."
   },
   "ppremiumSignUpFuture": {
-    "message": "Alle fremtidige Premium-egenskaper. Mere er planlagt snart!"
+    "message": "Alle fremtidige Premium-egenskaper. Mer er planlagt og vil komme snart!"
   },
   "premiumPurchase": {
     "message": "Kjøp Premium"
   },
   "premiumPurchaseAlert": {
-    "message": "Du kan kjøpe et Premium-medlemskap på bitwarden.net-netthvelvet. Vil du besøke det nettstedet nå?"
+    "message": "Du kan kjøpe et Premium-medlemskap på bitwarden.com. Vil du besøke det nettstedet nå?"
   },
   "premiumCurrentMember": {
     "message": "Du er et Premium-medlem!"
@@ -1310,6 +1310,10 @@
   "dateUpdated": {
     "message": "Oppdatert den",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Passordet ble oppdatert den",
@@ -1969,19 +1973,19 @@
     "message": "Key Connector feil: Sjekk at Key Connector er tilgjengelig og fungerer."
   },
   "premiumSubcriptionRequired": {
-    "message": "Premium subscription required"
+    "message": "Premium abonnement kreves"
   },
   "organizationIsDisabled": {
-    "message": "Organization is disabled."
+    "message": "Organisasjonen er deaktivert."
   },
   "disabledOrganizationFilterError": {
-    "message": "Items in disabled Organizations cannot be accessed. Contact your Organization owner for assistance."
+    "message": "Elementer i deaktiverte organisasjoner kan ikke aksesseres. Kontakt organisasjonseier for hjelp."
   },
   "cardBrandMir": {
     "message": "Mir"
   },
   "loggingInTo": {
-    "message": "Logging in to $DOMAIN$",
+    "message": "Logger inn på $DOMAIN$",
     "placeholders": {
       "domain": {
         "content": "$1",
@@ -1990,25 +1994,25 @@
     }
   },
   "settingsEdited": {
-    "message": "Settings have been edited"
+    "message": "Innstillingene har blitt endret"
   },
   "environmentEditedClick": {
-    "message": "Click here"
+    "message": "Klikk her"
   },
   "environmentEditedReset": {
-    "message": "to reset to pre-configured settings"
+    "message": "for å tilbakestille til forhåndskonfigurerte innstillinger"
   },
   "serverVersion": {
-    "message": "Server Version"
+    "message": "Server Versjon"
   },
   "selfHosted": {
-    "message": "Self-Hosted"
+    "message": "Selvbetjent"
   },
   "thirdParty": {
-    "message": "Third-Party"
+    "message": "Tredjepart"
   },
   "thirdPartyServerMessage": {
-    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "message": "Koblet til tredjeparts server-implementeringen $SERVERNAME$. Kontroller feil ved hjelp av den offisielle serveren, eller rapporter dem til tredjepartsserveren.",
     "placeholders": {
       "servername": {
         "content": "$1",
@@ -2017,7 +2021,7 @@
     }
   },
   "lastSeenOn": {
-    "message": "last seen on: $DATE$",
+    "message": "sist sett den: $DATE$",
     "placeholders": {
       "date": {
         "content": "$1",

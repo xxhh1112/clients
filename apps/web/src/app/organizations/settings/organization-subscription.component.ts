@@ -13,14 +13,15 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { OrganizationApiKeyType } from "@bitwarden/common/enums/organizationApiKeyType";
 import { OrganizationConnectionType } from "@bitwarden/common/enums/organizationConnectionType";
 import { PlanType } from "@bitwarden/common/enums/planType";
-import { BillingSyncConfigApi } from "@bitwarden/common/models/api/billingSyncConfigApi";
+import { BillingSyncConfigApi } from "@bitwarden/common/models/api/billing-sync-config.api";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { OrganizationConnectionResponse } from "@bitwarden/common/models/response/organizationConnectionResponse";
-import { OrganizationSubscriptionResponse } from "@bitwarden/common/models/response/organizationSubscriptionResponse";
+import { OrganizationConnectionResponse } from "@bitwarden/common/models/response/organization-connection.response";
+import { OrganizationSubscriptionResponse } from "@bitwarden/common/models/response/organization-subscription.response";
 
 import { BillingSyncKeyComponent } from "../../settings/billing-sync-key.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { SubscriptionHiddenIcon } from "./subscription-hidden.icon";
 
 @Component({
   selector: "app-org-subscription",
@@ -57,6 +58,8 @@ export class OrganizationSubscriptionComponent implements OnInit {
   @ViewChild("rotateBillingSyncKeyTemplate", { read: ViewContainerRef, static: true })
   billingSyncKeyViewContainerRef: ViewContainerRef;
   billingSyncKeyRef: [ModalRef, BillingSyncKeyComponent];
+
+  subscriptionHiddenIcon = SubscriptionHiddenIcon;
 
   constructor(
     private apiService: ApiService,

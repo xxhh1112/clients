@@ -2,22 +2,26 @@ import { Jsonify } from "type-fest";
 
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
-import { CipherData } from "../data/cipherData";
-import { LocalData } from "../data/localData";
-import { CipherView } from "../view/cipherView";
+import { Decryptable } from "../../interfaces/decryptable.interface";
+import { InitializerKey } from "../../services/cryptography/initializer-key";
+import { CipherData } from "../data/cipher.data";
+import { LocalData } from "../data/local.data";
+import { CipherView } from "../view/cipher.view";
 
 import { Attachment } from "./attachment";
 import { Card } from "./card";
-import Domain from "./domainBase";
-import { EncString } from "./encString";
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";
 import { Password } from "./password";
-import { SecureNote } from "./secureNote";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import { SecureNote } from "./secure-note";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Cipher extends Domain {
+export class Cipher extends Domain implements Decryptable<CipherView> {
+  readonly initializerKey = InitializerKey.Cipher;
+
   id: string;
   organizationId: string;
   folderId: string;
@@ -38,6 +42,7 @@ export class Cipher extends Domain {
   fields: Field[];
   passwordHistory: Password[];
   collectionIds: string[];
+  creationDate: Date;
   deletedDate: Date;
   reprompt: CipherRepromptType;
 
@@ -72,6 +77,7 @@ export class Cipher extends Domain {
     this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
     this.collectionIds = obj.collectionIds;
     this.localData = localData;
+    this.creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
     this.deletedDate = obj.deletedDate != null ? new Date(obj.deletedDate) : null;
     this.reprompt = obj.reprompt;
 
@@ -200,6 +206,7 @@ export class Cipher extends Domain {
     c.revisionDate = this.revisionDate != null ? this.revisionDate.toISOString() : null;
     c.type = this.type;
     c.collectionIds = this.collectionIds;
+    c.creationDate = this.creationDate != null ? this.creationDate.toISOString() : null;
     c.deletedDate = this.deletedDate != null ? this.deletedDate.toISOString() : null;
     c.reprompt = this.reprompt;
 

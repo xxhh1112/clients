@@ -4,6 +4,7 @@ import { CipherService } from "@bitwarden/common/services/cipher.service";
 
 import { apiServiceFactory, ApiServiceInitOptions } from "./api-service.factory";
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
+import { encryptServiceFactory, EncryptServiceInitOptions } from "./encrypt-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import {
   FileUploadServiceInitOptions,
@@ -27,7 +28,8 @@ export type CipherServiceInitOptions = CipherServiceFactoryOptions &
   FileUploadServiceInitOptions &
   I18nServiceInitOptions &
   LogServiceInitOptions &
-  StateServiceInitOptions;
+  StateServiceInitOptions &
+  EncryptServiceInitOptions;
 
 export function cipherServiceFactory(
   cache: { cipherService?: AbstractCipherService } & CachedServices,
@@ -44,11 +46,12 @@ export function cipherServiceFactory(
         await apiServiceFactory(cache, opts),
         await fileUploadServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
-        opts.cipherServiceOptions.searchServiceFactory === undefined
+        opts.cipherServiceOptions?.searchServiceFactory === undefined
           ? () => cache.searchService
           : opts.cipherServiceOptions.searchServiceFactory,
         await logServiceFactory(cache, opts),
-        await stateServiceFactory(cache, opts)
+        await stateServiceFactory(cache, opts),
+        await encryptServiceFactory(cache, opts)
       )
   );
 }

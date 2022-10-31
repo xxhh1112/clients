@@ -4,12 +4,12 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherExport } from "@bitwarden/common/models/export/cipherExport";
-import { CollectionExport } from "@bitwarden/common/models/export/collectionExport";
-import { FolderExport } from "@bitwarden/common/models/export/folderExport";
-import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
+import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
+import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
+import { FolderExport } from "@bitwarden/common/models/export/folder.export";
+import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
@@ -85,7 +85,7 @@ export class EditCommand {
     cipherView = CipherExport.toView(req, cipherView);
     const encCipher = await this.cipherService.encrypt(cipherView);
     try {
-      await this.cipherService.saveWithServer(encCipher);
+      await this.cipherService.updateWithServer(encCipher);
       const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt();
       const res = new CipherResponse(decCipher);

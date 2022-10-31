@@ -3,7 +3,7 @@
   "minimum_chrome_version": "102.0",
   "name": "__MSG_extName__",
   "short_name": "__MSG_appName__",
-  "version": "2022.9.1",
+  "version": "2022.10.2",
   "description": "__MSG_extDesc__",
   "default_locale": "en",
   "author": "Bitwarden Inc.",
@@ -38,6 +38,12 @@
       "css": ["content/autofill.css"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_end"
+    },
+    {
+      "all_frames": true,
+      "js": ["content/misc-utils.js"],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "run_at": "document_end"
     }
   ],
   "background": {
@@ -59,7 +65,8 @@
     "unlimitedStorage",
     "clipboardRead",
     "clipboardWrite",
-    "idle"
+    "idle",
+    "alarms"
   ],
   "optional_permissions": ["nativeMessaging"],
   "host_permissions": ["http://*/*", "https://*/*"],
@@ -99,12 +106,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "notification/bar.html",
-        "images/icon38.png",
-        "images/icon38_locked.png",
-        "images/close.png"
-      ],
+      "resources": ["notification/bar.html", "images/icon38.png", "images/icon38_locked.png"],
       "matches": ["<all_urls>"]
     }
   ],

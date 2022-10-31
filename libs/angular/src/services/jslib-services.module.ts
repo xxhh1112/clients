@@ -1,8 +1,10 @@
 import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
-import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service.abstraction";
-import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service.abstraction";
+import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service";
+import {
+  InternalAccountService,
+  AccountService as AccountServiceAbstraction,
+} from "@bitwarden/common/abstractions/account/account.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
@@ -15,6 +17,7 @@ import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/conf
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/common/abstractions/environment.service";
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
@@ -28,6 +31,7 @@ import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction }
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
@@ -55,13 +59,15 @@ import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/comm
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
+import { ValidationService as ValidationServiceAbstraction } from "@bitwarden/common/abstractions/validation.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { flagEnabled } from "@bitwarden/common/misc/flags";
 import { Account } from "@bitwarden/common/models/domain/account";
-import { GlobalState } from "@bitwarden/common/models/domain/globalState";
-import { AccountApiService } from "@bitwarden/common/services/account/account-api.service";
-import { AccountService } from "@bitwarden/common/services/account/account.service";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { AccountApiServiceImplementation } from "@bitwarden/common/services/account/account-api.service";
+import { AccountServiceImplementation } from "@bitwarden/common/services/account/account.service";
 import { AnonymousHubService } from "@bitwarden/common/services/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
@@ -73,7 +79,8 @@ import { ConfigApiService } from "@bitwarden/common/services/config/config-api.s
 import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
-import { EncryptService } from "@bitwarden/common/services/encrypt.service";
+import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
+import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 import { EventService } from "@bitwarden/common/services/event.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
@@ -82,6 +89,7 @@ import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.s
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
+import { LoginService } from "@bitwarden/common/services/login.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
@@ -102,6 +110,7 @@ import { TwoFactorService } from "@bitwarden/common/services/twoFactor.service";
 import { UserVerificationApiService } from "@bitwarden/common/services/userVerification/userVerification-api.service";
 import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { UsernameGenerationService } from "@bitwarden/common/services/usernameGeneration.service";
+import { ValidationService } from "@bitwarden/common/services/validation.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
@@ -127,12 +136,10 @@ import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
 import { ThemingService } from "./theming/theming.service";
 import { AbstractThemingService } from "./theming/theming.service.abstraction";
-import { ValidationService } from "./validation.service";
 
 @NgModule({
   declarations: [],
   providers: [
-    ValidationService,
     AuthGuard,
     UnauthGuard,
     LockGuard,
@@ -213,7 +220,8 @@ import { ValidationService } from "./validation.service";
         i18nService: I18nServiceAbstraction,
         injector: Injector,
         logService: LogService,
-        stateService: StateServiceAbstraction
+        stateService: StateServiceAbstraction,
+        encryptService: EncryptService
       ) =>
         new CipherService(
           cryptoService,
@@ -223,7 +231,8 @@ import { ValidationService } from "./validation.service";
           i18nService,
           () => injector.get(SearchServiceAbstraction),
           logService,
-          stateService
+          stateService,
+          encryptService
         ),
       deps: [
         CryptoServiceAbstraction,
@@ -234,6 +243,7 @@ import { ValidationService } from "./validation.service";
         Injector, // TODO: Get rid of this circular dependency!
         LogService,
         StateServiceAbstraction,
+        EncryptService,
       ],
     },
     {
@@ -257,18 +267,22 @@ import { ValidationService } from "./validation.service";
     },
     {
       provide: AccountApiServiceAbstraction,
-      useClass: AccountApiService,
-      deps: [ApiServiceAbstraction],
+      useClass: AccountApiServiceImplementation,
+      deps: [
+        ApiServiceAbstraction,
+        UserVerificationServiceAbstraction,
+        LogService,
+        InternalAccountService,
+      ],
     },
     {
       provide: AccountServiceAbstraction,
-      useClass: AccountService,
-      deps: [
-        AccountApiServiceAbstraction,
-        UserVerificationServiceAbstraction,
-        MessagingServiceAbstraction,
-        LogService,
-      ],
+      useClass: AccountServiceImplementation,
+      deps: [MessagingServiceAbstraction, LogService],
+    },
+    {
+      provide: InternalAccountService,
+      useExisting: AccountServiceAbstraction,
     },
     { provide: LogService, useFactory: () => new ConsoleLogService(false) },
     {
@@ -292,7 +306,7 @@ import { ValidationService } from "./validation.service";
       useClass: CryptoService,
       deps: [
         CryptoFunctionServiceAbstraction,
-        AbstractEncryptService,
+        EncryptService,
         PlatformUtilsServiceAbstraction,
         LogService,
         StateServiceAbstraction,
@@ -435,8 +449,8 @@ import { ValidationService } from "./validation.service";
       deps: [WINDOW],
     },
     {
-      provide: AbstractEncryptService,
-      useClass: EncryptService,
+      provide: EncryptService,
+      useFactory: encryptServiceFactory,
       deps: [CryptoFunctionServiceAbstraction, LogService, LOG_MAC_FAILURES],
     },
     {
@@ -561,6 +575,25 @@ import { ValidationService } from "./validation.service";
       useClass: AnonymousHubService,
       deps: [EnvironmentServiceAbstraction, AuthServiceAbstraction, LogService],
     },
+    {
+      provide: ValidationServiceAbstraction,
+      useClass: ValidationService,
+      deps: [I18nServiceAbstraction, PlatformUtilsServiceAbstraction],
+    },
+    {
+      provide: LoginServiceAbstraction,
+      useClass: LoginService,
+    },
   ],
 })
 export class JslibServicesModule {}
+
+function encryptServiceFactory(
+  cryptoFunctionservice: CryptoFunctionServiceAbstraction,
+  logService: LogService,
+  logMacFailures: boolean
+): EncryptService {
+  return flagEnabled("multithreadDecryption")
+    ? new MultithreadEncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures)
+    : new EncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures);
+}

@@ -1,8 +1,8 @@
 import { Observable } from "rxjs";
 
-import { FolderData } from "../../models/data/folderData";
+import { FolderData } from "../../models/data/folder.data";
 import { Folder } from "../../models/domain/folder";
-import { FolderView } from "../../models/view/folderView";
+import { FolderView } from "../../models/view/folder.view";
 
 export abstract class FolderService {
   folders$: Observable<Folder[]>;

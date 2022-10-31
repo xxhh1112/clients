@@ -1,6 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
@@ -16,10 +17,10 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PolicyData } from "@bitwarden/common/models/data/policyData";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
+import { PolicyData } from "@bitwarden/common/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
 import { Policy } from "@bitwarden/common/models/domain/policy";
-import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
+import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 
 import { RouterService } from "../core";
 
@@ -27,14 +28,14 @@ import { RouterService } from "../core";
   selector: "app-register",
   templateUrl: "register.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class RegisterComponent extends BaseRegisterComponent {
+export class RegisterComponent extends BaseRegisterComponent implements OnInit, OnDestroy {
   email = "";
   showCreateOrgMessage = false;
   layout = "";
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
 
   private policies: Policy[];
+  private destroy$ = new Subject<void>();
 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
@@ -130,11 +131,19 @@ export class RegisterComponent extends BaseRegisterComponent {
     }
 
     if (this.policies != null) {
-      this.enforcedPolicyOptions = await this.policyService.getMasterPasswordPolicyOptions(
-        this.policies
-      );
+      this.policyService
+        .masterPasswordPolicyOptions$(this.policies)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((enforcedPasswordPolicyOptions) => {
+          this.enforcedPolicyOptions = enforcedPasswordPolicyOptions;
+        });
     }
 
     await super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

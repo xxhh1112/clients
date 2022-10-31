@@ -1,20 +1,23 @@
 import { Observable } from "rxjs";
 
 import { AuthenticationStatus } from "../enums/authenticationStatus";
-import { AuthResult } from "../models/domain/authResult";
+import { AuthResult } from "../models/domain/auth-result";
 import {
   ApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
   PasswordlessLogInCredentials,
-} from "../models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
-import { AuthRequestPushNotification } from "../models/response/notificationResponse";
+} from "../models/domain/log-in-credentials";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
+import { AuthRequestPushNotification } from "../models/response/notification.response";
 
 export abstract class AuthService {
   masterPasswordHash: string;
   email: string;
+  accessCode: string;
+  authRequestId: string;
+
   logIn: (
     credentials:
       | ApiLogInCredentials
@@ -23,7 +26,7 @@ export abstract class AuthService {
       | PasswordlessLogInCredentials
   ) => Promise<AuthResult>;
   logInTwoFactor: (
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string
   ) => Promise<AuthResult>;
   logOut: (callback: () => void) => void;
@@ -31,6 +34,7 @@ export abstract class AuthService {
   authingWithApiKey: () => boolean;
   authingWithSso: () => boolean;
   authingWithPassword: () => boolean;
+  authingWithPasswordless: () => boolean;
   getAuthStatus: (userId?: string) => Promise<AuthenticationStatus>;
   authResponsePushNotifiction: (notification: AuthRequestPushNotification) => Promise<any>;
 

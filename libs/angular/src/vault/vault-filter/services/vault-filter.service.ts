@@ -10,9 +10,9 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 
@@ -83,11 +83,15 @@ export class VaultFilterService {
   }
 
   async checkForSingleOrganizationPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.SingleOrg)
+    );
   }
 
   async checkForPersonalOwnershipPolicy(): Promise<boolean> {
-    return await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership);
+    return await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    );
   }
 
   protected async getAllFoldersNested(folders: FolderView[]): Promise<TreeNode<FolderView>[]> {

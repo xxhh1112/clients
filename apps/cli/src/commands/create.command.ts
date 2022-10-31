@@ -8,12 +8,12 @@ import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/fold
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherExport } from "@bitwarden/common/models/export/cipherExport";
-import { CollectionExport } from "@bitwarden/common/models/export/collectionExport";
-import { FolderExport } from "@bitwarden/common/models/export/folderExport";
-import { CollectionRequest } from "@bitwarden/common/models/request/collectionRequest";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selectionReadOnlyRequest";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
+import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
+import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
+import { FolderExport } from "@bitwarden/common/models/export/folder.export";
+import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 import { Response } from "@bitwarden/node/cli/models/response";
 
 import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
@@ -78,7 +78,7 @@ export class CreateCommand {
   private async createCipher(req: CipherExport) {
     const cipher = await this.cipherService.encrypt(CipherExport.toView(req));
     try {
-      await this.cipherService.saveWithServer(cipher);
+      await this.cipherService.createWithServer(cipher);
       const newCipher = await this.cipherService.get(cipher.id);
       const decCipher = await newCipher.decrypt();
       const res = new CipherResponse(decCipher);

@@ -1,11 +1,11 @@
 import { CryptoService } from "../abstractions/crypto.service";
 import { I18nService } from "../abstractions/i18n.service";
-import { EncString } from "../models/domain/encString";
-import { ImportResult } from "../models/domain/importResult";
-import { CipherWithIdExport } from "../models/export/cipherWithIdsExport";
-import { CollectionWithIdExport } from "../models/export/collectionWithIdExport";
-import { FolderWithIdExport } from "../models/export/folderWithIdExport";
-import { FolderView } from "../models/view/folderView";
+import { EncString } from "../models/domain/enc-string";
+import { ImportResult } from "../models/domain/import-result";
+import { CipherWithIdExport } from "../models/export/cipher-with-ids.export";
+import { CollectionWithIdExport } from "../models/export/collection-with-id.export";
+import { FolderWithIdExport } from "../models/export/folder-with-id.export";
+import { FolderView } from "../models/view/folder.view";
 
 import { BaseImporter } from "./baseImporter";
 import { Importer } from "./importer";

@@ -65,13 +65,13 @@
     "message": "Codice di sicurezza (CVV)"
   },
   "identityName": {
-    "message": "Nome dell'identità"
+    "message": "Nome identità"
   },
   "company": {
     "message": "Azienda"
   },
   "ssn": {
-    "message": "Codice fiscale/Previdenza sociale"
+    "message": "Numero di previdenza sociale/codice fiscale"
   },
   "passportNumber": {
     "message": "Numero del passaporto"
@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Dominio di base",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Nome dominio",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Host",
@@ -425,7 +425,7 @@
     "message": "Io"
   },
   "myVault": {
-    "message": "La mia cassaforte"
+    "message": "Cassaforte"
   },
   "allVaults": {
     "message": "Tutte le Casseforti"
@@ -570,16 +570,16 @@
     "message": "Accedi o crea un nuovo account per accedere alla tua cassaforte."
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Accedi con il dispositivo"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be enabled in the settings of the Bitwarden mobile app. Need another option?"
+    "message": "Il login con il dispositivo deve essere abilitato nelle impostazioni dell'app mobile Bitwarden. Hai bisogno di un'altra opzione?"
   },
   "createAccount": {
     "message": "Crea account"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "Nuovo da queste parti?"
   },
   "startTrial": {
     "message": "Inizia il periodo di prova"
@@ -588,7 +588,7 @@
     "message": "Accedi"
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Login avviato"
   },
   "submit": {
     "message": "Invia"
@@ -648,7 +648,7 @@
     "message": "È necessario reinserire la password principale."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -718,7 +718,7 @@
     "message": "Non appartieni ad alcuna organizzazione. Le organizzazioni ti consentono di condividere oggetti in modo sicuro con altri utenti."
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Una notifica è stata inviata al tuo dispositivo."
   },
   "versionNumber": {
     "message": "Versione $VERSION_NUMBER$",
@@ -964,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Minimo di speciali",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Evita caratteri ambigui"
@@ -997,7 +997,7 @@
   },
   "capitalize": {
     "message": "Rendi maiuscolo",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Includi numero"
@@ -1010,7 +1010,7 @@
   },
   "clear": {
     "message": "Cancella",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Account aggiornato"
@@ -1192,6 +1192,12 @@
   "selectImportFile": {
     "message": "Seleziona il file da importare"
   },
+  "chooseFile": {
+    "message": "Choose File"
+  },
+  "noFileChosen": {
+    "message": "No file chosen"
+  },
   "orCopyPasteFileContents": {
     "message": "oppure copia e incolla il contenuto del file da importare"
   },
@@ -1228,13 +1234,6 @@
   },
   "faviconDesc": {
     "message": "Mostra un'immagine riconoscibile accanto a ogni login."
-  },
-  "enableGravatars": {
-    "message": "Abilita Gravatar",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Usa immagine profilo caricata da gravatar.com."
   },
   "enableFullWidth": {
     "message": "Abilita disposizione a larghezza piena",
@@ -1315,7 +1314,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Abbonamento Premium"
@@ -1324,7 +1323,7 @@
     "message": "Abbonamento Premium richiesto"
   },
   "premiumRequiredDesc": {
-    "message": "Un abbonamento premium è richiesto per utilizzare questa funzionalità."
+    "message": "Un abbonamento Premium è richiesto per utilizzare questa funzionalità."
   },
   "youHavePremiumAccess": {
     "message": "Hai accesso premium"
@@ -1539,7 +1538,7 @@
   },
   "reportsDesc": {
     "message": "Identifica e chiudi i problemi di sicurezza dei tuoi account online cliccando sui report in basso.",
-    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Resoconto sui siti web non protetti"
@@ -1572,7 +1571,7 @@
     "message": "Accessi senza 2FA trovati"
   },
   "inactive2faFoundDesc": {
-    "message": "Abbiamo trovato $COUNT$ siti web nella tua cassaforte che potrebbero non essere configurati con l'autenticazione a due fattori (secondo twofactorauth.org). Per proteggere ulteriormente questi account, è necessario abilitare l'autenticazione a due fattori.",
+    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1765,7 +1764,7 @@
   },
   "goPremium": {
     "message": "Passa a Premium",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Hai effettuato l'aggiornamento a Premium."
@@ -2320,7 +2319,7 @@
     "message": "Single Sign-On"
   },
   "editPolicy": {
-    "message": "Modifica politica"
+    "message": "Modifica policy"
   },
   "groups": {
     "message": "Gruppi"
@@ -2548,7 +2547,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Visualizza tutte le opzioni di accesso"
   },
   "viewedItemId": {
     "message": "Elemento visualizzato $ID$.",
@@ -2863,7 +2862,7 @@
     "message": "Modificare i gruppi a cui appartiene questo utente."
   },
   "invitedUsers": {
-    "message": "Utenti invitati."
+    "message": "Invitato/i utente/i."
   },
   "resendInvitation": {
     "message": "Invia nuovamente l'invito"
@@ -2957,7 +2956,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3029,15 +3028,15 @@
   },
   "billingPlan": {
     "message": "Piano",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Cambia piano",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Aggiorna il tuo account a un altro piano fornendo le informazioni qui sotto. Assicurati di avere un metodo di pagamento attivo aggiunto all'account.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Fattura #$NUMBER$",
@@ -3313,6 +3312,10 @@
     "message": "Aggiornato",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Password aggiornata",
     "description": "ex. Date this password was updated"
@@ -3391,10 +3394,10 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+    "message": "Assicurati che la tua cassaforte sia sbloccata e che la \"frase impronta\" corrisponda sull'altro dispositivo."
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Frase impronta"
   },
   "dontAskFingerprintAgain": {
     "message": "Non chiedere di verificare di nuovo la frase impronta",
@@ -3660,7 +3663,7 @@
     "message": "Accedi usando il portale di accesso Single Sign-On della tua organizzazione. Inserisci l'identificativo della tua organizzazione per iniziare."
   },
   "enterpriseSingleSignOn": {
-    "message": "Single Sign-On aziendale"
+    "message": "Accesso con il portale dell'organizzazione (SSO)"
   },
   "ssoHandOff": {
     "message": "Puoi chiudere questa scheda e continuare nell'estensione."
@@ -3943,7 +3946,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4082,10 +4085,10 @@
     "message": "Permessi"
   },
   "managerPermissions": {
-    "message": "Manager Permissions"
+    "message": "Permessi del Manager"
   },
   "adminPermissions": {
-    "message": "Admin Permissions"
+    "message": "Permessi dell'Amministratore"
   },
   "accessEventLogs": {
     "message": "Accedi ai log degli eventi"
@@ -4397,7 +4400,7 @@
     "message": "Invia nuovamente l'invito"
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Invia nuova notifica"
   },
   "noSelectedUsersApplicable": {
     "message": "Questa azione non è applicabile a nessuno degli utenti selezionati."
@@ -4487,7 +4490,7 @@
     "message": "Clienti"
   },
   "providerAdmin": {
-    "message": "Amministratore del fornitore"
+    "message": "Amministratore del provider"
   },
   "providerAdminDesc": {
     "message": "L'utente con privilegi di accesso più elevato che può gestire tutti gli aspetti del tuo fornitore nonché accedere e gestire le organizzazioni dei clienti."
@@ -4557,10 +4560,10 @@
     }
   },
   "providerIsDisabled": {
-    "message": "Il fornitore è disabilitato."
+    "message": "Il provider è disabilitato."
   },
   "providerUpdated": {
-    "message": "Fornitore aggiornato"
+    "message": "Provider aggiornato"
   },
   "yourProviderIs": {
     "message": "Il tuo fornitore è $PROVIDER$. Hanno privilegi amministrativi e di fatturazione per la tua organizzazione.",
@@ -4651,7 +4654,7 @@
     "message": "Esportazione cassaforte disabilitata"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Una o più politiche di organizzazione ti impediscono di esportare la tua cassaforte personale."
+    "message": "Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale."
   },
   "selectType": {
     "message": "Seleziona tipo di SSO"
@@ -4820,7 +4823,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -5390,5 +5393,17 @@
   },
   "numberOfUsers": {
     "message": "Numero di utenti"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to Filter --"
+  },
+  "multiSelectLoading": {
+    "message": "Retrieving options..."
+  },
+  "multiSelectNotFound": {
+    "message": "No items found"
+  },
+  "multiSelectClearAll": {
+    "message": "Clear all"
   }
 }

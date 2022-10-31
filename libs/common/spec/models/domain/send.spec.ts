@@ -1,12 +1,13 @@
+// eslint-disable-next-line no-restricted-imports
 import { Substitute, Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { SendType } from "@bitwarden/common/enums/sendType";
-import { SendData } from "@bitwarden/common/models/data/sendData";
-import { EncString } from "@bitwarden/common/models/domain/encString";
+import { SendData } from "@bitwarden/common/models/data/send.data";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Send } from "@bitwarden/common/models/domain/send";
-import { SendText } from "@bitwarden/common/models/domain/sendText";
+import { SendText } from "@bitwarden/common/models/domain/send-text";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 
 import { makeStaticByteArray, mockEnc } from "../../utils";
@@ -111,7 +112,7 @@ describe("Send", () => {
     cryptoService.decryptToBytes(send.key, null).resolves(makeStaticByteArray(32));
     cryptoService.makeSendKey(Arg.any()).resolves("cryptoKey" as any);
 
-    const encryptService = Substitute.for<AbstractEncryptService>();
+    const encryptService = Substitute.for<EncryptService>();
 
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 

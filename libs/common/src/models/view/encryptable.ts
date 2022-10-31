@@ -1,5 +1,5 @@
 import { CryptoService } from "../../abstractions/crypto.service";
-import { SymmetricCryptoKey } from "../domain/symmetricCryptoKey";
+import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
 /**
  * Domain model that can be decrypted using views.

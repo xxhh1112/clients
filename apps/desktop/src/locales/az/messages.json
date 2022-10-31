@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "İlk hərfi böyük yaz",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Rəqəm əlavə et"
@@ -1265,6 +1265,10 @@
   "dateUpdated": {
     "message": "Güncəlləndi",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Yaradıldı",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Parol güncəlləndi",

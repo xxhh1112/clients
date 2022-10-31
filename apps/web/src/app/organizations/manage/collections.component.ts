@@ -10,15 +10,15 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { CollectionData } from "@bitwarden/common/models/data/collectionData";
+import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import {
   CollectionDetailsResponse,
   CollectionResponse,
-} from "@bitwarden/common/models/response/collectionResponse";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
+} from "@bitwarden/common/models/response/collection.response";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { CollectionAddEditComponent } from "./collection-add-edit.component";
 import { EntityUsersComponent } from "./entity-users.component";

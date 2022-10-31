@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -9,9 +11,9 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/encArrayBuffer";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CipherService } from "@bitwarden/common/services/cipher.service";
 
 const ENCRYPTED_TEXT = "This data has been encrypted";
@@ -26,6 +28,7 @@ describe("Cipher Service", () => {
   let i18nService: SubstituteOf<I18nService>;
   let searchService: SubstituteOf<SearchService>;
   let logService: SubstituteOf<LogService>;
+  let encryptService: SubstituteOf<EncryptService>;
 
   let cipherService: CipherService;
 
@@ -38,6 +41,7 @@ describe("Cipher Service", () => {
     i18nService = Substitute.for<I18nService>();
     searchService = Substitute.for<SearchService>();
     logService = Substitute.for<LogService>();
+    encryptService = Substitute.for<EncryptService>();
 
     cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
     cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
@@ -50,7 +54,8 @@ describe("Cipher Service", () => {
       i18nService,
       () => searchService,
       logService,
-      stateService
+      stateService,
+      encryptService
     );
   });
 

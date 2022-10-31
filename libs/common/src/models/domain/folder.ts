@@ -1,9 +1,9 @@
 import { Jsonify } from "type-fest";
 
-import { FolderData } from "../data/folderData";
+import { FolderData } from "../data/folder.data";
 import { DecryptableDomain } from "../view/encryptable";
 
-import { EncString } from "./encString";
+import { EncString } from "./enc-string";
 
 export class Folder implements DecryptableDomain {
   id: string;

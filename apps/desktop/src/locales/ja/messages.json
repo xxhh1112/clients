@@ -346,10 +346,10 @@
     "message": "名前は必須項目です。"
   },
   "addedItem": {
-    "message": "追加しました"
+    "message": "追加されたアイテム"
   },
   "editedItem": {
-    "message": "編集しました"
+    "message": "編集されたアイテム"
   },
   "deleteItem": {
     "message": "アイテムの削除"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "先頭を大文字",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "数字を含む"
@@ -1265,6 +1265,10 @@
   "dateUpdated": {
     "message": "更新日",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "作成日",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "パスワード更新日",

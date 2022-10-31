@@ -6,7 +6,7 @@
     "message": "Filtre"
   },
   "allItems": {
-    "message": "Alle elementer"
+    "message": "Alle emner"
   },
   "favorites": {
     "message": "Favoritter"
@@ -33,10 +33,10 @@
     "message": "Samlinger"
   },
   "searchVault": {
-    "message": "Søg i boks"
+    "message": "Søg i Boks"
   },
   "addItem": {
-    "message": "Tilføj element"
+    "message": "Tilføj emne"
   },
   "shared": {
     "message": "Delt"
@@ -67,7 +67,7 @@
     "message": "Vedhæftninger"
   },
   "viewItem": {
-    "message": "Vis element"
+    "message": "Vis emne"
   },
   "name": {
     "message": "Navn"
@@ -98,22 +98,22 @@
     "message": "Adgangssætning"
   },
   "editItem": {
-    "message": "Redigér element"
+    "message": "Redigér emne"
   },
   "emailAddress": {
     "message": "E-mailadresse"
   },
   "verificationCodeTotp": {
-    "message": "Verifikationskode (TOTP)"
+    "message": "Bekræftelseskode (TOTP)"
   },
   "website": {
-    "message": "Hjemmeside"
+    "message": "Websted"
   },
   "notes": {
     "message": "Notater"
   },
   "customFields": {
-    "message": "Brugerdefinerede felter"
+    "message": "Tilpassede felter"
   },
   "launch": {
     "message": "Kør"
@@ -163,7 +163,7 @@
     "message": "Pasnummer"
   },
   "licenseNumber": {
-    "message": "Kørekortnummer"
+    "message": "Licensnummer"
   },
   "email": {
     "message": "E-mail"
@@ -349,7 +349,7 @@
     "message": "Tilføjede element"
   },
   "editedItem": {
-    "message": "Redigerede element"
+    "message": "Regiderede element"
   },
   "deleteItem": {
     "message": "Slet element"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Stort begyndelsesbogstav",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Inkludér ciffer"
@@ -827,7 +827,7 @@
     "message": "Ugyldig hovedadgangskode"
   },
   "twoStepLoginConfirmation": {
-    "message": "To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, med en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?"
+    "message": "To-trins login gør din konto mere sikker ved at kræve, at du verificerer dit login med en anden enhed, med en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller email. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?"
   },
   "twoStepLogin": {
     "message": "To-trins login"
@@ -1266,6 +1266,10 @@
     "message": "Opdateret",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Oprettet",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Adgangskode opdateret",
     "description": "ex. Date this password was updated"
@@ -1571,10 +1575,10 @@
     "message": "Bruges til biometri i browser."
   },
   "enableDuckDuckGoBrowserIntegration": {
-    "message": "Allow DuckDuckGo browser integration"
+    "message": "Tillad DuckDuckGo browserintegration"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+    "message": "Brug din Bitwarden-boks, når du browser med DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Browserintegration understøttes ikke"
@@ -1604,7 +1608,7 @@
     "message": "Sørg for, at det viste fingeraftryk er identisk med det fingeraftryk, der vises i browserudvidelsen."
   },
   "verifyNativeMessagingConnectionTitle": {
-    "message": "$APPID$ wants to connect to Bitwarden",
+    "message": "$APPID$ ønsker at oprette forbindelse til Bitwarden",
     "placeholders": {
       "appid": {
         "content": "$1",
@@ -1613,10 +1617,10 @@
     }
   },
   "verifyNativeMessagingConnectionDesc": {
-    "message": "Would you like to approve this request?"
+    "message": "Vil du godkende denne anmodning?"
   },
   "verifyNativeMessagingConnectionWarning": {
-    "message": "If you did not initiate this request, do not approve it."
+    "message": "Hvis du ikke indledte denne anmodning, skal du ikke godkende den."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometri ikke aktiveret"
@@ -1985,7 +1989,7 @@
     "message": "Søg i min boks"
   },
   "forwardedEmail": {
-    "message": "Videresendt E-mail Alias"
+    "message": "Videresendt e-mail alias"
   },
   "forwardedEmailDesc": {
     "message": "Generér et e-mail alias med en ekstern viderestillingstjeneste."

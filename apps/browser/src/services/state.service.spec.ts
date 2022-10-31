@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -7,9 +8,9 @@ import {
 } from "@bitwarden/common/abstractions/storage.service";
 import { SendType } from "@bitwarden/common/enums/sendType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
-import { GlobalState } from "@bitwarden/common/models/domain/globalState";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { State } from "@bitwarden/common/models/domain/state";
-import { SendView } from "@bitwarden/common/models/view/sendView";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
 
 import { Account } from "../models/account";

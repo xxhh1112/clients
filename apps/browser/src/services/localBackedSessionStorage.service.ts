@@ -1,13 +1,13 @@
 import { Jsonify } from "type-fest";
 
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import {
   AbstractCachedStorageService,
   MemoryStorageServiceInterface,
 } from "@bitwarden/common/abstractions/storage.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { MemoryStorageOptions } from "@bitwarden/common/models/domain/storageOptions";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { MemoryStorageOptions } from "@bitwarden/common/models/domain/storage-options";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { devFlag } from "../decorators/dev-flag.decorator";
 import { devFlagEnabled } from "../flags";
@@ -30,7 +30,7 @@ export class LocalBackedSessionStorageService
   private sessionStorage = new BrowserMemoryStorageService();
 
   constructor(
-    private encryptService: AbstractEncryptService,
+    private encryptService: EncryptService,
     private keyGenerationService: AbstractKeyGenerationService
   ) {
     super();
