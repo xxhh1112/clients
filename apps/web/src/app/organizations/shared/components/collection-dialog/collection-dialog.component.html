@@ -63,9 +63,11 @@
       </bit-tab-group>
     </div>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
-      <button type="submit" bitButton bitFormButton buttonType="primary">Save</button>
+      <button type="submit" bitButton bitFormButton buttonType="primary">
+        {{ "save" | i18n }}
+      </button>
       <button type="button" bitButton bitFormButton buttonType="secondary" (click)="cancel()">
-        Cancel
+        {{ "cancel" | i18n }}
       </button>
       <button
         *ngIf="organization.canDeleteAssignedCollections"
