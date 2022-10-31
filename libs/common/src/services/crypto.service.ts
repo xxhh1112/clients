@@ -14,7 +14,6 @@ import { sequentialize } from "../misc/sequentialize";
 import { Utils } from "../misc/utils";
 import { EEFLongWordList } from "../misc/wordlist";
 import { EncryptedOrganizationKeyData } from "../models/data/encryptedOrganizationKeyData";
-import Domain from "../models/domain/domainBase";
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
 import { BaseEncryptedOrganizationKey } from "../models/domain/encryptedOrganizationKey";
@@ -22,7 +21,12 @@ import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
-import { Decryptable, Encryptable, EncryptableDomain } from "../models/view/encryptable";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../models/view/encryptable";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -680,25 +684,25 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  async decrypt<V, D extends Domain>(view: Decryptable<V, D>, model: D): Promise<V> {
-    // If the item has an organizationId, use the org key, otherwise use the user key
-    const orgId: string = (model as any).organizationId;
-    const key = Utils.isNullOrWhitespace(orgId)
-      ? await this.getKeyForUserEncryption()
-      : await this.getOrgKey(orgId);
+  async decrypt<V, D extends DecryptableDomain>(view: Decryptable<V, D>, domain: D): Promise<V> {
+    const key = await this.getKeys(domain);
 
-    return view.decrypt(this, key, model);
+    return view.decrypt(this, key, domain);
   }
 
   async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
     view: V
   ): Promise<EncryptableDomain<V>> {
-    const orgId: string = (view as any).organizationId;
-    const key = Utils.isNullOrWhitespace(orgId)
-      ? await this.getKeyForUserEncryption()
-      : await this.getOrgKey(orgId);
+    const key = await this.getKeys(view);
 
     return view.encrypt(this, key);
+  }
+
+  private async getKeys<D>(i: DecryptableDomain | Encryptable<D>): Promise<SymmetricCryptoKey> {
+    const keyIdentifier = i.keyIdentifier();
+    return Utils.isNullOrWhitespace(keyIdentifier)
+      ? await this.getKeyForUserEncryption()
+      : await this.getOrgKey(keyIdentifier);
   }
 
   // ---HELPERS---

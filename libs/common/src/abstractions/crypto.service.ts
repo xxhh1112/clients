@@ -1,14 +1,18 @@
 import { HashPurpose } from "../enums/hashPurpose";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
-import Domain from "../models/domain/domainBase";
 import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
 import { EncString } from "../models/domain/encString";
 import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
 import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
 import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
 import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
-import { Decryptable, Encryptable, EncryptableDomain } from "../models/view/encryptable";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../models/view/encryptable";
 
 export abstract class CryptoService {
   setKey: (key: SymmetricCryptoKey) => Promise<any>;
@@ -87,7 +91,7 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
 
-  decrypt: <V, D extends Domain>(view: Decryptable<V, D>, model: D) => Promise<V>;
+  decrypt: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
   encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
     folder: V
   ) => Promise<EncryptableDomain<V>>;

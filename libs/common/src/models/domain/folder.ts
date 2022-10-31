@@ -1,32 +1,27 @@
 import { Jsonify } from "type-fest";
 
 import { FolderData } from "../data/folderData";
+import { DecryptableDomain } from "../view/encryptable";
 
-import Domain from "./domainBase";
 import { EncString } from "./encString";
 
-export class Folder extends Domain {
+export class Folder implements DecryptableDomain {
   id: string;
   name: EncString;
   revisionDate: Date;
 
   constructor(obj?: FolderData) {
-    super();
     if (obj == null) {
       return;
     }
 
-    this.buildDomainModel(
-      this,
-      obj,
-      {
-        id: null,
-        name: null,
-      },
-      ["id"]
-    );
-
+    this.id = obj.id;
+    this.name = new EncString(obj.name);
     this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
+  }
+
+  keyIdentifier(): string | null {
+    return null;
   }
 
   static fromJSON(obj: Jsonify<Folder>) {

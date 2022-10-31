@@ -21,6 +21,10 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
     this.revisionDate = f.revisionDate;
   }
 
+  keyIdentifier(): string | null {
+    return null;
+  }
+
   async encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<Folder> {
     const folder = new Folder();
     folder.id = this.id;
@@ -32,7 +36,7 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
 
   static async decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: Folder) {
     const view = new FolderView(model);
-    view.name = await cryptoService.decryptToUtf8(model.name, key);
+    view.name = await model.name.decryptWithCryptoService(cryptoService, key);
     return view;
   }
 
