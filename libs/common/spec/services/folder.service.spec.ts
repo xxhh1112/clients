@@ -7,6 +7,8 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { FolderData } from "@bitwarden/common/models/data/folder.data";
+import { Folder } from "@bitwarden/common/models/domain/folder";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { StateService } from "@bitwarden/common/services/state.service";
@@ -31,6 +33,10 @@ describe("Folder Service", () => {
     activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
+    cryptoService.decrypt(Arg.any(), Arg.any()).mimicks((view: any, model: Folder) => {
+      return Promise.resolve(new FolderView(model));
+    });
+
     stateService.getEncryptedFolders().resolves({
       "1": folderData("1", "test"),
     });
@@ -48,7 +54,6 @@ describe("Folder Service", () => {
       expect(result).toEqual({
         id: "1",
         name: {
-          decryptedValue: [],
           encryptedString: "test",
           encryptionType: 0,
         },
@@ -70,7 +75,6 @@ describe("Folder Service", () => {
       {
         id: "1",
         name: {
-          decryptedValue: [],
           encryptedString: "test",
           encryptionType: 0,
         },
@@ -79,7 +83,6 @@ describe("Folder Service", () => {
       {
         id: "2",
         name: {
-          decryptedValue: [],
           encryptedString: "test 2",
           encryptionType: 0,
         },
@@ -88,8 +91,8 @@ describe("Folder Service", () => {
     ]);
 
     expect(await firstValueFrom(folderService.folderViews$)).toEqual([
-      { id: "1", name: [], revisionDate: null },
-      { id: "2", name: [], revisionDate: null },
+      { id: "1", name: null, revisionDate: null },
+      { id: "2", name: null, revisionDate: null },
       { id: null, name: [], revisionDate: null },
     ]);
   });
@@ -101,7 +104,6 @@ describe("Folder Service", () => {
       {
         id: "2",
         name: {
-          decryptedValue: [],
           encryptedString: "test 2",
           encryptionType: 0,
         },
@@ -110,8 +112,8 @@ describe("Folder Service", () => {
     ]);
 
     expect(await firstValueFrom(folderService.folderViews$)).toEqual([
-      { id: "2", name: [], revisionDate: null },
-      { id: null, name: [], revisionDate: null },
+      { id: "2", name: null, revisionDate: null },
+      { id: null, name: null, revisionDate: null },
     ]);
   });
 
