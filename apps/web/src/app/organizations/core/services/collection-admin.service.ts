@@ -9,10 +9,10 @@ import {
   CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "@bitwarden/common/models/response/collection.response";
-import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { CoreOrganizationModule } from "../core-organization.module";
+import { CollectionAdminView } from "../views/collection-admin-view";
 
 @Injectable({ providedIn: CoreOrganizationModule })
 export class CollectionAdminService {

@@ -11,14 +11,16 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
-import { CollectionAccessSelectionView } from "@bitwarden/common/models/view/collection-access-selection-view";
-import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
 
 import { SharedModule } from "../../../../shared/shared.module";
 import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
-import { CollectionAdminService } from "../../../core";
+import {
+  CollectionAccessSelectionView,
+  CollectionAdminView,
+  CollectionAdminService,
+} from "../../../core";
 import { AccessSelectorModule } from "../access-selector";
 
 import {

@@ -9,11 +9,10 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionAdminView } from "@bitwarden/common/models/view/collection-admin-view";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators } from "@bitwarden/components";
 
-import { CollectionAdminService } from "../../../core";
+import { CollectionAdminView, CollectionAdminService } from "../../../core";
 import {
   AccessItemType,
   AccessItemValue,
