@@ -120,7 +120,7 @@ import { AttachmentsComponent } from "../vault/attachments.component";
 import { BulkActionsComponent } from "../vault/bulk-actions.component";
 import { BulkDeleteDialogComponent } from "../vault/bulk-delete-dialog.component";
 import { BulkMoveComponent } from "../vault/bulk-move.component";
-import { BulkRestoreComponent } from "../vault/bulk-restore.component";
+import { BulkRestoreDialogComponent } from "../vault/bulk-restore-dialog.component";
 import { BulkShareComponent } from "../vault/bulk-share.component";
 import { CollectionsComponent } from "../vault/collections.component";
 import { FolderAddEditComponent } from "../vault/folder-add-edit.component";
@@ -152,7 +152,7 @@ import { SharedModule } from ".";
     BulkActionsComponent,
     BulkDeleteDialogComponent,
     BulkMoveComponent,
-    BulkRestoreComponent,
+    BulkRestoreDialogComponent,
     BulkShareComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,
@@ -276,7 +276,7 @@ import { SharedModule } from ".";
     BulkActionsComponent,
     BulkDeleteDialogComponent,
     BulkMoveComponent,
-    BulkRestoreComponent,
+    BulkRestoreDialogComponent,
     BulkShareComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,

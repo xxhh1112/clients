@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild, ViewContainerRef } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -7,7 +8,6 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { DialogService } from "@bitwarden/components";
-import { lastValueFrom } from "rxjs";
 
 import {
   BulkDeleteDialogComponent,
@@ -15,7 +15,11 @@ import {
   BulkDeleteDialogResult,
 } from "./bulk-delete-dialog.component";
 import { BulkMoveComponent } from "./bulk-move.component";
-import { BulkRestoreComponent } from "./bulk-restore.component";
+import {
+  BulkRestoreDialogComponent,
+  BulkRestoreDialogParams,
+  BulkRestoreDialogResult,
+} from "./bulk-restore-dialog.component";
 import { BulkShareComponent } from "./bulk-share.component";
 import { CiphersComponent } from "./ciphers.component";
 
@@ -82,8 +86,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.ciphersComponent.selectedCipherIds;
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.ciphersComponent.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -92,18 +96,18 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkRestoreComponent,
-      this.bulkRestoreModalRef,
-      (comp) => {
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onRestored.subscribe(async () => {
-          modal.close();
-          await this.ciphersComponent.refresh();
-        });
-      }
-    );
+    const bulkRestoreParams: BulkRestoreDialogParams = {
+      cipherIds: selectedCipherIds,
+    };
+
+    const dialog = this.dialogService.open(BulkRestoreDialogComponent, {
+      data: bulkRestoreParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkRestoreDialogResult | undefined;
+    if (result === BulkRestoreDialogResult.Restored) {
+      this.ciphersComponent.refresh();
+    }
   }
 
   async bulkShare() {

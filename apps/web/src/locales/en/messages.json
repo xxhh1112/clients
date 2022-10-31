@@ -3678,7 +3678,7 @@
     "message": "Restore items"
   },
   "restoreSelectedItemsDesc": {
-    "message": "You have selected $COUNT$ item(s) to restore. Are you sure you want to restore all of these items?",
+    "message": "You have selected $COUNT$ item(s) to restore. Are you sure you want to restore these items?",
     "placeholders": {
       "count": {
         "content": "$1",

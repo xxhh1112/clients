@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -28,7 +29,6 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { DialogService } from "@bitwarden/components";
-import { lastValueFrom } from "rxjs";
 
 import {
   BulkDeleteDialogComponent,
@@ -36,7 +36,11 @@ import {
   BulkDeleteDialogResult,
 } from "./bulk-delete-dialog.component";
 import { BulkMoveComponent } from "./bulk-move.component";
-import { BulkRestoreComponent } from "./bulk-restore.component";
+import {
+  BulkRestoreDialogComponent,
+  BulkRestoreDialogParams,
+  BulkRestoreDialogResult,
+} from "./bulk-restore-dialog.component";
 import { BulkShareComponent } from "./bulk-share.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
@@ -345,8 +349,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedIds = this.selectedCipherIds;
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -355,18 +359,20 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkRestoreComponent,
-      this.bulkRestoreModalRef,
-      (comp) => {
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onRestored.subscribe(async () => {
-          modal.close();
-          await this.refresh();
-        });
-      }
-    );
+    const bulkRestoreParams: BulkRestoreDialogParams = {
+      cipherIds: selectedCipherIds,
+    };
+
+    const dialog = this.dialogService.open(BulkRestoreDialogComponent, {
+      data: bulkRestoreParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkRestoreDialogResult | undefined;
+    if (result === BulkRestoreDialogResult.Restored) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   async bulkShare() {
