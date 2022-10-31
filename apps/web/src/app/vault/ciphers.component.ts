@@ -35,7 +35,11 @@ import {
   BulkDeleteDialogParams,
   BulkDeleteDialogResult,
 } from "./bulk-delete-dialog.component";
-import { BulkMoveComponent } from "./bulk-move.component";
+import {
+  BulkMoveDialogComponent,
+  BulkMoveDialogParams,
+  BulkMoveDialogResult,
+} from "./bulk-move-dialog.component";
 import {
   BulkRestoreDialogComponent,
   BulkRestoreDialogParams,
@@ -409,8 +413,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const selectedIds = this.selectedCipherIds;
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -419,18 +423,20 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkMoveComponent,
-      this.bulkMoveModalRef,
-      (comp) => {
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onMoved.subscribe(async () => {
-          modal.close();
-          await this.refresh();
-        });
-      }
-    );
+    const bulkMoveParams: BulkMoveDialogParams = {
+      cipherIds: selectedCipherIds,
+    };
+
+    const dialog = this.dialogService.open(BulkMoveDialogComponent, {
+      data: bulkMoveParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkMoveDialogResult | undefined;
+    if (result === BulkMoveDialogResult.Moved) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   async copy(cipher: CipherView, value: string, typeI18nKey: string, aType: string) {

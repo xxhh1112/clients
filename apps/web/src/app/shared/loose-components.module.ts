@@ -119,7 +119,7 @@ import { AddEditComponent } from "../vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/attachments.component";
 import { BulkActionsComponent } from "../vault/bulk-actions.component";
 import { BulkDeleteDialogComponent } from "../vault/bulk-delete-dialog.component";
-import { BulkMoveComponent } from "../vault/bulk-move.component";
+import { BulkMoveDialogComponent } from "../vault/bulk-move-dialog.component";
 import { BulkRestoreDialogComponent } from "../vault/bulk-restore-dialog.component";
 import { BulkShareComponent } from "../vault/bulk-share.component";
 import { CollectionsComponent } from "../vault/collections.component";
@@ -151,7 +151,7 @@ import { SharedModule } from ".";
     BillingSyncKeyComponent,
     BulkActionsComponent,
     BulkDeleteDialogComponent,
-    BulkMoveComponent,
+    BulkMoveDialogComponent,
     BulkRestoreDialogComponent,
     BulkShareComponent,
     ChangeEmailComponent,
@@ -275,7 +275,7 @@ import { SharedModule } from ".";
     AttachmentsComponent,
     BulkActionsComponent,
     BulkDeleteDialogComponent,
-    BulkMoveComponent,
+    BulkMoveDialogComponent,
     BulkRestoreDialogComponent,
     BulkShareComponent,
     ChangeEmailComponent,
