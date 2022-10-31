@@ -18,6 +18,7 @@ import {
   IconButtonModule,
   IconModule,
   MenuModule,
+  NavigationModule,
   TableModule,
   TabsModule,
 } from "@bitwarden/components";
@@ -44,6 +45,7 @@ import "./locales";
     JslibModule,
 
     // Component library
+    AsyncActionsModule,
     AvatarModule,
     BadgeModule,
     ButtonModule,
@@ -53,6 +55,7 @@ import "./locales";
     IconButtonModule,
     IconModule,
     MenuModule,
+    NavigationModule,
     TableModule,
     TabsModule,
 
@@ -79,6 +82,7 @@ import "./locales";
     IconButtonModule,
     IconModule,
     MenuModule,
+    NavigationModule,
     TableModule,
     TabsModule,
 

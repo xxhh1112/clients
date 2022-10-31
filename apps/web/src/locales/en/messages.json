@@ -5606,5 +5606,8 @@
   },
   "softDeleteSuccessToast":{
     "message":"Secret sent to trash"
+  },
+  "searchProjects":{
+    "message":"Search Projects"
   }
 }

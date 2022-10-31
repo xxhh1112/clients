@@ -11,6 +11,7 @@ export * from "./icon";
 export * from "./link";
 export * from "./menu";
 export * from "./multi-select";
+export * from "./navigation";
 export * from "./table";
 export * from "./tabs";
 export * from "./toggle-group";

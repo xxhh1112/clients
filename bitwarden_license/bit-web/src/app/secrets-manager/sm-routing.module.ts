@@ -25,14 +25,26 @@ const routes: Routes = [
       {
         path: "secrets",
         loadChildren: () => SecretsModule,
+        data: {
+          title: "secrets",
+          searchTitle: "searchSecrets",
+        },
       },
       {
         path: "projects",
         loadChildren: () => ProjectsModule,
+        data: {
+          title: "projects",
+          searchTitle: "searchProjects",
+        },
       },
       {
         path: "serviceAccounts",
         loadChildren: () => ServiceAccountsModule,
+        data: {
+          title: "serviceAccounts",
+          searchTitle: "searchServiceAccounts",
+        },
       },
       {
         path: "",
