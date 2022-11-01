@@ -98,6 +98,9 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
   async setOrganization() {
     this.groups = (await this.apiService.getGroups(this.organization?.id)).data;
     this.allCiphers = await this.loadCiphers();
+    if (!this.activeFilter.selectedCollectionNode) {
+      await this.reload(this.activeFilter.buildFilter());
+    }
   }
 
   async loadCiphers(): Promise<CipherView[]> {
