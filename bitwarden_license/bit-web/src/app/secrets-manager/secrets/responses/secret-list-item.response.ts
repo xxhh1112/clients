@@ -6,6 +6,7 @@ export class SecretListItemResponse extends BaseResponse {
   name: string;
   creationDate: string;
   revisionDate: string;
+  projects: string[];
 
   constructor(response: any) {
     super(response);
@@ -14,5 +15,6 @@ export class SecretListItemResponse extends BaseResponse {
     this.name = this.getResponseProperty("Key");
     this.creationDate = this.getResponseProperty("CreationDate");
     this.revisionDate = this.getResponseProperty("RevisionDate");
+    this.projects = this.getResponseProperty("projects");
   }
 }

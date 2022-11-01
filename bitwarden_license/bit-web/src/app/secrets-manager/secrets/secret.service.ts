@@ -6,13 +6,15 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
-import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
 import { SecretListView } from "../models/view/secret-list.view";
+import { SecretProjectView } from "../models/view/secret-project.view";
 import { SecretView } from "../models/view/secret.view";
 
 import { SecretRequest } from "./requests/secret.request";
 import { SecretListItemResponse } from "./responses/secret-list-item.response";
+import { SecretProjectResponse } from "./responses/secret-project.response";
+import { SecretWithProjectsListResponse } from "./responses/secret-with-projects-list.response";
 import { SecretResponse } from "./responses/secret.response";
 
 @Injectable({
@@ -43,8 +45,9 @@ export class SecretService {
       true,
       true
     );
-    const results = new ListResponse(r, SecretListItemResponse);
-    return await this.createSecretsListView(organizationId, results.data);
+
+    const results = new SecretWithProjectsListResponse(r);
+    return await this.createSecretsListView(organizationId, results);
   }
 
   async create(organizationId: string, secretView: SecretView) {
@@ -128,11 +131,17 @@ export class SecretService {
 
   private async createSecretsListView(
     organizationId: string,
-    secrets: SecretListItemResponse[]
+    secrets: SecretWithProjectsListResponse
   ): Promise<SecretListView[]> {
     const orgKey = await this.getOrganizationKey(organizationId);
+
+    const projectsMappedToSecretsView = this.decryptProjectsMappedToSecrets(
+      orgKey,
+      secrets.projects
+    );
+
     return await Promise.all(
-      secrets.map(async (s: SecretListItemResponse) => {
+      secrets.secrets.map(async (s: SecretListItemResponse) => {
         const secretListView = new SecretListView();
         secretListView.id = s.id;
         secretListView.organizationId = s.organizationId;
@@ -142,7 +151,27 @@ export class SecretService {
         );
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
+        secretListView.projects = (await projectsMappedToSecretsView).filter((p) =>
+          s.projects.includes(p.id)
+        );
         return secretListView;
+      })
+    );
+  }
+
+  private async decryptProjectsMappedToSecrets(
+    orgKey: SymmetricCryptoKey,
+    projects: SecretProjectResponse[]
+  ): Promise<SecretProjectView[]> {
+    return await Promise.all(
+      projects.map(async (s: SecretProjectResponse) => {
+        const projectsMappedToSecretView = new SecretProjectView();
+        projectsMappedToSecretView.id = s.id;
+        projectsMappedToSecretView.name = await this.encryptService.decryptToUtf8(
+          new EncString(s.name),
+          orgKey
+        );
+        return projectsMappedToSecretView;
       })
     );
   }
