@@ -1,16 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -72,15 +63,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
 
-  @ViewChild("bulkDeleteTemplate", { read: ViewContainerRef, static: true })
-  bulkDeleteModalRef: ViewContainerRef;
-  @ViewChild("bulkRestoreTemplate", { read: ViewContainerRef, static: true })
-  bulkRestoreModalRef: ViewContainerRef;
-  @ViewChild("bulkMoveTemplate", { read: ViewContainerRef, static: true })
-  bulkMoveModalRef: ViewContainerRef;
-  @ViewChild("bulkShareTemplate", { read: ViewContainerRef, static: true })
-  bulkShareModalRef: ViewContainerRef;
-
   pagedCiphers: CipherView[] = [];
   pagedCollections: TreeNode<CollectionFilter>[] = [];
   cipherType = CipherType;
@@ -123,7 +105,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
     protected dialogService: DialogService,
-    protected modalService: ModalService,
     protected logService: LogService,
     private organizationService: OrganizationService,
     private tokenService: TokenService

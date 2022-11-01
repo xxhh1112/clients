@@ -7,8 +7,8 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -27,7 +27,6 @@ import { GroupResponse } from "@bitwarden/common/models/response/group.response"
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
-import { lastValueFrom } from "rxjs";
 
 import {
   BulkDeleteDialogComponent,
@@ -63,7 +62,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
     dialogService: DialogService,
-    modalService: ModalService,
     logService: LogService,
     stateService: StateService,
     organizationService: OrganizationService,
@@ -81,7 +79,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       stateService,
       passwordRepromptService,
       dialogService,
-      modalService,
       logService,
       organizationService,
       tokenService
