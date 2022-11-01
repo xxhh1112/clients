@@ -7,10 +7,20 @@
           <a routerLink="subscription" class="list-group-item" routerLinkActive="active">
             {{ "subscription" | i18n }}
           </a>
-          <a routerLink="payment-method" class="list-group-item" routerLinkActive="active">
+          <a
+            *ngIf="showPaymentAndHistory"
+            routerLink="payment-method"
+            class="list-group-item"
+            routerLinkActive="active"
+          >
             {{ "paymentMethod" | i18n }}
           </a>
-          <a routerLink="history" class="list-group-item" routerLinkActive="active">
+          <a
+            *ngIf="showPaymentAndHistory"
+            routerLink="history"
+            class="list-group-item"
+            routerLinkActive="active"
+          >
             {{ "billingHistory" | i18n }}
           </a>
         </div>
