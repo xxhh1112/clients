@@ -45,7 +45,11 @@ import {
   BulkRestoreDialogParams,
   BulkRestoreDialogResult,
 } from "./bulk-restore-dialog.component";
-import { BulkShareComponent } from "./bulk-share.component";
+import {
+  BulkShareDialogComponent,
+  BulkShareDialogParams,
+  BulkShareDialogResult,
+} from "./bulk-share-dialog.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { CollectionFilter } from "./vault-filter/shared/models/vault-filter.type";
@@ -394,18 +398,20 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkShareComponent,
-      this.bulkShareModalRef,
-      (comp) => {
-        comp.ciphers = selectedCiphers;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onShared.subscribe(async () => {
-          modal.close();
-          await this.refresh();
-        });
-      }
-    );
+    const bulkShareParams: BulkShareDialogParams = {
+      ciphers: selectedCiphers,
+    };
+
+    const dialog = this.dialogService.open(BulkShareDialogComponent, {
+      data: bulkShareParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkShareDialogResult | undefined;
+    if (result === BulkShareDialogResult.Shared) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   async bulkMove() {

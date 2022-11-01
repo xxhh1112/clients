@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, Inject, OnInit } from "@angular/core";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -11,14 +12,23 @@ import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
 
+export interface BulkShareDialogParams {
+  ciphers: CipherView[];
+  organizationId?: string;
+}
+
+export enum BulkShareDialogResult {
+  Shared = "shared",
+  Canceled = "canceled",
+}
+
 @Component({
   selector: "app-vault-bulk-share",
-  templateUrl: "bulk-share.component.html",
+  templateUrl: "bulk-share-dialog.component.html",
 })
-export class BulkShareComponent implements OnInit {
-  @Input() ciphers: CipherView[] = [];
-  @Input() organizationId: string;
-  @Output() onShared = new EventEmitter();
+export class BulkShareDialogComponent implements OnInit {
+  ciphers: CipherView[] = [];
+  organizationId: string;
 
   nonShareableCount = 0;
   collections: Checkable<CollectionView>[] = [];
@@ -29,13 +39,18 @@ export class BulkShareComponent implements OnInit {
   private writeableCollections: CollectionView[] = [];
 
   constructor(
+    @Inject(DIALOG_DATA) params: BulkShareDialogParams,
+    private dialogRef: DialogRef<BulkShareDialogResult>,
     private cipherService: CipherService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private organizationService: OrganizationService,
     private logService: LogService
-  ) {}
+  ) {
+    this.ciphers = params.ciphers ?? [];
+    this.organizationId = params.organizationId;
+  }
 
   async ngOnInit() {
     this.shareableCiphers = this.ciphers.filter(
@@ -66,7 +81,7 @@ export class BulkShareComponent implements OnInit {
     }
   }
 
-  async submit() {
+  submit = async () => {
     const checkedCollectionIds = this.collections.filter(isChecked).map((c) => c.id);
     try {
       this.formPromise = this.cipherService.shareManyWithServer(
@@ -75,7 +90,6 @@ export class BulkShareComponent implements OnInit {
         checkedCollectionIds
       );
       await this.formPromise;
-      this.onShared.emit();
       const orgName =
         this.organizations.find((o) => o.id === this.organizationId)?.name ??
         this.i18nService.t("organization");
@@ -84,10 +98,11 @@ export class BulkShareComponent implements OnInit {
         null,
         this.i18nService.t("movedItemsToOrg", orgName)
       );
+      this.close(BulkShareDialogResult.Shared);
     } catch (e) {
       this.logService.error(e);
     }
-  }
+  };
 
   check(c: Checkable<CollectionView>, select?: boolean) {
     c.checked = select == null ? !c.checked : select;
@@ -111,5 +126,13 @@ export class BulkShareComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  protected cancel() {
+    this.close(BulkShareDialogResult.Canceled);
+  }
+
+  private close(result: BulkShareDialogResult) {
+    this.dialogRef.close(result);
   }
 }

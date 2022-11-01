@@ -24,7 +24,11 @@ import {
   BulkRestoreDialogParams,
   BulkRestoreDialogResult,
 } from "./bulk-restore-dialog.component";
-import { BulkShareComponent } from "./bulk-share.component";
+import {
+  BulkShareDialogComponent,
+  BulkShareDialogParams,
+  BulkShareDialogResult,
+} from "./bulk-share-dialog.component";
 import { CiphersComponent } from "./ciphers.component";
 
 @Component({
@@ -129,18 +133,18 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkShareComponent,
-      this.bulkShareModalRef,
-      (comp) => {
-        comp.ciphers = selectedCiphers;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onShared.subscribe(async () => {
-          modal.close();
-          await this.ciphersComponent.refresh();
-        });
-      }
-    );
+    const bulkShareParams: BulkShareDialogParams = {
+      ciphers: selectedCiphers,
+    };
+
+    const dialog = this.dialogService.open(BulkShareDialogComponent, {
+      data: bulkShareParams,
+    });
+
+    const result = (await lastValueFrom(dialog.closed)) as BulkShareDialogResult | undefined;
+    if (result === BulkShareDialogResult.Shared) {
+      this.ciphersComponent.refresh();
+    }
   }
 
   async bulkMove() {
