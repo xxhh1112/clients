@@ -22,7 +22,11 @@ import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
 
-import { CollectionDialogComponent, CollectionDialogResult } from "../shared";
+import {
+  CollectionDialogComponent,
+  CollectionDialogResult,
+  CollectionEditDialogParams,
+} from "../shared";
 
 import { EntityUsersComponent } from "./entity-users.component";
 
@@ -130,9 +134,11 @@ export class CollectionsComponent implements OnInit {
       return;
     }
 
-    const dialog = this.dialogService.open(CollectionDialogComponent, {
-      data: { collectionId: collection?.id, organizationId: this.organizationId },
-    });
+    const data: CollectionEditDialogParams = {
+      collectionId: collection?.id,
+      organizationId: this.organizationId,
+    };
+    const dialog = this.dialogService.open(CollectionDialogComponent, { data });
 
     const result = (await lastValueFrom(dialog.closed)) as CollectionDialogResult | undefined;
     if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
