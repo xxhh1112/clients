@@ -1,4 +1,4 @@
-import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -11,6 +11,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
+import { DialogService } from "@bitwarden/components";
 
 export interface BulkShareDialogParams {
   ciphers: CipherView[];
@@ -21,6 +22,21 @@ export enum BulkShareDialogResult {
   Shared = "shared",
   Canceled = "canceled",
 }
+
+/**
+ * Strongly typed helper to open a BulkShareDialog
+ * @param dialogService Instance of the dialog service that will be used to open the dialog
+ * @param config Configuration for the dialog
+ */
+export const openBulkShareDialog = (
+  dialogService: DialogService,
+  config: DialogConfig<BulkShareDialogParams>
+) => {
+  return dialogService.open<BulkShareDialogResult, BulkShareDialogParams>(
+    BulkShareDialogComponent,
+    config
+  );
+};
 
 @Component({
   selector: "app-vault-bulk-share",

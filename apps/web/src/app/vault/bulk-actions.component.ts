@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -12,11 +12,7 @@ import { DialogService } from "@bitwarden/components";
 import { BulkDeleteDialogResult, openBulkDeleteDialog } from "./bulk-delete-dialog.component";
 import { BulkMoveDialogResult, openBulkMoveDialog } from "./bulk-move-dialog.component";
 import { BulkRestoreDialogResult, openBulkRestoreDialog } from "./bulk-restore-dialog.component";
-import {
-  BulkShareDialogComponent,
-  BulkShareDialogParams,
-  BulkShareDialogResult,
-} from "./bulk-share-dialog.component";
+import { BulkShareDialogResult, openBulkShareDialog } from "./bulk-share-dialog.component";
 import { CiphersComponent } from "./ciphers.component";
 
 @Component({
@@ -28,15 +24,6 @@ export class BulkActionsComponent {
   @Input() ciphersComponent: CiphersComponent;
   @Input() deleted: boolean;
   @Input() organization: Organization;
-
-  @ViewChild("bulkDeleteTemplate", { read: ViewContainerRef, static: true })
-  bulkDeleteModalRef: ViewContainerRef;
-  @ViewChild("bulkRestoreTemplate", { read: ViewContainerRef, static: true })
-  bulkRestoreModalRef: ViewContainerRef;
-  @ViewChild("bulkMoveTemplate", { read: ViewContainerRef, static: true })
-  bulkMoveModalRef: ViewContainerRef;
-  @ViewChild("bulkShareTemplate", { read: ViewContainerRef, static: true })
-  bulkShareModalRef: ViewContainerRef;
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
@@ -117,13 +104,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const bulkShareParams: BulkShareDialogParams = {
-      ciphers: selectedCiphers,
-    };
-
-    const dialog = this.dialogService.open(BulkShareDialogComponent, {
-      data: bulkShareParams,
-    });
+    const dialog = openBulkShareDialog(this.dialogService, { data: { ciphers: selectedCiphers } });
 
     const result = (await lastValueFrom(dialog.closed)) as BulkShareDialogResult | undefined;
     if (result === BulkShareDialogResult.Shared) {
