@@ -92,7 +92,7 @@ function providers(data: ProviderData) {
     {
       provide: OrganizationService,
       useValue: {
-        get: () => ({ useGroups: data.useGroups } as any),
+        get: () => ({ useGroups: data.useGroups, canDeleteAssignedCollections: true } as any),
       } as Partial<OrganizationService>,
     },
     {

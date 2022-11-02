@@ -4,7 +4,7 @@
   </ng-container>
   <bit-dialog disablePadding *ngIf="!loading">
     <span bitDialogTitle>
-      <ng-container *ngIf="collection; else newCollectionTitle">
+      <ng-container *ngIf="editMode; else newCollectionTitle">
         {{ "editCollection" | i18n }}
         <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection.name }}</span>
       </ng-container>
@@ -70,7 +70,7 @@
         {{ "cancel" | i18n }}
       </button>
       <button
-        *ngIf="organization.canDeleteAssignedCollections"
+        *ngIf="editMode && organization.canDeleteAssignedCollections"
         type="button"
         bitIconButton="bwi-trash"
         buttonType="danger"

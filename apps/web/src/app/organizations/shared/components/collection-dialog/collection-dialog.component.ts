@@ -162,6 +162,10 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     return this.params.collectionId;
   }
 
+  protected get editMode() {
+    return this.collection != undefined;
+  }
+
   protected async cancel() {
     this.close(CollectionDialogResult.Canceled);
   }
