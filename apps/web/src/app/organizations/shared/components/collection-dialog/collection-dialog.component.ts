@@ -9,6 +9,8 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { GroupView } from "@bitwarden/common/models/view/group-view";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/src/models/response/organization-user.response";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators, DialogService } from "@bitwarden/components";
 
@@ -71,7 +73,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     const groups$ = organization$.pipe(
       switchMap((organization) => {
         if (!organization.useGroups) {
-          return of([]);
+          return of([] as GroupView[]);
         }
 
         return this.groupService.getAll(this.params.organizationId);
@@ -91,25 +93,8 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       .subscribe(({ organization, collections, collectionDetails, groups, users }) => {
         this.organization = organization;
         this.accessItems = [].concat(
-          groups.map((group) => ({
-            id: group.id,
-            type: AccessItemType.Group,
-            listName: group.name,
-            labelName: group.name,
-            accessAllItems: group.accessAll,
-            readonly: group.accessAll,
-          })),
-          users.data.map((user) => ({
-            id: user.id,
-            type: AccessItemType.Member,
-            email: user.email,
-            role: user.type,
-            listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
-            labelName: user.name ?? user.email,
-            status: user.status,
-            accessAllItems: user.accessAll,
-            readonly: user.accessAll,
-          }))
+          groups.map(mapGroupToAccessItemView),
+          users.data.map(mapUserToAccessItemView)
         );
 
         if (this.params.collectionId) {
@@ -120,30 +105,12 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
             throw new Error("Could not find collection to edit.");
           }
 
-          const nameParts = this.collection.name?.split("/");
-          const name = nameParts[nameParts.length - 1];
-          const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
-
+          const { name, parent } = parseName(this.collection);
           if (parent !== null && !this.nestOptions.find((c) => c.name === parent)) {
             this.deletedParentName = parent;
           }
 
-          let accessSelections: AccessItemValue[] = [];
-          if (collectionDetails) {
-            accessSelections = [].concat(
-              collectionDetails.groups.map<AccessItemValue>((selection) => ({
-                id: selection.id,
-                type: AccessItemType.Group,
-                permission: convertToPermission(selection),
-              })),
-              collectionDetails.users.map((selection) => ({
-                id: selection.id,
-                type: AccessItemType.Member,
-                permission: convertToPermission(selection),
-              }))
-            );
-          }
-
+          const accessSelections = mapToAccessSelections(collectionDetails);
           this.formGroup.patchValue({
             name,
             externalId: this.collection.externalId,
@@ -224,6 +191,58 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   private close(result: CollectionDialogResult) {
     this.dialogRef.close(result);
   }
+}
+
+function parseName(collection: CollectionView) {
+  const nameParts = collection.name?.split("/");
+  const name = nameParts[nameParts.length - 1];
+  const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
+
+  return { name, parent };
+}
+
+function mapGroupToAccessItemView(group: GroupView): AccessItemView {
+  return {
+    id: group.id,
+    type: AccessItemType.Group,
+    listName: group.name,
+    labelName: group.name,
+    accessAllItems: group.accessAll,
+    readonly: group.accessAll,
+  };
+}
+
+// TODO: Use view when user apis are migrated to a service
+function mapUserToAccessItemView(user: OrganizationUserUserDetailsResponse): AccessItemView {
+  return {
+    id: user.id,
+    type: AccessItemType.Member,
+    email: user.email,
+    role: user.type,
+    listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
+    labelName: user.name ?? user.email,
+    status: user.status,
+    accessAllItems: user.accessAll,
+    readonly: user.accessAll,
+  };
+}
+
+function mapToAccessSelections(collectionDetails: CollectionAdminView): AccessItemValue[] {
+  if (collectionDetails == undefined) {
+    return [];
+  }
+  return [].concat(
+    collectionDetails.groups.map<AccessItemValue>((selection) => ({
+      id: selection.id,
+      type: AccessItemType.Group,
+      permission: convertToPermission(selection),
+    })),
+    collectionDetails.users.map<AccessItemValue>((selection) => ({
+      id: selection.id,
+      type: AccessItemType.Member,
+      permission: convertToPermission(selection),
+    }))
+  );
 }
 
 /**
