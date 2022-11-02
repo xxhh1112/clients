@@ -15,11 +15,7 @@ import {
   BulkMoveDialogParams,
   BulkMoveDialogResult,
 } from "./bulk-move-dialog.component";
-import {
-  BulkRestoreDialogComponent,
-  BulkRestoreDialogParams,
-  BulkRestoreDialogResult,
-} from "./bulk-restore-dialog.component";
+import { BulkRestoreDialogResult, openBulkRestoreDialog } from "./bulk-restore-dialog.component";
 import {
   BulkShareDialogComponent,
   BulkShareDialogParams,
@@ -98,12 +94,10 @@ export class BulkActionsComponent {
       return;
     }
 
-    const bulkRestoreParams: BulkRestoreDialogParams = {
-      cipherIds: selectedCipherIds,
-    };
-
-    const dialog = this.dialogService.open(BulkRestoreDialogComponent, {
-      data: bulkRestoreParams,
+    const dialog = openBulkRestoreDialog(this.dialogService, {
+      data: {
+        cipherIds: selectedCipherIds,
+      },
     });
 
     const result = (await lastValueFrom(dialog.closed)) as BulkRestoreDialogResult | undefined;
