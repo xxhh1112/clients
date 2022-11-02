@@ -1,4 +1,4 @@
-import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -8,6 +8,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherBulkDeleteRequest } from "@bitwarden/common/models/request/cipher-bulk-delete.request";
 import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collection-bulk-delete.request";
+import { DialogService } from "@bitwarden/components";
 
 export interface BulkDeleteDialogParams {
   cipherIds?: string[];
@@ -20,6 +21,22 @@ export enum BulkDeleteDialogResult {
   Deleted = "deleted",
   Canceled = "canceled",
 }
+
+/**
+ * Strongly typed helper to open a BulkDeleteDialog
+ * @param dialogService Instance of the dialog service that will be used to open the dialog
+ * @param config Configuration for the dialog
+ */
+export const openBulkDeleteDialog = (
+  dialogService: DialogService,
+  config: DialogConfig<BulkDeleteDialogParams>
+) => {
+  return dialogService.open<BulkDeleteDialogResult, BulkDeleteDialogParams>(
+    BulkDeleteDialogComponent,
+    config
+  );
+};
+
 @Component({
   selector: "app-vault-bulk-delete",
   templateUrl: "bulk-delete-dialog.component.html",

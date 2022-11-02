@@ -29,9 +29,8 @@ import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
 
 import {
-  BulkDeleteDialogComponent,
-  BulkDeleteDialogParams,
   BulkDeleteDialogResult,
+  openBulkDeleteDialog,
 } from "../../vault/bulk-delete-dialog.component";
 import { CiphersComponent as BaseCiphersComponent, ItemRow } from "../../vault/ciphers.component";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
@@ -247,15 +246,13 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       return;
     }
 
-    const bulkDeleteParams: BulkDeleteDialogParams = {
-      permanent: this.deleted,
-      cipherIds: selectedCipherIds,
-      collectionIds: selectedCollectionIds,
-      organization: this.organization,
-    };
-
-    const dialog = this.dialogService.open(BulkDeleteDialogComponent, {
-      data: bulkDeleteParams,
+    const dialog = openBulkDeleteDialog(this.dialogService, {
+      data: {
+        permanent: this.deleted,
+        cipherIds: selectedCipherIds,
+        collectionIds: selectedCollectionIds,
+        organization: this.organization,
+      },
     });
 
     const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;

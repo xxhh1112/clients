@@ -9,11 +9,7 @@ import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { DialogService } from "@bitwarden/components";
 
-import {
-  BulkDeleteDialogComponent,
-  BulkDeleteDialogParams,
-  BulkDeleteDialogResult,
-} from "./bulk-delete-dialog.component";
+import { BulkDeleteDialogResult, openBulkDeleteDialog } from "./bulk-delete-dialog.component";
 import {
   BulkMoveDialogComponent,
   BulkMoveDialogParams,
@@ -63,8 +59,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.ciphersComponent.selectedCipherIds;
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.ciphersComponent.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -73,14 +69,12 @@ export class BulkActionsComponent {
       return;
     }
 
-    const bulkDeleteParams: BulkDeleteDialogParams = {
-      permanent: this.deleted,
-      cipherIds: selectedIds,
-      organization: this.organization,
-    };
-
-    const dialog = this.dialogService.open(BulkDeleteDialogComponent, {
-      data: bulkDeleteParams,
+    const dialog = openBulkDeleteDialog(this.dialogService, {
+      data: {
+        permanent: this.deleted,
+        cipherIds: selectedCipherIds,
+        organization: this.organization,
+      },
     });
 
     const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
