@@ -1,4 +1,4 @@
-import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { firstValueFrom, Observable } from "rxjs";
@@ -8,6 +8,7 @@ import { FolderService } from "@bitwarden/common/abstractions/folder/folder.serv
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
+import { DialogService } from "@bitwarden/components";
 
 export interface BulkMoveDialogParams {
   cipherIds?: string[];
@@ -17,6 +18,21 @@ export enum BulkMoveDialogResult {
   Moved = "moved",
   Canceled = "canceled",
 }
+
+/**
+ * Strongly typed helper to open a BulkMoveDialog
+ * @param dialogService Instance of the dialog service that will be used to open the dialog
+ * @param config Configuration for the dialog
+ */
+export const openBulkMoveDialog = (
+  dialogService: DialogService,
+  config: DialogConfig<BulkMoveDialogParams>
+) => {
+  return dialogService.open<BulkMoveDialogResult, BulkMoveDialogParams>(
+    BulkMoveDialogComponent,
+    config
+  );
+};
 
 @Component({
   selector: "app-vault-bulk-move",

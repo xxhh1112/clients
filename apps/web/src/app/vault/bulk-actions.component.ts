@@ -10,11 +10,7 @@ import { Organization } from "@bitwarden/common/models/domain/organization";
 import { DialogService } from "@bitwarden/components";
 
 import { BulkDeleteDialogResult, openBulkDeleteDialog } from "./bulk-delete-dialog.component";
-import {
-  BulkMoveDialogComponent,
-  BulkMoveDialogParams,
-  BulkMoveDialogResult,
-} from "./bulk-move-dialog.component";
+import { BulkMoveDialogResult, openBulkMoveDialog } from "./bulk-move-dialog.component";
 import { BulkRestoreDialogResult, openBulkRestoreDialog } from "./bulk-restore-dialog.component";
 import {
   BulkShareDialogComponent,
@@ -150,12 +146,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const bulkMoveParams: BulkMoveDialogParams = {
-      cipherIds: selectedCipherIds,
-    };
-
-    const dialog = this.dialogService.open(BulkMoveDialogComponent, {
-      data: bulkMoveParams,
+    const dialog = openBulkMoveDialog(this.dialogService, {
+      data: { cipherIds: selectedCipherIds },
     });
 
     const result = (await lastValueFrom(dialog.closed)) as BulkMoveDialogResult | undefined;
