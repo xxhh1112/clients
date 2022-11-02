@@ -93,7 +93,9 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes.organization != null) {
-      await this.setOrganization();
+      this.actionPromise = this.setOrganization();
+      await this.actionPromise;
+      this.actionPromise = null;
     }
   }
 
