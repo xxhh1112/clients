@@ -32,7 +32,10 @@ import {
   BulkDeleteDialogResult,
   openBulkDeleteDialog,
 } from "../../vault/bulk-delete-dialog.component";
-import { CiphersComponent as BaseCiphersComponent, ItemRow } from "../../vault/ciphers.component";
+import {
+  CiphersComponent as BaseCiphersComponent,
+  VaultItemRow,
+} from "../../vault/ciphers.component";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
 
@@ -153,7 +156,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
       this.checkAll(false);
     }
 
-    const items: ItemRow[] = [...this.collections, ...this.ciphers];
+    const items: VaultItemRow[] = [...this.collections, ...this.ciphers];
     if (!items) {
       return;
     }
@@ -164,11 +167,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     }
   }
 
-  selectRow(item: ItemRow) {
+  selectRow(item: VaultItemRow) {
     this.checkRow(item);
   }
 
-  checkRow(item: ItemRow, select?: boolean) {
+  checkRow(item: VaultItemRow, select?: boolean) {
     if (item instanceof TreeNode && item.node.name == "Unassigned") {
       return;
     }
@@ -179,7 +182,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     if (!this.collections) {
       return [];
     }
-    return this.collections.filter((c) => !!(c as ItemRow).checked);
+    return this.collections.filter((c) => !!(c as VaultItemRow).checked);
   }
 
   get selectedCollectionIds(): string[] {

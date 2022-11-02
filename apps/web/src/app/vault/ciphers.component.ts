@@ -31,7 +31,7 @@ import { CollectionFilter } from "./vault-filter/shared/models/vault-filter.type
 
 const MaxCheckedCount = 500;
 
-export type ItemRow = (CipherView | TreeNode<CollectionFilter>) & { checked?: boolean };
+export type VaultItemRow = (CipherView | TreeNode<CollectionFilter>) & { checked?: boolean };
 
 @Component({
   selector: "app-vault-ciphers",
@@ -423,7 +423,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
   }
 
-  selectRow(item: ItemRow) {
+  selectRow(item: VaultItemRow) {
     if (item instanceof CipherView) {
       this.checkRow(item);
     } else if (item instanceof TreeNode) {
@@ -441,7 +441,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     if (select) {
       this.checkAll(false);
     }
-    const items: ItemRow[] = this.ciphers;
+    const items: VaultItemRow[] = this.ciphers;
     if (!items) {
       return;
     }
@@ -452,7 +452,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
   }
 
-  checkRow(item: ItemRow, select?: boolean) {
+  checkRow(item: VaultItemRow, select?: boolean) {
     // Collections can't be managed in end user vault
     if (!(item instanceof CipherView)) {
       return;
@@ -464,7 +464,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     if (!this.ciphers) {
       return [];
     }
-    return this.ciphers.filter((c) => !!(c as ItemRow).checked);
+    return this.ciphers.filter((c) => !!(c as VaultItemRow).checked);
   }
 
   get selectedCipherIds(): string[] {
