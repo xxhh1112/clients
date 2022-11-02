@@ -44,7 +44,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   protected collection?: CollectionView;
   protected nestOptions: CollectionView[] = [];
   protected accessItems: AccessItemView[] = [];
-  protected removedParentName: string | undefined;
+  protected deletedParentName: string | undefined;
   protected formGroup = this.formBuilder.group({
     name: ["", BitValidators.forbiddenCharacters(["/"])],
     externalId: "",
@@ -125,7 +125,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : null;
 
           if (parent !== null && !this.nestOptions.find((c) => c.name === parent)) {
-            this.removedParentName = parent;
+            this.deletedParentName = parent;
           }
 
           let accessSelections: AccessItemValue[] = [];
@@ -198,7 +198,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     this.close(CollectionDialogResult.Saved);
   };
 
-  protected remove = async () => {
+  protected delete = async () => {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("deleteCollectionConfirmation"),
       this.collection?.name,
@@ -211,7 +211,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    await this.collectionService.remove(this.params.organizationId, this.params.collectionId);
+    await this.collectionService.delete(this.params.organizationId, this.params.collectionId);
 
     this.close(CollectionDialogResult.Deleted);
   };

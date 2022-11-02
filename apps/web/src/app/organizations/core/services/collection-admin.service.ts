@@ -65,7 +65,7 @@ export class CollectionAdminService {
     return;
   }
 
-  async remove(organizationId: string, collectionId: string): Promise<void> {
+  async delete(organizationId: string, collectionId: string): Promise<void> {
     await this.apiService.deleteCollection(organizationId, collectionId);
   }
 

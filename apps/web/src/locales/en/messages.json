@@ -5577,7 +5577,7 @@
   "noMembersAdded": {
     "message": "No members added"
   },
-  "removed": {
-    "message": "Removed"
+  "deleted": {
+    "message": "Deleted"
   }
 }

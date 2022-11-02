@@ -30,8 +30,8 @@
             <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
             <select bitInput formControlName="parent">
               <option [ngValue]="null">-</option>
-              <option *ngIf="removedParentName" disabled [ngValue]="removedParentName">
-                {{ removedParentName }} ({{ "removed" | i18n }})
+              <option *ngIf="deletedParentName" disabled [ngValue]="deletedParentName">
+                {{ deletedParentName }} ({{ "deleted" | i18n }})
               </option>
               <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
                 {{ collection.name }}
@@ -77,7 +77,7 @@
         class="tw-ml-auto"
         bitFormButton
         [appA11yTitle]="'delete' | i18n"
-        [bitAction]="remove"
+        [bitAction]="delete"
       ></button>
     </div>
   </bit-dialog>
