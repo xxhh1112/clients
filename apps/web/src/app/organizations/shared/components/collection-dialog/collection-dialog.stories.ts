@@ -23,10 +23,7 @@ import {
 } from "../../../core";
 import { AccessSelectorModule } from "../access-selector";
 
-import {
-  CollectionDialogComponent,
-  CollectionEditDialogParams,
-} from "./collection-dialog.component";
+import { CollectionDialogComponent, CollectionDialogParams } from "./collection-dialog.component";
 
 interface ProviderData {
   collectionId: string;
@@ -82,7 +79,7 @@ function providers(data: ProviderData) {
       useValue: {
         collectionId: data.collectionId,
         organizationId: data.organizationId,
-      } as CollectionEditDialogParams,
+      } as CollectionDialogParams,
     },
     {
       provide: DialogRef,

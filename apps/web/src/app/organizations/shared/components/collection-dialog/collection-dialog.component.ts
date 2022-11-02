@@ -1,4 +1,4 @@
-import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { takeUntil, Subject, of, combineLatest, shareReplay, switchMap } from "rxjs";
@@ -10,7 +10,7 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
-import { BitValidators } from "@bitwarden/components";
+import { BitValidators, DialogService } from "@bitwarden/components";
 
 import { CollectionAdminView, CollectionAdminService } from "../../../core";
 import {
@@ -21,7 +21,7 @@ import {
   convertToSelectionView,
 } from "../access-selector";
 
-export interface CollectionEditDialogParams {
+export interface CollectionDialogParams {
   collectionId?: string;
   organizationId: string;
 }
@@ -53,7 +53,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    @Inject(DIALOG_DATA) private params: CollectionEditDialogParams,
+    @Inject(DIALOG_DATA) private params: CollectionDialogParams,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef<CollectionDialogResult>,
     private apiService: ApiService,
@@ -220,4 +220,19 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   private close(result: CollectionDialogResult) {
     this.dialogRef.close(result);
   }
+}
+
+/**
+ * Strongly typed helper to open a CollectionDialog
+ * @param dialogService Instance of the dialog service that will be used to open the dialog
+ * @param config Configuration for the dialog
+ */
+export function openCollectionDialog(
+  dialogService: DialogService,
+  config: DialogConfig<CollectionDialogParams>
+) {
+  return dialogService.open<CollectionDialogResult, CollectionDialogParams>(
+    CollectionDialogComponent,
+    config
+  );
 }
