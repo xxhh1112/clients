@@ -4,13 +4,13 @@
   </ng-container>
   <bit-dialog disablePadding *ngIf="!loading">
     <span bitDialogTitle>
-      <ng-container *ngIf="editMode; else newCollectionTitle">
+      <ng-container *ngIf="editMode">
         {{ "editCollection" | i18n }}
         <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection.name }}</span>
       </ng-container>
-      <ng-template #newCollectionTitle>
+      <ng-container *ngIf="!editMode">
         {{ "newCollection" | i18n }}
-      </ng-template>
+      </ng-container>
     </span>
     <div bitDialogContent>
       <bit-tab-group>
