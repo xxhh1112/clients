@@ -52,7 +52,6 @@ const routes: Routes = [
           organizationPermissions: canAccessGroupsTab,
         },
       },
-      // TODO: Remove before merging! If you see this during a PR review, please write a comment!
       {
         path: "manage",
         component: ManageComponent,
