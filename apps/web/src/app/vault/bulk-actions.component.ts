@@ -1,7 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -29,7 +28,6 @@ export class BulkActionsComponent {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private dialogService: DialogService,
-    private modalService: ModalService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
 
