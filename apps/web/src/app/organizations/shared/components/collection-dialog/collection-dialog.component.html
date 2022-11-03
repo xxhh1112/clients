@@ -1,19 +1,21 @@
 <form [formGroup]="formGroup" [bitSubmit]="submit">
-  <ng-container *ngIf="loading" #spinner>
-    <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
-  </ng-container>
-  <bit-dialog disablePadding *ngIf="!loading">
+  <bit-dialog [disablePadding]="!loading">
     <span bitDialogTitle>
       <ng-container *ngIf="editMode">
         {{ "editCollection" | i18n }}
-        <span class="tw-text-sm tw-normal-case tw-text-muted">{{ collection.name }}</span>
+        <span class="tw-text-sm tw-normal-case tw-text-muted" *ngIf="!loading">{{
+          collection.name
+        }}</span>
       </ng-container>
       <ng-container *ngIf="!editMode">
         {{ "newCollection" | i18n }}
       </ng-container>
     </span>
     <div bitDialogContent>
-      <bit-tab-group>
+      <ng-container *ngIf="loading" #spinner>
+        <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
+      </ng-container>
+      <bit-tab-group *ngIf="!loading">
         <bit-tab label="{{ 'collectionInfo' | i18n }}">
           <bit-form-field>
             <bit-label>{{ "name" | i18n }}</bit-label>
@@ -63,14 +65,21 @@
       </bit-tab-group>
     </div>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
-      <button type="submit" bitButton bitFormButton buttonType="primary">
+      <button type="submit" bitButton bitFormButton buttonType="primary" [disabled]="loading">
         {{ "save" | i18n }}
       </button>
-      <button type="button" bitButton bitFormButton buttonType="secondary" (click)="cancel()">
+      <button
+        type="button"
+        bitButton
+        bitFormButton
+        buttonType="secondary"
+        (click)="cancel()"
+        [disabled]="loading"
+      >
         {{ "cancel" | i18n }}
       </button>
       <button
-        *ngIf="editMode && organization.canDeleteAssignedCollections"
+        *ngIf="editMode && organization?.canDeleteAssignedCollections"
         type="button"
         bitIconButton="bwi-trash"
         buttonType="danger"
@@ -78,6 +87,7 @@
         bitFormButton
         [appA11yTitle]="'delete' | i18n"
         [bitAction]="delete"
+        [disabled]="loading"
       ></button>
     </div>
   </bit-dialog>

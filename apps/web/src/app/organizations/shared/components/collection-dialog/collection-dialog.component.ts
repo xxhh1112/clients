@@ -131,7 +131,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   }
 
   protected get editMode() {
-    return this.collection != undefined;
+    return this.params.collectionId != undefined;
   }
 
   protected async cancel() {
