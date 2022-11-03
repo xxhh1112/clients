@@ -202,6 +202,7 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    height: 100%;
 
     @include themify($themes) {
       color: themed("headerColor");
@@ -296,6 +297,10 @@ header {
   .search + .right {
     margin-left: -10px;
   }
+}
+
+.no-bg {
+  background-color: transparent;
 }
 
 .content {
@@ -438,6 +443,19 @@ main {
   main {
     bottom: 55px;
   }
+
+  [type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    mask-image: url("../images/close-button-white.svg");
+    -webkit-mask-image: url("../images/close-button-white.svg");
+    @include themify($themes) {
+      background-color: themed("headerInputColor");
+    }
+  }
 }
 
 .center-content,
@@ -491,11 +509,14 @@ main {
   padding-left: 7px;
   .org-filter {
     @include themify($themes) {
-      background-color: themed("backgroundColor");
+      background-color: themed("buttonBackgroundColor");
     }
-    border: 1px solid;
-    padding: 7px;
     border-radius: $border-radius;
+    padding: 6px 10px;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 .vault-select {
