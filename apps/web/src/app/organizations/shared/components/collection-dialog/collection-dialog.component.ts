@@ -1,4 +1,5 @@
 import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Overlay } from "@angular/cdk/overlay";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { takeUntil, Subject, of, combineLatest, shareReplay, switchMap } from "rxjs";
@@ -252,10 +253,14 @@ function mapToAccessSelections(collectionDetails: CollectionAdminView): AccessIt
  */
 export function openCollectionDialog(
   dialogService: DialogService,
+  overlay: Overlay,
   config: DialogConfig<CollectionDialogParams>
 ) {
   return dialogService.open<CollectionDialogResult, CollectionDialogParams>(
     CollectionDialogComponent,
-    config
+    {
+      positionStrategy: overlay.position().global().centerHorizontally().top(),
+      ...config,
+    }
   );
 }

@@ -1,3 +1,4 @@
+import { Overlay } from "@angular/cdk/overlay";
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
@@ -60,7 +61,8 @@ export class CollectionsComponent implements OnInit {
     private searchService: SearchService,
     private logService: LogService,
     private organizationService: OrganizationService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private overlay: Overlay
   ) {}
 
   async ngOnInit() {
@@ -130,7 +132,7 @@ export class CollectionsComponent implements OnInit {
       return;
     }
 
-    const dialog = openCollectionDialog(this.dialogService, {
+    const dialog = openCollectionDialog(this.dialogService, this.overlay, {
       data: { collectionId: collection?.id, organizationId: this.organizationId },
     });
 
