@@ -21,8 +21,17 @@ export const parameters = {
 };
 
 // ng-template is used to scope any template reference variables and isolate the previews
-const decorator = componentWrapperDecorator(
-  (story) => `
+const decorator = componentWrapperDecorator((story) => {
+  if (story.includes("router-outlet")) {
+    return `
+    <ng-template #lightPreview>
+      <div class="theme_light tw-px-5 tw-py-10 tw-border-2 tw-border-solid tw-border-secondary-300 tw-bg-[#ffffff]">${story}</div>
+    </ng-template>
+
+    <ng-container *ngTemplateOutlet="lightPreview"></ng-container>`;
+  }
+
+  return `
 <ng-template #lightPreview>
   <div class="theme_light tw-px-5 tw-py-10 tw-border-2 tw-border-solid tw-border-secondary-300 tw-bg-[#ffffff]">${story}</div>
 </ng-template>
@@ -32,7 +41,7 @@ const decorator = componentWrapperDecorator(
 
 <ng-container *ngTemplateOutlet="lightPreview"></ng-container>
 <ng-container *ngTemplateOutlet="darkPreview"></ng-container>
-`
-);
+`;
+});
 
 addDecorator(decorator);
