@@ -83,7 +83,7 @@ export default class AutofillService implements AutofillServiceInterface {
     return formData;
   }
 
-  async doAutoFill(options: AutoFillOptions) {
+  async doAutoFill(options: AutoFillOptions, page: any = null) {
     const tab = options.tab;
     if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
       throw new Error("Nothing to auto-fill.");
@@ -93,9 +93,10 @@ export default class AutofillService implements AutofillServiceInterface {
 
     const canAccessPremium = await this.stateService.getCanAccessPremium();
     let didAutofill = false;
-    options.pageDetails.forEach((pd) => {
+    options.pageDetails.forEach(async (pd) => {
       // make sure we're still on correct tab
       if (pd.tab.id !== tab.id || pd.tab.url !== tab.url) {
+        console.log("WRON TAB EXIT");
         return;
       }
 
@@ -106,6 +107,7 @@ export default class AutofillService implements AutofillServiceInterface {
         fillNewPassword: options.fillNewPassword || false,
         cipher: options.cipher,
       });
+
 
       if (!fillScript || !fillScript.script || !fillScript.script.length) {
         return;
@@ -119,15 +121,24 @@ export default class AutofillService implements AutofillServiceInterface {
         this.cipherService.updateLastUsedDate(options.cipher.id);
       }
 
-      BrowserApi.tabSendMessage(
-        tab,
-        {
-          command: "fillForm",
-          fillScript: fillScript,
-          url: tab.url,
-        },
-        { frameId: pd.frameId }
-      );
+      console.log(fillScript);
+
+
+      if (page) {
+        console.log("PAGE");
+        await page.evaluate(([fillScript]: any) => (window as any).autofill(fillScript), [fillScript]);
+      } else {
+        BrowserApi.tabSendMessage(
+          tab,
+          {
+            command: "fillForm",
+            fillScript: fillScript,
+            url: tab.url,
+          },
+          { frameId: pd.frameId }
+        );
+      }
+
 
       if (
         options.cipher.type !== CipherType.Login ||

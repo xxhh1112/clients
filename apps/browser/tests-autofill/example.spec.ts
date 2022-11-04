@@ -28,7 +28,7 @@ test("homepage has Playwright in title and get started link linking to the intro
   await page.waitForSelector("#login_input_email");
 
   const pageDetails = JSON.parse(await page.evaluate(() => (window as any).collect()));
-console.log(pageDetails);
+//console.log(pageDetails);
 
   const cipher = new CipherView();
   cipher.type = CipherType.Login;
@@ -61,7 +61,7 @@ console.log(pageDetails);
     ],
     fillNewPassword: true,
     skipLastUsed: true,
-  });
+  }, page);
 
   console.log(totp);
   /*
@@ -72,6 +72,9 @@ console.log(pageDetails);
 
   console.log(data);
 */
+
+  await page.waitForSelector("#login_input_email");
+
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Playwright/);
 
