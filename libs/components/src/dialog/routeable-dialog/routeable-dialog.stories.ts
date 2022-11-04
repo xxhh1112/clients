@@ -9,17 +9,25 @@ import { ButtonModule } from "../../button";
 import { TabsModule } from "../../tabs";
 import { I18nMockService } from "../../utils/i18n-mock.service";
 import { DialogModule } from "../dialog.module";
-import { DialogComponent } from "../dialog/dialog.component";
 
 @Component({
   selector: "app-main-content",
   template: `
     <input [(ngModel)]="data" class="tw-mr-2" />
-    <a href="hej" bitButton buttonType="primary">Open dialog</a>
+    <a [routerLink]="link" bitButton buttonType="primary">Open dialog</a>
   `,
 })
 class MainContentComponent {
   data = "Some data";
+
+  link = [
+    "/",
+    {
+      outlets: {
+        dialog: ["example"],
+      },
+    },
+  ];
 }
 
 @Component({
@@ -45,7 +53,6 @@ class ExampleDialogComponent {}
 
 export default {
   title: "Component Library/Dialogs/Routeable Dialog",
-  component: DialogComponent,
   decorators: [
     moduleMetadata({
       providers: [
@@ -66,8 +73,8 @@ export default {
         FormsModule,
         RouterModule.forRoot(
           [
-            { path: "", pathMatch: "full", component: MainContentComponent },
-            { path: "dialog", component: ExampleDialogComponent },
+            { path: "", component: MainContentComponent },
+            { path: "example", outlet: "dialog", component: ExampleDialogComponent },
           ],
           { useHash: true }
         ),
@@ -92,9 +99,11 @@ export default {
   },
 } as Meta;
 
-const Template: Story<DialogComponent> = (args: DialogComponent) => ({
+const Template: Story = (args) => ({
   props: args,
-  template: `<router-outlet></router-outlet>`,
+  template: `
+    <bit-routeable-dialog-outlet></bit-routeable-dialog-outlet>
+    <router-outlet></router-outlet>`,
 });
 
 export const Default = Template.bind({});
