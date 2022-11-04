@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -14,7 +14,6 @@ import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/re
 @Component({
   selector: "app-entity-users",
   templateUrl: "entity-users.component.html",
-  providers: [SearchPipe],
 })
 export class EntityUsersComponent implements OnInit {
   @Input() entity: "group" | "collection";
@@ -35,7 +34,7 @@ export class EntityUsersComponent implements OnInit {
   private allUsers: OrganizationUserUserDetailsResponse[] = [];
 
   constructor(
-    private search: SearchPipe,
+    private searchService: SearchService,
     private apiService: ApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
@@ -56,7 +55,7 @@ export class EntityUsersComponent implements OnInit {
   }
 
   get searchedUsers() {
-    return this.search.transform(this.users, this.searchText, "name", "email", "id");
+    return this.searchService.searchBasic(this.users, this.searchText, "name", "email", "id");
   }
 
   get scrollViewportStyle() {
