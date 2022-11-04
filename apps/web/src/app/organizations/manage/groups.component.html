@@ -25,23 +25,18 @@
   ></i>
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
-<ng-container
-  *ngIf="
-    !loading &&
-    (isPaging() ? pagedGroups : (groups | search: searchText:'name':'id')) as searchedGroups
-  "
->
-  <p *ngIf="!searchedGroups.length">{{ "noGroupsInList" | i18n }}</p>
+<ng-container *ngIf="!loading && (isPaging() ? pagedGroups : searchedGroups) as filteredGroups">
+  <p *ngIf="!filteredGroups.length">{{ "noGroupsInList" | i18n }}</p>
   <table
     class="table table-hover table-list"
-    *ngIf="searchedGroups.length"
+    *ngIf="filteredGroups.length"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
     (scrolled)="loadMore()"
   >
     <tbody>
-      <tr *ngFor="let g of searchedGroups">
+      <tr *ngFor="let g of filteredGroups">
         <td>
           <a href="#" appStopClick (click)="edit(g)">{{ g.name }}</a>
         </td>

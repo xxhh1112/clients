@@ -30,6 +30,10 @@ export class GroupsComponent implements OnInit {
   pagedGroups: GroupResponse[];
   searchText: string;
 
+  get searchedGroups() {
+    return this.searchService.searchBasic(this.groups, this.searchText, "name", "id");
+  }
+
   protected didScroll = false;
   protected pageSize = 100;
 
