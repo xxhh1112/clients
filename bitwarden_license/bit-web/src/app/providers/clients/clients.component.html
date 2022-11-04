@@ -36,9 +36,7 @@
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
 
-<ng-container
-  *ngIf="!loading && (clients | search: searchText:'organizationName':'id') as searchedClients"
->
+<ng-container *ngIf="!loading && searchedClients">
   <p *ngIf="!searchedClients.length">{{ "noClientsInList" | i18n }}</p>
   <ng-container *ngIf="searchedClients.length">
     <table

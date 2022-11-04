@@ -44,6 +44,10 @@ export class ClientsComponent implements OnInit {
   clients: ProviderOrganizationOrganizationDetailsResponse[];
   pagedClients: ProviderOrganizationOrganizationDetailsResponse[];
 
+  get searchedClients() {
+    return this.searchService.searchBasic(this.clients, this.searchText, "organizationName", "id");
+  }
+
   protected didScroll = false;
   protected pageSize = 100;
   protected actionPromise: Promise<unknown>;
