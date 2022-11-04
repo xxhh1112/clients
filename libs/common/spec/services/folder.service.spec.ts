@@ -34,7 +34,10 @@ describe("Folder Service", () => {
     activeAccountUnlocked = new BehaviorSubject(true);
 
     cryptoService.decrypt(Arg.any(), Arg.any()).mimicks((view: any, model: Folder) => {
-      return Promise.resolve(new FolderView(model));
+      const v = new FolderView();
+      v.id = model.id;
+      v.revisionDate = model.revisionDate;
+      return Promise.resolve(v);
     });
 
     stateService.getEncryptedFolders().resolves({
