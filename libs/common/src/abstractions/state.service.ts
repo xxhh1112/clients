@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 
 import { KdfType } from "../enums/kdfType";
 import { ThemeType } from "../enums/themeType";
@@ -27,7 +27,7 @@ import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
 
 export abstract class StateService<T extends Account = Account> {
-  accounts: BehaviorSubject<{ [userId: string]: T }>;
+  accounts$: Observable<{ [userId: string]: T }>;
   activeAccount$: Observable<string>;
   activeAccountUnlocked$: Observable<boolean>;
 
@@ -173,8 +173,6 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEnableFullWidth: (options?: StorageOptions) => Promise<boolean>;
   setEnableFullWidth: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getEnableGravitars: (options?: StorageOptions) => Promise<boolean>;
-  setEnableGravitars: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableMinimizeToTray: (options?: StorageOptions) => Promise<boolean>;
   setEnableMinimizeToTray: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableStartToTray: (options?: StorageOptions) => Promise<boolean>;

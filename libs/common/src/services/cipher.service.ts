@@ -3,6 +3,7 @@ import { firstValueFrom } from "rxjs";
 import { ApiService } from "../abstractions/api.service";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CryptoService } from "../abstractions/crypto.service";
+import { EncryptService } from "../abstractions/encrypt.service";
 import { FileUploadService } from "../abstractions/fileUpload.service";
 import { I18nService } from "../abstractions/i18n.service";
 import { LogService } from "../abstractions/log.service";
@@ -37,6 +38,7 @@ import { CipherBulkRestoreRequest } from "../models/request/cipher-bulk-restore.
 import { CipherBulkShareRequest } from "../models/request/cipher-bulk-share.request";
 import { CipherCollectionsRequest } from "../models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../models/request/cipher-create.request";
+import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
 import { CipherRequest } from "../models/request/cipher.request";
 import { CipherResponse } from "../models/response/cipher.response";
@@ -64,7 +66,8 @@ export class CipherService implements CipherServiceAbstraction {
     private i18nService: I18nService,
     private searchService: () => SearchService,
     private logService: LogService,
-    private stateService: StateService
+    private stateService: StateService,
+    private encryptService: EncryptService
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -157,6 +160,7 @@ export class CipherService implements CipherServiceAbstraction {
     cipher.collectionIds = model.collectionIds;
     cipher.revisionDate = model.revisionDate;
     cipher.reprompt = model.reprompt;
+    cipher.edit = model.edit;
 
     if (key == null && cipher.organizationId != null) {
       key = await this.cryptoService.getOrgKey(cipher.organizationId);
@@ -327,33 +331,48 @@ export class CipherService implements CipherServiceAbstraction {
 
   @sequentialize(() => "getAllDecrypted")
   async getAllDecrypted(): Promise<CipherView[]> {
-    const userId = await this.stateService.getUserId();
     if ((await this.getDecryptedCipherCache()) != null) {
-      if (
-        this.searchService != null &&
-        (this.searchService().indexedEntityId ?? userId) !== userId
-      ) {
-        await this.searchService().indexCiphers(userId, await this.getDecryptedCipherCache());
-      }
+      await this.reindexCiphers();
       return await this.getDecryptedCipherCache();
     }
 
-    const decCiphers: CipherView[] = [];
     const hasKey = await this.cryptoService.hasKey();
     if (!hasKey) {
       throw new Error("No key.");
     }
 
-    const promises: Promise<number>[] = [];
     const ciphers = await this.getAll();
-    ciphers.forEach(async (cipher) => {
-      promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
-    });
+    const orgKeys = await this.cryptoService.getOrgKeys();
+    const userKey = await this.cryptoService.getKeyForUserEncryption();
 
-    await Promise.all(promises);
-    decCiphers.sort(this.getLocaleSortingFunction());
+    // Group ciphers by orgId or under 'null' for the user's ciphers
+    const grouped = ciphers.reduce((agg, c) => {
+      agg[c.organizationId] ??= [];
+      agg[c.organizationId].push(c);
+      return agg;
+    }, {} as Record<string, Cipher[]>);
+
+    const decCiphers = (
+      await Promise.all(
+        Object.entries(grouped).map(([orgId, groupedCiphers]) =>
+          this.encryptService.decryptItems(groupedCiphers, orgKeys.get(orgId) ?? userKey)
+        )
+      )
+    )
+      .flat()
+      .sort(this.getLocaleSortingFunction());
+
     await this.setDecryptedCipherCache(decCiphers);
     return decCiphers;
+  }
+
+  private async reindexCiphers() {
+    const userId = await this.stateService.getUserId();
+    const reindexRequired =
+      this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId;
+    if (reindexRequired) {
+      await this.searchService().indexCiphers(userId, await this.getDecryptedCipherCache());
+    }
   }
 
   async getAllDecryptedForGrouping(groupingId: string, folder = true): Promise<CipherView[]> {
@@ -486,21 +505,17 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async getAllFromApiForOrganization(organizationId: string): Promise<CipherView[]> {
-    const ciphers = await this.apiService.getCiphersOrganization(organizationId);
-    if (ciphers != null && ciphers.data != null && ciphers.data.length) {
-      const decCiphers: CipherView[] = [];
-      const promises: any[] = [];
-      ciphers.data.forEach((r) => {
-        const data = new CipherData(r);
-        const cipher = new Cipher(data);
-        promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
-      });
-      await Promise.all(promises);
-      decCiphers.sort(this.getLocaleSortingFunction());
-      return decCiphers;
-    } else {
+    const response = await this.apiService.getCiphersOrganization(organizationId);
+    if (response?.data == null || response.data.length < 1) {
       return [];
     }
+
+    const ciphers = response.data.map((cr) => new Cipher(new CipherData(cr)));
+    const key = await this.cryptoService.getOrgKey(organizationId);
+    const decCiphers = await this.encryptService.decryptItems(ciphers, key);
+
+    decCiphers.sort(this.getLocaleSortingFunction());
+    return decCiphers;
   }
 
   async getLastUsedForUrl(url: string, autofillOnPageLoad = false): Promise<CipherView> {
@@ -594,20 +609,29 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setNeverDomains(domains);
   }
 
-  async saveWithServer(cipher: Cipher): Promise<any> {
+  async createWithServer(cipher: Cipher): Promise<any> {
     let response: CipherResponse;
-    if (cipher.id == null) {
-      if (cipher.collectionIds != null) {
-        const request = new CipherCreateRequest(cipher);
-        response = await this.apiService.postCipherCreate(request);
-      } else {
-        const request = new CipherRequest(cipher);
-        response = await this.apiService.postCipher(request);
-      }
-      cipher.id = response.id;
+    if (cipher.collectionIds != null) {
+      const request = new CipherCreateRequest(cipher);
+      response = await this.apiService.postCipherCreate(request);
     } else {
       const request = new CipherRequest(cipher);
+      response = await this.apiService.postCipher(request);
+    }
+    cipher.id = response.id;
+
+    const data = new CipherData(response, cipher.collectionIds);
+    await this.upsert(data);
+  }
+
+  async updateWithServer(cipher: Cipher): Promise<any> {
+    let response: CipherResponse;
+    if (cipher.edit) {
+      const request = new CipherRequest(cipher);
       response = await this.apiService.putCipher(cipher.id, request);
+    } else {
+      const request = new CipherPartialRequest(cipher);
+      response = await this.apiService.putPartialCipher(cipher.id, request);
     }
 
     const data = new CipherData(response, cipher.collectionIds);

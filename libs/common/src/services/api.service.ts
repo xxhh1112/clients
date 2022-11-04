@@ -14,6 +14,7 @@ import { CipherBulkMoveRequest } from "../models/request/cipher-bulk-move.reques
 import { CipherBulkShareRequest } from "../models/request/cipher-bulk-share.request";
 import { CipherCollectionsRequest } from "../models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../models/request/cipher-create.request";
+import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
 import { CipherRequest } from "../models/request/cipher.request";
 import { CollectionRequest } from "../models/request/collection.request";
@@ -606,6 +607,11 @@ export class ApiService implements ApiServiceAbstraction {
 
   async putCipher(id: string, request: CipherRequest): Promise<CipherResponse> {
     const r = await this.send("PUT", "/ciphers/" + id, request, true, true);
+    return new CipherResponse(r);
+  }
+
+  async putPartialCipher(id: string, request: CipherPartialRequest): Promise<CipherResponse> {
+    const r = await this.send("PUT", "/ciphers/" + id + "/partial", request, true, true);
     return new CipherResponse(r);
   }
 
@@ -1512,6 +1518,12 @@ export class ApiService implements ApiServiceAbstraction {
     return new DeviceVerificationResponse(r);
   }
 
+  async getKnownDevice(email: string, deviceIdentifier: string): Promise<boolean> {
+    const path = `/devices/knowndevice/${email}/${deviceIdentifier}`;
+    const r = await this.send("GET", path, null, false, true);
+    return r as boolean;
+  }
+
   // Emergency Access APIs
 
   async getEmergencyAccessTrusted(): Promise<ListResponse<EmergencyAccessGranteeDetailsResponse>> {
@@ -2348,21 +2360,25 @@ export class ApiService implements ApiServiceAbstraction {
     tokenError: boolean,
     authed: boolean
   ): Promise<ErrorResponse> {
-    if (
-      authed &&
-      ((tokenError && response.status === 400) ||
-        response.status === 401 ||
-        response.status === 403)
-    ) {
-      await this.logoutCallback(true);
-      return null;
-    }
-
     let responseJson: any = null;
     if (this.isJsonResponse(response)) {
       responseJson = await response.json();
     } else if (this.isTextResponse(response)) {
       responseJson = { Message: await response.text() };
+    }
+
+    if (authed) {
+      if (
+        response.status === 401 ||
+        response.status === 403 ||
+        (tokenError &&
+          response.status === 400 &&
+          responseJson != null &&
+          responseJson.error === "invalid_grant")
+      ) {
+        await this.logoutCallback(true);
+        return null;
+      }
     }
 
     return new ErrorResponse(responseJson, response.status, tokenError);

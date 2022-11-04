@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -78,7 +80,7 @@ export class EncryptedMessageHandlerService {
   }
 
   private async statusCommandHandler(): Promise<AccountStatusResponse[]> {
-    const accounts = this.stateService.accounts.getValue();
+    const accounts = await firstValueFrom(this.stateService.accounts$);
     const activeUserId = await this.stateService.getUserId();
 
     if (!accounts || !Object.keys(accounts)) {
@@ -159,7 +161,7 @@ export class EncryptedMessageHandlerService {
 
     try {
       const encrypted = await this.cipherService.encrypt(cipherView);
-      await this.cipherService.saveWithServer(encrypted);
+      await this.cipherService.createWithServer(encrypted);
 
       // Notify other clients of new login
       await this.messagingService.send("addedCipher");
@@ -198,7 +200,7 @@ export class EncryptedMessageHandlerService {
       cipherView.login.uris[0].uri = credentialUpdatePayload.uri;
       const encrypted = await this.cipherService.encrypt(cipherView);
 
-      await this.cipherService.saveWithServer(encrypted);
+      await this.cipherService.updateWithServer(encrypted);
 
       // Notify other clients of update
       await this.messagingService.send("editedCipher");

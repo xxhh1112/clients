@@ -65,8 +65,10 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
-  accounts = new BehaviorSubject<{ [userId: string]: TAccount }>({});
-  private activeAccountSubject = new BehaviorSubject<string>(null);
+  private accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
+  accounts$ = this.accountsSubject.asObservable();
+
+  private activeAccountSubject = new BehaviorSubject<string | null>(null);
   activeAccount$ = this.activeAccountSubject.asObservable();
 
   private activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
@@ -1222,27 +1224,6 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
     account.settings.enableFullWidth = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    );
-  }
-
-  async getEnableGravitars(options?: StorageOptions): Promise<boolean> {
-    return (
-      (
-        await this.getAccount(
-          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-        )
-      )?.settings?.enableGravitars ?? false
-    );
-  }
-
-  async setEnableGravitars(value: boolean, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    );
-    account.settings.enableGravitars = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
@@ -2568,11 +2549,11 @@ export class StateService<
     await this.pruneInMemoryAccounts();
     await this.state().then((state) => {
       if (state.accounts == null || Object.keys(state.accounts).length < 1) {
-        this.accounts.next(null);
+        this.accountsSubject.next({});
         return;
       }
 
-      this.accounts.next(state.accounts);
+      this.accountsSubject.next(state.accounts);
     });
   }
 

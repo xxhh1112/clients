@@ -123,7 +123,6 @@
 ./libs/common/src/importers/dashlaneImporters/dashlaneCsvImporter.ts
 ./libs/common/src/importers/dashlaneImporters/types/dashlaneCsvTypes.ts
 ./libs/common/src/importers/dashlaneImporters/dashlaneJsonImporter.ts
-./libs/common/src/importers/chromeCsvImporter.ts
 ./libs/common/src/importers/meldiumCsvImporter.ts
 ./libs/common/src/importers/safariCsvImporter.ts
 ./libs/common/src/importers/msecureCsvImporter.ts
@@ -236,7 +235,6 @@
 ./libs/common/src/abstractions/fileDownload/fileDownloadBuilder.ts
 ./libs/common/src/abstractions/fileDownload/fileDownload.service.ts
 ./libs/common/src/abstractions/fileDownload/fileDownloadRequest.ts
-./libs/common/src/abstractions/abstractEncrypt.service.ts
 ./libs/common/src/abstractions/passwordGeneration.service.ts
 ./libs/common/src/abstractions/passwordReprompt.service.ts
 ./libs/common/src/abstractions/formValidationErrors.service.ts
