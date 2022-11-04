@@ -13,4 +13,11 @@ export abstract class SearchService {
   ) => Promise<CipherView[]>;
   searchCiphersBasic: (ciphers: CipherView[], query: string, deleted?: boolean) => CipherView[];
   searchSends: (sends: SendView[], query: string) => SendView[];
+  searchBasic: <T, P extends keyof T>(
+    items: T[],
+    searchText: string,
+    prop1?: P,
+    prop2?: P,
+    prop3?: P
+  ) => T[];
 }

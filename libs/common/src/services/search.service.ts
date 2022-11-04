@@ -232,6 +232,48 @@ export class SearchService implements SearchServiceAbstraction {
     return sendsMatched.concat(lowPriorityMatched);
   }
 
+  searchBasic<T, P extends keyof T>(
+    items: T[],
+    searchText: string,
+    prop1?: P,
+    prop2?: P,
+    prop3?: P
+  ): T[] {
+    if (items == null || items.length === 0) {
+      return [];
+    }
+
+    if (searchText == null || searchText.length < 2) {
+      return items;
+    }
+
+    searchText = searchText.trim().toLowerCase();
+    return items.filter((i) => {
+      if (
+        prop1 != null &&
+        i[prop1] != null &&
+        i[prop1].toString().toLowerCase().indexOf(searchText) > -1
+      ) {
+        return true;
+      }
+      if (
+        prop2 != null &&
+        i[prop2] != null &&
+        i[prop2].toString().toLowerCase().indexOf(searchText) > -1
+      ) {
+        return true;
+      }
+      if (
+        prop3 != null &&
+        i[prop3] != null &&
+        i[prop3].toString().toLowerCase().indexOf(searchText) > -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+  }
+
   getIndexForSearch(): lunr.Index {
     return this.index;
   }
