@@ -42,6 +42,10 @@ export class CollectionsComponent implements OnInit {
   pagedCollections: CollectionView[];
   searchText: string;
 
+  get searchedCollections() {
+    return this.searchService.searchBasic(this.collections, this.searchText, "name", "id");
+  }
+
   protected didScroll = false;
   protected pageSize = 100;
 

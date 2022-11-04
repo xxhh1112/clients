@@ -1,5 +1,5 @@
 <div class="page-header d-flex">
-  <h1>{{ "collections" | i18n }}</h1>
+  <h1>{{ "collections" | i18n }} HI</h1>
   <div class="ml-auto d-flex">
     <div>
       <label class="sr-only" for="search">{{ "search" | i18n }}</label>
@@ -31,24 +31,19 @@
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
 <ng-container
-  *ngIf="
-    !loading &&
-    (isPaging()
-      ? pagedCollections
-      : (collections | search: searchText:'name':'id')) as searchedCollections
-  "
+  *ngIf="!loading && (isPaging() ? pagedCollections : searchedCollections) as filteredCollections"
 >
-  <p *ngIf="!searchedCollections.length">{{ "noCollectionsInList" | i18n }}</p>
+  <p *ngIf="!filteredCollections.length">{{ "noCollectionsInList" | i18n }}</p>
   <table
     class="table table-hover table-list"
-    *ngIf="searchedCollections.length"
+    *ngIf="filteredCollections.length"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
     (scrolled)="loadMore()"
   >
     <tbody>
-      <tr *ngFor="let c of searchedCollections">
+      <tr *ngFor="let c of filteredCollections">
         <td>
           <a href="#" appStopClick (click)="edit(c)">{{ c.name }}</a>
         </td>
