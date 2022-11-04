@@ -499,6 +499,12 @@
 .tw-mb-3{
     margin-bottom: 0.75rem;
 }
+.\!tw-mb-1{
+    margin-bottom: 0.25rem !important;
+}
+.-tw-mt-2{
+    margin-top: -0.5rem;
+}
 .tw-mt-12{
     margin-top: 3rem;
 }
@@ -565,6 +571,9 @@
 .tw-h-6{
     height: 1.5rem;
 }
+.tw-h-28{
+    height: 7rem;
+}
 .tw-h-4{
     height: 1rem;
 }
@@ -576,9 +585,6 @@
 }
 .tw-h-full{
     height: 100%;
-}
-.tw-h-28{
-    height: 7rem;
 }
 .tw-max-h-screen{
     max-height: 100vh;
@@ -1873,4 +1879,4 @@
 
 
 
-/*# sourceMappingURL=main.a4867213b8ffc7b7b0fa.css.map*/
+/*# sourceMappingURL=main.998a8ab39117ee4f4983.css.map*/
