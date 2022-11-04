@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -55,20 +54,23 @@ export class PeopleComponent
   providerId: string;
   accessEvents = false;
 
+  get searchedUsers() {
+    return this.searchService.searchBasic(this.users, this.searchText, "name", "email", "id");
+  }
+
   constructor(
     apiService: ApiService,
-    private route: ActivatedRoute,
     i18nService: I18nService,
     modalService: ModalService,
     platformUtilsService: PlatformUtilsService,
     cryptoService: CryptoService,
-    private router: Router,
     searchService: SearchService,
     validationService: ValidationService,
     logService: LogService,
-    searchPipe: SearchPipe,
     userNamePipe: UserNamePipe,
     stateService: StateService,
+    private route: ActivatedRoute,
+    private router: Router,
     private providerService: ProviderService
   ) {
     super(
@@ -80,7 +82,6 @@ export class PeopleComponent
       validationService,
       modalService,
       logService,
-      searchPipe,
       userNamePipe,
       stateService
     );

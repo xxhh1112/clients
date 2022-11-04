@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angu
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, concatMap, Subject, takeUntil } from "rxjs";
 
-import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -75,23 +74,26 @@ export class PeopleComponent
   orgResetPasswordPolicyEnabled = false;
   callingUserType: OrganizationUserType = null;
 
+  get searchedUsers() {
+    return this.searchService.searchBasic(this.users, this.searchText, "name", "email", "id");
+  }
+
   private destroy$ = new Subject<void>();
 
   constructor(
     apiService: ApiService,
-    private route: ActivatedRoute,
     i18nService: I18nService,
     modalService: ModalService,
     platformUtilsService: PlatformUtilsService,
     cryptoService: CryptoService,
     searchService: SearchService,
     validationService: ValidationService,
-    private policyService: PolicyService,
     logService: LogService,
-    searchPipe: SearchPipe,
     userNamePipe: UserNamePipe,
-    private syncService: SyncService,
     stateService: StateService,
+    private route: ActivatedRoute,
+    private syncService: SyncService,
+    private policyService: PolicyService,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction
   ) {
@@ -104,7 +106,6 @@ export class PeopleComponent
       validationService,
       modalService,
       logService,
-      searchPipe,
       userNamePipe,
       stateService
     );

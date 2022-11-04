@@ -1,6 +1,5 @@
 import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 
-import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -97,14 +96,13 @@ export abstract class BasePeopleComponent<
 
   constructor(
     protected apiService: ApiService,
-    private searchService: SearchService,
+    protected searchService: SearchService,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     protected cryptoService: CryptoService,
     protected validationService: ValidationService,
     protected modalService: ModalService,
     private logService: LogService,
-    private searchPipe: SearchPipe,
     protected userNamePipe: UserNamePipe,
     protected stateService: StateService
   ) {}
@@ -176,7 +174,7 @@ export abstract class BasePeopleComponent<
     this.didScroll = this.pagedUsers.length > this.pageSize;
   }
 
-  checkUser(user: OrganizationUserUserDetailsResponse, select?: boolean) {
+  checkUser(user: UserType, select?: boolean) {
     (user as any).checked = select == null ? !(user as any).checked : select;
   }
 
@@ -185,7 +183,7 @@ export abstract class BasePeopleComponent<
       this.selectAll(false);
     }
 
-    const filteredUsers = this.searchPipe.transform(
+    const filteredUsers = this.searchService.searchBasic(
       this.users,
       this.searchText,
       "name",

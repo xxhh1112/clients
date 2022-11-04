@@ -95,14 +95,9 @@
   ></i>
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
-<ng-container
-  *ngIf="
-    !loading &&
-    (isPaging() ? pagedUsers : (users | search: searchText:'name':'email':'id')) as searchedUsers
-  "
->
-  <p *ngIf="!searchedUsers.length">{{ "noUsersInList" | i18n }}</p>
-  <ng-container *ngIf="searchedUsers.length">
+<ng-container *ngIf="!loading && (isPaging() ? pagedUsers : searchedUsers) as filteredUsers">
+  <p *ngIf="!filteredUsers.length">{{ "noUsersInList" | i18n }}</p>
+  <ng-container *ngIf="filteredUsers.length">
     <app-callout
       type="info"
       title="{{ 'confirmUsers' | i18n }}"
@@ -119,7 +114,7 @@
       (scrolled)="loadMore()"
     >
       <tbody>
-        <tr *ngFor="let u of searchedUsers">
+        <tr *ngFor="let u of filteredUsers">
           <td (click)="checkUser(u)" class="table-list-checkbox">
             <input type="checkbox" [(ngModel)]="u.checked" appStopProp />
           </td>
