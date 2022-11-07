@@ -71,7 +71,7 @@
     "message": "Firma"
   },
   "ssn": {
-    "message": "Numer PESEL"
+    "message": "PESEL"
   },
   "passportNumber": {
     "message": "Numer paszportu"
@@ -227,7 +227,7 @@
     "description": "Toggling an expand/collapse state."
   },
   "generatePassword": {
-    "message": "Wygeneruj hasło"
+    "message": "Generuj hasło"
   },
   "checkPassword": {
     "message": "Sprawdź, czy hasło zostało ujawnione."
@@ -467,7 +467,7 @@
     "message": "Czy na pewno chcesz usunąć ten załącznik?"
   },
   "attachmentSaved": {
-    "message": "Załącznik został zapisany"
+    "message": "Załącznik został zapisany."
   },
   "file": {
     "message": "Plik"
@@ -485,7 +485,7 @@
     "message": "Element został dodany"
   },
   "editedItem": {
-    "message": "Element został zapisany"
+    "message": "Element został zaktualizowany"
   },
   "movedItemToOrg": {
     "message": "Element $ITEMNAME$ został przeniesiony do organizacji $ORGNAME$",
@@ -528,13 +528,13 @@
     "message": "Elementy zostały przeniesione do kosza"
   },
   "movedItems": {
-    "message": "Elementy zostały przeniesione"
+    "message": "Przeniesione elementy"
   },
   "overwritePasswordConfirmation": {
     "message": "Czy na pewno chcesz zastąpić obecne hasło?"
   },
   "editedFolder": {
-    "message": "Folder został zapisany"
+    "message": "Folder został zaktualizowany"
   },
   "addedFolder": {
     "message": "Folder został dodany"
@@ -597,7 +597,7 @@
     "message": "Używaj swojego adresu e-mail do logowania."
   },
   "yourName": {
-    "message": "Twoja nazwa"
+    "message": "Twoje imię"
   },
   "yourNameDesc": {
     "message": "Jak powinniśmy cię nazywać?"
@@ -691,7 +691,7 @@
     "message": "Hasło główne jest nieprawidłowe"
   },
   "invalidFilePassword": {
-    "message": "Hasło pliku jest nieprawidłowe. Użyj prawidłowego hasła."
+    "message": "Nieprawidłowe hasło, użyj hasła, które wprowadziłeś podczas tworzenia pliku eksportu."
   },
   "lockNow": {
     "message": "Zablokuj"
@@ -718,7 +718,7 @@
     "message": "Nie należysz do żadnej organizacji. Organizacje pozwalają na bezpieczne udostępnianie elementów innym użytkownikom."
   },
   "notificationSentDevice": {
-    "message": "Powiadomienie zostało wysłane na urządzenie."
+    "message": "Powiadomienie zostało wysłane na twoje urządzenie."
   },
   "versionNumber": {
     "message": "Wersja $VERSION_NUMBER$",
@@ -909,10 +909,10 @@
     "message": "Format pliku"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Plik będzie chroniony hasłem, które będzie wymagane do odszyfrowania pliku."
+    "message": "Ten plik będzie chroniony hasłem i będzie wymagał tego hasła do odszyfrowania."
   },
   "exportPasswordDescription": {
-    "message": "Hasło będzie używane do eksportowania i importowania pliku"
+    "message": "To hasło będzie używane do eksportu i importu tego pliku"
   },
   "confirmMasterPassword": {
     "message": "Potwierdź hasło główne"
@@ -921,10 +921,10 @@
     "message": "Potwierdź format"
   },
   "filePassword": {
-    "message": "Hasło pliku"
+    "message": "Hasło do pliku"
   },
   "confirmFilePassword": {
-    "message": "Potwierdź hasło pliku"
+    "message": "Potwierdź hasło do pliku"
   },
   "accountBackupOptionDescription": {
     "message": "Wykorzystuje szyfrowanie konta Bitwarden, a nie hasło główne, aby chronić eksport. Ten eksport może być zaimportowany tylko na tym koncie. Użyj tego, aby utworzyć kopię zapasową, której nie można użyć nigdzie indziej."
@@ -933,7 +933,7 @@
     "message": "Utwórz hasło wygenerowane przez użytkownika, aby chronić eksport. Użyj tego, aby utworzyć eksport, który może być używany na innych kontach."
   },
   "fileTypeHeading": {
-    "message": "Rodzaj pliku"
+    "message": "Typ Pliku"
   },
   "accountBackup": {
     "message": "Kopia zapasowa konta"
@@ -942,16 +942,16 @@
     "message": "Zabezpieczone hasłem"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“Hasło pliku” i “Potwierdź hasło pliku“ nie pasują do siebie."
+    "message": "\"Hasło do pliku\" i \"Potwierdź hasło do pliku\" nie pasują do siebie."
   },
   "confirmVaultImport": {
-    "message": "Potwierdź importowanie sejfu"
+    "message": "Potwierdź import sejfu"
   },
   "confirmVaultImportDesc": {
-    "message": "Plik jest chroniony hasłem. Wprowadź hasło pliku, aby zaimportować dane."
+    "message": "Ten plik jest chroniony hasłem. Wprowadź hasło pliku, aby zaimportować dane."
   },
   "exportSuccess": {
-    "message": "Dane sejfu zostały wyeksportowane"
+    "message": "Dane z sejfu zostały wyeksportowane."
   },
   "passwordGenerator": {
     "message": "Generator hasła"
@@ -970,7 +970,7 @@
     "message": "Unikaj niejednoznacznych znaków"
   },
   "regeneratePassword": {
-    "message": "Wygeneruj ponownie hasło"
+    "message": "Wygeneruj hasło ponownie"
   },
   "length": {
     "message": "Długość"
@@ -1003,7 +1003,7 @@
     "message": "Uwzględnij cyfry"
   },
   "passwordHistory": {
-    "message": "Historia hasła"
+    "message": "Historia haseł"
   },
   "noPasswordsInList": {
     "message": "Brak haseł."
@@ -1013,7 +1013,7 @@
     "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
-    "message": "Konto zostało zapisane"
+    "message": "Konto zostało zaktualizowane"
   },
   "changeEmail": {
     "message": "Zmień adres e-mail"
@@ -1040,7 +1040,7 @@
     "message": "Ta czynność spowoduje wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę."
   },
   "emailChanged": {
-    "message": "Adres e-mail został zapisany"
+    "message": "Adres e-mail został zmieniony"
   },
   "logBackIn": {
     "message": "Zaloguj się ponownie."
@@ -1052,7 +1052,7 @@
     "message": "Zmień hasło główne"
   },
   "masterPasswordChanged": {
-    "message": "Hasło główne zostało zapisane"
+    "message": "Hasło główne zostało zmienione"
   },
   "currentMasterPass": {
     "message": "Obecne hasło główne"
@@ -1094,7 +1094,7 @@
     "message": "Zmień KDF"
   },
   "encKeySettingsChanged": {
-    "message": "Ustawienia klucza szyfrowania zostały zapisane"
+    "message": "Ustawienia klucza szyfrowania zostały zaktualizowane"
   },
   "dangerZone": {
     "message": "Niebezpieczna strefa"
@@ -1166,7 +1166,7 @@
     "message": "Wystąpił problem z danymi, które chcesz zaimportować. Rozwiąż poniższe problemy w Twoim pliku i spróbuj ponownie."
   },
   "importSuccess": {
-    "message": "Dane zostały zaimportowane"
+    "message": "Dane zostały zaimportowane do sejfu."
   },
   "importWarning": {
     "message": "Importujesz dane do organizacji $ORGANIZATION$. Dane mogą zostać udostępnione członkom organizacji. Czy chcesz kontynuować?",
@@ -1221,7 +1221,7 @@
     "message": "Dostosuj swoje doświadczenia z sejfem internetowym."
   },
   "preferencesUpdated": {
-    "message": "Ustawienia zostały zapisane"
+    "message": "Ustawienia zostały zaktualizowane"
   },
   "language": {
     "message": "Język"
@@ -1234,6 +1234,13 @@
   },
   "faviconDesc": {
     "message": "Pokaż rozpoznawalny obraz obok każdych danych logowania."
+  },
+  "enableGravatars": {
+    "message": "Pokaż Gravatary",
+    "description": "Use avatar images loaded from gravatar.com."
+  },
+  "enableGravatarsDesc": {
+    "message": "Korzystaj ze zdjęć profilowych załadowanych z serwisu gravatar.com."
   },
   "enableFullWidth": {
     "message": "Włącz układ na całą szerokość",
@@ -1282,7 +1289,7 @@
     }
   },
   "domainsUpdated": {
-    "message": "Domeny zostały zapisane"
+    "message": "Domeny zostały zaktualizowane"
   },
   "twoStepLogin": {
     "message": "Logowanie dwustopniowe"
@@ -1338,7 +1345,7 @@
     "message": "Wyłącz"
   },
   "revokeAccess": {
-    "message": "Unieważnij dostęp"
+    "message": "Odwołaj dostęp"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Ten dostawca logowania dwustopniowego jest już włączony na koncie."
@@ -1473,7 +1480,7 @@
     "message": "Wpisz 6-cyfrowy kod weryfikacyjny z wiadomości e-mail"
   },
   "sendEmail": {
-    "message": "Wyślij wiadomość"
+    "message": "Wyślij e-mail"
   },
   "twoFactorU2fAdd": {
     "message": "Dodaj klucz bezpieczeństwa FIDO U2F do swojego konta"
@@ -1541,7 +1548,7 @@
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
-    "message": "Niezabezpieczone strony"
+    "message": "Niezabezpieczone witryny"
   },
   "unsecuredWebsitesReportDesc": {
     "message": "Używanie niezabezpieczonych stron (protokół HTTP) może być niebezpieczne. Jeśli strona na to pozwala, zawsze powinieneś używać protokołu HTTPS, aby Twoje połączenie było szyfrowane."
@@ -1717,13 +1724,13 @@
     "message": "Strona"
   },
   "affectedUsers": {
-    "message": "Poszkodowani użytkownicy"
+    "message": "Liczba poszkodowanych użytkowników"
   },
   "breachOccurred": {
-    "message": "Data naruszenia"
+    "message": "Data wystąpienia naruszenia"
   },
   "breachReported": {
-    "message": "Data zgłoszenia"
+    "message": "Naruszenie zostało zgłoszone"
   },
   "reportError": {
     "message": "Wystąpił błąd podczas próby załadowania raportu. Spróbuj ponownie"
@@ -1918,7 +1925,7 @@
     "message": "Czy na pewno chcesz anulować? Dostęp do wszystkich funkcji związanych z tą subskrypcją zostanie wyłączony na koniec tego okresu rozliczeniowego."
   },
   "canceledSubscription": {
-    "message": "Subskrypcja została anulowana"
+    "message": "Subskrypcja została anulowana."
   },
   "neverExpires": {
     "message": "Nigdy nie wygasa"
@@ -2020,7 +2027,7 @@
     "message": "Wybierz liczbę GB do dodania"
   },
   "gbStorageRemove": {
-    "message": "Wybierz liczbę GB do usunięcia"
+    "message": "GB przestrzeni do usunięcia"
   },
   "storageAddNote": {
     "message": "Dodanie przestrzeni dyskowej będzie skutkować korektą sumy należności i natychmiastowym obciążeniem konta. Pierwsza opłata zostanie naliczona proporcjonalnie do końca obecnego okresu rozliczeniowego."
@@ -2080,13 +2087,13 @@
     "message": "To konto jest własnością firmy."
   },
   "billingEmail": {
-    "message": "Adres rozliczeniowy"
+    "message": "E-mail rozliczeniowy"
   },
   "businessName": {
     "message": "Nazwa firmy"
   },
   "chooseYourPlan": {
-    "message": "Wybierz plan"
+    "message": "Wybierz swój plan"
   },
   "users": {
     "message": "Użytkownicy"
@@ -2481,7 +2488,7 @@
     "message": "Sejf internetowy"
   },
   "loggedIn": {
-    "message": "Zalogowano"
+    "message": "Zalogowano."
   },
   "changedPassword": {
     "message": "Hasło do konta zostało zmienione."
@@ -2502,13 +2509,13 @@
     "message": "Logowanie nie powiodło się z powodu nieprawidłowego logowania dwustopniowego."
   },
   "exportedVault": {
-    "message": "Sejf został wyeksportowany"
+    "message": "Sejf został wyeksportowany."
   },
   "exportedOrganizationVault": {
-    "message": "Sejf organizacji został wyeksportowany"
+    "message": "Sejf organizacji został wyeksportowany."
   },
   "editedOrgSettings": {
-    "message": "Ustawienia organizacji zostały zapisane"
+    "message": "Ustawienia organizacji zostały zaktualizowane."
   },
   "createdItemId": {
     "message": "Element $ID$ został utworzony.",
@@ -2577,7 +2584,7 @@
     }
   },
   "viewedSecurityCodeItemId": {
-    "message": "Wyświetlono kod zabezpieczający dla elementu $ID$.",
+    "message": "Wyświetlono kod bezpieczeństwa dla elementu $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2604,7 +2611,7 @@
     }
   },
   "copiedSecurityCodeItemId": {
-    "message": "Skopiowano kod zabezpieczający dla elementu $ID$.",
+    "message": "Skopiowano kod bezpieczeństwa dla elementu $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2853,7 +2860,7 @@
     "message": "Dostęp użytkownika"
   },
   "userType": {
-    "message": "Rodzaj użytkownika"
+    "message": "Typ użytkownika"
   },
   "groupAccess": {
     "message": "Dostęp grupowy"
@@ -2862,7 +2869,7 @@
     "message": "Zmień grupy, do których należy użytkownik."
   },
   "invitedUsers": {
-    "message": "Użytkownicy zostali zaproszeni"
+    "message": "Użytkownicy zostali zaproszeni."
   },
   "resendInvitation": {
     "message": "Wyślij ponownie zaproszenie"
@@ -2871,7 +2878,7 @@
     "message": "Wyślij ponownie wiadomość"
   },
   "hasBeenReinvited": {
-    "message": "Użytkownik $USER$ został ponownie zaproszony",
+    "message": "Użytkownik $USER$ został ponownie zaproszony.",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -3018,7 +3025,7 @@
     "message": "Organizacja i wszystkie połączone z nią dane zostały usunięte."
   },
   "organizationUpdated": {
-    "message": "Organizacja została zapisana"
+    "message": "Organizacja została zaktualizowana"
   },
   "taxInformation": {
     "message": "Informacje podatkowe"
@@ -3055,7 +3062,7 @@
     "message": "Pobierz fakturę"
   },
   "verifyBankAccount": {
-    "message": "Zweryfikuj konto bankowe"
+    "message": "Weryfikuj konto bankowe"
   },
   "verifyBankAccountDesc": {
     "message": "Dokonaliśmy dwóch mikro przelewów na konto bankowe (mogą upłynąć 1-2 dni robocze, zanim je zobaczysz). Wpisz te kwoty, aby zweryfikować konto bankowe."
@@ -3093,7 +3100,7 @@
     "message": "Nazwa posiadacza konta"
   },
   "bankAccountType": {
-    "message": "Rodzaj konta"
+    "message": "Typ konta"
   },
   "bankAccountTypeCompany": {
     "message": "Firmowe"
@@ -3317,7 +3324,7 @@
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
-    "message": "Hasło zostało zaktualizowane",
+    "message": "Aktualizacja hasła",
     "description": "ex. Date this password was updated"
   },
   "organizationIsDisabled": {
@@ -3579,7 +3586,7 @@
     }
   },
   "permanentlyDeletedItemId": {
-    "message": "Element $ID$ został trwale usunięty",
+    "message": "Element $ID$ został trwale usunięty.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3618,7 +3625,7 @@
     }
   },
   "restoredItemId": {
-    "message": "Element $ID$ został przywrócony",
+    "message": "Element $ID$ został przywrócony.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3729,7 +3736,7 @@
     "message": "Tekst"
   },
   "createSend": {
-    "message": "Nowa wysyłka",
+    "message": "Utwórz nową wysyłkę",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -3737,11 +3744,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Wysyłka została zapisana",
+    "message": "Wysyłka została utworzona",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Wysyłka została zapisana",
+    "message": "Wysyłka została zaktualizowana",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
@@ -3994,7 +4001,7 @@
     }
   },
   "emergencyApproved": {
-    "message": "Dostęp awaryjny został zatwierdzony"
+    "message": "Dostęp awaryjny został zatwierdzony."
   },
   "emergencyRejected": {
     "message": "Dostęp awaryjny został odrzucony"
@@ -4031,7 +4038,7 @@
     "message": "Użytkownicy organizacji, którzy mogą zarządzać zasadami organizacji są zwolnieni z przestrzegania wymagań zasad."
   },
   "sendDisabled": {
-    "message": "Wysyłka została usunięta",
+    "message": "Wysyłka została wyłączona",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -4563,7 +4570,7 @@
     "message": "Dostawca jest wyłączony."
   },
   "providerUpdated": {
-    "message": "Dostawca został zapisany"
+    "message": "Dostawca został zaktualizowany"
   },
   "yourProviderIs": {
     "message": "Twój dostawca to $PROVIDER$. Posiada on uprawnienia administracyjne i rozliczeniowe dla Twojej organizacji.",
@@ -5050,7 +5057,7 @@
     "message": "Aby skonfigurować swoją organizację na własnym serwerze, musisz przesłać plik licencyjny. Aby wesprzeć darmowe plany rodzinne i zaawansowane możliwości rozliczeniowe dla własnej organizacji, musisz skonfigurować synchronizację płatności."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Token został zmieniony"
+    "message": "Token został zmieniony."
   },
   "billingSync": {
     "message": "Synchronizacja płatności"

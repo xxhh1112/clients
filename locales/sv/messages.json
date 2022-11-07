@@ -1193,10 +1193,10 @@
     "message": "Välj importfilen"
   },
   "chooseFile": {
-    "message": "Välj fil"
+    "message": "Choose File"
   },
   "noFileChosen": {
-    "message": "Ingen fil har valts"
+    "message": "No file chosen"
   },
   "orCopyPasteFileContents": {
     "message": "eller kopiera och klistra in innehållet från filen"
@@ -1234,6 +1234,13 @@
   },
   "faviconDesc": {
     "message": "Show a recognizable image next to each login."
+  },
+  "enableGravatars": {
+    "message": "Aktivera gravatarer",
+    "description": "Use avatar images loaded from gravatar.com."
+  },
+  "enableGravatarsDesc": {
+    "message": "Använd avatarbilder hämtade från gravatar.com."
   },
   "enableFullWidth": {
     "message": "Aktivera layout med full bredd",
