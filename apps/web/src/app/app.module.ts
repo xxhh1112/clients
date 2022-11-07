@@ -19,7 +19,7 @@ import { WildcardRoutingModule } from "./wildcard-routing.module";
     BrowserAnimationsModule,
     FormsModule,
     CoreModule,
-    DialogModule,
+    DialogModule.forRoot(),
     InfiniteScrollModule,
     DragDropModule,
     LayoutModule,

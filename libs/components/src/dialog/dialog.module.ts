@@ -1,5 +1,5 @@
 import { DialogModule as CdkDialogModule } from "@angular/cdk/dialog";
-import { NgModule } from "@angular/core";
+import { ModuleWithProviders, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
 import { IconButtonModule } from "../icon-button";
@@ -21,6 +21,13 @@ import { SimpleDialogComponent } from "./simple-dialog/simple-dialog.component";
     SimpleDialogComponent,
   ],
   exports: [CdkDialogModule, DialogComponent, SimpleDialogComponent],
-  providers: [DialogService, DialogRouterService],
+  providers: [],
 })
-export class DialogModule {}
+export class DialogModule {
+  static forRoot(): ModuleWithProviders<DialogModule> {
+    return {
+      ngModule: DialogModule,
+      providers: [DialogService, DialogRouterService],
+    };
+  }
+}
