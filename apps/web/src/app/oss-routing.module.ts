@@ -4,6 +4,7 @@ import { Route, RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "@bitwarden/angular/guards/auth.guard";
 import { LockGuard } from "@bitwarden/angular/guards/lock.guard";
 import { UnauthGuard } from "@bitwarden/angular/guards/unauth.guard";
+import { DialogOutlet } from "@bitwarden/components";
 
 import { flagEnabled, Flags } from "../utils/flags";
 
@@ -49,6 +50,20 @@ import { ToolsComponent } from "./tools/tools.component";
 import { VaultModule } from "./vault/vault.module";
 
 const routes: Routes = [
+  {
+    path: "",
+    outlet: DialogOutlet,
+    // component: TestDialogComponent,
+    children: [
+      {
+        path: "test",
+        loadChildren: () =>
+          import("./organizations/shared/components/test-dialog/test-dialog.module").then(
+            (m) => m.TestDialogModule
+          ),
+      },
+    ],
+  },
   {
     path: "",
     component: FrontendLayoutComponent,
@@ -260,7 +275,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {
       useHash: true,
       paramsInheritanceStrategy: "always",
-      // enableTracing: true,
+      enableTracing: true,
     }),
   ],
   exports: [RouterModule],

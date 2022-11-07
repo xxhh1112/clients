@@ -5,6 +5,8 @@ import { FormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
+import { DialogModule } from "@bitwarden/components/src";
+
 import { AppComponent } from "./app.component";
 import { CoreModule } from "./core";
 import { OssRoutingModule } from "./oss-routing.module";
@@ -17,6 +19,7 @@ import { WildcardRoutingModule } from "./wildcard-routing.module";
     BrowserAnimationsModule,
     FormsModule,
     CoreModule,
+    DialogModule,
     InfiniteScrollModule,
     DragDropModule,
     LayoutModule,

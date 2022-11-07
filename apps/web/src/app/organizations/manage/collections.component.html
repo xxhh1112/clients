@@ -11,7 +11,11 @@
         [(ngModel)]="searchText"
       />
     </div>
-    <button
+    <a bitButton class="tw-ml-2" [routerLink]="['', { outlets: { dialog: 'test' } }]">
+      <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
+      Open test dialog
+    </a>
+    <!-- <button
       type="button"
       *ngIf="this.canCreate"
       class="btn btn-sm btn-outline-primary ml-3"
@@ -19,7 +23,7 @@
     >
       <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
       {{ "newCollection" | i18n }}
-    </button>
+    </button> -->
   </div>
 </div>
 <ng-container *ngIf="loading">

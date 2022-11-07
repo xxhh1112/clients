@@ -33,19 +33,11 @@ class MainContentComponent {
 @Component({
   selector: "app-example-dialog",
   template: ` <bit-dialog [dialogSize]="dialogSize" [disablePadding]="disablePadding">
-    <span bitDialogTitle>{{ title }}</span>
+    <span bitDialogTitle>Title</span>
     <span bitDialogContent>Dialog body text goes here.</span>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-items-center tw-gap-2">
       <button bitButton buttonType="primary">Save</button>
       <button bitButton buttonType="secondary">Cancel</button>
-      <button
-        class="tw-ml-auto"
-        bitIconButton="bwi-trash"
-        buttonType="danger"
-        size="default"
-        title="Delete"
-        aria-label="Delete"
-      ></button>
     </div>
   </bit-dialog>`,
 })
