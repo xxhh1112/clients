@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  SimpleChanges,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -45,8 +37,15 @@ const MaxCheckedCount = 500;
   selector: "app-org-vault-ciphers",
   templateUrl: "../../vault/ciphers.component.html",
 })
-export class CiphersComponent extends BaseCiphersComponent implements OnDestroy, OnChanges {
-  @Input() organization: Organization;
+export class CiphersComponent extends BaseCiphersComponent implements OnDestroy {
+  private _organization: Organization;
+  @Input() set organization(value: Organization) {
+    this._organization = value;
+    this.changeOrganization();
+  }
+  get organization() {
+    return this._organization;
+  }
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
   groups: GroupResponse[] = [];
@@ -91,31 +90,24 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
     super.ngOnDestroy();
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    if (changes.organization != null) {
-      this.actionPromise = this.setOrganization();
-      await this.actionPromise;
-      this.actionPromise = null;
-    }
-  }
-
-  async setOrganization() {
+  async changeOrganization() {
     this.groups = (await this.apiService.getGroups(this.organization?.id)).data;
-    this.allCiphers = await this.loadCiphers();
-    if (!this.activeFilter.selectedCollectionNode) {
-      await this.reload(this.activeFilter.buildFilter());
-    }
+    await this.loadCiphers();
+    await this.reload(this.activeFilter.buildFilter());
   }
 
-  async loadCiphers(): Promise<CipherView[]> {
+  async loadCiphers() {
     if (this.organization?.canEditAnyCollection) {
       this.accessEvents = this.organization?.useEvents;
-      return await this.cipherService.getAllFromApiForOrganization(this.organization?.id);
+      this.allCiphers = await this.cipherService.getAllFromApiForOrganization(
+        this.organization?.id
+      );
     } else {
-      return (await this.cipherService.getAllDecrypted()).filter(
+      this.allCiphers = (await this.cipherService.getAllDecrypted()).filter(
         (c) => c.organizationId === this.organization?.id
       );
     }
+    await this.searchService.indexCiphers(this.organization?.id, this.allCiphers);
   }
 
   async refreshCollections(): Promise<void> {
@@ -130,13 +122,12 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy,
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
     this.deleted = deleted ?? false;
-    await this.searchService.indexCiphers(this.organization?.id, this.allCiphers);
     await this.applyFilter(filter);
     this.loaded = true;
   }
 
   async refresh() {
-    this.allCiphers = await this.loadCiphers();
+    await this.loadCiphers();
     await this.refreshCollections();
     super.refresh();
   }
