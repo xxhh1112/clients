@@ -1,5 +1,5 @@
 import { DialogRef } from "@angular/cdk/dialog";
-import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { Router, RoutesRecognized } from "@angular/router";
 import {
   distinct,
@@ -17,12 +17,8 @@ import { DialogService } from "../dialog.service";
 
 export const DialogOutlet = "dialog";
 
-@Component({
-  selector: "bit-routeable-dialog-outlet",
-  template: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class RouteableDialogOutlet implements OnDestroy {
+@Injectable()
+export class DialogRouterService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private currentDialog?: DialogRef;
 
@@ -30,7 +26,11 @@ export class RouteableDialogOutlet implements OnDestroy {
     router.events
       .pipe(
         filter<RoutesRecognized>((e) => e instanceof RoutesRecognized),
-        map((e) => e?.state?.root?.children[1]?.children[0]?.children[0]?.component),
+        map(
+          (e) =>
+            e?.state?.root?.children.find((c) => c.outlet === DialogOutlet)?.children[0]
+              ?.children[0]?.component
+        ),
         startWith(undefined),
         pairwise(),
         distinct(),

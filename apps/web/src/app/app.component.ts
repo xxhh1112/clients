@@ -25,6 +25,7 @@ import { SettingsService } from "@bitwarden/common/abstractions/settings.service
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { DialogRouterService } from "@bitwarden/components";
 
 import { PolicyListService, RouterService } from "./core";
 import {
@@ -77,7 +78,8 @@ export class AppComponent implements OnDestroy, OnInit {
     private eventService: EventService,
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private dialogRouterService: DialogRouterService
   ) {}
 
   ngOnInit() {

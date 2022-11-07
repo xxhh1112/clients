@@ -5,11 +5,11 @@ import { RouterModule } from "@angular/router";
 import { IconButtonModule } from "../icon-button";
 import { SharedModule } from "../shared";
 
+import { DialogRouterService } from "./dialog-router/dialog-router.service";
 import { DialogService } from "./dialog.service";
 import { DialogComponent } from "./dialog/dialog.component";
 import { DialogCloseDirective } from "./directives/dialog-close.directive";
 import { DialogTitleContainerDirective } from "./directives/dialog-title-container.directive";
-import { RouteableDialogOutlet } from "./routeable-dialog/routable-dialog-outlet.component";
 import { SimpleDialogComponent } from "./simple-dialog/simple-dialog.component";
 
 @NgModule({
@@ -19,9 +19,8 @@ import { SimpleDialogComponent } from "./simple-dialog/simple-dialog.component";
     DialogTitleContainerDirective,
     DialogComponent,
     SimpleDialogComponent,
-    RouteableDialogOutlet,
   ],
-  exports: [CdkDialogModule, DialogComponent, SimpleDialogComponent, RouteableDialogOutlet],
-  providers: [DialogService],
+  exports: [CdkDialogModule, DialogComponent, SimpleDialogComponent],
+  providers: [DialogService, DialogRouterService],
 })
 export class DialogModule {}
