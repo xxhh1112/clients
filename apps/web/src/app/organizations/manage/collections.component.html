@@ -1,5 +1,5 @@
 <div class="page-header d-flex">
-  <h1>{{ "collections" | i18n }} HI</h1>
+  <h1>{{ "collections" | i18n }}</h1>
   <div class="ml-auto d-flex">
     <div>
       <label class="sr-only" for="search">{{ "search" | i18n }}</label>
@@ -8,7 +8,8 @@
         class="form-control form-control-sm"
         id="search"
         placeholder="{{ 'search' | i18n }}"
-        [(ngModel)]="searchText"
+        [ngModel]="searchText"
+        (ngModelChange)="searchTextChanged($event)"
       />
     </div>
     <button
@@ -30,9 +31,7 @@
   ></i>
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
-<ng-container
-  *ngIf="!loading && (isPaging() ? pagedCollections : searchedCollections) as filteredCollections"
->
+<ng-container *ngIf="!loading && filteredCollections">
   <p *ngIf="!filteredCollections.length">{{ "noCollectionsInList" | i18n }}</p>
   <table
     class="table table-hover table-list"

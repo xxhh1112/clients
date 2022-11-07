@@ -37,13 +37,29 @@ export class CollectionsComponent implements OnInit {
   organization: Organization;
   canCreate = false;
   organizationId: string;
-  collections: CollectionView[];
   assignedCollections: CollectionView[];
-  pagedCollections: CollectionView[];
-  searchText: string;
 
-  get searchedCollections() {
-    return this.searchService.searchBasic(this.collections, this.searchText, "name", "id");
+  searchText: string;
+  private _collections: CollectionView[];
+  private pagedCollections: CollectionView[];
+  private searchedCollections: CollectionView[];
+
+  get collections() {
+    return this._collections;
+  }
+  set collections(value: CollectionView[]) {
+    this._collections = value;
+    this.searchedCollections = this.searchService.searchBasic(
+      this.collections,
+      this.searchText,
+      "name",
+      "id"
+    );
+  }
+
+  // Used in the template
+  get filteredCollections() {
+    return this.isPaging() ? this.pagedCollections : this.searchedCollections;
   }
 
   protected didScroll = false;
@@ -208,6 +224,16 @@ export class CollectionsComponent implements OnInit {
 
   isSearching() {
     return this.searchService.isSearchable(this.searchText);
+  }
+
+  searchTextChanged(value: string) {
+    this.searchText = value;
+    this.searchedCollections = this.searchService.searchBasic(
+      this.collections,
+      value,
+      "name",
+      "id"
+    );
   }
 
   isPaging() {
