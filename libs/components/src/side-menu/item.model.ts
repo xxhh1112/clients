@@ -1,5 +1,7 @@
+import { RouteLink } from "./route.type";
+
 export interface Item {
-  id: string;
   name: string;
+  route: RouteLink;
   children: Item[];
 }
