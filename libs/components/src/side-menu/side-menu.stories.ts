@@ -57,22 +57,6 @@ const Template: Story<SideMenuComponent> = (args: SideMenuComponent) => ({
 
 export const PersonalVault = Template.bind({});
 PersonalVault.args = {
-  collections: [
-    createCollection("Top Collection 1", [
-      createCollection("Sub Collection 1A", [createCollection("Sub Collection 1AX")]),
-      createCollection("Sub Collection 1B", [createCollection("Sub Collection 1BX")]),
-    ])(),
-    createCollection("Top Collection 2", [
-      createCollection("Sub Collection 2A", [createCollection("Sub Collection 2AX")]),
-      createCollection("Sub Collection 2B", [createCollection("Sub Collection 2BX")]),
-    ])(),
-    createCollection("Top Collection 3")(),
-  ],
-  folders: [],
-};
-
-export const OrganizationVault = Template.bind({});
-OrganizationVault.args = {
   organizations: [
     createOrganization("Acme", [
       createCollection("Top Collection 1", [
@@ -85,6 +69,33 @@ OrganizationVault.args = {
       ]),
       createCollection("Top Collection 3"),
     ]),
+    createOrganization("Initech", [
+      createCollection("Top Collection 1", [
+        createCollection("Sub Collection 1A", [createCollection("Sub Collection 1AX")]),
+        createCollection("Sub Collection 1B", [createCollection("Sub Collection 1BX")]),
+      ]),
+      createCollection("Top Collection 2", [
+        createCollection("Sub Collection 2A", [createCollection("Sub Collection 2AX")]),
+        createCollection("Sub Collection 2B", [createCollection("Sub Collection 2BX")]),
+      ]),
+      createCollection("Top Collection 3"),
+    ]),
+  ],
+  folders: [],
+};
+
+export const OrganizationVault = Template.bind({});
+OrganizationVault.args = {
+  collections: [
+    createCollection("Top Collection 1", [
+      createCollection("Sub Collection 1A", [createCollection("Sub Collection 1AX")]),
+      createCollection("Sub Collection 1B", [createCollection("Sub Collection 1BX")]),
+    ])(),
+    createCollection("Top Collection 2", [
+      createCollection("Sub Collection 2A", [createCollection("Sub Collection 2AX")]),
+      createCollection("Sub Collection 2B", [createCollection("Sub Collection 2BX")]),
+    ])(),
+    createCollection("Top Collection 3")(),
   ],
   folders: [],
 };
