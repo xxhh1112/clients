@@ -10,8 +10,10 @@ import { Item } from "./item.model";
       routerLinkActive
       (isActiveChange)="isActive = $event"
       [class]="linkClasses"
-      >{{ item.name }}</a
     >
+      <i *ngIf="icon" class="bwi {{ icon }}"></i>
+      {{ item.name }}
+    </a>
     <div class="tw-p-2">
       <ng-content></ng-content>
     </div>
