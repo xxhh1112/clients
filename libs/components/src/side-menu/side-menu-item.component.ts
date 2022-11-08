@@ -5,7 +5,7 @@ import { Item } from "./item.model";
 @Component({
   selector: "bit-side-menu-item",
   template: `
-    <h3 class="tw-text-contrast">{{ name }}</h3>
+    <div class="tw-text-contrast">{{ name }}</div>
     <ng-content></ng-content>
   `,
 })
