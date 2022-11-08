@@ -5,14 +5,29 @@ import { Item } from "./item.model";
 @Component({
   selector: "bit-side-menu-item",
   template: `
-    <div class="tw-text-contrast">{{ name }}</div>
-    <ng-content></ng-content>
+    <a
+      [routerLink]="item.route"
+      routerLinkActive
+      (isActiveChange)="isActive = $event"
+      [class]="linkClasses"
+      >{{ item.name }}</a
+    >
+    <div class="tw-p-2">
+      <ng-content></ng-content>
+    </div>
   `,
 })
 export class SideMenuItemComponent {
-  @Input() name: string;
+  @Input() item: Item;
   @Input() icon: string;
-  @Input() children: Item[];
 
-  @HostBinding("class") classes = ["tw-block", "tw-p-3"];
+  @HostBinding("class") classes = ["tw-block"];
+
+  protected get linkClasses() {
+    return ["tw-text-contrast", "tw-p-3", "hover:tw-text-contrast", "hover:tw-underline"].concat(
+      this.isActive ? ["tw-bg-[#122E78]"] : []
+    );
+  }
+
+  protected isActive = false;
 }

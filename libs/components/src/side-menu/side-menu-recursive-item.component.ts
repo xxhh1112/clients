@@ -5,7 +5,7 @@ import { Item } from "./item.model";
 @Component({
   selector: `bit-side-menu-recursive-item`,
   template: `
-    <bit-side-menu-item [name]="item.name">
+    <bit-side-menu-item [item]="item">
       <bit-side-menu-recursive-item
         *ngFor="let child of item.children"
         [item]="child"

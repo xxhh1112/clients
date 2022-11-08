@@ -1,3 +1,4 @@
+import { RouterModule } from "@angular/router";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -7,12 +8,44 @@ import { Organization } from "./organization.model";
 import { SideMenuComponent } from "./side-menu.component";
 import { FiltersModule } from "./side-menu.module";
 
+const createOrganization = (
+  name: string,
+  collections: ReturnType<typeof createCollection>[]
+): Organization => {
+  const route = `organizations/${Utils.newGuid()}`;
+  return {
+    name,
+    route,
+    collections: collections.map((c) => c(route)),
+  };
+};
+
+const createCollection =
+  (name: string, children: ((parentRoute: string) => Item)[] = []) =>
+  (parentRoute = ""): Item => {
+    const route = `${parentRoute}/collections/${Utils.newGuid()}`;
+    return {
+      name,
+      route,
+      children: children.map<Item>((c) => c(route)),
+    };
+  };
+
 export default {
   title: "Component Library/Side Menu",
   component: SideMenuComponent,
   decorators: [
     moduleMetadata({
-      imports: [FiltersModule],
+      imports: [
+        FiltersModule,
+        RouterModule.forRoot(
+          [
+            { path: "", children: [] },
+            { path: "**", children: [] },
+          ],
+          { useHash: true }
+        ),
+      ],
     }),
   ],
 } as Meta;
@@ -25,85 +58,33 @@ const Template: Story<SideMenuComponent> = (args: SideMenuComponent) => ({
 export const PersonalVault = Template.bind({});
 PersonalVault.args = {
   collections: [
-    {
-      route: Utils.newGuid(),
-      name: "Top Collection 1",
-      children: [
-        {
-          route: Utils.newGuid(),
-          name: "Sub Collection 1A",
-          children: [{ route: Utils.newGuid(), name: "Sub Collection 1AX", children: [] }],
-        },
-        {
-          route: Utils.newGuid(),
-          name: "Sub Collection 1B",
-          children: [{ route: Utils.newGuid(), name: "Sub Collection 1BY", children: [] }],
-        },
-      ],
-    },
-    {
-      route: Utils.newGuid(),
-      name: "Top Collection 2",
-      children: [
-        {
-          route: Utils.newGuid(),
-          name: "Sub Collection 2A",
-          children: [{ route: Utils.newGuid(), name: "Sub Collection 2AX", children: [] }],
-        },
-        {
-          route: Utils.newGuid(),
-          name: "Sub Collection 2B",
-          children: [{ route: Utils.newGuid(), name: "Sub Collection 2BY", children: [] }],
-        },
-      ],
-    },
-    { route: Utils.newGuid(), name: "Sub Collection 3", children: [] },
-  ] as Item[],
+    createCollection("Top Collection 1", [
+      createCollection("Sub Collection 1A", [createCollection("Sub Collection 1AX")]),
+      createCollection("Sub Collection 1B", [createCollection("Sub Collection 1BX")]),
+    ])(),
+    createCollection("Top Collection 2", [
+      createCollection("Sub Collection 2A", [createCollection("Sub Collection 2AX")]),
+      createCollection("Sub Collection 2B", [createCollection("Sub Collection 2BX")]),
+    ])(),
+    createCollection("Top Collection 3")(),
+  ],
   folders: [],
 };
 
 export const OrganizationVault = Template.bind({});
 OrganizationVault.args = {
   organizations: [
-    {
-      route: Utils.newGuid(),
-      name: "Amce",
-      collections: [
-        {
-          route: Utils.newGuid(),
-          name: "Top Collection 1",
-          children: [
-            {
-              route: Utils.newGuid(),
-              name: "Sub Collection 1A",
-              children: [{ route: Utils.newGuid(), name: "Sub Collection 1AX", children: [] }],
-            },
-            {
-              route: Utils.newGuid(),
-              name: "Sub Collection 1B",
-              children: [{ route: Utils.newGuid(), name: "Sub Collection 1BY", children: [] }],
-            },
-          ],
-        },
-        {
-          route: Utils.newGuid(),
-          name: "Top Collection 2",
-          children: [
-            {
-              route: Utils.newGuid(),
-              name: "Sub Collection 2A",
-              children: [{ route: Utils.newGuid(), name: "Sub Collection 2AX", children: [] }],
-            },
-            {
-              route: Utils.newGuid(),
-              name: "Sub Collection 2B",
-              children: [{ route: Utils.newGuid(), name: "Sub Collection 2BY", children: [] }],
-            },
-          ],
-        },
-        { route: Utils.newGuid(), name: "Sub Collection 3", children: [] },
-      ] as Item[],
-    },
-  ] as Organization[],
+    createOrganization("Acme", [
+      createCollection("Top Collection 1", [
+        createCollection("Sub Collection 1A", [createCollection("Sub Collection 1AX")]),
+        createCollection("Sub Collection 1B", [createCollection("Sub Collection 1BX")]),
+      ]),
+      createCollection("Top Collection 2", [
+        createCollection("Sub Collection 2A", [createCollection("Sub Collection 2AX")]),
+        createCollection("Sub Collection 2B", [createCollection("Sub Collection 2BX")]),
+      ]),
+      createCollection("Top Collection 3"),
+    ]),
+  ],
   folders: [],
 };
