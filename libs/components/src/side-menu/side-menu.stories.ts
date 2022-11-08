@@ -2,13 +2,13 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { Utils } from "@bitwarden/common/misc/utils";
 
-import { FiltersComponent } from "./filters.component";
-import { FiltersModule } from "./filters.module";
 import { Item } from "./item.model";
+import { SideMenuComponent } from "./side-menu.component";
+import { FiltersModule } from "./side-menu.module";
 
 export default {
-  title: "Component Library/Filters",
-  component: FiltersComponent,
+  title: "Component Library/Side Menu",
+  component: SideMenuComponent,
   decorators: [
     moduleMetadata({
       imports: [FiltersModule],
@@ -16,9 +16,9 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<FiltersComponent> = (args: FiltersComponent) => ({
+const Template: Story<SideMenuComponent> = (args: SideMenuComponent) => ({
   props: args,
-  template: `<bit-filters [collections]="collections"></bit-filters>`,
+  template: `<bit-side-menu [collections]="collections"></bit-side-menu>`,
 });
 
 export const Default = Template.bind({});

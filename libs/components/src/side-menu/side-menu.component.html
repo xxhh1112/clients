@@ -1,0 +1,8 @@
+<div class="tw-bg-[#1A41AC]">
+  <bit-side-menu-item name="Acme">
+    <bit-side-menu-recursive-item
+      *ngFor="let collection of collections"
+      [item]="collection"
+    ></bit-side-menu-recursive-item>
+  </bit-side-menu-item>
+</div>
