@@ -45,7 +45,6 @@ export class BulkMoveDialogComponent implements OnInit {
     folderId: ["", [Validators.required]],
   });
   folders$: Observable<FolderView[]>;
-  formPromise: Promise<any>;
 
   constructor(
     @Inject(DIALOG_DATA) params: BulkMoveDialogParams,
@@ -75,11 +74,7 @@ export class BulkMoveDialogComponent implements OnInit {
       return;
     }
 
-    this.formPromise = this.cipherService.moveManyWithServer(
-      this.cipherIds,
-      this.formGroup.value.folderId
-    );
-    await this.formPromise;
+    await this.cipherService.moveManyWithServer(this.cipherIds, this.formGroup.value.folderId);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("movedItems"));
     this.close(BulkMoveDialogResult.Moved);
   };

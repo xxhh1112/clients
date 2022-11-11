@@ -50,7 +50,6 @@ export class BulkShareDialogComponent implements OnInit {
   collections: Checkable<CollectionView>[] = [];
   organizations: Organization[] = [];
   shareableCiphers: CipherView[] = [];
-  formPromise: Promise<void>;
 
   private writeableCollections: CollectionView[] = [];
 
@@ -100,12 +99,11 @@ export class BulkShareDialogComponent implements OnInit {
   submit = async () => {
     const checkedCollectionIds = this.collections.filter(isChecked).map((c) => c.id);
     try {
-      this.formPromise = this.cipherService.shareManyWithServer(
+      await this.cipherService.shareManyWithServer(
         this.shareableCiphers,
         this.organizationId,
         checkedCollectionIds
       );
-      await this.formPromise;
       const orgName =
         this.organizations.find((o) => o.id === this.organizationId)?.name ??
         this.i18nService.t("organization");

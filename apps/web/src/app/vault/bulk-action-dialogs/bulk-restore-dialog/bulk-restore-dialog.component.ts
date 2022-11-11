@@ -37,8 +37,6 @@ export const openBulkRestoreDialog = (
 export class BulkRestoreDialogComponent {
   cipherIds: string[];
 
-  formPromise: Promise<any>;
-
   constructor(
     @Inject(DIALOG_DATA) params: BulkRestoreDialogParams,
     private dialogRef: DialogRef<BulkRestoreDialogResult>,
@@ -50,8 +48,7 @@ export class BulkRestoreDialogComponent {
   }
 
   submit = async () => {
-    this.formPromise = this.cipherService.restoreManyWithServer(this.cipherIds);
-    await this.formPromise;
+    await this.cipherService.restoreManyWithServer(this.cipherIds);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("restoredItems"));
     this.close(BulkRestoreDialogResult.Restored);
   };

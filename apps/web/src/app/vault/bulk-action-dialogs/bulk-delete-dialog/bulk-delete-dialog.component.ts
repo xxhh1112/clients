@@ -47,8 +47,6 @@ export class BulkDeleteDialogComponent {
   permanent = false;
   organization: Organization;
 
-  formPromise: Promise<any>;
-
   constructor(
     @Inject(DIALOG_DATA) params: BulkDeleteDialogParams,
     private dialogRef: DialogRef<BulkDeleteDialogResult>,
@@ -81,8 +79,7 @@ export class BulkDeleteDialogComponent {
       deletePromises.push(this.deleteCollections());
     }
 
-    this.formPromise = Promise.all(deletePromises);
-    await this.formPromise;
+    await Promise.all(deletePromises);
 
     if (this.cipherIds.length) {
       this.platformUtilsService.showToast(
