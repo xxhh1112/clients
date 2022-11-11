@@ -1,4 +1,6 @@
-import { Directive, HostBinding, Input } from "@angular/core";
+import { Directive, HostBinding, Input, OnInit } from "@angular/core";
+
+import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 
 export const PrefixClasses = [
   "tw-block",
@@ -17,8 +19,14 @@ export const PrefixClasses = [
 @Directive({
   selector: "[bitPrefix]",
 })
-export class BitPrefixDirective {
+export class BitPrefixDirective implements OnInit {
+  constructor(private buttonComponent: ButtonLikeAbstraction) {}
+
   @HostBinding("class") @Input() get classList() {
     return PrefixClasses.concat(["tw-border-r-0", "first:tw-rounded-l"]);
+  }
+
+  ngOnInit(): void {
+    this.buttonComponent.setButtonType("secondary");
   }
 }

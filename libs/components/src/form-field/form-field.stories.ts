@@ -11,7 +11,9 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
+import { AsyncActionsModule } from "../async-actions";
 import { ButtonModule } from "../button";
+import { IconButtonModule } from "../icon-button";
 import { InputModule } from "../input/input.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
@@ -23,7 +25,15 @@ export default {
   component: BitFormFieldComponent,
   decorators: [
     moduleMetadata({
-      imports: [FormsModule, ReactiveFormsModule, FormFieldModule, InputModule, ButtonModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        FormFieldModule,
+        InputModule,
+        ButtonModule,
+        IconButtonModule,
+        AsyncActionsModule,
+      ],
       providers: [
         {
           provide: I18nService,
@@ -165,14 +175,10 @@ const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCom
   props: args,
   template: `
     <bit-form-field>
-      <bit-label>Label</bit-label>
+      <button bitPrefix bitIconButton="bwi-star"></button>
       <input bitInput placeholder="Placeholder" />
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-eye"></i>
-      </button>
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-clone"></i>
-      </button>
+      <button bitSuffix bitIconButton="bwi-eye"></button>
+      <button bitSuffix bitIconButton="bwi-refresh"></button>
     </bit-form-field>
   `,
 });
