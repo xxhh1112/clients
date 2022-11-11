@@ -124,7 +124,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   }
 
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
-    this.deleted = deleted ?? false;
+    this.deleted = deleted;
     await this.applyFilter(filter);
     this.loaded = true;
   }
