@@ -254,7 +254,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkDeleteDialogResult.Deleted) {
       this.actionPromise = this.refresh();
       await this.actionPromise;

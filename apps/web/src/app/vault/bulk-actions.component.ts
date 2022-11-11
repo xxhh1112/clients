@@ -66,7 +66,7 @@ export class BulkActionsComponent {
       },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkDeleteDialogResult.Deleted) {
       await this.ciphersComponent.refresh();
     }
@@ -93,7 +93,7 @@ export class BulkActionsComponent {
       },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkRestoreDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkRestoreDialogResult.Restored) {
       this.ciphersComponent.refresh();
     }
@@ -116,7 +116,7 @@ export class BulkActionsComponent {
 
     const dialog = openBulkShareDialog(this.dialogService, { data: { ciphers: selectedCiphers } });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkShareDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkShareDialogResult.Shared) {
       this.ciphersComponent.refresh();
     }
@@ -141,7 +141,7 @@ export class BulkActionsComponent {
       data: { cipherIds: selectedCipherIds },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkMoveDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkMoveDialogResult.Moved) {
       this.ciphersComponent.refresh();
     }

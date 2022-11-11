@@ -300,7 +300,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       data: { permanent: this.deleted, cipherIds: selectedIds },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkDeleteDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkDeleteDialogResult.Deleted) {
       this.actionPromise = this.refresh();
       await this.actionPromise;
@@ -353,7 +353,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       data: { cipherIds: selectedCipherIds },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkRestoreDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkRestoreDialogResult.Restored) {
       this.actionPromise = this.refresh();
       await this.actionPromise;
@@ -378,7 +378,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
     const dialog = openBulkShareDialog(this.dialogService, { data: { ciphers: selectedCiphers } });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkShareDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkShareDialogResult.Shared) {
       this.actionPromise = this.refresh();
       await this.actionPromise;
@@ -405,7 +405,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       data: { cipherIds: selectedCipherIds },
     });
 
-    const result = (await lastValueFrom(dialog.closed)) as BulkMoveDialogResult | undefined;
+    const result = await lastValueFrom(dialog.closed);
     if (result === BulkMoveDialogResult.Moved) {
       this.actionPromise = this.refresh();
       await this.actionPromise;
