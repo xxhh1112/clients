@@ -49,7 +49,7 @@ export class NavigationDirective implements OnInit, OnDestroy {
   private updateActive(): void {
     if (this.routerLinkWithHref) {
       this.active = this.router.isActive(this.routerLinkWithHref.urlTree, {
-        paths: "exact",
+        paths: "subset",
         queryParams: "exact",
         fragment: "ignored",
         matrixParams: "ignored",

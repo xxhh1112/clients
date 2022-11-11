@@ -10,8 +10,10 @@ import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
 import { ServiceAccountView } from "../models/view/service-account.view";
 
-import { ServiceAccountRequest } from "./requests/service-account.request";
-import { ServiceAccountResponse } from "./responses/service-account.response";
+import { ServiceAccountRequest } from "./models/requests/service-account.request";
+import { AccessTokenResponse } from "./models/responses/access-tokens.response";
+import { ServiceAccountResponse } from "./models/responses/service-account.response";
+import { AccessTokenView } from "./models/view/access-token.view";
 
 @Injectable({
   providedIn: "root",
@@ -54,6 +56,22 @@ export class ServiceAccountService {
     );
   }
 
+  async getAccessTokens(
+    organizationId: string,
+    serviceAccountId: string
+  ): Promise<AccessTokenView[]> {
+    const r = await this.apiService.send(
+      "GET",
+      "/service-accounts/" + serviceAccountId + "/access-tokens",
+      null,
+      true,
+      true
+    );
+    const results = new ListResponse(r, AccessTokenResponse);
+
+    return await this.createAccessTokenViews(organizationId, results.data);
+  }
+
   private async getOrganizationKey(organizationId: string): Promise<SymmetricCryptoKey> {
     return await this.cryptoService.getOrgKey(organizationId);
   }
@@ -91,6 +109,26 @@ export class ServiceAccountService {
     return await Promise.all(
       serviceAccountResponses.map(async (s: ServiceAccountResponse) => {
         return await this.createServiceAccountView(orgKey, s);
+      })
+    );
+  }
+
+  private async createAccessTokenViews(
+    organizationId: string,
+    accessTokenResponses: AccessTokenResponse[]
+  ): Promise<AccessTokenView[]> {
+    const orgKey = await this.getOrganizationKey(organizationId);
+    return await Promise.all(
+      accessTokenResponses.map(async (s) => {
+        const view = new AccessTokenView();
+        view.id = s.id;
+        view.name = await this.encryptService.decryptToUtf8(new EncString(s.name), orgKey);
+        view.scopes = s.scopes;
+        view.expireAt = new Date(s.expireAt);
+        view.creationDate = new Date(s.creationDate);
+        view.revisionDate = new Date(s.revisionDate);
+
+        return view;
       })
     );
   }
