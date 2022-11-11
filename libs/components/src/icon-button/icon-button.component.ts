@@ -134,4 +134,8 @@ export class BitIconButtonComponent implements ButtonLikeAbstraction {
 
   @Input() loading = false;
   @Input() disabled = false;
+
+  setButtonType(value: "primary" | "secondary" | "danger") {
+    this.buttonType = value;
+  }
 }
