@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core
 import { lastValueFrom } from "rxjs";
 
 import { CiphersComponent as BaseCiphersComponent } from "@bitwarden/angular/components/ciphers.component";
+import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -47,8 +48,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
 
-  pagedCiphers: CipherView[] = [];
-  pagedCollections: TreeNode<CollectionFilter>[] = [];
   cipherType = CipherType;
   actionPromise: Promise<any>;
   userHasPremiumAccess = false;
@@ -62,19 +61,27 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   protected currentPagedCollectionsCount = 0;
   protected refreshing = false;
 
-  get collections() {
+  protected pagedCiphers: CipherView[] = [];
+  protected pagedCollections: TreeNode<CollectionFilter>[] = [];
+  protected searchedCollections: TreeNode<CollectionFilter>[] = [];
+
+  get collections(): TreeNode<CollectionFilter>[] {
     return this.activeFilter?.selectedCollectionNode?.children ?? [];
   }
 
-  get showCollections() {
-    return this.filteredCollections && !(this.searchText?.length > 1);
+  get filteredCollections(): TreeNode<CollectionFilter>[] {
+    if (this.isPaging()) {
+      return this.pagedCollections;
+    }
+
+    if (this.searchService.isSearchable(this.searchText)) {
+      return this.searchedCollections;
+    }
+
+    return this.collections;
   }
 
-  get filteredCollections() {
-    return this.isPaging() ? this.pagedCollections : this.collections;
-  }
-
-  get filteredCiphers() {
+  get filteredCiphers(): CipherView[] {
     return this.isPaging() ? this.pagedCiphers : this.ciphers;
   }
 
@@ -90,6 +97,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     protected passwordRepromptService: PasswordRepromptService,
     protected dialogService: DialogService,
     protected logService: LogService,
+    private searchPipe: SearchPipe,
     private organizationService: OrganizationService,
     private tokenService: TokenService
   ) {
@@ -115,6 +123,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   // Do not use ngOnInit() for anything that requires sync data.
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
     await super.load(filter, deleted);
+    this.updateSearchedCollections(this.collections);
     this.profileName = await this.tokenService.getName();
     this.organizations = await this.organizationService.getAll();
     this.userHasPremiumAccess = await this.stateService.getCanAccessPremium();
@@ -191,6 +200,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       [this.filter, this.deletedFilter],
       indexedCiphers
     );
+    this.updateSearchedCollections(this.collections);
     this.resetPaging();
   }
 
@@ -485,6 +495,17 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
 
   onOrganizationClicked(organizationId: string) {
     this.onOrganzationBadgeClicked.emit(organizationId);
+  }
+
+  protected updateSearchedCollections(collections: TreeNode<CollectionFilter>[]) {
+    if (this.searchService.isSearchable(this.searchText)) {
+      this.searchedCollections = this.searchPipe.transform(
+        collections,
+        this.searchText,
+        (collection) => collection.node.name,
+        (collection) => collection.node.id
+      );
+    }
   }
 
   protected deleteCipherWithServer(id: string, permanent: boolean) {

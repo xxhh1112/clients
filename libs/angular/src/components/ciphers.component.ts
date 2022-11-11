@@ -13,7 +13,6 @@ export class CiphersComponent {
 
   loaded = false;
   ciphers: CipherView[] = [];
-  searchText: string;
   searchPlaceholder: string = null;
   filter: (cipher: CipherView) => boolean = null;
   deleted = false;
@@ -21,6 +20,13 @@ export class CiphersComponent {
   protected searchPending = false;
 
   private searchTimeout: any = null;
+  private _searchText: string = null;
+  get searchText() {
+    return this._searchText;
+  }
+  set searchText(value: string) {
+    this._searchText = value;
+  }
 
   constructor(protected searchService: SearchService) {}
 

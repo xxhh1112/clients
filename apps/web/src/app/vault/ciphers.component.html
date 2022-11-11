@@ -1,6 +1,6 @@
 <ng-container>
   <bit-table
-    *ngIf="filteredCiphers.length || (filteredCollections?.length && showCollections)"
+    *ngIf="filteredCiphers.length || filteredCollections?.length"
     class="!tw-table-fixed"
     infiniteScroll
     [infiniteScrollDistance]="1"
@@ -72,84 +72,82 @@
       </tr>
     </ng-container>
     <ng-container body>
-      <ng-container *ngIf="showCollections">
-        <tr bitRow *ngFor="let col of filteredCollections">
-          <td bitCell class="tw-w-10" (click)="selectRow(col)">
-            <input
-              *ngIf="organization && col.node.name !== 'Unassigned'"
-              class="tw-cursor-pointer"
-              type="checkbox"
-              [(ngModel)]="col.checked"
-              appStopProp
-            />
-          </td>
-          <td bitCell class="tw-w-10" (click)="selectRow(col)">
-            <div class="icon" aria-hidden="true">
-              <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
-            </div>
-          </td>
-          <td bitCell class="tw-font-bold" (click)="selectRow(col)">
-            <button bitLink [linkType]="secondary" (click)="navigateCollection(col)">
-              {{ col.node.name }}
-            </button>
-          </td>
-          <td bitCell class="tw-w-72" (click)="selectRow(col)">
-            <ng-container *ngIf="!organization">
-              <app-org-badge
-                organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
-                profileName="{{ profileName }}"
-                (onOrganizationClicked)="onOrganizationClicked(col.node.organizationId)"
-              >
-              </app-org-badge>
-            </ng-container>
-            <ng-container *ngIf="organization && activeFilter.selectedCollectionNode">
-              <app-group-badge
-                *ngIf="col.node.groups"
-                [selectedGroups]="col.node.groups"
-                [allGroups]="groups"
-              ></app-group-badge>
-            </ng-container>
-          </td>
-          <td bitCell>
+      <tr bitRow *ngFor="let col of filteredCollections">
+        <td bitCell class="tw-w-10" (click)="selectRow(col)">
+          <input
+            *ngIf="organization && col.node.name !== 'Unassigned'"
+            class="tw-cursor-pointer"
+            type="checkbox"
+            [(ngModel)]="col.checked"
+            appStopProp
+          />
+        </td>
+        <td bitCell class="tw-w-10" (click)="selectRow(col)">
+          <div class="icon" aria-hidden="true">
+            <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
+          </div>
+        </td>
+        <td bitCell class="tw-font-bold" (click)="selectRow(col)">
+          <button bitLink [linkType]="secondary" (click)="navigateCollection(col)">
+            {{ col.node.name }}
+          </button>
+        </td>
+        <td bitCell class="tw-w-72" (click)="selectRow(col)">
+          <ng-container *ngIf="!organization">
+            <app-org-badge
+              organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
+              profileName="{{ profileName }}"
+              (onOrganizationClicked)="onOrganizationClicked(col.node.organizationId)"
+            >
+            </app-org-badge>
+          </ng-container>
+          <ng-container *ngIf="organization && activeFilter.selectedCollectionNode">
+            <app-group-badge
+              *ngIf="col.node.groups"
+              [selectedGroups]="col.node.groups"
+              [allGroups]="groups"
+            ></app-group-badge>
+          </ng-container>
+        </td>
+        <td bitCell>
+          <button
+            *ngIf="organization && col.node.name !== 'Unassigned'"
+            [bitMenuTriggerFor]="collectionOptions"
+            size="small"
+            bitIconButton="bwi-ellipsis-v"
+            type="button"
+            appA11yTitle="{{ 'options' | i18n }}"
+          ></button>
+          <bit-menu #collectionOptions>
             <button
-              *ngIf="organization && col.node.name !== 'Unassigned'"
-              [bitMenuTriggerFor]="collectionOptions"
-              size="small"
-              bitIconButton="bwi-ellipsis-v"
-              type="button"
-              appA11yTitle="{{ 'options' | i18n }}"
-            ></button>
-            <bit-menu #collectionOptions>
-              <button
-                *ngIf="organization?.canEditAssignedCollections"
-                bitMenuItem
-                (click)="editCollectionInfo(col.node)"
-              >
-                <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
-                {{ "editInfo" | i18n }}
-              </button>
-              <button
-                *ngIf="organization?.canEditAssignedCollections"
-                bitMenuItem
-                (click)="editCollectionAccess(col.node)"
-              >
-                <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
-                {{ "access" | i18n }}
-              </button>
-              <button
-                *ngIf="organization?.canDeleteAssignedCollections"
-                bitMenuItem
-                (click)="deleteCollection(col.node)"
-              >
-                <span class="tw-text-danger">
-                  <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
-                  {{ "delete" | i18n }}
-                </span>
-              </button>
-            </bit-menu>
-          </td>
-        </tr>
-      </ng-container>
+              *ngIf="organization?.canEditAssignedCollections"
+              bitMenuItem
+              (click)="editCollectionInfo(col.node)"
+            >
+              <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
+              {{ "editInfo" | i18n }}
+            </button>
+            <button
+              *ngIf="organization?.canEditAssignedCollections"
+              bitMenuItem
+              (click)="editCollectionAccess(col.node)"
+            >
+              <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+              {{ "access" | i18n }}
+            </button>
+            <button
+              *ngIf="organization?.canDeleteAssignedCollections"
+              bitMenuItem
+              (click)="deleteCollection(col.node)"
+            >
+              <span class="tw-text-danger">
+                <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
+                {{ "delete" | i18n }}
+              </span>
+            </button>
+          </bit-menu>
+        </td>
+      </tr>
       <tr bitRow *ngFor="let c of filteredCiphers">
         <td bitCell class="tw-w-10" (click)="selectRow(c)">
           <input type="checkbox" [(ngModel)]="c.checked" appStopProp />
@@ -286,10 +284,7 @@
       </tr>
     </ng-container>
   </bit-table>
-  <div
-    class="no-items"
-    *ngIf="!filteredCiphers.length && (!filteredCollections?.length || !showCollections)"
-  >
+  <div class="no-items" *ngIf="!filteredCiphers.length && !filteredCollections?.length">
     <ng-container *ngIf="!loaded">
       <i
         class="bwi bwi-spinner bwi-spin text-muted"

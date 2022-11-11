@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
+import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { EventService } from "@bitwarden/common/abstractions/event.service";
@@ -67,6 +68,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     stateService: StateService,
     organizationService: OrganizationService,
     tokenService: TokenService,
+    searchPipe: SearchPipe,
     private apiService: ApiService
   ) {
     super(
@@ -81,6 +83,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
       passwordRepromptService,
       dialogService,
       logService,
+      searchPipe,
       organizationService,
       tokenService
     );
