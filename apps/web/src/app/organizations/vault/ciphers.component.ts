@@ -153,7 +153,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     }
 
     const items: VaultItemRow[] = [...this.collections, ...this.ciphers];
-    if (!items) {
+    if (!items.length) {
       return;
     }
 
