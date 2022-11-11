@@ -118,10 +118,6 @@ import { AddEditCustomFieldsComponent } from "../vault/add-edit-custom-fields.co
 import { AddEditComponent } from "../vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/attachments.component";
 import { BulkActionsComponent } from "../vault/bulk-actions.component";
-import { BulkDeleteDialogComponent } from "../vault/bulk-delete-dialog.component";
-import { BulkMoveDialogComponent } from "../vault/bulk-move-dialog.component";
-import { BulkRestoreDialogComponent } from "../vault/bulk-restore-dialog.component";
-import { BulkShareDialogComponent } from "../vault/bulk-share-dialog.component";
 import { CollectionsComponent } from "../vault/collections.component";
 import { FolderAddEditComponent } from "../vault/folder-add-edit.component";
 import { OrganizationBadgeModule } from "../vault/organization-badge/organization-badge.module";
@@ -150,10 +146,6 @@ import { SharedModule } from ".";
     AttachmentsComponent,
     BillingSyncKeyComponent,
     BulkActionsComponent,
-    BulkDeleteDialogComponent,
-    BulkMoveDialogComponent,
-    BulkRestoreDialogComponent,
-    BulkShareDialogComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,
@@ -274,10 +266,6 @@ import { SharedModule } from ".";
     ApiKeyComponent,
     AttachmentsComponent,
     BulkActionsComponent,
-    BulkDeleteDialogComponent,
-    BulkMoveDialogComponent,
-    BulkRestoreDialogComponent,
-    BulkShareDialogComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,

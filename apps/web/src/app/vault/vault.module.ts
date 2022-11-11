@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { SharedModule, LooseComponentsModule } from "../shared";
 
+import { BulkDialogsModule } from "./bulk-action-dialogs/bulk-dialogs.module";
 import { CiphersComponent } from "./ciphers.component";
 import { OrganizationBadgeModule } from "./organization-badge/organization-badge.module";
 import { PipesModule } from "./pipes/pipes.module";
@@ -17,6 +18,7 @@ import { VaultComponent } from "./vault.component";
     PipesModule,
     SharedModule,
     LooseComponentsModule,
+    BulkDialogsModule,
   ],
   declarations: [VaultComponent, CiphersComponent],
   exports: [VaultComponent],

@@ -22,10 +22,22 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { DialogService } from "@bitwarden/components";
 
-import { BulkDeleteDialogResult, openBulkDeleteDialog } from "./bulk-delete-dialog.component";
-import { BulkMoveDialogResult, openBulkMoveDialog } from "./bulk-move-dialog.component";
-import { BulkRestoreDialogResult, openBulkRestoreDialog } from "./bulk-restore-dialog.component";
-import { BulkShareDialogResult, openBulkShareDialog } from "./bulk-share-dialog.component";
+import {
+  BulkDeleteDialogResult,
+  openBulkDeleteDialog,
+} from "./bulk-action-dialogs/bulk-delete-dialog/bulk-delete-dialog.component";
+import {
+  BulkMoveDialogResult,
+  openBulkMoveDialog,
+} from "./bulk-action-dialogs/bulk-move-dialog/bulk-move-dialog.component";
+import {
+  BulkRestoreDialogResult,
+  openBulkRestoreDialog,
+} from "./bulk-action-dialogs/bulk-restore-dialog/bulk-restore-dialog.component";
+import {
+  BulkShareDialogResult,
+  openBulkShareDialog,
+} from "./bulk-action-dialogs/bulk-share-dialog/bulk-share-dialog.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { CollectionFilter } from "./vault-filter/shared/models/vault-filter.type";

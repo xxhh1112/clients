@@ -24,7 +24,7 @@ import { DialogService } from "@bitwarden/components";
 import {
   BulkDeleteDialogResult,
   openBulkDeleteDialog,
-} from "../../vault/bulk-delete-dialog.component";
+} from "../../vault/bulk-action-dialogs/bulk-delete-dialog/bulk-delete-dialog.component";
 import {
   CiphersComponent as BaseCiphersComponent,
   VaultItemRow,
