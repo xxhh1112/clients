@@ -176,7 +176,7 @@ export abstract class BasePeopleComponent<
     this.didScroll = this.pagedUsers.length > this.pageSize;
   }
 
-  checkUser(user: OrganizationUserUserDetailsResponse, select?: boolean) {
+  checkUser(user: UserType, select?: boolean) {
     (user as any).checked = select == null ? !(user as any).checked : select;
   }
 
