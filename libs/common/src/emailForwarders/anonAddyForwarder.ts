@@ -24,9 +24,7 @@ export class AnonAddyForwarder implements Forwarder {
         "Content-Type": "application/json",
       }),
     };
-
     const url = options.anonaddy.baseUrl + "/api/v1/aliases";
-
     requestInit.body = JSON.stringify({
       domain: options.anonaddy.domain,
       description:
