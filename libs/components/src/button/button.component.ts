@@ -11,10 +11,9 @@ const buttonStyles: Record<ButtonTypes, string[]> = {
     "!tw-text-contrast",
     "hover:tw-bg-primary-700",
     "hover:tw-border-primary-700",
-    "disabled:tw-bg-primary-500/60",
-    "disabled:tw-border-primary-500/60",
-    "disabled:!tw-text-contrast/60",
+    "disabled:tw-border-primary-500",
     "disabled:tw-bg-clip-padding",
+    "disabled:hover:tw-bg-primary-500",
   ],
   secondary: [
     "tw-bg-transparent",
@@ -23,9 +22,9 @@ const buttonStyles: Record<ButtonTypes, string[]> = {
     "hover:tw-bg-secondary-500",
     "hover:tw-border-secondary-500",
     "hover:!tw-text-contrast",
-    "disabled:tw-bg-transparent",
-    "disabled:tw-border-text-muted/60",
-    "disabled:!tw-text-muted/60",
+    "disabled:tw-border-text-muted",
+    "disabled:!tw-text-muted",
+    "disabled:hover:tw-bg-transparent",
   ],
   danger: [
     "tw-bg-transparent",
@@ -34,9 +33,9 @@ const buttonStyles: Record<ButtonTypes, string[]> = {
     "hover:tw-bg-danger-500",
     "hover:tw-border-danger-500",
     "hover:!tw-text-contrast",
-    "disabled:tw-bg-transparent",
-    "disabled:tw-border-danger-500/60",
-    "disabled:!tw-text-danger/60",
+    "disabled:tw-border-danger-500",
+    "disabled:!tw-text-danger",
+    "disabled:hover:tw-bg-transparent",
   ],
 };
 
@@ -62,6 +61,7 @@ export class ButtonComponent implements ButtonLikeAbstraction {
       "focus-visible:tw-ring-offset-2",
       "focus-visible:tw-ring-primary-700",
       "focus-visible:tw-z-10",
+      "disabled:tw-opacity-60",
     ]
       .concat(
         this.block == null || this.block === false ? ["tw-inline-block"] : ["tw-w-full", "tw-block"]
