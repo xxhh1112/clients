@@ -48,7 +48,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
   }
 
   async checkVaultTimeout(): Promise<void> {
-    if (await this.platformUtilsService.isViewOpen()) {
+    if (this.platformUtilsService.isViewOpen()) {
       return;
     }
 

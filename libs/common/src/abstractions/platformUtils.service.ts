@@ -16,7 +16,7 @@ export abstract class PlatformUtilsService {
   isVivaldi: () => boolean;
   isSafari: () => boolean;
   isMacAppStore: () => boolean;
-  isViewOpen: () => Promise<boolean>;
+  isViewOpen: () => boolean;
   launchUri: (uri: string, options?: any) => void;
   getApplicationVersion: () => Promise<string>;
   supportsWebAuthn: (win: Window) => boolean;

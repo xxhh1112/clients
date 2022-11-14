@@ -58,6 +58,8 @@ export class CipherService implements CipherServiceAbstraction {
     this.sortCiphersByLastUsed
   );
 
+  // private _settings?: AccountSettingsSettings;
+
   constructor(
     private cryptoService: CryptoService,
     private settingsService: SettingsService,
@@ -68,7 +70,11 @@ export class CipherService implements CipherServiceAbstraction {
     private logService: LogService,
     private stateService: StateService,
     private encryptService: EncryptService
-  ) {}
+  ) {
+    // this.settingsService.settings$.subscribe((value) => {
+    //   this._settings = value;
+    // });
+  }
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
     const decryptedCiphers = await this.stateService.getDecryptedCiphers();
@@ -411,8 +417,9 @@ export class CipherService implements CipherServiceAbstraction {
         ? Promise.resolve([])
         : firstValueFrom(this.settingsService.settings$).then(
             (settings: AccountSettingsSettings) => {
+              console.log("getAllDecryptedForUrl settings", settings);
               let matches: any[] = [];
-              settings.equivalentDomains?.forEach((eqDomain: any) => {
+              settings?.equivalentDomains?.forEach((eqDomain: any) => {
                 if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
                   matches = matches.concat(eqDomain);
                 }

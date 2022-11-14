@@ -19,6 +19,10 @@ export class SystemService implements SystemServiceAbstraction {
   ) {}
 
   async startProcessReload(authService: AuthService): Promise<void> {
+    if (this.platformUtilsService.isDev) {
+      return;
+    }
+
     const accounts = this.stateService.accounts.getValue();
     if (accounts != null) {
       const keys = Object.keys(accounts);

@@ -6,9 +6,10 @@ import {
   ValidationErrors,
   Validator,
 } from "@angular/forms";
-import { combineLatestWith, Subject, takeUntil } from "rxjs";
+import { Observable, map, Subject, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { Policy } from "@bitwarden/common/models/domain/policy";
@@ -39,34 +40,43 @@ export class VaultTimeoutInputComponent
   });
 
   @Input() vaultTimeouts: { name: string; value: number }[];
-  vaultTimeoutPolicy: Policy;
+  vaultTimeoutPolicy$: Observable<Policy>;
   vaultTimeoutPolicyHours: number;
   vaultTimeoutPolicyMinutes: number;
 
   private onChange: (vaultTimeout: number) => void;
   private validatorChange: () => void;
-  private destroy$ = new Subject<void>();
+  protected destroy$ = new Subject<null>();
 
   constructor(
     private formBuilder: FormBuilder,
     private policyService: PolicyService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private platformUtilsService: PlatformUtilsService
   ) {}
 
   async ngOnInit() {
-    this.policyService
-      .policyAppliesToActiveUser$(PolicyType.MaximumVaultTimeout)
-      .pipe(combineLatestWith(this.policyService.policies$), takeUntil(this.destroy$))
-      .subscribe(([policyAppliesToActiveUser, policies]) => {
-        if (policyAppliesToActiveUser) {
-          const vaultTimeoutPolicy = policies.find(
-            (policy) => policy.type === PolicyType.MaximumVaultTimeout && policy.enabled
-          );
+    this.vaultTimeoutPolicy$ = this.policyService.policies$.pipe(
+      map((policies) => policies.find((p) => p.type === PolicyType.MaximumVaultTimeout))
+    );
 
-          this.vaultTimeoutPolicy = vaultTimeoutPolicy;
-          this.applyVaultTimeoutPolicy();
-        }
-      });
+    const sub = this.vaultTimeoutPolicy$.pipe(takeUntil(this.destroy$)).subscribe();
+
+    sub.unsubscribe();
+    alert("unsubscribed");
+
+    // this.vaultTimeoutPolicy$
+    //   .pipe(
+    //     withLatestFrom(
+    //       this.policyService.policyAppliesToActiveUser$(PolicyType.MaximumVaultTimeout)
+    //     ),
+    //     takeUntil(this.destroy$)
+    //   )
+    //   .subscribe(([policy, applies]) => {
+    //     if (applies) {
+    //       this.applyVaultTimeoutPolicy(policy);
+    //     }
+    //   });
 
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.form.valueChanges.subscribe(async (value) => {
@@ -90,8 +100,11 @@ export class VaultTimeoutInputComponent
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
+    // console.log("Entered destroyed vault timeout input component");
+    alert("Entered destroyed vault timeout input component");
+    this.destroy$.next(null);
     this.destroy$.complete();
+    alert("destroyed vault timeout input component");
   }
 
   ngOnChanges() {
@@ -142,16 +155,20 @@ export class VaultTimeoutInputComponent
     // Empty
   }
 
-  validate(control: AbstractControl): ValidationErrors {
-    if (this.vaultTimeoutPolicy && this.vaultTimeoutPolicy?.data?.minutes < control.value) {
-      return { policyError: true };
-    }
+  validate(control: AbstractControl): Observable<ValidationErrors> {
+    return this.vaultTimeoutPolicy$.pipe(
+      map((policy) => {
+        if (policy && policy?.data?.minutes < control.value) {
+          return { policyError: true };
+        }
 
-    if (!this.exceedsMinimumTimout) {
-      return { minTimeoutError: true };
-    }
+        if (!this.exceedsMinimumTimout) {
+          return { minTimeoutError: true };
+        }
 
-    return null;
+        return null;
+      })
+    );
   }
 
   registerOnValidatorChange(fn: () => void): void {
@@ -162,13 +179,17 @@ export class VaultTimeoutInputComponent
     return this.form.value.custom.hours * 60 + this.form.value.custom.minutes;
   }
 
-  private applyVaultTimeoutPolicy() {
-    this.vaultTimeoutPolicyHours = Math.floor(this.vaultTimeoutPolicy.data.minutes / 60);
-    this.vaultTimeoutPolicyMinutes = this.vaultTimeoutPolicy.data.minutes % 60;
+  private applyVaultTimeoutPolicy(vaultTimeoutPolicy: Policy) {
+    if (vaultTimeoutPolicy == null) {
+      return;
+    }
+
+    this.vaultTimeoutPolicyHours = Math.floor(vaultTimeoutPolicy.data.minutes / 60);
+    this.vaultTimeoutPolicyMinutes = vaultTimeoutPolicy.data.minutes % 60;
 
     this.vaultTimeouts = this.vaultTimeouts.filter(
       (t) =>
-        t.value <= this.vaultTimeoutPolicy.data.minutes &&
+        t.value <= vaultTimeoutPolicy.data.minutes &&
         (t.value > 0 || t.value === VaultTimeoutInputComponent.CUSTOM_VALUE) &&
         t.value != null
     );

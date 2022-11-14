@@ -233,7 +233,11 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
   }
 
   async clear(userId?: string): Promise<void> {
-    if (userId == null || userId == (await this.stateService.getUserId())) {
+    console.log("policyservice clear, userId", userId);
+    const stateServiceUserId = await this.stateService.getUserId();
+    console.log("policyservice clear, stateServiceUserId", stateServiceUserId);
+    if (userId == null || userId == stateServiceUserId) {
+      console.log("policyservice clear, calling this._policies.next", this._policies);
       this._policies.next([]);
     }
     await this.stateService.setDecryptedPolicies(null, { userId: userId });

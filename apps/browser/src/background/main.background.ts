@@ -643,6 +643,7 @@ export default class MainBackground {
       this.vaultFilterService.clear(),
     ]);
 
+    console.log("logout waited on clears");
     await this.stateService.clean({ userId: userId });
 
     if (userId == null || userId === (await this.stateService.getUserId())) {

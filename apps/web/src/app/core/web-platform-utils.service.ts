@@ -87,8 +87,8 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     return false;
   }
 
-  isViewOpen(): Promise<boolean> {
-    return Promise.resolve(false);
+  isViewOpen(): boolean {
+    return false;
   }
 
   launchUri(uri: string, options?: any): void {

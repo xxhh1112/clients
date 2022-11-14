@@ -1,3 +1,5 @@
+import { filter, interval, map, Observable } from "rxjs";
+
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
@@ -15,6 +17,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     { tryResolve: (canceled: boolean, password: string) => Promise<boolean>; date: Date }
   >();
   private deviceCache: DeviceType = null;
+  popupClosed$: Observable<void>;
 
   constructor(
     private messagingService: MessagingService,
@@ -118,8 +121,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return false;
   }
 
-  async isViewOpen(): Promise<boolean> {
-    if (await BrowserApi.isPopupOpen()) {
+  isViewOpen(): boolean {
+    if (BrowserApi.isPopupOpen()) {
       return true;
     }
 

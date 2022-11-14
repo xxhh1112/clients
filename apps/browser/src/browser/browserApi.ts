@@ -1,3 +1,5 @@
+import { fromEvent } from "rxjs";
+
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { TabMessage } from "../types/tab-messages";
 
@@ -118,8 +120,8 @@ export class BrowserApi {
     return chrome.runtime.getManifest().version;
   }
 
-  static async isPopupOpen(): Promise<boolean> {
-    return Promise.resolve(chrome.extension.getViews({ type: "popup" }).length > 0);
+  static isPopupOpen(): boolean {
+    return chrome.extension.getViews({ type: "popup" }).length > 0;
   }
 
   static createNewTab(url: string, extensionPage = false, active = true) {
@@ -234,5 +236,9 @@ export class BrowserApi {
       : typeof win.opr !== "undefined" && win.opr.sidebarAction
       ? win.opr.sidebarAction
       : win.chrome.sidebarAction;
+  }
+
+  static popupClosed$(win: Window) {
+    return fromEvent(win, "beforeUnload");
   }
 }

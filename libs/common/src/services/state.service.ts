@@ -175,7 +175,6 @@ export class StateService<
     await this.scaffoldNewAccountStorage(account);
     await this.setLastActive(new Date().getTime(), { userId: account.profile.userId });
     await this.setActiveUser(account.profile.userId);
-    this.activeAccountSubject.next(account.profile.userId);
   }
 
   async setActiveUser(userId: string): Promise<void> {

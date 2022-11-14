@@ -75,8 +75,8 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
     return isMacAppStore();
   }
 
-  isViewOpen(): Promise<boolean> {
-    return Promise.resolve(false);
+  isViewOpen(): boolean {
+    return false;
   }
 
   launchUri(uri: string, options?: any): void {

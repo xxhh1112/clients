@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from "@angular/core";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -15,7 +15,7 @@ import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
   selector: "app-vault-bulk-share",
   templateUrl: "bulk-share.component.html",
 })
-export class BulkShareComponent implements OnInit {
+export class BulkShareComponent implements OnInit, OnDestroy {
   @Input() ciphers: CipherView[] = [];
   @Input() organizationId: string;
   @Output() onShared = new EventEmitter();
