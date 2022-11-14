@@ -19,6 +19,7 @@ const DefaultOptions = {
   catchallType: "random",
   forwardedService: "simplelogin",
   forwardedAnonAddyDomain: "anonaddy.me",
+  forwardedAnonAddyBaseUrl: "https://app.anonaddy.com",
 };
 
 export class UsernameGenerationService implements BaseUsernameGenerationService {
@@ -125,6 +126,7 @@ export class UsernameGenerationService implements BaseUsernameGenerationService 
       forwarder = new AnonAddyForwarder();
       forwarderOptions.apiKey = o.forwardedAnonAddyApiToken;
       forwarderOptions.anonaddy.domain = o.forwardedAnonAddyDomain;
+      forwarderOptions.anonaddy.baseUrl = o.forwardedAnonAddyBaseUrl;
     } else if (o.forwardedService === "firefoxrelay") {
       forwarder = new FirefoxRelayForwarder();
       forwarderOptions.apiKey = o.forwardedFirefoxApiToken;

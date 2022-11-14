@@ -11,6 +11,10 @@ export class AnonAddyForwarder implements Forwarder {
     if (options.anonaddy?.domain == null || options.anonaddy.domain === "") {
       throw "Invalid AnonAddy domain.";
     }
+    if (options.anonaddy?.baseUrl == null || options.anonaddy.baseUrl === "") {
+      throw "Invalid AnonAddy url.";
+    }
+
     const requestInit: RequestInit = {
       redirect: "manual",
       cache: "no-store",
@@ -20,7 +24,9 @@ export class AnonAddyForwarder implements Forwarder {
         "Content-Type": "application/json",
       }),
     };
-    const url = "https://app.anonaddy.com/api/v1/aliases";
+
+    const url = options.anonaddy.baseUrl + "/api/v1/aliases";
+
     requestInit.body = JSON.stringify({
       domain: options.anonaddy.domain,
       description:

@@ -11,4 +11,5 @@ export class FastmailForwarderOptions {
 
 export class AnonAddyForwarderOptions {
   domain: string;
+  baseUrl: string;
 }

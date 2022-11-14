@@ -382,6 +382,16 @@
               (blur)="saveUsernameOptions()"
             />
           </div>
+          <div class="box-content-row" appBoxRow>
+            <label for="anonaddy-baseUrl">{{ "baseUrl" | i18n }}</label>
+            <input
+              id="anonaddy-baseUrl"
+              type="text"
+              name="AnonAddyDomain"
+              [(ngModel)]="usernameOptions.forwardedAnonAddyBaseUrl"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
         </ng-container>
         <ng-container *ngIf="usernameOptions.forwardedService === 'firefoxrelay'">
           <div class="box-content-row" appBoxRow>
