@@ -1,4 +1,4 @@
-<app-callout type="info" *ngIf="vaultTimeoutPolicy$ | async">
+<app-callout type="info" *ngIf="vaultTimeoutPolicy">
   {{ "vaultTimeoutPolicyInEffect" | i18n: vaultTimeoutPolicyHours:vaultTimeoutPolicyMinutes }}
 </app-callout>
 

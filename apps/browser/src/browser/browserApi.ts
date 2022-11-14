@@ -1,5 +1,3 @@
-import { fromEvent } from "rxjs";
-
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { TabMessage } from "../types/tab-messages";
 
@@ -236,9 +234,5 @@ export class BrowserApi {
       : typeof win.opr !== "undefined" && win.opr.sidebarAction
       ? win.opr.sidebarAction
       : win.chrome.sidebarAction;
-  }
-
-  static popupClosed$(win: Window) {
-    return fromEvent(win, "beforeUnload");
   }
 }
