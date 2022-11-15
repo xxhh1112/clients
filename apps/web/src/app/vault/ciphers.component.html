@@ -1,7 +1,6 @@
 <ng-container>
   <bit-table
     *ngIf="filteredCiphers.length || filteredCollections?.length"
-    class="!tw-table-fixed"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
@@ -75,7 +74,7 @@
       <tr bitRow *ngFor="let col of filteredCollections">
         <td bitCell class="tw-w-10" (click)="selectRow(col)">
           <input
-            *ngIf="organization && col.node.name !== 'Unassigned'"
+            *ngIf="organization && col.node.id !== null"
             class="tw-cursor-pointer"
             type="checkbox"
             [(ngModel)]="col.checked"
@@ -96,7 +95,7 @@
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
-              profileName="{{ profileName }}"
+              [profileName]="profileName"
               (onOrganizationClicked)="onOrganizationClicked(col.node.organizationId)"
             >
             </app-org-badge>
@@ -111,7 +110,7 @@
         </td>
         <td bitCell>
           <button
-            *ngIf="organization && col.node.name !== 'Unassigned'"
+            *ngIf="organization && col.node.id !== null"
             [bitMenuTriggerFor]="collectionOptions"
             size="small"
             bitIconButton="bwi-ellipsis-v"
