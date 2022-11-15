@@ -20,7 +20,7 @@ import { EventType } from "@bitwarden/common/enums/eventType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService , Icons } from "@bitwarden/components";
 
 import {
   BulkDeleteDialogResult,
@@ -65,6 +65,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   userHasPremiumAccess = false;
   organizations: Organization[] = [];
   profileName: string;
+  noItemIcon = Icons.Search;
 
   protected pageSizeLimit = 200;
   protected isAllChecked = false;
