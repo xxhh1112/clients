@@ -32,6 +32,11 @@ export default {
       url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1717%3A15868",
     },
   },
+  args: {
+    barWidth: 0,
+    type: "strength",
+    text: "Hello World",
+  },
 } as Meta;
 
 const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
@@ -39,4 +44,31 @@ const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  barWidth: 0,
+};
+
+export const _20 = Template.bind({});
+_20.args = {
+  barWidth: 20,
+};
+
+export const _40 = Template.bind({});
+_40.args = {
+  barWidth: 40,
+};
+
+export const _60 = Template.bind({});
+_60.args = {
+  barWidth: 60,
+};
+
+export const _80 = Template.bind({});
+_80.args = {
+  barWidth: 80,
+};
+
+export const Full = Template.bind({});
+Full.args = {
+  barWidth: 100,
+};
