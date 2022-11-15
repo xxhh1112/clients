@@ -1,16 +1,18 @@
-<div class="tw-flex tw-h-4 tw-overflow-hidden tw-rounded tw-bg-[#e9ecef] tw-text-xs tw-leading-[0]">
+<div
+  class="tw-flex tw-overflow-hidden tw-rounded tw-bg-[#e9ecef] tw-text-xs tw-leading-[0] {{
+    sizeClass
+  }}"
+>
   <div
-    class="tw-flex tw-flex-col tw-justify-center tw-overflow-hidden tw-text-alt2 tw-text-center tw-whitespace-nowrap tw-transition-all {{
-      color
-    }}"
+    class="tw-flex tw-flex-col tw-justify-center tw-overflow-hidden tw-whitespace-nowrap tw-text-center tw-text-contrast tw-transition-all {{
+      typeClass
+    }} "
     role="progressbar"
-    [ngStyle]="{ width: scoreWidth + '%' }"
-    attr.aria-valuenow="{{ scoreWidth }}"
     aria-valuemin="0"
     aria-valuemax="100"
+    attr.aria-valuenow="{{ barWidth }}"
+    [ngStyle]="{ width: barWidth + '%' }"
   >
-    <ng-container *ngIf="showText && text">
-      {{ text }}
-    </ng-container>
+    <ng-container *ngIf="showText && size !== 'small'">Testing</ng-container>
   </div>
 </div>
