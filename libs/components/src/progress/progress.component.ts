@@ -68,19 +68,19 @@ export class ProgressComponent implements OnChanges {
       this.scoreWidth = this.masterPasswordScore == null ? 0 : (this.masterPasswordScore + 1) * 20;
       switch (this.masterPasswordScore) {
         case 4:
-          this.color = "bg-success";
+          this.color = "tw-bg-success-500";
           this.text = this.i18nService.t("strong");
           break;
         case 3:
-          this.color = "bg-primary";
+          this.color = "tw-bg-primary-500";
           this.text = this.i18nService.t("good");
           break;
         case 2:
-          this.color = "bg-warning";
+          this.color = "tw-bg-warning-500";
           this.text = this.i18nService.t("weak");
           break;
         default:
-          this.color = "bg-danger";
+          this.color = "tw-bg-danger-500";
           this.text = this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
           break;
       }
