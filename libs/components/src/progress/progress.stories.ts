@@ -37,6 +37,7 @@ export default {
   parameters: {
     design: {
       type: "figma",
+      // TODO: Make sure this goes to the correct location in the figma file
       url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1717%3A15868",
     },
   },
@@ -51,3 +52,18 @@ const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
 
 export const Empty = Template.bind({});
 Empty.args = {};
+
+export const Weak = Template.bind({});
+Weak.args = {
+  password: "2j&$P$QC",
+};
+
+export const Good = Template.bind({});
+Good.args = {
+  password: "BF^t6%b4zV",
+};
+
+export const Strong = Template.bind({});
+Strong.args = {
+  password: "$BuA2%p7Mt#avU7J",
+};
