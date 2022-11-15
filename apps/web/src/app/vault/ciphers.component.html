@@ -1,6 +1,6 @@
 <ng-container>
   <bit-table
-    *ngIf="filteredCiphers.length || filteredCollections?.length"
+    *ngIf="filteredCiphers.length || filteredCollections.length"
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollDisabled]="!isPaging()"
@@ -283,7 +283,7 @@
       </tr>
     </ng-container>
   </bit-table>
-  <div class="no-items" *ngIf="!filteredCiphers.length && !filteredCollections?.length">
+  <div class="no-items" *ngIf="!filteredCiphers.length && !filteredCollections.length">
     <ng-container *ngIf="!loaded">
       <i
         class="bwi bwi-spinner bwi-spin text-muted"
