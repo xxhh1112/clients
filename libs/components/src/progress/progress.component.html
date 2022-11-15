@@ -5,7 +5,7 @@
 >
   <div
     class="tw-flex tw-flex-col tw-justify-center tw-overflow-hidden tw-whitespace-nowrap tw-text-center tw-text-contrast tw-transition-all {{
-      typeClass
+      bgClass
     }} "
     role="progressbar"
     aria-valuemin="0"
@@ -13,6 +13,6 @@
     attr.aria-valuenow="{{ barWidth }}"
     [ngStyle]="{ width: barWidth + '%' }"
   >
-    <ng-container *ngIf="showText && size !== 'small'">Testing</ng-container>
+    <ng-container *ngIf="showText && size !== 'small'">{{ textContent }}</ng-container>
   </div>
 </div>
