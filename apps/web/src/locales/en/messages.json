@@ -915,7 +915,7 @@
     "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "This password will be used to export and import this file."
   },
   "confirmMasterPassword": {
     "message": "Confirm master password"
