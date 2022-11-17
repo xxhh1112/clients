@@ -1578,10 +1578,6 @@
     "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden personal or organization Vault."
   },
-  "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
-  },
   "unsecuredWebsitesReport": {
     "message": "Unsecure websites"
   },
@@ -3739,12 +3735,6 @@
   },
   "ssoIdentifier": {
     "message": "SSO identifier"
-  },
-  "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
-  },
-  "ssoIdentifier": {
-    "message": "SSO Identifier"
   },
   "ssoIdentifierHint": {
     "message": "Provide this ID to your members to login with SSO."
