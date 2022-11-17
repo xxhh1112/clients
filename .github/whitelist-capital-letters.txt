@@ -36,7 +36,6 @@
 ./libs/angular/src/interfaces/selectOptions.ts
 ./libs/components/src/stories/Introduction.stories.mdx
 ./libs/common/spec/misc/logInStrategies/logIn.strategy.spec.ts
-./libs/common/spec/misc/logInStrategies/apiLogIn.strategy.spec.ts
 ./libs/common/spec/misc/logInStrategies/passwordLogIn.strategy.spec.ts
 ./libs/common/spec/misc/logInStrategies/ssoLogIn.strategy.spec.ts
 ./libs/common/spec/web/services/webCryptoFunction.service.spec.ts
@@ -60,7 +59,6 @@
 ./libs/common/spec/services/consoleLog.service.spec.ts
 ./libs/common/src/misc/logInStrategies/ssoLogin.strategy.ts
 ./libs/common/src/misc/logInStrategies/passwordLogin.strategy.ts
-./libs/common/src/misc/logInStrategies/apiLogin.strategy.ts
 ./libs/common/src/misc/logInStrategies/passwordlessLogin.strategy.ts
 ./libs/common/src/misc/logInStrategies/logIn.strategy.ts
 ./libs/common/src/misc/nodeUtils.ts
@@ -165,7 +163,6 @@
 ./libs/common/src/services/webCryptoFunction.service.ts
 ./libs/common/src/interfaces/IEncrypted.ts
 ./libs/node/spec/cli/consoleLog.service.spec.ts
-./libs/node/spec/services/nodeCryptoFunction.service.spec.ts
 ./libs/node/src/cli/models/response/baseResponse.ts
 ./libs/node/src/cli/models/response/stringResponse.ts
 ./libs/node/src/cli/models/response/fileResponse.ts
@@ -175,7 +172,6 @@
 ./libs/node/src/cli/services/consoleLog.service.ts
 ./libs/node/src/cli/services/cliPlatformUtils.service.ts
 ./libs/node/src/services/nodeApi.service.ts
-./libs/node/src/services/nodeCryptoFunction.service.ts
 ./libs/node/src/services/lowdbStorage.service.ts
 ./libs/electron/spec/services/electronLog.service.spec.ts
 ./libs/electron/src/baseMenu.ts
