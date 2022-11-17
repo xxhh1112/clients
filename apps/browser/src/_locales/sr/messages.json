@@ -2028,5 +2028,20 @@
         "example": "Jun 15, 2015"
       }
     }
+  },
+  "loginWithMasterPassword": {
+    "message": "Пријавите се са главном лозинком"
+  },
+  "loggingInAs": {
+    "message": "Пријављивање као"
+  },
+  "notYou": {
+    "message": "Нисте Ви?"
+  },
+  "newAroundHere": {
+    "message": "Нов овде?"
+  },
+  "rememberEmail": {
+    "message": "Запамти имејл"
   }
 }

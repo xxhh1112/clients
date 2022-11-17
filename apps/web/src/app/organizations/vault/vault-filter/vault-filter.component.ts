@@ -24,7 +24,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
     }
   }
   _organization: Organization;
-  destroy$: Subject<void>;
+  protected destroy$: Subject<void>;
 
   async ngOnInit() {
     this.filters = await this.buildAllFilters();

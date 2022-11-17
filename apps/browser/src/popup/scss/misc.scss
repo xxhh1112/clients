@@ -132,7 +132,12 @@ p.lead {
 }
 
 .img-rounded {
-  border-radius: 6px;
+  border-radius: $border-radius;
+}
+
+.select-index-top {
+  position: relative;
+  z-index: 100;
 }
 
 .sr-only {
@@ -439,4 +444,8 @@ app-vault-view .box-footer {
 }
 html.force_redraw {
   animation: redraw 1s linear infinite;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
 }

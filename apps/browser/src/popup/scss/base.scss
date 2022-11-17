@@ -98,6 +98,25 @@ button {
   font-family: $font-family-sans-serif;
 }
 
+input[type*="date"] {
+  @include themify($themes) {
+    color-scheme: themed("dateInputColorScheme");
+  }
+}
+
+::-webkit-calendar-picker-indicator {
+  @include themify($themes) {
+    filter: themed("webkitCalendarPickerFilter");
+  }
+}
+
+::-webkit-calendar-picker-indicator:hover {
+  @include themify($themes) {
+    filter: themed("webkitCalendarPickerHoverFilter");
+  }
+  cursor: pointer;
+}
+
 select {
   width: 100%;
   padding: 0.35rem;
@@ -174,6 +193,11 @@ header {
 
   .right {
     justify-content: flex-end;
+    align-items: center;
+    app-avatar {
+      max-height: 30px;
+      margin-right: 5px;
+    }
   }
 
   .center {
@@ -181,6 +205,10 @@ header {
     align-items: center;
     text-align: center;
     min-width: 0;
+  }
+
+  .login-center {
+    margin: auto;
   }
 
   app-pop-out > button,
@@ -193,6 +221,7 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    height: 100%;
 
     @include themify($themes) {
       color: themed("headerColor");
@@ -287,6 +316,14 @@ header {
   .search + .right {
     margin-left: -10px;
   }
+}
+
+.no-bg {
+  background-color: transparent;
+}
+
+.no-pad {
+  padding: 0 !important;
 }
 
 .content {
@@ -429,6 +466,19 @@ main {
   main {
     bottom: 55px;
   }
+
+  [type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    mask-image: url("../images/close-button-white.svg");
+    -webkit-mask-image: url("../images/close-button-white.svg");
+    @include themify($themes) {
+      background-color: themed("headerInputColor");
+    }
+  }
 }
 
 .center-content,
@@ -482,11 +532,14 @@ main {
   padding-left: 7px;
   .org-filter {
     @include themify($themes) {
-      background-color: themed("backgroundColor");
+      background-color: themed("buttonBackgroundColor");
     }
-    border: 1px solid;
-    padding: 7px;
     border-radius: $border-radius;
+    padding: 6px 10px;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 .vault-select {

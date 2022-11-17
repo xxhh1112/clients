@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Prihlásenie pomocou zariadenia musí byť povolené v nastaveniach mobilnej aplikácie Biwarden. Potrebujete inú možnosť?"
   },
+  "loginWithMasterPassword": {
+    "message": "Prihlásenie pomocou hlavného hesla"
+  },
   "createAccount": {
     "message": "Vytvoriť účet"
   },
@@ -1235,13 +1238,6 @@
   "faviconDesc": {
     "message": "Pri každom prihlásení zobraziť rozpoznateľný obrázok."
   },
-  "enableGravatars": {
-    "message": "Zobraziť Gravatary",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Použiť avatar obrázky načítané z gravatar.com."
-  },
   "enableFullWidth": {
     "message": "Zapnúť vzhľad na celú šírku strany",
     "description": "Allows scaling the web vault UI's width"
@@ -1294,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Dvojstupňové prihlásenie"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Vynútenie dvojstupňového prihlásenia"
+  },
   "twoStepLoginDesc": {
     "message": "Zabezpečte svoj účet požadovaním ďalšieho kroku pri prihlasovaní."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Vynúťte dvojstupňové prihlásenie pre členov organizácie nastavením poskytovateľov na úrovni organizácie."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Vynútiť Bitwarden dvojstupňové prihlásenie pre členov použitím ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Pravidlá dvojstupňového prihlásenia"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Pre vynútenie dvojstupňového prihlásenia cez Duo, použite voľby nižšie."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Ak už máte alebo plánujete nastaviť SSO, dvojstupňové prihlásenie môže už byť vynútené vaším poskytovateľom identity."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Zapnutie dvojstupňového prihlásenia vás môže natrvalo vymknúť z vášho Bitwarden účtu. Záchranný kód umožňuje prístup k vášmu kontu v prípade že už nemôžete použiť svoj normálny dvojstupňový spôsob overenia. (napríklad ak stratíte zariadenie) Zákaznícka podpora nebude schopná pomôcť vám ak stratíte prístup k účtu. Preto vám odporúčame zapísať si, alebo si vytlačiť záchranný kód a uložiť ho na bezpečnom mieste."
@@ -1546,6 +1555,10 @@
   "reportsDesc": {
     "message": "Identifikujte a opravte bezpečnostné nedostatky kliknutím na reporty nižšie.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identifikujte a opravte bezpečnostné nedostatky vo vašej organizácii kliknutím na reporty nižšie.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Nezabezpečené stránky"
@@ -2583,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Zobrazené číslo karty položky $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Zobrazený bezpečnostný kód položky $ID$.",
     "placeholders": {
@@ -2994,6 +3016,9 @@
   "myOrganization": {
     "message": "Moja organizácia"
   },
+  "organizationInfo": {
+    "message": "Informácie o organizácii"
+  },
   "deleteOrganization": {
     "message": "Odstrániť organizáciu"
   },
@@ -3187,7 +3212,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "Your subscription allows for a total of $COUNT$ users. Your plan is sponsored and billed to an external organization.",
+    "message": "Your subscription allows for a total of $COUNT$ members. Your plan is sponsored and billed to an external organization.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3667,7 +3692,7 @@
     "message": "Identifikátor organizácie"
   },
   "ssoLogInWithOrgIdentifier": {
-    "message": "Prihláste sa prostredníctvom jednotného prihlasovania (SSO) vašej organizácie. Najskôr zadajte identifikátor vašej organizácie."
+    "message": "Prihláste sa prostredníctvom jednotného prihlásenie (SSO) vašej organizácie. Najskôr zadajte identifikátor vašej organizácie."
   },
   "enterpriseSingleSignOn": {
     "message": "Jednotné prihlásenie pre podniky (SSO)"
@@ -3689,6 +3714,12 @@
   },
   "ssoIdentifierRequired": {
     "message": "Pole identifikátora organizácie je povinné."
+  },
+  "ssoIdentifier": {
+    "message": "SSO identifikátor"
+  },
+  "ssoIdentifierHint": {
+    "message": "Poskytnite toto ID vaším členom pre prihlásenie prostredníctvom SSO."
   },
   "unlinkSso": {
     "message": "Odpojiť SSO"
@@ -4090,6 +4121,9 @@
   },
   "permissions": {
     "message": "Povolenia"
+  },
+  "permission": {
+    "message": "Oprávnenie"
   },
   "managerPermissions": {
     "message": "Oprávnenia manažéra"
@@ -4495,6 +4529,10 @@
   },
   "clients": {
     "message": "Klienti"
+  },
+  "client": {
+    "message": "Klient",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Správca poskytovateľa"
@@ -5380,6 +5418,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Nemôžete zadať viac než $COUNT$ znakov.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "Niektoré polia ($COUNT$) vyžadujú vašu pozornosť.",
     "placeholders": {
@@ -5395,11 +5442,23 @@
   "on": {
     "message": "Zapnuté"
   },
+  "members": {
+    "message": "Členovia"
+  },
+  "reporting": {
+    "message": "Reportuje"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Počet používateľov"
+  },
+  "loggingInAs": {
+    "message": "Prihlasujete sa ako"
+  },
+  "notYou": {
+    "message": "Nie ste to vy?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Začnite písať pre filtrovanie --"
@@ -5412,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "Vyčistiť všetko"
+  },
+  "from": {
+    "message": "Od"
+  },
+  "to": {
+    "message": "Do"
+  },
+  "member": {
+    "message": "Člen"
+  },
+  "update": {
+    "message": "Aktualizovať"
+  },
+  "role": {
+    "message": "Rola"
+  },
+  "canView": {
+    "message": "Môže zobraziť"
+  },
+  "canViewExceptPass": {
+    "message": "Môže zobraziť okrem hesiel"
+  },
+  "canEdit": {
+    "message": "Môže upraviť"
+  },
+  "canEditExceptPass": {
+    "message": "Môže upravovať okrem hesiel"
+  },
+  "group": {
+    "message": "Skupina"
+  },
+  "groupAccessAll": {
+    "message": "Táto skupina môže upravovať a pristupovať k všetkým položkám."
+  },
+  "memberAccessAll": {
+    "message": "Tento člen môže upravovať a pristupovať k všetkým položkám."
   }
 }
