@@ -1,6 +1,6 @@
 import { ImportResult } from "../models/domain/import-result";
 
-import { BaseImporter } from "./baseImporter";
+import { BaseImporter } from "./base-importer";
 import { Importer } from "./importer";
 
 export class ChromeCsvImporter extends BaseImporter implements Importer {

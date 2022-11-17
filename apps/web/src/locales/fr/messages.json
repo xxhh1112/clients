@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "La connexion avec l'appareil doit être activée dans les paramètres de l'application mobile Bitwarden. Avez-vous besoin d'une autre option?"
   },
+  "loginWithMasterPassword": {
+    "message": "Connectez-vous avec le mot de passe maître"
+  },
   "createAccount": {
     "message": "Créer un compte"
   },
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Identification en deux étapes"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Imposition de la Connexion en Deux Étapes"
+  },
   "twoStepLoginDesc": {
     "message": "Sécuriser votre compte en exigeant une étape supplémentaire lors de la connexion."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Exigez une connexion en deux étapes pour les utilisateurs de votre organisation en configurant les services au niveau de l'organisation."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Imposer les options de la Connexion en 2 Étapes aux membres en utilisant le ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Politique de Connexion en 2 Étapes"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Pour imposer la Connexion en 2 Étapes via Duo, utilisez les options ci-dessous."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Si vous avez configuré SSO ou planifié le faire, la Connexion en 2 Étapes peut déjà être imposée via votre Fournisseur d'Identité."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Activer la connexion en deux étapes peut vous empêcher définitivement d'accéder à votre compte Bitwarden. Un code de récupération vous permet d'accéder à votre compte dans le cas où vous ne pouvez plus utiliser votre service de connexion en deux étapes habituel (ex. vous perdez votre appareil). Le support Bitwarden ne pourra pas vous aider si vous perdez l'accès à votre compte. Nous vous recommandons d'écrire ou d'imprimer le code de récupération et de le conserver en lieu sûr."
@@ -1540,6 +1556,10 @@
     "message": "Identifiez et fermez les trous de sécurité dans vos comptes en ligne en cliquant sur les rapports ci-dessous.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
+  "orgsReportsDesc": {
+    "message": "Identifiez et fermez les trous de sécurité dans les comptes de votre organisation en cliquant sur les rapports ci-dessous.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+  },
   "unsecuredWebsitesReport": {
     "message": "Rapport sur les sites web non sécurisés"
   },
@@ -1571,7 +1591,7 @@
     "message": "Identifiants sans 2FA trouvés"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Nous avons trouvé $COUNT$ site(s) web dans votre coffre qui peuvent ne pas être configurés avec une connexion en deux étapes (selon 2fa. Pour protéger davantage ces comptes, vous devez configurer une connexion en deux étapes.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Numéro de Carte visionné pour l'article $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Le code de sécurité de l’élément $ID$ a été consulté.",
     "placeholders": {
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Mon organisation"
+  },
+  "organizationInfo": {
+    "message": "Informations sur l'Organisation"
   },
   "deleteOrganization": {
     "message": "Supprimer l'organisation"
@@ -3683,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "L'identifiant de l'organisation est requis."
   },
+  "ssoIdentifier": {
+    "message": "Identifiant SSO"
+  },
+  "ssoIdentifierHint": {
+    "message": "Fournissez cet ID à vos membres pour se connecter avec SSO."
+  },
   "unlinkSso": {
     "message": "Délier SSO"
   },
@@ -4083,6 +4121,9 @@
   },
   "permissions": {
     "message": "Permissions"
+  },
+  "permission": {
+    "message": "Permission"
   },
   "managerPermissions": {
     "message": "Permissions du Gestionnaire"
@@ -4488,6 +4529,10 @@
   },
   "clients": {
     "message": "Clients"
+  },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Administrateur du fournisseur"
@@ -5373,6 +5418,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "L'entrée ne doit pas dépasser $COUNT$ caractères de long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ champ(s) ci-dessus nécessitent votre attention.",
     "placeholders": {
@@ -5388,11 +5442,23 @@
   "on": {
     "message": "Activé"
   },
+  "members": {
+    "message": "Membres"
+  },
+  "reporting": {
+    "message": "Compte Rendu"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Nombre d’utilisateurs"
+  },
+  "loggingInAs": {
+    "message": "Connexion en tant que"
+  },
+  "notYou": {
+    "message": "Ce n'est pas vous ?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Tapez pour Filtrer --"
@@ -5405,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "Effacer tout"
+  },
+  "from": {
+    "message": "De"
+  },
+  "to": {
+    "message": "À"
+  },
+  "member": {
+    "message": "Membre"
+  },
+  "update": {
+    "message": "Mis à jour"
+  },
+  "role": {
+    "message": "Rôle"
+  },
+  "canView": {
+    "message": "Peut voir"
+  },
+  "canViewExceptPass": {
+    "message": "Peut voir, sauf les mots de passe"
+  },
+  "canEdit": {
+    "message": "Peut modifier"
+  },
+  "canEditExceptPass": {
+    "message": "Peut modifier, sauf les mots de passe"
+  },
+  "group": {
+    "message": "Groupe"
+  },
+  "groupAccessAll": {
+    "message": "Ce groupe peut accéder et modifier tous les éléments."
+  },
+  "memberAccessAll": {
+    "message": "Ce groupe peut voir et modifier tous les éléments."
   }
 }
