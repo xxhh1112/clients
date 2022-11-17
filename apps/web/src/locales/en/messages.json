@@ -5430,6 +5430,12 @@
   "deleteSecrets":{
     "message": "Delete Secrets"
   },
+  "secretProjectAssociationDescription" :{
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects" :{
+    "message": "Type or select Projects"
+  },
   "project":{
     "message": "Project"
   },

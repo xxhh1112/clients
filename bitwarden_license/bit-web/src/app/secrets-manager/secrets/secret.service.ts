@@ -33,7 +33,8 @@ export class SecretService {
 
   async getBySecretId(secretId: string): Promise<SecretView> {
     const r = await this.apiService.send("GET", "/secrets/" + secretId, null, true, true);
-    const secretResponse = new SecretResponse(r);
+    const secretResponse = new SecretResponse(r); //secret needs to come back with projects info that we need
+
     return await this.createSecretView(secretResponse);
   }
 
@@ -105,7 +106,33 @@ export class SecretService {
     request.key = key.encryptedString;
     request.value = value.encryptedString;
     request.note = note.encryptedString;
+    request.projectIds = await this.getProjectIds(secretView.projects);
+
     return request;
+  }
+
+  private async getProjectIds(projects: SecretProjectView[]): Promise<string[]> {
+    const projectIds: string[] = [];
+
+    projects.forEach((p) => {
+      projectIds.push(p.id);
+    });
+
+    return projectIds;
+  }
+
+  private async getSecretProjectViewList(projects: string[]): Promise<SecretProjectView[]> {
+    const secretProjectViews: SecretProjectView[] = [];
+
+    projects.forEach((p) => {
+      const spv = new SecretProjectView();
+      spv.id = p;
+      spv.name = "Temp";
+      //load up the projectName
+      secretProjectViews.push(spv);
+    });
+
+    return secretProjectViews;
   }
 
   private async createSecretView(secretResponse: SecretResponse): Promise<SecretView> {
@@ -125,6 +152,7 @@ export class SecretService {
     secretView.name = name;
     secretView.value = value;
     secretView.note = note;
+    secretView.projects = await this.getSecretProjectViewList(secretResponse.projects);
 
     return secretView;
   }
