@@ -6,7 +6,7 @@ export function nullableFactory<T extends new (...args: any) => any>(
   ...args: ConstructorParameters<T>
 ): InstanceType<T> | undefined {
   if (args[0] == null) {
-    return undefined;
+    return null;
   }
 
   return new c(...(args as any[]));
