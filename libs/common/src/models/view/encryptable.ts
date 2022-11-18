@@ -1,6 +1,17 @@
 import { CryptoService } from "../../abstractions/crypto.service";
 import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
+export function nullableFactory<T extends new (...args: any) => any>(
+  c: T,
+  ...args: ConstructorParameters<T>
+): InstanceType<T> | undefined {
+  if (args[0] == null) {
+    return undefined;
+  }
+
+  return new c(...(args as any[]));
+}
+
 /**
  * Domain model that can be decrypted using views.
  */
@@ -8,7 +19,7 @@ export interface DecryptableDomain {
   /**
    * Unique GUID for the key used to encrypt the data
    */
-  keyIdentifier(): string | null;
+  keyIdentifier: string | undefined;
 }
 
 /**
@@ -26,7 +37,7 @@ export interface Encryptable<Domain> {
   /**
    * Unique GUID for the key used to encrypt the data
    */
-  keyIdentifier(): string | null;
+  keyIdentifier: string | undefined;
 }
 
 /**

@@ -685,7 +685,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async decrypt<V, D extends DecryptableDomain>(view: Decryptable<V, D>, domain: D): Promise<V> {
-    const key = await this.getKeyFromIdentifier(domain.keyIdentifier());
+    const key = await this.getKeyFromIdentifier(domain.keyIdentifier);
 
     return view.decrypt(this, key, domain);
   }
@@ -693,7 +693,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
     view: V
   ): Promise<EncryptableDomain<V>> {
-    const key = await this.getKeyFromIdentifier(view.keyIdentifier());
+    const key = await this.getKeyFromIdentifier(view.keyIdentifier);
 
     return view.encrypt(this, key);
   }
