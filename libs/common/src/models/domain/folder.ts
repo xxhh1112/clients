@@ -1,7 +1,7 @@
 import { Jsonify } from "type-fest";
 
 import { FolderData } from "../data/folder.data";
-import { DecryptableDomain } from "../view/encryptable";
+import { DecryptableDomain, nullableFactory } from "../view/encryptable";
 
 import { EncString } from "./enc-string";
 
@@ -16,8 +16,8 @@ export class Folder implements DecryptableDomain {
     }
 
     this.id = obj.id;
-    this.name = new EncString(obj.name);
-    this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
+    this.name = nullableFactory(EncString, obj.name);
+    this.revisionDate = nullableFactory(Date, obj.revisionDate);
   }
 
   keyIdentifier(): string | null {
@@ -25,7 +25,7 @@ export class Folder implements DecryptableDomain {
   }
 
   static fromJSON(obj: Jsonify<Folder>) {
-    const revisionDate = obj.revisionDate == null ? null : new Date(obj.revisionDate);
+    const revisionDate = nullableFactory(Date, obj.revisionDate);
     return Object.assign(new Folder(), obj, { name: EncString.fromJSON(obj.name), revisionDate });
   }
 }
