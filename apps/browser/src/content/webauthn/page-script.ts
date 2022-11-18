@@ -1,3 +1,6 @@
+import { MessageType } from "./messaging/message";
+import { Messenger } from "./messaging/messenger";
+
 // eslint-disable-next-line no-console
 console.log("page-script loaded");
 
@@ -6,16 +9,17 @@ const browserCredentials = {
   get: navigator.credentials.get.bind(navigator.credentials),
 };
 
-// Intercept
+const messenger = Messenger.createInPageContext(window);
 
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
-  alert("Intercepted: create");
+  await messenger.request({
+    type: MessageType.CredentialCreationRequest,
+    rpId: options.publicKey.rp.id,
+  });
 
   return await browserCredentials.create(options);
 };
 
 navigator.credentials.get = async (options?: CredentialRequestOptions): Promise<Credential> => {
-  alert("Intercepted: get");
-
   return await browserCredentials.get(options);
 };
