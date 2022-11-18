@@ -9,6 +9,7 @@ import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitw
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
+import { Fido2Service as Fido2ServiceAbstraction } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService as InternalFolderServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
@@ -56,6 +57,7 @@ import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptog
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
 import { EventService } from "@bitwarden/common/services/event.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
+import { Fido2Service } from "@bitwarden/common/services/fido2/fido2.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
@@ -165,6 +167,7 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
+  fido2Service: Fido2ServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -460,6 +463,8 @@ export default class MainBackground {
       this.i18nService,
       this.userVerificationApiService
     );
+
+    this.fido2Service = new Fido2Service();
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =

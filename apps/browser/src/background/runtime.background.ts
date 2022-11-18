@@ -204,6 +204,13 @@ export default class RuntimeBackground {
       case "getClickedElementResponse":
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
+      case "fido2RegisterCredentialRequest":
+        BrowserApi.tabSendMessageData(
+          sender.tab,
+          "fido2RegisterCredentialResponse",
+          await this.main.fido2Service.createCredential(msg.data)
+        );
+        break;
       default:
         break;
     }

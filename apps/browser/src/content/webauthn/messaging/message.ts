@@ -1,3 +1,5 @@
+import { CredentialRegistrationParams } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
+
 export enum MessageType {
   CredentialCreationRequest,
   CredentialCreationResponse,
@@ -9,7 +11,7 @@ export enum MessageType {
 
 export type CredentialCreationRequest = {
   type: MessageType.CredentialCreationRequest;
-  rpId: string;
+  data: CredentialRegistrationParams;
 };
 
 export type CredentialCreationResponse = {

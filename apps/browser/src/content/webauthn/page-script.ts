@@ -14,7 +14,11 @@ const messenger = Messenger.createInPageContext(window);
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
   await messenger.request({
     type: MessageType.CredentialCreationRequest,
-    rpId: options.publicKey.rp.id,
+    data: {
+      rp: {
+        id: options.publicKey.rp.id,
+      },
+    },
   });
 
   return await browserCredentials.create(options);

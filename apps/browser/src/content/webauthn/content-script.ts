@@ -12,6 +12,11 @@ const messenger = Messenger.createInExtensionContext(window, chrome.runtime.conn
 
 messenger.addHandler(async (message) => {
   if (message.type === MessageType.CredentialCreationRequest) {
+    chrome.runtime.sendMessage({
+      command: "fido2RegisterCredentialRequest",
+      data: message.data,
+    });
+
     return {
       type: MessageType.CredentialCreationResponse,
       approved: true,
