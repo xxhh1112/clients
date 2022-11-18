@@ -1,55 +1,54 @@
 import { Component, Input } from "@angular/core";
 
-type SizeTypes = "large" | "default" | "small";
+type SizeTypes = "small" | "default" | "large";
 type ProgressTypes = "percent" | "strength";
+
+const sizeClasses: Record<SizeTypes, string> = {
+  small: "tw-h-1",
+  default: "tw-h-4",
+  large: "tw-h-6",
+};
 
 @Component({
   selector: "bit-progress",
   templateUrl: "./progress.component.html",
 })
 export class ProgressComponent {
+  @Input() barWidth = 0;
   @Input() showText = true;
   @Input() size: SizeTypes = "default";
   @Input() type: ProgressTypes = "percent";
 
-  @Input() barWidth: number;
-  @Input() text: string;
-
   get sizeClass() {
-    switch (this.size) {
-      case "small":
-        return `tw-h-1`;
-      case "large":
-        return `tw-h-6`;
-      default:
-        return `tw-h-4`;
-    }
+    return sizeClasses[this.size];
   }
 
   get bgClass() {
-    switch (this.type) {
-      case "strength":
-        if (this.barWidth <= 40) {
-          return `tw-bg-danger-500`;
-        } else if (this.barWidth <= 60) {
-          return `tw-bg-warning-500`;
-        } else if (this.barWidth <= 99) {
-          return `tw-bg-primary-500`;
-        } else {
-          return `tw-bg-success-500`;
-        }
-      default:
-        return `tw-bg-primary-500`;
+    if (this.type === "strength") {
+      if (this.barWidth <= 25) {
+        return "tw-bg-danger-500";
+      }
+      if (this.barWidth <= 50) {
+        return "tw-bg-warning-500";
+      }
+      if (this.barWidth <= 99) {
+        return "tw-bg-primary-500";
+      }
+      return "tw-bg-success-500";
     }
+    return `tw-bg-primary-500`;
   }
 
   get textContent() {
-    if (this.barWidth <= 60) {
-      return `Weak`;
-    } else if (this.barWidth <= 99) {
-      return `Good`;
-    } else {
-      return `Strong`;
+    if (this.type === "strength") {
+      if (this.barWidth <= 50) {
+        return "Weak";
+      }
+      if (this.barWidth <= 99) {
+        return "Good";
+      }
+      return "Strong";
     }
+    return `${this.barWidth}%`;
   }
 }
