@@ -1,5 +1,6 @@
 ---
 name: Release CLI
+run-name: Release CLI ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -47,7 +48,7 @@ jobs:
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc-cli ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-cli" ]]; then
             echo "==================================="
             echo "[!] Can only release from the 'rc' or 'hotfix-rc-cli' branches"
             echo "==================================="
@@ -64,7 +65,8 @@ jobs:
           monorepo: true
           monorepo-project: cli
 
-      - name: Create GitHub deployment for Snap
+      - name: Create GitHub deployment
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
         id: deployment
         with:
@@ -83,7 +85,7 @@ jobs:
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
 
-      - name: Download all artifacts
+      - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -115,7 +117,7 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ success() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -123,7 +125,7 @@ jobs:
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ failure() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -168,7 +170,7 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bw_${{ env._PKG_VERSION }}_amd64.snap
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -226,7 +228,7 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bitwarden-cli.${{ env._PKG_VERSION }}.nupkg
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -276,7 +278,7 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bitwarden-cli-${{ env._PKG_VERSION }}-npm-build.zip
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:

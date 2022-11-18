@@ -9,7 +9,13 @@ export function canAccessVaultTab(org: Organization): boolean {
 }
 
 export function canAccessSettingsTab(org: Organization): boolean {
-  return org.isOwner;
+  return (
+    org.isOwner ||
+    org.canManagePolicies ||
+    org.canManageSso ||
+    org.canManageScim ||
+    org.canAccessImportExport
+  );
 }
 
 export function canAccessMembersTab(org: Organization): boolean {
@@ -48,7 +54,8 @@ export function canAccessOrgAdmin(org: Organization): boolean {
     canAccessReportingTab(org) ||
     canAccessBillingTab(org) ||
     canAccessSettingsTab(org) ||
-    canAccessVaultTab(org)
+    canAccessVaultTab(org) ||
+    canAccessManageTab(org)
   );
 }
 
@@ -68,6 +75,11 @@ export abstract class OrganizationService {
   get: (id: string) => Organization;
   getByIdentifier: (identifier: string) => Organization;
   getAll: (userId?: string) => Promise<Organization[]>;
+  /**
+   * @deprecated For the CLI only
+   * @param id id of the organization
+   */
+  getFromState: (id: string) => Promise<Organization>;
   canManageSponsorships: () => Promise<boolean>;
   hasOrganizations: () => boolean;
 }

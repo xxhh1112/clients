@@ -1,5 +1,6 @@
 ---
 name: Release Desktop
+run-name: Release Desktop ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -47,7 +48,7 @@ jobs:
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc-desktop ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-desktop" ]]; then
             echo "==================================="
             echo "[!] Can only release from the 'rc' or 'hotfix-rc-desktop' branches"
             echo "==================================="
@@ -82,6 +83,7 @@ jobs:
           esac
 
       - name: Create GitHub deployment
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
         id: deployment
         with:
@@ -118,7 +120,7 @@ jobs:
           branch: ${{ github.ref_name }}
           path: apps/desktop/artifacts
 
-      - name: Download all artifacts
+      - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -210,7 +212,7 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ success() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -218,7 +220,7 @@ jobs:
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ failure() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -267,7 +269,7 @@ jobs:
           artifacts: bitwarden_${{ env._PKG_VERSION }}_amd64.snap
           path: apps/desktop/dist
 
-      - name: Download Snap artifact
+      - name: Dry Run - Download Snap artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
@@ -333,7 +335,7 @@ jobs:
           artifacts: bitwarden.${{ env._PKG_VERSION }}.nupkg
           path: apps/desktop/dist
 
-      - name: Download choco artifact
+      - name: Dry Run - Download choco artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:

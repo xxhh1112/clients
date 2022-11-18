@@ -1000,7 +1000,7 @@
     }
   },
   "restartToUpdate": {
-    "message": "Käynnistä Bitwarden uudelleen päivittääksesi"
+    "message": "Käynnistä Bitwarden uudelleen päivittääksesi sen"
   },
   "restartToUpdateDesc": {
     "message": "Versio $VERSION_NUM$ on valmis asennettavaksi. Sovellus tulee käynnistää uudelleen, jotta asennus voidaan suorittaa loppuun. Haluatko käynnistää sovelluksen uudelleen ja päivittää nyt?",
@@ -1563,7 +1563,7 @@
     "message": "Uusi pääsalasanasi ei täytä käytännön määrittämiä vaatimuksia."
   },
   "acceptPolicies": {
-    "message": "Valitsemalla tämän ruudun hyväksyt seuraavat:"
+    "message": "Valitsemalla tämän hyväksyt seuraavat:"
   },
   "acceptPoliciesRequired": {
     "message": "Palveluehtoja ja tietosuojakäytäntöä ei ole vahvistettu."
