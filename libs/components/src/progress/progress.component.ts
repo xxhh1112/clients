@@ -1,5 +1,7 @@
 import { Component, Input } from "@angular/core";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+
 type SizeTypes = "small" | "default" | "large";
 type ProgressTypes = "percent" | "strength";
 
@@ -18,6 +20,8 @@ export class ProgressComponent {
   @Input() showText = true;
   @Input() size: SizeTypes = "default";
   @Input() type: ProgressTypes = "percent";
+
+  constructor(private i18nService: I18nService) {}
 
   get sizeClass() {
     return sizeClasses[this.size];
@@ -42,12 +46,12 @@ export class ProgressComponent {
   get textContent() {
     if (this.type === "strength") {
       if (this.barWidth <= 50) {
-        return "Weak";
+        return this.i18nService.t("weak");
       }
       if (this.barWidth <= 99) {
-        return "Good";
+        return this.i18nService.t("good");
       }
-      return "Strong";
+      return this.i18nService.t("strong");
     }
     return `${this.barWidth}%`;
   }
