@@ -16,9 +16,9 @@ export default {
           provide: I18nService,
           useFactory: () => {
             return new I18nMockService({
-              strong: "strong",
-              good: "good",
-              weak: "weak",
+              weak: "Weak",
+              good: "Good",
+              strong: "Strong",
             });
           },
         },
