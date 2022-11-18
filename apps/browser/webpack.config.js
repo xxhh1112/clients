@@ -141,6 +141,8 @@ const mainConfig = {
     "content/notificationBar": "./src/content/notificationBar.ts",
     "content/contextMenuHandler": "./src/content/contextMenuHandler.ts",
     "content/message_handler": "./src/content/message_handler.ts",
+    "content/webauthn/content-script": "./src/content/webauthn/content-script.ts",
+    "content/webauthn/page-script": "./src/content/webauthn/page-script.ts",
     "notification/bar": "./src/notification/bar.js",
     "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
   },
