@@ -19,7 +19,7 @@ export interface DecryptableDomain {
   /**
    * Unique GUID for the key used to encrypt the data
    */
-  keyIdentifier: string | undefined;
+  keyIdentifier(): string | null;
 }
 
 /**
@@ -37,7 +37,7 @@ export interface Encryptable<Domain> {
   /**
    * Unique GUID for the key used to encrypt the data
    */
-  keyIdentifier: string | undefined;
+  keyIdentifier(): string | null;
 }
 
 /**

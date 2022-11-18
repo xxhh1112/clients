@@ -20,8 +20,8 @@ export class Folder implements DecryptableDomain {
     this.revisionDate = nullableFactory(Date, obj.revisionDate);
   }
 
-  get keyIdentifier(): string | undefined {
-    return undefined;
+  keyIdentifier(): string | null {
+    return null;
   }
 
   static fromJSON(obj: Jsonify<Folder>) {

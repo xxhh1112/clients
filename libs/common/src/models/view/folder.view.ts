@@ -12,8 +12,8 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   name: string = null;
   revisionDate: Date = null;
 
-  get keyIdentifier(): string | undefined {
-    return undefined;
+  keyIdentifier(): string | null {
+    return null;
   }
 
   async encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<Folder> {
