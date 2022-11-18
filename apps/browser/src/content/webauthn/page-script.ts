@@ -9,7 +9,7 @@ const browserCredentials = {
   get: navigator.credentials.get.bind(navigator.credentials),
 };
 
-const messenger = Messenger.createInPageContext(window);
+const messenger = Messenger.forDOMCommunication(window);
 
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
   await messenger.request({

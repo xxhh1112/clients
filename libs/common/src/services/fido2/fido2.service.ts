@@ -7,7 +7,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   createCredential(params: CredentialRegistrationParams): unknown {
     // eslint-disable-next-line no-console
     console.log("Fido2Service.registerCredential");
-    return undefined;
+    return "createCredential response";
   }
 
   assertCredential(): unknown {

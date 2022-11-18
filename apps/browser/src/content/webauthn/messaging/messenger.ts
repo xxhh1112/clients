@@ -2,7 +2,7 @@ import { concatMap, filter, firstValueFrom, Observable } from "rxjs";
 
 import { Message } from "./message";
 
-type PostMessageFunction = Window["postMessage"] | chrome.runtime.Port["postMessage"];
+type PostMessageFunction = (message: MessageWithMetadata) => void;
 
 type Channel = {
   messages$: Observable<MessageWithMetadata>;
@@ -17,22 +17,7 @@ type MessageWithMetadata = Message & { metadata: Metadata };
 // If you see this in a code review please comment on it!
 
 export class Messenger {
-  static createInPageContext(window: Window) {
-    return new Messenger({
-      postMessage: window.postMessage.bind(window),
-      messages$: new Observable((subscriber) => {
-        const eventListener = (event: MessageEvent<MessageWithMetadata>) => {
-          subscriber.next(event.data);
-        };
-
-        window.addEventListener("message", eventListener);
-
-        return () => window.removeEventListener("message", eventListener);
-      }),
-    });
-  }
-
-  static createInExtensionContext(window: Window, port: chrome.runtime.Port) {
+  static forDOMCommunication(window: Window) {
     return new Messenger({
       postMessage: window.postMessage.bind(window),
       messages$: new Observable((subscriber) => {
