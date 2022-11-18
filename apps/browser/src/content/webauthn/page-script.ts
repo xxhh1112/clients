@@ -1,3 +1,5 @@
+import { WebauthnUtils } from "../../browser/webauthn-utils";
+
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
@@ -14,11 +16,7 @@ const messenger = Messenger.forDOMCommunication(window);
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
   await messenger.request({
     type: MessageType.CredentialCreationRequest,
-    data: {
-      rp: {
-        id: options.publicKey.rp.id,
-      },
-    },
+    data: WebauthnUtils.mapCredentialCreationOptions(options, window.location.origin),
   });
 
   return await browserCredentials.create(options);
