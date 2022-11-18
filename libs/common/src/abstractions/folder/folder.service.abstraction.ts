@@ -13,6 +13,10 @@ export abstract class FolderService {
   /**
    * @deprecated Only use in CLI!
    */
+  getFromState: (id: string) => Promise<Folder>;
+  /**
+   * @deprecated Only use in CLI!
+   */
   getAllDecryptedFromState: () => Promise<FolderView[]>;
 }
 

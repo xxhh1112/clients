@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "设备登录必须在 Bitwarden 移动应用程序的设置中启用。需要其他选项吗？"
   },
+  "loginWithMasterPassword": {
+    "message": "使用主密码登录"
+  },
   "createAccount": {
     "message": "创建账户"
   },
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "两步登录"
   },
+  "twoStepLoginEnforcement": {
+    "message": "强制两步登录"
+  },
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "在组织机构层面配置提供程序，以要求你组织的用户采用两步登录。"
+  "twoStepLoginOrganizationDescStart": {
+    "message": "要强制成员使用 Bitwarden 两步登录选项，请使用 ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "两步登录策略"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "要强制 Duo 方式的两步登录，请使用下面的选项。"
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "如果您已设置或计划设置 SSO，两步登录可能已经通过您的身份提供程序强制执行了。"
   },
   "twoStepLoginRecoveryWarning": {
     "message": "启用两步登录可能会将您永久锁定在 Bitwarden 账户之外。如果您无法使用常规的两步登录提供程序（例如您丢失了设备），则可以使用恢复代码访问您的账户。如果您失去对您账户的访问，Bitwarden 支持也无法帮助您。我们建议您记下或打印恢复代码，并将其妥善保管。"
@@ -1539,6 +1555,10 @@
   "reportsDesc": {
     "message": "点击下面的报告，识别并消除您的在线账户中的安全漏洞。",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "点击下面的报告来验证和消除您组织帐户中的安全漏洞。",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "不安全的网站"
@@ -2481,19 +2501,19 @@
     "message": "网页密码库"
   },
   "loggedIn": {
-    "message": "已登录。"
+    "message": "已登录"
   },
   "changedPassword": {
-    "message": "账户密码已保存"
+    "message": "更改了帐户密码"
   },
   "enabledUpdated2fa": {
-    "message": "两步登录已保存"
+    "message": "保存了两步登录"
   },
   "disabled2fa": {
-    "message": "两步登录已停用"
+    "message": "停用了两步登录"
   },
   "recovered2fa": {
-    "message": "账户已从两步登录中恢复"
+    "message": "从两步登录中恢复了帐户。"
   },
   "failedLogin": {
     "message": "登录失败，密码不正确。"
@@ -2502,16 +2522,16 @@
     "message": "登录失败，两步登录不正确。"
   },
   "exportedVault": {
-    "message": "密码库已导出"
+    "message": "导出了密码库。"
   },
   "exportedOrganizationVault": {
-    "message": "组织密码库已导出"
+    "message": "导出了组织密码库。"
   },
   "editedOrgSettings": {
-    "message": "组织设置已保存"
+    "message": "编辑了组织设置。"
   },
   "createdItemId": {
-    "message": "已创建项目 $ID$。",
+    "message": "创建了项目 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2520,7 +2540,7 @@
     }
   },
   "editedItemId": {
-    "message": "已编辑项目 $ID$。",
+    "message": "编辑了项目 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2529,7 +2549,7 @@
     }
   },
   "deletedItemId": {
-    "message": "发送项目 $ID$ 到回收站。",
+    "message": "发送了项目 $ID$ 到回收站。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2538,7 +2558,7 @@
     }
   },
   "movedItemIdToOrg": {
-    "message": "已将项目 $ID$ 移动到组织。",
+    "message": "移动了项目 $ID$ 到组织。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "查看了项目 $ID$ 的卡号。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "查看了项目 $ID$ 的安全代码。",
     "placeholders": {
@@ -2604,7 +2633,7 @@
     }
   },
   "copiedSecurityCodeItemId": {
-    "message": "复制项目 $ID$ 的安全代码。",
+    "message": "复制了项目 $ID$ 的安全代码。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2613,7 +2642,7 @@
     }
   },
   "autofilledItemId": {
-    "message": "项目 $ID$ 已自动填充。",
+    "message": "自动填充了项目 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2862,7 +2891,7 @@
     "message": "编辑此用户隶属的群组。"
   },
   "invitedUsers": {
-    "message": "受邀用户。"
+    "message": "用户已邀请"
   },
   "resendInvitation": {
     "message": "重新发送邀请"
@@ -2871,7 +2900,7 @@
     "message": "重新发送电子邮件"
   },
   "hasBeenReinvited": {
-    "message": "已重新邀请 $USER$。",
+    "message": "已重新邀请 $USER$",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "我的组织"
+  },
+  "organizationInfo": {
+    "message": "组织信息"
   },
   "deleteOrganization": {
     "message": "删除组织"
@@ -3105,7 +3137,7 @@
     "message": "输入您的安装 ID"
   },
   "limitSubscriptionDesc": {
-    "message": "为您的订阅设置席位限制。达到此限制后，您将无法邀请新的用户。"
+    "message": "为您的订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "maxSeatLimit": {
     "message": "席位限制（可选）",
@@ -3126,7 +3158,7 @@
     "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的用户超过了您的订阅席位，您将立即收到按比例的额外用户费用。"
   },
   "subscriptionUserSeats": {
-    "message": "您的订阅一共允许 $COUNT$ 位用户。",
+    "message": "您的订阅一共允许 $COUNT$ 位成员。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3150,10 +3182,10 @@
     "message": "如需更多订阅管理的帮助，请联系客服支持。"
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
-    "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的用户超过了您的订阅席位，您将立即收到按比例的额外用户费用。"
+    "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的成员超过了您的订阅席位，您将立即收到按比例的额外成员费用。"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的用户超过了您的订阅席位，您将立即收到按比例的额外用户费用，直到达到您的 $MAX$ 席位限制。",
+    "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的成员超过了您的订阅席位，您将立即收到按比例的额外成员费用，直到达到您的 $MAX$ 席位限制。",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3162,7 +3194,7 @@
     }
   },
   "subscriptionFreePlan": {
-    "message": "如果不升级您的计划，你最多只能邀请 $COUNT$ 位用户。",
+    "message": "如果不升级您的计划，您最多只能邀请 $COUNT$ 位成员。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3171,7 +3203,7 @@
     }
   },
   "subscriptionFamiliesPlan": {
-    "message": "如果不升级您的计划，你最多只能邀请 $COUNT$ 位用户。请联系客户支持进行升级。",
+    "message": "如果不升级您的计划，您最多只能邀请 $COUNT$ 位成员。请联系客户支持进行升级。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3180,7 +3212,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "您的订阅允许总共 $COUNT$ 位用户。您的计划由一个外部组织赞助和支付费用。",
+    "message": "您的订阅允许总共 $COUNT$ 位成员。您的计划由一个外部组织赞助和支付费用。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3189,7 +3221,7 @@
     }
   },
   "subscriptionMaxReached": {
-    "message": "调整订阅将导致按比例调整您的计费总金额。如果不增加订阅席位，您将不能邀请超过 $COUNT$ 位用户。",
+    "message": "调整订阅将导致按比例调整您的计费总金额。如果不增加订阅席位，您将不能邀请超过 $COUNT$ 位成员。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3523,7 +3555,7 @@
     "message": "您的新主密码不符合策略要求。"
   },
   "minimumNumberOfWords": {
-    "message": "最少单词数"
+    "message": "单词最少个数"
   },
   "defaultType": {
     "message": "默认类型"
@@ -3681,7 +3713,13 @@
     "message": "SSO 验证失败"
   },
   "ssoIdentifierRequired": {
-    "message": "需要组织标识符。"
+    "message": "必须填写组织 SSO 标识符。"
+  },
+  "ssoIdentifier": {
+    "message": "SSO 标识符"
+  },
+  "ssoIdentifierHint": {
+    "message": "提供此 ID 给您的成员以使用 SSO 登录。"
   },
   "unlinkSso": {
     "message": "取消链接 SSO"
@@ -4028,7 +4066,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
-    "message": "可以管理组织策略的组织用户豁免此策略的执行。"
+    "message": "可以管理组织策略的组织成员豁免此策略的执行。"
   },
   "sendDisabled": {
     "message": "Send 已禁用",
@@ -4047,7 +4085,7 @@
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
-    "message": "可以管理组织策略的组织用户豁免此策略的执行。"
+    "message": "可以管理组织策略的组织成员豁免此策略的执行。"
   },
   "disableHideEmail": {
     "message": "在创建或编辑 Send 时，始终向收件人显示成员的电子邮件地址。",
@@ -4082,6 +4120,9 @@
     "message": "高级配置允许对用户权限进行更多的粒度控制。"
   },
   "permissions": {
+    "message": "权限"
+  },
+  "permission": {
     "message": "权限"
   },
   "managerPermissions": {
@@ -4283,7 +4324,7 @@
     "message": "撤销成功！"
   },
   "eventEnrollPasswordReset": {
-    "message": "用户 $ID$ 注册了密码重置协助。",
+    "message": "用户 $ID$ 注册了密码重置。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4292,7 +4333,7 @@
     }
   },
   "eventWithdrawPasswordReset": {
-    "message": "用户 $ID$ 撤销了密码重置协助。",
+    "message": "用户 $ID$ 撤销了密码重置。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4358,7 +4399,7 @@
     "message": "允许管理员重置成员的主密码。"
   },
   "resetPasswordPolicyWarning": {
-    "message": "组织中的用户自行注册或被自动注册后，管理员才能重置他们的主密码。"
+    "message": "组织中的成员自行注册或被自动注册后，管理员才能重置他们的主密码。"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自动注册"
@@ -4367,10 +4408,10 @@
     "message": "所有接受邀请的用戶，将会被自动注册密码重置，并且不允许撤销。"
   },
   "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "已经在组织中的用户将不会被注册密码重置。需要他们自行注册后，管理员才能重置他们的主密码。"
+    "message": "已经在组织中的成员将不会被注册密码重置。需要他们自行注册后，管理员才能重置他们的主密码。"
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
-    "message": "要求为新用户启用自动注册"
+    "message": "为新用户启用自动注册"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "此组织有一个企业策略，将自动为你注册密码重置。注册后将允许组织管理员更改您的主密码。"
@@ -4451,7 +4492,7 @@
     "message": "成功恢复组织的访问权限"
   },
   "bulkFilteredMessage": {
-    "message": "排除，不适用于此操作。"
+    "message": "已排除，不适用于此操作"
   },
   "fingerprint": {
     "message": "指纹"
@@ -4488,6 +4529,10 @@
   },
   "clients": {
     "message": "客户"
+  },
+  "client": {
+    "message": "客户端",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "提供商管理"
@@ -4639,7 +4684,7 @@
     "message": "您的密码库超时时间超出了您的组织设置的限制。"
   },
   "vaultCustomTimeoutMinimum": {
-    "message": "最小自定义超时为1分钟。"
+    "message": "自定义超时时间最小为 1 分钟。"
   },
   "vaultTimeoutRangeError": {
     "message": "密码库超时不在允许的范围内。"
@@ -4966,16 +5011,16 @@
     "message": "「SSO 登录和 Key Connector 解密」已启用。此策略仅适用于所有者和管理员。"
   },
   "enabledSso": {
-    "message": "SSO 已启用"
+    "message": "启用了 SSO"
   },
   "disabledSso": {
-    "message": "已禁用 SSO"
+    "message": "SSO 已停用"
   },
   "enabledKeyConnector": {
     "message": "Key Connector 已启用"
   },
   "disabledKeyConnector": {
-    "message": "Key Connector 已停用"
+    "message": "停用了 Key Connector"
   },
   "keyConnectorWarning": {
     "message": "一旦成员开始使用 Key Connector，您的组织就无法恢复为使用主密码解密。仅当您可以轻松地部署和管理密钥服务器时才继续操作。"
@@ -4990,7 +5035,7 @@
     "message": "赞助邀请已过期，您可以删除您创建的组织，以避免 7 天试用期结束时收取费用。您也可以关闭这个提示，以保留此组织并承担计费责任。"
   },
   "newFamiliesOrganization": {
-    "message": "新的家庭组织"
+    "message": "新建家庭组织"
   },
   "acceptOffer": {
     "message": "接受邀请"
@@ -5071,13 +5116,13 @@
     "message": "已失效"
   },
   "sentAwaitingSync": {
-    "message": "已发送（等待同步）"
+    "message": "已发送（正在等待同步）"
   },
   "sent": {
     "message": "发送"
   },
   "requestRemoved": {
-    "message": "已移除（等待同步）"
+    "message": "已移除（正在等待同步）"
   },
   "requested": {
     "message": "已请求"
@@ -5373,6 +5418,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "输入长度不能超过 $COUNT$ 个字符。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "上面的 $COUNT$ 个字段需要您注意。",
     "placeholders": {
@@ -5388,11 +5442,23 @@
   "on": {
     "message": "开启"
   },
+  "members": {
+    "message": "成员"
+  },
+  "reporting": {
+    "message": "报告"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "用户数量"
+  },
+  "loggingInAs": {
+    "message": "正登录为"
+  },
+  "notYou": {
+    "message": "不是你？"
   },
   "multiSelectPlaceholder": {
     "message": "-- 键入以筛选 --"
@@ -5405,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "清除全部"
+  },
+  "from": {
+    "message": "从"
+  },
+  "to": {
+    "message": "至"
+  },
+  "member": {
+    "message": "成员"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "role": {
+    "message": "角色"
+  },
+  "canView": {
+    "message": "可以查看"
+  },
+  "canViewExceptPass": {
+    "message": "除密码外，可以查看"
+  },
+  "canEdit": {
+    "message": "可以编辑"
+  },
+  "canEditExceptPass": {
+    "message": "除密码外，可以编辑"
+  },
+  "group": {
+    "message": "群组"
+  },
+  "groupAccessAll": {
+    "message": "此群组可以访问和修改所有项目。"
+  },
+  "memberAccessAll": {
+    "message": "此成员可以访问和修改所有项目。"
   }
 }

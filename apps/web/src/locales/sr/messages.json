@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Пријава помоћу уређаја мора бити омогућена у подешавањима Bitwarden апликације. Потребна је друга опција?"
   },
+  "loginWithMasterPassword": {
+    "message": "Пријавите се са главном лозинком"
+  },
   "createAccount": {
     "message": "Креирај налог"
   },
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Дво-коракна лозинка"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Two-step Login Enforcement"
+  },
   "twoStepLoginDesc": {
     "message": "Заштитите свој налог захтевањем додатног корака приликом пријављивања."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Захтевајте пријаву у два корака за кориснике ваше организације конфигурисањем добављача на нивоу организације."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Two-step Login Policy"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "To enforce Two-step Login through Duo, use the options below."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Омогућавање пријаве у два корака може вас трајно закључати са вашег Bitwarden-а налога. Код за опоравак омогућава вам приступ вашем налогу у случају да више не можете да користите свог уобичајеног добављача услуге пријављивања у два корака (нпр. ако изгубите уређај). Подршка Bitwarden-а неће вам моћи помоћи ако изгубите приступ свом налогу. Препоручујемо да запишете или одштампате код за опоравак и сачувате га на сигурном месту."
@@ -1539,6 +1555,10 @@
   "reportsDesc": {
     "message": "Идентификујте и затворите безбедносне празнине у вашим онлајн налозима кликом на извештаје у наставку.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Извештај о несигурним веб локацијама"
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Прегледан број картице за ставку $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Прогледан сигурносни код за $ID$.",
     "placeholders": {
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Моја организација"
+  },
+  "organizationInfo": {
+    "message": "Инфо о организацији"
   },
   "deleteOrganization": {
     "message": "Уклони организацију"
@@ -3683,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "Потребан је идентификатор организације."
   },
+  "ssoIdentifier": {
+    "message": "SSO identifier"
+  },
+  "ssoIdentifierHint": {
+    "message": "Provide this ID to your members to login with SSO."
+  },
   "unlinkSso": {
     "message": "Откачи SSO"
   },
@@ -4083,6 +4121,9 @@
   },
   "permissions": {
     "message": "Дозволе"
+  },
+  "permission": {
+    "message": "Дозвола"
   },
   "managerPermissions": {
     "message": "Менаџер созвола"
@@ -4488,6 +4529,10 @@
   },
   "clients": {
     "message": "Клијента"
+  },
+  "client": {
+    "message": "Клијент",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Администратор провајдера"
@@ -5373,6 +5418,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Input must not exceed $COUNT$ characters in length.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ поље(а) изнад захтевај(у) вашу пажњу.",
     "placeholders": {
@@ -5388,11 +5442,23 @@
   "on": {
     "message": "Укључено"
   },
+  "members": {
+    "message": "Чланови"
+  },
+  "reporting": {
+    "message": "Пријављивање"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Број корисника"
+  },
+  "loggingInAs": {
+    "message": "Пријављивање као"
+  },
+  "notYou": {
+    "message": "Нисте Ви?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Тип за филтрирање --"
@@ -5405,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "Обриши све"
+  },
+  "from": {
+    "message": "Од"
+  },
+  "to": {
+    "message": "За"
+  },
+  "member": {
+    "message": "Члан"
+  },
+  "update": {
+    "message": "Ажурирај"
+  },
+  "role": {
+    "message": "Улога"
+  },
+  "canView": {
+    "message": "Може прегледати"
+  },
+  "canViewExceptPass": {
+    "message": "Може видетим осим лозинке"
+  },
+  "canEdit": {
+    "message": "Може уређивати"
+  },
+  "canEditExceptPass": {
+    "message": "Ноже уређивати осим лозинке"
+  },
+  "group": {
+    "message": "Група"
+  },
+  "groupAccessAll": {
+    "message": "Ова група може приступити и изменити све ставке."
+  },
+  "memberAccessAll": {
+    "message": "Овај члан може приступити и изменити све ставке."
   }
 }

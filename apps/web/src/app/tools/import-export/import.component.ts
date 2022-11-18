@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import * as JSZip from "jszip";
-import { firstValueFrom, Subject } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -12,7 +12,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { ImportError } from "@bitwarden/common/importers/importError";
+import { ImportError } from "@bitwarden/common/importers/import-error";
 
 import { FilePasswordPromptComponent } from "./file-password-prompt.component";
 
@@ -20,21 +20,18 @@ import { FilePasswordPromptComponent } from "./file-password-prompt.component";
   selector: "app-import",
   templateUrl: "import.component.html",
 })
-export class ImportComponent implements OnInit, OnDestroy {
+export class ImportComponent implements OnInit {
   featuredImportOptions: ImportOption[];
   importOptions: ImportOption[];
   format: ImportType = null;
   fileContents: string;
+  fileSelected: File;
   formPromise: Promise<ImportError>;
   loading = false;
-  importBlockedByPolicy$ = this.policyService.policyAppliesToActiveUser$(
-    PolicyType.PersonalOwnership
-  );
+  importBlockedByPolicy = false;
 
   protected organizationId: string = null;
   protected successNavigate: any[] = ["vault"];
-
-  private destroy$ = new Subject<void>();
 
   constructor(
     protected i18nService: I18nService,
@@ -48,15 +45,14 @@ export class ImportComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.setImportOptions();
-  }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.importBlockedByPolicy = await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    );
   }
 
   async submit() {
-    if (await firstValueFrom(this.importBlockedByPolicy$)) {
+    if (this.importBlockedByPolicy) {
       this.platformUtilsService.showToast(
         "error",
         null,
@@ -182,6 +178,11 @@ export class ImportComponent implements OnInit, OnDestroy {
         ? this.i18nService.collator.compare(a.name, b.name)
         : a.name.localeCompare(b.name);
     });
+  }
+
+  setSelectedFile(event: Event) {
+    const fileInputEl = <HTMLInputElement>event.target;
+    this.fileSelected = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
   }
 
   private async error(error: Error) {

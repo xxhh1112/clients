@@ -13,14 +13,14 @@ import {
 } from "@bitwarden/common/models/response/collection.response";
 import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/list.response";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { ListResponse } from "@bitwarden/node/cli/models/response/listResponse";
 
-import { CipherResponse } from "../models/response/cipherResponse";
-import { CollectionResponse } from "../models/response/collectionResponse";
-import { FolderResponse } from "../models/response/folderResponse";
-import { OrganizationResponse } from "../models/response/organizationResponse";
-import { OrganizationUserResponse } from "../models/response/organizationUserResponse";
+import { Response } from "../models/response";
+import { CipherResponse } from "../models/response/cipher.response";
+import { CollectionResponse } from "../models/response/collection.response";
+import { FolderResponse } from "../models/response/folder.response";
+import { ListResponse } from "../models/response/list.response";
+import { OrganizationUserResponse } from "../models/response/organization-user.response";
+import { OrganizationResponse } from "../models/response/organization.response";
 import { CliUtils } from "../utils";
 
 export class ListCommand {
@@ -163,7 +163,7 @@ export class ListCommand {
     if (!Utils.isGuid(options.organizationId)) {
       return Response.badRequest("`" + options.organizationId + "` is not a GUID.");
     }
-    const organization = await this.organizationService.get(options.organizationId);
+    const organization = await this.organizationService.getFromState(options.organizationId);
     if (organization == null) {
       return Response.error("Organization not found.");
     }
@@ -196,7 +196,7 @@ export class ListCommand {
     if (!Utils.isGuid(options.organizationId)) {
       return Response.badRequest("`" + options.organizationId + "` is not a GUID.");
     }
-    const organization = await this.organizationService.get(options.organizationId);
+    const organization = await this.organizationService.getFromState(options.organizationId);
     if (organization == null) {
       return Response.error("Organization not found.");
     }

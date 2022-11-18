@@ -132,7 +132,12 @@ p.lead {
 }
 
 .img-rounded {
-  border-radius: 6px;
+  border-radius: $border-radius;
+}
+
+.select-index-top {
+  position: relative;
+  z-index: 100;
 }
 
 .sr-only {
