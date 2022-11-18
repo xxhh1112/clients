@@ -3,7 +3,7 @@ import { Component, Input } from "@angular/core";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 type SizeTypes = "small" | "default" | "large";
-type ProgressTypes = "percent" | "strength";
+type ProgressTypes = "progress" | "strength";
 
 const sizeClasses: Record<SizeTypes, string> = {
   small: "tw-h-1",
@@ -19,7 +19,7 @@ export class ProgressComponent {
   @Input() barWidth = 0;
   @Input() showText = true;
   @Input() size: SizeTypes = "default";
-  @Input() type: ProgressTypes = "percent";
+  @Input() type: ProgressTypes = "progress";
 
   constructor(private i18nService: I18nService) {}
 

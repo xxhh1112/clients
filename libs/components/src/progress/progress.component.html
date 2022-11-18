@@ -13,7 +13,8 @@
     attr.aria-valuenow="{{ barWidth }}"
     [ngStyle]="{ width: barWidth + '%' }"
   >
-    <ng-container *ngIf="showText && size !== 'small' && barWidth > 0">{{
+    <!-- Only show text if barWidth above 3%, otherwise text gets crammed or cut off -->
+    <ng-container *ngIf="showText && size !== 'small' && barWidth > 3">{{
       textContent
     }}</ng-container>
   </div>

@@ -36,7 +36,7 @@ export default {
     barWidth: 0,
     showText: true,
     size: "default",
-    type: "percent",
+    type: "progress",
   },
 } as Meta;
 
