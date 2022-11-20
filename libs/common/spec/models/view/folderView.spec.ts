@@ -27,18 +27,31 @@ describe("FolderView", () => {
     });
   });
 
-  it("Decrypt", async () => {
-    const folder = new Folder();
-    folder.id = "id";
-    folder.name = mockEnc("encName");
-    folder.revisionDate = new Date("2022-01-31T12:00:00.000Z");
+  describe("decrypt", () => {
+    it("with name", async () => {
+      const folder = new Folder();
+      folder.id = "id";
+      folder.name = mockEnc("encName");
+      folder.revisionDate = new Date("2022-01-31T12:00:00.000Z");
 
-    const view = await FolderView.decrypt(null, null, folder);
+      const view = await FolderView.decrypt(null, null, folder);
 
-    expect(view).toEqual({
-      id: "id",
-      name: "encName",
-      revisionDate: new Date("2022-01-31T12:00:00.000Z"),
+      expect(view).toEqual({
+        id: "id",
+        name: "encName",
+        revisionDate: new Date("2022-01-31T12:00:00.000Z"),
+      });
+    });
+
+    it("without name", async () => {
+      const folder = new Folder();
+      folder.id = "id";
+
+      const view = await FolderView.decrypt(null, null, folder);
+
+      expect(view).toEqual({
+        id: "id",
+      });
     });
   });
 

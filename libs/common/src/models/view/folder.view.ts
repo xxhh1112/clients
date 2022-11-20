@@ -29,8 +29,9 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   static async decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: Folder) {
     const view = new FolderView();
     view.id = model.id;
-    view.name = await model.name.decryptWithCryptoService(cryptoService, key);
     view.revisionDate = model.revisionDate;
+
+    view.name = await model.name?.decryptWithCryptoService(cryptoService, key);
 
     return view;
   }
