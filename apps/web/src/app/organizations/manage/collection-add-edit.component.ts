@@ -11,7 +11,9 @@ import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
-import { GroupResponse } from "@bitwarden/common/models/response/group.response";
+
+import { GroupServiceAbstraction } from "../services/abstractions/group";
+import { GroupView } from "../views/group.view";
 
 @Component({
   selector: "app-collection-add-edit",
@@ -31,7 +33,7 @@ export class CollectionAddEditComponent implements OnInit {
   title: string;
   name: string;
   externalId: string;
-  groups: GroupResponse[] = [];
+  groups: GroupView[] = [];
   formPromise: Promise<any>;
   deletePromise: Promise<any>;
 
@@ -39,6 +41,7 @@ export class CollectionAddEditComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private groupApiService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
@@ -51,10 +54,8 @@ export class CollectionAddEditComponent implements OnInit {
     this.accessGroups = organization.useGroups;
     this.editMode = this.loading = this.collectionId != null;
     if (this.accessGroups) {
-      const groupsResponse = await this.apiService.getGroups(this.organizationId);
-      this.groups = groupsResponse.data
-        .map((r) => r)
-        .sort(Utils.getSortFunction(this.i18nService, "name"));
+      const groupsResponse = await this.groupApiService.getAll(this.organizationId);
+      this.groups = groupsResponse.sort(Utils.getSortFunction(this.i18nService, "name"));
     }
     this.orgKey = await this.cryptoService.getOrgKey(this.organizationId);
 
@@ -97,7 +98,7 @@ export class CollectionAddEditComponent implements OnInit {
     this.loading = false;
   }
 
-  check(g: GroupResponse, select?: boolean) {
+  check(g: GroupView, select?: boolean) {
     if (g.accessAll) {
       return;
     }

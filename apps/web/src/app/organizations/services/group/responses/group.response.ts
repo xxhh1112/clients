@@ -1,5 +1,5 @@
-import { BaseResponse } from "./base.response";
-import { SelectionReadOnlyResponse } from "./selection-read-only.response";
+import { BaseResponse } from "@bitwarden/common/models/response/base.response";
+import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selection-read-only.response";
 
 export class GroupResponse extends BaseResponse {
   id: string;

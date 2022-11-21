@@ -1,8 +1,8 @@
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
-import { SelectionReadOnlyResponse } from "@bitwarden/common/models/response/selection-read-only.response";
 import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
+
+import { CollectionAccessSelectionView } from "../../views/collection-access-selection.view";
 
 /**
  * Permission options that replace/correspond with readOnly and hidePassword server fields.
@@ -75,11 +75,11 @@ export type AccessItemValue = {
 };
 
 /**
- * Converts the older SelectionReadOnly interface to one of the new CollectionPermission values
+ * Converts the CollectionAccessSelectionView interface to one of the new CollectionPermission values
  * for the dropdown in the AccessSelectorComponent
  * @param value
  */
-export const convertToPermission = (value: SelectionReadOnlyResponse) => {
+export const convertToPermission = (value: CollectionAccessSelectionView) => {
   if (value.readOnly) {
     return value.hidePasswords ? CollectionPermission.ViewExceptPass : CollectionPermission.View;
   } else {
@@ -88,16 +88,16 @@ export const convertToPermission = (value: SelectionReadOnlyResponse) => {
 };
 
 /**
- * Converts an AccessItemValue back into a SelectionReadOnly class using the CollectionPermission
+ * Converts an AccessItemValue back into a CollectionAccessView class using the CollectionPermission
  * to determine the values for `readOnly` and `hidePassword`
  * @param value
  */
-export const convertToSelectionReadOnly = (value: AccessItemValue) => {
-  return new SelectionReadOnlyRequest(
-    value.id,
-    readOnly(value.permission),
-    hidePassword(value.permission)
-  );
+export const convertToSelectionView = (value: AccessItemValue) => {
+  return new CollectionAccessSelectionView({
+    id: value.id,
+    readOnly: readOnly(value.permission),
+    hidePasswords: hidePassword(value.permission),
+  });
 };
 
 const readOnly = (perm: CollectionPermission) =>

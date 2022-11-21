@@ -2374,6 +2374,15 @@
   "deleteGroupConfirmation": {
     "message": "Are you sure you want to delete this group?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Are you sure you want to remove this user?"
   },
@@ -2390,7 +2399,7 @@
     "message": "External id"
   },
   "externalIdDesc": {
-    "message": "The external id can be used as a reference or to link this resource to an external system such as a user directory."
+    "message": "External ID is an unencrypted reference used by the Bitwarden Directory Connector or API."
   },
   "accessControl": {
     "message": "Access control"
@@ -2728,6 +2737,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Deleted $QUANTITY$ group(s).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -5502,8 +5520,47 @@
   "update": {
     "message": "Update"
   },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "editInfo": {
+    "message": "Edit Info"
+  },
+  "groupInfo": {
+    "message": "Group info"
+  },
+  "editGroupMembersDesc": {
+    "message": "Grant members access to the group's assigned collections."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Grant access to collections by adding them to this group."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Grant access to all current and future collections."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "If checked, this will replace all other collection permissions."
+  },
+  "selectMembers": {
+    "message": "Select members"
+  },
+  "selectCollections": {
+    "message": "Select collections"
+  },
   "role": {
     "message": "Role"
+  },
+  "removeMember": {
+    "message": "Remove member"
+  },
+  "collection": {
+    "message": "Collection"
   },
   "canView": {
     "message": "Can view"
@@ -5516,6 +5573,12 @@
   },
   "canEditExceptPass": {
     "message": "Can edit, except passwords"
+  },
+  "noCollectionsAdded": {
+    "message": "No collections added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
   },
   "group": {
     "message": "Group"

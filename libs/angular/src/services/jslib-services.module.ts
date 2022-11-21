@@ -2,8 +2,8 @@ import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service";
 import {
-  InternalAccountService,
   AccountService as AccountServiceAbstraction,
+  InternalAccountService,
 } from "@bitwarden/common/abstractions/account/account.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
@@ -41,8 +41,8 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import {
-  PolicyService as PolicyServiceAbstraction,
   InternalPolicyService,
+  PolicyService as PolicyServiceAbstraction,
 } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common/abstractions/provider.service";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
@@ -121,16 +121,16 @@ import { UnauthGuard } from "../guards/unauth.guard";
 
 import { BroadcasterService } from "./broadcaster.service";
 import {
-  WINDOW,
+  LOCALES_DIRECTORY,
+  LOCKED_CALLBACK,
+  LOG_MAC_FAILURES,
+  LOGOUT_CALLBACK,
   MEMORY_STORAGE,
   SECURE_STORAGE,
   STATE_FACTORY,
   STATE_SERVICE_USE_CACHE,
-  LOGOUT_CALLBACK,
-  LOCKED_CALLBACK,
-  LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
-  LOG_MAC_FAILURES,
+  WINDOW,
 } from "./injection-tokens";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
