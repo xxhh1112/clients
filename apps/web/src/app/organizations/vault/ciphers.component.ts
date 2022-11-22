@@ -16,7 +16,6 @@ import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
-import { GroupResponse } from "@bitwarden/common/models/response/group.response";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
@@ -31,6 +30,8 @@ import {
 } from "../../vault/ciphers.component";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
+import { GroupServiceAbstraction } from "../services/abstractions/group/group.service.abstraction";
+import { GroupView } from "../views/group.view";
 
 const MaxCheckedCount = 500;
 
@@ -49,7 +50,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   }
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
-  groups: GroupResponse[] = [];
+  groups: GroupView[] = [];
   accessEvents = false;
 
   protected allCiphers: CipherView[] = [];
@@ -69,6 +70,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     organizationService: OrganizationService,
     tokenService: TokenService,
     searchPipe: SearchPipe,
+    protected groupService: GroupServiceAbstraction,
     private apiService: ApiService
   ) {
     super(
@@ -94,7 +96,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
   }
 
   async changeOrganization() {
-    this.groups = (await this.apiService.getGroups(this.organization?.id)).data;
+    this.groups = await this.groupService.getAll(this.organization?.id);
     await this.loadCiphers();
     await this.reload(this.activeFilter.buildFilter());
   }

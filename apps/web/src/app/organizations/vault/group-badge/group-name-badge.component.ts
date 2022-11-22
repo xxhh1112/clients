@@ -1,7 +1,8 @@
 import { Component, Input } from "@angular/core";
 
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
-import { GroupResponse } from "@bitwarden/common/models/response/group.response";
+
+import { GroupResponse } from "../../services/group/responses/group.response";
 
 @Component({
   selector: "app-group-badge",
