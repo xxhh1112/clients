@@ -1,7 +1,10 @@
 import { Collection } from "../domain/collection";
 import { ITreeNodeObject } from "../domain/tree-node";
 import { SelectionReadOnlyRequest } from "../request/selection-read-only.request";
-import { CollectionGroupDetailsResponse } from "../response/collection.response";
+import {
+  CollectionResponse,
+  CollectionAccessDetailsResponse,
+} from "../response/collection.response";
 
 import { View } from "./view";
 
@@ -13,7 +16,7 @@ export class CollectionView implements View, ITreeNodeObject {
   readOnly: boolean = null;
   hidePasswords: boolean = null;
 
-  constructor(c?: Collection | Partial<CollectionView>) {
+  constructor(c?: Collection | CollectionResponse | Partial<CollectionView>) {
     if (!c) {
       return;
     }
@@ -32,13 +35,13 @@ export class CollectionGroupDetailsView extends CollectionView {
   groups: SelectionReadOnlyRequest[] = [];
 
   constructor(
-    c?: Collection | CollectionGroupDetailsResponse | Partial<CollectionGroupDetailsView>
+    c?: Collection | CollectionAccessDetailsResponse | Partial<CollectionGroupDetailsView>
   ) {
     super(c);
     if (!c) {
       return;
     }
-    if (c instanceof CollectionGroupDetailsResponse) {
+    if (c instanceof CollectionAccessDetailsResponse) {
       this.groups = c.groups;
     }
   }

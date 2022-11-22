@@ -596,11 +596,14 @@
   "loginOrCreateNewAccount": {
     "message": "Log in or create a new account to access your secure vault."
   },
-  "loginWithDevice" : {
+  "loginWithDevice": {
     "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
   },
   "createAccount": {
     "message": "Create account"
@@ -744,7 +747,7 @@
   "noOrganizationsList": {
     "message": "You do not belong to any organizations. Organizations allow you to securely share items with other users."
   },
-  "notificationSentDevice":{
+  "notificationSentDevice": {
     "message": "A notification has been sent to your device."
   },
   "versionNumber": {
@@ -2392,6 +2395,15 @@
   "deleteGroupConfirmation": {
     "message": "Are you sure you want to delete this group?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Are you sure you want to remove this user?"
   },
@@ -2405,10 +2417,13 @@
     "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently deactivate their account. This action cannot be undone. Do you want to proceed?"
   },
   "externalId": {
-    "message": "External id"
+    "message": "External ID"
   },
   "externalIdDesc": {
-    "message": "The external id can be used as a reference or to link this resource to an external system such as a user directory."
+    "message": "External ID is an unencrypted reference used by the Bitwarden Directory Connector and API."
+  },
+  "nestCollectionUnder": {
+    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Access control"
@@ -2430,6 +2445,12 @@
   },
   "editCollection": {
     "message": "Edit collection"
+  },
+  "collectionInfo": {
+    "message": "Collection info"
+  },
+  "access": {
+    "message": "Access"
   },
   "deleteCollectionConfirmation": {
     "message": "Are you sure you want to delete this collection?"
@@ -2540,7 +2561,7 @@
     "message": "Logged in"
   },
   "changedPassword": {
-    "message": "Account password saved"
+    "message": "Changed account password"
   },
   "enabledUpdated2fa": {
     "message": "Two-step login saved"
@@ -2549,7 +2570,7 @@
     "message": "Two-step login turned off"
   },
   "recovered2fa": {
-    "message": "Account recovered from two-step login"
+    "message": "Recovered account from two-step login."
   },
   "failedLogin": {
     "message": "Login attempt failed with incorrect password."
@@ -2561,10 +2582,10 @@
     "message": "Vault exported"
   },
   "exportedOrganizationVault": {
-    "message": "Organization vault exported"
+    "message": "Exported organization vault."
   },
   "editedOrgSettings": {
-    "message": "Organization settings saved"
+    "message": "Edited organization settings."
   },
   "createdItemId": {
     "message": "Created item $ID$.",
@@ -2629,6 +2650,15 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewedCardNumberItemId": {
+    "message": "Viewed Card Number for item $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
       }
     }
   },
@@ -2740,6 +2770,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Deleted $QUANTITY$ group(s).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -3047,7 +3086,7 @@
     "message": "My organization"
   },
   "organizationInfo": {
-    "message": "Organization Info"
+    "message": "Organization info"
   },
   "deleteOrganization": {
     "message": "Delete organization"
@@ -3722,7 +3761,7 @@
     "message": "Organization identifier"
   },
   "ssoLogInWithOrgIdentifier": {
-    "message": "Log in using your organization's single sign-on portal. Please enter your organization's identifier to begin."
+    "message": "Log in using your organization's single sign-on portal. Please enter your organization's SSO identifier to begin."
   },
   "enterpriseSingleSignOn": {
     "message": "Enterprise single sign-on"
@@ -3743,10 +3782,10 @@
     "message": "SSO validation failed"
   },
   "ssoIdentifierRequired": {
-    "message": "Organization identifier is required."
+    "message": "Organization SSO identifier is required."
   },
   "ssoIdentifier": {
-    "message": "SSO Identifier"
+    "message": "SSO identifier"
   },
   "ssoIdentifierHint": {
     "message": "Provide this ID to your members to login with SSO."
@@ -4354,7 +4393,7 @@
     "message": "Withdrawal success!"
   },
   "eventEnrollPasswordReset": {
-    "message": "User $ID$ enrolled in password reset assistance.",
+    "message": "User $ID$ enrolled in password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4363,7 +4402,7 @@
     }
   },
   "eventWithdrawPasswordReset": {
-    "message": "User $ID$ withdrew from password reset assistance.",
+    "message": "User $ID$ withdrew from password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -5448,6 +5487,15 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
   "inputMaxLength": {
     "message": "Input must not exceed $COUNT$ characters in length.",
     "placeholders": {
@@ -5484,6 +5532,12 @@
   "numberOfUsers": {
     "message": "Number of users"
   },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
   },
@@ -5508,8 +5562,44 @@
   "update": {
     "message": "Update"
   },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "editInfo": {
+    "message": "Edit Info"
+  },
+  "groupInfo": {
+    "message": "Group info"
+  },
+  "editGroupMembersDesc": {
+    "message": "Grant members access to the group's assigned collections."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Grant access to collections by adding them to this group."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Grant access to all current and future collections."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "If checked, this will replace all other collection permissions."
+  },
+  "selectCollections": {
+    "message": "Select collections"
+  },
   "role": {
     "message": "Role"
+  },
+  "removeMember": {
+    "message": "Remove member"
+  },
+  "collection": {
+    "message": "Collection"
   },
   "canView": {
     "message": "Can view"
@@ -5523,6 +5613,12 @@
   "canEditExceptPass": {
     "message": "Can edit, except passwords"
   },
+  "noCollectionsAdded": {
+    "message": "No collections added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
+  },
   "group": {
     "message": "Group"
   },
@@ -5531,5 +5627,26 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
+  },
+  "membersColumnHeader": {
+    "message": "Member/Group"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Member"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "selectMembers": {
+    "message": "Select members"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
+  },
+  "deleted": {
+    "message": "Deleted"
   }
 }

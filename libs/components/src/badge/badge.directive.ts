@@ -1,8 +1,8 @@
 import { Directive, ElementRef, HostBinding, Input } from "@angular/core";
 
-type BadgeTypes = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
+export type BadgeType = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
 
-const styles: Record<BadgeTypes, string[]> = {
+const styles: Record<BadgeType, string[]> = {
   primary: ["tw-bg-primary-500"],
   secondary: ["tw-bg-text-muted"],
   success: ["tw-bg-success-500"],
@@ -11,7 +11,7 @@ const styles: Record<BadgeTypes, string[]> = {
   info: ["tw-bg-info-500"],
 };
 
-const hoverStyles: Record<BadgeTypes, string[]> = {
+const hoverStyles: Record<BadgeType, string[]> = {
   primary: ["hover:tw-bg-primary-700"],
   secondary: ["hover:tw-bg-secondary-700"],
   success: ["hover:tw-bg-success-700"],
@@ -47,7 +47,7 @@ export class BadgeDirective {
       .concat(this.hasHoverEffects ? hoverStyles[this.badgeType] : []);
   }
 
-  @Input() badgeType: BadgeTypes = "primary";
+  @Input() badgeType: BadgeType = "primary";
 
   private hasHoverEffects = false;
 

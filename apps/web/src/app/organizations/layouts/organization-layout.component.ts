@@ -67,8 +67,4 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
   getReportTabLabel(organization: Organization): string {
     return organization.useEvents ? "reporting" : "reports";
   }
-
-  getReportRoute(organization: Organization): string {
-    return organization.useEvents ? "reporting/events" : "reporting/reports";
-  }
 }

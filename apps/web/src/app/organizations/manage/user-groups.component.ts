@@ -6,7 +6,9 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUpdateGroupsRequest } from "@bitwarden/common/models/request/organization-user-update-groups.request";
-import { GroupResponse } from "@bitwarden/common/models/response/group.response";
+
+import { GroupServiceAbstraction } from "../services/abstractions/group";
+import { GroupView } from "../views/group.view";
 
 @Component({
   selector: "app-user-groups",
@@ -19,19 +21,19 @@ export class UserGroupsComponent implements OnInit {
   @Output() onSavedUser = new EventEmitter();
 
   loading = true;
-  groups: GroupResponse[] = [];
+  groups: GroupView[] = [];
   formPromise: Promise<any>;
 
   constructor(
     private apiService: ApiService,
+    private groupApiService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService
   ) {}
 
   async ngOnInit() {
-    const groupsResponse = await this.apiService.getGroups(this.organizationId);
-    const groups = groupsResponse.data.map((r) => r);
+    const groups = await this.groupApiService.getAll(this.organizationId);
     groups.sort(Utils.getSortFunction(this.i18nService, "name"));
     this.groups = groups;
 
@@ -55,7 +57,7 @@ export class UserGroupsComponent implements OnInit {
     this.loading = false;
   }
 
-  check(g: GroupResponse, select?: boolean) {
+  check(g: GroupView, select?: boolean) {
     (g as any).checked = select == null ? !(g as any).checked : select;
     if (!(g as any).checked) {
       (g as any).readOnly = false;

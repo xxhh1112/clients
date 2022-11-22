@@ -38,8 +38,13 @@ export class VaultFilterService implements DeprecatedVaultFilterServiceAbstracti
     return new Set(await this.stateService.getCollapsedGroupings());
   }
 
-  buildOrganizations(): Promise<Organization[]> {
-    return this.organizationService.getAll();
+  async buildOrganizations(): Promise<Organization[]> {
+    let organizations = await this.organizationService.getAll();
+    if (organizations != null) {
+      organizations = organizations.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    return organizations;
   }
 
   buildNestedFolders(organizationId?: string): Observable<DynamicTreeNode<FolderView>> {

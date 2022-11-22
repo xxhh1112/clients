@@ -23,11 +23,10 @@ import { EmergencyAccessInviteRequest } from "../models/request/emergency-access
 import { EmergencyAccessPasswordRequest } from "../models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../models/request/emergency-access-update.request";
 import { EventRequest } from "../models/request/event.request";
-import { GroupRequest } from "../models/request/group.request";
 import { IapCheckRequest } from "../models/request/iap-check.request";
-import { ApiTokenRequest } from "../models/request/identity-token/api-token.request";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
+import { UserApiTokenRequest } from "../models/request/identity-token/user-api-token.request";
 import { ImportCiphersRequest } from "../models/request/import-ciphers.request";
 import { ImportOrganizationCiphersRequest } from "../models/request/import-organization-ciphers.request";
 import { KdfRequest } from "../models/request/kdf.request";
@@ -94,7 +93,7 @@ import { BillingPaymentResponse } from "../models/response/billing-payment.respo
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { CipherResponse } from "../models/response/cipher.response";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../models/response/collection.response";
 import { DeviceVerificationResponse } from "../models/response/device-verification.response";
@@ -106,7 +105,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../models/response/emergency-access.response";
 import { EventResponse } from "../models/response/event.response";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/group.response";
 import { IdentityCaptchaResponse } from "../models/response/identity-captcha.response";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
@@ -122,8 +120,8 @@ import { OrganizationUserBulkPublicKeyResponse } from "../models/response/organi
 import { OrganizationUserBulkResponse } from "../models/response/organization-user-bulk.response";
 import {
   OrganizationUserDetailsResponse,
-  OrganizationUserUserDetailsResponse,
   OrganizationUserResetPasswordDetailsReponse,
+  OrganizationUserUserDetailsResponse,
 } from "../models/response/organization-user.response";
 import { PaymentResponse } from "../models/response/payment.response";
 import { PlanResponse } from "../models/response/plan.response";
@@ -137,8 +135,8 @@ import {
 import { ProviderUserBulkPublicKeyResponse } from "../models/response/provider/provider-user-bulk-public-key.response";
 import { ProviderUserBulkResponse } from "../models/response/provider/provider-user-bulk.response";
 import {
-  ProviderUserUserDetailsResponse,
   ProviderUserResponse,
+  ProviderUserUserDetailsResponse,
 } from "../models/response/provider/provider-user.response";
 import { ProviderResponse } from "../models/response/provider/provider.response";
 import { SelectionReadOnlyResponse } from "../models/response/selection-read-only.response";
@@ -157,8 +155,8 @@ import { TwoFactorEmailResponse } from "../models/response/two-factor-email.resp
 import { TwoFactorProviderResponse } from "../models/response/two-factor-provider.response";
 import { TwoFactorRecoverResponse } from "../models/response/two-factor-recover.response";
 import {
-  TwoFactorWebAuthnResponse,
   ChallengeResponse,
+  TwoFactorWebAuthnResponse,
 } from "../models/response/two-factor-web-authn.response";
 import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
@@ -176,7 +174,7 @@ export abstract class ApiService {
   ) => Promise<any>;
 
   postIdentityToken: (
-    request: PasswordTokenRequest | SsoTokenRequest | ApiTokenRequest
+    request: PasswordTokenRequest | SsoTokenRequest | UserApiTokenRequest
   ) => Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse>;
   refreshIdentityToken: () => Promise<any>;
 
@@ -317,7 +315,7 @@ export abstract class ApiService {
   getCollectionDetails: (
     organizationId: string,
     id: string
-  ) => Promise<CollectionGroupDetailsResponse>;
+  ) => Promise<CollectionAccessDetailsResponse>;
   getUserCollections: () => Promise<ListResponse<CollectionResponse>>;
   getCollections: (organizationId: string) => Promise<ListResponse<CollectionResponse>>;
   getCollectionUsers: (organizationId: string, id: string) => Promise<SelectionReadOnlyResponse[]>;
@@ -346,13 +344,8 @@ export abstract class ApiService {
     organizationUserId: string
   ) => Promise<any>;
 
-  getGroupDetails: (organizationId: string, id: string) => Promise<GroupDetailsResponse>;
-  getGroups: (organizationId: string) => Promise<ListResponse<GroupResponse>>;
   getGroupUsers: (organizationId: string, id: string) => Promise<string[]>;
-  postGroup: (organizationId: string, request: GroupRequest) => Promise<GroupResponse>;
-  putGroup: (organizationId: string, id: string, request: GroupRequest) => Promise<GroupResponse>;
   putGroupUsers: (organizationId: string, id: string, request: string[]) => Promise<any>;
-  deleteGroup: (organizationId: string, id: string) => Promise<any>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
 
   getOrganizationUser: (
@@ -484,6 +477,7 @@ export abstract class ApiService {
   putDeviceVerificationSettings: (
     request: DeviceVerificationRequest
   ) => Promise<DeviceVerificationResponse>;
+  getKnownDevice: (email: string, deviceIdentifier: string) => Promise<boolean>;
 
   getEmergencyAccessTrusted: () => Promise<ListResponse<EmergencyAccessGranteeDetailsResponse>>;
   getEmergencyAccessGranted: () => Promise<ListResponse<EmergencyAccessGrantorDetailsResponse>>;
