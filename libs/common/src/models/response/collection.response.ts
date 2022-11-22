@@ -25,14 +25,20 @@ export class CollectionDetailsResponse extends CollectionResponse {
   }
 }
 
-export class CollectionGroupDetailsResponse extends CollectionResponse {
+export class CollectionAccessDetailsResponse extends CollectionResponse {
   groups: SelectionReadOnlyResponse[] = [];
+  users: SelectionReadOnlyResponse[] = [];
 
   constructor(response: any) {
     super(response);
     const groups = this.getResponseProperty("Groups");
     if (groups != null) {
       this.groups = groups.map((g: any) => new SelectionReadOnlyResponse(g));
+    }
+
+    const users = this.getResponseProperty("Users");
+    if (users != null) {
+      this.users = users.map((g: any) => new SelectionReadOnlyResponse(g));
     }
   }
 }

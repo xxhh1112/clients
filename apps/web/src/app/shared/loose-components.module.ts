@@ -123,7 +123,7 @@ import { FolderAddEditComponent } from "../vault/folder-add-edit.component";
 import { OrganizationBadgeModule } from "../vault/organization-badge/organization-badge.module";
 import { ShareComponent } from "../vault/share.component";
 
-import { SharedModule } from ".";
+import { SharedModule } from "./shared.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.

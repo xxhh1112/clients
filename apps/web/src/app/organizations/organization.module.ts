@@ -4,23 +4,23 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 
 import { SharedModule } from "../shared";
 
-import { AccessSelectorModule } from "./components/access-selector";
-import { CollectionAddEditComponent } from "./manage/collection-add-edit.component";
+import { CoreOrganizationModule } from "./core";
 import { GroupAddEditComponent } from "./manage/group-add-edit.component";
 import { GroupsComponent } from "./manage/groups.component";
 import { UserGroupsComponent } from "./manage/user-groups.component";
 import { OrganizationsRoutingModule } from "./organization-routing.module";
 import { GroupServiceAbstraction } from "./services/abstractions/group";
 import { GroupService } from "./services/group/group.service";
+import { SharedOrganizationModule } from "./shared";
 
 @NgModule({
-  imports: [SharedModule, AccessSelectorModule, OrganizationsRoutingModule],
-  declarations: [
-    GroupsComponent,
-    GroupAddEditComponent,
-    CollectionAddEditComponent,
-    UserGroupsComponent,
+  imports: [
+    SharedModule,
+    OrganizationsRoutingModule,
+    SharedOrganizationModule,
+    CoreOrganizationModule,
   ],
+  declarations: [GroupsComponent, GroupAddEditComponent, UserGroupsComponent],
   providers: [
     {
       provide: GroupServiceAbstraction,

@@ -100,7 +100,7 @@ import { BillingPaymentResponse } from "../models/response/billing-payment.respo
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { CipherResponse } from "../models/response/cipher.response";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../models/response/collection.response";
 import { DeviceVerificationResponse } from "../models/response/device-verification.response";
@@ -810,7 +810,7 @@ export class ApiService implements ApiServiceAbstraction {
   async getCollectionDetails(
     organizationId: string,
     id: string
-  ): Promise<CollectionGroupDetailsResponse> {
+  ): Promise<CollectionAccessDetailsResponse> {
     const r = await this.send(
       "GET",
       "/organizations/" + organizationId + "/collections/" + id + "/details",
@@ -818,7 +818,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true
     );
-    return new CollectionGroupDetailsResponse(r);
+    return new CollectionAccessDetailsResponse(r);
   }
 
   async getUserCollections(): Promise<ListResponse<CollectionResponse>> {
