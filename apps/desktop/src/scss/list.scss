@@ -3,7 +3,8 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 7.5px;
+  gap: 10px;
+  padding-right: 10px;
 }
 
 .list > button {

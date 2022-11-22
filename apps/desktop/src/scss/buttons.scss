@@ -177,29 +177,33 @@ button.no-btn {
   text-overflow: ellipsis;
 }
 
-.add-item-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  font-size: 15px;
-  font-weight: 700;
-  padding: 12px;
-  background: #52bdfb;
-  color: #fff;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
+.add-item-box {
+  padding-right: 10px;
 
-  @include themify($themes) {
-    background-color: themed("buttonPrimaryColor");
+  .add-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 12px;
+    background: #52bdfb;
+    color: #fff;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
 
-    &:hover {
-      background-color: darken(themed("buttonPrimaryColor"), 5%);
+    @include themify($themes) {
+      background-color: themed("buttonPrimaryColor");
+
+      &:hover {
+        background-color: darken(themed("buttonPrimaryColor"), 5%);
+      }
     }
-  }
 
-  .bwi {
-    font-weight: inherit;
+    .bwi {
+      font-weight: inherit;
+    }
   }
 }
