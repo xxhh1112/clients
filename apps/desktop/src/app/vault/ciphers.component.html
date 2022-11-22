@@ -54,7 +54,7 @@
       <p>{{ "noItemsInList" | i18n }}</p>
       <button (click)="addCipher()" class="btn block primary link">{{ "addItem" | i18n }}</button>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <button
         (click)="addCipher()"
         (contextmenu)="addCipherOptions()"
@@ -64,6 +64,16 @@
       >
         <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
       </button>
-    </div>
+    </div> -->
+    <button
+      (click)="addCipher()"
+      (contextmenu)="addCipherOptions()"
+      class="block add-item-btn"
+      appA11yTitle="{{ 'addItem' | i18n }}"
+      [disabled]="deleted"
+    >
+      <i class="bwi bwi-plus" aria-hidden="true"></i>
+      {{ "addItem" | i18n }}
+    </button>
   </div>
 </ng-container>
