@@ -1,5 +1,5 @@
-import { CryptoService } from "../../abstractions/crypto.service";
-import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
+import { EncryptService } from "../abstractions/encrypt.service";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 
 export function nullableFactory<T extends new (...args: any) => any>(
   c: T,
@@ -29,10 +29,10 @@ export interface Encryptable<Domain> {
   /**
    * Converts the View to a Domain model by encrypting data.
    *
-   * @param cryptoService CryptoService
+   * @param encryptService EncryptService
    * @param key Key used to encrypt the data
    */
-  encrypt(cryptoService: CryptoService, key: SymmetricCryptoKey): Promise<Domain>;
+  encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Domain>;
 
   /**
    * Unique GUID for the key used to encrypt the data
@@ -44,7 +44,7 @@ export interface Encryptable<Domain> {
  * Helper type for defining the static decrypt operation on view models.
  */
 export type Decryptable<View, Domain extends DecryptableDomain> = {
-  decrypt(cryptoService: CryptoService, key: SymmetricCryptoKey, model: Domain): View;
+  decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: Domain): View;
 };
 
 /**

@@ -1,7 +1,7 @@
 import { Jsonify } from "type-fest";
 
+import { DecryptableDomain, nullableFactory } from "../../interfaces/crypto.interface";
 import { FolderData } from "../data/folder.data";
-import { DecryptableDomain, nullableFactory } from "../view/encryptable";
 
 import { EncString } from "./enc-string";
 

@@ -7,6 +7,7 @@ import { InitializerMetadata } from "./initializer-metadata.interface";
  * corresponding view object as the type argument.
  * @example Cipher implements Decryptable<CipherView>
  */
-export interface Decryptable<TDecrypted extends InitializerMetadata> extends InitializerMetadata {
+export interface OldDecryptable<TDecrypted extends InitializerMetadata>
+  extends InitializerMetadata {
   decrypt: (key?: SymmetricCryptoKey) => Promise<TDecrypted>;
 }

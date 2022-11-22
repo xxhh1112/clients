@@ -92,7 +92,7 @@ export class FolderAddEditComponent implements OnInit {
       this.editMode = true;
       this.title = this.i18nService.t("editFolder");
       const folder = await this.folderService.get(this.folderId);
-      this.folder = await this.cryptoService.decrypt(FolderView, folder);
+      this.folder = await this.cryptoService.decryptView(FolderView, folder);
     } else {
       this.title = this.i18nService.t("addFolder");
     }

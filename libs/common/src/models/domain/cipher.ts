@@ -2,7 +2,7 @@ import { Jsonify } from "type-fest";
 
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
-import { Decryptable } from "../../interfaces/decryptable.interface";
+import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerKey } from "../../services/cryptography/initializer-key";
 import { CipherData } from "../data/cipher.data";
 import { LocalData } from "../data/local.data";
@@ -19,7 +19,7 @@ import { Password } from "./password";
 import { SecureNote } from "./secure-note";
 import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Cipher extends Domain implements Decryptable<CipherView> {
+export class Cipher extends Domain implements OldDecryptable<CipherView> {
   readonly initializerKey = InitializerKey.Cipher;
 
   id: string;

@@ -1,6 +1,6 @@
 import { Jsonify } from "type-fest";
 
-import { CryptoService } from "../../abstractions/crypto.service";
+import { EncryptService } from "../../abstractions/encrypt.service";
 import { EncryptionType } from "../../enums/encryptionType";
 import { IEncrypted } from "../../interfaces/IEncrypted";
 import { Utils } from "../../misc/utils";
@@ -162,12 +162,12 @@ export class EncString implements IEncrypted {
   }
 
   // TODO: Rename to decrypt once decrypt is removed.
-  async decryptWithCryptoService(
-    cryptoService: CryptoService,
+  async decryptWithEncryptService(
+    encryptService: EncryptService,
     key: SymmetricCryptoKey
   ): Promise<string> {
     try {
-      return cryptoService.decryptToUtf8(this, key);
+      return encryptService.decryptToUtf8(this, key);
     } catch (e) {
       return "[error: cannot decrypt]";
     }

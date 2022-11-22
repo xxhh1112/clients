@@ -10,6 +10,12 @@ import { EncryptionType } from "../enums/encryptionType";
 import { HashPurpose } from "../enums/hashPurpose";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../interfaces/crypto.interface";
 import { sequentialize } from "../misc/sequentialize";
 import { Utils } from "../misc/utils";
 import { EFFLongWordList } from "../misc/wordlist";
@@ -21,12 +27,6 @@ import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 import { ProfileOrganizationResponse } from "../models/response/profile-organization.response";
 import { ProfileProviderOrganizationResponse } from "../models/response/profile-provider-organization.response";
 import { ProfileProviderResponse } from "../models/response/profile-provider.response";
-import {
-  Decryptable,
-  DecryptableDomain,
-  Encryptable,
-  EncryptableDomain,
-} from "../models/view/encryptable";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -684,10 +684,13 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  async decrypt<V, D extends DecryptableDomain>(view: Decryptable<V, D>, domain: D): Promise<V> {
+  async decryptView<V, D extends DecryptableDomain>(
+    view: Decryptable<V, D>,
+    domain: D
+  ): Promise<V> {
     const key = await this.getKeyFromIdentifier(domain.keyIdentifier());
 
-    return view.decrypt(this, key, domain);
+    return this.encryptService.decryptView(view, domain as DecryptableDomain, key);
   }
 
   async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
@@ -695,7 +698,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<EncryptableDomain<V>> {
     const key = await this.getKeyFromIdentifier(view.keyIdentifier());
 
-    return view.encrypt(this, key);
+    return this.encryptService.encryptView(view as Encryptable<EncryptableDomain<V>>, key);
   }
 
   private async getKeyFromIdentifier(keyIdentifier: string | null): Promise<SymmetricCryptoKey> {

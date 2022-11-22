@@ -3,7 +3,13 @@ import { EncryptService } from "../../abstractions/encrypt.service";
 import { LogService } from "../../abstractions/log.service";
 import { EncryptionType } from "../../enums/encryptionType";
 import { IEncrypted } from "../../interfaces/IEncrypted";
-import { Decryptable } from "../../interfaces/decryptable.interface";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../../interfaces/crypto.interface";
+import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
 import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
@@ -151,7 +157,7 @@ export class EncryptServiceImplementation implements EncryptService {
   }
 
   async decryptItems<T extends InitializerMetadata>(
-    items: Decryptable<T>[],
+    items: OldDecryptable<T>[],
     key: SymmetricCryptoKey
   ): Promise<T[]> {
     if (items == null || items.length < 1) {
@@ -159,6 +165,21 @@ export class EncryptServiceImplementation implements EncryptService {
     }
 
     return await Promise.all(items.map((item) => item.decrypt(key)));
+  }
+
+  async decryptView<V, D extends DecryptableDomain>(
+    view: Decryptable<V, D>,
+    domain: D,
+    key: SymmetricCryptoKey
+  ): Promise<V> {
+    return view.decrypt(this, key, domain);
+  }
+
+  async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
+    view: V,
+    key: SymmetricCryptoKey
+  ): Promise<EncryptableDomain<V>> {
+    return view.encrypt(this, key);
   }
 
   private async aesEncrypt(data: ArrayBuffer, key: SymmetricCryptoKey): Promise<EncryptedObject> {

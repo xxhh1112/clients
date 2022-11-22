@@ -4,6 +4,7 @@ import { firstValueFrom } from "rxjs";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -32,7 +33,8 @@ export class UpdateKeyComponent {
     private syncService: SyncService,
     private folderService: FolderService,
     private cipherService: CipherService,
-    private logService: LogService
+    private logService: LogService,
+    private encryptService: EncryptService
   ) {}
 
   async submit() {
@@ -87,7 +89,7 @@ export class UpdateKeyComponent {
       if (folders[i].id == null) {
         continue;
       }
-      const folder = await folders[i].encrypt(this.cryptoService, encKey[0]);
+      const folder = await folders[i].encrypt(this.encryptService, encKey[0]);
       request.folders.push(new FolderWithIdRequest(folder));
     }
 

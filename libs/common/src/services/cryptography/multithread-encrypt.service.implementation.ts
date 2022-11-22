@@ -1,7 +1,7 @@
 import { defaultIfEmpty, filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
 import { Jsonify } from "type-fest";
 
-import { Decryptable } from "../../interfaces/decryptable.interface";
+import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
@@ -23,7 +23,7 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
    * This utilises multithreading to decrypt items faster without interrupting other operations (e.g. updating UI).
    */
   async decryptItems<T extends InitializerMetadata>(
-    items: Decryptable<T>[],
+    items: OldDecryptable<T>[],
     key: SymmetricCryptoKey
   ): Promise<T[]> {
     if (items == null || items.length < 1) {
