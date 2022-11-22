@@ -33,8 +33,6 @@
 
     @include themify($themes) {
       background-color: darken(themed("buttonBackgroundColor"), 4%);
-      // border-color: darken(themed("buttonBorderColor"), 17%);
-      // color: darken(themed("buttonColor"), 10%);
     }
 
     &.primary {
@@ -187,12 +185,11 @@ button.no-btn {
   width: 100%;
   font-size: 15px;
   font-weight: 700;
-  padding: 9px;
+  padding: 12px;
   background: #52bdfb;
   color: #fff;
   border-radius: 6px;
   letter-spacing: 0.5px;
-  margin-bottom: 10px;
 
   @include themify($themes) {
     background-color: themed("buttonPrimaryColor");

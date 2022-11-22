@@ -132,6 +132,9 @@ app-root {
   }
 
   .content {
+    display: flex;
+    flex-direction: column;
+    gap: 7.5px;
     flex: 1 1 auto;
     position: relative;
     overflow: auto;

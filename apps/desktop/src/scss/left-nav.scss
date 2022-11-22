@@ -191,9 +191,9 @@
     align-items: center;
     gap: 7.5px;
     width: 100%;
-    padding: 15px;
+    padding: 13px;
     border: 0;
-    border-radius: 6px 6px 0 0;
+    border-radius: 0 0 6px 6px;
 
     @include themify($themes) {
       background-color: themed("backgroundColorAlt");

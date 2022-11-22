@@ -53,7 +53,6 @@
     </div>
   </div>
   <div class="left-nav">
-    <app-nav class="nav"></app-nav>
     <app-vault-filter
       class="vault-filters"
       [activeFilter]="activeFilter"
@@ -61,6 +60,7 @@
       (onAddFolder)="addFolder()"
       (onEditFolder)="editFolder($event.id)"
     ></app-vault-filter>
+    <app-nav class="nav"></app-nav>
   </div>
 </div>
 <ng-template #generator></ng-template>
