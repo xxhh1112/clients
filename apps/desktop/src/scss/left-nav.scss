@@ -199,6 +199,12 @@
       background-color: themed("backgroundColorAlt");
     }
 
+    &:hover {
+      @include themify($themes) {
+        background-color: themed("backgroundColorAlt");
+      }
+    }
+
     &:not(.active) {
       @include themify($themes) {
         background-color: themed("backgroundColorAlt3");
