@@ -15,7 +15,7 @@ import {
   TabsModule,
 } from "@bitwarden/components";
 
-import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
+import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
 
 import { AccessSelectorComponent } from "./access-selector.component";
 import { AccessItemType, AccessItemView, CollectionPermission } from "./access-selector.models";

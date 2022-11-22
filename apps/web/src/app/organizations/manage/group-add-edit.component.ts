@@ -15,6 +15,7 @@ import { CollectionDetailsResponse } from "@bitwarden/common/models/response/col
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { DialogService } from "@bitwarden/components";
 
+import { GroupServiceAbstraction } from "../services/abstractions/group";
 import {
   AccessItemType,
   AccessItemValue,
@@ -22,8 +23,7 @@ import {
   convertToPermission,
   convertToSelectionView,
   PermissionMode,
-} from "../components/access-selector";
-import { GroupServiceAbstraction } from "../services/abstractions/group";
+} from "../shared/components/access-selector";
 import { GroupView } from "../views/group.view";
 
 /**
@@ -179,6 +179,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: GroupAddEditDialogParams,
     private dialogRef: DialogRef<GroupAddEditDialogResultType>,
     private apiService: ApiService,
+    private groupApiService: GroupServiceAbstraction,
     private groupService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private collectionService: CollectionService,
