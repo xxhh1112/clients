@@ -1,4 +1,4 @@
-import { EventType } from "../enums/eventType";
+import { EventType } from "../../enums/eventType";
 
 export abstract class EventService {
   collect: (

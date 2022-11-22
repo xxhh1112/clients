@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core
 
 import { VaultItemsComponent as BaseVaultItemsComponent } from "@bitwarden/angular/components/vault-items.component";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";

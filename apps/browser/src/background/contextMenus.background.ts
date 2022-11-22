@@ -1,6 +1,6 @@
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";

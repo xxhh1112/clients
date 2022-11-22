@@ -14,7 +14,7 @@ import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";

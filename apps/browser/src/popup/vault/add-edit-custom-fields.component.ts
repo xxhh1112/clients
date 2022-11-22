@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { AddEditCustomFieldsComponent as BaseAddEditCustomFieldsComponent } from "@bitwarden/angular/components/add-edit-custom-fields.component";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 @Component({

@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";

@@ -1,5 +1,5 @@
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";

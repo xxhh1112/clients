@@ -1,5 +1,5 @@
-import { EventService as AbstractEventService } from "@bitwarden/common/abstractions/event.service";
-import { EventService } from "@bitwarden/common/services/event.service";
+import { EventService as AbstractEventService } from "@bitwarden/common/abstractions/event/event.service";
+import { EventService } from "@bitwarden/common/services/event/event.service";
 
 import { apiServiceFactory, ApiServiceInitOptions } from "./api-service.factory";
 import { cipherServiceFactory, CipherServiceInitOptions } from "./cipher-service.factory";
