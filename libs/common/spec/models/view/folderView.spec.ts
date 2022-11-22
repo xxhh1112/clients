@@ -1,6 +1,6 @@
 import { mock } from "jest-mock-extended";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Folder } from "@bitwarden/common/models/domain/folder";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
@@ -61,10 +61,10 @@ describe("FolderView", () => {
     view.name = "Test Folder";
     view.revisionDate = new Date("2022-10-31T10:16:45+00:00");
 
-    const cryptoService = mock<CryptoService>();
-    cryptoService.encrypt.mockResolvedValue(new EncString("ENC"));
+    const encryptService = mock<EncryptService>();
+    encryptService.encrypt.mockResolvedValue(new EncString("ENC"));
 
-    const result = await view.encrypt(cryptoService, null);
+    const result = await view.encrypt(encryptService, null);
 
     expect(result).toEqual({
       id: "2",
