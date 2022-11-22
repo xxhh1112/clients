@@ -6,7 +6,6 @@ export class CollectionRequest {
   name: string;
   externalId: string;
   groups: SelectionReadOnlyRequest[] = [];
-  users: SelectionReadOnlyRequest[] = [];
 
   constructor(collection?: Collection) {
     if (collection == null) {

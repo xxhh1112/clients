@@ -10,9 +10,7 @@ import {
 
 import { OrganizationPermissionsGuard } from "./guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "./layouts/organization-layout.component";
-import { CollectionsComponent } from "./manage/collections.component";
 import { GroupsComponent } from "./manage/groups.component";
-import { ManageComponent } from "./manage/manage.component";
 import { PeopleComponent } from "./manage/people.component";
 import { VaultModule } from "./vault/vault.module";
 
@@ -51,19 +49,6 @@ const routes: Routes = [
           titleId: "groups",
           organizationPermissions: canAccessGroupsTab,
         },
-      },
-      {
-        path: "manage",
-        component: ManageComponent,
-        children: [
-          {
-            path: "collections",
-            component: CollectionsComponent,
-            data: {
-              titleId: "collections",
-            },
-          },
-        ],
       },
       {
         path: "reporting",

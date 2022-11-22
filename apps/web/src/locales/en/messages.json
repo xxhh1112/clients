@@ -2396,13 +2396,10 @@
     "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently deactivate their account. This action cannot be undone. Do you want to proceed?"
   },
   "externalId": {
-    "message": "External ID"
+    "message": "External id"
   },
   "externalIdDesc": {
-    "message": "External ID is an unencrypted reference used by the Bitwarden Directory Connector and API."
-  },
-  "nestCollectionUnder": {
-    "message": "Nest collection under"
+    "message": "External ID is an unencrypted reference used by the Bitwarden Directory Connector or API."
   },
   "accessControl": {
     "message": "Access control"
@@ -2424,12 +2421,6 @@
   },
   "editCollection": {
     "message": "Edit collection"
-  },
-  "collectionInfo": {
-    "message": "Collection info"
-  },
-  "access": {
-    "message": "Access"
   },
   "deleteCollectionConfirmation": {
     "message": "Are you sure you want to delete this collection?"
@@ -5463,15 +5454,6 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "inputMaxLength": {
     "message": "Input must not exceed $COUNT$ characters in length.",
     "placeholders": {
@@ -5565,6 +5547,9 @@
   "accessAllCollectionsHelp": {
     "message": "If checked, this will replace all other collection permissions."
   },
+  "selectMembers": {
+    "message": "Select members"
+  },
   "selectCollections": {
     "message": "Select collections"
   },
@@ -5603,26 +5588,5 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
-  },
-  "membersColumnHeader": {
-    "message": "Member/Group"
-  },
-  "groupAndMemberColumnHeader": {
-    "message": "Member"
-  },
-  "selectGroupsAndMembers": {
-    "message": "Select groups and members"
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
-  },
-  "noMembersOrGroupsAdded": {
-    "message": "No members or groups added"
-  },
-  "deleted": {
-    "message": "Deleted"
   }
 }

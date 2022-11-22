@@ -49,6 +49,16 @@ type CollectionViewMap = {
 
 type GroupDetailsRow = {
   /**
+   * Group Id (used for searching)
+   */
+  id: string;
+
+  /**
+   * Group name (used for searching)
+   */
+  name: string;
+
+  /**
    * Details used for displaying group information
    */
   details: GroupView;

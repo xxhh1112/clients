@@ -3,8 +3,9 @@ import { Subject, takeUntil } from "rxjs";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 
-import { BitActionDirective } from "./bit-action.directive";
 import { BitSubmitDirective } from "./bit-submit.directive";
+
+import { BitActionDirective } from ".";
 
 /**
  * This directive has two purposes:

@@ -15,7 +15,7 @@ import {
 } from "@bitwarden/components";
 import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
-import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
+import { PreloadedEnglishI18nModule } from "../../../tests/preloaded-english-i18n.module";
 
 import { AccessSelectorComponent, PermissionMode } from "./access-selector.component";
 import { AccessItemType, CollectionPermission } from "./access-selector.models";

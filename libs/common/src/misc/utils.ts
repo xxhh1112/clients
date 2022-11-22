@@ -440,10 +440,6 @@ export class Utils {
     return mobile || win.navigator.userAgent.match(/iPad/i) != null;
   }
 
-  static delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   private static isAppleMobile(win: Window) {
     return (
       win.navigator.userAgent.match(/iPhone/i) != null ||

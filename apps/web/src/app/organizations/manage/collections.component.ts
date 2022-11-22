@@ -1,7 +1,5 @@
-import { Overlay } from "@angular/cdk/overlay";
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { lastValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -21,10 +19,8 @@ import {
 } from "@bitwarden/common/models/response/collection.response";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
-import { DialogService } from "@bitwarden/components";
 
-import { CollectionDialogResult, openCollectionDialog } from "../shared";
-
+import { CollectionAddEditComponent } from "./collection-add-edit.component";
 import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
@@ -60,9 +56,7 @@ export class CollectionsComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private logService: LogService,
-    private organizationService: OrganizationService,
-    private dialogService: DialogService,
-    private overlay: Overlay
+    private organizationService: OrganizationService
   ) {}
 
   async ngOnInit() {
@@ -122,24 +116,36 @@ export class CollectionsComponent implements OnInit {
     this.didScroll = this.pagedCollections.length > this.pageSize;
   }
 
-  async edit(collection?: CollectionView) {
-    const canCreate = collection == undefined && this.canCreate;
-    const canEdit = collection != undefined && this.canEdit(collection);
-    const canDelete = collection != undefined && this.canDelete(collection);
+  async edit(collection: CollectionView) {
+    const canCreate = collection == null && this.canCreate;
+    const canEdit = collection != null && this.canEdit(collection);
+    const canDelete = collection != null && this.canDelete(collection);
 
     if (!(canCreate || canEdit || canDelete)) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("missingPermissions"));
       return;
     }
 
-    const dialog = openCollectionDialog(this.dialogService, this.overlay, {
-      data: { collectionId: collection?.id, organizationId: this.organizationId },
-    });
-
-    const result = await lastValueFrom(dialog.closed);
-    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
-      this.load();
-    }
+    const [modal] = await this.modalService.openViewRef(
+      CollectionAddEditComponent,
+      this.addEditModalRef,
+      (comp) => {
+        comp.organizationId = this.organizationId;
+        comp.collectionId = collection != null ? collection.id : null;
+        comp.canSave = canCreate || canEdit;
+        comp.canDelete = canDelete;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+        comp.onSavedCollection.subscribe(() => {
+          modal.close();
+          this.load();
+        });
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+        comp.onDeletedCollection.subscribe(() => {
+          modal.close();
+          this.removeCollection(collection);
+        });
+      }
+    );
   }
 
   add() {
