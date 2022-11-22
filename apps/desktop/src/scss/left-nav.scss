@@ -1,4 +1,5 @@
 .left-nav {
+  margin-right: 10px;
   order: 1;
   display: flex;
   flex-direction: column;
@@ -6,6 +7,8 @@
   min-width: 175px;
   max-width: 250px;
   border-right: 1px solid #000000;
+  border-radius: $border-radius;
+  overflow: hidden;
   flex-grow: 1;
   justify-content: space-between;
 

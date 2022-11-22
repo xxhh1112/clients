@@ -510,41 +510,43 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="footer" *ngIf="cipher">
-  <button
-    class="primary"
-    (click)="edit()"
-    appA11yTitle="{{ 'edit' | i18n }}"
-    *ngIf="!cipher.isDeleted"
-  >
-    <i class="bwi bwi-pencil bwi-fw bwi-lg" aria-hidden="true"></i>
-  </button>
-  <button
-    class="primary"
-    (click)="restore()"
-    appA11yTitle="{{ 'restore' | i18n }}"
-    *ngIf="cipher.isDeleted"
-  >
-    <i class="bwi bwi-undo bwi-fw bwi-lg" aria-hidden="true"></i>
-  </button>
-  <button
-    class="primary"
-    *ngIf="!cipher?.organizationId && !cipher.isDeleted"
-    (click)="clone()"
-    appA11yTitle="{{ 'clone' | i18n }}"
-  >
-    <i class="bwi bwi-files bwi-fw bwi-lg" aria-hidden="true"></i>
-  </button>
-  <div class="right" *ngIf="cipher.edit">
-    <button
-      type="button"
-      (click)="delete()"
-      class="danger"
-      appA11yTitle="{{ (cipher.isDeleted ? 'permanentlyDelete' : 'delete') | i18n }}"
-    >
-      <i class="bwi bwi-trash bwi-lg bwi-fw" aria-hidden="true"></i>
-    </button>
+    <div class="box">
+      <div class="footer" *ngIf="cipher">
+        <button
+          class="primary"
+          (click)="edit()"
+          appA11yTitle="{{ 'edit' | i18n }}"
+          *ngIf="!cipher.isDeleted"
+        >
+          <i class="bwi bwi-pencil bwi-fw bwi-lg" aria-hidden="true"></i>
+        </button>
+        <button
+          class="primary"
+          (click)="restore()"
+          appA11yTitle="{{ 'restore' | i18n }}"
+          *ngIf="cipher.isDeleted"
+        >
+          <i class="bwi bwi-undo bwi-fw bwi-lg" aria-hidden="true"></i>
+        </button>
+        <button
+          class="primary"
+          *ngIf="!cipher?.organizationId && !cipher.isDeleted"
+          (click)="clone()"
+          appA11yTitle="{{ 'clone' | i18n }}"
+        >
+          <i class="bwi bwi-files bwi-fw bwi-lg" aria-hidden="true"></i>
+        </button>
+        <div class="right" *ngIf="cipher.edit">
+          <button
+            type="button"
+            (click)="delete()"
+            class="danger"
+            appA11yTitle="{{ (cipher.isDeleted ? 'permanentlyDelete' : 'delete') | i18n }}"
+          >
+            <i class="bwi bwi-trash bwi-lg bwi-fw" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

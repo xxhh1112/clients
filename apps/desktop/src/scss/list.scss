@@ -1,7 +1,14 @@
 ﻿@import "variables.scss";
 
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .list > button {
-  padding: 3px 10px;
+  padding: 10px 12px;
+  border-radius: $border-radius;
   text-decoration: none;
   user-select: none;
   z-index: 1;
@@ -17,28 +24,8 @@
     clear: both;
   }
 
-  &:before {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    width: calc(100% - 10px);
-    border-bottom: 1px solid #000000;
-
-    @include themify($themes) {
-      border-bottom-color: themed("listItemBorderColor");
-    }
-  }
-
-  &:last-child:before {
-    border: none;
-    height: 0;
-  }
-
   &:hover,
-  &:focus,
-  &.active {
+  &:focus {
     @include themify($themes) {
       background-color: themed("listItemBackgroundHoverColor");
     }
@@ -46,16 +33,17 @@
 
   &.active {
     border-left: 5px solid #000000;
-    padding-left: 5px;
+    padding-left: 7px;
 
     @include themify($themes) {
       border-left-color: themed("primaryColor");
+      background-color: themed("backgroundColorAlt2");
     }
   }
 
   &:focus:not(.active) {
     border-left: 5px solid #000000;
-    padding-left: 5px;
+    padding-left: 7px;
 
     @include themify($themes) {
       border-left-color: themed("mutedColor");
@@ -106,6 +94,7 @@
 .list > button.flex-list-item {
   display: flex;
   align-items: center;
+  gap: 5px;
   width: 100%;
   text-align: left;
 
