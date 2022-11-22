@@ -1,6 +1,16 @@
 <div class="container loading-spinner" *ngIf="!loaded">
   <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
 </div>
+<button
+  (click)="addCipher()"
+  (contextmenu)="addCipherOptions()"
+  class="block add-item-btn"
+  appA11yTitle="{{ 'addItem' | i18n }}"
+  [disabled]="deleted"
+>
+  <i class="bwi bwi-plus" aria-hidden="true"></i>
+  {{ "addItem" | i18n }}
+</button>
 <ng-container *ngIf="loaded">
   <div class="content">
     <cdk-virtual-scroll-viewport
@@ -54,26 +64,5 @@
       <p>{{ "noItemsInList" | i18n }}</p>
       <button (click)="addCipher()" class="btn block primary link">{{ "addItem" | i18n }}</button>
     </div>
-    <!-- <div class="footer">
-      <button
-        (click)="addCipher()"
-        (contextmenu)="addCipherOptions()"
-        class="block primary"
-        appA11yTitle="{{ 'addItem' | i18n }}"
-        [disabled]="deleted"
-      >
-        <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
-      </button>
-    </div> -->
-    <button
-      (click)="addCipher()"
-      (contextmenu)="addCipherOptions()"
-      class="block add-item-btn"
-      appA11yTitle="{{ 'addItem' | i18n }}"
-      [disabled]="deleted"
-    >
-      <i class="bwi bwi-plus" aria-hidden="true"></i>
-      {{ "addItem" | i18n }}
-    </button>
   </div>
 </ng-container>

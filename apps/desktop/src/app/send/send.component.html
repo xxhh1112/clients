@@ -1,5 +1,6 @@
 <div id="sends" class="vault">
   <div class="left-nav">
+    <app-nav class="nav"></app-nav>
     <div class="vault-filters">
       <h2 class="sr-only">{{ "filters" | i18n }}</h2>
       <div class="filter">
@@ -53,9 +54,17 @@
         </ul>
       </div>
     </div>
-    <app-nav class="nav"></app-nav>
   </div>
   <div id="items" class="items">
+    <button
+      type="button"
+      (click)="addSend()"
+      class="block add-item-btn"
+      appA11yTitle="{{ 'addItem' | i18n }}"
+    >
+      <i class="bwi bwi-plus" aria-hidden="true"></i>
+      {{ "addItem" | i18n }}
+    </button>
     <div class="content">
       <div class="list full-height" *ngIf="filteredSends.length">
         <button
@@ -132,16 +141,6 @@
           <img class="no-items-image" aria-hidden="true" />
           <p>{{ "noItemsInList" | i18n }}</p>
         </ng-container>
-      </div>
-      <div class="footer">
-        <button
-          type="button"
-          (click)="addSend()"
-          class="block primary"
-          appA11yTitle="{{ 'addItem' | i18n }}"
-        >
-          <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
-        </button>
       </div>
     </div>
   </div>
