@@ -312,16 +312,16 @@ export abstract class ApiService {
   ) => Promise<AttachmentUploadDataResponse>;
   postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
 
-  getCollectionDetails: (
-    organizationId: string,
-    id: string
-  ) => Promise<CollectionAccessDetailsResponse>;
   getUserCollections: () => Promise<ListResponse<CollectionResponse>>;
   getCollections: (organizationId: string) => Promise<ListResponse<CollectionResponse>>;
   getCollectionUsers: (organizationId: string, id: string) => Promise<SelectionReadOnlyResponse[]>;
-  getManyCollectionsWithDetails: (
+  getCollectionAccessDetails: (
+    organizationId: string,
+    id: string
+  ) => Promise<CollectionAccessDetailsResponse>;
+  getManyCollectionsWithAccessDetails: (
     orgId: string
-  ) => Promise<ListResponse<CollectionGroupDetailsResponse>>;
+  ) => Promise<ListResponse<CollectionAccessDetailsResponse>>;
   postCollection: (
     organizationId: string,
     request: CollectionRequest

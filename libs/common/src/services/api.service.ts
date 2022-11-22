@@ -808,7 +808,7 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Collections APIs
 
-  async getCollectionDetails(
+  async getCollectionAccessDetails(
     organizationId: string,
     id: string
   ): Promise<CollectionAccessDetailsResponse> {
@@ -838,9 +838,9 @@ export class ApiService implements ApiServiceAbstraction {
     return new ListResponse(r, CollectionResponse);
   }
 
-  async getManyCollectionsWithDetails(
+  async getManyCollectionsWithAccessDetails(
     organizationId: string
-  ): Promise<ListResponse<CollectionGroupDetailsResponse>> {
+  ): Promise<ListResponse<CollectionAccessDetailsResponse>> {
     const r = await this.send(
       "GET",
       "/organizations/" + organizationId + "/collections/details",
@@ -848,7 +848,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true
     );
-    return new ListResponse(r, CollectionGroupDetailsResponse);
+    return new ListResponse(r, CollectionAccessDetailsResponse);
   }
 
   async getCollectionUsers(
