@@ -6,7 +6,6 @@
   width: 22%;
   min-width: 175px;
   max-width: 250px;
-  border-right: 1px solid #000000;
   border-radius: $border-radius;
   overflow: hidden;
   flex-grow: 1;
@@ -14,7 +13,6 @@
 
   @include themify($themes) {
     background-color: themed("backgroundColorAlt");
-    border-right-color: themed("borderColor");
   }
 }
 
