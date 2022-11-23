@@ -36,7 +36,7 @@
 
 .filter-heading {
   display: flex;
-  font-weight: 700;
+  font-weight: normal;
   margin-bottom: 5px;
   align-items: center;
   padding-top: 5px;
@@ -51,6 +51,7 @@
 
   button {
     @extend .no-btn;
+    font-weight: 700;
 
     @include themify($themes) {
       color: themed("headingButtonColor");
