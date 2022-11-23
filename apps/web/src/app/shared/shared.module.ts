@@ -84,7 +84,6 @@ import "./locales";
     TableModule,
     AvatarModule,
     IconButtonModule,
-    DialogModule,
   ],
   providers: [DatePipe],
   bootstrap: [],
