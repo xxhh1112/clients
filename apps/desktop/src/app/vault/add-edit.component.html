@@ -640,63 +640,53 @@
           </div>
         </div>
       </div>
-      <div class="box">
-        <div class="footer">
-          <button
-            type="submit"
-            class="primary"
-            appA11yTitle="{{ 'save' | i18n }}"
-            [disabled]="form.loading"
-          >
-            <i
-              class="bwi bwi-save-changes bwi-lg bwi-fw"
-              [hidden]="form.loading"
-              aria-hidden="true"
-            ></i>
-            <i
-              class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!form.loading"
-              aria-hidden="true"
-            ></i>
-            {{ "save" | i18n }}
-          </button>
-          <button type="button" (click)="cancel()">
-            {{ "cancel" | i18n }}
-          </button>
-          <div class="right">
-            <button
-              type="button"
-              (click)="share()"
-              appA11yTitle="{{ 'moveToOrganization' | i18n }}"
-              *ngIf="editMode && cipher && !cipher.organizationId && !cloneMode"
-            >
-              <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw" aria-hidden="true"></i>
-            </button>
-            <button
-              #deleteBtn
-              type="button"
-              (click)="delete()"
-              class="danger"
-              appA11yTitle="{{ 'delete' | i18n }}"
-              *ngIf="editMode && !cloneMode"
-              [disabled]="deleteBtn.loading"
-              [appApiAction]="deletePromise"
-            >
-              <i
-                class="bwi bwi-trash bwi-lg bwi-fw"
-                [hidden]="deleteBtn.loading"
-                aria-hidden="true"
-              ></i>
-              <i
-                class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-                [hidden]="!deleteBtn.loading"
-                aria-hidden="true"
-              ></i>
-              {{ "delete" | i18n }}
-            </button>
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <button
+      type="submit"
+      class="primary"
+      appA11yTitle="{{ 'save' | i18n }}"
+      [disabled]="form.loading"
+    >
+      <i class="bwi bwi-save-changes bwi-lg bwi-fw" [hidden]="form.loading" aria-hidden="true"></i>
+      <i
+        class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
+        [hidden]="!form.loading"
+        aria-hidden="true"
+      ></i>
+      {{ "save" | i18n }}
+    </button>
+    <button type="button" (click)="cancel()">
+      {{ "cancel" | i18n }}
+    </button>
+    <div class="right">
+      <button
+        type="button"
+        (click)="share()"
+        appA11yTitle="{{ 'moveToOrganization' | i18n }}"
+        *ngIf="editMode && cipher && !cipher.organizationId && !cloneMode"
+      >
+        <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw" aria-hidden="true"></i>
+      </button>
+      <button
+        #deleteBtn
+        type="button"
+        (click)="delete()"
+        class="danger"
+        appA11yTitle="{{ 'delete' | i18n }}"
+        *ngIf="editMode && !cloneMode"
+        [disabled]="deleteBtn.loading"
+        [appApiAction]="deletePromise"
+      >
+        <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="deleteBtn.loading" aria-hidden="true"></i>
+        <i
+          class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
+          [hidden]="!deleteBtn.loading"
+          aria-hidden="true"
+        ></i>
+        {{ "delete" | i18n }}
+      </button>
     </div>
   </div>
 </form>
