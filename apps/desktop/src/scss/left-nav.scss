@@ -52,7 +52,7 @@
 
   button {
     @extend .no-btn;
-    font-weight: 700;
+    text-transform: uppercase;
 
     @include themify($themes) {
       color: themed("headingButtonColor");
@@ -94,7 +94,7 @@
   padding: 0;
   list-style: none;
   width: 100%;
-  margin: 0 0 25px 0;
+  margin: 0 0 20px 0;
 
   .nested-filter-options {
     list-style: none;
@@ -115,7 +115,8 @@
     > .filter-buttons {
       .filter-button {
         @include themify($themes) {
-          background-color: themed("backgroundColorAlt2");
+          color: themed("primaryColor");
+          font-weight: bold;
         }
       }
 
@@ -128,10 +129,14 @@
 }
 
 .filter-buttons {
+  padding: 5px 0;
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 10px;
+
+  button {
+    @extend .no-btn;
+  }
 
   .edit-button,
   .toggle-button {
@@ -155,24 +160,6 @@
 
   .filter-button {
     white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    width: 100%;
-    border-radius: $border-radius;
-    padding: 7.5px 10px;
-
-    &:hover {
-      @include themify($themes) {
-        color: themed("primaryColor");
-      }
-    }
-
-    .bwi {
-      @include themify($themes) {
-        color: themed("iconColor");
-      }
-    }
   }
 }
 
