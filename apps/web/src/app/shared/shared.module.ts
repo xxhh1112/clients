@@ -10,6 +10,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
   AsyncActionsModule,
   AvatarModule,
+  BadgeListModule,
   BadgeModule,
   ButtonModule,
   IconButtonModule,
@@ -22,7 +23,6 @@ import {
   MultiSelectModule,
   TableModule,
   TabsModule,
-  BadgeListModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -39,7 +39,6 @@ import "./locales";
   imports: [
     CommonModule,
     DragDropModule,
-    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,
@@ -64,7 +63,6 @@ import "./locales";
     CommonModule,
     AsyncActionsModule,
     DragDropModule,
-    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,

@@ -1,26 +1,26 @@
-import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog";
 import { Provider } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { action } from "@storybook/addon-actions";
-import { Meta, Story, moduleMetadata } from "@storybook/angular";
+import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { GroupServiceAbstraction } from "@bitwarden/common/abstractions/group";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
-import { GroupView } from "@bitwarden/common/models/view/group-view";
 import { PlatformUtilsService } from "@bitwarden/common/src/abstractions/platformUtils.service";
 
 import { SharedModule } from "../../../../shared/shared.module";
 import { PreloadedEnglishI18nModule } from "../../../../tests/preloaded-english-i18n.module";
 import {
   CollectionAccessSelectionView,
-  CollectionAdminView,
   CollectionAdminService,
+  CollectionAdminView,
 } from "../../../core";
+import { GroupServiceAbstraction } from "../../../services/abstractions/group/group.service.abstraction";
+import { GroupView } from "../../../views/group.view";
 import { AccessSelectorModule } from "../access-selector";
 
 import { CollectionDialogComponent, CollectionDialogParams } from "./collection-dialog.component";

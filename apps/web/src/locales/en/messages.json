@@ -5487,21 +5487,21 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "inputMaxLength": {
     "message": "Input must not exceed $COUNT$ characters in length.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
       }
     }
   },
@@ -5589,6 +5589,9 @@
   "accessAllCollectionsHelp": {
     "message": "If checked, this will replace all other collection permissions."
   },
+  "selectMembers": {
+    "message": "Select members"
+  },
   "selectCollections": {
     "message": "Select collections"
   },
@@ -5645,6 +5648,9 @@
   },
   "noMembersOrGroupsAdded": {
     "message": "No members or groups added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
   },
   "deleted": {
     "message": "Deleted"

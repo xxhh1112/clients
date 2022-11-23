@@ -91,10 +91,6 @@ export class CollectionService implements CollectionServiceAbstraction {
     return decryptedCollections;
   }
 
-  /**
-   * @deprecated August 30 2022: Moved to new Vault Filter Service
-   * Remove when Desktop and Browser are updated
-   */
   async getAllNested(collections: CollectionView[] = null): Promise<TreeNode<CollectionView>[]> {
     if (collections == null) {
       collections = await this.getAllDecrypted();

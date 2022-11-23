@@ -179,7 +179,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: GroupAddEditDialogParams,
     private dialogRef: DialogRef<GroupAddEditDialogResultType>,
     private apiService: ApiService,
-    private groupApiService: GroupServiceAbstraction,
     private groupService: GroupServiceAbstraction,
     private i18nService: I18nService,
     private collectionService: CollectionService,
