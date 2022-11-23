@@ -21,12 +21,10 @@ import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
-import {
-  CollectionGroupDetailsView,
-  CollectionView,
-} from "@bitwarden/common/models/view/collection.view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
+import { CollectionAdminView } from "../../../organizations/core/views/collection-admin-view";
 import {
   CipherTypeFilter,
   CollectionFilter,
@@ -191,7 +189,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       collectionCopy.id = c.id;
       collectionCopy.organizationId = c.organizationId;
       collectionCopy.icon = "bwi-collection";
-      if (c instanceof CollectionGroupDetailsView) {
+      if (c instanceof CollectionAdminView) {
         collectionCopy.groups = c.groups;
       }
       const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
