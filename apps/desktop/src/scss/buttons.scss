@@ -5,14 +5,12 @@
 .modal-footer button {
   border-radius: $border-radius;
   padding: 12px 15px;
-  // border: 1px solid #000000;
   font-size: $font-size-base;
   text-align: center;
   cursor: pointer;
 
   @include themify($themes) {
     background-color: themed("buttonBackgroundColor");
-    // border-color: themed("buttonBorderColor");
     color: themed("buttonColor");
   }
 
