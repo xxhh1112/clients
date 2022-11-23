@@ -39,6 +39,7 @@ import "./locales";
   imports: [
     CommonModule,
     DragDropModule,
+    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,
@@ -63,6 +64,7 @@ import "./locales";
     CommonModule,
     AsyncActionsModule,
     DragDropModule,
+    DialogModule,
     FormsModule,
     InfiniteScrollModule,
     JslibModule,
