@@ -1,22 +1,19 @@
-import { ApiService } from "../../abstractions/api.service";
 import { CipherService } from "../../abstractions/cipher.service";
+import { EventUploadService } from "../../abstractions/event/event-upload.service";
 import { EventService as EventServiceAbstraction } from "../../abstractions/event/event.service";
-import { LogService } from "../../abstractions/log.service";
 import { OrganizationService } from "../../abstractions/organization/organization.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
 import { EventType } from "../../enums/eventType";
 import { EventData } from "../../models/data/event.data";
-import { EventRequest } from "../../models/request/event.request";
 
 export class EventService implements EventServiceAbstraction {
   private inited = false;
 
   constructor(
-    private apiService: ApiService,
     private cipherService: CipherService,
     private stateService: StateService,
-    private logService: LogService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private eventUploadService: EventUploadService
   ) {}
 
   init(checkOnInterval: boolean) {
@@ -26,8 +23,8 @@ export class EventService implements EventServiceAbstraction {
 
     this.inited = true;
     if (checkOnInterval) {
-      this.uploadEvents();
-      setInterval(() => this.uploadEvents(), 60 * 1000); // check every 60 seconds
+      this.eventUploadService.uploadEvents();
+      setInterval(() => this.eventUploadService.uploadEvents(), 60 * 1000); // check every 60 seconds
     }
   }
 
@@ -72,32 +69,7 @@ export class EventService implements EventServiceAbstraction {
     eventCollection.push(event);
     await this.stateService.setEventCollection(eventCollection);
     if (uploadImmediately) {
-      await this.uploadEvents();
-    }
-  }
-
-  async uploadEvents(userId?: string): Promise<any> {
-    const authed = await this.stateService.getIsAuthenticated({ userId: userId });
-    if (!authed) {
-      return;
-    }
-    const eventCollection = await this.stateService.getEventCollection({ userId: userId });
-    if (eventCollection == null || eventCollection.length === 0) {
-      return;
-    }
-    const request = eventCollection.map((e) => {
-      const req = new EventRequest();
-      req.type = e.type;
-      req.cipherId = e.cipherId;
-      req.date = e.date;
-      req.organizationId = e.organizationId;
-      return req;
-    });
-    try {
-      await this.apiService.postEventsCollect(request);
-      this.clearEvents(userId);
-    } catch (e) {
-      this.logService.error(e);
+      await this.eventUploadService.uploadEvents();
     }
   }
 

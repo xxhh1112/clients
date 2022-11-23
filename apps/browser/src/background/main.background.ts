@@ -7,6 +7,7 @@ import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/co
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
+import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
@@ -54,6 +55,7 @@ import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
+import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
 import { EventService } from "@bitwarden/common/services/event/event.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
@@ -149,6 +151,7 @@ export default class MainBackground {
   stateMigrationService: StateMigrationService;
   systemService: SystemServiceAbstraction;
   eventService: EventServiceAbstraction;
+  eventUploadService: EventUploadServiceAbstraction;
   policyService: InternalPolicyServiceAbstraction;
   popupUtilsService: PopupUtilsService;
   sendService: SendServiceAbstraction;
@@ -412,12 +415,16 @@ export default class MainBackground {
       this.organizationService,
       logoutCallback
     );
-    this.eventService = new EventService(
+    this.eventUploadService = new EventUploadService(
       this.apiService,
+      this.stateService,
+      this.logService
+    );
+    this.eventService = new EventService(
       this.cipherService,
       this.stateService,
-      this.logService,
-      this.organizationService
+      this.organizationService,
+      this.eventUploadService
     );
     this.passwordGenerationService = new PasswordGenerationService(
       this.cryptoService,
@@ -626,7 +633,7 @@ export default class MainBackground {
   }
 
   async logout(expired: boolean, userId?: string) {
-    await this.eventService.uploadEvents(userId);
+    await this.eventUploadService.uploadEvents(userId);
 
     await Promise.all([
       this.eventService.clearEvents(userId),
