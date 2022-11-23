@@ -266,10 +266,10 @@ p.lead {
 form,
 .form {
   .form-group {
-    margin-bottom: 1.25rem;
+    margin: 0 15px 1rem;
 
     &:last-child {
-      margin-bottom: 0;
+      padding-bottom: 1rem;
     }
 
     label {
@@ -365,6 +365,11 @@ form,
       }
     }
   }
+}
+
+.radio + .help-block,
+.checkbox + .help-block {
+  padding-left: 18px;
 }
 
 app-root > #loading,

@@ -34,12 +34,13 @@
 
   .box-header-expandable {
     border: none;
-    padding: 5px 0px;
+    padding: 10px 15px;
     text-transform: uppercase;
     display: flex;
     width: 100%;
     box-sizing: border-box;
     align-items: center;
+    border-radius: $border-radius $border-radius 0 0;
 
     @include themify($themes) {
       color: themed("headingColor");
@@ -50,7 +51,7 @@
     &:focus-visible,
     &.active {
       @include themify($themes) {
-        background-color: themed("boxBackgroundHoverColor");
+        background-color: themed("buttonBackgroundHoverColor");
       }
     }
 
@@ -73,7 +74,7 @@
     }
 
     &.box-content-padded {
-      padding: 10px 15px;
+      padding: 0;
 
       .box-header-expandable[aria-expanded="true"] {
         margin-bottom: 1rem;
