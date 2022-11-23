@@ -506,6 +506,13 @@ app-root > #loading,
   border-radius: 50% !important;
 }
 
+// hide button text at small sizes
+@media screen and (max-width: 830px) {
+  .sm-hide {
+    display: none;
+  }
+}
+
 // Text selection styles
 // Set explicit selection styles (assumes primary accent color has sufficient
 // contrast against the background, so its inversion is also still readable)

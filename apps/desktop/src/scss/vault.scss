@@ -149,6 +149,7 @@ app-root {
     display: flex;
     align-items: center;
     padding: 6px;
+    margin-right: 14px;
 
     @include themify($themes) {
       background-color: themed("backgroundColorAlt");
