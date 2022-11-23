@@ -55,15 +55,15 @@
       <p>{{ "noItemsInList" | i18n }}</p>
       <button (click)="addCipher()" class="btn block primary link">{{ "addItem" | i18n }}</button>
     </div>
-    <div class="add-item-box">
+    <div class="footer">
       <button
         (click)="addCipher()"
         (contextmenu)="addCipherOptions()"
-        class="block add-item-btn"
+        class="block primary"
         appA11yTitle="{{ 'addItem' | i18n }}"
         [disabled]="deleted"
       >
-        <i class="bwi bwi-plus" aria-hidden="true"></i>
+        <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
         {{ "addItem" | i18n }}
       </button>
     </div>

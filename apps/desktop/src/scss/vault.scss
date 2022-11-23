@@ -32,6 +32,7 @@ app-root {
     width: 28%;
     min-width: 200px;
     max-width: 350px;
+    margin-right: 6px;
 
     .no-items {
       display: flex;
@@ -142,13 +143,15 @@ app-root {
   }
 
   .footer {
-    padding-top: 10px;
+    height: 57px;
     flex: 0 0 auto;
-    border-top: 1px solid #000000;
+    border-radius: $border-radius;
     display: flex;
     align-items: center;
+    padding: 6px;
 
     @include themify($themes) {
+      background-color: themed("backgroundColorAlt");
       border-top-color: themed("borderColor");
     }
 
