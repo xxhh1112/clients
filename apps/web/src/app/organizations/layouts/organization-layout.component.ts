@@ -8,6 +8,7 @@ import {
   canAccessMembersTab,
   canAccessReportingTab,
   canAccessSettingsTab,
+  canAccessVaultTab,
   getOrganizationById,
   OrganizationService,
 } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
@@ -42,6 +43,10 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  canShowVaultTab(organization: Organization): boolean {
+    return canAccessVaultTab(organization);
   }
 
   canShowSettingsTab(organization: Organization): boolean {
