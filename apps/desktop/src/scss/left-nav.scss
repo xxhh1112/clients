@@ -36,8 +36,7 @@
 
 .filter-heading {
   display: flex;
-  text-transform: uppercase;
-  font-weight: normal;
+  font-weight: 700;
   margin-bottom: 5px;
   align-items: center;
   padding-top: 5px;
@@ -52,7 +51,6 @@
 
   button {
     @extend .no-btn;
-    text-transform: uppercase;
 
     @include themify($themes) {
       color: themed("headingButtonColor");
@@ -94,13 +92,19 @@
   padding: 0;
   list-style: none;
   width: 100%;
-  margin: 0 0 20px 0;
+  margin-bottom: 20px;
 
   .nested-filter-options {
     list-style: none;
     margin-bottom: 0px;
-    padding-left: 0.85em;
+    margin-left: 20px;
   }
+}
+
+.filter-options#collection-filters,
+.filter-options#folder-filters,
+.filter-options#type-filters {
+  margin-left: 20px;
 }
 
 .filter-option {
