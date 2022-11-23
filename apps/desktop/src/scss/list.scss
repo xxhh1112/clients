@@ -38,7 +38,7 @@
 
     @include themify($themes) {
       border-left-color: themed("primaryColor");
-      background-color: themed("backgroundColorAlt2");
+      background: themed("backgroundGradient");
     }
   }
 
