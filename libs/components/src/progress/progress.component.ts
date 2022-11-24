@@ -23,6 +23,14 @@ export class ProgressComponent {
 
   constructor(private i18nService: I18nService) {}
 
+  /**
+   * Only display text if size is not small, or if barWidth is above 3%,
+   * otherwise the text gets crammed or cut off.
+   */
+  get displayText() {
+    return this.showText && this.size !== "small" && this.barWidth > 3;
+  }
+
   get sizeClass() {
     return sizeClasses[this.size];
   }
@@ -55,4 +63,10 @@ export class ProgressComponent {
     }
     return `${this.barWidth}%`;
   }
+
+  /**
+   <ng-container *ngIf="showText && size !== 'small' && barWidth > 3">
+      {{ textContent }}
+    </ng-container>
+   */
 }
