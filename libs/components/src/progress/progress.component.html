@@ -1,12 +1,10 @@
 <div
-  class="tw-flex tw-overflow-hidden tw-rounded tw-bg-[#e9ecef] tw-text-xs tw-leading-[0] {{
-    sizeClass
-  }}"
+  class="tw-flex tw-overflow-hidden tw-rounded tw-bg-[#e9ecef] tw-text-xs tw-leading-[0]"
+  [ngClass]="sizeClass"
 >
   <div
-    class="tw-flex tw-flex-col tw-justify-center tw-overflow-hidden tw-whitespace-nowrap tw-text-center tw-text-contrast tw-transition-all {{
-      bgClass
-    }}"
+    class="tw-flex tw-flex-col tw-justify-center tw-overflow-hidden tw-whitespace-nowrap tw-text-center tw-text-contrast tw-transition-all"
+    [ngClass]="bgClass"
     role="progressbar"
     aria-valuemin="0"
     aria-valuemax="100"
@@ -14,8 +12,8 @@
     [ngStyle]="{ width: barWidth + '%' }"
   >
     <!-- Only show text if barWidth above 3%, otherwise text gets crammed or cut off -->
-    <ng-container *ngIf="showText && size !== 'small' && barWidth > 3">{{
-      textContent
-    }}</ng-container>
+    <ng-container *ngIf="showText && size !== 'small' && barWidth > 3">
+      {{ textContent }}
+    </ng-container>
   </div>
 </div>
