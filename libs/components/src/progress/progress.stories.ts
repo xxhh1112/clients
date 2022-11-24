@@ -28,8 +28,7 @@ export default {
   parameters: {
     design: {
       type: "figma",
-      // TODO: Make sure this goes to the correct location in the figma file
-      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1717%3A15868",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A18185&t=AM0acaIJ00BUhZKz-4",
     },
   },
   args: {
