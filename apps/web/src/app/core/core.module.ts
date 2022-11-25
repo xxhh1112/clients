@@ -35,6 +35,7 @@ import { PolicyListService } from "./policy-list.service";
 import { RouterService } from "./router.service";
 import { Account, GlobalState, StateService } from "./state";
 import { StateMigrationService } from "./state-migration.service";
+import { RoutedVaultFilterService } from "./vault-filter/routed-vault-filter.service";
 import { WebFileDownloadService } from "./web-file-download.service";
 import { WebPlatformUtilsService } from "./web-platform-utils.service";
 
@@ -46,6 +47,7 @@ import { WebPlatformUtilsService } from "./web-platform-utils.service";
     RouterService,
     EventService,
     PolicyListService,
+    RoutedVaultFilterService,
     {
       provide: APP_INITIALIZER,
       useFactory: (initService: InitService) => initService.init(),
