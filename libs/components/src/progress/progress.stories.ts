@@ -35,7 +35,7 @@ export default {
     barWidth: 0,
     showText: true,
     size: "default",
-    type: "progress",
+    // type: "progress",
   },
 } as Meta;
 
@@ -46,19 +46,9 @@ const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
 export const Default = Template.bind({});
 Default.args = {};
 
-export const _25Percent = Template.bind({});
-_25Percent.args = {
-  barWidth: 25,
-};
-
 export const _50Percent = Template.bind({});
 _50Percent.args = {
   barWidth: 50,
-};
-
-export const _75Percent = Template.bind({});
-_75Percent.args = {
-  barWidth: 75,
 };
 
 export const _100Percent = Template.bind({});
@@ -66,26 +56,26 @@ _100Percent.args = {
   barWidth: 100,
 };
 
-export const WeakDanger = Template.bind({});
-WeakDanger.args = {
-  barWidth: 25,
-  type: "strength",
-};
+// export const WeakDanger = Template.bind({});
+// WeakDanger.args = {
+//   barWidth: 25,
+//   type: "strength",
+// };
 
-export const WeakWarning = Template.bind({});
-WeakWarning.args = {
-  barWidth: 50,
-  type: "strength",
-};
+// export const WeakWarning = Template.bind({});
+// WeakWarning.args = {
+//   barWidth: 50,
+//   type: "strength",
+// };
 
-export const Good = Template.bind({});
-Good.args = {
-  barWidth: 75,
-  type: "strength",
-};
+// export const Good = Template.bind({});
+// Good.args = {
+//   barWidth: 75,
+//   type: "strength",
+// };
 
-export const Strong = Template.bind({});
-Strong.args = {
-  barWidth: 100,
-  type: "strength",
-};
+// export const Strong = Template.bind({});
+// Strong.args = {
+//   barWidth: 100,
+//   type: "strength",
+// };
