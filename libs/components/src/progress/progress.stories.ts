@@ -1,30 +1,10 @@
-import { Meta, Story, moduleMetadata } from "@storybook/angular";
-
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-
-import { I18nMockService } from "../utils/i18n-mock.service";
+import { Meta, Story } from "@storybook/angular";
 
 import { ProgressComponent } from "./progress.component";
 
 export default {
   title: "Component Library/Progress",
   component: ProgressComponent,
-  decorators: [
-    moduleMetadata({
-      providers: [
-        {
-          provide: I18nService,
-          useFactory: () => {
-            return new I18nMockService({
-              weak: "Weak",
-              good: "Good",
-              strong: "Strong",
-            });
-          },
-        },
-      ],
-    }),
-  ],
   parameters: {
     design: {
       type: "figma",
@@ -32,10 +12,8 @@ export default {
     },
   },
   args: {
-    barWidth: 0,
     showText: true,
     size: "default",
-    // type: "progress",
   },
 } as Meta;
 
@@ -44,7 +22,9 @@ const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  barWidth: 0,
+};
 
 export const _50Percent = Template.bind({});
 _50Percent.args = {
@@ -56,26 +36,8 @@ _100Percent.args = {
   barWidth: 100,
 };
 
-// export const WeakDanger = Template.bind({});
-// WeakDanger.args = {
-//   barWidth: 25,
-//   type: "strength",
-// };
-
-// export const WeakWarning = Template.bind({});
-// WeakWarning.args = {
-//   barWidth: 50,
-//   type: "strength",
-// };
-
-// export const Good = Template.bind({});
-// Good.args = {
-//   barWidth: 75,
-//   type: "strength",
-// };
-
-// export const Strong = Template.bind({});
-// Strong.args = {
-//   barWidth: 100,
-//   type: "strength",
-// };
+export const CustomText = Template.bind({});
+CustomText.args = {
+  barWidth: 90,
+  text: "Loading...",
+};
