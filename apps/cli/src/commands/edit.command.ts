@@ -124,13 +124,13 @@ export class EditCommand {
       return Response.notFound();
     }
 
-    let folderView = await this.cryptoService.decrypt(FolderView, folder);
+    let folderView = await this.cryptoService.decryptView(FolderView, folder);
     folderView = FolderExport.toView(req, folderView);
     const encFolder = await this.cryptoService.encryptView(folderView);
     try {
       await this.folderApiService.save(encFolder);
       const updatedFolder = await this.folderService.get(folder.id);
-      const decFolder = await this.cryptoService.decrypt(FolderView, updatedFolder);
+      const decFolder = await this.cryptoService.decryptView(FolderView, updatedFolder);
       const res = new FolderResponse(decFolder);
       return Response.success(res);
     } catch (e) {

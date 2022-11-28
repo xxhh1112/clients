@@ -153,7 +153,7 @@ export class CreateCommand {
     try {
       await this.folderApiService.save(folder);
       const newFolder = await this.folderService.get(folder.id);
-      const decFolder = await this.cryptoService.decrypt(FolderView, newFolder);
+      const decFolder = await this.cryptoService.decryptView(FolderView, newFolder);
       const res = new FolderResponse(decFolder);
       return Response.success(res);
     } catch (e) {
