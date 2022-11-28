@@ -33,7 +33,7 @@ describe("Folder Service", () => {
     activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
-    cryptoService.decrypt(Arg.any(), Arg.any()).mimicks((view: any, model: Folder) => {
+    cryptoService.decryptView(Arg.any(), Arg.any()).mimicks((view: any, model: Folder) => {
       const v = new FolderView();
       v.id = model.id;
       v.revisionDate = model.revisionDate;
