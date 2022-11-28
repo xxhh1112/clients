@@ -23,6 +23,7 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
+import { RoutedVaultFilterService } from "../../core/vault-filter/routed-vault-filter.service";
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/vault-filter/shared/models/vault-filter.model";
 import { EntityEventsComponent } from "../manage/entity-events.component";
@@ -38,6 +39,7 @@ const BroadcasterSubscriptionId = "OrgVaultComponent";
 @Component({
   selector: "app-org-vault",
   templateUrl: "vault.component.html",
+  providers: [RoutedVaultFilterService],
 })
 export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild("vaultFilter", { static: true })
