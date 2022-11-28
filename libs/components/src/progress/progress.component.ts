@@ -16,7 +16,7 @@ export class ProgressComponent {
   @Input() barWidth = 0;
   @Input() showText = true;
   @Input() size: SizeTypes = "default";
-  @Input() text: string;
+  @Input() text?: string;
 
   // Only show the text that fits in the inner bar
   get displayText() {
