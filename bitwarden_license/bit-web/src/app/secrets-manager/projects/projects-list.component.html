@@ -19,12 +19,15 @@
   <ng-container header>
     <tr>
       <th bitCell class="tw-w-0">
-        <input
-          type="checkbox"
-          (change)="$event ? toggleAll() : null"
-          [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"
-        />
+        <label class="!tw-mb-0 tw-flex tw-w-fit tw-gap-2 !tw-font-bold !tw-text-muted">
+          <input
+            type="checkbox"
+            (change)="$event ? toggleAll() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          />
+          {{ "all" | i18n }}
+        </label>
       </th>
       <th bitCell colspan="2">{{ "name" | i18n }}</th>
       <th bitCell>{{ "lastEdited" | i18n }}</th>
@@ -49,7 +52,7 @@
         />
       </td>
       <td bitCell class="tw-w-0 tw-pr-0">
-        <i class="bwi bwi-folder tw-text-xl tw-text-muted" aria-hidden="true"></i>
+        <i class="bwi bwi-collection tw-text-xl tw-text-muted" aria-hidden="true"></i>
       </td>
       <td bitCell>{{ project.name }}</td>
       <td bitCell>{{ project.revisionDate | date: "medium" }}</td>

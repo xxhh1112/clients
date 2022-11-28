@@ -39,7 +39,7 @@ const routes: Routes = [
         },
       },
       {
-        path: "serviceAccounts",
+        path: "service-accounts",
         loadChildren: () => ServiceAccountsModule,
         data: {
           title: "serviceAccounts",
