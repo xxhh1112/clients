@@ -23,9 +23,15 @@ import {
   convertToSelectionView,
 } from "../access-selector";
 
+export enum CollectionDialogTabType {
+  Info = 0,
+  Access = 1,
+}
+
 export interface CollectionDialogParams {
   collectionId?: string;
   organizationId: string;
+  initialTab?: CollectionDialogTabType;
 }
 
 export enum CollectionDialogResult {
@@ -41,6 +47,7 @@ export enum CollectionDialogResult {
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  protected tabIndex: CollectionDialogTabType;
   protected loading = true;
   protected organization?: Organization;
   protected collection?: CollectionView;
@@ -64,7 +71,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService
-  ) {}
+  ) {
+    this.tabIndex = params.initialTab ?? CollectionDialogTabType.Info;
+  }
 
   ngOnInit() {
     const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(

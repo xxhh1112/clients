@@ -121,7 +121,7 @@
             <button
               *ngIf="organization?.canEditAssignedCollections"
               bitMenuItem
-              (click)="editCollectionInfo(col.node)"
+              (click)="editCollection(col.node, 'info')"
             >
               <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
               {{ "editInfo" | i18n }}
@@ -129,7 +129,7 @@
             <button
               *ngIf="organization?.canEditAssignedCollections"
               bitMenuItem
-              (click)="editCollectionAccess(col.node)"
+              (click)="editCollection(col.node, 'access')"
             >
               <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
               {{ "access" | i18n }}
