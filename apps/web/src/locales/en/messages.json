@@ -5614,7 +5614,7 @@
     "message": "Access tokens"
   },
   "createAccessToken": {
-    "message": "Create Access Token"
+    "message": "Create access token"
   },
   "expires": {
     "message": "Expires"
@@ -5627,6 +5627,30 @@
   },
   "accessTokensNoItemsDesc": {
     "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
   },
   "revokeAccessToken": {
     "message": "Revoke Access Token"
