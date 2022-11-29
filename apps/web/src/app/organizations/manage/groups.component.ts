@@ -1,4 +1,3 @@
-import { Overlay } from "@angular/cdk/overlay";
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
@@ -134,8 +133,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private logService: LogService,
     private collectionService: CollectionService,
-    private searchPipe: SearchPipe,
-    private overlay: Overlay
+    private searchPipe: SearchPipe
   ) {}
 
   async ngOnInit() {
@@ -214,7 +212,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     group: GroupDetailsRow,
     startingTabIndex: GroupAddEditTabType = GroupAddEditTabType.Info
   ) {
-    const dialogRef = openGroupAddEditDialog(this.dialogService, this.overlay, {
+    const dialogRef = openGroupAddEditDialog(this.dialogService, {
       data: {
         initialTab: startingTabIndex,
         organizationId: this.organizationId,

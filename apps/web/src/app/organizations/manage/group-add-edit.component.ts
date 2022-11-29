@@ -1,5 +1,4 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
-import { Overlay } from "@angular/cdk/overlay";
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { catchError, combineLatest, from, map, of, Subject, switchMap, takeUntil } from "rxjs";
@@ -62,20 +61,15 @@ export enum GroupAddEditDialogResultType {
 /**
  * Strongly typed helper to open a groupAddEditDialog
  * @param dialogService Instance of the dialog service that will be used to open the dialog
- * @param overlay Instance of the CDK Overlay service
  * @param config Configuration for the dialog
  */
 export const openGroupAddEditDialog = (
   dialogService: DialogService,
-  overlay: Overlay,
   config: DialogConfig<GroupAddEditDialogParams>
 ) => {
   return dialogService.open<GroupAddEditDialogResultType, GroupAddEditDialogParams>(
     GroupAddEditComponent,
-    {
-      positionStrategy: overlay.position().global().centerHorizontally().top(),
-      ...config,
-    }
+    config
   );
 };
 
