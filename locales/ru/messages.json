@@ -143,7 +143,7 @@
     "message": "Год"
   },
   "authenticatorKeyTotp": {
-    "message": "Ключ проверки подлинности (TOTP)"
+    "message": "Ключ аутентификатора (TOTP)"
   },
   "folder": {
     "message": "Папка"
@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Основной домен",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Доменное имя",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Хост",
@@ -220,7 +220,7 @@
     "message": "Никогда"
   },
   "toggleVisibility": {
-    "message": "Изменить видимость"
+    "message": "Вкл/выкл видимость"
   },
   "toggleCollapse": {
     "message": "Свернуть/развернуть",
@@ -485,7 +485,7 @@
     "message": "Элемент добавлен"
   },
   "editedItem": {
-    "message": "Элемент изменен"
+    "message": "Элемент сохранен"
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ перемещен в $ORGNAME$",
@@ -534,7 +534,7 @@
     "message": "Вы хотите перезаписать текущий пароль?"
   },
   "editedFolder": {
-    "message": "Папка отредактирована"
+    "message": "Папка сохранена"
   },
   "addedFolder": {
     "message": "Папка добавлена"
@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Войдите или создайте новый аккаунт для доступа к вашему защищенному хранилищу."
   },
+  "loginWithDevice": {
+    "message": "Войти с помощью устройства"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Вход с устройства должен быть включен в настройках мобильного приложения Bitwarden. Нужен другой вариант?"
+  },
   "createAccount": {
     "message": "Создать аккаунт"
+  },
+  "newAroundHere": {
+    "message": "Вы здесь впервые?"
   },
   "startTrial": {
     "message": "Начать пробный период"
   },
   "logIn": {
     "message": "Войти"
+  },
+  "logInInitiated": {
+    "message": "Вход инициирован"
   },
   "submit": {
     "message": "Подтвердить"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Необходимо повторно ввести мастер-пароль."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Мастер-пароль должен содержать не менее 8 символов."
   },
   "masterPassDoesntMatch": {
@@ -705,6 +717,9 @@
   "noOrganizationsList": {
     "message": "Вы не являетесь членом какой-либо организации. Организации позволяют безопасно обмениваться элементами с другими пользователями."
   },
+  "notificationSentDevice": {
+    "message": "На ваше устройство отправлено уведомление."
+  },
   "versionNumber": {
     "message": "Версия $VERSION_NUMBER$",
     "placeholders": {
@@ -754,7 +769,7 @@
     "message": "Вход недоступен"
   },
   "noTwoStepProviders": {
-    "message": "У этого аккаунта включена двухфакторная аутентификация, однако ни один из настроенных вариантов не поддерживается этим веб-браузером."
+    "message": "У этой учетной записи включена двухфакторная аутентификация, однако ни один из настроенных вариантов не поддерживается этим веб-браузером."
   },
   "noTwoStepProviders2": {
     "message": "Используйте поддерживаемый веб-браузер (например Chrome) и/или добавьте дополнительные варианты аутентификации, которые поддерживаются в веб-браузерах (например приложение-аутентификатор)."
@@ -936,7 +951,7 @@
     "message": "Этот файл защищен паролем. Пожалуйста, введите пароль файла для импорта данных."
   },
   "exportSuccess": {
-    "message": "Данные вашего хранилища экспортированы."
+    "message": "Данные хранилища экспортированы"
   },
   "passwordGenerator": {
     "message": "Генератор паролей"
@@ -949,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Минимум символов",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Избегать неоднозначных символов"
@@ -982,7 +997,7 @@
   },
   "capitalize": {
     "message": "С заглавной буквы",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Добавить цифру"
@@ -995,16 +1010,16 @@
   },
   "clear": {
     "message": "Очистить",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
-    "message": "Аккаунт обновлен"
+    "message": "Аккаунт сохранен"
   },
   "changeEmail": {
-    "message": "Изменение email"
+    "message": "Изменить email"
   },
   "changeEmailTwoFactorWarning": {
-    "message": "В результате будет изменен адрес email вашего аккаунта. Это не приведет к изменению адреса электронной почты, используемого для двухфакторной аутентификации. Вы можете изменить этот адрес электронной почты в настройках двухэтапного входа."
+    "message": "При продолжении будет изменен адрес электронной почты вашей учетной записи. Это не изменит адрес электронной почты для двухфакторной аутентификации. Этот адрес электронной почты можно изменить в настройках двухэтапного входа."
   },
   "newEmail": {
     "message": "Новый email"
@@ -1034,7 +1049,7 @@
     "message": "Пожалуйста, войдите снова. Если вы используете другие приложения Bitwarden, выполните на них выход и повторный вход."
   },
   "changeMasterPassword": {
-    "message": "Изменение мастер-пароля"
+    "message": "Изменить мастер-пароль"
   },
   "masterPasswordChanged": {
     "message": "Мастер-пароль изменен"
@@ -1088,7 +1103,7 @@
     "message": "Осторожно, эти действия необратимы!"
   },
   "deauthorizeSessions": {
-    "message": "Деавторизовать сессии"
+    "message": "Деавторизовать сеансы"
   },
   "deauthorizeSessionsDesc": {
     "message": "Беспокоитесь о том, что ваша учетная запись авторизована на другом устройстве? Чтобы деавторизовать все ранее использовавшиеся компьютеры или устройства, выполните действие ниже. Этот шаг безопасности рекомендуется, если вы ранее использовали общедоступный компьютер или случайно сохранили свой пароль на устройстве, которое вам не принадлежит. Это действие также очистит все ранее сохраненные сессии двухфакторной аутентификации."
@@ -1097,7 +1112,7 @@
     "message": "В случае продолжения, ваша сессия будет завершена и вам будет предложено авторизоваться повторно. При активированной двухфакторной аутентификации вам потребуется ввести код. Сессии на других устройствах могут оставаться активными в течение одного часа."
   },
   "sessionsDeauthorized": {
-    "message": "Все сессии деавторизованы"
+    "message": "Все сеансы деавторизованы"
   },
   "purgeVault": {
     "message": "Очистить хранилище"
@@ -1118,7 +1133,7 @@
     "message": "Очистка вашего хранилища необратима. Ее нельзя отменить."
   },
   "vaultPurged": {
-    "message": "Ваше хранилище очищено."
+    "message": "Хранилище очищено."
   },
   "deleteAccount": {
     "message": "Удалить аккаунт"
@@ -1151,7 +1166,7 @@
     "message": "Возникла проблема с данными, которые вы пытались импортировать. Пожалуйста, исправьте ошибки, перечисленные ниже в вашем исходном файле и попробуйте еще раз."
   },
   "importSuccess": {
-    "message": "Данные были успешно импортированы в ваше хранилище."
+    "message": "Данные успешно импортированы в хранилище."
   },
   "importWarning": {
     "message": "Вы импортируете данные в $ORGANIZATION$. Члены этой организации могут получить доступ к вашим данным. Хотите продолжить?",
@@ -1176,6 +1191,12 @@
   },
   "selectImportFile": {
     "message": "Выберите файл импорта"
+  },
+  "chooseFile": {
+    "message": "Выбрать файл"
+  },
+  "noFileChosen": {
+    "message": "Файл не выбран"
   },
   "orCopyPasteFileContents": {
     "message": "или скопируйте/вставьте содержимое файла импорта"
@@ -1213,13 +1234,6 @@
   },
   "faviconDesc": {
     "message": "Отображать узнаваемое изображение рядом с каждым логином."
-  },
-  "enableGravatars": {
-    "message": "Включить Gravatar",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Использовать аватары с сайта gravatar.com."
   },
   "enableFullWidth": {
     "message": "Активировать отображение на всю ширину",
@@ -1283,7 +1297,7 @@
     "message": "При включении двухфакторной аутентификации вы можете навсегда потерять доступ к вашей учетной записи Bitwarden. Код восстановления позволяет получить доступ к вашему аккаунту в случае, если вы больше не можете использовать свой обычный метод двухфакторной аутентификации (например, при потере устройства). Поддержка Bitwarden не сможет вам помочь, если вы потеряете доступ к своей учетной записи. Мы рекомендуем вам записать или распечатать код восстановления и сохранить его в надежном месте."
   },
   "viewRecoveryCode": {
-    "message": "Просмотр кода восстановления"
+    "message": "Просмотреть код восстановления"
   },
   "providers": {
     "message": "Провайдеры",
@@ -1300,13 +1314,13 @@
   },
   "premium": {
     "message": "Премиум",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Премиум"
   },
   "premiumRequired": {
-    "message": "Необходим Премиум"
+    "message": "Требуется Премиум"
   },
   "premiumRequiredDesc": {
     "message": "Для использования этой функции требуется Премиум."
@@ -1321,7 +1335,7 @@
     "message": "Управление"
   },
   "disable": {
-    "message": "Выключить"
+    "message": "Отключить"
   },
   "revokeAccess": {
     "message": "Отозвать доступ"
@@ -1435,7 +1449,7 @@
     "message": "YubiKey обновлены"
   },
   "disableAllKeys": {
-    "message": "Отключить все ключи"
+    "message": "Деактивировать все ключи"
   },
   "twoFactorDuoDesc": {
     "message": "Введите информацию о приложении Bitwarden из панели администратора Duo."
@@ -1471,7 +1485,7 @@
     "message": "Добавить ключ безопасности WebAuthn в свою учетную запись"
   },
   "readKey": {
-    "message": "Читать ключ"
+    "message": "Чтение ключа"
   },
   "keyCompromised": {
     "message": "Ключ скомпрометирован."
@@ -1524,13 +1538,13 @@
   },
   "reportsDesc": {
     "message": "Выявите и устраните проблемы с безопасностью в ваших онлайн-аккаунтах, перейдя по ссылкам на отчеты ниже.",
-    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Небезопасные сайты"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "URL-адреса, начинающиеся с http://, не используют оптимальный способ шифрования. Измените URI для логинов этих аккаунтов на https:// для более безопасного использования интернета."
+    "message": "URL, начинающиеся с http://, не используют оптимальный способ шифрования. Измените URI для логинов этих аккаунтов на https:// для более безопасного использования интернета."
   },
   "unsecuredWebsitesFound": {
     "message": "Найдены незащищенные сайты"
@@ -1554,7 +1568,7 @@
     "message": "Двухфакторная аутентификация добавляет уровень защиты для ваших аккаунтов. Включите ее для этих учетных записей с помощью Bitwarden Authenticator или используйте альтернативный метод."
   },
   "inactive2faFound": {
-    "message": "Найдены логины без 2ФА"
+    "message": "Найдены логины без 2ЭА"
   },
   "inactive2faFoundDesc": {
     "message": "В хранилище обнаружены сайты ($COUNT$ шт.), у которых может быть не настроена двухфакторная аутентификация (согласно 2fa.directory). Для дополнительной защиты этих аккаунтов следует включить двухфакторную аутентификацию.",
@@ -1703,7 +1717,7 @@
     "message": "Сайт"
   },
   "affectedUsers": {
-    "message": "Затронутых пользователей"
+    "message": "Затронутые пользователи"
   },
   "breachOccurred": {
     "message": "Произошла утечка"
@@ -1750,13 +1764,13 @@
   },
   "goPremium": {
     "message": "Перейти на Премиум",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
-    "message": "Вы обновились до Премиум."
+    "message": "Вы перешли на Премиум."
   },
   "premiumUpgradeUnlockFeatures": {
-    "message": "Обновите свою учетную запись до Премиум и разблокируйте великолепные дополнительные возможности."
+    "message": "Обновите свой аккаунт до Премиум и разблокируйте дополнительные возможности."
   },
   "premiumSignUpStorage": {
     "message": "1 ГБ зашифрованного хранилища для вложенных файлов."
@@ -1777,7 +1791,7 @@
     "message": "Приоритетная поддержка."
   },
   "premiumSignUpFuture": {
-    "message": "Все будущие функции Премиум. Их будет больше!"
+    "message": "Все будущие функции Премиум-статуса. Их будет больше!"
   },
   "premiumPrice": {
     "message": "Всего лишь $PRICE$ /в год!",
@@ -1795,7 +1809,7 @@
     "message": "Премиум-доступ"
   },
   "premiumAccessDesc": {
-    "message": "Вы можете добавить премиум-доступ всем членам вашей организации за $PRICE$ /$INTERVAL$.",
+    "message": "Вы можете добавить премиум-доступ всем членам своей организации за $PRICE$ /$INTERVAL$.",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1808,7 +1822,7 @@
     }
   },
   "additionalStorageGb": {
-    "message": "Дополнительное хранилище (ГБ)"
+    "message": "Дополнительное место (ГБ)"
   },
   "additionalStorageGbDesc": {
     "message": "# дополнительных ГБ"
@@ -1877,7 +1891,7 @@
     "message": "Кредитная карта"
   },
   "paypalClickSubmit": {
-    "message": "Нажмите кнопку PayPal, чтобы войти в свою учетную запись PayPal, затем нажмите кнопку 'Подтвердить' ниже, чтобы продолжить."
+    "message": "Нажмите кнопку PayPal, чтобы войти в свой аккаунт PayPal, и нажмите кнопку \"Подтвердить\" для продолжения."
   },
   "cancelSubscription": {
     "message": "Отменить подписку"
@@ -1907,7 +1921,7 @@
     "message": "Подписка отменена."
   },
   "neverExpires": {
-    "message": "Никогда не истекает"
+    "message": "Не истекает"
   },
   "status": {
     "message": "Статус"
@@ -2045,7 +2059,7 @@
     }
   },
   "uploadLicenseFilePremium": {
-    "message": "Для обновления своей учетной записи до Премиум, необходимо загрузить действительный файл лицензии."
+    "message": "Чтобы обновить аккаунт до Премиум, необходимо отослать действительный файл лицензии."
   },
   "uploadLicenseFileOrg": {
     "message": "Для создания организации размещенной на локальном хостинге, необходимо загрузить действительный файл лицензии."
@@ -2069,7 +2083,7 @@
     "message": "Email для выставления счетов"
   },
   "businessName": {
-    "message": "Название компании"
+    "message": "Наименование компании"
   },
   "chooseYourPlan": {
     "message": "Выберите план"
@@ -2532,6 +2546,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Посмотреть все варианты авторизации"
+  },
   "viewedItemId": {
     "message": "Просмотрен элемент $ID$.",
     "placeholders": {
@@ -2939,7 +2956,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3011,15 +3028,15 @@
   },
   "billingPlan": {
     "message": "План",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Изменить план",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Обновите свой аккаунт до другого плана, предоставив информацию ниже. Пожалуйста, убедитесь, что в вашем аккаунте есть активный способ оплаты.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Счет #$NUMBER$",
@@ -3232,7 +3249,7 @@
     "message": "Обновить"
   },
   "upgradeOrganization": {
-    "message": "Обновить организацию"
+    "message": "Обновление организации"
   },
   "upgradeOrganizationDesc": {
     "message": "Эта функция недоступна для бесплатных организаций. Переключитесь на платный план, чтобы разблокировать дополнительные возможности."
@@ -3294,6 +3311,10 @@
   "dateUpdated": {
     "message": "Обновлено",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Создан",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Пароль обновлен",
@@ -3372,8 +3393,14 @@
     "message": "Чтобы обеспечить целостность ваших ключей шифрования, перед продолжением верифицируйте фразу отпечатка пользователя.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Убедитесь, что ваше хранилище разблокировано, а фраза отпечатка соответствует другому устройству."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза отпечатка"
+  },
   "dontAskFingerprintAgain": {
-    "message": "Никогда не запрашивать верификацию фразы отпечатка для приглашенных пользователей (не рекомендуется)",
+    "message": "Никогда не запрашивать проверку отпечатков фраз для приглашенных пользователей (не рекомендуется)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "free": {
@@ -3606,7 +3633,7 @@
     "message": "Подтверждение действия по тайм-ауту"
   },
   "hidePasswords": {
-    "message": "Скрывать пароли"
+    "message": "Скрыть пароли"
   },
   "countryPostalCodeRequiredDesc": {
     "message": "Эта информация требуется только для расчета налога с продаж и финансовой отчетности."
@@ -3919,7 +3946,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4056,6 +4083,12 @@
   },
   "permissions": {
     "message": "Разрешения"
+  },
+  "managerPermissions": {
+    "message": "Права менеджера"
+  },
+  "adminPermissions": {
+    "message": "Права администратора"
   },
   "accessEventLogs": {
     "message": "Доступ к журналам событий"
@@ -4241,7 +4274,7 @@
     "message": "Запрос на сброс пароля зарегистрирован"
   },
   "withdrawPasswordReset": {
-    "message": "Отписаться от сброса пароля"
+    "message": "Отменить сброс пароля"
   },
   "enrollPasswordResetSuccess": {
     "message": "Регистрация успешна!"
@@ -4365,6 +4398,9 @@
   },
   "reinviteSelected": {
     "message": "Отправить приглашения повторно"
+  },
+  "resendNotification": {
+    "message": "Отправить уведомление повторно"
   },
   "noSelectedUsersApplicable": {
     "message": "Это действие не применимо ни к одному из выбранных пользователей."
@@ -4787,7 +4823,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -5163,10 +5199,10 @@
     "message": "Используйте возможности субадресации вашей электронной почты."
   },
   "catchallEmail": {
-    "message": "Catch-all-адрес электронной почты"
+    "message": "Общий email домена"
   },
   "catchallEmailDesc": {
-    "message": "Использовать настроенную в вашем домене почту catch-all."
+    "message": "Использовать общую почту домена."
   },
   "random": {
     "message": "Случайно",
@@ -5357,5 +5393,17 @@
   },
   "numberOfUsers": {
     "message": "Количество пользователей"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Тип фильтра --"
+  },
+  "multiSelectLoading": {
+    "message": "Получение параметров..."
+  },
+  "multiSelectNotFound": {
+    "message": "Элементов не найдено"
+  },
+  "multiSelectClearAll": {
+    "message": "Очистить все"
   }
 }

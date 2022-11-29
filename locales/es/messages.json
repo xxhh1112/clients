@@ -71,10 +71,10 @@
     "message": "Empresa"
   },
   "ssn": {
-    "message": "Número de la seguridad social"
+    "message": "Nº de la seguridad social"
   },
   "passportNumber": {
-    "message": "Número de pasaporte"
+    "message": "Nº de pasaporte"
   },
   "licenseNumber": {
     "message": "Número de licencia"
@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Dominio base",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Nombre de dominio",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Servidor",
@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Identifícate o crea una nueva cuenta para acceder a tu caja fuerte."
   },
+  "loginWithDevice": {
+    "message": "Iniciar sesión con el dispositivo"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Iniciar sesión con el dispositivo debe estar habilitado en los ajustes de la aplicación móvil Bitwarden. ¿Necesitas otra opción?"
+  },
   "createAccount": {
     "message": "Crear cuenta"
+  },
+  "newAroundHere": {
+    "message": "¿Nuevo por aquí?"
   },
   "startTrial": {
     "message": "Iniciar período de prueba"
   },
   "logIn": {
     "message": "Identificarse"
+  },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
   },
   "submit": {
     "message": "Enviar"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "La contraseña maestra debe tener al menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "No perteneces a ninguna organización. Las organizaciones te permiten compartir elementos con otros usuarios de forma segura."
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
   },
   "versionNumber": {
     "message": "Versión $VERSION_NUMBER$",
@@ -949,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Mínimo de caracteres especiales",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Evitar caracteres ambiguos"
@@ -982,7 +997,7 @@
   },
   "capitalize": {
     "message": "Capitalizar",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Incluir número"
@@ -995,7 +1010,7 @@
   },
   "clear": {
     "message": "Limpiar",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Cuenta actualizada"
@@ -1177,6 +1192,12 @@
   "selectImportFile": {
     "message": "Seleccionar el fichero a importar"
   },
+  "chooseFile": {
+    "message": "Seleccionar archivo"
+  },
+  "noFileChosen": {
+    "message": "No se ha seleccionado ningún archivo"
+  },
   "orCopyPasteFileContents": {
     "message": "o copia/pega el contenido del fichero a importar"
   },
@@ -1213,13 +1234,6 @@
   },
   "faviconDesc": {
     "message": "Mostrar una imagen reconocible junto a cada inicio de sesión."
-  },
-  "enableGravatars": {
-    "message": "Habilitar Gravatars",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Usa imágenes de avatares cargadas desde gravatar.com."
   },
   "enableFullWidth": {
     "message": "Habilitar diseño de ancho completo",
@@ -1300,7 +1314,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Suscripción Premium"
@@ -1309,13 +1323,13 @@
     "message": "Premium requerido"
   },
   "premiumRequiredDesc": {
-    "message": "Se quiere membrasía Premium para poder utilizar esta característica."
+    "message": "Se quiere membresía Premium para poder utilizar esta característica."
   },
   "youHavePremiumAccess": {
-    "message": "Tienes acceso premium"
+    "message": "Usted tiene acceso premium"
   },
   "alreadyPremiumFromOrg": {
-    "message": "Ya tienes acceso a las características premium, debido a que eres miembro de una organización."
+    "message": "Ya tiene acceso a las características premium, debido a que es miembro de una organización."
   },
   "manage": {
     "message": "Gestionar"
@@ -1524,7 +1538,7 @@
   },
   "reportsDesc": {
     "message": "Identifique y cierre las lagunas de seguridad en sus cuentas en línea haciendo clic en los siguientes informes.",
-    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Informes de sitios web no seguros"
@@ -1557,7 +1571,7 @@
     "message": "Inicios de sesión sin 2FA encontrados"
   },
   "inactive2faFoundDesc": {
-    "message": "Hemos encontrado $COUNT$ sitio(s) web en su caja fuerte que no pueden ser configuradas con autenticación de dos factores (según twofactorauth.org). Para proteger estas cuentas, debe habilitar autenticación de dos factores.",
+    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1750,7 +1764,7 @@
   },
   "goPremium": {
     "message": "Hazte Premium",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Has actualizado a premium."
@@ -2532,6 +2546,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de inicio de sesión"
+  },
   "viewedItemId": {
     "message": "Elemento $ID$ visto.",
     "placeholders": {
@@ -2939,7 +2956,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3011,15 +3028,15 @@
   },
   "billingPlan": {
     "message": "Plan",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Cambiar plan",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Actualiza tu cuenta a otro plan proporcionando la información de abajo. Por favor, asegúrate de que tienes un método de pago activo añadido a la cuenta.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Factura $NUMBER$",
@@ -3295,6 +3312,10 @@
     "message": "Actualizada",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creado",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Contraseña actualizada",
     "description": "ex. Date this password was updated"
@@ -3371,6 +3392,12 @@
   "fingerprintEnsureIntegrityVerify": {
     "message": "Para asegurar la integridad de sus claves de encriptación, por favor verifique la frase de la huella digital del usuario antes de continuar.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su bóveda está desbloqueada y la frase de huella dactilar coincide con el otro dispositivo."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella dactilar"
   },
   "dontAskFingerprintAgain": {
     "message": "No pida verificar la frase de la huella dactilar de nuevo",
@@ -3919,7 +3946,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4056,6 +4083,12 @@
   },
   "permissions": {
     "message": "Permisos"
+  },
+  "managerPermissions": {
+    "message": "Permisos del Administrador"
+  },
+  "adminPermissions": {
+    "message": "Permisos del administrador"
   },
   "accessEventLogs": {
     "message": "Acceder a los registros de eventos"
@@ -4365,6 +4398,9 @@
   },
   "reinviteSelected": {
     "message": "Reenviar invitaciones"
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
   },
   "noSelectedUsersApplicable": {
     "message": "Esta acción no es aplicable a ninguno de los usuarios seleccionados."
@@ -4696,7 +4732,7 @@
     "message": "Comportamiento de firma"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum Incoming Signing Algorithm"
+    "message": "Algoritmo mínimo de firma entrante"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4714,13 +4750,13 @@
     "message": "URL del servicio de inicio de sesión único"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single Log Out Service URL"
+    "message": "URL del Servicio Único de Cierre de Sesión (SLO)"
   },
   "idpX509PublicCert": {
     "message": "Certificado público X509"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound Signing Algorithm"
+    "message": "Algoritmo de firma saliente"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Permitir respuestas de autenticación no solicitadas"
@@ -4732,7 +4768,7 @@
     "message": "Solicitud de inicio de sesión"
   },
   "ssoSettingsSaved": {
-    "message": "Single Sign-On configuration was saved."
+    "message": "Se ha guardado la configuración única de inicio de sesión."
   },
   "sponsoredFamilies": {
     "message": "Familias Bitwarden gratis"
@@ -4741,7 +4777,7 @@
     "message": "Usted y su familia son elegibles para Familias Bitwarden Gratis. Canjeé con su correo electrónico personal para mantener tus datos seguros incluso cuando no estés en el trabajo."
   },
   "sponsoredFamiliesEligibleCard": {
-    "message": "Redeem your Free Bitwarden for Families plan today to keep your data secure even when you are not at work."
+    "message": "Reclame su plan gratuito de Bitwarden para Familias, para mantener sus datos seguros, incluso cuando no se encuentra en el trabajo."
   },
   "sponsoredFamiliesInclude": {
     "message": "El plan de Bitwarden para familias incluye"
@@ -4750,10 +4786,10 @@
     "message": "Acceso Premium para hasta 6 usuarios"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "Shared collections for Family secrets"
+    "message": "Colecciones compartidas para Secretos Familiares"
   },
   "badToken": {
-    "message": "The link is no longer valid. Please have the sponsor resend the offer."
+    "message": "El enlace ya no es válido. Por favor, solicite al patrocinados que vuelva a enviar la oferta."
   },
   "reclaimedFreePlan": {
     "message": "Plan gratis canjeado"
@@ -4765,10 +4801,10 @@
     "message": "Seleccione la organización que desea patrocinar"
   },
   "familiesSponsoringOrgSelect": {
-    "message": "Which Free Families offer would you like to redeem?"
+    "message": "¿Cuál oferta gratuita para familias te gustaría canjear?"
   },
   "sponsoredFamiliesEmail": {
-    "message": "Enter your personal email to redeem Bitwarden Families"
+    "message": "Ingrese su correo personal para reclamar Bitwarden para Familias"
   },
   "sponsoredFamiliesLeaveCopy": {
     "message": "Si eliminas una oferta o la eliminas de la organización patrocinadora, el patrocinio de tu familia caducará en la próxima fecha de renovación."
@@ -4787,7 +4823,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -5011,7 +5047,7 @@
     "message": "Autoalojamiento"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
-    "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
+    "message": "Para configurar su organización en su propio servidor, necesitará subir su archivo de licencia. Para apoyar planes de Familias gratuitos y capacidades avanzadas de facturación para su organización autosuficiente, necesitará configurar la sincronización de facturación."
   },
   "billingSyncApiKeyRotated": {
     "message": "Token rotado."
@@ -5020,10 +5056,10 @@
     "message": "Facturación sincronizada"
   },
   "billingSyncDesc": {
-    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "La sincronización de facturación proveé planes Famliares gratuitos para los miembros y facilidades de facturación avanzada, conectando la bóveda autoalojada de Bitwarden al servidor en la nube de Bitwarden."
   },
   "billingSyncKeyDesc": {
-    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
     "message": "Token de sincronización de facturación"
@@ -5156,14 +5192,14 @@
     "message": "Tipo de nombre de usuario"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -5179,10 +5215,10 @@
     "message": "Servicio"
   },
   "unknownCipher": {
-    "message": "Unknown Item, you may need to request permission to access this item."
+    "message": "Elemento desconocido, puede que necesite solicitar permiso para acceder a este elemento."
   },
   "cannotSponsorSelf": {
-    "message": "You cannot redeem for the active account. Enter a different email."
+    "message": "No se puede canjear para la cuenta activa. Escriba un correo diferente."
   },
   "revokeWhenExpired": {
     "message": "Caduca $DATE$",
@@ -5216,7 +5252,7 @@
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
-    "message": "Self-hosted sponsorships synced."
+    "message": "Los patrocinios autohospedados están sincronizados."
   },
   "billingManagedByProvider": {
     "message": "Gestionado por $PROVIDER$",
@@ -5357,5 +5393,17 @@
   },
   "numberOfUsers": {
     "message": "Número de usuarios"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Escriba para filtrar --"
+  },
+  "multiSelectLoading": {
+    "message": "Recuperando opciones..."
+  },
+  "multiSelectNotFound": {
+    "message": "No hay elementos"
+  },
+  "multiSelectClearAll": {
+    "message": "Borrar todo"
   }
 }

@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Basisdomäne",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Domain-Name",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Host",
@@ -569,14 +569,26 @@
   "loginOrCreateNewAccount": {
     "message": "Sie müssen sich anmelden oder ein neues Konto erstellen, um auf den Tresor zugreifen zu können."
   },
+  "loginWithDevice": {
+    "message": "Mit Gerät anmelden"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Mit Gerät anmelden muss in den Einstellungen der Bitwarden Mobile App aktiviert sein. Brauchst du eine andere Möglichkeit?"
+  },
   "createAccount": {
     "message": "Konto erstellen"
+  },
+  "newAroundHere": {
+    "message": "Neu hier?"
   },
   "startTrial": {
     "message": "Probephase starten"
   },
   "logIn": {
     "message": "Anmelden"
+  },
+  "logInInitiated": {
+    "message": "Anmeldung initiiert"
   },
   "submit": {
     "message": "Absenden"
@@ -609,7 +621,7 @@
     "message": "Master-Passwort-Hinweis (optional)"
   },
   "masterPassHintLabel": {
-    "message": "Master-Passwort-Hinweis"
+    "message": "Master Passwort Hinweis"
   },
   "settings": {
     "message": "Einstellungen"
@@ -635,7 +647,7 @@
   "confirmMasterPasswordRequired": {
     "message": "Erneute Eingabe des Master-Passworts ist erforderlich."
   },
-  "masterPasswordMinLength": {
+  "masterPasswordMinlength": {
     "message": "Das Master-Passwort muss mindestens 8 Zeichen lang sein."
   },
   "masterPassDoesntMatch": {
@@ -704,6 +716,9 @@
   },
   "noOrganizationsList": {
     "message": "Sie gehören keiner Organisation an. Organisationen erlauben es Ihnen Passwörter sicher mit anderen zu teilen."
+  },
+  "notificationSentDevice": {
+    "message": "Eine Benachrichtigung wurde an dein Gerät gesendet."
   },
   "versionNumber": {
     "message": "Version $VERSION_NUMBER$",
@@ -949,7 +964,7 @@
   },
   "minSpecial": {
     "message": "Mindestanzahl Sonderzeichen",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Mehrdeutige Zeichen vermeiden"
@@ -982,7 +997,7 @@
   },
   "capitalize": {
     "message": "Großschreiben",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Ziffer hinzufügen"
@@ -995,7 +1010,7 @@
   },
   "clear": {
     "message": "Löschen",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Konto aktualisiert"
@@ -1177,6 +1192,12 @@
   "selectImportFile": {
     "message": "Wählen Sie die Import-Datei"
   },
+  "chooseFile": {
+    "message": "Datei auswählen"
+  },
+  "noFileChosen": {
+    "message": "Keine Datei ausgewählt"
+  },
   "orCopyPasteFileContents": {
     "message": "oder fügen Sie den Inhalt Ihrer Datei hier ein"
   },
@@ -1213,13 +1234,6 @@
   },
   "faviconDesc": {
     "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
-  },
-  "enableGravatars": {
-    "message": "Gravatare aktivieren",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Nutze Profilbilder von gravatar.com."
   },
   "enableFullWidth": {
     "message": "Darstellung in voller Breite aktivieren",
@@ -1300,7 +1314,7 @@
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Premium-Mitgliedschaft"
@@ -1524,7 +1538,7 @@
   },
   "reportsDesc": {
     "message": "Identifiziere und schließe Sicherheitslücken in deinen Online-Konten, indem du auf die Berichte unten klickst.",
-    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Bericht über ungesicherte Websites"
@@ -1750,7 +1764,7 @@
   },
   "goPremium": {
     "message": "Zu Premium wechseln",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Sie haben ein Premium-Abo aktiviert."
@@ -2532,6 +2546,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Alle Anmelde-Optionen anzeigen"
+  },
   "viewedItemId": {
     "message": "Eintrag $ID$ angesehen.",
     "placeholders": {
@@ -2887,7 +2904,7 @@
     "message": "Startdatum"
   },
   "endDate": {
-    "message": "Endatum"
+    "message": "Enddatum"
   },
   "verifyEmail": {
     "message": "E-Mail-Adresse bestätigen"
@@ -2939,7 +2956,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3011,15 +3028,15 @@
   },
   "billingPlan": {
     "message": "Abo",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Abo ändern",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Ändern sie ihr Konto zu einem anderen Tarif, indem Sie folgende Informationen bereitstellen. Bitte stellen Sie sicher, dass Sie eine aktive Zahlungsmethode zu ihren Konto hinzugefügt haben.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Rechnung #$NUMBER$",
@@ -3295,6 +3312,10 @@
     "message": "Aktualisiert",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Erstellt",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Passwort aktualisiert",
     "description": "ex. Date this password was updated"
@@ -3340,7 +3361,7 @@
     "message": "Schwaches Master-Passwort"
   },
   "weakMasterPasswordDesc": {
-    "message": "Das Master-Passwort, welches Sie gewählt haben, ist schwach. Sie sollten ein starkes Master-Passwort auswählen, um Ihr Bitwarden-Konto ausreichend zu schützen. Sind Sie sicher, dass Sie dieses Master-Passwort verwenden wollen?"
+    "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
   },
   "rotateAccountEncKey": {
     "message": "Auch den Verschlüsselungscode meines Kontos aktualisieren"
@@ -3371,6 +3392,12 @@
   "fingerprintEnsureIntegrityVerify": {
     "message": "Um die Sicherheit ihres Verschlüsselungscodes zu gewähren, bestätigen Sie bitte den Prüfschlüssel des Benutzers.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Bitte stelle sicher, dass dein Tresor entsperrt ist und die Fingerabdruck-Phrase mit dem anderen Gerät übereinstimmt."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerabdruck-Phrase"
   },
   "dontAskFingerprintAgain": {
     "message": "Nicht erneut nach dem Prüfschlüssel fragen",
@@ -3919,7 +3946,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -4056,6 +4083,12 @@
   },
   "permissions": {
     "message": "Berechtigungen"
+  },
+  "managerPermissions": {
+    "message": "Manager-Berechtigungen"
+  },
+  "adminPermissions": {
+    "message": "Administrator-Berechtigungen"
   },
   "accessEventLogs": {
     "message": "Zugriff auf Ereignisprotokolle"
@@ -4365,6 +4398,9 @@
   },
   "reinviteSelected": {
     "message": "Einladungen erneut senden"
+  },
+  "resendNotification": {
+    "message": "Benachrichtigung erneut senden"
   },
   "noSelectedUsersApplicable": {
     "message": "Diese Aktion ist für keinen der ausgewählten Benutzer anwendbar."
@@ -4787,7 +4823,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -5357,5 +5393,17 @@
   },
   "numberOfUsers": {
     "message": "Anzahl der Benutzer"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Typ zum Filtern --"
+  },
+  "multiSelectLoading": {
+    "message": "Optionen werden abgerufen..."
+  },
+  "multiSelectNotFound": {
+    "message": "Keine Einträge gefunden"
+  },
+  "multiSelectClearAll": {
+    "message": "Alles löschen"
   }
 }
