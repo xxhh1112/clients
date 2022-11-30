@@ -7,26 +7,12 @@ import { EventType } from "../../enums/eventType";
 import { EventData } from "../../models/data/event.data";
 
 export class EventCollectionService implements EventCollectionServiceAbstraction {
-  private inited = false;
-
   constructor(
     private cipherService: CipherService,
     private stateService: StateService,
     private organizationService: OrganizationService,
     private eventUploadService: EventUploadService
   ) {}
-
-  init(checkOnInterval: boolean) {
-    if (this.inited) {
-      return;
-    }
-
-    this.inited = true;
-    if (checkOnInterval) {
-      this.eventUploadService.uploadEvents();
-      setInterval(() => this.eventUploadService.uploadEvents(), 60 * 1000); // check every 60 seconds
-    }
-  }
 
   async collect(
     eventType: EventType,

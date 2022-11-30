@@ -5,11 +5,24 @@ import { StateService } from "../../abstractions/state.service";
 import { EventRequest } from "../../models/request/event.request";
 
 export class EventUploadService implements EventUploadServiceAbstraction {
+  private inited = false;
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
     private logService: LogService
   ) {}
+
+  init(checkOnInterval: boolean) {
+    if (this.inited) {
+      return;
+    }
+
+    this.inited = true;
+    if (checkOnInterval) {
+      this.uploadEvents();
+      setInterval(() => this.uploadEvents(), 60 * 1000); // check every 60 seconds
+    }
+  }
 
   async uploadEvents(userId?: string): Promise<void> {
     const authed = await this.stateService.getIsAuthenticated({ userId: userId });

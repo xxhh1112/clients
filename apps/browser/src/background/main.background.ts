@@ -567,7 +567,7 @@ export default class MainBackground {
 
     await (this.vaultTimeoutService as VaultTimeoutService).init(true);
     await (this.i18nService as I18nService).init();
-    await (this.eventCollectionService as EventCollectionService).init(true);
+    await (this.eventUploadService as EventUploadService).init(true);
     await this.runtimeBackground.init();
     await this.notificationBackground.init();
     await this.commandsBackground.init();
