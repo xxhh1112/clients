@@ -8,8 +8,8 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { firstValueFrom } from "rxjs";
-import { first, switchMap, withLatestFrom } from "rxjs/operators";
+import { combineLatest, firstValueFrom, Subject } from "rxjs";
+import { first, switchMap, takeUntil } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -55,6 +55,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   organization: Organization;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -79,20 +80,18 @@ export class VaultComponent implements OnInit, OnDestroy {
         ? "trashCleanupWarningSelfHosted"
         : "trashCleanupWarning"
     );
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.route.parent.params.subscribe((params) => {
+
+    this.route.parent.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.organization = this.organizationService.get(params.organizationId);
     });
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.route.queryParams.pipe(first()).subscribe((qParams) => {
+    this.route.queryParams.pipe(first(), takeUntil(this.destroy$)).subscribe((qParams) => {
       this.ciphersComponent.searchText = this.vaultFilterComponent.searchText = qParams.search;
     });
 
-    this.route.queryParams
-      // verify that the organization has been set
+    // verifies that the organization has been set
+    combineLatest([this.route.queryParams, this.route.parent.params])
       .pipe(
-        withLatestFrom(this.route.parent.params),
         switchMap(async ([qParams, params]) => {
           const cipherId = getCipherIdFromParams(qParams);
           if (cipherId) {
@@ -114,13 +113,12 @@ export class VaultComponent implements OnInit, OnDestroy {
               });
             }
           }
-        })
+        }),
+        takeUntil(this.destroy$)
       )
-      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       .subscribe();
 
     if (!this.organization.canUseAdminCollections) {
-      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
         this.ngZone.run(async () => {
           switch (message.command) {
@@ -142,6 +140,8 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async applyVaultFilter(filter: VaultFilter) {
