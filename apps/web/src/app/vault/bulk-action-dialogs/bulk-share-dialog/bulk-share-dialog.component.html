@@ -51,6 +51,7 @@
               type="checkbox"
               [(ngModel)]="c.checked"
               name="Collection[{{ i }}].Checked"
+              attr.aria-label="Check {{ c.name }}"
               appStopProp
             />
           </td>
