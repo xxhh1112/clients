@@ -15,8 +15,8 @@ import { CollectionService } from "@bitwarden/common/abstractions/collection.ser
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { EventService } from "@bitwarden/common/abstractions/event/event.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
@@ -201,7 +201,11 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<EventUploadService>("eventUploadService"),
       deps: [],
     },
-    { provide: EventService, useFactory: getBgService<EventService>("eventService"), deps: [] },
+    {
+      provide: EventCollectionService,
+      useFactory: getBgService<EventCollectionService>("eventCollectionService"),
+      deps: [],
+    },
     {
       provide: PolicyService,
       useFactory: (

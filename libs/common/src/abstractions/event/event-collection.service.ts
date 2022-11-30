@@ -1,6 +1,6 @@
 import { EventType } from "../../enums/eventType";
 
-export abstract class EventService {
+export abstract class EventCollectionService {
   collect: (
     eventType: EventType,
     cipherId?: string,

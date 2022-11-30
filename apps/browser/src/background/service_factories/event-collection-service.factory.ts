@@ -1,5 +1,5 @@
-import { EventService as AbstractEventService } from "@bitwarden/common/abstractions/event/event.service";
-import { EventService } from "@bitwarden/common/services/event/event.service";
+import { EventCollectionService as AbstractEventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 
 import { cipherServiceFactory, CipherServiceInitOptions } from "./cipher-service.factory";
 import {
@@ -13,24 +13,24 @@ import {
 } from "./organization-service.factory";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";
 
-type EventServiceOptions = FactoryOptions;
+type EventCollectionServiceOptions = FactoryOptions;
 
-export type EventServiceInitOptions = EventServiceOptions &
+export type EventCollectionServiceInitOptions = EventCollectionServiceOptions &
   CipherServiceInitOptions &
   StateServiceInitOptions &
   OrganizationServiceInitOptions &
   EventUploadServiceInitOptions;
 
-export function eventServiceFactory(
-  cache: { eventService?: AbstractEventService } & CachedServices,
-  opts: EventServiceInitOptions
-): Promise<AbstractEventService> {
+export function eventCollectionServiceFactory(
+  cache: { eventCollectionService?: AbstractEventCollectionService } & CachedServices,
+  opts: EventCollectionServiceInitOptions
+): Promise<AbstractEventCollectionService> {
   return factory(
     cache,
-    "eventService",
+    "eventCollectionService",
     opts,
     async () =>
-      new EventService(
+      new EventCollectionService(
         await cipherServiceFactory(cache, opts),
         await stateServiceFactory(cache, opts),
         await organizationServiceFactory(cache, opts),

@@ -19,8 +19,8 @@ import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abs
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/common/abstractions/environment.service";
+import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
@@ -86,8 +86,8 @@ import { CryptoService } from "@bitwarden/common/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
+import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
-import { EventService } from "@bitwarden/common/services/event/event.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
@@ -464,8 +464,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       deps: [ApiServiceAbstraction, StateServiceAbstraction, LogService],
     },
     {
-      provide: EventServiceAbstraction,
-      useClass: EventService,
+      provide: EventCollectionServiceAbstraction,
+      useClass: EventCollectionService,
       deps: [
         CipherServiceAbstraction,
         StateServiceAbstraction,

@@ -1,12 +1,12 @@
 import { CipherService } from "../../abstractions/cipher.service";
+import { EventCollectionService as EventCollectionServiceAbstraction } from "../../abstractions/event/event-collection.service";
 import { EventUploadService } from "../../abstractions/event/event-upload.service";
-import { EventService as EventServiceAbstraction } from "../../abstractions/event/event.service";
 import { OrganizationService } from "../../abstractions/organization/organization.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
 import { EventType } from "../../enums/eventType";
 import { EventData } from "../../models/data/event.data";
 
-export class EventService implements EventServiceAbstraction {
+export class EventCollectionService implements EventCollectionServiceAbstraction {
   private inited = false;
 
   constructor(
