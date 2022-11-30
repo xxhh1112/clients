@@ -636,7 +636,6 @@ export default class MainBackground {
     await this.eventUploadService.uploadEvents(userId);
 
     await Promise.all([
-      this.eventService.clearEvents(userId),
       this.syncService.setLastSync(new Date(0), userId),
       this.cryptoService.clearKeys(userId),
       this.settingsService.clear(userId),

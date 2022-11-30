@@ -72,8 +72,4 @@ export class EventService implements EventServiceAbstraction {
       await this.eventUploadService.uploadEvents();
     }
   }
-
-  async clearEvents(userId?: string): Promise<any> {
-    await this.stateService.setEventCollection(null, { userId: userId });
-  }
 }

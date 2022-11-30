@@ -7,5 +7,4 @@ export abstract class EventService {
     uploadImmediately?: boolean,
     organizationId?: string
   ) => Promise<any>;
-  clearEvents: (userId?: string) => Promise<any>;
 }

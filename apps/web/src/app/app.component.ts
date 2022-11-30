@@ -226,7 +226,6 @@ export class AppComponent implements OnDestroy, OnInit {
     await this.eventUploadService.uploadEvents();
     const userId = await this.stateService.getUserId();
     await Promise.all([
-      this.eventService.clearEvents(),
       this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.settingsService.clear(userId),
