@@ -117,7 +117,6 @@ export class VaultComponent implements OnInit, OnDestroy {
       });
 
     if (!this.organization.canUseAdminCollections) {
-      await this.syncService.fullSync(false);
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
         this.ngZone.run(async () => {
@@ -134,6 +133,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           }
         });
       });
+      await this.syncService.fullSync(false);
     }
   }
 
