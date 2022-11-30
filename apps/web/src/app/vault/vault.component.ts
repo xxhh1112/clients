@@ -8,7 +8,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { BehaviorSubject, firstValueFrom, Subject } from "rxjs";
+import { firstValueFrom, Subject } from "rxjs";
 import { first, takeUntil } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -71,7 +71,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
 
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private syncService: SyncService,
@@ -166,6 +166,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.routedVaultFilterBridgeService.activeFilter$
       .pipe(takeUntil(this.destroy$))
       .subscribe((activeFilter) => {
+        this.activeFilter = activeFilter;
+        // eslint-disable-next-line no-console
         console.log("activeFilter", activeFilter);
       });
   }
@@ -184,17 +186,19 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
   async applyVaultFilter(filter: VaultFilter) {
-    this.activeFilter = filter;
+    // this.activeFilter = filter;
     this.ciphersComponent.showAddNew = !this.activeFilter.isDeleted;
     await this.ciphersComponent.reload(
       this.activeFilter.buildFilter(),
       this.activeFilter.isDeleted
     );
-    this.go();
+    // this.go();
   }
 
   async applyOrganizationFilter(orgId: string) {

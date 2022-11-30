@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { combineLatest, map, Observable } from "rxjs";
 
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/tree-node";
 
+import { RoutedVaultFilterModel } from "../../../core/vault-filter/routed-vault-filter.model";
 import { RoutedVaultFilterService } from "../../../core/vault-filter/routed-vault-filter.service";
+import { RoutedVaultFilterBridge } from "../shared/models/routed-vault-filter-bridge.model";
 import { VaultFilter } from "../shared/models/vault-filter.model";
 
 import { VaultFilterService } from "./abstractions/vault-filter.service";
@@ -13,7 +16,8 @@ export class RoutedVaultFilterBridgeService {
   readonly activeFilter$: Observable<VaultFilter>;
 
   constructor(
-    routedVaultFilterService: RoutedVaultFilterService,
+    private router: Router,
+    private routedVaultFilterService: RoutedVaultFilterService,
     legacyVaultFilterService: VaultFilterService
   ) {
     this.activeFilter$ = combineLatest([
@@ -40,11 +44,18 @@ export class RoutedVaultFilterBridgeService {
           );
         }
 
-        return legacyFilter;
+        const bridgeModel = new RoutedVaultFilterBridge(legacyFilter, this);
+
+        return bridgeModel;
       })
     );
 
     this.activeFilter$.subscribe();
+  }
+
+  navigate(filter: RoutedVaultFilterModel) {
+    const route = this.routedVaultFilterService.createRoute(filter);
+    this.router.navigate(route.commands, route.extras);
   }
 
   private findNode<T extends ITreeNodeObject>(
