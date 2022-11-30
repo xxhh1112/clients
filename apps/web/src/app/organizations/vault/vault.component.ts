@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
-import { first, withLatestFrom } from "rxjs/operators";
+import { first, switchMap, withLatestFrom } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -91,30 +91,33 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.route.queryParams
       // verify that the organization has been set
-      .pipe(withLatestFrom(this.route.parent.params))
-      // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-      .subscribe(async ([qParams, params]) => {
-        const cipherId = getCipherIdFromParams(qParams);
-        if (cipherId) {
-          if (
-            // Handle users with implicit collection access since they use the admin endpoint
-            this.organization.canUseAdminCollections ||
-            (await this.cipherService.get(cipherId)) != null
-          ) {
-            this.editCipherId(cipherId);
-          } else {
-            this.platformUtilsService.showToast(
-              "error",
-              this.i18nService.t("errorOccurred"),
-              this.i18nService.t("unknownCipher")
-            );
-            this.router.navigate([], {
-              queryParams: { cipherId: null, itemId: null },
-              queryParamsHandling: "merge",
-            });
+      .pipe(
+        withLatestFrom(this.route.parent.params),
+        switchMap(async ([qParams, params]) => {
+          const cipherId = getCipherIdFromParams(qParams);
+          if (cipherId) {
+            if (
+              // Handle users with implicit collection access since they use the admin endpoint
+              this.organization.canUseAdminCollections ||
+              (await this.cipherService.get(cipherId)) != null
+            ) {
+              this.editCipherId(cipherId);
+            } else {
+              this.platformUtilsService.showToast(
+                "error",
+                this.i18nService.t("errorOccurred"),
+                this.i18nService.t("unknownCipher")
+              );
+              this.router.navigate([], {
+                queryParams: { cipherId: null, itemId: null },
+                queryParamsHandling: "merge",
+              });
+            }
           }
-        }
-      });
+        })
+      )
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+      .subscribe();
 
     if (!this.organization.canUseAdminCollections) {
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil
