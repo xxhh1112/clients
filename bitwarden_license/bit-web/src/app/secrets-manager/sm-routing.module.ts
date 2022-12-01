@@ -48,7 +48,7 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "secrets",
+        redirectTo: "projects",
         pathMatch: "full",
       },
     ],
