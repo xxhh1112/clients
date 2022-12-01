@@ -1,12 +1,15 @@
 import { Jsonify } from "type-fest";
 
+import { EncryptService } from "../../abstractions/encrypt.service";
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
 import { LinkedIdType } from "../../enums/linkedIdType";
+import { Encryptable } from "../../interfaces/crypto.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { InitializerKey } from "../../services/cryptography/initializer-key";
 import { LocalData } from "../data/local.data";
 import { Cipher } from "../domain/cipher";
+import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
 import { AttachmentView } from "./attachment.view";
 import { CardView } from "./card.view";
@@ -15,13 +18,13 @@ import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
 import { PasswordHistoryView } from "./password-history.view";
 import { SecureNoteView } from "./secure-note.view";
-import { View } from "./view";
 
-export class CipherView implements View, InitializerMetadata {
+export class CipherView implements Encryptable<Cipher>, InitializerMetadata {
   readonly initializerKey = InitializerKey.CipherView;
+  static readonly initializerKey = InitializerKey.CipherView;
 
   id: string = null;
-  organizationId: string = null;
+  organizationId?: string = null;
   folderId: string = null;
   name: string = null;
   notes: string = null;
@@ -49,6 +52,7 @@ export class CipherView implements View, InitializerMetadata {
       return;
     }
 
+    // TODO: Remove this
     this.id = c.id;
     this.organizationId = c.organizationId;
     this.folderId = c.folderId;
@@ -62,8 +66,39 @@ export class CipherView implements View, InitializerMetadata {
     this.revisionDate = c.revisionDate;
     this.creationDate = c.creationDate;
     this.deletedDate = c.deletedDate;
+  }
+
+  encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Cipher> {
+    throw new Error("Method not implemented.");
+  }
+
+  keyIdentifier(): string {
+    return this.organizationId;
+  }
+
+  static async decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: Cipher) {
+    const view = new CipherView(model);
+
+    view.id = model.id;
+    view.organizationId = model.organizationId;
+    view.folderId = model.folderId;
+    view.favorite = model.favorite;
+    view.organizationUseTotp = model.organizationUseTotp;
+    view.edit = model.edit;
+    view.viewPassword = model.viewPassword;
+    view.type = model.type;
+    view.localData = model.localData;
+    view.collectionIds = model.collectionIds;
+    view.revisionDate = model.revisionDate;
+    view.creationDate = model.creationDate;
+    view.deletedDate = model.deletedDate;
     // Old locally stored ciphers might have reprompt == null. If so set it to None.
-    this.reprompt = c.reprompt ?? CipherRepromptType.None;
+    view.reprompt = model.reprompt ?? CipherRepromptType.None;
+
+    view.name = await model.name?.decryptWithEncryptService(encryptService, key);
+    // TODO: Add remaining fields
+
+    return view;
   }
 
   private get item() {

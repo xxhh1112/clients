@@ -1,7 +1,7 @@
 import { defaultIfEmpty, filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
 import { Jsonify } from "type-fest";
 
-import { OldDecryptable } from "../../interfaces/decryptable.interface";
+import { Decryptable, DecryptableDomain } from "../../interfaces/crypto.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
@@ -22,10 +22,11 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
    * Sends items to a web worker to decrypt them.
    * This utilises multithreading to decrypt items faster without interrupting other operations (e.g. updating UI).
    */
-  async decryptItems<T extends InitializerMetadata>(
-    items: OldDecryptable<T>[],
+  async decryptDomains<V, D extends DecryptableDomain & InitializerMetadata>(
+    view: Decryptable<V, D> & InitializerMetadata,
+    items: D[],
     key: SymmetricCryptoKey
-  ): Promise<T[]> {
+  ): Promise<V[]> {
     if (items == null || items.length < 1) {
       return [];
     }
@@ -44,6 +45,7 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
 
     const request = {
       id: Utils.newGuid(),
+      view: view.initializerKey,
       items: items,
       key: key,
     };
@@ -55,8 +57,8 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
         filter((response: MessageEvent) => response.data?.id === request.id),
         map((response) => JSON.parse(response.data.items)),
         map((items) =>
-          items.map((jsonItem: Jsonify<T>) => {
-            const initializer = getClassInitializer<T>(jsonItem.initializerKey);
+          items.map((jsonItem: Jsonify<D>) => {
+            const initializer = getClassInitializer<D>(jsonItem.initializerKey);
             return initializer(jsonItem);
           })
         ),

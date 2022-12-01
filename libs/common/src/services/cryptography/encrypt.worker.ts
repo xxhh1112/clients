@@ -1,13 +1,14 @@
 import { Jsonify } from "type-fest";
 
-import { OldDecryptable } from "../../interfaces/decryptable.interface";
+import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { ConsoleLogService } from "../../services/consoleLog.service";
 import { ContainerService } from "../../services/container.service";
 import { WebCryptoFunctionService } from "../../services/webCryptoFunction.service";
 
 import { EncryptServiceImplementation } from "./encrypt.service.implementation";
-import { getClassInitializer } from "./get-class-initializer";
+import { getClass, getClassInitializer } from "./get-class-initializer";
+import { InitializerKey } from "./initializer-key";
 
 const workerApi: Worker = self as any;
 
@@ -38,16 +39,20 @@ workerApi.addEventListener("message", async (event: { data: string }) => {
 
   const request: {
     id: string;
-    items: Jsonify<OldDecryptable<any>>[];
+    view: InitializerKey;
+    items: Jsonify<InitializerMetadata>[];
     key: Jsonify<SymmetricCryptoKey>;
   } = JSON.parse(event.data);
 
   const key = SymmetricCryptoKey.fromJSON(request.key);
   const items = request.items.map((jsonItem) => {
-    const initializer = getClassInitializer<OldDecryptable<any>>(jsonItem.initializerKey);
+    const initializer = getClassInitializer(jsonItem.initializerKey);
     return initializer(jsonItem);
   });
-  const result = await encryptService.decryptItems(items, key);
+
+  const view = getClass<any>(request.view);
+
+  const result = await encryptService.decryptDomains(view as any, items as any, key);
 
   workerApi.postMessage({
     id: request.id,

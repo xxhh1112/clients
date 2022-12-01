@@ -44,7 +44,7 @@ export interface Encryptable<TDomain> {
  * Helper type for defining the static decrypt operation on view models.
  */
 export type Decryptable<TView, TDomain extends DecryptableDomain> = {
-  decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: TDomain): TView;
+  decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: TDomain): Promise<TView>;
 };
 
 /**

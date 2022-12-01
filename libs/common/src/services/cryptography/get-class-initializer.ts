@@ -15,8 +15,16 @@ const classInitializers: Record<InitializerKey, (obj: any) => any> = {
   [InitializerKey.CipherView]: CipherView.fromJSON,
 };
 
+const classes: Partial<Record<InitializerKey, any>> = {
+  [InitializerKey.CipherView]: CipherView,
+};
+
 export function getClassInitializer<T extends InitializerMetadata>(
   className: InitializerKey
 ): (obj: Jsonify<T>) => T {
   return classInitializers[className];
+}
+
+export function getClass<T extends InitializerMetadata>(className: InitializerKey): (a: any) => T {
+  return classes[className];
 }
