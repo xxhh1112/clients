@@ -1,6 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -34,7 +35,8 @@ export class ProjectDialogComponent implements OnInit {
     @Inject(DIALOG_DATA) private data: ProjectOperation,
     private projectService: ProjectService,
     private i18nService: I18nService,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -66,7 +68,8 @@ export class ProjectDialogComponent implements OnInit {
 
     const projectView = this.getProjectView();
     if (this.data.operation === OperationType.Add) {
-      await this.createProject(projectView);
+      const newProject = await this.createProject(projectView);
+      this.router.navigate(["sm", this.data.organizationId, "projects", newProject.id]);
     } else {
       projectView.id = this.data.projectId;
       await this.updateProject(projectView);
@@ -75,8 +78,9 @@ export class ProjectDialogComponent implements OnInit {
   };
 
   private async createProject(projectView: ProjectView) {
-    await this.projectService.create(this.data.organizationId, projectView);
+    const newProject = await this.projectService.create(this.data.organizationId, projectView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("projectCreated"));
+    return newProject;
   }
 
   private async updateProject(projectView: ProjectView) {

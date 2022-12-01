@@ -8,6 +8,8 @@ import { HeaderComponent } from "../layout/header.component";
 import { NewMenuComponent } from "../layout/new-menu.component";
 import { NoItemsComponent } from "../layout/no-items.component";
 
+import { SecretsListComponent } from "./secrets-list.component";
+
 @NgModule({
   imports: [SharedModule],
   exports: [
@@ -17,6 +19,7 @@ import { NoItemsComponent } from "../layout/no-items.component";
     HeaderComponent,
     NewMenuComponent,
     NoItemsComponent,
+    SecretsListComponent,
   ],
   declarations: [
     BulkStatusDialogComponent,
@@ -24,6 +27,7 @@ import { NoItemsComponent } from "../layout/no-items.component";
     HeaderComponent,
     NewMenuComponent,
     NoItemsComponent,
+    SecretsListComponent,
   ],
   providers: [],
   bootstrap: [],

@@ -12,9 +12,9 @@ import { BulkOperationStatus } from "../layout/dialogs/bulk-status-dialog.compon
 import { ProjectListView } from "../models/view/project-list.view";
 import { ProjectView } from "../models/view/project.view";
 
-import { ProjectRequest } from "./requests/project.request";
-import { ProjectListItemResponse } from "./responses/project-list-item.response";
-import { ProjectResponse } from "./responses/project.response";
+import { ProjectRequest } from "./models/requests/project.request";
+import { ProjectListItemResponse } from "./models/responses/project-list-item.response";
+import { ProjectResponse } from "./models/responses/project.response";
 
 @Injectable({
   providedIn: "root",
@@ -47,7 +47,7 @@ export class ProjectService {
     return await this.createProjectsListView(organizationId, results.data);
   }
 
-  async create(organizationId: string, projectView: ProjectView) {
+  async create(organizationId: string, projectView: ProjectView): Promise<ProjectView> {
     const request = await this.getProjectRequest(organizationId, projectView);
     const r = await this.apiService.send(
       "POST",
@@ -56,7 +56,10 @@ export class ProjectService {
       true,
       true
     );
-    this._project.next(await this.createProjectView(new ProjectResponse(r)));
+
+    const project = await this.createProjectView(new ProjectResponse(r));
+    this._project.next(project);
+    return project;
   }
 
   async update(organizationId: string, projectView: ProjectView) {

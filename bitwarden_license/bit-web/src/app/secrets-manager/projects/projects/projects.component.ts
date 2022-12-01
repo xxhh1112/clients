@@ -4,18 +4,17 @@ import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
 import { DialogService } from "@bitwarden/components";
 
-import { ProjectListView } from "../models/view/project-list.view";
-
+import { ProjectListView } from "../../models/view/project-list.view";
 import {
   ProjectDeleteDialogComponent,
   ProjectDeleteOperation,
-} from "./dialog/project-delete-dialog.component";
+} from "../dialog/project-delete-dialog.component";
 import {
   OperationType,
   ProjectDialogComponent,
   ProjectOperation,
-} from "./dialog/project-dialog.component";
-import { ProjectService } from "./project.service";
+} from "../dialog/project-dialog.component";
+import { ProjectService } from "../project.service";
 
 @Component({
   selector: "sm-projects",
