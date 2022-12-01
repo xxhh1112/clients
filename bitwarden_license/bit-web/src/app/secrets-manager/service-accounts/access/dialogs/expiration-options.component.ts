@@ -36,7 +36,7 @@ export class ExpirationOptionsComponent
 
   @Input() expirationDayOptions: number[];
 
-  @Input() set touched(val: number) {
+  @Input() set touched(val: boolean) {
     if (val) {
       this.form.markAllAsTouched();
     }

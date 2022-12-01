@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -10,6 +11,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
+import { EventSystemUser } from "@bitwarden/common/enums/event-system-user";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { EventResponse } from "@bitwarden/common/models/response/event.response";
 
@@ -20,13 +22,13 @@ import { EventService } from "../../core";
   selector: "app-org-events",
   templateUrl: "events.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class EventsComponent extends BaseEventsComponent implements OnInit {
+export class EventsComponent extends BaseEventsComponent implements OnInit, OnDestroy {
   exportFileName = "org-events";
   organizationId: string;
   organization: Organization;
 
   private orgUsersUserIdMap = new Map<string, any>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -53,17 +55,20 @@ export class EventsComponent extends BaseEventsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.parent.params.subscribe(async (params) => {
-      this.organizationId = params.organizationId;
-      this.organization = await this.organizationService.get(this.organizationId);
-      if (this.organization == null || !this.organization.useEvents) {
-        this.router.navigate(["/organizations", this.organizationId]);
-        return;
-      }
-
-      await this.load();
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          this.organization = await this.organizationService.get(this.organizationId);
+          if (this.organization == null || !this.organization.useEvents) {
+            await this.router.navigate(["/organizations", this.organizationId]);
+            return;
+          }
+          await this.load();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   async load() {
@@ -110,20 +115,33 @@ export class EventsComponent extends BaseEventsComponent implements OnInit {
   }
 
   protected getUserName(r: EventResponse, userId: string) {
-    if (userId == null) {
-      return null;
+    if (r.installationId != null) {
+      return `Installation: ${r.installationId}`;
     }
 
-    if (this.orgUsersUserIdMap.has(userId)) {
-      return this.orgUsersUserIdMap.get(userId);
+    if (userId != null) {
+      if (this.orgUsersUserIdMap.has(userId)) {
+        return this.orgUsersUserIdMap.get(userId);
+      }
+
+      if (r.providerId != null && r.providerId === this.organization.providerId) {
+        return {
+          name: this.organization.providerName,
+        };
+      }
     }
 
-    if (r.providerId != null && r.providerId === this.organization.providerId) {
+    if (r.systemUser != null) {
       return {
-        name: this.organization.providerName,
+        name: EventSystemUser[r.systemUser],
       };
     }
 
     return null;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -16,7 +16,7 @@
           class="tw-flex tw-items-center tw-py-1 tw-px-4 tw-leading-tight tw-text-info"
           appStopProp
         >
-          <bit-avatar [text]="account.name || account.email" [email]="account.email"></bit-avatar>
+          <bit-avatar [text]="account.name || account.email" [id]="account.userId"></bit-avatar>
           <div class="tw-ml-2 tw-block tw-overflow-hidden tw-whitespace-nowrap">
             <span>{{ "loggedInAs" | i18n }}</span>
             <small class="tw-block tw-overflow-hidden tw-whitespace-nowrap tw-text-muted">

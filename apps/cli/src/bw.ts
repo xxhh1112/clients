@@ -49,16 +49,16 @@ import { UserVerificationApiService } from "@bitwarden/common/services/userVerif
 import { UserVerificationService } from "@bitwarden/common/services/userVerification/userVerification.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
-import { CliPlatformUtilsService } from "@bitwarden/node/cli/services/cliPlatformUtils.service";
-import { ConsoleLogService } from "@bitwarden/node/cli/services/consoleLog.service";
-import { NodeApiService } from "@bitwarden/node/services/nodeApi.service";
-import { NodeCryptoFunctionService } from "@bitwarden/node/services/nodeCryptoFunction.service";
+import { NodeCryptoFunctionService } from "@bitwarden/node/services/node-crypto-function.service";
 
 import { Program } from "./program";
 import { SendProgram } from "./send.program";
+import { CliPlatformUtilsService } from "./services/cli-platform-utils.service";
+import { ConsoleLogService } from "./services/console-log.service";
 import { I18nService } from "./services/i18n.service";
-import { LowdbStorageService } from "./services/lowdbStorage.service";
-import { NodeEnvSecureStorageService } from "./services/nodeEnvSecureStorage.service";
+import { LowdbStorageService } from "./services/lowdb-storage.service";
+import { NodeApiService } from "./services/node-api.service";
+import { NodeEnvSecureStorageService } from "./services/node-env-secure-storage.service";
 import { VaultProgram } from "./vault.program";
 
 // Polyfills
@@ -240,7 +240,7 @@ export class Main {
 
     this.providerService = new ProviderService(this.stateService);
 
-    this.organizationService = new OrganizationService(this.stateService, this.syncNotifierService);
+    this.organizationService = new OrganizationService(this.stateService);
 
     this.policyService = new PolicyService(this.stateService, this.organizationService);
 
@@ -322,7 +322,7 @@ export class Main {
       this.stateService,
       this.providerService,
       this.folderApiService,
-      this.syncNotifierService,
+      this.organizationService,
       async (expired: boolean) => await this.logout()
     );
 

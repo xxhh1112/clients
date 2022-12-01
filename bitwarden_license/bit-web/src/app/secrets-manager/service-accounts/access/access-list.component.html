@@ -35,7 +35,6 @@
           buttonType="main"
           [title]="'options' | i18n"
           [attr.aria-label]="'options' | i18n"
-          [bitMenuTriggerFor]="tableMenu"
         ></button>
       </th>
     </tr>
@@ -64,7 +63,7 @@
       </td>
 
       <bit-menu #tokenMenu>
-        <button type="button" bitMenuItem (click)="editSecretEvent.emit(secret.id)">
+        <button type="button" bitMenuItem>
           <span class="tw-text-danger">
             <i class="bwi bwi-fw bwi-minus-circle" aria-hidden="true"></i>
             {{ "revokeAccessToken" | i18n }}

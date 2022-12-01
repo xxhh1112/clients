@@ -18,7 +18,6 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherCreateRequest } from "@bitwarden/common/models/request/cipher-create.request";
 import { CipherRequest } from "@bitwarden/common/models/request/cipher.request";
 
@@ -29,7 +28,6 @@ import { AddEditComponent as BaseAddEditComponent } from "../../vault/add-edit.c
   templateUrl: "../../vault/add-edit.component.html",
 })
 export class AddEditComponent extends BaseAddEditComponent {
-  organization: Organization;
   originalCipher: Cipher = null;
 
   constructor(
@@ -96,8 +94,11 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
     const response = await this.apiService.getCipherAdmin(this.cipherId);
     const data = new CipherData(response);
-    this.originalCipher = new Cipher(data);
-    return new Cipher(data);
+
+    data.edit = true;
+    const cipher = new Cipher(data);
+    this.originalCipher = cipher;
+    return cipher;
   }
 
   protected encryptCipher() {

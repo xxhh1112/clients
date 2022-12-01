@@ -3,7 +3,7 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden – Ilmainen salasananhallinta",
+    "message": "Bitwarden - Free Password Manager",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
@@ -1485,7 +1485,7 @@
     "message": "Uusi pääsalasanasi ei täytä käytännön määrittämiä vaatimuksia."
   },
   "acceptPolicies": {
-    "message": "Valitsemalla tämän ruudun hyväksyt seuraavat:"
+    "message": "Valitsemalla tämän hyväksyt seuraavat:"
   },
   "acceptPoliciesRequired": {
     "message": "Palveluehtoja ja tietosuojakäytäntöä ei ole vahvistettu."
@@ -2028,5 +2028,20 @@
         "example": "Jun 15, 2015"
       }
     }
+  },
+  "loginWithMasterPassword": {
+    "message": "Kirjaudu pääsalasanalla"
+  },
+  "loggingInAs": {
+    "message": "Kirjaudutaan tunnuksella"
+  },
+  "notYou": {
+    "message": "Etkö se ollut sinä?"
+  },
+  "newAroundHere": {
+    "message": "Oletko uusi täällä?"
+  },
+  "rememberEmail": {
+    "message": "Muista sähköpostiosoite"
   }
 }

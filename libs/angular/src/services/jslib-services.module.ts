@@ -31,10 +31,14 @@ import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction }
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
-import { OrganizationService as OrganizationServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import {
+  InternalOrganizationService,
+  OrganizationService as OrganizationServiceAbstraction,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -88,6 +92,7 @@ import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.s
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
+import { LoginService } from "@bitwarden/common/services/login.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
@@ -354,7 +359,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         ProviderServiceAbstraction,
         FolderApiServiceAbstraction,
-        SyncNotifierServiceAbstraction,
+        OrganizationServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -504,6 +509,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         LogService,
         OrganizationServiceAbstraction,
         CryptoFunctionServiceAbstraction,
+        SyncNotifierServiceAbstraction,
+        MessagingServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -520,7 +527,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: OrganizationServiceAbstraction,
       useClass: OrganizationService,
-      deps: [StateServiceAbstraction, SyncNotifierServiceAbstraction],
+      deps: [StateServiceAbstraction],
+    },
+    {
+      provide: InternalOrganizationService,
+      useExisting: OrganizationServiceAbstraction,
     },
     {
       provide: ProviderServiceAbstraction,
@@ -577,6 +588,10 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: ValidationServiceAbstraction,
       useClass: ValidationService,
       deps: [I18nServiceAbstraction, PlatformUtilsServiceAbstraction],
+    },
+    {
+      provide: LoginServiceAbstraction,
+      useClass: LoginService,
     },
   ],
 })

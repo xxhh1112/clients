@@ -6,6 +6,7 @@ import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/models/view/field.view";
 
@@ -13,7 +14,6 @@ import { BrowserApi } from "../browser/browserApi";
 import AutofillField from "../models/autofillField";
 import AutofillPageDetails from "../models/autofillPageDetails";
 import AutofillScript from "../models/autofillScript";
-import { StateService } from "../services/abstractions/state.service";
 
 import {
   AutoFillOptions,
@@ -21,6 +21,7 @@ import {
   PageDetail,
   FormData,
 } from "./abstractions/autofill.service";
+import { BrowserStateService } from "./abstractions/browser-state.service";
 import {
   AutoFillConstants,
   CreditCardAutoFillConstants,
@@ -38,7 +39,7 @@ export interface GenerateFillScriptOptions {
 export default class AutofillService implements AutofillServiceInterface {
   constructor(
     private cipherService: CipherService,
-    private stateService: StateService,
+    private stateService: BrowserStateService,
     private totpService: TotpService,
     private eventService: EventService,
     private logService: LogService
@@ -305,6 +306,8 @@ export default class AutofillService implements AutofillServiceInterface {
     let pf: AutofillField = null;
     let username: AutofillField = null;
     const login = options.cipher.login;
+    fillScript.savedUrls =
+      login?.uris?.filter((u) => u.match != UriMatchType.Never).map((u) => u.uri) ?? [];
 
     if (!login.password || login.password === "") {
       // No password for this login. Maybe they just wanted to auto-fill some custom fields?

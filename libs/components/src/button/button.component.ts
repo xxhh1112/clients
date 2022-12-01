@@ -20,8 +20,8 @@ const buttonStyles: Record<ButtonTypes, string[]> = {
     "tw-bg-transparent",
     "tw-border-text-muted",
     "!tw-text-muted",
-    "hover:tw-bg-secondary-500",
-    "hover:tw-border-secondary-500",
+    "hover:tw-bg-text-muted",
+    "hover:tw-border-text-muted",
     "hover:!tw-text-contrast",
     "disabled:tw-bg-transparent",
     "disabled:tw-border-text-muted/60",
@@ -76,7 +76,16 @@ export class ButtonComponent implements ButtonLikeAbstraction {
   }
 
   @Input() buttonType: ButtonTypes = null;
+
   @Input() block?: boolean;
+
   @Input() loading = false;
+
   @Input() disabled = false;
+
+  @Input("bitIconButton") icon: string;
+
+  get iconClass() {
+    return [this.icon, "!tw-m-0"];
+  }
 }

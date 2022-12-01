@@ -14,11 +14,11 @@ import { UpdaterMain } from "@bitwarden/electron/updater.main";
 import { WindowMain } from "@bitwarden/electron/window.main";
 
 import { BiometricMain } from "./main/biometric/biometric.main";
-import { DesktopCredentialStorageListener } from "./main/desktopCredentialStorageListener";
+import { DesktopCredentialStorageListener } from "./main/desktop-credential-storage-listener";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
-import { NativeMessagingMain } from "./main/nativeMessaging.main";
-import { PowerMonitorMain } from "./main/powerMonitor.main";
+import { NativeMessagingMain } from "./main/native-messaging.main";
+import { PowerMonitorMain } from "./main/power-monitor.main";
 import { Account } from "./models/account";
 import { I18nService } from "./services/i18n.service";
 
@@ -64,8 +64,12 @@ export class Main {
     const watch = args.some((val) => val === "--watch");
 
     if (watch) {
+      const execName = process.platform === "win32" ? "electron.cmd" : "electron";
       // eslint-disable-next-line
-      require("electron-reload")(__dirname, {});
+      require("electron-reload")(__dirname, {
+        electron: path.join(__dirname, "../../../", "node_modules", ".bin", execName),
+        electronArgv: ["--inspect=5858", "--watch"],
+      });
     }
 
     this.logService = new ElectronLogService(null, app.getPath("userData"));

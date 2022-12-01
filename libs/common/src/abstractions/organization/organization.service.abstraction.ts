@@ -1,35 +1,63 @@
 import { map, Observable } from "rxjs";
 
 import { Utils } from "../../misc/utils";
+import { OrganizationData } from "../../models/data/organization.data";
 import { Organization } from "../../models/domain/organization";
 import { I18nService } from "../i18n.service";
 
-export function canAccessToolsTab(org: Organization): boolean {
-  return org.canAccessImportExport || org.canAccessReports;
+export function canAccessVaultTab(org: Organization): boolean {
+  return org.isManager;
 }
 
 export function canAccessSettingsTab(org: Organization): boolean {
-  return org.isOwner;
+  return (
+    org.isOwner ||
+    org.canManagePolicies ||
+    org.canManageSso ||
+    org.canManageScim ||
+    org.canAccessImportExport
+  );
 }
 
-export function canAccessManageTab(org: Organization): boolean {
+export function canAccessMembersTab(org: Organization): boolean {
+  return org.canManageUsers || org.canManageUsersPassword;
+}
+
+export function canAccessGroupsTab(org: Organization): boolean {
+  return org.canManageGroups;
+}
+
+export function canAccessReportingTab(org: Organization): boolean {
+  return org.canAccessReports || org.canAccessEventLogs;
+}
+
+export function canAccessBillingTab(org: Organization): boolean {
+  return org.canManageBilling;
+}
+
+export function canManageCollections(org: Organization): boolean {
   return (
     org.canCreateNewCollections ||
     org.canEditAnyCollection ||
     org.canDeleteAnyCollection ||
-    org.canEditAssignedCollections ||
-    org.canDeleteAssignedCollections ||
-    org.canAccessEventLogs ||
-    org.canManageGroups ||
-    org.canManageUsers ||
-    org.canManagePolicies ||
-    org.canManageSso ||
-    org.canManageScim
+    org.canViewAssignedCollections
   );
 }
 
+export function canAccessManageTab(org: Organization): boolean {
+  return canAccessMembersTab(org) || canAccessGroupsTab(org) || canManageCollections(org);
+}
+
 export function canAccessOrgAdmin(org: Organization): boolean {
-  return canAccessToolsTab(org) || canAccessSettingsTab(org) || canAccessManageTab(org);
+  return (
+    canAccessMembersTab(org) ||
+    canAccessGroupsTab(org) ||
+    canAccessReportingTab(org) ||
+    canAccessBillingTab(org) ||
+    canAccessSettingsTab(org) ||
+    canAccessVaultTab(org) ||
+    canAccessManageTab(org)
+  );
 }
 
 export function getOrganizationById(id: string) {
@@ -48,6 +76,15 @@ export abstract class OrganizationService {
   get: (id: string) => Organization;
   getByIdentifier: (identifier: string) => Organization;
   getAll: (userId?: string) => Promise<Organization[]>;
+  /**
+   * @deprecated For the CLI only
+   * @param id id of the organization
+   */
+  getFromState: (id: string) => Promise<Organization>;
   canManageSponsorships: () => Promise<boolean>;
   hasOrganizations: () => boolean;
+}
+
+export abstract class InternalOrganizationService extends OrganizationService {
+  replace: (organizations: { [id: string]: OrganizationData }) => Promise<void>;
 }

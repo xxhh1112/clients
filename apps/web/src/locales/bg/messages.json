@@ -575,11 +575,14 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Вписването с устройство трябва да е включено в настройките на мобилното приложение на Битуорден. Друга настройка ли търсите?"
   },
+  "loginWithMasterPassword": {
+    "message": "Вписване с главната парола"
+  },
   "createAccount": {
     "message": "Създаване на абонамент"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "За пръв път ли сте тук?"
   },
   "startTrial": {
     "message": "Стартиране на пробния период"
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Двустепенно удостоверяване"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Задължително двустепенно удостоверяване"
+  },
   "twoStepLoginDesc": {
     "message": "Допълнителна защита на абонамента чрез изискването на допълнително действие при вписване."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Може да изискате двустепенна идентификация за всички потребители в организацията ви, като настроите доставчиците на ниво организация."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Two-step Login Policy"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "За да направите двустепенното удостоверяване чрез Duo задължително, използвайте настройките по-долу."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Ако сте настроили еднократната идентификация, двустепенното удостоверяване може вече да е зададено като задължително от Вашия доставчик на удостоверителни данни."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Включването на двустепенна идентификация може завинаги да предотврати вписването ви в абонамента към Битуорден. Кодът за възстановяване ще ви позволи да достъпите абонамента дори и да имате проблем с доставчика на двустепенна идентификация (напр. ако изгубите устройството си). Дори и екипът по поддръжката към няма да ви помогне в такъв случай. Силно препоръчваме да отпечатате или запишете кодовете и да ги пазете на надеждно място."
@@ -1539,6 +1555,10 @@
   "reportsDesc": {
     "message": "Открийте и отстранете проблемите със защитата на профилите си като щракнете върху докладите по-долу.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Открийте и отстранете проблемите със защитата на профилите в организацията си като щракнете върху докладите по-долу.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Доклад за сайтове без защита"
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Номерът на карта от запис $ID$ е прегледан.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Кодът за сигурност за запис № $ID$ е прегледан.",
     "placeholders": {
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Моята организация"
+  },
+  "organizationInfo": {
+    "message": "Информация за организацията"
   },
   "deleteOrganization": {
     "message": "Изтриване на организация"
@@ -3683,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "Идентификаторът на организация е задължителен."
   },
+  "ssoIdentifier": {
+    "message": "Идентификатор за еднократна идентификация"
+  },
+  "ssoIdentifierHint": {
+    "message": "Дайте този идентификатор на членовете си, за да могат да се вписват чрез еднократна идентификация."
+  },
   "unlinkSso": {
     "message": "Прекъсване на еднократна идентификация"
   },
@@ -4083,6 +4121,9 @@
   },
   "permissions": {
     "message": "Права"
+  },
+  "permission": {
+    "message": "Permission"
   },
   "managerPermissions": {
     "message": "Права на управителя"
@@ -4488,6 +4529,10 @@
   },
   "clients": {
     "message": "Клиенти"
+  },
+  "client": {
+    "message": "Клиент",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Администратор на доставчика"
@@ -5373,6 +5418,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Полето не може да съдържа повече от $COUNT$ знака.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ поле(та) по-горе се нуждае/ят от вниманието Ви.",
     "placeholders": {
@@ -5388,11 +5442,23 @@
   "on": {
     "message": "Включено"
   },
+  "members": {
+    "message": "Членове"
+  },
+  "reporting": {
+    "message": "Докладване"
+  },
   "cardBrandMir": {
     "message": "Мир"
   },
   "numberOfUsers": {
     "message": "Брой потребители"
+  },
+  "loggingInAs": {
+    "message": "Вписване като"
+  },
+  "notYou": {
+    "message": "Това не сте Вие?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Пишете тук за филтриране --"
@@ -5405,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "Изчистване на всичко"
+  },
+  "from": {
+    "message": "From"
+  },
+  "to": {
+    "message": "To"
+  },
+  "member": {
+    "message": "Член"
+  },
+  "update": {
+    "message": "Обновяване"
+  },
+  "role": {
+    "message": "Роля"
+  },
+  "canView": {
+    "message": "Може да преглежда"
+  },
+  "canViewExceptPass": {
+    "message": "Може да преглежда, без пароли"
+  },
+  "canEdit": {
+    "message": "Може да редактира"
+  },
+  "canEditExceptPass": {
+    "message": "Може да редактира, без пароли"
+  },
+  "group": {
+    "message": "Група"
+  },
+  "groupAccessAll": {
+    "message": "Тази група има достъп до всички записи и може да ги редактира."
+  },
+  "memberAccessAll": {
+    "message": "Този член има достъп до всички записи и може да ги редактира."
   }
 }
