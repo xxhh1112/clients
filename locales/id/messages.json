@@ -570,19 +570,16 @@
     "message": "Masuk atau buat akun baru untuk mengakses brankas Anda."
   },
   "loginWithDevice": {
-    "message": "Masuk dengan perangkat"
+    "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
-  },
-  "loginWithMasterPassword": {
-    "message": "Masuk dengan kata sandi utama"
   },
   "createAccount": {
     "message": "Buat Akun"
   },
   "newAroundHere": {
-    "message": "Pengguna baru?"
+    "message": "New around here?"
   },
   "startTrial": {
     "message": "Mulai Masa Percobaan"
@@ -918,16 +915,16 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Konfirmasi kata sandi utama"
+    "message": "Confirm master password"
   },
   "confirmFormat": {
-    "message": "Konfirmasi format"
+    "message": "Confirm format"
   },
   "filePassword": {
-    "message": "File kata sandi"
+    "message": "File password"
   },
   "confirmFilePassword": {
-    "message": "Konfirmasi file kata sandi"
+    "message": "Confirm file password"
   },
   "accountBackupOptionDescription": {
     "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
@@ -936,19 +933,19 @@
     "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "Jenis file"
+    "message": "File type"
   },
   "accountBackup": {
-    "message": "Pencadangan akun"
+    "message": "Account backup"
   },
   "passwordProtected": {
-    "message": "Dilindungi kata sandi"
+    "message": "Password protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
     "message": "“File password”  and “Confirm file password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Konfirmasi impor berangkas"
+    "message": "Confirm vault import"
   },
   "confirmVaultImportDesc": {
     "message": "This file is password-protected. Please enter the file password to import data."
@@ -1196,10 +1193,10 @@
     "message": "Pilih file impor"
   },
   "chooseFile": {
-    "message": "Pilih berkas"
+    "message": "Choose File"
   },
   "noFileChosen": {
-    "message": "Tidak ada berkas yang dipilih"
+    "message": "No file chosen"
   },
   "orCopyPasteFileContents": {
     "message": "atau salin / tempel konten file impor"
@@ -1290,24 +1287,11 @@
   "twoStepLogin": {
     "message": "Login dua-langkah"
   },
-  "twoStepLoginEnforcement": {
-    "message": "Two-step Login Enforcement"
-  },
   "twoStepLoginDesc": {
     "message": "Amankan akun Anda dengan meminta langkah tambahan saat masuk."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
-  },
-  "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
-  },
-  "twoStepLoginOrganizationDuoDesc": {
-    "message": "To enforce Two-step Login through Duo, use the options below."
-  },
-  "twoStepLoginOrganizationSsoDesc": {
-    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
+  "twoStepLoginOrganizationDesc": {
+    "message": "Mewajibkan login dua-langkah untuk para pengguna organisasi Anda dengan cara mengatur provider di tingkat organisasi."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Dengan mengaktifkan login dua-langkah, Anda bisa terkunci dari akun Bitwarden secara permanen. Jika Anda tidak bisa menggunakan provider login dua-langkah di kondisi normal (misal karena perangkat Anda hilang), Anda bisa menggunakan kode pemulihan untuk mengakses akun tersebut. Bitwarden sama sekali tidak dapat membantu jika Anda kehilangan akses ke akun Anda. Oleh karena itu, kami menyarankan Anda untuk menulis atau mencetak kode pemulihan dan menyimpannya di tempat yang aman."
@@ -1555,10 +1539,6 @@
   "reportsDesc": {
     "message": "Identifikasi dan tutup celah keamanan di akun-akun online Anda dengan meng-klik laporan di bawah ini.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
-  },
-  "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Laporan Situs Web Tidak Aman"
@@ -2567,7 +2547,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "Lihat semua opsi log in"
+    "message": "View all log in options"
   },
   "viewedItemId": {
     "message": "Melihat item $ID$.",
@@ -2593,15 +2573,6 @@
       "id": {
         "content": "$1",
         "example": "Google"
-      }
-    }
-  },
-  "viewedCardNumberItemId": {
-    "message": "Viewed Card Number for item $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "Unique ID"
       }
     }
   },
@@ -3016,9 +2987,6 @@
   "myOrganization": {
     "message": "Organisasi Saya"
   },
-  "organizationInfo": {
-    "message": "Organization info"
-  },
   "deleteOrganization": {
     "message": "Hapus Organisasi"
   },
@@ -3345,7 +3313,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Dibuat",
+    "message": "Created",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3429,7 +3397,7 @@
     "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
   },
   "fingerprintPhraseHeader": {
-    "message": "Frasa sidik jari"
+    "message": "Fingerprint phrase"
   },
   "dontAskFingerprintAgain": {
     "message": "Jangan tanya untuk memverifikasi frase sidik jari lagi",
@@ -3714,12 +3682,6 @@
   },
   "ssoIdentifierRequired": {
     "message": "Pengenal Organisasi wajib diisi."
-  },
-  "ssoIdentifier": {
-    "message": "SSO identifier"
-  },
-  "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
   },
   "unlinkSso": {
     "message": "Batalkan tautan SSO"
@@ -4122,14 +4084,11 @@
   "permissions": {
     "message": "Izin"
   },
-  "permission": {
-    "message": "Permission"
-  },
   "managerPermissions": {
-    "message": "Pengelola Izin"
+    "message": "Manager Permissions"
   },
   "adminPermissions": {
-    "message": "Izin Admin"
+    "message": "Admin Permissions"
   },
   "accessEventLogs": {
     "message": "Akses Log Peristiwa"
@@ -4159,10 +4118,10 @@
     "message": "Kelola Koleksi yang Ditugaskan"
   },
   "editAssignedCollections": {
-    "message": "Edit koleksi yang ditetapkan"
+    "message": "Edit assigned collections"
   },
   "deleteAssignedCollections": {
-    "message": "Hapus koleksi yang ditetapkan"
+    "message": "Delete assigned collections"
   },
   "manageGroups": {
     "message": "Kelola Grup"
@@ -4180,7 +4139,7 @@
     "message": "Kelola Peyetelan Ulang Sandi"
   },
   "disableRequiredError": {
-    "message": "Anda harus secara manual mengubah kebijakan $POLICYNAME$ sebelum kebijakan ini bisa dinonaktifkan.",
+    "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
     "placeholders": {
       "policyName": {
         "content": "$1",
@@ -4441,13 +4400,13 @@
     "message": "Kirim Ulang Undangan"
   },
   "resendNotification": {
-    "message": "Kirim ulang notifikasi"
+    "message": "Resend notification"
   },
   "noSelectedUsersApplicable": {
     "message": "This action is not applicable to any of the selected users."
   },
   "removeUsersWarning": {
-    "message": "Apakah Anda yakin ingin menghapus pengguna berikut? Proses ini mungkin memerlukan waktu beberapa detik untuk menyelesaikannya dan tidak dapat diinterupsi atau dibatalkan."
+    "message": "Are you sure you want to remove the following users? The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "removeOrgUsersConfirmation": {
     "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
@@ -4504,19 +4463,19 @@
     "message": "Cabut Pengguna"
   },
   "restoreUsers": {
-    "message": "Pulihkan pengguna"
+    "message": "Restore users"
   },
   "error": {
     "message": "Galat"
   },
   "resetPasswordManageUsers": {
-    "message": "Kelola pengguna juga harus diberikan izin mengelola pengaturan ulang kata sandi"
+    "message": "Manage users must also be granted with the manage password reset permission"
   },
   "setupProvider": {
     "message": "Pengaturan Provider"
   },
   "setupProviderLoginDesc": {
-    "message": "Anda telah diundang untuk menyiapkan Penyedia baru. Untuk melanjutkan, Anda harus masuk atau membuat akun Bitwarden baru."
+    "message": "You've been invited to setup a new Provider. To continue, you need to log in or create a new Bitwarden account."
   },
   "setupProviderDesc": {
     "message": "Please enter the details below to complete the Provider setup. Contact Customer Support if you have any questions."
@@ -4529,10 +4488,6 @@
   },
   "clients": {
     "message": "Klien"
-  },
-  "client": {
-    "message": "Client",
-    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Admin Provider"
@@ -4903,22 +4858,22 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Gratis Paket Keluarga"
+    "message": "Free Families plan"
   },
   "redeemNow": {
-    "message": "Tukarkan Sekarang"
+    "message": "Redeem now"
   },
   "recipient": {
-    "message": "Penerima"
+    "message": "Recipient"
   },
   "removeSponsorship": {
-    "message": "Buang sponsorship"
+    "message": "Remove sponsorship"
   },
   "removeSponsorshipConfirmation": {
     "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
-    "message": "Sponsorship dibuat"
+    "message": "Sponsorship created"
   },
   "emailSent": {
     "message": "Email Terkirim"
@@ -4927,16 +4882,16 @@
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
-    "message": "Sponsorship dibuang"
+    "message": "Sponsorship removed"
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "keyConnectorUrl": {
-    "message": "URL Konektor Utama"
+    "message": "Key Connector URL"
   },
   "sendVerificationCode": {
-    "message": "Kirim kode verifikasi ke email Anda"
+    "message": "Send a verification code to your email"
   },
   "sendCode": {
     "message": "Kirim Kode"
@@ -4969,10 +4924,10 @@
     "message": "Tinggalkan Organisasi"
   },
   "removeMasterPassword": {
-    "message": "Hapus Kata Sandi Utama"
+    "message": "Remove master password"
   },
   "removedMasterPassword": {
-    "message": "Sandi utama dihapus"
+    "message": "Master password removed"
   },
   "allowSso": {
     "message": "Izinkan autentikasi SSO"
@@ -5002,7 +4957,7 @@
     "message": "Once authenticated, members will decrypt vault data using their master passwords."
   },
   "keyConnector": {
-    "message": "Konektor Kunci"
+    "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDesc": {
     "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
@@ -5017,7 +4972,7 @@
     "message": "Matikan SSO"
   },
   "enabledKeyConnector": {
-    "message": "Konektor Kunci diaktifkan"
+    "message": "Key Connector activated"
   },
   "disabledKeyConnector": {
     "message": "Key Connector deactivated"
@@ -5418,15 +5373,6 @@
       }
     }
   },
-  "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ kolom diatas membutuhkan atensi Anda.",
     "placeholders": {
@@ -5442,23 +5388,11 @@
   "on": {
     "message": "On"
   },
-  "members": {
-    "message": "Members"
-  },
-  "reporting": {
-    "message": "Reporting"
-  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Jumplah pengguna"
-  },
-  "loggingInAs": {
-    "message": "Logging in as"
-  },
-  "notYou": {
-    "message": "Not you?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
@@ -5471,41 +5405,5 @@
   },
   "multiSelectClearAll": {
     "message": "Clear all"
-  },
-  "from": {
-    "message": "From"
-  },
-  "to": {
-    "message": "To"
-  },
-  "member": {
-    "message": "Member"
-  },
-  "update": {
-    "message": "Update"
-  },
-  "role": {
-    "message": "Role"
-  },
-  "canView": {
-    "message": "Can view"
-  },
-  "canViewExceptPass": {
-    "message": "Can view, except passwords"
-  },
-  "canEdit": {
-    "message": "Can edit"
-  },
-  "canEditExceptPass": {
-    "message": "Can edit, except passwords"
-  },
-  "group": {
-    "message": "Group"
-  },
-  "groupAccessAll": {
-    "message": "This group can access and modify all items."
-  },
-  "memberAccessAll": {
-    "message": "This member can access and modify all items."
   }
 }

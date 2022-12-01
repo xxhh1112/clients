@@ -209,11 +209,11 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Eltrovado de kongruo",
+    "message": "Detektilo de interrespondo",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
-    "message": "Implicita eltrovado de kongruo",
+    "message": "Implicita detektilo de interrespondo",
     "description": "Default URI match detection for auto-fill."
   },
   "never": {
@@ -570,13 +570,10 @@
     "message": "Ensalutu aŭ kreu novan konton por aliri vian sekuran trezorejon."
   },
   "loginWithDevice": {
-    "message": "Saluti kun la aparato"
+    "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
-  },
-  "loginWithMasterPassword": {
-    "message": "Saluti kun la ĉefpasvorto"
   },
   "createAccount": {
     "message": "Krei konton"
@@ -606,7 +603,7 @@
     "message": "Kiel ni nomu vin?"
   },
   "masterPass": {
-    "message": "Ĉefpasvorto"
+    "message": "Majstra Pasvorto"
   },
   "masterPassDesc": {
     "message": "La ĉefa pasvorto estas la pasvorto, kiun vi uzas por aliri vian trezorejon. Tre gravas, ke vi ne forgesu vian ĉefan pasvorton. Ne eblas retrovi la pasvorton, se vi forgesos ĝin."
@@ -654,7 +651,7 @@
     "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
-    "message": "La konfirmo de la ĉefa pasvorto ne kongruas."
+    "message": "La konfirmo de la ĉefa pasvorto ne interrespondas."
   },
   "newAccountCreated": {
     "message": "Via nova konto kreiĝis! Vi nun povas ensaluti."
@@ -918,7 +915,7 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Konfirmi la ĉefpasvorton"
+    "message": "Confirm master password"
   },
   "confirmFormat": {
     "message": "Confirm format"
@@ -1187,7 +1184,7 @@
     "message": "Nenio estis importita."
   },
   "importEncKeyError": {
-    "message": "Eraro de ĉifrado de la elporta dosiero. Via ŝlosilo de ĉifrado ne kongruas kun la ŝlosilo de ĉifrado uzita por elporti la datumojn."
+    "message": "Eraro de deĉifrado de la elportaĵo. Via ŝlosilo de ĉifrado ne interrespondas kun la ŝlosilo de ĉifrado uzita por elporti la datenon."
   },
   "selectFormat": {
     "message": "Elektu la formaton de la importa dosiero"
@@ -1290,24 +1287,11 @@
   "twoStepLogin": {
     "message": "Du-ŝtupa saluto"
   },
-  "twoStepLoginEnforcement": {
-    "message": "Two-step Login Enforcement"
-  },
   "twoStepLoginDesc": {
     "message": "Sekurigu vian konton postulante plian paŝon kiam vi ensalutas."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
-  },
-  "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
-  },
-  "twoStepLoginOrganizationDuoDesc": {
-    "message": "To enforce Two-step Login through Duo, use the options below."
-  },
-  "twoStepLoginOrganizationSsoDesc": {
-    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
+  "twoStepLoginOrganizationDesc": {
+    "message": "Postuli du-paŝan ensaluton por la uzantoj de via organizo per agordo de provizantoj je la organiza nivelo."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Ebligi du-paŝan ensaluton povas konstante elŝlosi vin el via Bitwarden-konto. Rekuperiga kodo permesas vin aliri vian konton, se vi ne plu povas uzi vian normalan du-paŝan ensalutan provizanton (ekz. vi perdas Bitwarden-subteno ne povos helpi vin se vi perdos aliron al via konto. Ni rekomendas al vi skribi aŭ presi la reakiran kodon kaj konservi ĝin en sekura loko. "
@@ -1540,7 +1524,7 @@
     "message": "Web vault and browser extensions on a desktop/laptop with a WebAuthn supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
   },
   "twoFactorRecoveryYourCode": {
-    "message": "Via kodo de senpaneigo de du-ŝtupa saluto de Bitwarden"
+    "message": "Via kodo de senpaneigo de la du-ŝtupa saluto de Bitwarden"
   },
   "twoFactorRecoveryNoCode": {
     "message": "Vi ankoraŭ ne ebligis du-paŝajn ensalutajn provizantojn. Post kiam vi ebligis du-ŝtupan ensalut-provizanton, vi povas kontroli ĉi tie vian reakiran kodon."
@@ -1555,10 +1539,6 @@
   "reportsDesc": {
     "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
-  },
-  "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Raporto pri Nesekurigitaj Retejoj"
@@ -2596,15 +2576,6 @@
       }
     }
   },
-  "viewedCardNumberItemId": {
-    "message": "Viewed Card Number for item $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "Unique ID"
-      }
-    }
-  },
   "viewedSecurityCodeItemId": {
     "message": "Vidiĝis sekureca kodo de ero $ID$.",
     "placeholders": {
@@ -3016,9 +2987,6 @@
   "myOrganization": {
     "message": "Mia Organizo"
   },
-  "organizationInfo": {
-    "message": "Organization info"
-  },
   "deleteOrganization": {
     "message": "Forigi Organizon"
   },
@@ -3137,7 +3105,7 @@
     "message": "Enigu vian instalan identigilon"
   },
   "limitSubscriptionDesc": {
-    "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
+    "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
   },
   "maxSeatLimit": {
     "message": "Seat Limit (optional)",
@@ -3182,10 +3150,10 @@
     "message": "For additional help in managing your subscription, please contact Customer Support."
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited members exceed your subscription seats, you will immediately receive a prorated charge for the additional members."
+    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users."
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited members exceed your subscription seats, you will immediately receive a prorated charge for the additional members until your $MAX$ seat limit is reached.",
+    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users until your $MAX$ seat limit is reached.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3194,7 +3162,7 @@
     }
   },
   "subscriptionFreePlan": {
-    "message": "You cannot invite more than $COUNT$ members without upgrading your plan.",
+    "message": "You cannot invite more than $COUNT$ users without upgrading your plan.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3203,7 +3171,7 @@
     }
   },
   "subscriptionFamiliesPlan": {
-    "message": "You cannot invite more than $COUNT$ members without upgrading your plan. Please contact Customer Support to upgrade.",
+    "message": "You cannot invite more than $COUNT$ users without upgrading your plan. Please contact Customer Support to upgrade.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3212,7 +3180,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "Your subscription allows for a total of $COUNT$ members. Your plan is sponsored and billed to an external organization.",
+    "message": "Your subscription allows for a total of $COUNT$ users. Your plan is sponsored and billed to an external organization.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3221,7 +3189,7 @@
     }
   },
   "subscriptionMaxReached": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. You cannot invite more than $COUNT$ members without increasing your subscription seats.",
+    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. You cannot invite more than $COUNT$ users without increasing your subscription seats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3715,12 +3683,6 @@
   "ssoIdentifierRequired": {
     "message": "La identigilo de la organizo estas postulata."
   },
-  "ssoIdentifier": {
-    "message": "SSO identifier"
-  },
-  "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
-  },
   "unlinkSso": {
     "message": "Malkonekti SSO"
   },
@@ -4085,7 +4047,7 @@
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
-    "message": "Organization members that can manage the organization's policies are exempt from this policy's enforcement."
+    "message": "Organization users that can manage the organization's policies are exempt from this policy's enforcement."
   },
   "disableHideEmail": {
     "message": "Always show member’s email address with recipients when creating or editing a Send.",
@@ -4121,9 +4083,6 @@
   },
   "permissions": {
     "message": "Permesoj"
-  },
-  "permission": {
-    "message": "Permission"
   },
   "managerPermissions": {
     "message": "Manager Permissions"
@@ -4324,7 +4283,7 @@
     "message": "Withdrawal success!"
   },
   "eventEnrollPasswordReset": {
-    "message": "User $ID$ enrolled in password reset.",
+    "message": "User $ID$ enrolled in password reset assistance.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4333,7 +4292,7 @@
     }
   },
   "eventWithdrawPasswordReset": {
-    "message": "User $ID$ withdrew from password reset.",
+    "message": "User $ID$ withdrew from password reset assistance.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4399,19 +4358,19 @@
     "message": "Allow admins to reset master passwords for members."
   },
   "resetPasswordPolicyWarning": {
-    "message": "Members in the organization will need to self-enroll or be auto-enrolled before administrators can reset their master password."
+    "message": "Users in the organization will need to self-enroll or be auto-enrolled before administrators can reset their master password."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatic enrollment"
   },
   "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "All members will be automatically enrolled in password reset once their invite is accepted and will not be allowed to withdraw."
+    "message": "All users will be automatically enrolled in password reset once their invite is accepted and will not be allowed to withdraw."
   },
   "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Members already in the organization will not be retroactively enrolled in password reset. They will need to self-enroll before administrators can reset their master password."
+    "message": "Users already in the organization will not be retroactively enrolled in password reset. They will need to self-enroll before administrators can reset their master password."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
-    "message": "Require new members to be enrolled automatically"
+    "message": "Require new users to be enrolled automatically"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "This organization has an Enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
@@ -4529,10 +4488,6 @@
   },
   "clients": {
     "message": "Clients"
-  },
-  "client": {
-    "message": "Client",
-    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Administranto de Provizanto"
@@ -5418,15 +5373,6 @@
       }
     }
   },
-  "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
@@ -5442,23 +5388,11 @@
   "on": {
     "message": "Ŝaltita"
   },
-  "members": {
-    "message": "Members"
-  },
-  "reporting": {
-    "message": "Reporting"
-  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Nombro de uzantoj"
-  },
-  "loggingInAs": {
-    "message": "Logging in as"
-  },
-  "notYou": {
-    "message": "Not you?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
@@ -5471,41 +5405,5 @@
   },
   "multiSelectClearAll": {
     "message": "Clear all"
-  },
-  "from": {
-    "message": "From"
-  },
-  "to": {
-    "message": "To"
-  },
-  "member": {
-    "message": "Member"
-  },
-  "update": {
-    "message": "Update"
-  },
-  "role": {
-    "message": "Role"
-  },
-  "canView": {
-    "message": "Can view"
-  },
-  "canViewExceptPass": {
-    "message": "Can view, except passwords"
-  },
-  "canEdit": {
-    "message": "Can edit"
-  },
-  "canEditExceptPass": {
-    "message": "Can edit, except passwords"
-  },
-  "group": {
-    "message": "Group"
-  },
-  "groupAccessAll": {
-    "message": "This group can access and modify all items."
-  },
-  "memberAccessAll": {
-    "message": "This member can access and modify all items."
   }
 }
