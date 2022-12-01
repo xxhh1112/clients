@@ -4,7 +4,7 @@ export class AccessTokenCreationResponse extends BaseResponse {
   id: string;
   name: string;
   clientSecret: string;
-  expireAt: string;
+  expireAt?: string;
   creationDate: string;
   revisionDate: string;
 

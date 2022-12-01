@@ -50,8 +50,7 @@ export class AccessTokenCreateDialogComponent implements OnInit {
 
   submit = async () => {
     this.formGroup.markAllAsTouched();
-    // TODO remove null check once never expires is implemented
-    if (this.formGroup.invalid || !this.formGroup.value.expirationDateControl) {
+    if (this.formGroup.invalid) {
       return;
     }
     const accessTokenView = new AccessTokenView();

@@ -11,6 +11,11 @@
   </bit-form-field>
   <bit-form-field *ngIf="form.value.expires === 'custom'">
     <bit-label>{{ "expirationDate" | i18n }}</bit-label>
-    <input bitInput type="datetime-local" [min]="minDateTime" formControlName="expireDateTime" />
+    <input
+      bitInput
+      type="datetime-local"
+      [min]="currentDate | date: 'YYYY-MM-ddThh:mm'"
+      formControlName="expireDateTime"
+    />
   </bit-form-field>
 </ng-container>

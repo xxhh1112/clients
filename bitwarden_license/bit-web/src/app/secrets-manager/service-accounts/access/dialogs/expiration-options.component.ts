@@ -42,6 +42,8 @@ export class ExpirationOptionsComponent
     }
   }
 
+  currentDate = new Date();
+
   protected form = new FormGroup({
     expires: new FormControl("never", [Validators.required]),
     expireDateTime: new FormControl("", [Validators.required]),
@@ -96,11 +98,6 @@ export class ExpirationOptionsComponent
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.form.disable() : this.form.enable();
-  }
-
-  get minDateTime() {
-    const now = new Date();
-    return this.datePipe.transform(now, "YYYY-MM-ddThh:mm");
   }
 
   private getExpiresDate(): Date | null {
