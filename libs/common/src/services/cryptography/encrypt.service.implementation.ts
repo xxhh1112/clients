@@ -167,7 +167,7 @@ export class EncryptServiceImplementation implements EncryptService {
     return await Promise.all(items.map((item) => item.decrypt(key)));
   }
 
-  async decryptView<V, D extends DecryptableDomain>(
+  async decryptDomain<V, D extends DecryptableDomain>(
     view: Decryptable<V, D>,
     domain: D,
     key: SymmetricCryptoKey

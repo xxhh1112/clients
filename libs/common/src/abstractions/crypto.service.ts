@@ -91,7 +91,7 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
 
-  decryptView: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
+  decryptDomain: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
   encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
     folder: V
   ) => Promise<EncryptableDomain<V>>;

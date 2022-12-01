@@ -158,7 +158,9 @@ export class FolderService implements InternalFolderServiceAbstraction {
   }
 
   private async decryptFolders(folders: Folder[]) {
-    const decryptFolderPromises = folders.map((f) => this.cryptoService.decryptView(FolderView, f));
+    const decryptFolderPromises = folders.map((f) =>
+      this.cryptoService.decryptDomain(FolderView, f)
+    );
     const decryptedFolders = await Promise.all(decryptFolderPromises);
 
     decryptedFolders.sort(Utils.getSortFunction(this.i18nService, "name"));

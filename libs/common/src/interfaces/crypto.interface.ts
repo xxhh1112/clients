@@ -25,14 +25,14 @@ export interface DecryptableDomain {
 /**
  * View model that encrypts to Domain.
  */
-export interface Encryptable<Domain> {
+export interface Encryptable<TDomain> {
   /**
    * Converts the View to a Domain model by encrypting data.
    *
    * @param encryptService EncryptService
    * @param key Key used to encrypt the data
    */
-  encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Domain>;
+  encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<TDomain>;
 
   /**
    * Unique GUID for the key used to encrypt the data
@@ -43,11 +43,11 @@ export interface Encryptable<Domain> {
 /**
  * Helper type for defining the static decrypt operation on view models.
  */
-export type Decryptable<View, Domain extends DecryptableDomain> = {
-  decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: Domain): View;
+export type Decryptable<TView, TDomain extends DecryptableDomain> = {
+  decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: TDomain): TView;
 };
 
 /**
  * Helper type for resolving which domain model the view encrypts to.
  */
-export type EncryptableDomain<View> = View extends Encryptable<infer Domain> ? Domain : never;
+export type EncryptableDomain<TView> = TView extends Encryptable<infer TDomain> ? TDomain : never;

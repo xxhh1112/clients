@@ -29,7 +29,7 @@ export abstract class EncryptService {
     view: V,
     key: SymmetricCryptoKey
   ) => Promise<EncryptableDomain<V>>;
-  abstract decryptView: <V, D extends DecryptableDomain>(
+  abstract decryptDomain: <V, D extends DecryptableDomain>(
     view: Decryptable<V, D>,
     domain: D,
     key: SymmetricCryptoKey

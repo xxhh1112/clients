@@ -12,7 +12,7 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   revisionDate: Date = null;
 
   keyIdentifier(): string | null {
-    return null;
+    return null; // Folders always belong to the user
   }
 
   async encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Folder> {

@@ -75,7 +75,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
         const folder = FolderWithIdExport.toDomain(f);
         if (folder != null) {
           folder.id = null;
-          const view = await this.cryptoService.decryptView(FolderView, folder);
+          const view = await this.cryptoService.decryptDomain(FolderView, folder);
           groupingsMap.set(f.id, this.result.folders.length);
           this.result.folders.push(view);
         }

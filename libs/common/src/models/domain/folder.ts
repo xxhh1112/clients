@@ -21,7 +21,7 @@ export class Folder implements DecryptableDomain {
   }
 
   keyIdentifier(): string | null {
-    return null;
+    return null; // Folders always belong to the user
   }
 
   static fromJSON(obj: Jsonify<Folder>) {
