@@ -9,6 +9,7 @@ import {
   Encryptable,
   EncryptableDomain,
 } from "../../interfaces/crypto.interface";
+import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
 import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
@@ -155,16 +156,15 @@ export class EncryptServiceImplementation implements EncryptService {
     return result ?? null;
   }
 
-  async decryptDomains<V, D extends DecryptableDomain & InitializerMetadata>(
-    view: Decryptable<V, D> & InitializerMetadata,
-    items: D[],
+  async decryptItems<T extends InitializerMetadata>(
+    items: OldDecryptable<T>[],
     key: SymmetricCryptoKey
-  ): Promise<V[]> {
+  ): Promise<T[]> {
     if (items == null || items.length < 1) {
       return [];
     }
 
-    return await Promise.all(items.map((item) => view.decrypt(this, key, item)));
+    return await Promise.all(items.map((item) => item.decrypt(key)));
   }
 
   async decryptDomain<V, D extends DecryptableDomain>(

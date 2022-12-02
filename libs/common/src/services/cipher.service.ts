@@ -345,20 +345,17 @@ export class CipherService implements CipherServiceAbstraction {
     const orgKeys = await this.cryptoService.getOrgKeys();
     const userKey = await this.cryptoService.getKeyForUserEncryption();
 
-    // Group ciphers by keyIdentifier
+    // Group ciphers by orgId or under 'null' for the user's ciphers
     const grouped = ciphers.reduce((agg, c) => {
-      agg[c.keyIdentifier()] ??= [];
-      agg[c.keyIdentifier()].push(c);
+      agg[c.organizationId] ??= [];
+      agg[c.organizationId].push(c);
       return agg;
     }, {} as Record<string, Cipher[]>);
+
     const decCiphers = (
       await Promise.all(
-        Object.entries(grouped).map(([keyIdentifier, groupedCiphers]) =>
-          this.encryptService.decryptDomains(
-            CipherView,
-            groupedCiphers,
-            orgKeys.get(keyIdentifier) ?? userKey
-          )
+        Object.entries(grouped).map(([orgId, groupedCiphers]) =>
+          this.encryptService.decryptItems(groupedCiphers, orgKeys.get(orgId) ?? userKey)
         )
       )
     )
@@ -515,7 +512,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     const ciphers = response.data.map((cr) => new Cipher(new CipherData(cr)));
     const key = await this.cryptoService.getOrgKey(organizationId);
-    const decCiphers = await this.encryptService.decryptDomains(CipherView, ciphers, key);
+    const decCiphers = await this.encryptService.decryptItems(ciphers, key);
 
     decCiphers.sort(this.getLocaleSortingFunction());
     return decCiphers;

@@ -2,7 +2,7 @@ import { Jsonify } from "type-fest";
 
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
-import { DecryptableDomain, nullableFactory } from "../../interfaces/crypto.interface";
+import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerKey } from "../../services/cryptography/initializer-key";
 import { CipherData } from "../data/cipher.data";
 import { LocalData } from "../data/local.data";
@@ -19,11 +19,11 @@ import { Password } from "./password";
 import { SecureNote } from "./secure-note";
 import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Cipher extends Domain implements DecryptableDomain {
+export class Cipher extends Domain implements OldDecryptable<CipherView> {
   readonly initializerKey = InitializerKey.Cipher;
 
   id: string;
-  organizationId?: string;
+  organizationId: string;
   folderId: string;
   name: EncString;
   notes: EncString;
@@ -52,11 +52,19 @@ export class Cipher extends Domain implements DecryptableDomain {
       return;
     }
 
-    this.id = obj.id;
-    this.organizationId = obj.organizationId;
-    this.folderId = obj.folderId;
-    this.name = nullableFactory(EncString, obj.name);
-    this.notes = nullableFactory(EncString, obj.notes);
+    this.buildDomainModel(
+      this,
+      obj,
+      {
+        id: null,
+        organizationId: null,
+        folderId: null,
+        name: null,
+        notes: null,
+      },
+      ["id", "organizationId", "folderId"]
+    );
+
     this.type = obj.type;
     this.favorite = obj.favorite;
     this.organizationUseTotp = obj.organizationUseTotp;
@@ -66,11 +74,11 @@ export class Cipher extends Domain implements DecryptableDomain {
     } else {
       this.viewPassword = true; // Default for already synced Ciphers without viewPassword
     }
-    this.revisionDate = nullableFactory(Date, obj.revisionDate);
+    this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
     this.collectionIds = obj.collectionIds;
     this.localData = localData;
-    this.creationDate = nullableFactory(Date, obj.creationDate);
-    this.deletedDate = nullableFactory(Date, obj.deletedDate);
+    this.creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
+    this.deletedDate = obj.deletedDate != null ? new Date(obj.deletedDate) : null;
     this.reprompt = obj.reprompt;
 
     switch (this.type) {
@@ -107,10 +115,6 @@ export class Cipher extends Domain implements DecryptableDomain {
     } else {
       this.passwordHistory = null;
     }
-  }
-
-  keyIdentifier(): string {
-    return this.organizationId;
   }
 
   async decrypt(encKey?: SymmetricCryptoKey): Promise<CipherView> {
@@ -206,8 +210,10 @@ export class Cipher extends Domain implements DecryptableDomain {
     c.deletedDate = this.deletedDate != null ? this.deletedDate.toISOString() : null;
     c.reprompt = this.reprompt;
 
-    c.name = this.name?.encryptedString;
-    c.notes = this.notes?.encryptedString;
+    this.buildDataModel(this, c, {
+      name: null,
+      notes: null,
+    });
 
     switch (c.type) {
       case CipherType.Login:

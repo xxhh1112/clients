@@ -5,6 +5,7 @@ import {
   Encryptable,
   EncryptableDomain,
 } from "../interfaces/crypto.interface";
+import { OldDecryptable } from "../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../interfaces/initializer-metadata.interface";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
@@ -19,11 +20,10 @@ export abstract class EncryptService {
   abstract decryptToUtf8: (encString: EncString, key: SymmetricCryptoKey) => Promise<string>;
   abstract decryptToBytes: (encThing: IEncrypted, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   abstract resolveLegacyKey: (key: SymmetricCryptoKey, encThing: IEncrypted) => SymmetricCryptoKey;
-  abstract decryptDomains: <V, D extends DecryptableDomain & InitializerMetadata>(
-    view: Decryptable<V, D> & InitializerMetadata,
-    items: D[],
+  abstract decryptItems: <T extends InitializerMetadata>(
+    items: OldDecryptable<T>[],
     key: SymmetricCryptoKey
-  ) => Promise<V[]>;
+  ) => Promise<T[]>;
 
   abstract encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
     view: V,
