@@ -1,7 +1,7 @@
 import { Jsonify } from "type-fest";
 
 import { EncryptService } from "../../abstractions/encrypt.service";
-import { Encryptable } from "../../interfaces/crypto.interface";
+import { Encryptable, nullableFactory } from "../../interfaces/crypto.interface";
 import { Folder } from "../domain/folder";
 import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 import { ITreeNodeObject } from "../domain/tree-node";
@@ -36,7 +36,8 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   }
 
   static fromJSON(obj: Jsonify<FolderView>) {
-    const revisionDate = obj.revisionDate == null ? null : new Date(obj.revisionDate);
-    return Object.assign(new FolderView(), obj, { revisionDate });
+    return Object.assign(new FolderView(), obj, {
+      revisionDate: nullableFactory(Date, obj.revisionDate),
+    });
   }
 }

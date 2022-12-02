@@ -25,7 +25,9 @@ export class Folder implements DecryptableDomain {
   }
 
   static fromJSON(obj: Jsonify<Folder>) {
-    const revisionDate = nullableFactory(Date, obj.revisionDate);
-    return Object.assign(new Folder(), obj, { name: EncString.fromJSON(obj.name), revisionDate });
+    return Object.assign(new Folder(), obj, {
+      name: nullableFactory(EncString, obj.name),
+      revisionDate: nullableFactory(Date, obj.revisionDate),
+    });
   }
 }
