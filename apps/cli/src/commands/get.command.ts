@@ -355,7 +355,7 @@ export class GetCommand extends DownloadCommand {
     if (Utils.isGuid(id)) {
       const folder = await this.folderService.getFromState(id);
       if (folder != null) {
-        decFolder = await this.cryptoService.decryptView(FolderView, folder);
+        decFolder = await this.cryptoService.decryptDomain(FolderView, folder);
       }
     } else if (id.trim() !== "") {
       let folders = await this.folderService.getAllDecryptedFromState();
