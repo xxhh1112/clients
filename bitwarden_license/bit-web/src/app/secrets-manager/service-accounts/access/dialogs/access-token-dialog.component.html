@@ -9,14 +9,16 @@
   <div bitDialogContent>
     <bit-callout type="info" [title]="'accessTokenCallOutTitle' | i18n">
       {{ "downloadAccessToken" | i18n }}<br />
-      {{ "expiresOnAccessToken" | i18n }} {{ data.expirationDate | date: "medium" }}
+      {{ "expiresOnAccessToken" | i18n }}
+      {{ data.expirationDate === null ? ("never" | i18n) : (data.expirationDate | date: "medium") }}
     </bit-callout>
 
     <bit-form-field class="tw-mb-0">
       <bit-label>{{ "accessToken" | i18n }}</bit-label>
       <textarea bitInput disabled rows="4">{{ data.accessToken }}</textarea>
     </bit-form-field>
-    {{ "expiresOnAccessToken" | i18n }} {{ data.expirationDate | date: "medium" }}
+    {{ "expiresOnAccessToken" | i18n }}
+    {{ data.expirationDate === null ? ("never" | i18n) : (data.expirationDate | date: "medium") }}
   </div>
 
   <div bitDialogFooter class="tw-flex tw-gap-2">

@@ -21,7 +21,7 @@ export interface AccessTokenOperation {
 })
 export class AccessTokenCreateDialogComponent implements OnInit {
   protected formGroup = new FormGroup({
-    name: new FormControl("", [Validators.required]),
+    name: new FormControl("", [Validators.required, Validators.maxLength(80)]),
     expirationDateControl: new FormControl(null),
   });
   protected loading = false;
@@ -72,7 +72,7 @@ export class AccessTokenCreateDialogComponent implements OnInit {
   private openAccessTokenDialog(
     serviceAccountName: string,
     accessToken: string,
-    expirationDate: Date
+    expirationDate?: Date
   ) {
     this.dialogService.open<unknown, AccessTokenDetails>(AccessTokenDialogComponent, {
       data: {
