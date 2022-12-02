@@ -98,27 +98,13 @@ export class VaultComponent implements OnInit, OnDestroy {
         : "trashCleanupWarning"
     );
 
-    this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-      this.ngZone.run(async () => {
-        switch (message.command) {
-          case "syncCompleted":
-            if (message.successfully) {
-              await Promise.all([
-                this.vaultFilterService.reloadCollections(),
-                this.ciphersComponent.load(this.ciphersComponent.filter),
-              ]);
-              this.changeDetectorRef.detectChanges();
-            }
-            break;
-        }
-      });
-    });
-
     this.route.queryParams
       .pipe(
         first(),
         switchMap(async (params: Params) => {
           await this.syncService.fullSync(false);
+          await this.vaultFilterService.reloadCollections();
+          await this.ciphersComponent.reload();
 
           const canAccessPremium = await this.stateService.getCanAccessPremium();
           this.showPremiumCallout =
@@ -163,6 +149,22 @@ export class VaultComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe();
+
+    this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+      this.ngZone.run(async () => {
+        switch (message.command) {
+          case "syncCompleted":
+            if (message.successfully) {
+              await Promise.all([
+                this.vaultFilterService.reloadCollections(),
+                this.ciphersComponent.load(this.ciphersComponent.filter),
+              ]);
+              this.changeDetectorRef.detectChanges();
+            }
+            break;
+        }
+      });
+    });
   }
 
   get isShowingCards() {
