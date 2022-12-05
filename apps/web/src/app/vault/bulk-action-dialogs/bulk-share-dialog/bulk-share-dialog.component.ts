@@ -39,7 +39,7 @@ export const openBulkShareDialog = (
 };
 
 @Component({
-  selector: "app-vault-bulk-share",
+  selector: "vault-bulk-share-dialog",
   templateUrl: "bulk-share-dialog.component.html",
 })
 export class BulkShareDialogComponent implements OnInit {
