@@ -34,6 +34,6 @@ export interface CredentialRegistrationParams {
 }
 
 export abstract class Fido2Service {
-  createCredential: (params: CredentialRegistrationParams) => unknown;
+  createCredential: (params: CredentialRegistrationParams) => Promise<unknown>;
   assertCredential: () => unknown;
 }

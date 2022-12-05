@@ -126,13 +126,21 @@ export class BrowserApi {
     chrome.tabs.create({ url: url, active: active });
   }
 
+  static createNewWindow(
+    url: string,
+    focused = true,
+    type: chrome.windows.createTypeEnum = "normal"
+  ) {
+    chrome.windows.create({ url, focused, type });
+  }
+
   static messageListener(
     name: string,
-    callback: (message: any, sender: chrome.runtime.MessageSender, response: any) => void
+    callback: (message: any, sender: chrome.runtime.MessageSender, response: any) => unknown
   ) {
     chrome.runtime.onMessage.addListener(
       (msg: any, sender: chrome.runtime.MessageSender, response: any) => {
-        callback(msg, sender, response);
+        return callback(msg, sender, response);
       }
     );
   }

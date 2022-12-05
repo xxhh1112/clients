@@ -67,7 +67,7 @@ export class PopupUtilsService {
         height: Math.round(bodyRect.height || 600),
       });
 
-      if (this.inPopup(win)) {
+      if (win && this.inPopup(win)) {
         BrowserApi.closePopup(win);
       }
     } else if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.create) {

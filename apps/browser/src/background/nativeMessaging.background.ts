@@ -334,7 +334,7 @@ export class NativeMessagingBackground {
             return;
           }
 
-          this.runtimeBackground.processMessage({ command: "unlocked" }, null, null);
+          this.runtimeBackground.processMessage({ command: "unlocked" }, null);
         }
         break;
       }

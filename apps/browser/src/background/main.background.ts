@@ -9,6 +9,7 @@ import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitw
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
+import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Fido2Service as Fido2ServiceAbstraction } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
@@ -99,6 +100,7 @@ import BrowserLocalStorageService from "../services/browserLocalStorage.service"
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
+import { BrowserFido2UserInterfaceService } from "../services/fido2/browser-fido2-user-interface.service";
 import { FolderService } from "../services/folders/folder.service";
 import I18nService from "../services/i18n.service";
 import { KeyGenerationService } from "../services/keyGeneration.service";
@@ -116,6 +118,16 @@ import NotificationBackground from "./notification.background";
 import RuntimeBackground from "./runtime.background";
 import TabsBackground from "./tabs.background";
 import WebRequestBackground from "./webRequest.background";
+
+export class Fido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
+  async verifyUser(): Promise<boolean> {
+    return false;
+  }
+
+  async verifyPresence(): Promise<boolean> {
+    return false;
+  }
+}
 
 export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
@@ -167,6 +179,7 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
+  fido2UserInterfaceService: Fido2UserInterfaceServiceAbstraction;
   fido2Service: Fido2ServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
@@ -355,7 +368,7 @@ export default class MainBackground {
       // AuthService should send the messages to the background not popup.
       send = (subscriber: string, arg: any = {}) => {
         const message = Object.assign({}, { command: subscriber }, arg);
-        that.runtimeBackground.processMessage(message, that, null);
+        that.runtimeBackground.processMessage(message, that);
       };
     })();
     this.authService = new AuthService(
@@ -464,7 +477,8 @@ export default class MainBackground {
       this.userVerificationApiService
     );
 
-    this.fido2Service = new Fido2Service();
+    this.fido2UserInterfaceService = new BrowserFido2UserInterfaceService(this.popupUtilsService);
+    this.fido2Service = new Fido2Service(this.fido2UserInterfaceService);
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =

@@ -47,16 +47,20 @@ export default class RuntimeBackground {
       sender: chrome.runtime.MessageSender,
       sendResponse: any
     ) => {
-      await this.processMessage(msg, sender, sendResponse);
+      const response = await this.processMessage(msg, sender);
+      sendResponse(response);
     };
 
-    BrowserApi.messageListener("runtime.background", backgroundMessageListener);
+    BrowserApi.messageListener("runtime.background", (msg, sender, sendResponse) => {
+      backgroundMessageListener(msg, sender, sendResponse);
+      return true;
+    });
     if (this.main.popupOnlyContext) {
       (window as any).bitwardenBackgroundMessageListener = backgroundMessageListener;
     }
   }
 
-  async processMessage(msg: any, sender: any, sendResponse: any) {
+  async processMessage(msg: any, sender: any): Promise<unknown> {
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -205,11 +209,9 @@ export default class RuntimeBackground {
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
       case "fido2RegisterCredentialRequest":
-        sendResponse(await this.main.fido2Service.createCredential(msg.data));
-        break;
-      default:
-        break;
+        return await this.main.fido2Service.createCredential(msg.data);
     }
+    return undefined;
   }
 
   private async autofillPage(tabToAutoFill: chrome.tabs.Tab) {
