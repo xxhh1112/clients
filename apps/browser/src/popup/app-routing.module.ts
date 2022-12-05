@@ -17,6 +17,7 @@ import { SsoComponent } from "./accounts/sso.component";
 import { TwoFactorOptionsComponent } from "./accounts/two-factor-options.component";
 import { TwoFactorComponent } from "./accounts/two-factor.component";
 import { UpdateTempPasswordComponent } from "./accounts/update-temp-password.component";
+import { Fido2Component } from "./fido2/fido2.component";
 import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
 import { SendAddEditComponent } from "./send/send-add-edit.component";
@@ -58,6 +59,10 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [UnauthGuard],
     data: { state: "home" },
+  },
+  {
+    path: "fido2",
+    component: Fido2Component,
   },
   {
     path: "login",
