@@ -119,7 +119,9 @@
           ></button>
           <bit-menu #collectionOptions>
             <button
-              *ngIf="organization?.canEditAssignedCollections"
+              *ngIf="
+                organization?.canEditAssignedCollections || organization?.canEditAnyCollections
+              "
               bitMenuItem
               (click)="editCollection(col.node, 'info')"
             >
@@ -127,7 +129,7 @@
               {{ "editInfo" | i18n }}
             </button>
             <button
-              *ngIf="organization?.canEditAssignedCollections"
+              *ngIf="organization?.canEditAssignedCollections || organization?.canEditAnyCollection"
               bitMenuItem
               (click)="editCollection(col.node, 'access')"
             >
@@ -135,7 +137,9 @@
               {{ "access" | i18n }}
             </button>
             <button
-              *ngIf="organization?.canDeleteAssignedCollections"
+              *ngIf="
+                organization?.canDeleteAssignedCollections || organization?.canDeleteAnyCollection
+              "
               bitMenuItem
               (click)="deleteCollection(col.node)"
             >
