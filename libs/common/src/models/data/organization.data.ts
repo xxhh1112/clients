@@ -21,6 +21,7 @@ export class OrganizationData {
   useKeyConnector: boolean;
   useScim: boolean;
   useResetPassword: boolean;
+  useSecretsManager: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
   seats: number;
@@ -61,6 +62,7 @@ export class OrganizationData {
     this.useKeyConnector = response.useKeyConnector;
     this.useScim = response.useScim;
     this.useResetPassword = response.useResetPassword;
+    this.useSecretsManager = response.useSecretsManager;
     this.selfHost = response.selfHost;
     this.usersGetPremium = response.usersGetPremium;
     this.seats = response.seats;
