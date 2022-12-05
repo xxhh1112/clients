@@ -5,6 +5,7 @@ import { BrowserApi } from "./browser/browserApi";
 import { onCommandListener } from "./listeners/onCommandListener";
 import { onInstallListener } from "./listeners/onInstallListener";
 import { UpdateBadge } from "./listeners/update-badge";
+import { registerTasks } from "./tasks/task-scheduler";
 
 const manifestV3MessageListeners: ((
   serviceCache: Record<string, unknown>,
@@ -26,6 +27,7 @@ if (BrowserApi.manifestVersion === 3) {
       listener(serviceCache, message);
     });
   });
+  registerTasks();
 } else {
   const bitwardenMain = ((window as any).bitwardenMain = new MainBackground());
   bitwardenMain.bootstrap().then(() => {
