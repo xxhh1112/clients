@@ -112,14 +112,15 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
           const cipherId = getCipherIdFromParams(params);
-          if (cipherId) {
-            const cipherView = new CipherView();
-            cipherView.id = cipherId;
-            if (params.action === "clone") {
-              await this.cloneCipher(cipherView);
-            } else if (params.action === "edit") {
-              await this.editCipher(cipherView);
-            }
+          if (!cipherId) {
+            return;
+          }
+          const cipherView = new CipherView();
+          cipherView.id = cipherId;
+          if (params.action === "clone") {
+            await this.cloneCipher(cipherView);
+          } else if (params.action === "edit") {
+            await this.editCipher(cipherView);
           }
         }),
         takeUntil(this.destroy$)
