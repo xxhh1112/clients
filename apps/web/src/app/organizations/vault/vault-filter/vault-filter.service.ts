@@ -5,7 +5,10 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import {
+  canAccessVaultTab,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -69,7 +72,7 @@ export class VaultFilterService extends BaseVaultFilterService implements OnDest
 
   protected async loadCollections(org: Organization): Promise<CollectionAdminView[]> {
     let collections: CollectionAdminView[] = [];
-    if (org?.permissions && org?.canViewAssignedCollections) {
+    if (canAccessVaultTab(org)) {
       collections = await this.collectionAdminService.getAll(org.id);
 
       const noneCollection = new CollectionAdminView();
