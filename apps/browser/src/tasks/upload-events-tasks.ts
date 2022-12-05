@@ -8,7 +8,6 @@ import { Account } from "../models/account";
 
 export const uploadEventAlarmName = "uploadEvents";
 
-const cachedServices: CachedServices = {};
 const opts = {
   cryptoFunctionServiceOptions: {
     win: self,
@@ -36,8 +35,8 @@ const opts = {
 };
 
 export class UploadEventsTask {
-  static async run() {
-    const eventUploadService = await eventUploadServiceFactory(cachedServices, opts);
+  static async run(serviceCache: CachedServices) {
+    const eventUploadService = await eventUploadServiceFactory(serviceCache, opts);
     eventUploadService.uploadEvents();
 
     await setAlarmTime(uploadEventAlarmName, 60 * 1000);
