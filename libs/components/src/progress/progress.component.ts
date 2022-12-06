@@ -32,6 +32,7 @@ export class ProgressComponent {
     return [
       "tw-flex",
       "tw-justify-center",
+      "tw-items-center",
       "tw-whitespace-nowrap",
       "tw-text-xs",
       "tw-font-semibold",
