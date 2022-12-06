@@ -18,9 +18,8 @@ export class ProgressComponent {
   @Input() size: SizeTypes = "default";
   @Input() text?: string;
 
-  // Only show the text that fits in the inner bar
   get displayText() {
-    return this.showText && this.size !== "small" && this.barWidth > 3;
+    return this.showText && this.size !== "small";
   }
 
   get outerBarStyles() {
@@ -32,7 +31,6 @@ export class ProgressComponent {
   get innerBarStyles() {
     return [
       "tw-flex",
-      "tw-items-center",
       "tw-justify-center",
       "tw-whitespace-nowrap",
       "tw-text-xs",

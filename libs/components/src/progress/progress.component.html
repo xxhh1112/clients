@@ -7,8 +7,12 @@
     attr.aria-valuenow="{{ barWidth }}"
     [ngStyle]="{ width: barWidth + '%' }"
   >
-    <ng-container *ngIf="displayText">
-      {{ textContent }}
-    </ng-container>
+    <div *ngIf="displayText" class="tw-flex tw-flex-wrap tw-overflow-hidden">
+      <!-- If text is too long to fit, wrap it below to hide -->
+      <div>&nbsp;</div>
+      <div>
+        {{ textContent }}
+      </div>
+    </div>
   </div>
 </div>
