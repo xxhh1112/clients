@@ -122,10 +122,22 @@
             id="userTypeCustom"
             [value]="organizationUserType.Custom"
             [(ngModel)]="type"
+            [attr.disabled]="!canUseCustomPermissions || null"
           />
           <label class="form-check-label" for="userTypeCustom">
             {{ "custom" | i18n }}
-            <small>{{ "customDesc" | i18n }}</small>
+            <ng-container *ngIf="!canUseCustomPermissions; else enterprise">
+              <small
+                >{{ "customDescNonEnterpriseStart" | i18n
+                }}<a href="https://bitwarden.com/contact/" target="_blank">{{
+                  "customDescNonEnterpriseLink" | i18n
+                }}</a
+                >{{ "customDescNonEnterpriseEnd" | i18n }}</small
+              >
+            </ng-container>
+            <ng-template #enterprise>
+              <small>{{ "customDesc" | i18n }}</small>
+            </ng-template>
           </label>
         </div>
         <ng-container *ngIf="customUserTypeSelected">
@@ -341,7 +353,7 @@
                 <td class="table-list-checkbox" (click)="check(c)">
                   <input
                     type="checkbox"
-                    [(ngModel)]="c.checked"
+                    [(ngModel)]="$any(c).checked"
                     name="Collection[{{ i }}].Checked"
                     appStopProp
                   />
@@ -354,7 +366,7 @@
                     type="checkbox"
                     [(ngModel)]="c.hidePasswords"
                     name="Collection[{{ i }}].HidePasswords"
-                    [disabled]="!c.checked"
+                    [disabled]="!$any(c).checked"
                   />
                 </td>
                 <td class="text-center">
@@ -362,7 +374,7 @@
                     type="checkbox"
                     [(ngModel)]="c.readOnly"
                     name="Collection[{{ i }}].ReadOnly"
-                    [disabled]="!c.checked"
+                    [disabled]="!$any(c).checked"
                   />
                 </td>
               </tr>
@@ -416,17 +428,17 @@
             class="btn btn-outline-danger"
             appA11yTitle="{{ 'delete' | i18n }}"
             *ngIf="editMode"
-            [disabled]="deleteBtn.loading"
+            [disabled]="$any(deleteBtn).loading"
             [appApiAction]="deletePromise"
           >
             <i
               class="bwi bwi-trash bwi-lg bwi-fw"
-              [hidden]="deleteBtn.loading"
+              [hidden]="$any(deleteBtn).loading"
               aria-hidden="true"
             ></i>
             <i
               class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!deleteBtn.loading"
+              [hidden]="!$any(deleteBtn).loading"
               title="{{ 'loading' | i18n }}"
               aria-hidden="true"
             ></i>
