@@ -1,3 +1,5 @@
+import { Jsonify } from "type-fest";
+
 import { OrganizationUserStatusType } from "../../enums/organizationUserStatusType";
 import { OrganizationUserType } from "../../enums/organizationUserType";
 import { ProductType } from "../../enums/productType";
@@ -20,6 +22,7 @@ export class Organization {
   useSso: boolean;
   useKeyConnector: boolean;
   useScim: boolean;
+  useCustomPermissions: boolean;
   useResetPassword: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
@@ -64,6 +67,7 @@ export class Organization {
     this.useSso = obj.useSso;
     this.useKeyConnector = obj.useKeyConnector;
     this.useScim = obj.useScim;
+    this.useCustomPermissions = obj.useCustomPermissions;
     this.useResetPassword = obj.useResetPassword;
     this.selfHost = obj.selfHost;
     this.usersGetPremium = obj.usersGetPremium;
@@ -200,5 +204,16 @@ export class Organization {
 
   get hasProvider() {
     return this.providerId != null || this.providerName != null;
+  }
+
+  static fromJSON(json: Jsonify<Organization>) {
+    if (json == null) {
+      return null;
+    }
+
+    return Object.assign(new Organization(), json, {
+      familySponsorshipLastSyncDate: new Date(json.familySponsorshipLastSyncDate),
+      familySponsorshipValidUntil: new Date(json.familySponsorshipValidUntil),
+    });
   }
 }

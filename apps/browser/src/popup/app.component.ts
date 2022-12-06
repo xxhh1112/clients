@@ -19,7 +19,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 import { BrowserApi } from "../browser/browserApi";
-import { StateService } from "../services/abstractions/state.service";
+import { BrowserStateService } from "../services/abstractions/browser-state.service";
 
 import { routerTransition } from "./app-routing.animations";
 
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private i18nService: I18nService,
     private router: Router,
-    private stateService: StateService,
+    private stateService: BrowserStateService,
     private messagingService: MessagingService,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -276,7 +276,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     await Promise.all([
       this.stateService.setBrowserGroupingComponentState(null),
-      this.stateService.setBrowserCipherComponentState(null),
+      this.stateService.setBrowserVaultItemsComponentState(null),
       this.stateService.setBrowserSendComponentState(null),
       this.stateService.setBrowserSendTypeComponentState(null),
     ]);
