@@ -5,7 +5,6 @@ import { canAccessVaultTab } from "@bitwarden/common/abstractions/organization/o
 
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 
-
 import { VaultComponent } from "./vault.component";
 const routes: Routes = [
   {
