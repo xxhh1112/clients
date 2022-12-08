@@ -13,7 +13,7 @@ export default {
   },
   args: {
     showText: true,
-    size: "medium",
+    size: "default",
     bgColor: "primary",
   },
 } as Meta;
@@ -22,23 +22,18 @@ const Template: Story<ProgressComponent> = (args: ProgressComponent) => ({
   props: args,
 });
 
-export const Default = Template.bind({});
-Default.args = {
+export const Empty = Template.bind({});
+Empty.args = {
   barWidth: 0,
 };
 
-export const _50Percent = Template.bind({});
-_50Percent.args = {
-  barWidth: 50,
-};
-
-export const _100Percent = Template.bind({});
-_100Percent.args = {
+export const Full = Template.bind({});
+Full.args = {
   barWidth: 100,
 };
 
 export const CustomText = Template.bind({});
 CustomText.args = {
-  barWidth: 90,
+  barWidth: 25,
   text: "Loading...",
 };
