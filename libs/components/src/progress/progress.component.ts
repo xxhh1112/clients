@@ -1,11 +1,19 @@
 import { Component, Input } from "@angular/core";
 
-type SizeTypes = "small" | "default" | "large";
+type SizeTypes = "small" | "medium" | "large";
+type BackgroundTypes = "danger" | "primary" | "success" | "warning";
 
 const SizeClasses: Record<SizeTypes, string[]> = {
   small: ["tw-h-1"],
-  default: ["tw-h-4"],
+  medium: ["tw-h-4"],
   large: ["tw-h-6"],
+};
+
+const BackgroundClasses: Record<BackgroundTypes, string[]> = {
+  danger: ["tw-bg-danger-500"],
+  primary: ["tw-bg-primary-500"],
+  success: ["tw-bg-success-500"],
+  warning: ["tw-bg-warning-500"],
 };
 
 @Component({
@@ -14,8 +22,9 @@ const SizeClasses: Record<SizeTypes, string[]> = {
 })
 export class ProgressComponent {
   @Input() barWidth = 0;
+  @Input() bgColor: BackgroundTypes = "primary";
   @Input() showText = true;
-  @Input() size: SizeTypes = "default";
+  @Input() size: SizeTypes = "medium";
   @Input() text?: string;
 
   get displayText() {
@@ -38,8 +47,9 @@ export class ProgressComponent {
       "tw-font-semibold",
       "tw-text-contrast",
       "tw-transition-all",
-      "tw-bg-primary-500",
-    ].concat(SizeClasses[this.size]);
+    ]
+      .concat(SizeClasses[this.size])
+      .concat(BackgroundClasses[this.bgColor]);
   }
 
   get textContent() {

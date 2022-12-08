@@ -13,7 +13,8 @@ export default {
   },
   args: {
     showText: true,
-    size: "default",
+    size: "medium",
+    bgColor: "primary",
   },
 } as Meta;
 
