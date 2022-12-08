@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, Inject, OnInit } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -15,21 +17,35 @@ import { OrganizationUserUpdateRequest } from "@bitwarden/common/models/request/
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { DialogService } from "@bitwarden/components";
+
+export enum MemberDialogTab {
+  Role = 0,
+  Groups = 1,
+  Collections = 2,
+}
+
+export interface MemberDialogParams {
+  name: string;
+  organizationId: string;
+  organizationUserId: string;
+  usesKeyConnector: boolean;
+  initialTab?: MemberDialogTab;
+}
+
+export enum MemberDialogResult {
+  Saved = "saved",
+  Canceled = "canceled",
+  Deleted = "deleted",
+  Revoked = "revoked",
+  Restored = "restored",
+}
 
 @Component({
-  selector: "app-user-add-edit",
-  templateUrl: "user-add-edit.component.html",
+  selector: "app-member-dialog",
+  templateUrl: "member-dialog.component.html",
 })
-export class UserAddEditComponent implements OnInit {
-  @Input() name: string;
-  @Input() organizationUserId: string;
-  @Input() organizationId: string;
-  @Input() usesKeyConnector = false;
-  @Output() onSavedUser = new EventEmitter();
-  @Output() onDeletedUser = new EventEmitter();
-  @Output() onRevokedUser = new EventEmitter();
-  @Output() onRestoredUser = new EventEmitter();
-
+export class MemberDialogComponent implements OnInit {
   loading = true;
   editMode = false;
   isRevoked = false;
@@ -40,9 +56,11 @@ export class UserAddEditComponent implements OnInit {
   showCustom = false;
   access: "all" | "selected" = "selected";
   collections: CollectionView[] = [];
-  formPromise: Promise<any>;
-  deletePromise: Promise<any>;
   organizationUserType = OrganizationUserType;
+
+  protected tabIndex: MemberDialogTab;
+  // Stub, to be filled out in upcoming PRs
+  protected formGroup = this.formBuilder.group({});
 
   manageAllCollectionsCheckboxes = [
     {
@@ -80,24 +98,28 @@ export class UserAddEditComponent implements OnInit {
   }
 
   constructor(
+    @Inject(DIALOG_DATA) protected params: MemberDialogParams,
+    private dialogRef: DialogRef<MemberDialogResult>,
     private apiService: ApiService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
-    private logService: LogService
+    private logService: LogService,
+    private formBuilder: FormBuilder
   ) {}
 
   async ngOnInit() {
-    this.editMode = this.loading = this.organizationUserId != null;
+    this.editMode = this.loading = this.params.organizationUserId != null;
+    this.tabIndex = this.params.initialTab ?? MemberDialogTab.Role;
     await this.loadCollections();
 
     if (this.editMode) {
       this.editMode = true;
-      this.title = this.i18nService.t("editUser");
+      this.title = this.i18nService.t("editMember");
       try {
         const user = await this.apiService.getOrganizationUser(
-          this.organizationId,
-          this.organizationUserId
+          this.params.organizationId,
+          this.params.organizationUserId
         );
         this.access = user.accessAll ? "all" : "selected";
         this.type = user.type;
@@ -119,14 +141,14 @@ export class UserAddEditComponent implements OnInit {
         this.logService.error(e);
       }
     } else {
-      this.title = this.i18nService.t("inviteUser");
+      this.title = this.i18nService.t("inviteMember");
     }
 
     this.loading = false;
   }
 
   async loadCollections() {
-    const response = await this.apiService.getCollections(this.organizationId);
+    const response = await this.apiService.getCollections(this.params.organizationId);
     const collections = response.data.map(
       (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
     );
@@ -162,7 +184,7 @@ export class UserAddEditComponent implements OnInit {
     }
   }
 
-  async submit() {
+  submit = async () => {
     let collections: SelectionReadOnlyRequest[] = null;
     if (this.access !== "all") {
       collections = this.collections
@@ -180,9 +202,9 @@ export class UserAddEditComponent implements OnInit {
           request.permissions ?? new PermissionsApi(),
           request.type !== OrganizationUserType.Custom
         );
-        this.formPromise = this.apiService.putOrganizationUser(
-          this.organizationId,
-          this.organizationUserId,
+        await this.apiService.putOrganizationUser(
+          this.params.organizationId,
+          this.params.organizationUserId,
           request
         );
       } else {
@@ -195,31 +217,31 @@ export class UserAddEditComponent implements OnInit {
           request.type !== OrganizationUserType.Custom
         );
         request.collections = collections;
-        this.formPromise = this.apiService.postOrganizationUserInvite(this.organizationId, request);
+        await this.apiService.postOrganizationUserInvite(this.params.organizationId, request);
       }
-      await this.formPromise;
+
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.name)
+        this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.params.name)
       );
-      this.onSavedUser.emit();
+      this.close(MemberDialogResult.Saved);
     } catch (e) {
       this.logService.error(e);
     }
-  }
+  };
 
-  async delete() {
+  delete = async () => {
     if (!this.editMode) {
       return;
     }
 
-    const message = this.usesKeyConnector
+    const message = this.params.usesKeyConnector
       ? "removeUserConfirmationKeyConnector"
       : "removeOrgUserConfirmation";
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t(message),
-      this.i18nService.t("removeUserIdAccess", this.name),
+      this.i18nService.t("removeUserIdAccess", this.params.name),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
       "warning"
@@ -229,30 +251,30 @@ export class UserAddEditComponent implements OnInit {
     }
 
     try {
-      this.deletePromise = this.apiService.deleteOrganizationUser(
-        this.organizationId,
-        this.organizationUserId
+      await this.apiService.deleteOrganizationUser(
+        this.params.organizationId,
+        this.params.organizationUserId
       );
-      await this.deletePromise;
+
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("removedUserId", this.name)
+        this.i18nService.t("removedUserId", this.params.name)
       );
-      this.onDeletedUser.emit();
+      this.close(MemberDialogResult.Deleted);
     } catch (e) {
       this.logService.error(e);
     }
-  }
+  };
 
-  async revoke() {
+  revoke = async () => {
     if (!this.editMode) {
       return;
     }
 
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("revokeUserConfirmation"),
-      this.i18nService.t("revokeUserId", this.name),
+      this.i18nService.t("revokeUserId", this.params.name),
       this.i18nService.t("revokeAccess"),
       this.i18nService.t("cancel"),
       "warning"
@@ -262,43 +284,63 @@ export class UserAddEditComponent implements OnInit {
     }
 
     try {
-      this.formPromise = this.apiService.revokeOrganizationUser(
-        this.organizationId,
-        this.organizationUserId
+      await this.apiService.revokeOrganizationUser(
+        this.params.organizationId,
+        this.params.organizationUserId
       );
-      await this.formPromise;
+
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("revokedUserId", this.name)
+        this.i18nService.t("revokedUserId", this.params.name)
       );
       this.isRevoked = true;
-      this.onRevokedUser.emit();
+      this.close(MemberDialogResult.Revoked);
     } catch (e) {
       this.logService.error(e);
     }
-  }
+  };
 
-  async restore() {
+  restore = async () => {
     if (!this.editMode) {
       return;
     }
 
     try {
-      this.formPromise = this.apiService.restoreOrganizationUser(
-        this.organizationId,
-        this.organizationUserId
+      await this.apiService.restoreOrganizationUser(
+        this.params.organizationId,
+        this.params.organizationUserId
       );
-      await this.formPromise;
+
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("restoredUserId", this.name)
+        this.i18nService.t("restoredUserId", this.params.name)
       );
       this.isRevoked = false;
-      this.onRestoredUser.emit();
+      this.close(MemberDialogResult.Restored);
     } catch (e) {
       this.logService.error(e);
     }
+  };
+
+  protected async cancel() {
+    this.close(MemberDialogResult.Canceled);
   }
+
+  private close(result: MemberDialogResult) {
+    this.dialogRef.close(result);
+  }
+}
+
+/**
+ * Strongly typed helper to open a UserDialog
+ * @param dialogService Instance of the dialog service that will be used to open the dialog
+ * @param config Configuration for the dialog
+ */
+export function openUserAddEditDialog(
+  dialogService: DialogService,
+  config: DialogConfig<MemberDialogParams>
+) {
+  return dialogService.open<MemberDialogResult, MemberDialogParams>(MemberDialogComponent, config);
 }

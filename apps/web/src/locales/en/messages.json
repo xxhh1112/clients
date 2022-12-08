@@ -2434,11 +2434,11 @@
   "deleteCollectionConfirmation": {
     "message": "Are you sure you want to delete this collection?"
   },
-  "editUser": {
-    "message": "Edit user"
+  "editMember": {
+    "message": "Edit member"
   },
-  "inviteUser": {
-    "message": "Invite user"
+  "inviteMember": {
+    "message": "Invite member"
   },
   "inviteUserDesc": {
     "message": "Invite a new user to your organization by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, concatMap, Subject, takeUntil } from "rxjs";
+import { combineLatest, concatMap, lastValueFrom, Subject, takeUntil } from "rxjs";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
@@ -26,6 +26,7 @@ import { OrganizationUserConfirmRequest } from "@bitwarden/common/models/request
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { OrganizationUserBulkResponse } from "@bitwarden/common/models/response/organization-user-bulk.response";
 import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
+import { DialogService } from "@bitwarden/components";
 
 import { BasePeopleComponent } from "../../common/base.people.component";
 
@@ -34,8 +35,8 @@ import { BulkRemoveComponent } from "./bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./bulk/bulk-status.component";
 import { EntityEventsComponent } from "./entity-events.component";
+import { openUserAddEditDialog, MemberDialogResult } from "./member-dialog/member-dialog.component";
 import { ResetPasswordComponent } from "./reset-password.component";
-import { UserAddEditComponent } from "./user-add-edit.component";
 import { UserGroupsComponent } from "./user-groups.component";
 
 @Component({
@@ -46,7 +47,6 @@ export class PeopleComponent
   extends BasePeopleComponent<OrganizationUserUserDetailsResponse>
   implements OnInit, OnDestroy
 {
-  @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
   @ViewChild("eventsTemplate", { read: ViewContainerRef, static: true })
@@ -93,7 +93,8 @@ export class PeopleComponent
     private syncService: SyncService,
     stateService: StateService,
     private organizationService: OrganizationService,
-    private organizationApiService: OrganizationApiServiceAbstraction
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private dialogService: DialogService
   ) {
     super(
       apiService,
@@ -240,36 +241,26 @@ export class PeopleComponent
   }
 
   async edit(user: OrganizationUserUserDetailsResponse) {
-    const [modal] = await this.modalService.openViewRef(
-      UserAddEditComponent,
-      this.addEditModalRef,
-      (comp) => {
-        comp.name = this.userNamePipe.transform(user);
-        comp.organizationId = this.organizationId;
-        comp.organizationUserId = user != null ? user.id : null;
-        comp.usesKeyConnector = user?.usesKeyConnector;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onSavedUser.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onDeletedUser.subscribe(() => {
-          modal.close();
-          this.removeUser(user);
-        });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onRevokedUser.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onRestoredUser.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-      }
-    );
+    const dialog = openUserAddEditDialog(this.dialogService, {
+      data: {
+        name: this.userNamePipe.transform(user),
+        organizationId: this.organizationId,
+        organizationUserId: user != null ? user.id : null,
+        usesKeyConnector: user?.usesKeyConnector,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    switch (result) {
+      case MemberDialogResult.Deleted:
+        this.removeUser(user);
+        break;
+      case MemberDialogResult.Saved:
+      case MemberDialogResult.Revoked:
+      case MemberDialogResult.Restored:
+        this.load();
+        break;
+    }
   }
 
   async groups(user: OrganizationUserUserDetailsResponse) {

@@ -19,7 +19,6 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
-import { NestedCheckboxComponent } from "../components/nested-checkbox.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
@@ -40,7 +39,6 @@ import { EventsComponent as OrgEventsComponent } from "../organizations/manage/e
 import { ManageComponent as OrgManageComponent } from "../organizations/manage/manage.component";
 import { PeopleComponent as OrgPeopleComponent } from "../organizations/manage/people.component";
 import { ResetPasswordComponent as OrgResetPasswordComponent } from "../organizations/manage/reset-password.component";
-import { UserAddEditComponent as OrgUserAddEditComponent } from "../organizations/manage/user-add-edit.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../organizations/manage/user-confirm.component";
 import { AcceptFamilySponsorshipComponent } from "../organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "../organizations/sponsorships/families-for-enterprise-setup.component";
@@ -172,7 +170,6 @@ import { SharedModule } from "./shared.module";
     HintComponent,
     LockComponent,
     NavbarComponent,
-    NestedCheckboxComponent,
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
@@ -194,7 +191,6 @@ import { SharedModule } from "./shared.module";
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
-    OrgUserAddEditComponent,
     OrgUserConfirmComponent,
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
@@ -292,7 +288,6 @@ import { SharedModule } from "./shared.module";
     HintComponent,
     LockComponent,
     NavbarComponent,
-    NestedCheckboxComponent,
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
@@ -314,7 +309,6 @@ import { SharedModule } from "./shared.module";
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
-    OrgUserAddEditComponent,
     OrgUserConfirmComponent,
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
