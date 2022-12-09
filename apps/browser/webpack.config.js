@@ -252,7 +252,7 @@ if (manifestVersion == 2) {
   const backgroundConfig = {
     name: "background",
     mode: ENV,
-    devtool: false,
+    devtool: ENV === "development" ? "inline-source-map" : false,
     entry: "./src/background.ts",
     target: "webworker",
     output: {
