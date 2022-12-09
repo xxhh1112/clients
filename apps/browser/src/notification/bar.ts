@@ -1,48 +1,51 @@
-// eslint-disable-next-line
+import type { FolderView } from "@bitwarden/common/models/view/folder.view";
+
 require("./bar.scss");
 
 document.addEventListener("DOMContentLoaded", () => {
+  contentLoaded();
+});
+
+function contentLoaded() {
   const theme = getQueryVariable("theme");
   document.documentElement.classList.add("theme_" + theme);
 
-  let i18n = {};
-  let lang = window.navigator.language;
-
-  i18n.appName = chrome.i18n.getMessage("appName");
-  i18n.close = chrome.i18n.getMessage("close");
-  i18n.never = chrome.i18n.getMessage("never");
-  i18n.folder = chrome.i18n.getMessage("folder");
-  i18n.notificationAddSave = chrome.i18n.getMessage("notificationAddSave");
-  i18n.notificationAddDesc = chrome.i18n.getMessage("notificationAddDesc");
-  i18n.notificationChangeSave = chrome.i18n.getMessage("notificationChangeSave");
-  i18n.notificationChangeDesc = chrome.i18n.getMessage("notificationChangeDesc");
-  lang = chrome.i18n.getUILanguage(); // eslint-disable-line
+  const i18n = {
+    appName: chrome.i18n.getMessage("appName"),
+    close: chrome.i18n.getMessage("close"),
+    never: chrome.i18n.getMessage("never"),
+    folder: chrome.i18n.getMessage("folder"),
+    notificationAddSave: chrome.i18n.getMessage("notificationAddSave"),
+    notificationAddDesc: chrome.i18n.getMessage("notificationAddDesc"),
+    notificationChangeSave: chrome.i18n.getMessage("notificationChangeSave"),
+    notificationChangeDesc: chrome.i18n.getMessage("notificationChangeDesc"),
+  };
 
   // delay 50ms so that we get proper body dimensions
   setTimeout(load, 50);
 
   function load() {
     const isVaultLocked = getQueryVariable("isVaultLocked") == "true";
-    document.getElementById("logo").src = isVaultLocked
+    (document.getElementById("logo") as HTMLImageElement).src = isVaultLocked
       ? chrome.runtime.getURL("images/icon38_locked.png")
       : chrome.runtime.getURL("images/icon38.png");
 
     document.getElementById("logo-link").title = i18n.appName;
 
-    var neverButton = document.querySelector("#template-add .never-save");
+    const neverButton = document.querySelector("#template-add .never-save");
     neverButton.textContent = i18n.never;
 
-    var selectFolder = document.querySelector("#template-add .select-folder");
+    const selectFolder = document.querySelector("#template-add .select-folder");
     selectFolder.setAttribute("aria-label", i18n.folder);
     selectFolder.setAttribute("isVaultLocked", isVaultLocked.toString());
 
-    var addButton = document.querySelector("#template-add .add-save");
+    const addButton = document.querySelector("#template-add .add-save");
     addButton.textContent = i18n.notificationAddSave;
 
-    var changeButton = document.querySelector("#template-change .change-save");
+    const changeButton = document.querySelector("#template-change .change-save");
     changeButton.textContent = i18n.notificationChangeSave;
 
-    var closeButton = document.getElementById("close-button");
+    const closeButton = document.getElementById("close-button");
     closeButton.title = i18n.close;
     closeButton.setAttribute("aria-label", i18n.close);
 
@@ -67,12 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
     adjustHeight();
   }
 
-  function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
+  function getQueryVariable(variable: string) {
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
 
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split("=");
       if (pair[0] === variable) {
         return pair[1];
       }
@@ -81,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-  function handleTypeAdd(isVaultLocked) {
+  function handleTypeAdd(isVaultLocked: boolean) {
     setContent(document.getElementById("template-add"));
 
     var addButton = document.querySelector("#template-add-clone .add-save"), // eslint-disable-line
@@ -90,7 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
     addButton.addEventListener("click", (e) => {
       e.preventDefault();
 
-      const folderId = document.querySelector("#template-add-clone .select-folder").value;
+      const folderId = (
+        document.querySelector("#template-add-clone .select-folder") as HTMLSelectElement
+      ).value;
 
       const bgAddSaveMessage = {
         command: "bgAddSave",
@@ -133,22 +138,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function setContent(element) {
+  function setContent(element: HTMLElement) {
     const content = document.getElementById("content");
     while (content.firstChild) {
       content.removeChild(content.firstChild);
     }
 
-    var newElement = element.cloneNode(true);
+    const newElement = element.cloneNode(true) as HTMLElement;
     newElement.id = newElement.id + "-clone";
     content.appendChild(newElement);
   }
 
-  function sendPlatformMessage(msg) {
+  function sendPlatformMessage(msg: unknown) {
     chrome.runtime.sendMessage(msg);
   }
 
-  function fillSelectorWithFolders(folders) {
+  function fillSelectorWithFolders(folders: FolderView[]) {
     const select = document.querySelector("#template-add-clone .select-folder");
     select.appendChild(new Option(chrome.i18n.getMessage("selectFolder"), null, true));
     folders.forEach((folder) => {
@@ -165,4 +170,4 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     });
   }
-});
+}
