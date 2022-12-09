@@ -31,6 +31,11 @@ import {
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
 import { GroupServiceAbstraction } from "../services/abstractions/group/group.service.abstraction";
+import {
+  CollectionDialogResult,
+  CollectionDialogTabType,
+  openCollectionDialog,
+} from "../shared/components/collection-dialog/collection-dialog.component";
 import { GroupView } from "../views/group.view";
 
 const MaxCheckedCount = 500;
@@ -187,14 +192,19 @@ export class CiphersComponent extends BaseCiphersComponent implements OnDestroy 
     return this.selectedCollections.map((c) => c.node.id);
   }
 
-  // TODO: Connect to new collection modal
-  async editCollectionInfo(c: CollectionView) {
-    return;
-  }
+  async editCollection(c: CollectionView, tab: "info" | "access") {
+    const tabType = tab == "info" ? CollectionDialogTabType.Info : CollectionDialogTabType.Access;
 
-  // TODO: Connect to new collection modal
-  async editCollectionAccess(c: CollectionView) {
-    return;
+    const dialog = openCollectionDialog(this.dialogService, {
+      data: { collectionId: c?.id, organizationId: this.organization?.id, initialTab: tabType },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+      this.actionPromise = this.refresh();
+      await this.actionPromise;
+      this.actionPromise = null;
+    }
   }
 
   async deleteCollection(collection: CollectionView) {

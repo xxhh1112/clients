@@ -1,4 +1,3 @@
-import { Overlay } from "@angular/cdk/overlay";
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
@@ -61,8 +60,7 @@ export class CollectionsComponent implements OnInit {
     private searchService: SearchService,
     private logService: LogService,
     private organizationService: OrganizationService,
-    private dialogService: DialogService,
-    private overlay: Overlay
+    private dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -132,7 +130,7 @@ export class CollectionsComponent implements OnInit {
       return;
     }
 
-    const dialog = openCollectionDialog(this.dialogService, this.overlay, {
+    const dialog = openCollectionDialog(this.dialogService, {
       data: { collectionId: collection?.id, organizationId: this.organizationId },
     });
 

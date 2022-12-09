@@ -6,9 +6,14 @@ import {
   canAccessOrgAdmin,
   canAccessGroupsTab,
   canAccessMembersTab,
+  canAccessVaultTab,
+  canAccessReportingTab,
+  canAccessSettingsTab,
 } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 import { OrganizationPermissionsGuard } from "./guards/org-permissions.guard";
+import { OrganizationRedirectGuard } from "./guards/org-redirect.guard";
 import { OrganizationLayoutComponent } from "./layouts/organization-layout.component";
 import { CollectionsComponent } from "./manage/collections.component";
 import { GroupsComponent } from "./manage/groups.component";
@@ -25,7 +30,15 @@ const routes: Routes = [
       organizationPermissions: canAccessOrgAdmin,
     },
     children: [
-      { path: "", pathMatch: "full", redirectTo: "vault" },
+      {
+        path: "",
+        pathMatch: "full",
+        canActivate: [OrganizationRedirectGuard],
+        data: {
+          autoRedirectCallback: getOrganizationRoute,
+        },
+        children: [], // This is required to make the auto redirect work, },
+      },
       {
         path: "vault",
         loadChildren: () => VaultModule,
@@ -80,6 +93,25 @@ const routes: Routes = [
     ],
   },
 ];
+
+function getOrganizationRoute(organization: Organization): string {
+  if (canAccessVaultTab(organization)) {
+    return "vault";
+  }
+  if (canAccessMembersTab(organization)) {
+    return "members";
+  }
+  if (canAccessGroupsTab(organization)) {
+    return "groups";
+  }
+  if (canAccessReportingTab(organization)) {
+    return "reporting";
+  }
+  if (canAccessSettingsTab(organization)) {
+    return "settings";
+  }
+  return undefined;
+}
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

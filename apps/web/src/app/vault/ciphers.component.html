@@ -8,7 +8,7 @@
   >
     <ng-container header>
       <tr>
-        <th bitCell class="tw-w-20" colspan="2">
+        <th bitCell class="tw-min-w-fit" colspan="2">
           <input
             class="tw-mr-2"
             type="checkbox"
@@ -20,14 +20,14 @@
             "all" | i18n
           }}</label>
         </th>
-        <th bitCell>{{ "name" | i18n }}</th>
-        <th bitCell>
+        <th bitCell class="tw-w-1/2">{{ "name" | i18n }}</th>
+        <th bitCell class="tw-w-1/2">
           <ng-container *ngIf="!organization">{{ "owner" | i18n }}</ng-container>
           <ng-container *ngIf="organization">
             {{ (activeFilter.selectedCollectionNode ? "groups" : "collections") | i18n }}
           </ng-container>
         </th>
-        <th bitCell class="tw-w-10">
+        <th bitCell class="tw-min-w-fit">
           <button
             [bitMenuTriggerFor]="headerMenu"
             bitIconButton="bwi-ellipsis-v"
@@ -72,7 +72,7 @@
     </ng-container>
     <ng-container body>
       <tr bitRow *ngFor="let col of filteredCollections">
-        <td bitCell class="tw-w-10" (click)="selectRow(col)">
+        <td bitCell (click)="selectRow(col)">
           <input
             *ngIf="organization && col.node.id !== null"
             class="tw-cursor-pointer"
@@ -81,7 +81,7 @@
             appStopProp
           />
         </td>
-        <td bitCell class="tw-w-10" (click)="selectRow(col)">
+        <td bitCell (click)="selectRow(col)">
           <div class="icon" aria-hidden="true">
             <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
           </div>
@@ -91,7 +91,7 @@
             {{ col.node.name }}
           </button>
         </td>
-        <td bitCell class="tw-w-72" (click)="selectRow(col)">
+        <td bitCell (click)="selectRow(col)">
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
@@ -119,23 +119,27 @@
           ></button>
           <bit-menu #collectionOptions>
             <button
-              *ngIf="organization?.canEditAssignedCollections"
+              *ngIf="
+                organization?.canEditAssignedCollections || organization?.canEditAnyCollections
+              "
               bitMenuItem
-              (click)="editCollectionInfo(col.node)"
+              (click)="editCollection(col.node, 'info')"
             >
               <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
               {{ "editInfo" | i18n }}
             </button>
             <button
-              *ngIf="organization?.canEditAssignedCollections"
+              *ngIf="organization?.canEditAssignedCollections || organization?.canEditAnyCollection"
               bitMenuItem
-              (click)="editCollectionAccess(col.node)"
+              (click)="editCollection(col.node, 'access')"
             >
               <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
               {{ "access" | i18n }}
             </button>
             <button
-              *ngIf="organization?.canDeleteAssignedCollections"
+              *ngIf="
+                organization?.canDeleteAssignedCollections || organization?.canDeleteAnyCollection
+              "
               bitMenuItem
               (click)="deleteCollection(col.node)"
             >
@@ -148,10 +152,10 @@
         </td>
       </tr>
       <tr bitRow *ngFor="let c of filteredCiphers">
-        <td bitCell class="tw-w-10" (click)="selectRow(c)">
+        <td bitCell (click)="selectRow(c)">
           <input type="checkbox" [(ngModel)]="c.checked" appStopProp />
         </td>
-        <td bitCell class="tw-w-10" (click)="selectRow(c)">
+        <td bitCell (click)="selectRow(c)">
           <app-vault-icon [cipher]="c"></app-vault-icon>
         </td>
         <td bitCell (click)="selectRow(c)">
@@ -184,7 +188,7 @@
           <br />
           <small appStopProp>{{ c.subTitle }}</small>
         </td>
-        <td bitCell class="tw-w-72">
+        <td bitCell>
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ c.organizationId | orgNameFromId: organizations }}"

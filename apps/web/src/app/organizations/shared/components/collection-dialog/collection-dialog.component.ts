@@ -1,5 +1,4 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
-import { Overlay } from "@angular/cdk/overlay";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "rxjs";
@@ -24,9 +23,15 @@ import {
   convertToSelectionView,
 } from "../access-selector";
 
+export enum CollectionDialogTabType {
+  Info = 0,
+  Access = 1,
+}
+
 export interface CollectionDialogParams {
   collectionId?: string;
   organizationId: string;
+  initialTab?: CollectionDialogTabType;
 }
 
 export enum CollectionDialogResult {
@@ -42,6 +47,7 @@ export enum CollectionDialogResult {
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  protected tabIndex: CollectionDialogTabType;
   protected loading = true;
   protected organization?: Organization;
   protected collection?: CollectionView;
@@ -65,7 +71,9 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService
-  ) {}
+  ) {
+    this.tabIndex = params.initialTab ?? CollectionDialogTabType.Info;
+  }
 
   ngOnInit() {
     const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(
@@ -253,14 +261,10 @@ function mapToAccessSelections(collectionDetails: CollectionAdminView): AccessIt
  */
 export function openCollectionDialog(
   dialogService: DialogService,
-  overlay: Overlay,
   config: DialogConfig<CollectionDialogParams>
 ) {
   return dialogService.open<CollectionDialogResult, CollectionDialogParams>(
     CollectionDialogComponent,
-    {
-      positionStrategy: overlay.position().global().centerHorizontally().top(),
-      ...config,
-    }
+    config
   );
 }

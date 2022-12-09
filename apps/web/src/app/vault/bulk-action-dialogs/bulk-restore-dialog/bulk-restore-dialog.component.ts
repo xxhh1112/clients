@@ -31,7 +31,7 @@ export const openBulkRestoreDialog = (
 };
 
 @Component({
-  selector: "app-vault-bulk-restore",
+  selector: "vault-bulk-restore-dialog",
   templateUrl: "bulk-restore-dialog.component.html",
 })
 export class BulkRestoreDialogComponent {

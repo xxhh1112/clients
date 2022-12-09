@@ -38,7 +38,7 @@ export const openBulkDeleteDialog = (
 };
 
 @Component({
-  selector: "app-vault-bulk-delete",
+  selector: "vault-bulk-delete-dialog",
   templateUrl: "bulk-delete-dialog.component.html",
 })
 export class BulkDeleteDialogComponent {
