@@ -70,7 +70,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   showPremiumCallout = false;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
-  private destroy$ = new Subject<void>();
 
   private destroy$ = new Subject<void>();
 
