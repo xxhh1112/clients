@@ -28,7 +28,7 @@ export class RoutedVaultFilterBridge implements VaultFilter {
     return this.legacyFilter.selectedCipherTypeNode;
   }
   set selectedCipherTypeNode(value: TreeNode<CipherTypeFilter>) {
-    // this.bridgeService.navigate({ });
+    this.bridgeService.navigate({ type: value.node.id });
   }
   get selectedFolderNode(): TreeNode<FolderFilter> {
     return this.legacyFilter.selectedFolderNode;

@@ -18,6 +18,9 @@ export class RoutedVaultFilterService implements OnDestroy {
           folderId: queryParams.get("folderId") ?? undefined,
           organizationId:
             queryParams.get("organizationId") ?? params.get("organizationId") ?? undefined,
+          type: queryParams.get("type") ?? undefined,
+          favorites: queryParams.get("favorites") ? true : undefined,
+          deleted: queryParams.get("deleted") ? true : undefined,
         };
       }),
       // eslint-disable-next-line no-console
@@ -34,6 +37,9 @@ export class RoutedVaultFilterService implements OnDestroy {
           collectionId: filter.collectionId ?? null,
           folderId: filter.folderId ?? null,
           organizationId: filter.organizationId ?? null,
+          type: filter.type ?? null,
+          deleted: filter.deleted || null,
+          favorites: filter.favorites || null,
         },
         queryParamsHandling: "merge",
       },
