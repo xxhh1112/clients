@@ -60,6 +60,10 @@ export default class RuntimeBackground {
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
+        if (this.main.popupOnlyContext) {
+          return;
+        }
+
         let item: LockedVaultPendingNotificationsItem;
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
@@ -103,7 +107,7 @@ export default class RuntimeBackground {
         await this.main.openPopup();
         break;
       case "promptForLogin":
-        await BrowserApi.createNewTab("popup/index.html?uilocation=popout", true, true);
+        BrowserApi.createNewTab("popup/index.html?uilocation=popout", true, true);
         break;
       case "showDialogResolve":
         this.platformUtilsService.resolveDialogPromise(msg.dialogId, msg.confirmed);
