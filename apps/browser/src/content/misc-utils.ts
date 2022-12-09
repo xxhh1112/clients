@@ -1,4 +1,4 @@
-import { TabMessage } from "../types/tab-messages";
+import TabMessage from "../types/tab-messages";
 
 async function copyText(text: string) {
   await window.navigator.clipboard.writeText(text);

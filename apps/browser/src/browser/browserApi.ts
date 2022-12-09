@@ -1,5 +1,5 @@
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
-import { TabMessage } from "../types/tab-messages";
+import TabMessage from "../types/tab-messages";
 
 export class BrowserApi {
   static isWebExtensionsApi: boolean = typeof browser !== "undefined";
