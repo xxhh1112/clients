@@ -20,6 +20,7 @@ export class OrganizationData {
   useSso: boolean;
   useKeyConnector: boolean;
   useScim: boolean;
+  useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
   selfHost: boolean;
@@ -61,6 +62,7 @@ export class OrganizationData {
     this.useSso = response.useSso;
     this.useKeyConnector = response.useKeyConnector;
     this.useScim = response.useScim;
+    this.useCustomPermissions = response.useCustomPermissions;
     this.useResetPassword = response.useResetPassword;
     this.useSecretsManager = response.useSecretsManager;
     this.selfHost = response.selfHost;
