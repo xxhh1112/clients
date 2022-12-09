@@ -1,3 +1,5 @@
+import { ThemeType } from "@bitwarden/common/enums/themeType";
+
 import AddLoginRuntimeMessage from "../background/models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "../background/models/changePasswordRuntimeMessage";
 import AutofillField from "../models/autofillField";
@@ -12,10 +14,10 @@ type FullFormData = {
 };
 
 document.addEventListener("DOMContentLoaded", (_event) => {
-  executeDomLoaded(window, window.document);
+  executeDomLoaded();
 });
 
-export function executeDomLoaded(window: Window, document: Document) {
+export function executeDomLoaded() {
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
     return;
   }
@@ -520,13 +522,23 @@ export function executeDomLoaded(window: Window, document: Document) {
     }, 500);
   }
 
-  function closeExistingAndOpenBar(type: string, typeData: any) {
+  function closeExistingAndOpenBar(
+    type: string,
+    typeData: { isVaultLocked: boolean; theme: ThemeType }
+  ) {
     const barQueryParams = {
       type,
       isVaultLocked: typeData.isVaultLocked,
       theme: typeData.theme,
     };
-    const barQueryString = new URLSearchParams(barQueryParams).toString();
+
+    if (typeData.theme === ThemeType.System) {
+      barQueryParams.theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? ThemeType.Dark
+        : ThemeType.Light;
+    }
+
+    const barQueryString = new URLSearchParams(barQueryParams as any).toString();
     const barPage = "notification/bar.html?" + barQueryString;
 
     const frame = document.getElementById("bit-notification-bar-iframe") as HTMLIFrameElement;
@@ -545,7 +557,7 @@ export function executeDomLoaded(window: Window, document: Document) {
       return;
     }
 
-    const barPageUrl: string = chrome.extension.getURL(barPage);
+    const barPageUrl: string = chrome.runtime.getURL(barPage);
 
     const iframe = document.createElement("iframe");
     iframe.style.cssText = "height: 42px; width: 100%; border: 0; min-height: initial;";

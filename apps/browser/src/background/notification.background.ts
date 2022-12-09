@@ -4,18 +4,22 @@ import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
+import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/models/view/login.view";
 
 import { BrowserApi } from "../browser/browserApi";
+import { Account } from "../models/account";
 import { AutofillService } from "../services/abstractions/autofill.service";
 import { BrowserStateService } from "../services/abstractions/browser-state.service";
+import RuntimeMessage from "../types/runtime-messages";
 
 import AddChangePasswordQueueMessage from "./models/addChangePasswordQueueMessage";
 import AddLoginQueueMessage from "./models/addLoginQueueMessage";
@@ -23,9 +27,84 @@ import AddLoginRuntimeMessage from "./models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "./models/changePasswordRuntimeMessage";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
 import { NotificationQueueMessageType } from "./models/notificationQueueMessageType";
+import {
+  authServiceFactory,
+  AuthServiceInitOptions,
+} from "./service_factories/auth-service.factory";
+import {
+  autofillServiceFactory,
+  AutoFillServiceInitOptions,
+} from "./service_factories/autofill-service.factory";
+import { cipherServiceFactory } from "./service_factories/cipher-service.factory";
+import { CachedServices } from "./service_factories/factory-options";
+import { folderServiceFactory } from "./service_factories/folder-service.factory";
+import { policyServiceFactory } from "./service_factories/policy-service.factory";
+import { searchServiceFactory } from "./service_factories/search-service.factory";
+import { stateServiceFactory } from "./service_factories/state-service.factory";
+
+const notificationQueueKey = "notificationQueue";
 
 export default class NotificationBackground {
-  private notificationQueue: (AddLoginQueueMessage | AddChangePasswordQueueMessage)[] = [];
+  static async messageListener(
+    services: CachedServices,
+    message: RuntimeMessage,
+    sender: chrome.runtime.MessageSender
+  ) {
+    const stateFactory = new StateFactory(GlobalState, Account);
+    let searchService: SearchService | null = null;
+    const serviceOptions: AutoFillServiceInitOptions & AuthServiceInitOptions = {
+      apiServiceOptions: {
+        logoutCallback: null,
+      },
+      cipherServiceOptions: {
+        searchServiceFactory: () => searchService,
+      },
+      cryptoFunctionServiceOptions: {
+        win: self,
+      },
+      encryptServiceOptions: {
+        logMacFailures: false,
+      },
+      i18nServiceOptions: {
+        systemLanguage: chrome.i18n.getUILanguage(),
+      },
+      keyConnectorServiceOptions: {
+        logoutCallback: null,
+      },
+      logServiceOptions: {
+        isDev: false,
+      },
+      platformUtilsServiceOptions: {
+        biometricCallback: null,
+        clipboardWriteCallback: null,
+        win: self,
+      },
+      stateMigrationServiceOptions: {
+        stateFactory: stateFactory,
+      },
+      stateServiceOptions: {
+        stateFactory: stateFactory,
+      },
+    };
+
+    searchService = await searchServiceFactory(services, serviceOptions);
+    const autofillService = await autofillServiceFactory(services, serviceOptions);
+    const cipherService = await cipherServiceFactory(services, serviceOptions);
+    const authService = await authServiceFactory(services, serviceOptions);
+    const policyService = await policyServiceFactory(services, serviceOptions);
+    const folderService = await folderServiceFactory(services, serviceOptions);
+    const stateService = await stateServiceFactory(services, serviceOptions);
+
+    const notificationBar = new NotificationBackground(
+      autofillService,
+      cipherService,
+      authService,
+      policyService,
+      folderService,
+      stateService
+    );
+    await notificationBar.listen(message, sender);
+  }
 
   constructor(
     private autofillService: AutofillService,
@@ -36,6 +115,7 @@ export default class NotificationBackground {
     private stateService: BrowserStateService
   ) {}
 
+  // Only needs to be ran for MV2
   async init() {
     if (chrome.runtime == null) {
       return;
@@ -43,21 +123,21 @@ export default class NotificationBackground {
 
     BrowserApi.messageListener(
       "notification.background",
-      async (msg: any, sender: chrome.runtime.MessageSender) => {
-        await this.processMessage(msg, sender);
+      async (msg: RuntimeMessage, sender: chrome.runtime.MessageSender) => {
+        await this.listen(msg, sender);
       }
     );
 
-    this.cleanupNotificationQueue();
+    await this.cleanupNotificationQueue();
   }
 
-  async processMessage(msg: any, sender: chrome.runtime.MessageSender) {
+  async listen(msg: RuntimeMessage, sender: chrome.runtime.MessageSender) {
     switch (msg.command) {
       case "unlockCompleted":
         if (msg.data.target !== "notification.background") {
           return;
         }
-        await this.processMessage(msg.data.commandToRetry.msg, msg.data.commandToRetry.sender);
+        await this.listen(msg.data.commandToRetry.msg, msg.data.commandToRetry.sender);
         break;
       case "bgGetDataForTab":
         await this.getDataForTab(sender.tab, msg.responseCommand);
@@ -76,7 +156,7 @@ export default class NotificationBackground {
         break;
       case "bgAddClose":
       case "bgChangeClose":
-        this.removeTabFromNotificationQueue(sender.tab);
+        await this.removeTabFromNotificationQueue(sender.tab);
         break;
       case "bgAddSave":
       case "bgChangeSave":
@@ -121,7 +201,8 @@ export default class NotificationBackground {
   }
 
   async checkNotificationQueue(tab: chrome.tabs.Tab = null): Promise<void> {
-    if (this.notificationQueue.length === 0) {
+    const notificationQueue = await this.getNotificationQueue();
+    if (notificationQueue.length === 0) {
       return;
     }
 
@@ -136,12 +217,14 @@ export default class NotificationBackground {
     }
   }
 
-  private cleanupNotificationQueue() {
-    for (let i = this.notificationQueue.length - 1; i >= 0; i--) {
-      if (this.notificationQueue[i].expires < new Date()) {
-        this.notificationQueue.splice(i, 1);
+  private async cleanupNotificationQueue() {
+    const notificationQueue = await this.getNotificationQueue();
+    for (let i = notificationQueue.length - 1; i >= 0; i--) {
+      if (notificationQueue[i].expires < new Date()) {
+        await this.spliceNotificationQueue(i);
       }
     }
+    // TODO: Convert to using scheduled tasks from alarms
     setTimeout(() => this.cleanupNotificationQueue(), 2 * 60 * 1000); // check every 2 minutes
   }
 
@@ -155,27 +238,25 @@ export default class NotificationBackground {
       return;
     }
 
-    for (let i = 0; i < this.notificationQueue.length; i++) {
-      if (
-        this.notificationQueue[i].tabId !== tab.id ||
-        this.notificationQueue[i].domain !== tabDomain
-      ) {
+    const notificationQueue = await this.getNotificationQueue();
+    for (let i = 0; i < notificationQueue.length; i++) {
+      if (notificationQueue[i].tabId !== tab.id || notificationQueue[i].domain !== tabDomain) {
         continue;
       }
 
-      if (this.notificationQueue[i].type === NotificationQueueMessageType.AddLogin) {
+      if (notificationQueue[i].type === NotificationQueueMessageType.AddLogin) {
         BrowserApi.tabSendMessageData(tab, "openNotificationBar", {
           type: "add",
           typeData: {
-            isVaultLocked: this.notificationQueue[i].wasVaultLocked,
+            isVaultLocked: notificationQueue[i].wasVaultLocked,
             theme: await this.getCurrentTheme(),
           },
         });
-      } else if (this.notificationQueue[i].type === NotificationQueueMessageType.ChangePassword) {
+      } else if (notificationQueue[i].type === NotificationQueueMessageType.ChangePassword) {
         BrowserApi.tabSendMessageData(tab, "openNotificationBar", {
           type: "change",
           typeData: {
-            isVaultLocked: this.notificationQueue[i].wasVaultLocked,
+            isVaultLocked: notificationQueue[i].wasVaultLocked,
             theme: await this.getCurrentTheme(),
           },
         });
@@ -185,21 +266,14 @@ export default class NotificationBackground {
   }
 
   private async getCurrentTheme() {
-    const theme = await this.stateService.getTheme();
-
-    if (theme !== ThemeType.System) {
-      return theme;
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? ThemeType.Dark
-      : ThemeType.Light;
+    return await this.stateService.getTheme();
   }
 
-  private removeTabFromNotificationQueue(tab: chrome.tabs.Tab) {
-    for (let i = this.notificationQueue.length - 1; i >= 0; i--) {
-      if (this.notificationQueue[i].tabId === tab.id) {
-        this.notificationQueue.splice(i, 1);
+  private async removeTabFromNotificationQueue(tab: chrome.tabs.Tab) {
+    const notificationQueue = await this.getNotificationQueue();
+    for (let i = notificationQueue.length - 1; i >= 0; i--) {
+      if (notificationQueue[i].tabId === tab.id) {
+        await this.spliceNotificationQueue(i);
       }
     }
   }
@@ -215,10 +289,7 @@ export default class NotificationBackground {
       return;
     }
 
-    let normalizedUsername = loginInfo.username;
-    if (normalizedUsername != null) {
-      normalizedUsername = normalizedUsername.toLowerCase();
-    }
+    const normalizedUsername = loginInfo.username?.toLowerCase();
 
     const disabledAddLogin = await this.stateService.getDisableAddLoginNotification();
     if (authStatus === AuthenticationStatus.Locked) {
@@ -230,7 +301,7 @@ export default class NotificationBackground {
         return;
       }
 
-      this.pushAddLoginToQueue(loginDomain, loginInfo, tab, true);
+      await this.pushAddLoginToQueue(loginDomain, loginInfo, tab, true);
       return;
     }
 
@@ -247,7 +318,7 @@ export default class NotificationBackground {
         return;
       }
 
-      this.pushAddLoginToQueue(loginDomain, loginInfo, tab);
+      await this.pushAddLoginToQueue(loginDomain, loginInfo, tab);
     } else if (
       usernameMatches.length === 1 &&
       usernameMatches[0].login.password !== loginInfo.password
@@ -257,7 +328,12 @@ export default class NotificationBackground {
       if (disabledChangePassword) {
         return;
       }
-      this.pushChangePasswordToQueue(usernameMatches[0].id, loginDomain, loginInfo.password, tab);
+      await this.pushChangePasswordToQueue(
+        usernameMatches[0].id,
+        loginDomain,
+        loginInfo.password,
+        tab
+      );
     }
   }
 
@@ -268,7 +344,7 @@ export default class NotificationBackground {
     isVaultLocked = false
   ) {
     // remove any old messages for this tab
-    this.removeTabFromNotificationQueue(tab);
+    await this.removeTabFromNotificationQueue(tab);
     const message: AddLoginQueueMessage = {
       type: NotificationQueueMessageType.AddLogin,
       username: loginInfo.username,
@@ -279,7 +355,7 @@ export default class NotificationBackground {
       expires: new Date(new Date().getTime() + 5 * 60000), // 5 minutes
       wasVaultLocked: isVaultLocked,
     };
-    this.notificationQueue.push(message);
+    await this.pushNotificationQueue(message);
     await this.checkNotificationQueue(tab);
   }
 
@@ -290,7 +366,7 @@ export default class NotificationBackground {
     }
 
     if ((await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked) {
-      this.pushChangePasswordToQueue(null, loginDomain, changeData.newPassword, tab, true);
+      await this.pushChangePasswordToQueue(null, loginDomain, changeData.newPassword, tab, true);
       return;
     }
 
@@ -307,7 +383,7 @@ export default class NotificationBackground {
       id = ciphers[0].id;
     }
     if (id != null) {
-      this.pushChangePasswordToQueue(id, loginDomain, changeData.newPassword, tab);
+      await this.pushChangePasswordToQueue(id, loginDomain, changeData.newPassword, tab);
     }
   }
 
@@ -319,7 +395,7 @@ export default class NotificationBackground {
     isVaultLocked = false
   ) {
     // remove any old messages for this tab
-    this.removeTabFromNotificationQueue(tab);
+    await this.removeTabFromNotificationQueue(tab);
     const message: AddChangePasswordQueueMessage = {
       type: NotificationQueueMessageType.ChangePassword,
       cipherId: cipherId,
@@ -329,13 +405,14 @@ export default class NotificationBackground {
       expires: new Date(new Date().getTime() + 5 * 60000), // 5 minutes
       wasVaultLocked: isVaultLocked,
     };
-    this.notificationQueue.push(message);
+    await this.pushNotificationQueue(message);
     await this.checkNotificationQueue(tab);
   }
 
   private async saveOrUpdateCredentials(tab: chrome.tabs.Tab, folderId?: string) {
-    for (let i = this.notificationQueue.length - 1; i >= 0; i--) {
-      const queueMessage = this.notificationQueue[i];
+    const notificationQueue = await this.getNotificationQueue();
+    for (let i = notificationQueue.length - 1; i >= 0; i--) {
+      const queueMessage = notificationQueue[i];
       if (
         queueMessage.tabId !== tab.id ||
         (queueMessage.type !== NotificationQueueMessageType.AddLogin &&
@@ -349,7 +426,7 @@ export default class NotificationBackground {
         continue;
       }
 
-      this.notificationQueue.splice(i, 1);
+      await this.spliceNotificationQueue(i);
       BrowserApi.tabSendMessageData(tab, "closeNotificationBar");
 
       if (queueMessage.type === NotificationQueueMessageType.ChangePassword) {
@@ -429,8 +506,9 @@ export default class NotificationBackground {
   }
 
   private async saveNever(tab: chrome.tabs.Tab) {
-    for (let i = this.notificationQueue.length - 1; i >= 0; i--) {
-      const queueMessage = this.notificationQueue[i];
+    const notificationQueue = await this.getNotificationQueue();
+    for (let i = notificationQueue.length - 1; i >= 0; i--) {
+      const queueMessage = notificationQueue[i];
       if (
         queueMessage.tabId !== tab.id ||
         queueMessage.type !== NotificationQueueMessageType.AddLogin
@@ -443,7 +521,7 @@ export default class NotificationBackground {
         continue;
       }
 
-      this.notificationQueue.splice(i, 1);
+      await this.spliceNotificationQueue(i);
       BrowserApi.tabSendMessageData(tab, "closeNotificationBar");
 
       const hostname = Utils.getHostname(tab.url);
@@ -452,7 +530,7 @@ export default class NotificationBackground {
   }
 
   private async getDataForTab(tab: chrome.tabs.Tab, responseCommand: string) {
-    const responseData: any = {};
+    const responseData: Record<string, unknown> = {};
     if (responseCommand === "notificationBarGetFoldersList") {
       responseData.folders = await firstValueFrom(this.folderService.folderViews$);
     }
@@ -464,5 +542,28 @@ export default class NotificationBackground {
     return !(await firstValueFrom(
       this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
     ));
+  }
+
+  private async getNotificationQueue(): Promise<
+    (AddLoginQueueMessage | AddChangePasswordQueueMessage)[]
+  > {
+    const queue = await this.stateService.getFromSessionMemory<
+      (AddLoginQueueMessage | AddChangePasswordQueueMessage)[]
+    >(notificationQueueKey);
+    return queue ?? [];
+  }
+
+  private async pushNotificationQueue(
+    message: AddLoginQueueMessage | AddChangePasswordQueueMessage
+  ) {
+    const queue = await this.getNotificationQueue();
+    queue.push(message);
+    await this.stateService.setInSessionMemory(notificationQueueKey, queue);
+  }
+
+  private async spliceNotificationQueue(index: number) {
+    const queue = await this.getNotificationQueue();
+    queue.splice(index, 1);
+    await this.stateService.setInSessionMemory(notificationQueueKey, queue);
   }
 }
