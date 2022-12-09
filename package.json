@@ -46,7 +46,7 @@
     "@storybook/angular": "^6.5.7",
     "@storybook/builder-webpack5": "^6.5.7",
     "@storybook/manager-webpack5": "^6.5.7",
-    "@types/chrome": "^0.0.190",
+    "@types/chrome": "^0.0.202",
     "@types/duo_web_sdk": "^2.7.1",
     "@types/firefox-webext-browser": "^82.0.0",
     "@types/inquirer": "^8.2.1",
