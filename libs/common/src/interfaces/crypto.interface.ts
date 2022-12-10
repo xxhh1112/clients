@@ -1,7 +1,7 @@
 import { EncryptService } from "../abstractions/encrypt.service";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 
-export function nullableFactory<T extends new (...args: any) => any>(
+export function nullableFactory<T extends new (...args: any[]) => any>(
   c: T,
   ...args: ConstructorParameters<T>
 ): InstanceType<T> | undefined {
@@ -9,7 +9,7 @@ export function nullableFactory<T extends new (...args: any) => any>(
     return null;
   }
 
-  return new c(...(args as any[]));
+  return new c(...args);
 }
 
 /**

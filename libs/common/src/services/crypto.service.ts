@@ -690,7 +690,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<V> {
     const key = await this.getKeyFromIdentifier(domain.keyIdentifier());
 
-    return this.encryptService.decryptDomain(view, domain as DecryptableDomain, key);
+    return await this.encryptService.decryptDomain(view, domain, key);
   }
 
   async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
@@ -698,7 +698,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<EncryptableDomain<V>> {
     const key = await this.getKeyFromIdentifier(view.keyIdentifier());
 
-    return this.encryptService.encryptView(view as Encryptable<EncryptableDomain<V>>, key);
+    return this.encryptService.encryptView(view, key);
   }
 
   private async getKeyFromIdentifier(keyIdentifier: string | null): Promise<SymmetricCryptoKey> {
