@@ -5436,6 +5436,9 @@
   "typeOrSelectProjects" :{
     "message": "Type or select Projects"
   },
+  "typeOrSelectProject" :{
+    "message": "Type or select Project"
+  },
   "project":{
     "message": "Project"
   },

@@ -50,6 +50,9 @@ export class SecretDialogComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // Load projects for the project secret association area
+    this.projects = await this.projectService.getProjects(this.data.organizationId);
+
     if (this.data.operation === OperationType.Edit && this.data.secretId) {
       await this.loadData();
     } else if (this.data.operation !== OperationType.Add) {
@@ -65,9 +68,8 @@ export class SecretDialogComponent implements OnInit {
 
   async loadData() {
     this.loading = true;
-    this.secret = await this.secretService.getBySecretId(this.data.secretId); //TODO make sure this api call pulls back projects so we dont need line 71-73
-    this.projects = await this.projectService.getProjects(this.data.organizationId);
-    this.selectedProjects = this.secret.projects;
+    this.secret = await this.secretService.getBySecretId(this.data.secretId);
+    this.selectedProjects = await this.secret.projects;
 
     this.loading = false;
     this.formGroup.setValue({
@@ -87,32 +89,37 @@ export class SecretDialogComponent implements OnInit {
   }
 
   removeProjectAssociation = async (id: string) => {
-    //filter the list to remove that ID
+    // Filter the list to remove that ID
     this.selectedProjects = this.selectedProjects.filter((e) => e.id != id);
   };
 
   updateProjectList() {
+    // Remove current project list, only one project association allowed.
+    const newList: SecretProjectView[] = [];
     const projectId = this.formGroup.get("project").value;
-    const projectToAddExistsAlready = this.selectedProjects.filter((f) => f.id == projectId);
 
-    if (projectId != "" && projectToAddExistsAlready.length == 0) {
-      const proj = this.projects.filter((p) => p.id == projectId)[0];
-      const projectSecretView = new SecretProjectView();
-      projectSecretView.id = proj.id;
-      projectSecretView.name = proj.name;
+    if (projectId) {
+      const selectedProject = this.projects?.filter((p) => p.id == projectId)[0];
 
-      this.selectedProjects.push(projectSecretView);
+      if (selectedProject != undefined) {
+        const projectSecretView = new SecretProjectView();
+
+        projectSecretView.id = selectedProject.id;
+        projectSecretView.name = selectedProject.name;
+
+        newList.push(projectSecretView);
+      }
     }
+
+    this.selectedProjects = newList;
   }
 
   async saveSecretProjectAssociation() {
     this.secret.projects = this.selectedProjects;
-    await this.secretService.update(this.data.organizationId, this.secret);
   }
 
   submit = async () => {
     this.saveSecretProjectAssociation();
-
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {
@@ -140,12 +147,14 @@ export class SecretDialogComponent implements OnInit {
   }
 
   private getSecretView() {
+    const emptyProjects: SecretProjectView[] = [];
+
     const secretView = new SecretView();
     secretView.organizationId = this.data.organizationId;
     secretView.name = this.formGroup.value.name;
     secretView.value = this.formGroup.value.value;
     secretView.note = this.formGroup.value.notes;
-    secretView.projects = this.selectedProjects;
+    secretView.projects = this.selectedProjects ? this.selectedProjects : emptyProjects;
     return secretView;
   }
 }

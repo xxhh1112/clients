@@ -95,7 +95,6 @@ export class ProjectService {
 
   private async createProjectView(projectResponse: ProjectResponse): Promise<ProjectView> {
     const orgKey = await this.getOrganizationKey(projectResponse.organizationId);
-
     const projectView = new ProjectView();
     projectView.id = projectResponse.id;
     projectView.organizationId = projectResponse.organizationId;

@@ -114,25 +114,11 @@ export class SecretService {
   private async getProjectIds(projects: SecretProjectView[]): Promise<string[]> {
     const projectIds: string[] = [];
 
-    projects.forEach((p) => {
+    projects?.forEach((p) => {
       projectIds.push(p.id);
     });
 
     return projectIds;
-  }
-
-  private async getSecretProjectViewList(projects: string[]): Promise<SecretProjectView[]> {
-    const secretProjectViews: SecretProjectView[] = [];
-
-    projects.forEach((p) => {
-      const spv = new SecretProjectView();
-      spv.id = p;
-      spv.name = "Temp";
-      //load up the projectName
-      secretProjectViews.push(spv);
-    });
-
-    return secretProjectViews;
   }
 
   private async createSecretView(secretResponse: SecretResponse): Promise<SecretView> {
@@ -152,7 +138,13 @@ export class SecretService {
     secretView.name = name;
     secretView.value = value;
     secretView.note = note;
-    secretView.projects = await this.getSecretProjectViewList(secretResponse.projects);
+
+    const projectsMappedToSecretsView = await this.decryptProjectsMappedToSecrets(
+      orgKey,
+      secretResponse.projects
+    );
+
+    secretView.projects = await projectsMappedToSecretsView;
 
     return secretView;
   }
@@ -179,9 +171,13 @@ export class SecretService {
         );
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
-        secretListView.projects = (await projectsMappedToSecretsView).filter((p) =>
-          s.projects.includes(p.id)
-        );
+
+        const projectsMappedToSecret = await projectsMappedToSecretsView;
+
+        const projectIds: string[] = [];
+        s.projects?.forEach((e) => projectIds.push(e.id));
+
+        secretListView.projects = projectsMappedToSecret.filter((p) => projectIds.includes(p.id));
         return secretListView;
       })
     );
