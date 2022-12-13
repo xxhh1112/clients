@@ -44,7 +44,7 @@
         <bit-tab label="{{ 'access' | i18n }}">
           <bit-access-selector
             *ngIf="organization.useGroups"
-            permissionMode="edit"
+            [permissionMode]="PermissionMode.Edit"
             formControlName="access"
             [items]="accessItems"
             [columnHeader]="'groupAndMemberColumnHeader' | i18n"
@@ -54,7 +54,7 @@
           ></bit-access-selector>
           <bit-access-selector
             *ngIf="!organization.useGroups"
-            permissionMode="edit"
+            [permissionMode]="PermissionMode.Edit"
             formControlName="access"
             [items]="accessItems"
             [columnHeader]="'memberColumnHeader' | i18n"

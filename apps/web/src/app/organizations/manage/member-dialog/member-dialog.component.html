@@ -113,12 +113,23 @@
               name="userType"
               id="userTypeCustom"
               [value]="organizationUserType.Custom"
-              [ngModelOptions]="{ standalone: true }"
               [(ngModel)]="type"
+              [attr.disabled]="!canUseCustomPermissions || null"
             />
             <label class="form-check-label" for="userTypeCustom">
               {{ "custom" | i18n }}
-              <small>{{ "customDesc" | i18n }}</small>
+              <ng-container *ngIf="!canUseCustomPermissions; else enterprise">
+                <small
+                  >{{ "customDescNonEnterpriseStart" | i18n
+                  }}<a href="https://bitwarden.com/contact/" target="_blank">{{
+                    "customDescNonEnterpriseLink" | i18n
+                  }}</a
+                  >{{ "customDescNonEnterpriseEnd" | i18n }}</small
+                >
+              </ng-container>
+              <ng-template #enterprise>
+                <small>{{ "customDesc" | i18n }}</small>
+              </ng-template>
             </label>
           </div>
           <ng-container *ngIf="customUserTypeSelected">
@@ -212,7 +223,7 @@
                         class="form-check-input"
                         type="checkbox"
                         name="manageSso"
-                        id="managePolicies"
+                        id="manageSso"
                         [ngModelOptions]="{ standalone: true }"
                         [(ngModel)]="permissions.manageSso"
                       />
@@ -345,7 +356,7 @@
                     <input
                       type="checkbox"
                       [ngModelOptions]="{ standalone: true }"
-                      [(ngModel)]="c.checked"
+                      [(ngModel)]="$any(c).checked"
                       name="Collection[{{ i }}].Checked"
                       appStopProp
                     />
@@ -359,7 +370,7 @@
                       [ngModelOptions]="{ standalone: true }"
                       [(ngModel)]="c.hidePasswords"
                       name="Collection[{{ i }}].HidePasswords"
-                      [disabled]="!c.checked"
+                      [disabled]="!$any(c).checked"
                     />
                   </td>
                   <td class="text-center">
@@ -368,7 +379,7 @@
                       [ngModelOptions]="{ standalone: true }"
                       [(ngModel)]="c.readOnly"
                       name="Collection[{{ i }}].ReadOnly"
-                      [disabled]="!c.checked"
+                      [disabled]="!$any(c).checked"
                     />
                   </td>
                 </tr>

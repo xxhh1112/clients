@@ -6,6 +6,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
@@ -57,6 +58,7 @@ export class MemberDialogComponent implements OnInit {
   access: "all" | "selected" = "selected";
   collections: CollectionView[] = [];
   organizationUserType = OrganizationUserType;
+  canUseCustomPermissions: boolean;
 
   protected tabIndex: MemberDialogTab;
   // Stub, to be filled out in upcoming PRs
@@ -104,6 +106,7 @@ export class MemberDialogComponent implements OnInit {
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
+    private organizationService: OrganizationService,
     private logService: LogService,
     private formBuilder: FormBuilder
   ) {}
@@ -111,6 +114,9 @@ export class MemberDialogComponent implements OnInit {
   async ngOnInit() {
     this.editMode = this.loading = this.params.organizationUserId != null;
     this.tabIndex = this.params.initialTab ?? MemberDialogTab.Role;
+
+    const organization = this.organizationService.get(this.params.organizationId);
+    this.canUseCustomPermissions = organization.useCustomPermissions;
     await this.loadCollections();
 
     if (this.editMode) {
@@ -185,6 +191,14 @@ export class MemberDialogComponent implements OnInit {
   }
 
   submit = async () => {
+    if (!this.canUseCustomPermissions && this.type === OrganizationUserType.Custom) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("customNonEnterpriseError")
+      );
+      return;
+    }
     let collections: SelectionReadOnlyRequest[] = null;
     if (this.access !== "all") {
       collections = this.collections
@@ -194,30 +208,9 @@ export class MemberDialogComponent implements OnInit {
 
     try {
       if (this.editMode) {
-        const request = new OrganizationUserUpdateRequest();
-        request.accessAll = this.access === "all";
-        request.type = this.type;
-        request.collections = collections;
-        request.permissions = this.setRequestPermissions(
-          request.permissions ?? new PermissionsApi(),
-          request.type !== OrganizationUserType.Custom
-        );
-        await this.apiService.putOrganizationUser(
-          this.params.organizationId,
-          this.params.organizationUserId,
-          request
-        );
+        await this.updateUser(collections);
       } else {
-        const request = new OrganizationUserInviteRequest();
-        request.emails = [...new Set(this.emails.trim().split(/\s*,\s*/))];
-        request.accessAll = this.access === "all";
-        request.type = this.type;
-        request.permissions = this.setRequestPermissions(
-          request.permissions ?? new PermissionsApi(),
-          request.type !== OrganizationUserType.Custom
-        );
-        request.collections = collections;
-        await this.apiService.postOrganizationUserInvite(this.params.organizationId, request);
+        await this.inviteUser(collections);
       }
 
       this.platformUtilsService.showToast(
@@ -330,6 +323,35 @@ export class MemberDialogComponent implements OnInit {
 
   private close(result: MemberDialogResult) {
     this.dialogRef.close(result);
+  }
+
+  async updateUser(collections: SelectionReadOnlyRequest[]) {
+    const request = new OrganizationUserUpdateRequest();
+    request.accessAll = this.access === "all";
+    request.type = this.type;
+    request.collections = collections;
+    request.permissions = this.setRequestPermissions(
+      request.permissions ?? new PermissionsApi(),
+      request.type !== OrganizationUserType.Custom
+    );
+    await this.apiService.putOrganizationUser(
+      this.params.organizationId,
+      this.params.organizationUserId,
+      request
+    );
+  }
+
+  async inviteUser(collections: SelectionReadOnlyRequest[]) {
+    const request = new OrganizationUserInviteRequest();
+    request.emails = [...new Set(this.emails.trim().split(/\s*,\s*/))];
+    request.accessAll = this.access === "all";
+    request.type = this.type;
+    request.permissions = this.setRequestPermissions(
+      request.permissions ?? new PermissionsApi(),
+      request.type !== OrganizationUserType.Custom
+    );
+    request.collections = collections;
+    await this.apiService.postOrganizationUserInvite(this.params.organizationId, request);
   }
 }
 

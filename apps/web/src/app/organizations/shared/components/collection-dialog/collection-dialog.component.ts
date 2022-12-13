@@ -21,6 +21,7 @@ import {
   AccessItemView,
   convertToPermission,
   convertToSelectionView,
+  PermissionMode,
 } from "../access-selector";
 
 export interface CollectionDialogParams {
@@ -53,6 +54,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     parent: null as string | null,
     access: [[] as AccessItemValue[]],
   });
+  protected PermissionMode = PermissionMode;
 
   constructor(
     @Inject(DIALOG_DATA) private params: CollectionDialogParams,

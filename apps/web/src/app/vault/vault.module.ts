@@ -2,10 +2,10 @@ import { NgModule } from "@angular/core";
 
 import { SharedModule, LooseComponentsModule } from "../shared";
 
-import { CiphersComponent } from "./ciphers.component";
 import { OrganizationBadgeModule } from "./organization-badge/organization-badge.module";
 import { PipesModule } from "./pipes/pipes.module";
 import { VaultFilterModule } from "./vault-filter/vault-filter.module";
+import { VaultItemsComponent } from "./vault-items.component";
 import { VaultRoutingModule } from "./vault-routing.module";
 import { VaultComponent } from "./vault.component";
 
@@ -18,7 +18,7 @@ import { VaultComponent } from "./vault.component";
     SharedModule,
     LooseComponentsModule,
   ],
-  declarations: [VaultComponent, CiphersComponent],
+  declarations: [VaultComponent, VaultItemsComponent],
   exports: [VaultComponent],
 })
 export class VaultModule {}
