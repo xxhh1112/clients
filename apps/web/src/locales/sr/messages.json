@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Пријава помоћу уређаја мора бити омогућена у подешавањима Bitwarden апликације. Потребна је друга опција?"
   },
+  "loginWithMasterPassword": {
+    "message": "Пријавите се са главном лозинком"
+  },
   "createAccount": {
     "message": "Креирај налог"
   },
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Дво-коракна лозинка"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Спровођење пријаве у два корака"
+  },
   "twoStepLoginDesc": {
     "message": "Заштитите свој налог захтевањем додатног корака приликом пријављивања."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Захтевајте пријаву у два корака за кориснике ваше организације конфигурисањем добављача на нивоу организације."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Примени Bitwarden опције за пријаву у два корака за чланове користећи ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Опције дво-коракне политике"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Да бисте спровели пријаву у два корака Duoупотребите опције испод."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Ако сте поставили SSO или планирате, Пријава у два корака је можда већ принуђена преко вашег добављача идентитета."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Омогућавање пријаве у два корака може вас трајно закључати са вашег Bitwarden-а налога. Код за опоравак омогућава вам приступ вашем налогу у случају да више не можете да користите свог уобичајеног добављача услуге пријављивања у два корака (нпр. ако изгубите уређај). Подршка Bitwarden-а неће вам моћи помоћи ако изгубите приступ свом налогу. Препоручујемо да запишете или одштампате код за опоравак и сачувате га на сигурном месту."
@@ -1540,6 +1556,10 @@
     "message": "Идентификујте и затворите безбедносне празнине у вашим онлајн налозима кликом на извештаје у наставку.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
+  "orgsReportsDesc": {
+    "message": "Идентификујте и затворите безбедносне празнине у вашим налозима организације кликом на извештаје у наставку.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+  },
   "unsecuredWebsitesReport": {
     "message": "Извештај о несигурним веб локацијама"
   },
@@ -1571,7 +1591,7 @@
     "message": "Нађене пријаве без 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Нашли смо $COUNT$ сајта у вашем сефу који можда нису конфигурисани за пријаву у два корака (према 2fa.directory). Да бисте додатно заштитили ове налоге, требало би да подесите пријаву у два корака.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2340,10 +2360,10 @@
     "message": "Да ли сте сигурни да желите да уклоните овог корисника?"
   },
   "removeOrgUserConfirmation": {
-    "message": "When a member is removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again."
+    "message": "Када се члан уклони, он више нема приступ подацима организације и ова радња је неповратна. Да бисте поново додали члана у организацију, они морају бити позвани и поново укључени."
   },
   "revokeUserConfirmation": {
-    "message": "When a member is revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab."
+    "message": "Када се члан опозове, он више нема приступ подацима организације. Да бисте брзо вратили приступ члановима, идите на картицу Опозвано."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Упозорење! Овај корисник захтева Key Connector да управља њиховом шифровањем. Уклањање овог корисника из ваше организације трајно ће онемогућити њихов рачун. Ова радња се не може поништити. Да ли желите да наставите?"
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Прегледан број картице за ставку $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Прогледан сигурносни код за $ID$.",
     "placeholders": {
@@ -2703,7 +2732,7 @@
     }
   },
   "revokedUserId": {
-    "message": "Revoked organization access for $ID$.",
+    "message": "Опозван приступ организацији за $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2712,7 +2741,7 @@
     }
   },
   "restoredUserId": {
-    "message": "Restored organization access for $ID$.",
+    "message": "Враћен приступ организацији за $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2721,7 +2750,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Revoke $ID$ access",
+    "message": "Опозови приступ „$ID$“",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Моја организација"
+  },
+  "organizationInfo": {
+    "message": "Инфо о организацији"
   },
   "deleteOrganization": {
     "message": "Уклони организацију"
@@ -3313,7 +3345,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Креирано",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3394,7 +3426,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+    "message": "Уверите се да је ваш сеф откључан и да се фраза отиска прста подудара на другом уређају."
   },
   "fingerprintPhraseHeader": {
     "message": "Сигурносна фраза сефа"
@@ -3682,6 +3714,12 @@
   },
   "ssoIdentifierRequired": {
     "message": "Потребан је идентификатор организације."
+  },
+  "ssoIdentifier": {
+    "message": "SSO идентификација"
+  },
+  "ssoIdentifierHint": {
+    "message": "Дајте овај ИД својим члановима за пријаву са SSO."
   },
   "unlinkSso": {
     "message": "Откачи SSO"
@@ -4084,6 +4122,9 @@
   "permissions": {
     "message": "Дозволе"
   },
+  "permission": {
+    "message": "Дозвола"
+  },
   "managerPermissions": {
     "message": "Менаџер созвола"
   },
@@ -4445,10 +4486,10 @@
     "message": "Успешно уклоњено"
   },
   "bulkRevokedMessage": {
-    "message": "Revoked organization access successfully"
+    "message": "Успешно опозван приступ организацији"
   },
   "bulkRestoredMessage": {
-    "message": "Restored organization access successfully"
+    "message": "Успешно враћен приступ организацији"
   },
   "bulkFilteredMessage": {
     "message": "Искључено, није применљиво за ову акцију."
@@ -4488,6 +4529,10 @@
   },
   "clients": {
     "message": "Клијента"
+  },
+  "client": {
+    "message": "Клијент",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Администратор провајдера"
@@ -4990,13 +5035,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families organization"
+    "message": "Нова организација Families"
   },
   "acceptOffer": {
     "message": "Прихвати понуду"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring organization"
+    "message": "Спонзорска организација"
   },
   "keyConnectorTest": {
     "message": "Тест"
@@ -5044,7 +5089,7 @@
     "message": "Rotating the billing sync token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-hosting"
+    "message": "Ауто-хстинг"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
@@ -5107,13 +5152,13 @@
     "message": "обавезно"
   },
   "idpSingleSignOnServiceUrlRequired": {
-    "message": "Required if Entity ID is not a URL."
+    "message": "Потребно ако Entity ID није УРЛ."
   },
   "openIdOptionalCustomizations": {
     "message": "Опциона подешавања"
   },
   "openIdAuthorityRequired": {
-    "message": "Required if Authority is not valid."
+    "message": "Потребно ако Authority није добро."
   },
   "separateMultipleWithComma": {
     "message": "Вишеструко одвојите зарезом."
@@ -5347,15 +5392,15 @@
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimUrl": {
-    "message": "SCIM URL",
+    "message": "SCIM УРЛ",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
-    "message": "SCIM API key successfully rotated",
+    "message": "SCIM API кључ успешно ротиран",
     "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
   },
   "scimSettingsSaved": {
-    "message": "SCIM settings saved",
+    "message": "SCIM подешавања сачувана",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
@@ -5370,6 +5415,15 @@
       "count": {
         "content": "$1",
         "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Унос не сме бити већи од $COUNT$ карактера.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
       }
     }
   },
@@ -5388,11 +5442,23 @@
   "on": {
     "message": "Укључено"
   },
+  "members": {
+    "message": "Чланови"
+  },
+  "reporting": {
+    "message": "Пријављивање"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Број корисника"
+  },
+  "loggingInAs": {
+    "message": "Пријављивање као"
+  },
+  "notYou": {
+    "message": "Нисте Ви?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Тип за филтрирање --"
@@ -5405,5 +5471,41 @@
   },
   "multiSelectClearAll": {
     "message": "Обриши све"
+  },
+  "from": {
+    "message": "Од"
+  },
+  "to": {
+    "message": "За"
+  },
+  "member": {
+    "message": "Члан"
+  },
+  "update": {
+    "message": "Ажурирај"
+  },
+  "role": {
+    "message": "Улога"
+  },
+  "canView": {
+    "message": "Може прегледати"
+  },
+  "canViewExceptPass": {
+    "message": "Може видетим осим лозинке"
+  },
+  "canEdit": {
+    "message": "Може уређивати"
+  },
+  "canEditExceptPass": {
+    "message": "Ноже уређивати осим лозинке"
+  },
+  "group": {
+    "message": "Група"
+  },
+  "groupAccessAll": {
+    "message": "Ова група може приступити и изменити све ставке."
+  },
+  "memberAccessAll": {
+    "message": "Овај члан може приступити и изменити све ставке."
   }
 }

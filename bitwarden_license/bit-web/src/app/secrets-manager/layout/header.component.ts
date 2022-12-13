@@ -28,7 +28,7 @@ export class HeaderComponent {
 
     this.account$ = combineLatest([
       this.stateService.activeAccount$,
-      this.stateService.accounts,
+      this.stateService.accounts$,
     ]).pipe(
       map(([activeAccount, accounts]) => {
         return accounts[activeAccount]?.profile;

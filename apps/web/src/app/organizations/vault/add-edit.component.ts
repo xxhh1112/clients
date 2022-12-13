@@ -4,7 +4,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -18,7 +18,6 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherCreateRequest } from "@bitwarden/common/models/request/cipher-create.request";
 import { CipherRequest } from "@bitwarden/common/models/request/cipher.request";
 
@@ -29,7 +28,6 @@ import { AddEditComponent as BaseAddEditComponent } from "../../vault/add-edit.c
   templateUrl: "../../vault/add-edit.component.html",
 })
 export class AddEditComponent extends BaseAddEditComponent {
-  organization: Organization;
   originalCipher: Cipher = null;
 
   constructor(
@@ -44,7 +42,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     passwordGenerationService: PasswordGenerationService,
     private apiService: ApiService,
     messagingService: MessagingService,
-    eventService: EventService,
+    eventCollectionService: EventCollectionService,
     policyService: PolicyService,
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
@@ -61,7 +59,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       totpService,
       passwordGenerationService,
       messagingService,
-      eventService,
+      eventCollectionService,
       policyService,
       organizationService,
       logService,
@@ -96,8 +94,11 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
     const response = await this.apiService.getCipherAdmin(this.cipherId);
     const data = new CipherData(response);
-    this.originalCipher = new Cipher(data);
-    return new Cipher(data);
+
+    data.edit = true;
+    const cipher = new Cipher(data);
+    this.originalCipher = cipher;
+    return cipher;
   }
 
   protected encryptCipher() {

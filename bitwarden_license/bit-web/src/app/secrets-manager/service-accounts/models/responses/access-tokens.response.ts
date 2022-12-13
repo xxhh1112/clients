@@ -4,7 +4,7 @@ export class AccessTokenResponse extends BaseResponse {
   id: string;
   name: string;
   scopes: string[];
-  expireAt: string;
+  expireAt?: string;
   creationDate: string;
   revisionDate: string;
 

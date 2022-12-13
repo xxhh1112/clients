@@ -88,10 +88,10 @@ module.exports = {
       minWidth: {
         52: "13rem",
       },
-      maxWidth: {
-        72: "18rem",
+      maxWidth: ({ theme }) => ({
+        ...theme("width"),
         "90vw": "90vw",
-      },
+      }),
     },
   },
   plugins: [],

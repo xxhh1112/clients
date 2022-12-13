@@ -5,9 +5,9 @@ import { ImportService } from "@bitwarden/common/abstractions/import.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { ImportType } from "@bitwarden/common/enums/importOptions";
 import { Importer } from "@bitwarden/common/importers/importer";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { MessageResponse } from "@bitwarden/node/cli/models/response/messageResponse";
 
+import { Response } from "../models/response";
+import { MessageResponse } from "../models/response/message.response";
 import { CliUtils } from "../utils";
 
 export class ImportCommand {
@@ -23,7 +23,7 @@ export class ImportCommand {
   ): Promise<Response> {
     const organizationId = options.organizationid;
     if (organizationId != null) {
-      const organization = await this.organizationService.get(organizationId);
+      const organization = await this.organizationService.getFromState(organizationId);
 
       if (organization == null) {
         return Response.badRequest(

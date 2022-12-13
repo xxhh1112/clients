@@ -4,7 +4,7 @@ export class AccessTokenView implements View {
   id: string;
   name: string;
   scopes: string[];
-  expireAt: Date;
+  expireAt?: Date;
   creationDate: Date;
   revisionDate: Date;
 }

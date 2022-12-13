@@ -1,5 +1,5 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { DatePipe, CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";

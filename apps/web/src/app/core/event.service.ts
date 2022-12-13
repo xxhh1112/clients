@@ -1,5 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Injectable } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
@@ -10,21 +9,13 @@ import { Policy } from "@bitwarden/common/models/domain/policy";
 import { EventResponse } from "@bitwarden/common/models/response/event.response";
 
 @Injectable()
-export class EventService implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class EventService {
   private policies: Policy[];
 
-  constructor(private i18nService: I18nService, private policyService: PolicyService) {}
-
-  ngOnInit(): void {
-    this.policyService.policies$.pipe(takeUntil(this.destroy$)).subscribe((policies) => {
+  constructor(private i18nService: I18nService, policyService: PolicyService) {
+    policyService.policies$.subscribe((policies) => {
       this.policies = policies;
     });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   getDefaultDateFilters() {
@@ -144,6 +135,13 @@ export class EventService implements OnInit, OnDestroy {
         msg = this.i18nService.t("viewedHiddenFieldItemId", this.formatCipherId(ev, options));
         humanReadableMsg = this.i18nService.t(
           "viewedHiddenFieldItemId",
+          this.getShortId(ev.cipherId)
+        );
+        break;
+      case EventType.Cipher_ClientToggledCardNumberVisible:
+        msg = this.i18nService.t("viewedCardNumberItemId", this.formatCipherId(ev, options));
+        humanReadableMsg = this.i18nService.t(
+          "viewedCardNumberItemId",
           this.getShortId(ev.cipherId)
         );
         break;
@@ -479,16 +477,14 @@ export class EventService implements OnInit, OnDestroy {
   private formatGroupId(ev: EventResponse) {
     const shortId = this.getShortId(ev.groupId);
     const a = this.makeAnchor(shortId);
-    a.setAttribute(
-      "href",
-      "#/organizations/" + ev.organizationId + "/manage/groups?search=" + shortId
-    );
+    a.setAttribute("href", "#/organizations/" + ev.organizationId + "/groups?search=" + shortId);
     return a.outerHTML;
   }
 
   private formatCollectionId(ev: EventResponse) {
     const shortId = this.getShortId(ev.collectionId);
     const a = this.makeAnchor(shortId);
+    // TODO: Update view/edit collection link after EC-14 is completed
     a.setAttribute(
       "href",
       "#/organizations/" + ev.organizationId + "/manage/collections?search=" + shortId
@@ -503,7 +499,7 @@ export class EventService implements OnInit, OnDestroy {
       "href",
       "#/organizations/" +
         ev.organizationId +
-        "/manage/people?search=" +
+        "/members?search=" +
         shortId +
         "&viewEvents=" +
         ev.organizationUserId

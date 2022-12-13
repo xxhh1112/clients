@@ -310,6 +310,11 @@ form,
       margin-top: 4px;
       margin-left: -18px;
     }
+
+    &.remember-email {
+      padding-left: 20px;
+      padding-bottom: 5px;
+    }
   }
 
   .radio {
@@ -482,6 +487,10 @@ app-root > #loading,
   margin-top: 15px;
 }
 
+.password-hint-btn {
+  margin-bottom: 10px;
+}
+
 .set-pin-modal {
   .box {
     margin-bottom: 15px;
@@ -524,4 +533,10 @@ img,
 
 app-vault-view .box-footer {
   user-select: auto;
+}
+
+/* tweak for inconsistent line heights in cipher view */
+.box-footer button,
+.box-footer a {
+  line-height: 1;
 }

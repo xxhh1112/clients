@@ -51,8 +51,21 @@ export class SecretService {
     return await this.createSecretsListView(organizationId, results);
   }
 
-  async create(organizationId: string, secretView: SecretView) {
-    const request = await this.getSecretRequest(organizationId, secretView);
+  async getSecretsByProject(organizationId: string, projectId: string): Promise<SecretListView[]> {
+    const r = await this.apiService.send(
+      "GET",
+      "/projects/" + projectId + "/secrets",
+      null,
+      true,
+      true
+    );
+
+    const results = new SecretWithProjectsListResponse(r);
+    return await this.createSecretsListView(organizationId, results);
+  }
+
+  async create(organizationId: string, secretView: SecretView, projectId?: string) {
+    const request = await this.getSecretRequest(organizationId, secretView, projectId);
     const r = await this.apiService.send(
       "POST",
       "/organizations/" + organizationId + "/secrets",
@@ -94,7 +107,8 @@ export class SecretService {
 
   private async getSecretRequest(
     organizationId: string,
-    secretView: SecretView
+    secretView: SecretView,
+    projectId?: string
   ): Promise<SecretRequest> {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = new SecretRequest();

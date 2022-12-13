@@ -1844,7 +1844,7 @@
     "message": "Czas blokowania sejfu przekracza limit określony przez organizację."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatyczne rejestrowanie użytkowników do resetowania hasła"
+    "message": "Automatyczne rejestrowanie użytkowników"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego."
@@ -2021,5 +2021,32 @@
   },
   "vault": {
     "message": "Sejf"
+  },
+  "loginWithMasterPassword": {
+    "message": "Logowanie hasłem głównym"
+  },
+  "loggingInAs": {
+    "message": "Logowanie jako"
+  },
+  "rememberEmail": {
+    "message": "Zapamiętaj adres e-mail"
+  },
+  "notYou": {
+    "message": "To nie Ty?"
+  },
+  "newAroundHere": {
+    "message": "Jesteś tu nowy(a)?"
+  },
+  "loggingInTo": {
+    "message": "Logowanie do $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Logowanie innym urządzeniem"
   }
 }

@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
@@ -91,11 +92,12 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private authService: AuthService,
     private messagingService: MessagingService,
+    private router: Router,
     private tokenService: TokenService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.stateService.accounts
+    this.stateService.accounts$
       .pipe(
         concatMap(async (accounts: { [userId: string]: Account }) => {
           for (const userId in accounts) {
@@ -142,6 +144,8 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
   async addAccount() {
     this.close();
     await this.stateService.setActiveUser(null);
+    await this.stateService.setRememberedEmail(null);
+    this.router.navigate(["/login"]);
   }
 
   private async createSwitcherAccounts(baseAccounts: {
