@@ -21,7 +21,7 @@
         placeholder="{{ searchPlaceholder | i18n }}"
         id="search"
         class="form-control"
-        (input)="searchTextChanged($event.target.value)"
+        (input)="searchTextChanged($any($event.target).value)"
         autocomplete="off"
         appAutofocus
       />
