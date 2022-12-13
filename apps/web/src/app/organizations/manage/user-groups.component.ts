@@ -7,8 +7,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUpdateGroupsRequest } from "@bitwarden/common/models/request/organization-user-update-groups.request";
 
-import { GroupServiceAbstraction } from "../services/abstractions/group";
-import { GroupView } from "../views/group.view";
+import { GroupService, GroupView } from "../core";
 
 @Component({
   selector: "app-user-groups",
@@ -26,7 +25,7 @@ export class UserGroupsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private groupApiService: GroupServiceAbstraction,
+    private groupApiService: GroupService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService

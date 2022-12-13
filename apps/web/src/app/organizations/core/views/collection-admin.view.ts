@@ -1,7 +1,7 @@
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { CollectionAccessDetailsResponse } from "@bitwarden/common/src/models/response/collection.response";
 
-import { CollectionAccessSelectionView } from "./collection-access-selection-view";
+import { CollectionAccessSelectionView } from "./collection-access-selection.view";
 
 export class CollectionAdminView extends CollectionView {
   groups: CollectionAccessSelectionView[] = [];

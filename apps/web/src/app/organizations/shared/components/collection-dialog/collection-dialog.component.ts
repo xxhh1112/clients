@@ -12,9 +12,12 @@ import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/src/model
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators, DialogService } from "@bitwarden/components";
 
-import { CollectionAdminService, CollectionAdminView } from "../../../core";
-import { GroupServiceAbstraction } from "../../../services/abstractions/group";
-import { GroupView } from "../../../views/group.view";
+import {
+  CollectionAdminService,
+  CollectionAdminView,
+  GroupService,
+  GroupView,
+} from "../../../core";
 import {
   AccessItemType,
   AccessItemValue,
@@ -62,7 +65,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private dialogRef: DialogRef<CollectionDialogResult>,
     private apiService: ApiService,
     private organizationService: OrganizationService,
-    private groupService: GroupServiceAbstraction,
+    private groupService: GroupService,
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService

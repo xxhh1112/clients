@@ -4,14 +4,15 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
+import { CoreOrganizationModule } from "../../core-organization.module";
 import { GroupView } from "../../views/group.view";
-import { GroupRequest, GroupServiceAbstraction } from "../abstractions/group";
 
+import { GroupRequest } from "./requests/group.request";
 import { OrganizationGroupBulkRequest } from "./requests/organization-group-bulk.request";
 import { GroupDetailsResponse, GroupResponse } from "./responses/group.response";
 
-@Injectable()
-export class GroupService implements GroupServiceAbstraction {
+@Injectable({ providedIn: CoreOrganizationModule })
+export class GroupService {
   constructor(private apiService: ApiService) {}
 
   async delete(orgId: string, groupId: string): Promise<void> {
