@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Bitwarden mugikorreko aplikazioaren konfigurazioan, gailuarekin saioa hastea gaituta egon behar du. Beste aukerarik behar duzu?"
   },
+  "loginWithMasterPassword": {
+    "message": "Hasi saioa pasahitz nagusiarekin"
+  },
   "createAccount": {
     "message": "Sortu kontua"
   },
@@ -1193,10 +1196,10 @@
     "message": "Hautatu inportazio fitxategia"
   },
   "chooseFile": {
-    "message": "Choose File"
+    "message": "Hautatu fitxategia"
   },
   "noFileChosen": {
-    "message": "No file chosen"
+    "message": "Ez da fitxategirik hautatu"
   },
   "orCopyPasteFileContents": {
     "message": "edo kopiatu/pegatu inportazio fitxategiaren edukia"
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Bi urratseko saio hasiera"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Bi urratseko saio hasiera aplikatu"
+  },
   "twoStepLoginDesc": {
     "message": "Ziurtatu zure kontua saioa hastean beste urrats bat egitea eskatuz."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Zure erakundeko erabiltzaileentzat bi urratseko saio hasiera bidez hasi behar da saioa, hornitzaileak erakundearen mailan konfiguratuz."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Behartu kideei Bitwardenen saioa hasteko bi urratseko aukera, hau erabiliz",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Bi urratseko saio hasieraren politika"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Duo bidezko bi urratseko saio hasiera behartzeko, erabili hurrengo aukerak."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "SSO ezarrita baduzu edo hori egiteko asmoa baduzu, baliteke bi urratseko saio-hasiera iada zure identitate-hornitzailearen bidez erabiltzen aritzea."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Bi urratseko saio hasiera gaitzeak betirako blokea dezake Bitwarden kontura sartzea. Berreskuratze-kode baten bidez, zure kontura sar zaitezke, bi urratseko saio hasierako hornitzailea erabili ezin baduzu (adb. gailua galtzen baduzu). Bitwarden-ek ezingo dizu lagundu zure konturako sarbidea galtzen baduzu. Berreskuratze-kodea idatzi edo inprimatzea eta leku seguruan edukitzea gomendatzen dugu."
@@ -1539,6 +1555,10 @@
   "reportsDesc": {
     "message": "Identifikatu eta itxi lineako kontuetako segurtasun hutsuneak, ondorengo txostenetan klik eginez.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identifikatu eta itxi erakundetako kontuetako segurtasun hutsuneak, ondorengo txostenetan klik eginez.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Webgune ez seguruak"
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "$ID$ elementuko txartel zenbakia ikusia.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "$ID$ elementuko segurtasun-kodea ikusia.",
     "placeholders": {
@@ -2987,6 +3016,9 @@
   "myOrganization": {
     "message": "Nire erakundea"
   },
+  "organizationInfo": {
+    "message": "Erakundearen informazioa"
+  },
   "deleteOrganization": {
     "message": "Ezabatu erakundea"
   },
@@ -3313,7 +3345,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Sortuta",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3682,6 +3714,12 @@
   },
   "ssoIdentifierRequired": {
     "message": "Erakundearen identifikatzailea beharrezkoa da."
+  },
+  "ssoIdentifier": {
+    "message": "SSO identifikatzailea"
+  },
+  "ssoIdentifierHint": {
+    "message": "Eman ID hau kideei, SSOrekin saioa hasteko."
   },
   "unlinkSso": {
     "message": "SSO deskonektatu"
@@ -4081,8 +4119,26 @@
   "customDesc": {
     "message": "Ezarpen aurreratuetarako erabiltzaile baimenen kontrol aurreratuagoa ahalbidetzen du."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+  },
   "permissions": {
     "message": "Baimenak"
+  },
+  "permission": {
+    "message": "Baimena"
   },
   "managerPermissions": {
     "message": "Kudeatu baimenak"
@@ -4488,6 +4544,10 @@
   },
   "clients": {
     "message": "Bezeroa"
+  },
+  "client": {
+    "message": "Bezeroa",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Hornitzailearen kudeatzailea"
@@ -5373,6 +5433,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Sarrerak ezin ditu $COUNT$ karaktere baino gehiago eduki.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ eremuk zure arreta behar dute.",
     "placeholders": {
@@ -5388,22 +5457,70 @@
   "on": {
     "message": "Piztuta"
   },
+  "members": {
+    "message": "Kideak"
+  },
+  "reporting": {
+    "message": "Informatzen"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Erabiltzaile kopurua"
   },
+  "loggingInAs": {
+    "message": "Honela hasi saioa"
+  },
+  "notYou": {
+    "message": "Ez zara zu?"
+  },
   "multiSelectPlaceholder": {
-    "message": "-- Type to Filter --"
+    "message": "-- Idatzi iragazteko --"
   },
   "multiSelectLoading": {
-    "message": "Retrieving options..."
+    "message": "Aukerak berreskuratzen..."
   },
   "multiSelectNotFound": {
-    "message": "No items found"
+    "message": "Ez da elementurik aurkitu"
   },
   "multiSelectClearAll": {
-    "message": "Clear all"
+    "message": "Ezabatu dena"
+  },
+  "from": {
+    "message": "Igorlea"
+  },
+  "to": {
+    "message": "Nora"
+  },
+  "member": {
+    "message": "Kidea"
+  },
+  "update": {
+    "message": "Eguneratu"
+  },
+  "role": {
+    "message": "Rola"
+  },
+  "canView": {
+    "message": "Ikus dezake"
+  },
+  "canViewExceptPass": {
+    "message": "Ikus dezake, pasahitza izan ezik"
+  },
+  "canEdit": {
+    "message": "Editatu dezake"
+  },
+  "canEditExceptPass": {
+    "message": "Editatu dezake, pasahitza izan ezik"
+  },
+  "group": {
+    "message": "Taldea"
+  },
+  "groupAccessAll": {
+    "message": "Talde hau elementu guztietara sartu eta aldaketak egin ditzake."
+  },
+  "memberAccessAll": {
+    "message": "Kide hau elementu guztietara sartu eta aldaketak egin ditzake."
   }
 }
