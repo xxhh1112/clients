@@ -237,7 +237,9 @@ export class MemberDialogComponent implements OnInit {
       this.i18nService.t("removeUserIdAccess", this.params.name),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
-      "warning"
+      "warning",
+      false,
+      "app-user-add-edit .modal-content"
     );
     if (!confirmed) {
       return false;
@@ -270,7 +272,9 @@ export class MemberDialogComponent implements OnInit {
       this.i18nService.t("revokeUserId", this.params.name),
       this.i18nService.t("revokeAccess"),
       this.i18nService.t("cancel"),
-      "warning"
+      "warning",
+      false,
+      "app-user-add-edit .modal-content"
     );
     if (!confirmed) {
       return false;
