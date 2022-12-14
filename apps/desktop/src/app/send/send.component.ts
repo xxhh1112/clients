@@ -10,8 +10,8 @@ import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.serv
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SendView } from "@bitwarden/common/models/view/send.view";
-import { invokeMenu, RendererMenuItem } from "@bitwarden/electron/utils";
 
+import { invokeMenu, RendererMenuItem } from "../../utils";
 import { SearchBarService } from "../layout/search/search-bar.service";
 
 import { AddEditComponent } from "./add-edit.component";
@@ -132,6 +132,18 @@ export class SendComponent extends BaseSendComponent implements OnInit, OnDestro
       label: this.i18nService.t("copyLink"),
       click: () => this.copy(send),
     });
+    if (send.password && !send.disabled) {
+      menu.push({
+        label: this.i18nService.t("removePassword"),
+        click: async () => {
+          await this.removePassword(send);
+          if (this.sendId === send.id) {
+            this.sendId = null;
+            this.selectSend(send.id);
+          }
+        },
+      });
+    }
     menu.push({
       label: this.i18nService.t("delete"),
       click: async () => {

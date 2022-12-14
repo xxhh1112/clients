@@ -4117,7 +4117,22 @@
     "message": "Personalizado"
   },
   "customDesc": {
-    "message": "Allows more granular control of user permissions for advanced configurations."
+    "message": "Grant customized permissions to members"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Os papéis personalizados são uma ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "funcionalidade empresarial",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contacte a nossa equipa de suporte para atualizar a sua subscrição",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Para ativar as permissões personalizadas, a organização tem de estar num plano Empresarial 2020."
   },
   "permissions": {
     "message": "Permissões"
