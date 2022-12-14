@@ -24,6 +24,7 @@ import {
   NavigationModule,
   TableModule,
   TabsModule,
+  ToggleGroupModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -59,6 +60,7 @@ import "./locales";
     FormFieldModule,
     IconButtonModule,
     IconModule,
+    LinkModule,
     MenuModule,
     NavigationModule,
     TableModule,
@@ -91,6 +93,7 @@ import "./locales";
     MenuModule,
     NavigationModule,
     TableModule,
+    ToggleGroupModule,
     LinkModule,
     TabsModule,
 

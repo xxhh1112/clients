@@ -302,6 +302,9 @@
   "searchOrganization": {
     "message": "Search organization"
   },
+  "searchMembers": {
+    "message": "Search members"
+  },
   "allItems": {
     "message": "All items"
   },
@@ -728,6 +731,9 @@
   },
   "noUsersInList": {
     "message": "There are no users to list."
+  },
+  "noMembersInList": {
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "There are no events to list."
@@ -2437,9 +2443,6 @@
   "editMember": {
     "message": "Edit member"
   },
-  "inviteMember": {
-    "message": "Invite member"
-  },
   "inviteUserDesc": {
     "message": "Invite a new user to your organization by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
@@ -2969,10 +2972,10 @@
     }
   },
   "confirmUsers": {
-    "message": "Confirm users"
+    "message": "Confirm members"
   },
   "usersNeedConfirmed": {
-    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the organization until they are confirmed."
+    "message": "You have members that have accepted their invitation, but still need to be confirmed. Members will not have access to the organization until they are confirmed."
   },
   "startDate": {
     "message": "Start date"
@@ -5883,19 +5886,25 @@
   "selectGroupsAndMembers": {
     "message": "Select groups and members"
   },
-  "selectMembers": {
-    "message": "Select members"
-  },
   "userPermissionOverrideHelper": {
     "message": "Permissions set for a member will replace permissions set by that member's group"
   },
   "noMembersOrGroupsAdded": {
     "message": "No members or groups added"
   },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
   "deleted": {
     "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
   }
 }

@@ -32,6 +32,8 @@ export class OrganizationUserUserDetailsResponse extends OrganizationUserRespons
   email: string;
   twoFactorEnabled: boolean;
   usesKeyConnector: boolean;
+  collections: SelectionReadOnlyResponse[] = [];
+  groups: string[] = [];
 
   constructor(response: any) {
     super(response);
@@ -39,6 +41,14 @@ export class OrganizationUserUserDetailsResponse extends OrganizationUserRespons
     this.email = this.getResponseProperty("Email");
     this.twoFactorEnabled = this.getResponseProperty("TwoFactorEnabled");
     this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector") ?? false;
+    const collections = this.getResponseProperty("Collections");
+    if (collections != null) {
+      this.collections = collections.map((c: any) => new SelectionReadOnlyResponse(c));
+    }
+    const groups = this.getResponseProperty("Groups");
+    if (groups != null) {
+      this.groups = groups;
+    }
   }
 }
 

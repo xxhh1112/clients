@@ -9,6 +9,6 @@ import { SearchInputComponent } from "./components/search-input/search-input.com
 @NgModule({
   imports: [SharedModule, CollectionDialogModule, AccessSelectorModule],
   declarations: [SearchInputComponent],
-  exports: [SharedModule, CollectionDialogModule, AccessSelectorModule],
+  exports: [SharedModule, CollectionDialogModule, AccessSelectorModule, SearchInputComponent],
 })
 export class SharedOrganizationModule {}

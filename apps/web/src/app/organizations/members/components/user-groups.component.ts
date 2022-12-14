@@ -7,7 +7,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationUserUpdateGroupsRequest } from "@bitwarden/common/models/request/organization-user-update-groups.request";
 
-import { GroupService, GroupView } from "../core";
+import { GroupService, GroupView } from "../../core";
 
 @Component({
   selector: "app-user-groups",

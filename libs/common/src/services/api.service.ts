@@ -984,11 +984,24 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async getOrganizationUsers(
-    organizationId: string
+    organizationId: string,
+    options?: {
+      includeCollections?: boolean;
+      includeGroups?: boolean;
+    }
   ): Promise<ListResponse<OrganizationUserUserDetailsResponse>> {
+    const params = new URLSearchParams();
+
+    if (options?.includeCollections) {
+      params.set("includeCollections", "true");
+    }
+    if (options?.includeGroups) {
+      params.set("includeGroups", "true");
+    }
+
     const r = await this.send(
       "GET",
-      "/organizations/" + organizationId + "/users",
+      `/organizations/${organizationId}/users?${params.toString()}`,
       null,
       true,
       true

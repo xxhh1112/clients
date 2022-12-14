@@ -354,7 +354,11 @@ export abstract class ApiService {
   ) => Promise<OrganizationUserDetailsResponse>;
   getOrganizationUserGroups: (organizationId: string, id: string) => Promise<string[]>;
   getOrganizationUsers: (
-    organizationId: string
+    organizationId: string,
+    options?: {
+      includeCollections?: boolean;
+      includeGroups?: boolean;
+    }
   ) => Promise<ListResponse<OrganizationUserUserDetailsResponse>>;
   getOrganizationUserResetPasswordDetails: (
     organizationId: string,
