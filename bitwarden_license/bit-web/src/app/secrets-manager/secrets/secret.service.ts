@@ -34,6 +34,7 @@ export class SecretService {
   async getBySecretId(secretId: string): Promise<SecretView> {
     const r = await this.apiService.send("GET", "/secrets/" + secretId, null, true, true);
     const secretResponse = new SecretResponse(r);
+
     return await this.createSecretView(secretResponse);
   }
 
@@ -63,8 +64,8 @@ export class SecretService {
     return await this.createSecretsListView(organizationId, results);
   }
 
-  async create(organizationId: string, secretView: SecretView, projectId?: string) {
-    const request = await this.getSecretRequest(organizationId, secretView, projectId);
+  async create(organizationId: string, secretView: SecretView) {
+    const request = await this.getSecretRequest(organizationId, secretView);
     const r = await this.apiService.send(
       "POST",
       "/organizations/" + organizationId + "/secrets",
@@ -106,8 +107,7 @@ export class SecretService {
 
   private async getSecretRequest(
     organizationId: string,
-    secretView: SecretView,
-    projectId?: string
+    secretView: SecretView
   ): Promise<SecretRequest> {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = new SecretRequest();
@@ -119,8 +119,19 @@ export class SecretService {
     request.key = key.encryptedString;
     request.value = value.encryptedString;
     request.note = note.encryptedString;
-    request.projectId = projectId;
+    request.projectIds = await this.getProjectIds(secretView.projects);
+
     return request;
+  }
+
+  private async getProjectIds(projects: SecretProjectView[]): Promise<string[]> {
+    const projectIds: string[] = [];
+
+    projects?.forEach((p) => {
+      projectIds.push(p.id);
+    });
+
+    return projectIds;
   }
 
   private async createSecretView(secretResponse: SecretResponse): Promise<SecretView> {
@@ -140,6 +151,17 @@ export class SecretService {
     secretView.name = name;
     secretView.value = value;
     secretView.note = note;
+
+    let projectsMappedToSecretsView: SecretProjectView[] = [];
+
+    if (secretResponse.projects != null) {
+      projectsMappedToSecretsView = await this.decryptProjectsMappedToSecrets(
+        orgKey,
+        secretResponse.projects
+      );
+    }
+
+    secretView.projects = await projectsMappedToSecretsView;
 
     return secretView;
   }
@@ -166,9 +188,13 @@ export class SecretService {
         );
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
-        secretListView.projects = (await projectsMappedToSecretsView).filter((p) =>
-          s.projects.includes(p.id)
-        );
+
+        const projectsMappedToSecret = await projectsMappedToSecretsView;
+
+        const projectIds: string[] = [];
+        s.projects?.forEach((e) => projectIds.push(e.id));
+
+        secretListView.projects = projectsMappedToSecret.filter((p) => projectIds.includes(p.id));
         return secretListView;
       })
     );
