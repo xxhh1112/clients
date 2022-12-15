@@ -37,7 +37,7 @@ export class SecretDialogComponent implements OnInit {
   });
   protected loading = false;
   projects: ProjectListView[];
-  selectedProjects: SecretProjectView[];
+  selectedProjects: SecretProjectView[] = [];
   secret: SecretView;
 
   private destroy$ = new Subject<void>();
@@ -70,7 +70,7 @@ export class SecretDialogComponent implements OnInit {
   async loadData() {
     this.loading = true;
     this.secret = await this.secretService.getBySecretId(this.data.secretId);
-    this.selectedProjects = await this.secret.projects;
+    this.selectedProjects = this.secret.projects;
 
     this.loading = false;
     this.formGroup.setValue({
@@ -115,12 +115,7 @@ export class SecretDialogComponent implements OnInit {
     this.selectedProjects = newList;
   }
 
-  async saveSecretProjectAssociation() {
-    this.secret.projects = this.selectedProjects;
-  }
-
   submit = async () => {
-    this.saveSecretProjectAssociation();
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {
@@ -129,7 +124,7 @@ export class SecretDialogComponent implements OnInit {
 
     const secretView = this.getSecretView();
     if (this.data.operation === OperationType.Add) {
-      await this.createSecret(secretView, this.data.projectId);
+      await this.createSecret(secretView);
     } else {
       secretView.id = this.data.secretId;
       await this.updateSecret(secretView);
@@ -137,8 +132,8 @@ export class SecretDialogComponent implements OnInit {
     this.dialogRef.close();
   };
 
-  private async createSecret(secretView: SecretView, projectId?: string) {
-    await this.secretService.create(this.data.organizationId, secretView, projectId);
+  private async createSecret(secretView: SecretView) {
+    await this.secretService.create(this.data.organizationId, secretView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("secretCreated"));
   }
 

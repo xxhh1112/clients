@@ -64,8 +64,8 @@ export class SecretService {
     return await this.createSecretsListView(organizationId, results);
   }
 
-  async create(organizationId: string, secretView: SecretView, projectId?: string) {
-    const request = await this.getSecretRequest(organizationId, secretView, projectId);
+  async create(organizationId: string, secretView: SecretView) {
+    const request = await this.getSecretRequest(organizationId, secretView);
     const r = await this.apiService.send(
       "POST",
       "/organizations/" + organizationId + "/secrets",
@@ -107,8 +107,7 @@ export class SecretService {
 
   private async getSecretRequest(
     organizationId: string,
-    secretView: SecretView,
-    projectId?: string
+    secretView: SecretView
   ): Promise<SecretRequest> {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = new SecretRequest();
