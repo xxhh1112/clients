@@ -119,6 +119,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     this.formGroup.markAllAsTouched();
 
     //web
+    // Will this always be invalid? Documentation claims yes.
     if (this.formGroup.invalid && !showToast) {
       return;
     }
@@ -137,6 +138,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         this.captchaToken,
         null
       );
+      // Cannot remove formPromise because other clients depend on it
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       this.setFormValues();

@@ -1,10 +1,4 @@
-<form
-  #form
-  (ngSubmit)="submit()"
-  [appApiAction]="formPromise"
-  class="tw-container tw-mx-auto"
-  [formGroup]="formGroup"
->
+<form #form [bitSubmit]="submitHandler" class="tw-container tw-mx-auto" [formGroup]="formGroup">
   <div
     class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
   >
@@ -100,7 +94,14 @@
   </div>
 
   <div class="tw-mb-3 tw-flex tw-space-x-4">
-    <button bitButton buttonType="primary" type="submit" [block]="true" [loading]="form.loading">
+    <button
+      bitButton
+      bitFormButton
+      buttonType="primary"
+      type="submit"
+      [block]="true"
+      [loading]="form.loading"
+    >
       <span> {{ "loginWithMasterPassword" | i18n }} </span>
     </button>
   </div>
