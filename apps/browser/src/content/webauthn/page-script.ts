@@ -14,6 +14,10 @@ const browserCredentials = {
 const messenger = Messenger.forDOMCommunication(window);
 
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
+  if (options.publicKey?.authenticatorSelection?.authenticatorAttachment === "platform") {
+    return await browserCredentials.create(options);
+  }
+
   const response = await messenger.request({
     type: MessageType.CredentialCreationRequest,
     data: WebauthnUtils.mapCredentialCreationOptions(options, window.location.origin),
@@ -45,7 +49,7 @@ navigator.credentials.get = async (options?: CredentialRequestOptions): Promise<
   }
 
   if (response.error && response.error.fallbackRequested) {
-    return await browserCredentials.create(options);
+    return await browserCredentials.get(options);
   }
 
   if (response.error) {
