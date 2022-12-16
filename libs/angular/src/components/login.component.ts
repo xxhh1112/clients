@@ -105,14 +105,9 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   }
 
   async submit(showToast = true) {
-    const data = this.formGroup.value;
-
-    await this.setupCaptcha();
-
     this.formGroup.markAllAsTouched();
 
     //web
-    // Will this always be invalid? Documentation claims yes.
     if (this.formGroup.invalid && !showToast) {
       return;
     }
@@ -124,6 +119,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       return;
     }
 
+    const data = this.formGroup.value;
+
+    await this.setupCaptcha();
+
     try {
       const credentials = new PasswordLogInCredentials(
         data.email,
@@ -131,7 +130,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         this.captchaToken,
         null
       );
-      // Cannot remove formPromise because other clients depend on it
+      // TODO Remove formPromise when no clients use it
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       this.setFormValues();
