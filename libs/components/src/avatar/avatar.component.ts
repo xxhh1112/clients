@@ -7,7 +7,7 @@ type SizeTypes = "large" | "default" | "small";
 
 const SizeClasses: Record<SizeTypes, string[]> = {
   large: ["tw-h-16", "tw-w-16"],
-  default: ["tw-h-12", "tw-w-12"],
+  default: ["tw-h-10", "tw-w-10"],
   small: ["tw-h-7", "tw-w-7"],
 };
 
@@ -17,9 +17,9 @@ const SizeClasses: Record<SizeTypes, string[]> = {
 })
 export class AvatarComponent implements OnChanges {
   @Input() border = false;
-  @Input() color: string;
-  @Input() id: number;
-  @Input() text: string;
+  @Input() color?: string;
+  @Input() id?: string;
+  @Input() text?: string;
   @Input() size: SizeTypes = "default";
 
   private svgCharCount = 2;
@@ -42,7 +42,7 @@ export class AvatarComponent implements OnChanges {
 
   private generate() {
     let chars: string = null;
-    const upperCaseText = this.text.toUpperCase();
+    const upperCaseText = this.text?.toUpperCase() ?? "";
 
     chars = this.getFirstLetters(upperCaseText, this.svgCharCount);
 
@@ -58,9 +58,9 @@ export class AvatarComponent implements OnChanges {
     let svg: HTMLElement;
     let hexColor = this.color;
 
-    if (this.color != null) {
+    if (!Utils.isNullOrWhitespace(this.color)) {
       svg = this.createSvgElement(this.svgSize, hexColor);
-    } else if (this.id != null) {
+    } else if (!Utils.isNullOrWhitespace(this.id)) {
       hexColor = Utils.stringToColor(this.id.toString());
       svg = this.createSvgElement(this.svgSize, hexColor);
     } else {

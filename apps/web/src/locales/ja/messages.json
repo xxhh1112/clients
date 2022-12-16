@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Bitwarden モバイルアプリの設定で有効化する必要があります。別のオプションが必要ですか？"
   },
+  "loginWithMasterPassword": {
+    "message": "マスターパスワードでログイン"
+  },
   "createAccount": {
     "message": "アカウントの作成"
   },
@@ -1235,13 +1238,6 @@
   "faviconDesc": {
     "message": "ログイン情報の隣にアイコン画像を表示します"
   },
-  "enableGravatars": {
-    "message": "Gravatar を有効化",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "gravatar.com から読み込んだアバター画像を使います。"
-  },
   "enableFullWidth": {
     "message": "全幅レイアウトを有効化",
     "description": "Allows scaling the web vault UI's width"
@@ -1294,11 +1290,24 @@
   "twoStepLogin": {
     "message": "2段階認証"
   },
+  "twoStepLoginEnforcement": {
+    "message": "2段階ログインを強制"
+  },
   "twoStepLoginDesc": {
     "message": "ログイン時に追加の手順を必要としアカウントを保護します。"
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "組織レベルで認証プロバイダを設定することで、組織のユーザーに二段階の認証を必要とします。"
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Bitwarden 2段階ログインの使用をメンバーに強制します",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "(2段階ログインポリシー)"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Duo で2段階ログインを強制するには、以下のオプションを使用してください。"
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "SSO 設定または設定予定がある場合は、ID プロバイダーを通じて2段階ログインがすでに強制されている場合があります。"
   },
   "twoStepLoginRecoveryWarning": {
     "message": "二段階認証を有効にすると Bitwarden アカウントから永久に閉め出されてしまうことがあります。リカバリーコードがあれば、通常の二段階認証プロバイダを使えなくなったとき(デバイスの紛失等)でもアカウントにアクセスできます。アカウントにアクセスできなくなっても Bitwarden はサポート出来ないため、リカバリーコードを書き出すか印刷し安全な場所で保管しておくことを推奨します。"
@@ -1546,6 +1555,10 @@
   "reportsDesc": {
     "message": "以下のレポートをクリックして、オンラインアカウントのセキュリティギャップを特定して修正してください。",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "以下のレポートをクリックして、組織アカウントのセキュリティギャップを特定して修正してください。",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "非セキュアウェブサイト調査"
@@ -2583,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "アイテム $ID$ のカード番号を表示しました。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "アイテム $ID$ のセキュリティコードを表示しました。",
     "placeholders": {
@@ -2993,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "組織"
+  },
+  "organizationInfo": {
+    "message": "組織の情報"
   },
   "deleteOrganization": {
     "message": "組織の削除"
@@ -3690,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "組織識別子が必要です。"
   },
+  "ssoIdentifier": {
+    "message": "SSO 識別子"
+  },
+  "ssoIdentifierHint": {
+    "message": "SSO でログインするには、この ID をメンバーに提供してください。"
+  },
   "unlinkSso": {
     "message": "SSO のリンクを解除"
   },
@@ -4088,7 +4119,25 @@
   "customDesc": {
     "message": "ユーザー権限をより詳細に制御できます。"
   },
+  "customDescNonEnterpriseStart": {
+    "message": "カスタムロールは",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "企業向け機能",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": "です。サブスクリプションのアップグレードについては、弊社サポートチームまでお問い合わせください。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "カスタム権限を有効にするには、組織が Enterprise 2020 プランに登録済みである必要があります。"
+  },
   "permissions": {
+    "message": "権限"
+  },
+  "permission": {
     "message": "権限"
   },
   "managerPermissions": {
@@ -4496,6 +4545,10 @@
   "clients": {
     "message": "クライアント"
   },
+  "client": {
+    "message": "クライアント",
+    "description": "This is used as a table header to describe which client application created an event log."
+  },
   "providerAdmin": {
     "message": "プロバイダー管理者"
   },
@@ -4685,19 +4738,19 @@
     "message": "Signed out callback path"
   },
   "authority": {
-    "message": "Authority"
+    "message": "権限"
   },
   "clientId": {
-    "message": "Client ID"
+    "message": "クライアントID"
   },
   "clientSecret": {
     "message": "Client secret"
   },
   "metadataAddress": {
-    "message": "Metadata address"
+    "message": "メタデータアドレス"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDCリダイレクトの動作"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
@@ -5380,6 +5433,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "入力は $COUNT$ 文字を超えてはいけません。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "上記の $COUNT$ フィールドを確認してください。",
     "placeholders": {
@@ -5395,11 +5457,23 @@
   "on": {
     "message": "オン"
   },
+  "members": {
+    "message": "メンバー"
+  },
+  "reporting": {
+    "message": "レポート"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "ユーザー数"
+  },
+  "loggingInAs": {
+    "message": "ログイン中:"
+  },
+  "notYou": {
+    "message": "あなたではないですか？"
   },
   "multiSelectPlaceholder": {
     "message": "-- 入力して絞り込み --"
@@ -5412,5 +5486,41 @@
   },
   "multiSelectClearAll": {
     "message": "すべてクリア"
+  },
+  "from": {
+    "message": "From"
+  },
+  "to": {
+    "message": "To"
+  },
+  "member": {
+    "message": "メンバー"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "role": {
+    "message": "役割"
+  },
+  "canView": {
+    "message": "閲覧可能"
+  },
+  "canViewExceptPass": {
+    "message": "パスワード以外は閲覧可能"
+  },
+  "canEdit": {
+    "message": "編集可能"
+  },
+  "canEditExceptPass": {
+    "message": "パスワード以外は編集可能"
+  },
+  "group": {
+    "message": "グループ"
+  },
+  "groupAccessAll": {
+    "message": "このグループはすべてのアイテムにアクセスして変更できます。"
+  },
+  "memberAccessAll": {
+    "message": "このメンバーはすべてのアイテムにアクセスして変更できます。"
   }
 }

@@ -1,5 +1,4 @@
 import * as papa from "papaparse";
-import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "../abstractions/api.service";
 import { CipherService } from "../abstractions/cipher.service";
@@ -116,7 +115,7 @@ export class ExportService implements ExportServiceAbstraction {
     const promises = [];
 
     promises.push(
-      firstValueFrom(this.folderService.folderViews$).then((folders) => {
+      this.folderService.getAllDecryptedFromState().then((folders) => {
         decFolders = folders;
       })
     );
@@ -192,7 +191,7 @@ export class ExportService implements ExportServiceAbstraction {
     const promises = [];
 
     promises.push(
-      firstValueFrom(this.folderService.folders$).then((f) => {
+      this.folderService.getAllFromState().then((f) => {
         folders = f;
       })
     );
@@ -248,12 +247,8 @@ export class ExportService implements ExportServiceAbstraction {
       this.apiService.getOrganizationExport(organizationId).then((exportData) => {
         const exportPromises: any = [];
         if (exportData != null) {
-          if (
-            exportData.collections != null &&
-            exportData.collections.data != null &&
-            exportData.collections.data.length > 0
-          ) {
-            exportData.collections.data.forEach((c) => {
+          if (exportData.collections != null && exportData.collections.length > 0) {
+            exportData.collections.forEach((c) => {
               const collection = new Collection(new CollectionData(c as CollectionDetailsResponse));
               exportPromises.push(
                 collection.decrypt().then((decCol) => {
@@ -262,12 +257,8 @@ export class ExportService implements ExportServiceAbstraction {
               );
             });
           }
-          if (
-            exportData.ciphers != null &&
-            exportData.ciphers.data != null &&
-            exportData.ciphers.data.length > 0
-          ) {
-            exportData.ciphers.data
+          if (exportData.ciphers != null && exportData.ciphers.length > 0) {
+            exportData.ciphers
               .filter((c) => c.deletedDate === null)
               .forEach((c) => {
                 const cipher = new Cipher(new CipherData(c));

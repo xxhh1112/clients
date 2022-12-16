@@ -8,6 +8,7 @@ import { CipherBulkRestoreRequest } from "../models/request/cipher-bulk-restore.
 import { CipherBulkShareRequest } from "../models/request/cipher-bulk-share.request";
 import { CipherCollectionsRequest } from "../models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../models/request/cipher-create.request";
+import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
 import { CipherRequest } from "../models/request/cipher.request";
 import { CollectionRequest } from "../models/request/collection.request";
@@ -23,9 +24,9 @@ import { EmergencyAccessUpdateRequest } from "../models/request/emergency-access
 import { EventRequest } from "../models/request/event.request";
 import { GroupRequest } from "../models/request/group.request";
 import { IapCheckRequest } from "../models/request/iap-check.request";
-import { ApiTokenRequest } from "../models/request/identity-token/api-token.request";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
+import { UserApiTokenRequest } from "../models/request/identity-token/user-api-token.request";
 import { ImportCiphersRequest } from "../models/request/import-ciphers.request";
 import { ImportOrganizationCiphersRequest } from "../models/request/import-organization-ciphers.request";
 import { KdfRequest } from "../models/request/kdf.request";
@@ -162,6 +163,11 @@ import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { SendAccessView } from "../models/view/send-access.view";
 
+/**
+ * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
+ * api services. The `send` method is still allowed to be used within api services. For background
+ * of this decision please read https://contributing.bitwarden.com/architecture/adr/refactor-api-service.
+ */
 export abstract class ApiService {
   send: (
     method: "GET" | "POST" | "PUT" | "DELETE",
@@ -174,7 +180,7 @@ export abstract class ApiService {
   ) => Promise<any>;
 
   postIdentityToken: (
-    request: PasswordTokenRequest | SsoTokenRequest | ApiTokenRequest
+    request: PasswordTokenRequest | SsoTokenRequest | UserApiTokenRequest
   ) => Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse>;
   refreshIdentityToken: () => Promise<any>;
 
@@ -257,6 +263,7 @@ export abstract class ApiService {
   postCipherCreate: (request: CipherCreateRequest) => Promise<CipherResponse>;
   postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
   putCipher: (id: string, request: CipherRequest) => Promise<CipherResponse>;
+  putPartialCipher: (id: string, request: CipherPartialRequest) => Promise<CipherResponse>;
   putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
   deleteCipher: (id: string) => Promise<any>;
   deleteCipherAdmin: (id: string) => Promise<any>;
@@ -477,6 +484,7 @@ export abstract class ApiService {
   putDeviceVerificationSettings: (
     request: DeviceVerificationRequest
   ) => Promise<DeviceVerificationResponse>;
+  getKnownDevice: (email: string, deviceIdentifier: string) => Promise<boolean>;
 
   getEmergencyAccessTrusted: () => Promise<ListResponse<EmergencyAccessGranteeDetailsResponse>>;
   getEmergencyAccessGranted: () => Promise<ListResponse<EmergencyAccessGrantorDetailsResponse>>;

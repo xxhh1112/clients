@@ -13,7 +13,7 @@ export default {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/f32LSg3jaegICkMu7rPARm/Tailwind-Component-Library-Update?node-id=1881%3A16733",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=5115%3A26950",
     },
   },
 } as Meta;
@@ -100,4 +100,18 @@ const BlockTemplate: Story<ButtonComponent> = (args: ButtonComponent) => ({
 export const Block = BlockTemplate.bind({});
 Block.args = {
   block: true,
+};
+
+const IconTemplate: Story = (args) => ({
+  props: args,
+  template: `
+    <button bitButton [bitIconButton]="icon" buttonType="primary" class="tw-mr-2"></button>
+    <button bitButton [bitIconButton]="icon"buttonType="secondary" class="tw-mr-2"></button>
+    <button bitButton [bitIconButton]="icon" buttonType="danger" class="tw-mr-2"></button>
+  `,
+});
+
+export const Icon = IconTemplate.bind({});
+Icon.args = {
+  icon: "bwi-eye",
 };

@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Inloggen met apparaat moet zijn ingeschakeld in de instellingen van de mobiele Bitwarden-app. Een andere optie nodig?"
   },
+  "loginWithMasterPassword": {
+    "message": "Inloggen met je hoofdwachtwoord"
+  },
   "createAccount": {
     "message": "Account aanmaken"
   },
@@ -1235,13 +1238,6 @@
   "faviconDesc": {
     "message": "Een herkenbare afbeelding naast iedere login weergeven."
   },
-  "enableGravatars": {
-    "message": "Gravatars activeren",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Gebruik avatar-afbeeldingen van gravatar.com."
-  },
   "enableFullWidth": {
     "message": "Weergave op volle breedte inschakelen",
     "description": "Allows scaling the web vault UI's width"
@@ -1294,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Tweestapsaanmelding"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Tweestapsaanmelding afdwingen"
+  },
   "twoStepLoginDesc": {
     "message": "Beveilig je account door een extra stap te vereisen bij het inloggen."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Vereis tweestapsaanmelding voor de gebruikers van je organisatie door aanbieders op organisatieniveau in te stellen."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Bitwarden tweestapsaanmeldingsopties afdwingen voor leden door gebruik te maken van de ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Beleid voor tweestapsaanmelding"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Voor het afdwingen van tweestapsaanmelding via Duo, gebruik je de onderstaande opties."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Als je SSO hebt ingesteld of dat van plan bent, is tweestapsaanmelding misschien al afgedwongen via je Identity Provider."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Door aanmelden in twee stappen in te schakelen, kun je jezelf definitief buitensluiten van je Bitwarden-account. Een herstelcode geeft je toegang tot je account in het geval dat je je normale tweestapsaanmelding niet meer kunt gebruiken (bijv. als je je apparaat verliest). De Bitwarden-klantondersteuning kan je niet helpen als je de toegang tot je account verliest. We raden je met klem aan de herstelcode op te schrijven of af te drukken en op een veilige plaats te bewaren."
@@ -1544,8 +1553,12 @@
     "message": "Rapportages"
   },
   "reportsDesc": {
-    "message": "Identificeer en sluit beveiligingsgaten in je online accounts door op onderstaande rapporten te klikken.",
+    "message": "Identificeer en sluit beveiligingsgaten in je online accounts door op één van de onderstaande rapporten te klikken.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identificeer en sluit beveiligingsgaten in je de accounts van je organisatie door op één van de onderstaande rapporten te klikken.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Niet-beveiligde websites"
@@ -2583,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Kaartnummer bekeken voor item $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Beveiligingscode bekeken voor item $ID$.",
     "placeholders": {
@@ -2993,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Mijn organisatie"
+  },
+  "organizationInfo": {
+    "message": "Organisatie-informatie"
   },
   "deleteOrganization": {
     "message": "Organisatie verwijderen"
@@ -3690,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "Organisatie-identificatie vereist."
   },
+  "ssoIdentifier": {
+    "message": "SSO Identifier"
+  },
+  "ssoIdentifierHint": {
+    "message": "Geef dit ID aan je leden door voor het inloggen met SSO."
+  },
   "unlinkSso": {
     "message": "SSO ontkoppelen"
   },
@@ -4088,8 +4119,26 @@
   "customDesc": {
     "message": "Maakt een fijnmazige controle van gebruikersrechten voor geavanceerde configuraties mogelijk."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Aangepaste rollen is een ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "Enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Neem contact op met ons ondersteuningsteam voor het aanpassen van je abonnement",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Voor het inschakelen van aangepaste rechten moet de organisatie een Enterprise 2020-abonnement hebben."
+  },
   "permissions": {
     "message": "Rechten"
+  },
+  "permission": {
+    "message": "Toestemming"
   },
   "managerPermissions": {
     "message": "Managersrechten"
@@ -4495,6 +4544,10 @@
   },
   "clients": {
     "message": "Apparaten"
+  },
+  "client": {
+    "message": "Applicatie",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Providerbeheerder"
@@ -5380,6 +5433,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Invoer mag niet meer dan $COUNT$ tekens lang zijn.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ veld(en) hierboven hebben je aandacht nodig.",
     "placeholders": {
@@ -5395,11 +5457,23 @@
   "on": {
     "message": "Aan"
   },
+  "members": {
+    "message": "Leden"
+  },
+  "reporting": {
+    "message": "Rapporteren"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Aantal gebruikers"
+  },
+  "loggingInAs": {
+    "message": "Inloggen als"
+  },
+  "notYou": {
+    "message": "Ben jij dit niet?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Type om te filteren --"
@@ -5412,5 +5486,41 @@
   },
   "multiSelectClearAll": {
     "message": "Alles wissen"
+  },
+  "from": {
+    "message": "Van"
+  },
+  "to": {
+    "message": "Naar"
+  },
+  "member": {
+    "message": "Lid"
+  },
+  "update": {
+    "message": "Bijwerken"
+  },
+  "role": {
+    "message": "Rol"
+  },
+  "canView": {
+    "message": "Kan bekijken"
+  },
+  "canViewExceptPass": {
+    "message": "Kan bekijken, behalve wachtwoorden"
+  },
+  "canEdit": {
+    "message": "Kan bewerken"
+  },
+  "canEditExceptPass": {
+    "message": "Kan bekijken, behalve wachtwoorden"
+  },
+  "group": {
+    "message": "Groep"
+  },
+  "groupAccessAll": {
+    "message": "Deze groep kan alle items inzien en bewerken."
+  },
+  "memberAccessAll": {
+    "message": "Deze gebruiker kan alle items inzien en bewerken."
   }
 }

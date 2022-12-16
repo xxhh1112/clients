@@ -64,6 +64,32 @@ export class FolderService implements InternalFolderServiceAbstraction {
     return folders.find((folder) => folder.id === id);
   }
 
+  async getAllFromState(): Promise<Folder[]> {
+    const folders = await this.stateService.getEncryptedFolders();
+    const response: Folder[] = [];
+    for (const id in folders) {
+      // eslint-disable-next-line
+      if (folders.hasOwnProperty(id)) {
+        response.push(new Folder(folders[id]));
+      }
+    }
+    return response;
+  }
+
+  /**
+   * @deprecated For the CLI only
+   * @param id id of the folder
+   */
+  async getFromState(id: string): Promise<Folder> {
+    const foldersMap = await this.stateService.getEncryptedFolders();
+    const folder = foldersMap[id];
+    if (folder == null) {
+      return null;
+    }
+
+    return new Folder(folder);
+  }
+
   /**
    * @deprecated Only use in CLI!
    */

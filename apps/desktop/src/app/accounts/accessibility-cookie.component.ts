@@ -7,7 +7,8 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { getCookie } from "@bitwarden/electron/utils";
+
+import { getCookie } from "../../utils";
 
 const BroadcasterSubscriptionId = "AccessibilityCookieComponent";
 
@@ -79,7 +80,7 @@ export class AccessibilityCookieComponent {
   }
 
   async submit() {
-    if (Utils.getDomain(this.accessibilityForm.value.link) !== "accounts.hcaptcha.com") {
+    if (Utils.getHostname(this.accessibilityForm.value.link) !== "accounts.hcaptcha.com") {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),

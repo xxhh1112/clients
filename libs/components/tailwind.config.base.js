@@ -1,5 +1,6 @@
 /* eslint-disable */
 const colors = require("tailwindcss/colors");
+const plugin = require("tailwindcss/plugin");
 
 function rgba(color) {
   return "rgb(var(" + color + ") / <alpha-value>)";
@@ -56,6 +57,8 @@ module.exports = {
         DEFAULT: rgba("--color-background"),
         alt: rgba("--color-background-alt"),
         alt2: rgba("--color-background-alt2"),
+        alt3: rgba("--color-background-alt3"),
+        alt4: rgba("--color-background-alt4"),
       },
     },
     textColor: {
@@ -83,10 +86,34 @@ module.exports = {
         "50vw": "50vw",
         "75vw": "75vw",
       },
-      maxWidth: {
-        "90vw": "90vw",
+      minWidth: {
+        52: "13rem",
       },
+      maxWidth: ({ theme }) => ({
+        ...theme("width"),
+        "90vw": "90vw",
+      }),
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ matchUtilities, theme, addUtilities, addComponents, e, config }) {
+      matchUtilities(
+        {
+          "mask-image": (value) => ({
+            "-webkit-mask-image": value,
+            "mask-image": value,
+          }),
+          "mask-position": (value) => ({
+            "-webkit-mask-position": value,
+            "mask-position": value,
+          }),
+          "mask-repeat": (value) => ({
+            "-webkit-mask-repeat": value,
+            "mask-repeat": value,
+          }),
+        },
+        {}
+      );
+    }),
+  ],
 };

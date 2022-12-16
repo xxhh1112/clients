@@ -30,7 +30,13 @@
         </div>
         <div class="box-content-row" appBoxRow>
           <label for="name">{{ "name" | i18n }}</label>
-          <input id="name" type="text" name="Name" [(ngModel)]="cipher.name" />
+          <input
+            id="name"
+            type="text"
+            name="Name"
+            [(ngModel)]="cipher.name"
+            [readonly]="!cipher.edit && editMode"
+          />
         </div>
         <!-- Login -->
         <div *ngIf="cipher.type === cipherType.Login">
@@ -44,6 +50,7 @@
                 [(ngModel)]="cipher.login.username"
                 inputmode="email"
                 appInputVerbatim
+                [readonly]="!cipher.edit && editMode"
               />
             </div>
             <div class="action-buttons">
@@ -53,6 +60,7 @@
                 appStopClick
                 appA11yTitle="{{ 'generateUsername' | i18n }}"
                 (click)="generateUsername()"
+                *ngIf="!(!cipher.edit && editMode)"
               >
                 <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
               </button>
@@ -69,6 +77,7 @@
                 [(ngModel)]="cipher.login.password"
                 appInputVerbatim
                 [disabled]="!cipher.viewPassword"
+                [readonly]="!cipher.edit && editMode"
               />
             </div>
             <div class="action-buttons">
@@ -79,17 +88,17 @@
                 appA11yTitle="{{ 'checkPassword' | i18n }}"
                 (click)="checkPassword()"
                 [appApiAction]="checkPasswordPromise"
-                [disabled]="checkPasswordBtn.loading"
+                [disabled]="$any(checkPasswordBtn).loading"
                 *ngIf="cipher.viewPassword"
               >
                 <i
                   class="bwi bwi-lg bwi-check-circle"
-                  [hidden]="checkPasswordBtn.loading"
+                  [hidden]="$any(checkPasswordBtn).loading"
                   aria-hidden="true"
                 ></i>
                 <i
                   class="bwi bwi-lg bwi-spinner bwi-spin"
-                  [hidden]="!checkPasswordBtn.loading"
+                  [hidden]="!$any(checkPasswordBtn).loading"
                   aria-hidden="true"
                 ></i>
               </button>
@@ -114,7 +123,7 @@
                 appStopClick
                 appA11yTitle="{{ 'generatePassword' | i18n }}"
                 (click)="generatePassword()"
-                *ngIf="cipher.viewPassword"
+                *ngIf="cipher.viewPassword && !(!cipher.edit && editMode)"
               >
                 <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
               </button>
@@ -130,6 +139,7 @@
               [(ngModel)]="cipher.login.totp"
               appInputVerbatim
               [disabled]="!cipher.viewPassword"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
         </div>
@@ -142,6 +152,7 @@
               type="text"
               name="Card.CardCardholderName"
               [(ngModel)]="cipher.card.cardholderName"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row box-content-row-flex" appBoxRow>
@@ -154,6 +165,7 @@
                 name="Card.Number"
                 [(ngModel)]="cipher.card.number"
                 appInputVerbatim
+                [readonly]="!cipher.edit && editMode"
               />
             </div>
             <div class="action-buttons">
@@ -175,17 +187,39 @@
           </div>
           <div class="box-content-row" appBoxRow>
             <label for="cardBrand">{{ "brand" | i18n }}</label>
-            <select id="cardBrand" name="Card.Brand" [(ngModel)]="cipher.card.brand">
-              <option *ngFor="let o of cardBrandOptions" [ngValue]="o.value">{{ o.name }}</option>
-            </select>
+            <span *ngIf="!(!cipher.edit && editMode); else readonlyCardBrand">
+              <select id="cardBrand" name="Card.Brand" [(ngModel)]="cipher.card.brand">
+                <option *ngFor="let o of cardBrandOptions" [ngValue]="o.value">{{ o.name }}</option>
+              </select>
+            </span>
+            <ng-template #readonlyCardBrand>
+              <input
+                id="cardBrand"
+                name="Card.Brand"
+                type="text"
+                [readonly]="true"
+                [value]="cipher.card.brand"
+              />
+            </ng-template>
           </div>
           <div class="box-content-row" appBoxRow>
             <label for="cardExpMonth">{{ "expirationMonth" | i18n }}</label>
-            <select id="cardExpMonth" name="Card.ExpMonth" [(ngModel)]="cipher.card.expMonth">
-              <option *ngFor="let o of cardExpMonthOptions" [ngValue]="o.value">
-                {{ o.name }}
-              </option>
-            </select>
+            <span *ngIf="!(!cipher.edit && editMode); else readonlyCardExpMonth">
+              <select id="cardExpMonth" name="Card.ExpMonth" [(ngModel)]="cipher.card.expMonth">
+                <option *ngFor="let o of cardExpMonthOptions" [ngValue]="o.value">
+                  {{ o.name }}
+                </option>
+              </select>
+            </span>
+            <ng-template #readonlyCardExpMonth>
+              <input
+                id="cardExpMonth"
+                name="Card.ExpMonth"
+                type="text"
+                [readonly]="true"
+                [value]="getCardExpMonthDisplay()"
+              />
+            </ng-template>
           </div>
           <div class="box-content-row" appBoxRow>
             <label for="cardExpYear">{{ "expirationYear" | i18n }}</label>
@@ -195,6 +229,7 @@
               name="Card.ExpYear"
               [(ngModel)]="cipher.card.expYear"
               placeholder="{{ 'ex' | i18n }} {{ currentDate | date: 'yyyy' }}"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row box-content-row-flex" appBoxRow>
@@ -207,6 +242,7 @@
                 name="Card.Code"
                 [(ngModel)]="cipher.card.code"
                 appInputVerbatim
+                [readonly]="!cipher.edit && editMode"
               />
             </div>
             <div class="action-buttons">
@@ -231,11 +267,22 @@
         <div *ngIf="cipher.type === cipherType.Identity">
           <div class="box-content-row" appBoxRow>
             <label for="idTitle">{{ "title" | i18n }}</label>
-            <select id="idTitle" name="Identity.Title" [(ngModel)]="cipher.identity.title">
-              <option *ngFor="let o of identityTitleOptions" [ngValue]="o.value">
-                {{ o.name }}
-              </option>
-            </select>
+            <span *ngIf="!(!cipher.edit && editMode); else readonlyIdTitle">
+              <select id="idTitle" name="Identity.Title" [(ngModel)]="cipher.identity.title">
+                <option *ngFor="let o of identityTitleOptions" [ngValue]="o.value">
+                  {{ o.name }}
+                </option>
+              </select>
+            </span>
+            <ng-template #readonlyIdTitle>
+              <input
+                id="idTitle"
+                name="Identity.Title"
+                type="text"
+                [readonly]="true"
+                [value]="cipher.identity.title"
+              />
+            </ng-template>
           </div>
           <div class="box-content-row" appBoxRow>
             <label for="idFirstName">{{ "firstName" | i18n }}</label>
@@ -244,6 +291,7 @@
               type="text"
               name="Identity.FirstName"
               [(ngModel)]="cipher.identity.firstName"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -253,6 +301,7 @@
               type="text"
               name="Identity.MiddleName"
               [(ngModel)]="cipher.identity.middleName"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -262,6 +311,7 @@
               type="text"
               name="Identity.LastName"
               [(ngModel)]="cipher.identity.lastName"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -272,6 +322,7 @@
               name="Identity.Username"
               [(ngModel)]="cipher.identity.username"
               appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -281,6 +332,7 @@
               type="text"
               name="Identity.Company"
               [(ngModel)]="cipher.identity.company"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -291,6 +343,7 @@
               name="Identity.SSN"
               [(ngModel)]="cipher.identity.ssn"
               appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -301,6 +354,7 @@
               name="Identity.PassportNumber"
               [(ngModel)]="cipher.identity.passportNumber"
               appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -311,6 +365,7 @@
               name="Identity.LicenseNumber"
               [(ngModel)]="cipher.identity.licenseNumber"
               appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -321,6 +376,7 @@
               name="Identity.Email"
               [(ngModel)]="cipher.identity.email"
               appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -330,6 +386,7 @@
               type="text"
               name="Identity.Phone"
               [(ngModel)]="cipher.identity.phone"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -339,6 +396,7 @@
               type="text"
               name="Identity.Address1"
               [(ngModel)]="cipher.identity.address1"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -348,6 +406,7 @@
               type="text"
               name="Identity.Address2"
               [(ngModel)]="cipher.identity.address2"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -357,6 +416,7 @@
               type="text"
               name="Identity.Address3"
               [(ngModel)]="cipher.identity.address3"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -366,6 +426,7 @@
               type="text"
               name="Identity.City"
               [(ngModel)]="cipher.identity.city"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -375,6 +436,7 @@
               type="text"
               name="Identity.State"
               [(ngModel)]="cipher.identity.state"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -384,6 +446,7 @@
               type="text"
               name="Identity.PostalCode"
               [(ngModel)]="cipher.identity.postalCode"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
           <div class="box-content-row" appBoxRow>
@@ -393,6 +456,7 @@
               type="text"
               name="Identity.Country"
               [(ngModel)]="cipher.identity.country"
+              [readonly]="!cipher.edit && editMode"
             />
           </div>
         </div>
@@ -423,7 +487,7 @@
                 type="text"
                 name="Login.Uris[{{ i }}].Uri"
                 [(ngModel)]="u.uri"
-                [hidden]="u.showUriOptionsInput === true"
+                [hidden]="$any(u).showUriOptionsInput === true"
                 placeholder="{{ 'ex' | i18n }} https://google.com"
                 inputmode="url"
                 appInputVerbatim
@@ -436,7 +500,7 @@
                 id="currentUris{{ i }}"
                 name="Login.Uris[{{ i }}].CurrentUris"
                 [(ngModel)]="u.uri"
-                [hidden]="!u.showCurrentUris"
+                [hidden]="!$any(u).showCurrentUris"
               >
                 <option [ngValue]="null">-- {{ "select" | i18n }} --</option>
                 <option *ngFor="let u of currentUris" [ngValue]="u">{{ u }}</option>
@@ -448,7 +512,9 @@
                 id="loginUriMatch{{ i }}"
                 name="Login.Uris[{{ i }}].Match"
                 [(ngModel)]="u.match"
-                [hidden]="u.showOptions === false || (u.showOptions == null && u.match == null)"
+                [hidden]="
+                  $any(u).showOptions === false || ($any(u).showOptions == null && u.match == null)
+                "
                 (change)="loginUriMatchChanged(u)"
               >
                 <option *ngFor="let o of uriMatchOptions" [ngValue]="o.value">{{ o.name }}</option>
@@ -462,7 +528,7 @@
                 appStopClick
                 appA11yTitle="{{ 'toggleCurrentUris' | i18n }}"
                 (click)="toggleUriInput(u)"
-                [attr.aria-pressed]="u.showCurrentUris === true"
+                [attr.aria-pressed]="$any(u).showCurrentUris === true"
               >
                 <i aria-hidden="true" class="bwi bwi-lg bwi-list"></i>
               </button>
@@ -472,7 +538,7 @@
                 appStopClick
                 appA11yTitle="{{ 'toggleOptions' | i18n }}"
                 (click)="toggleUriOptions(u)"
-                [attr.aria-pressed]="u.showOptions === true"
+                [attr.aria-pressed]="$any(u).showOptions === true"
               >
                 <i class="bwi bwi-lg bwi-cog" aria-hidden="true"></i>
               </button>
@@ -484,6 +550,7 @@
           appStopClick
           (click)="addUri()"
           class="box-content-row box-content-row-newmulti"
+          *ngIf="!(!cipher.edit && editMode)"
         >
           <i class="bwi bwi-plus-circle bwi-fw bwi-lg" aria-hidden="true"></i> {{ "newUri" | i18n }}
         </button>
@@ -535,6 +602,7 @@
             name="PasswordPrompt"
             [ngModel]="reprompt"
             (change)="repromptChanged()"
+            [disabled]="!cipher.edit && editMode"
           />
         </div>
         <button
@@ -574,11 +642,18 @@
       </h2>
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
-          <textarea id="notes" name="Notes" rows="6" [(ngModel)]="cipher.notes"></textarea>
+          <textarea
+            id="notes"
+            name="Notes"
+            rows="6"
+            [(ngModel)]="cipher.notes"
+            [readonly]="!cipher.edit && editMode"
+          ></textarea>
         </div>
       </div>
     </div>
     <app-vault-add-edit-custom-fields
+      *ngIf="!(!cipher.hasFields && !cipher.edit && editMode)"
       [cipher]="cipher"
       [thisCipherType]="cipher.type"
       [editMode]="editMode"
@@ -622,13 +697,13 @@
           <input
             id="collection_{{ i }}"
             type="checkbox"
-            [(ngModel)]="c.checked"
+            [(ngModel)]="$any(c).checked"
             name="Collection[{{ i }}].Checked"
           />
         </div>
       </div>
     </div>
-    <div class="box list" *ngIf="editMode && !cloneMode">
+    <div class="box list" *ngIf="editMode && !cloneMode && !(!cipher.edit && editMode)">
       <div class="box-content single-line">
         <button
           type="button"
@@ -640,8 +715,11 @@
         >
           <div class="row-main text-danger">
             <div class="icon text-danger" aria-hidden="true">
-              <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="deleteBtn.loading"></i>
-              <i class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw" [hidden]="!deleteBtn.loading"></i>
+              <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="$any(deleteBtn).loading"></i>
+              <i
+                class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
+                [hidden]="!$any(deleteBtn).loading"
+              ></i>
             </div>
             <span>{{ "deleteItem" | i18n }}</span>
           </div>

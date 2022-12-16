@@ -9,6 +9,7 @@ import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
@@ -61,7 +62,8 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     protected logService: LogService,
     protected twoFactorService: TwoFactorService,
-    protected appIdService: AppIdService
+    protected appIdService: AppIdService,
+    protected loginService: LoginService
   ) {
     this.webAuthnSupported = this.platformUtilsService.supportsWebAuthn(win);
   }
@@ -205,6 +207,7 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.onSuccessfulLogin != null) {
+        this.loginService.clearValues();
         this.onSuccessfulLogin();
       }
       if (response.resetMasterPassword) {
@@ -214,8 +217,10 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
         this.successRoute = "update-temp-password";
       }
       if (this.onSuccessfulLoginNavigate != null) {
+        this.loginService.clearValues();
         this.onSuccessfulLoginNavigate();
       } else {
+        this.loginService.clearValues();
         this.router.navigate([this.successRoute], {
           queryParams: {
             identifier: this.identifier,
@@ -283,13 +288,13 @@ export class TwoFactorComponent implements OnInit, OnDestroy {
     return (
       this.authService.authingWithPassword() ||
       this.authService.authingWithSso() ||
-      this.authService.authingWithApiKey() ||
+      this.authService.authingWithUserApiKey() ||
       this.authService.authingWithPasswordless()
     );
   }
 
   get needsLock(): boolean {
-    return this.authService.authingWithSso() || this.authService.authingWithApiKey();
+    return this.authService.authingWithSso() || this.authService.authingWithUserApiKey();
   }
 
   protected setCaptchaToken(token: string) {

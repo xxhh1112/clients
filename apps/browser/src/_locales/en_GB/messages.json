@@ -59,7 +59,7 @@
     "message": "My vault"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "All vaults"
   },
   "tools": {
     "message": "Tools"
@@ -92,13 +92,13 @@
     "message": "Auto-fill"
   },
   "generatePasswordCopied": {
-    "message": "Generate Password (and Copy)"
+    "message": "Generate password (copied)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Copy custom field name"
   },
   "noMatchingLogins": {
-    "message": "No matching logins."
+    "message": "No matching logins"
   },
   "unlockVaultMenu": {
     "message": "Unlock your vault"
@@ -342,7 +342,7 @@
     "message": "Verify Identity"
   },
   "yourVaultIsLocked": {
-    "message": "Your vault is locked. Verify your master password to continue."
+    "message": "Your vault is locked. Verify your identity to continue."
   },
   "unlock": {
     "message": "Unlock"
@@ -2028,5 +2028,20 @@
         "example": "Jun 15, 2015"
       }
     }
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
   }
 }

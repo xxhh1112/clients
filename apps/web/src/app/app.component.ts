@@ -12,7 +12,7 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { InternalFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
@@ -27,15 +27,17 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 
 import { PolicyListService, RouterService } from "./core";
-import { DisableSendPolicy } from "./organizations/policies/disable-send.component";
-import { MasterPasswordPolicy } from "./organizations/policies/master-password.component";
-import { PasswordGeneratorPolicy } from "./organizations/policies/password-generator.component";
-import { PersonalOwnershipPolicy } from "./organizations/policies/personal-ownership.component";
-import { RequireSsoPolicy } from "./organizations/policies/require-sso.component";
-import { ResetPasswordPolicy } from "./organizations/policies/reset-password.component";
-import { SendOptionsPolicy } from "./organizations/policies/send-options.component";
-import { SingleOrgPolicy } from "./organizations/policies/single-org.component";
-import { TwoFactorAuthenticationPolicy } from "./organizations/policies/two-factor-authentication.component";
+import {
+  DisableSendPolicy,
+  MasterPasswordPolicy,
+  PasswordGeneratorPolicy,
+  PersonalOwnershipPolicy,
+  RequireSsoPolicy,
+  ResetPasswordPolicy,
+  SendOptionsPolicy,
+  SingleOrgPolicy,
+  TwoFactorAuthenticationPolicy,
+} from "./organizations/policies";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -72,7 +74,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private notificationsService: NotificationsService,
     private routerService: RouterService,
     private stateService: StateService,
-    private eventService: EventService,
+    private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
     private keyConnectorService: KeyConnectorService
@@ -219,10 +221,9 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   private async logOut(expired: boolean) {
-    await this.eventService.uploadEvents();
+    await this.eventUploadService.uploadEvents();
     const userId = await this.stateService.getUserId();
     await Promise.all([
-      this.eventService.clearEvents(),
       this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.settingsService.clear(userId),

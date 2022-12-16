@@ -20,8 +20,8 @@
       <div class="page-header d-flex">
         <h1>
           {{ "vaultItems" | i18n }}
-          <small #actionSpinner [appApiAction]="ciphersComponent.actionPromise">
-            <ng-container *ngIf="actionSpinner.loading">
+          <small #actionSpinner [appApiAction]="vaultItemsComponent.actionPromise">
+            <ng-container *ngIf="$any(actionSpinner).loading">
               <i
                 class="bwi bwi-spinner bwi-spin text-muted"
                 title="{{ 'loading' | i18n }}"
@@ -33,7 +33,7 @@
         </h1>
         <div class="ml-auto d-flex">
           <app-vault-bulk-actions
-            [ciphersComponent]="ciphersComponent"
+            [vaultItemsComponent]="vaultItemsComponent"
             [deleted]="activeFilter.status === 'trash'"
           >
           </app-vault-bulk-actions>
@@ -54,7 +54,7 @@
       >
         {{ trashCleanupWarning }}
       </app-callout>
-      <app-vault-ciphers
+      <app-vault-items
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"
         (onAddCipher)="addCipher()"
@@ -63,7 +63,7 @@
         (onCloneClicked)="cloneCipher($event)"
         (onOrganzationBadgeClicked)="applyOrganizationFilter($event)"
       >
-      </app-vault-ciphers>
+      </app-vault-items>
     </div>
     <div class="col-3">
       <div class="card border-warning mb-4" *ngIf="showUpdateKey">
@@ -78,7 +78,12 @@
           </button>
         </div>
       </div>
-      <app-verify-email *ngIf="showVerifyEmail" class="d-block mb-4"></app-verify-email>
+      <app-verify-email
+        *ngIf="showVerifyEmail"
+        class="d-block mb-4"
+        (onVerified)="emailVerified($event)"
+      ></app-verify-email>
+
       <div class="card border-warning mb-4" *ngIf="showBrowserOutdated">
         <div class="card-header bg-warning text-white">
           <i class="bwi bwi-exclamation-triangle bwi-fw" aria-hidden="true"></i>

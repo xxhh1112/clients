@@ -1,41 +1,24 @@
-import { mock, MockProxy } from "jest-mock-extended";
-
 import { BrowserApi } from "../browser/browserApi";
-import { StateService } from "../services/abstractions/state.service";
 
 import { ClearClipboard } from "./clear-clipboard";
-import { getClearClipboardTime, setClearClipboardTime } from "./clipboard-state";
-
-jest.mock("./clipboard-state", () => {
-  return {
-    getClearClipboardTime: jest.fn(),
-    setClearClipboardTime: jest.fn(),
-  };
-});
-
-const getClearClipboardTimeMock = getClearClipboardTime as jest.Mock;
-const setClearClipboardTimeMock = setClearClipboardTime as jest.Mock;
 
 describe("clearClipboard", () => {
   describe("run", () => {
-    let stateService: MockProxy<StateService>;
-    let serviceCache: Record<string, unknown>;
+    it("Does not clear clipboard when no active tabs are retrieved", async () => {
+      jest.spyOn(BrowserApi, "getActiveTabs").mockResolvedValue([] as any);
 
-    beforeEach(() => {
-      stateService = mock<StateService>();
-      serviceCache = {
-        stateService: stateService,
-      };
+      jest.spyOn(BrowserApi, "sendTabsMessage").mockReturnValue();
+
+      await ClearClipboard.run();
+
+      expect(jest.spyOn(BrowserApi, "sendTabsMessage")).not.toHaveBeenCalled();
+
+      expect(jest.spyOn(BrowserApi, "sendTabsMessage")).not.toHaveBeenCalledWith(1, {
+        command: "clearClipboard",
+      });
     });
 
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it("has a clear time that is past execution time", async () => {
-      const executionTime = new Date(2022, 1, 1, 12);
-      const clearTime = new Date(2022, 1, 1, 12, 1);
-
+    it("Sends a message to the content script to clear the clipboard", async () => {
       jest.spyOn(BrowserApi, "getActiveTabs").mockResolvedValue([
         {
           id: 1,
@@ -44,36 +27,13 @@ describe("clearClipboard", () => {
 
       jest.spyOn(BrowserApi, "sendTabsMessage").mockReturnValue();
 
-      getClearClipboardTimeMock.mockResolvedValue(clearTime.getTime());
-
-      await ClearClipboard.run(executionTime, serviceCache);
+      await ClearClipboard.run();
 
       expect(jest.spyOn(BrowserApi, "sendTabsMessage")).toHaveBeenCalledTimes(1);
 
       expect(jest.spyOn(BrowserApi, "sendTabsMessage")).toHaveBeenCalledWith(1, {
         command: "clearClipboard",
       });
-    });
-
-    it("has a clear time before execution time", async () => {
-      const executionTime = new Date(2022, 1, 1, 12);
-      const clearTime = new Date(2022, 1, 1, 11);
-
-      setClearClipboardTimeMock.mockResolvedValue(clearTime.getTime());
-
-      await ClearClipboard.run(executionTime, serviceCache);
-
-      expect(jest.spyOn(BrowserApi, "getActiveTabs")).not.toHaveBeenCalled();
-    });
-
-    it("has an undefined clearTime", async () => {
-      const executionTime = new Date(2022, 1, 1);
-
-      getClearClipboardTimeMock.mockResolvedValue(undefined);
-
-      await ClearClipboard.run(executionTime, serviceCache);
-
-      expect(jest.spyOn(BrowserApi, "getActiveTabs")).not.toHaveBeenCalled();
     });
   });
 });

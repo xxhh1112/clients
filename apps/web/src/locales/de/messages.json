@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Mit Gerät anmelden muss in den Einstellungen der Bitwarden Mobile App aktiviert sein. Brauchst du eine andere Möglichkeit?"
   },
+  "loginWithMasterPassword": {
+    "message": "Mit Master-Passwort anmelden"
+  },
   "createAccount": {
     "message": "Konto erstellen"
   },
@@ -1235,13 +1238,6 @@
   "faviconDesc": {
     "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
   },
-  "enableGravatars": {
-    "message": "Gravatare aktivieren",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Nutze Profilbilder von gravatar.com."
-  },
   "enableFullWidth": {
     "message": "Darstellung in voller Breite aktivieren",
     "description": "Allows scaling the web vault UI's width"
@@ -1294,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Zwei-Faktor-Authentifizierung"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Erzwungene Zwei-Faktor-Authentifizierung"
+  },
   "twoStepLoginDesc": {
     "message": "Sichern Sie Ihr Konto mit Zwei-Faktor-Authentifizierung."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Zwei-Faktor-Authentifizierung für die Benutzer Ihrer Organisation verlangen, indem Sie Anbieter auf Organisationsebene konfigurieren."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Erzwinge Zwei-Faktor-Authentifizierung in Bitwarden für Mitglieder durch Verwendung der ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Richtlinie für Zwei-Faktor-Authentifizierung"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Verwende die folgenden Optionen, um Zwei-Faktor-Authentifizierung über Duo zu erzwingen."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Wenn SSO eingerichtet oder dies geplant ist, wird die Zwei-Faktor-Authentifizierung möglicherweise bereits über den Identity Provider erzwungen."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Durch die Aktivierung der Zwei-Faktor-Authentifizierung könnten Sie sich dauerhaft aus Ihrem Bitwarden-Konto aussperren. Ein Wiederherstellungscode ermöglicht es Ihnen, auf Ihr Konto zuzugreifen, falls Sie Ihren normalen Zwei-Faktor-Anbieter nicht mehr verwenden können (z.B. wenn Sie Ihr Gerät verlieren). Der Bitwarden-Support kann Ihnen nicht helfen, wenn Sie den Zugang zu Ihrem Konto verlieren. Wir empfehlen Ihnen, den Wiederherstellungscode aufzuschreiben oder auszudrucken und an einem sicheren Ort aufzubewahren."
@@ -1546,6 +1555,10 @@
   "reportsDesc": {
     "message": "Identifiziere und schließe Sicherheitslücken in deinen Online-Konten, indem du auf die Berichte unten klickst.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identifiziere und schließe Sicherheitslücken in den Konten deiner Organisation, indem du auf die folgenden Berichte klickst.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Bericht über ungesicherte Websites"
@@ -2583,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Kartennummer für Eintrag $ID$ angesehen.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Sicherheitscode für Eintrag $ID$ angesehen.",
     "placeholders": {
@@ -2994,6 +3016,9 @@
   "myOrganization": {
     "message": "Meine Organisation"
   },
+  "organizationInfo": {
+    "message": "Organisationsinfo"
+  },
   "deleteOrganization": {
     "message": "Organisation löschen"
   },
@@ -3368,7 +3393,7 @@
     "message": "Schwaches Master-Passwort"
   },
   "weakMasterPasswordDesc": {
-    "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
+    "message": "Das Master-Passwort, das du gewählt hast, ist schwach. Du solltest ein starkes Master-Passwort (oder eine Passphrase) auswählen, um dein Bitwarden-Konto richtig zu schützen. Bist du sicher, dass du dieses Master-Passwort verwenden willst?"
   },
   "rotateAccountEncKey": {
     "message": "Auch den Verschlüsselungscode meines Kontos aktualisieren"
@@ -3689,6 +3714,12 @@
   },
   "ssoIdentifierRequired": {
     "message": "Unternehmenskennung ist erforderlich."
+  },
+  "ssoIdentifier": {
+    "message": "SSO-Kennung"
+  },
+  "ssoIdentifierHint": {
+    "message": "Gib den Mitgliedern diese ID, um sich mit SSO anzumelden."
   },
   "unlinkSso": {
     "message": "SSO Verknüpfung aufheben"
@@ -4088,8 +4119,26 @@
   "customDesc": {
     "message": "Feinere Kontrolle der Benutzer Berechtigungen für erweiterte Konfigurationen erlauben."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Benutzerdefinierte Rollen sind eine ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "Funktion für Unternehmen",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Kontaktiere unser Kundenserviceteam, um dein Abo hochzustufen",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Um benutzerdefinierte Berechtigungen zu ermöglichen, muss sich die Organisation auf einem 2020er Unternehmensabo befinden."
+  },
   "permissions": {
     "message": "Berechtigungen"
+  },
+  "permission": {
+    "message": "Berechtigung"
   },
   "managerPermissions": {
     "message": "Manager-Berechtigungen"
@@ -4495,6 +4544,10 @@
   },
   "clients": {
     "message": "Kunden"
+  },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Anbieter-Administrator"
@@ -5380,6 +5433,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Die Eingabe darf nicht länger als $COUNT$ Zeichen sein.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ Feld(er) oben benötigt deine Aufmerksamkeit.",
     "placeholders": {
@@ -5395,11 +5457,23 @@
   "on": {
     "message": "Ein"
   },
+  "members": {
+    "message": "Mitglieder"
+  },
+  "reporting": {
+    "message": "Bericht"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Anzahl der Benutzer"
+  },
+  "loggingInAs": {
+    "message": "Einloggen als"
+  },
+  "notYou": {
+    "message": "Nicht du?"
   },
   "multiSelectPlaceholder": {
     "message": "-- Typ zum Filtern --"
@@ -5412,5 +5486,41 @@
   },
   "multiSelectClearAll": {
     "message": "Alles löschen"
+  },
+  "from": {
+    "message": "Von"
+  },
+  "to": {
+    "message": "Bis"
+  },
+  "member": {
+    "message": "Mitglied"
+  },
+  "update": {
+    "message": "Aktualisierung"
+  },
+  "role": {
+    "message": "Rolle"
+  },
+  "canView": {
+    "message": "Darf anzeigen"
+  },
+  "canViewExceptPass": {
+    "message": "Darf anzeigen, Passwörter ausgenommen"
+  },
+  "canEdit": {
+    "message": "Darf bearbeiten"
+  },
+  "canEditExceptPass": {
+    "message": "Darf bearbeiten, Passwörter ausgenommen"
+  },
+  "group": {
+    "message": "Gruppe"
+  },
+  "groupAccessAll": {
+    "message": "Diese Gruppe darf auf alle Einträge zugreifen und diese ändern."
+  },
+  "memberAccessAll": {
+    "message": "Dieses Mitglied darf auf alle Elemente zugreifen und diese ändern."
   }
 }

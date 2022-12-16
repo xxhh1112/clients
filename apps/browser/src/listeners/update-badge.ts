@@ -1,7 +1,7 @@
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -15,7 +15,7 @@ import { searchServiceFactory } from "../background/service_factories/search-ser
 import { stateServiceFactory } from "../background/service_factories/state-service.factory";
 import { BrowserApi } from "../browser/browserApi";
 import { Account } from "../models/account";
-import { StateService } from "../services/abstractions/state.service";
+import { BrowserStateService } from "../services/abstractions/browser-state.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 
 export type BadgeOptions = {
@@ -25,7 +25,7 @@ export type BadgeOptions = {
 
 export class UpdateBadge {
   private authService: AuthService;
-  private stateService: StateService;
+  private stateService: BrowserStateService;
   private cipherService: CipherService;
   private badgeAction: typeof chrome.action;
   private sidebarAction: OperaSidebarAction | FirefoxSidebarAction;
@@ -259,7 +259,7 @@ export class UpdateBadge {
     if (!self.bitwardenContainerService) {
       new ContainerService(
         serviceCache.cryptoService as CryptoService,
-        serviceCache.encryptService as AbstractEncryptService
+        serviceCache.encryptService as EncryptService
       ).attachToGlobal(self);
     }
 

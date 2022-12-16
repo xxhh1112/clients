@@ -9,12 +9,12 @@ import { CollectionExport } from "@bitwarden/common/models/export/collection.exp
 import { FolderExport } from "@bitwarden/common/models/export/folder.export";
 import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
-import { Response } from "@bitwarden/node/cli/models/response";
 
-import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
-import { CipherResponse } from "../models/response/cipherResponse";
-import { FolderResponse } from "../models/response/folderResponse";
-import { OrganizationCollectionResponse } from "../models/response/organizationCollectionResponse";
+import { OrganizationCollectionRequest } from "../models/request/organization-collection.request";
+import { Response } from "../models/response";
+import { CipherResponse } from "../models/response/cipher.response";
+import { FolderResponse } from "../models/response/folder.response";
+import { OrganizationCollectionResponse } from "../models/response/organization-collection.response";
 import { CliUtils } from "../utils";
 
 export class EditCommand {
@@ -84,7 +84,7 @@ export class EditCommand {
     cipherView = CipherExport.toView(req, cipherView);
     const encCipher = await this.cipherService.encrypt(cipherView);
     try {
-      await this.cipherService.saveWithServer(encCipher);
+      await this.cipherService.updateWithServer(encCipher);
       const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt();
       const res = new CipherResponse(decCipher);
@@ -118,7 +118,7 @@ export class EditCommand {
   }
 
   private async editFolder(id: string, req: FolderExport) {
-    const folder = await this.folderService.get(id);
+    const folder = await this.folderService.getFromState(id);
     if (folder == null) {
       return Response.notFound();
     }

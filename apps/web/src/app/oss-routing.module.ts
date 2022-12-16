@@ -15,7 +15,6 @@ import { LoginWithDeviceComponent } from "./accounts/login/login-with-device.com
 import { LoginComponent } from "./accounts/login/login.component";
 import { RecoverDeleteComponent } from "./accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "./accounts/recover-two-factor.component";
-import { RegisterComponent } from "./accounts/register.component";
 import { RemovePasswordComponent } from "./accounts/remove-password.component";
 import { SetPasswordComponent } from "./accounts/set-password.component";
 import { SsoComponent } from "./accounts/sso.component";
@@ -28,7 +27,7 @@ import { VerifyRecoverDeleteComponent } from "./accounts/verify-recover-delete.c
 import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
-import { OrganizationsRoutingModule } from "./organizations/organization-routing.module";
+import { OrganizationModule } from "./organizations/organization.module";
 import { AcceptFamilySponsorshipComponent } from "./organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./organizations/sponsorships/families-for-enterprise-setup.component";
 import { ReportsModule } from "./reports";
@@ -69,16 +68,15 @@ const routes: Routes = [
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "register",
-        component: RegisterComponent,
+        component: TrialInitiationComponent,
         canActivate: [UnauthGuard],
         data: { titleId: "createAccount" },
       },
-      buildFlaggedRoute("showTrial", {
+      {
         path: "trial",
-        component: TrialInitiationComponent,
-        canActivate: [UnauthGuard],
-        data: { titleId: "startTrial" },
-      }),
+        redirectTo: "register",
+        pathMatch: "full",
+      },
       {
         path: "sso",
         component: SsoComponent,
@@ -251,7 +249,7 @@ const routes: Routes = [
   },
   {
     path: "organizations",
-    loadChildren: () => OrganizationsRoutingModule,
+    loadChildren: () => OrganizationModule,
   },
 ];
 

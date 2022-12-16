@@ -1267,7 +1267,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Sortuta",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Desgaitua"
   },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "removedPassword": {
+    "message": "Password removed"
+  },
+  "removePasswordConfirmation": {
+    "message": "Are you sure you want to remove the password?"
+  },
   "maxAccessCountReached": {
     "message": "Sarbide kopuru maximoa gaindituta"
   },
@@ -2021,5 +2030,32 @@
   },
   "vault": {
     "message": "Kutxa gotorra"
+  },
+  "loginWithMasterPassword": {
+    "message": "Hasi saioa pasahitz nagusiarekin"
+  },
+  "loggingInAs": {
+    "message": "gisa saioa hasi"
+  },
+  "rememberEmail": {
+    "message": "Emaila gogoratu"
+  },
+  "notYou": {
+    "message": "Zu ez?"
+  },
+  "newAroundHere": {
+    "message": "Berria hemendik?"
+  },
+  "loggingInTo": {
+    "message": "$DOMAIN$-en saioa hasten",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Hasi saioa beste gailu batekin"
   }
 }

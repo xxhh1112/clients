@@ -35,7 +35,7 @@
                 name="Type_{{ o.value }}"
                 id="type_{{ o.value }}"
                 [value]="o.value"
-                (change)="typeChanged(o)"
+                (change)="typeChanged()"
                 [checked]="send.type === o.value"
                 [disabled]="disableSend"
               />
@@ -100,12 +100,12 @@
             (click)="toggleOptions()"
             [attr.aria-expanded]="showOptions"
           >
-            {{ "options" | i18n }}
             <i
               class="bwi bwi-lg"
               aria-hidden="true"
-              [ngClass]="{ 'bwi-angle-down': !showOptions, 'bwi-chevron-up': showOptions }"
+              [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
             ></i>
+            {{ "options" | i18n }}
           </button>
         </h2>
       </div>
@@ -280,10 +280,14 @@
         appA11yTitle="{{ 'delete' | i18n }}"
         *ngIf="editMode"
       >
-        <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="deleteBtn.loading" aria-hidden="true"></i>
+        <i
+          class="bwi bwi-trash bwi-lg bwi-fw"
+          [hidden]="$any(deleteBtn).loading"
+          aria-hidden="true"
+        ></i>
         <i
           class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-          [hidden]="!deleteBtn.loading"
+          [hidden]="!$any(deleteBtn).loading"
           aria-hidden="true"
         ></i>
       </button>

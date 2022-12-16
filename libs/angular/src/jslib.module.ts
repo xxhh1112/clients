@@ -2,7 +2,6 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { AvatarComponent } from "./components/avatar.component";
 import { CalloutComponent } from "./components/callout.component";
 import { CaptchaComponent } from "./components/captcha.component";
 import { ExportScopeCalloutComponent } from "./components/export-scope-callout.component";
@@ -13,9 +12,11 @@ import { A11yTitleDirective } from "./directives/a11y-title.directive";
 import { ApiActionDirective } from "./directives/api-action.directive";
 import { AutofocusDirective } from "./directives/autofocus.directive";
 import { BoxRowDirective } from "./directives/box-row.directive";
+import { CopyClickDirective } from "./directives/copy-click.directive";
 import { FallbackSrcDirective } from "./directives/fallback-src.directive";
 import { InputStripSpacesDirective } from "./directives/input-strip-spaces.directive";
 import { InputVerbatimDirective } from "./directives/input-verbatim.directive";
+import { LaunchClickDirective } from "./directives/launch-click.directive";
 import { NotPremiumDirective } from "./directives/not-premium.directive";
 import { SelectCopyDirective } from "./directives/select-copy.directive";
 import { StopClickDirective } from "./directives/stop-click.directive";
@@ -47,7 +48,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     A11yTitleDirective,
     ApiActionDirective,
     AutofocusDirective,
-    AvatarComponent,
     BoxRowDirective,
     CalloutComponent,
     CaptchaComponent,
@@ -69,6 +69,8 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     StopClickDirective,
     StopPropDirective,
     TrueFalseValueDirective,
+    CopyClickDirective,
+    LaunchClickDirective,
     UserNamePipe,
   ],
   exports: [
@@ -76,7 +78,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     A11yTitleDirective,
     ApiActionDirective,
     AutofocusDirective,
-    AvatarComponent,
     BitwardenToastModule,
     BoxRowDirective,
     CalloutComponent,
@@ -99,6 +100,8 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     StopClickDirective,
     StopPropDirective,
     TrueFalseValueDirective,
+    CopyClickDirective,
+    LaunchClickDirective,
     UserNamePipe,
   ],
   providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe],

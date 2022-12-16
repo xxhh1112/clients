@@ -1,8 +1,9 @@
 /* eslint-disable no-useless-escape */
-import * as tldjs from "tldjs";
+import { getHostname, parse } from "tldts";
+import { Merge } from "type-fest";
 
-import { AbstractEncryptService } from "../abstractions/abstractEncrypt.service";
 import { CryptoService } from "../abstractions/crypto.service";
+import { EncryptService } from "../abstractions/encrypt.service";
 import { I18nService } from "../abstractions/i18n.service";
 
 const nodeURL = typeof window === "undefined" ? require("url") : null;
@@ -14,7 +15,7 @@ declare global {
 
 interface BitwardenContainerService {
   getCryptoService: () => CryptoService;
-  getEncryptService: () => AbstractEncryptService;
+  getEncryptService: () => EncryptService;
 }
 
 export class Utils {
@@ -24,11 +25,10 @@ export class Utils {
   static isMobileBrowser = false;
   static isAppleMobileBrowser = false;
   static global: typeof global = null;
-  static tldEndingRegex =
-    /.*\.(com|net|org|edu|uk|gov|ca|de|jp|fr|au|ru|ch|io|es|us|co|xyz|info|ly|mil)$/;
   // Transpiled version of /\p{Emoji_Presentation}/gu using https://mothereff.in/regexpu. Used for compatability in older browsers.
   static regexpEmojiPresentation =
     /(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])/g;
+  static readonly validHosts: string[] = ["localhost"];
 
   static init() {
     if (Utils.inited) {
@@ -56,6 +56,10 @@ export class Utils {
   }
 
   static fromB64ToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
+
     if (Utils.isNode) {
       return new Uint8Array(Buffer.from(str, "base64"));
     } else {
@@ -109,6 +113,9 @@ export class Utils {
   }
 
   static fromBufferToB64(buffer: ArrayBuffer): string {
+    if (buffer == null) {
+      return null;
+    }
     if (Utils.isNode) {
       return Buffer.from(buffer).toString("base64");
     } else {
@@ -214,12 +221,39 @@ export class Utils {
   }
 
   static getHostname(uriString: string): string {
-    const url = Utils.getUrl(uriString);
+    if (Utils.isNullOrWhitespace(uriString)) {
+      return null;
+    }
+
+    uriString = uriString.trim();
+
+    if (uriString.startsWith("data:")) {
+      return null;
+    }
+
+    if (uriString.startsWith("about:")) {
+      return null;
+    }
+
+    if (uriString.startsWith("file:")) {
+      return null;
+    }
+
+    // Does uriString contain invalid characters
+    // TODO Needs to possibly be extended, although '!' is a reserved character
+    if (uriString.indexOf("!") > 0) {
+      return null;
+    }
+
     try {
-      return url != null && url.hostname !== "" ? url.hostname : null;
+      const hostname = getHostname(uriString, { validHosts: this.validHosts });
+      if (hostname != null) {
+        return hostname;
+      }
     } catch {
       return null;
     }
+    return null;
   }
 
   static getHost(uriString: string): string {
@@ -232,60 +266,35 @@ export class Utils {
   }
 
   static getDomain(uriString: string): string {
-    if (uriString == null) {
+    if (Utils.isNullOrWhitespace(uriString)) {
       return null;
     }
 
     uriString = uriString.trim();
-    if (uriString === "") {
-      return null;
-    }
 
     if (uriString.startsWith("data:")) {
       return null;
     }
 
-    let httpUrl = uriString.startsWith("http://") || uriString.startsWith("https://");
-    if (
-      !httpUrl &&
-      uriString.indexOf("://") < 0 &&
-      Utils.tldEndingRegex.test(uriString) &&
-      uriString.indexOf("@") < 0
-    ) {
-      uriString = "http://" + uriString;
-      httpUrl = true;
-    }
-
-    if (httpUrl) {
-      try {
-        const url = Utils.getUrlObject(uriString);
-        const validHostname = tldjs?.isValid != null ? tldjs.isValid(url.hostname) : true;
-        if (!validHostname) {
-          return null;
-        }
-
-        if (url.hostname === "localhost" || Utils.validIpAddress(url.hostname)) {
-          return url.hostname;
-        }
-
-        const urlDomain =
-          tldjs != null && tldjs.getDomain != null ? tldjs.getDomain(url.hostname) : null;
-        return urlDomain != null ? urlDomain : url.hostname;
-      } catch (e) {
-        // Invalid domain, try another approach below.
-      }
+    if (uriString.startsWith("about:")) {
+      return null;
     }
 
     try {
-      const domain = tldjs != null && tldjs.getDomain != null ? tldjs.getDomain(uriString) : null;
+      const parseResult = parse(uriString, { validHosts: this.validHosts });
+      if (parseResult != null && parseResult.hostname != null) {
+        if (parseResult.hostname === "localhost" || parseResult.isIp) {
+          return parseResult.hostname;
+        }
 
-      if (domain != null) {
-        return domain;
+        if (parseResult.domain != null) {
+          return parseResult.domain;
+        }
+        return null;
       }
     } catch {
       return null;
     }
-
     return null;
   }
 
@@ -358,14 +367,11 @@ export class Utils {
   }
 
   static getUrl(uriString: string): URL {
-    if (uriString == null) {
+    if (this.isNullOrWhitespace(uriString)) {
       return null;
     }
 
     uriString = uriString.trim();
-    if (uriString === "") {
-      return null;
-    }
 
     let url = Utils.getUrlObject(uriString);
     if (url == null) {
@@ -425,10 +431,55 @@ export class Utils {
     return this.global.bitwardenContainerService;
   }
 
-  private static validIpAddress(ipString: string): boolean {
-    const ipRegex =
-      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    return ipRegex.test(ipString);
+  /**
+   * Converts map to a Record<string, V> with the same data. Inverse of recordToMap
+   * Useful in toJSON methods, since Maps are not serializable
+   * @param map
+   * @returns
+   */
+  static mapToRecord<K extends string | number, V>(map: Map<K, V>): Record<string, V> {
+    if (map == null) {
+      return null;
+    }
+    if (!(map instanceof Map)) {
+      return map;
+    }
+    return Object.fromEntries(map);
+  }
+
+  /**
+   * Converts record to a Map<string, V> with the same data. Inverse of mapToRecord
+   * Useful in fromJSON methods, since Maps are not serializable
+   *
+   * Warning: If the record has string keys that are numbers, they will be converted to numbers in the map
+   * @param record
+   * @returns
+   */
+  static recordToMap<K extends string | number, V>(record: Record<K, V>): Map<K, V> {
+    if (record == null) {
+      return null;
+    } else if (record instanceof Map) {
+      return record;
+    }
+
+    const entries = Object.entries(record);
+    if (entries.length === 0) {
+      return new Map();
+    }
+
+    if (isNaN(Number(entries[0][0]))) {
+      return new Map(entries) as Map<K, V>;
+    } else {
+      return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
+    }
+  }
+
+  /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */
+  static merge<Destination, Source>(
+    destination: Destination,
+    source: Source
+  ): Merge<Destination, Source> {
+    return Object.assign(destination, source) as unknown as Merge<Destination, Source>;
   }
 
   private static isMobile(win: Window) {

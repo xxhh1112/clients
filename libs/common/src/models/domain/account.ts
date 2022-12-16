@@ -1,4 +1,4 @@
-import { Except, Jsonify } from "type-fest";
+import { Jsonify } from "type-fest";
 
 import { AuthenticationStatus } from "../../enums/authenticationStatus";
 import { KdfType } from "../../enums/kdfType";
@@ -40,7 +40,7 @@ export class EncryptionPair<TEncrypted, TDecrypted> {
   }
 
   static fromJSON<TEncrypted, TDecrypted>(
-    obj: Jsonify<EncryptionPair<Jsonify<TEncrypted>, Jsonify<TDecrypted>>>,
+    obj: { encrypted?: Jsonify<TEncrypted>; decrypted?: string | Jsonify<TDecrypted> },
     decryptedFromJson?: (decObj: Jsonify<TDecrypted> | string) => TDecrypted,
     encryptedFromJson?: (encObj: Jsonify<TEncrypted>) => TEncrypted
   ) {
@@ -123,7 +123,7 @@ export class AccountKeys {
   apiKeyClientSecret?: string;
 
   toJSON() {
-    return Object.assign(this as Except<AccountKeys, "publicKey">, {
+    return Utils.merge(this, {
       publicKey: Utils.fromBufferToByteString(this.publicKey),
     });
   }
@@ -175,6 +175,7 @@ export class AccountProfile {
   apiKeyClientId?: string;
   authenticationStatus?: AuthenticationStatus;
   convertAccountToKeyConnector?: boolean;
+  name?: string;
   email?: string;
   emailVerified?: boolean;
   entityId?: string;
@@ -219,7 +220,6 @@ export class AccountSettings {
   enableAutoFillOnPageLoad?: boolean;
   enableBiometric?: boolean;
   enableFullWidth?: boolean;
-  enableGravitars?: boolean;
   environmentUrls: EnvironmentUrls = new EnvironmentUrls();
   equivalentDomains?: any;
   minimizeOnCopyToClipboard?: boolean;
@@ -251,7 +251,7 @@ export class AccountSettings {
 }
 
 export type AccountSettingsSettings = {
-  equivalentDomains?: { [id: string]: any };
+  equivalentDomains?: string[][];
 };
 
 export class AccountTokens {
