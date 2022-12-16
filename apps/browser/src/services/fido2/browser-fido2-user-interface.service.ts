@@ -3,6 +3,7 @@ import { filter, first, lastValueFrom, Subject, takeUntil } from "rxjs";
 import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
 
+import { RequestAbortedError } from "../../../../../libs/common/src/abstractions/fido2/fido2.service.abstraction";
 import { BrowserApi } from "../../browser/browserApi";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
@@ -23,6 +24,7 @@ export type BrowserFido2Message = { requestId: string } & (
     }
   | {
       type: "RequestCancelled";
+      fallbackRequested: boolean;
     }
 );
 
@@ -68,6 +70,10 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       return true;
     }
 
+    if (response.type === "RequestCancelled") {
+      throw new RequestAbortedError(response.fallbackRequested);
+    }
+
     return false;
   }
 
@@ -91,6 +97,10 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 
     if (response.type === "ConfirmNewCredentialResponse") {
       return true;
+    }
+
+    if (response.type === "RequestCancelled") {
+      throw new RequestAbortedError(response.fallbackRequested);
     }
 
     return false;

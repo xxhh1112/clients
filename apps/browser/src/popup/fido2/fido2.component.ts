@@ -35,23 +35,25 @@ export class Fido2Component {
       BrowserFido2UserInterfaceService.sendMessage({
         requestId: data.requestId,
         type: "RequestCancelled",
+        fallbackRequested: true,
       });
     }
 
     window.close();
   }
 
-  cancel() {
-    this.unload();
+  cancel(fallback: boolean) {
+    this.unload(fallback);
     window.close();
   }
 
   @HostListener("window:unload")
-  unload() {
+  unload(fallback = true) {
     const data = this.data;
     BrowserFido2UserInterfaceService.sendMessage({
       requestId: data.requestId,
       type: "RequestCancelled",
+      fallbackRequested: fallback,
     });
   }
 }

@@ -5,6 +5,8 @@ import {
   CredentialRegistrationResult,
 } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
 
+import { MessageError } from "./error";
+
 export enum MessageType {
   CredentialCreationRequest,
   CredentialCreationResponse,
@@ -21,8 +23,8 @@ export type CredentialCreationRequest = {
 
 export type CredentialCreationResponse = {
   type: MessageType.CredentialCreationResponse;
-  approved: boolean;
   result?: CredentialRegistrationResult;
+  error?: MessageError;
 };
 
 export type CredentialGetRequest = {
@@ -33,6 +35,7 @@ export type CredentialGetRequest = {
 export type CredentialGetResponse = {
   type: MessageType.CredentialGetResponse;
   result?: CredentialAssertResult;
+  error?: MessageError;
 };
 
 export type AbortRequest = {

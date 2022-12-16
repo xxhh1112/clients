@@ -19,8 +19,16 @@ navigator.credentials.create = async (options?: CredentialCreationOptions): Prom
     data: WebauthnUtils.mapCredentialCreationOptions(options, window.location.origin),
   });
 
-  if (response.type !== MessageType.CredentialCreationResponse || !response.approved) {
+  if (response.type !== MessageType.CredentialCreationResponse) {
     return await browserCredentials.create(options);
+  }
+
+  if (response.error && response.error.fallbackRequested) {
+    return await browserCredentials.create(options);
+  }
+
+  if (response.error) {
+    throw new Error(response.error.message ?? "The request was aborted.");
   }
 
   return WebauthnUtils.mapCredentialRegistrationResult(response.result);
@@ -34,6 +42,14 @@ navigator.credentials.get = async (options?: CredentialRequestOptions): Promise<
 
   if (response.type !== MessageType.CredentialGetResponse) {
     return await browserCredentials.get(options);
+  }
+
+  if (response.error && response.error.fallbackRequested) {
+    return await browserCredentials.create(options);
+  }
+
+  if (response.error) {
+    throw new Error(response.error.message ?? "The request was aborted.");
   }
 
   return WebauthnUtils.mapCredentialAssertResult(response.result);

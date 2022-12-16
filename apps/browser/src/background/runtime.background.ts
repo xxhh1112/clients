@@ -209,9 +209,17 @@ export default class RuntimeBackground {
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
       case "fido2RegisterCredentialRequest":
-        return await this.main.fido2Service.createCredential(msg.data);
+        try {
+          return { result: await this.main.fido2Service.createCredential(msg.data) };
+        } catch (error) {
+          return { error: { ...error, message: error.message } };
+        }
       case "fido2GetCredentialRequest":
-        return await this.main.fido2Service.assertCredential(msg.data);
+        try {
+          return { result: await this.main.fido2Service.assertCredential(msg.data) };
+        } catch (error) {
+          return { error: { ...error, message: error.message } };
+        }
     }
     return undefined;
   }

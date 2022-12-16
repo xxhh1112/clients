@@ -21,8 +21,8 @@ messenger.addHandler(async (message) => {
         (response) => {
           resolve({
             type: MessageType.CredentialCreationResponse,
-            approved: true,
-            result: response,
+            result: response.result,
+            error: response.error,
           });
         }
       );
@@ -39,7 +39,8 @@ messenger.addHandler(async (message) => {
         (response) => {
           resolve({
             type: MessageType.CredentialGetResponse,
-            result: response,
+            result: response.result,
+            error: response.error,
           });
         }
       );

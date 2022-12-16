@@ -9,5 +9,8 @@
     <ng-container *ngIf="data.type == 'VerifyUserRequest'">Authenticate</ng-container>
     <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
   </button>
-  <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-outline-secondary" (click)="cancel(true)">
+    Use browser built-in
+  </button>
+  <button type="button" class="btn btn-outline-secondary" (click)="cancel(false)">Abort</button>
 </div>

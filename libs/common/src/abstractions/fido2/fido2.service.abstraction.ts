@@ -54,6 +54,12 @@ export interface CredentialAssertResult {
   userHandle: string;
 }
 
+export class RequestAbortedError extends Error {
+  constructor(readonly fallbackRequested = false) {
+    super("Fido2 request was aborted");
+  }
+}
+
 export abstract class Fido2Service {
   createCredential: (params: CredentialRegistrationParams) => Promise<CredentialRegistrationResult>;
   assertCredential: (params: CredentialAssertParams) => Promise<CredentialAssertResult>;
