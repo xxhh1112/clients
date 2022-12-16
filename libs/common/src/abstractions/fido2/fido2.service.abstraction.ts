@@ -39,7 +39,22 @@ export interface CredentialRegistrationResult {
   attestationObject: string;
 }
 
+export interface CredentialAssertParams {
+  allowedCredentialIds: string[];
+  rpId: string;
+  origin: string;
+  challenge: string;
+}
+
+export interface CredentialAssertResult {
+  credentialId: string;
+  clientDataJSON: string;
+  authenticatorData: string;
+  signature: string;
+  userHandle: string;
+}
+
 export abstract class Fido2Service {
   createCredential: (params: CredentialRegistrationParams) => Promise<CredentialRegistrationResult>;
-  assertCredential: () => unknown;
+  assertCredential: (params: CredentialAssertParams) => Promise<CredentialAssertResult>;
 }

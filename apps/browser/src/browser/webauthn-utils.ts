@@ -1,5 +1,7 @@
 import { Fido2Utils } from "@bitwarden/common/abstractions/fido2/fido2-utils";
 import {
+  CredentialAssertParams,
+  CredentialAssertResult,
   CredentialRegistrationParams,
   CredentialRegistrationResult,
 } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
@@ -59,6 +61,40 @@ export class WebauthnUtils {
         clientDataJSON: Fido2Utils.stringToBuffer(result.clientDataJSON),
         attestationObject: Fido2Utils.stringToBuffer(result.attestationObject),
       } as AuthenticatorAttestationResponse,
+      getClientExtensionResults: () => ({}),
+    };
+  }
+
+  static mapCredentialRequestOptions(
+    options: CredentialRequestOptions,
+    origin: string
+  ): CredentialAssertParams {
+    const keyOptions = options.publicKey;
+
+    if (keyOptions == undefined) {
+      throw new Error("Public-key options not found");
+    }
+
+    return {
+      origin,
+      allowedCredentialIds:
+        keyOptions.allowCredentials?.map((c) => Fido2Utils.bufferToString(c.id)) ?? [],
+      challenge: Fido2Utils.bufferToString(keyOptions.challenge),
+      rpId: keyOptions.rpId,
+    };
+  }
+
+  static mapCredentialAssertResult(result: CredentialAssertResult): PublicKeyCredential {
+    return {
+      id: result.credentialId,
+      rawId: Fido2Utils.stringToBuffer(result.credentialId),
+      type: "public-key",
+      response: {
+        authenticatorData: Fido2Utils.stringToBuffer(result.authenticatorData),
+        clientDataJSON: Fido2Utils.stringToBuffer(result.clientDataJSON),
+        signature: Fido2Utils.stringToBuffer(result.signature),
+        userHandle: Fido2Utils.stringToBuffer(result.userHandle),
+      } as AuthenticatorAssertionResponse,
       getClientExtensionResults: () => ({}),
     };
   }

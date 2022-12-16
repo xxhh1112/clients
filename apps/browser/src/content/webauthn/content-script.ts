@@ -29,5 +29,22 @@ messenger.addHandler(async (message) => {
     });
   }
 
+  if (message.type === MessageType.CredentialGetRequest) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        {
+          command: "fido2GetCredentialRequest",
+          data: message.data,
+        },
+        (response) => {
+          resolve({
+            type: MessageType.CredentialGetResponse,
+            result: response,
+          });
+        }
+      );
+    });
+  }
+
   return undefined;
 });

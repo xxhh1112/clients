@@ -27,5 +27,14 @@ navigator.credentials.create = async (options?: CredentialCreationOptions): Prom
 };
 
 navigator.credentials.get = async (options?: CredentialRequestOptions): Promise<Credential> => {
-  return await browserCredentials.get(options);
+  const response = await messenger.request({
+    type: MessageType.CredentialGetRequest,
+    data: WebauthnUtils.mapCredentialRequestOptions(options, window.location.origin),
+  });
+
+  if (response.type !== MessageType.CredentialGetResponse) {
+    return await browserCredentials.get(options);
+  }
+
+  return WebauthnUtils.mapCredentialAssertResult(response.result);
 };

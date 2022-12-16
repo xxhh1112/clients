@@ -1,4 +1,6 @@
 import {
+  CredentialAssertParams,
+  CredentialAssertResult,
   CredentialRegistrationParams,
   CredentialRegistrationResult,
 } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
@@ -25,10 +27,12 @@ export type CredentialCreationResponse = {
 
 export type CredentialGetRequest = {
   type: MessageType.CredentialGetRequest;
+  data: CredentialAssertParams;
 };
 
 export type CredentialGetResponse = {
   type: MessageType.CredentialGetResponse;
+  result?: CredentialAssertResult;
 };
 
 export type AbortRequest = {

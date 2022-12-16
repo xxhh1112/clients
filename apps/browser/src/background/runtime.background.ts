@@ -210,6 +210,8 @@ export default class RuntimeBackground {
         break;
       case "fido2RegisterCredentialRequest":
         return await this.main.fido2Service.createCredential(msg.data);
+      case "fido2GetCredentialRequest":
+        return await this.main.fido2Service.assertCredential(msg.data);
     }
     return undefined;
   }

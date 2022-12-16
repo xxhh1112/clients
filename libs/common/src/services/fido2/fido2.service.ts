@@ -3,6 +3,8 @@ import { CBOR } from "cbor-redux";
 import { Fido2UserInterfaceService } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../../abstractions/fido2/fido2-utils";
 import {
+  CredentialAssertParams,
+  CredentialAssertResult,
   CredentialRegistrationParams,
   CredentialRegistrationResult,
   Fido2Service as Fido2ServiceAbstraction,
@@ -102,7 +104,74 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     };
   }
 
-  assertCredential(): unknown {
+  async assertCredential(params: CredentialAssertParams): Promise<CredentialAssertResult> {
+    let credential: BitCredential | undefined;
+
+    if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
+      // We're looking for regular non-resident keys
+      credential = this.getCredential(params.allowedCredentialIds);
+    } else {
+      // We're looking for a resident key
+      credential = this.getCredentialByRp(params.rpId);
+    }
+
+    if (credential === undefined) {
+      throw new Error("No valid credentials found");
+    }
+
+    if (credential.origin !== params.origin) {
+      throw new Error("Not allowed: Origin mismatch");
+    }
+
+    const encoder = new TextEncoder();
+    const clientData = encoder.encode(
+      JSON.stringify({
+        type: "webauthn.get",
+        challenge: params.challenge,
+        origin: params.origin,
+      })
+    );
+
+    const authData = await generateAuthData({
+      credentialId: credential.credentialId,
+      rpId: params.rpId,
+      userPresence: true,
+      userVerification: true,
+    });
+
+    const signature = await generateSignature({
+      authData,
+      clientData,
+      keyPair: credential.keyPair,
+    });
+
+    return {
+      credentialId: credential.credentialId.encoded,
+      clientDataJSON: Fido2Utils.bufferToString(clientData),
+      authenticatorData: Fido2Utils.bufferToString(authData),
+      signature: Fido2Utils.bufferToString(signature),
+      userHandle: Fido2Utils.bufferToString(credential.userHandle),
+    };
+  }
+
+  private getCredential(allowedCredentialIds: string[]): BitCredential | undefined {
+    let credential: BitCredential | undefined;
+    for (const allowedCredential of allowedCredentialIds) {
+      const id = new CredentialId(allowedCredential);
+      if (this.credentials.has(id.encoded)) {
+        credential = this.credentials.get(id.encoded);
+        break;
+      }
+    }
+    return credential;
+  }
+
+  private getCredentialByRp(rpId: string): BitCredential | undefined {
+    for (const credential of this.credentials.values()) {
+      if (credential.rpId === rpId) {
+        return credential;
+      }
+    }
     return undefined;
   }
 }
