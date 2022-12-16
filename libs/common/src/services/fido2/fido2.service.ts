@@ -32,7 +32,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   async createCredential(
     params: CredentialRegistrationParams
   ): Promise<CredentialRegistrationResult> {
-    await this.fido2UserInterfaceService.confirmNewCredential();
+    const presence = await this.fido2UserInterfaceService.confirmNewCredential();
     // eslint-disable-next-line no-console
     console.log("Fido2Service.createCredential", params);
 
@@ -59,7 +59,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const authData = await generateAuthData({
       rpId: params.rp.id,
       credentialId,
-      userPresence: true,
+      userPresence: presence,
       userVerification: false,
       keyPair,
       attestationFormat: STANDARD_ATTESTATION_FORMAT,
@@ -105,6 +105,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   }
 
   async assertCredential(params: CredentialAssertParams): Promise<CredentialAssertResult> {
+    const presence = await this.fido2UserInterfaceService.verifyPresence();
+
     let credential: BitCredential | undefined;
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
@@ -135,8 +137,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const authData = await generateAuthData({
       credentialId: credential.credentialId,
       rpId: params.rpId,
-      userPresence: true,
-      userVerification: true,
+      userPresence: presence,
+      userVerification: false,
     });
 
     const signature = await generateSignature({
