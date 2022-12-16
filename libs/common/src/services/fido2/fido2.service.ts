@@ -8,7 +8,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   constructor(private fido2UserInterfaceService: Fido2UserInterfaceService) {}
 
   async createCredential(params: CredentialRegistrationParams): Promise<unknown> {
-    await this.fido2UserInterfaceService.verifyPresence();
+    await this.fido2UserInterfaceService.confirmNewCredential();
     // eslint-disable-next-line no-console
     console.log("Fido2Service.registerCredential", params);
     return "createCredential response";

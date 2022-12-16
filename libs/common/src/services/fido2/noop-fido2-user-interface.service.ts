@@ -8,4 +8,8 @@ export class Fido2UserInterfaceService implements Fido2UserInterfaceServiceAbstr
   async verifyPresence(): Promise<boolean> {
     return false;
   }
+
+  async confirmNewCredential(): Promise<boolean> {
+    return false;
+  }
 }

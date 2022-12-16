@@ -119,16 +119,6 @@ import RuntimeBackground from "./runtime.background";
 import TabsBackground from "./tabs.background";
 import WebRequestBackground from "./webRequest.background";
 
-export class Fido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  async verifyUser(): Promise<boolean> {
-    return false;
-  }
-
-  async verifyPresence(): Promise<boolean> {
-    return false;
-  }
-}
-
 export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
   storageService: AbstractStorageService;

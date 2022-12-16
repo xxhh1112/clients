@@ -16,6 +16,12 @@ export type BrowserFido2Message = { requestId: string } & (
       type: "VerifyUserResponse";
     }
   | {
+      type: "ConfirmNewCredentialRequest";
+    }
+  | {
+      type: "ConfirmNewCredentialResponse";
+    }
+  | {
       type: "RequestCancelled";
     }
 );
@@ -59,6 +65,31 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     );
 
     if (response.type === "VerifyUserResponse") {
+      return true;
+    }
+
+    return false;
+  }
+
+  async confirmNewCredential(): Promise<boolean> {
+    const requestId = Utils.newGuid();
+    const data: BrowserFido2Message = { type: "ConfirmNewCredentialRequest", requestId };
+    const queryParams = new URLSearchParams(data).toString();
+    this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      { center: true }
+    );
+
+    const response = await lastValueFrom(
+      this.messages$.pipe(
+        filter((msg) => msg.requestId === requestId),
+        first(),
+        takeUntil(this.destroy$)
+      )
+    );
+
+    if (response.type === "ConfirmNewCredentialResponse") {
       return true;
     }
 

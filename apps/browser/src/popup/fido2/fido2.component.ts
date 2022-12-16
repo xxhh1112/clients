@@ -18,12 +18,26 @@ export class Fido2Component {
     return this.activatedRoute.snapshot.queryParams as BrowserFido2Message;
   }
 
-  async verify() {
+  async accept() {
     const data = this.data;
-    BrowserFido2UserInterfaceService.sendMessage({
-      requestId: data.requestId,
-      type: "VerifyUserResponse",
-    });
+
+    if (data.type === "VerifyUserRequest") {
+      BrowserFido2UserInterfaceService.sendMessage({
+        requestId: data.requestId,
+        type: "VerifyUserResponse",
+      });
+    } else if (data.type === "ConfirmNewCredentialRequest") {
+      BrowserFido2UserInterfaceService.sendMessage({
+        requestId: data.requestId,
+        type: "ConfirmNewCredentialResponse",
+      });
+    } else {
+      BrowserFido2UserInterfaceService.sendMessage({
+        requestId: data.requestId,
+        type: "RequestCancelled",
+      });
+    }
+
     window.close();
   }
 
