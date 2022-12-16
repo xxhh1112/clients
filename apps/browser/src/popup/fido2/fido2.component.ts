@@ -27,8 +27,13 @@ export class Fido2Component {
     window.close();
   }
 
+  cancel() {
+    this.unload();
+    window.close();
+  }
+
   @HostListener("window:unload")
-  unloadHandler() {
+  unload() {
     const data = this.data;
     BrowserFido2UserInterfaceService.sendMessage({
       requestId: data.requestId,
