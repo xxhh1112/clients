@@ -44,7 +44,11 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     const requestId = Utils.newGuid();
     const data: BrowserFido2Message = { type: "VerifyUserRequest", requestId };
     const queryParams = new URLSearchParams(data).toString();
-    this.popupUtilsService.popOut(null, `popup/index.html?uilocation=popout#/fido2?${queryParams}`);
+    this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      { center: true }
+    );
 
     const response = await lastValueFrom(
       this.messages$.pipe(

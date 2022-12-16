@@ -42,7 +42,7 @@ export class PopupUtilsService {
     }
   }
 
-  popOut(win: Window, href: string = null): void {
+  popOut(win: Window, href: string = null, options: { center?: boolean } = {}): void {
     if (href === null) {
       href = win.location.href;
     }
@@ -60,11 +60,17 @@ export class PopupUtilsService {
       }
 
       const bodyRect = document.querySelector("body").getBoundingClientRect();
+      const width = Math.round(bodyRect.width ? bodyRect.width + 60 : 375);
+      const height = Math.round(bodyRect.height || 600);
+      const top = options.center ? Math.round((screen.height - height) / 2) : undefined;
+      const left = options.center ? Math.round((screen.width - width) / 2) : undefined;
       chrome.windows.create({
         url: href,
         type: "popup",
-        width: Math.round(bodyRect.width ? bodyRect.width + 60 : 375),
-        height: Math.round(bodyRect.height || 600),
+        width,
+        height,
+        top,
+        left,
       });
 
       if (win && this.inPopup(win)) {
