@@ -107,8 +107,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   }
 
   async assertCredential(params: CredentialAssertParams): Promise<CredentialAssertResult> {
-    const presence = await this.fido2UserInterfaceService.verifyPresence();
-
     let credential: BitCredential | undefined;
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
@@ -126,6 +124,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     if (credential.origin !== params.origin) {
       throw new OriginMismatchError();
     }
+
+    const presence = await this.fido2UserInterfaceService.verifyPresence();
 
     const encoder = new TextEncoder();
     const clientData = encoder.encode(
