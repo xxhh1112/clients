@@ -63,78 +63,71 @@
       </div>
     </div>
   </div>
-</form>
 
-<ng-template [formGroup]="formGroup" #loginPage>
-  <div class="tw-mb-6 tw-h-28">
-    <bit-form-field class="!tw-mb-1">
-      <bit-label>{{ "masterPass" | i18n }}</bit-label>
-      <input
-        id="login_input_master-password"
-        bitInput
-        [type]="showPassword ? 'text' : 'password'"
-        formControlName="masterPassword"
-        appAutofocus
-      />
-      <button type="button" bitSuffix bitButton (click)="togglePassword()">
-        <i
-          aria-hidden="true"
-          class="bwi bwi-lg bwi-eye"
-          [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-        ></i>
+  <ng-template #loginPage>
+    <div class="tw-mb-6 tw-h-28">
+      <bit-form-field class="!tw-mb-1">
+        <bit-label>{{ "masterPass" | i18n }}</bit-label>
+        <input
+          id="login_input_master-password"
+          bitInput
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="masterPassword"
+          appAutofocus
+        />
+        <button type="button" bitSuffix bitButton (click)="togglePassword()">
+          <i
+            aria-hidden="true"
+            class="bwi bwi-lg bwi-eye"
+            [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+          ></i>
+        </button>
+      </bit-form-field>
+      <a class="-tw-mt-2" routerLink="/hint" (mousedown)="goToHint()" (click)="setFormValues()">{{
+        "getMasterPasswordHint" | i18n
+      }}</a>
+    </div>
+
+    <div [hidden]="!showCaptcha()">
+      <iframe id="hcaptcha_iframe" height="80"></iframe>
+    </div>
+
+    <div class="tw-mb-3 tw-flex tw-space-x-4">
+      <button bitButton bitFormButton buttonType="primary" type="submit" [block]="true">
+        <span> {{ "loginWithMasterPassword" | i18n }} </span>
       </button>
-    </bit-form-field>
-    <a class="-tw-mt-2" routerLink="/hint" (mousedown)="goToHint()" (click)="setFormValues()">{{
-      "getMasterPasswordHint" | i18n
-    }}</a>
-  </div>
+    </div>
 
-  <div [hidden]="!showCaptcha()">
-    <iframe id="hcaptcha_iframe" height="80"></iframe>
-  </div>
+    <div class="tw-mb-3" *ngIf="showLoginWithDevice && showPasswordless">
+      <button
+        bitButton
+        type="button"
+        [block]="true"
+        buttonType="secondary"
+        (click)="startPasswordlessLogin()"
+      >
+        <span> <i class="bwi bwi-mobile"></i> {{ "loginWithDevice" | i18n }} </span>
+      </button>
+    </div>
 
-  <div class="tw-mb-3 tw-flex tw-space-x-4">
-    <button
-      bitButton
-      bitFormButton
-      buttonType="primary"
-      type="submit"
-      [block]="true"
-      [loading]="form.loading"
-    >
-      <span> {{ "loginWithMasterPassword" | i18n }} </span>
-    </button>
-  </div>
+    <div class="tw-mb-3">
+      <a
+        routerLink="/sso"
+        (click)="saveEmailSettings()"
+        bitButton
+        buttonType="secondary"
+        class="tw-w-full"
+      >
+        <i class="bwi bwi-provider tw-mr-2"></i>
+        {{ "enterpriseSingleSignOn" | i18n }}
+      </a>
+    </div>
 
-  <div class="tw-mb-3" *ngIf="showLoginWithDevice && showPasswordless">
-    <button
-      bitButton
-      type="button"
-      [block]="true"
-      buttonType="secondary"
-      (click)="startPasswordlessLogin()"
-    >
-      <span> <i class="bwi bwi-mobile"></i> {{ "loginWithDevice" | i18n }} </span>
-    </button>
-  </div>
+    <hr />
 
-  <div class="tw-mb-3">
-    <a
-      routerLink="/sso"
-      (click)="saveEmailSettings()"
-      bitButton
-      buttonType="secondary"
-      class="tw-w-full"
-    >
-      <i class="bwi bwi-provider tw-mr-2"></i>
-      {{ "enterpriseSingleSignOn" | i18n }}
-    </a>
-  </div>
-
-  <hr />
-
-  <div class="tw-m-0 tw-text-sm">
-    <p class="tw-mb-1">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
-    <a [routerLink]="[]" (click)="toggleValidateEmail(false)">{{ "notYou" | i18n }}</a>
-  </div>
-</ng-template>
+    <div class="tw-m-0 tw-text-sm">
+      <p class="tw-mb-1">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
+      <a [routerLink]="[]" (click)="toggleValidateEmail(false)">{{ "notYou" | i18n }}</a>
+    </div>
+  </ng-template>
+</form>
