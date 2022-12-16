@@ -22,6 +22,7 @@ messenger.addHandler(async (message) => {
           resolve({
             type: MessageType.CredentialCreationResponse,
             approved: true,
+            result: response,
           });
         }
       );

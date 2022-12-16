@@ -4,6 +4,7 @@ import { Fido2UserInterfaceService } from "../../abstractions/fido2/fido2-user-i
 import { Fido2Utils } from "../../abstractions/fido2/fido2-utils";
 import {
   CredentialRegistrationParams,
+  CredentialRegistrationResult,
   Fido2Service as Fido2ServiceAbstraction,
 } from "../../abstractions/fido2/fido2.service.abstraction";
 import { Utils } from "../../misc/utils";
@@ -26,10 +27,12 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
   constructor(private fido2UserInterfaceService: Fido2UserInterfaceService) {}
 
-  async createCredential(params: CredentialRegistrationParams): Promise<unknown> {
+  async createCredential(
+    params: CredentialRegistrationParams
+  ): Promise<CredentialRegistrationResult> {
     await this.fido2UserInterfaceService.confirmNewCredential();
     // eslint-disable-next-line no-console
-    console.log("Fido2Service.registerCredential", params);
+    console.log("Fido2Service.createCredential", params);
 
     const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
@@ -39,7 +42,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       JSON.stringify({
         type: "webauthn.create",
         challenge: params.challenge,
-        origin,
+        origin: params.origin,
       })
     );
     const keyPair = await crypto.subtle.generateKey(
@@ -80,20 +83,22 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     this.credentials.set(credentialId.encoded, {
       credentialId,
       keyPair,
-      origin,
+      origin: params.origin,
       rpId: params.rp.id,
       userHandle: Fido2Utils.stringToBuffer(params.user.id),
     });
 
+    // eslint-disable-next-line no-console
+    console.log("Fido2Service.createCredential => result", {
+      credentialId: Fido2Utils.bufferToString(credentialId.raw),
+      clientDataJSON: Fido2Utils.bufferToString(clientData),
+      attestationObject: Fido2Utils.bufferToString(attestationObject),
+    });
+
     return {
-      id: credentialId.encoded,
-      rawId: credentialId.raw,
-      type: "public-key",
-      response: {
-        clientDataJSON: clientData,
-        attestationObject: attestationObject,
-      } as AuthenticatorAttestationResponse,
-      getClientExtensionResults: () => ({}),
+      credentialId: Fido2Utils.bufferToString(credentialId.raw),
+      clientDataJSON: Fido2Utils.bufferToString(clientData),
+      attestationObject: Fido2Utils.bufferToString(attestationObject),
     };
   }
 
@@ -174,8 +179,7 @@ async function generateAuthData(params: AuthDataParams) {
     coseBytes.set(keyY, 10 + 32 + 3);
 
     // credential public key - convert to array from CBOR encoded COSE key
-    const credPublicKeyBytes = coseBytes.subarray(0, -1);
-    attestedCredentialData.push(...credPublicKeyBytes);
+    attestedCredentialData.push(...coseBytes);
 
     authData.push(...attestedCredentialData);
   }

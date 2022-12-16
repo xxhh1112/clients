@@ -1,4 +1,7 @@
-import { CredentialRegistrationParams } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
+import {
+  CredentialRegistrationParams,
+  CredentialRegistrationResult,
+} from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
 
 export enum MessageType {
   CredentialCreationRequest,
@@ -17,6 +20,7 @@ export type CredentialCreationRequest = {
 export type CredentialCreationResponse = {
   type: MessageType.CredentialCreationResponse;
   approved: boolean;
+  result?: CredentialRegistrationResult;
 };
 
 export type CredentialGetRequest = {

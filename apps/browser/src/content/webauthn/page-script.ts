@@ -14,12 +14,16 @@ const browserCredentials = {
 const messenger = Messenger.forDOMCommunication(window);
 
 navigator.credentials.create = async (options?: CredentialCreationOptions): Promise<Credential> => {
-  await messenger.request({
+  const response = await messenger.request({
     type: MessageType.CredentialCreationRequest,
     data: WebauthnUtils.mapCredentialCreationOptions(options, window.location.origin),
   });
 
-  return await browserCredentials.create(options);
+  if (response.type !== MessageType.CredentialCreationResponse || !response.approved) {
+    return await browserCredentials.create(options);
+  }
+
+  return WebauthnUtils.mapCredentialRegistrationResult(response.result);
 };
 
 navigator.credentials.get = async (options?: CredentialRequestOptions): Promise<Credential> => {
