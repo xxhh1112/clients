@@ -54,9 +54,30 @@ export interface CredentialAssertResult {
   userHandle: string;
 }
 
-export class RequestAbortedError extends Error {
-  constructor(readonly fallbackRequested = false) {
-    super("Fido2 request was aborted");
+export class Fido2Error extends Error {
+  constructor(message: string, readonly fallbackRequested = false) {
+    super(message);
+  }
+}
+
+export class RequestAbortedError extends Fido2Error {
+  constructor(fallbackRequested = false) {
+    super("Fido2 request was aborted", fallbackRequested);
+  }
+}
+
+export class NoCredentialFoundError extends Fido2Error {
+  constructor() {
+    super("No valid credential found", true);
+  }
+}
+
+export class OriginMismatchError extends Fido2Error {
+  constructor() {
+    super(
+      "Authentication requests must originate from the same source that created the credential.",
+      false
+    );
   }
 }
 

@@ -8,6 +8,8 @@ import {
   CredentialRegistrationParams,
   CredentialRegistrationResult,
   Fido2Service as Fido2ServiceAbstraction,
+  NoCredentialFoundError,
+  OriginMismatchError,
 } from "../../abstractions/fido2/fido2.service.abstraction";
 import { Utils } from "../../misc/utils";
 
@@ -118,11 +120,11 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     }
 
     if (credential === undefined) {
-      throw new Error("No valid credentials found");
+      throw new NoCredentialFoundError();
     }
 
     if (credential.origin !== params.origin) {
-      throw new Error("Not allowed: Origin mismatch");
+      throw new OriginMismatchError();
     }
 
     const encoder = new TextEncoder();
