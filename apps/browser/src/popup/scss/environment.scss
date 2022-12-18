@@ -1,18 +1,6 @@
 @import "variables.scss";
 
 html.browser_safari {
-  body {
-    height: 360px !important;
-
-    &.body-xs {
-      height: 300px !important;
-    }
-
-    &.body-full {
-      height: 100% !important;
-    }
-  }
-
   header {
     .search .bwi {
       left: 20px;
