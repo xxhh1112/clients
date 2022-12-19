@@ -30,6 +30,10 @@ export class RadioButtonComponent {
     return this.groupComponent.disabled;
   }
 
+  get inline() {
+    return this.groupComponent.inline;
+  }
+
   protected onInputChange() {
     this.groupComponent.onInputChange(this.value);
   }

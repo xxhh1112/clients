@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Component, ContentChild, HostBinding, Input, Optional, Self } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 
@@ -12,6 +13,14 @@ let nextId = 0;
 export class RadioGroupComponent implements ControlValueAccessor {
   selected: unknown;
   disabled = false;
+
+  private _inline = false;
+  @Input() get inline() {
+    return this._inline;
+  }
+  set inline(value: boolean | "") {
+    this._inline = coerceBooleanProperty(value);
+  }
 
   private _name?: string;
   @Input() get name() {
