@@ -11,6 +11,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { ProductType } from "@bitwarden/common/enums/productType";
 import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
@@ -25,6 +26,7 @@ import { DialogService } from "@bitwarden/components";
 import { CollectionDialogResult, openCollectionDialog } from "../shared";
 
 import { EntityUsersComponent } from "./entity-users.component";
+import { OrgUpgradeDialogComponent } from "./org-upgrade-dialog/org-upgrade-dialog.component";
 
 @Component({
   selector: "app-org-manage-collections",
@@ -127,6 +129,32 @@ export class CollectionsComponent implements OnInit {
 
     if (!(canCreate || canEdit || canDelete)) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("missingPermissions"));
+      return;
+    }
+
+    if (
+      !collection &&
+      this.organization.planProductType === ProductType.Free &&
+      this.collections.length === this.organization.maxCollections
+    ) {
+      // Show org upgrade modal
+      const dialogBodyText = this.organization.canManageBilling
+        ? this.i18nService.t(
+            "freeOrgMaxCollectionReachedManageBilling",
+            this.organization.maxCollections.toString()
+          )
+        : this.i18nService.t(
+            "freeOrgMaxCollectionReachedNoManageBilling",
+            this.organization.maxCollections.toString()
+          );
+
+      this.dialogService.open(OrgUpgradeDialogComponent, {
+        data: {
+          orgId: this.organization.id,
+          dialogBodyText: dialogBodyText,
+          orgCanManageBilling: this.organization.canManageBilling,
+        },
+      });
       return;
     }
 
