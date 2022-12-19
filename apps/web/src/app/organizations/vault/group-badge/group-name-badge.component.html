@@ -1,0 +1,6 @@
+<ng-container *ngFor="let c of shownGroups">
+  <span bitBadge badgeType="secondary">{{ c.id | groupNameFromId: allGroups }}</span>
+</ng-container>
+<ng-container *ngIf="showXMore">
+  <span bitBadge badgeType="secondary">+ {{ xMoreCount }} more</span>
+</ng-container>

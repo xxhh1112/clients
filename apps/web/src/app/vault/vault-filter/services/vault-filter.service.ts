@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   BehaviorSubject,
   combineLatestWith,
@@ -7,9 +7,7 @@ import {
   Observable,
   of,
   ReplaySubject,
-  Subject,
   switchMap,
-  takeUntil,
 } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -26,6 +24,7 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
+import { CollectionAdminView } from "../../../organizations/core";
 import {
   CipherTypeFilter,
   CollectionFilter,
@@ -38,7 +37,7 @@ import { VaultFilterService as VaultFilterServiceAbstraction } from "./abstracti
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService implements VaultFilterServiceAbstraction, OnDestroy {
+export class VaultFilterService implements VaultFilterServiceAbstraction {
   protected _collapsedFilterNodes = new BehaviorSubject<Set<string>>(null);
   collapsedFilterNodes$: Observable<Set<string>> = this._collapsedFilterNodes.pipe(
     switchMap(async (nodes) => nodes ?? (await this.getCollapsedFilterNodes()))
@@ -49,23 +48,30 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
       switchMap((orgs) => this.buildOrganizationTree(orgs))
     );
 
-  protected _filteredFolders = new ReplaySubject<FolderView[]>(1);
-  filteredFolders$: Observable<FolderView[]> = this._filteredFolders.asObservable();
-  protected _filteredCollections = new ReplaySubject<CollectionView[]>(1);
-  filteredCollections$: Observable<CollectionView[]> = this._filteredCollections.asObservable();
+  protected _organizationFilter = new BehaviorSubject<Organization>(null);
 
+  filteredFolders$: Observable<FolderView[]> = this.folderService.folderViews$.pipe(
+    combineLatestWith(this._organizationFilter),
+    switchMap(([folders, org]) => {
+      return this.filterFolders(folders, org);
+    })
+  );
   folderTree$: Observable<TreeNode<FolderFilter>> = this.filteredFolders$.pipe(
     map((folders) => this.buildFolderTree(folders))
+  );
+
+  // TODO: Remove once collections is refactored with observables
+  // replace with collection service observable
+  private collectionViews$ = new ReplaySubject<CollectionView[]>(1);
+  filteredCollections$: Observable<CollectionView[]> = this.collectionViews$.pipe(
+    combineLatestWith(this._organizationFilter),
+    switchMap(([collections, org]) => {
+      return this.filterCollections(collections, org);
+    })
   );
   collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => this.buildCollectionTree(collections))
   );
-
-  protected _organizationFilter = new BehaviorSubject<Organization>(null);
-  protected destroy$: Subject<void> = new Subject<void>();
-
-  // TODO: Remove once collections is refactored with observables
-  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
 
   constructor(
     protected stateService: StateService,
@@ -75,41 +81,16 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
     protected collectionService: CollectionService,
     protected policyService: PolicyService,
     protected i18nService: I18nService
-  ) {
-    this.loadSubscriptions();
-  }
-
-  protected loadSubscriptions() {
-    this.folderService.folderViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(([folders, org]) => {
-          return this.filterFolders(folders, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredFolders);
-
-    // TODO: Use collectionService once collections is refactored
-    this.collectionViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(([collections, org]) => {
-          return this.filterCollections(collections, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredCollections);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ) {}
 
   // TODO: Remove once collections is refactored with observables
   async reloadCollections() {
     this.collectionViews$.next(await this.collectionService.getAllDecrypted());
+  }
+
+  async getCollectionNodeFromTree(id: string) {
+    const collections = await firstValueFrom(this.collectionTree$);
+    return ServiceUtils.getTreeNodeObject(collections, id) as TreeNode<CollectionFilter>;
   }
 
   async setCollapsedFilterNodes(collapsedFilterNodes: Set<string>): Promise<void> {
@@ -208,6 +189,9 @@ export class VaultFilterService implements VaultFilterServiceAbstraction, OnDest
       collectionCopy.id = c.id;
       collectionCopy.organizationId = c.organizationId;
       collectionCopy.icon = "bwi-collection";
+      if (c instanceof CollectionAdminView) {
+        collectionCopy.groups = c.groups;
+      }
       const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
       ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
     });

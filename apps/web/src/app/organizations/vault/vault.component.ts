@@ -8,8 +8,8 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { firstValueFrom } from "rxjs";
-import { first } from "rxjs/operators";
+import { combineLatest, firstValueFrom, Subject } from "rxjs";
+import { first, switchMap, takeUntil } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -55,11 +55,12 @@ export class VaultComponent implements OnInit, OnDestroy {
   organization: Organization;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
-    private vaultFilterService: VaultFilterService,
+    protected vaultFilterService: VaultFilterService,
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
     private syncService: SyncService,
@@ -73,82 +74,75 @@ export class VaultComponent implements OnInit, OnDestroy {
     private passwordRepromptService: PasswordRepromptService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.trashCleanupWarning = this.i18nService.t(
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
         : "trashCleanupWarning"
     );
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.parent.params.subscribe(async (params: any) => {
+
+    this.route.parent.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.organization = this.organizationService.get(params.organizationId);
-      this.vaultItemsComponent.organization = this.organization;
+    });
 
-      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-      this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-        this.vaultItemsComponent.searchText = this.vaultFilterComponent.searchText = qParams.search;
-        if (!this.organization.canViewAllCollections) {
-          await this.syncService.fullSync(false);
-          this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-            this.ngZone.run(async () => {
-              switch (message.command) {
-                case "syncCompleted":
-                  if (message.successfully) {
-                    await Promise.all([
-                      this.vaultFilterService.reloadCollections(),
-                      this.vaultItemsComponent.refresh(),
-                    ]);
-                    this.changeDetectorRef.detectChanges();
-                  }
-                  break;
-              }
-            });
-          });
-        }
+    this.route.queryParams.pipe(first(), takeUntil(this.destroy$)).subscribe((qParams) => {
+      this.vaultItemsComponent.searchText = this.vaultFilterComponent.searchText = qParams.search;
+    });
 
-        await this.vaultItemsComponent.reload(
-          this.activeFilter.buildFilter(),
-          this.activeFilter.isDeleted
-        );
-
-        if (qParams.viewEvents != null) {
-          const cipher = this.vaultItemsComponent.ciphers.filter(
-            (c) => c.id === qParams.viewEvents
-          );
-          if (cipher.length > 0) {
-            this.viewEvents(cipher[0]);
+    // verifies that the organization has been set
+    combineLatest([this.route.queryParams, this.route.parent.params])
+      .pipe(
+        switchMap(async ([qParams, params]) => {
+          const cipherId = getCipherIdFromParams(qParams);
+          if (!cipherId) {
+            return;
           }
-        }
+          if (
+            // Handle users with implicit collection access since they use the admin endpoint
+            this.organization.canUseAdminCollections ||
+            (await this.cipherService.get(cipherId)) != null
+          ) {
+            this.editCipherId(cipherId);
+          } else {
+            this.platformUtilsService.showToast(
+              "error",
+              this.i18nService.t("errorOccurred"),
+              this.i18nService.t("unknownCipher")
+            );
+            this.router.navigate([], {
+              queryParams: { cipherId: null, itemId: null },
+              queryParamsHandling: "merge",
+            });
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
 
-        /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-        this.route.queryParams.subscribe(async (params) => {
-          const cipherId = getCipherIdFromParams(params);
-          if (cipherId) {
-            if (
-              // Handle users with implicit collection access since they use the admin endpoint
-              this.organization.canUseAdminCollections ||
-              (await this.cipherService.get(cipherId)) != null
-            ) {
-              this.editCipherId(cipherId);
-            } else {
-              this.platformUtilsService.showToast(
-                "error",
-                this.i18nService.t("errorOccurred"),
-                this.i18nService.t("unknownCipher")
-              );
-              this.router.navigate([], {
-                queryParams: { cipherId: null, itemId: null },
-                queryParamsHandling: "merge",
-              });
-            }
+    if (!this.organization.canUseAdminCollections) {
+      this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+        this.ngZone.run(async () => {
+          switch (message.command) {
+            case "syncCompleted":
+              if (message.successfully) {
+                await Promise.all([
+                  this.vaultFilterService.reloadCollections(),
+                  this.vaultItemsComponent.refresh(),
+                ]);
+                this.changeDetectorRef.detectChanges();
+              }
+              break;
           }
         });
       });
-    });
+      await this.syncService.fullSync(false);
+    }
   }
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async applyVaultFilter(filter: VaultFilter) {

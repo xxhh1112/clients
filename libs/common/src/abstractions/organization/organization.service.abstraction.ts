@@ -6,7 +6,7 @@ import { Organization } from "../../models/domain/organization";
 import { I18nService } from "../i18n.service";
 
 export function canAccessVaultTab(org: Organization): boolean {
-  return org.isManager;
+  return org.canViewAssignedCollections || org.canViewAllCollections || org.canManageGroups;
 }
 
 export function canAccessSettingsTab(org: Organization): boolean {

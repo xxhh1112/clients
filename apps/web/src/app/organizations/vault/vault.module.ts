@@ -5,6 +5,8 @@ import { SharedModule } from "../../shared/shared.module";
 import { OrganizationBadgeModule } from "../../vault/organization-badge/organization-badge.module";
 import { PipesModule } from "../../vault/pipes/pipes.module";
 
+import { CollectionBadgeModule } from "./collection-badge/collection-badge.module";
+import { GroupBadgeModule } from "./group-badge/group-badge.module";
 import { VaultFilterModule } from "./vault-filter/vault-filter.module";
 import { VaultItemsComponent } from "./vault-items.component";
 import { VaultRoutingModule } from "./vault-routing.module";
@@ -16,6 +18,8 @@ import { VaultComponent } from "./vault.component";
     VaultFilterModule,
     SharedModule,
     LooseComponentsModule,
+    GroupBadgeModule,
+    CollectionBadgeModule,
     OrganizationBadgeModule,
     PipesModule,
   ],

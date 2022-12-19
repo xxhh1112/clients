@@ -9,7 +9,6 @@ import {
   CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "@bitwarden/common/models/response/collection.response";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 
 import { CoreOrganizationModule } from "../core-organization.module";
 import { CollectionAdminView } from "../views/collection-admin.view";
@@ -18,8 +17,11 @@ import { CollectionAdminView } from "../views/collection-admin.view";
 export class CollectionAdminService {
   constructor(private apiService: ApiService, private cryptoService: CryptoService) {}
 
-  async getAll(organizationId: string): Promise<CollectionView[]> {
-    const collectionResponse = await this.apiService.getCollections(organizationId);
+  async getAll(organizationId: string): Promise<CollectionAdminView[]> {
+    const collectionResponse = await this.apiService.getManyCollectionsWithAccessDetails(
+      organizationId
+    );
+
     if (collectionResponse?.data == null || collectionResponse.data.length === 0) {
       return [];
     }
@@ -31,7 +33,7 @@ export class CollectionAdminService {
     organizationId: string,
     collectionId: string
   ): Promise<CollectionAdminView | undefined> {
-    const collectionResponse = await this.apiService.getCollectionDetails(
+    const collectionResponse = await this.apiService.getCollectionAccessDetails(
       organizationId,
       collectionId
     );

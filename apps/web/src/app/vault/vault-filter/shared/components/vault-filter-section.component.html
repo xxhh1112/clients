@@ -4,8 +4,8 @@
       class="toggle-button"
       (click)="toggleCollapse(headerNode.node)"
       [attr.aria-expanded]="!isCollapsed(headerNode.node)"
+      appA11yTitle="{{ 'toggleCollapse' | i18n }}: {{ headerNode.node.name | i18n }}"
       aria-controls="sub-filters"
-      title="{{ 'toggleCollapse' | i18n }}"
     >
       <i
         class="bwi bwi-fw"
@@ -15,6 +15,9 @@
     </button>
     <button
       *ngIf="headerInfo.isSelectable"
+      appA11yTitle="{{ isOrganizationFilter ? 'vault' : ('filter' | i18n) }}: {{
+        headerNode.node.name | i18n
+      }}"
       class="filter-button"
       (click)="onFilterSelect(headerNode)"
     >
@@ -55,8 +58,7 @@
         <span class="filter-buttons">
           <button
             *ngIf="f.children.length"
-            title="{{ 'toggleCollapse' | i18n }}"
-            appA11yTitle="{{ 'toggleCollapse' | i18n }} {{ f.node.name | i18n }}"
+            appA11yTitle="{{ 'toggleCollapse' | i18n }}: {{ f.node.name }}"
             (click)="toggleCollapse(f.node)"
             [attr.aria-expanded]="!isCollapsed(f.node)"
             [attr.aria-controls]="f.node.name + '_children'"
@@ -73,7 +75,9 @@
           </button>
           <button
             class="filter-button"
-            appA11yTitle="{{ 'vault' | i18n }}: {{ f.node.name | i18n }}"
+            appA11yTitle="{{ isOrganizationFilter ? 'vault' : ('filter' | i18n) }}: {{
+              f.node.name
+            }}"
             [ngClass]="{ 'disabled-organization': isOrganizationFilter && !f.node.enabled }"
             (click)="onFilterSelect(f)"
           >

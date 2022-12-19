@@ -17,6 +17,7 @@ import { CipherCreateRequest } from "../models/request/cipher-create.request";
 import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
 import { CipherRequest } from "../models/request/cipher.request";
+import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { CollectionRequest } from "../models/request/collection.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { DeviceVerificationRequest } from "../models/request/device-verification.request";
@@ -812,7 +813,7 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Collections APIs
 
-  async getCollectionDetails(
+  async getCollectionAccessDetails(
     organizationId: string,
     id: string
   ): Promise<CollectionAccessDetailsResponse> {
@@ -840,6 +841,19 @@ export class ApiService implements ApiServiceAbstraction {
       true
     );
     return new ListResponse(r, CollectionResponse);
+  }
+
+  async getManyCollectionsWithAccessDetails(
+    organizationId: string
+  ): Promise<ListResponse<CollectionAccessDetailsResponse>> {
+    const r = await this.send(
+      "GET",
+      "/organizations/" + organizationId + "/collections/details",
+      null,
+      true,
+      true
+    );
+    return new ListResponse(r, CollectionAccessDetailsResponse);
   }
 
   async getCollectionUsers(
@@ -904,6 +918,16 @@ export class ApiService implements ApiServiceAbstraction {
       "DELETE",
       "/organizations/" + organizationId + "/collections/" + id,
       null,
+      true,
+      false
+    );
+  }
+
+  deleteManyCollections(request: CollectionBulkDeleteRequest): Promise<any> {
+    return this.send(
+      "DELETE",
+      "/organizations/" + request.organizationId + "/collections",
+      request,
       true,
       false
     );

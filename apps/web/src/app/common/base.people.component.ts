@@ -17,7 +17,6 @@ import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStat
 import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
 import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
 import { OrganizationUserView } from "../organizations/core/views/organization-user.view";
@@ -182,7 +181,7 @@ export abstract class BasePeopleComponent<
     this.didScroll = this.pagedUsers.length > this.pageSize;
   }
 
-  checkUser(user: OrganizationUserUserDetailsResponse, select?: boolean) {
+  checkUser(user: UserType, select?: boolean) {
     (user as any).checked = select == null ? !(user as any).checked : select;
   }
 

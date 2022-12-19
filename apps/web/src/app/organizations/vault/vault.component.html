@@ -55,10 +55,13 @@
         {{ trashCleanupWarning }}
       </app-callout>
       <app-org-vault-items
+        [activeFilter]="activeFilter"
+        [initOrganization]="organization"
+        (activeFilterChanged)="applyVaultFilter($event)"
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"
         (onAddCipher)="addCipher()"
-        (onCollectionsClicked)="editCipherCollections($event)"
+        (onEditCipherCollectionsClicked)="editCipherCollections($event)"
         (onEventsClicked)="viewEvents($event)"
         (onCloneClicked)="cloneCipher($event)"
       >

@@ -133,7 +133,7 @@
         <ng-container body>
           <tr bitRow *ngFor="let u of searchedUsers" alignContent="middle">
             <td bitCell (click)="checkUser(u)">
-              <input type="checkbox" [(ngModel)]="u.checked" />
+              <input type="checkbox" [(ngModel)]="$any(u).checked" />
             </td>
             <td bitCell (click)="edit(u)" class="tw-cursor-pointer">
               <div class="tw-flex tw-items-center">
@@ -195,7 +195,7 @@
                 ></i>
                 <span class="tw-sr-only">{{ "userUsingTwoStep" | i18n }}</span>
               </ng-container>
-              <ng-container *ngIf="showEnrolledStatus(u)">
+              <ng-container *ngIf="showEnrolledStatus($any(u))">
                 <i
                   class="bwi bwi-key"
                   title="{{ 'enrolledPasswordReset' | i18n }}"
@@ -244,7 +244,7 @@
                 <button
                   type="button"
                   bitMenuItem
-                  (click)="groups(u)"
+                  (click)="groups($any(u))"
                   *ngIf="organization.useGroups"
                 >
                   <i aria-hidden="true" class="bwi bwi-users"></i> {{ "groups" | i18n }}

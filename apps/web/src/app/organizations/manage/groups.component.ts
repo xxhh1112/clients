@@ -343,7 +343,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private updateSearchedGroups() {
     if (this.searchService.isSearchable(this.searchText)) {
       // Making use of the pipe in the component as we need know which groups where filtered
-      this.searchedGroups = this.searchPipe.transform(this.groups, this.searchText, "name", "id");
+      this.searchedGroups = this.searchPipe.transform(
+        this.groups,
+        this.searchText,
+        (group) => group.details.name,
+        (group) => group.details.id
+      );
     }
   }
 }

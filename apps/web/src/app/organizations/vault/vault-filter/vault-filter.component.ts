@@ -29,7 +29,9 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   async ngOnInit() {
     this.filters = await this.buildAllFilters();
     if (!this.activeFilter.selectedCipherTypeNode) {
-      this.applyCollectionFilter((await this.getDefaultFilter()) as TreeNode<CollectionFilter>);
+      this.activeFilter.resetFilter();
+      this.activeFilter.selectedCollectionNode =
+        (await this.getDefaultFilter()) as TreeNode<CollectionFilter>;
     }
     this.isLoaded = true;
   }

@@ -1,25 +1,34 @@
-import { Injectable } from "@angular/core";
-import { combineLatestWith, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { Injectable, OnDestroy } from "@angular/core";
+import { filter, map, Observable, ReplaySubject, Subject, switchMap, takeUntil } from "rxjs";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import {
+  canAccessVaultTab,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CollectionData } from "@bitwarden/common/models/data/collection.data";
-import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
+import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
+import { CollectionAdminView } from "../../core";
+import { CollectionAdminService } from "../../core/services/collection-admin.service";
 
 @Injectable()
-export class VaultFilterService extends BaseVaultFilterService {
-  protected collectionViews$ = new ReplaySubject<CollectionView[]>(1);
+export class VaultFilterService extends BaseVaultFilterService implements OnDestroy {
+  private destroy$ = new Subject<void>();
+  private _collections = new ReplaySubject<CollectionAdminView[]>(1);
+
+  filteredCollections$: Observable<CollectionAdminView[]> = this._collections.asObservable();
+
+  collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
+    map((collections) => this.buildCollectionTree(collections))
+  );
 
   constructor(
     stateService: StateService,
@@ -28,8 +37,8 @@ export class VaultFilterService extends BaseVaultFilterService {
     cipherService: CipherService,
     collectionService: CollectionService,
     policyService: PolicyService,
-    protected apiService: ApiService,
-    i18nService: I18nService
+    i18nService: I18nService,
+    protected collectionAdminService: CollectionAdminService
   ) {
     super(
       stateService,
@@ -40,67 +49,42 @@ export class VaultFilterService extends BaseVaultFilterService {
       policyService,
       i18nService
     );
+    this.loadSubscriptions();
   }
 
   protected loadSubscriptions() {
-    this.folderService.folderViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(async ([folders, org]) => {
-          return this.filterFolders(folders, org);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(this._filteredFolders);
-
     this._organizationFilter
       .pipe(
+        filter((org) => org != null),
         switchMap((org) => {
           return this.loadCollections(org);
-        })
-      )
-      .subscribe(this.collectionViews$);
-
-    this.collectionViews$
-      .pipe(
-        combineLatestWith(this._organizationFilter),
-        switchMap(async ([collections, org]) => {
-          if (org?.canUseAdminCollections) {
-            return collections;
-          } else {
-            return await this.filterCollections(collections, org);
-          }
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(this._filteredCollections);
+      .subscribe((collections) => {
+        this._collections.next(collections);
+      });
   }
 
-  protected async loadCollections(org: Organization) {
-    if (org?.permissions && org?.canEditAnyCollection) {
-      return await this.loadAdminCollections(org);
-    } else {
-      // TODO: remove when collections is refactored with observables
-      return await this.collectionService.getAllDecrypted();
-    }
+  async reloadCollections() {
+    this._collections.next(await this.loadCollections(this._organizationFilter.getValue()));
   }
 
-  async loadAdminCollections(org: Organization): Promise<CollectionView[]> {
-    let collections: CollectionView[] = [];
-    if (org?.permissions && org?.canEditAnyCollection) {
-      const collectionResponse = await this.apiService.getCollections(org.id);
-      if (collectionResponse?.data != null && collectionResponse.data.length) {
-        const collectionDomains = collectionResponse.data.map(
-          (r: CollectionDetailsResponse) => new Collection(new CollectionData(r))
-        );
-        collections = await this.collectionService.decryptMany(collectionDomains);
-      }
+  protected async loadCollections(org: Organization): Promise<CollectionAdminView[]> {
+    let collections: CollectionAdminView[] = [];
+    if (canAccessVaultTab(org)) {
+      collections = await this.collectionAdminService.getAll(org.id);
 
-      const noneCollection = new CollectionView();
+      const noneCollection = new CollectionAdminView();
       noneCollection.name = this.i18nService.t("unassigned");
       noneCollection.organizationId = org.id;
       collections.push(noneCollection);
     }
     return collections;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

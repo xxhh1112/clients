@@ -8,8 +8,8 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { firstValueFrom } from "rxjs";
-import { first } from "rxjs/operators";
+import { firstValueFrom, Subject } from "rxjs";
+import { first, switchMap, takeUntil } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -67,6 +67,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   showPremiumCallout = false;
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private syncService: SyncService,
@@ -97,63 +98,72 @@ export class VaultComponent implements OnInit, OnDestroy {
         : "trashCleanupWarning"
     );
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (params) => {
-      await this.syncService.fullSync(false);
-      const canAccessPremium = await this.stateService.getCanAccessPremium();
-      this.showPremiumCallout =
-        !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
+    this.route.queryParams
+      .pipe(
+        first(),
+        switchMap(async (params: Params) => {
+          await this.syncService.fullSync(false);
+          await this.vaultFilterService.reloadCollections();
+          await this.vaultItemsComponent.reload();
 
-      await this.vaultFilterService.reloadCollections();
-      this.showUpdateKey = !(await this.cryptoService.hasEncKey());
+          const canAccessPremium = await this.stateService.getCanAccessPremium();
+          this.showPremiumCallout =
+            !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
+          this.showUpdateKey = !(await this.cryptoService.hasEncKey());
 
-      const cipherId = getCipherIdFromParams(params);
-
-      if (cipherId) {
-        const cipherView = new CipherView();
-        cipherView.id = cipherId;
-        if (params.action === "clone") {
-          await this.cloneCipher(cipherView);
-        } else if (params.action === "edit") {
-          await this.editCipher(cipherView);
-        }
-      }
-      await this.vaultItemsComponent.reload();
-
-      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
-      this.route.queryParams.subscribe(async (params) => {
-        const cipherId = getCipherIdFromParams(params);
-        if (cipherId) {
-          if ((await this.cipherService.get(cipherId)) != null) {
-            this.editCipherId(cipherId);
-          } else {
-            this.platformUtilsService.showToast(
-              "error",
-              this.i18nService.t("errorOccurred"),
-              this.i18nService.t("unknownCipher")
-            );
-            this.router.navigate([], {
-              queryParams: { itemId: null, cipherId: null },
-              queryParamsHandling: "merge",
-            });
+          const cipherId = getCipherIdFromParams(params);
+          if (!cipherId) {
+            return;
           }
-        }
-      });
-
-      this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-        this.ngZone.run(async () => {
-          switch (message.command) {
-            case "syncCompleted":
-              if (message.successfully) {
-                await Promise.all([
-                  this.vaultFilterService.reloadCollections(),
-                  this.vaultItemsComponent.load(this.vaultItemsComponent.filter),
-                ]);
-                this.changeDetectorRef.detectChanges();
-              }
-              break;
+          const cipherView = new CipherView();
+          cipherView.id = cipherId;
+          if (params.action === "clone") {
+            await this.cloneCipher(cipherView);
+          } else if (params.action === "edit") {
+            await this.editCipher(cipherView);
           }
-        });
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.route.queryParams
+      .pipe(
+        switchMap(async (params) => {
+          const cipherId = getCipherIdFromParams(params);
+          if (cipherId) {
+            if ((await this.cipherService.get(cipherId)) != null) {
+              this.editCipherId(cipherId);
+            } else {
+              this.platformUtilsService.showToast(
+                "error",
+                this.i18nService.t("errorOccurred"),
+                this.i18nService.t("unknownCipher")
+              );
+              this.router.navigate([], {
+                queryParams: { itemId: null, cipherId: null },
+                queryParamsHandling: "merge",
+              });
+            }
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+      this.ngZone.run(async () => {
+        switch (message.command) {
+          case "syncCompleted":
+            if (message.successfully) {
+              await Promise.all([
+                this.vaultFilterService.reloadCollections(),
+                this.vaultItemsComponent.load(this.vaultItemsComponent.filter),
+              ]);
+              this.changeDetectorRef.detectChanges();
+            }
+            break;
+        }
       });
     });
   }
@@ -173,6 +183,8 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async applyVaultFilter(filter: VaultFilter) {

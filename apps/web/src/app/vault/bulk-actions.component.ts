@@ -1,16 +1,29 @@
-import { Component, Input, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { DialogService } from "@bitwarden/components";
 
-import { BulkDeleteComponent } from "./bulk-delete.component";
-import { BulkMoveComponent } from "./bulk-move.component";
-import { BulkRestoreComponent } from "./bulk-restore.component";
-import { BulkShareComponent } from "./bulk-share.component";
+import {
+  BulkDeleteDialogResult,
+  openBulkDeleteDialog,
+} from "./bulk-action-dialogs/bulk-delete-dialog/bulk-delete-dialog.component";
+import {
+  BulkMoveDialogResult,
+  openBulkMoveDialog,
+} from "./bulk-action-dialogs/bulk-move-dialog/bulk-move-dialog.component";
+import {
+  BulkRestoreDialogResult,
+  openBulkRestoreDialog,
+} from "./bulk-action-dialogs/bulk-restore-dialog/bulk-restore-dialog.component";
+import {
+  BulkShareDialogResult,
+  openBulkShareDialog,
+} from "./bulk-action-dialogs/bulk-share-dialog/bulk-share-dialog.component";
 import { VaultItemsComponent } from "./vault-items.component";
 
 @Component({
@@ -23,19 +36,10 @@ export class BulkActionsComponent {
   @Input() deleted: boolean;
   @Input() organization: Organization;
 
-  @ViewChild("bulkDeleteTemplate", { read: ViewContainerRef, static: true })
-  bulkDeleteModalRef: ViewContainerRef;
-  @ViewChild("bulkRestoreTemplate", { read: ViewContainerRef, static: true })
-  bulkRestoreModalRef: ViewContainerRef;
-  @ViewChild("bulkMoveTemplate", { read: ViewContainerRef, static: true })
-  bulkMoveModalRef: ViewContainerRef;
-  @ViewChild("bulkShareTemplate", { read: ViewContainerRef, static: true })
-  bulkShareModalRef: ViewContainerRef;
-
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private modalService: ModalService,
+    private dialogService: DialogService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
 
@@ -44,8 +48,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.vaultItemsComponent.getSelectedIds();
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -54,20 +58,18 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkDeleteComponent,
-      this.bulkDeleteModalRef,
-      (comp) => {
-        comp.permanent = this.deleted;
-        comp.cipherIds = selectedIds;
-        comp.organization = this.organization;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onDeleted.subscribe(async () => {
-          modal.close();
-          await this.vaultItemsComponent.refresh();
-        });
-      }
-    );
+    const dialog = openBulkDeleteDialog(this.dialogService, {
+      data: {
+        permanent: this.deleted,
+        cipherIds: selectedCipherIds,
+        organization: this.organization,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkDeleteDialogResult.Deleted) {
+      await this.vaultItemsComponent.refresh();
+    }
   }
 
   async bulkRestore() {
@@ -75,8 +77,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.vaultItemsComponent.getSelectedIds();
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -85,18 +87,16 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkRestoreComponent,
-      this.bulkRestoreModalRef,
-      (comp) => {
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onRestored.subscribe(async () => {
-          modal.close();
-          await this.vaultItemsComponent.refresh();
-        });
-      }
-    );
+    const dialog = openBulkRestoreDialog(this.dialogService, {
+      data: {
+        cipherIds: selectedCipherIds,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkRestoreDialogResult.Restored) {
+      this.vaultItemsComponent.refresh();
+    }
   }
 
   async bulkShare() {
@@ -104,7 +104,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCiphers = this.vaultItemsComponent.getSelected();
+    const selectedCiphers = this.vaultItemsComponent.selectedCiphers;
     if (selectedCiphers.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -114,18 +114,12 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkShareComponent,
-      this.bulkShareModalRef,
-      (comp) => {
-        comp.ciphers = selectedCiphers;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onShared.subscribe(async () => {
-          modal.close();
-          await this.vaultItemsComponent.refresh();
-        });
-      }
-    );
+    const dialog = openBulkShareDialog(this.dialogService, { data: { ciphers: selectedCiphers } });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkShareDialogResult.Shared) {
+      this.vaultItemsComponent.refresh();
+    }
   }
 
   async bulkMove() {
@@ -133,8 +127,8 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedIds = this.vaultItemsComponent.getSelectedIds();
-    if (selectedIds.length === 0) {
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
+    if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -143,26 +137,22 @@ export class BulkActionsComponent {
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      BulkMoveComponent,
-      this.bulkMoveModalRef,
-      (comp) => {
-        comp.cipherIds = selectedIds;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-        comp.onMoved.subscribe(async () => {
-          modal.close();
-          await this.vaultItemsComponent.refresh();
-        });
-      }
-    );
+    const dialog = openBulkMoveDialog(this.dialogService, {
+      data: { cipherIds: selectedCipherIds },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkMoveDialogResult.Moved) {
+      this.vaultItemsComponent.refresh();
+    }
   }
 
   selectAll(select: boolean) {
-    this.vaultItemsComponent.selectAll(select);
+    this.vaultItemsComponent.checkAll(select);
   }
 
   private async promptPassword() {
-    const selectedCiphers = this.vaultItemsComponent.getSelected();
+    const selectedCiphers = this.vaultItemsComponent.selectedCiphers;
     const notProtected = !selectedCiphers.find(
       (cipher) => cipher.reprompt !== CipherRepromptType.None
     );

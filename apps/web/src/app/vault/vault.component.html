@@ -51,11 +51,13 @@
         {{ trashCleanupWarning }}
       </app-callout>
       <app-vault-items
+        [activeFilter]="activeFilter"
+        (activeFilterChanged)="applyVaultFilter($event)"
         (onCipherClicked)="editCipher($event)"
         (onAttachmentsClicked)="editCipherAttachments($event)"
         (onAddCipher)="addCipher()"
         (onShareClicked)="shareCipher($event)"
-        (onCollectionsClicked)="editCipherCollections($event)"
+        (onEditCipherCollectionsClicked)="editCipherCollections($event)"
         (onCloneClicked)="cloneCipher($event)"
         (onOrganzationBadgeClicked)="applyOrganizationFilter($event)"
       >
