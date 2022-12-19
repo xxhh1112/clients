@@ -18,7 +18,6 @@ import { OrganizationLayoutComponent } from "./layouts/organization-layout.compo
 import { CollectionsComponent } from "./manage/collections.component";
 import { GroupsComponent } from "./manage/groups.component";
 import { ManageComponent } from "./manage/manage.component";
-import { PeopleComponent } from "./manage/people.component";
 import { VaultModule } from "./vault/vault.module";
 
 const routes: Routes = [
@@ -49,12 +48,7 @@ const routes: Routes = [
       },
       {
         path: "members",
-        component: PeopleComponent,
-        canActivate: [OrganizationPermissionsGuard],
-        data: {
-          titleId: "members",
-          organizationPermissions: canAccessMembersTab,
-        },
+        loadChildren: () => import("./members").then((m) => m.MembersModule),
       },
       {
         path: "groups",

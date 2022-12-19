@@ -54,7 +54,7 @@
     <bit-label>{{ "scimApiKey" | i18n }}</bit-label>
     <input
       bitInput
-      type="{{ showScimKey ? 'text' : 'password' }}"
+      [type]="showScimKey ? 'text' : 'password'"
       formControlName="clientSecret"
       id="clientSecret"
     />
@@ -70,7 +70,7 @@
     </ng-container>
     <ng-container #rotateButton [appApiAction]="rotatePromise">
       <button
-        [disabled]="rotateButton.loading"
+        [disabled]="$any(rotateButton).loading"
         type="button"
         bitSuffix
         bitButton
@@ -80,7 +80,7 @@
         <i
           aria-hidden="true"
           class="bwi bwi-lg bwi-generate"
-          [ngClass]="{ 'bwi-spin': rotateButton.loading }"
+          [ngClass]="{ 'bwi-spin': $any(rotateButton).loading }"
         ></i>
       </button>
     </ng-container>

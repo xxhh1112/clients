@@ -36,7 +36,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onSearchTextChanged = new EventEmitter<string>();
   @Output() onAddFolder = new EventEmitter<never>();
-  @Output() onEditFolder = new EventEmitter<FolderView>();
+  @Output() onEditFolder = new EventEmitter<FolderFilter>();
 
   isLoaded = false;
   searchText = "";

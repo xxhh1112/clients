@@ -24,7 +24,7 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
-import { CollectionAdminView } from "../../../organizations/core/views/collection-admin-view";
+import { CollectionAdminView } from "../../../organizations/core";
 import {
   CipherTypeFilter,
   CollectionFilter,

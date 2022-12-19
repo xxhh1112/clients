@@ -671,7 +671,7 @@
     "message": "Настройки двухэтапной аутентификации"
   },
   "selfHostedEnvironment": {
-    "message": "Окружение собственного хостинга"
+    "message": "Окружение пользовательского хостинга"
   },
   "selfHostedEnvironmentFooter": {
     "message": "Укажите URL Bitwarden на вашем сервере."
@@ -1468,7 +1468,7 @@
     "message": "Чтобы получить доступ к хранилищу после выхода из него требуется повторная авторизация."
   },
   "lock": {
-    "message": "Заблокировать",
+    "message": "Блокировка",
     "description": "Verb form: to make secure or inaccesible by"
   },
   "trash": {
@@ -1766,7 +1766,7 @@
     "message": "Скопировать ссылку в буфер обмена после сохранения, чтобы поделиться этой Send."
   },
   "sendDisabled": {
-    "message": "Send отключена",
+    "message": "Send удалена",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1778,6 +1778,15 @@
   },
   "disabled": {
     "message": "Отключено"
+  },
+  "removePassword": {
+    "message": "Удалить пароль"
+  },
+  "removedPassword": {
+    "message": "Пароль удален"
+  },
+  "removePasswordConfirmation": {
+    "message": "Вы уверены, что хотите удалить пароль?"
   },
   "maxAccessCountReached": {
     "message": "Достигнут максимум обращений"

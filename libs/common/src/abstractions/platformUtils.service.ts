@@ -19,6 +19,7 @@ export abstract class PlatformUtilsService {
   isViewOpen: () => Promise<boolean>;
   launchUri: (uri: string, options?: any) => void;
   getApplicationVersion: () => Promise<string>;
+  getApplicationVersionNumber: () => Promise<string>;
   supportsWebAuthn: (win: Window) => boolean;
   supportsDuo: () => boolean;
   showToast: (
@@ -33,7 +34,8 @@ export abstract class PlatformUtilsService {
     confirmText?: string,
     cancelText?: string,
     type?: string,
-    bodyIsHtml?: boolean
+    bodyIsHtml?: boolean,
+    target?: string
   ) => Promise<boolean>;
   isDev: () => boolean;
   isSelfHost: () => boolean;

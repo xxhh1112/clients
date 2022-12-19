@@ -171,6 +171,11 @@ import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { SendAccessView } from "../models/view/send-access.view";
 
+/**
+ * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
+ * api services. The `send` method is still allowed to be used within api services. For background
+ * of this decision please read https://contributing.bitwarden.com/architecture/adr/refactor-api-service.
+ */
 export class ApiService implements ApiServiceAbstraction {
   private device: DeviceType;
   private deviceType: string;
@@ -1003,11 +1008,24 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async getOrganizationUsers(
-    organizationId: string
+    organizationId: string,
+    options?: {
+      includeCollections?: boolean;
+      includeGroups?: boolean;
+    }
   ): Promise<ListResponse<OrganizationUserUserDetailsResponse>> {
+    const params = new URLSearchParams();
+
+    if (options?.includeCollections) {
+      params.set("includeCollections", "true");
+    }
+    if (options?.includeGroups) {
+      params.set("includeGroups", "true");
+    }
+
     const r = await this.send(
       "GET",
-      "/organizations/" + organizationId + "/users",
+      `/organizations/${organizationId}/users?${params.toString()}`,
       null,
       true,
       true
@@ -2045,7 +2063,7 @@ export class ApiService implements ApiServiceAbstraction {
     request.headers.set("Bitwarden-Client-Name", this.platformUtilsService.getClientType());
     request.headers.set(
       "Bitwarden-Client-Version",
-      await this.platformUtilsService.getApplicationVersion()
+      await this.platformUtilsService.getApplicationVersionNumber()
     );
     return this.nativeFetch(request);
   }

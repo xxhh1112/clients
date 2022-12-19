@@ -12,7 +12,9 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
+import { CheckboxModule } from "../checkbox";
 import { InputModule } from "../input/input.module";
+import { RadioButtonModule } from "../radio-button";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BitFormFieldComponent } from "./form-field.component";
@@ -23,7 +25,15 @@ export default {
   component: BitFormFieldComponent,
   decorators: [
     moduleMetadata({
-      imports: [FormsModule, ReactiveFormsModule, FormFieldModule, InputModule, ButtonModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        FormFieldModule,
+        InputModule,
+        ButtonModule,
+        CheckboxModule,
+        RadioButtonModule,
+      ],
       providers: [
         {
           provide: I18nService,
@@ -55,6 +65,8 @@ const formObj = fb.group({
 const defaultFormObj = fb.group({
   name: ["", [Validators.required]],
   email: ["", [Validators.required, Validators.email, forbiddenNameValidator(/bit/i)]],
+  terms: [false, [Validators.requiredTrue]],
+  updates: ["yes"],
 });
 
 // Custom error message, `message` is shown as the error message
@@ -166,13 +178,9 @@ const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCom
   template: `
     <bit-form-field>
       <bit-label>Label</bit-label>
-      <input bitInput placeholder="Placeholder" />
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-eye"></i>
-      </button>
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-clone"></i>
-      </button>
+      <input bitInput placeholder="Placeholder" type="password" />
+      <button bitSuffix bitButton bitIconButton="bwi-eye"></button>
+      <button bitSuffix bitButton bitIconButton="bwi-clone"></button>
     </bit-form-field>
   `,
 });
@@ -188,12 +196,8 @@ const DisabledButtonInputGroupTemplate: Story<BitFormFieldComponent> = (
     <bit-form-field>
       <bit-label>Label</bit-label>
       <input bitInput placeholder="Placeholder" disabled />
-      <button bitSuffix bitButton disabled>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-eye"></i>
-      </button>
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-clone"></i>
-      </button>
+      <button bitSuffix bitButton bitIconButton="bwi-eye" disabled></button>
+      <button bitSuffix bitButton bitIconButton="bwi-clone"></button>
     </bit-form-field>
   `,
 });

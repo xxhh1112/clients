@@ -16,8 +16,8 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 
 import { VaultFilterService as BaseVaultFilterService } from "../../../vault/vault-filter/services/vault-filter.service";
 import { CollectionFilter } from "../../../vault/vault-filter/shared/models/vault-filter.type";
+import { CollectionAdminView } from "../../core";
 import { CollectionAdminService } from "../../core/services/collection-admin.service";
-import { CollectionAdminView } from "../../core/views/collection-admin-view";
 
 @Injectable()
 export class VaultFilterService extends BaseVaultFilterService implements OnDestroy {

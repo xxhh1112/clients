@@ -30,7 +30,7 @@ export class OrganizationOptionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    @Inject(OptionsInput) private organization: OrganizationFilter,
+    @Inject(OptionsInput) protected organization: OrganizationFilter,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private apiService: ApiService,
@@ -58,7 +58,7 @@ export class OrganizationOptionsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  allowEnrollmentChanges(org: Organization): boolean {
+  allowEnrollmentChanges(org: OrganizationFilter): boolean {
     if (org.usePolicies && org.useResetPassword && org.hasPublicAndPrivateKeys) {
       const policy = this.policies.find((p) => p.organizationId === org.id);
       if (policy != null && policy.enabled) {

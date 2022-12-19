@@ -936,10 +936,10 @@
     "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
-    "message": "File type"
+    "message": "Typ souboru"
   },
   "accountBackup": {
-    "message": "Account backup"
+    "message": "Zálohování účtu"
   },
   "passwordProtected": {
     "message": "Password protected"
@@ -1199,7 +1199,7 @@
     "message": "Choose File"
   },
   "noFileChosen": {
-    "message": "No file chosen"
+    "message": "Není vybrán žádný soubor"
   },
   "orCopyPasteFileContents": {
     "message": "nebo zkopírujte a vložte obsah souboru"
@@ -2453,13 +2453,13 @@
     "message": "Administrátor"
   },
   "adminDesc": {
-    "message": "Administrátoři mohou prohlížet a spravovat všechny položky, sbírky a uživatele ve vaší organizaci."
+    "message": "Administrátoři mohou prohlížet a spravovat všechny položky, kolekce a uživatele ve vaší organizaci."
   },
   "user": {
     "message": "Uživatel"
   },
   "userDesc": {
-    "message": "Běžný uživatel s přístupem k přiřazeným kolekcím vaší organizace."
+    "message": "A regular user with access to your organization's collections."
   },
   "manager": {
     "message": "Správce"
@@ -2897,7 +2897,7 @@
     "message": "Znovu poslat pozvánku"
   },
   "resendEmail": {
-    "message": "Resend email"
+    "message": "Znovu poslat e-mail"
   },
   "hasBeenReinvited": {
     "message": "Uživatel $USER$ byl znovu pozván.",
@@ -3345,7 +3345,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Vytvořeno",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3418,7 +3418,7 @@
     "message": "Ve vašem trezoru jsou staré přílohy vyžadující opravu před změnou šifrovacího klíče k vašemu účtu."
   },
   "yourAccountsFingerprint": {
-    "message": "Fráze otisku prstu vašeho účtu",
+    "message": "Fráze otisku vašeho účtu",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintEnsureIntegrityVerify": {
@@ -3432,7 +3432,7 @@
     "message": "Fingerprint phrase"
   },
   "dontAskFingerprintAgain": {
-    "message": "Již se neptat na ověření fráze otisku prstu",
+    "message": "Již se neptat na ověření fráze otisku účtu (nedoporučeno)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "free": {
@@ -4119,14 +4119,29 @@
   "customDesc": {
     "message": "Umožňuje větší kontrolu nad uživatelských oprávnění pro pokročilé konfigurace."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+  },
   "permissions": {
     "message": "Oprávnění"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Oprávnění"
   },
   "managerPermissions": {
-    "message": "Manager Permissions"
+    "message": "Spravovat oprávnění"
   },
   "adminPermissions": {
     "message": "Admin Permissions"
@@ -5216,7 +5231,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountSettings": {
-    "message": "Account settings"
+    "message": "Nastavení účtu"
   },
   "generator": {
     "message": "Generator"
@@ -5443,7 +5458,7 @@
     "message": "Zapnuto"
   },
   "members": {
-    "message": "Members"
+    "message": "Členové"
   },
   "reporting": {
     "message": "Reporting"
@@ -5479,7 +5494,7 @@
     "message": "To"
   },
   "member": {
-    "message": "Member"
+    "message": "Člen"
   },
   "update": {
     "message": "Update"

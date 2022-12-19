@@ -302,6 +302,9 @@
   "searchOrganization": {
     "message": "Search organization"
   },
+  "searchMembers": {
+    "message": "Search members"
+  },
   "allItems": {
     "message": "All items"
   },
@@ -737,6 +740,9 @@
   },
   "noUsersInList": {
     "message": "There are no users to list."
+  },
+  "noMembersInList": {
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "There are no events to list."
@@ -2455,11 +2461,8 @@
   "deleteCollectionConfirmation": {
     "message": "Are you sure you want to delete this collection?"
   },
-  "editUser": {
-    "message": "Edit user"
-  },
-  "inviteUser": {
-    "message": "Invite user"
+  "editMember": {
+    "message": "Edit member"
   },
   "inviteUserDesc": {
     "message": "Invite a new user to your organization by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
@@ -2501,7 +2504,7 @@
     "message": "Owner"
   },
   "ownerDesc": {
-    "message": "The highest access user that can manage all aspects of your organization."
+    "message": "Manage all aspects of your organization, including billing and subscriptions"
   },
   "clientOwnerDesc": {
     "message": "This user should be independent of the Provider. If the Provider is disassociated with the organization, this user will maintain ownership of the organization."
@@ -2510,19 +2513,19 @@
     "message": "Admin"
   },
   "adminDesc": {
-    "message": "Admins can access and manage all items, collections and users in your organization."
+    "message": "Manage organization access, all collections, members, reporting, and security settings"
   },
   "user": {
     "message": "User"
   },
   "userDesc": {
-    "message": "A regular user with access to assigned collections in your organization."
+    "message": "Access and add items to assigned collections"
   },
   "manager": {
     "message": "Manager"
   },
   "managerDesc": {
-    "message": "Managers can access and manage assigned collections in your organization."
+    "message": "Create, delete, and manage access in assigned collections"
   },
   "all": {
     "message": "All"
@@ -2993,10 +2996,10 @@
     }
   },
   "confirmUsers": {
-    "message": "Confirm users"
+    "message": "Confirm members"
   },
   "usersNeedConfirmed": {
-    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the organization until they are confirmed."
+    "message": "You have members that have accepted their invitation, but still need to be confirmed. Members will not have access to the organization until they are confirmed."
   },
   "startDate": {
     "message": "Start date"
@@ -4186,7 +4189,22 @@
     "message": "Custom"
   },
   "customDesc": {
-    "message": "Allows more granular control of user permissions for advanced configurations."
+    "message": "Grant customized permissions to members"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
   },
   "permissions": {
     "message": "Permissions"
@@ -5550,6 +5568,258 @@
   "multiSelectClearAll": {
     "message": "Clear all"
   },
+  "projects":{
+    "message": "Projects"
+  },
+  "lastEdited":{
+    "message": "Last Edited"
+  },
+  "editSecret":{
+    "message": "Edit Secret"
+  },
+  "addSecret":{
+    "message": "Add Secret"
+  },
+  "copySecretName":{
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue":{
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret":{
+    "message": "Delete Secret"
+  },
+  "deleteSecrets":{
+    "message": "Delete Secrets"
+  },
+  "project":{
+    "message": "Project"
+  },
+  "editProject":{
+    "message": "Edit Project"
+  },
+  "viewProject":{
+    "message": "View Project"
+  },
+  "deleteProject":{
+    "message": "Delete Project"
+  },
+  "deleteProjects":{
+    "message": "Delete Projects"
+  },
+  "secret":{
+    "message": "Secret"
+  },
+  "serviceAccount":{
+    "message": "Service Account"
+  },
+  "serviceAccounts":{
+    "message": "Service Accounts"
+  },
+  "new":{
+    "message": "New"
+  },
+  "secrets":{
+    "message":"Secrets"
+  },
+  "nameValuePair":{
+    "message":"Name/Value Pair"
+  },
+  "secretEdited":{
+    "message":"Secret edited"
+  },
+  "secretCreated":{
+    "message":"Secret created"
+  },
+  "newSecret":{
+    "message":"New Secret"
+  },
+  "newServiceAccount":{
+    "message":"New Service Account"
+  },
+  "importSecrets":{
+    "message":"Import Secrets"
+  },
+  "secretsNoItemsTitle":{
+    "message":"No secrets to show"
+  },
+  "secretsNoItemsMessage":{
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle":{
+    "message":"Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage":{
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets":{
+    "message":"Search Secrets"
+  },
+  "deleteServiceAccounts":{
+    "message":"Delete Service Accounts"
+  },
+  "deleteServiceAccount":{
+    "message":"Delete Service Account"
+  },
+  "viewServiceAccount":{
+    "message":"View Service Account"
+  },
+  "searchServiceAccounts":{
+    "message":"Search Service Accounts"
+  },
+  "addProject":{
+    "message": "Add Project"
+  },
+  "projectEdited":{
+    "message":"Project edited"
+  },
+  "projectSaved":{
+    "message":"Project saved"
+  },
+  "projectCreated":{
+    "message":"Project created"
+  },
+  "projectName":{
+    "message":"Project Name"
+  },
+  "newProject":{
+    "message":"New Project"
+  },
+  "softDeleteSecretWarning":{
+    "message":"Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast":{
+    "message":"Secrets sent to trash"
+  },
+  "serviceAccountCreated":{
+    "message":"Service Account Created"
+  },
+  "smAccess":{
+    "message":"Access"
+  },
+  "projectCommaSecret":{
+    "message":"Project, Secret"
+  },
+  "serviceAccountName":{
+    "message": "Service account name"
+  },
+  "newSaSelectAccess":{
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter":{
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast":{
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast":{
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message":  "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message":  "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage":{
+    "message":  "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage":{
+    "message":  "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage":{
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle":{
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage":{
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired":{
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage":{
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast":{
+    "message":"Secret sent to trash"
+  },
+  "searchProjects":{
+    "message":"Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Create access token"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
+  },
   "from": {
     "message": "From"
   },
@@ -5640,19 +5910,25 @@
   "selectGroupsAndMembers": {
     "message": "Select groups and members"
   },
-  "selectMembers": {
-    "message": "Select members"
-  },
   "userPermissionOverrideHelper": {
     "message": "Permissions set for a member will replace permissions set by that member's group"
   },
   "noMembersOrGroupsAdded": {
     "message": "No members or groups added"
   },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
   "deleted": {
     "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
   }
 }

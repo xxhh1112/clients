@@ -3,7 +3,7 @@ import { Organization } from "@bitwarden/common/src/models/domain/organization";
 import { ITreeNodeObject } from "@bitwarden/common/src/models/domain/tree-node";
 import { FolderView } from "@bitwarden/common/src/models/view/folder.view";
 
-import { CollectionAdminView } from "../../../../organizations/core/views/collection-admin-view";
+import { CollectionAdminView } from "../../../../organizations/core";
 
 export type CipherStatus = "all" | "favorites" | "trash" | CipherType;
 

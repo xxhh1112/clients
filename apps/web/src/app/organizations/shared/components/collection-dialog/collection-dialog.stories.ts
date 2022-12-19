@@ -18,9 +18,9 @@ import {
   CollectionAccessSelectionView,
   CollectionAdminService,
   CollectionAdminView,
+  GroupService,
+  GroupView,
 } from "../../../core";
-import { GroupServiceAbstraction } from "../../../services/abstractions/group/group.service.abstraction";
-import { GroupView } from "../../../views/group.view";
 import { AccessSelectorModule } from "../access-selector";
 
 import { CollectionDialogComponent, CollectionDialogParams } from "./collection-dialog.component";
@@ -96,8 +96,8 @@ function providers(data: ProviderData) {
       } as Partial<OrganizationService>,
     },
     {
-      provide: GroupServiceAbstraction,
-      useValue: { getAll: () => Promise.resolve(data.groups) } as Partial<GroupServiceAbstraction>,
+      provide: GroupService,
+      useValue: { getAll: () => Promise.resolve(data.groups) } as Partial<GroupService>,
     },
     {
       provide: ApiService,

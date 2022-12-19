@@ -24,7 +24,7 @@ import {
   BulkShareDialogResult,
   openBulkShareDialog,
 } from "./bulk-action-dialogs/bulk-share-dialog/bulk-share-dialog.component";
-import { CiphersComponent } from "./ciphers.component";
+import { VaultItemsComponent } from "./vault-items.component";
 
 @Component({
   selector: "app-vault-bulk-actions",
@@ -32,7 +32,7 @@ import { CiphersComponent } from "./ciphers.component";
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class BulkActionsComponent {
-  @Input() ciphersComponent: CiphersComponent;
+  @Input() vaultItemsComponent: VaultItemsComponent;
   @Input() deleted: boolean;
   @Input() organization: Organization;
 
@@ -48,7 +48,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCipherIds = this.ciphersComponent.selectedCipherIds;
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
     if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -68,7 +68,7 @@ export class BulkActionsComponent {
 
     const result = await lastValueFrom(dialog.closed);
     if (result === BulkDeleteDialogResult.Deleted) {
-      await this.ciphersComponent.refresh();
+      await this.vaultItemsComponent.refresh();
     }
   }
 
@@ -77,7 +77,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCipherIds = this.ciphersComponent.selectedCipherIds;
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
     if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -95,7 +95,7 @@ export class BulkActionsComponent {
 
     const result = await lastValueFrom(dialog.closed);
     if (result === BulkRestoreDialogResult.Restored) {
-      this.ciphersComponent.refresh();
+      this.vaultItemsComponent.refresh();
     }
   }
 
@@ -104,7 +104,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCiphers = this.ciphersComponent.selectedCiphers;
+    const selectedCiphers = this.vaultItemsComponent.selectedCiphers;
     if (selectedCiphers.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -118,7 +118,7 @@ export class BulkActionsComponent {
 
     const result = await lastValueFrom(dialog.closed);
     if (result === BulkShareDialogResult.Shared) {
-      this.ciphersComponent.refresh();
+      this.vaultItemsComponent.refresh();
     }
   }
 
@@ -127,7 +127,7 @@ export class BulkActionsComponent {
       return;
     }
 
-    const selectedCipherIds = this.ciphersComponent.selectedCipherIds;
+    const selectedCipherIds = this.vaultItemsComponent.selectedCipherIds;
     if (selectedCipherIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -143,16 +143,16 @@ export class BulkActionsComponent {
 
     const result = await lastValueFrom(dialog.closed);
     if (result === BulkMoveDialogResult.Moved) {
-      this.ciphersComponent.refresh();
+      this.vaultItemsComponent.refresh();
     }
   }
 
   selectAll(select: boolean) {
-    this.ciphersComponent.checkAll(select);
+    this.vaultItemsComponent.checkAll(select);
   }
 
   private async promptPassword() {
-    const selectedCiphers = this.ciphersComponent.selectedCiphers;
+    const selectedCiphers = this.vaultItemsComponent.selectedCiphers;
     const notProtected = !selectedCiphers.find(
       (cipher) => cipher.reprompt !== CipherRepromptType.None
     );

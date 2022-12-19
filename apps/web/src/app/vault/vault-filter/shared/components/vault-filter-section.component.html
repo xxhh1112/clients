@@ -15,7 +15,7 @@
     </button>
     <button
       *ngIf="headerInfo.isSelectable"
-      appA11yTitle="{{ isOrganization ? 'vault' : ('filter' | i18n) }}: {{
+      appA11yTitle="{{ isOrganizationFilter ? 'vault' : ('filter' | i18n) }}: {{
         headerNode.node.name | i18n
       }}"
       class="filter-button"
@@ -75,8 +75,10 @@
           </button>
           <button
             class="filter-button"
-            appA11yTitle="{{ isOrganization ? 'vault' : ('filter' | i18n) }}: {{ f.node.name }}"
-            [ngClass]="{ 'disabled-organization': isOrganization && !f.node.enabled }"
+            appA11yTitle="{{ isOrganizationFilter ? 'vault' : ('filter' | i18n) }}: {{
+              f.node.name
+            }}"
+            [ngClass]="{ 'disabled-organization': isOrganizationFilter && !f.node.enabled }"
             (click)="onFilterSelect(f)"
           >
             <i
@@ -98,7 +100,7 @@
             <i
               *ngIf="isOrganizationFilter && !f.node.enabled"
               class="org-options bwi bwi-fw bwi-exclamation-triangle text-danger"
-              aria-label="{{ 'organizationIsDisabled' | i18n }}"
+              [attr.aria-label]="'organizationIsDisabled' | i18n"
               appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
             ></i
             ><ng-container *ngIf="optionsInfo && !f.node.hideOptions"

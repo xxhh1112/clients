@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 
 import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
 
-import { GroupResponse } from "../../services/group/responses/group.response";
+import { GroupView } from "../../core";
 
 @Component({
   selector: "app-group-badge",
@@ -10,7 +10,7 @@ import { GroupResponse } from "../../services/group/responses/group.response";
 })
 export class GroupNameBadgeComponent {
   @Input() selectedGroups: SelectionReadOnlyRequest[];
-  @Input() allGroups: GroupResponse[];
+  @Input() allGroups: GroupView[];
 
   get shownGroups(): SelectionReadOnlyRequest[] {
     return this.showXMore ? this.selectedGroups.slice(0, 2) : this.selectedGroups;

@@ -11,7 +11,7 @@ import {
 } from "@bitwarden/common/models/response/collection.response";
 
 import { CoreOrganizationModule } from "../core-organization.module";
-import { CollectionAdminView } from "../views/collection-admin-view";
+import { CollectionAdminView } from "../views/collection-admin.view";
 
 @Injectable({ providedIn: CoreOrganizationModule })
 export class CollectionAdminService {

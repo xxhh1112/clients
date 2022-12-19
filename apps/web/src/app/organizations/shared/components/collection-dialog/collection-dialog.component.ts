@@ -12,15 +12,19 @@ import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/src/model
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators, DialogService } from "@bitwarden/components";
 
-import { CollectionAdminService, CollectionAdminView } from "../../../core";
-import { GroupServiceAbstraction } from "../../../services/abstractions/group";
-import { GroupView } from "../../../views/group.view";
+import {
+  CollectionAdminService,
+  CollectionAdminView,
+  GroupService,
+  GroupView,
+} from "../../../core";
 import {
   AccessItemType,
   AccessItemValue,
   AccessItemView,
   convertToPermission,
   convertToSelectionView,
+  PermissionMode,
 } from "../access-selector";
 
 export enum CollectionDialogTabType {
@@ -60,6 +64,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     parent: null as string | null,
     access: [[] as AccessItemValue[]],
   });
+  protected PermissionMode = PermissionMode;
 
   constructor(
     @Inject(DIALOG_DATA) private params: CollectionDialogParams,
@@ -67,7 +72,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private dialogRef: DialogRef<CollectionDialogResult>,
     private apiService: ApiService,
     private organizationService: OrganizationService,
-    private groupService: GroupServiceAbstraction,
+    private groupService: GroupService,
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService

@@ -1,6 +1,7 @@
 import { Directive, HostListener, Input, OnDestroy, Optional } from "@angular/core";
 import { BehaviorSubject, finalize, Subject, takeUntil, tap } from "rxjs";
 
+import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
@@ -17,13 +18,16 @@ export class BitActionDirective implements OnDestroy {
   private destroy$ = new Subject<void>();
   private _loading$ = new BehaviorSubject<boolean>(false);
 
+  disabled = false;
+
   @Input("bitAction") protected handler: FunctionReturningAwaitable;
 
   readonly loading$ = this._loading$.asObservable();
 
   constructor(
     private buttonComponent: ButtonLikeAbstraction,
-    @Optional() private validationService?: ValidationService
+    @Optional() private validationService?: ValidationService,
+    @Optional() private logService?: LogService
   ) {}
 
   get loading() {
@@ -37,14 +41,19 @@ export class BitActionDirective implements OnDestroy {
 
   @HostListener("click")
   protected async onClick() {
-    if (!this.handler) {
+    if (!this.handler || this.loading || this.disabled || this.buttonComponent.disabled) {
       return;
     }
 
     this.loading = true;
     functionToObservable(this.handler)
       .pipe(
-        tap({ error: (err: unknown) => this.validationService?.showError(err) }),
+        tap({
+          error: (err: unknown) => {
+            this.logService?.error(`Async action exception: ${err}`);
+            this.validationService?.showError(err);
+          },
+        }),
         finalize(() => (this.loading = false)),
         takeUntil(this.destroy$)
       )
