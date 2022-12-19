@@ -8,8 +8,8 @@ import { Component, HostBinding, Input } from "@angular/core";
 export class DialogComponent {
   @Input() dialogSize: "small" | "default" | "large" = "default";
 
-  private _disablePadding: boolean;
-  @Input() set disablePadding(value: boolean | string) {
+  private _disablePadding = false;
+  @Input() set disablePadding(value: boolean | "") {
     this._disablePadding = coerceBooleanProperty(value);
   }
   get disablePadding() {
