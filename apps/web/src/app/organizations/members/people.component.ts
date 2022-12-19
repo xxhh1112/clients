@@ -10,6 +10,12 @@ import { CollectionService } from "@bitwarden/common/abstractions/collection.ser
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserConfirmRequest } from "@bitwarden/common/abstractions/organization-user/requests";
+import {
+  OrganizationUserBulkResponse,
+  OrganizationUserUserDetailsResponse,
+} from "@bitwarden/common/abstractions/organization-user/responses";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -26,12 +32,8 @@ import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { OrganizationKeysRequest } from "@bitwarden/common/models/request/organization-keys.request";
-import { OrganizationUserBulkRequest } from "@bitwarden/common/models/request/organization-user-bulk.request";
-import { OrganizationUserConfirmRequest } from "@bitwarden/common/models/request/organization-user-confirm.request";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { OrganizationUserBulkResponse } from "@bitwarden/common/models/response/organization-user-bulk.response";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
 import { DialogService } from "@bitwarden/components";
 
 import { BasePeopleComponent } from "../../common/base.people.component";
@@ -97,6 +99,7 @@ export class PeopleComponent
     stateService: StateService,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
+    private organizationUserService: OrganizationUserService,
     private dialogService: DialogService,
     private groupService: GroupService,
     private collectionService: CollectionService
@@ -177,7 +180,7 @@ export class PeopleComponent
     let collectionsPromise: Promise<Map<string, string>>;
 
     // We don't need both groups and collections for the table, so only load one
-    const userPromise = this.apiService.getOrganizationUsers(this.organization.id, {
+    const userPromise = this.organizationUserService.getAllUsers(this.organization.id, {
       includeGroups: this.organization.useGroups,
       includeCollections: !this.organization.useGroups,
     });
@@ -234,19 +237,19 @@ export class PeopleComponent
   }
 
   deleteUser(id: string): Promise<void> {
-    return this.apiService.deleteOrganizationUser(this.organization.id, id);
+    return this.organizationUserService.deleteOrganizationUser(this.organization.id, id);
   }
 
   revokeUser(id: string): Promise<void> {
-    return this.apiService.revokeOrganizationUser(this.organization.id, id);
+    return this.organizationUserService.revokeOrganizationUser(this.organization.id, id);
   }
 
   restoreUser(id: string): Promise<void> {
-    return this.apiService.restoreOrganizationUser(this.organization.id, id);
+    return this.organizationUserService.restoreOrganizationUser(this.organization.id, id);
   }
 
   reinviteUser(id: string): Promise<void> {
-    return this.apiService.postOrganizationUserReinvite(this.organization.id, id);
+    return this.organizationUserService.postOrganizationUserReinvite(this.organization.id, id);
   }
 
   async confirmUser(user: OrganizationUserView, publicKey: Uint8Array): Promise<void> {
@@ -254,7 +257,11 @@ export class PeopleComponent
     const key = await this.cryptoService.rsaEncrypt(orgKey.key, publicKey.buffer);
     const request = new OrganizationUserConfirmRequest();
     request.key = key.encryptedString;
-    await this.apiService.postOrganizationUserConfirm(this.organization.id, user.id, request);
+    await this.organizationUserService.postOrganizationUserConfirm(
+      this.organization.id,
+      user.id,
+      request
+    );
   }
 
   allowResetPassword(orgUser: OrganizationUserView): boolean {
@@ -428,10 +435,9 @@ export class PeopleComponent
     }
 
     try {
-      const request = new OrganizationUserBulkRequest(filteredUsers.map((user) => user.id));
-      const response = this.apiService.postManyOrganizationUserReinvite(
+      const response = this.organizationUserService.postManyOrganizationUserReinvite(
         this.organization.id,
-        request
+        filteredUsers.map((user) => user.id)
       );
       this.showBulkStatus(
         users,

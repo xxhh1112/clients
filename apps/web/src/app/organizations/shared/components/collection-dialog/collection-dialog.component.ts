@@ -3,12 +3,12 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "rxjs";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/src/models/response/organization-user.response";
 import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { BitValidators, DialogService } from "@bitwarden/components";
 
@@ -70,12 +70,12 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: CollectionDialogParams,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef<CollectionDialogResult>,
-    private apiService: ApiService,
     private organizationService: OrganizationService,
     private groupService: GroupService,
     private collectionService: CollectionAdminService,
     private i18nService: I18nService,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    private organizationUserService: OrganizationUserService
   ) {
     this.tabIndex = params.initialTab ?? CollectionDialogTabType.Info;
   }
@@ -101,7 +101,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
         ? this.collectionService.get(this.params.organizationId, this.params.collectionId)
         : of(null),
       groups: groups$,
-      users: this.apiService.getOrganizationUsers(this.params.organizationId),
+      users: this.organizationUserService.getAllUsers(this.params.organizationId),
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ organization, collections, collectionDetails, groups, users }) => {

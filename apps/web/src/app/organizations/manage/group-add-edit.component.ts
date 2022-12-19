@@ -7,6 +7,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
@@ -129,7 +130,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
   }
 
   private get orgMembers$() {
-    return from(this.apiService.getOrganizationUsers(this.organizationId)).pipe(
+    return from(this.organizationUserService.getAllUsers(this.organizationId)).pipe(
       map((response) =>
         response.data.map((m) => ({
           id: m.id,
@@ -172,6 +173,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: GroupAddEditDialogParams,
     private dialogRef: DialogRef<GroupAddEditDialogResultType>,
     private apiService: ApiService,
+    private organizationUserService: OrganizationUserService,
     private groupService: GroupService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
