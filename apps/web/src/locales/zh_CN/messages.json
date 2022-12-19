@@ -573,7 +573,7 @@
     "message": "使用设备登录"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "设备登录必须在 Bitwarden 移动应用程序的设置中启用。需要其他选项吗？"
+    "message": "必须在 Bitwarden 移动应用程序的设置中启用设备登录。需要其他选项吗？"
   },
   "loginWithMasterPassword": {
     "message": "使用主密码登录"
@@ -582,7 +582,7 @@
     "message": "创建账户"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "初来乍到吗？"
   },
   "startTrial": {
     "message": "开始试用"
@@ -1291,23 +1291,23 @@
     "message": "两步登录"
   },
   "twoStepLoginEnforcement": {
-    "message": "强制两步登录"
+    "message": "两步登录实施"
   },
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
   },
   "twoStepLoginOrganizationDescStart": {
-    "message": "要强制成员使用 Bitwarden 两步登录选项，请使用 ",
+    "message": "要为成员实施 Bitwarden 两步登录选项，请使用 ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
     "message": "两步登录策略"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "要强制 Duo 方式的两步登录，请使用下面的选项。"
+    "message": "要实施 Duo 方式的两步登录，请使用下面的选项。"
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "如果您已设置或计划设置 SSO，两步登录可能已经通过您的身份提供程序强制执行了。"
+    "message": "如果您已设置或计划设置 SSO，两步登录可能已经通过您的身份提供程序实施了。"
   },
   "twoStepLoginRecoveryWarning": {
     "message": "启用两步登录可能会将您永久锁定在 Bitwarden 账户之外。如果您无法使用常规的两步登录提供程序（例如您丢失了设备），则可以使用恢复代码访问您的账户。如果您失去对您账户的访问，Bitwarden 支持也无法帮助您。我们建议您记下或打印恢复代码，并将其妥善保管。"
@@ -2444,7 +2444,7 @@
     "message": "所有者"
   },
   "ownerDesc": {
-    "message": "可以管理组织的所有方面的最高权限用户。"
+    "message": "管理您组织的所有方面，包括计费和订阅"
   },
   "clientOwnerDesc": {
     "message": "此用户应独立于提供商。如果提供商与组织断开关联，该用户将保留该组织的所有权。"
@@ -2453,19 +2453,19 @@
     "message": "管理员"
   },
   "adminDesc": {
-    "message": " 管理员可以访问和管理组织中的所有项目、集合和用户。"
+    "message": "管理组织访问权限，所有集合，成员，报告以及安全设置"
   },
   "user": {
     "message": "用户"
   },
   "userDesc": {
-    "message": "具有对组织所分配的集合有访问权限的普通用户。"
+    "message": "访问项目和将项目添加到已分配的集合"
   },
   "manager": {
     "message": "经理"
   },
   "managerDesc": {
-    "message": "经理可以访问和管理组织所分配的集合。"
+    "message": "在已分配的集合中创建、删除和管理访问权限"
   },
   "all": {
     "message": "全部"
@@ -4117,7 +4117,22 @@
     "message": "自定义"
   },
   "customDesc": {
-    "message": "高级配置允许对用户权限进行更多的粒度控制。"
+    "message": "授予成员自定义权限"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "自定义角色是 ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "企业功能",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": "。请联系我们的支持团队升级您的订阅",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "要启用自定义权限，该组织必须处于 2020 企业计划中。"
   },
   "permissions": {
     "message": "权限"
@@ -4729,7 +4744,7 @@
     "message": "客户 ID"
   },
   "clientSecret": {
-    "message": "客户密钥"
+    "message": "客户机密"
   },
   "metadataAddress": {
     "message": "元数据地址"
@@ -4831,7 +4846,7 @@
     "message": "最多 6 个用户的高级访问权限"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "用于家庭账号密码共享的集合"
+    "message": "用于家庭机密的共享集合"
   },
   "badToken": {
     "message": "链接已失效。请让赞助方重新发送邀请。"
@@ -5471,6 +5486,255 @@
   },
   "multiSelectClearAll": {
     "message": "清除全部"
+  },
+  "projects": {
+    "message": "Projects"
+  },
+  "lastEdited": {
+    "message": "上次编辑时间"
+  },
+  "editSecret": {
+    "message": "Edit Secret"
+  },
+  "addSecret": {
+    "message": "Add Secret"
+  },
+  "copySecretName": {
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue": {
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret": {
+    "message": "Delete Secret"
+  },
+  "deleteSecrets": {
+    "message": "Delete Secrets"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "服务账户"
+  },
+  "serviceAccounts": {
+    "message": "服务帐户"
+  },
+  "new": {
+    "message": "New"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "名称/值对"
+  },
+  "secretEdited": {
+    "message": "Secret edited"
+  },
+  "secretCreated": {
+    "message": "Secret created"
+  },
+  "newSecret": {
+    "message": "New Secret"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No secrets to show"
+  },
+  "secretsNoItemsMessage": {
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "还没有要显示的内容"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Search Secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "删除服务账户"
+  },
+  "deleteServiceAccount": {
+    "message": "删除服务帐户"
+  },
+  "viewServiceAccount": {
+    "message": "查看服务账户"
+  },
+  "searchServiceAccounts": {
+    "message": "搜索服务账户"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets sent to trash"
+  },
+  "serviceAccountCreated": {
+    "message": "服务帐户已创建"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Project, Secret"
+  },
+  "serviceAccountName": {
+    "message": "服务账户名称"
+  },
+  "newSaSelectAccess": {
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "键入以筛选"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "输入「$CONFIRM$」以继续",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "删除 $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "需要确认"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "访问令牌"
+  },
+  "createAccessToken": {
+    "message": "创建访问令牌"
+  },
+  "expires": {
+    "message": "到期"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "没有可显示的访问令牌"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "要开始，请创建一个访问令牌"
+  },
+  "downloadAccessToken": {
+    "message": "关闭前下载或复制。"
+  },
+  "expiresOnAccessToken": {
+    "message": "有效期至："
+  },
+  "accessTokenCallOutTitle": {
+    "message": "访问令牌未存储，无法获取"
+  },
+  "copyToken": {
+    "message": "复制令牌"
+  },
+  "accessToken": {
+    "message": "访问令牌"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "到期日期是必需的。"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "访问令牌已创建且已复制到剪贴板"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Beta 版中的权限管理不可用。"
+  },
+  "revokeAccessToken": {
+    "message": "撤销访问令牌"
+  },
+  "submenu": {
+    "message": "子菜单"
   },
   "from": {
     "message": "从"
