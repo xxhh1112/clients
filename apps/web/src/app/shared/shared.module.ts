@@ -25,6 +25,7 @@ import {
   TableModule,
   TabsModule,
   ToggleGroupModule,
+  ColorPasswordModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -66,6 +67,8 @@ import "./locales";
     TableModule,
     TabsModule,
     ToggleGroupModule,
+    LinkModule,
+    ColorPasswordModule,
 
     // Web specific
   ],
@@ -97,6 +100,8 @@ import "./locales";
     TableModule,
     TabsModule,
     ToggleGroupModule,
+    LinkModule,
+    ColorPasswordModule,
 
     // Web specific
   ],
