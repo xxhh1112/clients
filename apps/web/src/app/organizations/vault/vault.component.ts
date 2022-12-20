@@ -8,7 +8,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { combineLatest, firstValueFrom, Subject } from "rxjs";
+import { combineLatest, firstValueFrom, lastValueFrom, Subject } from "rxjs";
 import { first, switchMap, takeUntil } from "rxjs/operators";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -22,10 +22,15 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { DialogService } from "@bitwarden/components";
 
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/vault-filter/shared/models/vault-filter.model";
 import { EntityEventsComponent } from "../manage/entity-events.component";
+import {
+  CollectionDialogResult,
+  openCollectionDialog,
+} from "../shared/components/collection-dialog";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
@@ -66,6 +71,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private syncService: SyncService,
     private i18nService: I18nService,
     private modalService: ModalService,
+    private dialogService: DialogService,
     private messagingService: MessagingService,
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
@@ -158,6 +164,21 @@ export class VaultComponent implements OnInit, OnDestroy {
   filterSearchText(searchText: string) {
     this.vaultItemsComponent.searchText = searchText;
     this.vaultItemsComponent.search(200);
+  }
+
+  async addCollection() {
+    const dialog = openCollectionDialog(this.dialogService, {
+      data: {
+        organizationId: this.organization?.id,
+        parentCollectionId: this.activeFilter.collectionId,
+      },
+    });
+    const result = await lastValueFrom(dialog.closed);
+    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+      this.vaultItemsComponent.actionPromise = this.vaultItemsComponent.refresh();
+      await this.vaultItemsComponent.actionPromise;
+      this.vaultItemsComponent.actionPromise = null;
+    }
   }
 
   async editCipherAttachments(cipher: CipherView) {
