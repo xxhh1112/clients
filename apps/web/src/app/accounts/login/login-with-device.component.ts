@@ -136,7 +136,7 @@ export class LoginWithDeviceComponent implements OnInit, OnDestroy {
           this.router.navigate([this.forcePasswordResetRoute]);
         }
       } else {
-        await this.setRememberEmailValues();
+        await this.loginService.saveEmailSettings();
         if (this.onSuccessfulLogin != null) {
           this.onSuccessfulLogin();
         }
@@ -195,13 +195,5 @@ export class LoginWithDeviceComponent implements OnInit, OnDestroy {
       key,
       localHashedPassword
     );
-  }
-
-  private async setRememberEmailValues() {
-    const rememberEmail = this.loginService.getRememberEmail();
-    const rememberedEmail = this.loginService.getEmail();
-    await this.stateService.setRememberEmail(rememberEmail);
-    await this.stateService.setRememberedEmail(rememberEmail ? rememberedEmail : null);
-    this.loginService.clearValues();
   }
 }

@@ -47,8 +47,6 @@ export class LoginComponent implements OnInit {
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
-  protected alwaysRememberEmail = false;
-  protected skipRememberEmail = false;
 
   get loggedEmail() {
     return this.formGroup.value.email;
@@ -85,6 +83,7 @@ export class LoginComponent implements OnInit {
         const queryParamsEmail = params["email"];
         if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
           this.formGroup.get("email").setValue(queryParamsEmail);
+          this.loginService.setEmail(queryParamsEmail);
           this.paramEmailSet = true;
         }
       }
@@ -98,17 +97,11 @@ export class LoginComponent implements OnInit {
     if (!this.paramEmailSet) {
       this.formGroup.get("email")?.setValue(email ?? "");
     }
-    if (!this.alwaysRememberEmail) {
-      let rememberEmail = this.loginService.getRememberEmail();
-      if (rememberEmail == null) {
-        rememberEmail = (await this.stateService.getRememberedEmail()) != null;
-      }
-      this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
+    let rememberEmail = this.loginService.getRememberEmail();
+    if (rememberEmail == null) {
+      rememberEmail = (await this.stateService.getRememberedEmail()) != null;
     }
-
-    if (email) {
-      this.validateEmail();
-    }
+    this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
   }
 
   async submit(showToast = true) {
@@ -138,11 +131,7 @@ export class LoginComponent implements OnInit {
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       this.setFormValues();
-      if (data.rememberEmail || this.alwaysRememberEmail) {
-        await this.stateService.setRememberedEmail(data.email);
-      } else {
-        await this.stateService.setRememberedEmail(null);
-      }
+      await this.loginService.saveEmailSettings();
       if (!Utils.isNullOrWhitespace(response.captchaSiteKey)) {
         this.captchaSiteKey = response.captchaSiteKey;
         return;
@@ -161,7 +150,6 @@ export class LoginComponent implements OnInit {
       } else {
         const disableFavicon = await this.stateService.getDisableFavicon();
         await this.stateService.setDisableFavicon(!!disableFavicon);
-        this.loginService.clearValues();
         if (this.onSuccessfulLogin != null) {
           this.onSuccessfulLogin();
         }
@@ -191,6 +179,7 @@ export class LoginComponent implements OnInit {
   }
 
   async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
+    await this.saveEmailSettings();
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -243,6 +232,11 @@ export class LoginComponent implements OnInit {
   setFormValues() {
     this.loginService.setEmail(this.formGroup.value.email);
     this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
+  }
+
+  async saveEmailSettings() {
+    this.setFormValues();
+    await this.loginService.saveEmailSettings();
   }
 
   private getErrorToastMessage() {
