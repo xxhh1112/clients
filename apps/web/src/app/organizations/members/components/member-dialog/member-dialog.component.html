@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" [bitSubmit]="submit">
-  <bit-dialog dialogSize="large" [disablePadding]="!loading">
+  <bit-dialog [disablePadding]="!loading">
     <span bitDialogTitle>
       {{ title }}
       <span class="tw-text-sm tw-normal-case tw-text-muted" *ngIf="!loading && params.name">{{
@@ -114,6 +114,7 @@
               id="userTypeCustom"
               [value]="organizationUserType.Custom"
               [(ngModel)]="type"
+              [ngModelOptions]="{ standalone: true }"
               [attr.disabled]="!canUseCustomPermissions || null"
             />
             <label class="form-check-label" for="userTypeCustom">
@@ -283,112 +284,41 @@
               </div>
             </div>
           </ng-container>
-          <h3 class="mt-4 d-flex">
-            <div class="mb-3">
-              {{ "accessControl" | i18n }}
-              <a
-                target="_blank"
-                rel="noopener"
-                appA11yTitle="{{ 'learnMore' | i18n }}"
-                href="https://bitwarden.com/help/user-types-access-control/#access-control"
-              >
-                <i class="bwi bwi-question-circle" aria-hidden="true"></i>
-              </a>
-            </div>
-            <div class="ml-auto" *ngIf="access === 'selected' && collections && collections.length">
-              <button type="button" (click)="selectAll(true)" class="btn btn-link btn-sm py-0">
-                {{ "selectAll" | i18n }}
-              </button>
-              <button type="button" (click)="selectAll(false)" class="btn btn-link btn-sm py-0">
-                {{ "unselectAll" | i18n }}
-              </button>
-            </div>
-          </h3>
-          <div class="form-group" [ngClass]="{ 'mb-0': access !== 'selected' }">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="access"
-                id="accessAll"
-                value="all"
-                [ngModelOptions]="{ standalone: true }"
-                [(ngModel)]="access"
-              />
-              <label class="form-check-label" for="accessAll">
-                {{ "userAccessAllItems" | i18n }}
-              </label>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="access"
-                id="accessSelected"
-                value="selected"
-                [ngModelOptions]="{ standalone: true }"
-                [(ngModel)]="access"
-              />
-              <label class="form-check-label" for="accessSelected">
-                {{ "userAccessSelectedCollections" | i18n }}
-              </label>
-            </div>
-          </div>
-          <ng-container *ngIf="access === 'selected'">
-            <div *ngIf="!collections || !collections.length">
-              {{ "noCollectionsInList" | i18n }}
-            </div>
-            <table
-              class="table table-hover table-list mb-0"
-              *ngIf="collections && collections.length"
-            >
-              <thead>
-                <tr>
-                  <th>&nbsp;</th>
-                  <th>{{ "name" | i18n }}</th>
-                  <th width="100" class="text-center">{{ "hidePasswords" | i18n }}</th>
-                  <th width="100" class="text-center">{{ "readOnly" | i18n }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let c of collections; let i = index">
-                  <td class="table-list-checkbox" (click)="check(c)">
-                    <input
-                      type="checkbox"
-                      [ngModelOptions]="{ standalone: true }"
-                      [(ngModel)]="$any(c).checked"
-                      name="Collection[{{ i }}].Checked"
-                      appStopProp
-                    />
-                  </td>
-                  <td (click)="check(c)">
-                    {{ c.name }}
-                  </td>
-                  <td class="text-center">
-                    <input
-                      type="checkbox"
-                      [ngModelOptions]="{ standalone: true }"
-                      [(ngModel)]="c.hidePasswords"
-                      name="Collection[{{ i }}].HidePasswords"
-                      [disabled]="!$any(c).checked"
-                    />
-                  </td>
-                  <td class="text-center">
-                    <input
-                      type="checkbox"
-                      [ngModelOptions]="{ standalone: true }"
-                      [(ngModel)]="c.readOnly"
-                      name="Collection[{{ i }}].ReadOnly"
-                      [disabled]="!$any(c).checked"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </ng-container>
         </bit-tab>
-        <bit-tab [label]="'groups' | i18n">Groups</bit-tab>
-        <bit-tab [label]="'collections' | i18n">Collections</bit-tab>
+        <bit-tab *ngIf="organization.useGroups" [label]="'groups' | i18n"> Groups </bit-tab>
+        <bit-tab [label]="'collections' | i18n">
+          <div *ngIf="organization.useGroups" class="tw-mb-6">
+            {{ "userPermissionOverrideHelper" | i18n }}
+          </div>
+          <div class="tw-mb-6">
+            <!-- TODO: Replace with bit-checkbox when feature has been merged into feature branch -->
+            <label>
+              <input type="checkbox" formControlName="accessAllCollections" />
+              <span class="tw-bold"
+                >{{ "accessAllCollectionsDesc" | i18n }}
+                <a
+                  target="_blank"
+                  rel="noopener"
+                  appA11yTitle="{{ 'learnMore' | i18n }}"
+                  href="https://bitwarden.com/help/user-types-access-control/#access-control"
+                >
+                  <i class="bwi bwi-question-circle" aria-hidden="true"></i>
+                </a>
+              </span>
+            </label>
+            <div class="tw-text-muted">{{ "accessAllCollectionsHelp" | i18n }}</div>
+          </div>
+          <bit-access-selector
+            *ngIf="!accessAllCollections"
+            [permissionMode]="PermissionMode.Edit"
+            formControlName="access"
+            [showGroupColumn]="organization.useGroups"
+            [items]="accessItems"
+            [columnHeader]="'collection' | i18n"
+            [selectorLabelText]="'selectCollections' | i18n"
+            [emptySelectionText]="'noCollectionsAdded' | i18n"
+          ></bit-access-selector
+        ></bit-tab>
       </bit-tab-group>
     </div>
     <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">

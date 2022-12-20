@@ -1,16 +1,13 @@
-import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
-import { Component, Inject, OnInit } from "@angular/core";
+import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
+import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import {
-  OrganizationUserInviteRequest,
-  OrganizationUserUpdateRequest,
-} from "@bitwarden/common/abstractions/organization-user/requests";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
@@ -18,10 +15,27 @@ import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserTy
 import { PermissionsApi } from "@bitwarden/common/models/api/permissions.api";
 import { CollectionData } from "@bitwarden/common/models/data/collection.data";
 import { Collection } from "@bitwarden/common/models/domain/collection";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
+
+import {
+  CollectionAccessSelectionView,
+  CollectionAdminService,
+  GroupService,
+  GroupView,
+  OrganizationUserAdminView,
+  UserAdminService,
+} from "../../../core";
+import {
+  AccessItemType,
+  AccessItemValue,
+  AccessItemView,
+  convertToPermission,
+  convertToSelectionView,
+  PermissionMode,
+} from "../../../shared/components/access-selector";
 
 export enum MemberDialogTab {
   Role = 0,
@@ -49,7 +63,7 @@ export enum MemberDialogResult {
   selector: "app-member-dialog",
   templateUrl: "member-dialog.component.html",
 })
-export class MemberDialogComponent implements OnInit {
+export class MemberDialogComponent implements OnInit, OnDestroy {
   loading = true;
   editMode = false;
   isRevoked = false;
@@ -57,15 +71,22 @@ export class MemberDialogComponent implements OnInit {
   emails: string;
   type: OrganizationUserType = OrganizationUserType.User;
   permissions = new PermissionsApi();
-  showCustom = false;
   access: "all" | "selected" = "selected";
   collections: CollectionView[] = [];
   organizationUserType = OrganizationUserType;
   canUseCustomPermissions: boolean;
+  PermissionMode = PermissionMode;
 
+  protected organization: Organization;
+  protected accessItems: AccessItemView[] = [];
   protected tabIndex: MemberDialogTab;
   // Stub, to be filled out in upcoming PRs
-  protected formGroup = this.formBuilder.group({});
+  protected formGroup = this.formBuilder.group({
+    accessAllCollections: false,
+    access: [[] as AccessItemValue[]],
+  });
+
+  private destroy$ = new Subject<void>();
 
   manageAllCollectionsCheckboxes = [
     {
@@ -102,6 +123,10 @@ export class MemberDialogComponent implements OnInit {
     return this.type === OrganizationUserType.Custom;
   }
 
+  get accessAllCollections(): boolean {
+    return this.formGroup.value.accessAllCollections;
+  }
+
   constructor(
     @Inject(DIALOG_DATA) protected params: MemberDialogParams,
     private dialogRef: DialogRef<MemberDialogResult>,
@@ -111,8 +136,12 @@ export class MemberDialogComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private organizationService: OrganizationService,
     private logService: LogService,
-    private organizationUserService: OrganizationUserService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    // TODO: We should really look into consolidating naming conventions for these services
+    private collectionAdminService: CollectionAdminService,
+    private groupService: GroupService,
+    private userService: UserAdminService,
+    private organizationUserService: OrganizationUserService
   ) {}
 
   async ngOnInit() {
@@ -154,7 +183,70 @@ export class MemberDialogComponent implements OnInit {
       this.title = this.i18nService.t("inviteMember");
     }
 
-    this.loading = false;
+    // ----------- New data fetching below ---------------
+
+    const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(
+      shareReplay({ refCount: true, bufferSize: 1 })
+    );
+    const groups$ = organization$.pipe(
+      switchMap((organization) => {
+        if (!organization.useGroups) {
+          return of([] as GroupView[]);
+        }
+
+        return this.groupService.getAll(this.params.organizationId);
+      })
+    );
+    const userGroups$ = this.params.organizationUserId
+      ? of(
+          await this.organizationUserService.getOrganizationUserGroups(
+            this.params.organizationId,
+            this.params.organizationUserId
+          )
+        )
+      : of([]);
+
+    combineLatest({
+      organization: organization$,
+      collections: this.collectionAdminService.getAll(this.params.organizationId),
+      userDetails: this.params.organizationUserId
+        ? this.userService.get(this.params.organizationId, this.params.organizationUserId)
+        : of(null),
+      groups: groups$,
+      userGroups: userGroups$,
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ organization, collections, userDetails, groups, userGroups }) => {
+        this.organization = organization;
+        const collectionsFromGroups = groups
+          .filter((group) => userGroups.includes(group.id))
+          .flatMap((group) =>
+            group.collections.map((accessSelection) => {
+              const collection = collections.find((c) => c.id === accessSelection.id);
+              return { group, collection, accessSelection };
+            })
+          );
+        this.accessItems = [].concat(
+          collectionsFromGroups.map(({ collection, accessSelection, group }) =>
+            mapCollectionToAccessItemView(collection, accessSelection, group)
+          ),
+          collections.map((c) => mapCollectionToAccessItemView(c))
+        );
+
+        if (this.params.organizationUserId) {
+          if (!userDetails) {
+            throw new Error("Could not find user to edit.");
+          }
+
+          const accessSelections = mapToAccessSelections(userDetails);
+          this.formGroup.patchValue({
+            accessAllCollections: userDetails.accessAll,
+            access: accessSelections,
+          });
+        }
+
+        this.loading = false;
+      });
   }
 
   async loadCollections() {
@@ -195,6 +287,10 @@ export class MemberDialogComponent implements OnInit {
   }
 
   submit = async () => {
+    if (this.formGroup.invalid) {
+      return;
+    }
+
     if (!this.canUseCustomPermissions && this.type === OrganizationUserType.Custom) {
       this.platformUtilsService.showToast(
         "error",
@@ -203,18 +299,27 @@ export class MemberDialogComponent implements OnInit {
       );
       return;
     }
-    let collections: SelectionReadOnlyRequest[] = null;
-    if (this.access !== "all") {
-      collections = this.collections
-        .filter((c) => (c as any).checked)
-        .map((c) => new SelectionReadOnlyRequest(c.id, !!c.readOnly, !!c.hidePasswords));
-    }
 
     try {
+      const userView = new OrganizationUserAdminView();
+      userView.id = this.params.organizationUserId;
+      userView.organizationId = this.params.organizationId;
+      userView.accessAll = this.accessAllCollections;
+      userView.type = this.type;
+      userView.permissions = this.setRequestPermissions(
+        userView.permissions ?? new PermissionsApi(),
+        userView.type !== OrganizationUserType.Custom
+      );
+      userView.collections = this.formGroup.controls.access.value
+        .filter((v) => v.type === AccessItemType.Collection)
+        .map(convertToSelectionView);
+
       if (this.editMode) {
-        await this.updateUser(collections);
+        await this.userService.save(userView);
       } else {
-        await this.inviteUser(collections);
+        userView.id = this.params.organizationUserId;
+        const emails = [...new Set(this.emails.trim().split(/\s*,\s*/))];
+        await this.userService.invite(emails, userView);
       }
 
       this.platformUtilsService.showToast(
@@ -325,6 +430,11 @@ export class MemberDialogComponent implements OnInit {
     }
   };
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   protected async cancel() {
     this.close(MemberDialogResult.Canceled);
   }
@@ -332,38 +442,35 @@ export class MemberDialogComponent implements OnInit {
   private close(result: MemberDialogResult) {
     this.dialogRef.close(result);
   }
+}
 
-  async updateUser(collections: SelectionReadOnlyRequest[]) {
-    const request = new OrganizationUserUpdateRequest();
-    request.accessAll = this.access === "all";
-    request.type = this.type;
-    request.collections = collections;
-    request.permissions = this.setRequestPermissions(
-      request.permissions ?? new PermissionsApi(),
-      request.type !== OrganizationUserType.Custom
-    );
-    await this.organizationUserService.putOrganizationUser(
-      this.params.organizationId,
-      this.params.organizationUserId,
-      request
-    );
-  }
+function mapCollectionToAccessItemView(
+  collection: CollectionView,
+  accessSelection?: CollectionAccessSelectionView,
+  group?: GroupView
+): AccessItemView {
+  return {
+    type: AccessItemType.Collection,
+    id: group ? `${collection.id}-${group.id}` : collection.id,
+    labelName: collection.name,
+    listName: collection.name,
+    readonly: accessSelection !== undefined,
+    readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
+    viaGroupName: group?.name,
+  };
+}
 
-  async inviteUser(collections: SelectionReadOnlyRequest[]) {
-    const request = new OrganizationUserInviteRequest();
-    request.emails = [...new Set(this.emails.trim().split(/\s*,\s*/))];
-    request.accessAll = this.access === "all";
-    request.type = this.type;
-    request.permissions = this.setRequestPermissions(
-      request.permissions ?? new PermissionsApi(),
-      request.type !== OrganizationUserType.Custom
-    );
-    request.collections = collections;
-    await this.organizationUserService.postOrganizationUserInvite(
-      this.params.organizationId,
-      request
-    );
+function mapToAccessSelections(user: OrganizationUserAdminView): AccessItemValue[] {
+  if (user == undefined) {
+    return [];
   }
+  return [].concat(
+    user.collections.map<AccessItemValue>((selection) => ({
+      id: selection.id,
+      type: AccessItemType.Collection,
+      permission: convertToPermission(selection),
+    }))
+  );
 }
 
 /**
