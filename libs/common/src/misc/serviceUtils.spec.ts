@@ -1,56 +1,27 @@
-import { TreeNode } from "../models/domain/tree-node";
+import { ITreeNodeObject, TreeNode } from "../models/domain/tree-node";
 
 import { ServiceUtils } from "./serviceUtils";
 
+type FakeObject = { id: string; name: string };
+
 describe("serviceUtils", () => {
-  type fakeObject = { id: string; name: string };
-  let nodeTree: TreeNode<fakeObject>[];
+  let nodeTree: TreeNode<FakeObject>[];
   beforeEach(() => {
     nodeTree = [
-      {
-        parent: null,
-        node: { id: "1", name: "1" },
-        children: [
-          {
-            parent: { id: "1", name: "1" },
-            node: { id: "1.1", name: "1.1" },
-            children: [
-              {
-                parent: { id: "1.1", name: "1.1" },
-                node: { id: "1.1.1", name: "1.1.1" },
-                children: [],
-              },
-            ],
-          },
-          {
-            parent: { id: "1", name: "1" },
-            node: { id: "1.2", name: "1.2" },
-            children: [],
-          },
-        ],
-      },
-      {
-        parent: null,
-        node: { id: "2", name: "2" },
-        children: [
-          {
-            parent: { id: "2", name: "2" },
-            node: { id: "2.1", name: "2.1" },
-            children: [],
-          },
-        ],
-      },
-      {
-        parent: null,
-        node: { id: "3", name: "3" },
-        children: [],
-      },
+      createTreeNode({ id: "1", name: "1" }, [
+        createTreeNode({ id: "1.1", name: "1.1" }, [
+          createTreeNode({ id: "1.1.1", name: "1.1.1" }),
+        ]),
+        createTreeNode({ id: "1.2", name: "1.2" }),
+      ])(null),
+      createTreeNode({ id: "2", name: "2" }, [createTreeNode({ id: "2.1", name: "2.1" })])(null),
+      createTreeNode({ id: "3", name: "3" }, [])(null),
     ];
   });
 
   describe("nestedTraverse", () => {
     it("should traverse a tree and add a node at the correct position given a valid path", () => {
-      const nodeToBeAdded: fakeObject = { id: "1.2.1", name: "1.2.1" };
+      const nodeToBeAdded: FakeObject = { id: "1.2.1", name: "1.2.1" };
       const path = ["1", "1.2", "1.2.1"];
 
       ServiceUtils.nestedTraverse(nodeTree, 0, path, nodeToBeAdded, null, "/");
@@ -58,7 +29,7 @@ describe("serviceUtils", () => {
     });
 
     it("should combine the path for missing nodes and use as the added node name given an invalid path", () => {
-      const nodeToBeAdded: fakeObject = { id: "blank", name: "blank" };
+      const nodeToBeAdded: FakeObject = { id: "blank", name: "blank" };
       const path = ["3", "3.1", "3.1.1"];
 
       ServiceUtils.nestedTraverse(nodeTree, 0, path, nodeToBeAdded, null, "/");
@@ -82,3 +53,20 @@ describe("serviceUtils", () => {
     });
   });
 });
+
+type TreeNodeFactory<T extends ITreeNodeObject> = (
+  obj: T,
+  children?: TreeNodeFactoryWithoutParent<T>[]
+) => TreeNodeFactoryWithoutParent<T>;
+
+type TreeNodeFactoryWithoutParent<T extends ITreeNodeObject> = (
+  parent?: TreeNode<T>
+) => TreeNode<T>;
+
+const createTreeNode: TreeNodeFactory<FakeObject> =
+  (obj, children = []) =>
+  (parent) => {
+    const node = new TreeNode<FakeObject>(obj, parent, obj.name, obj.id);
+    node.children = children.map((childFunc) => childFunc(node));
+    return node;
+  };

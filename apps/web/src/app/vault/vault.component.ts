@@ -37,7 +37,11 @@ import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
-import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
+import {
+  CollectionFilter,
+  FolderFilter,
+  OrganizationFilter,
+} from "./vault-filter/shared/models/vault-filter.type";
 import { VaultItemsComponent } from "./vault-items.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";
@@ -378,6 +382,29 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async updateKey() {
     await this.modalService.openViewRef(UpdateKeyComponent, this.updateKeyModalRef);
+  }
+
+  get breadcrumbs(): TreeNode<CollectionFilter>[] {
+    if (!this.activeFilter.selectedCollectionNode) {
+      return [];
+    }
+
+    const collections = [this.activeFilter.selectedCollectionNode];
+    while (collections[collections.length - 1].parent != undefined) {
+      collections.push(collections[collections.length - 1].parent);
+    }
+
+    return collections
+      .map((c) => c)
+      .slice(1) // 1 for self
+      .reverse();
+  }
+
+  protected applyCollectionFilter(collection: TreeNode<CollectionFilter>) {
+    const filter = this.activeFilter;
+    filter.resetFilter();
+    filter.selectedCollectionNode = collection;
+    this.applyVaultFilter(filter);
   }
 
   private go(queryParams: any = null) {

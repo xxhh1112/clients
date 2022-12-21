@@ -16,6 +16,17 @@
       </div>
     </div>
     <div class="col-9">
+      <bit-breadcrumbs *ngIf="breadcrumbs.length > 0">
+        <bit-breadcrumb
+          *ngFor="let collection of breadcrumbs; let first = first"
+          [icon]="first ? undefined : 'bwi-collection'"
+          (click)="applyCollectionFilter(collection)"
+        >
+          <!-- First node in the tree contains a translation key. The rest come from user input. -->
+          <ng-container *ngIf="first">{{ collection.node.name | i18n }}</ng-container>
+          <ng-template *ngIf="!first">{{ collection.node.name }}</ng-template>
+        </bit-breadcrumb>
+      </bit-breadcrumbs>
       <div class="tw-mb-4 tw-flex">
         <h1>
           {{ "vaultItems" | i18n }}

@@ -21,11 +21,13 @@ import { PasswordRepromptService } from "@bitwarden/common/abstractions/password
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { Organization } from "@bitwarden/common/models/domain/organization";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { DialogService } from "@bitwarden/components";
 
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/vault-filter/shared/models/vault-filter.model";
+import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
 import { EntityEventsComponent } from "../manage/entity-events.component";
 import {
   CollectionDialogResult,
@@ -304,6 +306,29 @@ export class VaultComponent implements OnInit, OnDestroy {
       comp.showUser = true;
       comp.entity = "cipher";
     });
+  }
+
+  get breadcrumbs(): TreeNode<CollectionFilter>[] {
+    if (!this.activeFilter.selectedCollectionNode) {
+      return [];
+    }
+
+    const collections = [this.activeFilter.selectedCollectionNode];
+    while (collections[collections.length - 1].parent != undefined) {
+      collections.push(collections[collections.length - 1].parent);
+    }
+
+    return collections
+      .map((c) => c)
+      .slice(1) // 1 for self
+      .reverse();
+  }
+
+  protected applyCollectionFilter(collection: TreeNode<CollectionFilter>) {
+    const filter = this.activeFilter;
+    filter.resetFilter();
+    filter.selectedCollectionNode = collection;
+    this.applyVaultFilter(filter);
   }
 
   private go(queryParams: any = null) {

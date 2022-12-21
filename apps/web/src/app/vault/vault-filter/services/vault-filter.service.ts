@@ -135,7 +135,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       orgs.forEach((org) => {
         const orgCopy = org as OrganizationFilter;
         orgCopy.icon = "bwi-business";
-        const node = new TreeNode<OrganizationFilter>(orgCopy, headNode.node, orgCopy.name);
+        const node = new TreeNode<OrganizationFilter>(orgCopy, headNode, orgCopy.name);
         headNode.children.push(node);
       });
     }
@@ -163,7 +163,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
   ): Observable<TreeNode<CipherTypeFilter>> {
     const headNode = new TreeNode<CipherTypeFilter>(head, null);
     array?.forEach((filter) => {
-      const node = new TreeNode<CipherTypeFilter>(filter, head, filter.name);
+      const node = new TreeNode<CipherTypeFilter>(filter, headNode, filter.name);
       headNode.children.push(node);
     });
     return of(headNode);
@@ -196,7 +196,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
     });
     nodes.forEach((n) => {
-      n.parent = headNode.node;
+      n.parent = headNode;
       headNode.children.push(n);
     });
     return headNode;
@@ -239,7 +239,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
     });
 
     nodes.forEach((n) => {
-      n.parent = headNode.node;
+      n.parent = headNode;
       headNode.children.push(n);
     });
     return headNode;
