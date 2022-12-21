@@ -96,7 +96,7 @@ const FullExampleTemplate: Story = (args) => ({
         <bit-hint>Required for the service to work properly</bit-hint>
       </bit-form-control>
 
-      <bit-radio-group formControlName="updates">
+      <bit-radio-group inline formControlName="updates">
         <bit-label>Subscribe to updates?</bit-label>
         <bit-radio-button value="yes">Yes</bit-radio-button>
         <bit-radio-button value="no">No</bit-radio-button>
