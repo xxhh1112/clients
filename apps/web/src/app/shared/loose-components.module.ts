@@ -24,6 +24,7 @@ import { UserVerificationComponent } from "../components/user-verification.compo
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
+import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { OrganizationCreateModule } from "../organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../organizations/layouts/organization-layout.component";
@@ -112,7 +113,7 @@ import { SharedModule } from "./shared.module";
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
 @NgModule({
-  imports: [SharedModule, OrganizationCreateModule, RegisterFormModule],
+  imports: [SharedModule, OrganizationCreateModule, RegisterFormModule, ProductSwitcherModule],
   declarations: [
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
