@@ -10,11 +10,20 @@ import { RadioButtonModule } from "./radio-button.module";
 
 const template = `
   <form [formGroup]="formObj">
-    <bit-radio-group formControlName="radio" aria-label="Example radio group">
+    <bit-radio-group [inline]=inline formControlName="radio" aria-label="Example radio group">
       <bit-label *ngIf="label">Group of radio buttons</bit-label>
-      <bit-radio-button [value]="TestValue.First" id="radio-first">First</bit-radio-button>
-      <bit-radio-button [value]="TestValue.Second" id="radio-second">Second</bit-radio-button>
-      <bit-radio-button [value]="TestValue.Third" id="radio-third">Third</bit-radio-button>
+      <bit-radio-button [value]="TestValue.First" id="radio-first">
+        First
+        <bit-hint>Hints will only show if you set inline to false</bit-hint>
+      </bit-radio-button>
+      <bit-radio-button [value]="TestValue.Second" id="radio-second">
+        Second
+        <bit-hint>Here is another hint that can help explain the Second option in more detail</bit-hint>
+      </bit-radio-button>
+      <bit-radio-button [value]="TestValue.Third" id="radio-third">
+        Third
+        <bit-hint>Make sure you provide your hint inside of the bit-radio-button tag</bit-hint>
+      </bit-radio-button>
     </bit-radio-group>
   </form>`;
 
@@ -36,6 +45,8 @@ class ExampleComponent {
   });
 
   @Input() label: boolean;
+
+  @Input() inline: boolean;
 
   @Input() set selected(value: TestValue) {
     this.formObj.patchValue({ radio: value });
@@ -83,6 +94,7 @@ export default {
     selected: TestValue.First,
     disabled: false,
     label: true,
+    inline: false,
   },
   argTypes: {
     selected: {
@@ -101,7 +113,7 @@ export default {
 
 const DefaultTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
   props: args,
-  template: `<app-example [selected]="selected" [disabled]="disabled" [label]="label"></app-example>`,
+  template: `<app-example [inline]="inline" [selected]="selected" [disabled]="disabled" [label]="label"></app-example>`,
 });
 
 export const Default = DefaultTemplate.bind({});

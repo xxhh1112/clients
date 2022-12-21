@@ -1,4 +1,4 @@
-<bit-form-control inline>
+<bit-form-control [inline]="inline">
   <input
     type="radio"
     bitRadio
@@ -10,5 +10,11 @@
     (change)="onInputChange()"
     (blur)="onBlur()"
   />
-  <bit-label><ng-content></ng-content></bit-label>
+  <bit-label>
+    <ng-content></ng-content>
+  </bit-label>
+
+  <bit-hint *ngIf="hint && !inline" class="tw-ml-5 !tw-mt-0"
+    ><ng-content select="bit-hint"></ng-content
+  ></bit-hint>
 </bit-form-control>
