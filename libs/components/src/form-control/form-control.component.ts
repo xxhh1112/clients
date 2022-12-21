@@ -20,24 +20,33 @@ export class FormControlComponent {
     this._inline = coerceBooleanProperty(value);
   }
 
+  private _smallBottomMargin = false;
+  @Input() get smallBottomMargin() {
+    return this._smallBottomMargin;
+  }
+  set smallBottomMargin(value: boolean | "") {
+    this._smallBottomMargin = coerceBooleanProperty(value);
+  }
+
   @ContentChild(BitFormControlAbstraction) protected formControl: BitFormControlAbstraction;
 
   @HostBinding("class") get classes() {
-    return ["tw-mb-6"].concat(this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"]);
+    return [].concat(
+      this.smallBottomMargin ? ["tw-mb-3"] : ["tw-mb-6"],
+      this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"]
+    );
   }
 
   constructor(private i18nService: I18nService) {}
 
   protected get labelClasses() {
-    return ["tw-transition", "tw-select-none", "tw-mb-0"].concat(
+    return ["tw-transition", "tw-select-none", "tw-mb-0", "tw-flex", "tw-items-baseline"].concat(
       this.formControl.disabled ? "tw-cursor-auto" : "tw-cursor-pointer"
     );
   }
 
   protected get labelContentClasses() {
-    return ["tw-font-semibold"].concat(
-      this.formControl.disabled ? "tw-text-muted" : "tw-text-main"
-    );
+    return this.formControl.disabled ? "tw-text-muted" : "tw-text-main";
   }
 
   get required() {
