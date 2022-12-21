@@ -13,10 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import { PermissionsApi } from "@bitwarden/common/models/api/permissions.api";
-import { CollectionData } from "@bitwarden/common/models/data/collection.data";
-import { Collection } from "@bitwarden/common/models/domain/collection";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionDetailsResponse } from "@bitwarden/common/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
 
@@ -78,12 +75,14 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   PermissionMode = PermissionMode;
 
   protected organization: Organization;
-  protected accessItems: AccessItemView[] = [];
+  protected collectionAccessItems: AccessItemView[] = [];
+  protected groupAccessItems: AccessItemView[] = [];
   protected tabIndex: MemberDialogTab;
   // Stub, to be filled out in upcoming PRs
   protected formGroup = this.formBuilder.group({
     accessAllCollections: false,
     access: [[] as AccessItemValue[]],
+    groups: [[] as AccessItemValue[]],
   });
 
   private destroy$ = new Subject<void>();
@@ -147,43 +146,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.editMode = this.loading = this.params.organizationUserId != null;
     this.tabIndex = this.params.initialTab ?? MemberDialogTab.Role;
-
-    const organization = this.organizationService.get(this.params.organizationId);
-    this.canUseCustomPermissions = organization.useCustomPermissions;
-    await this.loadCollections();
-
-    if (this.editMode) {
-      this.editMode = true;
-      this.title = this.i18nService.t("editMember");
-      try {
-        const user = await this.organizationUserService.getOrganizationUser(
-          this.params.organizationId,
-          this.params.organizationUserId
-        );
-        this.access = user.accessAll ? "all" : "selected";
-        this.type = user.type;
-        this.isRevoked = user.status === OrganizationUserStatusType.Revoked;
-        if (user.type === OrganizationUserType.Custom) {
-          this.permissions = user.permissions;
-        }
-        if (user.collections != null && this.collections != null) {
-          user.collections.forEach((s) => {
-            const collection = this.collections.filter((c) => c.id === s.id);
-            if (collection != null && collection.length > 0) {
-              (collection[0] as any).checked = true;
-              collection[0].readOnly = s.readOnly;
-              collection[0].hidePasswords = s.hidePasswords;
-            }
-          });
-        }
-      } catch (e) {
-        this.logService.error(e);
-      }
-    } else {
-      this.title = this.i18nService.t("inviteMember");
-    }
-
-    // ----------- New data fetching below ---------------
+    this.title = this.i18nService.t(this.editMode ? "editMember" : "inviteMember");
 
     const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(
       shareReplay({ refCount: true, bufferSize: 1 })
@@ -197,14 +160,6 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         return this.groupService.getAll(this.params.organizationId);
       })
     );
-    const userGroups$ = this.params.organizationUserId
-      ? of(
-          await this.organizationUserService.getOrganizationUserGroups(
-            this.params.organizationId,
-            this.params.organizationUserId
-          )
-        )
-      : of([]);
 
     combineLatest({
       organization: organization$,
@@ -213,24 +168,35 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         ? this.userService.get(this.params.organizationId, this.params.organizationUserId)
         : of(null),
       groups: groups$,
-      userGroups: userGroups$,
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ organization, collections, userDetails, groups, userGroups }) => {
+      .subscribe(({ organization, collections, userDetails, groups }) => {
         this.organization = organization;
+        this.canUseCustomPermissions = organization.useCustomPermissions;
+        this.type = userDetails.type;
+        this.isRevoked = userDetails.status === OrganizationUserStatusType.Revoked;
+
+        if (userDetails.type === OrganizationUserType.Custom) {
+          this.permissions = userDetails.permissions;
+        }
+
         const collectionsFromGroups = groups
-          .filter((group) => userGroups.includes(group.id))
+          .filter((group) => userDetails.groups.includes(group.id))
           .flatMap((group) =>
             group.collections.map((accessSelection) => {
               const collection = collections.find((c) => c.id === accessSelection.id);
               return { group, collection, accessSelection };
             })
           );
-        this.accessItems = [].concat(
+        this.collectionAccessItems = [].concat(
           collectionsFromGroups.map(({ collection, accessSelection, group }) =>
             mapCollectionToAccessItemView(collection, accessSelection, group)
           ),
           collections.map((c) => mapCollectionToAccessItemView(c))
+        );
+
+        this.groupAccessItems = [].concat(
+          groups.map<AccessItemView>((g) => mapGroupToAccessItemView(g))
         );
 
         if (this.params.organizationUserId) {
@@ -239,22 +205,16 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
           }
 
           const accessSelections = mapToAccessSelections(userDetails);
+          const groupAccessSelections = mapToGroupAccessSelections(userDetails.groups);
           this.formGroup.patchValue({
             accessAllCollections: userDetails.accessAll,
             access: accessSelections,
+            groups: groupAccessSelections,
           });
         }
 
         this.loading = false;
       });
-  }
-
-  async loadCollections() {
-    const response = await this.apiService.getCollections(this.params.organizationId);
-    const collections = response.data.map(
-      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
-    );
-    this.collections = await this.collectionService.decryptMany(collections);
   }
 
   check(c: CollectionView, select?: boolean) {
@@ -313,6 +273,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       userView.collections = this.formGroup.controls.access.value
         .filter((v) => v.type === AccessItemType.Collection)
         .map(convertToSelectionView);
+      userView.groups = this.formGroup.controls.groups.value.map((m) => m.id);
 
       if (this.editMode) {
         await this.userService.save(userView);
@@ -460,6 +421,15 @@ function mapCollectionToAccessItemView(
   };
 }
 
+function mapGroupToAccessItemView(group: GroupView): AccessItemView {
+  return {
+    type: AccessItemType.Group,
+    id: group.id,
+    labelName: group.name,
+    listName: group.name,
+  };
+}
+
 function mapToAccessSelections(user: OrganizationUserAdminView): AccessItemValue[] {
   if (user == undefined) {
     return [];
@@ -469,6 +439,18 @@ function mapToAccessSelections(user: OrganizationUserAdminView): AccessItemValue
       id: selection.id,
       type: AccessItemType.Collection,
       permission: convertToPermission(selection),
+    }))
+  );
+}
+
+function mapToGroupAccessSelections(groups: string[]): AccessItemValue[] {
+  if (groups == undefined) {
+    return [];
+  }
+  return [].concat(
+    groups.map((groupId) => ({
+      id: groupId,
+      type: AccessItemType.Group,
     }))
   );
 }

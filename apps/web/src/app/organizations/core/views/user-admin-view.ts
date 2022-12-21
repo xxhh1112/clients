@@ -15,4 +15,5 @@ export class OrganizationUserAdminView {
   resetPasswordEnrolled: boolean;
 
   collections: CollectionAccessSelectionView[] = [];
+  groups: string[] = [];
 }

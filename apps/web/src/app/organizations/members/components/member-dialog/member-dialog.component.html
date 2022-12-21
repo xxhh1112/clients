@@ -285,7 +285,18 @@
             </div>
           </ng-container>
         </bit-tab>
-        <bit-tab *ngIf="organization.useGroups" [label]="'groups' | i18n"> Groups </bit-tab>
+        <bit-tab *ngIf="organization.useGroups" [label]="'groups' | i18n">
+          <div class="tw-mb-6">
+            {{ "groupAccessUserDesc" | i18n }}
+          </div>
+          <bit-access-selector
+            formControlName="groups"
+            [items]="groupAccessItems"
+            [columnHeader]="'groups' | i18n"
+            [selectorLabelText]="'selectGroups' | i18n"
+            [emptySelectionText]="'noGroupsAdded' | i18n"
+          ></bit-access-selector>
+        </bit-tab>
         <bit-tab [label]="'collections' | i18n">
           <div *ngIf="organization.useGroups" class="tw-mb-6">
             {{ "userPermissionOverrideHelper" | i18n }}
@@ -313,7 +324,7 @@
             [permissionMode]="PermissionMode.Edit"
             formControlName="access"
             [showGroupColumn]="organization.useGroups"
-            [items]="accessItems"
+            [items]="collectionAccessItems"
             [columnHeader]="'collection' | i18n"
             [selectorLabelText]="'selectCollections' | i18n"
             [emptySelectionText]="'noCollectionsAdded' | i18n"

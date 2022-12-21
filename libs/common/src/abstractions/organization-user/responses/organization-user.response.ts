@@ -13,6 +13,8 @@ export class OrganizationUserResponse extends BaseResponse {
   accessAll: boolean;
   permissions: PermissionsApi;
   resetPasswordEnrolled: boolean;
+  collections: SelectionReadOnlyResponse[] = [];
+  groups: string[] = [];
 
   constructor(response: any) {
     super(response);
@@ -23,23 +25,7 @@ export class OrganizationUserResponse extends BaseResponse {
     this.permissions = new PermissionsApi(this.getResponseProperty("Permissions"));
     this.accessAll = this.getResponseProperty("AccessAll");
     this.resetPasswordEnrolled = this.getResponseProperty("ResetPasswordEnrolled");
-  }
-}
 
-export class OrganizationUserUserDetailsResponse extends OrganizationUserResponse {
-  name: string;
-  email: string;
-  twoFactorEnabled: boolean;
-  usesKeyConnector: boolean;
-  collections: SelectionReadOnlyResponse[] = [];
-  groups: string[] = [];
-
-  constructor(response: any) {
-    super(response);
-    this.name = this.getResponseProperty("Name");
-    this.email = this.getResponseProperty("Email");
-    this.twoFactorEnabled = this.getResponseProperty("TwoFactorEnabled");
-    this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector") ?? false;
     const collections = this.getResponseProperty("Collections");
     if (collections != null) {
       this.collections = collections.map((c: any) => new SelectionReadOnlyResponse(c));
@@ -51,15 +37,24 @@ export class OrganizationUserUserDetailsResponse extends OrganizationUserRespons
   }
 }
 
-export class OrganizationUserDetailsResponse extends OrganizationUserResponse {
-  collections: SelectionReadOnlyResponse[] = [];
+export class OrganizationUserUserDetailsResponse extends OrganizationUserResponse {
+  name: string;
+  email: string;
+  twoFactorEnabled: boolean;
+  usesKeyConnector: boolean;
 
   constructor(response: any) {
     super(response);
-    const collections = this.getResponseProperty("Collections");
-    if (collections != null) {
-      this.collections = collections.map((c: any) => new SelectionReadOnlyResponse(c));
-    }
+    this.name = this.getResponseProperty("Name");
+    this.email = this.getResponseProperty("Email");
+    this.twoFactorEnabled = this.getResponseProperty("TwoFactorEnabled");
+    this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector") ?? false;
+  }
+}
+
+export class OrganizationUserDetailsResponse extends OrganizationUserResponse {
+  constructor(response: any) {
+    super(response);
   }
 }
 

@@ -20,7 +20,10 @@ export class UserAdminService {
   ): Promise<OrganizationUserAdminView | undefined> {
     const userResponse = await this.organizationUserService.getOrganizationUser(
       organizationId,
-      organizationUserId
+      organizationUserId,
+      {
+        includeGroups: true,
+      }
     );
 
     if (userResponse == null) {
@@ -38,6 +41,7 @@ export class UserAdminService {
     request.permissions = user.permissions;
     request.type = user.type;
     request.collections = user.collections;
+    request.groups = user.groups;
 
     await this.organizationUserService.putOrganizationUser(user.organizationId, user.id, request);
   }
@@ -49,6 +53,7 @@ export class UserAdminService {
     request.permissions = user.permissions;
     request.type = user.type;
     request.collections = user.collections;
+    request.groups = user.groups;
 
     await this.organizationUserService.postOrganizationUserInvite(user.organizationId, request);
   }
@@ -73,6 +78,7 @@ export class UserAdminService {
         hidePasswords: c.hidePasswords,
         readOnly: c.readOnly,
       }));
+      view.groups = u.groups;
 
       return view;
     });
