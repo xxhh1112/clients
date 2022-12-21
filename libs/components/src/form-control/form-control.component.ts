@@ -5,12 +5,20 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { BitFormControlAbstraction } from "./form-control.abstraction";
 
+export type FormControlBottomMargin = "default" | "small" | "none";
+const marginSizes: Record<FormControlBottomMargin, string[]> = {
+  default: ["tw-mb-6"],
+  small: ["tw-mb-3"],
+  none: [],
+};
+
 @Component({
   selector: "bit-form-control",
   templateUrl: "form-control.component.html",
 })
 export class FormControlComponent {
   @Input() label: string;
+  @Input() bottomMarginSize: FormControlBottomMargin = "default";
 
   private _inline = false;
   @Input() get inline() {
@@ -20,21 +28,12 @@ export class FormControlComponent {
     this._inline = coerceBooleanProperty(value);
   }
 
-  private _smallBottomMargin = false;
-  @Input() get smallBottomMargin() {
-    return this._smallBottomMargin;
-  }
-  set smallBottomMargin(value: boolean | "") {
-    this._smallBottomMargin = coerceBooleanProperty(value);
-  }
-
   @ContentChild(BitFormControlAbstraction) protected formControl: BitFormControlAbstraction;
 
   @HostBinding("class") get classes() {
-    return [].concat(
-      this.smallBottomMargin ? ["tw-mb-3"] : ["tw-mb-6"],
-      this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"]
-    );
+    return []
+      .concat(marginSizes[this.bottomMarginSize])
+      .concat(this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"]);
   }
 
   constructor(private i18nService: I18nService) {}

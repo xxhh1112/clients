@@ -1,5 +1,6 @@
 import { Component, ContentChild, HostBinding, Input } from "@angular/core";
 
+import { FormControlBottomMargin } from "../form-control";
 import { BitHintComponent } from "../form-control/hint.component";
 
 import { RadioGroupComponent } from "./radio-group.component";
@@ -36,6 +37,10 @@ export class RadioButtonComponent {
 
   get inline() {
     return this.groupComponent.inline;
+  }
+
+  get formControlMargin(): FormControlBottomMargin {
+    return this.inline ? "none" : "small";
   }
 
   protected onInputChange() {
