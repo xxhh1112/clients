@@ -184,17 +184,20 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       return headNode;
     }
     const nodes: TreeNode<CollectionFilter>[] = [];
-    collections.forEach((c) => {
-      const collectionCopy = new CollectionView() as CollectionFilter;
-      collectionCopy.id = c.id;
-      collectionCopy.organizationId = c.organizationId;
-      collectionCopy.icon = "bwi-collection";
-      if (c instanceof CollectionAdminView) {
-        collectionCopy.groups = c.groups;
-      }
-      const parts = c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
-      ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
-    });
+    collections
+      .sort((a, b) => this.i18nService.collator.compare(a.name, b.name))
+      .forEach((c) => {
+        const collectionCopy = new CollectionView() as CollectionFilter;
+        collectionCopy.id = c.id;
+        collectionCopy.organizationId = c.organizationId;
+        collectionCopy.icon = "bwi-collection";
+        if (c instanceof CollectionAdminView) {
+          collectionCopy.groups = c.groups;
+        }
+        const parts =
+          c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];
+        ServiceUtils.nestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
+      });
     nodes.forEach((n) => {
       n.parent = headNode;
       headNode.children.push(n);
