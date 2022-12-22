@@ -33,7 +33,9 @@
     <tr>
       <th bitCell>{{ columnHeader }}</th>
       <th bitCell id="permissionColHeading" *ngIf="permissionMode != 'hidden'">
-        {{ "permission" | i18n }}
+        <div class="tw-border tw-border-solid tw-border-transparent">
+          {{ "permission" | i18n }}
+        </div>
       </th>
       <th bitCell id="roleColHeading" *ngIf="showMemberRoles">{{ "role" | i18n }}</th>
       <th bitCell id="groupColHeading" *ngIf="showGroupColumn">{{ "group" | i18n }}</th>
@@ -78,23 +80,28 @@
           <label class="sr-only" [for]="'permission' + i"
             >{{ item.labelName }} {{ "permission" | i18n }}</label
           >
-          <select
-            bitInput
-            class="-tw-ml-1 tw-max-w-36 tw-overflow-ellipsis !tw-rounded tw-border-0 !tw-bg-transparent tw-pl-0 tw-font-bold"
-            formControlName="permission"
-            [id]="'permission' + i"
-            (blur)="handleBlur()"
-          >
-            <option *ngFor="let p of permissionList" [value]="p.perm">
-              {{ p.labelId | i18n }}
-            </option>
-          </select>
+          <div class="tw-relative tw-inline-block">
+            <select
+              bitInput
+              class="tw-apperance-none -tw-ml-3 tw-max-w-40 tw-appearance-none tw-overflow-ellipsis !tw-rounded tw-border-transparent !tw-bg-transparent tw-pr-6 tw-font-bold hover:tw-border-primary-700"
+              formControlName="permission"
+              [id]="'permission' + i"
+              (blur)="handleBlur()"
+            >
+              <option *ngFor="let p of permissionList" [value]="p.perm">
+                {{ p.labelId | i18n }}
+              </option>
+            </select>
+            <div class="tw-absolute tw-inset-y-0 tw-right-4 tw-flex tw-items-center">
+              <i class="bwi bwi-sm bwi-angle-down tw-leading-[0]"></i>
+            </div>
+          </div>
         </ng-container>
 
         <ng-template #readOnlyPerm>
           <div
             *ngIf="item.accessAllItems"
-            class="tw-max-w-36 tw-overflow-hidden tw-overflow-ellipsis tw-whitespace-nowrap tw-font-bold tw-text-muted"
+            class="tw-max-w-40 tw-overflow-hidden tw-overflow-ellipsis tw-whitespace-nowrap tw-border tw-border-solid tw-border-transparent tw-font-bold tw-text-muted"
             [appA11yTitle]="accessAllLabelId(item) | i18n"
           >
             {{ "canEdit" | i18n }}
@@ -103,7 +110,7 @@
 
           <div
             *ngIf="item.readonly"
-            class="tw-max-w-36 tw-overflow-hidden tw-overflow-ellipsis tw-whitespace-nowrap tw-font-bold tw-text-muted"
+            class="tw-max-w-40 tw-overflow-hidden tw-overflow-ellipsis tw-whitespace-nowrap tw-font-bold tw-text-muted"
             [title]="permissionLabelId(item.readonlyPermission) | i18n"
           >
             {{ permissionLabelId(item.readonlyPermission) | i18n }}
