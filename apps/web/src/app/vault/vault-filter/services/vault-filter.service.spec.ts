@@ -37,6 +37,7 @@ describe("vault filter service", () => {
     collectionService = mock<CollectionService>();
     policyService = mock<PolicyService>();
     i18nService = mock<I18nService>();
+    i18nService.collator = new Intl.Collator("en-US");
 
     organizations = new ReplaySubject<Organization[]>(1);
     folderViews = new ReplaySubject<FolderView[]>(1);
