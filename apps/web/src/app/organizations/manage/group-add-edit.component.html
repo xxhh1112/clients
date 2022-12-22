@@ -1,5 +1,5 @@
 <form [formGroup]="groupForm" [bitSubmit]="submit">
-  <bit-dialog dialogSize="large" [disablePadding]="!loading">
+  <bit-dialog [disablePadding]="!loading">
     <span bitDialogTitle>
       {{ title }}
       <span *ngIf="editMode" class="tw-text-sm tw-normal-case tw-text-muted">{{
