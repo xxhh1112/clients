@@ -91,8 +91,8 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
   groupForm = this.formBuilder.group({
     accessAll: new FormControl(false),
-    name: new FormControl("", Validators.required),
-    externalId: new FormControl(""),
+    name: new FormControl("", [Validators.required, Validators.maxLength(100)]),
+    externalId: new FormControl("", Validators.maxLength(300)),
     members: new FormControl<AccessItemValue[]>([]),
     collections: new FormControl<AccessItemValue[]>([]),
   });
@@ -245,18 +245,15 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
       groupView.collections = formValue.collections.map((c) => convertToSelectionView(c));
     }
 
-    try {
-      await this.groupService.save(groupView);
+    await this.groupService.save(groupView);
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t(this.editMode ? "editedGroupId" : "createdGroupId", formValue.name)
-      );
-      this.dialogRef.close(GroupAddEditDialogResultType.Saved);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t(this.editMode ? "editedGroupId" : "createdGroupId", formValue.name)
+    );
+
+    this.dialogRef.close(GroupAddEditDialogResultType.Saved);
   };
 
   delete = async () => {
@@ -277,17 +274,13 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    try {
-      await this.groupService.delete(this.organizationId, this.groupId);
+    await this.groupService.delete(this.organizationId, this.groupId);
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("deletedGroupId", this.group.name)
-      );
-      this.dialogRef.close(GroupAddEditDialogResultType.Deleted);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("deletedGroupId", this.group.name)
+    );
+    this.dialogRef.close(GroupAddEditDialogResultType.Deleted);
   };
 }

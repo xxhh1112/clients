@@ -6,7 +6,6 @@ import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "r
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -123,7 +122,6 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
     private organizationService: OrganizationService,
-    private logService: LogService,
     private formBuilder: FormBuilder,
     // TODO: We should really look into consolidating naming conventions for these services
     private collectionAdminService: CollectionAdminService,
@@ -305,38 +303,34 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    try {
-      const userView = new OrganizationUserAdminView();
+    const userView = new OrganizationUserAdminView();
+    userView.id = this.params.organizationUserId;
+    userView.organizationId = this.params.organizationId;
+    userView.accessAll = this.accessAllCollections;
+    userView.type = this.formGroup.value.type;
+    userView.permissions = this.setRequestPermissions(
+      userView.permissions ?? new PermissionsApi(),
+      userView.type !== OrganizationUserType.Custom
+    );
+    userView.collections = this.formGroup.controls.access.value
+      .filter((v) => v.type === AccessItemType.Collection)
+      .map(convertToSelectionView);
+    userView.groups = this.formGroup.controls.groups.value.map((m) => m.id);
+
+    if (this.editMode) {
+      await this.userService.save(userView);
+    } else {
       userView.id = this.params.organizationUserId;
-      userView.organizationId = this.params.organizationId;
-      userView.accessAll = this.accessAllCollections;
-      userView.type = this.formGroup.value.type;
-      userView.permissions = this.setRequestPermissions(
-        userView.permissions ?? new PermissionsApi(),
-        userView.type !== OrganizationUserType.Custom
-      );
-      userView.collections = this.formGroup.controls.access.value
-        .filter((v) => v.type === AccessItemType.Collection)
-        .map(convertToSelectionView);
-      userView.groups = this.formGroup.controls.groups.value.map((m) => m.id);
-
-      if (this.editMode) {
-        await this.userService.save(userView);
-      } else {
-        userView.id = this.params.organizationUserId;
-        const emails = [...new Set(this.formGroup.value.emails.trim().split(/\s*,\s*/))];
-        await this.userService.invite(emails, userView);
-      }
-
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.params.name)
-      );
-      this.close(MemberDialogResult.Saved);
-    } catch (e) {
-      this.logService.error(e);
+      const emails = [...new Set(this.formGroup.value.emails.trim().split(/\s*,\s*/))];
+      await this.userService.invite(emails, userView);
     }
+
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.params.name)
+    );
+    this.close(MemberDialogResult.Saved);
   };
 
   delete = async () => {
@@ -360,21 +354,17 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    try {
-      await this.organizationUserService.deleteOrganizationUser(
-        this.params.organizationId,
-        this.params.organizationUserId
-      );
+    await this.organizationUserService.deleteOrganizationUser(
+      this.params.organizationId,
+      this.params.organizationUserId
+    );
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("removedUserId", this.params.name)
-      );
-      this.close(MemberDialogResult.Deleted);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("removedUserId", this.params.name)
+    );
+    this.close(MemberDialogResult.Deleted);
   };
 
   revoke = async () => {
@@ -395,22 +385,18 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    try {
-      await this.organizationUserService.revokeOrganizationUser(
-        this.params.organizationId,
-        this.params.organizationUserId
-      );
+    await this.organizationUserService.revokeOrganizationUser(
+      this.params.organizationId,
+      this.params.organizationUserId
+    );
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("revokedUserId", this.params.name)
-      );
-      this.isRevoked = true;
-      this.close(MemberDialogResult.Revoked);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("revokedUserId", this.params.name)
+    );
+    this.isRevoked = true;
+    this.close(MemberDialogResult.Revoked);
   };
 
   restore = async () => {
@@ -418,22 +404,18 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    try {
-      await this.organizationUserService.restoreOrganizationUser(
-        this.params.organizationId,
-        this.params.organizationUserId
-      );
+    await this.organizationUserService.restoreOrganizationUser(
+      this.params.organizationId,
+      this.params.organizationUserId
+    );
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("restoredUserId", this.params.name)
-      );
-      this.isRevoked = false;
-      this.close(MemberDialogResult.Restored);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("restoredUserId", this.params.name)
+    );
+    this.isRevoked = false;
+    this.close(MemberDialogResult.Restored);
   };
 
   ngOnDestroy() {
