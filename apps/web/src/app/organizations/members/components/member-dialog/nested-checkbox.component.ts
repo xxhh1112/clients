@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { KeyValue } from "@angular/common";
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { Subject, takeUntil } from "rxjs";
 
 import { Utils } from "@bitwarden/common/misc/utils";
 
@@ -6,24 +9,51 @@ import { Utils } from "@bitwarden/common/misc/utils";
   selector: "app-nested-checkbox",
   templateUrl: "nested-checkbox.component.html",
 })
-export class NestedCheckboxComponent {
+export class NestedCheckboxComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   @Input() parentId: string;
-  @Input() checkboxes: { id: string; get: () => boolean; set: (v: boolean) => void }[];
+  @Input() checkboxes: FormGroup<Record<string, FormControl<boolean>>>;
   @Output() onSavedUser = new EventEmitter();
   @Output() onDeletedUser = new EventEmitter();
 
   get parentIndeterminate() {
-    return !this.parentChecked && this.checkboxes.some((c) => c.get());
+    return (
+      this.children.some(([key, control]) => control.value == true) &&
+      !this.children.every(([key, control]) => control.value == true)
+    );
   }
 
-  get parentChecked() {
-    return this.checkboxes.every((c) => c.get());
+  ngOnInit(): void {
+    this.checkboxes.controls[this.parentId].valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        Object.values(this.checkboxes.controls).forEach((control) =>
+          control.setValue(value, { emitEvent: false })
+        );
+      });
   }
 
-  set parentChecked(value: boolean) {
-    this.checkboxes.forEach((c) => {
-      c.set(value);
-    });
+  private get parentCheckbox() {
+    return this.checkboxes.controls[this.parentId];
+  }
+
+  get children() {
+    return Object.entries(this.checkboxes.controls).filter(([key, value]) => key != this.parentId);
+  }
+
+  protected onChildCheck() {
+    const parentChecked = this.children.every(([key, value]) => value.value == true);
+    this.parentCheckbox.setValue(parentChecked, { emitEvent: false });
+  }
+
+  protected key(index: number, item: KeyValue<string, FormControl<boolean>>) {
+    return item.key;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   pascalize(s: string) {

@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -65,9 +65,6 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   editMode = false;
   isRevoked = false;
   title: string;
-  emails: string;
-  type: OrganizationUserType = OrganizationUserType.User;
-  permissions = new PermissionsApi();
   access: "all" | "selected" = "selected";
   collections: CollectionView[] = [];
   organizationUserType = OrganizationUserType;
@@ -78,48 +75,40 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   protected collectionAccessItems: AccessItemView[] = [];
   protected groupAccessItems: AccessItemView[] = [];
   protected tabIndex: MemberDialogTab;
-  // Stub, to be filled out in upcoming PRs
   protected formGroup = this.formBuilder.group({
+    emails: ["", [Validators.required]],
+    type: OrganizationUserType.User,
     accessAllCollections: false,
     access: [[] as AccessItemValue[]],
     groups: [[] as AccessItemValue[]],
   });
 
+  protected permissionsGroup = this.formBuilder.group({
+    manageAssignedCollectionsGroup: this.formBuilder.group<Record<string, boolean>>({
+      manageAssignedCollections: false,
+      editAssignedCollections: false,
+      deleteAssignedCollections: false,
+    }),
+    manageAllCollectionsGroup: this.formBuilder.group<Record<string, boolean>>({
+      manageAllCollections: false,
+      createNewCollections: false,
+      editAnyCollection: false,
+      deleteAnyCollection: false,
+    }),
+    accessEventLogs: false,
+    accessImportExport: false,
+    accessReports: false,
+    manageGroups: false,
+    manageSso: false,
+    managePolicies: false,
+    manageUsers: false,
+    manageResetPassword: false,
+  });
+
   private destroy$ = new Subject<void>();
 
-  manageAllCollectionsCheckboxes = [
-    {
-      id: "createNewCollections",
-      get: () => this.permissions.createNewCollections,
-      set: (v: boolean) => (this.permissions.createNewCollections = v),
-    },
-    {
-      id: "editAnyCollection",
-      get: () => this.permissions.editAnyCollection,
-      set: (v: boolean) => (this.permissions.editAnyCollection = v),
-    },
-    {
-      id: "deleteAnyCollection",
-      get: () => this.permissions.deleteAnyCollection,
-      set: (v: boolean) => (this.permissions.deleteAnyCollection = v),
-    },
-  ];
-
-  manageAssignedCollectionsCheckboxes = [
-    {
-      id: "editAssignedCollections",
-      get: () => this.permissions.editAssignedCollections,
-      set: (v: boolean) => (this.permissions.editAssignedCollections = v),
-    },
-    {
-      id: "deleteAssignedCollections",
-      get: () => this.permissions.deleteAssignedCollections,
-      set: (v: boolean) => (this.permissions.deleteAssignedCollections = v),
-    },
-  ];
-
   get customUserTypeSelected(): boolean {
-    return this.type === OrganizationUserType.Custom;
+    return this.formGroup.value.type === OrganizationUserType.Custom;
   }
 
   get accessAllCollections(): boolean {
@@ -144,7 +133,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.editMode = this.loading = this.params.organizationUserId != null;
+    this.editMode = this.params.organizationUserId != null;
     this.tabIndex = this.params.initialTab ?? MemberDialogTab.Role;
     this.title = this.i18nService.t(this.editMode ? "editMember" : "inviteMember");
 
@@ -173,25 +162,8 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       .subscribe(({ organization, collections, userDetails, groups }) => {
         this.organization = organization;
         this.canUseCustomPermissions = organization.useCustomPermissions;
-        this.type = userDetails.type;
-        this.isRevoked = userDetails.status === OrganizationUserStatusType.Revoked;
 
-        if (userDetails.type === OrganizationUserType.Custom) {
-          this.permissions = userDetails.permissions;
-        }
-
-        const collectionsFromGroups = groups
-          .filter((group) => userDetails.groups.includes(group.id))
-          .flatMap((group) =>
-            group.collections.map((accessSelection) => {
-              const collection = collections.find((c) => c.id === accessSelection.id);
-              return { group, collection, accessSelection };
-            })
-          );
         this.collectionAccessItems = [].concat(
-          collectionsFromGroups.map(({ collection, accessSelection, group }) =>
-            mapCollectionToAccessItemView(collection, accessSelection, group)
-          ),
           collections.map((c) => mapCollectionToAccessItemView(c))
         );
 
@@ -203,10 +175,54 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
           if (!userDetails) {
             throw new Error("Could not find user to edit.");
           }
+          this.isRevoked = userDetails.status === OrganizationUserStatusType.Revoked;
+          const assignedCollectionsPermissions = {
+            manageAssignedCollections: userDetails.permissions.manageAssignedCollections,
+            editAssignedCollections: userDetails.permissions.editAssignedCollections,
+            deleteAssignedCollections: userDetails.permissions.deleteAssignedCollections,
+          };
+          const allCollectionsPermissions = {
+            manageAllCollections: userDetails.permissions.manageAllCollections,
+            createNewCollections: userDetails.permissions.createNewCollections,
+            editAnyCollection: userDetails.permissions.editAnyCollection,
+            deleteAnyCollection: userDetails.permissions.deleteAnyCollection,
+          };
+          if (userDetails.type === OrganizationUserType.Custom) {
+            this.permissionsGroup.patchValue({
+              accessEventLogs: userDetails.permissions.accessEventLogs,
+              accessImportExport: userDetails.permissions.accessImportExport,
+              accessReports: userDetails.permissions.accessReports,
+              manageGroups: userDetails.permissions.manageGroups,
+              manageSso: userDetails.permissions.manageSso,
+              managePolicies: userDetails.permissions.managePolicies,
+              manageUsers: userDetails.permissions.manageUsers,
+              manageResetPassword: userDetails.permissions.manageResetPassword,
+              manageAssignedCollectionsGroup: assignedCollectionsPermissions,
+              manageAllCollectionsGroup: allCollectionsPermissions,
+            });
+          }
+
+          const collectionsFromGroups = groups
+            .filter((group) => userDetails.groups.includes(group.id))
+            .flatMap((group) =>
+              group.collections.map((accessSelection) => {
+                const collection = collections.find((c) => c.id === accessSelection.id);
+                return { group, collection, accessSelection };
+              })
+            );
+
+          this.collectionAccessItems = this.collectionAccessItems.concat(
+            collectionsFromGroups.map(({ collection, accessSelection, group }) =>
+              mapCollectionToAccessItemView(collection, accessSelection, group)
+            )
+          );
 
           const accessSelections = mapToAccessSelections(userDetails);
           const groupAccessSelections = mapToGroupAccessSelections(userDetails.groups);
+
+          this.formGroup.removeControl("emails");
           this.formGroup.patchValue({
+            type: userDetails.type,
             accessAllCollections: userDetails.accessAll,
             access: accessSelections,
             groups: groupAccessSelections,
@@ -228,15 +244,44 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     this.collections.forEach((c) => this.check(c, select));
   }
 
-  setRequestPermissions(p: PermissionsApi, clearPermissions: boolean) {
-    Object.assign(p, clearPermissions ? new PermissionsApi() : this.permissions);
-    return p;
+  setRequestPermissions(p: PermissionsApi, clearPermissions: boolean): PermissionsApi {
+    if (clearPermissions) {
+      return new PermissionsApi();
+    }
+    const partialPermissions: Partial<PermissionsApi> = {
+      accessEventLogs: this.permissionsGroup.value.accessEventLogs,
+      accessImportExport: this.permissionsGroup.value.accessImportExport,
+      accessReports: this.permissionsGroup.value.accessReports,
+      manageGroups: this.permissionsGroup.value.manageGroups,
+      manageSso: this.permissionsGroup.value.manageSso,
+      managePolicies: this.permissionsGroup.value.managePolicies,
+      manageUsers: this.permissionsGroup.value.manageUsers,
+      manageResetPassword: this.permissionsGroup.value.manageResetPassword,
+      manageAllCollections:
+        this.permissionsGroup.value.manageAllCollectionsGroup.manageAllCollections,
+      createNewCollections:
+        this.permissionsGroup.value.manageAllCollectionsGroup.createNewCollections,
+      editAnyCollection: this.permissionsGroup.value.manageAllCollectionsGroup.editAnyCollection,
+      deleteAnyCollection:
+        this.permissionsGroup.value.manageAllCollectionsGroup.deleteAnyCollection,
+      manageAssignedCollections:
+        this.permissionsGroup.value.manageAssignedCollectionsGroup.manageAssignedCollections,
+      editAssignedCollections:
+        this.permissionsGroup.value.manageAssignedCollectionsGroup.editAssignedCollections,
+      deleteAssignedCollections:
+        this.permissionsGroup.value.manageAssignedCollectionsGroup.deleteAssignedCollections,
+    };
+
+    return Object.assign(p, partialPermissions);
   }
 
   handleDependentPermissions() {
     // Manage Password Reset must have Manage Users enabled
-    if (this.permissions.manageResetPassword && !this.permissions.manageUsers) {
-      this.permissions.manageUsers = true;
+    if (
+      this.permissionsGroup.value.manageResetPassword &&
+      !this.permissionsGroup.value.manageUsers
+    ) {
+      this.permissionsGroup.value.manageUsers = true;
       (document.getElementById("manageUsers") as HTMLInputElement).checked = true;
       this.platformUtilsService.showToast(
         "info",
@@ -251,7 +296,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.canUseCustomPermissions && this.type === OrganizationUserType.Custom) {
+    if (!this.canUseCustomPermissions && this.customUserTypeSelected) {
       this.platformUtilsService.showToast(
         "error",
         null,
@@ -265,7 +310,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       userView.id = this.params.organizationUserId;
       userView.organizationId = this.params.organizationId;
       userView.accessAll = this.accessAllCollections;
-      userView.type = this.type;
+      userView.type = this.formGroup.value.type;
       userView.permissions = this.setRequestPermissions(
         userView.permissions ?? new PermissionsApi(),
         userView.type !== OrganizationUserType.Custom
@@ -279,7 +324,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         await this.userService.save(userView);
       } else {
         userView.id = this.params.organizationUserId;
-        const emails = [...new Set(this.emails.trim().split(/\s*,\s*/))];
+        const emails = [...new Set(this.formGroup.value.emails.trim().split(/\s*,\s*/))];
         await this.userService.invite(emails, userView);
       }
 

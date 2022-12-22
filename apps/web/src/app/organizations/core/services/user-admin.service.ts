@@ -8,7 +8,7 @@ import {
 import { OrganizationUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 
 import { CoreOrganizationModule } from "../core-organization.module";
-import { OrganizationUserAdminView } from "../views/user-admin-view";
+import { OrganizationUserAdminView } from "../views/organization-user-admin-view";
 
 @Injectable({ providedIn: CoreOrganizationModule })
 export class UserAdminService {
