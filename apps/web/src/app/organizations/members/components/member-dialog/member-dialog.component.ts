@@ -312,10 +312,10 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       userView.permissions ?? new PermissionsApi(),
       userView.type !== OrganizationUserType.Custom
     );
-    userView.collections = this.formGroup.controls.access.value
+    userView.collections = this.formGroup.value.access
       .filter((v) => v.type === AccessItemType.Collection)
       .map(convertToSelectionView);
-    userView.groups = this.formGroup.controls.groups.value.map((m) => m.id);
+    userView.groups = this.formGroup.value.groups.map((m) => m.id);
 
     if (this.editMode) {
       await this.userService.save(userView);
@@ -442,7 +442,7 @@ function mapCollectionToAccessItemView(
     id: group ? `${collection.id}-${group.id}` : collection.id,
     labelName: collection.name,
     listName: collection.name,
-    readonly: accessSelection !== undefined,
+    readonly: group !== undefined,
     readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
     viaGroupName: group?.name,
   };
