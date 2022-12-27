@@ -437,7 +437,7 @@
     "message": "Сефови"
   },
   "vaultItems": {
-    "message": "Стaвке сефа"
+    "message": "Стваке сефа"
   },
   "moveSelectedToOrg": {
     "message": "Премести одабрано у организацију"
@@ -4120,19 +4120,19 @@
     "message": "Омогућава детаљнију контролу корисничких дозвола за напредне конфигурације."
   },
   "customDescNonEnterpriseStart": {
-    "message": "Прилагођене улоге су ",
+    "message": "Custom roles is an ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseLink": {
-    "message": "enterprise способност",
+    "message": "enterprise feature",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseEnd": {
-    "message": ". Контактирајте наш тим за подршку да бисте надоградили своју претплату",
+    "message": ". Contact our support team to upgrade your subscription",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customNonEnterpriseError": {
-    "message": "Да бисте омогућили прилагођене дозволе, организација мора бити на Enterprise 2020."
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
   },
   "permissions": {
     "message": "Дозволе"
@@ -5487,88 +5487,77 @@
   "multiSelectClearAll": {
     "message": "Обриши све"
   },
-  "toggleCharacterCount": {
-    "message": "Пребаци бројање слова",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "passwordCharacterCount": {
-    "message": "Број знакова лозинке",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "hide": {
-    "message": "Сакриј"
-  },
   "projects": {
-    "message": "Пројекти"
+    "message": "Projects"
   },
   "lastEdited": {
-    "message": "Последња измена"
+    "message": "Last Edited"
   },
   "editSecret": {
-    "message": "Уреди тајну"
+    "message": "Edit Secret"
   },
   "addSecret": {
-    "message": "Додај тајну"
+    "message": "Add Secret"
   },
   "copySecretName": {
-    "message": "Копирати име тајне"
+    "message": "Copy Secret Name"
   },
   "copySecretValue": {
-    "message": "Копирати вредност тајне"
+    "message": "Copy Secret Value"
   },
   "deleteSecret": {
-    "message": "Обрисати тајну"
+    "message": "Delete Secret"
   },
   "deleteSecrets": {
-    "message": "Обрисати тајне"
+    "message": "Delete Secrets"
   },
   "project": {
-    "message": "Пројекат"
+    "message": "Project"
   },
   "editProject": {
-    "message": "Уреди Пројекат"
+    "message": "Edit Project"
   },
   "viewProject": {
-    "message": "Приказ пројекта"
+    "message": "View Project"
   },
   "deleteProject": {
-    "message": "Избриши пројекат"
+    "message": "Delete Project"
   },
   "deleteProjects": {
-    "message": "Избриши пројекте"
+    "message": "Delete Projects"
   },
   "secret": {
-    "message": "Тајна"
+    "message": "Secret"
   },
   "serviceAccount": {
-    "message": "Налог сервиса"
+    "message": "Service Account"
   },
   "serviceAccounts": {
-    "message": "Налози сервиса"
+    "message": "Service Accounts"
   },
   "new": {
     "message": "New"
   },
   "secrets": {
-    "message": "Тајне"
+    "message": "Secrets"
   },
   "nameValuePair": {
     "message": "Name/Value Pair"
   },
   "secretEdited": {
-    "message": "Тајна промењена"
+    "message": "Secret edited"
   },
   "secretCreated": {
-    "message": "Тајна креирана"
+    "message": "Secret created"
   },
   "newSecret": {
-    "message": "Нова тајна"
+    "message": "New Secret"
   },
   "newServiceAccount": {
     "message": "New Service Account"
   },
   "secretsNoItemsTitle": {
-    "message": "Нема тајне за приказ"
+    "message": "No secrets to show"
   },
   "secretsNoItemsMessage": {
     "message": "To get started, add a new secret or import secrets."
@@ -5580,7 +5569,7 @@
     "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "Претражити тајне"
+    "message": "Search Secrets"
   },
   "deleteServiceAccounts": {
     "message": "Delete Service Accounts"
@@ -5595,22 +5584,22 @@
     "message": "Search Service Accounts"
   },
   "addProject": {
-    "message": "Додај пројекат"
+    "message": "Add Project"
   },
   "projectEdited": {
-    "message": "Пројекат промењен"
+    "message": "Project edited"
   },
   "projectSaved": {
-    "message": "Пројекат сачуван"
+    "message": "Project saved"
   },
   "projectCreated": {
-    "message": "Пројекат креиран"
+    "message": "Project created"
   },
   "projectName": {
-    "message": "Назив Пројекта"
+    "message": "Project Name"
   },
   "newProject": {
-    "message": "Нови пројекат"
+    "message": "New Project"
   },
   "softDeleteSecretWarning": {
     "message": "Deleting secrets can affect existing integrations."
@@ -5622,28 +5611,28 @@
     "message": "Service Account Created"
   },
   "smAccess": {
-    "message": "Приступ"
+    "message": "Access"
   },
   "projectCommaSecret": {
-    "message": "Пројекат, тајна"
+    "message": "Project, Secret"
   },
   "serviceAccountName": {
-    "message": "Има налога сервиса"
+    "message": "Service account name"
   },
   "newSaSelectAccess": {
     "message": "Type or Select Projects or Secrets"
   },
   "newSaTypeToFilter": {
-    "message": "Тип за филтрирање"
+    "message": "Type to Filter"
   },
   "deleteProjectsToast": {
-    "message": "Пројекат избрисан"
+    "message": "Projects deleted"
   },
   "deleteProjectToast": {
-    "message": "Пројекат и све повезане тајне су избрисане"
+    "message": "The project and all associated secrets have been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "Брисање пројекта $PROJECT$ је трајно и неповратно.",
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5652,7 +5641,7 @@
     }
   },
   "deleteProjectInputLabel": {
-    "message": "Унети \"$CONFIRM$\" за наставак",
+    "message": "Type \"$CONFIRM$\" to continue",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5661,7 +5650,7 @@
     }
   },
   "deleteProjectConfirmMessage": {
-    "message": "Обрисати $PROJECT$",
+    "message": "Delete $PROJECT$",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5670,7 +5659,7 @@
     }
   },
   "deleteProjectsConfirmMessage": {
-    "message": "Обрисати $COUNT$ пројекта",
+    "message": "Delete $COUNT$ Projects",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5679,61 +5668,61 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Брисање пројекта је трајно и неповратно."
+    "message": "Deleting projects is permanent and irreversible."
   },
   "projectsNoItemsTitle": {
-    "message": "Нема пројекта за приказ"
+    "message": "No projects to display"
   },
   "projectsNoItemsMessage": {
     "message": "Add a new project to get started organizing secrets."
   },
   "smConfirmationRequired": {
-    "message": "Потврда је обавезна"
+    "message": "Confirmation required"
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "Следећи пројекти се не могу избрисати:"
+    "message": "The following projects could not be deleted:"
   },
   "softDeleteSuccessToast": {
-    "message": "Тајна послана у отпад"
+    "message": "Secret sent to trash"
   },
   "searchProjects": {
-    "message": "Претражити пројекте"
+    "message": "Search Projects"
   },
   "accessTokens": {
-    "message": "Приступни токени"
+    "message": "Access tokens"
   },
   "createAccessToken": {
-    "message": "Креирати приступни токен"
+    "message": "Create access token"
   },
   "expires": {
-    "message": "Истиче"
+    "message": "Expires"
   },
   "canRead": {
-    "message": "Може да чита"
+    "message": "Can Read"
   },
   "accessTokensNoItemsTitle": {
-    "message": "Нема токен за приказ"
+    "message": "No access tokens to show"
   },
   "accessTokensNoItemsDesc": {
     "message": "To get started, create an access token"
   },
   "downloadAccessToken": {
-    "message": "Преузмите или копирајте пре затварања."
+    "message": "Download or copy before closing."
   },
   "expiresOnAccessToken": {
-    "message": "Истиче:"
+    "message": "Expires on:"
   },
   "accessTokenCallOutTitle": {
     "message": "Access tokens are not stored and cannot be retrieved"
   },
   "copyToken": {
-    "message": "Копирај токен"
+    "message": "Copy token"
   },
   "accessToken": {
-    "message": "Приступни токени"
+    "message": "Access token"
   },
   "accessTokenExpirationRequired": {
-    "message": "Потребан је датум истека"
+    "message": "Expiration date required"
   },
   "accessTokenCreatedAndCopied": {
     "message": "Access token created and copied to clipboard"
@@ -5745,7 +5734,7 @@
     "message": "Revoke Access Token"
   },
   "submenu": {
-    "message": "Под-мени"
+    "message": "Submenu"
   },
   "from": {
     "message": "Од"
@@ -5782,47 +5771,5 @@
   },
   "memberAccessAll": {
     "message": "Овај члан може приступити и изменити све ставке."
-  },
-  "moreFromBitwarden": {
-    "message": "More from Bitwarden"
-  },
-  "switchProducts": {
-    "message": "Switch Products"
-  },
-  "freeOrgInvLimitReachedManageBilling": {
-    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgInvLimitReachedNoManageBilling": {
-    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedManageBilling": {
-    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedNoManageBilling": {
-    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
   }
 }

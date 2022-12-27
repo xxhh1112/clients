@@ -1699,7 +1699,7 @@
     "message": "Kontroller eventuelle brugernavne eller e-mailadresser, som du bruger."
   },
   "checkBreaches": {
-    "message": "Tjek læk"
+    "message": "Kontroller læk"
   },
   "breachUsernameNotFound": {
     "message": "$USERNAME$ blev ikke fundet i nogen kendte datalæk.",
@@ -1752,7 +1752,7 @@
     "message": "Fakturering"
   },
   "billingPlanLabel": {
-    "message": "Faktureringsabonnementstype"
+    "message": "Faktureringsplan"
   },
   "paymentType": {
     "message": "Betalingstype"
@@ -2891,7 +2891,7 @@
     "message": "Redigér de grupper, som denne bruger tilhører."
   },
   "invitedUsers": {
-    "message": "Bruger(e) inviteret"
+    "message": "Inviterede bruger(e)."
   },
   "resendInvitation": {
     "message": "Send invitation igen"
@@ -5476,7 +5476,7 @@
     "message": "Ikke dig?"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Skriv for at filtrere --"
+    "message": "-- Type at filtrere --"
   },
   "multiSelectLoading": {
     "message": "Henter indstillinger..."
@@ -5486,17 +5486,6 @@
   },
   "multiSelectClearAll": {
     "message": "Ryd alt"
-  },
-  "toggleCharacterCount": {
-    "message": "Vis/skjul tegnantal",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "passwordCharacterCount": {
-    "message": "Adgangskodetegnantal",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "hide": {
-    "message": "Skjul"
   },
   "projects": {
     "message": "Projekter"
@@ -5622,7 +5611,7 @@
     "message": "Tjenestekonto oprettet"
   },
   "smAccess": {
-    "message": "Adgang"
+    "message": "Tilgå"
   },
   "projectCommaSecret": {
     "message": "Projekt, Hemmelighed"
@@ -5782,47 +5771,5 @@
   },
   "memberAccessAll": {
     "message": "Dette medlem kan tilgå og ændre alle emner."
-  },
-  "moreFromBitwarden": {
-    "message": "Mere fra Bitwarden"
-  },
-  "switchProducts": {
-    "message": "Skift produkter"
-  },
-  "freeOrgInvLimitReachedManageBilling": {
-    "message": "Gratis organisationer kan have op til $SEATCOUNT$ medlemmer. Opgradér til en betalt abonnementstype for at invitere flere medlemmer.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgInvLimitReachedNoManageBilling": {
-    "message": "Gratis organisationer kan have op til $SEATCOUNT$ medlemmer. Kontakt organisationsejeren for at opgradere.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedManageBilling": {
-    "message": "Gratis organisationer kan have op til $COLLECTIONCOUNT$ samlinger. Opgradér til en betalt abonnementstype for at tilføje flere samlinger.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedNoManageBilling": {
-    "message": "Gratis organisationer kan have op til $COLLECTIONCOUNT$ samlinger. Kontakt organisationsejeren for at opgradere.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
   }
 }

@@ -5487,58 +5487,47 @@
   "multiSelectClearAll": {
     "message": "清除全部"
   },
-  "toggleCharacterCount": {
-    "message": "字符计数开关",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "passwordCharacterCount": {
-    "message": "密码字符计数",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "hide": {
-    "message": "隐藏"
-  },
   "projects": {
-    "message": "项目"
+    "message": "Projects"
   },
   "lastEdited": {
     "message": "上次编辑时间"
   },
   "editSecret": {
-    "message": "编辑机密"
+    "message": "Edit Secret"
   },
   "addSecret": {
-    "message": "添加机密"
+    "message": "Add Secret"
   },
   "copySecretName": {
-    "message": "复制机密名称"
+    "message": "Copy Secret Name"
   },
   "copySecretValue": {
-    "message": "复制机密值"
+    "message": "Copy Secret Value"
   },
   "deleteSecret": {
-    "message": "删除机密"
+    "message": "Delete Secret"
   },
   "deleteSecrets": {
-    "message": "删除机密"
+    "message": "Delete Secrets"
   },
   "project": {
-    "message": "项目"
+    "message": "Project"
   },
   "editProject": {
-    "message": "编辑项目"
+    "message": "Edit Project"
   },
   "viewProject": {
-    "message": "查看项目"
+    "message": "View Project"
   },
   "deleteProject": {
-    "message": "删除项目"
+    "message": "Delete Project"
   },
   "deleteProjects": {
-    "message": "删除项目"
+    "message": "Delete Projects"
   },
   "secret": {
-    "message": "机密"
+    "message": "Secret"
   },
   "serviceAccount": {
     "message": "服务账户"
@@ -5547,31 +5536,31 @@
     "message": "服务帐户"
   },
   "new": {
-    "message": "新建"
+    "message": "New"
   },
   "secrets": {
-    "message": "机密"
+    "message": "Secrets"
   },
   "nameValuePair": {
     "message": "名称/值对"
   },
   "secretEdited": {
-    "message": "机密已编辑"
+    "message": "Secret edited"
   },
   "secretCreated": {
-    "message": "机密已创建"
+    "message": "Secret created"
   },
   "newSecret": {
-    "message": "新建机密"
+    "message": "New Secret"
   },
   "newServiceAccount": {
-    "message": "新建服务账户"
+    "message": "New Service Account"
   },
   "secretsNoItemsTitle": {
-    "message": "没有可显示的机密"
+    "message": "No secrets to show"
   },
   "secretsNoItemsMessage": {
-    "message": "要开始，请添加一个新的机密或导入机密。"
+    "message": "To get started, add a new secret or import secrets."
   },
   "serviceAccountsNoItemsTitle": {
     "message": "还没有要显示的内容"
@@ -5580,7 +5569,7 @@
     "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "搜索机密"
+    "message": "Search Secrets"
   },
   "deleteServiceAccounts": {
     "message": "删除服务账户"
@@ -5595,28 +5584,28 @@
     "message": "搜索服务账户"
   },
   "addProject": {
-    "message": "添加项目"
+    "message": "Add Project"
   },
   "projectEdited": {
-    "message": "项目已编辑"
+    "message": "Project edited"
   },
   "projectSaved": {
-    "message": "项目已保存"
+    "message": "Project saved"
   },
   "projectCreated": {
-    "message": "项目已创建"
+    "message": "Project created"
   },
   "projectName": {
-    "message": "项目名称"
+    "message": "Project Name"
   },
   "newProject": {
-    "message": "新建项目"
+    "message": "New Project"
   },
   "softDeleteSecretWarning": {
-    "message": "删除机密可能会影响现有的集成。"
+    "message": "Deleting secrets can affect existing integrations."
   },
   "softDeletesSuccessToast": {
-    "message": "机密已发送到回收站"
+    "message": "Secrets sent to trash"
   },
   "serviceAccountCreated": {
     "message": "服务帐户已创建"
@@ -5625,25 +5614,25 @@
     "message": "Access"
   },
   "projectCommaSecret": {
-    "message": "项目，机密"
+    "message": "Project, Secret"
   },
   "serviceAccountName": {
     "message": "服务账户名称"
   },
   "newSaSelectAccess": {
-    "message": "输入或选择项目或机密"
+    "message": "Type or Select Projects or Secrets"
   },
   "newSaTypeToFilter": {
     "message": "键入以筛选"
   },
   "deleteProjectsToast": {
-    "message": "项目已删除"
+    "message": "Projects deleted"
   },
   "deleteProjectToast": {
-    "message": "项目和所有相关的机密已被删除"
+    "message": "The project and all associated secrets have been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "删除项目 $PROJECT$ 是永久性的，不可撤销！",
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5670,7 +5659,7 @@
     }
   },
   "deleteProjectsConfirmMessage": {
-    "message": "删除 $COUNT$ 个项目",
+    "message": "Delete $COUNT$ Projects",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5679,10 +5668,10 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "删除项目是永久性的，不可撤销！"
+    "message": "Deleting projects is permanent and irreversible."
   },
   "projectsNoItemsTitle": {
-    "message": "没有可显示的项目"
+    "message": "No projects to display"
   },
   "projectsNoItemsMessage": {
     "message": "Add a new project to get started organizing secrets."
@@ -5691,13 +5680,13 @@
     "message": "需要确认"
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "以下项目无法删除："
+    "message": "The following projects could not be deleted:"
   },
   "softDeleteSuccessToast": {
-    "message": "机密已发送到回收站"
+    "message": "Secret sent to trash"
   },
   "searchProjects": {
-    "message": "搜索项目"
+    "message": "Search Projects"
   },
   "accessTokens": {
     "message": "访问令牌"
@@ -5709,7 +5698,7 @@
     "message": "到期"
   },
   "canRead": {
-    "message": "可以读取"
+    "message": "Can Read"
   },
   "accessTokensNoItemsTitle": {
     "message": "没有可显示的访问令牌"
@@ -5782,47 +5771,5 @@
   },
   "memberAccessAll": {
     "message": "此成员可以访问和修改所有项目。"
-  },
-  "moreFromBitwarden": {
-    "message": "来自 Bitwarden 的更多产品"
-  },
-  "switchProducts": {
-    "message": "切换产品"
-  },
-  "freeOrgInvLimitReachedManageBilling": {
-    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。升级到付费计划以邀请更多成员。",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgInvLimitReachedNoManageBilling": {
-    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。请联系您的组织所有者升级。",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedManageBilling": {
-    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。升级到付费计划以添加更多集合。",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedNoManageBilling": {
-    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。请联系您的组织所有者升级。",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
   }
 }

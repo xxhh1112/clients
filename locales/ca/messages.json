@@ -5487,17 +5487,6 @@
   "multiSelectClearAll": {
     "message": "Esborra-ho tot"
   },
-  "toggleCharacterCount": {
-    "message": "Toggle character count",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "passwordCharacterCount": {
-    "message": "Password character count",
-    "description": "'Character count' describes a feature that displays a number next to each character of the password."
-  },
-  "hide": {
-    "message": "Hide"
-  },
   "projects": {
     "message": "Projectes"
   },
@@ -5577,55 +5566,55 @@
     "message": "Encara no hi ha res a mostrar"
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Creeu un compte de servei nou per començar a automatitzar l'accés secret."
+    "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "Cerca secrets"
+    "message": "Search Secrets"
   },
   "deleteServiceAccounts": {
-    "message": "Suprimeix els comptes de servei"
+    "message": "Delete Service Accounts"
   },
   "deleteServiceAccount": {
-    "message": "Suprimeix el compte de servei"
+    "message": "Delete Service Account"
   },
   "viewServiceAccount": {
-    "message": "Veure el compte de servei"
+    "message": "View Service Account"
   },
   "searchServiceAccounts": {
-    "message": "Cerca els comptes de servei"
+    "message": "Search Service Accounts"
   },
   "addProject": {
-    "message": "Afegeix un projecte"
+    "message": "Add Project"
   },
   "projectEdited": {
-    "message": "Projecte editat"
+    "message": "Project edited"
   },
   "projectSaved": {
-    "message": "Projecte guardat"
+    "message": "Project saved"
   },
   "projectCreated": {
-    "message": "Projecte creat"
+    "message": "Project created"
   },
   "projectName": {
-    "message": "Nom del Projecte"
+    "message": "Project Name"
   },
   "newProject": {
-    "message": "Projecte nou"
+    "message": "New Project"
   },
   "softDeleteSecretWarning": {
-    "message": "La supressió de secrets pot afectar les integracions existents."
+    "message": "Deleting secrets can affect existing integrations."
   },
   "softDeletesSuccessToast": {
-    "message": "Secrets enviats a la paperera"
+    "message": "Secrets sent to trash"
   },
   "serviceAccountCreated": {
-    "message": "Compte de servei creat"
+    "message": "Service Account Created"
   },
   "smAccess": {
-    "message": "Accés"
+    "message": "Access"
   },
   "projectCommaSecret": {
-    "message": "Projecte, secret"
+    "message": "Project, Secret"
   },
   "serviceAccountName": {
     "message": "Service account name"
@@ -5782,47 +5771,5 @@
   },
   "memberAccessAll": {
     "message": "Aquest usuari pot accedir i modificar tots els elements."
-  },
-  "moreFromBitwarden": {
-    "message": "More from Bitwarden"
-  },
-  "switchProducts": {
-    "message": "Switch Products"
-  },
-  "freeOrgInvLimitReachedManageBilling": {
-    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgInvLimitReachedNoManageBilling": {
-    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
-    "placeholders": {
-      "seatcount": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedManageBilling": {
-    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "freeOrgMaxCollectionReachedNoManageBilling": {
-    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
-    "placeholders": {
-      "COLLECTIONCOUNT": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
   }
 }
