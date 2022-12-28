@@ -220,7 +220,7 @@
     "message": "ไม่เคย"
   },
   "toggleVisibility": {
-    "message": "สลับการมองเห็น"
+    "message": "Toggle visibility"
   },
   "toggleCollapse": {
     "message": "Toggle collapse",
@@ -375,7 +375,7 @@
     "message": "ดูรายการ"
   },
   "ex": {
-    "message": "เช่น",
+    "message": "ex.",
     "description": "Short abbreviation for 'example'."
   },
   "other": {
@@ -467,7 +467,7 @@
     "message": "คุณแน่ใจใช่ไหมว่าต้องการลบไฟล์แนบนี้"
   },
   "attachmentSaved": {
-    "message": "บันทึกสิ่งที่แนบมาแล้ว"
+    "message": "Attachment saved"
   },
   "file": {
     "message": "ไฟล์"
@@ -488,7 +488,7 @@
     "message": "Item saved"
   },
   "movedItemToOrg": {
-    "message": "ย้าย $ITEMNAME$ ไปยัง $ORGNAME$ แล้ว",
+    "message": "$ITEMNAME$ moved to $ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -513,13 +513,13 @@
     "message": "Delete item"
   },
   "deleteFolder": {
-    "message": "ลบโฟลเดอร์"
+    "message": "Delete folder"
   },
   "deleteAttachment": {
-    "message": "ลบไฟล์แนบ"
+    "message": "Delete attachment"
   },
   "deleteItemConfirmation": {
-    "message": "คุณต้องการส่งไปยังถังขยะใช่หรือไม่?"
+    "message": "Do you really want to send to the trash?"
   },
   "deletedItem": {
     "message": "Item sent to trash"
@@ -528,10 +528,10 @@
     "message": "Items sent to trash"
   },
   "movedItems": {
-    "message": "ย้ายรายการแล้ว"
+    "message": "Items moved"
   },
   "overwritePasswordConfirmation": {
-    "message": "คุณต้องการเขียนทับรหัสผ่านปัจจุบันใช่หรือไม่?"
+    "message": "Are you sure you want to overwrite the current password?"
   },
   "editedFolder": {
     "message": "Folder saved"
@@ -540,73 +540,73 @@
     "message": "Folder added"
   },
   "deleteFolderConfirmation": {
-    "message": "คุณแน่ใจหรือว่าคุณต้องการลบโฟลเดอร์นี้?"
+    "message": "Are you sure you want to delete this folder?"
   },
   "deletedFolder": {
-    "message": "ลบโฟลเดอร์แล้ว."
+    "message": "Folder deleted"
   },
   "loggedOut": {
-    "message": "ออกจากระบบ"
+    "message": "Logged out"
   },
   "loginExpired": {
-    "message": "เซสชันของคุณหมดอายุแล้ว"
+    "message": "Your login session has expired."
   },
   "logOutConfirmation": {
-    "message": "คุณต้องการล็อกเอาต์ใช่หรือไม่?"
+    "message": "Are you sure you want to log out?"
   },
   "logOut": {
-    "message": "ออกจากระบบ"
+    "message": "Log out"
   },
   "ok": {
-    "message": "ตกลง"
+    "message": "Ok"
   },
   "yes": {
-    "message": "ใช่"
+    "message": "Yes"
   },
   "no": {
-    "message": "ไม่ใช่"
+    "message": "No"
   },
   "loginOrCreateNewAccount": {
-    "message": "ล็อกอิน หรือ สร้างบัญชีใหม่ เพื่อใช้งานตู้นิรภัยของคุณ"
+    "message": "Log in or create a new account to access your secure vault."
   },
   "loginWithDevice": {
-    "message": "ล็อกอินด้วยอุปกรณ์"
+    "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
   },
   "loginWithMasterPassword": {
-    "message": "เข้าสู่ระบบด้วยรหัสผ่านหลัก"
+    "message": "Log in with master password"
   },
   "createAccount": {
-    "message": "สร้างบัญชีผู้ใช้"
+    "message": "Create account"
   },
   "newAroundHere": {
     "message": "New around here?"
   },
   "startTrial": {
-    "message": "เริ่มทดลองใช้งาน"
+    "message": "Start trial"
   },
   "logIn": {
-    "message": "เข้าสู่ระบบ"
+    "message": "Log in"
   },
   "logInInitiated": {
     "message": "Log in initiated"
   },
   "submit": {
-    "message": "ส่ง"
+    "message": "Submit"
   },
   "emailAddressDesc": {
     "message": "You'll use your email address to log in."
   },
   "yourName": {
-    "message": "ชื่อของคุณ"
+    "message": "Your name"
   },
   "yourNameDesc": {
-    "message": "เราให้เราเรียกคุณว่า?"
+    "message": "What should we call you?"
   },
   "masterPass": {
-    "message": "รหัสผ่านหลัก:"
+    "message": "Master password"
   },
   "masterPassDesc": {
     "message": "รหัสผ่านหลัก คือ รหัสผ่านที่ใช้เข้าถึงตู้นิรภัยของคุณ สิ่งสำคัญมาก คือ คุณจะต้องไม่ลืมรหัสผ่านหลักโดยเด็ดขาด เพราะหากคุณลืมแล้วล่ะก็ จะไม่มีวิธีที่สามารถกู้รหัสผ่านของคุณได้เลย"
@@ -888,28 +888,28 @@
     "message": "Copy verification code"
   },
   "warning": {
-    "message": "คำเตือน"
+    "message": "Warning"
   },
   "confirmVaultExport": {
-    "message": "ยืนยันการส่งออกตู้นิรภัย"
+    "message": "Confirm vault export"
   },
   "exportWarningDesc": {
     "message": "This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
-    "message": "การส่งออกนี้เข้ารหัสข้อมูลของคุณโดยใช้คีย์เข้ารหัสของบัญชีของคุณ หากคุณเคยหมุนเวียนคีย์เข้ารหัสของบัญชี คุณควรส่งออกอีกครั้ง เนื่องจากคุณจะไม่สามารถถอดรหัสไฟล์ส่งออกนี้ได้"
+    "message": "This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file."
   },
   "encExportAccountWarningDesc": {
-    "message": "คีย์การเข้ารหัสบัญชีจะไม่ซ้ำกันสำหรับบัญชีผู้ใช้ Bitwarden แต่ละบัญชี ดังนั้นคุณจึงไม่สามารถนำเข้าการส่งออกที่เข้ารหัสไปยังบัญชีอื่นได้"
+    "message": "Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account."
   },
   "export": {
-    "message": "ส่งออก"
+    "message": "Export"
   },
   "exportVault": {
     "message": "Export vault"
   },
   "fileFormat": {
-    "message": "รูปแบบไฟล์"
+    "message": "File format"
   },
   "fileEncryptedExportWarningDesc": {
     "message": "This file export will be password protected and require the file password to decrypt."
@@ -5486,255 +5486,6 @@
   },
   "multiSelectClearAll": {
     "message": "Clear all"
-  },
-  "projects": {
-    "message": "Projects"
-  },
-  "lastEdited": {
-    "message": "Last Edited"
-  },
-  "editSecret": {
-    "message": "Edit Secret"
-  },
-  "addSecret": {
-    "message": "Add Secret"
-  },
-  "copySecretName": {
-    "message": "Copy Secret Name"
-  },
-  "copySecretValue": {
-    "message": "Copy Secret Value"
-  },
-  "deleteSecret": {
-    "message": "Delete Secret"
-  },
-  "deleteSecrets": {
-    "message": "Delete Secrets"
-  },
-  "project": {
-    "message": "Project"
-  },
-  "editProject": {
-    "message": "Edit Project"
-  },
-  "viewProject": {
-    "message": "View Project"
-  },
-  "deleteProject": {
-    "message": "Delete Project"
-  },
-  "deleteProjects": {
-    "message": "Delete Projects"
-  },
-  "secret": {
-    "message": "Secret"
-  },
-  "serviceAccount": {
-    "message": "Service Account"
-  },
-  "serviceAccounts": {
-    "message": "Service Accounts"
-  },
-  "new": {
-    "message": "New"
-  },
-  "secrets": {
-    "message": "Secrets"
-  },
-  "nameValuePair": {
-    "message": "Name/Value Pair"
-  },
-  "secretEdited": {
-    "message": "Secret edited"
-  },
-  "secretCreated": {
-    "message": "Secret created"
-  },
-  "newSecret": {
-    "message": "New Secret"
-  },
-  "newServiceAccount": {
-    "message": "New Service Account"
-  },
-  "secretsNoItemsTitle": {
-    "message": "No secrets to show"
-  },
-  "secretsNoItemsMessage": {
-    "message": "To get started, add a new secret or import secrets."
-  },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Nothing to show yet"
-  },
-  "serviceAccountsNoItemsMessage": {
-    "message": "Create a new Service Account to get started automating secret access."
-  },
-  "searchSecrets": {
-    "message": "Search Secrets"
-  },
-  "deleteServiceAccounts": {
-    "message": "Delete Service Accounts"
-  },
-  "deleteServiceAccount": {
-    "message": "Delete Service Account"
-  },
-  "viewServiceAccount": {
-    "message": "View Service Account"
-  },
-  "searchServiceAccounts": {
-    "message": "Search Service Accounts"
-  },
-  "addProject": {
-    "message": "Add Project"
-  },
-  "projectEdited": {
-    "message": "Project edited"
-  },
-  "projectSaved": {
-    "message": "Project saved"
-  },
-  "projectCreated": {
-    "message": "Project created"
-  },
-  "projectName": {
-    "message": "Project Name"
-  },
-  "newProject": {
-    "message": "New Project"
-  },
-  "softDeleteSecretWarning": {
-    "message": "Deleting secrets can affect existing integrations."
-  },
-  "softDeletesSuccessToast": {
-    "message": "Secrets sent to trash"
-  },
-  "serviceAccountCreated": {
-    "message": "Service Account Created"
-  },
-  "smAccess": {
-    "message": "Access"
-  },
-  "projectCommaSecret": {
-    "message": "Project, Secret"
-  },
-  "serviceAccountName": {
-    "message": "Service account name"
-  },
-  "newSaSelectAccess": {
-    "message": "Type or Select Projects or Secrets"
-  },
-  "newSaTypeToFilter": {
-    "message": "Type to Filter"
-  },
-  "deleteProjectsToast": {
-    "message": "Projects deleted"
-  },
-  "deleteProjectToast": {
-    "message": "The project and all associated secrets have been deleted"
-  },
-  "deleteProjectDialogMessage": {
-    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
-    "placeholders": {
-      "project": {
-        "content": "$1",
-        "example": "project name"
-      }
-    }
-  },
-  "deleteProjectInputLabel": {
-    "message": "Type \"$CONFIRM$\" to continue",
-    "placeholders": {
-      "confirm": {
-        "content": "$1",
-        "example": "Delete 3 Projects"
-      }
-    }
-  },
-  "deleteProjectConfirmMessage": {
-    "message": "Delete $PROJECT$",
-    "placeholders": {
-      "project": {
-        "content": "$1",
-        "example": "project name"
-      }
-    }
-  },
-  "deleteProjectsConfirmMessage": {
-    "message": "Delete $COUNT$ Projects",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "deleteProjectsDialogMessage": {
-    "message": "Deleting projects is permanent and irreversible."
-  },
-  "projectsNoItemsTitle": {
-    "message": "No projects to display"
-  },
-  "projectsNoItemsMessage": {
-    "message": "Add a new project to get started organizing secrets."
-  },
-  "smConfirmationRequired": {
-    "message": "Confirmation required"
-  },
-  "bulkDeleteProjectsErrorMessage": {
-    "message": "The following projects could not be deleted:"
-  },
-  "softDeleteSuccessToast": {
-    "message": "Secret sent to trash"
-  },
-  "searchProjects": {
-    "message": "Search Projects"
-  },
-  "accessTokens": {
-    "message": "Access tokens"
-  },
-  "createAccessToken": {
-    "message": "Create access token"
-  },
-  "expires": {
-    "message": "Expires"
-  },
-  "canRead": {
-    "message": "Can Read"
-  },
-  "accessTokensNoItemsTitle": {
-    "message": "No access tokens to show"
-  },
-  "accessTokensNoItemsDesc": {
-    "message": "To get started, create an access token"
-  },
-  "downloadAccessToken": {
-    "message": "Download or copy before closing."
-  },
-  "expiresOnAccessToken": {
-    "message": "Expires on:"
-  },
-  "accessTokenCallOutTitle": {
-    "message": "Access tokens are not stored and cannot be retrieved"
-  },
-  "copyToken": {
-    "message": "Copy token"
-  },
-  "accessToken": {
-    "message": "Access token"
-  },
-  "accessTokenExpirationRequired": {
-    "message": "Expiration date required"
-  },
-  "accessTokenCreatedAndCopied": {
-    "message": "Access token created and copied to clipboard"
-  },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta."
-  },
-  "revokeAccessToken": {
-    "message": "Revoke Access Token"
-  },
-  "submenu": {
-    "message": "Submenu"
   },
   "from": {
     "message": "From"

@@ -570,19 +570,19 @@
     "message": "Pro přístup do vašeho bezpečného trezoru se přihlaste nebo si vytvořte nový účet."
   },
   "loginWithDevice": {
-    "message": "Přihlásit se pomocí zařízení"
+    "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Přihlášení pomocí zařízení musí být nastaveno v nastavení mobilní aplikace Bitwarden. Potřebujete jinou volbu?"
+    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
   },
   "loginWithMasterPassword": {
-    "message": "Přihlásit se pomocí hlavního hesla"
+    "message": "Log in with master password"
   },
   "createAccount": {
     "message": "Vytvořit účet"
   },
   "newAroundHere": {
-    "message": "Jste tu noví?"
+    "message": "New around here?"
   },
   "startTrial": {
     "message": "Zahájit zkušební verzi"
@@ -591,7 +591,7 @@
     "message": "Přihlásit se"
   },
   "logInInitiated": {
-    "message": "Přihlášení zahájeno"
+    "message": "Log in initiated"
   },
   "submit": {
     "message": "Potvrdit"
@@ -651,7 +651,7 @@
     "message": "Druhé zadání hlavního hesla je povinné."
   },
   "masterPasswordMinlength": {
-    "message": "Hlavní heslo musí obsahovat alespoň 8 znaků."
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Potvrzení hlavního hesla se neshoduje."
@@ -660,7 +660,7 @@
     "message": "Váš účet byl vytvořen! Můžete se přihlásit."
   },
   "trialAccountCreated": {
-    "message": "Účet byl úspěšně vytvořen."
+    "message": "Account created successfully."
   },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
@@ -694,7 +694,7 @@
     "message": "Chybné hlavní heslo"
   },
   "invalidFilePassword": {
-    "message": "Neplatné heslo souboru, použijte heslo zadané při vytvoření souboru exportu."
+    "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
     "message": "Zamknout nyní"
@@ -721,7 +721,7 @@
     "message": "Nepatříte do žádné organizace. Organizace umožňují bezpečné sdílení položek s ostatními uživateli."
   },
   "notificationSentDevice": {
-    "message": "Na vaše zařízení bylo odesláno oznámení."
+    "message": "A notification has been sent to your device."
   },
   "versionNumber": {
     "message": "Verze $VERSION_NUMBER$",
@@ -912,28 +912,28 @@
     "message": "Formát souboru"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru."
+    "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription": {
-    "message": "Toto heslo bude použito pro export a import tohoto souboru"
+    "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Potvrzení hlavního hesla"
+    "message": "Confirm master password"
   },
   "confirmFormat": {
-    "message": "Potvrdit formát"
+    "message": "Confirm format"
   },
   "filePassword": {
-    "message": "Heslo souboru"
+    "message": "File password"
   },
   "confirmFilePassword": {
-    "message": "Potvrzení hesla souboru"
+    "message": "Confirm file password"
   },
   "accountBackupOptionDescription": {
-    "message": "Použijte šifrovací klíč vašeho účtu pro šifrování exportu a omezte import pouze na aktuální účet Bitwarden."
+    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Nastavte heslo pro šifrování exportu a importujte ho do libovolného účtu Bitwarden pomocí hesla pro dešifrování."
+    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "fileTypeHeading": {
     "message": "Typ souboru"
@@ -942,16 +942,16 @@
     "message": "Zálohování účtu"
   },
   "passwordProtected": {
-    "message": "Chráněno heslem"
+    "message": "Password protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "„Heslo souboru“ a „Potvrzení hesla souboru“ se neshodují."
+    "message": "“File password”  and “Confirm file password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Potvrdit import trezoru"
+    "message": "Confirm vault import"
   },
   "confirmVaultImportDesc": {
-    "message": "Tento soubor je chráněn heslem. Zadejte prosím heslo souboru k importu dat."
+    "message": "This file is password-protected. Please enter the file password to import data."
   },
   "exportSuccess": {
     "message": "Data trezoru byla exportována"
@@ -1196,7 +1196,7 @@
     "message": "Vyberte soubor pro import"
   },
   "chooseFile": {
-    "message": "Zvolit soubor"
+    "message": "Choose File"
   },
   "noFileChosen": {
     "message": "Není vybrán žádný soubor"
@@ -1221,10 +1221,10 @@
     "message": "Nastavení"
   },
   "preferencesDesc": {
-    "message": "Přizpůsobte si svůj webový trezor."
+    "message": "Customize your web vault experience."
   },
   "preferencesUpdated": {
-    "message": "Předvolby byly uloženy"
+    "message": "Preferences saved"
   },
   "language": {
     "message": "Jazyk"
@@ -1291,7 +1291,7 @@
     "message": "Dvoufázové přihlášení"
   },
   "twoStepLoginEnforcement": {
-    "message": "Vynucení dvoufázového přihlášení"
+    "message": "Two-step Login Enforcement"
   },
   "twoStepLoginDesc": {
     "message": "Zabezpečte svůj účet vyžadováním dodatečného kroku při přihlašování."
@@ -5486,255 +5486,6 @@
   },
   "multiSelectClearAll": {
     "message": "Clear all"
-  },
-  "projects": {
-    "message": "Projects"
-  },
-  "lastEdited": {
-    "message": "Last Edited"
-  },
-  "editSecret": {
-    "message": "Edit Secret"
-  },
-  "addSecret": {
-    "message": "Add Secret"
-  },
-  "copySecretName": {
-    "message": "Copy Secret Name"
-  },
-  "copySecretValue": {
-    "message": "Copy Secret Value"
-  },
-  "deleteSecret": {
-    "message": "Delete Secret"
-  },
-  "deleteSecrets": {
-    "message": "Delete Secrets"
-  },
-  "project": {
-    "message": "Project"
-  },
-  "editProject": {
-    "message": "Edit Project"
-  },
-  "viewProject": {
-    "message": "View Project"
-  },
-  "deleteProject": {
-    "message": "Delete Project"
-  },
-  "deleteProjects": {
-    "message": "Delete Projects"
-  },
-  "secret": {
-    "message": "Secret"
-  },
-  "serviceAccount": {
-    "message": "Service Account"
-  },
-  "serviceAccounts": {
-    "message": "Service Accounts"
-  },
-  "new": {
-    "message": "New"
-  },
-  "secrets": {
-    "message": "Secrets"
-  },
-  "nameValuePair": {
-    "message": "Name/Value Pair"
-  },
-  "secretEdited": {
-    "message": "Secret edited"
-  },
-  "secretCreated": {
-    "message": "Secret created"
-  },
-  "newSecret": {
-    "message": "New Secret"
-  },
-  "newServiceAccount": {
-    "message": "New Service Account"
-  },
-  "secretsNoItemsTitle": {
-    "message": "No secrets to show"
-  },
-  "secretsNoItemsMessage": {
-    "message": "To get started, add a new secret or import secrets."
-  },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Nothing to show yet"
-  },
-  "serviceAccountsNoItemsMessage": {
-    "message": "Create a new Service Account to get started automating secret access."
-  },
-  "searchSecrets": {
-    "message": "Search Secrets"
-  },
-  "deleteServiceAccounts": {
-    "message": "Delete Service Accounts"
-  },
-  "deleteServiceAccount": {
-    "message": "Delete Service Account"
-  },
-  "viewServiceAccount": {
-    "message": "View Service Account"
-  },
-  "searchServiceAccounts": {
-    "message": "Search Service Accounts"
-  },
-  "addProject": {
-    "message": "Add Project"
-  },
-  "projectEdited": {
-    "message": "Project edited"
-  },
-  "projectSaved": {
-    "message": "Project saved"
-  },
-  "projectCreated": {
-    "message": "Project created"
-  },
-  "projectName": {
-    "message": "Project Name"
-  },
-  "newProject": {
-    "message": "New Project"
-  },
-  "softDeleteSecretWarning": {
-    "message": "Deleting secrets can affect existing integrations."
-  },
-  "softDeletesSuccessToast": {
-    "message": "Secrets sent to trash"
-  },
-  "serviceAccountCreated": {
-    "message": "Service Account Created"
-  },
-  "smAccess": {
-    "message": "Access"
-  },
-  "projectCommaSecret": {
-    "message": "Project, Secret"
-  },
-  "serviceAccountName": {
-    "message": "Service account name"
-  },
-  "newSaSelectAccess": {
-    "message": "Type or Select Projects or Secrets"
-  },
-  "newSaTypeToFilter": {
-    "message": "Type to Filter"
-  },
-  "deleteProjectsToast": {
-    "message": "Projects deleted"
-  },
-  "deleteProjectToast": {
-    "message": "The project and all associated secrets have been deleted"
-  },
-  "deleteProjectDialogMessage": {
-    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
-    "placeholders": {
-      "project": {
-        "content": "$1",
-        "example": "project name"
-      }
-    }
-  },
-  "deleteProjectInputLabel": {
-    "message": "Type \"$CONFIRM$\" to continue",
-    "placeholders": {
-      "confirm": {
-        "content": "$1",
-        "example": "Delete 3 Projects"
-      }
-    }
-  },
-  "deleteProjectConfirmMessage": {
-    "message": "Delete $PROJECT$",
-    "placeholders": {
-      "project": {
-        "content": "$1",
-        "example": "project name"
-      }
-    }
-  },
-  "deleteProjectsConfirmMessage": {
-    "message": "Delete $COUNT$ Projects",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "deleteProjectsDialogMessage": {
-    "message": "Deleting projects is permanent and irreversible."
-  },
-  "projectsNoItemsTitle": {
-    "message": "No projects to display"
-  },
-  "projectsNoItemsMessage": {
-    "message": "Add a new project to get started organizing secrets."
-  },
-  "smConfirmationRequired": {
-    "message": "Confirmation required"
-  },
-  "bulkDeleteProjectsErrorMessage": {
-    "message": "The following projects could not be deleted:"
-  },
-  "softDeleteSuccessToast": {
-    "message": "Secret sent to trash"
-  },
-  "searchProjects": {
-    "message": "Search Projects"
-  },
-  "accessTokens": {
-    "message": "Access tokens"
-  },
-  "createAccessToken": {
-    "message": "Create access token"
-  },
-  "expires": {
-    "message": "Expires"
-  },
-  "canRead": {
-    "message": "Can Read"
-  },
-  "accessTokensNoItemsTitle": {
-    "message": "No access tokens to show"
-  },
-  "accessTokensNoItemsDesc": {
-    "message": "To get started, create an access token"
-  },
-  "downloadAccessToken": {
-    "message": "Download or copy before closing."
-  },
-  "expiresOnAccessToken": {
-    "message": "Expires on:"
-  },
-  "accessTokenCallOutTitle": {
-    "message": "Access tokens are not stored and cannot be retrieved"
-  },
-  "copyToken": {
-    "message": "Copy token"
-  },
-  "accessToken": {
-    "message": "Access token"
-  },
-  "accessTokenExpirationRequired": {
-    "message": "Expiration date required"
-  },
-  "accessTokenCreatedAndCopied": {
-    "message": "Access token created and copied to clipboard"
-  },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta."
-  },
-  "revokeAccessToken": {
-    "message": "Revoke Access Token"
-  },
-  "submenu": {
-    "message": "Submenu"
   },
   "from": {
     "message": "From"
