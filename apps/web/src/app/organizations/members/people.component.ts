@@ -46,9 +46,12 @@ import { BulkConfirmComponent } from "./components/bulk/bulk-confirm.component";
 import { BulkRemoveComponent } from "./components/bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./components/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./components/bulk/bulk-status.component";
-import { MemberDialogResult, openUserAddEditDialog } from "./components/member-dialog";
+import {
+  MemberDialogResult,
+  MemberDialogTab,
+  openUserAddEditDialog,
+} from "./components/member-dialog";
 import { ResetPasswordComponent } from "./components/reset-password.component";
-import { UserGroupsComponent } from "./components/user-groups.component";
 
 @Component({
   selector: "app-org-people",
@@ -75,6 +78,7 @@ export class PeopleComponent
 
   userType = OrganizationUserType;
   userStatusType = OrganizationUserStatusType;
+  memberTab = MemberDialogTab;
 
   organization: Organization;
   status: OrganizationUserStatusType = null;
@@ -302,7 +306,7 @@ export class PeopleComponent
     );
   }
 
-  async edit(user: OrganizationUserView) {
+  async edit(user: OrganizationUserView, initialTab: MemberDialogTab = MemberDialogTab.Role) {
     // Invite User: Add Flow
     // Click on user email: Edit Flow
 
@@ -340,6 +344,7 @@ export class PeopleComponent
         organizationId: this.organization.id,
         organizationUserId: user != null ? user.id : null,
         usesKeyConnector: user?.usesKeyConnector,
+        initialTab: initialTab,
       },
     });
 
@@ -354,23 +359,6 @@ export class PeopleComponent
         this.load();
         break;
     }
-  }
-
-  async groups(user: OrganizationUserUserDetailsResponse) {
-    const [modal] = await this.modalService.openViewRef(
-      UserGroupsComponent,
-      this.groupsModalRef,
-      (comp) => {
-        comp.name = this.userNamePipe.transform(user);
-        comp.organizationId = this.organization.id;
-        comp.organizationUserId = user != null ? user.id : null;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onSavedUser.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-      }
-    );
   }
 
   async bulkRemove() {

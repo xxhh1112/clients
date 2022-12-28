@@ -172,7 +172,11 @@
               </div>
             </td>
 
-            <td bitCell (click)="edit(u)" class="tw-cursor-pointer">
+            <td
+              bitCell
+              (click)="edit(u, organization.useGroups ? memberTab.Groups : memberTab.Collections)"
+              class="tw-cursor-pointer"
+            >
               <bit-badge-list
                 *ngIf="organization.useGroups || !u.accessAll"
                 [items]="organization.useGroups ? u.groupNames : u.collectionNames"
@@ -182,7 +186,7 @@
               <span *ngIf="!organization.useGroups && u.accessAll">{{ "all" | i18n }}</span>
             </td>
 
-            <td bitCell (click)="edit(u)" class="tw-cursor-pointer">
+            <td bitCell (click)="edit(u, memberTab.Role)" class="tw-cursor-pointer">
               {{ u.type | userType }}
             </td>
 
@@ -238,18 +242,18 @@
                     u.status === userStatusType.Accepted || u.status === userStatusType.Invited
                   "
                 ></bit-menu-divider>
-                <button type="button" bitMenuItem (click)="edit(u)">
+                <button type="button" bitMenuItem (click)="edit(u, memberTab.Role)">
                   <i aria-hidden="true" class="bwi bwi-user"></i> {{ "memberRole" | i18n }}
                 </button>
                 <button
                   type="button"
                   bitMenuItem
-                  (click)="groups($any(u))"
+                  (click)="edit(u, memberTab.Groups)"
                   *ngIf="organization.useGroups"
                 >
                   <i aria-hidden="true" class="bwi bwi-users"></i> {{ "groups" | i18n }}
                 </button>
-                <button type="button" bitMenuItem (click)="edit(u)">
+                <button type="button" bitMenuItem (click)="edit(u, memberTab.Collections)">
                   <i aria-hidden="true" class="bwi bwi-collection"></i> {{ "collections" | i18n }}
                 </button>
                 <bit-menu-divider></bit-menu-divider>
