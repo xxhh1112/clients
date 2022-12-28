@@ -25,10 +25,10 @@ export class BadgeListComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.maxItems == undefined) {
+    if (this.maxItems == undefined || this.items.length <= this.maxItems) {
       this.filteredItems = this.items;
     } else {
-      this.filteredItems = this.items.slice(0, this.maxItems);
+      this.filteredItems = this.items.slice(0, this.maxItems - 1);
     }
     this.isFiltered = this.items.length > this.filteredItems.length;
   }

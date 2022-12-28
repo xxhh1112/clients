@@ -176,7 +176,7 @@
               <bit-badge-list
                 *ngIf="organization.useGroups || !u.accessAll"
                 [items]="organization.useGroups ? u.groupNames : u.collectionNames"
-                [maxItems]="2"
+                [maxItems]="3"
                 badgeType="secondary"
               ></bit-badge-list>
               <span *ngIf="!organization.useGroups && u.accessAll">{{ "all" | i18n }}</span>
