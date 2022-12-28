@@ -123,9 +123,23 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: MessagingService,
       useFactory: () => {
-        return needsBackgroundInit
-          ? new BrowserMessagingPrivateModePopupService()
-          : new BrowserMessagingService();
+        const messagingServices: MessagingService[] = [];
+
+        if (needsBackgroundInit) {
+          messagingServices.push(new BrowserMessagingPrivateModePopupService());
+        }
+
+        if (!isPrivateMode) {
+          messagingServices.push(new BrowserMessagingService());
+        }
+
+        return new (class extends MessagingService {
+          send = (subscriber: string, arg: any = {}) => {
+            for (const messagingService of messagingServices) {
+              messagingService.send(subscriber, arg);
+            }
+          };
+        })();
       },
     },
     {

@@ -7,6 +7,8 @@ import { BrowserApi } from "../../browser/browserApi";
 
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
+const syncerSubject = new Subject<{ command: string; id: string }>();
+
 export class SessionSyncer {
   subscription: Subscription;
   id = Utils.newGuid();
@@ -75,6 +77,11 @@ export class SessionSyncer {
       this.updateMessageCommand,
       async (message) => await this.updateFromMessage(message)
     );
+
+    // Listen for updates from this context
+    syncerSubject.subscribe((message) => {
+      this.updateFromMessage(message);
+    });
   }
 
   async updateFromMessage(message: any) {
@@ -94,8 +101,18 @@ export class SessionSyncer {
   }
 
   private async updateSession(value: any) {
-    await this.memoryStorageService.save(this.metaData.sessionKey, value);
-    await BrowserApi.sendMessage(this.updateMessageCommand, { id: this.id });
+    try {
+      await this.memoryStorageService.save(this.metaData.sessionKey, value);
+      // Send message to this context
+      syncerSubject.next({ command: this.updateMessageCommand, id: this.id });
+      // Send message to other contexts
+      await BrowserApi.sendMessage(this.updateMessageCommand, { id: this.id });
+    } catch (e) {
+      if (e.message === "Could not establish connection. Receiving end does not exist.") {
+        return;
+      }
+      throw e;
+    }
   }
 
   private get updateMessageCommand() {

@@ -686,7 +686,7 @@ export default class MainBackground {
     }
 
     if (BrowserApi.manifestVersion === 3) {
-      BrowserApi.sendMessage("updateBadge");
+      this.messagingService.send("updateBadge");
     }
     await this.refreshBadge();
     await this.mainContextMenuHandler.noAccess();
