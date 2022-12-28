@@ -1,3 +1,4 @@
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
@@ -14,7 +15,7 @@ export default {
   component: NavGroupComponent,
   decorators: [
     moduleMetadata({
-      imports: [SharedModule, RouterTestingModule, NavigationModule],
+      imports: [SharedModule, RouterTestingModule, NavigationModule, BrowserAnimationsModule],
       providers: [
         {
           provide: I18nService,
