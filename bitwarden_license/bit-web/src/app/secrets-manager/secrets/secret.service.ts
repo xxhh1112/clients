@@ -119,19 +119,11 @@ export class SecretService {
     request.key = key.encryptedString;
     request.value = value.encryptedString;
     request.note = note.encryptedString;
-    request.projectIds = await this.getProjectIds(secretView.projects);
+    request.projectIds = [];
+
+    secretView.projects?.forEach((e) => request.projectIds.push(e.id));
 
     return request;
-  }
-
-  private async getProjectIds(projects: SecretProjectView[]): Promise<string[]> {
-    const projectIds: string[] = [];
-
-    projects?.forEach((p) => {
-      projectIds.push(p.id);
-    });
-
-    return projectIds;
   }
 
   private async createSecretView(secretResponse: SecretResponse): Promise<SecretView> {
@@ -152,16 +144,12 @@ export class SecretService {
     secretView.value = value;
     secretView.note = note;
 
-    let projectsMappedToSecretsView: SecretProjectView[] = [];
-
     if (secretResponse.projects != null) {
-      projectsMappedToSecretsView = await this.decryptProjectsMappedToSecrets(
+      secretView.projects = await this.decryptProjectsMappedToSecrets(
         orgKey,
         secretResponse.projects
       );
     }
-
-    secretView.projects = await projectsMappedToSecretsView;
 
     return secretView;
   }
