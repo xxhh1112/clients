@@ -3,6 +3,7 @@ extern crate napi_derive;
 
 mod biometric;
 mod password;
+mod clipboard;
 
 #[napi]
 pub mod passwords {
@@ -54,5 +55,18 @@ pub mod biometrics {
     #[napi]
     pub async fn available() -> napi::Result<bool> {
         super::biometric::available().map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+}
+
+#[napi]
+pub mod clipboards {
+    #[napi]
+    pub async fn read() -> napi::Result<String> {
+        super::clipboard::read().map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+
+    #[napi]
+    pub async fn write(text: String, password: bool) -> napi::Result<()> {
+        super::clipboard::write(text, password).map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 }

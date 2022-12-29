@@ -8,6 +8,7 @@ import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.s
 import { StateService } from "@bitwarden/common/services/state.service";
 
 import { BiometricMain } from "./main/biometric/biometric.main";
+import { ClipboardMain } from "./main/clipboard.main";
 import { DesktopCredentialStorageListener } from "./main/desktop-credential-storage-listener";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
@@ -39,6 +40,7 @@ export class Main {
   trayMain: TrayMain;
   biometricMain: BiometricMain;
   nativeMessagingMain: NativeMessagingMain;
+  clipboardMain: ClipboardMain;
 
   constructor() {
     // Set paths for portable builds
@@ -140,6 +142,9 @@ export class Main {
       app.getPath("userData"),
       app.getPath("exe")
     );
+
+    this.clipboardMain = new ClipboardMain();
+    this.clipboardMain.init();
   }
 
   bootstrap() {

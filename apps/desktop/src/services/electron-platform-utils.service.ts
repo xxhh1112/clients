@@ -1,8 +1,11 @@
-import { clipboard, ipcRenderer, shell } from "electron";
+import { ipcRenderer, shell } from "electron";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import {
+  ClipboardOptions,
+  PlatformUtilsService,
+} from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ClientType } from "@bitwarden/common/enums/clientType";
 import { DeviceType } from "@bitwarden/common/enums/deviceType";
@@ -149,24 +152,26 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
     return false;
   }
 
-  copyToClipboard(text: string, options?: any): void {
-    const type = options ? options.type : null;
-    const clearing = options ? !!options.clearing : false;
-    const clearMs: number = options && options.clearMs ? options.clearMs : null;
-    clipboard.writeText(text, type);
+  copyToClipboard(text: string, options?: ClipboardOptions): void {
+    const clearing = options?.clearing === true;
+    const clearMs = options?.clearMs ?? null;
+
+    ipcRenderer.invoke("clipboard.write", {
+      text: text,
+      password: (options?.allowHistory ?? false) === false, // default to false
+    });
+
     if (!clearing) {
       this.messagingService.send("copiedToClipboard", {
         clipboardValue: text,
         clearMs: clearMs,
-        type: type,
         clearing: clearing,
       });
     }
   }
 
-  readFromClipboard(options?: any): Promise<string> {
-    const type = options ? options.type : null;
-    return Promise.resolve(clipboard.readText(type));
+  readFromClipboard(): Promise<string> {
+    return ipcRenderer.invoke("clipboard.read");
   }
 
   async supportsBiometric(): Promise<boolean> {

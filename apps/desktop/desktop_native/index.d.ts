@@ -17,3 +17,7 @@ export namespace biometrics {
   export function prompt(hwnd: Buffer, message: string): Promise<boolean>
   export function available(): Promise<boolean>
 }
+export namespace clipboards {
+  export function read(): Promise<string>
+  export function write(text: string, password: boolean): Promise<void>
+}
