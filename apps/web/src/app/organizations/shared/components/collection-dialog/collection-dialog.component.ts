@@ -179,6 +179,15 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
 
     await this.collectionService.save(collectionView);
 
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t(
+        this.editMode ? "editedCollectionId" : "createdCollectionId",
+        collectionView.name
+      )
+    );
+
     this.close(CollectionDialogResult.Saved);
   };
 
@@ -196,6 +205,12 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     }
 
     await this.collectionService.delete(this.params.organizationId, this.params.collectionId);
+
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("deletedCollectionId", this.collection?.name)
+    );
 
     this.close(CollectionDialogResult.Deleted);
   };
