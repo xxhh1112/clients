@@ -67,7 +67,12 @@
         "pathGroupsExcludedImportTypes": ["builtin"]
       }
     ],
-    "rxjs-angular/prefer-takeuntil": "error",
+    "rxjs-angular/prefer-takeuntil": [
+      "error",
+      {
+        "alias": ["untilDestroyed"]
+      }
+    ],
     "rxjs/no-exposed-subjects": ["error", { "allowProtected": true }],
     "no-restricted-syntax": [
       "error",
