@@ -1,14 +1,15 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
 import { SecretListView } from "../models/view/secret-list.view";
 
+@UntilDestroy()
 @Component({
   selector: "sm-secrets-list",
   templateUrl: "./secrets-list.component.html",
 })
-export class SecretsListComponent implements OnDestroy {
+export class SecretsListComponent {
   @Input()
   get secrets(): SecretListView[] {
     return this._secrets;
@@ -27,19 +28,12 @@ export class SecretsListComponent implements OnDestroy {
   @Output() deleteSecretsEvent = new EventEmitter<string[]>();
   @Output() newSecretEvent = new EventEmitter();
 
-  private destroy$: Subject<void> = new Subject<void>();
-
   selection = new SelectionModel<string>(true, []);
 
   constructor() {
     this.selection.changed
-      .pipe(takeUntil(this.destroy$))
+      .pipe(untilDestroyed(this))
       .subscribe((_) => this.onSecretCheckedEvent.emit(this.selection.selected));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   isAllSelected() {

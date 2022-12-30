@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
 import { DialogService } from "@bitwarden/components";
 
@@ -18,25 +18,20 @@ import {
   ServiceAccountOperation,
 } from "../service-accounts/dialog/service-account-dialog.component";
 
+@UntilDestroy()
 @Component({
   selector: "sm-new-menu",
   templateUrl: "./new-menu.component.html",
 })
-export class NewMenuComponent implements OnInit, OnDestroy {
+export class NewMenuComponent implements OnInit {
   private organizationId: string;
-  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute, private dialogService: DialogService) {}
 
   ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: any) => {
+    this.route.params.pipe(untilDestroyed(this)).subscribe((params: any) => {
       this.organizationId = params.organizationId;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   openSecretDialog() {

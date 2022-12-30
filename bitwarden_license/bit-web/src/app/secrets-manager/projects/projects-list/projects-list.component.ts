@@ -1,14 +1,15 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
 import { ProjectListView } from "../../models/view/project-list.view";
 
+@UntilDestroy()
 @Component({
   selector: "sm-projects-list",
   templateUrl: "./projects-list.component.html",
 })
-export class ProjectsListComponent implements OnDestroy {
+export class ProjectsListComponent {
   @Input()
   get projects(): ProjectListView[] {
     return this._projects;
@@ -25,19 +26,12 @@ export class ProjectsListComponent implements OnDestroy {
   @Output() onProjectCheckedEvent = new EventEmitter<string[]>();
   @Output() newProjectEvent = new EventEmitter();
 
-  private destroy$: Subject<void> = new Subject<void>();
-
   selection = new SelectionModel<string>(true, []);
 
   constructor() {
     this.selection.changed
-      .pipe(takeUntil(this.destroy$))
+      .pipe(untilDestroyed(this))
       .subscribe((_) => this.onProjectCheckedEvent.emit(this.selection.selected));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   isAllSelected() {

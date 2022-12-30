@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -11,8 +11,9 @@ import {
   Validator,
   Validators,
 } from "@angular/forms";
-import { Subject, takeUntil } from "rxjs";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
+@UntilDestroy()
 @Component({
   selector: "sm-expiration-options",
   templateUrl: "./expiration-options.component.html",
@@ -29,11 +30,7 @@ import { Subject, takeUntil } from "rxjs";
     },
   ],
 })
-export class ExpirationOptionsComponent
-  implements ControlValueAccessor, Validator, OnInit, OnDestroy
-{
-  private destroy$ = new Subject<void>();
-
+export class ExpirationOptionsComponent implements ControlValueAccessor, Validator, OnInit {
   @Input() expirationDayOptions: number[];
 
   @Input() set touched(val: boolean) {
@@ -52,14 +49,9 @@ export class ExpirationOptionsComponent
   constructor(private datePipe: DatePipe) {}
 
   async ngOnInit() {
-    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.form.valueChanges.pipe(untilDestroyed(this)).subscribe(() => {
       this._onChange(this.getExpiresDate());
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private _onChange = (_value: Date | null): void => undefined;
