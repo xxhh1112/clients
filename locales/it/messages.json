@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Conferma password del file"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountBackupOptionDescription": {
+    "message": "Utilizza la chiave di crittografia del tuo account per crittare l'esportazione e limitare l'import all'attuale account Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Imposta una password per crittare l'esportazione e importala in qualsiasi account Bitwarden, utilizzando la password impostata."
   },
-  "exportTypeHeading": {
-    "message": "Export type"
+  "fileTypeHeading": {
+    "message": "Tipo di file"
   },
-  "accountRestricted": {
-    "message": "Account restricted"
+  "accountBackup": {
+    "message": "Backup dell'account"
   },
   "passwordProtected": {
     "message": "Protetto da password"
@@ -5488,15 +5488,15 @@
     "message": "Cancella tutto"
   },
   "toggleCharacterCount": {
-    "message": "Attiva/Disattiva conteggio caratteri",
+    "message": "Toggle character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
-    "message": "Conteggio caratteri password",
+    "message": "Password character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "hide": {
-    "message": "Nascondi"
+    "message": "Hide"
   },
   "projects": {
     "message": "Progetti"
@@ -5784,10 +5784,10 @@
     "message": "Questo utente può accedere e modificare tutti gli elementi."
   },
   "moreFromBitwarden": {
-    "message": "Altro da Bitwarden"
+    "message": "More from Bitwarden"
   },
   "switchProducts": {
-    "message": "Cambia Prodotti"
+    "message": "Switch Products"
   },
   "freeOrgInvLimitReachedManageBilling": {
     "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Aggiorna a un piano a pagamento per invitare più membri.",

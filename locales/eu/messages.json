@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Fitxategi pasahitza berretsi"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountBackupOptionDescription": {
+    "message": "Erabili zure kontuaren zifratze-gakoa esportazioa zifratzeko eta inportazioa egungo Bitwarden kontura bakarrik mugatzeko."
   },
   "passwordProtectedOptionDescription": {
     "message": "Erabili pasahitza esportazioa zifratzeko eta Bitwardeneko edozein kontutara inportatzean deszifratzeko."
   },
-  "exportTypeHeading": {
-    "message": "Export type"
+  "fileTypeHeading": {
+    "message": "Fitxategi mota"
   },
-  "accountRestricted": {
-    "message": "Account restricted"
+  "accountBackup": {
+    "message": "Kontuaren segurtasun kopia"
   },
   "passwordProtected": {
     "message": "Pasahitz babestua"

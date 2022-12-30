@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Apstiprināt datnes paroli"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Izmantot konta šifrēšanas atslēgu, kas iegūta no lietotājvārda un galvenās paroles, lai šifrētu izdošanu un atļautu ievietošanu tikai pašreizējā Bitwarden kontā."
+  "accountBackupOptionDescription": {
+    "message": "Jāizmanto konta šifrēšanas atslēga, lai šifrētu izdošanu un ierobežotu ievietošanu tikai pašreizējā Bitwarden kontā."
   },
   "passwordProtectedOptionDescription": {
     "message": "Uzstādīt paroli, lai šifrētu izdošanu un tad to ievietotu jebkurā Bitwarden kontā, izmantojot atšifrēšanas paroli."
   },
-  "exportTypeHeading": {
-    "message": "Izdošanas veids"
+  "fileTypeHeading": {
+    "message": "Datnes veids"
   },
-  "accountRestricted": {
-    "message": "Konts ir ierobežots"
+  "accountBackup": {
+    "message": "Konta rezerves kopija"
   },
   "passwordProtected": {
     "message": "Aizsargāts ar paroli"
@@ -5488,15 +5488,15 @@
     "message": "Notīrīt visu"
   },
   "toggleCharacterCount": {
-    "message": "Pārslēgt rakstzīmju skaita attēlošanu",
+    "message": "Toggle character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
-    "message": "Paroles rakstzīmju skaits",
+    "message": "Password character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "hide": {
-    "message": "Paslēpt"
+    "message": "Hide"
   },
   "projects": {
     "message": "Projekti"
@@ -5784,10 +5784,10 @@
     "message": "Šis dalībnieks var piekļūt visiem vienumiem un mainīt tos."
   },
   "moreFromBitwarden": {
-    "message": "Vairāk no Bitwarden"
+    "message": "More from Bitwarden"
   },
   "switchProducts": {
-    "message": "Pārslēgt pakalpojumus"
+    "message": "Switch Products"
   },
   "freeOrgInvLimitReachedManageBilling": {
     "message": "Apvienībās, kuras izmanto Bitwarden bez maksas, var būt līdz $SEATCOUNT$ dalībniekiem. Jāpāriet uz maksas plānu, lai uzaicinātu vairāk dalībnieku.",

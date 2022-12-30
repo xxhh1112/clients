@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Confirmar senha do arquivo"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountBackupOptionDescription": {
+    "message": "Usar sua chave de criptografia da conta para criptografar a exportação e restringir a importação apenas para a conta atual do Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Defina uma senha para criptografar a exportação e importá-la para qualquer conta do Bitwarden usando a senha para descriptografar."
   },
-  "exportTypeHeading": {
-    "message": "Export type"
+  "fileTypeHeading": {
+    "message": "Tipo de arquivo"
   },
-  "accountRestricted": {
-    "message": "Account restricted"
+  "accountBackup": {
+    "message": "Backup da Conta"
   },
   "passwordProtected": {
     "message": "Protegido por Senha"

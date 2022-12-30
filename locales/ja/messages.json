@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "ファイルパスワードの確認"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "アカウントのユーザー名とマスターパスワードから得られる暗号化キーを使用してエクスポートするデータを暗号化し、現在の Bitwarden アカウントのみがインポートできるよう制限します。"
+  "accountBackupOptionDescription": {
+    "message": "アカウントの暗号化キーを使用してエクスポートを暗号化し、インポートを現在の Bitwarden アカウントのみに制限します。"
   },
   "passwordProtectedOptionDescription": {
     "message": "エクスポートを暗号化するためのパスワードを設定します。そのパスワードを使用して、任意の Bitwarden アカウントにインポートします。"
   },
-  "exportTypeHeading": {
-    "message": "エクスポートの種類"
+  "fileTypeHeading": {
+    "message": "ファイル形式"
   },
-  "accountRestricted": {
-    "message": "アカウント制限"
+  "accountBackup": {
+    "message": "アカウントのバックアップ"
   },
   "passwordProtected": {
     "message": "パスワード保護あり"

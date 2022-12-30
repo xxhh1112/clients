@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Potwierdź hasło pliku"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Użyj klucza szyfrowania konta, pochodzącego z nazwy użytkownika konta i hasła głównego, aby zaszyfrować eksport i ograniczyć import tylko do bieżącego konta Bitwarden."
+  "accountBackupOptionDescription": {
+    "message": "Wykorzystuje szyfrowanie konta Bitwarden, a nie hasło główne, aby chronić eksport. Ten eksport może być zaimportowany tylko na tym koncie. Użyj tego, aby utworzyć kopię zapasową, której nie można użyć nigdzie indziej."
   },
   "passwordProtectedOptionDescription": {
     "message": "Utwórz hasło wygenerowane przez użytkownika, aby chronić eksport. Użyj tego, aby utworzyć eksport, który może być używany na innych kontach."
   },
-  "exportTypeHeading": {
-    "message": "Typ eksportu"
+  "fileTypeHeading": {
+    "message": "Rodzaj pliku"
   },
-  "accountRestricted": {
-    "message": "Konto ograniczone"
+  "accountBackup": {
+    "message": "Kopia zapasowa konta"
   },
   "passwordProtected": {
     "message": "Zabezpieczone hasłem"
@@ -2528,7 +2528,7 @@
     "message": "Sejf organizacji został wyeksportowany."
   },
   "editedOrgSettings": {
-    "message": "Ustawienia organizacji zostały zaktualizowane."
+    "message": "Ustawienia organizacji zostały zmienione."
   },
   "createdItemId": {
     "message": "Element $ID$ został utworzony.",
@@ -5125,19 +5125,19 @@
     "message": "Token synchronizacji płatności"
   },
   "active": {
-    "message": "Aktywny"
+    "message": "Aktywna"
   },
   "inactive": {
-    "message": "Nieaktywny"
+    "message": "Nieaktywna"
   },
   "sentAwaitingSync": {
-    "message": "Wysłany (oczekiwanie na synchronizację)"
+    "message": "Wysłano (oczekiwanie na synchronizację)"
   },
   "sent": {
     "message": "Wysłano"
   },
   "requestRemoved": {
-    "message": "Usunięty (oczekiwanie na synchronizację)"
+    "message": "Usunięto (oczekiwanie na synchronizację)"
   },
   "requested": {
     "message": "Zażądano"
@@ -5556,7 +5556,7 @@
     "message": "Para nazwa/wartość"
   },
   "secretEdited": {
-    "message": "Sekret został zaktualizowany"
+    "message": "Sekret został edytowany"
   },
   "secretCreated": {
     "message": "Sekret został utworzony"
@@ -5598,7 +5598,7 @@
     "message": "Dodaj projekt"
   },
   "projectEdited": {
-    "message": "Projekt został zaktualizowany"
+    "message": "Projekt został edytowany"
   },
   "projectSaved": {
     "message": "Projekt został zapisany"
@@ -5697,7 +5697,7 @@
     "message": "Sekret został przeniesiony do kosza"
   },
   "searchProjects": {
-    "message": "Szukaj w projektach"
+    "message": "Wyszukaj w projektach"
   },
   "accessTokens": {
     "message": "Tokeny dostępu"

@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Потврдити лозинку датотеке"
   },
-  "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountBackupOptionDescription": {
+    "message": "Користите кључ за шифровање налога да шифрујете извоз и ограничите увоз само на тренутни Bitwarden налогу."
   },
   "passwordProtectedOptionDescription": {
     "message": "Подесите лозинку за шифровање извоза и увоз у било који Bitwarden налог користећи лозинку за дешифровање."
   },
-  "exportTypeHeading": {
-    "message": "Export type"
+  "fileTypeHeading": {
+    "message": "Тип датотеке"
   },
-  "accountRestricted": {
-    "message": "Account restricted"
+  "accountBackup": {
+    "message": "Резервна копија налога"
   },
   "passwordProtected": {
     "message": "Заштићено лозинком"
