@@ -58,7 +58,7 @@
     .icon {
       display: flex;
       align-items: flex-end;
-      margin-left: 5px;
+      margin-right: 5px;
 
       @include themify($themes) {
         color: themed("headingColor");
@@ -365,6 +365,11 @@
   .action-buttons {
     display: flex;
     margin-left: 5px;
+
+    &.action-buttons-fixed {
+      align-self: start;
+      margin-top: 2px;
+    }
 
     .row-btn {
       @extend .icon-btn;

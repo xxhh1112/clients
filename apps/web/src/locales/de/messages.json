@@ -900,7 +900,7 @@
     "message": "Dieser Export verschlüsselt Ihre Daten mit dem Verschlüsselungscode Ihres Kontos. Falls Sie Ihren Verschlüsselungscode erneuern, sollten Sie den Export erneut durchführen, da Sie die zuvor erstellte Datei ansonsten nicht mehr entschlüsseln können."
   },
   "encExportAccountWarningDesc": {
-    "message": "Die Verschlüsselungscodes eines Kontos sind für jedes Bitwarden Benutzerkonto einzigartig, deshalb können Sie keinen verschlüsselten Export in ein anderes Konto importieren."
+    "message": "Die Verschlüsselungscodes eines Kontos sind für jedes Bitwarden-Benutzerkonto einzigartig, deshalb kannst du keinen verschlüsselten Export in ein anderes Konto importieren."
   },
   "export": {
     "message": "Export"
@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Dateipasswort bestätigen"
   },
-  "accountBackupOptionDescription": {
-    "message": "Nutze den Verschlüsselungscode deines Kontos, um den Export zu verschlüsseln und den Import allein auf das aktuelle Bitwarden-Konto zu beschränken."
+  "accountRestrictedOptionDescription": {
+    "message": "Verwende den Verschlüsselungscode deines Kontos, abgeleitet vom Benutzernamen und Master-Passwort, um den Export zu verschlüsseln und den Import auf das aktuelle Bitwarden-Konto zu beschränken."
   },
   "passwordProtectedOptionDescription": {
     "message": "Lege ein Passwort fest, um den Export zu verschlüsseln und ihn in ein beliebiges Bitwarden-Konto zu importieren, wobei das Passwort zum Entschlüsseln genutzt wird."
   },
-  "fileTypeHeading": {
-    "message": "Dateityp"
+  "exportTypeHeading": {
+    "message": "Exporttyp"
   },
-  "accountBackup": {
-    "message": "Konto-Sicherung"
+  "accountRestricted": {
+    "message": "Konto eingeschränkt"
   },
   "passwordProtected": {
     "message": "Passwortgeschützt"
@@ -3402,7 +3402,7 @@
     "message": "Verschlüsselungscode aktualisieren"
   },
   "rotateEncKeyConfirmation": {
-    "message": "Sind Sie sich sicher, dass Sie ihren Verschlüsselungscode aktualisieren möchten?"
+    "message": "Bist du sicher, dass du deinen Verschlüsselungscode aktualisieren möchtest?"
   },
   "attachmentsNeedFix": {
     "message": "Dieser Eintrag hat Anhänge, die repariert werden müssen."
@@ -3415,7 +3415,7 @@
     "description": "This is a verb. ex. 'Fix The Car'"
   },
   "oldAttachmentsNeedFixDesc": {
-    "message": "Es gibt alte Dateianhänge in ihrem Tresor, die repariert werden müssen, bevor Sie Ihren Verschlüsselungscode aktualisieren können."
+    "message": "Es gibt alte Dateianhänge in deinem Tresor, die repariert werden müssen, bevor du deinen Verschlüsselungscode aktualisieren kannst."
   },
   "yourAccountsFingerprint": {
     "message": "Prüfschlüssel für Ihren Account",
@@ -5487,6 +5487,266 @@
   "multiSelectClearAll": {
     "message": "Alles löschen"
   },
+  "toggleCharacterCount": {
+    "message": "Zeichenzählung ein-/ausschalten",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Passwort Zeichenzählung",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Ausblenden"
+  },
+  "projects": {
+    "message": "Projekte"
+  },
+  "lastEdited": {
+    "message": "Zuletzt bearbeitet"
+  },
+  "editSecret": {
+    "message": "Geheimnis bearbeiten"
+  },
+  "addSecret": {
+    "message": "Geheimnis hinzufügen"
+  },
+  "copySecretName": {
+    "message": "Geheimnamen kopieren"
+  },
+  "copySecretValue": {
+    "message": "Geheimen Wert kopieren"
+  },
+  "deleteSecret": {
+    "message": "Geheimnis löschen"
+  },
+  "deleteSecrets": {
+    "message": "Geheimnisse löschen"
+  },
+  "project": {
+    "message": "Projekt"
+  },
+  "editProject": {
+    "message": "Projekt bearbeiten"
+  },
+  "viewProject": {
+    "message": "Projekt anzeigen"
+  },
+  "deleteProject": {
+    "message": "Projekt löschen"
+  },
+  "deleteProjects": {
+    "message": "Projekte löschen"
+  },
+  "secret": {
+    "message": "Geheimnis"
+  },
+  "serviceAccount": {
+    "message": "Dienstkonto"
+  },
+  "serviceAccounts": {
+    "message": "Dienstkonten"
+  },
+  "new": {
+    "message": "Neu"
+  },
+  "secrets": {
+    "message": "Geheimnisse"
+  },
+  "nameValuePair": {
+    "message": "Name/Wert-Paar"
+  },
+  "secretEdited": {
+    "message": "Geheimnis bearbeitet"
+  },
+  "secretCreated": {
+    "message": "Geheimnis erstellt"
+  },
+  "newSecret": {
+    "message": "Neues Geheimnis"
+  },
+  "newServiceAccount": {
+    "message": "Neues Dienstkonto"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Keine Geheimnisse zum Anzeigen"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Um loszulegen, füge ein neues Geheimnis hinzu oder importiere Geheimnisse."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Hier gibt es noch nichts"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Erstelle ein neues Dienstkonto, um mit der Automation für Zugriffe auf Geheimnisse zu beginnen."
+  },
+  "searchSecrets": {
+    "message": "Geheimnisse durchsuchen"
+  },
+  "deleteServiceAccounts": {
+    "message": "Dienstkonten löschen"
+  },
+  "deleteServiceAccount": {
+    "message": "Dienstkonto löschen"
+  },
+  "viewServiceAccount": {
+    "message": "Dienstkonto anzeigen"
+  },
+  "searchServiceAccounts": {
+    "message": "Dienstkonten durchsuchen"
+  },
+  "addProject": {
+    "message": "Projekt hinzufügen"
+  },
+  "projectEdited": {
+    "message": "Projekt bearbeitet"
+  },
+  "projectSaved": {
+    "message": "Projekt gespeichert"
+  },
+  "projectCreated": {
+    "message": "Projekt erstellt"
+  },
+  "projectName": {
+    "message": "Projektname"
+  },
+  "newProject": {
+    "message": "Neues Projekt"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Das Löschen von Geheimnissen kann bestehende Integrationen beeinflussen."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Geheimnisse in Papierkorb verschoben"
+  },
+  "serviceAccountCreated": {
+    "message": "Dienstkonto erstellt"
+  },
+  "smAccess": {
+    "message": "Zugriff"
+  },
+  "projectCommaSecret": {
+    "message": "Projekt, Geheimnis"
+  },
+  "serviceAccountName": {
+    "message": "Name des Dienstkontos"
+  },
+  "newSaSelectAccess": {
+    "message": "Projekte oder Geheimnisse eingeben oder auswählen"
+  },
+  "newSaTypeToFilter": {
+    "message": "Schreiben, um zu filtern"
+  },
+  "deleteProjectsToast": {
+    "message": "Projekte gelöscht"
+  },
+  "deleteProjectToast": {
+    "message": "Das Projekt und alle zugehörigen Geheimnisse wurden gelöscht"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Das Löschen des Projekts $PROJECT$ ist dauerhaft und unwiderruflich.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Gebe \"$CONFIRM$\" ein, um fortzufahren",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "$PROJECT$ löschen",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "$COUNT$ Projekte löschen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Das Löschen von Projekten ist dauerhaft und unwiderruflich."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Keine Projekte zum Anzeigen"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Füge ein neues Projekt hinzu, um mit der Organisation von Geheimnissen zu beginnen."
+  },
+  "smConfirmationRequired": {
+    "message": "Bestätigung erforderlich"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Die folgenden Projekte konnten nicht gelöscht werden:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Geheimnis in Papierkorb verschoben"
+  },
+  "searchProjects": {
+    "message": "Projekte durchsuchen"
+  },
+  "accessTokens": {
+    "message": "Zugriffstokens"
+  },
+  "createAccessToken": {
+    "message": "Zugriffstoken erstellen"
+  },
+  "expires": {
+    "message": "Läuft ab"
+  },
+  "canRead": {
+    "message": "Kann lesen"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Keine Zugriffstoken zum Anzeigen"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Um loszulegen, erstelle ein Zugriffstoken"
+  },
+  "downloadAccessToken": {
+    "message": "Vor dem Schließen herunterladen oder kopieren."
+  },
+  "expiresOnAccessToken": {
+    "message": "Läuft ab am:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Zugriffstoken sind nicht gespeichert und können nicht abgerufen werden"
+  },
+  "copyToken": {
+    "message": "Token kopieren"
+  },
+  "accessToken": {
+    "message": "Zugriffstoken"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Ablaufdatum erforderlich"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Zugriffstoken erstellt und in Zwischenablage kopiert"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Die Berechtigungsverwaltung ist in der Beta nicht verfügbar."
+  },
+  "revokeAccessToken": {
+    "message": "Zugriffstoken widerrufen"
+  },
+  "submenu": {
+    "message": "Untermenü"
+  },
   "from": {
     "message": "Von"
   },
@@ -5522,5 +5782,47 @@
   },
   "memberAccessAll": {
     "message": "Dieses Mitglied darf auf alle Elemente zugreifen und diese ändern."
+  },
+  "moreFromBitwarden": {
+    "message": "Mehr von Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Produkte wechseln"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Kostenlose Organisationen können bis zu $SEATCOUNT$ Mitglieder haben. Wechsle auf ein kostenpflichtiges Abo, um mehr Mitglieder einzuladen.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Kostenlose Organisationen können bis zu $SEATCOUNT$ Mitglieder haben. Kontaktiere deinen Organisationseigentümer zum Hochstufen.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Kostenlose Organisationen können bis zu $COLLECTIONCOUNT$ Sammlungen haben. Wechsle auf ein kostenpflichtiges Abo, um mehr Sammlungen hinzuzufügen.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Kostenlose Organisationen können bis zu $COLLECTIONCOUNT$ Sammlungen haben. Kontaktiere deinen Organisationseigentümer zum Hochstufen.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

@@ -175,6 +175,7 @@
   }
 
   &:disabled:not(.manual),
+  &[aria-disabled="true"]:not(.manual),
   &.loading {
     .bwi-spinner {
       display: flex;
@@ -200,4 +201,18 @@ button.no-btn {
     box-shadow: none;
     color: inherit;
   }
+}
+
+button.header-expandable {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+/* special case for Send options */
+h3 button.header-expandable .bwi {
+  line-height: 1.5;
 }
