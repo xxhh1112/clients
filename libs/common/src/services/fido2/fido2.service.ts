@@ -84,7 +84,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       })
     );
 
-    this.credentials.set(credentialId.encoded, {
+    await this.saveCredential({
       credentialId,
       keyPair,
       origin: params.origin,
@@ -168,6 +168,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       }
     }
     return credential;
+  }
+
+  private async saveCredential(credential: BitCredential): Promise<void> {
+    this.credentials.set(credential.credentialId.encoded, credential);
   }
 
   private getCredentialByRp(rpId: string): BitCredential | undefined {
