@@ -18,6 +18,7 @@ import {
 } from "../shared/models/vault-filter-section.type";
 import { VaultFilter } from "../shared/models/vault-filter.model";
 import {
+  CipherStatus,
   CipherTypeFilter,
   CollectionFilter,
   FolderFilter,
@@ -243,42 +244,44 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     return orgFilterSection;
   }
 
-  protected async addTypeFilter(): Promise<VaultFilterSection> {
+  protected async addTypeFilter(excludeTypes: CipherStatus[] = []): Promise<VaultFilterSection> {
+    const allTypeFilters: CipherTypeFilter[] = [
+      {
+        id: "favorites",
+        name: this.i18nService.t("favorites"),
+        type: "favorites",
+        icon: "bwi-star",
+      },
+      {
+        id: "login",
+        name: this.i18nService.t("typeLogin"),
+        type: CipherType.Login,
+        icon: "bwi-globe",
+      },
+      {
+        id: "card",
+        name: this.i18nService.t("typeCard"),
+        type: CipherType.Card,
+        icon: "bwi-credit-card",
+      },
+      {
+        id: "identity",
+        name: this.i18nService.t("typeIdentity"),
+        type: CipherType.Identity,
+        icon: "bwi-id-card",
+      },
+      {
+        id: "note",
+        name: this.i18nService.t("typeSecureNote"),
+        type: CipherType.SecureNote,
+        icon: "bwi-sticky-note",
+      },
+    ];
+
     const typeFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         { id: "AllItems", name: "allItems", type: "all", icon: "" },
-        [
-          {
-            id: "favorites",
-            name: this.i18nService.t("favorites"),
-            type: "favorites",
-            icon: "bwi-star",
-          },
-          {
-            id: "login",
-            name: this.i18nService.t("typeLogin"),
-            type: CipherType.Login,
-            icon: "bwi-globe",
-          },
-          {
-            id: "card",
-            name: this.i18nService.t("typeCard"),
-            type: CipherType.Card,
-            icon: "bwi-credit-card",
-          },
-          {
-            id: "identity",
-            name: this.i18nService.t("typeIdentity"),
-            type: CipherType.Identity,
-            icon: "bwi-id-card",
-          },
-          {
-            id: "note",
-            name: this.i18nService.t("typeSecureNote"),
-            type: CipherType.SecureNote,
-            icon: "bwi-sticky-note",
-          },
-        ]
+        allTypeFilters.filter((f) => !excludeTypes.includes(f.type))
       ),
       header: {
         showHeader: true,

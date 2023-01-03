@@ -65,7 +65,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
 
   async buildAllFilters(): Promise<VaultFilterList> {
     const builderFilter = {} as VaultFilterList;
-    builderFilter.typeFilter = await this.addTypeFilter();
+    builderFilter.typeFilter = await this.addTypeFilter(["favorites"]);
     builderFilter.collectionFilter = await this.addCollectionFilter();
     builderFilter.trashFilter = await this.addTrashFilter();
     return builderFilter;
