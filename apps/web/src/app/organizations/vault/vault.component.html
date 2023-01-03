@@ -24,7 +24,7 @@
         >
           <!-- First node in the tree contains a translation key. The rest come from user input. -->
           <ng-container *ngIf="first">{{ collection.node.name | i18n }}</ng-container>
-          <ng-template *ngIf="!first">{{ collection.node.name }}</ng-template>
+          <ng-container *ngIf="!first">{{ collection.node.name }}</ng-container>
         </bit-breadcrumb>
       </bit-breadcrumbs>
       <div class="tw-mb-4 tw-flex">
