@@ -277,14 +277,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const result = await this.groupService.deleteMany(
+      await this.groupService.deleteMany(
         this.organizationId,
         groupsToDelete.map((g) => g.details.id)
       );
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("deletedManyGroups", result.length.toString())
+        this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString())
       );
 
       groupsToDelete.forEach((g) => this.removeGroup(g.details.id));

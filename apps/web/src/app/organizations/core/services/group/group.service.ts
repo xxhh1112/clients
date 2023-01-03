@@ -25,19 +25,14 @@ export class GroupService {
     );
   }
 
-  async deleteMany(orgId: string, groupIds: string[]): Promise<GroupView[]> {
-    const request = new OrganizationGroupBulkRequest(groupIds);
-
-    const r = await this.apiService.send(
+  async deleteMany(orgId: string, groupIds: string[]): Promise<void> {
+    await this.apiService.send(
       "DELETE",
       "/organizations/" + orgId + "/groups",
-      request,
+      new OrganizationGroupBulkRequest(groupIds),
       true,
       true
     );
-    const listResponse = new ListResponse(r, GroupResponse);
-
-    return listResponse.data?.map((gr) => GroupView.fromResponse(gr)) ?? [];
   }
 
   async get(orgId: string, groupId: string): Promise<GroupView> {
