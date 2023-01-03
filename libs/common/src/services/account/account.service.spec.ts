@@ -193,24 +193,22 @@ describe("AccountService", () => {
       });
 
       it("emits when active account is set", () => {
-        const a = SubjectData.loading(undefined);
-        const b = SubjectData.loading(lockedAccount);
+        const a = SubjectData.loading(lockedAccount);
 
         sut.setActiveAccount(lockedAccount.id);
 
         expect({ marbles: marbles, values: values }).toEqual({
           marbles: ["0", "1"],
           values: {
-            0: a,
-            1: b,
+            0: undefined,
+            1: a,
           },
         });
       });
 
       it("emits when active account is updated", () => {
-        const a = SubjectData.loading(undefined);
-        const b = SubjectData.loading(lockedAccount);
-        const c = SubjectData.loading(unlockedAccount);
+        const a = SubjectData.loading(lockedAccount);
+        const b = SubjectData.loading(unlockedAccount);
 
         sut.setActiveAccount(lockedAccount.id);
         sut.upsertAccount(unlockedAccount);
@@ -219,9 +217,9 @@ describe("AccountService", () => {
         expect({ marbles: marbles, values: values }).toEqual({
           marbles: ["0", "1", "2"],
           values: {
-            0: a,
-            1: b,
-            2: c,
+            0: undefined,
+            1: a,
+            2: b,
           },
         });
       });

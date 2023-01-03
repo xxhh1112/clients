@@ -27,10 +27,8 @@ export class AccountServiceImplementation implements InternalAccountService {
   activeAccount$ = this._accounts.pipe(
     filter((accounts) => accounts.loaded),
     combineLatestWith(this._activeAccount),
-    map(
-      ([accounts, activeAccount]) =>
-        accounts.data.find((a) => a?.data?.id != null && a.data.id === activeAccount) ??
-        SubjectData.loading(undefined)
+    map(([accounts, activeAccount]) =>
+      accounts.data.find((a) => a?.data?.id != null && a.data.id === activeAccount)
     ),
     distinctUntilChanged((_, curr) => {
       if (curr.hash === this._lastActiveAccountHash) {
@@ -42,7 +40,7 @@ export class AccountServiceImplementation implements InternalAccountService {
     })
   );
   activeAccountUnlocked$ = this.activeAccount$.pipe(
-    filter((account) => account.loaded),
+    filter((account) => account?.loaded),
     map((account) => account?.data?.unlocked)
   );
 

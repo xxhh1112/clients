@@ -9,7 +9,7 @@ export type AccountData = {
 
 export abstract class AccountService {
   accounts$: Observable<SubjectData<SubjectData<AccountData>[]>>;
-  activeAccount$: Observable<SubjectData<AccountData>>;
+  activeAccount$: Observable<SubjectData<AccountData> | undefined>;
   activeAccountUnlocked$: Observable<boolean>;
 }
 
