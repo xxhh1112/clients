@@ -23,6 +23,8 @@ import { IdentityCaptchaResponse } from "@bitwarden/common/models/response/ident
 import { IdentityTokenResponse } from "@bitwarden/common/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "@bitwarden/common/models/response/identity-two-factor.response";
 
+import { InternalAccountService } from "../../../src/abstractions/account/account.service";
+
 const email = "hello@world.com";
 const masterPassword = "password";
 
@@ -74,6 +76,7 @@ describe("LogInStrategy", () => {
   let messagingService: MockProxy<MessagingService>;
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
+  let accountService: MockProxy<InternalAccountService>;
   let twoFactorService: MockProxy<TwoFactorService>;
   let authService: MockProxy<AuthService>;
 
@@ -81,16 +84,17 @@ describe("LogInStrategy", () => {
   let credentials: PasswordLogInCredentials;
 
   beforeEach(async () => {
-    cryptoService = mock<CryptoService>();
-    apiService = mock<ApiService>();
-    tokenService = mock<TokenService>();
-    appIdService = mock<AppIdService>();
-    platformUtilsService = mock<PlatformUtilsService>();
-    messagingService = mock<MessagingService>();
-    logService = mock<LogService>();
-    stateService = mock<StateService>();
-    twoFactorService = mock<TwoFactorService>();
-    authService = mock<AuthService>();
+    cryptoService = mock();
+    apiService = mock();
+    tokenService = mock();
+    appIdService = mock();
+    platformUtilsService = mock();
+    messagingService = mock();
+    logService = mock();
+    stateService = mock();
+    accountService = mock();
+    twoFactorService = mock();
+    authService = mock();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.decodeToken.calledWith(accessToken).mockResolvedValue(decodedToken);
@@ -106,6 +110,7 @@ describe("LogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
+      accountService,
       authService
     );
     credentials = new PasswordLogInCredentials(email, masterPassword);

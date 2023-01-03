@@ -1,5 +1,6 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 
+import { AccountService } from "../../abstractions/account/account.service";
 import { InternalOrganizationService as InternalOrganizationServiceAbstraction } from "../../abstractions/organization/organization.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
 import { OrganizationData } from "../../models/data/organization.data";
@@ -10,8 +11,8 @@ export class OrganizationService implements InternalOrganizationServiceAbstracti
 
   organizations$ = this._organizations.asObservable();
 
-  constructor(private stateService: StateService) {
-    this.stateService.activeAccountUnlocked$
+  constructor(private stateService: StateService, private accountService: AccountService) {
+    this.accountService.activeAccountUnlocked$
       .pipe(
         concatMap(async (unlocked) => {
           if (!unlocked) {

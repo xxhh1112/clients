@@ -1,5 +1,6 @@
 import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
 
+import { AccountService } from "../../abstractions/account/account.service";
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { ServerConfig } from "../../abstractions/config/server-config";
@@ -12,9 +13,10 @@ export class ConfigService implements ConfigServiceAbstraction {
 
   constructor(
     private stateService: StateService,
-    private configApiService: ConfigApiServiceAbstraction
+    private configApiService: ConfigApiServiceAbstraction,
+    private accountService: AccountService
   ) {
-    this.stateService.activeAccountUnlocked$
+    this.accountService.activeAccountUnlocked$
       .pipe(
         switchMap((unlocked) => {
           if (!unlocked) {

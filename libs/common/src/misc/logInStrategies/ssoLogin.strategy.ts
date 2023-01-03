@@ -1,3 +1,4 @@
+import { InternalAccountService } from "../../abstractions/account/account.service";
 import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
@@ -28,6 +29,7 @@ export class SsoLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
+    accountService: InternalAccountService,
     private keyConnectorService: KeyConnectorService
   ) {
     super(
@@ -39,7 +41,8 @@ export class SsoLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      accountService
     );
   }
 

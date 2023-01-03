@@ -1,5 +1,6 @@
 import { Observable, Subject } from "rxjs";
 
+import { InternalAccountService } from "../abstractions/account/account.service";
 import { ApiService } from "../abstractions/api.service";
 import { AppIdService } from "../abstractions/appId.service";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
@@ -87,7 +88,8 @@ export class AuthService implements AuthServiceAbstraction {
     protected environmentService: EnvironmentService,
     protected stateService: StateService,
     protected twoFactorService: TwoFactorService,
-    protected i18nService: I18nService
+    protected i18nService: I18nService,
+    protected accountService: InternalAccountService
   ) {}
 
   async logIn(
@@ -117,6 +119,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
+          this.accountService,
           this
         );
         break;
@@ -131,6 +134,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
+          this.accountService,
           this.keyConnectorService
         );
         break;
@@ -145,6 +149,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
+          this.accountService,
           this.environmentService,
           this.keyConnectorService
         );
@@ -160,6 +165,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
+          this.accountService,
           this
         );
         break;

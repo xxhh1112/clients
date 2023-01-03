@@ -1,3 +1,4 @@
+import { InternalAccountService } from "../../abstractions/account/account.service";
 import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { AuthService } from "../../abstractions/auth.service";
@@ -41,6 +42,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
+    accountService: InternalAccountService,
     private authService: AuthService
   ) {
     super(
@@ -52,7 +54,8 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      accountService
     );
   }
 

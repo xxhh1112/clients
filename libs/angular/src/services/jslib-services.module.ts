@@ -217,6 +217,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         TwoFactorServiceAbstraction,
         I18nServiceAbstraction,
+        InternalAccountService,
       ],
     },
     {
@@ -263,6 +264,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         I18nServiceAbstraction,
         CipherServiceAbstraction,
         StateServiceAbstraction,
+        AccountServiceAbstraction,
       ],
     },
     {
@@ -371,6 +373,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         ProviderServiceAbstraction,
         FolderApiServiceAbstraction,
         OrganizationServiceAbstraction,
+        AccountServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -378,7 +381,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: SettingsServiceAbstraction,
       useClass: SettingsService,
-      deps: [StateServiceAbstraction],
+      deps: [StateServiceAbstraction, AccountServiceAbstraction],
     },
     {
       provide: VaultTimeoutSettingsServiceAbstraction,
@@ -416,6 +419,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         AbstractStorageService,
         SECURE_STORAGE,
         MEMORY_STORAGE,
+        AccountServiceAbstraction,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,
@@ -485,7 +489,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: PolicyServiceAbstraction,
       useClass: PolicyService,
-      deps: [StateServiceAbstraction, OrganizationServiceAbstraction],
+      deps: [StateServiceAbstraction, OrganizationServiceAbstraction, AccountServiceAbstraction],
     },
     {
       provide: InternalPolicyService,
@@ -537,7 +541,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: OrganizationServiceAbstraction,
       useClass: OrganizationService,
-      deps: [StateServiceAbstraction],
+      deps: [StateServiceAbstraction, AccountServiceAbstraction],
     },
     {
       provide: InternalOrganizationService,
@@ -587,7 +591,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: ConfigServiceAbstraction,
       useClass: ConfigService,
-      deps: [StateServiceAbstraction, ConfigApiServiceAbstraction],
+      deps: [StateServiceAbstraction, ConfigApiServiceAbstraction, AccountServiceAbstraction],
     },
     {
       provide: ConfigApiServiceAbstraction,

@@ -5,10 +5,13 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationData } from "@bitwarden/common/models/data/organization.data";
 import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
 
+import { AccountServiceImplementation } from "../../../src/services/account/account.service";
+
 describe("Organization Service", () => {
   let organizationService: OrganizationService;
 
   let stateService: MockProxy<StateService>;
+  let accountService: MockProxy<AccountServiceImplementation>;
   let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
@@ -17,10 +20,11 @@ describe("Organization Service", () => {
   ) => {
     mockClear(stateService);
     stateService = mock<StateService>();
+    accountService = mock();
     stateService.activeAccount$ = activeAccount;
-    stateService.activeAccountUnlocked$ = activeAccountUnlocked;
+    accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     customizeStateService(stateService);
-    organizationService = new OrganizationService(stateService);
+    organizationService = new OrganizationService(stateService, accountService);
     await new Promise((r) => setTimeout(r, 50));
   };
 
@@ -29,14 +33,15 @@ describe("Organization Service", () => {
     activeAccountUnlocked = new BehaviorSubject(true);
 
     stateService = mock<StateService>();
+    accountService = mock();
     stateService.activeAccount$ = activeAccount;
-    stateService.activeAccountUnlocked$ = activeAccountUnlocked;
+    accountService.activeAccountUnlocked$ = activeAccountUnlocked;
 
     stateService.getOrganizations.calledWith(any()).mockResolvedValue({
       "1": organizationData("1", "Test Org"),
     });
 
-    organizationService = new OrganizationService(stateService);
+    organizationService = new OrganizationService(stateService, accountService);
   });
 
   afterEach(() => {

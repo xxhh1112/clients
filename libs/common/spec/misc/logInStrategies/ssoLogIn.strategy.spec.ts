@@ -14,6 +14,8 @@ import { SsoLogInStrategy } from "@bitwarden/common/misc/logInStrategies/ssoLogi
 import { Utils } from "@bitwarden/common/misc/utils";
 import { SsoLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
 
+import { InternalAccountService } from "../../../src/abstractions/account/account.service";
+
 import { identityTokenResponseFactory } from "./logIn.strategy.spec";
 
 describe("SsoLogInStrategy", () => {
@@ -25,6 +27,7 @@ describe("SsoLogInStrategy", () => {
   let messagingService: MockProxy<MessagingService>;
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
+  let accountService: MockProxy<InternalAccountService>;
   let twoFactorService: MockProxy<TwoFactorService>;
   let keyConnectorService: MockProxy<KeyConnectorService>;
 
@@ -40,16 +43,17 @@ describe("SsoLogInStrategy", () => {
   const ssoOrgId = "SSO_ORG_ID";
 
   beforeEach(async () => {
-    cryptoService = mock<CryptoService>();
-    apiService = mock<ApiService>();
-    tokenService = mock<TokenService>();
-    appIdService = mock<AppIdService>();
-    platformUtilsService = mock<PlatformUtilsService>();
-    messagingService = mock<MessagingService>();
-    logService = mock<LogService>();
-    stateService = mock<StateService>();
-    twoFactorService = mock<TwoFactorService>();
-    keyConnectorService = mock<KeyConnectorService>();
+    cryptoService = mock();
+    apiService = mock();
+    tokenService = mock();
+    appIdService = mock();
+    platformUtilsService = mock();
+    messagingService = mock();
+    logService = mock();
+    stateService = mock();
+    accountService = mock();
+    twoFactorService = mock();
+    keyConnectorService = mock();
 
     tokenService.getTwoFactorToken.mockResolvedValue(null);
     appIdService.getAppId.mockResolvedValue(deviceId);
@@ -65,6 +69,7 @@ describe("SsoLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
+      accountService,
       keyConnectorService
     );
     credentials = new SsoLogInCredentials(ssoCode, ssoCodeVerifier, ssoRedirectUrl, ssoOrgId);

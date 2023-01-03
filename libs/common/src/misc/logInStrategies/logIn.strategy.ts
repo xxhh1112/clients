@@ -1,3 +1,4 @@
+import { InternalAccountService } from "../../abstractions/account/account.service";
 import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
@@ -39,7 +40,8 @@ export abstract class LogInStrategy {
     protected messagingService: MessagingService,
     protected logService: LogService,
     protected stateService: StateService,
-    protected twoFactorService: TwoFactorService
+    protected twoFactorService: TwoFactorService,
+    protected accountService: InternalAccountService
   ) {}
 
   abstract logIn(
@@ -119,6 +121,7 @@ export abstract class LogInStrategy {
         },
       })
     );
+    this.accountService.setActiveAccount(accountInformation.sub);
   }
 
   protected async processTokenResponse(response: IdentityTokenResponse): Promise<AuthResult> {

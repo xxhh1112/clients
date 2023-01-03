@@ -1,5 +1,6 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 
+import { AccountService } from "../abstractions/account/account.service";
 import { SettingsService as SettingsServiceAbstraction } from "../abstractions/settings.service";
 import { StateService } from "../abstractions/state.service";
 import { Utils } from "../misc/utils";
@@ -10,8 +11,8 @@ export class SettingsService implements SettingsServiceAbstraction {
 
   settings$ = this._settings.asObservable();
 
-  constructor(private stateService: StateService) {
-    this.stateService.activeAccountUnlocked$
+  constructor(private stateService: StateService, private accountService: AccountService) {
+    this.accountService.activeAccountUnlocked$
       .pipe(
         concatMap(async (unlocked) => {
           if (Utils.global.bitwardenContainerService == null) {

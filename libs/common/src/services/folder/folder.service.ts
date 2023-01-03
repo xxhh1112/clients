@@ -1,5 +1,6 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 
+import { AccountService } from "../../abstractions/account/account.service";
 import { CipherService } from "../../abstractions/cipher.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { InternalFolderService as InternalFolderServiceAbstraction } from "../../abstractions/folder/folder.service.abstraction";
@@ -23,9 +24,10 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cryptoService: CryptoService,
     private i18nService: I18nService,
     private cipherService: CipherService,
-    private stateService: StateService
+    private stateService: StateService,
+    private accountService: AccountService
   ) {
-    this.stateService.activeAccountUnlocked$
+    this.accountService.activeAccountUnlocked$
       .pipe(
         concatMap(async (unlocked) => {
           if (Utils.global.bitwardenContainerService == null) {

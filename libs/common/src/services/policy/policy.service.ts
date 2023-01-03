@@ -1,5 +1,6 @@
 import { of, concatMap, BehaviorSubject, Observable, map } from "rxjs";
 
+import { AccountService } from "../../abstractions/account/account.service";
 import { OrganizationService } from "../../abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService as InternalPolicyServiceAbstraction } from "../../abstractions/policy/policy.service.abstraction";
 import { StateService } from "../../abstractions/state.service";
@@ -22,9 +23,10 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
 
   constructor(
     private stateService: StateService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private accountService: AccountService
   ) {
-    this.stateService.activeAccountUnlocked$
+    this.accountService.activeAccountUnlocked$
       .pipe(
         concatMap(async (unlocked) => {
           if (Utils.global.bitwardenContainerService == null) {

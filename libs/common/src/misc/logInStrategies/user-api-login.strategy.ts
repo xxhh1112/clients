@@ -1,3 +1,4 @@
+import { InternalAccountService } from "../../abstractions/account/account.service";
 import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
@@ -28,6 +29,7 @@ export class UserApiLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
+    accountService: InternalAccountService,
     private environmentService: EnvironmentService,
     private keyConnectorService: KeyConnectorService
   ) {
@@ -40,7 +42,8 @@ export class UserApiLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      accountService
     );
   }
 

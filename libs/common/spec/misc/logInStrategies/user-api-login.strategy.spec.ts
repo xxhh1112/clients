@@ -15,6 +15,8 @@ import { UserApiLogInStrategy } from "@bitwarden/common/misc/logInStrategies/use
 import { Utils } from "@bitwarden/common/misc/utils";
 import { UserApiLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
 
+import { InternalAccountService } from "../../../src/abstractions/account/account.service";
+
 import { identityTokenResponseFactory } from "./logIn.strategy.spec";
 
 describe("UserApiLogInStrategy", () => {
@@ -26,6 +28,7 @@ describe("UserApiLogInStrategy", () => {
   let messagingService: MockProxy<MessagingService>;
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
+  let accountService: MockProxy<InternalAccountService>;
   let twoFactorService: MockProxy<TwoFactorService>;
   let keyConnectorService: MockProxy<KeyConnectorService>;
   let environmentService: MockProxy<EnvironmentService>;
@@ -39,17 +42,18 @@ describe("UserApiLogInStrategy", () => {
   const apiClientSecret = "API_CLIENT_SECRET";
 
   beforeEach(async () => {
-    cryptoService = mock<CryptoService>();
-    apiService = mock<ApiService>();
-    tokenService = mock<TokenService>();
-    appIdService = mock<AppIdService>();
-    platformUtilsService = mock<PlatformUtilsService>();
-    messagingService = mock<MessagingService>();
-    logService = mock<LogService>();
-    stateService = mock<StateService>();
-    twoFactorService = mock<TwoFactorService>();
-    keyConnectorService = mock<KeyConnectorService>();
-    environmentService = mock<EnvironmentService>();
+    cryptoService = mock();
+    apiService = mock();
+    tokenService = mock();
+    appIdService = mock();
+    platformUtilsService = mock();
+    messagingService = mock();
+    logService = mock();
+    stateService = mock();
+    twoFactorService = mock();
+    accountService = mock();
+    keyConnectorService = mock();
+    environmentService = mock();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.getTwoFactorToken.mockResolvedValue(null);
@@ -65,6 +69,7 @@ describe("UserApiLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
+      accountService,
       environmentService,
       keyConnectorService
     );

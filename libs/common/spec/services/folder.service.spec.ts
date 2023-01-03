@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { mock, MockProxy } from "jest-mock-extended";
 import { BehaviorSubject, firstValueFrom } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -13,6 +14,8 @@ import { ContainerService } from "@bitwarden/common/services/container.service";
 import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { StateService } from "@bitwarden/common/services/state.service";
 
+import { AccountServiceImplementation } from "../../src/services/account/account.service";
+
 describe("Folder Service", () => {
   let folderService: FolderService;
 
@@ -21,6 +24,7 @@ describe("Folder Service", () => {
   let i18nService: SubstituteOf<I18nService>;
   let cipherService: SubstituteOf<CipherService>;
   let stateService: SubstituteOf<StateService>;
+  let accountService: MockProxy<AccountServiceImplementation>;
   let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
@@ -30,6 +34,7 @@ describe("Folder Service", () => {
     i18nService = Substitute.for();
     cipherService = Substitute.for();
     stateService = Substitute.for();
+    accountService = mock();
     activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
@@ -37,10 +42,16 @@ describe("Folder Service", () => {
       "1": folderData("1", "test"),
     });
     stateService.activeAccount$.returns(activeAccount);
-    stateService.activeAccountUnlocked$.returns(activeAccountUnlocked);
+    accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
-    folderService = new FolderService(cryptoService, i18nService, cipherService, stateService);
+    folderService = new FolderService(
+      cryptoService,
+      i18nService,
+      cipherService,
+      stateService,
+      accountService
+    );
   });
 
   it("encrypt", async () => {

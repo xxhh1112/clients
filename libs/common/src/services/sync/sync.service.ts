@@ -1,3 +1,6 @@
+import { firstValueFrom } from "rxjs";
+
+import { InternalAccountService } from "../../abstractions/account/account.service";
 import { ApiService } from "../../abstractions/api.service";
 import { CipherService } from "../../abstractions/cipher.service";
 import { CollectionService } from "../../abstractions/collection.service";
@@ -54,6 +57,7 @@ export class SyncService implements SyncServiceAbstraction {
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
     private organizationService: InternalOrganizationService,
+    private accountService: InternalAccountService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
 
@@ -77,10 +81,13 @@ export class SyncService implements SyncServiceAbstraction {
   @sequentialize(() => "fullSync")
   async fullSync(forceSync: boolean, allowThrowOnError = false): Promise<boolean> {
     this.syncStarted();
+    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
     const isAuthenticated = await this.stateService.getIsAuthenticated();
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !activeAccount?.data?.id) {
       return this.syncCompleted(false);
     }
+
+    this.accountService.setAccountLoaded(activeAccount.data.id, false);
 
     const now = new Date();
     let needsSync = false;
@@ -110,11 +117,13 @@ export class SyncService implements SyncServiceAbstraction {
       await this.syncPolicies(response.policies);
 
       await this.setLastSync(now);
+      this.accountService.setAccountLoaded(activeAccount.data.id, true);
       return this.syncCompleted(true);
     } catch (e) {
       if (allowThrowOnError) {
         throw e;
       } else {
+        this.accountService.setAccountLoaded(activeAccount.data.id, true);
         return this.syncCompleted(false);
       }
     }

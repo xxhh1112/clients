@@ -1,6 +1,7 @@
-import { BehaviorSubject, concatMap } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { Jsonify } from "type-fest";
 
+import { InternalAccountService } from "../abstractions/account/account.service";
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
 import { StateMigrationService } from "../abstractions/stateMigration.service";
@@ -73,9 +74,6 @@ export class StateService<
   protected activeAccountSubject = new BehaviorSubject<string | null>(null);
   activeAccount$ = this.activeAccountSubject.asObservable();
 
-  protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
-  activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
-
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
@@ -88,29 +86,12 @@ export class StateService<
     protected storageService: AbstractStorageService,
     protected secureStorageService: AbstractStorageService,
     protected memoryStorageService: AbstractMemoryStorageService,
+    protected accountService: InternalAccountService,
     protected logService: LogService,
     protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
     protected useAccountCache: boolean = true
-  ) {
-    // If the account gets changed, verify the new account is unlocked
-    this.activeAccountSubject
-      .pipe(
-        concatMap(async (userId) => {
-          if (userId == null && this.activeAccountUnlockedSubject.getValue() == false) {
-            return;
-          } else if (userId == null) {
-            this.activeAccountUnlockedSubject.next(false);
-          }
-
-          // FIXME: This should be refactored into AuthService or a similar service,
-          //  as checking for the existance of the crypto key is a low level
-          //  implementation detail.
-          this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
-        })
-      )
-      .subscribe();
-  }
+  ) {}
 
   async init(): Promise<void> {
     if (this.hasBeenInited) {
@@ -150,6 +131,8 @@ export class StateService<
         state.activeUserId = storedActiveUser;
       }
       await this.pushAccounts();
+      this.accountService.setActiveAccount(state.activeUserId);
+      this.accountService.setAccountsListLoaded(true);
       this.activeAccountSubject.next(state.activeUserId);
 
       return state;
@@ -160,6 +143,7 @@ export class StateService<
     if (userId == null) {
       return;
     }
+    const loadedUserIds: string[] = [];
     await this.updateState(async (state) => {
       if (state.accounts == null) {
         state.accounts = {};
@@ -167,7 +151,12 @@ export class StateService<
       state.accounts[userId] = this.createAccount();
       const diskAccount = await this.getAccountFromDisk({ userId: userId });
       state.accounts[userId].profile = diskAccount.profile;
+      this.accountService.upsertAccount({ id: userId, unlocked: false });
+      loadedUserIds.push(userId);
       return state;
+    });
+    loadedUserIds.forEach((userId) => {
+      this.accountService.setAccountLoaded(userId, true);
     });
   }
 
@@ -182,7 +171,6 @@ export class StateService<
     await this.scaffoldNewAccountStorage(account);
     await this.setLastActive(new Date().getTime(), { userId: account.profile.userId });
     await this.setActiveUser(account.profile.userId);
-    this.activeAccountSubject.next(account.profile.userId);
   }
 
   async setActiveUser(userId: string): Promise<void> {
@@ -190,6 +178,7 @@ export class StateService<
     await this.updateState(async (state) => {
       state.activeUserId = userId;
       await this.storageService.save(keys.activeUserId, userId);
+      this.accountService.setActiveAccount(state.activeUserId);
       this.activeAccountSubject.next(state.activeUserId);
       return state;
     });
@@ -525,14 +514,7 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    if (options.userId == this.activeAccountSubject.getValue()) {
-      const nextValue = value != null;
-
-      // Avoid emitting if we are already unlocked
-      if (this.activeAccountUnlockedSubject.getValue() != nextValue) {
-        this.activeAccountUnlockedSubject.next(nextValue);
-      }
-    }
+    this.accountService.upsertAccount({ id: options.userId, unlocked: value != null });
   }
 
   async getCryptoMasterKeyAuto(options?: StorageOptions): Promise<string> {
@@ -1554,7 +1536,7 @@ export class StateService<
 
   async setEnvironmentUrls(value: EnvironmentUrls, options?: StorageOptions): Promise<void> {
     // Global values are set on each change and the current global settings are passed to any newly authed accounts.
-    // This is to allow setting environement values before an account is active, while still allowing individual accounts to have their own environments.
+    // This is to allow setting environment values before an account is active, while still allowing individual accounts to have their own environments.
     const globals = await this.getGlobals(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );

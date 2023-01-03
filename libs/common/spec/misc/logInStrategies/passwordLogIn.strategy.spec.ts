@@ -16,6 +16,8 @@ import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
+import { InternalAccountService } from "../../../src/abstractions/account/account.service";
+
 import { identityTokenResponseFactory } from "./logIn.strategy.spec";
 
 const email = "hello@world.com";
@@ -38,6 +40,7 @@ describe("PasswordLogInStrategy", () => {
   let messagingService: MockProxy<MessagingService>;
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
+  let accountService: MockProxy<InternalAccountService>;
   let twoFactorService: MockProxy<TwoFactorService>;
   let authService: MockProxy<AuthService>;
 
@@ -45,16 +48,17 @@ describe("PasswordLogInStrategy", () => {
   let credentials: PasswordLogInCredentials;
 
   beforeEach(async () => {
-    cryptoService = mock<CryptoService>();
-    apiService = mock<ApiService>();
-    tokenService = mock<TokenService>();
-    appIdService = mock<AppIdService>();
-    platformUtilsService = mock<PlatformUtilsService>();
-    messagingService = mock<MessagingService>();
-    logService = mock<LogService>();
-    stateService = mock<StateService>();
-    twoFactorService = mock<TwoFactorService>();
-    authService = mock<AuthService>();
+    cryptoService = mock();
+    apiService = mock();
+    tokenService = mock();
+    appIdService = mock();
+    platformUtilsService = mock();
+    messagingService = mock();
+    logService = mock();
+    stateService = mock();
+    accountService = mock();
+    twoFactorService = mock();
+    authService = mock();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.decodeToken.mockResolvedValue({});
@@ -78,6 +82,7 @@ describe("PasswordLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
+      accountService,
       authService
     );
     credentials = new PasswordLogInCredentials(email, masterPassword);

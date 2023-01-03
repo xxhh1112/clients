@@ -1,9 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { mock, MockProxy } from "jest-mock-extended";
 import { BehaviorSubject, firstValueFrom } from "rxjs";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
+import { AccountServiceImplementation } from "@bitwarden/common/services/account/account.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateService } from "@bitwarden/common/services/state.service";
@@ -14,6 +16,7 @@ describe("SettingsService", () => {
   let cryptoService: SubstituteOf<CryptoService>;
   let encryptService: SubstituteOf<EncryptService>;
   let stateService: SubstituteOf<StateService>;
+  let accountService: MockProxy<AccountServiceImplementation>;
   let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
@@ -21,15 +24,16 @@ describe("SettingsService", () => {
     cryptoService = Substitute.for();
     encryptService = Substitute.for();
     stateService = Substitute.for();
+    accountService = mock();
     activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
     stateService.getSettings().resolves({ equivalentDomains: [["test"], ["domains"]] });
     stateService.activeAccount$.returns(activeAccount);
-    stateService.activeAccountUnlocked$.returns(activeAccountUnlocked);
+    accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
-    settingsService = new SettingsService(stateService);
+    settingsService = new SettingsService(stateService, accountService);
   });
 
   afterEach(() => {
