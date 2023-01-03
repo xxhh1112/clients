@@ -82,6 +82,7 @@ export class SecretDialogComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get title() {
@@ -90,7 +91,7 @@ export class SecretDialogComponent implements OnInit {
 
   async removeProjectAssociation(id: string) {
     this.selectedProjects = this.selectedProjects.filter((e) => e.id != id);
-    this.formGroup.get("project").setValue(""); //set the selected to nothing;
+    this.formGroup.get("project").setValue("");
   }
 
   updateProjectList() {

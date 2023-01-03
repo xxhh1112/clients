@@ -160,7 +160,7 @@ export class SecretService {
   ): Promise<SecretListView[]> {
     const orgKey = await this.getOrganizationKey(organizationId);
 
-    const projectsMappedToSecretsView = this.decryptProjectsMappedToSecrets(
+    const projectsMappedToSecretsView = await this.decryptProjectsMappedToSecrets(
       orgKey,
       secrets.projects
     );
@@ -177,12 +177,11 @@ export class SecretService {
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
 
-        const projectsMappedToSecret = await projectsMappedToSecretsView;
+        const projectIds = s.projects?.map((p) => p.id);
+        secretListView.projects = projectsMappedToSecretsView.filter((p) =>
+          projectIds.includes(p.id)
+        );
 
-        const projectIds: string[] = [];
-        s.projects?.forEach((e) => projectIds.push(e.id));
-
-        secretListView.projects = projectsMappedToSecret.filter((p) => projectIds.includes(p.id));
         return secretListView;
       })
     );
