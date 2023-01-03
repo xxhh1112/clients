@@ -92,9 +92,12 @@
                 {{ p.labelId | i18n }}
               </option>
             </select>
-            <div class="tw-absolute tw-inset-y-0 tw-right-4 tw-flex tw-items-center">
+            <label
+              [for]="'permission' + i"
+              class="tw-absolute tw-inset-y-0 tw-right-4 tw-mb-0 tw-block tw-flex tw-items-center"
+            >
               <i class="bwi bwi-sm bwi-angle-down tw-leading-[0]"></i>
-            </div>
+            </label>
           </div>
         </ng-container>
 
