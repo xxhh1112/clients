@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { concatMap, take, takeUntil } from "rxjs/operators";
 
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -56,11 +57,12 @@ export class LockComponent implements OnInit, OnDestroy {
     protected apiService: ApiService,
     protected logService: LogService,
     private keyConnectorService: KeyConnectorService,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    protected accountService: AccountService
   ) {}
 
   async ngOnInit() {
-    this.stateService.activeAccount$
+    this.accountService.activeAccount$
       .pipe(
         concatMap(async () => {
           await this.load();

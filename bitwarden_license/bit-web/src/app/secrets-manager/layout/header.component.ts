@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, map, Observable } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AccountProfile } from "@bitwarden/common/models/domain/account";
 
@@ -16,7 +17,11 @@ export class HeaderComponent {
   protected routeData$: Observable<{ title: string; searchTitle: string }>;
   protected account$: Observable<AccountProfile>;
 
-  constructor(private route: ActivatedRoute, private stateService: StateService) {
+  constructor(
+    private route: ActivatedRoute,
+    private stateService: StateService,
+    private accountService: AccountService
+  ) {
     this.routeData$ = this.route.data.pipe(
       map((params) => {
         return {
@@ -27,11 +32,11 @@ export class HeaderComponent {
     );
 
     this.account$ = combineLatest([
-      this.stateService.activeAccount$,
+      this.accountService.activeAccount$,
       this.stateService.accounts$,
     ]).pipe(
       map(([activeAccount, accounts]) => {
-        return accounts[activeAccount]?.profile;
+        return accounts[activeAccount?.data?.id]?.profile;
       })
     );
   }

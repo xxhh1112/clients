@@ -31,7 +31,6 @@ describe("PolicyService", () => {
   let accountService: MockProxy<AccountServiceImplementation>;
   let organizationService: SubstituteOf<OrganizationService>;
   let encryptService: SubstituteOf<EncryptService>;
-  let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
   beforeEach(() => {
@@ -53,7 +52,6 @@ describe("PolicyService", () => {
       ]);
     organizationService.getAll(undefined).resolves([]);
     organizationService.getAll(null).resolves([]);
-    activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
     stateService.getDecryptedPolicies({ userId: "user" }).resolves(null);
     stateService.getEncryptedPolicies({ userId: "user" }).resolves({
@@ -66,7 +64,6 @@ describe("PolicyService", () => {
         minutes: 14,
       }),
     });
-    stateService.activeAccount$.returns(activeAccount);
     accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     stateService.getUserId().resolves("user");
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
@@ -75,7 +72,6 @@ describe("PolicyService", () => {
   });
 
   afterEach(() => {
-    activeAccount.complete();
     activeAccountUnlocked.complete();
   });
 

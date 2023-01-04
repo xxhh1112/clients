@@ -15,6 +15,7 @@ import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -128,12 +129,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     private modalService: ModalService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
-    this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
-      this.activeUserId = userId;
+    this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
+      this.activeUserId = account?.data?.id;
     });
 
     this.ngZone.runOutsideAngular(() => {

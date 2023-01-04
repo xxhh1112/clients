@@ -14,6 +14,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 
+import { AccountService } from "../../../../../libs/common/src/abstractions/account/account.service";
 import { RouterService } from "../core";
 
 @Component({
@@ -35,7 +36,8 @@ export class LockComponent extends BaseLockComponent {
     apiService: ApiService,
     logService: LogService,
     keyConnectorService: KeyConnectorService,
-    ngZone: NgZone
+    ngZone: NgZone,
+    accountService: AccountService
   ) {
     super(
       router,
@@ -50,7 +52,8 @@ export class LockComponent extends BaseLockComponent {
       apiService,
       logService,
       keyConnectorService,
-      ngZone
+      ngZone,
+      accountService
     );
   }
 

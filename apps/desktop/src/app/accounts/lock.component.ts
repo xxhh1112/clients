@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ipcRenderer } from "electron";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/components/lock.component";
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -36,11 +37,12 @@ export class LockComponent extends BaseLockComponent {
     environmentService: EnvironmentService,
     stateService: StateService,
     apiService: ApiService,
-    private route: ActivatedRoute,
-    private broadcasterService: BroadcasterService,
-    ngZone: NgZone,
     logService: LogService,
-    keyConnectorService: KeyConnectorService
+    keyConnectorService: KeyConnectorService,
+    ngZone: NgZone,
+    accountService: AccountService,
+    private route: ActivatedRoute,
+    private broadcasterService: BroadcasterService
   ) {
     super(
       router,
@@ -55,7 +57,8 @@ export class LockComponent extends BaseLockComponent {
       apiService,
       logService,
       keyConnectorService,
-      ngZone
+      ngZone,
+      accountService
     );
   }
 

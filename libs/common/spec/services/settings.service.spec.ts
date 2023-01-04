@@ -17,7 +17,6 @@ describe("SettingsService", () => {
   let encryptService: SubstituteOf<EncryptService>;
   let stateService: SubstituteOf<StateService>;
   let accountService: MockProxy<AccountServiceImplementation>;
-  let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
   beforeEach(() => {
@@ -25,11 +24,9 @@ describe("SettingsService", () => {
     encryptService = Substitute.for();
     stateService = Substitute.for();
     accountService = mock();
-    activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
     stateService.getSettings().resolves({ equivalentDomains: [["test"], ["domains"]] });
-    stateService.activeAccount$.returns(activeAccount);
     accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
@@ -37,7 +34,6 @@ describe("SettingsService", () => {
   });
 
   afterEach(() => {
-    activeAccount.complete();
     activeAccountUnlocked.complete();
   });
 

@@ -25,7 +25,6 @@ describe("Folder Service", () => {
   let cipherService: SubstituteOf<CipherService>;
   let stateService: SubstituteOf<StateService>;
   let accountService: MockProxy<AccountServiceImplementation>;
-  let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
   beforeEach(() => {
@@ -35,13 +34,11 @@ describe("Folder Service", () => {
     cipherService = Substitute.for();
     stateService = Substitute.for();
     accountService = mock();
-    activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
     stateService.getEncryptedFolders().resolves({
       "1": folderData("1", "test"),
     });
-    stateService.activeAccount$.returns(activeAccount);
     accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 

@@ -71,9 +71,6 @@ export class StateService<
   protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
   accounts$ = this.accountsSubject.asObservable();
 
-  protected activeAccountSubject = new BehaviorSubject<string | null>(null);
-  activeAccount$ = this.activeAccountSubject.asObservable();
-
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
@@ -133,7 +130,6 @@ export class StateService<
       await this.pushAccounts();
       this.accountService.setActiveAccount(state.activeUserId);
       this.accountService.setAccountsListLoaded(true);
-      this.activeAccountSubject.next(state.activeUserId);
 
       return state;
     });
@@ -179,7 +175,6 @@ export class StateService<
       state.activeUserId = userId;
       await this.storageService.save(keys.activeUserId, userId);
       this.accountService.setActiveAccount(state.activeUserId);
-      this.activeAccountSubject.next(state.activeUserId);
       return state;
     });
 

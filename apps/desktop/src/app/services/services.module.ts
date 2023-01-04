@@ -11,6 +11,7 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/abstractions/cipher.service";
@@ -141,6 +142,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         AbstractStorageService,
         SECURE_STORAGE,
         MEMORY_STORAGE,
+        AccountServiceAbstraction,
         LogService,
         StateMigrationServiceAbstraction,
         STATE_FACTORY,

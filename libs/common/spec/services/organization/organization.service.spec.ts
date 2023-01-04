@@ -12,7 +12,6 @@ describe("Organization Service", () => {
 
   let stateService: MockProxy<StateService>;
   let accountService: MockProxy<AccountServiceImplementation>;
-  let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;
 
   const resetStateService = async (
@@ -21,7 +20,6 @@ describe("Organization Service", () => {
     mockClear(stateService);
     stateService = mock<StateService>();
     accountService = mock();
-    stateService.activeAccount$ = activeAccount;
     accountService.activeAccountUnlocked$ = activeAccountUnlocked;
     customizeStateService(stateService);
     organizationService = new OrganizationService(stateService, accountService);
@@ -29,12 +27,10 @@ describe("Organization Service", () => {
   };
 
   beforeEach(() => {
-    activeAccount = new BehaviorSubject("123");
     activeAccountUnlocked = new BehaviorSubject(true);
 
     stateService = mock<StateService>();
     accountService = mock();
-    stateService.activeAccount$ = activeAccount;
     accountService.activeAccountUnlocked$ = activeAccountUnlocked;
 
     stateService.getOrganizations.calledWith(any()).mockResolvedValue({
@@ -45,7 +41,6 @@ describe("Organization Service", () => {
   });
 
   afterEach(() => {
-    activeAccount.complete();
     activeAccountUnlocked.complete();
   });
 

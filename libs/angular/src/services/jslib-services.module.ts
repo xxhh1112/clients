@@ -309,7 +309,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: EnvironmentServiceAbstraction,
       useClass: EnvironmentService,
-      deps: [StateServiceAbstraction],
+      deps: [StateServiceAbstraction, AccountServiceAbstraction],
     },
     {
       provide: TotpServiceAbstraction,

@@ -1,5 +1,6 @@
 import { concatMap, Observable, Subject } from "rxjs";
 
+import { AccountService } from "../abstractions/account/account.service";
 import {
   EnvironmentService as EnvironmentServiceAbstraction,
   Urls,
@@ -21,8 +22,8 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   private keyConnectorUrl: string;
   private scimUrl: string = null;
 
-  constructor(private stateService: StateService) {
-    this.stateService.activeAccount$
+  constructor(private stateService: StateService, private accountService: AccountService) {
+    this.accountService.activeAccount$
       .pipe(
         concatMap(async () => {
           await this.setUrlsFromStorage();
