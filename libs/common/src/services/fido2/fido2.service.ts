@@ -1,5 +1,6 @@
 import { CBOR } from "cbor-redux";
 
+import { CipherService } from "../../abstractions/cipher.service";
 import { Fido2UserInterfaceService } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../../abstractions/fido2/fido2-utils";
 import {
@@ -11,7 +12,11 @@ import {
   NoCredentialFoundError,
   OriginMismatchError,
 } from "../../abstractions/fido2/fido2.service.abstraction";
+import { CipherType } from "../../enums/cipherType";
 import { Utils } from "../../misc/utils";
+import { Cipher } from "../../models/domain/cipher";
+import { CipherView } from "../../models/view/cipher.view";
+import { Fido2KeyView } from "../../models/view/fido2-key.view";
 
 import { CredentialId } from "./credential-id";
 import { joseToDer } from "./ecdsa-utils";
@@ -20,16 +25,21 @@ const STANDARD_ATTESTATION_FORMAT = "packed";
 
 interface BitCredential {
   credentialId: CredentialId;
-  keyPair: CryptoKeyPair;
+  privateKey: CryptoKey;
   rpId: string;
   origin: string;
   userHandle: Uint8Array;
 }
 
+const KeyUsages: KeyUsage[] = ["sign"];
+
 export class Fido2Service implements Fido2ServiceAbstraction {
   private credentials = new Map<string, BitCredential>();
 
-  constructor(private fido2UserInterfaceService: Fido2UserInterfaceService) {}
+  constructor(
+    private fido2UserInterfaceService: Fido2UserInterfaceService,
+    private cipherService: CipherService
+  ) {}
 
   async createCredential(
     params: CredentialRegistrationParams
@@ -40,7 +50,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
     const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
-    const credentialId = new CredentialId(Utils.newGuid());
 
     const clientData = encoder.encode(
       JSON.stringify({
@@ -55,14 +64,21 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         namedCurve: "P-256",
       },
       true,
-      ["sign", "verify"]
+      KeyUsages
     );
+
+    const credentialId = await this.saveCredential({
+      privateKey: keyPair.privateKey,
+      origin: params.origin,
+      rpId: params.rp.id,
+      userHandle: Fido2Utils.stringToBuffer(params.user.id),
+    });
 
     const authData = await generateAuthData({
       rpId: params.rp.id,
       credentialId,
       userPresence: presence,
-      userVerification: false,
+      userVerification: true, // TODO: Change to false
       keyPair,
       attestationFormat: STANDARD_ATTESTATION_FORMAT,
     });
@@ -70,7 +86,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const asn1Der_signature = await generateSignature({
       authData,
       clientData,
-      keyPair,
+      privateKey: keyPair.privateKey,
     });
 
     const attestationObject = new Uint8Array(
@@ -83,14 +99,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         authData,
       })
     );
-
-    await this.saveCredential({
-      credentialId,
-      keyPair,
-      origin: params.origin,
-      rpId: params.rp.id,
-      userHandle: Fido2Utils.stringToBuffer(params.user.id),
-    });
 
     // eslint-disable-next-line no-console
     console.log("Fido2Service.createCredential => result", {
@@ -111,7 +119,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
       // We're looking for regular non-resident keys
-      credential = this.getCredential(params.allowedCredentialIds);
+      credential = await this.getCredential(params.allowedCredentialIds);
+      console.log("Found credential: ", credential);
     } else {
       // We're looking for a resident key
       credential = this.getCredentialByRp(params.rpId);
@@ -140,13 +149,13 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       credentialId: credential.credentialId,
       rpId: params.rpId,
       userPresence: presence,
-      userVerification: false,
+      userVerification: true, // TODO: Change to false!
     });
 
     const signature = await generateSignature({
       authData,
       clientData,
-      keyPair: credential.keyPair,
+      privateKey: credential.privateKey,
     });
 
     return {
@@ -158,20 +167,67 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     };
   }
 
-  private getCredential(allowedCredentialIds: string[]): BitCredential | undefined {
-    let credential: BitCredential | undefined;
+  private async getCredential(allowedCredentialIds: string[]): Promise<BitCredential | undefined> {
+    let cipher: Cipher | undefined;
     for (const allowedCredential of allowedCredentialIds) {
-      const id = new CredentialId(allowedCredential);
-      if (this.credentials.has(id.encoded)) {
-        credential = this.credentials.get(id.encoded);
+      cipher = await this.cipherService.get(allowedCredential);
+
+      if (cipher != undefined) {
         break;
       }
     }
-    return credential;
+
+    if (cipher == null) {
+      return undefined;
+    }
+
+    const cipherView = await cipher.decrypt();
+    const keyBuffer = Fido2Utils.stringToBuffer(cipherView.fido2Key.key);
+    let privateKey;
+    try {
+      privateKey = await crypto.subtle.importKey(
+        "pkcs8",
+        keyBuffer,
+        {
+          name: "ECDSA",
+          namedCurve: "P-256",
+        },
+        true,
+        KeyUsages
+      );
+    } catch (err) {
+      console.log("Error importing key", { err });
+      throw err;
+    }
+
+    return {
+      credentialId: new CredentialId(cipherView.id),
+      privateKey,
+      origin: cipherView.fido2Key.origin,
+      rpId: cipherView.fido2Key.rpId,
+      userHandle: Fido2Utils.stringToBuffer(cipherView.fido2Key.userHandle),
+    };
   }
 
-  private async saveCredential(credential: BitCredential): Promise<void> {
-    this.credentials.set(credential.credentialId.encoded, credential);
+  private async saveCredential(
+    credential: Omit<BitCredential, "credentialId">
+  ): Promise<CredentialId> {
+    const pcks8Key = await crypto.subtle.exportKey("pkcs8", credential.privateKey);
+
+    const view = new CipherView();
+    view.type = CipherType.Fido2Key;
+    view.name = credential.origin;
+    view.fido2Key = new Fido2KeyView();
+    view.fido2Key.key = Fido2Utils.bufferToString(pcks8Key);
+    view.fido2Key.origin = credential.origin;
+    view.fido2Key.rpId = credential.rpId;
+    view.fido2Key.userHandle = Fido2Utils.bufferToString(credential.userHandle);
+
+    const cipher = await this.cipherService.encrypt(view);
+    await this.cipherService.createWithServer(cipher);
+
+    // TODO: Cipher service modifies supplied object, we might wanna change that.
+    return new CredentialId(cipher.id);
   }
 
   private getCredentialByRp(rpId: string): BitCredential | undefined {
@@ -267,7 +323,7 @@ async function generateAuthData(params: AuthDataParams) {
 interface SignatureParams {
   authData: Uint8Array;
   clientData: Uint8Array;
-  keyPair: CryptoKeyPair;
+  privateKey: CryptoKey;
 }
 
 async function generateSignature(params: SignatureParams) {
@@ -279,7 +335,7 @@ async function generateSignature(params: SignatureParams) {
         name: "ECDSA",
         hash: { name: "SHA-256" },
       },
-      params.keyPair.privateKey,
+      params.privateKey,
       sigBase
     )
   );

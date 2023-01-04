@@ -1,6 +1,7 @@
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
 import { CardApi } from "../api/card.api";
+import { Fido2KeyApi } from "../api/fido2-key.api";
 import { FieldApi } from "../api/field.api";
 import { IdentityApi } from "../api/identity.api";
 import { LoginUriApi } from "../api/login-uri.api";
@@ -22,6 +23,7 @@ export class CipherRequest {
   secureNote: SecureNoteApi;
   card: CardApi;
   identity: IdentityApi;
+  fido2Key: Fido2KeyApi;
   fields: FieldApi[];
   passwordHistory: PasswordHistoryRequest[];
   // Deprecated, remove at some point and rename attachments2 to attachments
@@ -120,6 +122,17 @@ export class CipherRequest {
           cipher.identity.licenseNumber != null
             ? cipher.identity.licenseNumber.encryptedString
             : null;
+        break;
+      case CipherType.Fido2Key:
+        this.fido2Key = new Fido2KeyApi();
+        this.fido2Key.key =
+          cipher.fido2Key.key != null ? cipher.fido2Key.key.encryptedString : null;
+        this.fido2Key.origin =
+          cipher.fido2Key.origin != null ? cipher.fido2Key.origin.encryptedString : null;
+        this.fido2Key.rpId =
+          cipher.fido2Key.rpId != null ? cipher.fido2Key.rpId.encryptedString : null;
+        this.fido2Key.userHandle =
+          cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
         break;
       default:
         break;

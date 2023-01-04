@@ -23,6 +23,7 @@ import { Cipher } from "../models/domain/cipher";
 import Domain from "../models/domain/domain-base";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
+import { Fido2Key } from "../models/domain/fido2-key";
 import { Field } from "../models/domain/field";
 import { Identity } from "../models/domain/identity";
 import { Login } from "../models/domain/login";
@@ -1244,6 +1245,20 @@ export class CipherService implements CipherServiceAbstraction {
           key
         );
         return;
+      case CipherType.Fido2Key:
+        cipher.fido2Key = new Fido2Key();
+        await this.encryptObjProperty(
+          model.fido2Key,
+          cipher.fido2Key,
+          {
+            key: null,
+            rpId: null,
+            origin: null,
+            userHandle: null,
+          },
+          key
+        );
+        break;
       default:
         throw new Error("Unknown cipher type.");
     }

@@ -468,7 +468,7 @@ export default class MainBackground {
     );
 
     this.fido2UserInterfaceService = new BrowserFido2UserInterfaceService(this.popupUtilsService);
-    this.fido2Service = new Fido2Service(this.fido2UserInterfaceService);
+    this.fido2Service = new Fido2Service(this.fido2UserInterfaceService, this.cipherService);
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =
