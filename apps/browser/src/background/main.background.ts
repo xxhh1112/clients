@@ -1,3 +1,4 @@
+import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -45,6 +46,7 @@ import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -168,6 +170,7 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
+  avatarUpdateService: AvatarUpdateServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -211,25 +214,9 @@ export default class MainBackground {
     const logoutCallback = async (expired: boolean, userId?: string) =>
       await this.logout(expired, userId);
 
-    const messagingServices: MessagingServiceAbstraction[] = [];
-    if (!isPrivateMode) {
-      // Sent to detached background
-      messagingServices.push(new BrowserMessagingService());
-    }
-
-    if (this.popupOnlyContext) {
-      // Sent to popup
-      messagingServices.push(new BrowserMessagingPrivateModeBackgroundService());
-    }
-
-    this.messagingService = new (class extends MessagingServiceAbstraction {
-      // AuthService should send the messages to the background not popup.
-      send = (subscriber: string, arg: any = {}) => {
-        for (const messagingService of messagingServices) {
-          messagingService.send(subscriber, arg);
-        }
-      };
-    })();
+    this.messagingService = this.popupOnlyContext
+      ? new BrowserMessagingPrivateModeBackgroundService()
+      : new BrowserMessagingService();
     this.logService = new ConsoleLogService(false);
     this.cryptoFunctionService = new WebCryptoFunctionService(window);
     this.storageService = new BrowserLocalStorageService();
@@ -365,13 +352,22 @@ export default class MainBackground {
 
     this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
 
+    // eslint-disable-next-line
+    const that = this;
+    const backgroundMessagingService = new (class extends MessagingServiceAbstraction {
+      // AuthService should send the messages to the background not popup.
+      send = (subscriber: string, arg: any = {}) => {
+        const message = Object.assign({}, { command: subscriber }, arg);
+        that.runtimeBackground.processMessage(message, that, null);
+      };
+    })();
     this.authService = new AuthService(
       this.cryptoService,
       this.apiService,
       this.tokenService,
       this.appIdService,
       this.platformUtilsService,
-      this.messagingService,
+      backgroundMessagingService,
       this.logService,
       this.keyConnectorService,
       this.environmentService,
@@ -565,6 +561,8 @@ export default class MainBackground {
       this.stateService,
       this.apiService
     );
+
+    this.avatarUpdateService = new AvatarUpdateService(this.apiService, this.stateService);
   }
 
   async bootstrap() {
@@ -603,7 +601,9 @@ export default class MainBackground {
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
-        await this.refreshBadge();
+        if (!this.isPrivateMode) {
+          await this.refreshBadge();
+        }
         this.fullSync(true);
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
