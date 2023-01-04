@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "确认文件密码"
   },
-  "accountBackupOptionDescription": {
-    "message": "使用您的账户加密密钥来加密导出的数据，并且限制只能导入到当前的 Bitwarden 账户。"
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
     "message": "设置一个密码用来加密导出的数据，并使用此密码解密以导入到任意 Bitwarden 账户。"
   },
-  "fileTypeHeading": {
-    "message": "文件类型"
+  "exportTypeHeading": {
+    "message": "导出类型"
   },
-  "accountBackup": {
-    "message": "账户备份"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "密码保护"
@@ -2459,7 +2459,7 @@
     "message": "用户"
   },
   "userDesc": {
-    "message": "访问并将项目添加到已分配的集合"
+    "message": "访问项目和将项目添加到已分配的集合"
   },
   "manager": {
     "message": "经理"
@@ -4744,7 +4744,7 @@
     "message": "客户 ID"
   },
   "clientSecret": {
-    "message": "客户密钥"
+    "message": "客户机密"
   },
   "metadataAddress": {
     "message": "元数据地址"
@@ -4846,7 +4846,7 @@
     "message": "最多 6 个用户的高级访问权限"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "用于家庭账号密码共享的集合"
+    "message": "用于家庭机密的共享集合"
   },
   "badToken": {
     "message": "链接已失效。请让赞助方重新发送邀请。"
@@ -5487,6 +5487,266 @@
   "multiSelectClearAll": {
     "message": "清除全部"
   },
+  "toggleCharacterCount": {
+    "message": "字符计数开关",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "密码字符计数",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "隐藏"
+  },
+  "projects": {
+    "message": "项目"
+  },
+  "lastEdited": {
+    "message": "上次编辑时间"
+  },
+  "editSecret": {
+    "message": "编辑机密"
+  },
+  "addSecret": {
+    "message": "添加机密"
+  },
+  "copySecretName": {
+    "message": "复制机密名称"
+  },
+  "copySecretValue": {
+    "message": "复制机密值"
+  },
+  "deleteSecret": {
+    "message": "删除机密"
+  },
+  "deleteSecrets": {
+    "message": "删除机密"
+  },
+  "project": {
+    "message": "项目"
+  },
+  "editProject": {
+    "message": "编辑项目"
+  },
+  "viewProject": {
+    "message": "查看项目"
+  },
+  "deleteProject": {
+    "message": "删除项目"
+  },
+  "deleteProjects": {
+    "message": "删除项目"
+  },
+  "secret": {
+    "message": "机密"
+  },
+  "serviceAccount": {
+    "message": "服务账户"
+  },
+  "serviceAccounts": {
+    "message": "服务帐户"
+  },
+  "new": {
+    "message": "新建"
+  },
+  "secrets": {
+    "message": "机密"
+  },
+  "nameValuePair": {
+    "message": "名称/值对"
+  },
+  "secretEdited": {
+    "message": "机密已编辑"
+  },
+  "secretCreated": {
+    "message": "机密已创建"
+  },
+  "newSecret": {
+    "message": "新建机密"
+  },
+  "newServiceAccount": {
+    "message": "新建服务账户"
+  },
+  "secretsNoItemsTitle": {
+    "message": "没有可显示的机密"
+  },
+  "secretsNoItemsMessage": {
+    "message": "要开始，请添加一个新的机密或导入机密。"
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "还没有要显示的内容"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "搜索机密"
+  },
+  "deleteServiceAccounts": {
+    "message": "删除服务账户"
+  },
+  "deleteServiceAccount": {
+    "message": "删除服务帐户"
+  },
+  "viewServiceAccount": {
+    "message": "查看服务账户"
+  },
+  "searchServiceAccounts": {
+    "message": "搜索服务账户"
+  },
+  "addProject": {
+    "message": "添加项目"
+  },
+  "projectEdited": {
+    "message": "项目已编辑"
+  },
+  "projectSaved": {
+    "message": "项目已保存"
+  },
+  "projectCreated": {
+    "message": "项目已创建"
+  },
+  "projectName": {
+    "message": "项目名称"
+  },
+  "newProject": {
+    "message": "新建项目"
+  },
+  "softDeleteSecretWarning": {
+    "message": "删除机密可能会影响现有的集成。"
+  },
+  "softDeletesSuccessToast": {
+    "message": "机密已发送到回收站"
+  },
+  "serviceAccountCreated": {
+    "message": "服务帐户已创建"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "项目，机密"
+  },
+  "serviceAccountName": {
+    "message": "服务账户名称"
+  },
+  "newSaSelectAccess": {
+    "message": "输入或选择项目或机密"
+  },
+  "newSaTypeToFilter": {
+    "message": "键入以筛选"
+  },
+  "deleteProjectsToast": {
+    "message": "项目已删除"
+  },
+  "deleteProjectToast": {
+    "message": "项目和所有相关的机密已被删除"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "删除项目 $PROJECT$ 是永久性的，不可撤销！",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "输入「$CONFIRM$」以继续",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "删除 $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "删除 $COUNT$ 个项目",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "删除项目是永久性的，不可撤销！"
+  },
+  "projectsNoItemsTitle": {
+    "message": "没有可显示的项目"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "需要确认"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "以下项目无法删除："
+  },
+  "softDeleteSuccessToast": {
+    "message": "机密已发送到回收站"
+  },
+  "searchProjects": {
+    "message": "搜索项目"
+  },
+  "accessTokens": {
+    "message": "访问令牌"
+  },
+  "createAccessToken": {
+    "message": "创建访问令牌"
+  },
+  "expires": {
+    "message": "到期"
+  },
+  "canRead": {
+    "message": "可以读取"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "没有可显示的访问令牌"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "要开始，请创建一个访问令牌"
+  },
+  "downloadAccessToken": {
+    "message": "关闭前下载或复制。"
+  },
+  "expiresOnAccessToken": {
+    "message": "有效期至："
+  },
+  "accessTokenCallOutTitle": {
+    "message": "访问令牌未存储，无法获取"
+  },
+  "copyToken": {
+    "message": "复制令牌"
+  },
+  "accessToken": {
+    "message": "访问令牌"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "到期日期是必需的。"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "访问令牌已创建且已复制到剪贴板"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Beta 版中的权限管理不可用。"
+  },
+  "revokeAccessToken": {
+    "message": "撤销访问令牌"
+  },
+  "submenu": {
+    "message": "子菜单"
+  },
   "from": {
     "message": "从"
   },
@@ -5522,5 +5782,47 @@
   },
   "memberAccessAll": {
     "message": "此成员可以访问和修改所有项目。"
+  },
+  "moreFromBitwarden": {
+    "message": "来自 Bitwarden 的更多产品"
+  },
+  "switchProducts": {
+    "message": "切换产品"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。升级到付费计划以邀请更多成员。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。请联系您的组织所有者升级。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。升级到付费计划以添加更多集合。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。请联系您的组织所有者升级。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

@@ -1780,13 +1780,13 @@
     "message": "غیرفعال شد"
   },
   "removePassword": {
-    "message": "Remove password"
+    "message": "حذف رمز عبور"
   },
   "removedPassword": {
-    "message": "Password removed"
+    "message": "رمز عبور حذف شد"
   },
   "removePasswordConfirmation": {
-    "message": "Are you sure you want to remove the password?"
+    "message": "مطمئنید که می‌خواهید رمز عبور حذف شود؟"
   },
   "maxAccessCountReached": {
     "message": "به حداکثر تعداد دسترسی رسیده است"
@@ -2057,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "با دستگاه دیگری وارد شوید"
+  },
+  "toggleCharacterCount": {
+    "message": "تغییر تعداد کاراکترها",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

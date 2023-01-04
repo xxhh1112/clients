@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Потвърждаване на паролата на файла"
   },
-  "accountBackupOptionDescription": {
-    "message": "Използва шифроването на Вашата регистрация в Битуорден, а не главната Ви парола, като защита на изнесения файл. Той може да бъде внесен само в текущата регистрация. Използвайте тази възможност, за да направите резервно копие, което не може да се ползва другаде."
+  "accountRestrictedOptionDescription": {
+    "message": "Използвайте ключа си за шифриране, който се получава чрез комбиниране на потребителското име на регистрацията Ви и главната парола. С него изнасянето ще се шифрира и внасянето ще бъда възможно само в текущата регистрация в Битуорден."
   },
   "passwordProtectedOptionDescription": {
     "message": "Създайте потребителска парола за защита на изнесения файл. Използвайте тази възможност, за да изнесете информацията във файл, който да може да се ползва и в други регистрации."
   },
-  "fileTypeHeading": {
-    "message": "Тип на файла"
+  "exportTypeHeading": {
+    "message": "Вид изнасяне"
   },
-  "accountBackup": {
-    "message": "Резервно копие на регистрацията"
+  "accountRestricted": {
+    "message": "Регистрацията е ограничена"
   },
   "passwordProtected": {
     "message": "Защитен с парола"
@@ -5487,11 +5487,271 @@
   "multiSelectClearAll": {
     "message": "Изчистване на всичко"
   },
+  "toggleCharacterCount": {
+    "message": "Превключване на броя знаци",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Брой знаци в паролата",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Скриване"
+  },
+  "projects": {
+    "message": "Проекти"
+  },
+  "lastEdited": {
+    "message": "Последна редакция"
+  },
+  "editSecret": {
+    "message": "Редактиране на тайната"
+  },
+  "addSecret": {
+    "message": "Добавяне на тайна"
+  },
+  "copySecretName": {
+    "message": "Копиране на името на тайната"
+  },
+  "copySecretValue": {
+    "message": "Копиране на стойността на тайната"
+  },
+  "deleteSecret": {
+    "message": "Изтриване на тайната"
+  },
+  "deleteSecrets": {
+    "message": "Изтриване на тайните"
+  },
+  "project": {
+    "message": "Проект"
+  },
+  "editProject": {
+    "message": "Редактиране на проекта"
+  },
+  "viewProject": {
+    "message": "Преглед на проекта"
+  },
+  "deleteProject": {
+    "message": "Изтриване на проекта"
+  },
+  "deleteProjects": {
+    "message": "Изтриване на проектите"
+  },
+  "secret": {
+    "message": "Тайна"
+  },
+  "serviceAccount": {
+    "message": "Service Account"
+  },
+  "serviceAccounts": {
+    "message": "Service Accounts"
+  },
+  "new": {
+    "message": "Ново"
+  },
+  "secrets": {
+    "message": "Тайни"
+  },
+  "nameValuePair": {
+    "message": "Двойка име/стойност"
+  },
+  "secretEdited": {
+    "message": "Тайната е редактирана"
+  },
+  "secretCreated": {
+    "message": "Тайната е създадена"
+  },
+  "newSecret": {
+    "message": "Нова тайна"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Няма тайни за показване"
+  },
+  "secretsNoItemsMessage": {
+    "message": "За да започнете, добавете нова тайна или внесете тайни."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Все още няма нищо за показване"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Търсене в тайните"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Добавяне на проект"
+  },
+  "projectEdited": {
+    "message": "Проектът е редактиран"
+  },
+  "projectSaved": {
+    "message": "Проектът е запазен"
+  },
+  "projectCreated": {
+    "message": "Проектът е създаден"
+  },
+  "projectName": {
+    "message": "Име на проекта"
+  },
+  "newProject": {
+    "message": "Нов проект"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Изтриването на тайни може да засегне съществуващите интеграции."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Тайните са преместени в кошчето"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Достъп"
+  },
+  "projectCommaSecret": {
+    "message": "Проект, тайна"
+  },
+  "serviceAccountName": {
+    "message": "Service account name"
+  },
+  "newSaSelectAccess": {
+    "message": "Пишете тук или изберете проекти или тайни"
+  },
+  "newSaTypeToFilter": {
+    "message": "Пишете тук за филтриране"
+  },
+  "deleteProjectsToast": {
+    "message": "Проектите са изтрити"
+  },
+  "deleteProjectToast": {
+    "message": "Проектът и всички свързани с него тайни са изтрити"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Изтриването на проекта $PROJECT$ е окончателно и необратимо.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Напишете „$CONFIRM$“, за да продължите",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Изтриване на $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Изтриване на $COUNT$ проекта",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Изтриването на проекти е окончателно и необратимо."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Няма проекти за показване"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Добавете нов проект, за да започнете да организирате тайните си."
+  },
+  "smConfirmationRequired": {
+    "message": "Изисква се потвърждение"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Следните проекти не могат да бъдат изтрити:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Създаване на идентификатор за достъп"
+  },
+  "expires": {
+    "message": "Изтича"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Няма идентификатори за достъп за показване"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "За да започнете, създайте идентификатор за достъп"
+  },
+  "downloadAccessToken": {
+    "message": "Свалете или копирайте преди затваряне."
+  },
+  "expiresOnAccessToken": {
+    "message": "Изтича на:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Идентификаторите за достъп не се съхраняват никъде и не могат да бъдат видени повторно"
+  },
+  "copyToken": {
+    "message": "Копиране на идентификатора"
+  },
+  "accessToken": {
+    "message": "Идентификатор за достъп"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Идентификаторът за достъп е създаден и копиран в буфера"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Управлението на разрешенията не е възможно в бета-версията."
+  },
+  "revokeAccessToken": {
+    "message": "Анулиране на идентификатора за достъп"
+  },
+  "submenu": {
+    "message": "Подменю"
+  },
   "from": {
-    "message": "From"
+    "message": "От"
   },
   "to": {
-    "message": "To"
+    "message": "До"
   },
   "member": {
     "message": "Член"
@@ -5522,5 +5782,47 @@
   },
   "memberAccessAll": {
     "message": "Този член има достъп до всички записи и може да ги редактира."
+  },
+  "moreFromBitwarden": {
+    "message": "Още от Битуорден"
+  },
+  "switchProducts": {
+    "message": "Превключване на продуктите"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Безплатните организации могат да имат не повече от $SEATCOUNT$ членове. Надградете до платен план, ако искате да имате повече членове.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Безплатните организации могат да имат не повече от $SEATCOUNT$ членове. Свържете се със собственика на организацията си, ако смятате, че планът трябва да бъде надграден.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Безплатните организации могат да имат не повече от $COLLECTIONCOUNT$ колекции. Надградете до платен план, ако искате да имате повече колекции.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Безплатните организации могат да имат не повече от $COLLECTIONCOUNT$ колекции. Свържете се със собственика на организацията си, ако смятате, че планът трябва да бъде надграден.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }
