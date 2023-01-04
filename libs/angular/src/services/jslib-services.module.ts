@@ -2,9 +2,10 @@ import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service";
 import {
-  InternalAccountService,
   AccountService as AccountServiceAbstraction,
+  InternalAccountService,
 } from "@bitwarden/common/abstractions/account/account.service";
+import { AvatarUpdateService as AccountUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
@@ -35,6 +36,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import {
   InternalOrganizationService,
@@ -45,8 +47,8 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import {
-  PolicyService as PolicyServiceAbstraction,
   InternalPolicyService,
+  PolicyService as PolicyServiceAbstraction,
 } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common/abstractions/provider.service";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
@@ -72,6 +74,7 @@ import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AccountApiServiceImplementation } from "@bitwarden/common/services/account/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/services/account/account.service";
+import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { AnonymousHubService } from "@bitwarden/common/services/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
@@ -96,6 +99,7 @@ import { FormValidationErrorsService } from "@bitwarden/common/services/formVali
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { LoginService } from "@bitwarden/common/services/login.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
+import { OrganizationUserServiceImplementation } from "@bitwarden/common/services/organization-user/organization-user.service.implementation";
 import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
@@ -126,16 +130,16 @@ import { UnauthGuard } from "../guards/unauth.guard";
 
 import { BroadcasterService } from "./broadcaster.service";
 import {
-  WINDOW,
+  LOCALES_DIRECTORY,
+  LOCKED_CALLBACK,
+  LOG_MAC_FAILURES,
+  LOGOUT_CALLBACK,
   MEMORY_STORAGE,
   SECURE_STORAGE,
   STATE_FACTORY,
   STATE_SERVICE_USE_CACHE,
-  LOGOUT_CALLBACK,
-  LOCKED_CALLBACK,
-  LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
-  LOG_MAC_FAILURES,
+  WINDOW,
 } from "./injection-tokens";
 import { ModalService } from "./modal.service";
 import { PasswordRepromptService } from "./passwordReprompt.service";
@@ -288,6 +292,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: InternalAccountService,
       useExisting: AccountServiceAbstraction,
+    },
+    {
+      provide: AccountUpdateServiceAbstraction,
+      useClass: AvatarUpdateService,
+      deps: [ApiServiceAbstraction, StateServiceAbstraction],
     },
     { provide: LogService, useFactory: () => new ConsoleLogService(false) },
     {
@@ -538,6 +547,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: InternalOrganizationService,
       useExisting: OrganizationServiceAbstraction,
+    },
+    {
+      provide: OrganizationUserService,
+      useClass: OrganizationUserServiceImplementation,
+      deps: [ApiServiceAbstraction],
     },
     {
       provide: ProviderServiceAbstraction,
