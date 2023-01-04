@@ -78,6 +78,8 @@ export class CipherView implements View, InitializerMetadata {
         return this.card;
       case CipherType.Identity:
         return this.identity;
+      case CipherType.Fido2Key:
+        return this.fido2Key;
       default:
         break;
     }

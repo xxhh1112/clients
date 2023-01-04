@@ -555,7 +555,12 @@
         class="box-content-row"
         appStopClick
         (click)="fillCipher()"
-        *ngIf="cipher.type !== cipherType.SecureNote && !cipher.isDeleted && !inPopout"
+        *ngIf="
+          cipher.type !== cipherType.SecureNote &&
+          !cipher.isDeleted &&
+          !inPopout &&
+          cipher.type != cipherType.Fido2Key
+        "
       >
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
@@ -569,7 +574,12 @@
         class="box-content-row"
         appStopClick
         (click)="fillCipherAndSave()"
-        *ngIf="cipher.type === cipherType.Login && !cipher.isDeleted && !inPopout"
+        *ngIf="
+          cipher.type === cipherType.Login &&
+          !cipher.isDeleted &&
+          !inPopout &&
+          cipher.type != cipherType.Fido2Key
+        "
       >
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
@@ -583,7 +593,7 @@
         class="box-content-row"
         appStopClick
         (click)="clone()"
-        *ngIf="!cipher.organizationId && !cipher.isDeleted"
+        *ngIf="!cipher.organizationId && !cipher.isDeleted && cipher.type != cipherType.Fido2Key"
       >
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">

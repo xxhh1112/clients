@@ -172,6 +172,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     for (const allowedCredential of allowedCredentialIds) {
       cipher = await this.cipherService.get(allowedCredential);
 
+      if (cipher.deletedDate != undefined) {
+        cipher = undefined;
+      }
+
       if (cipher != undefined) {
         break;
       }
@@ -211,7 +215,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   private async getCredentialByRp(rpId: string): Promise<BitCredential | undefined> {
     const allCipherViews = await this.cipherService.getAllDecrypted();
     const cipherView = allCipherViews.find(
-      (cv) => cv.type === CipherType.Fido2Key && cv.fido2Key?.rpId === rpId
+      (cv) => !cv.isDeleted && cv.type === CipherType.Fido2Key && cv.fido2Key?.rpId === rpId
     );
 
     if (cipherView == undefined) {

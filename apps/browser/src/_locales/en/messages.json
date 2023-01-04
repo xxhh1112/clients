@@ -1198,6 +1198,9 @@
   "typeIdentity": {
     "message": "Identity"
   },
+  "typePasskey": {
+    "message": "Passkey"
+  },
   "passwordHistory": {
     "message": "Password history"
   },

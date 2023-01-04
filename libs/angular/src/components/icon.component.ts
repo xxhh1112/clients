@@ -65,6 +65,9 @@ export class IconComponent implements OnChanges {
       case CipherType.Identity:
         this.icon = "bwi-id-card";
         break;
+      case CipherType.Fido2Key:
+        this.icon = "bwi-key"; // TODO: Verify if this icon should be classified as "Bitwarden Object"
+        break;
       default:
         break;
     }
