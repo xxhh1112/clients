@@ -137,6 +137,8 @@ export class CipherRequest {
           cipher.fido2Key.keyValue != null ? cipher.fido2Key.keyValue.encryptedString : null;
         this.fido2Key.rpId =
           cipher.fido2Key.rpId != null ? cipher.fido2Key.rpId.encryptedString : null;
+        this.fido2Key.rpName =
+          cipher.fido2Key.rpName != null ? cipher.fido2Key.rpName.encryptedString : null;
         this.fido2Key.userHandle =
           cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
         this.fido2Key.userName =

@@ -33,9 +33,10 @@ export class Fido2Component implements OnInit, OnDestroy {
 
           if (this.data?.type === "ConfirmNewCredentialRequest") {
             const cipher = new CipherView();
-            cipher.name = this.data.name;
+            cipher.name = this.data.credentialName;
             cipher.type = CipherType.Fido2Key;
             cipher.fido2Key = new Fido2KeyView();
+            cipher.fido2Key.userName = this.data.userName;
             this.ciphers = [cipher];
           } else if (this.data?.type === "ConfirmCredentialRequest") {
             const cipher = await this.cipherService.get(this.data.cipherId);

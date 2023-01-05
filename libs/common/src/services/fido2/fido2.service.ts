@@ -47,7 +47,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     params: CredentialRegistrationParams
   ): Promise<CredentialRegistrationResult> {
     const presence = await this.fido2UserInterfaceService.confirmNewCredential({
-      name: params.origin,
+      credentialName: params.rp.name,
+      userName: params.user.displayName,
     });
     // eslint-disable-next-line no-console
     console.log("Fido2Service.createCredential", params);
@@ -212,10 +213,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
     const view = new CipherView();
     view.type = CipherType.Fido2Key;
-    view.name = credential.origin;
+    view.name = credential.rpName;
+
     view.fido2Key = new Fido2KeyView();
     view.fido2Key.origin = credential.origin;
-
     view.fido2Key.keyType = credential.keyType;
     view.fido2Key.keyCurve = credential.keyCurve;
     view.fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);

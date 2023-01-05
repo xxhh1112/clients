@@ -30,7 +30,8 @@ export type BrowserFido2Message = { requestId: string } & (
     }
   | {
       type: "ConfirmNewCredentialRequest";
-      name: string;
+      credentialName: string;
+      userName: string;
     }
   | {
       type: "ConfirmNewCredentialResponse";
@@ -115,9 +116,14 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     return response.cipherId;
   }
 
-  async confirmNewCredential({ name }: NewCredentialParams): Promise<boolean> {
+  async confirmNewCredential({ credentialName, userName }: NewCredentialParams): Promise<boolean> {
     const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = { type: "ConfirmNewCredentialRequest", requestId, name };
+    const data: BrowserFido2Message = {
+      type: "ConfirmNewCredentialRequest",
+      requestId,
+      credentialName,
+      userName,
+    };
     const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
     this.popupUtilsService.popOut(
       null,

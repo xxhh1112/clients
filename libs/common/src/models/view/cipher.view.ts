@@ -174,6 +174,9 @@ export class CipherView implements View, InitializerMetadata {
       case CipherType.SecureNote:
         view.secureNote = SecureNoteView.fromJSON(obj.secureNote);
         break;
+      case CipherType.Fido2Key:
+        view.fido2Key = Fido2KeyView.fromJSON(obj.fido2Key);
+        break;
       default:
         break;
     }

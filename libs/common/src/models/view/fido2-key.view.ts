@@ -1,3 +1,5 @@
+import { Jsonify } from "type-fest";
+
 import { ItemView } from "./item.view";
 
 export class Fido2KeyView extends ItemView {
@@ -11,6 +13,10 @@ export class Fido2KeyView extends ItemView {
   origin: string;
 
   get subTitle(): string {
-    return null;
+    return this.userName;
+  }
+
+  static fromJSON(obj: Partial<Jsonify<Fido2KeyView>>): Fido2KeyView {
+    return Object.assign(new Fido2KeyView(), obj);
   }
 }

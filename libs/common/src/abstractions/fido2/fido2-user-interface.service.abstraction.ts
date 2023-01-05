@@ -1,5 +1,6 @@
 export interface NewCredentialParams {
-  name: string;
+  credentialName: string;
+  userName: string;
 }
 
 export abstract class Fido2UserInterfaceService {

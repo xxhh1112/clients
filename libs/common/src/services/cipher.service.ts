@@ -1251,10 +1251,14 @@ export class CipherService implements CipherServiceAbstraction {
           model.fido2Key,
           cipher.fido2Key,
           {
-            key: null,
+            keyType: null,
+            keyCurve: null,
+            keyValue: null,
             rpId: null,
-            origin: null,
+            rpName: null,
             userHandle: null,
+            userName: null,
+            origin: null,
           },
           key
         );
