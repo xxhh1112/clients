@@ -21,7 +21,7 @@
           }}</label>
         </th>
         <th bitCell class="tw-w-1/2">{{ "name" | i18n }}</th>
-        <th bitCell class="tw-w-1/2">
+        <th bitCell class="tw-w-max">
           <ng-container *ngIf="!organization">{{ "owner" | i18n }}</ng-container>
           <ng-container *ngIf="organization">
             {{ (activeFilter.selectedCollectionNode ? "groups" : "collections") | i18n }}
@@ -156,7 +156,7 @@
         <td bitCell (click)="selectRow(c)">
           <app-vault-icon [cipher]="c"></app-vault-icon>
         </td>
-        <td bitCell (click)="selectRow(c)">
+        <td bitCell class="tw-break-all" (click)="selectRow(c)">
           <button
             bitLink
             [routerLink]="[]"
