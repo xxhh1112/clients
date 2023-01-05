@@ -5,6 +5,7 @@ import { Merge } from "type-fest";
 import { CryptoService } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
 import { I18nService } from "../abstractions/i18n.service";
+import { ValidRecordKeys } from "../types/valid-record-keys";
 
 const nodeURL = typeof window === "undefined" ? require("url") : null;
 
@@ -476,6 +477,17 @@ export class Utils {
     } else {
       return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
     }
+  }
+
+  /** reduces an array to a Record with keys equal to the provided key */
+  static arrayToRecord<
+    T extends { [P in ValidRecordKeys<T>]: string | number | symbol },
+    K extends ValidRecordKeys<T>
+  >(array: T[], key: K): Record<T[K], T> {
+    return array.reduce((record, item) => {
+      record[item[key]] = item;
+      return record;
+    }, {} as Record<T[K], T>);
   }
 
   /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */

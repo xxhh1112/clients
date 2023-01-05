@@ -1,10 +1,12 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, map, Observable } from "rxjs";
+import { combineLatest, filter, map, Observable } from "rxjs";
 
-import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
+import {
+  AccountData,
+  AccountService,
+} from "@bitwarden/common/abstractions/account/account.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { AccountProfile } from "@bitwarden/common/models/domain/account";
 
 @Component({
   selector: "sm-header",
@@ -15,7 +17,7 @@ export class HeaderComponent {
   @Input() searchTitle: string;
 
   protected routeData$: Observable<{ title: string; searchTitle: string }>;
-  protected account$: Observable<AccountProfile>;
+  protected account$: Observable<AccountData>;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,10 +35,13 @@ export class HeaderComponent {
 
     this.account$ = combineLatest([
       this.accountService.activeAccount$,
-      this.stateService.accounts$,
+      this.accountService.accounts$.pipe(
+        filter((accounts) => accounts.loaded),
+        map((accounts) => accounts.data.map((account) => account?.data))
+      ),
     ]).pipe(
       map(([activeAccount, accounts]) => {
-        return accounts[activeAccount?.data?.id]?.profile;
+        return accounts.find((account) => account?.id === activeAccount?.data?.id);
       })
     );
   }

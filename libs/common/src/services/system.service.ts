@@ -1,5 +1,6 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, filter, map } from "rxjs";
 
+import { AccountService } from "../abstractions/account/account.service";
 import { AuthService } from "../abstractions/auth.service";
 import { MessagingService } from "../abstractions/messaging.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
@@ -17,19 +18,20 @@ export class SystemService implements SystemServiceAbstraction {
     private messagingService: MessagingService,
     private platformUtilsService: PlatformUtilsService,
     private reloadCallback: () => Promise<void> = null,
-    private stateService: StateService
+    private stateService: StateService,
+    private accountService: AccountService
   ) {}
 
   async startProcessReload(authService: AuthService): Promise<void> {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    if (accounts != null) {
-      const keys = Object.keys(accounts);
-      if (keys.length > 0) {
-        for (const userId of keys) {
-          if ((await authService.getAuthStatus(userId)) === AuthenticationStatus.Unlocked) {
-            return;
-          }
-        }
+    const userIds = await firstValueFrom(
+      this.accountService.accounts$.pipe(
+        filter((a) => a.loaded && a.data != null),
+        map((a) => a.data?.map((a) => a.data?.id))
+      )
+    );
+    for (const userId of userIds) {
+      if ((await authService.getAuthStatus(userId)) === AuthenticationStatus.Unlocked) {
+        return;
       }
     }
 
@@ -58,11 +60,14 @@ export class SystemService implements SystemServiceAbstraction {
   }
 
   private async executeProcessReload() {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
+    const accounts = await firstValueFrom(
+      this.accountService.accounts$.pipe(
+        filter((a) => a.loaded),
+        map((a) => a.data)
+      )
+    );
     const doRefresh =
-      accounts == null ||
-      Object.keys(accounts).length == 0 ||
-      (await this.inactiveMoreThanSeconds(5));
+      accounts == null || accounts.length == 0 || (await this.inactiveMoreThanSeconds(5));
 
     const biometricLockedFingerprintValidated =
       await this.stateService.getBiometricFingerprintValidated();

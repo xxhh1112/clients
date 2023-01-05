@@ -11,11 +11,14 @@ import {
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
-import { firstValueFrom, Subject, takeUntil } from "rxjs";
+import { firstValueFrom, Subject, takeUntil, map, filter, Observable } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
+import {
+  AccountData,
+  AccountService,
+} from "@bitwarden/common/abstractions/account/account.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
@@ -41,7 +44,7 @@ import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaul
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 
-import { MenuUpdateRequest } from "../main/menu/menu.updater";
+import { MenuAccount, MenuUpdateRequest } from "../main/menu/menu.updater";
 
 import { DeleteAccountComponent } from "./accounts/delete-account.component";
 import { PremiumComponent } from "./accounts/premium.component";
@@ -50,6 +53,8 @@ import { ExportComponent } from "./vault/export.component";
 import { FolderAddEditComponent } from "./vault/folder-add-edit.component";
 import { GeneratorComponent } from "./vault/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./vault/password-generator-history.component";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { SubjectData } from "@bitwarden/common/misc/subject-data";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -99,6 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private idleTimer: number = null;
   private isIdle = false;
   private activeUserId: string = null;
+  private loadedAccounts$: Observable<SubjectData<AccountData>[]>;
 
   private destroy$ = new Subject<void>();
 
@@ -137,6 +143,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.activeUserId = account?.data?.id;
     });
+    this.loadedAccounts$ = this.accountService.accounts$.pipe(
+      filter((a) => a.loaded),
+      map((a) => a.data)
+    );
 
     this.ngZone.runOutsideAngular(() => {
       setTimeout(async () => {
@@ -176,13 +186,17 @@ export class AppComponent implements OnInit, OnDestroy {
           case "lockVault":
             await this.vaultTimeoutService.lock(message.userId);
             break;
-          case "lockAllVaults":
-            for (const userId in await firstValueFrom(this.stateService.accounts$)) {
+          case "lockAllVaults": {
+            const userIds = await firstValueFrom(
+              this.accountService.accounts$.pipe(map((a) => a.data?.map((u) => u.data?.id)))
+            );
+            for (const userId of userIds) {
               if (userId != null) {
                 await this.vaultTimeoutService.lock(userId);
               }
             }
             break;
+          }
           case "locked":
             this.modalService.closeAll();
             if (
@@ -431,32 +445,28 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private async updateAppMenu() {
     let updateRequest: MenuUpdateRequest;
-    const stateAccounts = await firstValueFrom(this.stateService.accounts$);
-    if (stateAccounts == null || Object.keys(stateAccounts).length < 1) {
+    const currentAccounts = await firstValueFrom(this.loadedAccounts$);
+    if (currentAccounts == null || currentAccounts.length < 1) {
       updateRequest = {
         accounts: null,
         activeUserId: null,
         hideChangeMasterPassword: true,
       };
     } else {
-      const accounts: { [userId: string]: any } = {};
-      for (const i in stateAccounts) {
-        if (i != null && stateAccounts[i]?.profile?.userId != null) {
-          const userId = stateAccounts[i].profile.userId;
-          accounts[userId] = {
-            isAuthenticated: await this.stateService.getIsAuthenticated({
-              userId: userId,
-            }),
-            isLocked:
-              (await this.authService.getAuthStatus(userId)) === AuthenticationStatus.Locked,
-            email: stateAccounts[i].profile.email,
-            userId: stateAccounts[i].profile.userId,
-          };
-        }
-      }
+      const accounts = await Promise.all(
+        currentAccounts.map(async (a) => {
+          const authStatus = await this.authService.getAuthStatus(a.data.id);
+          return {
+            isAuthenticated: authStatus !== AuthenticationStatus.LoggedOut,
+            isLocked: authStatus === AuthenticationStatus.Locked,
+            email: a.data.email,
+            userId: a.data.id,
+          } as MenuAccount;
+        })
+      );
       updateRequest = {
-        accounts: accounts,
-        activeUserId: await this.stateService.getUserId(),
+        accounts: Utils.arrayToRecord(accounts, "userId"),
+        activeUserId: this.activeUserId,
         hideChangeMasterPassword: await this.keyConnectorService.getUsesKeyConnector(),
       };
     }
@@ -595,8 +605,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private async checkForSystemTimeout(timeout: number): Promise<void> {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    for (const userId in accounts) {
+    const accounts = await firstValueFrom(this.loadedAccounts$);
+    for (const userId of accounts.map((a) => a?.data?.id)) {
       if (userId == null) {
         continue;
       }

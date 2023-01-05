@@ -1,5 +1,6 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, filter, map } from "rxjs";
 
+import { AccountService } from "../../abstractions/account/account.service";
 import { AuthService } from "../../abstractions/auth.service";
 import { CipherService } from "../../abstractions/cipher.service";
 import { CollectionService } from "../../abstractions/collection.service";
@@ -29,6 +30,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private stateService: StateService,
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
+    private accountService: AccountService,
     private lockedCallback: (userId?: string) => Promise<void> = null,
     private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null
   ) {}
@@ -54,8 +56,13 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       return;
     }
 
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    for (const userId in accounts) {
+    const userIds = await firstValueFrom(
+      this.accountService.accounts$.pipe(
+        filter((a) => a.loaded),
+        map((a) => a.data.map((b) => b?.data?.id))
+      )
+    );
+    for (const userId of userIds) {
       if (userId != null && (await this.shouldLock(userId))) {
         await this.executeTimeoutAction(userId);
       }

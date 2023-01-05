@@ -166,6 +166,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         PolicyServiceAbstraction,
         MessagingServiceAbstraction,
         PasswordGenerationServiceAbstraction,
+        AccountServiceAbstraction,
       ],
     },
     {
@@ -177,6 +178,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         MessagingServiceAbstraction,
         I18nServiceAbstraction,
         EncryptedMessageHandlerService,
+        AccountServiceAbstraction,
       ],
     },
     {

@@ -2,15 +2,19 @@ import { animate, state, style, transition, trigger } from "@angular/animations"
 import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { concatMap, Subject, takeUntil } from "rxjs";
+import { concatMap, Subject, takeUntil, filter, map } from "rxjs";
 
+import {
+  AccountData,
+  AccountService,
+} from "@bitwarden/common/abstractions/account/account.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Account } from "@bitwarden/common/models/domain/account";
+import { EnvironmentUrls } from "@bitwarden/common/models/domain/environment-urls";
 
 type ActiveAccount = {
   id: string;
@@ -19,16 +23,20 @@ type ActiveAccount = {
   avatarColor: string;
 };
 
-export class SwitcherAccount extends Account {
+export class SwitcherAccount {
+  constructor(
+    public id: string,
+    public name: string,
+    public email: string,
+    public environmentUrls: EnvironmentUrls,
+    public authenticationStatus: AuthenticationStatus,
+    public avatarColor: string
+  ) {}
   get serverUrl() {
     return this.removeWebProtocolFromString(
-      this.settings?.environmentUrls?.base ??
-        this.settings?.environmentUrls.api ??
-        "https://bitwarden.com"
+      this.environmentUrls?.base ?? this.environmentUrls?.api ?? "https://bitwarden.com"
     );
   }
-
-  avatarColor: string;
 
   private removeWebProtocolFromString(urlString: string) {
     const regex = /http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g;
@@ -95,20 +103,19 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private authService: AuthService,
     private messagingService: MessagingService,
+    private accountService: AccountService,
     private router: Router,
     private tokenService: TokenService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.stateService.accounts$
+    this.accountService.accounts$
       .pipe(
-        concatMap(async (accounts: { [userId: string]: Account }) => {
-          for (const userId in accounts) {
-            accounts[userId].profile.authenticationStatus = await this.authService.getAuthStatus(
-              userId
-            );
-          }
-
+        filter((accounts) => accounts.loaded),
+        map((accounts) =>
+          accounts.data.filter((account) => account.loaded).map((account) => account.data)
+        ),
+        concatMap(async (accounts) => {
           this.accounts = await this.createSwitcherAccounts(accounts);
           try {
             this.activeAccount = {
@@ -152,24 +159,24 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     this.router.navigate(["/login"]);
   }
 
-  private async createSwitcherAccounts(baseAccounts: {
-    [userId: string]: Account;
-  }): Promise<{ [userId: string]: SwitcherAccount }> {
-    const switcherAccounts: { [userId: string]: SwitcherAccount } = {};
-    for (const userId in baseAccounts) {
-      if (userId == null || userId === (await this.stateService.getUserId())) {
-        continue;
-      }
-
-      // environmentUrls are stored on disk and must be retrieved seperatly from the in memory state offered from subscribing to accounts
-      baseAccounts[userId].settings.environmentUrls = await this.stateService.getEnvironmentUrls({
-        userId: userId,
-      });
-      switcherAccounts[userId] = new SwitcherAccount(baseAccounts[userId]);
-      switcherAccounts[userId].avatarColor = await this.stateService.getAvatarColor({
-        userId: userId,
-      });
-    }
-    return switcherAccounts;
+  private async createSwitcherAccounts(
+    accounts: AccountData[]
+  ): Promise<{ [userId: string]: SwitcherAccount }> {
+    const switcherAccounts = await Promise.all(
+      accounts.map(async (account) => {
+        const environmentUrls = await this.stateService.getEnvironmentUrls({ userId: account.id });
+        const authStatus = await this.authService.getAuthStatus(account.id);
+        const avatarColor = await this.stateService.getAvatarColor({ userId: account.id });
+        return new SwitcherAccount(
+          account.id,
+          account.name,
+          account.email,
+          environmentUrls,
+          authStatus,
+          avatarColor
+        );
+      })
+    );
+    return Utils.arrayToRecord(switcherAccounts, "id");
   }
 }

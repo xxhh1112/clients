@@ -2,7 +2,11 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { Subscription } from "rxjs";
 
 import { marbleize } from "../../../test-utils";
-import { AccountData, InternalAccountService } from "../../abstractions/account/account.service";
+import {
+  AccountData,
+  ACCOUNT_DEFAULTS,
+  InternalAccountService,
+} from "../../abstractions/account/account.service";
 import { LogService } from "../../abstractions/log.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { SubjectData } from "../../misc/subject-data";
@@ -13,8 +17,8 @@ describe("AccountService", () => {
   let messagingService: MockProxy<MessagingService>;
   let logService: MockProxy<LogService>;
   let sut: InternalAccountService;
-  const lockedAccount = { id: "account", unlocked: false };
-  const unlockedAccount = { id: "account", unlocked: true };
+  const lockedAccount = { id: "account", unlocked: false, email: "email", name: "name" };
+  const unlockedAccount = { id: "account", unlocked: true, email: "email", name: "name" };
 
   beforeEach(() => {
     messagingService = mock();
@@ -86,9 +90,9 @@ describe("AccountService", () => {
     it("emits when account is added", () => {
       const a = SubjectData.loading([]);
       const b = SubjectData.loading([SubjectData.loading(lockedAccount)]);
-      sut.upsertAccount(b.data[0].data);
-      sut.upsertAccount(b.data[0].data);
-      sut.upsertAccount(b.data[0].data);
+      sut.upsertAccount(lockedAccount);
+      sut.upsertAccount(lockedAccount);
+      sut.upsertAccount(lockedAccount);
 
       expect({ marbles: marbles, values: values }).toEqual({
         marbles: ["0", "1"],
@@ -212,7 +216,8 @@ describe("AccountService", () => {
 
         sut.setActiveAccount(lockedAccount.id);
         sut.upsertAccount(unlockedAccount);
-        sut.upsertAccount(unlockedAccount); // duplicate action is filtered
+        // duplicate action is filtered
+        sut.upsertAccount(unlockedAccount);
 
         expect({ marbles: marbles, values: values }).toEqual({
           marbles: ["0", "1", "2"],
@@ -283,15 +288,45 @@ describe("AccountService", () => {
     });
   });
 
-  describe("upsertAccount", () => {
+  describe("updateAccount", () => {
+    beforeEach(() => {
+      sut.upsertAccount(lockedAccount);
+    });
+
     it("should do nothing if id is null", () => {
       const actual = marbleize(sut.accounts$);
       sut.upsertAccount(null);
 
       expect({ marbles: actual.marbles, values: actual.values }).toEqual({
         marbles: ["0"],
-        values: { "0": SubjectData.loading([]) },
+        values: { "0": SubjectData.loading([SubjectData.loading(lockedAccount)]) },
       });
+    });
+
+    it("should add the account if the account is not found", () => {
+      const spy = jest.spyOn(sut as any, "addAccount").mockImplementation();
+
+      sut.upsertAccount({ id: "new" });
+
+      expect(spy).toHaveBeenCalledWith({ ...ACCOUNT_DEFAULTS, id: "new" });
+    });
+
+    it("should update only changed fields", () => {
+      const account = {
+        id: lockedAccount.id,
+        name: "new name",
+      };
+
+      sut.upsertAccount(account);
+
+      expect((sut as any)._accounts.value).toEqual(
+        SubjectData.loading([
+          SubjectData.loading({
+            ...lockedAccount,
+            name: "new name",
+          }),
+        ])
+      );
     });
   });
 });

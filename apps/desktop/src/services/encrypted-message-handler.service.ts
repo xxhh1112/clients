@@ -1,5 +1,6 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, filter, map } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -34,7 +35,8 @@ export class EncryptedMessageHandlerService {
     private cipherService: CipherService,
     private policyService: PolicyService,
     private messagingService: MessagingService,
-    private passwordGenerationService: PasswordGenerationService
+    private passwordGenerationService: PasswordGenerationService,
+    private accountService: AccountService
   ) {}
 
   async responseDataForCommand(
@@ -80,23 +82,30 @@ export class EncryptedMessageHandlerService {
   }
 
   private async statusCommandHandler(): Promise<AccountStatusResponse[]> {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    const activeUserId = await this.stateService.getUserId();
-
-    if (!accounts || !Object.keys(accounts)) {
-      return [];
-    }
+    const accounts = await firstValueFrom(
+      this.accountService.accounts$.pipe(
+        filter((accounts) => accounts.loaded),
+        map((accounts) =>
+          accounts.data.filter((accounts) => accounts?.loaded).map((account) => account.data)
+        )
+      )
+    );
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(
+        filter((account) => account?.loaded),
+        map((account) => account.data.id)
+      )
+    );
 
     return Promise.all(
-      Object.keys(accounts).map(async (userId) => {
-        const authStatus = await this.authService.getAuthStatus(userId);
-        const email = await this.stateService.getEmail({ userId });
+      accounts.map(async (account) => {
+        const authStatus = await this.authService.getAuthStatus(account.id);
 
         return {
-          id: userId,
-          email,
+          id: account.id,
+          email: account.email,
           status: authStatus === AuthenticationStatus.Unlocked ? "unlocked" : "locked",
-          active: userId === activeUserId,
+          active: account.id === activeUserId,
         };
       })
     );

@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { CanActivate } from "@angular/router";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, filter, map } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 
 const maxAllowedAccounts = 5;
 
@@ -12,14 +12,19 @@ const maxAllowedAccounts = 5;
 export class LoginGuard implements CanActivate {
   protected homepage = "vault";
   constructor(
-    private stateService: StateService,
+    private accountService: AccountService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService
   ) {}
 
   async canActivate() {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    if (accounts != null && Object.keys(accounts).length >= maxAllowedAccounts) {
+    const accounts = await firstValueFrom(
+      this.accountService.accounts$.pipe(
+        filter((a) => a.loaded),
+        map((a) => a.data)
+      )
+    );
+    if (accounts != null && accounts.length >= maxAllowedAccounts) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("accountLimitReached"));
       return false;
     }

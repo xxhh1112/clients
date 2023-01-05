@@ -147,7 +147,12 @@ export class StateService<
       state.accounts[userId] = this.createAccount();
       const diskAccount = await this.getAccountFromDisk({ userId: userId });
       state.accounts[userId].profile = diskAccount.profile;
-      this.accountService.upsertAccount({ id: userId, unlocked: false });
+      this.accountService.upsertAccount({
+        id: userId,
+        unlocked: false,
+        email: diskAccount.profile?.email,
+        name: diskAccount.profile?.name,
+      });
       loadedUserIds.push(userId);
       return state;
     });
@@ -509,7 +514,12 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    this.accountService.upsertAccount({ id: options.userId, unlocked: value != null });
+    this.accountService.upsertAccount({
+      id: options.userId,
+      unlocked: value != null,
+      email: account.profile?.email,
+      name: account.profile?.name,
+    });
   }
 
   async getCryptoMasterKeyAuto(options?: StorageOptions): Promise<string> {
@@ -2410,6 +2420,7 @@ export class StateService<
       useSecureStorage: false,
     }
   ) {
+    // TODO MDG: need to set account here
     return this.useMemory(options.storageLocation)
       ? await this.saveAccountToMemory(account)
       : await this.saveAccountToDisk(account, options);
@@ -2524,15 +2535,12 @@ export class StateService<
   //
 
   protected async pushAccounts(): Promise<void> {
-    await this.pruneInMemoryAccounts();
-    await this.state().then((state) => {
-      if (state.accounts == null || Object.keys(state.accounts).length < 1) {
-        this.accountsSubject.next({});
-        return;
-      }
-
-      this.accountsSubject.next(state.accounts);
+    this.accountService.setAccountsListLoaded(false);
+    const prunedAccounts = await this.pruneInMemoryAccounts();
+    prunedAccounts.forEach((userId) => {
+      this.accountService.removeAccount(userId);
     });
+    this.accountService.setAccountsListLoaded(true);
   }
 
   protected reconcileOptions(
@@ -2641,11 +2649,14 @@ export class StateService<
 
   protected async pruneInMemoryAccounts() {
     // We preserve settings for logged out accounts, but we don't want to consider them when thinking about active account state
+    const prunedAccounts = [];
     for (const userId in (await this.state())?.accounts) {
       if (!(await this.getIsAuthenticated({ userId: userId }))) {
         await this.removeAccountFromMemory(userId);
+        prunedAccounts.push(userId);
       }
     }
+    return prunedAccounts;
   }
 
   // settings persist even on reset, and are not effected by this method

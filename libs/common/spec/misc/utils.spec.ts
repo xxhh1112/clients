@@ -309,4 +309,33 @@ describe("Utils Service", () => {
       expect(Utils.recordToMap(map as any)).toEqual(map);
     });
   });
+
+  describe("arrayToRecord", () => {
+    it("should build a record based off the provided key", () => {
+      const actual = Utils.arrayToRecord(
+        [
+          { id: "1", name: "one" },
+          { id: "2", name: "two" },
+        ],
+        "id"
+      );
+      expect(actual).toEqual({
+        "1": { id: "1", name: "one" },
+        "2": { id: "2", name: "two" },
+      });
+    });
+
+    it("should overwrite values if the key values repeat", () => {
+      const actual = Utils.arrayToRecord(
+        [
+          { id: "1", name: "one" },
+          { id: "1", name: "two" },
+        ],
+        "id"
+      );
+      expect(actual).toEqual({
+        "1": { id: "1", name: "two" },
+      });
+    });
+  });
 });

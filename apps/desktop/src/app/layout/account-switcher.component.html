@@ -56,34 +56,33 @@
         *ngFor="let a of accounts | keyvalue"
         class="account"
         (click)="switch(a.key)"
-        appA11yTitle="{{ 'loggedInAsOn' | i18n: a.value.profile.email:a.value.serverUrl }}"
+        appA11yTitle="{{ 'loggedInAsOn' | i18n: a.value.email:a.value.serverUrl }}"
         attr.aria-label="{{ 'switchAccount' | i18n }}"
       >
         <app-avatar
-          [text]="a.value.profile.name ?? a.value.profile.email"
-          [id]="a.value.profile.userId"
+          [text]="a.value.name ?? a.value.email"
+          [id]="a.value.id"
           [size]="25"
           [circle]="true"
           [fontSize]="14"
           [dynamic]="true"
           [color]="a.value.avatarColor"
-          *ngIf="a.value.profile.email != null"
+          *ngIf="a.value.email != null"
           aria-hidden="true"
         ></app-avatar>
         <div class="accountInfo">
-          <span class="email" aria-hidden="true">{{ a.value.profile.email }}</span>
+          <span class="email" aria-hidden="true">{{ a.value.email }}</span>
           <span class="server" aria-hidden="true" *ngIf="a.value.serverUrl != 'bitwarden.com'">{{
             a.value.serverUrl
           }}</span>
           <span class="status" aria-hidden="true">{{
-            (a.value.profile.authenticationStatus === authStatus.Unlocked ? "unlocked" : "locked")
-              | i18n
+            (a.value.authenticationStatus === authStatus.Unlocked ? "unlocked" : "locked") | i18n
           }}</span>
         </div>
         <i
           class="bwi bwi-2x text-muted"
           [ngClass]="
-            a.value.profile.authenticationStatus == authStatus.Unlocked ? 'bwi-unlock' : 'bwi-lock'
+            a.value.authenticationStatus == authStatus.Unlocked ? 'bwi-unlock' : 'bwi-lock'
           "
           aria-hidden="true"
         ></i>

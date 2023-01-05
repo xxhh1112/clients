@@ -1,6 +1,11 @@
 import { BehaviorSubject, combineLatestWith, distinctUntilChanged, filter, map } from "rxjs";
+import { SetRequired } from "type-fest";
 
-import { AccountData, InternalAccountService } from "../../abstractions/account/account.service";
+import {
+  AccountData,
+  ACCOUNT_DEFAULTS,
+  InternalAccountService,
+} from "../../abstractions/account/account.service";
 import { LogService } from "../../abstractions/log.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { SubjectData } from "../../misc/subject-data";
@@ -63,24 +68,28 @@ export class AccountServiceImplementation implements InternalAccountService {
     this._activeAccount.next(account);
   }
 
-  upsertAccount(account: AccountData, loaded: boolean | null = null): void {
+  upsertAccount(
+    account: SetRequired<Partial<AccountData>, "id">,
+    loaded: boolean | null = null
+  ): void {
     if (account?.id == null) {
       return;
     }
 
     const existing = this._accounts.value?.data?.find((a) => a?.data?.id === account.id);
+    const newAccount = { ...ACCOUNT_DEFAULTS, ...(existing?.data ?? {}), ...account };
 
     if (existing == null) {
-      this.addAccount(account);
+      this.addAccount(newAccount);
       return;
     }
 
     loaded = loaded ?? existing?.loaded;
     const accounts = this._accounts.value.data || [];
 
-    const accountData = loaded ? SubjectData.loaded(account) : SubjectData.loading(account);
+    const accountData = loaded ? SubjectData.loaded(newAccount) : SubjectData.loading(newAccount);
     const newAccounts = accounts?.map((a) => {
-      return a.data.id === account.id ? accountData : a;
+      return a.data.id === newAccount.id ? accountData : a;
     });
     this._accounts.next(this._accounts.value.update(newAccounts));
   }
