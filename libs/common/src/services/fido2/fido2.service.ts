@@ -25,10 +25,14 @@ const STANDARD_ATTESTATION_FORMAT = "packed";
 
 interface BitCredential {
   credentialId: CredentialId;
-  privateKey: CryptoKey;
+  keyType: "ECDSA";
+  keyCurve: "P-256";
+  keyValue: CryptoKey;
   rpId: string;
-  origin: string;
+  rpName: string;
   userHandle: Uint8Array;
+  userName: string;
+  origin: string;
 }
 
 const KeyUsages: KeyUsage[] = ["sign"];
@@ -68,10 +72,14 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     );
 
     const credentialId = await this.saveCredential({
-      privateKey: keyPair.privateKey,
+      keyType: "ECDSA",
+      keyCurve: "P-256",
+      keyValue: keyPair.privateKey,
       origin: params.origin,
       rpId: params.rp.id,
+      rpName: params.rp.name,
       userHandle: Fido2Utils.stringToBuffer(params.user.id),
+      userName: params.user.displayName,
     });
 
     const authData = await generateAuthData({
@@ -163,7 +171,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const signature = await generateSignature({
       authData,
       clientData,
-      privateKey: credential.privateKey,
+      privateKey: credential.keyValue,
     });
 
     return {
@@ -200,16 +208,22 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   private async saveCredential(
     credential: Omit<BitCredential, "credentialId">
   ): Promise<CredentialId> {
-    const pcks8Key = await crypto.subtle.exportKey("pkcs8", credential.privateKey);
+    const pcks8Key = await crypto.subtle.exportKey("pkcs8", credential.keyValue);
 
     const view = new CipherView();
     view.type = CipherType.Fido2Key;
     view.name = credential.origin;
     view.fido2Key = new Fido2KeyView();
-    view.fido2Key.key = Fido2Utils.bufferToString(pcks8Key);
     view.fido2Key.origin = credential.origin;
+
+    view.fido2Key.keyType = credential.keyType;
+    view.fido2Key.keyCurve = credential.keyCurve;
+    view.fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
     view.fido2Key.rpId = credential.rpId;
+    view.fido2Key.rpName = credential.rpName;
     view.fido2Key.userHandle = Fido2Utils.bufferToString(credential.userHandle);
+    view.fido2Key.userName = credential.userName;
+    view.fido2Key.origin = credential.origin;
 
     const cipher = await this.cipherService.encrypt(view);
     await this.cipherService.createWithServer(cipher);
@@ -238,13 +252,13 @@ interface AuthDataParams {
 }
 
 async function mapCipherViewToBitCredential(cipherView: CipherView): Promise<BitCredential> {
-  const keyBuffer = Fido2Utils.stringToBuffer(cipherView.fido2Key.key);
+  const keyBuffer = Fido2Utils.stringToBuffer(cipherView.fido2Key.keyValue);
   const privateKey = await crypto.subtle.importKey(
     "pkcs8",
     keyBuffer,
     {
-      name: "ECDSA",
-      namedCurve: "P-256",
+      name: cipherView.fido2Key.keyType,
+      namedCurve: cipherView.fido2Key.keyCurve,
     },
     true,
     KeyUsages
@@ -252,10 +266,14 @@ async function mapCipherViewToBitCredential(cipherView: CipherView): Promise<Bit
 
   return {
     credentialId: new CredentialId(cipherView.id),
-    privateKey,
-    origin: cipherView.fido2Key.origin,
+    keyType: cipherView.fido2Key.keyType,
+    keyCurve: cipherView.fido2Key.keyCurve,
+    keyValue: privateKey,
     rpId: cipherView.fido2Key.rpId,
+    rpName: cipherView.fido2Key.rpName,
     userHandle: Fido2Utils.stringToBuffer(cipherView.fido2Key.userHandle),
+    userName: cipherView.fido2Key.userName,
+    origin: cipherView.fido2Key.origin,
   };
 }
 

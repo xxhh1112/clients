@@ -125,14 +125,24 @@ export class CipherRequest {
         break;
       case CipherType.Fido2Key:
         this.fido2Key = new Fido2KeyApi();
-        this.fido2Key.key =
-          cipher.fido2Key.key != null ? cipher.fido2Key.key.encryptedString : null;
-        this.fido2Key.origin =
-          cipher.fido2Key.origin != null ? cipher.fido2Key.origin.encryptedString : null;
+        this.fido2Key.keyType =
+          cipher.fido2Key.keyType != null
+            ? (cipher.fido2Key.keyType.encryptedString as "ECDSA")
+            : null;
+        this.fido2Key.keyCurve =
+          cipher.fido2Key.keyCurve != null
+            ? (cipher.fido2Key.keyCurve.encryptedString as "P-256")
+            : null;
+        this.fido2Key.keyValue =
+          cipher.fido2Key.keyValue != null ? cipher.fido2Key.keyValue.encryptedString : null;
         this.fido2Key.rpId =
           cipher.fido2Key.rpId != null ? cipher.fido2Key.rpId.encryptedString : null;
         this.fido2Key.userHandle =
           cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
+        this.fido2Key.userName =
+          cipher.fido2Key.userName != null ? cipher.fido2Key.userName.encryptedString : null;
+        this.fido2Key.origin =
+          cipher.fido2Key.origin != null ? cipher.fido2Key.origin.encryptedString : null;
         break;
       default:
         break;

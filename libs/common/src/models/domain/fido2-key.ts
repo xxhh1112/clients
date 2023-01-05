@@ -8,11 +8,14 @@ import { EncString } from "./enc-string";
 import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class Fido2Key extends Domain {
-  key: EncString; // PCKS#8
+  keyType: EncString;
+  keyCurve: EncString;
+  keyValue: EncString;
   rpId: EncString;
-  origin: EncString;
+  rpName: EncString;
   userHandle: EncString;
-  // extensions: Record<string, unknown>;
+  userName: EncString;
+  origin: EncString;
 
   constructor(obj?: Fido2KeyData) {
     super();
@@ -24,10 +27,14 @@ export class Fido2Key extends Domain {
       this,
       obj,
       {
-        key: null,
+        keyType: null,
+        keyCurve: null,
+        keyValue: null,
         rpId: null,
-        origin: null,
+        rpName: null,
         userHandle: null,
+        userName: null,
+        origin: null,
       },
       []
     );
@@ -37,10 +44,14 @@ export class Fido2Key extends Domain {
     return this.decryptObj(
       new Fido2KeyView(),
       {
-        key: null,
+        keyType: null,
+        keyCurve: null,
+        keyValue: null,
         rpId: null,
-        origin: null,
+        rpName: null,
         userHandle: null,
+        userName: null,
+        origin: null,
       },
       orgId,
       encKey
@@ -50,10 +61,14 @@ export class Fido2Key extends Domain {
   toFido2KeyData(): Fido2KeyData {
     const i = new Fido2KeyData();
     this.buildDataModel(this, i, {
-      key: null,
+      keyType: null,
+      keyCurve: null,
+      keyValue: null,
       rpId: null,
-      origin: null,
+      rpName: null,
       userHandle: null,
+      userName: null,
+      origin: null,
     });
     return i;
   }
@@ -63,16 +78,24 @@ export class Fido2Key extends Domain {
       return null;
     }
 
-    const key = EncString.fromJSON(obj.key);
+    const keyType = EncString.fromJSON(obj.keyType);
+    const keyCurve = EncString.fromJSON(obj.keyCurve);
+    const keyValue = EncString.fromJSON(obj.keyValue);
     const rpId = EncString.fromJSON(obj.rpId);
-    const origin = EncString.fromJSON(obj.origin);
+    const rpName = EncString.fromJSON(obj.rpName);
     const userHandle = EncString.fromJSON(obj.userHandle);
+    const userName = EncString.fromJSON(obj.userName);
+    const origin = EncString.fromJSON(obj.origin);
 
     return Object.assign(new Fido2Key(), obj, {
-      key,
+      keyType,
+      keyCurve,
+      keyValue,
       rpId,
-      origin,
+      rpName,
       userHandle,
+      userName,
+      origin,
     });
   }
 }
