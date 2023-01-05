@@ -129,7 +129,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         throw new OriginMismatchError();
       }
 
-      await this.fido2UserInterfaceService.pickCredential([credential.credentialId.encoded]);
+      await this.fido2UserInterfaceService.confirmCredential(credential.credentialId.encoded);
     } else {
       // We're looking for a resident key
       const credentials = await this.getCredentialsByRp(params.rpId);

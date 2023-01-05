@@ -37,6 +37,9 @@ export class Fido2Component implements OnInit, OnDestroy {
             cipher.type = CipherType.Fido2Key;
             cipher.fido2Key = new Fido2KeyView();
             this.ciphers = [cipher];
+          } else if (this.data?.type === "ConfirmCredentialRequest") {
+            const cipher = await this.cipherService.get(this.data.cipherId);
+            this.ciphers = [await cipher.decrypt()];
           } else if (this.data?.type === "PickCredentialRequest") {
             this.ciphers = await Promise.all(
               this.data.cipherIds.map(async (cipherId) => {
@@ -62,6 +65,14 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   confirm() {
+    BrowserFido2UserInterfaceService.sendMessage({
+      requestId: this.data.requestId,
+      type: "ConfirmCredentialResponse",
+    });
+    window.close();
+  }
+
+  confirmNew() {
     BrowserFido2UserInterfaceService.sendMessage({
       requestId: this.data.requestId,
       type: "ConfirmNewCredentialResponse",

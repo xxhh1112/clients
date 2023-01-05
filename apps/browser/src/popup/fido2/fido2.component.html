@@ -1,7 +1,18 @@
 <ng-container *ngIf="data">
   <div class="auth-wrapper">
+    <ng-container *ngIf="data.type == 'ConfirmCredentialRequest'">
+      A site is asking for authentication using the following credential:
+      <div class="box list">
+        <div class="box-content">
+          <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">
+        Authenticate
+      </button>
+    </ng-container>
     <ng-container *ngIf="data.type == 'PickCredentialRequest'">
-      A site is asking for authentication, please choose one of the following credentials to use
+      A site is asking for authentication, please choose one of the following credentials to use:
       <div class="box list">
         <div class="box-content">
           <app-cipher-row
@@ -11,10 +22,6 @@
           ></app-cipher-row>
         </div>
       </div>
-      <!-- <button type="button" class="btn btn-outline-secondary" (click)="accept()">
-        <ng-container *ngIf="data.type == 'VerifyUserRequest'">Authenticate</ng-container>
-        <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
-      </button> -->
     </ng-container>
     <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">
       A site wants to create the following passkey in your vault
@@ -23,9 +30,7 @@
           <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
         </div>
       </div>
-      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">
-        <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
-      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="confirmNew()">Create</button>
     </ng-container>
     <button type="button" class="btn btn-outline-secondary" (click)="cancel(true)">
       Use browser built-in

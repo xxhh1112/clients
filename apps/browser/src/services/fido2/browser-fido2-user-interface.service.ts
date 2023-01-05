@@ -22,6 +22,13 @@ export type BrowserFido2Message = { requestId: string } & (
       cipherId?: string;
     }
   | {
+      type: "ConfirmCredentialRequest";
+      cipherId: string;
+    }
+  | {
+      type: "ConfirmCredentialResponse";
+    }
+  | {
       type: "ConfirmNewCredentialRequest";
       name: string;
     }
@@ -48,6 +55,35 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 
   constructor(private popupUtilsService: PopupUtilsService) {
     BrowserApi.messageListener(BrowserFido2MessageName, this.processMessage.bind(this));
+  }
+
+  async confirmCredential(cipherId: string): Promise<boolean> {
+    const requestId = Utils.newGuid();
+    const data: BrowserFido2Message = { type: "ConfirmCredentialRequest", cipherId, requestId };
+    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+    this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      { center: true }
+    );
+
+    const response = await lastValueFrom(
+      this.messages$.pipe(
+        filter((msg) => msg.requestId === requestId),
+        first(),
+        takeUntil(this.destroy$)
+      )
+    );
+
+    if (response.type === "ConfirmCredentialResponse") {
+      return true;
+    }
+
+    if (response.type === "RequestCancelled") {
+      throw new RequestAbortedError(response.fallbackRequested);
+    }
+
+    return false;
   }
 
   async pickCredential(cipherIds: string[]): Promise<string> {
