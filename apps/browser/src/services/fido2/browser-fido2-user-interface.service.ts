@@ -14,10 +14,12 @@ const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
 
 export type BrowserFido2Message = { requestId: string } & (
   | {
-      type: "VerifyUserRequest";
+      type: "PickCredentialRequest";
+      cipherIds: string[];
     }
   | {
-      type: "VerifyUserResponse";
+      type: "PickCredentialResponse";
+      cipherId?: string;
     }
   | {
       type: "ConfirmNewCredentialRequest";
@@ -48,13 +50,9 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     BrowserApi.messageListener(BrowserFido2MessageName, this.processMessage.bind(this));
   }
 
-  async verifyUser(): Promise<boolean> {
-    return false;
-  }
-
-  async verifyPresence(): Promise<boolean> {
+  async pickCredential(cipherIds: string[]): Promise<string> {
     const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = { type: "VerifyUserRequest", requestId };
+    const data: BrowserFido2Message = { type: "PickCredentialRequest", cipherIds, requestId };
     const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
     this.popupUtilsService.popOut(
       null,
@@ -70,15 +68,15 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       )
     );
 
-    if (response.type === "VerifyUserResponse") {
-      return true;
-    }
-
     if (response.type === "RequestCancelled") {
       throw new RequestAbortedError(response.fallbackRequested);
     }
 
-    return false;
+    if (response.type !== "PickCredentialResponse") {
+      throw new RequestAbortedError();
+    }
+
+    return response.cipherId;
   }
 
   async confirmNewCredential({ name }: NewCredentialParams): Promise<boolean> {

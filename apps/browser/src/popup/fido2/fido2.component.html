@@ -1,20 +1,32 @@
 <ng-container *ngIf="data">
   <div class="auth-wrapper">
-    <ng-container *ngIf="data.type == 'VerifyUserRequest'">
-      A site is asking for authentication
-    </ng-container>
-    <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">
+    <ng-container *ngIf="data.type == 'PickCredentialRequest'">
+      A site is asking for authentication, please choose one of the following credentials to use
       <div class="box list">
         <div class="box-content">
-          <app-cipher-row [cipher]="cipher"></app-cipher-row>
+          <app-cipher-row
+            *ngFor="let cipher of ciphers"
+            [cipher]="cipher"
+            (onSelected)="pick(cipher)"
+          ></app-cipher-row>
         </div>
       </div>
-      A site wants to create a new passkey in your vault
+      <!-- <button type="button" class="btn btn-outline-secondary" (click)="accept()">
+        <ng-container *ngIf="data.type == 'VerifyUserRequest'">Authenticate</ng-container>
+        <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
+      </button> -->
     </ng-container>
-    <button type="button" class="btn btn-outline-secondary" (click)="accept()">
-      <ng-container *ngIf="data.type == 'VerifyUserRequest'">Authenticate</ng-container>
-      <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
-    </button>
+    <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">
+      A site wants to create the following passkey in your vault
+      <div class="box list">
+        <div class="box-content">
+          <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">
+        <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">Create</ng-container>
+      </button>
+    </ng-container>
     <button type="button" class="btn btn-outline-secondary" (click)="cancel(true)">
       Use browser built-in
     </button>

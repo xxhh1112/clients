@@ -3,7 +3,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { LayoutModule } from "@angular/cdk/layout";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
-import { CurrencyPipe, DatePipe, registerLocaleData } from "@angular/common";
+import { CommonModule, CurrencyPipe, DatePipe, registerLocaleData } from "@angular/common";
 import localeAr from "@angular/common/locales/ar";
 import localeAz from "@angular/common/locales/az";
 import localeBe from "@angular/common/locales/be";
@@ -175,6 +175,7 @@ registerLocaleData(localeZhTw, "zh-TW");
 
 @NgModule({
   imports: [
+    CommonModule,
     A11yModule,
     AppRoutingModule,
     BitwardenToastModule.forRoot({

@@ -3,7 +3,6 @@ export interface NewCredentialParams {
 }
 
 export abstract class Fido2UserInterfaceService {
-  verifyUser: () => Promise<boolean>;
-  verifyPresence: () => Promise<boolean>;
+  pickCredential: (cipherIds: string[]) => Promise<string>;
   confirmNewCredential: (params: NewCredentialParams) => Promise<boolean>;
 }

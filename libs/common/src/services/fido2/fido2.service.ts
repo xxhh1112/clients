@@ -120,20 +120,29 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
       // We're looking for regular non-resident keys
       credential = await this.getCredential(params.allowedCredentialIds);
+
+      if (credential === undefined) {
+        throw new NoCredentialFoundError();
+      }
+
+      if (credential.origin !== params.origin) {
+        throw new OriginMismatchError();
+      }
+
+      await this.fido2UserInterfaceService.pickCredential([credential.credentialId.encoded]);
     } else {
       // We're looking for a resident key
-      credential = await this.getCredentialByRp(params.rpId);
-    }
+      const credentials = await this.getCredentialsByRp(params.rpId);
 
-    if (credential === undefined) {
-      throw new NoCredentialFoundError();
-    }
+      if (credentials.length === 0) {
+        throw new NoCredentialFoundError();
+      }
 
-    if (credential.origin !== params.origin) {
-      throw new OriginMismatchError();
+      const pickedId = await this.fido2UserInterfaceService.pickCredential(
+        credentials.map((c) => c.credentialId.encoded)
+      );
+      credential = credentials.find((c) => c.credentialId.encoded === pickedId);
     }
-
-    const presence = await this.fido2UserInterfaceService.verifyPresence();
 
     const encoder = new TextEncoder();
     const clientData = encoder.encode(
@@ -147,7 +156,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const authData = await generateAuthData({
       credentialId: credential.credentialId,
       rpId: params.rpId,
-      userPresence: presence,
+      userPresence: true,
       userVerification: true, // TODO: Change to false!
     });
 
@@ -171,7 +180,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     for (const allowedCredential of allowedCredentialIds) {
       cipher = await this.cipherService.get(allowedCredential);
 
-      if (cipher.deletedDate != undefined) {
+      if (cipher?.deletedDate != undefined) {
         cipher = undefined;
       }
 
@@ -209,17 +218,13 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     return new CredentialId(cipher.id);
   }
 
-  private async getCredentialByRp(rpId: string): Promise<BitCredential | undefined> {
+  private async getCredentialsByRp(rpId: string): Promise<BitCredential[]> {
     const allCipherViews = await this.cipherService.getAllDecrypted();
-    const cipherView = allCipherViews.find(
+    const cipherViews = allCipherViews.filter(
       (cv) => !cv.isDeleted && cv.type === CipherType.Fido2Key && cv.fido2Key?.rpId === rpId
     );
 
-    if (cipherView == undefined) {
-      return undefined;
-    }
-
-    return await mapCipherViewToBitCredential(cipherView);
+    return await Promise.all(cipherViews.map((view) => mapCipherViewToBitCredential(view)));
   }
 }
 
