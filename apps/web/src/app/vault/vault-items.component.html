@@ -86,7 +86,7 @@
             <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
           </div>
         </td>
-        <td bitCell class="tw-font-bold" (click)="selectRow(col)">
+        <td bitCell (click)="selectRow(col)">
           <button bitLink linkType="secondary" (click)="navigateCollection(col)">
             {{ col.node.name }}
           </button>
@@ -157,14 +157,15 @@
           <app-vault-icon [cipher]="c"></app-vault-icon>
         </td>
         <td bitCell (click)="selectRow(c)">
-          <a
-            appStopProp
+          <button
+            bitLink
             [routerLink]="[]"
             [queryParams]="{ itemId: c.id }"
             queryParamsHandling="merge"
             title="{{ 'editItem' | i18n }}"
-            >{{ c.name }}</a
           >
+            {{ c.name }}
+          </button>
           <ng-container *ngIf="c.hasAttachments">
             <i
               class="bwi bwi-paperclip"
