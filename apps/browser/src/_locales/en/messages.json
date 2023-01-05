@@ -2046,5 +2046,17 @@
   },
   "rememberEmail": {
     "message": "Remember email"
+  },
+  "keyType": {
+    "message": "Key type"
+  },
+  "keyCurve": {
+    "message": "Key curve"
+  },
+  "rpName": {
+    "message": "Relying party"
+  },
+  "origin": {
+    "message": "Origin"
   }
 }

@@ -414,6 +414,33 @@
           <div *ngIf="cipher.identity.country">{{ cipher.identity.country }}</div>
         </div>
       </div>
+      <!-- Fido2Key -->
+      <div *ngIf="cipher.type == cipherType.Fido2Key">
+        <div class="box-content-row">
+          <span class="row-label">{{ "keyType" | i18n }}</span>
+          {{ cipher.fido2Key.keyType }}
+        </div>
+
+        <div class="box-content-row">
+          <span class="row-label">{{ "keyCurve" | i18n }}</span>
+          {{ cipher.fido2Key.keyCurve }}
+        </div>
+
+        <div class="box-content-row">
+          <span class="row-label">{{ "rpName" | i18n }}</span>
+          {{ cipher.fido2Key.rpName }}
+        </div>
+
+        <div class="box-content-row">
+          <span class="row-label">{{ "username" | i18n }}</span>
+          {{ cipher.fido2Key.userName }}
+        </div>
+
+        <div class="box-content-row">
+          <span class="row-label">{{ "origin" | i18n }}</span>
+          {{ cipher.fido2Key.origin }}
+        </div>
+      </div>
     </div>
   </div>
   <div class="box" *ngIf="cipher.login && cipher.login.hasUris">

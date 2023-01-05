@@ -20,6 +20,7 @@ export class Fido2KeyApi extends BaseResponse {
     this.keyCurve = this.getResponseProperty("KeyCurve");
     this.keyValue = this.getResponseProperty("keyValue");
     this.rpId = this.getResponseProperty("RpId");
+    this.rpName = this.getResponseProperty("RpName");
     this.userHandle = this.getResponseProperty("UserHandle");
     this.userName = this.getResponseProperty("UserName");
     this.origin = this.getResponseProperty("Origin");
