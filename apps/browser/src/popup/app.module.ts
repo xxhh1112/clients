@@ -87,7 +87,7 @@ import { PrivateModeWarningComponent } from "./components/private-mode-warning.c
 import { SendListComponent } from "./components/send-list.component";
 import { SetPinComponent } from "./components/set-pin.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
-import { Fido2Module } from "./fido2/fido2.module";
+import { Fido2Component } from "./fido2/fido2.component";
 import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "./send/efflux-dates.component";
@@ -193,7 +193,6 @@ registerLocaleData(localeZhTw, "zh-TW");
     ReactiveFormsModule,
     ScrollingModule,
     ServicesModule,
-    Fido2Module,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -246,6 +245,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     RemovePasswordComponent,
     VaultSelectComponent,
     AboutComponent,
+    Fido2Component,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],

@@ -1,5 +1,10 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
+
+import { CipherType } from "@bitwarden/common/enums/cipherType";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { Fido2KeyView } from "@bitwarden/common/models/view/fido2-key.view";
 
 import {
   BrowserFido2Message,
@@ -11,11 +16,25 @@ import {
   templateUrl: "fido2.component.html",
   styleUrls: [],
 })
-export class Fido2Component {
+export class Fido2Component implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  protected data?: BrowserFido2Message;
+  protected cipher?: CipherView;
+
   constructor(private activatedRoute: ActivatedRoute) {}
 
-  get data() {
-    return this.activatedRoute.snapshot.queryParams as BrowserFido2Message;
+  ngOnInit(): void {
+    this.activatedRoute.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((queryParamMap) => {
+      this.data = JSON.parse(queryParamMap.get("data"));
+
+      if (this.data?.type === "ConfirmNewCredentialRequest") {
+        this.cipher = new CipherView();
+        this.cipher.name = this.data.name;
+        this.cipher.type = CipherType.Fido2Key;
+        this.cipher.fido2Key = new Fido2KeyView();
+      }
+    });
   }
 
   async accept() {
@@ -55,5 +74,10 @@ export class Fido2Component {
       type: "RequestCancelled",
       fallbackRequested: fallback,
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,6 +1,9 @@
 import { filter, first, lastValueFrom, Subject, takeUntil } from "rxjs";
 
-import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/abstractions/fido2/fido2-user-interface.service.abstraction";
+import {
+  Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
+  NewCredentialParams,
+} from "@bitwarden/common/abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { RequestAbortedError } from "../../../../../libs/common/src/abstractions/fido2/fido2.service.abstraction";
@@ -18,6 +21,7 @@ export type BrowserFido2Message = { requestId: string } & (
     }
   | {
       type: "ConfirmNewCredentialRequest";
+      name: string;
     }
   | {
       type: "ConfirmNewCredentialResponse";
@@ -51,7 +55,7 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
   async verifyPresence(): Promise<boolean> {
     const requestId = Utils.newGuid();
     const data: BrowserFido2Message = { type: "VerifyUserRequest", requestId };
-    const queryParams = new URLSearchParams(data).toString();
+    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
     this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
@@ -77,10 +81,10 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     return false;
   }
 
-  async confirmNewCredential(): Promise<boolean> {
+  async confirmNewCredential({ name }: NewCredentialParams): Promise<boolean> {
     const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = { type: "ConfirmNewCredentialRequest", requestId };
-    const queryParams = new URLSearchParams(data).toString();
+    const data: BrowserFido2Message = { type: "ConfirmNewCredentialRequest", requestId, name };
+    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
     this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,

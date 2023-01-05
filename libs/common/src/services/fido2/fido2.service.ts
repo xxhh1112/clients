@@ -42,7 +42,9 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   async createCredential(
     params: CredentialRegistrationParams
   ): Promise<CredentialRegistrationResult> {
-    const presence = await this.fido2UserInterfaceService.confirmNewCredential();
+    const presence = await this.fido2UserInterfaceService.confirmNewCredential({
+      name: params.origin,
+    });
     // eslint-disable-next-line no-console
     console.log("Fido2Service.createCredential", params);
 
@@ -123,14 +125,11 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       credential = await this.getCredentialByRp(params.rpId);
     }
 
-    console.log("Found credential: ", credential);
-
     if (credential === undefined) {
       throw new NoCredentialFoundError();
     }
 
     if (credential.origin !== params.origin) {
-      console.error(`${params.origin} tried to use credential created by ${credential.origin}`);
       throw new OriginMismatchError();
     }
 
@@ -203,8 +202,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     view.fido2Key.rpId = credential.rpId;
     view.fido2Key.userHandle = Fido2Utils.bufferToString(credential.userHandle);
 
-    console.log("saving credential", { view, credential });
-
     const cipher = await this.cipherService.encrypt(view);
     await this.cipherService.createWithServer(cipher);
 
@@ -237,22 +234,16 @@ interface AuthDataParams {
 
 async function mapCipherViewToBitCredential(cipherView: CipherView): Promise<BitCredential> {
   const keyBuffer = Fido2Utils.stringToBuffer(cipherView.fido2Key.key);
-  let privateKey;
-  try {
-    privateKey = await crypto.subtle.importKey(
-      "pkcs8",
-      keyBuffer,
-      {
-        name: "ECDSA",
-        namedCurve: "P-256",
-      },
-      true,
-      KeyUsages
-    );
-  } catch (err) {
-    console.log("Error importing key", { err });
-    throw err;
-  }
+  const privateKey = await crypto.subtle.importKey(
+    "pkcs8",
+    keyBuffer,
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    KeyUsages
+  );
 
   return {
     credentialId: new CredentialId(cipherView.id),
