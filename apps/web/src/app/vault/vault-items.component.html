@@ -71,7 +71,7 @@
       </tr>
     </ng-container>
     <ng-container body>
-      <tr bitRow *ngFor="let col of filteredCollections">
+      <tr bitRow *ngFor="let col of filteredCollections" alignContent="middle">
         <td bitCell (click)="selectRow(col)">
           <input
             *ngIf="organization && col.node.id !== null"
@@ -87,7 +87,12 @@
           </div>
         </td>
         <td bitCell (click)="selectRow(col)">
-          <button bitLink linkType="secondary" (click)="navigateCollection(col)">
+          <button
+            bitLink
+            class="tw-text-start"
+            linkType="secondary"
+            (click)="navigateCollection(col)"
+          >
             {{ col.node.name }}
           </button>
         </td>
@@ -149,7 +154,7 @@
           </bit-menu>
         </td>
       </tr>
-      <tr bitRow *ngFor="let c of filteredCiphers">
+      <tr bitRow *ngFor="let c of filteredCiphers" alignContent="middle">
         <td bitCell (click)="selectRow(c)">
           <input type="checkbox" [(ngModel)]="$any(c).checked" appStopProp />
         </td>
@@ -159,6 +164,7 @@
         <td bitCell class="tw-break-all" (click)="selectRow(c)">
           <button
             bitLink
+            class="tw-text-start"
             [routerLink]="[]"
             [queryParams]="{ itemId: c.id }"
             queryParamsHandling="merge"
