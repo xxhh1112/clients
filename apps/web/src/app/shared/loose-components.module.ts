@@ -16,15 +16,18 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
+import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { NestedCheckboxComponent } from "../components/nested-checkbox.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
+import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
 import { UserVerificationComponent } from "../components/user-verification.component";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
+import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { OrganizationCreateModule } from "../organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../organizations/layouts/organization-layout.component";
@@ -68,6 +71,7 @@ import { ApiKeyComponent } from "../settings/api-key.component";
 import { BillingHistoryViewComponent } from "../settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
+import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
 import { ChangeKdfComponent } from "../settings/change-kdf.component";
 import { ChangePasswordComponent } from "../settings/change-password.component";
@@ -130,7 +134,13 @@ import { SharedModule } from ".";
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
 @NgModule({
-  imports: [SharedModule, VaultFilterModule, OrganizationCreateModule, RegisterFormModule],
+  imports: [
+    SharedModule,
+    VaultFilterModule,
+    OrganizationCreateModule,
+    RegisterFormModule,
+    ProductSwitcherModule,
+  ],
   declarations: [
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
@@ -160,6 +170,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -213,6 +224,7 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -220,6 +232,7 @@ import { SharedModule } from ".";
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
@@ -283,6 +296,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -335,6 +349,7 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -342,6 +357,7 @@ import { SharedModule } from ".";
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,

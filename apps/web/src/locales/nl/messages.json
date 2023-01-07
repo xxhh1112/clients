@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Bestandswachtwoord bevestigen"
   },
-  "accountBackupOptionDescription": {
-    "message": "Maakt gebruik van Bitwarden-accountversleuteling, niet het hoofdwachtwoord, om de export te beveiligen. Je kunt deze export alleen importeren in het huidige account. Gebruik dit om een back-up te maken die je elders niet kunt gebruiken."
+  "accountRestrictedOptionDescription": {
+    "message": "Gebruik de encryptiesleutel van je account, afgeleid van je gebruikersnaam en hoodfwachtwoord, om de export te versleutelen en importeren te beperken tot het huidige Bitwarden-account."
   },
   "passwordProtectedOptionDescription": {
     "message": "Maak een door de gebruiker gegenereerd wachtwoord aan om de export te beschermen. Gebruik dit om een export te maken die je in andere accounts kunt gebruiken."
   },
-  "fileTypeHeading": {
-    "message": "Bestandstype"
+  "exportTypeHeading": {
+    "message": "Exporttype"
   },
-  "accountBackup": {
-    "message": "Account back-up"
+  "accountRestricted": {
+    "message": "Account beperkt"
   },
   "passwordProtected": {
     "message": "Beveiligd met wachtwoord"
@@ -4918,7 +4918,7 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Gratis Families Plan"
+    "message": "Gratis Familie-abonnement"
   },
   "redeemNow": {
     "message": "Nu verzilveren"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Ben jij dit niet?"
   },
+  "pickAnAvatarColor": {
+    "message": "Kies een kleur voor je avatar"
+  },
+  "customizeAvatar": {
+    "message": "Avatar aanpassen"
+  },
+  "avatarUpdated": {
+    "message": "Avatar bijgewerkt"
+  },
+  "brightBlue": {
+    "message": "Helderblauw"
+  },
+  "green": {
+    "message": "Groen"
+  },
+  "orange": {
+    "message": "Oranje"
+  },
+  "lavender": {
+    "message": "Lavendel"
+  },
+  "yellow": {
+    "message": "Geel"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Groenblauw"
+  },
+  "salmon": {
+    "message": "Zalm"
+  },
+  "pink": {
+    "message": "Roze"
+  },
+  "customColor": {
+    "message": "Aangepaste kleur"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Type om te filteren --"
   },
@@ -5486,6 +5525,17 @@
   },
   "multiSelectClearAll": {
     "message": "Alles wissen"
+  },
+  "toggleCharacterCount": {
+    "message": "Tekentelling in-/uitschakelen",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Aantal tekens van het wachtwoord",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Verbergen"
   },
   "projects": {
     "message": "Projects"
@@ -5510,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Delete Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Kies projecten om het geheim aan te koppelen. Alleen gebruikers uit de organisatie met toegang tot deze projecten kunnen het geheim zien."
+  },
+  "typeOrSelectProjects": {
+    "message": "Typ of kies projecten"
+  },
+  "typeOrSelectProject": {
+    "message": "Typ of kies een project"
   },
   "project": {
     "message": "Project"
@@ -5771,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Deze gebruiker kan alle items inzien en bewerken."
+  },
+  "moreFromBitwarden": {
+    "message": "Meer van Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Producten wisselen"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Gratis organisaties kunnen maximaal $SEATCOUNT$ leden hebben. Upgrade naar een betaald abonnement voor het uitnodigen van meer leden.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Gratis organisaties kunnen maximaal $SEATCOUNT$ leden hebben. Neem contact op met de eigenaar van je organisatie om te upgraden.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Gratis organisaties kunnen maximaal $COLLECTIONCOUNT$ collecties hebben. Upgrade naar een betaald abonnement voor het toevoegen van meer collecties.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Gratis organisaties kunnen maximaal $COLLECTIONCOUNT$ collecties hebben. Neem contact op met de eigenaar van je organisatie om te upgraden.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

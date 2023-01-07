@@ -428,7 +428,7 @@
     "message": "Mon coffre"
   },
   "allVaults": {
-    "message": "Tous les Coffres"
+    "message": "Tous les Coffres-forts"
   },
   "vault": {
     "message": "Coffre"
@@ -576,7 +576,7 @@
     "message": "La connexion avec l'appareil doit être activée dans les paramètres de l'application mobile Bitwarden. Avez-vous besoin d'une autre option?"
   },
   "loginWithMasterPassword": {
-    "message": "Connectez-vous avec le mot de passe maître"
+    "message": "Se connecter avec le mot de passe maître"
   },
   "createAccount": {
     "message": "Créer un compte"
@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Confirmer le Mot de Passe du Fichier"
   },
-  "accountBackupOptionDescription": {
-    "message": "Utilise le chiffrement de votre compte Bitwarden pour protéger l'exportation, pas celui du mot de passe maître. Cette exportation ne peut être importée que dans le compte actuel. Utilisez ceci pour créer une sauvegarde qui ne peut pas être utilisée ailleurs."
+  "accountRestrictedOptionDescription": {
+    "message": "Chiffrez le fichier avec la clé de chiffrement de votre compte, dérivée de vos nom d'utilisateur et mot de passe maître. L'importation ne sera possible que sur ce compte Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Créez un mot de passe généré par l'utilisateur pour protéger l'exportation. Utilisez ceci pour créer une exportation qui peut être utilisée dans d'autres comptes."
   },
-  "fileTypeHeading": {
-    "message": "Types de Fichier"
+  "exportTypeHeading": {
+    "message": "Type d'exportation"
   },
-  "accountBackup": {
-    "message": "Sauvegarde du Compte"
+  "accountRestricted": {
+    "message": "Restreint à ce compte"
   },
   "passwordProtected": {
     "message": "Protégé par Mot de Passe"
@@ -3498,7 +3498,7 @@
     "message": "Nécessite une connexion en deux étapes"
   },
   "twoStepLoginPolicyDesc": {
-    "message": "Exiger que les utilisateurs définissent une connexion en deux étapes sur leurs comptes personnels."
+    "message": "Imposer aux membres l'usage de la double authentification."
   },
   "twoStepLoginPolicyWarning": {
     "message": "Les membres de l'organisation (hors propriétaires et administrateurs) qui n'ont pas activé la connexion en deux étapes sur leur compte personnel seront supprimés de l'organisation et recevront un courriel les informant du changement."
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Ce n'est pas vous ?"
   },
+  "pickAnAvatarColor": {
+    "message": "Choisissez la couleur de votre avatar"
+  },
+  "customizeAvatar": {
+    "message": "Personnaliser votre avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar mis à jour"
+  },
+  "brightBlue": {
+    "message": "Bleu Clair"
+  },
+  "green": {
+    "message": "Vert"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavande"
+  },
+  "yellow": {
+    "message": "Jaune"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Sarcelle"
+  },
+  "salmon": {
+    "message": "Saumon"
+  },
+  "pink": {
+    "message": "Rose"
+  },
+  "customColor": {
+    "message": "Couleur Personnalisée"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Tapez pour Filtrer --"
   },
@@ -5486,6 +5525,17 @@
   },
   "multiSelectClearAll": {
     "message": "Effacer tout"
+  },
+  "toggleCharacterCount": {
+    "message": "Afficher/masquer la longueur",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Longueur du mot de passe",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Masquer"
   },
   "projects": {
     "message": "Projets"
@@ -5510,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Supprimer les Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Sélectionnez les projets auxquels le secret sera associé. Seuls les utilisateurs de l'organisation ayant accès à ces projets pourront voir le secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Écrivez ou sélectionnez des projets"
+  },
+  "typeOrSelectProject": {
+    "message": "Écrivez ou sélectionnez un projet"
   },
   "project": {
     "message": "Projet"
@@ -5771,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Ce groupe peut voir et modifier tous les éléments."
+  },
+  "moreFromBitwarden": {
+    "message": "Plus de Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Changer de Produits"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Les organisations gratuites peuvent avoir jusqu'à $SEATCOUNT$ membres. Passez à une offre payante pour inviter plus de membres.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Les organisations gratuites peuvent avoir jusqu'à $SEATCOUNT$ membres. Contactez le propriétaire de votre organisation pour mettre à niveau.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Les organisations gratuites peuvent avoir jusqu'à $COLLECTIONCOUNT$ collections. Passez à une offre payante pour inviter plus de collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Les organisations gratuites peuvent avoir jusqu'à $COLLECTIONCOUNT$ collections. Contactez le propriétaire de votre organisation pour mettre à niveau.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

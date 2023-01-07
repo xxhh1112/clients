@@ -4,7 +4,8 @@ import { FormData } from "../services/abstractions/autofill.service";
 
 type TabMessage =
   | CopyTextTabMessage
-  | TabMessageBase<"clearClipboard">
+  | ClearClipboardTabMessage
+  | GetClickedElementTabMessage
   | CollectPageDetailsMessage
   | CollectPageDetailsImmediatelyMessage
   | NotificationBarPageDetailsMessage
@@ -12,13 +13,17 @@ type TabMessage =
   | AdjustNotificationBarMessage
   | AddToLockedVaultPendingNotificationsMessage;
 
-export type TabMessageBase<T extends string> = {
+type TabMessageBase<T extends string> = {
   command: T;
 };
 
-export type CopyTextTabMessage = TabMessageBase<"copyText"> & {
+type CopyTextTabMessage = TabMessageBase<"copyText"> & {
   text: string;
 };
+
+export type ClearClipboardTabMessage = TabMessageBase<"clearClipboard">;
+
+export type GetClickedElementTabMessage = TabMessageBase<"getClickedElement">;
 
 export type CollectPageDetailsMessage = TabMessageBase<"collectPageDetails"> & {
   tab: chrome.tabs.Tab;

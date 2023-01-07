@@ -13,11 +13,10 @@ import RuntimeMessage from "../types/runtime-messages";
 import TabMessage from "../types/tab-messages";
 
 export class NotificationBarPageDetailsRelay {
-  // TODO: Make work with 'combine'
   static async messageListener(
-    services: CachedServices,
     message: RuntimeMessage,
-    sender: chrome.runtime.MessageSender
+    sender: chrome.runtime.MessageSender,
+    services: CachedServices
   ) {
     const stateFactory = new StateFactory(GlobalState, Account);
     const serviceOptions: AutoFillServiceInitOptions = {

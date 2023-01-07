@@ -42,7 +42,7 @@ describe("PendingNotificationsListener", () => {
 
       const tabSendMessageDataSpy = jest
         .spyOn(BrowserApi, "tabSendMessageData")
-        .mockImplementation(() => Promise.resolve<any[]>(null));
+        .mockImplementation(() => Promise.resolve());
 
       session = {
         lockedVaultPendingNotifications: [
@@ -74,7 +74,7 @@ describe("PendingNotificationsListener", () => {
 
       const tabSendMessageDataSpy = jest
         .spyOn(BrowserApi, "tabSendMessageData")
-        .mockImplementation(() => Promise.resolve<any[]>(null));
+        .mockImplementation(() => Promise.resolve());
 
       session = {
         lockedVaultPendingNotifications: [
@@ -106,7 +106,7 @@ describe("PendingNotificationsListener", () => {
 
       const tabSendMessageDataSpy = jest
         .spyOn(BrowserApi, "tabSendMessageData")
-        .mockImplementation(() => Promise.resolve<any[]>(null));
+        .mockImplementation(() => Promise.resolve());
 
       session = {
         lockedVaultPendingNotifications: [

@@ -46,9 +46,9 @@ const notificationQueueKey = "notificationQueue";
 
 export default class NotificationBackground {
   static async messageListener(
-    services: CachedServices,
     message: RuntimeMessage,
-    sender: chrome.runtime.MessageSender
+    sender: chrome.runtime.MessageSender,
+    services: CachedServices
   ) {
     const stateFactory = new StateFactory(GlobalState, Account);
     let searchService: SearchService | null = null;

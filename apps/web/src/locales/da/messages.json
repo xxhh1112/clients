@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Bekræft filadgangskode"
   },
-  "accountBackupOptionDescription": {
-    "message": "Brug din kontos krypteringsnøgle til at kryptere eksporten og begrænse importen til udelukkende den aktuelle Bitwarden-konto."
+  "accountRestrictedOptionDescription": {
+    "message": "Brug kontokrypteringsnøglen, dannet af dit kontobrugernavn samt hovedadgangskode, for at kryptere eksporten og hindre import til andre end den aktuelle Bitwarden-konto."
   },
   "passwordProtectedOptionDescription": {
     "message": "Opsæt en adgangskode til både at kryptere eksporten samt dekryptere denne ved import til enhver Bitwarden-konto."
   },
-  "fileTypeHeading": {
-    "message": "Filtype"
+  "exportTypeHeading": {
+    "message": "Eksporttype"
   },
-  "accountBackup": {
-    "message": "Kontosikkerhedskopi"
+  "accountRestricted": {
+    "message": "Konto begrænset"
   },
   "passwordProtected": {
     "message": "Adgangskodebeskyttet"
@@ -1699,7 +1699,7 @@
     "message": "Kontroller eventuelle brugernavne eller e-mailadresser, som du bruger."
   },
   "checkBreaches": {
-    "message": "Kontroller læk"
+    "message": "Tjek læk"
   },
   "breachUsernameNotFound": {
     "message": "$USERNAME$ blev ikke fundet i nogen kendte datalæk.",
@@ -1752,7 +1752,7 @@
     "message": "Fakturering"
   },
   "billingPlanLabel": {
-    "message": "Faktureringsplan"
+    "message": "Faktureringsabonnementstype"
   },
   "paymentType": {
     "message": "Betalingstype"
@@ -2891,7 +2891,7 @@
     "message": "Redigér de grupper, som denne bruger tilhører."
   },
   "invitedUsers": {
-    "message": "Inviterede bruger(e)."
+    "message": "Bruger(e) inviteret"
   },
   "resendInvitation": {
     "message": "Send invitation igen"
@@ -5475,8 +5475,47 @@
   "notYou": {
     "message": "Ikke dig?"
   },
+  "pickAnAvatarColor": {
+    "message": "Vælg avatarfarve"
+  },
+  "customizeAvatar": {
+    "message": "Tilpas avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar opdateret"
+  },
+  "brightBlue": {
+    "message": "Klar blå"
+  },
+  "green": {
+    "message": "Grøn"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavendel"
+  },
+  "yellow": {
+    "message": "Gul"
+  },
+  "indigo": {
+    "message": "Mørkeblå (indigo)"
+  },
+  "teal": {
+    "message": "Blågrøn"
+  },
+  "salmon": {
+    "message": "Laksefarvet"
+  },
+  "pink": {
+    "message": "Lyserød"
+  },
+  "customColor": {
+    "message": "Tilpasset farve"
+  },
   "multiSelectPlaceholder": {
-    "message": "-- Type at filtrere --"
+    "message": "-- Skriv for at filtrere --"
   },
   "multiSelectLoading": {
     "message": "Henter indstillinger..."
@@ -5486,6 +5525,17 @@
   },
   "multiSelectClearAll": {
     "message": "Ryd alt"
+  },
+  "toggleCharacterCount": {
+    "message": "Vis/skjul tegnantal",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Adgangskodetegnantal",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Skjul"
   },
   "projects": {
     "message": "Projekter"
@@ -5510,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Slet hemmeligheder"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekt"
@@ -5611,7 +5670,7 @@
     "message": "Tjenestekonto oprettet"
   },
   "smAccess": {
-    "message": "Tilgå"
+    "message": "Adgang"
   },
   "projectCommaSecret": {
     "message": "Projekt, Hemmelighed"
@@ -5771,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Dette medlem kan tilgå og ændre alle emner."
+  },
+  "moreFromBitwarden": {
+    "message": "Mere fra Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Skift produkter"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Gratis organisationer kan have op til $SEATCOUNT$ medlemmer. Opgradér til en betalt abonnementstype for at invitere flere medlemmer.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Gratis organisationer kan have op til $SEATCOUNT$ medlemmer. Kontakt organisationsejeren for at opgradere.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Gratis organisationer kan have op til $COLLECTIONCOUNT$ samlinger. Opgradér til en betalt abonnementstype for at tilføje flere samlinger.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Gratis organisationer kan have op til $COLLECTIONCOUNT$ samlinger. Kontakt organisationsejeren for at opgradere.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

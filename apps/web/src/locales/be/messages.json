@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Пацвердзіць пароль файла"
   },
-  "accountBackupOptionDescription": {
-    "message": "Выкарыстоўвайце ключ шыфравання вашага ўліковага запісу, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Выкарыстоўвайце свой ключ шыфравання, які атрыманы з імя карыстальніка і асноўнага пароля, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Прызначце пароль, каб зашыфраваць экспартаванне і імпартуйце яго ў любы ўліковы запіс Bitwarden з выкарыстаннем пароля для расшыфроўкі."
   },
-  "fileTypeHeading": {
-    "message": "Тып файла"
+  "exportTypeHeading": {
+    "message": "Тып экспартавання"
   },
-  "accountBackup": {
-    "message": "Рэзервовая копія ўліковага запісу"
+  "accountRestricted": {
+    "message": "Абмежавана ўліковым запісам"
   },
   "passwordProtected": {
     "message": "Абаронена паролем"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Не вы?"
   },
+  "pickAnAvatarColor": {
+    "message": "Выберыце колер аватара"
+  },
+  "customizeAvatar": {
+    "message": "Дапасаваць аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар абноўлены"
+  },
+  "brightBlue": {
+    "message": "Ярка-блакітны"
+  },
+  "green": {
+    "message": "Зялёны"
+  },
+  "orange": {
+    "message": "Аранжавы"
+  },
+  "lavender": {
+    "message": "Пурпурны"
+  },
+  "yellow": {
+    "message": "Жоўты"
+  },
+  "indigo": {
+    "message": "Індыга"
+  },
+  "teal": {
+    "message": "Сіне-зялёны"
+  },
+  "salmon": {
+    "message": "Ласосевы"
+  },
+  "pink": {
+    "message": "Ружовы"
+  },
+  "customColor": {
+    "message": "Карыстальніцкі колер"
+  },
   "multiSelectPlaceholder": {
     "message": "- Увядзіце для фільтрацыі -"
   },
@@ -5486,6 +5525,17 @@
   },
   "multiSelectClearAll": {
     "message": "Ачысціць усё"
+  },
+  "toggleCharacterCount": {
+    "message": "Пераключыць лічыльнік сімвалаў",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Колькасць сімвалаў пароля",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Схаваць"
   },
   "projects": {
     "message": "Праекты"
@@ -5510,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Выдаліць сакрэты"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Праект"
@@ -5771,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Гэты ўдзельнік можа атрымліваць доступ і змяняць усе элементы."
+  },
+  "moreFromBitwarden": {
+    "message": "Больш ад Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Змяніць прадукты"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Перайдзіце на платны тарыфны план, каб запрасіць больш удзельнікаў.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Перайдзіце на платны тарыфны план, каб больш калекцый.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Колькасць бясплатных калекцый у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

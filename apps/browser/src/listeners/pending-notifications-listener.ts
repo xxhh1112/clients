@@ -16,9 +16,9 @@ const notificationsKey = "lockedVaultPendingNotifications";
 
 export class PendingNotificationsListener {
   static async messageListener(
-    services: CachedServices,
     message: RuntimeMessage,
-    sender: chrome.runtime.MessageSender
+    sender: chrome.runtime.MessageSender,
+    services: CachedServices
   ) {
     const stateFactory = new StateFactory(GlobalState, Account);
     const serviceOptions: StateServiceInitOptions = {

@@ -32,7 +32,7 @@ describe("NotificationBackground", () => {
   let stateService: MockProxy<BrowserStateService>;
 
   let tabSendMessageDataSpy: jest.SpyInstance<
-    Promise<any[]>,
+    Promise<void>,
     [tab: chrome.tabs.Tab, command: string, data?: any]
   >;
 
@@ -53,7 +53,7 @@ describe("NotificationBackground", () => {
 
     tabSendMessageDataSpy = jest
       .spyOn(BrowserApi, "tabSendMessageData")
-      .mockImplementation(() => Promise.resolve<any[]>([]));
+      .mockImplementation(() => Promise.resolve());
 
     sut = new NotificationBackground(
       autofillService,

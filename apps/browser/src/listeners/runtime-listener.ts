@@ -14,9 +14,9 @@ type ExtendedAction = typeof chrome.action & {
 };
 
 export async function runtimeListener(
-  cachedServices: CachedServices,
   message: RuntimeMessage,
-  sender: chrome.runtime.MessageSender
+  sender: chrome.runtime.MessageSender,
+  cachedServices: CachedServices
 ) {
   switch (message.command) {
     case "promptForLogin":
