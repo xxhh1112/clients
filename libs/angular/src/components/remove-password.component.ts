@@ -1,17 +1,17 @@
 import { Directive, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Directive()
 export class RemovePasswordComponent implements OnInit {
-  actionPromise: Promise<any>;
+  actionPromise: Promise<void | boolean>;
   continuing = false;
   leaving = false;
 
@@ -22,11 +22,11 @@ export class RemovePasswordComponent implements OnInit {
   constructor(
     private router: Router,
     private stateService: StateService,
-    private apiService: ApiService,
     private syncService: SyncService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -68,9 +68,7 @@ export class RemovePasswordComponent implements OnInit {
 
     try {
       this.leaving = true;
-      this.actionPromise = this.apiService.postLeaveOrganization(this.organization.id).then(() => {
-        return this.syncService.fullSync(true);
-      });
+      this.actionPromise = this.organizationApiService.leave(this.organization.id);
       await this.actionPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("leftOrganization"));
       await this.keyConnectorService.removeConvertAccountRequired();

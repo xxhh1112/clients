@@ -7,17 +7,17 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { EmergencyAccessStatusType } from "@bitwarden/common/enums/emergencyAccessStatusType";
 import { EmergencyAccessType } from "@bitwarden/common/enums/emergencyAccessType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EmergencyAccessConfirmRequest } from "@bitwarden/common/models/request/emergencyAccessConfirmRequest";
+import { EmergencyAccessConfirmRequest } from "@bitwarden/common/models/request/emergency-access-confirm.request";
 import {
   EmergencyAccessGranteeDetailsResponse,
   EmergencyAccessGrantorDetailsResponse,
-} from "@bitwarden/common/models/response/emergencyAccessResponse";
+} from "@bitwarden/common/models/response/emergency-access.response";
 
 import { EmergencyAccessAddEditComponent } from "./emergency-access-add-edit.component";
 import { EmergencyAccessConfirmComponent } from "./emergency-access-confirm.component";
@@ -27,6 +27,7 @@ import { EmergencyAccessTakeoverComponent } from "./emergency-access-takeover.co
   selector: "emergency-access",
   templateUrl: "emergency-access.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class EmergencyAccessComponent implements OnInit {
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("takeoverTemplate", { read: ViewContainerRef, static: true })
@@ -84,10 +85,12 @@ export class EmergencyAccessComponent implements OnInit {
         comp.name = this.userNamePipe.transform(details);
         comp.emergencyAccessId = details?.id;
         comp.readOnly = !this.canAccessPremium;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onSaved.subscribe(() => {
           modal.close();
           this.load();
         });
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onDeleted.subscribe(() => {
           modal.close();
           this.remove(details);
@@ -132,6 +135,7 @@ export class EmergencyAccessComponent implements OnInit {
           comp.name = this.userNamePipe.transform(contact);
           comp.emergencyAccessId = contact.id;
           comp.userId = contact?.granteeId;
+          // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
           comp.onConfirmed.subscribe(async () => {
             modal.close();
 
@@ -264,6 +268,7 @@ export class EmergencyAccessComponent implements OnInit {
         comp.email = details.email;
         comp.emergencyAccessId = details != null ? details.id : null;
 
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onDone.subscribe(() => {
           modal.close();
           this.platformUtilsService.showToast(

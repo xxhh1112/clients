@@ -53,13 +53,13 @@
     "message": "탭"
   },
   "vault": {
-    "message": "Vault"
+    "message": "보관함"
   },
   "myVault": {
     "message": "내 보관함"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "모든 보관함"
   },
   "tools": {
     "message": "도구"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "잘못된 이메일 주소입니다."
   },
-  "masterPassRequired": {
-    "message": "마스터 비밀번호는 반드시 입력해야 합니다."
+  "masterPasswordRequired": {
+    "message": "마스터 비밀번호가 필요합니다."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "마스터 비밀번호를 재입력해야 합니다."
+  },
+  "masterPasswordMinlength": {
     "message": "마스터 비밀번호는 최소 8자 이상이어야 합니다."
   },
   "masterPassDoesntMatch": {
@@ -807,13 +810,13 @@
     "message": "새로 고침 완료"
   },
   "enableAutoTotpCopy": {
-    "message": "Copy TOTP automatically"
+    "message": "인증 코드 자동으로 복사하기"
   },
   "disableAutoTotpCopyDesc": {
     "message": "로그인에 인증 키가 연결되어 있을 경우, 그 로그인을 자동 완성할 때마다 TOTP 인증 코드가 클립보드에 자동으로 복사됩니다."
   },
   "enableAutoBiometricsPrompt": {
-    "message": "Ask for biometrics on launch"
+    "message": "실행 시 생체 인증 요구하기"
   },
   "premiumRequired": {
     "message": "프리미엄 멤버십 필요"
@@ -1034,7 +1037,7 @@
     "message": "이 브라우저의 팝업 창에서는 U2F 요청을 처리할 수 없습니다. U2F로 로그인할 수 있도록 이 창을 새 창에서 여시겠습니까?"
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "웹사이트 아이콘 표시하기"
   },
   "faviconDesc": {
     "message": "Show a recognizable image next to each login."
@@ -1308,6 +1311,10 @@
     "message": "업데이트됨",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "비밀번호 업데이트됨",
     "description": "ex. Date this password was updated"
@@ -1480,8 +1487,8 @@
   "acceptPolicies": {
     "message": "이 박스를 체크하면 다음에 동의하는 것으로 간주됩니다:"
   },
-  "acceptPoliciesError": {
-    "message": "서비스 약관 및 개인 정보 보호 정책을 확인하지 않았습니다."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "서비스 약관"
@@ -1846,8 +1853,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "볼트 제한 시간이 조직에서 설정한 제한을 초과합니다."
+  "vaultTimeoutTooLarge": {
+    "message": "Your vault timeout exceeds the restrictions set by your organization."
   },
   "vaultExportDisabled": {
     "message": "보관함 내보내기 비활성화됨"
@@ -1895,7 +1902,7 @@
     "message": "개인 보관함을 내보내는 중"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "오직 $EMAIL$와 연관된 개인 보관함의 항목만 내보내집니다. 조직 보관함의 항목은 포함되지 않습니다.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1916,14 +1923,14 @@
     "message": "아이디 유형"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -1947,7 +1954,7 @@
     "message": "서비스"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -1957,12 +1964,84 @@
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API Access Token"
+    "message": "API 액세스 토큰"
   },
   "apiKey": {
-    "message": "API Key"
+    "message": "API 키"
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "키 커넥터 오류: 키 커넥터가 사용 가능한지 및 정상적으로 작동하고 있는지 확인해주세요."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended Organizations cannot be accessed. Contact your Organization owner for assistance."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Settings have been edited"
+  },
+  "environmentEditedClick": {
+    "message": "Click here"
+  },
+  "environmentEditedReset": {
+    "message": "to reset to pre-configured settings"
+  },
+  "serverVersion": {
+    "message": "Server version"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
+  },
+  "thirdParty": {
+    "message": "Third-party"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "last seen on: $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
   }
 }

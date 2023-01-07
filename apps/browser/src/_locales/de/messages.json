@@ -32,19 +32,19 @@
     "message": "Absenden"
   },
   "emailAddress": {
-    "message": "E-Mail Adresse"
+    "message": "E-Mail-Adresse"
   },
   "masterPass": {
     "message": "Master-Passwort"
   },
   "masterPassDesc": {
-    "message": "Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen."
+    "message": "Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt dieses zurückzusetzen."
   },
   "masterPassHintDesc": {
-    "message": "Ein Master-Passwort-Hinweis kann dir helfen, dich an das Passwort zu erinnern, solltest du es vergessen."
+    "message": "Ein Master-Passwort-Hinweis kann dir helfen, dich an das Passwort zu erinnern, sofern du es vergessen hast."
   },
   "reTypeMasterPass": {
-    "message": "Master-Passwort wiederholen"
+    "message": "Master-Passwort erneut eingeben"
   },
   "masterPassHint": {
     "message": "Master-Passwort-Hinweis (optional)"
@@ -80,7 +80,7 @@
     "message": "URI kopieren"
   },
   "copyUsername": {
-    "message": "Nutzernamen Kopieren"
+    "message": "Nutzernamen kopieren"
   },
   "copyNumber": {
     "message": "Nummer kopieren"
@@ -98,7 +98,7 @@
     "message": "Benutzerdefinierten Feldnamen kopieren"
   },
   "noMatchingLogins": {
-    "message": "Keine passenden Zugangsdaten."
+    "message": "Keine passenden Zugangsdaten"
   },
   "unlockVaultMenu": {
     "message": "Entsperre deinen Tresor"
@@ -131,7 +131,7 @@
     "message": "Einen Bestätigungscode an deine E-Mail senden"
   },
   "sendCode": {
-    "message": "Code senden"
+    "message": "Send Code"
   },
   "codeSent": {
     "message": "Code gesendet"
@@ -146,10 +146,10 @@
     "message": "Konto"
   },
   "changeMasterPassword": {
-    "message": "Masterpasswort ändern"
+    "message": "Master-Passwort ändern"
   },
   "fingerprintPhrase": {
-    "message": "Prüfschlüssel",
+    "message": "Fingerabdruck-Phrase",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -193,7 +193,7 @@
     "message": "Es gibt keine Ordner zum Anzeigen."
   },
   "helpFeedback": {
-    "message": "Hilfe & Rückmeldung"
+    "message": "Hilfe & Feedback"
   },
   "sync": {
     "message": "Synchronisierung"
@@ -202,10 +202,10 @@
     "message": "Tresor jetzt synchronisieren"
   },
   "lastSync": {
-    "message": "Letzte Synchronisation:"
+    "message": "Zuletzt synchronisiert:"
   },
   "passGen": {
-    "message": "Passwort-Generator"
+    "message": "Passwortgenerator"
   },
   "generator": {
     "message": "Generator",
@@ -215,7 +215,7 @@
     "message": "Generiert automatisch ein starkes und einzigartiges Passwort."
   },
   "bitWebVault": {
-    "message": "Bitwarden Web-Datenspeicher"
+    "message": "Bitwarden Web-Tresor"
   },
   "importItems": {
     "message": "Einträge importieren"
@@ -227,7 +227,7 @@
     "message": "Passwort generieren"
   },
   "regeneratePassword": {
-    "message": "Password neu generieren"
+    "message": "Passwort neu generieren"
   },
   "options": {
     "message": "Optionen"
@@ -258,10 +258,10 @@
     "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Zahl hinzufügen"
+    "message": "Ziffer hinzufügen"
   },
   "minNumbers": {
-    "message": "Mindestanzahl Zahlen"
+    "message": "Mindestanzahl Ziffern"
   },
   "minSpecial": {
     "message": "Mindestanzahl Sonderzeichen"
@@ -282,7 +282,7 @@
     "message": "Keine Einträge zum Anzeigen vorhanden."
   },
   "itemInformation": {
-    "message": "Eintrags-Information"
+    "message": "Anmeldedaten Information"
   },
   "username": {
     "message": "Nutzername"
@@ -342,7 +342,7 @@
     "message": "Identität verifizieren"
   },
   "yourVaultIsLocked": {
-    "message": "Dein Tresor ist gesperrt. Überprüfe dein Master-Passwort um fortzufahren."
+    "message": "Ihr Tresor ist gesperrt. Bestätigen Sie Ihre Identität um fortzufahren."
   },
   "unlock": {
     "message": "Entsperren"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Ungültige E-Mail Adresse."
   },
-  "masterPassRequired": {
-    "message": "Das Master-Passwort wird benötigt."
+  "masterPasswordRequired": {
+    "message": "Das Master-Passwort ist erforderlich."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Erneute Eingabe des Master-Passworts ist erforderlich."
+  },
+  "masterPasswordMinlength": {
     "message": "Das Master-Passwort muss mindestens 8 Zeichen lang sein."
   },
   "masterPassDoesntMatch": {
@@ -488,7 +491,7 @@
     "message": "Du kannst dein Master-Passwort im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?"
   },
   "twoStepLoginConfirmation": {
-    "message": "Mit der Zwei-Faktor Authentifizierung wird dein Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor Authentifizierung kann im Bitwarden.com Web-Tresor aktiviert werden. Möchtest du die Seite jetzt öffnen?"
+    "message": "Mit der Zwei-Faktor-Authentifizierung wird dein Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, eine SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor-Authentifizierung kann im bitwarden.com Web-Tresor aktiviert werden. Möchtest du die Seite jetzt öffnen?"
   },
   "editedFolder": {
     "message": "Ordner bearbeitet"
@@ -571,7 +574,7 @@
     "message": "Danach fragen Zugangsdaten hinzuzufügen"
   },
   "addLoginNotificationDesc": {
-    "message": "Die \"Login hinzufügen\" Benachrichtigung fragt Sie automatisch, ob Sie neue Zugangsdaten in Ihrem Tresor speichern möchten, wenn Sie sich zum ersten Mal mit ihnen anmelden."
+    "message": "Die \"Login hinzufügen\" Benachrichtigung fragt dich automatisch, ob du neue Zugangsdaten im Tresor speichern möchtest, wenn du dich zum ersten Mal mit ihnen anmeldest."
   },
   "showCardsCurrentTab": {
     "message": "Karten auf Tab Seite anzeigen"
@@ -702,13 +705,13 @@
     "message": "Erfahre mehr"
   },
   "authenticatorKeyTotp": {
-    "message": "Authenticator Schlüssel (TOTP)"
+    "message": "Authentifizierungsschlüssel (TOTP)"
   },
   "verificationCodeTotp": {
     "message": "Verifizierungscode (TOTP)"
   },
   "copyVerificationCode": {
-    "message": "Kopiere Verifizierungscode"
+    "message": "Verifizierungscode kopieren"
   },
   "attachments": {
     "message": "Anhänge"
@@ -735,7 +738,7 @@
     "message": "Datei"
   },
   "selectFile": {
-    "message": "Wähle eine Datei."
+    "message": "Wähle eine Datei"
   },
   "maxFileSize": {
     "message": "Die maximale Dateigröße beträgt 500 MB."
@@ -759,7 +762,7 @@
     "message": "Mitgliedschaft erneuern"
   },
   "premiumNotCurrentMember": {
-    "message": "Du hast derzeit keine Premium-Mitgliedschaft."
+    "message": "Sie haben derzeit keine Premium-Mitgliedschaft."
   },
   "premiumSignUpAndGet": {
     "message": "Werde Premium-Mitglied und erhalte dafür:"
@@ -816,7 +819,7 @@
     "message": "Beim Start nach biometrischen Daten fragen"
   },
   "premiumRequired": {
-    "message": "Premium-Mitgliedschaft wird benötigt"
+    "message": "Erweiterte Mitgliedschaft wird benötigt"
   },
   "premiumRequiredDesc": {
     "message": "Eine Premium-Mitgliedschaft ist für diese Funktion notwendig."
@@ -879,7 +882,7 @@
     "message": "Optionen für Zwei-Faktor Authentifizierung"
   },
   "recoveryCodeDesc": {
-    "message": "Zugang zu allen Zwei-Faktor Anbietern verloren? Benutze deinen Wiederherstellungscode, um alle Zwei-Faktor Anbieter in deinem Konto zu deaktivieren."
+    "message": "Zugang zu allen Zwei-Faktor-Anbietern verloren? Benutzen Sie Ihren Wiederherstellungscode, um alle Zwei-Faktor-Anbieter in Ihrem Konto zu deaktivieren."
   },
   "recoveryCodeTitle": {
     "message": "Wiederherstellungscode"
@@ -951,7 +954,7 @@
     "message": "Die URLs der Umgebung wurden gespeichert."
   },
   "enableAutoFillOnPageLoad": {
-    "message": "Auto-Ausfüllen beim Seitenladen aktivieren"
+    "message": "Auto-Ausfüllen beim Laden einer Seite aktivieren"
   },
   "enableAutoFillOnPageLoadDesc": {
     "message": "Wenn eine Zugangsmaske erkannt wird, füge automatisch die Zugangsdaten ein während die Webseite lädt."
@@ -1253,7 +1256,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "host": {
-    "message": "Server",
+    "message": "Host",
     "description": "A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'."
   },
   "exact": {
@@ -1307,6 +1310,10 @@
   "dateUpdated": {
     "message": "Aktualisiert",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Erstellt",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Passwort aktualisiert",
@@ -1427,13 +1434,13 @@
     "message": "Automatisch ausfüllen und speichern"
   },
   "autoFillSuccessAndSavedUri": {
-    "message": "Automatisch ausgefüllter Eintrag und gespeicherte URI"
+    "message": "Auto-Ausgefüllter Eintrag und gespeicherte URI"
   },
   "autoFillSuccess": {
     "message": "Automatisch ausgefüllter Eintrag"
   },
   "setMasterPassword": {
-    "message": "Masterpasswort festlegen"
+    "message": "Master-Passwort festlegen"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Eine oder mehrere Organisationsrichtlinien erfordern, dass dein Masterpasswort die folgenden Anforderungen erfüllt:"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "Durch Anwählen dieses Kästchens erklären Sie sich mit folgendem einverstanden:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
   },
   "termsOfService": {
@@ -1505,7 +1512,7 @@
     "message": "Browser-Einbindung ist nicht aktiviert"
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "Die Browser-Einbindung ist in der Bitwarden Desktop-Anwendung nicht aktiviert. Bitte aktiviere diese in den Einstellungen innerhalb der Desktop-Anwendung."
+    "message": "Die Browser-Einbindung ist in der Bitwarden Desktop-Anwendung nicht aktiviert. Bitte aktivieren Sie diese in den Einstellungen innerhalb der Desktop-Anwendung."
   },
   "startDesktopTitle": {
     "message": "Bitwarden Desktop-Anwendung starten"
@@ -1562,7 +1569,7 @@
     "message": "Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen."
   },
   "excludedDomains": {
-    "message": "Ausgeschlossene Domänen"
+    "message": "Ausgeschlossene Domains"
   },
   "excludedDomainsDesc": {
     "message": "Bitwarden wird keine Login-Daten für diese Domäne speichern. Du musst die Seite aktualisieren, damit die Änderungen wirksam werden."
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen."
   },
   "vaultExportDisabled": {
@@ -1895,7 +1902,7 @@
     "message": "Persönlichen Tresor exportieren"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Nur die persönlichen Tresoreinträge die mit $EMAIL$ verbunden sind, werden exportiert. Tresoreinträge der Organisation werden nicht berücksichtigt.",
+    "message": "Nur die persönlichen Tresoreinträge, die mit $EMAIL$ verbunden sind, werden exportiert. Tresoreinträge der Organisation werden nicht berücksichtigt.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector Fehler: Stelle sicher, dass der Key Connector verfügbar ist und einwandfrei funktioniert."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium-Abonnement erforderlich"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisation ist deaktiviert."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Auf Einträge in deaktivierten Organisationen kann nicht zugegriffen werden. Kontaktiere deinen Organisationseigentümer für Unterstützung."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Anmelden bei $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Einstellungen wurden bearbeitet"
+  },
+  "environmentEditedClick": {
+    "message": "Hier klicken"
+  },
+  "environmentEditedReset": {
+    "message": "um auf vorkonfigurierte Einstellungen zurückzusetzen"
+  },
+  "serverVersion": {
+    "message": "Server-Version"
+  },
+  "selfHosted": {
+    "message": "Selbst-gehostet"
+  },
+  "thirdParty": {
+    "message": "Drittanbieter"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Verbunden mit Server-Implementierung eines Drittanbieters, $SERVERNAME$. Bitte verifiziere Fehler mit dem offiziellen Server oder melde diese an den Drittanbieter-Server.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "zuletzt am $DATE$ gesehen",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Mit Master-Passwort anmelden"
+  },
+  "loggingInAs": {
+    "message": "Einloggen als"
+  },
+  "notYou": {
+    "message": "Nicht du?"
+  },
+  "newAroundHere": {
+    "message": "Neu hier?"
+  },
+  "rememberEmail": {
+    "message": "E-Mail-Adresse merken"
   }
 }

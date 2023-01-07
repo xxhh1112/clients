@@ -26,6 +26,7 @@ npm-debug.log
 # Build directories
 dist
 build
+.angular/cache
 
 # Testing
 coverage
@@ -38,3 +39,5 @@ coverage
 
 # Storybook
 documentation.json
+.eslintcache
+storybook-static

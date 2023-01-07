@@ -4,11 +4,12 @@ import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/ang
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
+import { AttachmentView } from "@bitwarden/common/models/view/attachment.view";
 
 @Component({
   selector: "emergency-access-attachments",
@@ -25,7 +26,8 @@ export class EmergencyAccessAttachmentsComponent extends BaseAttachmentsComponen
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
     apiService: ApiService,
-    logService: LogService
+    logService: LogService,
+    fileDownloadService: FileDownloadService
   ) {
     super(
       cipherService,
@@ -35,7 +37,8 @@ export class EmergencyAccessAttachmentsComponent extends BaseAttachmentsComponen
       apiService,
       window,
       logService,
-      stateService
+      stateService,
+      fileDownloadService
     );
   }
 

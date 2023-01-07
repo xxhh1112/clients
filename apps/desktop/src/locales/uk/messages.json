@@ -33,7 +33,7 @@
     "message": "Збірки"
   },
   "searchVault": {
-    "message": "Пошук"
+    "message": "Шукати у сховищі"
   },
   "addItem": {
     "message": "Додати запис"
@@ -61,13 +61,13 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "Виберіть організацію, до якої ви бажаєте перемістити цей запис. При переміщенні до організації власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення."
+    "message": "Виберіть організацію, до якої ви бажаєте перемістити цей запис. Переміщуючи до організації, власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення."
   },
   "attachments": {
     "message": "Вкладення"
   },
   "viewItem": {
-    "message": "Переглянути запис"
+    "message": "Перегляд запису"
   },
   "name": {
     "message": "Назва"
@@ -98,7 +98,7 @@
     "message": "Парольна фраза"
   },
   "editItem": {
-    "message": "Змінити запис"
+    "message": "Редагування"
   },
   "emailAddress": {
     "message": "Адреса е-пошти"
@@ -126,7 +126,7 @@
     "message": "Згортати при копіюванні в буфер обміну"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Згортати при копіюванні даних запису в буфер обміну."
+    "message": "Згортати під час копіювання даних запису до буфера обміну."
   },
   "toggleVisibility": {
     "message": "Перемкнути видимість"
@@ -151,7 +151,7 @@
     "message": "Код безпеки"
   },
   "identityName": {
-    "message": "Ім'я"
+    "message": "Назва"
   },
   "company": {
     "message": "Компанія"
@@ -175,10 +175,10 @@
     "message": "Адреса"
   },
   "premiumRequired": {
-    "message": "Необхідний преміум статус"
+    "message": "Необхідна передплата преміум"
   },
   "premiumRequiredDesc": {
-    "message": "Для використання цієї функції необхідний преміум статус."
+    "message": "Для використання цієї функції необхідна передплата преміум."
   },
   "errorOccurred": {
     "message": "Сталася помилка."
@@ -349,7 +349,7 @@
     "message": "Запис додано"
   },
   "editedItem": {
-    "message": "Запис змінено"
+    "message": "Запис збережено"
   },
   "deleteItem": {
     "message": "Видалити запис"
@@ -358,13 +358,13 @@
     "message": "Видалити теку"
   },
   "deleteAttachment": {
-    "message": "Видалити файл"
+    "message": "Видалити вкладення"
   },
   "deleteItemConfirmation": {
     "message": "Ви дійсно хочете перенести до смітника?"
   },
   "deletedItem": {
-    "message": "Запис перенесено до смітника"
+    "message": "Запис переміщено до смітника"
   },
   "overwritePasswordConfirmation": {
     "message": "Ви дійсно хочете перезаписати поточний пароль?"
@@ -383,7 +383,7 @@
     "message": "Додати теку"
   },
   "editFolder": {
-    "message": "Редагувати теку"
+    "message": "Редагування"
   },
   "regeneratePassword": {
     "message": "Генерувати новий"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Великі літери",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Включити число"
@@ -461,13 +461,13 @@
     "message": "Ви дійсно хочете видалити це вкладення?"
   },
   "attachmentSaved": {
-    "message": "Вкладення збережено."
+    "message": "Вкладення збережено"
   },
   "file": {
     "message": "Файл"
   },
   "selectFile": {
-    "message": "Оберіть файл."
+    "message": "Оберіть файл"
   },
   "maxFileSize": {
     "message": "Максимальний розмір файлу 500 Мб."
@@ -476,10 +476,10 @@
     "message": "Ви не можете використовувати цю функцію доки не оновите свій ключ шифрування."
   },
   "editedFolder": {
-    "message": "Тека відредагована"
+    "message": "Теку збережено"
   },
   "addedFolder": {
-    "message": "Додано теку"
+    "message": "Теку додано"
   },
   "deleteFolderConfirmation": {
     "message": "Ви дійсно хочете видалити цю теку?"
@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "Неправильна адреса е-пошти."
   },
-  "masterPassRequired": {
-    "message": "Потрібен головний пароль."
+  "masterPasswordRequired": {
+    "message": "Необхідно ввести головний пароль."
   },
-  "masterPassLength": {
-    "message": "Довжина головного пароля повинна бути не менше 8 символів."
+  "confirmMasterPasswordRequired": {
+    "message": "Необхідно повторно ввести головний пароль."
+  },
+  "masterPasswordMinlength": {
+    "message": "Довжина головного пароля має бути принаймні 8 символів."
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -647,7 +650,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Використовуйте будь-який ключ безпеки WebAuthn для доступу до сховища."
+    "message": "Використовуйте будь-який сумісний з WebAuthn ключ безпеки для доступу до сховища."
   },
   "emailTitle": {
     "message": "Е-пошта"
@@ -659,7 +662,7 @@
     "message": "Вхід недоступний"
   },
   "noTwoStepProviders": {
-    "message": "Для цього облікового запису увімкнено двоетапну перевірку. Однак, жоден з налаштованих провайдерів двоетапної перевірки не підтримується цим пристроєм."
+    "message": "Для цього облікового запису налаштовано двоетапну перевірку. Однак, жоден із налаштованих провайдерів двоетапної перевірки не підтримується цим пристроєм."
   },
   "noTwoStepProviders2": {
     "message": "Додайте інших провайдерів, які краще підтримуються різними пристроями, наприклад програма авторизації."
@@ -683,7 +686,7 @@
     "message": "URL-адреса сервера"
   },
   "apiUrl": {
-    "message": "URL-адреса API"
+    "message": "URL-адреса сервера API"
   },
   "webVaultUrl": {
     "message": "URL-адреса сервера веб сховища"
@@ -692,13 +695,13 @@
     "message": "URL-адреса сервера ідентифікації"
   },
   "notificationsUrl": {
-    "message": "URL сервера сповіщень"
+    "message": "URL-адреса сервера сповіщень"
   },
   "iconsUrl": {
     "message": "URL-адреса сервера піктограм"
   },
   "environmentSaved": {
-    "message": "URL-адреси середовища збережено."
+    "message": "URL-адреси середовища збережено"
   },
   "ok": {
     "message": "Ok"
@@ -731,13 +734,13 @@
     "message": "Вийти"
   },
   "addNewLogin": {
-    "message": "Додати новий запис"
+    "message": "Новий вхід"
   },
   "addNewItem": {
-    "message": "Додати новий елемент"
+    "message": "Новий елемент"
   },
   "addNewFolder": {
-    "message": "Додати нову теку"
+    "message": "Нова тека"
   },
   "view": {
     "message": "Перегляд"
@@ -767,7 +770,7 @@
     "message": "Блог"
   },
   "followUs": {
-    "message": "Слідкуйте за нами"
+    "message": "Стежте за нами"
   },
   "syncVault": {
     "message": "Синхронізувати сховище"
@@ -779,11 +782,11 @@
     "message": "Ви можете змінити головний пароль в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
   },
   "fingerprintPhrase": {
-    "message": "Фраза відбитку",
+    "message": "Фраза відбитка",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "Фраза відбитку вашого облікового запису",
+    "message": "Фраза відбитка вашого облікового запису",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
@@ -799,7 +802,7 @@
     "message": "Синхронізацію завершено"
   },
   "syncingFailed": {
-    "message": "Не вдалося синхронізувати"
+    "message": "Збій синхронізації"
   },
   "yourVaultIsLocked": {
     "message": "Сховище заблоковано. Пройдіть ідентифікацію для продовження."
@@ -824,7 +827,7 @@
     "message": "Неправильний головний пароль"
   },
   "twoStepLoginConfirmation": {
-    "message": "Двоетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
+    "message": "Двоетапна перевірка дає змогу надійніше захистити ваш обліковий запис, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете налаштувати двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
   },
   "twoStepLogin": {
     "message": "Двоетапна перевірка"
@@ -833,7 +836,7 @@
     "message": "Час очікування сховища"
   },
   "vaultTimeoutDesc": {
-    "message": "Оберіть дію, яка виконається після завершення часу очікування вашого сховища."
+    "message": "Оберіть дію, яка виконається після завершення часу очікування сховища."
   },
   "immediately": {
     "message": "Негайно"
@@ -869,16 +872,16 @@
     "message": "4 години"
   },
   "onIdle": {
-    "message": "При бездіяльності системи"
+    "message": "Бездіяльність системи"
   },
   "onSleep": {
-    "message": "При переході в режим сну"
+    "message": "Перехід у режим сну"
   },
   "onLocked": {
-    "message": "При блокуванні системи"
+    "message": "Блокування системи"
   },
   "onRestart": {
-    "message": "При перезапуску"
+    "message": "Перезапуск"
   },
   "never": {
     "message": "Ніколи"
@@ -925,7 +928,7 @@
     "message": "При закритті вікна, показувати піктограму в панелі завдань."
   },
   "enableTray": {
-    "message": "Увімкнути піктограму в системному лотку"
+    "message": "Увімкнути піктограму в панелі сповіщень"
   },
   "enableTrayDesc": {
     "message": "Завжди показувати піктограму в системному лотку."
@@ -946,7 +949,7 @@
     "message": "Запускати автоматично при вході"
   },
   "openAtLoginDesc": {
-    "message": "Запускати програму Bitwarden для комп'ютера автоматично при вході в систему."
+    "message": "Запускати програму Bitwarden для комп'ютера автоматично із входом у систему."
   },
   "alwaysShowDock": {
     "message": "Завжди показувати в панелі Dock"
@@ -1000,7 +1003,7 @@
     "message": "Перезапустити для оновлення"
   },
   "restartToUpdateDesc": {
-    "message": "Версія $VERSION_NUM$ готова до встановлення. Для завершення встановлення ви повинні перезапустити програму. Хочете зробити це зараз?",
+    "message": "Версія $VERSION_NUM$ готова до встановлення. Для завершення встановлення необхідно перезапустити програму. Хочете зробити це зараз?",
     "placeholders": {
       "version_num": {
         "content": "$1",
@@ -1044,19 +1047,19 @@
     "message": "Преміум статус"
   },
   "premiumManage": {
-    "message": "Керувати статусом"
+    "message": "Керувати передплатою"
   },
   "premiumManageAlert": {
     "message": "Ви можете керувати своїм статусом у сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
   },
   "premiumRefresh": {
-    "message": "Оновити статус"
+    "message": "Оновити стан передплати"
   },
   "premiumNotCurrentMember": {
-    "message": "Зараз у вас немає преміум-статусу."
+    "message": "Зараз у вас немає передплати преміум."
   },
   "premiumSignUpAndGet": {
-    "message": "Підпишіться на преміум-статус і отримайте:"
+    "message": "Передплатіть преміум і отримайте:"
   },
   "premiumSignUpStorage": {
     "message": "1 ГБ зашифрованого сховища для файлів."
@@ -1074,16 +1077,16 @@
     "message": "Пріоритетну технічну підтримку."
   },
   "premiumSignUpFuture": {
-    "message": "Всі майбутні функції преміум статусу. Їх буде більше!"
+    "message": "Усі майбутні преміумфункції. Їх буде більше!"
   },
   "premiumPurchase": {
     "message": "Придбати преміум"
   },
   "premiumPurchaseAlert": {
-    "message": "Ви можете придбати преміум статус у сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
+    "message": "Ви можете передплатити преміум у сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?"
   },
   "premiumCurrentMember": {
-    "message": "У вас преміум статус!"
+    "message": "Ви користуєтеся передплатою преміум!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Дякуємо за підтримку Bitwarden."
@@ -1253,22 +1256,26 @@
     "description": "Text for a button that toggles the visibility of the window. Shows the window when it is hidden or hides the window if it is currently open."
   },
   "hideToTray": {
-    "message": "Згорнути в лоток"
+    "message": "Згорнути до панелі сповіщень"
   },
   "alwaysOnTop": {
-    "message": "Завжди вгорі",
+    "message": "Завжди на передньому плані",
     "description": "Application window should always stay on top of other windows"
   },
   "dateUpdated": {
     "message": "Оновлено",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Створено",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Пароль оновлено",
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
-    "message": "Експорт сховища"
+    "message": "Експортувати сховище"
   },
   "fileFormat": {
     "message": "Формат файлу"
@@ -1318,7 +1325,7 @@
     "message": "Експортовані дані вашого сховища знаходяться в незашифрованому вигляді. Вам не слід зберігати чи надсилати їх через незахищені канали (наприклад, е-поштою). Після використання негайно видаліть їх."
   },
   "encExportKeyWarningDesc": {
-    "message": "Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, ви повинні виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту."
+    "message": "Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, необхідно виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту."
   },
   "encExportAccountWarningDesc": {
     "message": "Ключі шифрування унікальні для кожного облікового запису користувача Bitwarden, тому ви не можете імпортувати зашифрований експорт до іншого облікового запису."
@@ -1390,11 +1397,26 @@
   "lockWithMasterPassOnRestart": {
     "message": "Блокувати головним паролем при перезапуску"
   },
+  "deleteAccount": {
+    "message": "Видалити обліковий запис"
+  },
+  "deleteAccountDesc": {
+    "message": "Нижче ви зможете завершити видалення облікового запису та всіх даних сховища."
+  },
+  "deleteAccountWarning": {
+    "message": "Видалення облікового запису є незворотною дією. Це не можна буде скасувати."
+  },
+  "accountDeleted": {
+    "message": "Обліковий запис видалено"
+  },
+  "accountDeletedDesc": {
+    "message": "Ваш обліковий запис було закрито і всі пов'язані дані було видалено."
+  },
   "preferences": {
     "message": "Налаштування"
   },
   "enableMenuBar": {
-    "message": "Увімкнути піктограму в панелі завдань"
+    "message": "Показувати піктограму в панелі завдань"
   },
   "enableMenuBarDesc": {
     "message": "Завжди показувати піктограму в панелі завдань."
@@ -1403,10 +1425,10 @@
     "message": "Приховувати до панелі завдань"
   },
   "selectOneCollection": {
-    "message": "Ви повинні обрати принаймні одну збірку."
+    "message": "Необхідно вибрати принаймні одну збірку."
   },
   "premiumUpdated": {
-    "message": "Ви оновилися до версії premium."
+    "message": "Ви оновилися до версії Premium."
   },
   "restore": {
     "message": "Відновити"
@@ -1428,7 +1450,7 @@
     "message": "Ви справді хочете піти? Якщо ви зараз підете, вашу поточну інформацію не буде збережено."
   },
   "unsavedChangesTitle": {
-    "message": "Є незбережені зміни"
+    "message": "Незбережені зміни"
   },
   "clone": {
     "message": "Клонувати"
@@ -1440,10 +1462,10 @@
     "message": "Дія після часу очікування сховища"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Щоб відновити доступ до заблокованого сховища, необхідно повторно ввести головний пароль."
+    "message": "Щоб відновити доступ до сховища, необхідно ввести головний пароль або скористатись іншим способом розблокування."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Щоб відновити доступ до сховища після виходу, необхідно повторно авторизуватись."
+    "message": "Щоб відновити доступ до сховища, необхідно повторно авторизуватись."
   },
   "lock": {
     "message": "Блокувати",
@@ -1543,14 +1565,20 @@
   "acceptPolicies": {
     "message": "Позначивши цей прапорець, ви погоджуєтеся з:"
   },
-  "acceptPoliciesError": {
-    "message": "Умови користування та політика приватності не погоджені."
+  "acceptPoliciesRequired": {
+    "message": "Ви не погодилися з умовами користування та політикою приватності."
   },
   "enableBrowserIntegration": {
-    "message": "Увімкнути інтеграцію з браузером"
+    "message": "Дозволити інтеграцію з браузером"
   },
   "enableBrowserIntegrationDesc": {
-    "message": "Інтеграція з браузером використовується для біометрії в браузері."
+    "message": "Використовується для біометрії в браузері."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Дозволити інтеграцію з браузером DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Користуйтеся Bitwarden під час роботи з браузером DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Інтеграція з браузером не підтримується"
@@ -1559,16 +1587,16 @@
     "message": "На жаль, зараз інтеграція з браузером підтримується лише у версії для Mac з App Store."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "На жаль, зараз інтеграція з браузером не підтримується у версії з Windows Store."
+    "message": "На жаль, зараз інтеграція з браузером не підтримується у версії з Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
     "message": "На жаль, зараз інтеграція з браузером не підтримується у версії для Linux."
   },
   "enableBrowserIntegrationFingerprint": {
-    "message": "Вимагати підтвердження для інтеграції з браузером"
+    "message": "Вимагати перевірку для інтеграції з браузером"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Увімкніть додатковий рівень безпеки, вимагаючи перевірку фрази відбитка при встановленні зв'язку між програмою на комп'ютері та браузером. Якщо увімкнено, вимагатиметься втручання користувача і перевірка щоразу при встановленні зв'язку."
+    "message": "Додайте ще один рівень безпеки, вимагаючи підтвердження фрази відбитка під час встановлення зв'язку між програмою на комп'ютері та браузером. Вимагатиметься дія користувача і перевірка щоразу під час встановлення зв'язку."
   },
   "approve": {
     "message": "Схвалити"
@@ -1577,16 +1605,31 @@
     "message": "Перевірка з'єднання з браузером"
   },
   "verifyBrowserDesc": {
-    "message": "Переконайтеся, що показаний відбиток ідентичний відбитку в розширенні браузера."
+    "message": "Переконайтеся, що ця фраза відбитка ідентична показаній у розширенні браузера."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ хоче з'єднатися з Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Бажаєте схвалити цей запит?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Відхиліть цей запит, якщо ви його не ініціювали."
   },
   "biometricsNotEnabledTitle": {
-    "message": "Біометрію не увімкнено"
+    "message": "Біометрію не налаштовано"
   },
   "biometricsNotEnabledDesc": {
-    "message": "Для активації біометрії в браузері необхідно спершу увімкнути біометрію в програмі на комп'ютері."
+    "message": "Для використання біометрії в браузері необхідно спершу налаштувати її в програмі на комп'ютері."
   },
   "personalOwnershipSubmitError": {
-    "message": "У зв'язку з корпоративною політикою, вам не дозволено зберігати записи до особистого сховища. Змініть налаштування власності на організацію та виберіть серед доступних збірок."
+    "message": "Згідно з політикою компанії, вам заборонено зберігати записи в особистому сховищі. Змініть опцію власника на організацію та виберіть серед доступних збірок."
   },
   "hintEqualsPassword": {
     "message": "Підказка для пароля не може бути такою самою, як ваш пароль."
@@ -1609,7 +1652,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
-    "message": "Змінити відправлення",
+    "message": "Редагування",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
@@ -1668,11 +1711,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Відправлення створено",
+    "message": "Відправлення додано",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Відправлення змінено",
+    "message": "Відправлення збережено",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
@@ -1687,7 +1730,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createSend": {
-    "message": "Створити відправлення",
+    "message": "Нове відправлення",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -1723,7 +1766,7 @@
     "message": "Копіювати посилання, щоб поділитися відправленням після збереження."
   },
   "sendDisabled": {
-    "message": "Відправлення вимкнено",
+    "message": "Відправлення вилучено",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1735,6 +1778,15 @@
   },
   "disabled": {
     "message": "Вимкнено"
+  },
+  "removePassword": {
+    "message": "Вилучити пароль"
+  },
+  "removedPassword": {
+    "message": "Пароль вилучено"
+  },
+  "removePasswordConfirmation": {
+    "message": "Ви дійсно хочете вилучити пароль?"
   },
   "maxAccessCountReached": {
     "message": "Досягнуто максимальну кількість доступів"
@@ -1776,7 +1828,7 @@
     "message": "Оновити головний пароль"
   },
   "updateMasterPasswordWarning": {
-    "message": "Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, ви повинні оновити його зараз. Продовживши, ви вийдете з поточного сеансу, після чого необхідно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
+    "message": "Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, вам необхідно оновити його зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
   "hours": {
     "message": "Годин"
@@ -1801,13 +1853,13 @@
     "message": "Час очікування сховища перевищує обмеження, встановлені вашою організацією."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Автоматичне розгортання"
+    "message": "Автоматичне подання запиту"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль."
   },
   "vaultExportDisabled": {
-    "message": "Експорт сховища вимкнено"
+    "message": "Експорт сховища вилучено"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище."
@@ -1819,7 +1871,7 @@
     "message": "Вилучити головний пароль"
   },
   "removedMasterPassword": {
-    "message": "Головний пароль вилучено."
+    "message": "Головний пароль вилучено"
   },
   "convertOrganizationEncryptionDesc": {
     "message": "$ORGANIZATION$ використовує SSO з власним сервером ключів. Головний пароль для учасників цієї організації більше не вимагається.",
@@ -1852,7 +1904,7 @@
     "message": "Налаштування"
   },
   "appPreferences": {
-    "message": "Налаштування програми (Усі облікові записи)"
+    "message": "Налаштування програми (усі облікові записи)"
   },
   "accountSwitcherLimitReached": {
     "message": "Досягнуто обмеження облікового запису. Вийдіть, щоб додати інший обліковий запис."
@@ -1912,7 +1964,7 @@
     "message": "Тип імені користувача"
   },
   "plusAddressedEmail": {
-    "message": "Плюс адреса електронної пошти",
+    "message": "Адреса е-пошти з плюсом",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "Ключ API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Необхідна передплата преміум"
+  },
+  "organizationIsDisabled": {
+    "message": "Організацію призупинено"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Записи у призупинених організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
+  },
+  "neverLockWarning": {
+    "message": "Ви впевнені, що ніколи не хочете блокувати? Встановивши параметр блокування \"Ніколи\", ключ шифрування сховища зберігатиметься на вашому пристрої. Користуючись цим параметром, ви маєте бути впевнені в тому, що ваш пристрій надійно захищений."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Сховище"
+  },
+  "loginWithMasterPassword": {
+    "message": "Увійти з головним паролем"
+  },
+  "loggingInAs": {
+    "message": "Вхід у систему як"
+  },
+  "rememberEmail": {
+    "message": "Запам'ятати е-пошту"
+  },
+  "notYou": {
+    "message": "Не ви?"
+  },
+  "newAroundHere": {
+    "message": "Виконуєте вхід вперше?"
+  },
+  "loggingInTo": {
+    "message": "Вхід до $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Увійти з іншого пристрою"
+  },
+  "toggleCharacterCount": {
+    "message": "Перемкнути лічильник символів",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

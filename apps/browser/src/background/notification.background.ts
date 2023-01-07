@@ -1,18 +1,21 @@
+import { firstValueFrom } from "rxjs";
+
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { ThemeType } from "@bitwarden/common/enums/themeType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
-import { LoginView } from "@bitwarden/common/models/view/loginView";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/models/view/login.view";
 
 import { BrowserApi } from "../browser/browserApi";
 import { AutofillService } from "../services/abstractions/autofill.service";
-import { StateService } from "../services/abstractions/state.service";
+import { BrowserStateService } from "../services/abstractions/browser-state.service";
 
 import AddChangePasswordQueueMessage from "./models/addChangePasswordQueueMessage";
 import AddLoginQueueMessage from "./models/addLoginQueueMessage";
@@ -30,7 +33,7 @@ export default class NotificationBackground {
     private authService: AuthService,
     private policyService: PolicyService,
     private folderService: FolderService,
-    private stateService: StateService
+    private stateService: BrowserStateService
   ) {}
 
   async init() {
@@ -123,13 +126,13 @@ export default class NotificationBackground {
     }
 
     if (tab != null) {
-      this.doNotificationQueueCheck(tab);
+      await this.doNotificationQueueCheck(tab);
       return;
     }
 
     const currentTab = await BrowserApi.getTabFromCurrentWindow();
     if (currentTab != null) {
-      this.doNotificationQueueCheck(currentTab);
+      await this.doNotificationQueueCheck(currentTab);
     }
   }
 
@@ -142,7 +145,7 @@ export default class NotificationBackground {
     setTimeout(() => this.cleanupNotificationQueue(), 2 * 60 * 1000); // check every 2 minutes
   }
 
-  private doNotificationQueueCheck(tab: chrome.tabs.Tab): void {
+  private async doNotificationQueueCheck(tab: chrome.tabs.Tab): Promise<void> {
     if (tab == null) {
       return;
     }
@@ -165,6 +168,7 @@ export default class NotificationBackground {
           type: "add",
           typeData: {
             isVaultLocked: this.notificationQueue[i].wasVaultLocked,
+            theme: await this.getCurrentTheme(),
           },
         });
       } else if (this.notificationQueue[i].type === NotificationQueueMessageType.ChangePassword) {
@@ -172,11 +176,24 @@ export default class NotificationBackground {
           type: "change",
           typeData: {
             isVaultLocked: this.notificationQueue[i].wasVaultLocked,
+            theme: await this.getCurrentTheme(),
           },
         });
       }
       break;
     }
+  }
+
+  private async getCurrentTheme() {
+    const theme = await this.stateService.getTheme();
+
+    if (theme !== ThemeType.System) {
+      return theme;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? ThemeType.Dark
+      : ThemeType.Light;
   }
 
   private removeTabFromNotificationQueue(tab: chrome.tabs.Tab) {
@@ -385,14 +402,14 @@ export default class NotificationBackground {
     model.login = loginModel;
 
     if (!Utils.isNullOrWhitespace(folderId)) {
-      const folders = await this.folderService.getAllDecrypted();
+      const folders = await firstValueFrom(this.folderService.folderViews$);
       if (folders.some((x) => x.id === folderId)) {
         model.folderId = folderId;
       }
     }
 
     const cipher = await this.cipherService.encrypt(model);
-    await this.cipherService.saveWithServer(cipher);
+    await this.cipherService.createWithServer(cipher);
   }
 
   private async getDecryptedCipherById(cipherId: string) {
@@ -407,7 +424,7 @@ export default class NotificationBackground {
     if (cipher != null && cipher.type === CipherType.Login) {
       cipher.login.password = newPassword;
       const newCipher = await this.cipherService.encrypt(cipher);
-      await this.cipherService.saveWithServer(newCipher);
+      await this.cipherService.updateWithServer(newCipher);
     }
   }
 
@@ -437,13 +454,15 @@ export default class NotificationBackground {
   private async getDataForTab(tab: chrome.tabs.Tab, responseCommand: string) {
     const responseData: any = {};
     if (responseCommand === "notificationBarGetFoldersList") {
-      responseData.folders = await this.folderService.getAllDecrypted();
+      responseData.folders = await firstValueFrom(this.folderService.folderViews$);
     }
 
     await BrowserApi.tabSendMessageData(tab, responseCommand, responseData);
   }
 
   private async allowPersonalOwnership(): Promise<boolean> {
-    return !(await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership));
+    return !(await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    ));
   }
 }

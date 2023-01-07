@@ -1,11 +1,11 @@
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
-import { Response } from "@bitwarden/node/cli/models/response";
 
-import { TemplateResponse } from "../models/response/templateResponse";
+import { Response } from "../models/response";
+import { TemplateResponse } from "../models/response/template.response";
 
 export class StatusCommand {
   constructor(

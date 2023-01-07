@@ -1,19 +1,30 @@
 <form #form (ngSubmit)="submit()">
   <header>
     <div class="left">
-      <a routerLink="/home">{{ "close" | i18n }}</a>
+      <button type="button" routerLink="/home">{{ "close" | i18n }}</button>
     </div>
     <h1 class="center">
       <span class="title">{{ "appName" | i18n }}</span>
     </h1>
     <div class="right">
-      <button type="submit" appBlurClick [disabled]="form.loading">
+      <button type="submit" [disabled]="form.loading">
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
     </div>
   </header>
   <main tabindex="-1">
+    <app-callout
+      type="info"
+      title="{{ 'settingsEdited' | i18n }}"
+      *ngIf="showEditedManagedSettings"
+    >
+      <a href="#" appStopClick (click)="resetEnvironment()">
+        {{ "environmentEditedClick" | i18n }}
+      </a>
+      {{ "environmentEditedReset" | i18n }}
+    </app-callout>
+
     <div class="box">
       <h2 class="box-header">
         {{ "selfHostedEnvironment" | i18n }}
@@ -25,13 +36,14 @@
             id="baseUrl"
             type="text"
             name="BaseUrl"
+            aria-describedby="baseUrlHelp"
             [(ngModel)]="baseUrl"
             placeholder="ex. https://bitwarden.company.com"
             appInputVerbatim
           />
         </div>
       </div>
-      <div class="box-footer">
+      <div id="baseUrlHelp" class="box-footer">
         {{ "selfHostedEnvironmentFooter" | i18n }}
       </div>
     </div>
@@ -39,7 +51,13 @@
       <h2 class="box-header">
         {{ "customEnvironment" | i18n }}
       </h2>
-      <div class="box-content" [hidden]="!showCustom">
+      <div
+        role="group"
+        attr.aria-label="{{ 'customEnvironment' | i18n }}"
+        aria-describedby="customEnvironmentHelp"
+        class="box-content"
+        [hidden]="!showCustom"
+      >
         <div class="box-content-row" appBoxRow>
           <label for="webVaultUrl">{{ "webVaultUrl" | i18n }}</label>
           <input
@@ -96,7 +114,7 @@
           />
         </div>
       </div>
-      <div class="box-footer" [hidden]="!showCustom">
+      <div id="customEnvironmentHelp" class="box-footer" [hidden]="!showCustom">
         {{ "customEnvironmentFooter" | i18n }}
       </div>
     </div>

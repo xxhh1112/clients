@@ -1,12 +1,12 @@
 <header>
   <div class="left">
-    <button type="button" appBlurClick (click)="close()">{{ "close" | i18n }}</button>
+    <button type="button" (click)="close()">{{ "close" | i18n }}</button>
   </div>
   <h1 class="center">
     <span class="title">{{ "viewItem" | i18n }}</span>
   </h1>
   <div class="right" *ngIf="cipher">
-    <button type="button" appBlurClick (click)="edit()" *ngIf="!cipher.isDeleted">
+    <button type="button" (click)="edit()" *ngIf="!cipher.isDeleted">
       {{ "edit" | i18n }}
     </button>
   </div>
@@ -18,7 +18,13 @@
     </h2>
     <div class="box-content">
       <div class="box-content-row">
-        <label for="name">{{ "name" | i18n }}</label>
+        <label
+          for="name"
+          class="draggable"
+          draggable="true"
+          (dragstart)="setTextDataOnDrag($event, cipher.name)"
+          >{{ "name" | i18n }}</label
+        >
         <input id="name" type="text" [value]="cipher.name" readonly aria-readonly="true" />
       </div>
       <!-- Login -->
@@ -79,21 +85,20 @@
               type="button"
               #checkPasswordBtn
               class="row-btn btn"
-              appBlurClick
               appA11yTitle="{{ 'checkPassword' | i18n }}"
               (click)="checkPassword()"
               [appApiAction]="checkPasswordPromise"
-              [disabled]="checkPasswordBtn.loading"
+              [disabled]="$any(checkPasswordBtn).loading"
               *ngIf="cipher.viewPassword"
             >
               <i
                 class="bwi bwi-lg bwi-check-circle"
-                [hidden]="checkPasswordBtn.loading"
+                [hidden]="$any(checkPasswordBtn).loading"
                 aria-hidden="true"
               ></i>
               <i
                 class="bwi bwi-lg bwi-spinner bwi-spin"
-                [hidden]="!checkPasswordBtn.loading"
+                [hidden]="!$any(checkPasswordBtn).loading"
                 aria-hidden="true"
               ></i>
             </button>
@@ -151,7 +156,7 @@
             >
             <span class="totp-code">{{ totpCodeFormatted }}</span>
           </div>
-          <span class="totp-countdown">
+          <span class="totp-countdown" aria-hidden="true">
             <span class="totp-sec">{{ totpSec }}</span>
             <svg>
               <g>
@@ -171,23 +176,51 @@
               type="button"
               class="row-btn"
               appStopClick
-              appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
+              title="{{ 'copyVerificationCode' | i18n }}"
               (click)="copy(totpCode, 'verificationCodeTotp', 'TOTP')"
             >
               <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+              <span class="sr-only">{{ "copyValue" | i18n }}</span>
+              <span
+                class="sr-only exists-only-on-parent-focus"
+                aria-live="polite"
+                aria-atomic="true"
+                >{{ totpSec }}</span
+              >
             </button>
+          </div>
+        </div>
+
+        <div class="box-content-row box-content-row-flex totp" *ngIf="showPremiumRequiredTotp">
+          <div class="row-main">
+            <span class="row-label">{{ "verificationCodeTotp" | i18n }}</span>
+            <span class="row-label">
+              <a routerLink="/premium">
+                {{ "premiumSubcriptionRequired" | i18n }}
+              </a>
+            </span>
           </div>
         </div>
       </div>
       <!-- Card -->
       <div *ngIf="cipher.card">
         <div class="box-content-row" *ngIf="cipher.card.cardholderName">
-          <span class="row-label">{{ "cardholderName" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.card.cardholderName)"
+            >{{ "cardholderName" | i18n }}</span
+          >
           {{ cipher.card.cardholderName }}
         </div>
         <div class="box-content-row box-content-row-flex" *ngIf="cipher.card.number">
           <div class="row-main">
-            <span class="row-label">{{ "number" | i18n }}</span>
+            <span
+              class="row-label draggable"
+              draggable="true"
+              (dragstart)="setTextDataOnDrag($event, cipher.card.number)"
+              >{{ "number" | i18n }}</span
+            >
             <span [hidden]="showCardNumber" class="monospaced">{{
               cipher.card.maskedNumber | creditCardNumber: cipher.card.brand
             }}</span>
@@ -223,16 +256,31 @@
           </div>
         </div>
         <div class="box-content-row" *ngIf="cipher.card.brand">
-          <span class="row-label">{{ "brand" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.card.brand)"
+            >{{ "brand" | i18n }}</span
+          >
           {{ cipher.card.brand }}
         </div>
         <div class="box-content-row" *ngIf="cipher.card.expiration">
-          <span class="row-label">{{ "expiration" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.card.expiration)"
+            >{{ "expiration" | i18n }}</span
+          >
           {{ cipher.card.expiration }}
         </div>
         <div class="box-content-row box-content-row-flex" *ngIf="cipher.card.code">
           <div class="row-main">
-            <span class="row-label">{{ "securityCode" | i18n }}</span>
+            <span
+              class="row-label draggable"
+              draggable="true"
+              (dragstart)="setTextDataOnDrag($event, cipher.card.code)"
+              >{{ "securityCode" | i18n }}</span
+            >
             <span [hidden]="showCardCode" class="monospaced">{{ cipher.card.maskedCode }}</span>
             <span [hidden]="!showCardCode" class="monospaced">{{ cipher.card.code }}</span>
           </div>
@@ -267,42 +315,98 @@
       <!-- Identity -->
       <div *ngIf="cipher.identity">
         <div class="box-content-row" *ngIf="cipher.identity.fullName">
-          <span class="row-label">{{ "identityName" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.fullName)"
+            >{{ "identityName" | i18n }}</span
+          >
           {{ cipher.identity.fullName }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.username">
-          <span class="row-label">{{ "username" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.username)"
+            >{{ "username" | i18n }}</span
+          >
           {{ cipher.identity.username }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.company">
-          <span class="row-label">{{ "company" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.company)"
+            >{{ "company" | i18n }}</span
+          >
           {{ cipher.identity.company }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.ssn">
-          <span class="row-label">{{ "ssn" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.ssn)"
+            >{{ "ssn" | i18n }}</span
+          >
           {{ cipher.identity.ssn }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.passportNumber">
-          <span class="row-label">{{ "passportNumber" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.passportNumber)"
+            >{{ "passportNumber" | i18n }}</span
+          >
           {{ cipher.identity.passportNumber }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.licenseNumber">
-          <span class="row-label">{{ "licenseNumber" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.licenseNumber)"
+            >{{ "licenseNumber" | i18n }}</span
+          >
           {{ cipher.identity.licenseNumber }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.email">
-          <span class="row-label">{{ "email" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.email)"
+            >{{ "email" | i18n }}</span
+          >
           {{ cipher.identity.email }}
         </div>
         <div class="box-content-row" *ngIf="cipher.identity.phone">
-          <span class="row-label">{{ "phone" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, cipher.identity.phone)"
+            >{{ "phone" | i18n }}</span
+          >
           {{ cipher.identity.phone }}
         </div>
         <div
           class="box-content-row"
           *ngIf="cipher.identity.address1 || cipher.identity.city || cipher.identity.country"
         >
-          <span class="row-label">{{ "address" | i18n }}</span>
+          <span
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="
+              setTextDataOnDrag(
+                $event,
+                (cipher.identity.address1 ? cipher.identity.address1 + '\n' : '') +
+                  (cipher.identity.address2 ? cipher.identity.address2 + '\n' : '') +
+                  (cipher.identity.address3 ? cipher.identity.address3 + '\n' : '') +
+                  (cipher.identity.fullAddressPart2
+                    ? cipher.identity.fullAddressPart2 + '\n'
+                    : '') +
+                  (cipher.identity.country ? cipher.identity.country : '')
+              )
+            "
+            >{{ "address" | i18n }}</span
+          >
           <div *ngIf="cipher.identity.address1">{{ cipher.identity.address1 }}</div>
           <div *ngIf="cipher.identity.address2">{{ cipher.identity.address2 }}</div>
           <div *ngIf="cipher.identity.address3">{{ cipher.identity.address3 }}</div>
@@ -319,12 +423,22 @@
         *ngFor="let u of cipher.login.uris; let i = index"
       >
         <div class="row-main">
-          <label for="hostOrUri{{ i }}" class="row-label" *ngIf="!u.isWebsite">{{
-            "uri" | i18n
-          }}</label>
-          <label for="hostOrUri{{ i }}" class="row-label" *ngIf="u.isWebsite">{{
-            "website" | i18n
-          }}</label>
+          <label
+            for="hostOrUri{{ i }}"
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, u.uri)"
+            *ngIf="!u.isWebsite"
+            >{{ "uri" | i18n }}</label
+          >
+          <label
+            for="hostOrUri{{ i }}"
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, u.uri)"
+            *ngIf="u.isWebsite"
+            >{{ "website" | i18n }}</label
+          >
           <span title="{{ u.uri }}">
             <input
               id="hostOrUri{{ i }}"
@@ -361,9 +475,29 @@
       </div>
     </div>
   </div>
+  <div class="box" *ngIf="cipher.folderId">
+    <div class="box-content">
+      <div class="box-content-row">
+        <label
+          for="folderName"
+          class="draggable"
+          draggable="true"
+          (dragstart)="setTextDataOnDrag($event, folder.name)"
+          >{{ "folder" | i18n }}</label
+        >
+        <input id="folderName" type="text" name="folderName" [value]="folder.name" readonly />
+      </div>
+    </div>
+  </div>
   <div class="box" *ngIf="cipher.notes">
     <h2 class="box-header">
-      <label for="notes">{{ "notes" | i18n }}</label>
+      <label
+        for="notes"
+        class="draggable"
+        draggable="true"
+        (dragstart)="setTextDataOnDrag($event, cipher.notes)"
+        >{{ "notes" | i18n }}</label
+      >
     </h2>
     <div class="box-content">
       <div class="box-content-row">
@@ -391,25 +525,24 @@
     <h2 class="box-header">
       {{ "attachments" | i18n }}
     </h2>
-    <div class="box-content">
+    <div class="box-content single-line">
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
         *ngFor="let attachment of cipher.attachments"
         appStopClick
-        appBlurCLick
         (click)="downloadAttachment(attachment)"
       >
         <span class="row-main">{{ attachment.fileName }}</span>
         <small class="row-sub-label">{{ attachment.sizeName }}</small>
         <i
           class="bwi bwi-download bwi-fw row-sub-icon"
-          *ngIf="!attachment.downloading"
+          *ngIf="!$any(attachment).downloading"
           aria-hidden="true"
         ></i>
         <i
           class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
-          *ngIf="attachment.downloading"
+          *ngIf="$any(attachment).downloading"
           aria-hidden="true"
         ></i>
       </button>
@@ -421,7 +554,6 @@
         type="button"
         class="box-content-row"
         appStopClick
-        appBlurClick
         (click)="fillCipher()"
         *ngIf="cipher.type !== cipherType.SecureNote && !cipher.isDeleted && !inPopout"
       >
@@ -436,7 +568,6 @@
         type="button"
         class="box-content-row"
         appStopClick
-        appBlurClick
         (click)="fillCipherAndSave()"
         *ngIf="cipher.type === cipherType.Login && !cipher.isDeleted && !inPopout"
       >
@@ -451,7 +582,6 @@
         type="button"
         class="box-content-row"
         appStopClick
-        appBlurClick
         (click)="clone()"
         *ngIf="!cipher.organizationId && !cipher.isDeleted"
       >
@@ -466,7 +596,6 @@
         type="button"
         class="box-content-row"
         appStopClick
-        appBlurClick
         (click)="share()"
         *ngIf="!cipher.organizationId"
       >
@@ -481,7 +610,6 @@
         type="button"
         class="box-content-row"
         appStopClick
-        appBlurClick
         (click)="restore()"
         *ngIf="cipher.isDeleted"
       >
@@ -492,7 +620,13 @@
           <span>{{ "restoreItem" | i18n }}</span>
         </div>
       </button>
-      <button type="button" class="box-content-row" appStopClick appBlurClick (click)="delete()">
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        (click)="delete()"
+        *ngIf="cipher.edit"
+      >
         <div class="row-main text-danger">
           <div class="icon text-danger" aria-hidden="true">
             <i class="bwi bwi-trash bwi-lg bwi-fw"></i>
@@ -508,20 +642,24 @@
         <b class="font-weight-semibold">{{ "dateUpdated" | i18n }}:</b>
         {{ cipher.revisionDate | date: "medium" }}
       </div>
+      <div *ngIf="cipher.creationDate">
+        <b class="font-weight-semibold">{{ "dateCreated" | i18n }}:</b>
+        {{ cipher.creationDate | date: "medium" }}
+      </div>
       <div *ngIf="cipher.passwordRevisionDisplayDate">
         <b class="font-weight-semibold">{{ "datePasswordUpdated" | i18n }}:</b>
         {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
       </div>
       <div *ngIf="cipher.hasPasswordHistory">
         <b class="font-weight-semibold">{{ "passwordHistory" | i18n }}:</b>
-        <a
+        <button
           routerLink="/cipher-password-history"
           [queryParams]="{ cipherId: cipher.id }"
           appStopClick
           title="{{ 'passwordHistory' | i18n }}"
         >
           {{ cipher.passwordHistory.length }}
-        </a>
+        </button>
       </div>
     </div>
   </div>

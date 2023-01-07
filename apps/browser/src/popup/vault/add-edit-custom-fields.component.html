@@ -6,17 +6,20 @@
     <!-- Current custom fields -->
     <div cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="cipher.hasFields">
       <div
+        role="group"
         class="box-content-row box-content-row-multi box-draggable-row"
         appBoxRow
         cdkDrag
         *ngFor="let f of cipher.fields; let i = index; trackBy: trackByFunction"
         [ngClass]="{ 'box-content-row-checkbox': f.type === fieldType.Boolean }"
+        attr.aria-label="{{ f.name }}"
       >
         <button
           type="button"
           appStopClick
           (click)="removeField(f)"
           appA11yTitle="{{ 'remove' | i18n }}"
+          *ngIf="!(!cipher.edit && editMode)"
         >
           <i class="bwi bwi-minus-circle bwi-lg" aria-hidden="true"></i>
         </button>
@@ -31,6 +34,7 @@
             class="row-label"
             placeholder="{{ 'name' | i18n }}"
             appInputVerbatim
+            [readonly]="!cipher.edit && editMode"
           />
           <!-- Text -->
           <input
@@ -41,6 +45,8 @@
             *ngIf="f.type === fieldType.Text"
             placeholder="{{ 'value' | i18n }}"
             appInputVerbatim
+            attr.aria-describedby="fieldName{{ i }}"
+            [readonly]="!cipher.edit && editMode"
           />
           <!-- Hidden -->
           <input
@@ -53,6 +59,8 @@
             *ngIf="f.type === fieldType.Hidden"
             placeholder="{{ 'value' | i18n }}"
             [disabled]="!cipher.viewPassword && !f.newField"
+            attr.aria-describedby="fieldName{{ i }}"
+            [readonly]="!cipher.edit && editMode"
           />
           <!-- Linked -->
           <select
@@ -60,6 +68,7 @@
             name="Field.Value{{ i }}"
             [(ngModel)]="f.linkedId"
             *ngIf="f.type === fieldType.Linked && cipher.linkedFieldOptions != null"
+            attr.aria-describedby="fieldName{{ i }}"
           >
             <option *ngFor="let o of linkedFieldOptions" [ngValue]="o.value">{{ o.name }}</option>
           </select>
@@ -74,6 +83,8 @@
           appTrueFalseValue
           trueValue="true"
           falseValue="false"
+          attr.aria-describedby="fieldName{{ i }}"
+          [readonly]="!cipher.edit && editMode"
         />
         <div
           class="action-buttons"
@@ -83,7 +94,6 @@
             type="button"
             class="row-btn"
             appStopClick
-            appBlurClick
             appA11yTitle="{{ 'toggleVisibility' | i18n }}"
             (click)="toggleFieldValue(f)"
             [attr.aria-pressed]="f.showValue"
@@ -95,13 +105,22 @@
             ></i>
           </button>
         </div>
-        <div class="drag-handle" appA11yTitle="{{ 'dragToSort' | i18n }}" cdkDragHandle>
+        <div
+          class="drag-handle"
+          appA11yTitle="{{ 'dragToSort' | i18n }}"
+          *ngIf="!(!cipher.edit && editMode)"
+          cdkDragHandle
+        >
           <i class="bwi bwi-hamburger" aria-hidden="true"></i>
         </div>
       </div>
     </div>
     <!-- Add new custom field -->
-    <div class="box-content-row box-content-row-newmulti" appBoxRow>
+    <div
+      class="box-content-row box-content-row-newmulti"
+      *ngIf="!(!cipher.edit && editMode)"
+      appBoxRow
+    >
       <button type="button" appStopClick (click)="addField()">
         <i class="bwi bwi-plus-circle bwi-fw bwi-lg" aria-hidden="true"></i>
         {{ "newCustomField" | i18n }}

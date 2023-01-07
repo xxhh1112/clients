@@ -8,11 +8,11 @@
       ngNativeValidate
     >
       <div class="modal-header">
-        <h2 class="modal-title" id="userAddEditTitle">
+        <h1 class="modal-title" id="userAddEditTitle">
           <app-premium-badge *ngIf="readOnly"></app-premium-badge>
           {{ title }}
           <small class="text-muted" *ngIf="name">{{ name }}</small>
-        </h2>
+        </h1>
         <button
           type="button"
           class="close"
@@ -101,18 +101,13 @@
       </div>
       <div class="modal-footer">
         <button
-          bitButton
           type="submit"
           buttonType="primary"
-          [disabled]="loading || form.loading || readOnly"
+          bitButton
+          [loading]="loading || form.loading"
+          [disabled]="readOnly"
         >
-          <i
-            class="bwi bwi-spinner bwi-spin"
-            title="{{ 'loading' | i18n }}"
-            aria-hidden="true"
-            *ngIf="loading || form.loading"
-          ></i>
-          <span *ngIf="!loading && !form.loading">{{ "save" | i18n }}</span>
+          {{ "save" | i18n }}
         </button>
         <button bitButton buttonType="secondary" type="button" data-dismiss="modal">
           {{ "cancel" | i18n }}
@@ -126,16 +121,16 @@
             (click)="delete()"
             appA11yTitle="{{ 'delete' | i18n }}"
             *ngIf="editMode"
-            [disabled]="deleteBtn.loading"
+            [disabled]="$any(deleteBtn).loading"
           >
             <i
               class="bwi bwi-trash bwi-lg bwi-fw"
-              [hidden]="deleteBtn.loading"
+              [hidden]="$any(deleteBtn).loading"
               aria-hidden="true"
             ></i>
             <i
               class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!deleteBtn.loading"
+              [hidden]="!$any(deleteBtn).loading"
               title="{{ 'loading' | i18n }}"
               aria-hidden="true"
             ></i>

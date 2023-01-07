@@ -1,24 +1,24 @@
 import { Location } from "@angular/common";
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
-import { VaultFilter } from "@bitwarden/angular/modules/vault-filter/models/vault-filter.model";
+import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { TreeNode } from "@bitwarden/common/models/domain/treeNode";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
-
-import { BrowserGroupingsComponentState } from "src/models/browserGroupingsComponentState";
+import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
 import { BrowserApi } from "../../browser/browserApi";
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserGroupingsComponentState } from "../../models/browserGroupingsComponentState";
+import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import { VaultFilterService } from "../../services/vaultFilter.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
@@ -83,7 +83,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private location: Location,
-    private browserStateService: StateService,
+    private browserStateService: BrowserStateService,
     private vaultFilterService: VaultFilterService
   ) {
     this.noFolderListSize = 100;
@@ -94,7 +94,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.showLeftHeader = !(
       this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox()
     );
-    await this.browserStateService.setBrowserCipherComponentState(null);
+    await this.browserStateService.setBrowserVaultItemsComponentState(null);
 
     this.broadcasterService.subscribe(ComponentId, (message: any) => {
       this.ngZone.run(async () => {
@@ -113,6 +113,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     });
 
     const restoredScopeState = await this.restoreState();
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       this.state = await this.browserStateService.getBrowserGroupingComponentState();
       if (this.state?.searchText) {
@@ -182,9 +183,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async loadFolders() {
-    const allFolders = await this.vaultFilterService.buildFolders(this.selectedOrganization);
+    const allFolders = await firstValueFrom(
+      this.vaultFilterService.buildNestedFolders(this.selectedOrganization)
+    );
     this.folders = allFolders.fullList;
-    this.nestedFolders = await allFolders.nestedList;
+    this.nestedFolders = allFolders.nestedList;
   }
 
   async search(timeout: number = null) {
@@ -370,7 +373,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   private async saveState() {
-    this.state = {
+    this.state = Object.assign(new BrowserGroupingsComponentState(), {
       scrollY: this.popupUtils.getContentScrollY(window),
       searchText: this.searchText,
       favoriteCiphers: this.favoriteCiphers,
@@ -382,7 +385,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       folders: this.folders,
       collections: this.collections,
       deletedCount: this.deletedCount,
-    };
+    });
     await this.browserStateService.setBrowserGroupingComponentState(this.state);
   }
 

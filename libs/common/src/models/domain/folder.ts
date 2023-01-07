@@ -1,8 +1,10 @@
-import { FolderData } from "../data/folderData";
-import { FolderView } from "../view/folderView";
+import { Jsonify } from "type-fest";
 
-import Domain from "./domainBase";
-import { EncString } from "./encString";
+import { FolderData } from "../data/folder.data";
+import { FolderView } from "../view/folder.view";
+
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
 
 export class Folder extends Domain {
   id: string;
@@ -36,5 +38,10 @@ export class Folder extends Domain {
       },
       null
     );
+  }
+
+  static fromJSON(obj: Jsonify<Folder>) {
+    const revisionDate = obj.revisionDate == null ? null : new Date(obj.revisionDate);
+    return Object.assign(new Folder(), obj, { name: EncString.fromJSON(obj.name), revisionDate });
   }
 }

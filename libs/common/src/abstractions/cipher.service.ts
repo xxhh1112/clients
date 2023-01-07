@@ -1,11 +1,11 @@
 import { CipherType } from "../enums/cipherType";
 import { UriMatchType } from "../enums/uriMatchType";
-import { CipherData } from "../models/data/cipherData";
+import { CipherData } from "../models/data/cipher.data";
 import { Cipher } from "../models/domain/cipher";
 import { Field } from "../models/domain/field";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { CipherView } from "../models/view/cipherView";
-import { FieldView } from "../models/view/fieldView";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { CipherView } from "../models/view/cipher.view";
+import { FieldView } from "../models/view/field.view";
 
 export abstract class CipherService {
   clearCache: (userId?: string) => Promise<void>;
@@ -33,7 +33,8 @@ export abstract class CipherService {
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
-  saveWithServer: (cipher: Cipher) => Promise<any>;
+  createWithServer: (cipher: Cipher) => Promise<any>;
+  updateWithServer: (cipher: Cipher) => Promise<any>;
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
@@ -65,8 +66,8 @@ export abstract class CipherService {
   deleteManyWithServer: (ids: string[]) => Promise<any>;
   deleteAttachment: (id: string, attachmentId: string) => Promise<void>;
   deleteAttachmentWithServer: (id: string, attachmentId: string) => Promise<void>;
-  sortCiphersByLastUsed: (a: any, b: any) => number;
-  sortCiphersByLastUsedThenName: (a: any, b: any) => number;
+  sortCiphersByLastUsed: (a: CipherView, b: CipherView) => number;
+  sortCiphersByLastUsedThenName: (a: CipherView, b: CipherView) => number;
   getLocaleSortingFunction: () => (a: CipherView, b: CipherView) => number;
   softDelete: (id: string | string[]) => Promise<any>;
   softDeleteWithServer: (id: string) => Promise<any>;

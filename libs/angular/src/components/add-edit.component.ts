@@ -1,17 +1,18 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Observable, Subject, takeUntil, concatMap } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -22,17 +23,18 @@ import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { CardView } from "@bitwarden/common/models/view/cardView";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
-import { IdentityView } from "@bitwarden/common/models/view/identityView";
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
-import { LoginView } from "@bitwarden/common/models/view/loginView";
-import { SecureNoteView } from "@bitwarden/common/models/view/secureNoteView";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { CardView } from "@bitwarden/common/models/view/card.view";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/models/view/folder.view";
+import { IdentityView } from "@bitwarden/common/models/view/identity.view";
+import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/models/view/login.view";
+import { SecureNoteView } from "@bitwarden/common/models/view/secure-note.view";
 
 @Directive()
-export class AddEditComponent implements OnInit {
+export class AddEditComponent implements OnInit, OnDestroy {
   @Input() cloneMode = false;
   @Input() folderId: string = null;
   @Input() cipherId: string;
@@ -51,7 +53,7 @@ export class AddEditComponent implements OnInit {
 
   editMode = false;
   cipher: CipherView;
-  folders: FolderView[];
+  folders$: Observable<FolderView[]>;
   collections: CollectionView[] = [];
   title: string;
   formPromise: Promise<any>;
@@ -73,8 +75,12 @@ export class AddEditComponent implements OnInit {
   allowPersonal = true;
   reprompt = false;
   canUseReprompt = true;
+  organization: Organization;
 
+  protected componentName = "";
+  protected destroy$ = new Subject<void>();
   protected writeableCollections: CollectionView[];
+  private personalOwnershipPolicyAppliesToActiveUser: boolean;
   private previousCipherId: string;
 
   constructor(
@@ -86,7 +92,7 @@ export class AddEditComponent implements OnInit {
     protected stateService: StateService,
     protected collectionService: CollectionService,
     protected messagingService: MessagingService,
-    protected eventService: EventService,
+    protected eventCollectionService: EventCollectionService,
     protected policyService: PolicyService,
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
@@ -109,6 +115,7 @@ export class AddEditComponent implements OnInit {
       { name: "Maestro", value: "Maestro" },
       { name: "UnionPay", value: "UnionPay" },
       { name: "RuPay", value: "RuPay" },
+      { name: i18nService.t("cardBrandMir"), value: "Mir" },
       { name: i18nService.t("other"), value: "Other" },
     ];
     this.cardExpMonthOptions = [
@@ -150,14 +157,28 @@ export class AddEditComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.init();
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+      .pipe(
+        concatMap(async (policyAppliesToActiveUser) => {
+          this.personalOwnershipPolicyAppliesToActiveUser = policyAppliesToActiveUser;
+          await this.init();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async init() {
     if (this.ownershipOptions.length) {
       this.ownershipOptions = [];
     }
-    if (await this.policyService.policyAppliesToUser(PolicyType.PersonalOwnership)) {
+    if (this.personalOwnershipPolicyAppliesToActiveUser) {
       this.allowPersonal = false;
     } else {
       const myEmail = await this.stateService.getEmail();
@@ -243,10 +264,10 @@ export class AddEditComponent implements OnInit {
       }
     }
 
-    this.folders = await this.folderService.getAllDecrypted();
+    this.folders$ = this.folderService.folderViews$;
 
     if (this.editMode && this.previousCipherId !== this.cipherId) {
-      this.eventService.collect(EventType.Cipher_ClientViewed, this.cipherId);
+      this.eventCollectionService.collect(EventType.Cipher_ClientViewed, this.cipherId);
     }
     this.previousCipherId = this.cipherId;
     this.reprompt = this.cipher.reprompt !== CipherRepromptType.None;
@@ -345,6 +366,10 @@ export class AddEditComponent implements OnInit {
     }
   }
 
+  getCardExpMonthDisplay() {
+    return this.cardExpMonthOptions.find((x) => x.value == this.cipher.card.expMonth)?.name;
+  }
+
   trackByFunction(index: number, item: any) {
     return index;
   }
@@ -373,7 +398,9 @@ export class AddEditComponent implements OnInit {
       this.i18nService.t("deleteItem"),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
-      "warning"
+      "warning",
+      false,
+      this.componentName != "" ? this.componentName + " .modal-content" : null
     );
     if (!confirmed) {
       return false;
@@ -465,14 +492,20 @@ export class AddEditComponent implements OnInit {
     this.showPassword = !this.showPassword;
     document.getElementById("loginPassword").focus();
     if (this.editMode && this.showPassword) {
-      this.eventService.collect(EventType.Cipher_ClientToggledPasswordVisible, this.cipherId);
+      this.eventCollectionService.collect(
+        EventType.Cipher_ClientToggledPasswordVisible,
+        this.cipherId
+      );
     }
   }
 
   async toggleCardNumber() {
     this.showCardNumber = !this.showCardNumber;
     if (this.showCardNumber) {
-      this.eventService.collect(EventType.Cipher_ClientToggledCardNumberVisible, this.cipherId);
+      this.eventCollectionService.collect(
+        EventType.Cipher_ClientToggledCardNumberVisible,
+        this.cipherId
+      );
     }
   }
 
@@ -480,7 +513,10 @@ export class AddEditComponent implements OnInit {
     this.showCardCode = !this.showCardCode;
     document.getElementById("cardCode").focus();
     if (this.editMode && this.showCardCode) {
-      this.eventService.collect(EventType.Cipher_ClientToggledCardCodeVisible, this.cipherId);
+      this.eventCollectionService.collect(
+        EventType.Cipher_ClientToggledCardCodeVisible,
+        this.cipherId
+      );
     }
   }
 
@@ -562,7 +598,9 @@ export class AddEditComponent implements OnInit {
   }
 
   protected saveCipher(cipher: Cipher) {
-    return this.cipherService.saveWithServer(cipher);
+    return this.cipher.id == null
+      ? this.cipherService.createWithServer(cipher)
+      : this.cipherService.updateWithServer(cipher);
   }
 
   protected deleteCipher() {

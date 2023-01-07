@@ -1,13 +1,17 @@
+import { Observable, ReplaySubject } from "rxjs";
+
 import { I18nService as I18nServiceAbstraction } from "../abstractions/i18n.service";
 
 export class I18nService implements I18nServiceAbstraction {
-  locale: string;
+  private _locale = new ReplaySubject<string>(1);
+  locale$: Observable<string> = this._locale.asObservable();
   // First locale is the default (English)
   supportedTranslationLocales: string[] = ["en"];
   translationLocale: string;
   collator: Intl.Collator;
   localeNames = new Map<string, string>([
     ["af", "Afrikaans"],
+    ["ar", "العربية الفصحى"],
     ["az", "Azərbaycanca"],
     ["be", "Беларуская"],
     ["bg", "български"],
@@ -24,6 +28,7 @@ export class I18nService implements I18nServiceAbstraction {
     ["eo", "Esperanto"],
     ["es", "español"],
     ["et", "eesti"],
+    ["eu", "euskara"],
     ["fa", "فارسی"],
     ["fi", "suomi"],
     ["fil", "Wikang Filipino"],
@@ -85,10 +90,14 @@ export class I18nService implements I18nServiceAbstraction {
     }
 
     this.inited = true;
-    this.locale = this.translationLocale = locale != null ? locale : this.systemLanguage;
+    this.translationLocale = locale != null ? locale : this.systemLanguage;
+    this._locale.next(this.translationLocale);
 
     try {
-      this.collator = new Intl.Collator(this.locale, { numeric: true, sensitivity: "base" });
+      this.collator = new Intl.Collator(this.translationLocale, {
+        numeric: true,
+        sensitivity: "base",
+      });
     } catch {
       this.collator = null;
     }
@@ -113,7 +122,7 @@ export class I18nService implements I18nServiceAbstraction {
     return this.translate(id, p1, p2, p3);
   }
 
-  translate(id: string, p1?: string, p2?: string, p3?: string): string {
+  translate(id: string, p1?: string | number, p2?: string | number, p3?: string | number): string {
     let result: string;
     // eslint-disable-next-line
     if (this.localeMessages.hasOwnProperty(id) && this.localeMessages[id]) {
@@ -127,13 +136,13 @@ export class I18nService implements I18nServiceAbstraction {
 
     if (result !== "") {
       if (p1 != null) {
-        result = result.split("__$1__").join(p1);
+        result = result.split("__$1__").join(p1.toString());
       }
       if (p2 != null) {
-        result = result.split("__$2__").join(p2);
+        result = result.split("__$2__").join(p2.toString());
       }
       if (p3 != null) {
-        result = result.split("__$3__").join(p3);
+        result = result.split("__$3__").join(p3.toString());
       }
     }
 

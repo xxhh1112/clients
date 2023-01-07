@@ -20,7 +20,7 @@
     "message": "Inloggen"
   },
   "enterpriseSingleSignOn": {
-    "message": "Enterprise Single Sign-On"
+    "message": "Single sign-on voor bedrijven"
   },
   "cancel": {
     "message": "Annuleren"
@@ -227,7 +227,7 @@
     "message": "Wachtwoord genereren"
   },
   "regeneratePassword": {
-    "message": "Opnieuw genereren"
+    "message": "Wachtwoord opnieuw genereren"
   },
   "options": {
     "message": "Opties"
@@ -330,7 +330,7 @@
     "message": "Overig"
   },
   "rateExtension": {
-    "message": "Extensie beoordelen"
+    "message": "Deze extensie beoordelen"
   },
   "rateExtensionDesc": {
     "message": "Je kunt ons helpen door een goede recensie achter te laten!"
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Ongeldig e-mailadres."
   },
-  "masterPassRequired": {
-    "message": "Hoofdwachtwoord is vereist."
+  "masterPasswordRequired": {
+    "message": "Hoofdwachtwoord vereist."
   },
-  "masterPassLength": {
-    "message": "Hoofdwachtwoord moet minstens 8 tekens lang zijn."
+  "confirmMasterPasswordRequired": {
+    "message": "Type je hoofdwachtwoord opnieuw in."
+  },
+  "masterPasswordMinlength": {
+    "message": "Het hoofdwachtwoord moet minimaal 8 tekens lang zijn."
   },
   "masterPassDoesntMatch": {
     "message": "De hoofdwachtwoorden komen niet overeen."
@@ -993,7 +996,7 @@
     "message": "Kluis vergrendelen"
   },
   "privateModeWarning": {
-    "message": "Private mode support is experimental and some features are limited."
+    "message": "Private mode ondersteuning is experimenteel en sommige functies zijn beperkt."
   },
   "customFields": {
     "message": "Aangepaste velden"
@@ -1124,7 +1127,7 @@
     "message": "Voornaam"
   },
   "middleName": {
-    "message": "Tweede naam"
+    "message": "Tussenvoegsel"
   },
   "lastName": {
     "message": "Achternaam"
@@ -1308,6 +1311,10 @@
     "message": "Bijgewerkt",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Aangemaakt",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Wachtwoord bijgewerkt",
     "description": "ex. Date this password was updated"
@@ -1480,8 +1487,8 @@
   "acceptPolicies": {
     "message": "Door dit vakje aan te vinken, ga je akkoord met het volgende:"
   },
-  "acceptPoliciesError": {
-    "message": "Algemene voorwaarden en privacybeleid zijn nog niet erkend."
+  "acceptPoliciesRequired": {
+    "message": "Je hebt de algemene voorwaarden en het privacybeleid nog niet erkend."
   },
   "termsOfService": {
     "message": "Algemene voorwaarden"
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Je kluis time-out is hoger dan het maximum van jouw organisatie."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key-connector fout: zorg ervoor dat Key-connector beschikbaar is en werkt."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium-abonnement vereist"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisatie is uitgeschakeld."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Je kunt uitgeschakelde items in een organisatie niet benaderen. Neem contact op met de eigenaar van je organisatie voor hulp."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Inloggen op $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Instellingen zijn bijgewerkt"
+  },
+  "environmentEditedClick": {
+    "message": "Klik hier"
+  },
+  "environmentEditedReset": {
+    "message": "om terug te gaan naar vooraf geconfigureerde instellingen"
+  },
+  "serverVersion": {
+    "message": "Serverversie"
+  },
+  "selfHosted": {
+    "message": "Zelfgehost"
+  },
+  "thirdParty": {
+    "message": "van derden"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Verbonden met server implementatie van derden, $SERVERNAME$. Reproduceer bugs via de officiële server, of meld ze bij het serverproject.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "laatst gezien op: $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Inloggen met je hoofdwachtwoord"
+  },
+  "loggingInAs": {
+    "message": "Inloggen als"
+  },
+  "notYou": {
+    "message": "Ben jij dit niet?"
+  },
+  "newAroundHere": {
+    "message": "Nieuw hier?"
+  },
+  "rememberEmail": {
+    "message": "E-mailadres onthouden"
   }
 }

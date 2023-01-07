@@ -9,9 +9,10 @@ import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/enums/twoFactorProviderType";
 
@@ -21,6 +22,7 @@ import { TwoFactorOptionsComponent } from "./two-factor-options.component";
   selector: "app-two-factor",
   templateUrl: "two-factor.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TwoFactorComponent extends BaseTwoFactorComponent {
   @ViewChild("twoFactorOptions", { read: ViewContainerRef, static: true })
   twoFactorOptionsModal: ViewContainerRef;
@@ -40,7 +42,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     route: ActivatedRoute,
     logService: LogService,
     twoFactorService: TwoFactorService,
-    appIdService: AppIdService
+    appIdService: AppIdService,
+    loginService: LoginService
   ) {
     super(
       authService,
@@ -54,9 +57,11 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       route,
       logService,
       twoFactorService,
-      appIdService
+      appIdService,
+      loginService
     );
     super.onSuccessfulLogin = () => {
+      this.loginService.clearValues();
       return syncService.fullSync(true);
     };
   }
@@ -67,18 +72,22 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       this.twoFactorOptionsModal
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onShown.subscribe(() => {
       this.showingModal = true;
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onClosed.subscribe(() => {
       this.showingModal = false;
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onProviderSelected.subscribe(async (provider: TwoFactorProviderType) => {
       modal.close();
       this.selectedProviderType = provider;
       await this.init();
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onRecoverSelected.subscribe(() => {
       modal.close();
     });

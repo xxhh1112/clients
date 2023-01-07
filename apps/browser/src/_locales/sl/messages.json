@@ -53,13 +53,13 @@
     "message": "Zavihek"
   },
   "vault": {
-    "message": "Vault"
+    "message": "Trezor"
   },
   "myVault": {
     "message": "Moj trezor"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "Vsi trezorji"
   },
   "tools": {
     "message": "Orodja"
@@ -95,13 +95,13 @@
     "message": "Generiraj geslo (kopirano)"
   },
   "copyElementIdentifier": {
-    "message": "Copy Custom Field Name"
+    "message": "Copy custom field name"
   },
   "noMatchingLogins": {
     "message": "Nobenih ujemajočih prijav."
   },
   "unlockVaultMenu": {
-    "message": "Unlock your vault"
+    "message": "Odkleni svoj trezor"
   },
   "loginToVaultMenu": {
     "message": "Log in to your vault"
@@ -131,10 +131,10 @@
     "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Send Code"
+    "message": "Pošlji kodo"
   },
   "codeSent": {
-    "message": "Code Sent"
+    "message": "Koda poslana"
   },
   "verificationCode": {
     "message": "Verifikacijska koda"
@@ -242,10 +242,10 @@
     "message": "Lowercase (a-z)"
   },
   "numbers": {
-    "message": "Numbers (0-9)"
+    "message": "Številke (0-9)"
   },
   "specialCharacters": {
-    "message": "Special Characters (!@#$%^&*)"
+    "message": "Posebni znaki (!@#$%^&*)"
   },
   "numWords": {
     "message": "Število besed"
@@ -339,7 +339,7 @@
     "message": "Vaš spletni brskalnik ne podpira enostavno kopiranje odložišča. Kopirajte ročno."
   },
   "verifyIdentity": {
-    "message": "Verify Identity"
+    "message": "Verify identity"
   },
   "yourVaultIsLocked": {
     "message": "Vaš trezor je zaklenjen. Potrdite vaše glavno geslo za nadaljevanje."
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Neveljaven epoštni naslov."
   },
-  "masterPassRequired": {
-    "message": "Glavno geslo je obvezno."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Glavno geslo mora biti dolgo najmanj 8 znakov."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Potrditev glavnega gesla se ne ujema."
@@ -488,7 +491,7 @@
     "message": "Svoje glavno geslo lahko spremenite v bitwarden.com spletnem trezorju. Želite obiskati spletno stran zdaj?"
   },
   "twoStepLoginConfirmation": {
-    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?"
+    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?"
   },
   "editedFolder": {
     "message": "Urejena mapa"
@@ -500,7 +503,7 @@
     "message": "Izbrisana mapa"
   },
   "gettingStartedTutorial": {
-    "message": "Getting Started Tutorial"
+    "message": "Getting started tutorial"
   },
   "gettingStartedTutorialVideo": {
     "message": "Watch our getting started tutorial to learn how to get the most out of the browser extension."
@@ -549,7 +552,7 @@
     "message": "Ali ste prepričani, da želite prepisati vaše trenutno geslo?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Overwrite username"
   },
   "overwriteUsernameConfirmation": {
     "message": "Are you sure you want to overwrite the current username?"
@@ -677,7 +680,7 @@
     "message": "Bitwarden allows you to share your vault items with others by using an organization. Would you like to visit the bitwarden.com website to learn more?"
   },
   "moveToOrganization": {
-    "message": "Move to Organization"
+    "message": "Move to organization"
   },
   "share": {
     "message": "Deli"
@@ -861,7 +864,7 @@
     "message": "To start the WebAuthn 2FA verification. Click the button below to open a new tab and follow the instructions provided in the new tab."
   },
   "webAuthnNewTabOpen": {
-    "message": "Open new tab"
+    "message": "Odpri nov zavihek"
   },
   "webAuthnAuthenticate": {
     "message": "Authenticate WebAuthn"
@@ -876,10 +879,10 @@
     "message": "Please use a supported web browser (such as Chrome) and/or add additional providers that are better supported across web browsers (such as an authenticator app)."
   },
   "twoStepOptions": {
-    "message": "Two-step Login Options"
+    "message": "Možnosti dvostopenjske prijave"
   },
   "recoveryCodeDesc": {
-    "message": "Lost access to all of your two-factor providers? Use your recovery code to disable all two-factor providers from your account."
+    "message": "Ste izgubili dostop do vseh vaših ponudnikov dvostopenjske prijave? Uporabite svojo kodo za obnovitev in tako onemogočite dvostopenjsko prijavo v svoj račun."
   },
   "recoveryCodeTitle": {
     "message": "Koda za obnovitev"
@@ -909,7 +912,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Use any WebAuthn enabled security key to access your account."
+    "message": "Use any WebAuthn compatible security key to access your account."
   },
   "emailTitle": {
     "message": "E-pošta"
@@ -918,13 +921,13 @@
     "message": "Potrditvene kode vam bodo posredovane po e-pošti."
   },
   "selfHostedEnvironment": {
-    "message": "Self-hosted Environment"
+    "message": "Self-hosted environment"
   },
   "selfHostedEnvironmentFooter": {
     "message": "Specify the base URL of your on-premises hosted Bitwarden installation."
   },
   "customEnvironment": {
-    "message": "Custom Environment"
+    "message": "Okolje po meri"
   },
   "customEnvironmentFooter": {
     "message": "For advanced users. You can specify the base URL of each service independently."
@@ -936,19 +939,19 @@
     "message": "URL naslov API strežnika"
   },
   "webVaultUrl": {
-    "message": "Web Vault Server URL"
+    "message": "Web vault server URL"
   },
   "identityUrl": {
-    "message": "Identity Server URL"
+    "message": "Identity server URL"
   },
   "notificationsUrl": {
-    "message": "Notifications Server URL"
+    "message": "Notifications server URL"
   },
   "iconsUrl": {
-    "message": "Icons Server URL"
+    "message": "Icons server URL"
   },
   "environmentSaved": {
-    "message": "The environment URLs have been saved."
+    "message": "Environment URLs saved"
   },
   "enableAutoFillOnPageLoad": {
     "message": "Auto-fill on page load"
@@ -966,7 +969,7 @@
     "message": "You can turn off auto-fill on page load for individual login items from the item's Edit view."
   },
   "itemAutoFillOnPageLoad": {
-    "message": "Auto-fill on page load (if enabled in Options)"
+    "message": "Auto-fill on page load (if set up in Options)"
   },
   "autoFillOnPageLoadUseDefault": {
     "message": "Uporabi privzete nastavitve"
@@ -990,22 +993,22 @@
     "message": "Generate and copy a new random password to the clipboard"
   },
   "commandLockVaultDesc": {
-    "message": "Lock the vault"
+    "message": "Zakleni trezor"
   },
   "privateModeWarning": {
     "message": "Private mode support is experimental and some features are limited."
   },
   "customFields": {
-    "message": "Custom Fields"
+    "message": "Custom fields"
   },
   "copyValue": {
-    "message": "Copy Value"
+    "message": "Kopiraj vrednost"
   },
   "value": {
-    "message": "Value"
+    "message": "Vrednost"
   },
   "newCustomField": {
-    "message": "New Custom Field"
+    "message": "New custom field"
   },
   "dragToSort": {
     "message": "Drag to sort"
@@ -1017,7 +1020,7 @@
     "message": "Skrito"
   },
   "cfTypeBoolean": {
-    "message": "Boolean"
+    "message": "Logična vrednost"
   },
   "cfTypeLinked": {
     "message": "Linked",
@@ -1130,7 +1133,7 @@
     "message": "Priimek"
   },
   "fullName": {
-    "message": "Full Name"
+    "message": "Polno ime"
   },
   "identityName": {
     "message": "Ime identitete"
@@ -1187,22 +1190,22 @@
     "message": "Prijave"
   },
   "typeSecureNote": {
-    "message": "Secure Note"
+    "message": "Varni zapisek"
   },
   "typeCard": {
-    "message": "Card"
+    "message": "Kartica"
   },
   "typeIdentity": {
-    "message": "Identity"
+    "message": "Identiteta"
   },
   "passwordHistory": {
-    "message": "Password History"
+    "message": "Zgodovina gesel"
   },
   "back": {
-    "message": "Back"
+    "message": "Nazaj"
   },
   "collections": {
-    "message": "Collections"
+    "message": "Zbirke"
   },
   "favorites": {
     "message": "Priljubljeno"
@@ -1223,7 +1226,7 @@
     "message": "Prijave"
   },
   "secureNotes": {
-    "message": "Secure Notes"
+    "message": "Varni zapiski"
   },
   "clear": {
     "message": "Počisti",
@@ -1267,7 +1270,7 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Match Detection",
+    "message": "Match detection",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
@@ -1275,41 +1278,45 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Toggle Options"
+    "message": "Toggle options"
   },
   "toggleCurrentUris": {
-    "message": "Toggle Current URIs",
+    "message": "Toggle current URIs",
     "description": "Toggle the display of the URIs of the currently open tabs in the browser."
   },
   "currentUri": {
-    "message": "Current URI",
+    "message": "Trenutni URI",
     "description": "The URI of one of the current open tabs in the browser."
   },
   "organization": {
-    "message": "Organization",
+    "message": "Organizacija",
     "description": "An entity of multiple related people (ex. a team or business organization)."
   },
   "types": {
-    "message": "Types"
+    "message": "Tipi"
   },
   "allItems": {
-    "message": "All Items"
+    "message": "All items"
   },
   "noPasswordsInList": {
     "message": "There are no passwords to list."
   },
   "remove": {
-    "message": "Remove"
+    "message": "Odstrani"
   },
   "default": {
-    "message": "Default"
+    "message": "Privzeto"
   },
   "dateUpdated": {
-    "message": "Updated",
+    "message": "Posodobljeno",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
-    "message": "Password Updated",
+    "message": "Password updated",
     "description": "ex. Date this password was updated"
   },
   "neverLockWarning": {
@@ -1322,25 +1329,25 @@
     "message": "There are no collections to list."
   },
   "ownership": {
-    "message": "Ownership"
+    "message": "Lastništvo"
   },
   "whoOwnsThisItem": {
     "message": "Who owns this item?"
   },
   "strong": {
-    "message": "Strong",
+    "message": "Močno",
     "description": "ex. A strong password. Scale: Weak -> Good -> Strong"
   },
   "good": {
-    "message": "Good",
+    "message": "Dobro",
     "description": "ex. A good password. Scale: Weak -> Good -> Strong"
   },
   "weak": {
-    "message": "Weak",
+    "message": "Šibko",
     "description": "ex. A weak password. Scale: Weak -> Good -> Strong"
   },
   "weakMasterPassword": {
-    "message": "Weak Master Password"
+    "message": "Šibko glavno geslo"
   },
   "weakMasterPasswordDesc": {
     "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
@@ -1350,25 +1357,25 @@
     "description": "PIN code. Ex. The short code (often numeric) that you use to unlock a device."
   },
   "unlockWithPin": {
-    "message": "Unlock with PIN"
+    "message": "Odkleni s PIN kodo"
   },
   "setYourPinCode": {
     "message": "Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application."
   },
   "pinRequired": {
-    "message": "PIN code is required."
+    "message": "Potrebna je PIN koda."
   },
   "invalidPin": {
-    "message": "Invalid PIN code."
+    "message": "Nepravilna PIN koda."
   },
   "unlockWithBiometrics": {
-    "message": "Unlock with biometrics"
+    "message": "Prijava z biometriko"
   },
   "awaitDesktop": {
     "message": "Awaiting confirmation from desktop"
   },
   "awaitDesktopDesc": {
-    "message": "Please confirm using biometrics in the Bitwarden Desktop application to enable biometrics for browser."
+    "message": "Please confirm using biometrics in the Bitwarden desktop application to set up biometrics for browser."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lock with master password on browser restart"
@@ -1377,10 +1384,10 @@
     "message": "You must select at least one collection."
   },
   "cloneItem": {
-    "message": "Clone Item"
+    "message": "Clone item"
   },
   "clone": {
-    "message": "Clone"
+    "message": "Kloniraj"
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "One or more organization policies are affecting your generator settings."
@@ -1389,51 +1396,51 @@
     "message": "Vault timeout action"
   },
   "lock": {
-    "message": "Lock",
+    "message": "Zakleni",
     "description": "Verb form: to make secure or inaccesible by"
   },
   "trash": {
-    "message": "Trash",
+    "message": "Koš",
     "description": "Noun: a special folder to hold deleted items"
   },
   "searchTrash": {
-    "message": "Search trash"
+    "message": "Preišči koš"
   },
   "permanentlyDeleteItem": {
-    "message": "Permanently Delete Item"
+    "message": "Permanently delete item"
   },
   "permanentlyDeleteItemConfirmation": {
     "message": "Are you sure you want to permanently delete this item?"
   },
   "permanentlyDeletedItem": {
-    "message": "Permanently Deleted item"
+    "message": "Item permanently deleted"
   },
   "restoreItem": {
-    "message": "Restore Item"
+    "message": "Restore item"
   },
   "restoreItemConfirmation": {
     "message": "Are you sure you want to restore this item?"
   },
   "restoredItem": {
-    "message": "Restored Item"
+    "message": "Item restored"
   },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Timeout Action Confirmation"
+    "message": "Timeout action confirmation"
   },
   "autoFillAndSave": {
-    "message": "Auto-fill and Save"
+    "message": "Auto-fill and save"
   },
   "autoFillSuccessAndSavedUri": {
-    "message": "Auto-filled Item and Saved URI"
+    "message": "Item auto-filled and URI saved"
   },
   "autoFillSuccess": {
-    "message": "Auto-filled Item"
+    "message": "Item auto-filled "
   },
   "setMasterPassword": {
-    "message": "Set Master Password"
+    "message": "Nastavi glavno geslo"
   },
   "masterPasswordPolicyInEffect": {
     "message": "One or more organization policies require your master password to meet the following requirements:"
@@ -1480,20 +1487,20 @@
   "acceptPolicies": {
     "message": "By checking this box you agree to the following:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "termsOfService": {
     "message": "Terms of Service"
   },
   "privacyPolicy": {
-    "message": "Privacy Policy"
+    "message": "Pravilnik o zasebnosti"
   },
   "hintEqualsPassword": {
     "message": "Your password hint cannot be the same as your password."
   },
   "ok": {
-    "message": "Ok"
+    "message": "V redu"
   },
   "desktopSyncVerificationTitle": {
     "message": "Desktop sync verification"
@@ -1502,19 +1509,19 @@
     "message": "Please verify that the desktop application shows this fingerprint: "
   },
   "desktopIntegrationDisabledTitle": {
-    "message": "Browser integration is not enabled"
+    "message": "Browser integration is not set up"
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "Browser integration is not enabled in the Bitwarden Desktop application. Please enable it in the settings within the desktop application."
+    "message": "Browser integration is not set up in the Bitwarden desktop application. Please set it up in the settings within the desktop application."
   },
   "startDesktopTitle": {
-    "message": "Start the Bitwarden Desktop application"
+    "message": "Start the Bitwarden desktop application"
   },
   "startDesktopDesc": {
-    "message": "The Bitwarden Desktop application needs to be started before unlock with biometrics can be used."
+    "message": "The Bitwarden desktop application needs to be started before unlock with biometrics can be used."
   },
   "errorEnableBiometricTitle": {
-    "message": "Unable to enable biometrics"
+    "message": "Unable to set up biometrics"
   },
   "errorEnableBiometricDesc": {
     "message": "Action was canceled by the desktop application"
@@ -1532,10 +1539,10 @@
     "message": "Account missmatch"
   },
   "biometricsNotEnabledTitle": {
-    "message": "Biometrics not enabled"
+    "message": "Biometrics not set up"
   },
   "biometricsNotEnabledDesc": {
-    "message": "Browser biometrics requires desktop biometric to be enabled in the settings first."
+    "message": "Browser biometrics requires desktop biometric to be set up in the settings first."
   },
   "biometricsNotSupportedTitle": {
     "message": "Biometrics not supported"
@@ -1556,7 +1563,7 @@
     "message": "This action cannot be done in the sidebar, please retry the action in the popup or popout."
   },
   "personalOwnershipSubmitError": {
-    "message": "Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections."
+    "message": "Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available collections."
   },
   "personalOwnershipPolicyInEffect": {
     "message": "An organization policy is affecting your ownership options."
@@ -1577,7 +1584,7 @@
     }
   },
   "send": {
-    "message": "Send",
+    "message": "Pošlji",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "searchSends": {
@@ -1589,10 +1596,10 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTypeText": {
-    "message": "Text"
+    "message": "Besedilo"
   },
   "sendTypeFile": {
-    "message": "File"
+    "message": "Datoteka"
   },
   "allSends": {
     "message": "All Sends",
@@ -1603,7 +1610,7 @@
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
-    "message": "Expired"
+    "message": "Poteklo"
   },
   "pendingDeletion": {
     "message": "Pending deletion"
@@ -1619,21 +1626,21 @@
     "message": "Remove Password"
   },
   "delete": {
-    "message": "Delete"
+    "message": "Izbriši"
   },
   "removedPassword": {
-    "message": "Removed Password"
+    "message": "Password removed"
   },
   "deletedSend": {
-    "message": "Deleted Send",
+    "message": "Send deleted",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLink": {
-    "message": "Send link",
+    "message": "Pošlji povezavo",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disabled": {
-    "message": "Disabled"
+    "message": "Onemogočeno"
   },
   "removePasswordConfirmation": {
     "message": "Are you sure you want to remove the password?"
@@ -1662,24 +1669,24 @@
     "message": "The file you want to send."
   },
   "deletionDate": {
-    "message": "Deletion Date"
+    "message": "Deletion date"
   },
   "deletionDateDesc": {
     "message": "The Send will be permanently deleted on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "Expiration Date"
+    "message": "Expiration date"
   },
   "expirationDateDesc": {
     "message": "If set, access to this Send will expire on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "oneDay": {
-    "message": "1 day"
+    "message": "1 dan"
   },
   "days": {
-    "message": "$DAYS$ days",
+    "message": "$DAYS$ dni",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -1706,7 +1713,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisableDesc": {
-    "message": "Disable this Send so that no one can access it.",
+    "message": "Deactivate this Send so that no one can access it.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendShareDesc": {
@@ -1721,17 +1728,17 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
-    "message": "Current Access Count"
+    "message": "Current access count"
   },
   "createSend": {
-    "message": "Create New Send",
+    "message": "New Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
-    "message": "New Password"
+    "message": "New password"
   },
   "sendDisabled": {
-    "message": "Send Disabled",
+    "message": "Send removed",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1739,11 +1746,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Created Send",
+    "message": "Send created",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Edited Send",
+    "message": "Send saved",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinuxChromiumFileWarning": {
@@ -1801,22 +1808,22 @@
     "message": "This action is protected. To continue, please re-enter your master password to verify your identity."
   },
   "emailVerificationRequired": {
-    "message": "Email Verification Required"
+    "message": "Email verification required"
   },
   "emailVerificationRequiredDesc": {
     "message": "You must verify your email to use this feature. You can verify your email in the web vault."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Updated master password"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Update master password"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatic enrollment"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
@@ -1828,10 +1835,10 @@
     "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
   },
   "hours": {
-    "message": "Hours"
+    "message": "Ur"
   },
   "minutes": {
-    "message": "Minutes"
+    "message": "Minut"
   },
   "vaultTimeoutPolicyInEffect": {
     "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
@@ -1846,14 +1853,14 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Your vault timeout exceeds the restrictions set by your organization."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Vault export unavailable"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "One or more organization policies prevents you from exporting your individual vault."
   },
   "copyCustomFieldNameInvalidElement": {
     "message": "Unable to identify a valid form element. Try inspecting the HTML instead."
@@ -1871,13 +1878,13 @@
     }
   },
   "leaveOrganization": {
-    "message": "Leave Organization"
+    "message": "Leave organization"
   },
   "removeMasterPassword": {
-    "message": "Remove Master Password"
+    "message": "Remove master password"
   },
   "removedMasterPassword": {
-    "message": "Master password removed."
+    "message": "Master password removed"
   },
   "leaveOrganizationConfirmation": {
     "message": "Are you sure you want to leave this organization?"
@@ -1892,10 +1899,10 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Exporting individual vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1904,50 +1911,50 @@
     }
   },
   "error": {
-    "message": "Error"
+    "message": "Napaka"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Regenerate username"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generate username"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Username type"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
   },
   "random": {
-    "message": "Random"
+    "message": "Naključno"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Naključna beseda"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Ime spletne strani"
   },
   "whatWouldYouLikeToGenerate": {
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Password type"
   },
   "service": {
     "message": "Service"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -1963,6 +1970,78 @@
     "message": "API Key"
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "Key connector error: make sure key connector is available and working correctly."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended Organizations cannot be accessed. Contact your Organization owner for assistance."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Settings have been edited"
+  },
+  "environmentEditedClick": {
+    "message": "Kliknite tukaj"
+  },
+  "environmentEditedReset": {
+    "message": "to reset to pre-configured settings"
+  },
+  "serverVersion": {
+    "message": "Verzija strežnika"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
+  },
+  "thirdParty": {
+    "message": "Third-party"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "last seen on: $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "notYou": {
+    "message": "Niste vi?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "rememberEmail": {
+    "message": "Zapomni si e-pošto"
   }
 }

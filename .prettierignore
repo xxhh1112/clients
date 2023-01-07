@@ -2,6 +2,9 @@
 **/build
 **/dist
 **/coverage
+.angular
+documentation.json
+storybook-static
 
 # External libraries / auto synced locales
 apps/browser/src/_locales
@@ -25,3 +28,6 @@ libs/.github
 
 # Github Workflows
 .github/workflows
+
+# Forked library files
+libs/common/src/types/deep-jsonify.ts

@@ -86,7 +86,7 @@
     "message": "Copia numero"
   },
   "copySecurityCode": {
-    "message": "Copia codice di sicurezza"
+    "message": "Copia il codice di sicurezza"
   },
   "autoFill": {
     "message": "Auto-riempimento"
@@ -98,7 +98,7 @@
     "message": "Copia nome campo personalizzato"
   },
   "noMatchingLogins": {
-    "message": "Nessun login corrispondente."
+    "message": "Nessun accesso corrispondente."
   },
   "unlockVaultMenu": {
     "message": "Sblocca la tua cassaforte"
@@ -199,7 +199,7 @@
     "message": "Sincronizza"
   },
   "syncVaultNow": {
-    "message": "Sincronizza ora la cassaforte"
+    "message": "Sincronizza cassaforte ora"
   },
   "lastSync": {
     "message": "Ultima sincronizzazione:"
@@ -261,10 +261,10 @@
     "message": "Includi numero"
   },
   "minNumbers": {
-    "message": "Minimo di numeri"
+    "message": "Minimo numeri"
   },
   "minSpecial": {
-    "message": "Minimo di speciali"
+    "message": "Minimo caratteri speciali"
   },
   "avoidAmbChar": {
     "message": "Evita caratteri ambigui"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Indirizzo email non valido."
   },
-  "masterPassRequired": {
-    "message": "La password principale è obbligatoria."
+  "masterPasswordRequired": {
+    "message": "È necessario inserire la password principale."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "È necessario reinserire la password principale."
+  },
+  "masterPasswordMinlength": {
     "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
@@ -708,7 +711,7 @@
     "message": "Codice di verifica (TOTP)"
   },
   "copyVerificationCode": {
-    "message": "Copia codice di verifica"
+    "message": "Copia il codice di verifica"
   },
   "attachments": {
     "message": "Allegati"
@@ -723,7 +726,7 @@
     "message": "Allegato eliminato"
   },
   "newAttachment": {
-    "message": "Aggiungi Nuovo Allegato"
+    "message": "Aggiungi nuovo allegato"
   },
   "noAttachments": {
     "message": "Nessun allegato."
@@ -762,7 +765,7 @@
     "message": "Al momento non sei un membro premium."
   },
   "premiumSignUpAndGet": {
-    "message": "Iscriviti a un abbonamento premium e ottieni:"
+    "message": "Iscriviti ad un abbonamento premium e ottieni:"
   },
   "ppremiumSignUpStorage": {
     "message": "1 GB di spazio di archiviazione cifrato per gli allegati."
@@ -819,7 +822,7 @@
     "message": "Premium richiesto"
   },
   "premiumRequiredDesc": {
-    "message": "Un abbonamento premium è richiesto per utilizzare questa funzionalità."
+    "message": "Un abbonamento Premium è richiesto per utilizzare questa funzionalità."
   },
   "enterVerificationCodeApp": {
     "message": "Inserisci il codice di verifica a 6 cifre dalla tua applicazione di autenticazione."
@@ -1308,6 +1311,10 @@
     "message": "Aggiornato",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creato",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Password aggiornata",
     "description": "ex. Date this password was updated"
@@ -1368,7 +1375,7 @@
     "message": "In attesa di conferma dal desktop"
   },
   "awaitDesktopDesc": {
-    "message": "Conferma utilizzando l'autenticazione biometrica nell'applicazione Bitwarden Desktop per abilitare l'autenticazione biometrica per il browser."
+    "message": "Si prega di confermare utilizzando l'autenticazione biometrica nell'applicazione Bitwarden Desktop per abilitare l'autenticazione biometrica per il browser."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Blocca con la password principale al riavvio del browser"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "Selezionando la casella accetti quanto segue:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "I termini di servizio e l'informativa sulla privacy non sono stati accettati."
   },
   "termsOfService": {
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Errore Key Connector: assicurarsi che il Key Connector sia disponibile e correttamente funzionante."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "È richiesto un abbonamento Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "L'organizzazione è disabilitata."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Non è possibile accedere agli oggetti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per ricevere assistenza."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Accedo a $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Le impostazioni sono state cambiate"
+  },
+  "environmentEditedClick": {
+    "message": "Clicca qui"
+  },
+  "environmentEditedReset": {
+    "message": "per ritornare alle impostazioni preconfigurate"
+  },
+  "serverVersion": {
+    "message": "Versione Server"
+  },
+  "selfHosted": {
+    "message": "Self-Hosted"
+  },
+  "thirdParty": {
+    "message": "Terze parti"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connesso a una implementazione server di terze parti, $SERVERNAME$. Controlla i bug utilizzando il server ufficiale o segnalali al server di terze parti.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "visto l'ultima volta il $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Accedi con la password principale"
+  },
+  "loggingInAs": {
+    "message": "Accesso eseguito come"
+  },
+  "notYou": {
+    "message": "Non sei tu?"
+  },
+  "newAroundHere": {
+    "message": "Nuovo da queste parti?"
+  },
+  "rememberEmail": {
+    "message": "Ricorda email"
   }
 }

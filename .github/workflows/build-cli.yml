@@ -17,7 +17,7 @@ on:
     branches:
       - 'master'
       - 'rc'
-      - 'hotfix-rc/**'
+      - 'hotfix-rc-cli'
     paths:
       - 'apps/cli/**'
       - 'libs/**'
@@ -62,7 +62,7 @@ jobs:
         id: retrieve-version
         run: |
           PKG_VERSION=$(jq -r .version package.json)
-          echo "::set-output name=package_version::$PKG_VERSION"
+          echo "package_version=$PKG_VERSION" >> $GITHUB_OUTPUT
 
 
   cli:
@@ -72,7 +72,7 @@ jobs:
       - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
-      _WIN_PKG_FETCH_VERSION: 16.15.0
+      _WIN_PKG_FETCH_VERSION: 16.16.0
       _WIN_PKG_VERSION: 3.4
     steps:
       - name: Checkout repo
@@ -154,9 +154,6 @@ jobs:
       - name: Install
         run: npm ci
         working-directory: ./
-
-      - name: Run tests
-        run: npm run test
 
       - name: Build & Package
         run: npm run dist --quiet
@@ -363,8 +360,8 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
         if: failure()
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
         with:
           keyvault: "bitwarden-prod-kv"
           secrets: "devops-alerts-slack-webhook-url"

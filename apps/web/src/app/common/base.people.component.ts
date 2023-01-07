@@ -3,22 +3,22 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ValidationService } from "@bitwarden/angular/services/validation.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
 import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
 import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
 import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organizationUserResponse";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/providerUserResponse";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
 import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
 
@@ -55,9 +55,9 @@ export abstract class BasePeopleComponent<
       : 0;
   }
 
-  get deactivatedCount() {
-    return this.statusMap.has(this.userStatusType.Deactivated)
-      ? this.statusMap.get(this.userStatusType.Deactivated).length
+  get revokedCount() {
+    return this.statusMap.has(this.userStatusType.Revoked)
+      ? this.statusMap.get(this.userStatusType.Revoked).length
       : 0;
   }
 
@@ -85,7 +85,7 @@ export abstract class BasePeopleComponent<
   users: UserType[] = [];
   pagedUsers: UserType[] = [];
   searchText: string;
-  actionPromise: Promise<any>;
+  actionPromise: Promise<void>;
 
   protected allUsers: UserType[] = [];
   protected activeUsers: UserType[] = [];
@@ -111,11 +111,11 @@ export abstract class BasePeopleComponent<
 
   abstract edit(user: UserType): void;
   abstract getUsers(): Promise<ListResponse<UserType>>;
-  abstract deleteUser(id: string): Promise<any>;
-  abstract deactivateUser(id: string): Promise<any>;
-  abstract activateUser(id: string): Promise<any>;
-  abstract reinviteUser(id: string): Promise<any>;
-  abstract confirmUser(user: UserType, publicKey: Uint8Array): Promise<any>;
+  abstract deleteUser(id: string): Promise<void>;
+  abstract revokeUser(id: string): Promise<void>;
+  abstract restoreUser(id: string): Promise<void>;
+  abstract reinviteUser(id: string): Promise<void>;
+  abstract confirmUser(user: UserType, publicKey: Uint8Array): Promise<void>;
 
   async load() {
     const response = await this.getUsers();
@@ -126,14 +126,19 @@ export abstract class BasePeopleComponent<
     }
 
     this.allUsers = response.data != null && response.data.length > 0 ? response.data : [];
-    this.allUsers.sort(Utils.getSortFunction(this.i18nService, "email"));
+    this.allUsers.sort(
+      Utils.getSortFunction<ProviderUserUserDetailsResponse | OrganizationUserUserDetailsResponse>(
+        this.i18nService,
+        "email"
+      )
+    );
     this.allUsers.forEach((u) => {
       if (!this.statusMap.has(u.status)) {
         this.statusMap.set(u.status, [u]);
       } else {
         this.statusMap.get(u.status).push(u);
       }
-      if (u.status !== this.userStatusType.Deactivated) {
+      if (u.status !== this.userStatusType.Revoked) {
         this.activeUsers.push(u);
       }
     });
@@ -204,15 +209,18 @@ export abstract class BasePeopleComponent<
     this.edit(null);
   }
 
-  async remove(user: UserType) {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.deleteWarningMessage(user),
+  protected async removeUserConfirmationDialog(user: UserType) {
+    return this.platformUtilsService.showDialog(
+      this.i18nService.t("removeUserConfirmation"),
       this.userNamePipe.transform(user),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
       "warning"
     );
+  }
 
+  async remove(user: UserType) {
+    const confirmed = await this.removeUserConfirmationDialog(user);
     if (!confirmed) {
       return false;
     }
@@ -232,11 +240,11 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
-  async deactivate(user: UserType) {
+  async revoke(user: UserType) {
     const confirmed = await this.platformUtilsService.showDialog(
-      this.deactivateWarningMessage(),
-      this.i18nService.t("deactivateUserId", this.userNamePipe.transform(user)),
-      this.i18nService.t("deactivate"),
+      this.revokeWarningMessage(),
+      this.i18nService.t("revokeUserId", this.userNamePipe.transform(user)),
+      this.i18nService.t("revokeAccess"),
       this.i18nService.t("cancel"),
       "warning"
     );
@@ -245,13 +253,13 @@ export abstract class BasePeopleComponent<
       return false;
     }
 
-    this.actionPromise = this.deactivateUser(user.id);
+    this.actionPromise = this.revokeUser(user.id);
     try {
       await this.actionPromise;
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("deactivatedUserId", this.userNamePipe.transform(user))
+        this.i18nService.t("revokedUserId", this.userNamePipe.transform(user))
       );
       await this.load();
     } catch (e) {
@@ -260,26 +268,14 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
-  async activate(user: UserType) {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.activateWarningMessage(),
-      this.i18nService.t("activateUserId", this.userNamePipe.transform(user)),
-      this.i18nService.t("activate"),
-      this.i18nService.t("cancel"),
-      "warning"
-    );
-
-    if (!confirmed) {
-      return false;
-    }
-
-    this.actionPromise = this.activateUser(user.id);
+  async restore(user: UserType) {
+    this.actionPromise = this.restoreUser(user.id);
     try {
       await this.actionPromise;
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("activatedUserId", this.userNamePipe.transform(user))
+        this.i18nService.t("restoredUserId", this.userNamePipe.transform(user))
       );
       await this.load();
     } catch (e) {
@@ -352,6 +348,7 @@ export abstract class BasePeopleComponent<
             comp.name = this.userNamePipe.transform(user);
             comp.userId = user != null ? user.userId : null;
             comp.publicKey = publicKey;
+            // eslint-disable-next-line rxjs/no-async-subscribe
             comp.onConfirmedUser.subscribe(async () => {
               try {
                 comp.formPromise = confirmUser(publicKey);
@@ -390,16 +387,8 @@ export abstract class BasePeopleComponent<
     return !searching && this.users && this.users.length > this.pageSize;
   }
 
-  protected deleteWarningMessage(user: UserType): string {
-    return this.i18nService.t("removeUserConfirmation");
-  }
-
-  protected deactivateWarningMessage(): string {
-    return this.i18nService.t("deactivateUserConfirmation");
-  }
-
-  protected activateWarningMessage(): string {
-    return this.i18nService.t("activateUserConfirmation");
+  protected revokeWarningMessage(): string {
+    return this.i18nService.t("revokeUserConfirmation");
   }
 
   protected getCheckedUsers() {
@@ -412,6 +401,12 @@ export abstract class BasePeopleComponent<
       this.users.splice(index, 1);
       this.resetPaging();
     }
+
+    index = this.allUsers.indexOf(user);
+    if (index > -1) {
+      this.allUsers.splice(index, 1);
+    }
+
     if (this.statusMap.has(user.status)) {
       index = this.statusMap.get(user.status).indexOf(user);
       if (index > -1) {

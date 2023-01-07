@@ -5,18 +5,22 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  NgZone,
   OnInit,
   Output,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
+  HostListener,
+  OnDestroy,
 } from "@angular/core";
-import { merge } from "rxjs";
+import { BehaviorSubject, concatMap, map, merge, Observable, Subject, takeUntil } from "rxjs";
 
-import { VaultFilter } from "@bitwarden/angular/modules/vault-filter/models/vault-filter.model";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import {
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
 import { VaultFilterService } from "../../services/vaultFilter.service";
@@ -45,19 +49,21 @@ import { VaultFilterService } from "../../services/vaultFilter.service";
     ]),
   ],
 })
-export class VaultSelectComponent implements OnInit {
+export class VaultSelectComponent implements OnInit, OnDestroy {
   @Output() onVaultSelectionChanged = new EventEmitter();
 
   @ViewChild("toggleVaults", { read: ElementRef })
   buttonRef: ElementRef<HTMLButtonElement>;
   @ViewChild("vaultSelectorTemplate", { read: TemplateRef }) templateRef: TemplateRef<HTMLElement>;
 
+  private _selectedVault = new BehaviorSubject<string | null>(null);
+
   isOpen = false;
   loaded = false;
-  organizations: Organization[];
-  vaultFilter: VaultFilter = new VaultFilter();
-  vaultFilterDisplay = "";
-  enforcePersonalOwnwership = false;
+  organizations$: Observable<Organization[]>;
+  selectedVault$: Observable<string | null> = this._selectedVault.asObservable();
+
+  enforcePersonalOwnership = false;
   overlayPostition: ConnectedPosition[] = [
     {
       originX: "start",
@@ -68,64 +74,73 @@ export class VaultSelectComponent implements OnInit {
   ];
 
   private overlayRef: OverlayRef;
+  private _destroy = new Subject<void>();
 
-  get show() {
+  shouldShow(organizations: Organization[]): boolean {
     return (
-      (this.organizations.length > 0 && !this.enforcePersonalOwnwership) ||
-      (this.organizations.length > 1 && this.enforcePersonalOwnwership)
+      (organizations.length > 0 && !this.enforcePersonalOwnership) ||
+      (organizations.length > 1 && this.enforcePersonalOwnership)
     );
   }
 
   constructor(
     private vaultFilterService: VaultFilterService,
     private i18nService: I18nService,
-    private ngZone: NgZone,
-    private broadcasterService: BroadcasterService,
     private overlay: Overlay,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private platformUtilsService: PlatformUtilsService,
+    private organizationService: OrganizationService
   ) {}
 
-  async ngOnInit() {
-    await this.load();
-    this.broadcasterService.subscribe(this.constructor.name, (message: any) => {
-      this.ngZone.run(async () => {
-        switch (message.command) {
-          case "syncCompleted":
-            await this.load();
-            break;
-          default:
-            break;
-        }
-      });
-    });
+  @HostListener("document:keydown.escape", ["$event"])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.isOpen) {
+      event.preventDefault();
+      this.close();
+    }
   }
 
-  async load() {
-    this.vaultFilter = this.vaultFilterService.getVaultFilter();
-    this.organizations = (await this.vaultFilterService.buildOrganizations()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-    this.enforcePersonalOwnwership =
-      await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+  async ngOnInit() {
+    this.organizations$ = this.organizationService.organizations$
+      .pipe(takeUntil(this._destroy))
+      .pipe(
+        map((orgs) => orgs.filter(isNotProviderUser).sort((a, b) => a.name.localeCompare(b.name)))
+      );
 
-    if (this.show) {
-      if (this.enforcePersonalOwnwership && !this.vaultFilter.myVaultOnly) {
-        this.vaultFilterService.setVaultFilter(this.organizations[0].id);
-        this.vaultFilter.selectedOrganizationId = this.organizations[0].id;
-        this.vaultFilterDisplay = this.organizations.find(
-          (o) => o.id === this.vaultFilter.selectedOrganizationId
-        ).name;
-      } else if (this.vaultFilter.myVaultOnly) {
-        this.vaultFilterDisplay = this.i18nService.t(this.vaultFilterService.myVault);
-      } else if (this.vaultFilter.selectedOrganizationId != null) {
-        this.vaultFilterDisplay = this.organizations.find(
-          (o) => o.id === this.vaultFilter.selectedOrganizationId
-        ).name;
-      } else {
-        this.vaultFilterDisplay = this.i18nService.t(this.vaultFilterService.allVaults);
-      }
-    }
+    this.organizations$
+      .pipe(
+        concatMap(async (organizations) => {
+          this.enforcePersonalOwnership =
+            await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+
+          if (this.shouldShow(organizations)) {
+            if (this.enforcePersonalOwnership && !this.vaultFilterService.vaultFilter.myVaultOnly) {
+              const firstOrganization = organizations[0];
+              this._selectedVault.next(firstOrganization.name);
+              this.vaultFilterService.setVaultFilter(firstOrganization.id);
+            } else if (this.vaultFilterService.vaultFilter.myVaultOnly) {
+              this._selectedVault.next(this.i18nService.t(this.vaultFilterService.myVault));
+            } else if (this.vaultFilterService.vaultFilter.selectedOrganizationId != null) {
+              const selectedOrganization = organizations.find(
+                (o) => o.id === this.vaultFilterService.vaultFilter.selectedOrganizationId
+              );
+              this._selectedVault.next(selectedOrganization.name);
+            } else {
+              this._selectedVault.next(this.i18nService.t(this.vaultFilterService.allVaults));
+            }
+          }
+        })
+      )
+      .pipe(takeUntil(this._destroy))
+      .subscribe();
+
     this.loaded = true;
+  }
+
+  ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
+    this._selectedVault.complete();
   }
 
   openOverlay() {
@@ -157,6 +172,7 @@ export class VaultSelectComponent implements OnInit {
       this.overlayRef.outsidePointerEvents(),
       this.overlayRef.backdropClick(),
       this.overlayRef.detachments()
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     ).subscribe(() => {
       this.close();
     });
@@ -171,19 +187,27 @@ export class VaultSelectComponent implements OnInit {
   }
 
   selectOrganization(organization: Organization) {
-    this.vaultFilterDisplay = organization.name;
-    this.vaultFilterService.setVaultFilter(organization.id);
-    this.onVaultSelectionChanged.emit();
-    this.close();
+    if (!organization.enabled) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("disabledOrganizationFilterError")
+      );
+    } else {
+      this._selectedVault.next(organization.name);
+      this.vaultFilterService.setVaultFilter(organization.id);
+      this.onVaultSelectionChanged.emit();
+      this.close();
+    }
   }
   selectAllVaults() {
-    this.vaultFilterDisplay = this.i18nService.t(this.vaultFilterService.allVaults);
+    this._selectedVault.next(this.i18nService.t(this.vaultFilterService.allVaults));
     this.vaultFilterService.setVaultFilter(this.vaultFilterService.allVaults);
     this.onVaultSelectionChanged.emit();
     this.close();
   }
   selectMyVault() {
-    this.vaultFilterDisplay = this.i18nService.t(this.vaultFilterService.myVault);
+    this._selectedVault.next(this.i18nService.t(this.vaultFilterService.myVault));
     this.vaultFilterService.setVaultFilter(this.vaultFilterService.myVault);
     this.onVaultSelectionChanged.emit();
     this.close();

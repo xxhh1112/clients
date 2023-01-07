@@ -1,7 +1,7 @@
 import { StateService } from "../abstractions/state.service";
 import { TokenService as TokenServiceAbstraction } from "../abstractions/token.service";
 import { Utils } from "../misc/utils";
-import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
+import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 export class TokenService implements TokenServiceAbstraction {
   static decodeToken(token: string): Promise<any> {
@@ -93,11 +93,6 @@ export class TokenService implements TokenServiceAbstraction {
   // ref https://github.com/auth0/angular-jwt/blob/master/src/angularJwt/services/jwt.js
 
   async decodeToken(token?: string): Promise<any> {
-    const storedToken = await this.stateService.getDecodedToken();
-    if (token === null && storedToken != null) {
-      return storedToken;
-    }
-
     token = token ?? (await this.stateService.getAccessToken());
 
     if (token == null) {

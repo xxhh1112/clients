@@ -1,3 +1,5 @@
+import { Observable, Subject } from "rxjs";
+
 import { ApiService } from "../abstractions/api.service";
 import { AppIdService } from "../abstractions/appId.service";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
@@ -15,25 +17,35 @@ import { AuthenticationStatus } from "../enums/authenticationStatus";
 import { AuthenticationType } from "../enums/authenticationType";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
-import { ApiLogInStrategy } from "../misc/logInStrategies/apiLogin.strategy";
 import { PasswordLogInStrategy } from "../misc/logInStrategies/passwordLogin.strategy";
+import { PasswordlessLogInStrategy } from "../misc/logInStrategies/passwordlessLogin.strategy";
 import { SsoLogInStrategy } from "../misc/logInStrategies/ssoLogin.strategy";
-import { AuthResult } from "../models/domain/authResult";
+import { UserApiLogInStrategy } from "../misc/logInStrategies/user-api-login.strategy";
+import { AuthResult } from "../models/domain/auth-result";
 import {
-  ApiLogInCredentials,
+  UserApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
-} from "../models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
-import { PreloginRequest } from "../models/request/preloginRequest";
-import { ErrorResponse } from "../models/response/errorResponse";
+  PasswordlessLogInCredentials,
+} from "../models/domain/log-in-credentials";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
+import { PreloginRequest } from "../models/request/prelogin.request";
+import { ErrorResponse } from "../models/response/error.response";
+import { AuthRequestPushNotification } from "../models/response/notification.response";
 
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
 
 export class AuthService implements AuthServiceAbstraction {
   get email(): string {
-    return this.logInStrategy instanceof PasswordLogInStrategy ? this.logInStrategy.email : null;
+    if (
+      this.logInStrategy instanceof PasswordLogInStrategy ||
+      this.logInStrategy instanceof PasswordlessLogInStrategy
+    ) {
+      return this.logInStrategy.email;
+    }
+
+    return null;
   }
 
   get masterPasswordHash(): string {
@@ -42,8 +54,26 @@ export class AuthService implements AuthServiceAbstraction {
       : null;
   }
 
-  private logInStrategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
+  get accessCode(): string {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy
+      ? this.logInStrategy.accessCode
+      : null;
+  }
+
+  get authRequestId(): string {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy
+      ? this.logInStrategy.authRequestId
+      : null;
+  }
+
+  private logInStrategy:
+    | UserApiLogInStrategy
+    | PasswordLogInStrategy
+    | SsoLogInStrategy
+    | PasswordlessLogInStrategy;
   private sessionTimeout: any;
+
+  private pushNotificationSubject = new Subject<string>();
 
   constructor(
     protected cryptoService: CryptoService,
@@ -61,52 +91,78 @@ export class AuthService implements AuthServiceAbstraction {
   ) {}
 
   async logIn(
-    credentials: ApiLogInCredentials | PasswordLogInCredentials | SsoLogInCredentials
+    credentials:
+      | UserApiLogInCredentials
+      | PasswordLogInCredentials
+      | SsoLogInCredentials
+      | PasswordlessLogInCredentials
   ): Promise<AuthResult> {
     this.clearState();
 
-    let strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy;
+    let strategy:
+      | UserApiLogInStrategy
+      | PasswordLogInStrategy
+      | SsoLogInStrategy
+      | PasswordlessLogInStrategy;
 
-    if (credentials.type === AuthenticationType.Password) {
-      strategy = new PasswordLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this
-      );
-    } else if (credentials.type === AuthenticationType.Sso) {
-      strategy = new SsoLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this.keyConnectorService
-      );
-    } else if (credentials.type === AuthenticationType.Api) {
-      strategy = new ApiLogInStrategy(
-        this.cryptoService,
-        this.apiService,
-        this.tokenService,
-        this.appIdService,
-        this.platformUtilsService,
-        this.messagingService,
-        this.logService,
-        this.stateService,
-        this.twoFactorService,
-        this.environmentService,
-        this.keyConnectorService
-      );
+    switch (credentials.type) {
+      case AuthenticationType.Password:
+        strategy = new PasswordLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this
+        );
+        break;
+      case AuthenticationType.Sso:
+        strategy = new SsoLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this.keyConnectorService
+        );
+        break;
+      case AuthenticationType.UserApi:
+        strategy = new UserApiLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this.environmentService,
+          this.keyConnectorService
+        );
+        break;
+      case AuthenticationType.Passwordless:
+        strategy = new PasswordlessLogInStrategy(
+          this.cryptoService,
+          this.apiService,
+          this.tokenService,
+          this.appIdService,
+          this.platformUtilsService,
+          this.messagingService,
+          this.logService,
+          this.stateService,
+          this.twoFactorService,
+          this
+        );
+        break;
     }
 
     const result = await strategy.logIn(credentials as any);
@@ -118,7 +174,7 @@ export class AuthService implements AuthServiceAbstraction {
   }
 
   async logInTwoFactor(
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string
   ): Promise<AuthResult> {
     if (this.logInStrategy == null) {
@@ -147,8 +203,8 @@ export class AuthService implements AuthServiceAbstraction {
     this.messagingService.send("loggedOut");
   }
 
-  authingWithApiKey(): boolean {
-    return this.logInStrategy instanceof ApiLogInStrategy;
+  authingWithUserApiKey(): boolean {
+    return this.logInStrategy instanceof UserApiLogInStrategy;
   }
 
   authingWithSso(): boolean {
@@ -157,6 +213,10 @@ export class AuthService implements AuthServiceAbstraction {
 
   authingWithPassword(): boolean {
     return this.logInStrategy instanceof PasswordLogInStrategy;
+  }
+
+  authingWithPasswordless(): boolean {
+    return this.logInStrategy instanceof PasswordlessLogInStrategy;
   }
 
   async getAuthStatus(userId?: string): Promise<AuthenticationStatus> {
@@ -202,7 +262,21 @@ export class AuthService implements AuthServiceAbstraction {
     return this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
   }
 
-  private saveState(strategy: ApiLogInStrategy | PasswordLogInStrategy | SsoLogInStrategy) {
+  async authResponsePushNotifiction(notification: AuthRequestPushNotification): Promise<any> {
+    this.pushNotificationSubject.next(notification.id);
+  }
+
+  getPushNotifcationObs$(): Observable<any> {
+    return this.pushNotificationSubject.asObservable();
+  }
+
+  private saveState(
+    strategy:
+      | UserApiLogInStrategy
+      | PasswordLogInStrategy
+      | SsoLogInStrategy
+      | PasswordlessLogInStrategy
+  ) {
     this.logInStrategy = strategy;
     this.startSessionTimeout();
   }

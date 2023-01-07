@@ -1,12 +1,20 @@
-import { Component, OnInit } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { SelectOptions } from "@bitwarden/angular/interfaces/selectOptions";
-import { dirtyRequired } from "@bitwarden/angular/validators/dirty.validator";
+import { ControlsOf } from "@bitwarden/angular/types/controls-of";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import {
   OpenIdConnectRedirectBehavior,
@@ -16,11 +24,11 @@ import {
   SsoType,
 } from "@bitwarden/common/enums/ssoEnums";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SsoConfigApi } from "@bitwarden/common/models/api/ssoConfigApi";
+import { SsoConfigApi } from "@bitwarden/common/models/api/sso-config.api";
 import { Organization } from "@bitwarden/common/models/domain/organization";
-import { OrganizationSsoRequest } from "@bitwarden/common/models/request/organization/organizationSsoRequest";
-import { OrganizationSsoResponse } from "@bitwarden/common/models/response/organization/organizationSsoResponse";
-import { SsoConfigView } from "@bitwarden/common/models/view/ssoConfigView";
+import { OrganizationSsoRequest } from "@bitwarden/common/models/request/organization/organization-sso.request";
+import { OrganizationSsoResponse } from "@bitwarden/common/models/response/organization/organization-sso.response";
+import { SsoConfigView } from "@bitwarden/common/models/view/sso-config.view";
 
 const defaultSigningAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
 
@@ -28,7 +36,7 @@ const defaultSigningAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha2
   selector: "app-org-manage-sso",
   templateUrl: "sso.component.html",
 })
-export class SsoComponent implements OnInit {
+export class SsoComponent implements OnInit, OnDestroy {
   readonly ssoType = SsoType;
 
   readonly ssoTypeOptions: SelectOptions[] = [
@@ -41,7 +49,6 @@ export class SsoComponent implements OnInit {
     "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
     "http://www.w3.org/2000/09/xmldsig#rsa-sha384",
     "http://www.w3.org/2000/09/xmldsig#rsa-sha512",
-    "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
   ];
 
   readonly saml2SigningBehaviourOptions: SelectOptions[] = [
@@ -73,13 +80,15 @@ export class SsoComponent implements OnInit {
     { name: "Form POST", value: OpenIdConnectRedirectBehavior.FormPost },
   ];
 
+  private destory$ = new Subject<void>();
+
   showOpenIdCustomizations = false;
 
   loading = true;
   haveTestedKeyConnector = false;
   organizationId: string;
   organization: Organization;
-  formPromise: Promise<any>;
+  formPromise: Promise<OrganizationSsoResponse>;
 
   callbackPath: string;
   signedOutCallbackPath: string;
@@ -87,56 +96,63 @@ export class SsoComponent implements OnInit {
   spMetadataUrl: string;
   spAcsUrl: string;
 
-  enabled = this.formBuilder.control(false);
+  protected enabled = this.formBuilder.control(false);
 
-  openIdForm = this.formBuilder.group(
+  protected ssoIdentifier = this.formBuilder.control("", {
+    validators: [Validators.maxLength(50), Validators.required],
+  });
+
+  protected openIdForm = this.formBuilder.group<ControlsOf<SsoConfigView["openId"]>>(
     {
-      authority: ["", dirtyRequired],
-      clientId: ["", dirtyRequired],
-      clientSecret: ["", dirtyRequired],
-      metadataAddress: [],
-      redirectBehavior: [OpenIdConnectRedirectBehavior.RedirectGet, dirtyRequired],
-      getClaimsFromUserInfoEndpoint: [],
-      additionalScopes: [],
-      additionalUserIdClaimTypes: [],
-      additionalEmailClaimTypes: [],
-      additionalNameClaimTypes: [],
-      acrValues: [],
-      expectedReturnAcrValue: [],
+      authority: new FormControl("", Validators.required),
+      clientId: new FormControl("", Validators.required),
+      clientSecret: new FormControl("", Validators.required),
+      metadataAddress: new FormControl(),
+      redirectBehavior: new FormControl(
+        OpenIdConnectRedirectBehavior.RedirectGet,
+        Validators.required
+      ),
+      getClaimsFromUserInfoEndpoint: new FormControl(),
+      additionalScopes: new FormControl(),
+      additionalUserIdClaimTypes: new FormControl(),
+      additionalEmailClaimTypes: new FormControl(),
+      additionalNameClaimTypes: new FormControl(),
+      acrValues: new FormControl(),
+      expectedReturnAcrValue: new FormControl(),
     },
     {
       updateOn: "blur",
     }
   );
 
-  samlForm = this.formBuilder.group(
+  protected samlForm = this.formBuilder.group<ControlsOf<SsoConfigView["saml"]>>(
     {
-      spNameIdFormat: [Saml2NameIdFormat.NotConfigured],
-      spOutboundSigningAlgorithm: [defaultSigningAlgorithm],
-      spSigningBehavior: [Saml2SigningBehavior.IfIdpWantAuthnRequestsSigned],
-      spMinIncomingSigningAlgorithm: [defaultSigningAlgorithm],
-      spWantAssertionsSigned: [],
-      spValidateCertificates: [],
+      spNameIdFormat: new FormControl(Saml2NameIdFormat.NotConfigured),
+      spOutboundSigningAlgorithm: new FormControl(defaultSigningAlgorithm),
+      spSigningBehavior: new FormControl(Saml2SigningBehavior.IfIdpWantAuthnRequestsSigned),
+      spMinIncomingSigningAlgorithm: new FormControl(defaultSigningAlgorithm),
+      spWantAssertionsSigned: new FormControl(),
+      spValidateCertificates: new FormControl(),
 
-      idpEntityId: ["", dirtyRequired],
-      idpBindingType: [Saml2BindingType.HttpRedirect],
-      idpSingleSignOnServiceUrl: [],
-      idpSingleLogoutServiceUrl: [],
-      idpX509PublicCert: ["", dirtyRequired],
-      idpOutboundSigningAlgorithm: [defaultSigningAlgorithm],
-      idpAllowUnsolicitedAuthnResponse: [],
-      idpAllowOutboundLogoutRequests: [true],
-      idpWantAuthnRequestsSigned: [],
+      idpEntityId: new FormControl("", Validators.required),
+      idpBindingType: new FormControl(Saml2BindingType.HttpRedirect),
+      idpSingleSignOnServiceUrl: new FormControl(),
+      idpSingleLogoutServiceUrl: new FormControl(),
+      idpX509PublicCert: new FormControl("", Validators.required),
+      idpOutboundSigningAlgorithm: new FormControl(defaultSigningAlgorithm),
+      idpAllowUnsolicitedAuthnResponse: new FormControl(),
+      idpAllowOutboundLogoutRequests: new FormControl(true),
+      idpWantAuthnRequestsSigned: new FormControl(),
     },
     {
       updateOn: "blur",
     }
   );
 
-  ssoConfigForm = this.formBuilder.group({
-    configType: [SsoType.None],
-    keyConnectorEnabled: [false],
-    keyConnectorUrl: [""],
+  protected ssoConfigForm = this.formBuilder.group<ControlsOf<SsoConfigView>>({
+    configType: new FormControl(SsoType.None),
+    keyConnectorEnabled: new FormControl(false),
+    keyConnectorUrl: new FormControl(""),
     openId: this.openIdForm,
     saml: this.samlForm,
   });
@@ -147,38 +163,51 @@ export class SsoComponent implements OnInit {
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
-    this.ssoConfigForm.get("configType").valueChanges.subscribe((newType: SsoType) => {
-      if (newType === SsoType.OpenIdConnect) {
-        this.openIdForm.enable();
-        this.samlForm.disable();
-      } else if (newType === SsoType.Saml2) {
-        this.openIdForm.disable();
-        this.samlForm.enable();
-      } else {
-        this.openIdForm.disable();
-        this.samlForm.disable();
-      }
-    });
+    this.ssoConfigForm
+      .get("configType")
+      .valueChanges.pipe(takeUntil(this.destory$))
+      .subscribe((newType: SsoType) => {
+        if (newType === SsoType.OpenIdConnect) {
+          this.openIdForm.enable();
+          this.samlForm.disable();
+        } else if (newType === SsoType.Saml2) {
+          this.openIdForm.disable();
+          this.samlForm.enable();
+        } else {
+          this.openIdForm.disable();
+          this.samlForm.disable();
+        }
+      });
 
     this.samlForm
       .get("spSigningBehavior")
-      .valueChanges.subscribe(() =>
-        this.samlForm.get("idpX509PublicCert").updateValueAndValidity()
-      );
+      .valueChanges.pipe(takeUntil(this.destory$))
+      .subscribe(() => this.samlForm.get("idpX509PublicCert").updateValueAndValidity());
 
-    this.route.parent.parent.params.subscribe(async (params) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          await this.load();
+        }),
+        takeUntil(this.destory$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destory$.next();
+    this.destory$.complete();
   }
 
   async load() {
     this.organization = await this.organizationService.get(this.organizationId);
-    const ssoSettings = await this.apiService.getOrganizationSso(this.organizationId);
+    const ssoSettings = await this.organizationApiService.getSso(this.organizationId);
     this.populateForm(ssoSettings);
 
     this.callbackPath = ssoSettings.urls.callbackPath;
@@ -193,7 +222,8 @@ export class SsoComponent implements OnInit {
   async submit() {
     this.validateForm(this.ssoConfigForm);
 
-    if (this.ssoConfigForm.get("keyConnectorEnabled").value) {
+    if (this.ssoConfigForm.value.keyConnectorEnabled) {
+      this.haveTestedKeyConnector = false;
       await this.validateKeyConnectorUrl();
     }
 
@@ -204,9 +234,10 @@ export class SsoComponent implements OnInit {
 
     const request = new OrganizationSsoRequest();
     request.enabled = this.enabled.value;
-    request.data = SsoConfigApi.fromView(this.ssoConfigForm.value as SsoConfigView);
+    request.identifier = this.ssoIdentifier.value;
+    request.data = SsoConfigApi.fromView(this.ssoConfigForm.getRawValue());
 
-    this.formPromise = this.apiService.postOrganizationSso(this.organizationId, request);
+    this.formPromise = this.organizationApiService.updateSso(this.organizationId, request);
 
     try {
       const response = await this.formPromise;
@@ -231,7 +262,7 @@ export class SsoComponent implements OnInit {
       this.keyConnectorUrl.updateValueAndValidity();
     } catch {
       this.keyConnectorUrl.setErrors({
-        invalidUrl: true,
+        invalidUrl: { message: this.i18nService.t("keyConnectorTestFail") },
       });
     }
 
@@ -242,9 +273,9 @@ export class SsoComponent implements OnInit {
     this.showOpenIdCustomizations = !this.showOpenIdCustomizations;
   }
 
-  getErrorCount(form: FormGroup): number {
+  getErrorCount(form: UntypedFormGroup): number {
     return Object.values(form.controls).reduce((acc: number, control: AbstractControl) => {
-      if (control instanceof FormGroup) {
+      if (control instanceof UntypedFormGroup) {
         return acc + this.getErrorCount(control);
       }
 
@@ -270,13 +301,13 @@ export class SsoComponent implements OnInit {
     return this.samlSigningAlgorithms.map((algorithm) => ({ name: algorithm, value: algorithm }));
   }
 
-  private validateForm(form: FormGroup) {
+  private validateForm(form: UntypedFormGroup) {
     Object.values(form.controls).forEach((control: AbstractControl) => {
       if (control.disabled) {
         return;
       }
 
-      if (control instanceof FormGroup) {
+      if (control instanceof UntypedFormGroup) {
         this.validateForm(control);
       } else {
         control.markAsDirty();
@@ -288,6 +319,7 @@ export class SsoComponent implements OnInit {
 
   private populateForm(ssoSettings: OrganizationSsoResponse) {
     this.enabled.setValue(ssoSettings.enabled);
+    this.ssoIdentifier.setValue(ssoSettings.identifier);
     if (ssoSettings.data != null) {
       const ssoConfigView = new SsoConfigView(ssoSettings.data);
       this.ssoConfigForm.patchValue(ssoConfigView);

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_extName__",
   "short_name": "__MSG_appName__",
-  "version": "2022.5.0",
+  "version": "2022.12.1",
   "description": "__MSG_extDesc__",
   "default_locale": "en",
   "author": "Bitwarden Inc.",
@@ -23,12 +23,6 @@
         "content/notificationBar.js",
         "content/contextMenuHandler.js"
       ],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
-      "run_at": "document_start"
-    },
-    {
-      "all_frames": false,
-      "js": ["content/shortcuts.js"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
     },
@@ -106,8 +100,7 @@
   "web_accessible_resources": [
     "notification/bar.html",
     "images/icon38.png",
-    "images/icon38_locked.png",
-    "images/close.png"
+    "images/icon38_locked.png"
   ],
   "applications": {
     "gecko": {
@@ -119,5 +112,8 @@
     "default_title": "Bitwarden",
     "default_panel": "popup/index.html?uilocation=sidebar",
     "default_icon": "images/icon19.png"
+  },
+  "storage": {
+    "managed_schema": "managed_schema.json"
   }
 }

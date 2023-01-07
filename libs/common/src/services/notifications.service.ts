@@ -8,7 +8,7 @@ import { EnvironmentService } from "../abstractions/environment.service";
 import { LogService } from "../abstractions/log.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "../abstractions/notifications.service";
 import { StateService } from "../abstractions/state.service";
-import { SyncService } from "../abstractions/sync.service";
+import { SyncService } from "../abstractions/sync/sync.service.abstraction";
 import { AuthenticationStatus } from "../enums/authenticationStatus";
 import { NotificationType } from "../enums/notificationType";
 import {
@@ -16,7 +16,7 @@ import {
   SyncCipherNotification,
   SyncFolderNotification,
   SyncSendNotification,
-} from "../models/response/notificationResponse";
+} from "../models/response/notification.response";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
   private signalrConnection: signalR.HubConnection;

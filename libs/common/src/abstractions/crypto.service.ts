@@ -1,12 +1,12 @@
 import { HashPurpose } from "../enums/hashPurpose";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
-import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
-import { EncString } from "../models/domain/encString";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
-import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
-import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
+import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
+import { EncString } from "../models/domain/enc-string";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { ProfileOrganizationResponse } from "../models/response/profile-organization.response";
+import { ProfileProviderOrganizationResponse } from "../models/response/profile-provider-organization.response";
+import { ProfileProviderResponse } from "../models/response/profile-provider.response";
 
 export abstract class CryptoService {
   setKey: (key: SymmetricCryptoKey) => Promise<any>;
@@ -29,6 +29,7 @@ export abstract class CryptoService {
   getOrgKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
   getOrgKey: (orgId: string) => Promise<SymmetricCryptoKey>;
   getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
+  getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
   hasKey: () => Promise<boolean>;
   hasKeyInMemory: (userId?: string) => Promise<boolean>;
   hasKeyStored: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<boolean>;
@@ -80,7 +81,7 @@ export abstract class CryptoService {
   rsaDecrypt: (encValue: string, privateKeyValue?: ArrayBuffer) => Promise<ArrayBuffer>;
   decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   decryptToUtf8: (encString: EncString, key?: SymmetricCryptoKey) => Promise<string>;
-  decryptFromBytes: (encBuf: ArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
+  decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
 }

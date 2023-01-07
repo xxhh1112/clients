@@ -2,6 +2,7 @@ import "zone.js/dist/zone";
 
 import { registerLocaleData } from "@angular/common";
 import localeAf from "@angular/common/locales/af";
+import localeAr from "@angular/common/locales/ar";
 import localeAz from "@angular/common/locales/az";
 import localeBe from "@angular/common/locales/be";
 import localeBg from "@angular/common/locales/bg";
@@ -17,6 +18,7 @@ import localeEnIn from "@angular/common/locales/en-IN";
 import localeEo from "@angular/common/locales/eo";
 import localeEs from "@angular/common/locales/es";
 import localeEt from "@angular/common/locales/et";
+import localeEu from "@angular/common/locales/eu";
 import localeFa from "@angular/common/locales/fa";
 import localeFi from "@angular/common/locales/fi";
 import localeFil from "@angular/common/locales/fil";
@@ -56,7 +58,11 @@ import localeZhCn from "@angular/common/locales/zh-Hans";
 import localeZhTw from "@angular/common/locales/zh-Hant";
 import { NgModule } from "@angular/core";
 
+import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
+import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
+
 import { AccessibilityCookieComponent } from "./accounts/accessibility-cookie.component";
+import { DeleteAccountComponent } from "./accounts/delete-account.component";
 import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
 import { LockComponent } from "./accounts/lock.component";
@@ -80,15 +86,13 @@ import { AccountSwitcherComponent } from "./layout/account-switcher.component";
 import { HeaderComponent } from "./layout/header.component";
 import { NavComponent } from "./layout/nav.component";
 import { SearchComponent } from "./layout/search/search.component";
-import { SharedModule } from "./modules/shared.module";
-import { VaultFilterModule } from "./modules/vault-filter/vault-filter.module";
 import { AddEditComponent as SendAddEditComponent } from "./send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "./send/efflux-dates.component";
 import { SendComponent } from "./send/send.component";
+import { SharedModule } from "./shared/shared.module";
 import { AddEditCustomFieldsComponent } from "./vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "./vault/add-edit.component";
 import { AttachmentsComponent } from "./vault/attachments.component";
-import { CiphersComponent } from "./vault/ciphers.component";
 import { CollectionsComponent } from "./vault/collections.component";
 import { ExportComponent } from "./vault/export.component";
 import { FolderAddEditComponent } from "./vault/folder-add-edit.component";
@@ -96,11 +100,14 @@ import { GeneratorComponent } from "./vault/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./vault/password-generator-history.component";
 import { PasswordHistoryComponent } from "./vault/password-history.component";
 import { ShareComponent } from "./vault/share.component";
+import { VaultFilterModule } from "./vault/vault-filter/vault-filter.module";
+import { VaultItemsComponent } from "./vault/vault-items.component";
 import { VaultComponent } from "./vault/vault.component";
 import { ViewCustomFieldsComponent } from "./vault/view-custom-fields.component";
 import { ViewComponent } from "./vault/view.component";
 
 registerLocaleData(localeAf, "af");
+registerLocaleData(localeAr, "ar");
 registerLocaleData(localeAz, "az");
 registerLocaleData(localeBe, "be");
 registerLocaleData(localeBg, "bg");
@@ -116,6 +123,7 @@ registerLocaleData(localeEnIn, "en-IN");
 registerLocaleData(localeEo, "eo");
 registerLocaleData(localeEs, "es");
 registerLocaleData(localeEt, "et");
+registerLocaleData(localeEu, "eu");
 registerLocaleData(localeFa, "fa");
 registerLocaleData(localeFi, "fi");
 registerLocaleData(localeFil, "fil");
@@ -163,8 +171,11 @@ registerLocaleData(localeZhTw, "zh-TW");
     AddEditCustomFieldsComponent,
     AppComponent,
     AttachmentsComponent,
-    CiphersComponent,
+    VaultItemsComponent,
     CollectionsComponent,
+    ColorPasswordPipe,
+    ColorPasswordCountPipe,
+    DeleteAccountComponent,
     EnvironmentComponent,
     ExportComponent,
     FolderAddEditComponent,

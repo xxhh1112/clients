@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Izmantot lielos sākumburtus",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Iekļaut ciparu"
@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Nederīga e-pasta adrese."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Ir jānorāda galvenā parole."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Ir nepieciešama galvenās paroles atkārtota ievadīšana."
+  },
+  "masterPasswordMinlength": {
     "message": "Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai."
   },
   "masterPassDoesntMatch": {
@@ -1263,6 +1266,10 @@
     "message": "Atjaunināts",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Izveidots",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Parole atjaunināta",
     "description": "ex. Date this password was updated"
@@ -1389,6 +1396,21 @@
   },
   "lockWithMasterPassOnRestart": {
     "message": "Aizslēgt ar galveno paroli pēc pārsāknēšanas"
+  },
+  "deleteAccount": {
+    "message": "Dzēst kontu"
+  },
+  "deleteAccountDesc": {
+    "message": "Turpināt zemāk, lai izdzēstu kontu un visu glabātavas sasturu."
+  },
+  "deleteAccountWarning": {
+    "message": "Konta dzēšana ir paliekoša. To nevar atsaukt."
+  },
+  "accountDeleted": {
+    "message": "Konts tika izdzēsts"
+  },
+  "accountDeletedDesc": {
+    "message": "Konts ir slēgts, un visi saistītie dati ir izdzēsti."
   },
   "preferences": {
     "message": "Uzstādījumi"
@@ -1543,14 +1565,20 @@
   "acceptPolicies": {
     "message": "Atzīmējot šo rūtiņu, Tu piekrīti sekojošajam:"
   },
-  "acceptPoliciesError": {
-    "message": "Nav pieņemti izmantošanas nosacījumi un privātuma politika."
+  "acceptPoliciesRequired": {
+    "message": "Nav apstiprināti izmantošanas nosacījumi un privātuma politika."
   },
   "enableBrowserIntegration": {
     "message": "Iespējot pārlūka saistīšanu"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Pārlūka saistīšana tiek izmantota pārlūka biometrijas nodrošināšanai."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Atļaut DuckDuckGo pārlūka saistīšanu"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Izmantot Bitwarden glabātavu, kad pārlūko ar DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Pārlūka saistīšana nav atbalstīta"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Lūgums pārliecināties, ka attēlotā atpazīšanas vārdkopa ir tāda pati kā tā, kas ir redzama pārlūka paplašinājumā."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ pieprasa savienojumu ar Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Vai apstiprināt šo pieprasījumu?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Ja Tu neuzsāki šo pieprasījumu, neapstiprini to!"
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometrija nav iespējota"
@@ -1736,6 +1779,15 @@
   "disabled": {
     "message": "Atspējots"
   },
+  "removePassword": {
+    "message": "Noņemt paroli"
+  },
+  "removedPassword": {
+    "message": "Parole noņemta"
+  },
+  "removePasswordConfirmation": {
+    "message": "Vai tiešām noņemt paroli?"
+  },
   "maxAccessCountReached": {
     "message": "Sasniegts lielākais pieļaujamais piekļuvju skaits"
   },
@@ -1798,7 +1850,7 @@
     }
   },
   "vaultTimeoutTooLarge": {
-    "message": "Glabātavas noildze pāŗsniedz apvienības uzstādītos ierobežojumus."
+    "message": "Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automātiska ievietošana sarakstā"
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "API atslēga"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Nepieciešams Premium abonements"
+  },
+  "organizationIsDisabled": {
+    "message": "Apvienība ir atspējota."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Atspējotu apvienību vienumiem nevar piekļūt. Jāsazinās ar apvienības īpašnieku, lai iegūtu palīdzību."
+  },
+  "neverLockWarning": {
+    "message": "Vai tiešām izmantot uzstādījumu \"Nekad\"? Uzstādot aizslēgšanas iespēju uz \"Nekad\", šifrēšanas atslēga tiek glabāta ierīcē. Ja šī iespēja tiek izmantota, jāpārliecinās, ka ierīce tiek pienācīgi aizsargāta."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Glabātava"
+  },
+  "loginWithMasterPassword": {
+    "message": "Pierakstīties ar galveno paroli"
+  },
+  "loggingInAs": {
+    "message": "Pierakstās kā"
+  },
+  "rememberEmail": {
+    "message": "Atcerēties e-pasta adresi"
+  },
+  "notYou": {
+    "message": "Tas neesi Tu?"
+  },
+  "newAroundHere": {
+    "message": "Jauns šeit?"
+  },
+  "loggingInTo": {
+    "message": "Pierakstās $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Pierakstīties ar citu ierīci"
+  },
+  "toggleCharacterCount": {
+    "message": "Pārslēgt rakstzīmju skaita attēlošanu",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

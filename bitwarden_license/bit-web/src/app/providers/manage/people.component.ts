@@ -5,7 +5,6 @@ import { first } from "rxjs/operators";
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ValidationService } from "@bitwarden/angular/services/validation.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -14,17 +13,17 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
 import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
-import { ProviderUserBulkRequest } from "@bitwarden/common/models/request/provider/providerUserBulkRequest";
-import { ProviderUserConfirmRequest } from "@bitwarden/common/models/request/provider/providerUserConfirmRequest";
-import { ListResponse } from "@bitwarden/common/models/response/listResponse";
-import { ProviderUserBulkResponse } from "@bitwarden/common/models/response/provider/providerUserBulkResponse";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/providerUserResponse";
-
-import { BasePeopleComponent } from "src/app/common/base.people.component";
-import { BulkStatusComponent } from "src/app/organizations/manage/bulk/bulk-status.component";
-import { EntityEventsComponent } from "src/app/organizations/manage/entity-events.component";
+import { ProviderUserBulkRequest } from "@bitwarden/common/models/request/provider/provider-user-bulk.request";
+import { ProviderUserConfirmRequest } from "@bitwarden/common/models/request/provider/provider-user-confirm.request";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { ProviderUserBulkResponse } from "@bitwarden/common/models/response/provider/provider-user-bulk.response";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
+import { BasePeopleComponent } from "@bitwarden/web-vault/app/common/base.people.component";
+import { BulkStatusComponent } from "@bitwarden/web-vault/app/organizations/manage/bulk/bulk-status.component";
+import { EntityEventsComponent } from "@bitwarden/web-vault/app/organizations/manage/entity-events.component";
 
 import { BulkConfirmComponent } from "./bulk/bulk-confirm.component";
 import { BulkRemoveComponent } from "./bulk/bulk-remove.component";
@@ -34,6 +33,7 @@ import { UserAddEditComponent } from "./user-add-edit.component";
   selector: "provider-people",
   templateUrl: "people.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class PeopleComponent
   extends BasePeopleComponent<ProviderUserUserDetailsResponse>
   implements OnInit
@@ -87,6 +87,7 @@ export class PeopleComponent
   }
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.params.subscribe(async (params) => {
       this.providerId = params.providerId;
       const provider = await this.providerService.get(this.providerId);
@@ -100,6 +101,7 @@ export class PeopleComponent
 
       await this.load();
 
+      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
         this.searchText = qParams.search;
         if (qParams.viewEvents != null) {
@@ -120,12 +122,12 @@ export class PeopleComponent
     return this.apiService.deleteProviderUser(this.providerId, id);
   }
 
-  deactivateUser(id: string): Promise<any> {
+  revokeUser(id: string): Promise<any> {
     // Not implemented.
     return null;
   }
 
-  activateUser(id: string): Promise<any> {
+  restoreUser(id: string): Promise<any> {
     // Not implemented.
     return null;
   }

@@ -1,10 +1,10 @@
-import { animate, style, transition, trigger } from "@angular/animations";
-import { Component, OnInit } from "@angular/core";
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Directive, OnInit } from "@angular/core";
+import { ControlValueAccessor, FormControl } from "@angular/forms";
 
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification.service";
+import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { VerificationType } from "@bitwarden/common/enums/verificationType";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";
 
 /**
@@ -13,22 +13,10 @@ import { Verification } from "@bitwarden/common/types/verification";
  * This is exposed to the parent component via the ControlValueAccessor interface (e.g. bind it to a FormControl).
  * Use UserVerificationService to verify the user's input.
  */
-@Component({
+@Directive({
   selector: "app-user-verification",
-  templateUrl: "user-verification.component.html",
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: UserVerificationComponent,
-    },
-  ],
-  animations: [
-    trigger("sent", [
-      transition(":enter", [style({ opacity: 0 }), animate("100ms", style({ opacity: 1 }))]),
-    ]),
-  ],
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   usesKeyConnector = false;
   disableRequestOTP = false;
@@ -47,6 +35,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     this.usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
     this.processChanges(this.secret.value);
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.secret.valueChanges.subscribe((secret: string) => this.processChanges(secret));
   }
 
@@ -90,7 +79,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
 
     this.onChange({
       type: this.usesKeyConnector ? VerificationType.OTP : VerificationType.MasterPassword,
-      secret: secret,
+      secret: Utils.isNullOrWhitespace(secret) ? null : secret,
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
@@ -30,7 +30,10 @@ export class ResetPasswordPolicyComponent extends BasePolicyComponent {
   defaultTypes: { name: string; value: string }[];
   showKeyConnectorInfo = false;
 
-  constructor(private formBuilder: FormBuilder, private organizationService: OrganizationService) {
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private organizationService: OrganizationService
+  ) {
     super();
   }
 

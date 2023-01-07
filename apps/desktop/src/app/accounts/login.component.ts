@@ -1,19 +1,24 @@
 import { Component, NgZone, OnDestroy, ViewChild, ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
+import { FormBuilder } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/components/login.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 
 import { EnvironmentComponent } from "./environment.component";
 
@@ -27,13 +32,23 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
 
-  showingModal = false;
+  webVaultHostname = "";
 
-  protected alwaysRememberEmail = true;
+  showingModal = false;
 
   private deferFocus: boolean = null;
 
+  get loggedEmail() {
+    return this.formGroup.value.email;
+  }
+
+  get selfHostedDomain() {
+    return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
+  }
+
   constructor(
+    apiService: ApiService,
+    appIdService: AppIdService,
     authService: AuthService,
     router: Router,
     i18nService: I18nService,
@@ -47,9 +62,15 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     private broadcasterService: BroadcasterService,
     ngZone: NgZone,
     private messagingService: MessagingService,
-    logService: LogService
+    logService: LogService,
+    formBuilder: FormBuilder,
+    formValidationErrorService: FormValidationErrorsService,
+    route: ActivatedRoute,
+    loginService: LoginService
   ) {
     super(
+      apiService,
+      appIdService,
       authService,
       router,
       platformUtilsService,
@@ -59,7 +80,11 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       passwordGenerationService,
       cryptoFunctionService,
       logService,
-      ngZone
+      ngZone,
+      formBuilder,
+      formValidationErrorService,
+      route,
+      loginService
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
@@ -102,13 +127,16 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       this.environmentModal
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onShown.subscribe(() => {
       this.showingModal = true;
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     modal.onClosed.subscribe(() => {
       this.showingModal = false;
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSaved.subscribe(() => {
       modal.close();
     });
@@ -118,11 +146,33 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     this.showPassword = false;
   }
 
+  async continue() {
+    await super.validateEmail();
+    if (!this.formGroup.controls.email.valid) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccured"),
+        this.i18nService.t("invalidEmail")
+      );
+      return;
+    }
+    this.focusInput();
+  }
+
   async submit() {
+    if (!this.validatedEmail) {
+      return;
+    }
+
     await super.submit();
     if (this.captchaSiteKey) {
       const content = document.getElementById("content") as HTMLDivElement;
       content.setAttribute("style", "width:335px");
     }
+  }
+
+  private focusInput() {
+    const email = this.loggedEmail;
+    document.getElementById(email == null || email === "" ? "email" : "masterPassword").focus();
   }
 }

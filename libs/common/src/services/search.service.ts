@@ -7,25 +7,39 @@ import { SearchService as SearchServiceAbstraction } from "../abstractions/searc
 import { CipherType } from "../enums/cipherType";
 import { FieldType } from "../enums/fieldType";
 import { UriMatchType } from "../enums/uriMatchType";
-import { CipherView } from "../models/view/cipherView";
-import { SendView } from "../models/view/sendView";
+import { CipherView } from "../models/view/cipher.view";
+import { SendView } from "../models/view/send.view";
 
 export class SearchService implements SearchServiceAbstraction {
+  private static registeredPipeline = false;
+
   indexedEntityId?: string = null;
   private indexing = false;
   private index: lunr.Index = null;
-  private searchableMinLength = 2;
+  private readonly immediateSearchLocales: string[] = ["zh-CN", "zh-TW", "ja", "ko", "vi"];
+  private readonly defaultSearchableMinLength: number = 2;
+  private searchableMinLength: number = this.defaultSearchableMinLength;
 
   constructor(
     private cipherService: CipherService,
     private logService: LogService,
     private i18nService: I18nService
   ) {
-    if (["zh-CN", "zh-TW"].indexOf(i18nService.locale) !== -1) {
-      this.searchableMinLength = 1;
+    this.i18nService.locale$.subscribe((locale) => {
+      if (this.immediateSearchLocales.indexOf(locale) !== -1) {
+        this.searchableMinLength = 1;
+      } else {
+        this.searchableMinLength = this.defaultSearchableMinLength;
+      }
+    });
+
+    // Currently have to ensure this is only done a single time. Lunr allows you to register a function
+    // multiple times but they will add a warning message to the console. The way they do that breaks when ran on a service worker.
+    if (!SearchService.registeredPipeline) {
+      SearchService.registeredPipeline = true;
+      //register lunr pipeline function
+      lunr.Pipeline.registerFunction(this.normalizeAccentsPipelineFunction, "normalizeAccents");
     }
-    //register lunr pipeline function
-    lunr.Pipeline.registerFunction(this.normalizeAccentsPipelineFunction, "normalizeAccents");
   }
 
   clearIndex(): void {
@@ -47,7 +61,6 @@ export class SearchService implements SearchServiceAbstraction {
       return;
     }
 
-    this.logService.time("search indexing");
     this.indexing = true;
     this.indexedEntityId = indexedEntityId;
     this.index = null;
@@ -88,7 +101,7 @@ export class SearchService implements SearchServiceAbstraction {
 
     this.indexing = false;
 
-    this.logService.timeEnd("search indexing");
+    this.logService.info("Finished search indexing");
   }
 
   async searchCiphers(
@@ -183,7 +196,7 @@ export class SearchService implements SearchServiceAbstraction {
       if (
         c.login &&
         c.login.hasUris &&
-        c.login.uris.some((loginUri) => loginUri.uri.toLowerCase().indexOf(query) > -1)
+        c.login.uris.some((loginUri) => loginUri?.uri?.toLowerCase().indexOf(query) > -1)
       ) {
         return true;
       }

@@ -34,40 +34,34 @@
   <tbody>
     <tr *ngFor="let c of trustedContacts; let i = index">
       <td width="30">
-        <app-avatar
-          [data]="c | userName"
-          [email]="c.email"
-          size="25"
-          [circle]="true"
-          [fontSize]="14"
-        >
-        </app-avatar>
+        <bit-avatar [text]="c | userName" [id]="c.granteeId" size="small"></bit-avatar>
       </td>
       <td>
         <a href="#" appStopClick (click)="edit(c)">{{ c.email }}</a>
         <span
-          class="badge badge-secondary"
+          bitBadge
+          badgeType="secondary"
           *ngIf="c.status === emergencyAccessStatusType.Invited"
           >{{ "invited" | i18n }}</span
         >
-        <span class="badge badge-warning" *ngIf="c.status === emergencyAccessStatusType.Accepted">{{
-          "accepted" | i18n
-        }}</span>
         <span
-          class="badge badge-warning"
+          bitBadge
+          badgeType="warning"
+          *ngIf="c.status === emergencyAccessStatusType.Accepted"
+          >{{ "accepted" | i18n }}</span
+        >
+        <span
+          bitBadge
+          badgeType="warning"
           *ngIf="c.status === emergencyAccessStatusType.RecoveryInitiated"
           >{{ "emergencyAccessRecoveryInitiated" | i18n }}</span
         >
-        <span
-          class="badge badge-success"
-          *ngIf="c.status === emergencyAccessStatusType.RecoveryApproved"
-          >{{ "emergencyAccessRecoveryApproved" | i18n }}</span
-        >
-
-        <span class="badge badge-primary" *ngIf="c.type === emergencyAccessType.View">{{
-          "view" | i18n
+        <span bitBadge *ngIf="c.status === emergencyAccessStatusType.RecoveryApproved">{{
+          "emergencyAccessRecoveryApproved" | i18n
         }}</span>
-        <span class="badge badge-primary" *ngIf="c.type === emergencyAccessType.Takeover">{{
+
+        <span bitBadge *ngIf="c.type === emergencyAccessType.View">{{ "view" | i18n }}</span>
+        <span bitBadge *ngIf="c.type === emergencyAccessType.Takeover">{{
           "takeover" | i18n
         }}</span>
 
@@ -148,40 +142,34 @@
   <tbody>
     <tr *ngFor="let c of grantedContacts; let i = index">
       <td width="30">
-        <app-avatar
-          [data]="c | userName"
-          [email]="c.email"
-          size="25"
-          [circle]="true"
-          [fontSize]="14"
-        >
-        </app-avatar>
+        <bit-avatar [text]="c | userName" [id]="c.grantorId" size="small"></bit-avatar>
       </td>
       <td>
         <span>{{ c.email }}</span>
-        <span
-          class="badge badge-secondary"
-          *ngIf="c.status === emergencyAccessStatusType.Invited"
-          >{{ "invited" | i18n }}</span
-        >
-        <span class="badge badge-warning" *ngIf="c.status === emergencyAccessStatusType.Accepted">{{
-          "accepted" | i18n
+        <span bitBadge *ngIf="c.status === emergencyAccessStatusType.Invited">{{
+          "invited" | i18n
         }}</span>
         <span
-          class="badge badge-warning"
+          bitBadge
+          badgeType="warning"
+          *ngIf="c.status === emergencyAccessStatusType.Accepted"
+          >{{ "accepted" | i18n }}</span
+        >
+        <span
+          bitBadge
+          badgeType="warning"
           *ngIf="c.status === emergencyAccessStatusType.RecoveryInitiated"
           >{{ "emergencyAccessRecoveryInitiated" | i18n }}</span
         >
         <span
-          class="badge badge-success"
+          bitBadge
+          badgeType="success"
           *ngIf="c.status === emergencyAccessStatusType.RecoveryApproved"
           >{{ "emergencyAccessRecoveryApproved" | i18n }}</span
         >
 
-        <span class="badge badge-primary" *ngIf="c.type === emergencyAccessType.View">{{
-          "view" | i18n
-        }}</span>
-        <span class="badge badge-primary" *ngIf="c.type === emergencyAccessType.Takeover">{{
+        <span bitBadge *ngIf="c.type === emergencyAccessType.View">{{ "view" | i18n }}</span>
+        <span bitBadge *ngIf="c.type === emergencyAccessType.Takeover">{{
           "takeover" | i18n
         }}</span>
 

@@ -3,9 +3,9 @@
     <form class="modal-content" #form (ngSubmit)="submit()" [appApiAction]="formPromise">
       <div class="modal-body">
         <div class="box">
-          <div class="box-header" id="folderAddEditTitle">
+          <h1 class="box-header" id="folderAddEditTitle">
             {{ title }}
-          </div>
+          </h1>
           <div class="box-content">
             <div class="box-content-row" appBoxRow>
               <label for="name">{{ "name" | i18n }}</label>
@@ -47,17 +47,17 @@
             class="danger"
             appA11yTitle="{{ 'delete' | i18n }}"
             *ngIf="editMode"
-            [disabled]="deleteBtn.loading"
+            [disabled]="$any(deleteBtn).loading"
             [appApiAction]="deletePromise"
           >
             <i
               class="bwi bwi-trash bwi-lg bwi-fw"
-              [hidden]="deleteBtn.loading"
+              [hidden]="$any(deleteBtn).loading"
               aria-hidden="true"
             ></i>
             <i
               class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!deleteBtn.loading"
+              [hidden]="!$any(deleteBtn).loading"
               aria-hidden="true"
             ></i>
           </button>

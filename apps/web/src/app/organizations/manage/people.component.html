@@ -1,6 +1,8 @@
-<div class="page-header">
-  <h1>{{ "people" | i18n }}</h1>
-  <div class="mt-2 d-flex">
+<div
+  class="-tw-mt-2 tw-mb-2 tw-flex tw-flex-wrap tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-pb-2.5"
+>
+  <h1 class="tw-mt-2 tw-mb-0 tw-grow tw-pr-3">{{ "members" | i18n }}</h1>
+  <div class="tw-mt-2 tw-flex tw-justify-start tw-space-x-3">
     <div class="btn-group btn-group-sm" role="group">
       <button
         type="button"
@@ -9,7 +11,7 @@
         (click)="filter(null)"
       >
         {{ "all" | i18n }}
-        <span class="badge badge-pill badge-info" *ngIf="allCount">{{ allCount }}</span>
+        <span bitBadge badgeType="info" *ngIf="allCount">{{ allCount }}</span>
       </button>
       <button
         type="button"
@@ -18,7 +20,7 @@
         (click)="filter(userStatusType.Invited)"
       >
         {{ "invited" | i18n }}
-        <span class="badge badge-pill badge-info" *ngIf="invitedCount">{{ invitedCount }}</span>
+        <span bitBadge badgeType="info" *ngIf="invitedCount">{{ invitedCount }}</span>
       </button>
       <button
         type="button"
@@ -27,23 +29,19 @@
         (click)="filter(userStatusType.Accepted)"
       >
         {{ "accepted" | i18n }}
-        <span class="badge badge-pill badge-warning" *ngIf="acceptedCount">{{
-          acceptedCount
-        }}</span>
+        <span bitBadge badgeType="warning" *ngIf="acceptedCount">{{ acceptedCount }}</span>
       </button>
       <button
         type="button"
         class="btn btn-outline-secondary"
-        [ngClass]="{ active: status == userStatusType.Deactivated }"
-        (click)="filter(userStatusType.Deactivated)"
+        [ngClass]="{ active: status == userStatusType.Revoked }"
+        (click)="filter(userStatusType.Revoked)"
       >
-        {{ "deactivated" | i18n }}
-        <span class="badge badge-pill badge-info" *ngIf="deactivatedCount">{{
-          deactivatedCount
-        }}</span>
+        {{ "revoked" | i18n }}
+        <span bitBadge badgeType="info" *ngIf="revokedCount">{{ revokedCount }}</span>
       </button>
     </div>
-    <div class="ml-3">
+    <div class="tw-w-44">
       <label class="sr-only" for="search">{{ "search" | i18n }}</label>
       <input
         type="search"
@@ -53,7 +51,7 @@
         [(ngModel)]="searchText"
       />
     </div>
-    <div class="dropdown ml-3" appListDropdown>
+    <div class="dropdown" appListDropdown>
       <button
         class="btn btn-sm btn-outline-secondary dropdown-toggle"
         type="button"
@@ -79,13 +77,13 @@
           <i class="bwi bwi-fw bwi-check" aria-hidden="true"></i>
           {{ "confirmSelected" | i18n }}
         </button>
-        <button class="dropdown-item" appStopClick (click)="bulkActivate()">
+        <button class="dropdown-item" appStopClick (click)="bulkRestore()">
           <i class="bwi bwi-fw bwi-plus-circle" aria-hidden="true"></i>
-          {{ "activate" | i18n }}
+          {{ "restoreAccess" | i18n }}
         </button>
-        <button class="dropdown-item" appStopClick (click)="bulkDeactivate()">
+        <button class="dropdown-item" appStopClick (click)="bulkRevoke()">
           <i class="bwi bwi-fw bwi-minus-circle" aria-hidden="true"></i>
-          {{ "deactivate" | i18n }}
+          {{ "revokeAccess" | i18n }}
         </button>
         <button class="dropdown-item text-danger" appStopClick (click)="bulkRemove()">
           <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
@@ -102,7 +100,7 @@
         </button>
       </div>
     </div>
-    <button type="button" class="btn btn-sm btn-outline-primary ml-3" (click)="invite()">
+    <button type="button" class="btn btn-sm btn-outline-primary" (click)="invite()">
       <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
       {{ "inviteUser" | i18n }}
     </button>
@@ -145,25 +143,18 @@
             <input type="checkbox" [(ngModel)]="u.checked" appStopProp />
           </td>
           <td width="30">
-            <app-avatar
-              [data]="u | userName"
-              [email]="u.email"
-              size="25"
-              [circle]="true"
-              [fontSize]="14"
-            >
-            </app-avatar>
+            <bit-avatar [text]="u | userName" [id]="u.userId" size="small"></bit-avatar>
           </td>
           <td>
             <a href="#" appStopClick (click)="edit(u)">{{ u.email }}</a>
-            <span class="badge badge-secondary" *ngIf="u.status === userStatusType.Invited">{{
+            <span bitBadge badgeType="secondary" *ngIf="u.status === userStatusType.Invited">{{
               "invited" | i18n
             }}</span>
-            <span class="badge badge-warning" *ngIf="u.status === userStatusType.Accepted">{{
+            <span bitBadge badgeType="warning" *ngIf="u.status === userStatusType.Accepted">{{
               "accepted" | i18n
             }}</span>
-            <span class="badge badge-secondary" *ngIf="u.status === userStatusType.Deactivated">{{
-              "deactivated" | i18n
+            <span bitBadge badgeType="secondary" *ngIf="u.status === userStatusType.Revoked">{{
+              "revoked" | i18n
             }}</span>
             <small class="text-muted d-block" *ngIf="u.name">{{ u.name }}</small>
           </td>
@@ -230,7 +221,7 @@
                   href="#"
                   appStopClick
                   (click)="groups(u)"
-                  *ngIf="accessGroups"
+                  *ngIf="organization.useGroups"
                 >
                   <i class="bwi bwi-fw bwi-sitemap" aria-hidden="true"></i>
                   {{ "groups" | i18n }}
@@ -240,7 +231,7 @@
                   href="#"
                   appStopClick
                   (click)="events(u)"
-                  *ngIf="accessEvents && u.status === userStatusType.Confirmed"
+                  *ngIf="organization.useEvents && u.status === userStatusType.Confirmed"
                 >
                   <i class="bwi bwi-fw bwi-file-text" aria-hidden="true"></i>
                   {{ "eventLogs" | i18n }}
@@ -259,21 +250,21 @@
                   class="dropdown-item"
                   href="#"
                   appStopClick
-                  (click)="activate(u)"
-                  *ngIf="u.status === userStatusType.Deactivated"
+                  (click)="restore(u)"
+                  *ngIf="u.status === userStatusType.Revoked"
                 >
                   <i class="bwi bwi-fw bwi-plus-circle" aria-hidden="true"></i>
-                  {{ "activate" | i18n }}
+                  {{ "restoreAccess" | i18n }}
                 </a>
                 <a
                   class="dropdown-item"
                   href="#"
                   appStopClick
-                  (click)="deactivate(u)"
-                  *ngIf="u.status !== userStatusType.Deactivated"
+                  (click)="revoke(u)"
+                  *ngIf="u.status !== userStatusType.Revoked"
                 >
                   <i class="bwi bwi-fw bwi-minus-circle" aria-hidden="true"></i>
-                  {{ "deactivate" | i18n }}
+                  {{ "revokeAccess" | i18n }}
                 </a>
                 <a class="dropdown-item text-danger" href="#" appStopClick (click)="remove(u)">
                   <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>

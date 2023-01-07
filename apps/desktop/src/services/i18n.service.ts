@@ -19,6 +19,7 @@ export class I18nService extends BaseI18nService {
     this.supportedTranslationLocales = [
       "en",
       "af",
+      "ar",
       "az",
       "be",
       "bg",
@@ -34,6 +35,7 @@ export class I18nService extends BaseI18nService {
       "eo",
       "es",
       "et",
+      "eu",
       "fa",
       "fi",
       "fil",

@@ -1,15 +1,10 @@
-<div
-  class="modal fade"
-  role="dialog"
-  aria-modal="true"
-  attr.aria-label="{{ 'generatePassword' | i18n }}"
->
+<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="generatorTitle">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <div class="modal-title">
+        <h1 class="modal-title" id="generatorTitle">
           {{ "generator" | i18n }}
-        </div>
+        </h1>
         <app-callout
           type="info"
           *ngIf="enforcedPasswordPolicyOptions?.inEffect() && type === 'password'"
@@ -56,12 +51,12 @@
               class="icon-btn primary"
               appStopClick
               appA11yTitle="{{ 'regenerateUsername' | i18n }}"
-              (click)="regenerate()"
-              [disabled]="form.loading"
+              (click)="$any(form).loading ? false : regenerate()"
+              [attr.aria-disabled]="$any(form).loading ? 'true' : null"
             >
               <i
                 class="bwi bwi-lg bwi-generate"
-                [ngClass]="form.loading ? 'bwi-spin' : ''"
+                [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
                 aria-hidden="true"
               ></i>
             </button>
@@ -103,18 +98,16 @@
         </div>
         <ng-container *ngIf="type === 'password'">
           <div class="box">
-            <div class="box-header">
-              <button
-                type="button"
-                (click)="toggleOptions()"
-                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-expanded]="showOptions"
-              >
-                <i class="bwi bwi-plus-square" aria-hidden="true" [hidden]="showOptions"></i>
-                <i class="bwi bwi-minus-square" aria-hidden="true" [hidden]="!showOptions"></i>
+            <h2 class="box-header">
+              <button type="button" (click)="toggleOptions()" [attr.aria-expanded]="showOptions">
+                <i
+                  class="bwi bwi-lg"
+                  aria-hidden="true"
+                  [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
+                ></i>
                 {{ "options" | i18n }}
               </button>
-            </div>
+            </h2>
             <div class="box-content condensed" [hidden]="!showOptions">
               <div
                 class="box-content-row box-content-row-radio"
@@ -156,7 +149,7 @@
                   type="number"
                   min="3"
                   max="20"
-                  (blur)="savePasswordOptions()"
+                  (change)="savePasswordOptions()"
                   [(ngModel)]="passwordOptions.numWords"
                 />
               </div>
@@ -273,7 +266,7 @@
                     type="number"
                     min="0"
                     max="9"
-                    (blur)="savePasswordOptions()"
+                    (change)="savePasswordOptions()"
                     [(ngModel)]="passwordOptions.minNumber"
                   />
                 </div>
@@ -284,7 +277,7 @@
                     type="number"
                     min="0"
                     max="9"
-                    (blur)="savePasswordOptions()"
+                    (change)="savePasswordOptions()"
                     [(ngModel)]="passwordOptions.minSpecial"
                   />
                 </div>
@@ -303,18 +296,16 @@
         </ng-container>
         <ng-container *ngIf="type === 'username'">
           <div class="box">
-            <div class="box-header">
-              <button
-                type="button"
-                (click)="toggleOptions()"
-                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-expanded]="showOptions"
-              >
-                <i class="bwi bwi-plus-square" aria-hidden="true" [hidden]="showOptions"></i>
-                <i class="bwi bwi-minus-square" aria-hidden="true" [hidden]="!showOptions"></i>
+            <h2 class="box-header">
+              <button type="button" (click)="toggleOptions()" [attr.aria-expanded]="showOptions">
+                <i
+                  class="bwi bwi-lg"
+                  aria-hidden="true"
+                  [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
+                ></i>
                 {{ "options" | i18n }}
               </button>
-            </div>
+            </h2>
             <div class="box-content condensed" [hidden]="!showOptions">
               <div
                 class="box-content-row box-content-row-radio"
@@ -350,7 +341,7 @@
                   />
                   <label class="unstyled" for="usernameType_{{ o.value }}">
                     {{ o.name }}
-                    <div class="small text-muted" *ngIf="o.desc">{{ o.desc }}</div>
+                    <small class="help-block" *ngIf="o.desc">{{ o.desc }}</small>
                   </label>
                 </div>
               </div>
@@ -358,22 +349,18 @@
           </div>
           <div class="box" *ngIf="usernameOptions.type === 'forwarded'" [hidden]="!showOptions">
             <div class="box-content condensed">
-              <div class="box-content-row" role="radiogroup" aria-labelledby="forwardTypeHeading">
-                <label id="forwardTypeHeading" class="radio-header">{{ "service" | i18n }}</label>
-                <div class="radio-group text-default" appBoxRow *ngFor="let o of forwardOptions">
-                  <input
-                    type="radio"
-                    [(ngModel)]="usernameOptions.forwardedService"
-                    name="ForwardType"
-                    id="forwardtype_{{ o.value }}"
-                    [value]="o.value"
-                    (change)="saveUsernameOptions()"
-                    [checked]="usernameOptions.forwardedService === o.value"
-                  />
-                  <label for="forwardtype_{{ o.value }}">
+              <div class="box-content-row" role="listbox" aria-labelledby="forwardTypeHeading">
+                <label id="forwardTypeHeading">{{ "service" | i18n }}</label>
+                <select
+                  id="ForwardTypeDropdown"
+                  name="ForwardType"
+                  [(ngModel)]="usernameOptions.forwardedService"
+                  (change)="saveUsernameOptions()"
+                >
+                  <option *ngFor="let o of forwardOptions" [ngValue]="o.value" role="option">
                     {{ o.name }}
-                  </label>
-                </div>
+                  </option>
+                </select>
               </div>
               <ng-container *ngIf="usernameOptions.forwardedService === 'simplelogin'">
                 <div class="box-content-row" appBoxRow>
@@ -383,6 +370,18 @@
                     type="password"
                     name="SimpleLoginApiKey"
                     [(ngModel)]="usernameOptions.forwardedSimpleLoginApiKey"
+                    (blur)="saveUsernameOptions()"
+                  />
+                </div>
+              </ng-container>
+              <ng-container *ngIf="usernameOptions.forwardedService === 'duckduckgo'">
+                <div class="box-content-row" appBoxRow>
+                  <label for="duckduckgo-apikey">{{ "apiKey" | i18n }}</label>
+                  <input
+                    id="duckduckgo-apikey"
+                    type="password"
+                    name="DuckDuckGoApiKey"
+                    [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
                     (blur)="saveUsernameOptions()"
                   />
                 </div>
@@ -417,6 +416,18 @@
                     type="password"
                     name="FirefoxApiKey"
                     [(ngModel)]="usernameOptions.forwardedFirefoxApiToken"
+                    (blur)="saveUsernameOptions()"
+                  />
+                </div>
+              </ng-container>
+              <ng-container *ngIf="usernameOptions.forwardedService === 'fastmail'">
+                <div class="box-content-row" appBoxRow>
+                  <label for="fastmail-apiToken">{{ "apiAccessToken" | i18n }}</label>
+                  <input
+                    id="fastmail-apiToken"
+                    type="password"
+                    name="FastmailApiToken"
+                    [(ngModel)]="usernameOptions.forwardedFastmailApiToken"
                     (blur)="saveUsernameOptions()"
                   />
                 </div>

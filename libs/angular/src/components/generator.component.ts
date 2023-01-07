@@ -8,7 +8,7 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
-import { PasswordGeneratorPolicyOptions } from "@bitwarden/common/models/domain/passwordGeneratorPolicyOptions";
+import { PasswordGeneratorPolicyOptions } from "@bitwarden/common/models/domain/password-generator-policy-options";
 
 @Directive()
 export class GeneratorComponent implements OnInit {
@@ -70,15 +70,11 @@ export class GeneratorComponent implements OnInit {
     ];
     this.subaddressOptions = [{ name: i18nService.t("random"), value: "random" }];
     this.catchallOptions = [{ name: i18nService.t("random"), value: "random" }];
-    this.forwardOptions = [
-      { name: "SimpleLogin", value: "simplelogin" },
-      { name: "AnonAddy", value: "anonaddy" },
-      { name: "Firefox Relay", value: "firefoxrelay" },
-      // { name: "FastMail", value: "fastmail" },
-    ];
+    this.initForwardOptions();
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const passwordOptionsResponse = await this.passwordGenerationService.getOptions();
       this.passwordOptions = passwordOptionsResponse[0];
@@ -236,5 +232,25 @@ export class GeneratorComponent implements OnInit {
       this.passwordOptions,
       this.enforcedPasswordPolicyOptions
     );
+  }
+
+  private async initForwardOptions() {
+    this.forwardOptions = [
+      { name: "AnonAddy", value: "anonaddy" },
+      { name: "DuckDuckGo", value: "duckduckgo" },
+      { name: "Fastmail", value: "fastmail" },
+      { name: "Firefox Relay", value: "firefoxrelay" },
+      { name: "SimpleLogin", value: "simplelogin" },
+    ];
+
+    this.usernameOptions = await this.usernameGenerationService.getOptions();
+    if (
+      this.usernameOptions.forwardedService == null ||
+      this.usernameOptions.forwardedService === ""
+    ) {
+      this.forwardOptions.push({ name: "", value: null });
+    }
+
+    this.forwardOptions = this.forwardOptions.sort((a, b) => a.name.localeCompare(b.name));
   }
 }

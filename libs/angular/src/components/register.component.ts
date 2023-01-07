@@ -1,40 +1,81 @@
-import { Directive, OnInit } from "@angular/core";
+import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import {
+  AllValidationErrors,
+  FormValidationErrorsService,
+} from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
-import { KeysRequest } from "@bitwarden/common/models/request/keysRequest";
-import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenceEventRequest";
-import { RegisterRequest } from "@bitwarden/common/models/request/registerRequest";
+import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
+import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
+import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
+import { RegisterRequest } from "@bitwarden/common/models/request/register.request";
+import { RegisterResponse } from "@bitwarden/common/models/response/authentication/register.response";
+
+import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
+import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
-  name = "";
-  email = "";
-  masterPassword = "";
-  confirmMasterPassword = "";
-  hint = "";
+  @Input() isInTrialFlow = false;
+  @Output() createdAccount = new EventEmitter<string>();
+
   showPassword = false;
-  formPromise: Promise<any>;
-  masterPasswordScore: number;
+  formPromise: Promise<RegisterResponse>;
   referenceData: ReferenceEventRequest;
   showTerms = true;
-  acceptPolicies = false;
+  showErrorSummary = false;
+  passwordStrengthResult: any;
+  color: string;
+  text: string;
+
+  formGroup = this.formBuilder.group(
+    {
+      email: ["", [Validators.required, Validators.email]],
+      name: [""],
+      masterPassword: ["", [Validators.required, Validators.minLength(8)]],
+      confirmMasterPassword: ["", [Validators.required, Validators.minLength(8)]],
+      hint: [
+        null,
+        [
+          InputsFieldMatch.validateInputsDoesntMatch(
+            "masterPassword",
+            this.i18nService.t("hintEqualsPassword")
+          ),
+        ],
+      ],
+      acceptPolicies: [false, [this.acceptPoliciesValidation()]],
+    },
+    {
+      validator: InputsFieldMatch.validateFormInputsMatch(
+        "masterPassword",
+        "confirmMasterPassword",
+        this.i18nService.t("masterPassDoesntMatch")
+      ),
+    }
+  );
 
   protected successRoute = "login";
-  private masterPasswordStrengthTimeout: any;
+
+  protected accountCreated = false;
+
+  protected captchaBypassToken: string = null;
 
   constructor(
+    protected formValidationErrorService: FormValidationErrorsService,
+    protected formBuilder: UntypedFormBuilder,
     protected authService: AuthService,
     protected router: Router,
     i18nService: I18nService,
@@ -54,92 +95,124 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     this.setupCaptcha();
   }
 
-  get masterPasswordScoreWidth() {
-    return this.masterPasswordScore == null ? 0 : (this.masterPasswordScore + 1) * 20;
-  }
-
-  get masterPasswordScoreColor() {
-    switch (this.masterPasswordScore) {
-      case 4:
-        return "success";
-      case 3:
-        return "primary";
-      case 2:
-        return "warning";
-      default:
-        return "danger";
+  async submit(showToast = true) {
+    let email = this.formGroup.value.email;
+    email = email.trim().toLowerCase();
+    let name = this.formGroup.value.name;
+    name = name === "" ? null : name; // Why do we do this?
+    const masterPassword = this.formGroup.value.masterPassword;
+    try {
+      if (!this.accountCreated) {
+        const registerResponse = await this.registerAccount(
+          await this.buildRegisterRequest(email, masterPassword, name),
+          showToast
+        );
+        if (!registerResponse.successful) {
+          return;
+        }
+        this.captchaBypassToken = registerResponse.captchaBypassToken;
+        this.accountCreated = true;
+      }
+      if (this.isInTrialFlow) {
+        if (!this.accountCreated) {
+          this.platformUtilsService.showToast(
+            "success",
+            null,
+            this.i18nService.t("trialAccountCreated")
+          );
+        }
+        const loginResponse = await this.logIn(email, masterPassword, this.captchaBypassToken);
+        if (loginResponse.captchaRequired) {
+          return;
+        }
+        this.createdAccount.emit(this.formGroup.value.email);
+      } else {
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("newAccountCreated")
+        );
+        this.router.navigate([this.successRoute], { queryParams: { email: email } });
+      }
+    } catch (e) {
+      this.logService.error(e);
     }
   }
 
-  get masterPasswordScoreText() {
-    switch (this.masterPasswordScore) {
-      case 4:
-        return this.i18nService.t("strong");
-      case 3:
-        return this.i18nService.t("good");
-      case 2:
-        return this.i18nService.t("weak");
-      default:
-        return this.masterPasswordScore != null ? this.i18nService.t("weak") : null;
-    }
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  async submit() {
-    if (!this.acceptPolicies && this.showTerms) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("acceptPoliciesError")
-      );
-      return;
+  getStrengthResult(result: any) {
+    this.passwordStrengthResult = result;
+  }
+
+  getPasswordScoreText(event: PasswordColorText) {
+    this.color = event.color;
+    this.text = event.text;
+  }
+
+  private getErrorToastMessage() {
+    const error: AllValidationErrors = this.formValidationErrorService
+      .getFormValidationErrors(this.formGroup.controls)
+      .shift();
+
+    if (error) {
+      switch (error.errorName) {
+        case "email":
+          return this.i18nService.t("invalidEmail");
+        case "inputsDoesntMatchError":
+          return this.i18nService.t("masterPassDoesntMatch");
+        case "inputsMatchError":
+          return this.i18nService.t("hintEqualsPassword");
+        default:
+          return this.i18nService.t(this.errorTag(error));
+      }
     }
 
-    if (this.email == null || this.email === "") {
+    return;
+  }
+
+  private errorTag(error: AllValidationErrors): string {
+    const name = error.errorName.charAt(0).toUpperCase() + error.errorName.slice(1);
+    return `${error.controlName}${name}`;
+  }
+
+  //validation would be ignored on selfhosted
+  private acceptPoliciesValidation(): ValidatorFn {
+    return (control: AbstractControl) => {
+      const ctrlValue = control.value;
+
+      return !ctrlValue && this.showTerms ? { required: true } : null;
+    };
+  }
+
+  private async validateRegistration(showToast: boolean): Promise<{ isValid: boolean }> {
+    this.formGroup.markAllAsTouched();
+    this.showErrorSummary = true;
+
+    if (this.formGroup.get("acceptPolicies").hasError("required")) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("emailRequired")
+        this.i18nService.t("acceptPoliciesRequired")
       );
-      return;
-    }
-    if (this.email.indexOf("@") === -1) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidEmail")
-      );
-      return;
-    }
-    if (this.masterPassword == null || this.masterPassword === "") {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
-      );
-      return;
-    }
-    if (this.masterPassword.length < 8) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassLength")
-      );
-      return;
-    }
-    if (this.masterPassword !== this.confirmMasterPassword) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassDoesntMatch")
-      );
-      return;
+      return { isValid: false };
     }
 
-    const strengthResult = this.passwordGenerationService.passwordStrength(
-      this.masterPassword,
-      this.getPasswordStrengthUserInput()
-    );
-    if (strengthResult != null && strengthResult.score < 3) {
+    //web
+    if (this.formGroup.invalid && !showToast) {
+      return { isValid: false };
+    }
+
+    //desktop, browser
+    if (this.formGroup.invalid && showToast) {
+      const errorText = this.getErrorToastMessage();
+      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
+      return { isValid: false };
+    }
+
+    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
       const result = await this.platformUtilsService.showDialog(
         this.i18nService.t("weakMasterPasswordDesc"),
         this.i18nService.t("weakMasterPassword"),
@@ -148,37 +221,29 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
         "warning"
       );
       if (!result) {
-        return;
+        return { isValid: false };
       }
     }
+    return { isValid: true };
+  }
 
-    if (this.hint === this.masterPassword) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("hintEqualsPassword")
-      );
-      return;
-    }
-
-    this.name = this.name === "" ? null : this.name;
-    this.email = this.email.trim().toLowerCase();
+  private async buildRegisterRequest(
+    email: string,
+    masterPassword: string,
+    name: string
+  ): Promise<RegisterRequest> {
+    const hint = this.formGroup.value.hint;
     const kdf = DEFAULT_KDF_TYPE;
     const kdfIterations = DEFAULT_KDF_ITERATIONS;
-    const key = await this.cryptoService.makeKey(
-      this.masterPassword,
-      this.email,
-      kdf,
-      kdfIterations
-    );
+    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
     const encKey = await this.cryptoService.makeEncKey(key);
-    const hashedPassword = await this.cryptoService.hashPassword(this.masterPassword, key);
+    const hashedPassword = await this.cryptoService.hashPassword(masterPassword, key);
     const keys = await this.cryptoService.makeKeyPair(encKey[0]);
     const request = new RegisterRequest(
-      this.email,
-      this.name,
+      email,
+      name,
       hashedPassword,
-      this.hint,
+      hint,
       encKey[1].encryptedString,
       kdf,
       kdfIterations,
@@ -191,58 +256,44 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       request.token = orgInvite.token;
       request.organizationUserId = orgInvite.organizationUserId;
     }
+    return request;
+  }
 
+  private async registerAccount(
+    request: RegisterRequest,
+    showToast: boolean
+  ): Promise<{ successful: boolean; captchaBypassToken?: string }> {
+    if (!(await this.validateRegistration(showToast)).isValid) {
+      return { successful: false };
+    }
+    this.formPromise = this.apiService.postRegister(request);
     try {
-      this.formPromise = this.apiService.postRegister(request);
-      try {
-        await this.formPromise;
-      } catch (e) {
-        if (this.handleCaptchaRequired(e)) {
-          return;
-        } else {
-          throw e;
-        }
-      }
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("newAccountCreated"));
-      this.router.navigate([this.successRoute], { queryParams: { email: this.email } });
+      const response = await this.formPromise;
+      return { successful: true, captchaBypassToken: response.captchaBypassToken };
     } catch (e) {
-      this.logService.error(e);
+      if (this.handleCaptchaRequired(e)) {
+        return { successful: false };
+      } else {
+        throw e;
+      }
     }
   }
 
-  togglePassword(confirmField: boolean) {
-    this.showPassword = !this.showPassword;
-    document.getElementById(confirmField ? "masterPasswordRetype" : "masterPassword").focus();
-  }
-
-  updatePasswordStrength() {
-    if (this.masterPasswordStrengthTimeout != null) {
-      clearTimeout(this.masterPasswordStrengthTimeout);
+  private async logIn(
+    email: string,
+    masterPassword: string,
+    captchaBypassToken: string
+  ): Promise<{ captchaRequired: boolean }> {
+    const credentials = new PasswordLogInCredentials(
+      email,
+      masterPassword,
+      captchaBypassToken,
+      null
+    );
+    const loginResponse = await this.authService.logIn(credentials);
+    if (this.handleCaptchaRequired(loginResponse)) {
+      return { captchaRequired: true };
     }
-    this.masterPasswordStrengthTimeout = setTimeout(() => {
-      const strengthResult = this.passwordGenerationService.passwordStrength(
-        this.masterPassword,
-        this.getPasswordStrengthUserInput()
-      );
-      this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
-    }, 300);
-  }
-
-  private getPasswordStrengthUserInput() {
-    let userInput: string[] = [];
-    const atPosition = this.email.indexOf("@");
-    if (atPosition > -1) {
-      userInput = userInput.concat(
-        this.email
-          .substr(0, atPosition)
-          .trim()
-          .toLowerCase()
-          .split(/[^A-Za-z0-9]/)
-      );
-    }
-    if (this.name != null && this.name !== "") {
-      userInput = userInput.concat(this.name.trim().toLowerCase().split(" "));
-    }
-    return userInput;
+    return { captchaRequired: false };
   }
 }

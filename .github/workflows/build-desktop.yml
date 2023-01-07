@@ -8,6 +8,7 @@ on:
       - 'cf-pages'
     paths:
       - 'apps/desktop/**'
+      - 'libs/**'
       - '*'
       - '!*.md'
       - '!*.txt'
@@ -16,7 +17,7 @@ on:
     branches:
       - 'master'
       - 'rc'
-      - 'hotfix-rc/**'
+      - 'hotfix-rc-desktop'
     paths:
       - 'apps/desktop/**'
       - 'libs/**'
@@ -86,29 +87,29 @@ jobs:
         id: retrieve-version
         run: |
           PKG_VERSION=$(jq -r .version src/package.json)
-          echo "::set-output name=package_version::$PKG_VERSION"
+          echo "package_version=$PKG_VERSION" >> $GITHUB_OUTPUT
 
       - name: Increment Version
         id: increment-version
         run: |
           BUILD_NUMBER=$(expr 3000 + $GITHUB_RUN_NUMBER)
           echo "Setting build number to $BUILD_NUMBER"
-          echo "::set-output name=build_number::$BUILD_NUMBER"
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Get Version Channel
         id: release-channel
         run: |
           case "${{ steps.retrieve-version.outputs.package_version }}" in
             *"alpha"*)
-              echo "::set-output name=channel::alpha"
+              echo "channel=alpha" >> $GITHUB_OUTPUT
               echo "[!] We do not yet support 'alpha'"
               exit 1
               ;;
             *"beta"*)
-              echo "::set-output name=channel::beta"
+              echo "channel=beta" >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "::set-output name=channel::latest"
+              echo "channel=latest" >> $GITHUB_OUTPUT
               ;;
           esac
 
@@ -116,22 +117,23 @@ jobs:
         id: branch-check
         run: |
           if [[ $(git ls-remote --heads origin rc) ]]; then
-            echo "::set-output name=rc_branch_exists::1"
+            echo "rc_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=rc_branch_exists::0"
+            echo "rc_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
-          if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
-            echo "::set-output name=hotfix_branch_exists::1"
+          if [[ $(git ls-remote --heads origin hotfix-rc-desktop) ]]; then
+            echo "hotfix_branch_exists=1" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=hotfix_branch_exists::0"
+            echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
 
   linux:
     name: Linux Build
     runs-on: ubuntu-20.04
-    needs: setup
+    needs:
+      - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
@@ -142,7 +144,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -159,7 +161,7 @@ jobs:
       - name: Set up environment
         run: |
           sudo apt-get update
-          sudo apt-get -y install pkg-config libxss-dev libsecret-1-dev rpm
+          sudo apt-get -y install pkg-config libxss-dev libsecret-1-dev rpm musl-dev musl-tools
 
       - name: Set up Snap
         run: sudo snap install snapcraft --classic
@@ -174,6 +176,27 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
         working-directory: ./
+
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: |
+            apps/desktop/desktop_native/*.node
+            ${{ env.RUNNER_TEMP }}/.cargo/registry
+            ${{ env.RUNNER_TEMP }}/.cargo/git
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        env:
+          PKG_CONFIG_ALLOW_CROSS: true
+          PKG_CONFIG_ALL_STATIC: true
+          TARGET: musl
+        run: |
+          rustup target add x86_64-unknown-linux-musl
+          npm run build:cross-platform
 
       - name: Build application
         run: npm run dist:lin
@@ -224,7 +247,8 @@ jobs:
   windows:
     name: Windows Build
     runs-on: windows-2019
-    needs: setup
+    needs:
+      - setup
     defaults:
       run:
         shell: pwsh
@@ -236,7 +260,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -251,36 +275,55 @@ jobs:
           node-gyp install $(node -v)
 
       - name: Install AST
-        uses: bitwarden/gh-actions/install-ast@f135c42c8596cb535c5bcb7523c0b2eef89709ac
+        uses: bitwarden/gh-actions/install-ast@471ae4aec27405f16c5b796e288f54262c406e5d
 
-      - name: Set up environment
+      - name: Set up environmentF
         run: choco install checksum --no-progress
+
+      - name: Rust
+        shell: pwsh
+        run: |
+          rustup target install i686-pc-windows-msvc
+          rustup target install aarch64-pc-windows-msvc
 
       - name: Print environment
         run: |
           node --version
           npm --version
           choco --version
+          rustup show
 
       - name: Login to Azure
-        uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
+        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         with:
           creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
+        uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
           keyvault: "bitwarden-prod-kv"
           secrets: "code-signing-vault-url,
-                    code-signing-client-id,
-                    code-signing-tenant-id,
-                    code-signing-client-secret,
-                    code-signing-cert-name"
+            code-signing-client-id,
+            code-signing-tenant-id,
+            code-signing-client-secret,
+            code-signing-cert-name"
 
       - name: Install Node dependencies
         run: npm ci
         working-directory: ./
+
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: apps/desktop/desktop_native/*.node
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        run: npm run build:cross-platform
 
       - name: Build & Sign (dev)
         env:
@@ -418,7 +461,8 @@ jobs:
   macos-build:
     name: MacOS Build
     runs-on: macos-11
-    needs: setup
+    needs:
+      - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
@@ -429,7 +473,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -443,23 +487,28 @@ jobs:
           npm install -g node-gyp
           node-gyp install $(node -v)
 
+      - name: Rust
+        shell: pwsh
+        run: rustup target install aarch64-apple-darwin
+
       - name: Print environment
         run: |
           node --version
           npm --version
+          rustup show
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Cache Build
         id: build-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/desktop/build
           key: ${{ runner.os }}-${{ github.run_id }}-build
 
       - name: Cache Safari
         id: safari-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/browser/dist/Safari
           key: ${{ runner.os }}-${{ github.run_id }}-safari-extension
@@ -536,16 +585,36 @@ jobs:
         run: npm ci
         working-directory: ./
 
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: apps/desktop/desktop_native/*.node
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        run: npm run build:cross-platform
+
       - name: Build application (dev)
         run: npm run build
+
+
+  browser-build:
+    name: Browser Build
+    needs: setup
+    uses: ./.github/workflows/build-browser.yml
+    secrets: inherit
 
 
   macos-package-github:
     name: MacOS Package GitHub Release Assets
     runs-on: macos-11
     needs:
-      - setup
+      - browser-build
       - macos-build
+      - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
@@ -556,7 +625,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -570,23 +639,28 @@ jobs:
           npm install -g node-gyp
           node-gyp install $(node -v)
 
+      - name: Rust
+        shell: pwsh
+        run: rustup target install aarch64-apple-darwin
+
       - name: Print environment
         run: |
           node --version
           npm --version
+          rustup show
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Get Build Cache
         id: build-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/desktop/build
           key: ${{ runner.os }}-${{ github.run_id }}-build
 
       - name: Setup Safari Cache
         id: safari-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/browser/dist/Safari
           key: ${{ runner.os }}-${{ github.run_id }}-safari-extension
@@ -663,41 +737,25 @@ jobs:
         run: npm ci
         working-directory: ./
 
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: apps/desktop/desktop_native/*.node
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        run: npm run build:cross-platform
+
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: npm run build
 
-      - name: Extract branch name
-        if: contains(github.ref, 'hotfix-rc')
-        id: extract_branch
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-
-      - name: Download artifact from hotfix-rc
-        if: contains(github.ref, 'hotfix-rc')
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
+      - name: Download Browser artifact
+        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: ${{ steps.extract_branch.outputs.branch }}
-          path: ${{ github.workspace }}/browser-build-artifacts
-
-      - name: Download artifact from rc
-        if: github.ref == 'refs/heads/rc'
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
-        with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: rc
-          path: ${{ github.workspace }}/browser-build-artifacts
-
-      - name: Download artifact from master
-        if: ${{ github.ref != 'refs/heads/rc' && !contains(github.ref, 'hotfix-rc') }}
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
-        with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: master
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Unzip Safari artifact
@@ -750,8 +808,9 @@ jobs:
     name: MacOS Package Prod Release Asset
     runs-on: macos-11
     needs:
-      - setup
+      - browser-build
       - macos-build
+      - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
@@ -762,7 +821,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -776,23 +835,28 @@ jobs:
           npm install -g node-gyp
           node-gyp install $(node -v)
 
+      - name: Rust
+        shell: pwsh
+        run: rustup target install aarch64-apple-darwin
+
       - name: Print environment
         run: |
           node --version
           npm --version
+          rustup show
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Get Build Cache
         id: build-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/desktop/build
           key: ${{ runner.os }}-${{ github.run_id }}-build
 
       - name: Setup Safari Cache
         id: safari-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/browser/dist/Safari
           key: ${{ runner.os }}-${{ github.run_id }}-safari-extension
@@ -869,41 +933,25 @@ jobs:
         run: npm ci
         working-directory: ./
 
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: apps/desktop/desktop_native/*.node
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        run: npm run build:cross-platform
+
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: npm run build
 
-      - name: Extract branch name
-        if: contains(github.ref, 'hotfix-rc')
-        id: extract_branch
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-
-      - name: Download artifact from hotfix-rc
-        if: contains(github.ref, 'hotfix-rc')
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
+      - name: Download Browser artifact
+        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: ${{ steps.extract_branch.outputs.branch }}
-          path: ${{ github.workspace }}/browser-build-artifacts
-
-      - name: Download artifact from rc
-        if: github.ref == 'refs/heads/rc'
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
-        with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: rc
-          path: ${{ github.workspace }}/browser-build-artifacts
-
-      - name: Download artifact from master
-        if: ${{ github.ref != 'refs/heads/rc' && !contains(github.ref, 'hotfix-rc') }}
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
-        with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: master
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Unzip Safari artifact
@@ -939,7 +987,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
+            || github.ref == 'refs/heads/hotfix-rc-desktop'
         run: npm run upload:mas
 
 
@@ -948,8 +996,9 @@ jobs:
     if: false  # We need to look into how code signing works for dev
     runs-on: macos-11
     needs:
-      - setup
+      - browser-build
       - macos-build
+      - setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     defaults:
@@ -960,7 +1009,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -983,14 +1032,14 @@ jobs:
 
       - name: Get Build Cache
         id: build-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/desktop/build
           key: ${{ runner.os }}-${{ github.run_id }}-build
 
       - name: Setup Safari Cache
         id: safari-cache
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: apps/browser/dist/Safari
           key: ${{ runner.os }}-${{ github.run_id }}-safari-extension
@@ -1067,26 +1116,25 @@ jobs:
         run: npm ci
         working-directory: ./
 
+      - name: Cache Native Module
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        id: cache
+        with:
+          path: apps/desktop/desktop_native/*.node
+          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+
+      - name: Build Native Module
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: apps/desktop/desktop_native
+        run: npm run build:cross-platform
+
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: npm run build
 
-      - name: Download artifact from rc
-        if: github.ref == 'refs/heads/rc'
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
+      - name: Download Browser artifact
+        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: rc
-          path: ${{ github.workspace }}/browser-build-artifacts
-
-      - name: Download artifact from master
-        if: github.ref != 'refs/heads/rc'
-        uses: dawidd6/action-download-artifact@b2abf1705491048a2d7074f7d90513044fd25d39  # v2.19.0
-        with:
-          workflow: build-browser.yml
-          workflow_conclusion: success
-          branch: master
           path: ${{ github.workspace }}/browser-build-artifacts
 
       - name: Unzip Safari artifact
@@ -1132,19 +1180,19 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
 
       - name: Login to Azure
-        uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
+        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         with:
           creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
+        uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
           keyvault: "bitwarden-prod-kv"
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@ecd7eb0ef6f3cfa16293c79e9cbc4bc5b5fd9c49  # v1.4.9
+        uses: crowdin/github-action@ecd7eb0ef6f3cfa16293c79e9cbc4bc5b5fd9c49
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
@@ -1163,6 +1211,7 @@ jobs:
     needs:
       - cloc
       - electron-verify
+      - browser-build
       - setup
       - linux
       - windows
@@ -1176,6 +1225,7 @@ jobs:
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ELECTRON_VERIFY_STATUS: ${{ needs.electron-verify.result }}
+          BROWSER_BUILD_STATUS: ${{ needs.browser-build.result }}
           SETUP_STATUS: ${{ needs.setup.result }}
           LINUX_STATUS: ${{ needs.linux.result }}
           WINDOWS_STATUS: ${{ needs.windows.result }}
@@ -1187,6 +1237,8 @@ jobs:
           if [ "$CLOC_STATUS" = "failure" ]; then
               exit 1
           elif [ "$ELECTRON_VERIFY_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$BROWSER_BUILD_STATUS" = "failure" ]; then
               exit 1
           elif [ "$SETUP_STATUS" = "failure" ]; then
               exit 1
@@ -1205,15 +1257,15 @@ jobs:
           fi
 
       - name: Login to Azure - Prod Subscription
-        uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
+        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         if: failure()
         with:
           creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@b5c723b9ac7870c022b8c35befe620b7009b336f
         if: failure()
+        uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
           keyvault: "bitwarden-prod-kv"
           secrets: "devops-alerts-slack-webhook-url"

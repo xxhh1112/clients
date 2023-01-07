@@ -9,24 +9,25 @@ import { TokenService } from "../../abstractions/token.service";
 import { TwoFactorService } from "../../abstractions/twoFactor.service";
 import { TwoFactorProviderType } from "../../enums/twoFactorProviderType";
 import { Account, AccountProfile, AccountTokens } from "../../models/domain/account";
-import { AuthResult } from "../../models/domain/authResult";
+import { AuthResult } from "../../models/domain/auth-result";
 import {
-  ApiLogInCredentials,
+  UserApiLogInCredentials,
   PasswordLogInCredentials,
   SsoLogInCredentials,
-} from "../../models/domain/logInCredentials";
-import { DeviceRequest } from "../../models/request/deviceRequest";
-import { ApiTokenRequest } from "../../models/request/identityToken/apiTokenRequest";
-import { PasswordTokenRequest } from "../../models/request/identityToken/passwordTokenRequest";
-import { SsoTokenRequest } from "../../models/request/identityToken/ssoTokenRequest";
-import { TokenRequestTwoFactor } from "../../models/request/identityToken/tokenRequestTwoFactor";
-import { KeysRequest } from "../../models/request/keysRequest";
-import { IdentityCaptchaResponse } from "../../models/response/identityCaptchaResponse";
-import { IdentityTokenResponse } from "../../models/response/identityTokenResponse";
-import { IdentityTwoFactorResponse } from "../../models/response/identityTwoFactorResponse";
+  PasswordlessLogInCredentials,
+} from "../../models/domain/log-in-credentials";
+import { DeviceRequest } from "../../models/request/device.request";
+import { PasswordTokenRequest } from "../../models/request/identity-token/password-token.request";
+import { SsoTokenRequest } from "../../models/request/identity-token/sso-token.request";
+import { TokenTwoFactorRequest } from "../../models/request/identity-token/token-two-factor.request";
+import { UserApiTokenRequest } from "../../models/request/identity-token/user-api-token.request";
+import { KeysRequest } from "../../models/request/keys.request";
+import { IdentityCaptchaResponse } from "../../models/response/identity-captcha.response";
+import { IdentityTokenResponse } from "../../models/response/identity-token.response";
+import { IdentityTwoFactorResponse } from "../../models/response/identity-two-factor.response";
 
 export abstract class LogInStrategy {
-  protected abstract tokenRequest: ApiTokenRequest | PasswordTokenRequest | SsoTokenRequest;
+  protected abstract tokenRequest: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest;
   protected captchaBypassToken: string = null;
 
   constructor(
@@ -42,11 +43,18 @@ export abstract class LogInStrategy {
   ) {}
 
   abstract logIn(
-    credentials: ApiLogInCredentials | PasswordLogInCredentials | SsoLogInCredentials
+    credentials:
+      | UserApiLogInCredentials
+      | PasswordLogInCredentials
+      | SsoLogInCredentials
+      | PasswordlessLogInCredentials
   ): Promise<AuthResult>;
 
+  // The user key comes from different sources depending on the login strategy
+  protected abstract setUserKey(response: IdentityTokenResponse): Promise<void>;
+
   async logInTwoFactor(
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string = null
   ): Promise<AuthResult> {
     this.tokenRequest.setTwoFactor(twoFactor);
@@ -69,27 +77,22 @@ export abstract class LogInStrategy {
     throw new Error("Invalid response object.");
   }
 
-  protected onSuccessfulLogin(response: IdentityTokenResponse): Promise<void> {
-    // Implemented in subclass if required
-    return null;
-  }
-
   protected async buildDeviceRequest() {
     const appId = await this.appIdService.getAppId();
     return new DeviceRequest(appId, this.platformUtilsService);
   }
 
-  protected async buildTwoFactor(userProvidedTwoFactor?: TokenRequestTwoFactor) {
+  protected async buildTwoFactor(userProvidedTwoFactor?: TokenTwoFactorRequest) {
     if (userProvidedTwoFactor != null) {
       return userProvidedTwoFactor;
     }
 
     const storedTwoFactorToken = await this.tokenService.getTwoFactorToken();
     if (storedTwoFactorToken != null) {
-      return new TokenRequestTwoFactor(TwoFactorProviderType.Remember, storedTwoFactorToken, false);
+      return new TokenTwoFactorRequest(TwoFactorProviderType.Remember, storedTwoFactorToken, false);
     }
 
-    return new TokenRequestTwoFactor();
+    return new TokenTwoFactorRequest();
   }
 
   protected async saveAccountInformation(tokenResponse: IdentityTokenResponse) {
@@ -100,6 +103,7 @@ export abstract class LogInStrategy {
           ...new AccountProfile(),
           ...{
             userId: accountInformation.sub,
+            name: accountInformation.name,
             email: accountInformation.email,
             hasPremiumPersonally: accountInformation.premium,
             kdfIterations: tokenResponse.kdfIterations,
@@ -128,6 +132,9 @@ export abstract class LogInStrategy {
       await this.tokenService.setTwoFactorToken(response);
     }
 
+    await this.setUserKey(response);
+
+    // Must come after the user Key is set, otherwise createKeyPairForOldAccount will fail
     const newSsoUser = response.key == null;
     if (!newSsoUser) {
       await this.cryptoService.setEncKey(response.key);
@@ -136,9 +143,6 @@ export abstract class LogInStrategy {
       );
     }
 
-    await this.onSuccessfulLogin(response);
-
-    await this.stateService.setBiometricLocked(false);
     this.messagingService.send("loggedIn");
 
     return result;

@@ -10,10 +10,11 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/enums/twoFactorProviderType";
 
@@ -44,7 +45,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     private messagingService: MessagingService,
     logService: LogService,
     twoFactorService: TwoFactorService,
-    appIdService: AppIdService
+    appIdService: AppIdService,
+    loginService: LoginService
   ) {
     super(
       authService,
@@ -58,9 +60,11 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       route,
       logService,
       twoFactorService,
-      appIdService
+      appIdService,
+      loginService
     );
     super.onSuccessfulLogin = () => {
+      this.loginService.clearValues();
       return syncService.fullSync(true);
     };
     super.successRoute = "/tabs/vault";
@@ -109,6 +113,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       }
     }
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.sso === "true") {
         super.onSuccessfulLogin = () => {

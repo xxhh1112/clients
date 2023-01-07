@@ -1,48 +1,71 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
+import zxcvbn from "zxcvbn";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { PasswordStrengthComponent } from "@bitwarden/angular/shared/components/password-strength/password-strength.component";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserResetPasswordRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { OrganizationUserResetPasswordRequest } from "@bitwarden/common/models/request/organizationUserResetPasswordRequest";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 @Component({
   selector: "app-reset-password",
   templateUrl: "reset-password.component.html",
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   @Input() name: string;
   @Input() email: string;
   @Input() id: string;
   @Input() organizationId: string;
   @Output() onPasswordReset = new EventEmitter();
+  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
 
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
   newPassword: string = null;
   showPassword = false;
-  masterPasswordScore: number;
+  passwordStrengthResult: zxcvbn.ZXCVBNResult;
   formPromise: Promise<any>;
-  private newPasswordStrengthTimeout: any;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private apiService: ApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private passwordGenerationService: PasswordGenerationService,
     private policyService: PolicyService,
     private cryptoService: CryptoService,
-    private logService: LogService
+    private logService: LogService,
+    private organizationUserService: OrganizationUserService
   ) {}
 
   async ngOnInit() {
-    // Get Enforced Policy Options
-    this.enforcedPolicyOptions = await this.policyService.getMasterPasswordPolicyOptions();
+    this.policyService
+      .masterPasswordPolicyOptions$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (enforcedPasswordPolicyOptions) =>
+          (this.enforcedPolicyOptions = enforcedPasswordPolicyOptions)
+      );
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get loggedOutWarningName() {
@@ -50,9 +73,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   async generatePassword() {
-    const options = (await this.passwordGenerationService.getOptions())[0];
+    const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
     this.newPassword = await this.passwordGenerationService.generatePassword(options);
-    this.updatePasswordStrength();
+    this.passwordStrengthComponent.updatePasswordStrength(this.newPassword);
   }
 
   togglePassword() {
@@ -79,7 +102,7 @@ export class ResetPasswordComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
+        this.i18nService.t("masterPasswordRequired")
       );
       return false;
     }
@@ -88,7 +111,7 @@ export class ResetPasswordComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassLength")
+        this.i18nService.t("masterPasswordMinlength")
       );
       return false;
     }
@@ -96,7 +119,7 @@ export class ResetPasswordComponent implements OnInit {
     if (
       this.enforcedPolicyOptions != null &&
       !this.policyService.evaluateMasterPassword(
-        this.masterPasswordScore,
+        this.passwordStrengthResult.score,
         this.newPassword,
         this.enforcedPolicyOptions
       )
@@ -109,7 +132,7 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
-    if (this.masterPasswordScore < 3) {
+    if (this.passwordStrengthResult.score < 3) {
       const result = await this.platformUtilsService.showDialog(
         this.i18nService.t("weakMasterPasswordDesc"),
         this.i18nService.t("weakMasterPassword"),
@@ -124,7 +147,7 @@ export class ResetPasswordComponent implements OnInit {
 
     // Get user Information (kdf type, kdf iterations, resetPasswordKey, private key) and change password
     try {
-      this.formPromise = this.apiService
+      this.formPromise = this.organizationUserService
         .getOrganizationUserResetPasswordDetails(this.organizationId, this.id)
         .then(async (response) => {
           if (response == null) {
@@ -165,7 +188,7 @@ export class ResetPasswordComponent implements OnInit {
           request.newMasterPasswordHash = newPasswordHash;
 
           // Change user's password
-          return this.apiService.putOrganizationUserResetPassword(
+          return this.organizationUserService.putOrganizationUserResetPassword(
             this.organizationId,
             this.id,
             request
@@ -184,34 +207,7 @@ export class ResetPasswordComponent implements OnInit {
     }
   }
 
-  updatePasswordStrength() {
-    if (this.newPasswordStrengthTimeout != null) {
-      clearTimeout(this.newPasswordStrengthTimeout);
-    }
-    this.newPasswordStrengthTimeout = setTimeout(() => {
-      const strengthResult = this.passwordGenerationService.passwordStrength(
-        this.newPassword,
-        this.getPasswordStrengthUserInput()
-      );
-      this.masterPasswordScore = strengthResult == null ? null : strengthResult.score;
-    }, 300);
-  }
-
-  private getPasswordStrengthUserInput() {
-    let userInput: string[] = [];
-    const atPosition = this.email.indexOf("@");
-    if (atPosition > -1) {
-      userInput = userInput.concat(
-        this.email
-          .substr(0, atPosition)
-          .trim()
-          .toLowerCase()
-          .split(/[^A-Za-z0-9]/)
-      );
-    }
-    if (this.name != null && this.name !== "") {
-      userInput = userInput.concat(this.name.trim().toLowerCase().split(" "));
-    }
-    return userInput;
+  getStrengthResult(result: zxcvbn.ZXCVBNResult) {
+    this.passwordStrengthResult = result;
   }
 }

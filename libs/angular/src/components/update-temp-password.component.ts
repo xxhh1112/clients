@@ -7,13 +7,13 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { UpdateTempPasswordRequest } from "@bitwarden/common/models/request/updateTempPasswordRequest";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { UpdateTempPasswordRequest } from "@bitwarden/common/models/request/update-temp-password.request";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
@@ -60,7 +60,6 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   async setupSubmitActions(): Promise<boolean> {
-    this.enforcedPolicyOptions = await this.policyService.getMasterPasswordPolicyOptions();
     this.email = await this.stateService.getEmail();
     this.kdf = await this.stateService.getKdfType();
     this.kdfIterations = await this.stateService.getKdfIterations();

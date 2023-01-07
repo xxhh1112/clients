@@ -54,7 +54,7 @@
 #lock-page,
 #update-temp-password-page {
   .content {
-    width: 300px;
+    width: 325px;
     transition: width 0.25s linear;
 
     p {
@@ -71,10 +71,6 @@
 
     .box {
       margin-bottom: 20px;
-
-      &.last {
-        margin-bottom: 15px;
-      }
     }
 
     .buttons {
@@ -111,39 +107,12 @@
         }
       }
     }
-
-    a.settings-icon {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-
-      @include themify($themes) {
-        color: themed("mutedColor");
-      }
-
-      span {
-        visibility: hidden;
-      }
-
-      &:hover,
-      &:focus {
-        text-decoration: none;
-
-        @include themify($themes) {
-          color: themed("primaryColor");
-        }
-
-        span {
-          visibility: visible;
-        }
-      }
-    }
   }
 }
 
 #sso-page {
   .content {
-    width: 300px;
+    width: 325px;
 
     .box {
       margin-top: 30px;
@@ -220,6 +189,8 @@
 
 #login-page {
   flex-direction: column;
+  justify-content: unset;
+  padding-top: 20px;
 
   .login-header {
     align-self: flex-start;

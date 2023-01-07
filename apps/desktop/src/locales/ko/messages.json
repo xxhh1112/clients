@@ -364,7 +364,7 @@
     "message": "정말로 휴지통으로 이동시킬까요?"
   },
   "deletedItem": {
-    "message": "삭제한 항목"
+    "message": "항목 삭제함"
   },
   "overwritePasswordConfirmation": {
     "message": "정말 현재 비밀번호를 덮어쓰시겠습니까?"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "첫 글자를 대문자로",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "숫자 포함"
@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "잘못된 이메일 주소입니다."
   },
-  "masterPassRequired": {
-    "message": "마스터 비밀번호는 반드시 입력해야 합니다."
+  "masterPasswordRequired": {
+    "message": "마스터 비밀번호가 필요합니다."
   },
-  "masterPassLength": {
-    "message": "마스터 비밀번호는 최소 8자 이상이어야 합니다."
+  "confirmMasterPasswordRequired": {
+    "message": "마스터 비밀번호를 재입력해야 합니다."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "마스터 비밀번호 확인과 마스터 비밀번호가 일치하지 않습니다."
@@ -895,7 +898,7 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "웹사이트 아이콘 표시하기"
   },
   "faviconDesc": {
     "message": "Show a recognizable image next to each login."
@@ -1263,6 +1266,10 @@
     "message": "업데이트됨",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "비밀번호 업데이트됨",
     "description": "ex. Date this password was updated"
@@ -1274,11 +1281,11 @@
     "message": "파일 형식"
   },
   "hCaptchaUrl": {
-    "message": "hCaptcha Url",
+    "message": "hCaptcha URL",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "Load Accessibility Cookie"
+    "message": "접근성 쿠키 불러오기"
   },
   "registerAccessibilityUser": {
     "message": "Register as an accessibility user at",
@@ -1292,20 +1299,20 @@
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
-    "message": "hCaptcha Url is required",
+    "message": "hCaptcha URL이 필요합니다",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "invalidUrl": {
-    "message": "Invalid Url"
+    "message": "잘못된 URL"
   },
   "done": {
-    "message": "Done"
+    "message": "완료"
   },
   "accessibilityCookieSaved": {
-    "message": "Accessibility cookie saved!"
+    "message": "접근성 쿠키가 저장되었습니다!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "접근성 쿠키가 저장되지 않았습니다"
   },
   "warning": {
     "message": "경고",
@@ -1382,13 +1389,28 @@
     "message": "보관함 잠금 해제"
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "실행 시 Windows Hello 요구하기"
   },
   "autoPromptTouchId": {
-    "message": "Ask for Touch ID on launch"
+    "message": "실행 시 Touch ID 요구하기"
   },
   "lockWithMasterPassOnRestart": {
     "message": "다시 시작 시 마스터 비밀번호로 잠금"
+  },
+  "deleteAccount": {
+    "message": "Delete account"
+  },
+  "deleteAccountDesc": {
+    "message": "Proceed below to delete your account and all vault data."
+  },
+  "deleteAccountWarning": {
+    "message": "Deleting your account is permanent. It cannot be undone."
+  },
+  "accountDeleted": {
+    "message": "Account deleted"
+  },
+  "accountDeletedDesc": {
+    "message": "Your account has been closed and all associated data has been deleted."
   },
   "preferences": {
     "message": "설정"
@@ -1543,14 +1565,20 @@
   "acceptPolicies": {
     "message": "이 박스를 체크하면 다음에 동의하는 것으로 간주됩니다:"
   },
-  "acceptPoliciesError": {
-    "message": "서비스 약관 및 개인 정보 보호 정책을 확인하지 않았습니다."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
     "message": "브라우저와 연결 활성화"
   },
   "enableBrowserIntegrationDesc": {
     "message": "브라우저와 연결하면 브라우저에서 생체 인식을 사용할 수 있습니다."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Allow DuckDuckGo browser integration"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Browser integration not supported"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "다음의 지문 구절이 브라우저 확장 프로그램에 표시된 지문 구절과 동일한지 확인해주세요."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wants to connect to Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Would you like to approve this request?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "If you did not initiate this request, do not approve it."
   },
   "biometricsNotEnabledTitle": {
     "message": "생체 인식이 활성화되지 않음"
@@ -1735,6 +1778,15 @@
   },
   "disabled": {
     "message": "비활성화됨"
+  },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "removedPassword": {
+    "message": "Password removed"
+  },
+  "removePasswordConfirmation": {
+    "message": "Are you sure you want to remove the password?"
   },
   "maxAccessCountReached": {
     "message": "최대 접근 횟수 도달"
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "API 키"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Vault"
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Log in with another device"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

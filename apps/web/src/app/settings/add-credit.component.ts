@@ -11,11 +11,11 @@ import {
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PayPalConfig } from "@bitwarden/common/abstractions/environment.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
-import { BitPayInvoiceRequest } from "@bitwarden/common/models/request/bitPayInvoiceRequest";
+import { BitPayInvoiceRequest } from "@bitwarden/common/models/request/bit-pay-invoice.request";
 
 @Component({
   selector: "app-add-credit",

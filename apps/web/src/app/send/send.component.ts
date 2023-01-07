@@ -7,10 +7,11 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
-import { SendView } from "@bitwarden/common/models/view/sendView";
+import { SendView } from "@bitwarden/common/models/view/send.view";
+import { Icons } from "@bitwarden/components";
 
 import { AddEditComponent } from "./add-edit.component";
 
@@ -23,6 +24,7 @@ const BroadcasterSubscriptionId = "SendComponent";
 export class SendComponent extends BaseSendComponent {
   @ViewChild("sendAddEdit", { read: ViewContainerRef, static: true })
   sendAddEditModalRef: ViewContainerRef;
+  noItemIcon = Icons.Search;
 
   constructor(
     sendService: SendService,
@@ -85,10 +87,12 @@ export class SendComponent extends BaseSendComponent {
       this.sendAddEditModalRef,
       (comp) => {
         comp.sendId = send == null ? null : send.id;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onSavedSend.subscribe(async () => {
           modal.close();
           await this.load();
         });
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onDeletedSend.subscribe(async () => {
           modal.close();
           await this.load();

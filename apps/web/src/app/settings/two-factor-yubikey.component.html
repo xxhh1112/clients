@@ -2,10 +2,10 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="2faYubiKeyTitle">
+        <h1 class="modal-title" id="2faYubiKeyTitle">
           {{ "twoStepLogin" | i18n }}
           <small>YubiKey</small>
-        </h2>
+        </h1>
         <button
           type="button"
           class="close"
@@ -18,7 +18,7 @@
       <app-two-factor-verify
         [organizationId]="organizationId"
         [type]="type"
-        (onAuthed)="auth($event)"
+        (onAuthed)="auth($any($event))"
         *ngIf="!authed"
       >
       </app-two-factor-verify>
@@ -104,7 +104,7 @@
             type="button"
             class="btn btn-outline-secondary btn-submit"
             [appApiAction]="disablePromise"
-            [disabled]="disableBtn.loading"
+            [disabled]="$any(disableBtn).loading"
             (click)="disable()"
             *ngIf="enabled"
           >

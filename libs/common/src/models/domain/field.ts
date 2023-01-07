@@ -1,11 +1,13 @@
+import { Jsonify } from "type-fest";
+
 import { FieldType } from "../../enums/fieldType";
 import { LinkedIdType } from "../../enums/linkedIdType";
-import { FieldData } from "../data/fieldData";
-import { FieldView } from "../view/fieldView";
+import { FieldData } from "../data/field.data";
+import { FieldView } from "../view/field.view";
 
-import Domain from "./domainBase";
-import { EncString } from "./encString";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class Field extends Domain {
   name: EncString;
@@ -58,5 +60,19 @@ export class Field extends Domain {
       ["type", "linkedId"]
     );
     return f;
+  }
+
+  static fromJSON(obj: Partial<Jsonify<Field>>): Field {
+    if (obj == null) {
+      return null;
+    }
+
+    const name = EncString.fromJSON(obj.name);
+    const value = EncString.fromJSON(obj.value);
+
+    return Object.assign(new Field(), obj, {
+      name,
+      value,
+    });
   }
 }

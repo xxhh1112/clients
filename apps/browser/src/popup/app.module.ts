@@ -4,6 +4,7 @@ import { LayoutModule } from "@angular/cdk/layout";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { CurrencyPipe, DatePipe, registerLocaleData } from "@angular/common";
+import localeAr from "@angular/common/locales/ar";
 import localeAz from "@angular/common/locales/az";
 import localeBe from "@angular/common/locales/be";
 import localeBg from "@angular/common/locales/bg";
@@ -18,6 +19,7 @@ import localeEnGb from "@angular/common/locales/en-GB";
 import localeEnIn from "@angular/common/locales/en-IN";
 import localeEs from "@angular/common/locales/es";
 import localeEt from "@angular/common/locales/et";
+import localeEu from "@angular/common/locales/eu";
 import localeFa from "@angular/common/locales/fa";
 import localeFi from "@angular/common/locales/fi";
 import localeFil from "@angular/common/locales/fil";
@@ -62,6 +64,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.component";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
+import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
 
 import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
@@ -92,6 +96,7 @@ import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
 import { SendTypeComponent } from "./send/send-type.component";
 import { ServicesModule } from "./services/services.module";
+import { AboutComponent } from "./settings/about.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
@@ -105,16 +110,17 @@ import { TabsComponent } from "./tabs.component";
 import { AddEditCustomFieldsComponent } from "./vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "./vault/add-edit.component";
 import { AttachmentsComponent } from "./vault/attachments.component";
-import { CiphersComponent } from "./vault/ciphers.component";
 import { CollectionsComponent } from "./vault/collections.component";
 import { CurrentTabComponent } from "./vault/current-tab.component";
 import { PasswordHistoryComponent } from "./vault/password-history.component";
 import { ShareComponent } from "./vault/share.component";
 import { VaultFilterComponent } from "./vault/vault-filter.component";
+import { VaultItemsComponent } from "./vault/vault-items.component";
 import { VaultSelectComponent } from "./vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "./vault/view-custom-fields.component";
 import { ViewComponent } from "./vault/view.component";
 
+registerLocaleData(localeAr, "ar");
 registerLocaleData(localeAz, "az");
 registerLocaleData(localeBe, "be");
 registerLocaleData(localeBg, "bg");
@@ -129,6 +135,7 @@ registerLocaleData(localeEnGb, "en-GB");
 registerLocaleData(localeEnIn, "en-IN");
 registerLocaleData(localeEs, "es");
 registerLocaleData(localeEt, "et");
+registerLocaleData(localeEu, "eu");
 registerLocaleData(localeFa, "fa");
 registerLocaleData(localeFi, "fi");
 registerLocaleData(localeFil, "fil");
@@ -195,8 +202,10 @@ registerLocaleData(localeZhTw, "zh-TW");
     AppComponent,
     AttachmentsComponent,
     CipherRowComponent,
-    CiphersComponent,
+    VaultItemsComponent,
     CollectionsComponent,
+    ColorPasswordPipe,
+    ColorPasswordCountPipe,
     CurrentTabComponent,
     EnvironmentComponent,
     ExcludedDomainsComponent,
@@ -238,8 +247,8 @@ registerLocaleData(localeZhTw, "zh-TW");
     ViewCustomFieldsComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
+    AboutComponent,
   ],
-  entryComponents: [],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
 })

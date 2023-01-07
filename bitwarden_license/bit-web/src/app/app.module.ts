@@ -7,11 +7,10 @@ import { RouterModule } from "@angular/router";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-
-import { OssRoutingModule } from "src/app/oss-routing.module";
-import { OssModule } from "src/app/oss.module";
-import { ServicesModule } from "src/app/services/services.module";
-import { WildcardRoutingModule } from "src/app/wildcard-routing.module";
+import { CoreModule } from "@bitwarden/web-vault/app/core/core.module";
+import { OssRoutingModule } from "@bitwarden/web-vault/app/oss-routing.module";
+import { OssModule } from "@bitwarden/web-vault/app/oss.module";
+import { WildcardRoutingModule } from "@bitwarden/web-vault/app/wildcard-routing.module";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -27,7 +26,7 @@ import { MaximumVaultTimeoutPolicyComponent } from "./policies/maximum-vault-tim
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    ServicesModule,
+    CoreModule,
     InfiniteScrollModule,
     DragDropModule,
     AppRoutingModule,

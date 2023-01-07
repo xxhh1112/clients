@@ -5,11 +5,11 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CipherData } from "@bitwarden/common/models/data/cipherData";
+import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
-import { EmergencyAccessViewResponse } from "@bitwarden/common/models/response/emergencyAccessResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { EmergencyAccessViewResponse } from "@bitwarden/common/models/response/emergency-access.response";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { EmergencyAccessAttachmentsComponent } from "./emergency-access-attachments.component";
 import { EmergencyAddEditComponent } from "./emergency-add-edit.component";
@@ -18,6 +18,7 @@ import { EmergencyAddEditComponent } from "./emergency-add-edit.component";
   selector: "emergency-access-view",
   templateUrl: "emergency-access-view.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class EmergencyAccessViewComponent implements OnInit {
   @ViewChild("cipherAddEdit", { read: ViewContainerRef, static: true })
   cipherAddEditModalRef: ViewContainerRef;
@@ -38,6 +39,7 @@ export class EmergencyAccessViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.route.params.subscribe((qParams) => {
       if (qParams.id == null) {
         return this.router.navigate(["settings/emergency-access"]);

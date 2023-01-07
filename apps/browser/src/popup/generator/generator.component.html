@@ -1,7 +1,7 @@
 <header>
   <div class="left">
     <app-pop-out [show]="!comingFromAddEdit"></app-pop-out>
-    <button type="button" appBlurClick (click)="close()" *ngIf="comingFromAddEdit">
+    <button type="button" (click)="close()" *ngIf="comingFromAddEdit">
       {{ "cancel" | i18n }}
     </button>
   </div>
@@ -9,7 +9,7 @@
     <span class="title">{{ "generator" | i18n }}</span>
   </h1>
   <div class="right">
-    <button type="button" appBlurClick (click)="select()" *ngIf="comingFromAddEdit">
+    <button type="button" (click)="select()" *ngIf="comingFromAddEdit">
       {{ "select" | i18n }}
     </button>
   </div>
@@ -33,7 +33,6 @@
       <button
         type="button"
         appStopClick
-        appBlurClick
         appA11yTitle="{{ 'regeneratePassword' | i18n }}"
         (click)="regenerate()"
       >
@@ -56,14 +55,13 @@
       <button
         type="button"
         appStopClick
-        appBlurClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
-        (click)="regenerate()"
-        [disabled]="form.loading"
+        (click)="$any(form).loading ? false : regenerate()"
+        [attr.aria-disabled]="$any(form).loading ? 'true' : null"
       >
         <i
           class="bwi bwi-lg bwi-generate"
-          [ngClass]="form.loading ? 'bwi-spin' : ''"
+          [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
           aria-hidden="true"
         ></i>
       </button>
@@ -314,7 +312,9 @@
             />
             <label for="type_{{ o.value }}">
               {{ o.name }}
-              <div class="small text-muted" *ngIf="o.desc">{{ o.desc }}</div>
+              <div class="small text-muted" *ngIf="o.desc">
+                {{ o.desc }}
+              </div>
             </label>
           </div>
         </div>
@@ -322,22 +322,18 @@
     </div>
     <div class="box" *ngIf="usernameOptions.type === 'forwarded'">
       <div class="box-content">
-        <div class="box-content-row" role="radiogroup" aria-labelledby="forwardTypeHeading">
-          <label id="forwardTypeHeading" class="radio-header">{{ "service" | i18n }}</label>
-          <div class="radio-group text-default" appBoxRow *ngFor="let o of forwardOptions">
-            <input
-              type="radio"
-              [(ngModel)]="usernameOptions.forwardedService"
-              name="ForwardType"
-              id="forwardtype_{{ o.value }}"
-              [value]="o.value"
-              (change)="saveUsernameOptions()"
-              [checked]="usernameOptions.forwardedService === o.value"
-            />
-            <label for="forwardtype_{{ o.value }}">
+        <div class="box-content-row" role="listbox" aria-labelledby="forwardTypeHeading">
+          <label id="forwardTypeHeading">{{ "service" | i18n }}</label>
+          <select
+            id="ForwardTypeDropdown"
+            name="ForwardType"
+            [(ngModel)]="usernameOptions.forwardedService"
+            (change)="saveUsernameOptions()"
+          >
+            <option *ngFor="let o of forwardOptions" [ngValue]="o.value" role="option">
               {{ o.name }}
-            </label>
-          </div>
+            </option>
+          </select>
         </div>
         <ng-container *ngIf="usernameOptions.forwardedService === 'simplelogin'">
           <div class="box-content-row" appBoxRow>
@@ -347,6 +343,18 @@
               type="password"
               name="SimpleLoginApiKey"
               [(ngModel)]="usernameOptions.forwardedSimpleLoginApiKey"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="usernameOptions.forwardedService === 'duckduckgo'">
+          <div class="box-content-row" appBoxRow>
+            <label for="duckduckgo-apikey">{{ "apiKey" | i18n }}</label>
+            <input
+              id="duckduckgo-apikey"
+              type="password"
+              name="DuckDuckGoApiKey"
+              [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
               (blur)="saveUsernameOptions()"
             />
           </div>
@@ -381,6 +389,18 @@
               type="password"
               name="FirefoxApiKey"
               [(ngModel)]="usernameOptions.forwardedFirefoxApiToken"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="usernameOptions.forwardedService === 'fastmail'">
+          <div class="box-content-row" appBoxRow>
+            <label for="fastmail-apiToken">{{ "apiAccessToken" | i18n }}</label>
+            <input
+              id="fastmail-apiToken"
+              type="password"
+              name="FastmailApiToken"
+              [(ngModel)]="usernameOptions.forwardedFastmailApiToken"
               (blur)="saveUsernameOptions()"
             />
           </div>

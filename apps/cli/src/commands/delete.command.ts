@@ -1,18 +1,20 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Response } from "@bitwarden/node/cli/models/response";
 
-import { CliUtils } from "src/utils";
+import { Response } from "../models/response";
+import { CliUtils } from "../utils";
 
 export class DeleteCommand {
   constructor(
     private cipherService: CipherService,
     private folderService: FolderService,
     private stateService: StateService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private folderApiService: FolderApiServiceAbstraction
   ) {}
 
   async run(object: string, id: string, cmdOptions: Record<string, any>): Promise<Response> {
@@ -86,13 +88,13 @@ export class DeleteCommand {
   }
 
   private async deleteFolder(id: string) {
-    const folder = await this.folderService.get(id);
+    const folder = await this.folderService.getFromState(id);
     if (folder == null) {
       return Response.notFound();
     }
 
     try {
-      await this.folderService.deleteWithServer(id);
+      await this.folderApiService.delete(id);
       return Response.success();
     } catch (e) {
       return Response.error(e);

@@ -19,7 +19,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 import { BrowserApi } from "../browser/browserApi";
-import { StateService } from "../services/abstractions/state.service";
+import { BrowserStateService } from "../services/abstractions/browser-state.service";
 
 import { routerTransition } from "./app-routing.animations";
 
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private lastActivity: number = null;
   private activeUserId: string;
 
-  private destroy$: Subject<void> = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private toastrService: ToastrService,
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private i18nService: I18nService,
     private router: Router,
-    private stateService: StateService,
+    private stateService: BrowserStateService,
     private messagingService: MessagingService,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // Clear them aggressively to make sure this doesn't occur
     await this.clearComponentStates();
 
-    this.stateService.activeAccount.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
+    this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       this.activeUserId = userId;
     });
 
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
               });
             }
 
-            if (this.stateService.activeAccount.getValue() == null) {
+            if (this.activeUserId === null) {
               this.router.navigate(["home"]);
             }
           });
@@ -107,14 +107,15 @@ export class AppComponent implements OnInit, OnDestroy {
           this.showToast(msg);
         });
       } else if (msg.command === "reloadProcess") {
-        const windowReload =
+        const forceWindowReload =
           this.platformUtilsService.isSafari() ||
           this.platformUtilsService.isFirefox() ||
           this.platformUtilsService.isOpera();
-        if (windowReload) {
-          // Wait to make sure background has reloaded first.
-          window.setTimeout(() => BrowserApi.reloadExtension(window), 2000);
-        }
+        // Wait to make sure background has reloaded first.
+        window.setTimeout(
+          () => BrowserApi.reloadExtension(forceWindowReload ? window : null),
+          2000
+        );
       } else if (msg.command === "reloadPopup") {
         this.ngZone.run(() => {
           this.router.navigate(["/"]);
@@ -131,6 +132,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     BrowserApi.messageListener("app.component", (window as any).bitwardenPopupMainMessageListener);
 
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(async (event) => {
       if (event instanceof NavigationEnd) {
         const url = event.urlAfterRedirects || event.url || "";
@@ -274,7 +276,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     await Promise.all([
       this.stateService.setBrowserGroupingComponentState(null),
-      this.stateService.setBrowserCipherComponentState(null),
+      this.stateService.setBrowserVaultItemsComponentState(null),
       this.stateService.setBrowserSendComponentState(null),
       this.stateService.setBrowserSendTypeComponentState(null),
     ]);

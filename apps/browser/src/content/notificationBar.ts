@@ -1,5 +1,5 @@
-import AddLoginRuntimeMessage from "src/background/models/addLoginRuntimeMessage";
-import ChangePasswordRuntimeMessage from "src/background/models/changePasswordRuntimeMessage";
+import AddLoginRuntimeMessage from "../background/models/addLoginRuntimeMessage";
+import ChangePasswordRuntimeMessage from "../background/models/changePasswordRuntimeMessage";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
@@ -498,17 +498,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   function closeExistingAndOpenBar(type: string, typeData: any) {
-    let barPage = "notification/bar.html";
-    switch (type) {
-      case "add":
-        barPage = barPage + "?add=1&isVaultLocked=" + typeData.isVaultLocked;
-        break;
-      case "change":
-        barPage = barPage + "?change=1&isVaultLocked=" + typeData.isVaultLocked;
-        break;
-      default:
-        break;
-    }
+    const barQueryParams = {
+      type,
+      isVaultLocked: typeData.isVaultLocked,
+      theme: typeData.theme,
+    };
+    const barQueryString = new URLSearchParams(barQueryParams).toString();
+    const barPage = "notification/bar.html?" + barQueryString;
 
     const frame = document.getElementById("bit-notification-bar-iframe") as HTMLIFrameElement;
     if (frame != null && frame.src.indexOf(barPage) >= 0) {

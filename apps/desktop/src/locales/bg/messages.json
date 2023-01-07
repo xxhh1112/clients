@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Главни букви",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "И цифри"
@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "Грешен адрес на е-поща."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Главната парола е задължителна."
   },
-  "masterPassLength": {
-    "message": "Главната парола трябва да съдържа поне 8 знака."
+  "confirmMasterPasswordRequired": {
+    "message": "Повторното въвеждане на главната парола е задължително."
+  },
+  "masterPasswordMinlength": {
+    "message": "Главната парола трябва да е дълга поне 8 знака."
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -1263,6 +1266,10 @@
     "message": "Обновено",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Създадено",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Обновена парола",
     "description": "ex. Date this password was updated"
@@ -1278,17 +1285,17 @@
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "Load Accessibility Cookie"
+    "message": "Зареждане на бисквитка за достъпност"
   },
   "registerAccessibilityUser": {
-    "message": "Register as an accessibility user at",
+    "message": "Регистрирайте се като потребител на достъпност на",
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
     "message": "Копирайте връзката изпратена на е-пощата Ви и я поставете по-долу"
   },
   "enterhCaptchaUrl": {
-    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "message": "Въведете URL за зареждане на бисквитка за достъпност за hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
@@ -1302,10 +1309,10 @@
     "message": "Готово"
   },
   "accessibilityCookieSaved": {
-    "message": "Accessibility cookie saved!"
+    "message": "Бисквитката за достъпност е запазена!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "Няма запазена бисквитка за достъпност"
   },
   "warning": {
     "message": "ВНИМАНИЕ",
@@ -1389,6 +1396,21 @@
   },
   "lockWithMasterPassOnRestart": {
     "message": "Заключване с главната парола при повторно пускане"
+  },
+  "deleteAccount": {
+    "message": "Изтриване на регистрацията"
+  },
+  "deleteAccountDesc": {
+    "message": "Ако продължите, ще изтриете регистрацията си и всички данни в трезора си."
+  },
+  "deleteAccountWarning": {
+    "message": "Изтриването на регистрацията е окончателно и необратимо."
+  },
+  "accountDeleted": {
+    "message": "Регистрацията е изтрита"
+  },
+  "accountDeletedDesc": {
+    "message": "Регистрацията Ви е окончателно прекратена и всички данни към нея са изтрити."
   },
   "preferences": {
     "message": "Настройки"
@@ -1543,7 +1565,7 @@
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Условията за използване и политиката за поверителност не бяха приети."
   },
   "enableBrowserIntegration": {
@@ -1551,6 +1573,12 @@
   },
   "enableBrowserIntegrationDesc": {
     "message": "За потвърждаване с биометрични данни е необходима интеграция с браузъра."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Разрешаване на интеграцията на DuckDuckGo в браузъра"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Използвайте трезора си в Битуорден, когато навигирате в мрежата с DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Интеграцията с браузър не се поддържа"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Уверете се, че идентификаторът в разширението съвпада с показания."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ иска де се свърже с Битуорден",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Одобрявате ли тази заявка?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Ако не Вие сте предизвикали тази заявка, не я одобрявайте."
   },
   "biometricsNotEnabledTitle": {
     "message": "Потвърждаването с биометрични данни не е включено"
@@ -1735,6 +1778,15 @@
   },
   "disabled": {
     "message": "Изключено"
+  },
+  "removePassword": {
+    "message": "Премахване на паролата"
+  },
+  "removedPassword": {
+    "message": "Паролата е премахната"
+  },
+  "removePasswordConfirmation": {
+    "message": "Наистина ли искате да премахнете паролата?"
   },
   "maxAccessCountReached": {
     "message": "Достигнат е максималният брой достъпвания"
@@ -1912,17 +1964,17 @@
     "message": "Тип потребителско име"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Плюс адресиран имейл",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Използвайте възможностите за под-адресиране на е-поща на своя доставчик."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Всички имейли"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Използвайте конфигурираната входяща кутия за събиране на всичко."
   },
   "random": {
     "message": "Произволно"
@@ -1946,10 +1998,10 @@
     "message": "Търсене в моя трезор"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Псевдоним на препратен имейл"
   },
   "forwardedEmailDesc": {
-    "message": "Generate an email alias with an external forwarding service."
+    "message": "Генерирайте имейл псевдоним с външна услуга за препращане."
   },
   "hostname": {
     "message": "Име на сървъра",
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "Ключ за API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Изисква се платен абонамент"
+  },
+  "organizationIsDisabled": {
+    "message": "Организацията е изключена."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Записите в изключени организации не са достъпни. Свържете се със собственика на организацията си за помощ."
+  },
+  "neverLockWarning": {
+    "message": "Уверени ли сте, че искате да зададете стойност „Никога“? Това води до съхранение на шифриращия ключ за трезора във устройството ви. Ако използвате тази възможност, е много важно да имате надлежна защита на устройството си."
+  },
+  "cardBrandMir": {
+    "message": "Мир"
+  },
+  "vault": {
+    "message": "Трезор"
+  },
+  "loginWithMasterPassword": {
+    "message": "Вписване с главната парола"
+  },
+  "loggingInAs": {
+    "message": "Вписване като"
+  },
+  "rememberEmail": {
+    "message": "Запомняне на е-пощата"
+  },
+  "notYou": {
+    "message": "Това не сте Вие?"
+  },
+  "newAroundHere": {
+    "message": "За пръв път ли сте тук?"
+  },
+  "loggingInTo": {
+    "message": "Вписване в $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Вписване с друго устройство"
+  },
+  "toggleCharacterCount": {
+    "message": "Превключване на броя знаци",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

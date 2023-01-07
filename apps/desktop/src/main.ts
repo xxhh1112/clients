@@ -3,28 +3,30 @@ import * as path from "path";
 import { app } from "electron";
 
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
-import { GlobalState } from "@bitwarden/common/models/domain/globalState";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { StateService } from "@bitwarden/common/services/state.service";
-import { ElectronLogService } from "@bitwarden/electron/services/electronLog.service";
-import { ElectronMainMessagingService } from "@bitwarden/electron/services/electronMainMessaging.service";
-import { ElectronStorageService } from "@bitwarden/electron/services/electronStorage.service";
-import { TrayMain } from "@bitwarden/electron/tray.main";
-import { UpdaterMain } from "@bitwarden/electron/updater.main";
-import { WindowMain } from "@bitwarden/electron/window.main";
 
 import { BiometricMain } from "./main/biometric/biometric.main";
-import { DesktopCredentialStorageListener } from "./main/desktopCredentialStorageListener";
+import { DesktopCredentialStorageListener } from "./main/desktop-credential-storage-listener";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
-import { NativeMessagingMain } from "./main/nativeMessaging.main";
-import { PowerMonitorMain } from "./main/powerMonitor.main";
+import { NativeMessagingMain } from "./main/native-messaging.main";
+import { PowerMonitorMain } from "./main/power-monitor.main";
+import { TrayMain } from "./main/tray.main";
+import { UpdaterMain } from "./main/updater.main";
+import { WindowMain } from "./main/window.main";
 import { Account } from "./models/account";
+import { ElectronLogService } from "./services/electron-log.service";
+import { ElectronMainMessagingService } from "./services/electron-main-messaging.service";
+import { ElectronStorageService } from "./services/electron-storage.service";
 import { I18nService } from "./services/i18n.service";
 
 export class Main {
   logService: ElectronLogService;
   i18nService: I18nService;
   storageService: ElectronStorageService;
+  memoryStorageService: MemoryStorageService;
   messagingService: ElectronMainMessagingService;
   stateService: StateService;
   desktopCredentialStorageListener: DesktopCredentialStorageListener;
@@ -62,8 +64,12 @@ export class Main {
     const watch = args.some((val) => val === "--watch");
 
     if (watch) {
+      const execName = process.platform === "win32" ? "electron.cmd" : "electron";
       // eslint-disable-next-line
-      require("electron-reload")(__dirname, {});
+      require("electron-reload")(__dirname, {
+        electron: path.join(__dirname, "../../../", "node_modules", ".bin", execName),
+        electronArgv: ["--inspect=5858", "--watch"],
+      });
     }
 
     this.logService = new ElectronLogService(null, app.getPath("userData"));
@@ -74,6 +80,7 @@ export class Main {
     storageDefaults["global.vaultTimeout"] = -1;
     storageDefaults["global.vaultTimeoutAction"] = "lock";
     this.storageService = new ElectronStorageService(app.getPath("userData"), storageDefaults);
+    this.memoryStorageService = new MemoryStorageService();
 
     // TODO: this state service will have access to on disk storage, but not in memory storage.
     // If we could get this to work using the stateService singleton that the rest of the app uses we could save
@@ -81,6 +88,7 @@ export class Main {
     this.stateService = new StateService(
       this.storageService,
       null,
+      this.memoryStorageService,
       this.logService,
       null,
       new StateFactory(GlobalState, Account),
@@ -97,15 +105,7 @@ export class Main {
       (win) => this.trayMain.setupWindowListeners(win)
     );
     this.messagingMain = new MessagingMain(this, this.stateService);
-    this.updaterMain = new UpdaterMain(
-      this.i18nService,
-      this.windowMain,
-      "desktop",
-      null,
-      null,
-      null,
-      "bitwarden"
-    );
+    this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain, "bitwarden");
     this.menuMain = new MenuMain(this);
     this.powerMonitorMain = new PowerMonitorMain(this);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.stateService);
@@ -167,7 +167,10 @@ export class Main {
           await this.biometricMain.init();
         }
 
-        if (await this.stateService.getEnableBrowserIntegration()) {
+        if (
+          (await this.stateService.getEnableBrowserIntegration()) ||
+          (await this.stateService.getEnableDuckDuckGoBrowserIntegration())
+        ) {
           this.nativeMessagingMain.listen();
         }
 

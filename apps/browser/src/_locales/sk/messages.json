@@ -20,7 +20,7 @@
     "message": "Prihlásiť sa"
   },
   "enterpriseSingleSignOn": {
-    "message": "Prihlásenie cez prihlasovací formulár spoločnosti (SSO)"
+    "message": "Jednotné prihlásenie pre podniky (SSO)"
   },
   "cancel": {
     "message": "Zrušiť"
@@ -309,7 +309,7 @@
     "message": "Priečinok"
   },
   "deleteItem": {
-    "message": "Zmazať položku"
+    "message": "Odstrániť položku"
   },
   "viewItem": {
     "message": "Zobraziť položku"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Neplatná emailová adresa."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Hlavné heslo je povinné."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
+  },
+  "masterPasswordMinlength": {
     "message": "Hlavné heslo musí obsahovať aspoň 8 znakov."
   },
   "masterPassDoesntMatch": {
@@ -531,16 +534,16 @@
     "message": "Nové URI"
   },
   "addedItem": {
-    "message": "Položka pridaná"
+    "message": "Pridaná položka"
   },
   "editedItem": {
-    "message": "Položka upravená"
+    "message": "Upravená položka"
   },
   "deleteItemConfirmation": {
     "message": "Naozaj chcete odstrániť túto položku?"
   },
   "deletedItem": {
-    "message": "Položka odstránená do koša"
+    "message": "Odstránená položka"
   },
   "overwritePassword": {
     "message": "Prepísať heslo"
@@ -1308,6 +1311,10 @@
     "message": "Aktualizované",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Vytvorené",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Heslo bolo aktualizované",
     "description": "ex. Date this password was updated"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Neboli akceptované Podmienky používania a zásady Ochrany osobných údajov."
   },
   "termsOfService": {
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Chyba Key Connector: uistite sa, že je Key Connector k dispozícii a funguje správne."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Vyžaduje sa Premiové predplatné"
+  },
+  "organizationIsDisabled": {
+    "message": "Organizácia je vypnutá."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Prihlásenie do $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Nastavenia boli upravené"
+  },
+  "environmentEditedClick": {
+    "message": "Kliknite sem"
+  },
+  "environmentEditedReset": {
+    "message": "na obnovenie predvolených nastavení"
+  },
+  "serverVersion": {
+    "message": "Verzia servera"
+  },
+  "selfHosted": {
+    "message": "Vlastný hosting"
+  },
+  "thirdParty": {
+    "message": "Tretia strana"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Pripojené na server $SERVERNAME$ implementovaný treťou stranou. Prosím overte chyby použitím oficiálneho servera, alebo nahláste problém tretej strane.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "naposledy videné $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Prihlásenie pomocou hlavného hesla"
+  },
+  "loggingInAs": {
+    "message": "Prihlasujete sa ako"
+  },
+  "notYou": {
+    "message": "Nie ste to vy?"
+  },
+  "newAroundHere": {
+    "message": "Ste tu nový?"
+  },
+  "rememberEmail": {
+    "message": "Zapamätať si e-mail"
   }
 }

@@ -1,16 +1,19 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserAcceptRequest } from "@bitwarden/common/abstractions/organization-user/requests";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Policy } from "@bitwarden/common/models/domain/policy";
-import { OrganizationUserAcceptRequest } from "@bitwarden/common/models/request/organizationUserAcceptRequest";
 
 import { BaseAcceptComponent } from "../common/base.accept.component";
 
@@ -28,24 +31,37 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     route: ActivatedRoute,
-    private apiService: ApiService,
     stateService: StateService,
     private cryptoService: CryptoService,
+    private policyApiService: PolicyApiServiceAbstraction,
     private policyService: PolicyService,
-    private logService: LogService
+    private logService: LogService,
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private organizationUserService: OrganizationUserService,
+    private messagingService: MessagingService
   ) {
     super(router, platformUtilsService, i18nService, route, stateService);
   }
 
   async authedHandler(qParams: Params): Promise<void> {
+    const needsReAuth = (await this.stateService.getOrganizationInvitation()) != null;
+    if (!needsReAuth) {
+      // Accepting an org invite requires authentication from a logged out state
+      this.messagingService.send("logout", { redirect: false });
+      await this.prepareOrganizationInvitation(qParams);
+      return;
+    }
+
+    // User has already logged in and passed the Master Password policy check
     this.actionPromise = this.prepareAcceptRequest(qParams).then(async (request) => {
-      await this.apiService.postOrganizationUserAccept(
+      await this.organizationUserService.postOrganizationUserAccept(
         qParams.organizationId,
         qParams.organizationUserId,
         request
       );
     });
 
+    await this.stateService.setOrganizationInvitation(null);
     await this.actionPromise;
     this.platformUtilService.showToast(
       "success",
@@ -54,17 +70,11 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
       { timeout: 10000 }
     );
 
-    await this.stateService.setOrganizationInvitation(null);
     this.router.navigate(["/vault"]);
   }
 
   async unauthedHandler(qParams: Params): Promise<void> {
-    this.orgName = qParams.organizationName;
-    if (this.orgName != null) {
-      // Fix URL encoding of space issue with Angular
-      this.orgName = this.orgName.replace(/\+/g, " ");
-    }
-    await this.stateService.setOrganizationInvitation(qParams);
+    await this.prepareOrganizationInvitation(qParams);
   }
 
   private async prepareAcceptRequest(qParams: Params): Promise<OrganizationUserAcceptRequest> {
@@ -72,7 +82,7 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     request.token = qParams.token;
 
     if (await this.performResetPasswordAutoEnroll(qParams)) {
-      const response = await this.apiService.getOrganizationKeys(qParams.organizationId);
+      const response = await this.organizationApiService.getKeys(qParams.organizationId);
 
       if (response == null) {
         throw new Error(this.i18nService.t("resetPasswordOrgKeysError"));
@@ -90,10 +100,10 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     return request;
   }
 
-  private async performResetPasswordAutoEnroll(qParams: any): Promise<boolean> {
+  private async performResetPasswordAutoEnroll(qParams: Params): Promise<boolean> {
     let policyList: Policy[] = null;
     try {
-      const policies = await this.apiService.getPoliciesByToken(
+      const policies = await this.policyApiService.getPoliciesByToken(
         qParams.organizationId,
         qParams.token,
         qParams.email,
@@ -114,5 +124,14 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     }
 
     return false;
+  }
+
+  private async prepareOrganizationInvitation(qParams: Params): Promise<void> {
+    this.orgName = qParams.organizationName;
+    if (this.orgName != null) {
+      // Fix URL encoding of space issue with Angular
+      this.orgName = this.orgName.replace(/\+/g, " ");
+    }
+    await this.stateService.setOrganizationInvitation(qParams);
   }
 }

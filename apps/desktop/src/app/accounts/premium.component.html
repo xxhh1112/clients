@@ -3,9 +3,9 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="box">
-          <div class="box-header" id="premiumTitle">
+          <h1 class="box-header" id="premiumTitle">
             {{ "premiumMembership" | i18n }}
-          </div>
+          </h1>
           <div class="box-content box-content-padded">
             <div *ngIf="!isPremium">
               <p class="text-center lead">{{ "premiumNotCurrentMember" | i18n }}</p>
@@ -57,7 +57,7 @@
           class="primary"
           (click)="purchase()"
           *ngIf="!isPremium"
-          [disabled]="purchaseBtn.loading"
+          [disabled]="$any(purchaseBtn).loading"
         >
           <b>{{ "premiumPurchase" | i18n }}</b>
         </button>
@@ -67,18 +67,18 @@
             #refreshBtn
             type="button"
             (click)="refresh()"
-            [disabled]="refreshBtn.loading"
+            [disabled]="$any(refreshBtn).loading"
             appA11yTitle="{{ 'premiumRefresh' | i18n }}"
             [appApiAction]="refreshPromise"
           >
             <i
               class="bwi bwi-refresh bwi-lg bwi-fw"
-              [hidden]="refreshBtn.loading"
+              [hidden]="$any(refreshBtn).loading"
               aria-hidden="true"
             ></i>
             <i
               class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!refreshBtn.loading"
+              [hidden]="!$any(refreshBtn).loading"
               aria-hidden="true"
             ></i>
           </button>

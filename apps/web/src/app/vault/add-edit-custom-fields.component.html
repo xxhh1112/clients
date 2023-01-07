@@ -2,9 +2,11 @@
   <h3 class="mt-4">{{ "customFields" | i18n }}</h3>
   <div cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="cipher.hasFields">
     <div
+      role="group"
       class="row"
       cdkDrag
       *ngFor="let f of cipher.fields; let i = index; trackBy: trackByFunction"
+      attr.aria-label="{{ f.name }}"
     >
       <div class="col-5 form-group">
         <div class="d-flex">
@@ -27,6 +29,7 @@
           class="form-control"
           appInputVerbatim
           [disabled]="cipher.isDeleted || viewOnly"
+          [readonly]="!cipher.edit && editMode"
         />
       </div>
       <div class="col-7 form-group">
@@ -42,6 +45,8 @@
               [(ngModel)]="f.value"
               appInputVerbatim
               [disabled]="cipher.isDeleted || viewOnly"
+              [readonly]="!cipher.edit && editMode"
+              attr.aria-describedby="fieldName{{ i }}"
             />
             <div class="input-group-append">
               <button
@@ -65,6 +70,8 @@
               appInputVerbatim
               autocomplete="new-password"
               [disabled]="cipher.isDeleted || viewOnly || (!cipher.viewPassword && !f.newField)"
+              [readonly]="!cipher.edit && editMode"
+              attr.aria-describedby="fieldName{{ i }}"
             />
             <div class="input-group-append">
               <button
@@ -101,6 +108,7 @@
               [(ngModel)]="f.linkedId"
               *ngIf="f.type === fieldType.Linked && cipher.linkedFieldOptions != null"
               [disabled]="cipher.isDeleted || viewOnly"
+              attr.aria-describedby="fieldName{{ i }}"
             >
               <option *ngFor="let o of linkedFieldOptions" [ngValue]="o.value">{{ o.name }}</option>
             </select>
@@ -117,6 +125,7 @@
               trueValue="true"
               falseValue="false"
               [disabled]="cipher.isDeleted || viewOnly"
+              attr.aria-describedby="fieldName{{ i }}"
             />
           </div>
           <button
@@ -124,7 +133,7 @@
             class="btn btn-link text-danger ml-2"
             (click)="removeField(f)"
             appA11yTitle="{{ 'remove' | i18n }}"
-            *ngIf="!cipher.isDeleted && !viewOnly"
+            *ngIf="!cipher.isDeleted && !viewOnly && !(!cipher.edit && editMode)"
           >
             <i class="bwi bwi-minus-circle bwi-lg" aria-hidden="true"></i>
           </button>
@@ -132,7 +141,7 @@
             type="button"
             class="btn btn-link text-muted cursor-move"
             appA11yTitle="{{ 'dragToSort' | i18n }}"
-            *ngIf="!cipher.isDeleted && !viewOnly"
+            *ngIf="!cipher.isDeleted && !viewOnly && !(!cipher.edit && editMode)"
           >
             <i class="bwi bwi-hamburger bwi-lg" aria-hidden="true"></i>
           </button>
@@ -146,11 +155,11 @@
     appStopClick
     (click)="addField()"
     class="d-inline-block mb-2"
-    *ngIf="!cipher.isDeleted && !viewOnly"
+    *ngIf="!cipher.isDeleted && !viewOnly && !(!cipher.edit && editMode)"
   >
     <i class="bwi bwi-plus-circle bwi-fw" aria-hidden="true"></i> {{ "newCustomField" | i18n }}
   </a>
-  <div class="row" *ngIf="!cipher.isDeleted && !viewOnly">
+  <div class="row" *ngIf="!cipher.isDeleted && !viewOnly && !(!cipher.edit && editMode)">
     <div class="col-5">
       <label for="addFieldType" class="sr-only">{{ "type" | i18n }}</label>
       <select id="addFieldType" class="form-control" name="AddFieldType" [(ngModel)]="addFieldType">

@@ -1,9 +1,11 @@
-import { PasswordHistoryData } from "../data/passwordHistoryData";
-import { PasswordHistoryView } from "../view/passwordHistoryView";
+import { Jsonify } from "type-fest";
 
-import Domain from "./domainBase";
-import { EncString } from "./encString";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import { PasswordHistoryData } from "../data/password-history.data";
+import { PasswordHistoryView } from "../view/password-history.view";
+
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class Password extends Domain {
   password: EncString;
@@ -39,5 +41,19 @@ export class Password extends Domain {
       password: null,
     });
     return ph;
+  }
+
+  static fromJSON(obj: Partial<Jsonify<Password>>): Password {
+    if (obj == null) {
+      return null;
+    }
+
+    const password = EncString.fromJSON(obj.password);
+    const lastUsedDate = obj.lastUsedDate == null ? null : new Date(obj.lastUsedDate);
+
+    return Object.assign(new Password(), obj, {
+      password,
+      lastUsedDate,
+    });
   }
 }

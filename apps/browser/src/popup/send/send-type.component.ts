@@ -9,14 +9,14 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SendType } from "@bitwarden/common/enums/sendType";
-import { SendView } from "@bitwarden/common/models/view/sendView";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
 import { BrowserComponentState } from "../../models/browserComponentState";
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 const ComponentId = "SendTypeComponent";
@@ -41,7 +41,7 @@ export class SendTypeComponent extends BaseSendComponent {
     policyService: PolicyService,
     searchService: SearchService,
     private popupUtils: PopupUtilsService,
-    private stateService: StateService,
+    private stateService: BrowserStateService,
     private route: ActivatedRoute,
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef,
@@ -70,6 +70,7 @@ export class SendTypeComponent extends BaseSendComponent {
   async ngOnInit() {
     // Let super class finish
     await super.ngOnInit();
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       if (this.applySavedState) {
         this.state = await this.stateService.getBrowserSendTypeComponentState();

@@ -1,6 +1,6 @@
 import {
   AbstractControl,
-  FormBuilder,
+  UntypedFormBuilder,
   FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
@@ -11,8 +11,12 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
+import { AsyncActionsModule } from "../async-actions";
 import { ButtonModule } from "../button";
+import { CheckboxModule } from "../checkbox";
+import { IconButtonModule } from "../icon-button";
 import { InputModule } from "../input/input.module";
+import { RadioButtonModule } from "../radio-button";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BitFormFieldComponent } from "./form-field.component";
@@ -23,7 +27,17 @@ export default {
   component: BitFormFieldComponent,
   decorators: [
     moduleMetadata({
-      imports: [FormsModule, ReactiveFormsModule, FormFieldModule, InputModule, ButtonModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        FormFieldModule,
+        InputModule,
+        ButtonModule,
+        IconButtonModule,
+        AsyncActionsModule,
+        CheckboxModule,
+        RadioButtonModule,
+      ],
       providers: [
         {
           provide: I18nService,
@@ -41,12 +55,12 @@ export default {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/f32LSg3jaegICkMu7rPARm/Tailwind-Component-Library-Update?node-id=1881%3A17689",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A17689",
     },
   },
 } as Meta;
 
-const fb = new FormBuilder();
+const fb = new UntypedFormBuilder();
 const formObj = fb.group({
   test: [""],
   required: ["", [Validators.required]],
@@ -55,6 +69,8 @@ const formObj = fb.group({
 const defaultFormObj = fb.group({
   name: ["", [Validators.required]],
   email: ["", [Validators.required, Validators.email, forbiddenNameValidator(/bit/i)]],
+  terms: [false, [Validators.requiredTrue]],
+  updates: ["yes"],
 });
 
 // Custom error message, `message` is shown as the error message
@@ -165,13 +181,12 @@ const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCom
   props: args,
   template: `
     <bit-form-field>
-      <bit-label>Label</bit-label>
+      <button bitPrefix bitIconButton="bwi-star"></button>
       <input bitInput placeholder="Placeholder" />
+      <button bitSuffix bitIconButton="bwi-eye"></button>
+      <button bitSuffix bitIconButton="bwi-clone"></button>
       <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-eye"></i>
-      </button>
-      <button bitSuffix bitButton>
-        <i aria-hidden="true" class="bwi bwi-lg bwi-clone"></i>
+        Apply
       </button>
     </bit-form-field>
   `,
@@ -179,6 +194,27 @@ const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCom
 
 export const ButtonInputGroup = ButtonGroupTemplate.bind({});
 ButtonInputGroup.args = {};
+
+const DisabledButtonInputGroupTemplate: Story<BitFormFieldComponent> = (
+  args: BitFormFieldComponent
+) => ({
+  props: args,
+  template: `
+    <bit-form-field>
+      <bit-label>Label</bit-label>
+      <button bitPrefix bitIconButton="bwi-star" disabled></button>
+      <input bitInput placeholder="Placeholder" disabled />
+      <button bitSuffix bitIconButton="bwi-eye" disabled></button>
+      <button bitSuffix bitIconButton="bwi-clone" disabled></button>
+      <button bitSuffix bitButton disabled>
+        Apply
+      </button>
+    </bit-form-field>
+  `,
+});
+
+export const DisabledButtonInputGroup = DisabledButtonInputGroupTemplate.bind({});
+DisabledButtonInputGroup.args = {};
 
 const SelectTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,

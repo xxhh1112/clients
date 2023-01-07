@@ -1,13 +1,13 @@
-<form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
+<form #form (ngSubmit)="submit()" [appApiAction]="formPromise" [formGroup]="formGroup">
   <header>
     <div class="left">
-      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+      <button type="button" routerLink="/home">{{ "cancel" | i18n }}</button>
     </div>
     <h1 class="center">
       <span class="title">{{ "createAccount" | i18n }}</span>
     </h1>
     <div class="right">
-      <button type="submit" appBlurClick [disabled]="form.loading">
+      <button type="submit" [disabled]="form.loading">
         <span [hidden]="form.loading">{{ "submit" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
@@ -18,39 +18,24 @@
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
           <label for="email">{{ "emailAddress" | i18n }}</label>
-          <input
-            id="email"
-            type="text"
-            name="Email"
-            [(ngModel)]="email"
-            required
-            [appAutofocus]="email === ''"
-            inputmode="email"
-            appInputVerbatim="false"
-          />
+          <input id="email" type="email" formControlName="email" appInputVerbatim="false" />
         </div>
         <div class="box-content-row" appBoxRow>
           <div class="box-content-row-flex">
             <div class="row-main">
               <label for="masterPassword">
                 {{ "masterPass" | i18n }}
-                <strong
-                  class="sub-label text-{{ masterPasswordScoreColor }}"
-                  *ngIf="masterPasswordScoreText"
-                >
-                  {{ masterPasswordScoreText }}
+                <strong class="sub-label text-{{ color }}" *ngIf="text">
+                  {{ text }}
                 </strong>
               </label>
               <input
                 id="masterPassword"
                 type="{{ showPassword ? 'text' : 'password' }}"
-                name="MasterPassword"
+                aria-describedby="masterPasswordHelp"
                 class="monospaced"
-                [(ngModel)]="masterPassword"
-                required
-                [appAutofocus]="email !== ''"
+                formControlName="masterPassword"
                 appInputVerbatim
-                (input)="updatePasswordStrength()"
               />
             </div>
             <div class="action-buttons">
@@ -58,9 +43,8 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                (click)="togglePassword(false)"
+                (click)="togglePassword()"
                 [attr.aria-pressed]="showPassword"
               >
                 <i
@@ -71,20 +55,17 @@
               </button>
             </div>
           </div>
-          <div class="progress">
-            <div
-              class="progress-bar bg-{{ masterPasswordScoreColor }}"
-              role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              [ngStyle]="{ width: masterPasswordScoreWidth + '%' }"
-              attr.aria-valuenow="{{ masterPasswordScoreWidth }}"
-            ></div>
-          </div>
+          <app-password-strength
+            [password]="formGroup.get('masterPassword')?.value"
+            [email]="formGroup.get('email')?.value"
+            [name]="formGroup.get('name')?.value"
+            (passwordStrengthResult)="getStrengthResult($event)"
+            (passwordScoreColor)="getPasswordScoreText($event)"
+          >
+          </app-password-strength>
         </div>
       </div>
-      <div class="box-footer">
+      <div id="masterPasswordHelp" class="box-footer">
         {{ "masterPassDesc" | i18n }}
       </div>
     </div>
@@ -96,10 +77,8 @@
             <input
               id="masterPasswordRetype"
               type="{{ showPassword ? 'text' : 'password' }}"
-              name="MasterPasswordRetype"
               class="monospaced"
-              [(ngModel)]="confirmMasterPassword"
-              required
+              formControlName="confirmMasterPassword"
               appInputVerbatim
             />
           </div>
@@ -108,9 +87,8 @@
               type="button"
               class="row-btn"
               appStopClick
-              appBlurClick
               appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-              (click)="togglePassword(true)"
+              (click)="togglePassword()"
               [attr.aria-pressed]="showPassword"
             >
               <i
@@ -123,10 +101,10 @@
         </div>
         <div class="box-content-row" appBoxRow>
           <label for="hint">{{ "masterPassHint" | i18n }}</label>
-          <input id="hint" type="text" name="Hint" [(ngModel)]="hint" />
+          <input id="hint" type="text" aria-describedby="hintHelp" formControlName="hint" />
         </div>
       </div>
-      <div class="box-footer">
+      <div id="hintHelp" class="box-footer">
         {{ "masterPassHintDesc" | i18n }}
       </div>
     </div>
@@ -137,12 +115,7 @@
           class="box-content-row box-content-row-checkbox box-content-row-checkbox-left box-content-row-word-break"
           appBoxRow
         >
-          <input
-            type="checkbox"
-            id="acceptPolicies"
-            [(ngModel)]="acceptPolicies"
-            name="AcceptPolicies"
-          />
+          <input type="checkbox" id="acceptPolicies" formControlName="acceptPolicies" />
           <label for="acceptPolicies">
             {{ "acceptPolicies" | i18n }}<br />
             <a href="https://bitwarden.com/terms/" target="_blank" rel="noopener">{{

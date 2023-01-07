@@ -6,15 +6,15 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 
 const BroadcasterSubscriptionId = "AddEditComponent";
@@ -35,7 +35,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
     stateService: StateService,
     collectionService: CollectionService,
     messagingService: MessagingService,
-    eventService: EventService,
+    eventCollectionService: EventCollectionService,
     policyService: PolicyService,
     passwordRepromptService: PasswordRepromptService,
     private broadcasterService: BroadcasterService,
@@ -52,7 +52,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
       stateService,
       collectionService,
       messagingService,
-      eventService,
+      eventCollectionService,
       policyService,
       logService,
       passwordRepromptService,
@@ -61,6 +61,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
   }
 
   async ngOnInit() {
+    await super.ngOnInit();
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(() => {
         switch (message.command) {
@@ -75,7 +76,6 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
   }
 
   async ngOnChanges() {
-    await super.init();
     await this.load();
   }
 

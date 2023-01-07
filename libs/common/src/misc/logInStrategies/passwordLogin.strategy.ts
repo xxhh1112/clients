@@ -9,11 +9,11 @@ import { StateService } from "../../abstractions/state.service";
 import { TokenService } from "../../abstractions/token.service";
 import { TwoFactorService } from "../../abstractions/twoFactor.service";
 import { HashPurpose } from "../../enums/hashPurpose";
-import { AuthResult } from "../../models/domain/authResult";
-import { PasswordLogInCredentials } from "../../models/domain/logInCredentials";
-import { SymmetricCryptoKey } from "../../models/domain/symmetricCryptoKey";
-import { PasswordTokenRequest } from "../../models/request/identityToken/passwordTokenRequest";
-import { TokenRequestTwoFactor } from "../../models/request/identityToken/tokenRequestTwoFactor";
+import { AuthResult } from "../../models/domain/auth-result";
+import { PasswordLogInCredentials } from "../../models/domain/log-in-credentials";
+import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
+import { PasswordTokenRequest } from "../../models/request/identity-token/password-token.request";
+import { TokenTwoFactorRequest } from "../../models/request/identity-token/token-two-factor.request";
 
 import { LogInStrategy } from "./logIn.strategy";
 
@@ -56,13 +56,13 @@ export class PasswordLogInStrategy extends LogInStrategy {
     );
   }
 
-  async onSuccessfulLogin() {
+  async setUserKey() {
     await this.cryptoService.setKey(this.key);
     await this.cryptoService.setKeyHash(this.localHashedPassword);
   }
 
   async logInTwoFactor(
-    twoFactor: TokenRequestTwoFactor,
+    twoFactor: TokenTwoFactorRequest,
     captchaResponse: string
   ): Promise<AuthResult> {
     this.tokenRequest.captchaResponse = captchaResponse ?? this.captchaBypassToken;

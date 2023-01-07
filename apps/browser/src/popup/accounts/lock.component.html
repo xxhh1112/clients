@@ -5,7 +5,7 @@
       <span class="title">{{ "verifyIdentity" | i18n }}</span>
     </h1>
     <div class="right">
-      <button type="submit" appBlurClick *ngIf="!hideInput">{{ "unlock" | i18n }}</button>
+      <button type="submit" *ngIf="!hideInput">{{ "unlock" | i18n }}</button>
     </div>
   </header>
   <main tabindex="-1">
@@ -30,6 +30,7 @@
               id="masterPassword"
               type="{{ showPassword ? 'text' : 'password' }}"
               name="MasterPassword"
+              aria-describedby="masterPasswordHelp"
               class="monospaced"
               [(ngModel)]="masterPassword"
               required
@@ -41,7 +42,6 @@
               type="button"
               class="row-btn"
               appStopClick
-              appBlurClick
               appA11yTitle="{{ 'toggleVisibility' | i18n }}"
               (click)="togglePassword()"
               [attr.aria-pressed]="showPassword"
@@ -55,13 +55,13 @@
           </div>
         </div>
       </div>
-      <div class="box-footer">
+      <div id="masterPasswordHelp" class="box-footer">
         <p>{{ "yourVaultIsLocked" | i18n }}</p>
         {{ "loggedInAsOn" | i18n: email:webVaultHostname }}
       </div>
     </div>
     <div class="box" *ngIf="biometricLock">
-      <div class="box-footer">
+      <div class="box-footer no-pad">
         <button
           type="button"
           class="btn primary block"

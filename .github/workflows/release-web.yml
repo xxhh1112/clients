@@ -1,5 +1,6 @@
 ---
 name: Release Web
+run-name: Release Web ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -22,18 +23,18 @@ jobs:
       release_version: ${{ steps.version.outputs.version }}
       tag_version: ${{ steps.version.outputs.tag }}
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
+
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc/* ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-web" ]]; then
             echo "==================================="
-            echo "[!] Can only release from the 'rc' or 'hotfix-rc/*' branches"
+            echo "[!] Can only release from the 'rc' or 'hotfix-rc-web' branches"
             echo "==================================="
             exit 1
           fi
-
-      - name: Checkout repo
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
 
       - name: Check Release Version
         id: version
@@ -74,7 +75,7 @@ jobs:
           azure-creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
           azure-keyvault-name: "bitwarden-prod-kv"
 
-      - name: Pull latest selfhost image
+      - name: Pull branch image
         run: |
           if [[ "${{ github.event.inputs.release_type }}" == "Dry Run" ]]; then
             docker pull bitwarden/web:latest
@@ -82,23 +83,20 @@ jobs:
             docker pull bitwarden/web:$_BRANCH_NAME
           fi
 
-      - name: Docker Tag version and latest image
+      - name: Docker Tag version
         run: |
           if [[ "${{ github.event.inputs.release_type }}" == "Dry Run" ]]; then
             docker tag bitwarden/web:latest bitwarden/web:$_RELEASE_VERSION
           else
             docker tag bitwarden/web:$_BRANCH_NAME bitwarden/web:$_RELEASE_VERSION
-            docker tag bitwarden/web:$_BRANCH_NAME bitwarden/web:latest
           fi
 
-      - name: Docker Push version and latest image
+      - name: Docker Push version
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         env:
           DOCKER_CONTENT_TRUST: 1
           DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: ${{ steps.setup-dct.outputs.dct-delegate-repo-passphrase }}
-        run: |
-          docker push bitwarden/web:$_RELEASE_VERSION
-          docker push bitwarden/web:latest
+        run: docker push bitwarden/web:$_RELEASE_VERSION
 
       - name: Log out of Docker and disable Docker Notary
         run: |
@@ -114,34 +112,28 @@ jobs:
       - name: Login to Azure ACR
         run: az acr login -n bitwardenqa
 
-      - name: Tag version and latest
+      - name: Tag version
         env:
           REGISTRY: bitwardenqa.azurecr.io
         run: |
           if [[ "${{ github.event.inputs.release_type }}" == "Dry Run" ]]; then
             docker tag bitwarden/web:latest $REGISTRY/web:$_RELEASE_VERSION
-            docker tag bitwarden/web:latest $REGISTRY/web:latest
 
             docker tag bitwarden/web:latest $REGISTRY/web-sh:$_RELEASE_VERSION
-            docker tag bitwarden/web:latest $REGISTRY/web-sh:latest
           else
             docker tag bitwarden/web:$_BRANCH_NAME $REGISTRY/web:$_RELEASE_VERSION
-            docker tag bitwarden/web:$_BRANCH_NAME $REGISTRY/web:latest
 
             docker tag bitwarden/web:$_BRANCH_NAME $REGISTRY/web-sh:$_RELEASE_VERSION
-            docker tag bitwarden/web:$_BRANCH_NAME $REGISTRY/web-sh:latest
           fi
 
-      - name: Push version and latest image
+      - name: Push version
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         env:
           REGISTRY: bitwardenqa.azurecr.io
         run: |
           docker push $REGISTRY/web:$_RELEASE_VERSION
-          docker push $REGISTRY/web:latest
 
           docker push $REGISTRY/web-sh:$_RELEASE_VERSION
-          docker push $REGISTRY/web-sh:latest
 
       - name: Log out of Docker
         run: docker logout
@@ -155,13 +147,14 @@ jobs:
       - self-host
     env:
       _RELEASE_VERSION: ${{ needs.setup.outputs.release_version }}
-      _TAG_VERSION: ${{ needs.setup.outputs.tag_version }}
+      _TAG_VERSION: ${{ needs.setup.outputs.release_version }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
 
       - name: Download latest cloud asset
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web
@@ -169,7 +162,16 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: web-*-cloud-COMMERCIAL.zip
 
-      # This should result in a build directory in the current working directory
+      - name: Dry Run - Download latest cloud asset
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
+        with:
+          workflow: build-web.yml
+          path: apps/web
+          workflow_conclusion: success
+          branch: master
+          artifacts: web-*-cloud-COMMERCIAL.zip
+
       - name: Unzip build asset
         working-directory: apps/web
         run: unzip web-*-cloud-COMMERCIAL.zip
@@ -198,7 +200,10 @@ jobs:
           git switch -c cf-pages-deploy-$_TAG_VERSION
           git add .
           git commit -m "Staging deploy ${{ needs.setup.outputs.release_version }}"
-          git push -u origin cf-pages-deploy-$_TAG_VERSION
+
+          if [[ "${{ github.event.inputs.release_type }}" != "Dry Run" ]]; then
+            git push -u origin cf-pages-deploy-$_TAG_VERSION
+          fi
         working-directory: deployment
 
       - name: Create CloudFlare Pages Deploy PR
@@ -221,13 +226,37 @@ jobs:
       - self-host
       - cfpages-deploy
     steps:
+      - name: Create GitHub deployment
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          initial-status: 'in_progress'
+          environment-url: http://vault.bitwarden.com
+          environment: 'Web Vault - Production'
+          description: 'Deployment ${{ needs.setup.outputs.release_version }} from branch ${{ github.ref_name }}'
+          task: release
+
       - name: Download latest build artifacts
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web/artifacts
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+          artifacts: "web-*-selfhosted-COMMERCIAL.zip,
+            web-*-selfhosted-open-source.zip"
+
+      - name: Dry Run - Download latest build artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
+        with:
+          workflow: build-web.yml
+          path: apps/web/artifacts
+          workflow_conclusion: success
+          branch: master
           artifacts: "web-*-selfhosted-COMMERCIAL.zip,
             web-*-selfhosted-open-source.zip"
 
@@ -241,28 +270,29 @@ jobs:
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@58ae73b360456532aafd58ee170c045abbeaee37  # v1.10.0
         with:
-          name: "Version v${{ needs.setup.outputs.release_version }}"
+          name: "Web v${{ needs.setup.outputs.release_version }}"
           commit: ${{ github.sha }}
-          tag: "${{ needs.setup.outputs.tag_version }}"
+          tag: web-v${{ needs.setup.outputs.release_version }}
           body: "<insert release notes here>"
           artifacts: "apps/web/artifacts/web-${{ needs.setup.outputs.release_version }}-selfhosted-COMMERCIAL.zip,
             apps/web/artifacts/web-${{ needs.setup.outputs.release_version }}-selfhosted-open-source.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
 
+      - name: Update deployment status to Success
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: http://vault.bitwarden.com
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
-  dry-run:
-    name: Dry Run Cleanup
-    runs-on: ubuntu-20.04
-    if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-    env:
-      _TAG_VERSION: ${{ needs.setup.outputs.tag_version }}
-    needs:
-      - setup
-      - release
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
-
-      - name: Remove cf-pages-deploy branch
-        run: git push origin --delete cf-pages-deploy-$_TAG_VERSION
+      - name: Update deployment status to Failure
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: http://vault.bitwarden.com
+          state: 'failure'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}

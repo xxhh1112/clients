@@ -7,15 +7,15 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { SendType } from "@bitwarden/common/enums/sendType";
-import { SendView } from "@bitwarden/common/models/view/sendView";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
 import { BrowserSendComponentState } from "../../models/browserSendComponentState";
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 const ComponentId = "SendComponent";
@@ -42,7 +42,7 @@ export class SendGroupingsComponent extends BaseSendComponent {
     policyService: PolicyService,
     searchService: SearchService,
     private popupUtils: PopupUtilsService,
-    private stateService: StateService,
+    private stateService: BrowserStateService,
     private router: Router,
     private syncService: SyncService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -165,12 +165,12 @@ export class SendGroupingsComponent extends BaseSendComponent {
   }
 
   private async saveState() {
-    this.state = {
+    this.state = Object.assign(new BrowserSendComponentState(), {
       scrollY: this.popupUtils.getContentScrollY(window),
       searchText: this.searchText,
       sends: this.sends,
       typeCounts: this.typeCounts,
-    };
+    });
     await this.stateService.setBrowserSendComponentState(this.state);
   }
 

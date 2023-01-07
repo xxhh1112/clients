@@ -3,14 +3,16 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
-import { AttachmentView } from "@bitwarden/common/models/view/attachmentView";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { AttachmentView } from "@bitwarden/common/models/view/attachment.view";
+import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 @Directive()
 export class AttachmentsComponent implements OnInit {
@@ -27,6 +29,7 @@ export class AttachmentsComponent implements OnInit {
   deletePromises: { [id: string]: Promise<any> } = {};
   reuploadPromises: { [id: string]: Promise<any> } = {};
   emergencyAccessId?: string = null;
+  protected componentName = "";
 
   constructor(
     protected cipherService: CipherService,
@@ -36,7 +39,8 @@ export class AttachmentsComponent implements OnInit {
     protected apiService: ApiService,
     protected win: Window,
     protected logService: LogService,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected fileDownloadService: FileDownloadService
   ) {}
 
   async ngOnInit() {
@@ -101,7 +105,9 @@ export class AttachmentsComponent implements OnInit {
       this.i18nService.t("deleteAttachment"),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
-      "warning"
+      "warning",
+      false,
+      this.componentName != "" ? this.componentName + " .modal-content" : null
     );
     if (!confirmed) {
       return;
@@ -165,13 +171,16 @@ export class AttachmentsComponent implements OnInit {
     }
 
     try {
-      const buf = await response.arrayBuffer();
+      const encBuf = await EncArrayBuffer.fromResponse(response);
       const key =
         attachment.key != null
           ? attachment.key
           : await this.cryptoService.getOrgKey(this.cipher.organizationId);
-      const decBuf = await this.cryptoService.decryptFromBytes(buf, key);
-      this.platformUtilsService.saveFile(this.win, decBuf, null, attachment.fileName);
+      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
+      this.fileDownloadService.download({
+        fileName: attachment.fileName,
+        blobData: decBuf,
+      });
     } catch (e) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
     }
@@ -232,12 +241,12 @@ export class AttachmentsComponent implements OnInit {
 
         try {
           // 2. Resave
-          const buf = await response.arrayBuffer();
+          const encBuf = await EncArrayBuffer.fromResponse(response);
           const key =
             attachment.key != null
               ? attachment.key
               : await this.cryptoService.getOrgKey(this.cipher.organizationId);
-          const decBuf = await this.cryptoService.decryptFromBytes(buf, key);
+          const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
           this.cipherDomain = await this.cipherService.saveAttachmentRawWithServer(
             this.cipherDomain,
             attachment.fileName,
@@ -285,5 +294,9 @@ export class AttachmentsComponent implements OnInit {
 
   protected deleteCipherAttachment(attachmentId: string) {
     return this.cipherService.deleteAttachmentWithServer(this.cipher.id, attachmentId);
+  }
+
+  protected async reupload(attachment: AttachmentView) {
+    // TODO: This should be removed but is needed since we re-use the same template
   }
 }

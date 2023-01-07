@@ -6,7 +6,7 @@
     "message": "Filtri"
   },
   "allItems": {
-    "message": "Tutti gli elementi"
+    "message": "Tutti gli Elementi"
   },
   "favorites": {
     "message": "Preferiti"
@@ -151,7 +151,7 @@
     "message": "Codice di sicurezza"
   },
   "identityName": {
-    "message": "Nome dell'identità"
+    "message": "Nome identità"
   },
   "company": {
     "message": "Azienda"
@@ -175,10 +175,10 @@
     "message": "Indirizzo"
   },
   "premiumRequired": {
-    "message": "Abbonamento Premium Richiesto"
+    "message": "Abbonamento Premium richiesto"
   },
   "premiumRequiredDesc": {
-    "message": "Un abbonamento premium è richiesto per utilizzare questa funzionalità."
+    "message": "Un abbonamento Premium è richiesto per utilizzare questa funzionalità."
   },
   "errorOccurred": {
     "message": "Si è verificato un errore."
@@ -364,7 +364,7 @@
     "message": "Sei sicuro di voler cestinare questo elemento?"
   },
   "deletedItem": {
-    "message": "Elemento cestinato"
+    "message": "Elemento eliminato"
   },
   "overwritePasswordConfirmation": {
     "message": "Sei sicuro di voler sovrascrivere la password corrente?"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Rendi maiuscolo",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Includi numero"
@@ -448,7 +448,7 @@
     "message": "Cerca tra i preferiti"
   },
   "searchType": {
-    "message": "Cerca tipo",
+    "message": "Tipo di ricerca",
     "description": "Search item type"
   },
   "newAttachment": {
@@ -512,7 +512,7 @@
     "message": "Digita nuovamente la password principale"
   },
   "masterPassHint": {
-    "message": "Suggerimento password principale (facoltativo)"
+    "message": "Suggerimento per la password principale (facoltativo)"
   },
   "settings": {
     "message": "Impostazioni"
@@ -532,11 +532,14 @@
   "invalidEmail": {
     "message": "L'indirizzo email non è valido."
   },
-  "masterPassRequired": {
-    "message": "La password principale è obbligatoria."
+  "masterPasswordRequired": {
+    "message": "È necessario inserire la password principale."
   },
-  "masterPassLength": {
-    "message": "La password principale deve avere almeno 8 caratteri."
+  "confirmMasterPasswordRequired": {
+    "message": "È necessario reinserire la password principale."
+  },
+  "masterPasswordMinlength": {
+    "message": "La password principale deve essere lunga almeno 8 caratteri."
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -617,7 +620,7 @@
     "message": "Inserisci la tua chiave di sicurezza nella porta USB del tuo computer. Se dispone di un pulsante, premilo."
   },
   "recoveryCodeDesc": {
-    "message": "Hai perso l'accesso a tutti i tuoi metodi di verifica in due passaggi? Usa il tuo codice di recupero per disattivare tutti i metodi di verifica in due passaggi sul tuo account."
+    "message": "Hai perso l'accesso a tutti i tuoi metodi in due fasi? Usa il tuo codice di recupero per disattivare tutti i metodi in due fasi sul tuo account."
   },
   "recoveryCodeTitle": {
     "message": "Codice di recupero"
@@ -659,13 +662,13 @@
     "message": "Accesso non disponibile"
   },
   "noTwoStepProviders": {
-    "message": "Questo account ha la verifica in due passaggi abilitata, ma nessuno dei provider configurati è supportato da questo browser."
+    "message": "Questo account ha abilitato la verifica in due passaggi, ma nessuno dei provider configurati è supportato da questo browser."
   },
   "noTwoStepProviders2": {
     "message": "Aggiungi altri metodi che sono supportati meglio su tutti i dispositivi (ad esempio, un'applicazione di autenticazione)."
   },
   "twoStepOptions": {
-    "message": "Opzioni di accesso in due passaggi"
+    "message": "Opzioni di verifica in due passaggi"
   },
   "selfHostedEnvironment": {
     "message": "Ambiente self-hosted"
@@ -1263,6 +1266,10 @@
     "message": "Aggiornato",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creato",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Password aggiornata",
     "description": "ex. Date this password was updated"
@@ -1390,6 +1397,21 @@
   "lockWithMasterPassOnRestart": {
     "message": "Blocca con la password principale al riavvio"
   },
+  "deleteAccount": {
+    "message": "Elimina account"
+  },
+  "deleteAccountDesc": {
+    "message": "Procedi sotto per eliminare il tuo account e tutti i dati della tua cassaforte."
+  },
+  "deleteAccountWarning": {
+    "message": "L'eliminazione dell'account è permanente. Questa azione non è reversibile."
+  },
+  "accountDeleted": {
+    "message": "Account eliminato"
+  },
+  "accountDeletedDesc": {
+    "message": "Il tuo account è stato eliminato e tutti i dati associati sono stati rimossi."
+  },
   "preferences": {
     "message": "Preferenze"
   },
@@ -1406,7 +1428,7 @@
     "message": "Devi selezionare almeno una raccolta."
   },
   "premiumUpdated": {
-    "message": "Hai effettuato l'aggiornamento a premium."
+    "message": "Hai effettuato l'aggiornamento a Premium."
   },
   "restore": {
     "message": "Ripristina"
@@ -1443,7 +1465,7 @@
     "message": "Una cassaforte bloccata richiede l'inserimento della password principale per accedere nuovamente."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "La disconnessione dalla cassaforte richiede l'inserimento della password principale per accedere nuovamente."
+    "message": "Per accedere nuovamente alla cassaforte è necessaria una nuova autenticazione."
   },
   "lock": {
     "message": "Blocca",
@@ -1543,14 +1565,20 @@
   "acceptPolicies": {
     "message": "Marcando la casella accetti quanto segue:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "I termini di servizio e l'informativa sulla privacy non sono stati accettati."
   },
   "enableBrowserIntegration": {
-    "message": "Abilita l'integrazione con il browser"
+    "message": "Abilita l'integrazione del browser"
   },
   "enableBrowserIntegrationDesc": {
     "message": "L'integrazione del browser è utilizzata per l'autenticazione biometrica."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Consenti l'integrazione del browser DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Usa la tua cassaforte Bitwarden quando navighi con DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "L'integrazione del browser non è supportata"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Assicurati che l'impronta digitale mostrata sia identica all'impronta digitale mostrata nell'estensione del browser."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ vuole connettersi a Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Vuoi approvare questa richiesta?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Se la richiesta non è stata fatta da te, non approvarla."
   },
   "biometricsNotEnabledTitle": {
     "message": "Autenticazione biometrica non abilitata"
@@ -1641,7 +1684,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
-    "message": "Conteggio accessi attuale"
+    "message": "Conteggio accessi corrente"
   },
   "disableSend": {
     "message": "Disabilita il Send per renderlo inaccessibile.",
@@ -1735,6 +1778,15 @@
   },
   "disabled": {
     "message": "Disabilitato"
+  },
+  "removePassword": {
+    "message": "Rimuovi la password"
+  },
+  "removedPassword": {
+    "message": "Password rimossa"
+  },
+  "removePasswordConfirmation": {
+    "message": "Sei sicuro di voler rimuovere la password?"
   },
   "maxAccessCountReached": {
     "message": "Numero massimo di accessi raggiunto"
@@ -1876,7 +1928,7 @@
     "message": "La tua sessione è scaduta. Torna indietro e riprova ad accedere."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Esportazione cassaforte personale"
+    "message": "Esportazione cassaforte personale..."
   },
   "exportingPersonalVaultDescription": {
     "message": "Saranno esportati solo gli oggetti della cassaforte personale associati a $EMAIL$. Gli oggetti della cassaforte dell'organizzazione non saranno inclusi.",
@@ -1946,7 +1998,7 @@
     "message": "Cerca nella cassaforte"
   },
   "forwardedEmail": {
-    "message": "Alias email inoltrate"
+    "message": "Alias email inoltrata"
   },
   "forwardedEmailDesc": {
     "message": "Genera un alias email con un servizio di inoltro esterno."
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "Chiave API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "È richiesto un abbonamento Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "L'organizzazione è disabilitata."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Non è possibile accedere agli oggetti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per ricevere assistenza."
+  },
+  "neverLockWarning": {
+    "message": "Sei sicuro di voler usare l'opzione \"Mai\"? Impostando le opzioni di blocco su \"Mai\", la chiave di cifratura della cassaforte sarà salvata sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il dispositivo adeguatamente protetto."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Cassaforte"
+  },
+  "loginWithMasterPassword": {
+    "message": "Accedi con la password principale"
+  },
+  "loggingInAs": {
+    "message": "Accesso eseguito come"
+  },
+  "rememberEmail": {
+    "message": "Ricorda email"
+  },
+  "notYou": {
+    "message": "Non sei tu?"
+  },
+  "newAroundHere": {
+    "message": "Nuovo da queste parti?"
+  },
+  "loggingInTo": {
+    "message": "Accedo a $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Accedi con un altro dispositivo"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

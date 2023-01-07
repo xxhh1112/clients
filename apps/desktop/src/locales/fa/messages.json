@@ -346,10 +346,10 @@
     "message": "نام ضروری است."
   },
   "addedItem": {
-    "message": "مورد افزوده شد"
+    "message": "مورد افزوده شده"
   },
   "editedItem": {
-    "message": "مورد ویرایش شد"
+    "message": "مورد ویرایش شده"
   },
   "deleteItem": {
     "message": "حذف مورد"
@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "بزرگ نوشتن حرف اول",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "شامل عدد"
@@ -476,10 +476,10 @@
     "message": "تا زمانی که کد رمزنگاری را بروز نکنید نمی‌توانید از این قابلیت استفاده کنید."
   },
   "editedFolder": {
-    "message": "پوشه ویرایش شد"
+    "message": "پوشه ویرایش شده"
   },
   "addedFolder": {
-    "message": "پوشه اضافه شد"
+    "message": "پوشه اضافه شده"
   },
   "deleteFolderConfirmation": {
     "message": "آیا از حذف این پوشه اطمینان دارید؟"
@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "نشانی رایانامه نامعتبر است."
   },
-  "masterPassRequired": {
-    "message": "کلمه عبور اصلی ضروری است."
+  "masterPasswordRequired": {
+    "message": "گذرواژه اصلی ضروری است."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "تایپ مجدد گذرواژه اصلی نیاز است."
+  },
+  "masterPasswordMinlength": {
     "message": "طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد."
   },
   "masterPassDoesntMatch": {
@@ -1263,6 +1266,10 @@
     "message": "بروزرسانی شد",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "ایجاد شده",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "کلمه عبور بروزرسانی شد",
     "description": "ex. Date this password was updated"
@@ -1389,6 +1396,21 @@
   },
   "lockWithMasterPassOnRestart": {
     "message": "در زمان شروع مجدد، با کلمه عبور اصلی قفل کن"
+  },
+  "deleteAccount": {
+    "message": "حذف حساب"
+  },
+  "deleteAccountDesc": {
+    "message": "برای حذف حساب کاربری خود و تمام داده‌های گاوصندوق، به زیر ادامه دهید."
+  },
+  "deleteAccountWarning": {
+    "message": "حذف حساب شما دائمی است. نمی توان آن را برگرداند."
+  },
+  "accountDeleted": {
+    "message": "حساب حذف شد"
+  },
+  "accountDeletedDesc": {
+    "message": "حساب شما بسته شد و تمام داده های مرتبط حذف شده است."
   },
   "preferences": {
     "message": "تنظیمات"
@@ -1543,7 +1565,7 @@
   "acceptPolicies": {
     "message": "با علامت زدن این کادر با موارد زیر موافقت می کنید:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "شرایط خدمات و سیاست حفظ حریم خصوصی تأیید نشده است."
   },
   "enableBrowserIntegration": {
@@ -1551,6 +1573,12 @@
   },
   "enableBrowserIntegrationDesc": {
     "message": "یکپارچه سازی مرورگر برای بیومتریک در مرورگر استفاده می شود."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "اجازه ادغام مرورگر DuckDuckGo را بدهید"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "هنگام مرور با DuckDuckGo از گاوصندوق Bitwarden خود استفاده کنید."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "ادغام مرورگر پشتیبانی نمی شود"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "لطفاً اطمینان حاصل کنید که اثر انگشت نشان داده شده با اثر انگشت نشان داده شده در افزونه مرورگر یکسان است."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ می‌خواهد به Bitwarden متصل شود",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "آیا می‌خواهید این درخواست را تأیید کنید؟"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "اگر شما این درخواست را آغاز نکرده اید، آن را تأیید نکنید."
   },
   "biometricsNotEnabledTitle": {
     "message": "بیومتریک فعال نیست"
@@ -1735,6 +1778,15 @@
   },
   "disabled": {
     "message": "غیرفعال شد"
+  },
+  "removePassword": {
+    "message": "حذف رمز عبور"
+  },
+  "removedPassword": {
+    "message": "رمز عبور حذف شد"
+  },
+  "removePasswordConfirmation": {
+    "message": "مطمئنید که می‌خواهید رمز عبور حذف شود؟"
   },
   "maxAccessCountReached": {
     "message": "به حداکثر تعداد دسترسی رسیده است"
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "کلید API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "اشتراک پرمیوم نیاز است"
+  },
+  "organizationIsDisabled": {
+    "message": "سازمان از کار افتاده است."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "موارد موجود در سازمان‌های غیرفعال، قابل دسترسی نیستند. برای دریافت کمک با مالک سازمان خود تماس بگیرید."
+  },
+  "neverLockWarning": {
+    "message": "آیا جدا میخواهید از گزینه \"هرگز\" استفاده کنید؟ تنظیم کردن کردن گزینه قفل به \"هرگز\" کلیدهای رمزنگاری گاوصندوقتان را بر روی دستگاه شما ذخیره خواهد کرد. اگر از این گزینه استفاده میکنید باید اطمینان داشته باشید که دستگاه شما کاملا محافظت شده است."
+  },
+  "cardBrandMir": {
+    "message": "میر"
+  },
+  "vault": {
+    "message": "گاوصندوق"
+  },
+  "loginWithMasterPassword": {
+    "message": "با کلمه عبور اصلی وارد شوید"
+  },
+  "loggingInAs": {
+    "message": "در حال ورود به عنوان"
+  },
+  "rememberEmail": {
+    "message": "ایمیل را به خاطر بسپار"
+  },
+  "notYou": {
+    "message": "شما نیستید؟"
+  },
+  "newAroundHere": {
+    "message": "اینجا جدیده؟"
+  },
+  "loggingInTo": {
+    "message": "ورود به $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "با دستگاه دیگری وارد شوید"
+  },
+  "toggleCharacterCount": {
+    "message": "تغییر تعداد کاراکترها",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

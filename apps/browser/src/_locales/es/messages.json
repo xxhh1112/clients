@@ -245,7 +245,7 @@
     "message": "Números (0-9)"
   },
   "specialCharacters": {
-    "message": "Carácteres especiales (!@#$%^&*)"
+    "message": "Caracteres especiales (!@#$%^&*)"
   },
   "numWords": {
     "message": "Número de palabras"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Correo electrónico no válido."
   },
-  "masterPassRequired": {
-    "message": "Contraseña maestra requerida."
+  "masterPasswordRequired": {
+    "message": "Se requiere una contraseña maestra."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Se requiere volver a teclear la contraseña maestra."
+  },
+  "masterPasswordMinlength": {
     "message": "La contraseña maestra debe tener al menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
@@ -537,7 +540,7 @@
     "message": "Elemento editado"
   },
   "deleteItemConfirmation": {
-    "message": "¿Seguro que quieres enviarlo a la papelera?"
+    "message": "¿Estás seguro de que quieres eliminar este elemento?"
   },
   "deletedItem": {
     "message": "Elemento enviado a la papelera"
@@ -549,7 +552,7 @@
     "message": "¿Estás seguro de que quieres sobreescribir la contraseña actual?"
   },
   "overwriteUsername": {
-    "message": "Reemplazar nombre de usuario"
+    "message": "Sobrescribir nombre de usuario"
   },
   "overwriteUsernameConfirmation": {
     "message": "¿Estás seguro de que quieres reemplazar el nombre de usuario actual?"
@@ -568,22 +571,22 @@
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
-    "message": "Ask to add login"
+    "message": "Pedir que se añada el inicio de sesión"
   },
   "addLoginNotificationDesc": {
     "message": "La opción \"Notificación para añadir entradas\" pregunta automáticamente si quieres guardar nuevas entradas en tu caja fuerte cuando te identificas en un sitio web por primera vez."
   },
   "showCardsCurrentTab": {
-    "message": "Show cards on Tab page"
+    "message": "Mostrar las tarjetas en la pestaña"
   },
   "showCardsCurrentTabDesc": {
-    "message": "List card items on the Tab page for easy auto-fill."
+    "message": "Listar los elementos de tarjetas en la página para facilitar el auto-rellenado."
   },
   "showIdentitiesCurrentTab": {
-    "message": "Show identities on Tab page"
+    "message": "Mostrar las identidades en la página"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List identity items on the Tab page for easy auto-fill."
+    "message": "Listar los elementos de identidad en la página para facilitar el auto-rellenado."
   },
   "clearClipboard": {
     "message": "Vaciar portapapeles",
@@ -600,22 +603,22 @@
     "message": "Sí, guardar ahora"
   },
   "enableChangedPasswordNotification": {
-    "message": "Ask to update existing login"
+    "message": "Solicitar la actualización de los datos de inicio de sesión existentes"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Ask to update a login's password when a change is detected on a website."
+    "message": "Solicitar la actualización de los datos de inicio de sesión existentes cuando se detecte un cambio en un sitio web."
   },
   "notificationChangeDesc": {
     "message": "¿Desea actualizar esta contraseña en Bitwarden?"
   },
   "notificationChangeSave": {
-    "message": "Actualizado"
+    "message": "Actualizar"
   },
   "enableContextMenuItem": {
-    "message": "Show context menu options"
+    "message": "Mostrar las opciones de menú contextuales"
   },
   "contextMenuItemDesc": {
-    "message": "Use a secondary click to access password generation and matching logins for the website. "
+    "message": "Haga clic con el botón secundario para acceder a la generación de contraseñas y a los inicios de sesión correspondientes al sitio web. "
   },
   "defaultUriMatchDetection": {
     "message": "Detección por defecto de coincidencia de URI",
@@ -807,19 +810,19 @@
     "message": "Actualización completada"
   },
   "enableAutoTotpCopy": {
-    "message": "Copy TOTP automatically"
+    "message": "Copiar TOTP automáticamente"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Si tu entrada tiene una clave de autenticación adjunta, el código de verificación TOTP es copiado automáticamente al portapapeles cuando autorellenas una entrada."
   },
   "enableAutoBiometricsPrompt": {
-    "message": "Ask for biometrics on launch"
+    "message": "Pedir datos biométricos al ejecutar"
   },
   "premiumRequired": {
     "message": "Premium requerido"
   },
   "premiumRequiredDesc": {
-    "message": "Una membresía Premium es requerida para utilizar esta característica."
+    "message": "Una membrasía Premium es requerida para utilizar esta característica."
   },
   "enterVerificationCodeApp": {
     "message": "Introduce el código de verificación de 6 dígitos de tu aplicación autenticadora."
@@ -1034,16 +1037,16 @@
     "message": "Este navegador no puede procesar las peticiones U2F en esta ventana emergente. ¿Desea abrir esta ventana emergente en una nueva ventana para que pueda iniciar sesión usando U2F?"
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Mostrar los iconos del sitio web"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Mostrar una imagen reconocible junto a cada inicio de sesión."
   },
   "enableBadgeCounter": {
-    "message": "Show badge counter"
+    "message": "Mostrar el contador numérico"
   },
   "badgeCounterDesc": {
-    "message": "Indicate how many logins you have for the current web page."
+    "message": "Indique cuántos inicios de sesión tiene para la página web actual."
   },
   "cardholderName": {
     "message": "Nombre en la tarjeta"
@@ -1308,6 +1311,10 @@
     "message": "Actualizado",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creado",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Contraseña actualizada",
     "description": "ex. Date this password was updated"
@@ -1480,8 +1487,8 @@
   "acceptPolicies": {
     "message": "Al seleccionar esta casilla, acepta lo siguiente:"
   },
-  "acceptPoliciesError": {
-    "message": "Todavía no has aceptado los términos del servicio y la política de privacidad."
+  "acceptPoliciesRequired": {
+    "message": "No ha aceptado los términos del servicio y la política de privacidad."
   },
   "termsOfService": {
     "message": "Términos y condiciones del servicio"
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Error en el conector de claves: asegúrate de que el conector de claves está disponible y que funciona correctamente."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Se requiere una Suscripción Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "La organización está desactivada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Póngase en contacto con el personal propietario de la organización para obtener ayuda."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Iniciando sesión en $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Se han editado los ajustes"
+  },
+  "environmentEditedClick": {
+    "message": "Haga click aquí"
+  },
+  "environmentEditedReset": {
+    "message": "para restablecer a los ajustes por defecto"
+  },
+  "serverVersion": {
+    "message": "Versión del servidor"
+  },
+  "selfHosted": {
+    "message": "Autoalojado"
+  },
+  "thirdParty": {
+    "message": "Aplicaciones de terceros"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Conectado al servidor de terceros, $SERVERNAME$. Por favor, verifica los errores usando el servidor oficial o informe al servidor de terceros.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "visto por última vez el $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Iniciar sesión con contraseña maestra"
+  },
+  "loggingInAs": {
+    "message": "Iniciando sesión como"
+  },
+  "notYou": {
+    "message": "¿No eres tú?"
+  },
+  "newAroundHere": {
+    "message": "¿Nuevo por aquí?"
+  },
+  "rememberEmail": {
+    "message": "Recordar email"
   }
 }

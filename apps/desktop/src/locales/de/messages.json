@@ -98,10 +98,10 @@
     "message": "Passphrase"
   },
   "editItem": {
-    "message": "Eintrag editieren"
+    "message": "Eintrag bearbeiten"
   },
   "emailAddress": {
-    "message": "E-Mail-Adresse"
+    "message": "E-Mail Adresse"
   },
   "verificationCodeTotp": {
     "message": "Verifizierungscode (TOTP)"
@@ -126,7 +126,7 @@
     "message": "Minimieren beim Kopieren in die Zwischenablage"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimieren, wenn Daten eines Eintrags in die Zwischenablage kopiert werden."
+    "message": "Anwendung minimieren, wenn Daten eines Eintrags in die Zwischenablage kopiert werden."
   },
   "toggleVisibility": {
     "message": "Sichtbarkeit umschalten"
@@ -178,7 +178,7 @@
     "message": "Premium notwendig"
   },
   "premiumRequiredDesc": {
-    "message": "Für diese Funktion ist eine Premium-Mitgliedschaft notwendig."
+    "message": "Eine Premium-Mitgliedschaft ist für diese Funktion notwendig."
   },
   "errorOccurred": {
     "message": "Ein Fehler ist aufgetreten."
@@ -420,16 +420,16 @@
   },
   "capitalize": {
     "message": "Großschreiben",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
-    "message": "Zahl hinzufügen"
+    "message": "Ziffer hinzufügen"
   },
   "close": {
     "message": "Schließen"
   },
   "minNumbers": {
-    "message": "Mindestanzahl Zahlen"
+    "message": "Mindestanzahl Ziffern"
   },
   "minSpecial": {
     "message": "Mindestanzahl Sonderzeichen",
@@ -461,7 +461,7 @@
     "message": "Bist du sicher, dass du diesen Anhang löschen möchtest?"
   },
   "attachmentSaved": {
-    "message": "Die Datei wurde gespeichert."
+    "message": "Der Anhang wurde gespeichert."
   },
   "file": {
     "message": "Datei"
@@ -512,7 +512,7 @@
     "message": "Master-Passwort wiederholen"
   },
   "masterPassHint": {
-    "message": "Master-Passwort-Hinweis (optional)"
+    "message": "Hinweis zum Master-Passwort (optional)"
   },
   "settings": {
     "message": "Einstellungen"
@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Ungültige E-Mail-Adresse."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Das Master-Passwort ist erforderlich."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Erneute Eingabe des Master-Passworts ist erforderlich."
+  },
+  "masterPasswordMinlength": {
     "message": "Das Master-Passwort muss mindestens 8 Zeichen lang sein."
   },
   "masterPassDoesntMatch": {
@@ -584,7 +587,7 @@
     "message": "Gib den 6-stelligen Verifizierungscode aus deiner Authentifizierungs-App ein."
   },
   "enterVerificationCodeEmail": {
-    "message": "Gib den 6-stelligen Bestätigungscode ein, der an $EMAIL$ gesendet wurde.",
+    "message": "Gib den 6-stelligen Verifizierungscode ein, der an $EMAIL$ gesendet wurde.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -617,7 +620,7 @@
     "message": "Stecke deinen Sicherheitsschlüssel in einen USB-Anschluss deines Computers. Falls er einen Knopf hat, drücke diesen."
   },
   "recoveryCodeDesc": {
-    "message": "Zugang zu allen Zwei-Faktor-Anbietern verloren? Benutze deinen Wiederherstellungscode, um alle Zwei-Faktor-Anbieter in deinem Konto zu deaktivieren."
+    "message": "Zugang zu allen Zwei-Faktor Anbietern verloren? Benutzen Sie Ihren Wiederherstellungscode, um alle Zwei-Faktor Anbieter in Ihrem Konto zu deaktivieren."
   },
   "recoveryCodeTitle": {
     "message": "Wiederherstellungscode"
@@ -692,7 +695,7 @@
     "message": "Identitätsserver-URL"
   },
   "notificationsUrl": {
-    "message": "URL des Benachrichtigungsservers"
+    "message": "Benachrichtigungsserver-URL"
   },
   "iconsUrl": {
     "message": "Icons-Server-URL"
@@ -790,7 +793,7 @@
     "message": "Web-Tresor öffnen"
   },
   "getMobileApp": {
-    "message": "Hole dir die mobile App"
+    "message": "Mobile App laden"
   },
   "getBrowserExtension": {
     "message": "Browser-Erweiterung installieren"
@@ -958,7 +961,7 @@
     "message": "Tray deaktivieren bestätigen"
   },
   "confirmTrayDesc": {
-    "message": "Das Deaktivieren dieser Einstellung wird auch alle anderen Taskleisten-Einstellungen deaktivieren."
+    "message": "Deaktivieren dieser Einstellung wird auch alle anderen Tray-bezogenen Einstellungen deaktivieren."
   },
   "language": {
     "message": "Sprache"
@@ -985,7 +988,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Auf Updates prüfen"
+    "message": "Auf Updates prüfen …"
   },
   "version": {
     "message": "Version $VERSION_NUM$",
@@ -1194,7 +1197,7 @@
     "message": "Überprüfe ob dein Kennwort kompromittiert ist."
   },
   "passwordExposed": {
-    "message": "Dieses Kennwort wurde $VALUE$ in öffentlichen Passwortdatenbanken gefunden. Du solltest es ändern.",
+    "message": "Dieses Passwort wurde $VALUE$ mal in öffentlichen Passwortdatenbanken gefunden. Du solltest es ändern.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1214,7 +1217,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "host": {
-    "message": "Server",
+    "message": "Host",
     "description": "A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'."
   },
   "exact": {
@@ -1262,6 +1265,10 @@
   "dateUpdated": {
     "message": "Aktualisiert",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Erstellt",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Passwort aktualisiert",
@@ -1390,6 +1397,21 @@
   "lockWithMasterPassOnRestart": {
     "message": "Beim Neustart mit Master-Passwort sperren"
   },
+  "deleteAccount": {
+    "message": "Konto löschen"
+  },
+  "deleteAccountDesc": {
+    "message": "Unten fortfahren, um dein Konto und alle Tresor-Daten zu löschen."
+  },
+  "deleteAccountWarning": {
+    "message": "Die Kontolöschung ist permanent. Sie kann nicht rückgängig gemacht werden."
+  },
+  "accountDeleted": {
+    "message": "Konto gelöscht"
+  },
+  "accountDeletedDesc": {
+    "message": "Dein Konto wurde geschlossen und alle zugehörigen Daten wurden gelöscht."
+  },
   "preferences": {
     "message": "Einstellungen"
   },
@@ -1406,7 +1428,7 @@
     "message": "Du musst mindestens eine Sammlung auswählen."
   },
   "premiumUpdated": {
-    "message": "Du hast ein Premium-Abo aktiviert."
+    "message": "Du hast ein Upgrade auf Premium durchgeführt."
   },
   "restore": {
     "message": "Wiederherstellen"
@@ -1481,13 +1503,13 @@
     "message": "Nach dem Ausloggen verlierest du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchtest?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Bestätigung der Timeout-Aktion"
+    "message": "Timeout-Aktion bestätigen"
   },
   "enterpriseSingleSignOn": {
     "message": "Enterprise Single Sign-On"
   },
   "setMasterPassword": {
-    "message": "Masterpasswort festlegen"
+    "message": "Master-Passwort festlegen"
   },
   "ssoCompleteRegistration": {
     "message": "Bitte lege ein Masterpasswort für den Schutz deines Tresors fest, um die Anmeldung über SSO abzuschließen."
@@ -1543,14 +1565,20 @@
   "acceptPolicies": {
     "message": "Durch Anwählen dieses Kästchens erklärst du dich mit folgendem einverstanden:"
   },
-  "acceptPoliciesError": {
-    "message": "Die Nutzungsbedingungen und die Datenschutzerklärung wurden nicht akzeptiert."
+  "acceptPoliciesRequired": {
+    "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
   },
   "enableBrowserIntegration": {
     "message": "Browser-Integration aktivieren"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Die Browser-Integration wird für Biometrie im Browser verwendet."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "DuckDuckGo Browser-Integration erlauben"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Verwende deinen Bitwarden-Tresor, wenn du mit DuckDuckGo surfst."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Browser-Integration wird nicht unterstützt"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Bitte stelle sicher, dass der angezeigte Prüfschlüssel identisch mit dem Prüfschlüssel in der Browser-Erweiterung ist."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ möchte sich mit Bitwarden verbinden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Möchtest du diese Anfrage genehmigen?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Wenn du diese Anfrage nicht initiiert hast, genehmige sie nicht."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometrie ist nicht aktiviert"
@@ -1660,7 +1703,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinkLabel": {
-    "message": "Send Link",
+    "message": "Send-Link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "textHiddenByDefault": {
@@ -1676,7 +1719,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Gelöschtes Send",
+    "message": "Send gelöscht",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
@@ -1736,6 +1779,15 @@
   "disabled": {
     "message": "Deaktiviert"
   },
+  "removePassword": {
+    "message": "Passwort entfernen"
+  },
+  "removedPassword": {
+    "message": "Passwort entfernt"
+  },
+  "removePasswordConfirmation": {
+    "message": "Bist du sicher, dass du das Passwort entfernen möchtest?"
+  },
   "maxAccessCountReached": {
     "message": "Maximale Zugriffsanzahl erreicht"
   },
@@ -1785,7 +1837,7 @@
     "message": "Minuten"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Deine Unternehmensrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout ist $HOURS$ Stunde(n) und $MINUTES$ Minute(n)",
+    "message": "Die Unternehmensrichtlinien beeinflussen deinen Tresor-Timeout. Das maximal zulässige Tresor-Timeout ist $HOURS$ Stunde(n) und $MINUTES$ Minute(n)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1846,7 +1898,7 @@
     "message": "Alle Tresore sperren"
   },
   "accountLimitReached": {
-    "message": "Es dürfen nicht mehr als 5 Konten gleichzeitig angemeldet sein."
+    "message": "Es dürfen nicht mehr als fünf Konten gleichzeitig angemeldet sein."
   },
   "accountPreferences": {
     "message": "Einstellungen"
@@ -1960,5 +2012,54 @@
   },
   "apiKey": {
     "message": "API-Schlüssel"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium-Abonnement erforderlich"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisation ist deaktiviert."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Auf Einträge in deaktivierten Organisationen kann nicht zugegriffen werden. Kontaktiere deinen Organisationseigentümer für Unterstützung."
+  },
+  "neverLockWarning": {
+    "message": "Bist du sicher, dass du die Option \"Nie\" verwenden möchten? Durch das Setzen der Sperroptionen zu \"Nie\" wird der Verschlüsselungsschlüssel deines Tresors auf deinem Gerät gespeichert. Wenn du diese Option verwendest, solltest du sicherstellen, dass dein Gerät ausreichend geschützt ist."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Tresor"
+  },
+  "loginWithMasterPassword": {
+    "message": "Mit Master-Passwort anmelden"
+  },
+  "loggingInAs": {
+    "message": "Einloggen als"
+  },
+  "rememberEmail": {
+    "message": "E-Mail-Adresse merken"
+  },
+  "notYou": {
+    "message": "Nicht du?"
+  },
+  "newAroundHere": {
+    "message": "Neu hier?"
+  },
+  "loggingInTo": {
+    "message": "Anmelden bei $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Mit einem anderen Gerät anmelden"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

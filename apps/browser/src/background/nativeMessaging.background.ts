@@ -9,8 +9,8 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetricCryptoKey";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../browser/browserApi";
 
@@ -238,7 +238,18 @@ export class NativeMessagingBackground {
   private postMessage(message: OuterMessage) {
     // Wrap in try-catch to when the port disconnected without triggering `onDisconnect`.
     try {
-      this.port.postMessage(message);
+      const msg: any = message;
+      if (message.message instanceof EncString) {
+        // Alternative, backwards-compatible serialization of EncString
+        msg.message = {
+          encryptedString: message.message.encryptedString,
+          encryptionType: message.message.encryptionType,
+          data: message.message.data,
+          iv: message.message.iv,
+          mac: message.message.mac,
+        };
+      }
+      this.port.postMessage(msg);
     } catch (e) {
       this.logService.error("NativeMessaging port disconnected, disconnecting.");
 
@@ -323,7 +334,6 @@ export class NativeMessagingBackground {
             return;
           }
 
-          await this.stateService.setBiometricLocked(false);
           this.runtimeBackground.processMessage({ command: "unlocked" }, null, null);
         }
         break;

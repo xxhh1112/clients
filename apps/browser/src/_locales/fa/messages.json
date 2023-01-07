@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "آدرس ایمیل نامعتبر است."
   },
-  "masterPassRequired": {
-    "message": "کلمه عبور اصلی ضروری است."
+  "masterPasswordRequired": {
+    "message": "گذرواژه اصلی ضروری است."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "تایپ مجدد گذرواژه اصلی نیاز است."
+  },
+  "masterPasswordMinlength": {
     "message": "طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد."
   },
   "masterPassDoesntMatch": {
@@ -1308,6 +1311,10 @@
     "message": "بروزرسانی شد",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "ایجاد شده",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "کلمه عبور بروزرسانی شد",
     "description": "ex. Date this password was updated"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "با علامت زدن این کادر با موارد زیر موافقت می کنید:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "شرایط خدمات و سیاست حفظ حریم خصوصی تأیید نشده است."
   },
   "termsOfService": {
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "مهلت زمانی شما بیش از محدودیت های تعیین شده توسط سازمانتان است."
   },
   "vaultExportDisabled": {
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "خطای Key Connector: مطمئن شوید که Key Connector در دسترس است و به درستی کار می کند."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "اشتراک پرمیوم نیاز است"
+  },
+  "organizationIsDisabled": {
+    "message": "سازمان از کار افتاده است."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "موارد موجود در سازمان‌های غیرفعال، قابل دسترسی نیستند. برای دریافت کمک با مالک سازمان خود تماس بگیرید."
+  },
+  "cardBrandMir": {
+    "message": "میر"
+  },
+  "loggingInTo": {
+    "message": "ورود به $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "تنظیمات ویرایش شده اند"
+  },
+  "environmentEditedClick": {
+    "message": "اینجا کلیک کنید"
+  },
+  "environmentEditedReset": {
+    "message": "برای بازنشانی به تنظیمات از پیش پیکربندی شده"
+  },
+  "serverVersion": {
+    "message": "نسخه سرور"
+  },
+  "selfHosted": {
+    "message": "میزبانی خود"
+  },
+  "thirdParty": {
+    "message": "شخص ثالث"
+  },
+  "thirdPartyServerMessage": {
+    "message": "به اجرای سرور شخص ثالث، $SERVERNAME$ متصل شد. لطفاً اشکالات را با استفاده از سرور رسمی تأیید کنید یا آنها را به سرور شخص ثالث گزارش دهید.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "آخرین بار در $DATE$ دیده شده است",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "با کلمه عبور اصلی وارد شوید"
+  },
+  "loggingInAs": {
+    "message": "در حال ورود به عنوان"
+  },
+  "notYou": {
+    "message": "شما نیستید؟"
+  },
+  "newAroundHere": {
+    "message": "اینجا جدیده؟"
+  },
+  "rememberEmail": {
+    "message": "ایمیل را به خاطر بسپار"
   }
 }

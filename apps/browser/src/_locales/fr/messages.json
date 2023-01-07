@@ -44,7 +44,7 @@
     "message": "Un indice de mot de passe maître peut vous aider à vous rappeler de votre mot de passe en cas d'oubli."
   },
   "reTypeMasterPass": {
-    "message": "Saisissez à nouveau le mot de passe maître"
+    "message": "Saisir à nouveau le mot de passe maître"
   },
   "masterPassHint": {
     "message": "Indice du mot de passe maître (facultatif)"
@@ -56,7 +56,7 @@
     "message": "Coffre"
   },
   "myVault": {
-    "message": "Mon coffre"
+    "message": "Mon Coffre"
   },
   "allVaults": {
     "message": "Tous les coffres"
@@ -98,7 +98,7 @@
     "message": "Copier le nom du champ personnalisé"
   },
   "noMatchingLogins": {
-    "message": "Aucun site correspondant."
+    "message": "Aucun identifiant correspondant."
   },
   "unlockVaultMenu": {
     "message": "Déverrouillez votre coffre"
@@ -110,13 +110,13 @@
     "message": "Il n'existe aucun site disponible pour le remplissage automatique pour l'onglet actuel du navigateur."
   },
   "addLogin": {
-    "message": "Ajouter un identifiant"
+    "message": "Ajouter un site"
   },
   "addItem": {
     "message": "Ajouter un élément"
   },
   "passwordHint": {
-    "message": "Indice du mot de passe"
+    "message": "Indice mot de passe"
   },
   "enterEmailToGetHint": {
     "message": "Saisissez l'adresse e-mail de votre compte pour recevoir l'indice de votre mot de passe maître."
@@ -227,7 +227,7 @@
     "message": "Générer un mot de passe"
   },
   "regeneratePassword": {
-    "message": "Générer un nouveau mot de passe"
+    "message": "Re-générer un mot de passe"
   },
   "options": {
     "message": "Options"
@@ -258,7 +258,7 @@
     "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Inclure un chiffre"
+    "message": "Inclure le numéro"
   },
   "minNumbers": {
     "message": "Nombre minimum de chiffres"
@@ -282,7 +282,7 @@
     "message": "Aucun identifiant à afficher."
   },
   "itemInformation": {
-    "message": "Informations sur l'élément"
+    "message": "Information sur l'élément"
   },
   "username": {
     "message": "Nom d'utilisateur"
@@ -303,16 +303,16 @@
     "message": "Note"
   },
   "editItem": {
-    "message": "Modifier l'élément"
+    "message": "Modifier l'identifiant"
   },
   "folder": {
     "message": "Dossier"
   },
   "deleteItem": {
-    "message": "Supprimer l'élément"
+    "message": "Supprimer l'identifiant"
   },
   "viewItem": {
-    "message": "Afficher l'élément"
+    "message": "Voir l'élément"
   },
   "launch": {
     "message": "Ouvrir"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Adresse e-mail invalide."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Le mot de passe maître est requis."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Le mot de passe maître doit être entré de nouveau."
+  },
+  "masterPasswordMinlength": {
     "message": "Le mot de passe maître doit au moins contenir 8 caractères."
   },
   "masterPassDoesntMatch": {
@@ -488,7 +491,7 @@
     "message": "Vous pouvez modifier votre mot de passe maître depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site maintenant ?"
   },
   "twoStepLoginConfirmation": {
-    "message": "L'identification en deux étapes sécurise davantage votre compte en vous demandant à chaque connexion de saisir un code de sécurité obtenu depuis un autre appareil, via une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique, ou un e-mail. L'identification en deux étapes peut être activée depuis le coffre web sur bitwarden.com. Voulez-vous vous visiter le site web maintenant ?"
+    "message": "L'identification en deux étapes rend votre compte plus sécurisé en vous demandant de saisir un code de sécurité depuis une application d'authentification à chaque fois que vous vous identifiez. L'identification en deux étapes peut être activée depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site maintenant ?"
   },
   "editedFolder": {
     "message": "Dossier modifié"
@@ -500,7 +503,7 @@
     "message": "Dossier supprimé"
   },
   "gettingStartedTutorial": {
-    "message": "Tutoriel"
+    "message": "Didacticiel"
   },
   "gettingStartedTutorialVideo": {
     "message": "Regardez notre didacticiel pour savoir comment parfaitement utiliser l'extension du navigateur."
@@ -564,26 +567,26 @@
     "message": "Rechercher dans le type"
   },
   "noneFolder": {
-    "message": "Aucun dossier",
+    "message": "Pas de dossier",
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
-    "message": "Ask to add login"
+    "message": "Demander à ajouter un identifiant"
   },
   "addLoginNotificationDesc": {
     "message": "La \"Notification de demande d'ajout d'identifiant\" apparait automatiquement pour vous demander d'enregistrer dans votre coffre les identifiants que vous utilisez pour la première fois."
   },
   "showCardsCurrentTab": {
-    "message": "Show cards on Tab page"
+    "message": "Afficher les cartes sur la page de l'onglet"
   },
   "showCardsCurrentTabDesc": {
-    "message": "List card items on the Tab page for easy auto-fill."
+    "message": "Lister les éléments de la carte sur la page de l'onglet pour faciliter le remplissage automatique."
   },
   "showIdentitiesCurrentTab": {
-    "message": "Show identities on Tab page"
+    "message": "Afficher les identités sur la page Onglet courant"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List identity items on the Tab page for easy auto-fill."
+    "message": "Lister les éléments d'identité sur la page de l'onglet pour faciliter le remplissage automatique."
   },
   "clearClipboard": {
     "message": "Effacer le presse-papiers",
@@ -600,10 +603,10 @@
     "message": "Enregistrer"
   },
   "enableChangedPasswordNotification": {
-    "message": "Ask to update existing login"
+    "message": "Demander à mettre à jour l'identifiant existant"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Ask to update a login's password when a change is detected on a website."
+    "message": "Demander à mettre à jour le mot de passe d'un identifiant lorsqu'un changement est détecté sur un site Web."
   },
   "notificationChangeDesc": {
     "message": "Souhaitez-vous mettre à jour ce mot de passe dans Bitwarden ?"
@@ -612,10 +615,10 @@
     "message": "Mettre à jour"
   },
   "enableContextMenuItem": {
-    "message": "Show context menu options"
+    "message": "Afficher les options du menu contextuel"
   },
   "contextMenuItemDesc": {
-    "message": "Use a secondary click to access password generation and matching logins for the website. "
+    "message": "Utilisez un clic secondaire pour accéder à la génération de mots de passe et les identifiants correspondants pour le site Web. "
   },
   "defaultUriMatchDetection": {
     "message": "Détection de correspondance URI par défaut",
@@ -780,13 +783,13 @@
     "message": "Support client prioritaire."
   },
   "ppremiumSignUpFuture": {
-    "message": "Toutes les futures options premium. D'autres suivront prochainement !"
+    "message": "Toutes les futures options premium. Prochainement !"
   },
   "premiumPurchase": {
     "message": "Acheter Premium"
   },
   "premiumPurchaseAlert": {
-    "message": "Vous pouvez opter pour une adhésion premium depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site web maintenant ?"
+    "message": "Vous pouvez opter pour une adhésion premium depuis le coffre web sur bitwarden.com. Souhaitez-vous consulter le site web maintenant ?"
   },
   "premiumCurrentMember": {
     "message": "Vous êtes un adhérent premium !"
@@ -807,16 +810,16 @@
     "message": "Actualisation terminée"
   },
   "enableAutoTotpCopy": {
-    "message": "Copy TOTP automatically"
+    "message": "Copier le code TOTP automatiquement"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Si une clé d'authentification est rattachée à votre identifiant, alors le code de vérification TOTP est automatiquement copié dans le presse-papiers lorsque vous renseignez l'identifiant."
   },
   "enableAutoBiometricsPrompt": {
-    "message": "Ask for biometrics on launch"
+    "message": "Demander la biométrie au lancement"
   },
   "premiumRequired": {
-    "message": "Adhésion Premium requise"
+    "message": "Version Premium requise"
   },
   "premiumRequiredDesc": {
     "message": "Une adhésion premium est requise pour utiliser cette fonctionnalité."
@@ -867,16 +870,16 @@
     "message": "Authentifier WebAuthn"
   },
   "loginUnavailable": {
-    "message": "Connexion impossible"
+    "message": "Identifiant non disponible"
   },
   "noTwoStepProviders": {
-    "message": "Ce compte dispose d'une identification en deux étapes. Cependant, aucun service d'identification en deux étapes n'est supporté par ce navigateur web."
+    "message": "Ce compte dispose d'une authentification à double facteurs, cependant, aucun service d'authentification à double facteurs n'est supporté par ce navigateur web."
   },
   "noTwoStepProviders2": {
     "message": "Merci d'utiliser un navigateur web compatible (comme Chrome) et/ou d'ajouter des services additionnels d'identification en deux étapes qui sont mieux supportés par les navigateurs web (comme par exemple une application d'authentification)."
   },
   "twoStepOptions": {
-    "message": "Options d'identification en deux étapes"
+    "message": "Options d'identification à double facteurs"
   },
   "recoveryCodeDesc": {
     "message": "Accès perdu à tous vos services d'authentification à double facteurs ? Utilisez votre code de récupération pour désactiver tous les services de double authentifications sur votre compte."
@@ -1034,16 +1037,16 @@
     "message": "Ce navigateur ne peut pas traiter les requêtes U2F dans cette popup. Voulez-vous ouvrir cette popup dans une nouvelle fenêtre pour que vous puissiez vous connecter en utilisant U2F ?"
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Afficher les icônes du site web"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Afficher une image reconnaissable à côté de chaque identifiant."
   },
   "enableBadgeCounter": {
-    "message": "Show badge counter"
+    "message": "Afficher le compteur de badge"
   },
   "badgeCounterDesc": {
-    "message": "Indicate how many logins you have for the current web page."
+    "message": "Indique le nombre d'identifiants que vous avez pour la page web actuelle."
   },
   "cardholderName": {
     "message": "Nom du titulaire de la carte"
@@ -1145,7 +1148,7 @@
     "message": "Numéro de passeport"
   },
   "licenseNumber": {
-    "message": "Numéro de permis"
+    "message": "Numéro de permis de Conduire"
   },
   "email": {
     "message": "E-mail"
@@ -1275,7 +1278,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Afficher/masquer les options"
+    "message": "Options de basculement"
   },
   "toggleCurrentUris": {
     "message": "Afficher/masquer les URIs actuels",
@@ -1307,6 +1310,10 @@
   "dateUpdated": {
     "message": "Mis à jour",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Créé",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Mot de passe mis à jour",
@@ -1480,8 +1487,8 @@
   "acceptPolicies": {
     "message": "En cochant cette case, vous acceptez les éléments suivants :"
   },
-  "acceptPoliciesError": {
-    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
+  "acceptPoliciesRequired": {
+    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
   },
   "termsOfService": {
     "message": "Conditions d'utilisation"
@@ -1846,8 +1853,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation."
+  "vaultTimeoutTooLarge": {
+    "message": "Le délai d'expiration de votre coffre-fort dépasse les restrictions définies par votre organisation."
   },
   "vaultExportDisabled": {
     "message": "Export du coffre désactivé"
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Erreur du connecteur de clé: veuillez vérifier que le connecteur de clé est disponible et qu'il fonctionne correctement."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Un abonnement Premium est requis"
+  },
+  "organizationIsDisabled": {
+    "message": "L'organisation est désactivée."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Les éléments des Organisations désactivées ne sont pas accessibles. Contactez le propriétaire de votre Organisation pour obtenir de l'aide."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Connexion à $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Les paramètres ont été modifiés"
+  },
+  "environmentEditedClick": {
+    "message": "Cliquez ici"
+  },
+  "environmentEditedReset": {
+    "message": "pour réinitialiser aux paramètres par défaut"
+  },
+  "serverVersion": {
+    "message": "Version du serveur"
+  },
+  "selfHosted": {
+    "message": "Auto-hébergé"
+  },
+  "thirdParty": {
+    "message": "Tierce partie"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connecté à l'implémentation du serveur tiers, $SERVERNAME$. Veuillez contrôler les bugs en utilisant le serveur officiel, ou rapportez-les au serveur tiers.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "vu pour la dernière fois le : $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Connectez-vous avec le mot de passe maître"
+  },
+  "loggingInAs": {
+    "message": "Connexion en tant que"
+  },
+  "notYou": {
+    "message": "Ce n'est pas vous ?"
+  },
+  "newAroundHere": {
+    "message": "Nouveau par ici ?"
+  },
+  "rememberEmail": {
+    "message": "Se souvenir du courriel"
   }
 }

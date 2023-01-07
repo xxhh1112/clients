@@ -420,7 +420,7 @@
   },
   "capitalize": {
     "message": "Mayúsculas iniciales",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Incluir número"
@@ -532,10 +532,13 @@
   "invalidEmail": {
     "message": "Correo electrónico no válido."
   },
-  "masterPassRequired": {
-    "message": "Contraseña maestra requerida."
+  "masterPasswordRequired": {
+    "message": "Se requiere una contraseña maestra."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Se requiere volver a teclear la contraseña maestra."
+  },
+  "masterPasswordMinlength": {
     "message": "La contraseña maestra debe tener al menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
@@ -895,10 +898,10 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Mostrar iconos del sitio web"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Mostrar una imagen reconocible junto a cada inicio de sesión."
   },
   "enableMinToTray": {
     "message": "Minimizar a icono en la bandeja"
@@ -1263,6 +1266,10 @@
     "message": "Actualizada",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creado",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Contraseña actualizada",
     "description": "ex. Date this password was updated"
@@ -1278,34 +1285,34 @@
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "Load Accessibility Cookie"
+    "message": "Cargar cookie de accesibilidad"
   },
   "registerAccessibilityUser": {
-    "message": "Register as an accessibility user at",
+    "message": "Registrarse como usuario de accesibilidad en",
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
-    "message": "Copy and paste the link sent to your email below"
+    "message": "Copia y pega el enlace enviado a tu correo electrónico"
   },
   "enterhCaptchaUrl": {
-    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "message": "Introduzca la URL para cargar la cookie de accesibilidad de hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
-    "message": "hCaptcha Url is required",
+    "message": "hCaptcha Url es obligatorio",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "invalidUrl": {
-    "message": "Invalid Url"
+    "message": "Url inválida"
   },
   "done": {
-    "message": "Done"
+    "message": "Hecho"
   },
   "accessibilityCookieSaved": {
-    "message": "Accessibility cookie saved!"
+    "message": "¡Cookie de accesibilidad guardada!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "No hay ninguna cookie de accesibilidad guardada"
   },
   "warning": {
     "message": "ADVERTENCIA",
@@ -1382,13 +1389,28 @@
     "message": "Verificar para Bitwarden."
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "Solicitar Windows Hello al iniciar"
   },
   "autoPromptTouchId": {
-    "message": "Ask for Touch ID on launch"
+    "message": "Solicitar Touch ID al iniciar"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bloquear con contraseña maestra al reiniciar"
+  },
+  "deleteAccount": {
+    "message": "Eliminar cuenta"
+  },
+  "deleteAccountDesc": {
+    "message": "Si procede eliminará su cuenta y todo el contenido asociado a ella."
+  },
+  "deleteAccountWarning": {
+    "message": "El borrado de su cuenta es una operación permanente. No se puede deshacer."
+  },
+  "accountDeleted": {
+    "message": "Cuenta eliminada"
+  },
+  "accountDeletedDesc": {
+    "message": "Su cuenta ha sido cerrada y toda la información asociada ha sido eliminada."
   },
   "preferences": {
     "message": "Preferencias"
@@ -1543,8 +1565,8 @@
   "acceptPolicies": {
     "message": "Al seleccionar esta casilla, acepto lo siguiente:"
   },
-  "acceptPoliciesError": {
-    "message": "Todavía no has aceptado los términos del servicio y la política de privacidad."
+  "acceptPoliciesRequired": {
+    "message": "No ha aceptado los términos del servicio y la política de privacidad."
   },
   "enableBrowserIntegration": {
     "message": "Habilitar integración con el navegador"
@@ -1552,8 +1574,14 @@
   "enableBrowserIntegrationDesc": {
     "message": "La integración del navegador se usa para la biometría en el mismo."
   },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Permitir integración con el navegador DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Usa tu bóveda de Bitwarden cuando navegas con DuckDuckGo."
+  },
   "browserIntegrationUnsupportedTitle": {
-    "message": "Browser integration not supported"
+    "message": "La integración con el navegador no está soportada"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Por desgracia la integración del navegador sólo está soportada por ahora en la versión de la Mac App Store."
@@ -1562,7 +1590,7 @@
     "message": "Por desgracia la integración del navegador sólo está soportada por ahora en la versión de Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
-    "message": "Unfortunately browser integration is currently not supported in the linux version."
+    "message": "Por desgracia la integración con el navegador actualmente sólo está soportada en la versión de Microsoft Store."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Requiere verificación para la integración del navegador"
@@ -1578,6 +1606,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Por favor, asegúrese de que la huella digital mostrada es idéntica a la huella que aparece en la extensión del navegador."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ quiere conectarse a Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "¿Quieres aprobar esta solicitud?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Si no iniciaste esta solicitud, no la apruebes."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometría no habilitada"
@@ -1736,6 +1779,15 @@
   "disabled": {
     "message": "Deshabilitado"
   },
+  "removePassword": {
+    "message": "Eliminar contraseña"
+  },
+  "removedPassword": {
+    "message": "Contraseña eliminada"
+  },
+  "removePasswordConfirmation": {
+    "message": "¿Está seguro que desea eliminar la contraseña?"
+  },
   "maxAccessCountReached": {
     "message": "Se ha alcanzado el número máximo de accesos"
   },
@@ -1840,7 +1892,7 @@
     "message": "Has abandonado la organización."
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "Error en el conector de claves: asegúrate de que el conector de claves está disponible y que funciona correctamente."
   },
   "lockAllVaults": {
     "message": "Bloquear todas las cajas fuertes"
@@ -1937,28 +1989,77 @@
     "message": "Servicio"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "Todas las cajas fuertes"
   },
   "searchOrganization": {
-    "message": "Search Organization"
+    "message": "Buscar organizaciones"
   },
   "searchMyVault": {
-    "message": "Search My Vault"
+    "message": "Buscar en mi caja fuerte"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Alias de correo"
   },
   "forwardedEmailDesc": {
-    "message": "Generate an email alias with an external forwarding service."
+    "message": "Generar un alias de correo electrónico con un servicio de reenvío externo."
   },
   "hostname": {
-    "message": "Hostname",
+    "message": "Nombre del host",
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API Access Token"
+    "message": "Token de acceso API"
   },
   "apiKey": {
-    "message": "API Key"
+    "message": "Clave API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Se requiere una Suscripción Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "La organización está desactivada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "No se puede acceder a los elementos que pertenecen a organizaciones que estén deshabilitadas. Por favor, póngase en contacto con el propietario de la organización para obtener ayuda."
+  },
+  "neverLockWarning": {
+    "message": "¿Está seguro de que quieres usar la opción \"Nunca\"? Al ajustar las opciones de bloqueo a \"Nunca\", la clave de cifrado de su caja fuerte se guardará en tu dispositivo. Si usas esta opción, asegúrate de mantener tu dispositivo debidamente protegido."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Caja fuerte"
+  },
+  "loginWithMasterPassword": {
+    "message": "Iniciar sesión con contraseña maestra"
+  },
+  "loggingInAs": {
+    "message": "Iniciando sesión como"
+  },
+  "rememberEmail": {
+    "message": "Recordar email"
+  },
+  "notYou": {
+    "message": "¿No eres tú?"
+  },
+  "newAroundHere": {
+    "message": "¿Nuevo por aquí?"
+  },
+  "loggingInTo": {
+    "message": "Iniciando sesión en $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Iniciar sesión con otro dispositivo"
+  },
+  "toggleCharacterCount": {
+    "message": "Activar recuento de caracteres",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

@@ -1,5 +1,6 @@
 ---
 name: Release Browser
+run-name: Release Browser ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -25,18 +26,18 @@ jobs:
     outputs:
       release-version: ${{ steps.version.outputs.version }}
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
+
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc/* ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-browser" ]]; then
             echo "==================================="
-            echo "[!] Can only release from the 'rc' or 'hotfix-rc/*' branches"
+            echo "[!] Can only release from the 'rc' or 'hotfix-rc-browser' branches"
             echo "==================================="
             exit 1
           fi
-
-      - name: Checkout repo
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
       - name: Check Release Version
         id: version
@@ -90,12 +91,36 @@ jobs:
       - setup
       - locales-test
     steps:
-      - name: Download latest RC build artifacts
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          initial-status: 'in_progress'
+          environment: 'Browser - Production'
+          description: 'Deployment ${{ needs.setup.outputs.release-version }} from branch ${{ github.ref_name }}'
+          task: release
+
+      - name: Download latest Release build artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-browser.yml
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
+          artifacts: 'browser-source-*.zip,
+                      dist-chrome-*.zip,
+                      dist-opera-*.zip,
+                      dist-firefox-*.zip,
+                      dist-edge-*.zip'
+
+      - name: Dry Run - Download latest master build artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
+        with:
+          workflow: build-browser.yml
+          workflow_conclusion: success
+          branch: master
           artifacts: 'browser-source-*.zip,
                       dist-chrome-*.zip,
                       dist-opera-*.zip,
@@ -127,3 +152,19 @@ jobs:
           body: "<insert release notes here>"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
+
+      - name: Update deployment status to Success
+        if: ${{ success() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+      - name: Update deployment status to Failure
+        if: ${{ failure() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          state: 'failure'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}

@@ -83,7 +83,7 @@
     "message": "Копиране на потребителското име"
   },
   "copyNumber": {
-    "message": "Копиране на но̀мера"
+    "message": "Копиране на номера"
   },
   "copySecurityCode": {
     "message": "Копиране на кода да сигурност"
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Недействителна електронна поща."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Главната парола е задължителна."
   },
-  "masterPassLength": {
-    "message": "Главната парола трябва да съдържа поне 8 знака."
+  "confirmMasterPasswordRequired": {
+    "message": "Повторното въвеждане на главната парола е задължително."
+  },
+  "masterPasswordMinlength": {
+    "message": "Главната парола трябва да е дълга поне 8 знака."
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -1308,6 +1311,10 @@
     "message": "Обновено",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Създадено",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Обновена парола",
     "description": "ex. Date this password was updated"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Условията за използване и политиката за поверителност не бяха приети."
   },
   "termsOfService": {
@@ -1846,7 +1853,7 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
+  "vaultTimeoutTooLarge": {
     "message": "Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви."
   },
   "vaultExportDisabled": {
@@ -1916,14 +1923,14 @@
     "message": "Тип потребителско име"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Използвайте възможностите за под-адресиране на е-поща на своя доставчик."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -1947,7 +1954,7 @@
     "message": "Услуга"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Грешка с конектора за ключове: уверете се, че конекторът за ключове е наличен и работи правилно."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Изисква се платен абонамент"
+  },
+  "organizationIsDisabled": {
+    "message": "Организацията е изключена."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Записите в изключени организации не са достъпни. Свържете се със собственика на организацията си за помощ."
+  },
+  "cardBrandMir": {
+    "message": "Мир"
+  },
+  "loggingInTo": {
+    "message": "Вписване в $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Настройките баха променени"
+  },
+  "environmentEditedClick": {
+    "message": "Щракнете тук"
+  },
+  "environmentEditedReset": {
+    "message": "за да върнете предварително зададените настройки"
+  },
+  "serverVersion": {
+    "message": "Версия на сървъра"
+  },
+  "selfHosted": {
+    "message": "Собствен хостинг"
+  },
+  "thirdParty": {
+    "message": "Third-party"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "последно видян на $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Вписване с главната парола"
+  },
+  "loggingInAs": {
+    "message": "Вписване като"
+  },
+  "notYou": {
+    "message": "Това не сте Вие?"
+  },
+  "newAroundHere": {
+    "message": "За пръв път ли сте тук?"
+  },
+  "rememberEmail": {
+    "message": "Запомняне на е-пощата"
   }
 }

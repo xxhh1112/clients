@@ -20,7 +20,7 @@
     "message": "Войти"
   },
   "enterpriseSingleSignOn": {
-    "message": "Единая корпоративная авторизация (SSO)"
+    "message": "Единая корпоративная авторизация"
   },
   "cancel": {
     "message": "Отмена"
@@ -157,7 +157,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
-    "message": "Двухфакторная аутентификация"
+    "message": "Двухэтапная аутентификация"
   },
   "logOut": {
     "message": "Выход"
@@ -199,7 +199,7 @@
     "message": "Синхронизация"
   },
   "syncVaultNow": {
-    "message": "Синхронизировать сейчас"
+    "message": "Синхронизировать"
   },
   "lastSync": {
     "message": "Последняя синхронизация:"
@@ -309,7 +309,7 @@
     "message": "Папка"
   },
   "deleteItem": {
-    "message": "Удалить элемент"
+    "message": "Удаление элемента"
   },
   "viewItem": {
     "message": "Просмотр элемента"
@@ -318,7 +318,7 @@
     "message": "Перейти"
   },
   "website": {
-    "message": "Веб-сайт"
+    "message": "Сайт"
   },
   "toggleVisibility": {
     "message": "Вкл/выкл видимость"
@@ -367,7 +367,7 @@
     "message": "Тайм-аут хранилища"
   },
   "lockNow": {
-    "message": "Заблокировать сейчас"
+    "message": "Заблокировать"
   },
   "immediately": {
     "message": "Немедленно"
@@ -423,10 +423,13 @@
   "invalidEmail": {
     "message": "Неверный адрес email."
   },
-  "masterPassRequired": {
-    "message": "Необходимо ввести мастер-пароль."
+  "masterPasswordRequired": {
+    "message": "Требуется мастер-пароль."
   },
-  "masterPassLength": {
+  "confirmMasterPasswordRequired": {
+    "message": "Необходимо повторно ввести мастер-пароль."
+  },
+  "masterPasswordMinlength": {
     "message": "Мастер-пароль должен содержать не менее 8 символов."
   },
   "masterPassDoesntMatch": {
@@ -461,7 +464,7 @@
     "message": "Вы вышли из хранилища"
   },
   "loginExpired": {
-    "message": "Истек срок действия вашей сессии."
+    "message": "Истек срок действия вашего сеанса."
   },
   "logOutConfirmation": {
     "message": "Вы действительно хотите выйти?"
@@ -488,10 +491,10 @@
     "message": "Вы можете изменить свой мастер-пароль на bitwarden.com. Перейти на сайт сейчас?"
   },
   "twoStepLoginConfirmation": {
-    "message": "Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или письмом. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?"
+    "message": "Двухэтапная аутентификация делает аккаунт более защищенным, поскольку требуется подтверждение входа при помощи другого устройства, например, ключа безопасности, приложения-аутентификатора, SMS, телефонного звонка или электронной почты. Двухэтапная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?"
   },
   "editedFolder": {
-    "message": "Папка отредактирована"
+    "message": "Папка сохранена"
   },
   "deleteFolderConfirmation": {
     "message": "Удалить эту папку?"
@@ -500,13 +503,13 @@
     "message": "Папка удалена"
   },
   "gettingStartedTutorial": {
-    "message": "Учебник по началу работы"
+    "message": "Гид по bitwarden"
   },
   "gettingStartedTutorialVideo": {
     "message": "Посмотрите небольшой обучающий материал, чтобы узнать, как получить максимальную отдачу от расширения браузера."
   },
   "syncingComplete": {
-    "message": "Синхронизация завершена"
+    "message": "Синхронизация выполнена"
   },
   "syncingFailed": {
     "message": "Ошибка синхронизации"
@@ -534,7 +537,7 @@
     "message": "Элемент добавлен"
   },
   "editedItem": {
-    "message": "Элемент изменен"
+    "message": "Элемент сохранен"
   },
   "deleteItemConfirmation": {
     "message": "Вы действительно хотите отправить в корзину?"
@@ -603,7 +606,7 @@
     "message": "Спрашивать при обновлении существующего логина"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Спрашивать обновление пароля логина при обнаружении изменения на веб-сайте."
+    "message": "Спрашивать обновление пароля логина при обнаружении изменения на сайте."
   },
   "notificationChangeDesc": {
     "message": "Обновить этот пароль в Bitwarden?"
@@ -615,7 +618,7 @@
     "message": "Показать опции контекстного меню"
   },
   "contextMenuItemDesc": {
-    "message": "С помощью двойного щелчка можно получить доступ к генерации паролей и сопоставлению логинов для веб-сайта."
+    "message": "С помощью двойного щелчка можно получить доступ к генерации паролей и сопоставлению логинов для сайта."
   },
   "defaultUriMatchDetection": {
     "message": "Обнаружение совпадения URI по умолчанию",
@@ -639,7 +642,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Солнечная темная",
+    "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
@@ -702,7 +705,7 @@
     "message": "Подробнее"
   },
   "authenticatorKeyTotp": {
-    "message": "Ключ проверки подлинности (TOTP)"
+    "message": "Ключ аутентификатора (TOTP)"
   },
   "verificationCodeTotp": {
     "message": "Код подтверждения (TOTP)"
@@ -735,7 +738,7 @@
     "message": "Файл"
   },
   "selectFile": {
-    "message": "Выберите файл."
+    "message": "Выбрать файл"
   },
   "maxFileSize": {
     "message": "Максимальный размер файла 500 МБ."
@@ -759,7 +762,7 @@
     "message": "Обновить Премиум"
   },
   "premiumNotCurrentMember": {
-    "message": "На текущий момент у вас отсутствует Премиум."
+    "message": "Сейчас у вас отсутствует Премиум."
   },
   "premiumSignUpAndGet": {
     "message": "Подпишитесь на Премиум и получите:"
@@ -768,13 +771,13 @@
     "message": "1 ГБ зашифрованного хранилища для вложенных файлов."
   },
   "ppremiumSignUpTwoStep": {
-    "message": "Дополнительные варианты двухфакторной аутентификации, такие как YubiKey, FIDO U2F и Duo."
+    "message": "Дополнительные варианты двухэтапной аутентификации, такие как YubiKey, FIDO U2F и Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Гигиена паролей, здоровье аккаунта и отчеты об утечках данных для обеспечения безопасности вашего хранилища."
   },
   "ppremiumSignUpTotp": {
-    "message": "TOTP-генератор кодов (2ФА) для логинов в хранилище."
+    "message": "Генератор кода подтверждения TOTP (2ЭА) для входа в ваше хранилище."
   },
   "ppremiumSignUpSupport": {
     "message": "Приоритетная поддержка."
@@ -807,7 +810,7 @@
     "message": "Обновление завершено"
   },
   "enableAutoTotpCopy": {
-    "message": "Копировать TOTP автоматически"
+    "message": "Скопировать TOTP автоматически"
   },
   "disableAutoTotpCopyDesc": {
     "message": "Если к вашему логину прикреплен ключ аутентификации, то код подтверждения TOTP будет скопирован при автозаполнении логина."
@@ -816,7 +819,7 @@
     "message": "Запрашивать биометрию при запуске"
   },
   "premiumRequired": {
-    "message": "Необходим Премиум"
+    "message": "Требуется Премиум"
   },
   "premiumRequiredDesc": {
     "message": "Для использования этой функции необходим Премиум."
@@ -849,7 +852,7 @@
     "message": "Отправить код подтверждения еще раз"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Использовать другой метод двухфакторной аутентификации"
+    "message": "Использовать другой метод двухэтапной аутентификации"
   },
   "insertYubiKey": {
     "message": "Вставьте свой YubiKey в USB-порт компьютера и нажмите его кнопку."
@@ -858,7 +861,7 @@
     "message": "Вставьте ключ безопасности в USB-порт компьютера. Если у ключа есть кнопка, нажмите ее."
   },
   "webAuthnNewTab": {
-    "message": "Продолжить верификацию 2ФА WebAuthn в новой вкладке."
+    "message": "Продолжить верификацию 2ЭА WebAuthn в новой вкладке."
   },
   "webAuthnNewTabOpen": {
     "message": "Открыть новую вкладку"
@@ -870,16 +873,16 @@
     "message": "Вход недоступен"
   },
   "noTwoStepProviders": {
-    "message": "У этой учетной записи включена двухфакторная аутентификация, однако ни один из настроенных вариантов не поддерживается этим веб-браузером."
+    "message": "У этой учетной записи включена двухэтапная аутентификация, однако ни один из настроенных вариантов не поддерживается этим браузером."
   },
   "noTwoStepProviders2": {
     "message": "Используйте поддерживаемый веб-браузер (например, Chrome) и/или добавьте дополнительные варианты аутентификации, которые поддерживаются в веб-браузерах (например, приложение-аутентификатор)."
   },
   "twoStepOptions": {
-    "message": "Настройки двухфакторной аутентификации"
+    "message": "Настройки двухэтапной аутентификации"
   },
   "recoveryCodeDesc": {
-    "message": "Потеряли доступ ко всем вариантам двухфакторной аутентификации? Используйте код восстановления, чтобы отключить двухфакторную аутентификацию для вашей учетной записи."
+    "message": "Потеряли доступ ко всем вариантам двухэтапной аутентификации? Используйте код восстановления, чтобы отключить двухэтапную аутентификацию для вашей учетной записи."
   },
   "recoveryCodeTitle": {
     "message": "Код восстановления"
@@ -909,7 +912,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Используйте любой ключ безопасности с поддержкой WebAuthn для доступа к своей учетной записи."
+    "message": "Используйте любой ключ безопасности с поддержкой WebAuthn для доступа к вашей учетной записи."
   },
   "emailTitle": {
     "message": "Email"
@@ -918,10 +921,10 @@
     "message": "Коды подтверждения будут отправлены вам по электронной почте."
   },
   "selfHostedEnvironment": {
-    "message": "Среда собственного хостинга"
+    "message": "Окружение пользовательского хостинга"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Укажите URL-адрес Bitwarden на вашем сервере."
+    "message": "Укажите URL Bitwarden на вашем сервере."
   },
   "customEnvironment": {
     "message": "Пользовательское окружение"
@@ -930,25 +933,25 @@
     "message": "Для опытных пользователей. Можно указать URL отдельно для каждой службы."
   },
   "baseUrl": {
-    "message": "URL-адрес сервера"
+    "message": "URL сервера"
   },
   "apiUrl": {
-    "message": "API URL-адреса сервера"
+    "message": "URL API сервера"
   },
   "webVaultUrl": {
-    "message": "URL-адрес сервера веб-хранилища"
+    "message": "URL сервера веб-хранилища"
   },
   "identityUrl": {
-    "message": "URL-адрес сервера идентификации"
+    "message": "URL сервера идентификации"
   },
   "notificationsUrl": {
-    "message": "URL-адрес сервера уведомлений"
+    "message": "URL сервера уведомлений"
   },
   "iconsUrl": {
-    "message": "URL-адрес сервера значков"
+    "message": "URL сервера значков"
   },
   "environmentSaved": {
-    "message": "URL-адреса среды сохранены."
+    "message": "URL окружения сохранены"
   },
   "enableAutoFillOnPageLoad": {
     "message": "Автозаполнение при загрузке страницы"
@@ -984,7 +987,7 @@
     "message": "Открыть хранилище в боковой панели"
   },
   "commandAutofillDesc": {
-    "message": "Автозаполнение последнего использованного логина для текущего веб-сайта."
+    "message": "Автозаполнение последнего использованного логина для текущего сайта."
   },
   "commandGeneratePasswordDesc": {
     "message": "Сгенерировать и скопировать новый случайный пароль в буфер обмена."
@@ -1034,7 +1037,7 @@
     "message": "Этот браузер не может обрабатывать запросы U2F в этом всплывающем окне. Вы хотите открыть это всплывающее окно в новом окне, чтобы иметь возможность войти в систему, используя U2F?"
   },
   "enableFavicon": {
-    "message": "Показать значки веб-сайтов"
+    "message": "Показать значки сайтов"
   },
   "faviconDesc": {
     "message": "Отображать узнаваемое изображение рядом с каждым логином."
@@ -1275,7 +1278,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Переключить настройки"
+    "message": "Настройки перебора"
   },
   "toggleCurrentUris": {
     "message": "Переключить текущий URI",
@@ -1307,6 +1310,10 @@
   "dateUpdated": {
     "message": "Обновлено",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Создан",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Пароль обновлен",
@@ -1389,7 +1396,7 @@
     "message": "Действие по тайм-ауту хранилища"
   },
   "lock": {
-    "message": "Заблокировать",
+    "message": "Блокировка",
     "description": "Verb form: to make secure or inaccesible by"
   },
   "trash": {
@@ -1427,10 +1434,10 @@
     "message": "Заполнить и сохранить"
   },
   "autoFillSuccessAndSavedUri": {
-    "message": "Автозаполненный элемент и сохраненный URI"
+    "message": "URI элемента заполнен и сохранен"
   },
   "autoFillSuccess": {
-    "message": "Автозаполненный элемент"
+    "message": "Элемент заполнен "
   },
   "setMasterPassword": {
     "message": "Задать мастер-пароль"
@@ -1480,7 +1487,7 @@
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Условия предоставления услуг и Политика конфиденциальности не были подтверждены."
   },
   "termsOfService": {
@@ -1502,10 +1509,10 @@
     "message": "Пожалуйста, убедитесь, что приложение для компьютера отображает этот отпечаток: "
   },
   "desktopIntegrationDisabledTitle": {
-    "message": "Интеграция с браузером не включена"
+    "message": "Интеграция с браузером не настроена"
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "Пожалуйста, включите интеграцию с браузером в настройках приложения Bitwarden  для компьютера."
+    "message": "Пожалуйста, настройте интеграцию с браузером в приложени Bitwarden для компьютера."
   },
   "startDesktopTitle": {
     "message": "Запустить приложение Bitwarden для компьютера"
@@ -1514,7 +1521,7 @@
     "message": "Перед использованием разблокировки с помощью биометрии необходимо запустить приложение Bitwarden для компьютера."
   },
   "errorEnableBiometricTitle": {
-    "message": "Не удается включить биометрию"
+    "message": "Не удается настроить биометрию"
   },
   "errorEnableBiometricDesc": {
     "message": "Действие было отменено приложением для компьютера"
@@ -1532,7 +1539,7 @@
     "message": "Несоответствие аккаунта"
   },
   "biometricsNotEnabledTitle": {
-    "message": "Биометрия не включена"
+    "message": "Биометрия не настроена"
   },
   "biometricsNotEnabledDesc": {
     "message": "Для активации биометрии в браузере сначала необходимо включить биометрию в приложении для компьютера."
@@ -1625,7 +1632,7 @@
     "message": "Пароль удален"
   },
   "deletedSend": {
-    "message": "Удаленная Send",
+    "message": "Send удалена",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLink": {
@@ -1662,14 +1669,14 @@
     "message": "Файл, который вы хотите отправить."
   },
   "deletionDate": {
-    "message": "Срок удаления"
+    "message": "Дата удаления"
   },
   "deletionDateDesc": {
     "message": "Эта Send будет окончательно удалена в указанные дату и время.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "Срок истечения"
+    "message": "Дата истечения"
   },
   "expirationDateDesc": {
     "message": "Если задано, доступ к этой Send истечет в указанные дату и время.",
@@ -1706,7 +1713,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisableDesc": {
-    "message": "Отключить эту Send, чтобы никто не мог получить к ней доступ.",
+    "message": "Деактивировать эту Send, чтобы никто не мог получить к ней доступ.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendShareDesc": {
@@ -1724,14 +1731,14 @@
     "message": "Текущих обращений"
   },
   "createSend": {
-    "message": "Создание новой Send",
+    "message": "Новая Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
     "message": "Новый пароль"
   },
   "sendDisabled": {
-    "message": "Send отключена",
+    "message": "Send удалена",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1739,11 +1746,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Созданная Send",
+    "message": "Send создана",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Измененная Send",
+    "message": "Send сохранена",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinuxChromiumFileWarning": {
@@ -1813,10 +1820,10 @@
     "message": "Обновить мастер-пароль"
   },
   "updateMasterPasswordWarning": {
-    "message": "Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить его сейчас. В результате текущая сессия будет завершена, потребуется повторный вход. Активные сессии на других устройствах могут оставаться активными в течение одного часа."
+    "message": "Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить его сейчас. В результате текущий сеанс будет завершен, потребуется повторный вход. Сеансы на других устройствах могут оставаться активными в течение одного часа."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Автоматическая регистрация"
+    "message": "Автоматическое развертывание"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль."
@@ -1846,14 +1853,14 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Время ожидания превышает ограничения, установленные вашей организацией."
+  "vaultTimeoutTooLarge": {
+    "message": "Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией."
   },
   "vaultExportDisabled": {
-    "message": "Экспорт хранилища отключен"
+    "message": "Экспорт хранилища недоступен"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации."
+    "message": "Одна или несколько политик организации запрещают вам экспортировать личное хранилище."
   },
   "copyCustomFieldNameInvalidElement": {
     "message": "Невозможно определить элемент формы. Попробуйте вместо этого проверить HTML."
@@ -1877,7 +1884,7 @@
     "message": "Удалить мастер-пароль"
   },
   "removedMasterPassword": {
-    "message": "Мастер-пароль удален."
+    "message": "Мастер-пароль удален"
   },
   "leaveOrganizationConfirmation": {
     "message": "Вы действительно хотите покинуть эту организацию?"
@@ -1889,7 +1896,7 @@
     "message": "Показать количество символов"
   },
   "sessionTimeout": {
-    "message": "Время вашей сессии истекло. Пожалуйста, вернитесь и попробуйте войти снова."
+    "message": "Время вашего сеанса истекло. Пожалуйста, вернитесь и попробуйте войти снова."
   },
   "exportingPersonalVaultTitle": {
     "message": "Экспорт личного хранилища"
@@ -1916,17 +1923,17 @@
     "message": "Тип имени пользователя"
   },
   "plusAddressedEmail": {
-    "message": "Плюс-адресованные email",
+    "message": "Субадресованные email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Использовать возможности суб-адресации вашего провайдера электронной почты."
+    "message": "Используйте возможности субадресации вашей электронной почты."
   },
   "catchallEmail": {
-    "message": "Catch-all-адрес электронной почты"
+    "message": "Общий email домена"
   },
   "catchallEmailDesc": {
-    "message": "Использовать настроенную в вашем домене почту catch-all."
+    "message": "Использовать общую почту домена."
   },
   "random": {
     "message": "Случайно"
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Ошибка соединителя ключей: убедитесь, что он доступен и работает корректно."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Требуется подписка Премиум"
+  },
+  "organizationIsDisabled": {
+    "message": "Организация отключена."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Доступ к элементам в отключенных организациях невозможен. Обратитесь за помощью к владельцу организации."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Вход в $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Настройки были изменены"
+  },
+  "environmentEditedClick": {
+    "message": "Нажмите здесь"
+  },
+  "environmentEditedReset": {
+    "message": "для сброса к предварительно настроенным параметрам"
+  },
+  "serverVersion": {
+    "message": "Версия сервера"
+  },
+  "selfHosted": {
+    "message": "Собственный хостинг"
+  },
+  "thirdParty": {
+    "message": "Сторонний"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Подключено к стороннему серверу, $SERVERNAME$. Пожалуйста, проверяйте ошибки, используя официальный сервер, или сообщайте о них на сторонний сервер.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "был $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Войти с мастер-паролем"
+  },
+  "loggingInAs": {
+    "message": "Войти как"
+  },
+  "notYou": {
+    "message": "Не вы?"
+  },
+  "newAroundHere": {
+    "message": "Вы здесь впервые?"
+  },
+  "rememberEmail": {
+    "message": "Запомнить email"
   }
 }

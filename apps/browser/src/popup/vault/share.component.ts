@@ -7,13 +7,14 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 @Component({
   selector: "app-vault-share",
   templateUrl: "share.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ShareComponent extends BaseShareComponent {
   constructor(
     collectionService: CollectionService,
@@ -36,9 +37,11 @@ export class ShareComponent extends BaseShareComponent {
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.onSharedCipher.subscribe(() => {
       this.router.navigate(["view-cipher", { cipherId: this.cipherId }]);
     });
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       this.cipherId = params.cipherId;
       await this.load();

@@ -3,18 +3,19 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SecretVerificationRequest } from "@bitwarden/common/models/request/secretVerificationRequest";
+import { SecretVerificationRequest } from "@bitwarden/common/models/request/secret-verification.request";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { MessageResponse } from "@bitwarden/node/cli/models/response/messageResponse";
 
+import { Response } from "../models/response";
+import { MessageResponse } from "../models/response/message.response";
 import { CliUtils } from "../utils";
 
-import { ConvertToKeyConnectorCommand } from "./convertToKeyConnector.command";
+import { ConvertToKeyConnectorCommand } from "./convert-to-key-connector.command";
 
 export class UnlockCommand {
   constructor(
@@ -26,6 +27,7 @@ export class UnlockCommand {
     private keyConnectorService: KeyConnectorService,
     private environmentService: EnvironmentService,
     private syncService: SyncService,
+    private organizationApiService: OrganizationApiServiceAbstraction,
     private logout: () => Promise<void>
   ) {}
 
@@ -78,10 +80,10 @@ export class UnlockCommand {
 
       if (await this.keyConnectorService.getConvertAccountRequired()) {
         const convertToKeyConnectorCommand = new ConvertToKeyConnectorCommand(
-          this.apiService,
           this.keyConnectorService,
           this.environmentService,
           this.syncService,
+          this.organizationApiService,
           this.logout
         );
         const convertResponse = await convertToKeyConnectorCommand.run();

@@ -101,16 +101,16 @@
     "message": "Sem credenciais correspondentes."
   },
   "unlockVaultMenu": {
-    "message": "Desbloqueie seu Cofre"
+    "message": "Desbloqueie seu cofre"
   },
   "loginToVaultMenu": {
-    "message": "Acesse o seu Cofre"
+    "message": "Acesse o seu cofre"
   },
   "autoFillInfo": {
     "message": "Não há credenciais disponíveis para autopreenchimento para a aba do navegador atual."
   },
   "addLogin": {
-    "message": "Adicionar uma Credencial"
+    "message": "Adicionar um Login"
   },
   "addItem": {
     "message": "Adicionar Item"
@@ -149,7 +149,7 @@
     "message": "Alterar Senha Mestra"
   },
   "fingerprintPhrase": {
-    "message": "Frase de Biometria",
+    "message": "Frase Biométrica",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -261,10 +261,10 @@
     "message": "Incluir Número"
   },
   "minNumbers": {
-    "message": "Mínimo de Números"
+    "message": "Números Mínimos"
   },
   "minSpecial": {
-    "message": "Mínimo Especial"
+    "message": "Especiais Mínimos"
   },
   "avoidAmbChar": {
     "message": "Evitar Caracteres Ambíguos"
@@ -364,7 +364,7 @@
     "message": "Senha mestra inválida"
   },
   "vaultTimeout": {
-    "message": "Tempo limite do cofre."
+    "message": "Cofre - tempo esgotado"
   },
   "lockNow": {
     "message": "Bloquear Agora"
@@ -423,11 +423,14 @@
   "invalidEmail": {
     "message": "Endereço de e-mail inválido."
   },
-  "masterPassRequired": {
-    "message": "A senha mestra é obrigatória."
+  "masterPasswordRequired": {
+    "message": "A senha mestre é obrigatória."
   },
-  "masterPassLength": {
-    "message": "A senha mestra deve ter pelo menos 8 caracteres."
+  "confirmMasterPasswordRequired": {
+    "message": "É necessário redigitar a senha mestre."
+  },
+  "masterPasswordMinlength": {
+    "message": "A senha mestre deve ter pelo menos 8 caracteres."
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -488,7 +491,7 @@
     "message": "Você pode alterar a sua senha mestra no cofre web em bitwarden.com. Você deseja visitar o site agora?"
   },
   "twoStepLoginConfirmation": {
-    "message": "O login em duas etapas torna a sua conta mais segura ao exigir que você verifique seu login com outro dispositivo como uma chave de segurança, aplicativo de autenticação, SMS, ligação telefônica, ou e-mail. O login em duas etapas pode ser ativado no cofre web em bitwarden.com. Você deseja visitar o site agora?"
+    "message": "O login de duas etapas torna a sua conta mais segura ao exigir que digite um código de segurança de um aplicativo de autenticação quando for iniciar a sessão. O login de duas etapas pode ser ativado no cofre web bitwarden.com. Deseja visitar o site agora?"
   },
   "editedFolder": {
     "message": "Pasta Editada"
@@ -540,7 +543,7 @@
     "message": "Você tem certeza que deseja enviar este item para a lixeira?"
   },
   "deletedItem": {
-    "message": "Enviar item para lixeira"
+    "message": "Item excluído"
   },
   "overwritePassword": {
     "message": "Sobrescrever Senha"
@@ -574,16 +577,16 @@
     "message": "A \"Notificação de Adicionar Login\" pede para salvar automaticamente novas logins para o seu cofre quando você inicia uma sessão em um site pela primeira vez."
   },
   "showCardsCurrentTab": {
-    "message": "Mostrar cartões na aba atual"
+    "message": "Mostrar cartões em páginas com guias."
   },
   "showCardsCurrentTabDesc": {
-    "message": "Listar itens do cartão na Aba  para facilitar  preenchimento automático."
+    "message": "Exibir itens de cartão em páginas com abas para simplificar o preenchimento automático"
   },
   "showIdentitiesCurrentTab": {
-    "message": "Mostrar identidades na aba atual"
+    "message": "Exibir Identidades na Aba Atual"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List identity items on the Tab page for easy auto-fill."
+    "message": "Liste os itens de identidade na aba atual  para facilitar preenchimento automático."
   },
   "clearClipboard": {
     "message": "Limpar Área de Transferência",
@@ -600,10 +603,10 @@
     "message": "Salvar"
   },
   "enableChangedPasswordNotification": {
-    "message": "Ask to update existing login"
+    "message": "Pedir para atualizar os dados de login existentes"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Ask to update a login's password when a change is detected on a website."
+    "message": "Peça para atualizar a senha de login quando uma mudança for detectada em um site."
   },
   "notificationChangeDesc": {
     "message": "Você quer atualizar esta senha no Bitwarden?"
@@ -759,10 +762,10 @@
     "message": "Atualizar Assinatura"
   },
   "premiumNotCurrentMember": {
-    "message": "Você não é um membro premium atualmente."
+    "message": "Você não é atualmente um membro premium."
   },
   "premiumSignUpAndGet": {
-    "message": "Registre-se para uma assinatura premium e obtenha:"
+    "message": "Registe-se para uma assinatura premium e obtenha:"
   },
   "ppremiumSignUpStorage": {
     "message": "1 GB de armazenamento de arquivos encriptados."
@@ -870,7 +873,7 @@
     "message": "Sessão Indisponível"
   },
   "noTwoStepProviders": {
-    "message": "Esta conta tem a verificação em duas etapas ativado, no entanto, nenhum dos provedores de verificação em duas etapas configurados são suportados por este navegador web."
+    "message": "Esta conta tem a verificação de duas etapas ativado, no entanto, nenhum dos provedores de verificação de duas etapas configurados são suportados por este navegador web."
   },
   "noTwoStepProviders2": {
     "message": "Por favor utilize um navegador web suportado (tal como o Chrome) e/ou inclua provedores adicionais que são melhor suportados entre navegadores web (tal como uma aplicativo de autenticação)."
@@ -1127,7 +1130,7 @@
     "message": "Nome do Meio"
   },
   "lastName": {
-    "message": "Sobrenome"
+    "message": "Último Nome"
   },
   "fullName": {
     "message": "Nome Completo"
@@ -1139,7 +1142,7 @@
     "message": "Empresa"
   },
   "ssn": {
-    "message": "Cadastro de Pessoas Físicas (CPF)"
+    "message": "Número de Segurança Social"
   },
   "passportNumber": {
     "message": "Número do Passaporte"
@@ -1307,6 +1310,10 @@
   "dateUpdated": {
     "message": "Atualizado",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Criado",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Senha Atualizada",
@@ -1480,8 +1487,8 @@
   "acceptPolicies": {
     "message": "Ao marcar esta caixa, você concorda com o seguinte:"
   },
-  "acceptPoliciesError": {
-    "message": "Os Termos de Serviço e a Política de Privacidade não foram reconhecidos."
+  "acceptPoliciesRequired": {
+    "message": "Os Termos de Serviço e a Política de Privacidade não foram aceitos."
   },
   "termsOfService": {
     "message": "Termos de Serviço"
@@ -1502,10 +1509,10 @@
     "message": "Por favor, verifique se o aplicativo desktop mostra esta impressão digital: "
   },
   "desktopIntegrationDisabledTitle": {
-    "message": "A integração com o navegador não está ativada"
+    "message": "A integração com o navegador não está habilitada"
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "A integração com o navegador não está ativada no aplicativo Bitwarden Desktop. Por favor, ative-a nas configurações do aplicativo desktop."
+    "message": "A integração com o navegador não está habilitada no aplicativo Bitwarden Desktop. Por favor, habilite-a nas configurações do aplicativo desktop."
   },
   "startDesktopTitle": {
     "message": "Iniciar o aplicativo Bitwarden Desktop"
@@ -1535,7 +1542,7 @@
     "message": "Biometria não ativada"
   },
   "biometricsNotEnabledDesc": {
-    "message": "A biometria com o navegador requer que a biometria de desktop seja ativada nas configurações primeiro."
+    "message": "A biometria com o navegador requer que a biometria de desktop seja habilitada nas configurações primeiro."
   },
   "biometricsNotSupportedTitle": {
     "message": "Biometria não suportada"
@@ -1846,8 +1853,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "O tempo limite do seu cofre excede as restrições definidas por sua organização."
+  "vaultTimeoutTooLarge": {
+    "message": "Seu tempo de espera no cofre excede as restrições estabelecidas por sua organização."
   },
   "vaultExportDisabled": {
     "message": "Exportação de Cofre Desativada"
@@ -1964,5 +1971,77 @@
   },
   "ssoKeyConnectorError": {
     "message": "Erro de Key Connector: certifique-se de que a Key Connector está disponível e funcionando corretamente."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Assinatura Premium necessária"
+  },
+  "organizationIsDisabled": {
+    "message": "Organização está desabilitada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Itens em Organizações Desativadas não podem ser acessados. Entre em contato com o proprietário da sua Organização para obter assistência."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Fazendo login em $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "As configurações foram editadas"
+  },
+  "environmentEditedClick": {
+    "message": "Clique aqui"
+  },
+  "environmentEditedReset": {
+    "message": "para redefinir para as configurações pré-configuradas"
+  },
+  "serverVersion": {
+    "message": "Versão do servidor"
+  },
+  "selfHosted": {
+    "message": "Auto-hospedado"
+  },
+  "thirdParty": {
+    "message": "Terceiros"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Conectado a implementação de servidores terceiros, $SERVERNAME$. Por favor, verifique as falhas usando o servidor oficial ou reporte-os ao servidor de terceiros.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "visto pela última vez: $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Entrar com a senha mestra"
+  },
+  "loggingInAs": {
+    "message": "Logar como"
+  },
+  "notYou": {
+    "message": "Não é você?"
+  },
+  "newAroundHere": {
+    "message": "Novo por aqui?"
+  },
+  "rememberEmail": {
+    "message": "Lembrar e-mail"
   }
 }

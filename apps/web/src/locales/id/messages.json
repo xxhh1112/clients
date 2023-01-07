@@ -188,11 +188,11 @@
   },
   "baseDomain": {
     "message": "Domain basis",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
-    "message": "Domain Name",
-    "description": "Domain name. Ex. website.com"
+    "message": "Nama Domain",
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Host",
@@ -422,22 +422,22 @@
     "description": "Copy URI to clipboard"
   },
   "me": {
-    "message": "Me"
+    "message": "Saya"
   },
   "myVault": {
     "message": "Brankas Saya"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "Semua Vault"
   },
   "vault": {
     "message": "Brankas"
   },
   "vaults": {
-    "message": "Vaults"
+    "message": "Brankas"
   },
   "vaultItems": {
-    "message": "Vault Items"
+    "message": "Item Brankas"
   },
   "moveSelectedToOrg": {
     "message": "Pindahkan terpilih ke Organisasi"
@@ -569,11 +569,29 @@
   "loginOrCreateNewAccount": {
     "message": "Masuk atau buat akun baru untuk mengakses brankas Anda."
   },
+  "loginWithDevice": {
+    "message": "Masuk dengan perangkat"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+  },
+  "loginWithMasterPassword": {
+    "message": "Masuk dengan kata sandi utama"
+  },
   "createAccount": {
     "message": "Buat Akun"
   },
+  "newAroundHere": {
+    "message": "Pengguna baru?"
+  },
+  "startTrial": {
+    "message": "Mulai Masa Percobaan"
+  },
   "logIn": {
     "message": "Masuk"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
   },
   "submit": {
     "message": "Kirim"
@@ -592,6 +610,9 @@
   },
   "masterPassDesc": {
     "message": "Kata sandi utama adalah kata sandi yang Anda gunakan untuk mengakses brankas Anda. Sangat penting bahwa Anda tidak lupa kata sandi utama Anda. Tidak ada cara untuk memulihkan kata sandi jika Anda melupakannya."
+  },
+  "masterPassImportant": {
+    "message": "Kata sandi utama tidak dapat dipulihkan jika Anda melupakannya!"
   },
   "masterPassHintDesc": {
     "message": "Petunjuk kata sandi utama dapat membantu Anda mengingat kata sandi Anda jika Anda melupakannya."
@@ -623,17 +644,23 @@
   "invalidEmail": {
     "message": "Alamat surel tidak valid."
   },
-  "masterPassRequired": {
-    "message": "Sandi utama diperlukan."
+  "masterPasswordRequired": {
+    "message": "Kata sandi utama diperlukan."
   },
-  "masterPassLength": {
-    "message": "Kata sandi utama sedikitnya harus 8 karakter."
+  "confirmMasterPasswordRequired": {
+    "message": "Diperlukan pengetikan ulang kata sandi utama."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Konfirmasi sandi utama tidak cocok."
   },
   "newAccountCreated": {
     "message": "Akun baru Anda telah dibuat! Sekarang Anda bisa masuk."
+  },
+  "trialAccountCreated": {
+    "message": "Akun berhasil dibuat."
   },
   "masterPassSent": {
     "message": "Kami telah mengirimi Anda email dengan petunjuk sandi utama Anda."
@@ -648,10 +675,10 @@
     "message": "Brankas Anda terkunci. Verifikasi kata sandi utama Anda untuk melanjutkan."
   },
   "unlock": {
-    "message": "Membuka kunci"
+    "message": "Buka Kunci"
   },
   "loggedInAsEmailOn": {
-    "message": "Telah log in sebagai $EMAIL$ di $HOSTNAME$.",
+    "message": "Login sebagai $EMAIL$ di $HOSTNAME$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -665,6 +692,9 @@
   },
   "invalidMasterPassword": {
     "message": "Sandi utama tidak valid"
+  },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
     "message": "Kunci Sekarang"
@@ -689,6 +719,9 @@
   },
   "noOrganizationsList": {
     "message": "Anda tidak berada dalam organisasi apapun. Organisasi memungkinkan Anda dengan aman berbagi item dengan pengguna lainnya."
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
   },
   "versionNumber": {
     "message": "Versi $VERSION_NUMBER$",
@@ -727,7 +760,7 @@
     "message": "Kirim ulang email kode verifikasi"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Gunakan metode masuk dua langkah lainnya"
+    "message": "Gunakan metode login dua-langkah lainnya"
   },
   "insertYubiKey": {
     "message": "Masukkan YubiKey Anda ke port USB komputer Anda, lalu sentuh tombol nya."
@@ -739,13 +772,13 @@
     "message": "Info Masuk Tidak Tersedia"
   },
   "noTwoStepProviders": {
-    "message": "Akun ini mengaktifkan info masuk dua langkah, namun, tidak satupun dari penyedia dua langkah yang dikonfigurasi didukung oleh peramban web ini."
+    "message": "Login dua-langkah telah diaktifkan di akun ini, tetapi provider dua-langkah yang dipilih tidak didukung oleh web browser ini."
   },
   "noTwoStepProviders2": {
     "message": "Silakan gunakan peramban web yang didukung (seperti Chrome) dan/atau tambahkan penyedia tambahan yang didukung di semua peramban web (seperti aplikasi autentikasi)."
   },
   "twoStepOptions": {
-    "message": "Pilihan Info Masuk Dua Langkah"
+    "message": "Opsi login dua-langkah"
   },
   "recoveryCodeDesc": {
     "message": "Kehilangan akses ke semua penyedia dua faktor Anda? Gunakan kode pemulihan untuk menonaktifkan semua penyedia dua faktor dari akun Anda."
@@ -858,7 +891,7 @@
     "message": "Peringatan"
   },
   "confirmVaultExport": {
-    "message": "Konfirmasi Ekspor Vault"
+    "message": "Konfirmasi Ekspor Brankas"
   },
   "exportWarningDesc": {
     "message": "Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti email). Hapus segera setelah Anda selesai menggunakannya."
@@ -878,6 +911,48 @@
   "fileFormat": {
     "message": "Format Berkas"
   },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "exportPasswordDescription": {
+    "message": "This password will be used to export and import this file"
+  },
+  "confirmMasterPassword": {
+    "message": "Konfirmasi kata sandi utama"
+  },
+  "confirmFormat": {
+    "message": "Konfirmasi format"
+  },
+  "filePassword": {
+    "message": "File kata sandi"
+  },
+  "confirmFilePassword": {
+    "message": "Konfirmasi file kata sandi"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "exportTypeHeading": {
+    "message": "Export type"
+  },
+  "accountRestricted": {
+    "message": "Account restricted"
+  },
+  "passwordProtected": {
+    "message": "Dilindungi kata sandi"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm file password“ do not match."
+  },
+  "confirmVaultImport": {
+    "message": "Konfirmasi impor berangkas"
+  },
+  "confirmVaultImportDesc": {
+    "message": "This file is password-protected. Please enter the file password to import data."
+  },
   "exportSuccess": {
     "message": "Data brankas Anda telah diekspor."
   },
@@ -892,7 +967,7 @@
   },
   "minSpecial": {
     "message": "Karakter Khusus Minimum",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Hindari Karakter Ambigu"
@@ -904,18 +979,18 @@
     "message": "Panjang"
   },
   "uppercase": {
-    "message": "Uppercase (A-Z)",
+    "message": "Huruf Kapital (A-Z)",
     "description": "Include uppercase letters in the password generator."
   },
   "lowercase": {
-    "message": "Lowercase (a-z)",
+    "message": "Huruf Kecil (a-z)",
     "description": "Include lowercase letters in the password generator."
   },
   "numbers": {
-    "message": "Numbers (0-9)"
+    "message": "Angka (0-9)"
   },
   "specialCharacters": {
-    "message": "Special Characters (!@#$%^&*)"
+    "message": "Karakter Khusus (!@#$%^&*)"
   },
   "numWords": {
     "message": "Jumlah Kata"
@@ -925,7 +1000,7 @@
   },
   "capitalize": {
     "message": "Gunakan Huruf Besar",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Sertakan Digit"
@@ -938,7 +1013,7 @@
   },
   "clear": {
     "message": "Bersihkan",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Akun Diperbarui"
@@ -947,7 +1022,7 @@
     "message": "Ubah Surel"
   },
   "changeEmailTwoFactorWarning": {
-    "message": "Proceeding will change your account email address. It will not change the email address used for two-factor authentication. You can change this email address in the Two-Step Login settings."
+    "message": "Melanjutkan proses ini akan mengubah alamat email akun Anda. Tindakan ini tidak akan mengubah alamat email yang digunakan untuk autentikasi dua-faktor. Anda bisa mengubah alamat email tersebut di pengaturan Login Dua-Langkah."
   },
   "newEmail": {
     "message": "Surel Baru"
@@ -1043,7 +1118,7 @@
     "message": "Semua Sesi Dicabut Izinnya"
   },
   "purgeVault": {
-    "message": "Bersihkan Vault"
+    "message": "Kosongkan Brankas"
   },
   "purgedOrganizationVault": {
     "message": "Kubah organisasi yang dibersihkan."
@@ -1112,13 +1187,19 @@
     "message": "Tidak ada yang diimpor."
   },
   "importEncKeyError": {
-    "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
+    "message": "Tidak dapat mendekripsi file yang diekspor. Kunci enkripsi Anda tidak cocok dengan kunci enkripsi yang digunakan untuk menekspor data terkait."
   },
   "selectFormat": {
     "message": "Pilih format file impor"
   },
   "selectImportFile": {
     "message": "Pilih file impor"
+  },
+  "chooseFile": {
+    "message": "Pilih berkas"
+  },
+  "noFileChosen": {
+    "message": "Tidak ada berkas yang dipilih"
   },
   "orCopyPasteFileContents": {
     "message": "atau salin / tempel konten file impor"
@@ -1137,13 +1218,13 @@
     "message": "Pilihan"
   },
   "preferences": {
-    "message": "Preferences"
+    "message": "Preferensi"
   },
   "preferencesDesc": {
-    "message": "Customize your web vault experience."
+    "message": "Sesuaikan pengalaman brankas web Anda."
   },
   "preferencesUpdated": {
-    "message": "Preferences updated"
+    "message": "Preferensi telah diperbarui"
   },
   "language": {
     "message": "Bahasa"
@@ -1152,17 +1233,10 @@
     "message": "Ubah bahasa yang digunakan oleh brankas web."
   },
   "enableFavicon": {
-    "message": "Show website icons"
+    "message": "Tampilkan ikon website"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
-  },
-  "enableGravatars": {
-    "message": "Aktifkan Gravatars",
-    "description": "Use avatar images loaded from gravatar.com."
-  },
-  "enableGravatarsDesc": {
-    "message": "Gunakan gambar avatar yang dimuat dari gravatar.com."
+    "message": "Tampilkan gambar pengenal di samping setiap login."
   },
   "enableFullWidth": {
     "message": "Aktifkan Tata Letak Lebar Penuh",
@@ -1214,16 +1288,29 @@
     "message": "Domain diperbaharui"
   },
   "twoStepLogin": {
-    "message": "Info masuk dua langkah"
+    "message": "Login dua-langkah"
+  },
+  "twoStepLoginEnforcement": {
+    "message": "Two-step Login Enforcement"
   },
   "twoStepLoginDesc": {
     "message": "Amankan akun Anda dengan meminta langkah tambahan saat masuk."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Mewajibkan login dua langkah untuk pengguna organisasi Anda dengan mengonfigurasi penyedia di tingkat organisasi."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Two-step Login Policy"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "To enforce Two-step Login through Duo, use the options below."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
   },
   "twoStepLoginRecoveryWarning": {
-    "message": "Mengaktifkan login dua langkah dapat mengunci Anda secara permanen dari akun Bitwarden Anda. Kode pemulihan memungkinkan Anda untuk mengakses akun Anda jika Anda tidak dapat lagi menggunakan penyedia proses masuk dua langkah biasa (mis. Anda kehilangan perangkat). Dukungan Bitwarden tidak akan dapat membantu Anda jika Anda kehilangan akses ke akun Anda. Kami menyarankan Anda untuk menuliskan atau mencetak kode pemulihan dan menyimpannya di tempat yang aman."
+    "message": "Dengan mengaktifkan login dua-langkah, Anda bisa terkunci dari akun Bitwarden secara permanen. Jika Anda tidak bisa menggunakan provider login dua-langkah di kondisi normal (misal karena perangkat Anda hilang), Anda bisa menggunakan kode pemulihan untuk mengakses akun tersebut. Bitwarden sama sekali tidak dapat membantu jika Anda kehilangan akses ke akun Anda. Oleh karena itu, kami menyarankan Anda untuk menulis atau mencetak kode pemulihan dan menyimpannya di tempat yang aman."
   },
   "viewRecoveryCode": {
     "message": "Lihat Kode Pemulihan"
@@ -1238,12 +1325,12 @@
   "enabled": {
     "message": "Diaktifkan"
   },
-  "activate": {
-    "message": "Activate"
+  "restoreAccess": {
+    "message": "Pulihkan Akses"
   },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Keanggotaan Premium"
@@ -1266,8 +1353,8 @@
   "disable": {
     "message": "Nonaktifkan"
   },
-  "deactivate": {
-    "message": "Deactivate"
+  "revokeAccess": {
+    "message": "Cabut Akses"
   },
   "twoStepLoginProviderEnabled": {
     "message": "Penyedia proses masuk dua langkah ini diaktifkan di akun Anda."
@@ -1466,8 +1553,12 @@
     "message": "Laporan"
   },
   "reportsDesc": {
-    "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
-    "description": "Vault Health Reports can be used to evaluate the security of your Bitwarden Personal or Organization Vault."
+    "message": "Identifikasi dan tutup celah keamanan di akun-akun online Anda dengan meng-klik laporan di bawah ini.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Laporan Situs Web Tidak Aman"
@@ -1500,7 +1591,7 @@
     "message": "Login Tanpa Ditemukan 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "Kami menemukan $COUNT$ situs web di lemari besi Anda yang mungkin tidak dikonfigurasi dengan otentikasi dua faktor (menurut twofactorauth.org). Untuk lebih melindungi akun ini, Anda harus mengaktifkan otentikasi dua faktor.",
+    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1515,10 +1606,10 @@
     "message": "Instruksi"
   },
   "exposedPasswordsReport": {
-    "message": "Laporan Kata Sandi Terkena"
+    "message": "Kata Sandi yang Terpapar"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Kata sandi yang terbuka adalah kata sandi yang telah ditemukan dalam pelanggaran data yang diketahui yang dirilis secara publik atau dijual di web gelap oleh peretas."
+    "message": "Kata yang terpapar di sebuah kebocoran data adalah sasaran empuk untuk para peretas. Ubah kata sandi terkait untuk mencegah potensi terjadinya peretasan."
   },
   "exposedPasswordsFound": {
     "message": "Kata Sandi Terkena Ditemukan"
@@ -1536,7 +1627,7 @@
     "message": "Tidak ada item di lemari besi Anda yang memiliki kata sandi yang telah terungkap dalam pelanggaran data yang diketahui."
   },
   "checkExposedPasswords": {
-    "message": "Periksa Kata Sandi yang Terekspos"
+    "message": "Periksa Kata Sandi yang Terpapar"
   },
   "exposedXTimes": {
     "message": "Dipaparkan $COUNT$ kali",
@@ -1660,8 +1751,14 @@
   "billing": {
     "message": "Penagihan"
   },
+  "billingPlanLabel": {
+    "message": "Rencana Penagihan"
+  },
+  "paymentType": {
+    "message": "Metode Pembayaran"
+  },
   "accountCredit": {
-    "message": "Kredit Akun",
+    "message": "Saldo Akun",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
   },
   "accountBalance": {
@@ -1669,7 +1766,7 @@
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
   },
   "addCredit": {
-    "message": "Tambahkan Pulsa",
+    "message": "Tambah Saldo",
     "description": "Add more credit to your account's balance."
   },
   "amount": {
@@ -1683,11 +1780,11 @@
     "message": "Harap pastikan bahwa akun Anda memiliki cukup kredit yang tersedia untuk pembelian ini. Jika akun Anda tidak memiliki cukup kredit yang tersedia, metode pembayaran default Anda yang tercatat akan digunakan untuk selisihnya. Anda dapat menambahkan kredit ke akun Anda dari halaman Penagihan."
   },
   "creditAppliedDesc": {
-    "message": "Kredit akun Anda dapat digunakan untuk melakukan pembelian. Semua kredit yang tersedia akan secara otomatis diterapkan ke faktur yang dibuat untuk akun ini."
+    "message": "Saldo akun Anda dapat digunakan untuk melakukan pembelian. Semua saldo yang tersedia akan secara otomatis ditagihkan ke faktur yang dibuat untuk akun ini."
   },
   "goPremium": {
     "message": "Jadi Anggota Premium",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Anda telah ditingkatkan ke premium."
@@ -1776,6 +1873,9 @@
   "year": {
     "message": "tahun"
   },
+  "yr": {
+    "message": "thn"
+  },
   "month": {
     "message": "bulan"
   },
@@ -1803,6 +1903,9 @@
   },
   "billingInformation": {
     "message": "Informasi tagihan"
+  },
+  "billingTrialSubLabel": {
+    "message": "Metode pembayaran Anda tidak akan dikenakan biaya selama 7 hari uji coba gratis."
   },
   "creditCard": {
     "message": "Kartu kredit"
@@ -1844,13 +1947,13 @@
     "message": "Status"
   },
   "nextCharge": {
-    "message": "Biaya berikutnya"
+    "message": "Tagihan Berikutnya"
   },
   "details": {
-    "message": "Detailnya"
+    "message": "Detail"
   },
   "downloadLicense": {
-    "message": "Mengunduh lisensi"
+    "message": "Unduh Lisensi"
   },
   "updateLicense": {
     "message": "Perbarui Lisensi"
@@ -1865,13 +1968,13 @@
     "message": "Penyimpanan"
   },
   "addStorage": {
-    "message": "Tambahkan Penyimpanan"
+    "message": "Tambah Penyimpanan"
   },
   "removeStorage": {
     "message": "Hapus Penyimpanan"
   },
   "subscriptionStorage": {
-    "message": "Langganan Anda memiliki total penyimpanan file terenkripsi $MAX_STORAGE$ GB. Anda saat ini menggunakan $USED_STORAGE$.",
+    "message": "Anda telah menggunakan $USED_STORAGE$ dari total $MAX_STORAGE$ GB penyimpanan file terkenkripsi.",
     "placeholders": {
       "max_storage": {
         "content": "$1",
@@ -1884,7 +1987,7 @@
     }
   },
   "paymentMethod": {
-    "message": "Cara Pembayaran"
+    "message": "Metode Pembayaran"
   },
   "noPaymentMethod": {
     "message": "Tidak ada metode pembayaran yang tercatat."
@@ -1917,7 +2020,7 @@
     "message": "Tidak ada transaksi."
   },
   "chargeNoun": {
-    "message": "Biaya",
+    "message": "Tagihan",
     "description": "Noun. A charge from a payment method."
   },
   "refundNoun": {
@@ -1925,7 +2028,7 @@
     "description": "Noun. A refunded payment that was charged."
   },
   "chargesStatement": {
-    "message": "Tagihan apa pun akan muncul di laporan mutasi Anda sebagai $STATEMENT_NAME$.",
+    "message": "Semua tagihan akan muncul di laporan Anda sebagai $STATEMENT_NAME$.",
     "placeholders": {
       "statement_name": {
         "content": "$1",
@@ -2160,11 +2263,35 @@
       }
     }
   },
+  "trialThankYou": {
+    "message": "Terima kasih telah mendaftar untuk Bitwarden $PLAN$!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialPaidInfoMessage": {
+    "message": "Uji coba gratis $PLAN$ 7 hari Anda akan dikonversi menjadi langganan berbayar setelah 7 hari.",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialConfirmationEmail": {
+    "message": "Kami telah mengirim sebuah email konfirmasi ke email penagihan tim Anda di "
+  },
   "monthly": {
     "message": "Bulanan"
   },
   "annually": {
     "message": "Setiap tahun"
+  },
+  "annual": {
+    "message": "Tahunan"
   },
   "basePrice": {
     "message": "Harga dasar"
@@ -2232,14 +2359,14 @@
   "removeUserConfirmation": {
     "message": "Apakah Anda yakin ingin menghapus pengguna ini?"
   },
-  "deactivateUserConfirmation": {
-    "message": "The member will no longer have access to the organization, but will still have access to their individual vault."
+  "removeOrgUserConfirmation": {
+    "message": "Ketika anggota dihapus, mereka tidak lagi memiliki akses ke data organisasi dan tindakan ini tidak dapat dibatalkan. Untuk menambahkan kembali anggota tersebut ke organisasi, mereka harus diundang dan diproses lagi."
   },
-  "activateUserConfirmation": {
-    "message": "Are you sure you want to activate this user, granting them access to the organization?"
+  "revokeUserConfirmation": {
+    "message": "Ketika status keanggotaan dicabut, mereka tidak lagi memiliki akses ke data organisasi. Untuk mengembalikan akses anggota secara cepat, buka tab Dicabut."
   },
   "removeUserConfirmationKeyConnector": {
-    "message": "Warning! This user requires Key Connector to manage their encryption. Removing this user from your organization will permanently disable their account. This action cannot be undone. Do you want to proceed?"
+    "message": "Peringatan! Pengguna ini memerlukan Key Connector untuk mengelola enkripsi mereka. Menghapus pengguna ini dari organisasi Anda akan menonaktifkan akun mereka secara permanen. Tindakan ini tidak dapat dibatalkan. Apakah Anda ingin melanjutkan?"
   },
   "externalId": {
     "message": "Id Eksternal"
@@ -2320,7 +2447,7 @@
     "message": "Pengguna dengan akses tertinggi yang dapat mengelola semua aspek organisasi Anda."
   },
   "clientOwnerDesc": {
-    "message": "This user should be independent of the Provider. If the Provider is disassociated with the organization, this user will maintain ownership of the organization."
+    "message": "Pengguna ini harus independen dari Provider. Jika suatu saat Provider dipisahkan dari organisasi, pengguna ini akan memegang kepemilikan atas organisasi tersebut."
   },
   "admin": {
     "message": "Admin"
@@ -2439,6 +2566,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Lihat semua opsi log in"
+  },
   "viewedItemId": {
     "message": "Melihat item $ID$.",
     "placeholders": {
@@ -2463,6 +2593,15 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewedCardNumberItemId": {
+    "message": "Viewed Card Number for item $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
       }
     }
   },
@@ -2583,8 +2722,8 @@
       }
     }
   },
-  "deactivatedUserId": {
-    "message": "Deactivated user $ID$.",
+  "removeUserIdAccess": {
+    "message": "Hapus akses untuk $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2592,8 +2731,8 @@
       }
     }
   },
-  "activatedUserId": {
-    "message": "Activated user $ID$.",
+  "revokedUserId": {
+    "message": "Cabut akses organisasi untuk $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2601,8 +2740,8 @@
       }
     }
   },
-  "deactivateUserId": {
-    "message": "Deactivate user $ID$?",
+  "restoredUserId": {
+    "message": "Pulihkan akses organisasi untuk $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2610,8 +2749,8 @@
       }
     }
   },
-  "activateUserId": {
-    "message": "Activate user $ID$?",
+  "revokeUserId": {
+    "message": "Cabut akses untuk $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2719,7 +2858,7 @@
     }
   },
   "accessedClientVault": {
-    "message": "Accessed $ID$ organization vault.",
+    "message": "Mengakses brankas organisasi $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2846,7 +2985,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -2877,11 +3016,14 @@
   "myOrganization": {
     "message": "Organisasi Saya"
   },
+  "organizationInfo": {
+    "message": "Organization info"
+  },
   "deleteOrganization": {
     "message": "Hapus Organisasi"
   },
   "deletingOrganizationContentWarning": {
-    "message": "Enter the master password to confirm deletion of $ORGANIZATION$ and all associated data. Vault data in $ORGANIZATION$ includes:",
+    "message": "Masukan kata sandi utama untuk mengonfirmasi penghapusan $ORGANIZATION$ serta semua data yang terkait. Data brankas di $ORGANIZATION$ termasuk:",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2890,10 +3032,10 @@
     }
   },
   "deletingOrganizationActiveUserAccountsWarning": {
-    "message": "User accounts will remain active after deletion but will no longer be associated to this organization."
+    "message": "Akun pengguna akan tetap aktif setelah dihapus, tetapi tidak akan lagi diasosiasikan dengan organisasi ini."
   },
   "deletingOrganizationIsPermanentWarning": {
-    "message": "Deleting $ORGANIZATION$ is permanent and irreversible.",
+    "message": "Penghapusan $ORGANIZATION$ bersifat permanen dan tidak dapat dipulihkan.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2918,15 +3060,15 @@
   },
   "billingPlan": {
     "message": "Paket",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Ubah Paket",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Tingkatkan akun Anda ke paket lain dengan memberikan informasi di bawah ini. Harap pastikan bahwa Anda memiliki metode pembayaran aktif yang ditambahkan ke akun.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktur #$NUMBER$",
@@ -2995,14 +3137,14 @@
     "message": "Masukkan id instalasi Anda"
   },
   "limitSubscriptionDesc": {
-    "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new users."
+    "message": "Tetapkan jumlah kuota untuk langganan Anda. Begitu batas ini tercapai, Anda tidak akan bisa mengundang pengguna baru."
   },
   "maxSeatLimit": {
-    "message": "Maximum Seat Limit (optional)",
+    "message": "Batas Kuota (opsional)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
-    "message": "Max potential seat cost"
+    "message": "Perkiraan biaya maksimum untuk kuota"
   },
   "addSeats": {
     "message": "Tambahkan Kursi",
@@ -3013,7 +3155,7 @@
     "description": "Seat = User Seat"
   },
   "subscriptionDesc": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users."
+    "message": "Penyesuaian pada paket langganan Anda akan mengakibatkan perubahan prorata pada total tagihan Anda. Jika anggota yang baru diundang melampaui kuota langganan Anda, Anda akan langsung dikenakan biaya prorata untuk pengguna tambahan tersebut."
   },
   "subscriptionUserSeats": {
     "message": "Langganan Anda memungkinkan total $COUNT$ pengguna.",
@@ -3037,13 +3179,13 @@
     "message": "Opsi Tambahan"
   },
   "additionalOptionsDesc": {
-    "message": "For additional help in managing your subscription, please contact Customer Support."
+    "message": "Untuk bantuan lebih lanjut dalam mengelola paket langganan Anda, silakan hubungi Dukungan Pelanggan."
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users."
+    "message": "Penyesuaian pada paket langganan Anda akan mengakibatkan perubahan prorata pada total tagihan Anda. Jika anggota yang baru diundang melampaui kuota langganan Anda, Anda akan langsung dikenakan biaya prorata untuk pengguna tambahan tersebut."
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited users exceed your subscription seats, you will immediately receive a prorated charge for the additional users until your $MAX$ seat limit is reached.",
+    "message": "Penyesuaian pada paket langganan Anda akan mengakibatkan perubahan prorata pada total tagihan Anda. Jika anggota yang baru diundang melampaui kuota langganan Anda, Anda akan langsung dikenakan biaya prorata untuk pengguna tambahan tersebut hingga batas kuota $MAX$ anggota tercapai.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3061,7 +3203,7 @@
     }
   },
   "subscriptionFamiliesPlan": {
-    "message": "You cannot invite more than $COUNT$ users without upgrading your plan. Please contact Customer Support to upgrade.",
+    "message": "Anda tidak dapat mengundang lebih dari $COUNT$ pengguna tanpa melakukan peningkatan pada paket Anda. Silakan hubungi Dukungan Pelanggan untuk melakukan peningkatan.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3070,7 +3212,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "Your subscription allows for a total of $COUNT$ users. Your plan is sponsored and billed to an external organization.",
+    "message": "Paket langganan Anda dapat mengakomodasi hingga $COUNT$ pengguna. Paket Anda disponsori dan ditagihkan ke organisasi eksternal.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3079,7 +3221,7 @@
     }
   },
   "subscriptionMaxReached": {
-    "message": "Adjustments to your subscription will result in prorated changes to your billing totals. You cannot invite more than $COUNT$ users without increasing your subscription seats.",
+    "message": "Penyesuaian pada paket langganan Anda akan mengakibatkan perubahan prorata pada total tagihan Anda. Anda tidak dapat mengundang lebih dari $COUNT$ pengguna tanpa meningkatkan kuota paket langganan Anda.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3159,8 +3301,8 @@
   "acceptPolicies": {
     "message": "Dengan mencentang kotak ini, anda menyetujui yang berikut:"
   },
-  "acceptPoliciesError": {
-    "message": "Persyaratan Layanan dan Kebijakan Privasi belum diakui."
+  "acceptPoliciesRequired": {
+    "message": "Persyaratan Layanan dan Kebijakan Privasi belum disetujui."
   },
   "termsOfService": {
     "message": "Persyaratan Layanan"
@@ -3175,7 +3317,7 @@
     "message": "Batas Waktu Brankas"
   },
   "vaultTimeoutDesc": {
-    "message": "Pilih kapan vault Anda akan habis waktu dan melakukan tindakan yang dipilih."
+    "message": "Pilih batas waktu untuk brankas Anda mengambil tindakan yang dipilih."
   },
   "oneMinute": {
     "message": "1 menit"
@@ -3202,12 +3344,19 @@
     "message": "Di perbarui",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Dibuat",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Kata Sandi Diperbarui",
     "description": "ex. Date this password was updated"
   },
   "organizationIsDisabled": {
     "message": "Organisasi dinonaktifkan."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Item di Organisasi yang dinonaktifkan tidak bisa diakses. Hubungi pemilik Organisasi Anda untuk mendapatkan bantuan."
   },
   "licenseIsExpired": {
     "message": "Lisensi sudah kadaluarsa."
@@ -3276,6 +3425,12 @@
     "message": "Untuk memastikan integritas kunci enkripsi Anda, harap verifikasi frasa sidik jari pengguna sebelum melanjutkan.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frasa sidik jari"
+  },
   "dontAskFingerprintAgain": {
     "message": "Jangan tanya untuk memverifikasi frase sidik jari lagi",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -3333,8 +3488,14 @@
   "clone": {
     "message": "Klon"
   },
+  "masterPassPolicyTitle": {
+    "message": "Kata sandi utama diperlukan"
+  },
   "masterPassPolicyDesc": {
     "message": "Tetapkan persyaratan minimum untuk kekuatan kata sandi utama."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Diperlukan login dua-langkah"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Mewajibkan pengguna untuk mengatur login dua langkah di akun pribadi mereka."
@@ -3403,7 +3564,7 @@
     "message": "Preferensi Pengguna"
   },
   "vaultTimeoutAction": {
-    "message": "Tindakan Batas Waktu Vault"
+    "message": "Tindakan ketika Batas Waktu Brankas Habis"
   },
   "vaultTimeoutActionLockDesc": {
     "message": "Kubah yang terkunci mengharuskan Anda memasukkan kembali kata sandi utama Anda untuk mengaksesnya lagi."
@@ -3554,11 +3715,17 @@
   "ssoIdentifierRequired": {
     "message": "Pengenal Organisasi wajib diisi."
   },
+  "ssoIdentifier": {
+    "message": "SSO identifier"
+  },
+  "ssoIdentifierHint": {
+    "message": "Provide this ID to your members to login with SSO."
+  },
   "unlinkSso": {
     "message": "Batalkan tautan SSO"
   },
   "unlinkSsoConfirmation": {
-    "message": "Are you sure you want to unlink SSO for this organization?"
+    "message": "Apakah Anda yakin ingin memutus link SSO untuk organisasi ini?"
   },
   "linkSso": {
     "message": "Tautkan SSO"
@@ -3666,8 +3833,8 @@
   "disabled": {
     "message": "Dinonaktifkan"
   },
-  "deactivated": {
-    "message": "Deactivated"
+  "revoked": {
+    "message": "Dicabut"
   },
   "sendLink": {
     "message": "Kirim Tautan",
@@ -3817,7 +3984,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3952,8 +4119,32 @@
   "customDesc": {
     "message": "Memungkinkan kontrol yang lebih terperinci atas izin pengguna untuk konfigurasi lanjutan."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+  },
   "permissions": {
     "message": "Izin"
+  },
+  "permission": {
+    "message": "Permission"
+  },
+  "managerPermissions": {
+    "message": "Pengelola Izin"
+  },
+  "adminPermissions": {
+    "message": "Izin Admin"
   },
   "accessEventLogs": {
     "message": "Akses Log Peristiwa"
@@ -3965,7 +4156,7 @@
     "message": "Akses Laporan"
   },
   "missingPermissions": {
-    "message": "You lack the necessary permissions to perform this action."
+    "message": "Anda tidak memiliki izin yang diperlukan untuk melakukan tindakan ini."
   },
   "manageAllCollections": {
     "message": "Kelola Semua Koleksi"
@@ -3974,7 +4165,7 @@
     "message": "Buat Koleksi Baru"
   },
   "editAnyCollection": {
-    "message": "Edit Any Collection"
+    "message": "Ubah Koleksi Manapun"
   },
   "deleteAnyCollection": {
     "message": "Hapus Koleksi"
@@ -3983,10 +4174,10 @@
     "message": "Kelola Koleksi yang Ditugaskan"
   },
   "editAssignedCollections": {
-    "message": "Edit Assigned Collections"
+    "message": "Edit koleksi yang ditetapkan"
   },
   "deleteAssignedCollections": {
-    "message": "Delete Assigned Collections"
+    "message": "Hapus koleksi yang ditetapkan"
   },
   "manageGroups": {
     "message": "Kelola Grup"
@@ -4004,7 +4195,7 @@
     "message": "Kelola Peyetelan Ulang Sandi"
   },
   "disableRequiredError": {
-    "message": "You must manually disable the $POLICYNAME$ policy before this policy can be disabled.",
+    "message": "Anda harus secara manual mengubah kebijakan $POLICYNAME$ sebelum kebijakan ini bisa dinonaktifkan.",
     "placeholders": {
       "policyName": {
         "content": "$1",
@@ -4016,7 +4207,7 @@
     "message": "Kebijakan organisasi memengaruhi opsi kepemilikan Anda."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has disabled importing items into your personal vault."
+    "message": "An organization policy has blocked importing items into your individual vault."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Nonaktifkan kepemilikan pribadi untuk pengguna organisasi"
@@ -4238,19 +4429,19 @@
     "message": "Ikutkan pengguna baru secara otomatis"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
+    "message": "This organization has an Enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
   },
   "resetPasswordOrgKeysError": {
-    "message": "Organization Keys response is null"
+    "message": "Organization keys response is null"
   },
   "resetPasswordDetailsError": {
-    "message": "Reset Password Details response is null"
+    "message": "Reset password details response is null"
   },
   "trashCleanupWarning": {
-    "message": "Items that have been in Trash more than 30 days will be automatically deleted."
+    "message": "Items that have been in trash more than 30 days will be automatically deleted."
   },
   "trashCleanupWarningSelfHosted": {
-    "message": "Items that have been in Trash for a while will be automatically deleted."
+    "message": "Items that have been in trash for a while will be automatically deleted."
   },
   "passwordPrompt": {
     "message": "Pengingat ulang sandi utama"
@@ -4264,17 +4455,20 @@
   "reinviteSelected": {
     "message": "Kirim Ulang Undangan"
   },
+  "resendNotification": {
+    "message": "Kirim ulang notifikasi"
+  },
   "noSelectedUsersApplicable": {
     "message": "This action is not applicable to any of the selected users."
   },
   "removeUsersWarning": {
-    "message": "Are you sure you want to remove the following users? The process may take a few seconds to complete and cannot be interrupted or canceled."
+    "message": "Apakah Anda yakin ingin menghapus pengguna berikut? Proses ini mungkin memerlukan waktu beberapa detik untuk menyelesaikannya dan tidak dapat diinterupsi atau dibatalkan."
   },
-  "deactivateUsersWarning": {
-    "message": "Are you sure you want to deactivate the following members? They will no longer have access to the organization, but will still have access to their individual vaults. The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "removeOrgUsersConfirmation": {
+    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
-  "activateUsersWarning": {
-    "message": "Are you sure you want to activate the following members, granting them access to the organization? The process may take a few seconds to complete and cannot be interrupted or canceled."
+  "revokeUsersWarning": {
+    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
   },
   "theme": {
     "message": "Tema"
@@ -4306,14 +4500,14 @@
   "bulkRemovedMessage": {
     "message": "Penghapusan sukses"
   },
-  "bulkDeactivatedMessage": {
-    "message": "Deactivated successfully"
+  "bulkRevokedMessage": {
+    "message": "Revoked organization access successfully"
   },
-  "bulkActivatedMessage": {
-    "message": "Activated successfully"
+  "bulkRestoredMessage": {
+    "message": "Restored organization access successfully"
   },
   "bulkFilteredMessage": {
-    "message": "Excluded, not applicable for this action."
+    "message": "Excluded, not applicable for this action"
   },
   "fingerprint": {
     "message": "Sidik Jari"
@@ -4321,41 +4515,45 @@
   "removeUsers": {
     "message": "Hapus pengguna"
   },
-  "deactivateUsers": {
-    "message": "Deactivate Users"
+  "revokeUsers": {
+    "message": "Cabut Pengguna"
   },
-  "activateUsers": {
-    "message": "Activate Users"
+  "restoreUsers": {
+    "message": "Pulihkan pengguna"
   },
   "error": {
     "message": "Galat"
   },
   "resetPasswordManageUsers": {
-    "message": "Manage Users must also be enabled with the Manage Password Reset permission"
+    "message": "Kelola pengguna juga harus diberikan izin mengelola pengaturan ulang kata sandi"
   },
   "setupProvider": {
     "message": "Pengaturan Provider"
   },
   "setupProviderLoginDesc": {
-    "message": "You've been invited to setup a new provider. To continue, you need to log in or create a new Bitwarden account."
+    "message": "Anda telah diundang untuk menyiapkan Penyedia baru. Untuk melanjutkan, Anda harus masuk atau membuat akun Bitwarden baru."
   },
   "setupProviderDesc": {
-    "message": "Please enter the details below to complete the provider setup. Contact Customer Support if you have any questions."
+    "message": "Please enter the details below to complete the Provider setup. Contact Customer Support if you have any questions."
   },
   "providerName": {
     "message": "Nama Provider"
   },
   "providerSetup": {
-    "message": "The provider has been set up."
+    "message": "Provider successfully set up"
   },
   "clients": {
     "message": "Klien"
+  },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Admin Provider"
   },
   "providerAdminDesc": {
-    "message": "The highest access user that can manage all aspects of your provider as well as access and manage client organizations."
+    "message": "The highest access user that can manage all aspects of your Provider as well as access and manage client organizations."
   },
   "serviceUser": {
     "message": "Layanan Pengguna"
@@ -4364,22 +4562,22 @@
     "message": "Service users can access and manage all client organizations."
   },
   "providerInviteUserDesc": {
-    "message": "Invite a new user to your provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
+    "message": "Invite a new user to your Provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "joinProvider": {
     "message": "Gabung Provider"
   },
   "joinProviderDesc": {
-    "message": "You've been invited to join the provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
+    "message": "You've been invited to join the Provider listed above. To accept the invitation, you need to log in or create a new Bitwarden account."
   },
   "providerInviteAcceptFailed": {
-    "message": "Unable to accept invitation. Ask a provider admin to send a new invitation."
+    "message": "Unable to accept invitation. Ask a Provider admin to send a new invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "You can access this provider once an administrator confirms your membership. We'll send you an email when that happens."
+    "message": "You can access this Provider once an administrator confirms your membership. We'll send you an email when that happens."
   },
   "providerUsersNeedConfirmed": {
-    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the provider until they are confirmed."
+    "message": "You have users that have accepted their invitation, but still need to be confirmed. Users will not have access to the Provider until they are confirmed."
   },
   "provider": {
     "message": "Provider"
@@ -4388,7 +4586,7 @@
     "message": "Organisasi Klien Baru"
   },
   "newClientOrganizationDesc": {
-    "message": "Create a new client organization that will be associated with you as the provider. You will be able to access and manage this organization."
+    "message": "Create a new client organization that will be associated with you as the Provider. You will be able to access and manage this organization."
   },
   "addExistingOrganization": {
     "message": "Tambah Organisasi yang sudah ada"
@@ -4410,10 +4608,10 @@
     }
   },
   "organizationJoinedProvider": {
-    "message": "Organization was successfully added to the provider"
+    "message": "Organization was successfully added to the Provider"
   },
   "accessingUsingProvider": {
-    "message": "Accessing organization using provider $PROVIDER$",
+    "message": "Accessing organization using Provider $PROVIDER$",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4428,7 +4626,7 @@
     "message": "Provider diperbarui"
   },
   "yourProviderIs": {
-    "message": "Your provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
+    "message": "Your Provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4437,7 +4635,7 @@
     }
   },
   "detachedOrganization": {
-    "message": "The organization $ORGANIZATION$ has been detached from your provider.",
+    "message": "The organization $ORGANIZATION$ has been detached from your Provider.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4446,7 +4644,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the provider."
+    "message": "Are you sure you want to detach this organization? The organization will continue to exist but will no longer be managed by the Provider."
   },
   "add": {
     "message": "Tambah"
@@ -4458,16 +4656,16 @@
     "message": "Perbarui Kata Sandi Utama"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "masterPasswordInvalidWarning": {
-    "message": "Your Master Password does not meet the policy requirements of this organization. In order to join the organization, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
     "message": "Batas Waktu Brankas"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Configure a maximum vault timeout for all users."
+    "message": "Set a maximum vault timeout for members."
   },
   "maximumVaultTimeoutLabel": {
     "message": "Batas waktu Maksimal Brankas"
@@ -4482,7 +4680,7 @@
     "message": "Menit"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4495,7 +4693,7 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Custom Vault Timeout"
+    "message": "Custom vault timeout"
   },
   "vaultTimeoutToLarge": {
     "message": "Your vault timeout exceeds the restriction set by your organization."
@@ -4504,19 +4702,19 @@
     "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault Timeout is not within allowed range."
+    "message": "Vault timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
-    "message": "Disable Personal Vault Export"
+    "message": "Remove individual vault export"
   },
   "disablePersonalVaultExportDesc": {
-    "message": "Prohibits users from exporting their private vault data."
+    "message": "Do not allow members to export their individual vault data."
   },
   "vaultExportDisabled": {
     "message": "Ekspor Brankas Dinonaktifkan"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "One or more organization policies prevents you from exporting your personal vault."
+    "message": "One or more organization policies prevents you from exporting your individual vault."
   },
   "selectType": {
     "message": "Pilih Tipe SSO"
@@ -4525,19 +4723,19 @@
     "message": "Tipe"
   },
   "openIdConnectConfig": {
-    "message": "OpenID Connect Configuration"
+    "message": "OpenID connect configuration"
   },
   "samlSpConfig": {
-    "message": "SAML Service Provider Configuration"
+    "message": "SAML service provider configuration"
   },
   "samlIdpConfig": {
-    "message": "SAML Identity Provider Configuration"
+    "message": "SAML identity provider configuration"
   },
   "callbackPath": {
-    "message": "Callback Path"
+    "message": "Callback path"
   },
   "signedOutCallbackPath": {
-    "message": "Signed Out Callback Path"
+    "message": "Signed out callback path"
   },
   "authority": {
     "message": "Otoritas"
@@ -4552,28 +4750,28 @@
     "message": "Alamat Metadata"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC Redirect Behavior"
+    "message": "OIDC redirect behavior"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
   },
   "additionalScopes": {
-    "message": "Custom Scopes"
+    "message": "Custom scopes"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom User ID Claim Types"
+    "message": "Custom user ID claim types"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email Claim Types"
+    "message": "Email claim types"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom Name Claim Types"
+    "message": "Custom name claim types"
   },
   "acrValues": {
-    "message": "Requested Authentication Context Class Reference values"
+    "message": "Requested authentication context class reference values"
   },
   "expectedReturnAcrValue": {
-    "message": "Expected \"acr\" Claim Value In Response"
+    "message": "Expected \"acr\" claim value in response"
   },
   "spEntityId": {
     "message": "ID Entitas SP"
@@ -4582,19 +4780,19 @@
     "message": "Metadata URL SAML 2.0"
   },
   "spAcsUrl": {
-    "message": "Assertion Consumer Service (ACS) URL"
+    "message": "Assertion consumer service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID Format"
+    "message": "Name ID format"
   },
   "spOutboundSigningAlgorithm": {
-    "message": "Outbound Signing Algorithm"
+    "message": "Outbound signing algorithm"
   },
   "spSigningBehavior": {
-    "message": "Signing Behavior"
+    "message": "Signing behavior"
   },
   "spMinIncomingSigningAlgorithm": {
-    "message": "Minimum Incoming Signing Algorithm"
+    "message": "Minimum incoming signing algorithm"
   },
   "spWantAssertionsSigned": {
     "message": "Expect signed assertions"
@@ -4609,16 +4807,16 @@
     "message": "Tipe Binding"
   },
   "idpSingleSignOnServiceUrl": {
-    "message": "Single Sign On Service URL"
+    "message": "Single sign-on service URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "Single Log Out Service URL"
+    "message": "Single log-out service URL"
   },
   "idpX509PublicCert": {
     "message": "Sertifikat Publik X509"
   },
   "idpOutboundSigningAlgorithm": {
-    "message": "Outbound Signing Algorithm"
+    "message": "Outbound signing algorithm"
   },
   "idpAllowUnsolicitedAuthnResponse": {
     "message": "Allow unsolicited authentication response"
@@ -4630,7 +4828,7 @@
     "message": "Sign authentication requests"
   },
   "ssoSettingsSaved": {
-    "message": "Single Sign-On configuration was saved."
+    "message": "Single sign-on configuration saved"
   },
   "sponsoredFamilies": {
     "message": "Free Bitwarden Families"
@@ -4675,17 +4873,17 @@
     "message": "Accept offer for an existing organization or create a new Families organization."
   },
   "setupSponsoredFamiliesLoginDesc": {
-    "message": "You've been offered a free Bitwarden Families Plan Organization. To continue, you need to log in to the account that received the offer."
+    "message": "You've been offered a free Bitwarden Families plan organization. To continue, you need to log in to the account that received the offer."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Unable to accept offer. Please resend the offer email from your enterprise account and try again."
+    "message": "Unable to accept offer. Please resend the offer email from your Enterprise account and try again."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Unable to accept offer. $DESCRIPTION$",
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -4699,7 +4897,7 @@
     "message": "Redeemed"
   },
   "redeemedAccount": {
-    "message": "Redeemed Account"
+    "message": "Account redeemed"
   },
   "revokeAccount": {
     "message": "Revoke account $NAME$",
@@ -4711,7 +4909,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Resend Sponsorship email to $NAME$ sponsorship",
+    "message": "Resend sponsorship email to $NAME$ sponsorship",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4720,25 +4918,22 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Free Families Plan"
+    "message": "Gratis Paket Keluarga"
   },
   "redeemNow": {
-    "message": "Redeem Now"
+    "message": "Tukarkan Sekarang"
   },
   "recipient": {
-    "message": "Recipient"
+    "message": "Penerima"
   },
   "removeSponsorship": {
-    "message": "Remove Sponsorship"
+    "message": "Buang sponsorship"
   },
   "removeSponsorshipConfirmation": {
     "message": "After removing a sponsorship, you will be responsible for this subscription and related invoices. Are you sure you want to continue?"
   },
   "sponsorshipCreated": {
-    "message": "Sponsorship Created"
-  },
-  "revoke": {
-    "message": "Revoke"
+    "message": "Sponsorship dibuat"
   },
   "emailSent": {
     "message": "Email Terkirim"
@@ -4747,16 +4942,16 @@
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
   },
   "removeSponsorshipSuccess": {
-    "message": "Sponsorship Removed"
+    "message": "Sponsorship dibuang"
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "keyConnectorUrl": {
-    "message": "Key Connector URL"
+    "message": "URL Konektor Utama"
   },
   "sendVerificationCode": {
-    "message": "Send a verification code to your email"
+    "message": "Kirim kode verifikasi ke email Anda"
   },
   "sendCode": {
     "message": "Kirim Kode"
@@ -4789,10 +4984,10 @@
     "message": "Tinggalkan Organisasi"
   },
   "removeMasterPassword": {
-    "message": "Remove Master Password"
+    "message": "Hapus Kata Sandi Utama"
   },
   "removedMasterPassword": {
-    "message": "Master password removed."
+    "message": "Sandi utama dihapus"
   },
   "allowSso": {
     "message": "Izinkan autentikasi SSO"
@@ -4802,33 +4997,33 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Aktifkan",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "kebijakan Otentikasi SSO",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "untuk mewajibkan semua anggota masuk dengan SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "SSO Authentication and Single Organization policies are required to set up Key Connector decryption."
+    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
-    "message": "Member Decryption Options"
+    "message": "Member decryption options"
   },
   "memberDecryptionPassDesc": {
-    "message": "Once authenticated, members will decrypt vault data using their Master Passwords."
+    "message": "Once authenticated, members will decrypt vault data using their master passwords."
   },
   "keyConnector": {
-    "message": "Key Connector"
+    "message": "Konektor Kunci"
   },
   "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect Login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their Master Passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Login with SSO and Key Connector Decryption\" is enabled. This policy will only apply to Owners and Admins."
+    "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
   },
   "enabledSso": {
     "message": "Aktifkan SSO"
@@ -4837,13 +5032,13 @@
     "message": "Matikan SSO"
   },
   "enabledKeyConnector": {
-    "message": "Enabled Key Connector"
+    "message": "Konektor Kunci diaktifkan"
   },
   "disabledKeyConnector": {
-    "message": "Disabled Key Connector"
+    "message": "Key Connector deactivated"
   },
   "keyConnectorWarning": {
-    "message": "Once members begin using Key Connector, your Organization cannot revert to Master Password decryption. Proceed only if you are comfortable deploying and managing a key server."
+    "message": "Once members begin using Key Connector, your organization cannot revert to master password decryption. Proceed only if you are comfortable deploying and managing a key server."
   },
   "migratedKeyConnector": {
     "message": "Migrated to Key Connector"
@@ -4855,13 +5050,13 @@
     "message": "The sponsorship offer has expired. You may delete the organization you created to avoid a charge at the end of your 7 day trial. Otherwise you may close this prompt to keep the organization and assume billing responsibility."
   },
   "newFamiliesOrganization": {
-    "message": "New Families Organization"
+    "message": "New Families organization"
   },
   "acceptOffer": {
-    "message": "Accept Offer"
+    "message": "Accept offer"
   },
   "sponsoringOrg": {
-    "message": "Sponsoring Organization"
+    "message": "Sponsoring organization"
   },
   "keyConnectorTest": {
     "message": "Test"
@@ -4879,70 +5074,70 @@
     "message": "FREE with sponsorship"
   },
   "viewBillingSyncToken": {
-    "message": "View Billing Sync Token"
+    "message": "View billing sync token"
   },
   "generateBillingSyncToken": {
-    "message": "Generate Billing Sync Token"
+    "message": "Generate billing sync token"
   },
   "copyPasteBillingSync": {
-    "message": "Copy and paste this token into the Billing Sync settings of your self-hosted organization."
+    "message": "Copy and paste this token into the billing sync settings of your self-hosted organization."
   },
   "billingSyncCanAccess": {
-    "message": "Your Billing Sync token can access and edit this organization's subscription settings."
+    "message": "Your billing sync token can access and edit this organization's subscription settings."
   },
   "manageBillingSync": {
-    "message": "Manage Billing Sync"
+    "message": "Manage billing sync"
   },
   "setUpBillingSync": {
-    "message": "Set Up Billing Sync"
+    "message": "Set up billing sync"
   },
   "generateToken": {
-    "message": "Generate Token"
+    "message": "Generate token"
   },
   "rotateToken": {
-    "message": "Rotate Token"
+    "message": "Rotate token"
   },
   "rotateBillingSyncTokenWarning": {
     "message": "If you proceed, you will need to re-setup billing sync on your self-hosted server."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Rotating the Billing Sync Token will invalidate the previous token."
+    "message": "Rotating the billing sync token will invalidate the previous token."
   },
   "selfHostingTitle": {
-    "message": "Self-Hosting"
+    "message": "Self-hosting"
   },
   "selfHostingEnterpriseOrganizationSectionCopy": {
     "message": "To set-up your organization on your own server, you will need to upload your license file. To support Free Families plans and advanced billing capabilities for your self-hosted organization, you will need to set up billing sync."
   },
   "billingSyncApiKeyRotated": {
-    "message": "Token rotated."
+    "message": "Token rotated"
   },
   "billingSync": {
-    "message": "Billing Sync"
+    "message": "Billing sync"
   },
   "billingSyncDesc": {
-    "message": "Billing Sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
+    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
-    "message": "A Billing Sync Token from your cloud organization's subscription settings is required to complete this form."
+    "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
   },
   "billingSyncKey": {
-    "message": "Billing Sync Token"
+    "message": "Billing sync token"
   },
   "active": {
-    "message": "Active"
+    "message": "Aktif"
   },
   "inactive": {
     "message": "Inactive"
   },
   "sentAwaitingSync": {
-    "message": "Sent (Awaiting Sync)"
+    "message": "Sent (awaiting sync)"
   },
   "sent": {
     "message": "Sent"
   },
   "requestRemoved": {
-    "message": "Removed (Awaiting Sync)"
+    "message": "Removed (awaiting sync)"
   },
   "requested": {
     "message": "Requested"
@@ -4987,13 +5182,13 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Exporting individual vault"
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting Organization Vault"
+    "message": "Exporting organization vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated password history or attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5002,7 +5197,7 @@
     }
   },
   "exportingOrganizationVaultDescription": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Personal vault items and items from other organizations will not be included.",
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5011,22 +5206,22 @@
     }
   },
   "accessDenied": {
-    "message": "Access Denied. You do not have permission to view this page."
+    "message": "Access denied. You do not have permission to view this page."
   },
   "masterPassword": {
-    "message": "Master Password"
+    "message": "Kata Sandi Utama"
   },
   "security": {
-    "message": "Security"
+    "message": "Keamanan"
   },
   "keys": {
-    "message": "Keys"
+    "message": "Kunci"
   },
   "billingHistory": {
-    "message": "Billing History"
+    "message": "Riwayat Penagihan"
   },
   "backToReports": {
-    "message": "Back to Reports"
+    "message": "Kembali ke Laporan"
   },
   "organizationPicker": {
     "message": "Organization picker"
@@ -5036,7 +5231,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountSettings": {
-    "message": "Account Settings"
+    "message": "Pengaturan Akun"
   },
   "generator": {
     "message": "Generator"
@@ -5045,26 +5240,26 @@
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Password type"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Regenerate username"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generate username"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Username type"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -5074,13 +5269,13 @@
     "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Random word"
   },
   "service": {
     "message": "Service"
   },
   "unknownCipher": {
-    "message": "Unknown Item, you may need to request permission to access this item."
+    "message": "Unknown item, you may need to request permission to access this item."
   },
   "cannotSponsorSelf": {
     "message": "You cannot redeem for the active account. Enter a different email."
@@ -5113,7 +5308,7 @@
     }
   },
   "lastSync": {
-    "message": "Last Sync",
+    "message": "Last sync",
     "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
@@ -5133,7 +5328,7 @@
     "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -5143,26 +5338,538 @@
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API Access Token"
+    "message": "API access token"
   },
   "deviceVerification": {
-    "message": "Device Verification"
+    "message": "Verifikasi Perangkat"
   },
   "enableDeviceVerification": {
-    "message": "Enable Device Verification"
+    "message": "Aktifkan Verifikasi Perangkat"
   },
   "deviceVerificationDesc": {
-    "message": "When enabled, verification codes are sent to your email address when logging in from an unrecognized device"
+    "message": "Jika diaktifkan, kode verifikasi akan dikirim ke alamat email Anda ketika login dari perangkat yang tidak dikenal"
   },
   "updatedDeviceVerification": {
-    "message": "Updated Device Verification"
+    "message": "Updated device verification"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Are you sure you want to enable Device Verification? The verification code emails will arrive at: $EMAIL$",
+    "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "My Email"
+      }
+    }
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "scim": {
+    "message": "SCIM provisioning",
+    "description": "The text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimDescription": {
+    "message": "Automatically provision users and groups with your preferred identity provider via SCIM provisioning",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDesc": {
+    "message": "Enable SCIM",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDescHelpText": {
+    "message": "Set up your preferred identity provider by configuring the URL and SCIM API Key",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimApiKeyHelperText": {
+    "message": "This API key has access to manage users within your organization. It should be kept secret."
+  },
+  "copyScimKey": {
+    "message": "Copy the SCIM API key to your clipboard",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKey": {
+    "message": "Rotate the SCIM API key",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKeyWarning": {
+    "message": "Are you sure you want to rotate the SCIM API Key? The current key will no longer work for any existing integrations.",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateKey": {
+    "message": "Rotate key"
+  },
+  "scimApiKey": {
+    "message": "SCIM API key",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "copyScimUrl": {
+    "message": "Copy the SCIM endpoint URL to your clipboard",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimUrl": {
+    "message": "SCIM URL",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimApiKeyRotated": {
+    "message": "SCIM API Key berhasil dirotasi",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "scimSettingsSaved": {
+    "message": "Pengaturan SCIM berhasil disimpan",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "inputRequired": {
+    "message": "Data input diperlukan."
+  },
+  "inputEmail": {
+    "message": "Data input bukan sebuah alamat email."
+  },
+  "inputMinLength": {
+    "message": "Data input harus memiliki sekurang-kurangnya $COUNT$ karakter.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Input must not exceed $COUNT$ characters in length.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ kolom diatas membutuhkan atensi Anda.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Aktifkan"
+  },
+  "on": {
+    "message": "On"
+  },
+  "members": {
+    "message": "Members"
+  },
+  "reporting": {
+    "message": "Reporting"
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "numberOfUsers": {
+    "message": "Jumplah pengguna"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to Filter --"
+  },
+  "multiSelectLoading": {
+    "message": "Retrieving options..."
+  },
+  "multiSelectNotFound": {
+    "message": "No items found"
+  },
+  "multiSelectClearAll": {
+    "message": "Clear all"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Password character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "projects": {
+    "message": "Projects"
+  },
+  "lastEdited": {
+    "message": "Last Edited"
+  },
+  "editSecret": {
+    "message": "Edit Secret"
+  },
+  "addSecret": {
+    "message": "Add Secret"
+  },
+  "copySecretName": {
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue": {
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret": {
+    "message": "Delete Secret"
+  },
+  "deleteSecrets": {
+    "message": "Delete Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "Service Account"
+  },
+  "serviceAccounts": {
+    "message": "Service Accounts"
+  },
+  "new": {
+    "message": "New"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "Name/Value Pair"
+  },
+  "secretEdited": {
+    "message": "Secret edited"
+  },
+  "secretCreated": {
+    "message": "Secret created"
+  },
+  "newSecret": {
+    "message": "New Secret"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No secrets to show"
+  },
+  "secretsNoItemsMessage": {
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Search Secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets sent to trash"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Project, Secret"
+  },
+  "serviceAccountName": {
+    "message": "Service account name"
+  },
+  "newSaSelectAccess": {
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Create access token"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
+  },
+  "from": {
+    "message": "From"
+  },
+  "to": {
+    "message": "To"
+  },
+  "member": {
+    "message": "Member"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "role": {
+    "message": "Role"
+  },
+  "canView": {
+    "message": "Can view"
+  },
+  "canViewExceptPass": {
+    "message": "Can view, except passwords"
+  },
+  "canEdit": {
+    "message": "Can edit"
+  },
+  "canEditExceptPass": {
+    "message": "Can edit, except passwords"
+  },
+  "group": {
+    "message": "Group"
+  },
+  "groupAccessAll": {
+    "message": "This group can access and modify all items."
+  },
+  "memberAccessAll": {
+    "message": "This member can access and modify all items."
+  },
+  "moreFromBitwarden": {
+    "message": "More from Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Switch Products"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
       }
     }
   }

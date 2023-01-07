@@ -12,9 +12,9 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { AuthResult } from "@bitwarden/common/models/domain/authResult";
-import { SsoLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
-import { SsoPreValidateResponse } from "@bitwarden/common/models/response/ssoPreValidateResponse";
+import { AuthResult } from "@bitwarden/common/models/domain/auth-result";
+import { SsoLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
+import { SsoPreValidateResponse } from "@bitwarden/common/models/response/sso-pre-validate.response";
 
 @Directive()
 export class SsoComponent {
@@ -53,6 +53,7 @@ export class SsoComponent {
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.code != null && qParams.state != null) {
         const codeVerifier = await this.stateService.getSsoCodeVerifier();

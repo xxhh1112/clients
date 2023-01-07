@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ipcRenderer } from "electron";
 
@@ -13,7 +13,8 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 
 const BroadcasterSubscriptionId = "LockComponent";
 
@@ -21,7 +22,7 @@ const BroadcasterSubscriptionId = "LockComponent";
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
-export class LockComponent extends BaseLockComponent implements OnDestroy {
+export class LockComponent extends BaseLockComponent {
   private deferFocus: boolean = null;
 
   constructor(
@@ -31,6 +32,7 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
     messagingService: MessagingService,
     cryptoService: CryptoService,
     vaultTimeoutService: VaultTimeoutService,
+    vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     environmentService: EnvironmentService,
     stateService: StateService,
     apiService: ApiService,
@@ -47,6 +49,7 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
       messagingService,
       cryptoService,
       vaultTimeoutService,
+      vaultTimeoutSettingsService,
       environmentService,
       stateService,
       apiService,
@@ -60,14 +63,17 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
     await super.ngOnInit();
     const autoPromptBiometric = !(await this.stateService.getNoAutoPromptBiometrics());
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.route.queryParams.subscribe((params) => {
-      if (this.supportsBiometric && params.promptBiometric && autoPromptBiometric) {
-        setTimeout(async () => {
-          if (await ipcRenderer.invoke("windowVisible")) {
-            this.unlockBiometric();
-          }
-        }, 1000);
-      }
+      setTimeout(async () => {
+        if (!params.promptBiometric || !this.supportsBiometric || !autoPromptBiometric) {
+          return;
+        }
+
+        if (await ipcRenderer.invoke("windowVisible")) {
+          this.unlockBiometric();
+        }
+      }, 1000);
     });
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(() => {
@@ -94,6 +100,7 @@ export class LockComponent extends BaseLockComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 

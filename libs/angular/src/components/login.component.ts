@@ -1,40 +1,59 @@
-import { Directive, Input, NgZone, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Directive, NgZone, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 import { take } from "rxjs/operators";
 
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import {
+  AllValidationErrors,
+  FormValidationErrorsService,
+} from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { AuthResult } from "@bitwarden/common/models/domain/authResult";
-import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/logInCredentials";
+import { AuthResult } from "@bitwarden/common/models/domain/auth-result";
+import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
-  @Input() email = "";
-  @Input() rememberEmail = true;
-
-  masterPassword = "";
   showPassword = false;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
+  private selfHosted = false;
+  showLoginWithDevice: boolean;
+  validatedEmail = false;
+  paramEmailSet = false;
+
+  formGroup = this.formBuilder.group({
+    email: ["", [Validators.required, Validators.email]],
+    masterPassword: ["", [Validators.required, Validators.minLength(8)]],
+    rememberEmail: [false],
+  });
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
-  protected alwaysRememberEmail = false;
+
+  get loggedEmail() {
+    return this.formGroup.value.email;
+  }
 
   constructor(
+    protected apiService: ApiService,
+    protected appIdService: AppIdService,
     protected authService: AuthService,
     protected router: Router,
     platformUtilsService: PlatformUtilsService,
@@ -44,68 +63,77 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     protected passwordGenerationService: PasswordGenerationService,
     protected cryptoFunctionService: CryptoFunctionService,
     protected logService: LogService,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    protected formBuilder: FormBuilder,
+    protected formValidationErrorService: FormValidationErrorsService,
+    protected route: ActivatedRoute,
+    protected loginService: LoginService
   ) {
     super(environmentService, i18nService, platformUtilsService);
+    this.selfHosted = platformUtilsService.isSelfHost();
+  }
+
+  get selfHostedDomain() {
+    return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
   }
 
   async ngOnInit() {
-    if (this.email == null || this.email === "") {
-      this.email = await this.stateService.getRememberedEmail();
-      if (this.email == null) {
-        this.email = "";
+    this.route?.queryParams.subscribe((params) => {
+      if (params != null) {
+        const queryParamsEmail = params["email"];
+        if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
+          this.formGroup.get("email").setValue(queryParamsEmail);
+          this.loginService.setEmail(queryParamsEmail);
+          this.paramEmailSet = true;
+        }
       }
+    });
+    let email = this.loginService.getEmail();
+
+    if (email == null || email === "") {
+      email = await this.stateService.getRememberedEmail();
     }
-    if (!this.alwaysRememberEmail) {
-      this.rememberEmail = (await this.stateService.getRememberedEmail()) != null;
+
+    if (!this.paramEmailSet) {
+      this.formGroup.get("email")?.setValue(email ?? "");
     }
-    if (Utils.isBrowser && !Utils.isNode) {
-      this.focusInput();
+    let rememberEmail = this.loginService.getRememberEmail();
+    if (rememberEmail == null) {
+      rememberEmail = (await this.stateService.getRememberedEmail()) != null;
     }
+    this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
   }
 
-  async submit() {
+  async submit(showToast = true) {
+    const data = this.formGroup.value;
+
     await this.setupCaptcha();
 
-    if (this.email == null || this.email === "") {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("emailRequired")
-      );
+    this.formGroup.markAllAsTouched();
+
+    //web
+    if (this.formGroup.invalid && !showToast) {
       return;
     }
-    if (this.email.indexOf("@") === -1) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidEmail")
-      );
-      return;
-    }
-    if (this.masterPassword == null || this.masterPassword === "") {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
-      );
+
+    //desktop, browser; This should be removed once all clients use reactive forms
+    if (this.formGroup.invalid && showToast) {
+      const errorText = this.getErrorToastMessage();
+      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
       return;
     }
 
     try {
       const credentials = new PasswordLogInCredentials(
-        this.email,
-        this.masterPassword,
+        data.email,
+        data.masterPassword,
         this.captchaToken,
         null
       );
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
-      if (this.rememberEmail || this.alwaysRememberEmail) {
-        await this.stateService.setRememberedEmail(this.email);
-      } else {
-        await this.stateService.setRememberedEmail(null);
-      }
+      this.setFormValues();
+      await this.loginService.saveEmailSettings();
       if (this.handleCaptchaRequired(response)) {
         return;
       } else if (response.requiresTwoFactor) {
@@ -149,6 +177,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   }
 
   async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
+    await this.saveEmailSettings();
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -184,9 +213,60 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     );
   }
 
-  protected focusInput() {
-    document
-      .getElementById(this.email == null || this.email === "" ? "email" : "masterPassword")
-      .focus();
+  async validateEmail() {
+    this.formGroup.controls.email.markAsTouched();
+    const emailInvalid = this.formGroup.get("email").invalid;
+    if (!emailInvalid) {
+      this.toggleValidateEmail(true);
+      await this.getLoginWithDevice(this.loggedEmail);
+    }
+  }
+
+  toggleValidateEmail(value: boolean) {
+    this.validatedEmail = value;
+    this.formGroup.controls.masterPassword.reset();
+  }
+
+  setFormValues() {
+    this.loginService.setEmail(this.formGroup.value.email);
+    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
+  }
+
+  async saveEmailSettings() {
+    this.setFormValues();
+    await this.loginService.saveEmailSettings();
+  }
+
+  private getErrorToastMessage() {
+    const error: AllValidationErrors = this.formValidationErrorService
+      .getFormValidationErrors(this.formGroup.controls)
+      .shift();
+
+    if (error) {
+      switch (error.errorName) {
+        case "email":
+          return this.i18nService.t("invalidEmail");
+        default:
+          return this.i18nService.t(this.errorTag(error));
+      }
+    }
+
+    return;
+  }
+
+  private errorTag(error: AllValidationErrors): string {
+    const name = error.errorName.charAt(0).toUpperCase() + error.errorName.slice(1);
+    return `${error.controlName}${name}`;
+  }
+
+  private async getLoginWithDevice(email: string) {
+    try {
+      const deviceIdentifier = await this.appIdService.getAppId();
+      const res = await this.apiService.getKnownDevice(email, deviceIdentifier);
+      //ensure the application is not self-hosted
+      this.showLoginWithDevice = res && !this.selfHosted;
+    } catch (e) {
+      this.showLoginWithDevice = false;
+    }
   }
 }

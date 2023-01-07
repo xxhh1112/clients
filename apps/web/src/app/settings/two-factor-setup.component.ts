@@ -1,17 +1,14 @@
-import { Component, OnInit, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { TwoFactorProviderType } from "@bitwarden/common/enums/twoFactorProviderType";
-import { DeviceVerificationRequest } from "@bitwarden/common/models/request/deviceVerificationRequest";
 import { TwoFactorProviders } from "@bitwarden/common/services/twoFactor.service";
 
 import { TwoFactorAuthenticatorComponent } from "./two-factor-authenticator.component";
@@ -25,7 +22,7 @@ import { TwoFactorYubiKeyComponent } from "./two-factor-yubikey.component";
   selector: "app-two-factor-setup",
   templateUrl: "two-factor-setup.component.html",
 })
-export class TwoFactorSetupComponent implements OnInit {
+export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   @ViewChild("recoveryTemplate", { read: ViewContainerRef, static: true })
   recoveryModalRef: ViewContainerRef;
   @ViewChild("authenticatorTemplate", { read: ViewContainerRef, static: true })
@@ -43,32 +40,22 @@ export class TwoFactorSetupComponent implements OnInit {
   canAccessPremium: boolean;
   showPolicyWarning = false;
   loading = true;
-  enableDeviceVerification: boolean;
-  isDeviceVerificationSectionEnabled: boolean;
   modal: ModalRef;
   formPromise: Promise<any>;
+
+  private destroy$ = new Subject<void>();
+  private twoFactorAuthPolicyAppliesToActiveUser: boolean;
 
   constructor(
     protected apiService: ApiService,
     protected modalService: ModalService,
     protected messagingService: MessagingService,
     protected policyService: PolicyService,
-    private stateService: StateService,
-    private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService,
-    private logService: LogService
+    private stateService: StateService
   ) {}
 
   async ngOnInit() {
     this.canAccessPremium = await this.stateService.getCanAccessPremium();
-    try {
-      const deviceVerificationSettings = await this.apiService.getDeviceVerificationSettings();
-      this.isDeviceVerificationSectionEnabled =
-        deviceVerificationSettings.isDeviceVerificationSectionEnabled;
-      this.enableDeviceVerification = deviceVerificationSettings.unknownDeviceVerificationEnabled;
-    } catch (e) {
-      this.logService.error(e);
-    }
 
     for (const key in TwoFactorProviders) {
       // eslint-disable-next-line
@@ -92,7 +79,20 @@ export class TwoFactorSetupComponent implements OnInit {
     }
 
     this.providers.sort((a: any, b: any) => a.sort - b.sort);
+
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.TwoFactorAuthentication)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this.twoFactorAuthPolicyAppliesToActiveUser = policyAppliesToActiveUser;
+      });
+
     await this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async load() {
@@ -116,6 +116,7 @@ export class TwoFactorSetupComponent implements OnInit {
           this.authenticatorModalRef,
           TwoFactorAuthenticatorComponent
         );
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         authComp.onUpdated.subscribe((enabled: boolean) => {
           this.updateStatus(enabled, TwoFactorProviderType.Authenticator);
         });
@@ -123,6 +124,7 @@ export class TwoFactorSetupComponent implements OnInit {
       }
       case TwoFactorProviderType.Yubikey: {
         const yubiComp = await this.openModal(this.yubikeyModalRef, TwoFactorYubiKeyComponent);
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         yubiComp.onUpdated.subscribe((enabled: boolean) => {
           this.updateStatus(enabled, TwoFactorProviderType.Yubikey);
         });
@@ -130,6 +132,7 @@ export class TwoFactorSetupComponent implements OnInit {
       }
       case TwoFactorProviderType.Duo: {
         const duoComp = await this.openModal(this.duoModalRef, TwoFactorDuoComponent);
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         duoComp.onUpdated.subscribe((enabled: boolean) => {
           this.updateStatus(enabled, TwoFactorProviderType.Duo);
         });
@@ -137,6 +140,7 @@ export class TwoFactorSetupComponent implements OnInit {
       }
       case TwoFactorProviderType.Email: {
         const emailComp = await this.openModal(this.emailModalRef, TwoFactorEmailComponent);
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         emailComp.onUpdated.subscribe((enabled: boolean) => {
           this.updateStatus(enabled, TwoFactorProviderType.Email);
         });
@@ -147,6 +151,7 @@ export class TwoFactorSetupComponent implements OnInit {
           this.webAuthnModalRef,
           TwoFactorWebAuthnComponent
         );
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         webAuthnComp.onUpdated.subscribe((enabled: boolean) => {
           this.updateStatus(enabled, TwoFactorProviderType.WebAuthn);
         });
@@ -197,44 +202,9 @@ export class TwoFactorSetupComponent implements OnInit {
 
   private async evaluatePolicies() {
     if (this.organizationId == null && this.providers.filter((p) => p.enabled).length === 1) {
-      this.showPolicyWarning = await this.policyService.policyAppliesToUser(
-        PolicyType.TwoFactorAuthentication
-      );
+      this.showPolicyWarning = this.twoFactorAuthPolicyAppliesToActiveUser;
     } else {
       this.showPolicyWarning = false;
-    }
-  }
-
-  async submit() {
-    try {
-      if (this.enableDeviceVerification) {
-        const email = await this.stateService.getEmail();
-        const confirmed = await this.platformUtilsService.showDialog(
-          this.i18nService.t(
-            "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX",
-            email
-          ),
-          this.i18nService.t("deviceVerification"),
-          this.i18nService.t("yes"),
-          this.i18nService.t("no"),
-          "warning"
-        );
-        if (!confirmed) {
-          return;
-        }
-      }
-
-      this.formPromise = this.apiService.putDeviceVerificationSettings(
-        new DeviceVerificationRequest(this.enableDeviceVerification)
-      );
-      await this.formPromise;
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("updatedDeviceVerification")
-      );
-    } catch (e) {
-      this.logService.error(e);
     }
   }
 }

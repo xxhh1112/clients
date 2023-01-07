@@ -1,30 +1,30 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
+import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
 
 @Component({
   selector: "app-vault-add-edit",
   templateUrl: "add-edit.component.html",
 })
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnDestroy {
   canAccessPremium: boolean;
   totpCode: string;
   totpCodeFormatted: string;
@@ -35,8 +35,10 @@ export class AddEditComponent extends BaseAddEditComponent {
   hasPasswordHistory = false;
   viewingPasswordHistory = false;
   viewOnly = false;
+  showPasswordCount = false;
 
   protected totpInterval: number;
+  protected override componentName = "app-vault-add-edit";
 
   constructor(
     cipherService: CipherService,
@@ -49,7 +51,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     protected totpService: TotpService,
     protected passwordGenerationService: PasswordGenerationService,
     protected messagingService: MessagingService,
-    eventService: EventService,
+    eventCollectionService: EventCollectionService,
     protected policyService: PolicyService,
     organizationService: OrganizationService,
     logService: LogService,
@@ -64,7 +66,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       stateService,
       collectionService,
       messagingService,
-      eventService,
+      eventCollectionService,
       policyService,
       logService,
       passwordRepromptService,
@@ -95,8 +97,32 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
   }
 
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
+
   toggleFavorite() {
     this.cipher.favorite = !this.cipher.favorite;
+  }
+
+  togglePassword() {
+    super.togglePassword();
+
+    // Hide password count when password is hidden to be safe
+    if (!this.showPassword && this.showPasswordCount) {
+      this.togglePasswordCount();
+    }
+  }
+
+  togglePasswordCount() {
+    this.showPasswordCount = !this.showPasswordCount;
+
+    if (this.editMode && this.showPasswordCount) {
+      this.eventCollectionService.collect(
+        EventType.Cipher_ClientToggledPasswordVisible,
+        this.cipherId
+      );
+    }
   }
 
   launch(uri: LoginUriView) {
@@ -121,11 +147,17 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     if (this.editMode) {
       if (typeI18nKey === "password") {
-        this.eventService.collect(EventType.Cipher_ClientToggledHiddenFieldVisible, this.cipherId);
+        this.eventCollectionService.collect(
+          EventType.Cipher_ClientToggledHiddenFieldVisible,
+          this.cipherId
+        );
       } else if (typeI18nKey === "securityCode") {
-        this.eventService.collect(EventType.Cipher_ClientCopiedCardCode, this.cipherId);
+        this.eventCollectionService.collect(EventType.Cipher_ClientCopiedCardCode, this.cipherId);
       } else if (aType === "H_Field") {
-        this.eventService.collect(EventType.Cipher_ClientCopiedHiddenField, this.cipherId);
+        this.eventCollectionService.collect(
+          EventType.Cipher_ClientCopiedHiddenField,
+          this.cipherId
+        );
       }
     }
   }
@@ -133,7 +165,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   async generatePassword(): Promise<boolean> {
     const confirmed = await super.generatePassword();
     if (confirmed) {
-      const options = (await this.passwordGenerationService.getOptions())[0];
+      const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
       this.cipher.login.password = await this.passwordGenerationService.generatePassword(options);
     }
     return confirmed;
@@ -150,6 +182,17 @@ export class AddEditComponent extends BaseAddEditComponent {
     this.messagingService.send("upgradeOrganization", {
       organizationId: this.cipher.organizationId,
     });
+  }
+
+  showGetPremium() {
+    if (this.canAccessPremium) {
+      return;
+    }
+    if (this.cipher.organizationUseTotp) {
+      this.upgradeOrganization();
+    } else {
+      this.premiumRequired();
+    }
   }
 
   viewHistory() {

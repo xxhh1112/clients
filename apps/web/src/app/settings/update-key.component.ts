@@ -1,18 +1,19 @@
 import { Component } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync.service";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { CipherWithIdRequest } from "@bitwarden/common/models/request/cipherWithIdRequest";
-import { FolderWithIdRequest } from "@bitwarden/common/models/request/folderWithIdRequest";
-import { UpdateKeyRequest } from "@bitwarden/common/models/request/updateKeyRequest";
+import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { CipherWithIdRequest } from "@bitwarden/common/models/request/cipher-with-id.request";
+import { FolderWithIdRequest } from "@bitwarden/common/models/request/folder-with-id.request";
+import { UpdateKeyRequest } from "@bitwarden/common/models/request/update-key.request";
 
 @Component({
   selector: "app-update-key",
@@ -44,7 +45,7 @@ export class UpdateKeyComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
+        this.i18nService.t("masterPasswordRequired")
       );
       return;
     }
@@ -81,7 +82,7 @@ export class UpdateKeyComponent {
 
     await this.syncService.fullSync(true);
 
-    const folders = await this.folderService.getAllDecrypted();
+    const folders = await firstValueFrom(this.folderService.folderViews$);
     for (let i = 0; i < folders.length; i++) {
       if (folders[i].id == null) {
         continue;

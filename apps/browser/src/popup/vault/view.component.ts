@@ -9,7 +9,9 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -20,7 +22,7 @@ import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { LoginUriView } from "@bitwarden/common/models/view/loginUriView";
+import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
@@ -42,6 +44,7 @@ export class ViewComponent extends BaseViewComponent {
 
   constructor(
     cipherService: CipherService,
+    folderService: FolderService,
     totpService: TotpService,
     tokenService: TokenService,
     i18nService: I18nService,
@@ -55,16 +58,18 @@ export class ViewComponent extends BaseViewComponent {
     ngZone: NgZone,
     changeDetectorRef: ChangeDetectorRef,
     stateService: StateService,
-    eventService: EventService,
+    eventCollectionService: EventCollectionService,
     private autofillService: AutofillService,
     private messagingService: MessagingService,
     private popupUtilsService: PopupUtilsService,
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
-    logService: LogService
+    logService: LogService,
+    fileDownloadService: FileDownloadService
   ) {
     super(
       cipherService,
+      folderService,
       totpService,
       tokenService,
       i18nService,
@@ -75,16 +80,18 @@ export class ViewComponent extends BaseViewComponent {
       broadcasterService,
       ngZone,
       changeDetectorRef,
-      eventService,
+      eventCollectionService,
       apiService,
       passwordRepromptService,
       logService,
-      stateService
+      stateService,
+      fileDownloadService
     );
   }
 
   ngOnInit() {
     this.inPopout = this.popupUtilsService.inPopout(window);
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       if (params.cipherId) {
         this.cipherId = params.cipherId;
@@ -211,7 +218,7 @@ export class ViewComponent extends BaseViewComponent {
 
       try {
         const cipher: Cipher = await this.cipherService.encrypt(this.cipher);
-        await this.cipherService.saveWithServer(cipher);
+        await this.cipherService.updateWithServer(cipher);
         this.platformUtilsService.showToast(
           "success",
           null,
@@ -273,6 +280,7 @@ export class ViewComponent extends BaseViewComponent {
 
     try {
       this.totpCode = await this.autofillService.doAutoFill({
+        tab: this.tab,
         cipher: this.cipher,
         pageDetails: this.pageDetails,
         doc: window.document,

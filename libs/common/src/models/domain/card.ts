@@ -1,9 +1,11 @@
-import { CardData } from "../data/cardData";
-import { CardView } from "../view/cardView";
+import { Jsonify } from "type-fest";
 
-import Domain from "./domainBase";
-import { EncString } from "./encString";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import { CardData } from "../data/card.data";
+import { CardView } from "../view/card.view";
+
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class Card extends Domain {
   cardholderName: EncString;
@@ -61,5 +63,26 @@ export class Card extends Domain {
       code: null,
     });
     return c;
+  }
+
+  static fromJSON(obj: Partial<Jsonify<Card>>): Card {
+    if (obj == null) {
+      return null;
+    }
+
+    const cardholderName = EncString.fromJSON(obj.cardholderName);
+    const brand = EncString.fromJSON(obj.brand);
+    const number = EncString.fromJSON(obj.number);
+    const expMonth = EncString.fromJSON(obj.expMonth);
+    const expYear = EncString.fromJSON(obj.expYear);
+    const code = EncString.fromJSON(obj.code);
+    return Object.assign(new Card(), obj, {
+      cardholderName,
+      brand,
+      number,
+      expMonth,
+      expYear,
+      code,
+    });
   }
 }

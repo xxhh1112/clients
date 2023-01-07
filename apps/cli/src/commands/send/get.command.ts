@@ -5,10 +5,10 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SendView } from "@bitwarden/common/models/view/sendView";
-import { Response } from "@bitwarden/node/cli/models/response";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
-import { SendResponse } from "../../models/response/sendResponse";
+import { Response } from "../../models/response";
+import { SendResponse } from "../../models/response/send.response";
 import { DownloadCommand } from "../download.command";
 
 export class SendGetCommand extends DownloadCommand {

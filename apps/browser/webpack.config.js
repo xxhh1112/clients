@@ -6,11 +6,18 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { AngularWebpackPlugin } = require("@ngtools/webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
+const configurator = require("./config/config");
 
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
 }
 const ENV = (process.env.ENV = process.env.NODE_ENV);
+const manifestVersion = process.env.MANIFEST_VERSION == 3 ? 3 : 2;
+
+console.log(`Building Manifest Version ${manifestVersion} app`);
+const envConfig = configurator.load(ENV);
+configurator.log(envConfig);
 
 const moduleRules = [
   {
@@ -43,15 +50,34 @@ const moduleRules = [
       "sass-loader",
     ],
   },
-  // Hide System.import warnings. ref: https://github.com/angular/angular/issues/21560
   {
-    test: /[\/\\]@angular[\/\\].+\.js$/,
-    parser: { system: true },
+    test: /\.[cm]?js$/,
+    use: [
+      {
+        loader: "babel-loader",
+        options: {
+          configFile: false,
+          plugins: ["@angular/compiler-cli/linker/babel"],
+        },
+      },
+    ],
   },
   {
-    test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+    test: /\.[jt]sx?$/,
     loader: "@ngtools/webpack",
   },
+];
+
+const requiredPlugins = [
+  new webpack.DefinePlugin({
+    "process.env": {
+      ENV: JSON.stringify(ENV),
+    },
+  }),
+  new webpack.EnvironmentPlugin({
+    FLAGS: envConfig.flags,
+    DEV_FLAGS: ENV === "development" ? envConfig.devFlags : {},
+  }),
 ];
 
 const plugins = [
@@ -61,20 +87,16 @@ const plugins = [
     chunks: ["popup/polyfills", "popup/vendor-angular", "popup/vendor", "popup/main"],
   }),
   new HtmlWebpackPlugin({
-    template: "./src/background.html",
-    filename: "background.html",
-    chunks: ["vendor", "background"],
-  }),
-  new HtmlWebpackPlugin({
     template: "./src/notification/bar.html",
     filename: "notification/bar.html",
     chunks: ["notification/bar"],
   }),
   new CopyWebpackPlugin({
     patterns: [
-      process.env.MANIFEST_VERSION == 3
-        ? { from: "./src/manifest.json.v3", to: "manifest.json" }
+      manifestVersion == 3
+        ? { from: "./src/manifest.v3.json", to: "manifest.json" }
         : "./src/manifest.json",
+      { from: "./src/managed_schema.json", to: "managed_schema.json" },
       { from: "./src/_locales", to: "_locales" },
       { from: "./src/images", to: "images" },
       { from: "./src/popup/images", to: "popup/images" },
@@ -85,11 +107,6 @@ const plugins = [
     filename: "[name].css",
     chunkFilename: "chunk-[id].css",
   }),
-  new webpack.DefinePlugin({
-    "process.env": {
-      ENV: JSON.stringify(ENV),
-    },
-  }),
   new AngularWebpackPlugin({
     tsConfigPath: "tsconfig.json",
     entryModule: "src/popup/app.module#AppModule",
@@ -99,31 +116,36 @@ const plugins = [
     cleanAfterEveryBuildPatterns: ["!popup/fonts/**/*"],
   }),
   new webpack.ProvidePlugin({
-    process: "process/browser",
+    process: "process/browser.js",
   }),
   new webpack.SourceMapDevToolPlugin({
     exclude: [/content\/.*/, /notification\/.*/],
     filename: "[file].map",
   }),
+  ...requiredPlugins,
 ];
 
-const config = {
+/**
+ * @type {import("webpack").Configuration}
+ * This config compiles everything but the background
+ */
+const mainConfig = {
+  name: "main",
   mode: ENV,
   devtool: false,
   entry: {
     "popup/polyfills": "./src/popup/polyfills.ts",
     "popup/main": "./src/popup/main.ts",
-    background: "./src/background.ts",
     "content/autofill": "./src/content/autofill.js",
     "content/autofiller": "./src/content/autofiller.ts",
     "content/notificationBar": "./src/content/notificationBar.ts",
     "content/contextMenuHandler": "./src/content/contextMenuHandler.ts",
-    "content/shortcuts": "./src/content/shortcuts.ts",
     "content/message_handler": "./src/content/message_handler.ts",
     "notification/bar": "./src/notification/bar.js",
+    "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
   },
   optimization: {
-    minimize: true,
+    minimize: ENV !== "development",
     minimizer: [
       new TerserPlugin({
         exclude: [/content\/.*/, /notification\/.*/],
@@ -165,13 +187,6 @@ const config = {
             return chunk.name === "popup/main";
           },
         },
-        commons2: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: (chunk) => {
-            return chunk.name === "background";
-          },
-        },
       },
     },
   },
@@ -198,4 +213,72 @@ const config = {
   plugins: plugins,
 };
 
-module.exports = config;
+/**
+ * @type {import("webpack").Configuration[]}
+ */
+const configs = [];
+
+if (manifestVersion == 2) {
+  mainConfig.optimization.splitChunks.cacheGroups.commons2 = {
+    test: /[\\/]node_modules[\\/]/,
+    name: "vendor",
+    chunks: (chunk) => {
+      return chunk.name === "background";
+    },
+  };
+
+  // Manifest V2 uses Background Pages which requires a html page.
+  mainConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: "./src/background.html",
+      filename: "background.html",
+      chunks: ["vendor", "background"],
+    })
+  );
+
+  // Manifest V2 background pages can be run through the regular build pipeline.
+  // Since it's a standard webpage.
+  mainConfig.entry.background = "./src/background.ts";
+
+  configs.push(mainConfig);
+} else {
+  // Manifest v3 needs an extra helper for utilities in the content script.
+  // The javascript output of this should be added to manifest.v3.json
+  mainConfig.entry["content/misc-utils"] = "./src/content/misc-utils.ts";
+
+  /**
+   * @type {import("webpack").Configuration}
+   */
+  const backgroundConfig = {
+    name: "background",
+    mode: ENV,
+    devtool: false,
+    entry: "./src/background.ts",
+    target: "webworker",
+    output: {
+      filename: "background.js",
+      path: path.resolve(__dirname, "build"),
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+        },
+      ],
+    },
+    resolve: {
+      extensions: [".ts", ".js"],
+      symlinks: false,
+      modules: [path.resolve("../../node_modules")],
+      plugins: [new TsconfigPathsPlugin()],
+    },
+    dependencies: ["main"],
+    plugins: [...requiredPlugins],
+  };
+
+  configs.push(mainConfig);
+  configs.push(backgroundConfig);
+}
+
+module.exports = configs;

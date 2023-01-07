@@ -7,10 +7,10 @@ import {
   ViewChild,
 } from "@angular/core";
 
-import { BitInputDirective } from "../input/input.directive";
+import { BitHintComponent } from "../form-control/hint.component";
 
 import { BitErrorComponent } from "./error.component";
-import { BitHintComponent } from "./hint.component";
+import { BitFormFieldControl } from "./form-field-control";
 import { BitPrefixDirective } from "./prefix.directive";
 import { BitSuffixDirective } from "./suffix.directive";
 
@@ -22,7 +22,7 @@ import { BitSuffixDirective } from "./suffix.directive";
   },
 })
 export class BitFormFieldComponent implements AfterContentChecked {
-  @ContentChild(BitInputDirective) input: BitInputDirective;
+  @ContentChild(BitFormFieldControl) input: BitFormFieldControl;
   @ContentChild(BitHintComponent) hint: BitHintComponent;
 
   @ViewChild(BitErrorComponent) error: BitErrorComponent;
