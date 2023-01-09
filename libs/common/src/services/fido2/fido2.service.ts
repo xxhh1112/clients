@@ -50,8 +50,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       credentialName: params.rp.name,
       userName: params.user.displayName,
     });
-    // eslint-disable-next-line no-console
-    console.log("Fido2Service.createCredential", params);
 
     const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
@@ -108,13 +106,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         authData,
       })
     );
-
-    // eslint-disable-next-line no-console
-    console.log("Fido2Service.createCredential => result", {
-      credentialId: Fido2Utils.bufferToString(credentialId.raw),
-      clientDataJSON: Fido2Utils.bufferToString(clientData),
-      attestationObject: Fido2Utils.bufferToString(attestationObject),
-    });
 
     return {
       credentialId: Fido2Utils.bufferToString(credentialId.raw),
