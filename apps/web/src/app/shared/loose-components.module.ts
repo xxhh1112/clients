@@ -16,9 +16,11 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
+import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
+import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
 import { UserVerificationComponent } from "../components/user-verification.component";
 import { FooterComponent } from "../layouts/footer.component";
@@ -57,6 +59,7 @@ import { ApiKeyComponent } from "../settings/api-key.component";
 import { BillingHistoryViewComponent } from "../settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
+import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
 import { ChangeKdfComponent } from "../settings/change-kdf.component";
 import { ChangePasswordComponent } from "../settings/change-password.component";
@@ -138,6 +141,7 @@ import { SharedModule } from "./shared.module";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -179,6 +183,7 @@ import { SharedModule } from "./shared.module";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -186,6 +191,7 @@ import { SharedModule } from "./shared.module";
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
@@ -244,6 +250,7 @@ import { SharedModule } from "./shared.module";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -284,6 +291,7 @@ import { SharedModule } from "./shared.module";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -291,6 +299,7 @@ import { SharedModule } from "./shared.module";
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,

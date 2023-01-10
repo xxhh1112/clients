@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Apstiprināt datnes paroli"
   },
-  "accountBackupOptionDescription": {
-    "message": "Jāizmanto konta šifrēšanas atslēga, lai šifrētu izdošanu un ierobežotu ievietošanu tikai pašreizējā Bitwarden kontā."
+  "accountRestrictedOptionDescription": {
+    "message": "Izmantot konta šifrēšanas atslēgu, kas iegūta no lietotājvārda un galvenās paroles, lai šifrētu izdošanu un atļautu ievietošanu tikai pašreizējā Bitwarden kontā."
   },
   "passwordProtectedOptionDescription": {
     "message": "Uzstādīt paroli, lai šifrētu izdošanu un tad to ievietotu jebkurā Bitwarden kontā, izmantojot atšifrēšanas paroli."
   },
-  "fileTypeHeading": {
-    "message": "Datnes veids"
+  "exportTypeHeading": {
+    "message": "Izdošanas veids"
   },
-  "accountBackup": {
-    "message": "Konta rezerves kopija"
+  "accountRestricted": {
+    "message": "Konts ir ierobežots"
   },
   "passwordProtected": {
     "message": "Aizsargāts ar paroli"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Tas neesi Tu?"
   },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Rakstīt, lai atlasītu --"
   },
@@ -5488,15 +5527,15 @@
     "message": "Notīrīt visu"
   },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Pārslēgt rakstzīmju skaita attēlošanu",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
-    "message": "Password character count",
+    "message": "Paroles rakstzīmju skaits",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "hide": {
-    "message": "Hide"
+    "message": "Paslēpt"
   },
   "projects": {
     "message": "Projekti"
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Izdzēst noslēpumus"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekts"
@@ -5784,10 +5832,10 @@
     "message": "Šis dalībnieks var piekļūt visiem vienumiem un mainīt tos."
   },
   "moreFromBitwarden": {
-    "message": "More from Bitwarden"
+    "message": "Vairāk no Bitwarden"
   },
   "switchProducts": {
-    "message": "Switch Products"
+    "message": "Pārslēgt pakalpojumus"
   },
   "freeOrgInvLimitReachedManageBilling": {
     "message": "Apvienībās, kuras izmanto Bitwarden bez maksas, var būt līdz $SEATCOUNT$ dalībniekiem. Jāpāriet uz maksas plānu, lai uzaicinātu vairāk dalībnieku.",

@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Fájl jelszó megerősítés"
   },
-  "accountBackupOptionDescription": {
-    "message": "Az exportálás védelme érdekében a Bitwarden fiók titkosítását használjuk, nem a mesterjelszót. Ez az exportálás csak az aktuális fiókba importálható. Ezzel máshol nem használható biztonsági másolatot hozhatunk létre."
+  "accountRestrictedOptionDescription": {
+    "message": "Használjuk a fiókjfelhasználónevéből és a fő jelszóból származó titkosítási kulcsot az exportálás titkosításához és az importálás korlátozásához csak az aktuális Bitwarden fiókra."
   },
   "passwordProtectedOptionDescription": {
     "message": "Hozzunk létre egy felhasználó által generált jelszót az exportálás védelme érdekében. Ezzel más fiókokban is használható exportálást hozhatunk létre."
   },
-  "fileTypeHeading": {
-    "message": "Fájltípus"
+  "exportTypeHeading": {
+    "message": "Exportálási típus"
   },
-  "accountBackup": {
-    "message": "Fiók biztonsági másolat"
+  "accountRestricted": {
+    "message": "Fiók korlátozás"
   },
   "passwordProtected": {
     "message": "Jelszóval védett"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Ez tévedés?"
   },
+  "pickAnAvatarColor": {
+    "message": "Avatar szín választás"
+  },
+  "customizeAvatar": {
+    "message": "Avatar testre szabása"
+  },
+  "avatarUpdated": {
+    "message": "Az avatar frissítésre került."
+  },
+  "brightBlue": {
+    "message": "Élénk kék"
+  },
+  "green": {
+    "message": "Zöld"
+  },
+  "orange": {
+    "message": "Narancssárga"
+  },
+  "lavender": {
+    "message": "Levendula"
+  },
+  "yellow": {
+    "message": "Sárga"
+  },
+  "indigo": {
+    "message": "Indigókék"
+  },
+  "teal": {
+    "message": "Pávakék"
+  },
+  "salmon": {
+    "message": "Lazac"
+  },
+  "pink": {
+    "message": "Rózsaszín"
+  },
+  "customColor": {
+    "message": "Egyedi szín"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Szűrendő típus --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Titkos kódok törlése"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekt"

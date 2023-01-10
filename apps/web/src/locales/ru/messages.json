@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Подтвердить пароль к файлу"
   },
-  "accountBackupOptionDescription": {
-    "message": "Используйте ключ шифрования своей учетной записи, чтобы зашифровать экспорт и ограничить импорт только текущей учетной записью Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Использовать ключ шифрования вашего аккаунта, полученный из имени пользователя и мастер-пароля, для шифрования экспорта и ограничения импорта только для текущего аккаунта Bitwarden."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Установите пароль для шифрования экспорта и импортируйте его в любую учетную запись Bitwarden, используя пароль для расшифровки."
+    "message": "Установите пароль файла для шифрования экспорта и импортируйте его в любую учетную запись Bitwarden, используя пароль для расшифровки."
   },
-  "fileTypeHeading": {
-    "message": "Тип файла"
+  "exportTypeHeading": {
+    "message": "Тип экспорта"
   },
-  "accountBackup": {
-    "message": "Резервное копирование аккаунта"
+  "accountRestricted": {
+    "message": "Ограничено аккаунтом"
   },
   "passwordProtected": {
     "message": "Пароль защищен"
@@ -5188,7 +5188,7 @@
     "message": "Экспорт хранилища организации"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Будут экспортированы только личные элементы хранилища, связанные с $EMAIL$. Элементы хранилища организации включены не будут.",
+    "message": "Будут экспортированы только отдельные элементы хранилища, связанные с $EMAIL$. Элементы хранилища организации включены не будут. Экспортируется только информация об элементах хранилища, не включая связанную историю паролей или вложений.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Не вы?"
   },
+  "pickAnAvatarColor": {
+    "message": "Выбрать цвет аватара"
+  },
+  "customizeAvatar": {
+    "message": "Настроить аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар обновлен"
+  },
+  "brightBlue": {
+    "message": "Ярко-голубой"
+  },
+  "green": {
+    "message": "Зеленый"
+  },
+  "orange": {
+    "message": "Оранжевый"
+  },
+  "lavender": {
+    "message": "Лавандовый"
+  },
+  "yellow": {
+    "message": "Желтый"
+  },
+  "indigo": {
+    "message": "Фиолетовый"
+  },
+  "teal": {
+    "message": "Бирюзовый"
+  },
+  "salmon": {
+    "message": "Лососевый"
+  },
+  "pink": {
+    "message": "Розовый"
+  },
+  "customColor": {
+    "message": "Пользовательский цвет"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Тип фильтра --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Удалить секреты"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Проект"

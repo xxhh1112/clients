@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Потвърждаване на паролата на файла"
   },
-  "accountBackupOptionDescription": {
-    "message": "Използва шифроването на Вашата регистрация в Битуорден, а не главната Ви парола, като защита на изнесения файл. Той може да бъде внесен само в текущата регистрация. Използвайте тази възможност, за да направите резервно копие, което не може да се ползва другаде."
+  "accountRestrictedOptionDescription": {
+    "message": "Използвайте ключа си за шифриране, който се получава чрез комбиниране на потребителското име на регистрацията Ви и главната парола. С него изнасянето ще се шифрира и внасянето ще бъда възможно само в текущата регистрация в Битуорден."
   },
   "passwordProtectedOptionDescription": {
     "message": "Създайте потребителска парола за защита на изнесения файл. Използвайте тази възможност, за да изнесете информацията във файл, който да може да се ползва и в други регистрации."
   },
-  "fileTypeHeading": {
-    "message": "Тип на файла"
+  "exportTypeHeading": {
+    "message": "Вид изнасяне"
   },
-  "accountBackup": {
-    "message": "Резервно копие на регистрацията"
+  "accountRestricted": {
+    "message": "Регистрацията е ограничена"
   },
   "passwordProtected": {
     "message": "Защитен с парола"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Това не сте Вие?"
   },
+  "pickAnAvatarColor": {
+    "message": "Изберете цвят за аватара"
+  },
+  "customizeAvatar": {
+    "message": "Персонализиране на аватара"
+  },
+  "avatarUpdated": {
+    "message": "Аватарът е обновен"
+  },
+  "brightBlue": {
+    "message": "Ярко синьо"
+  },
+  "green": {
+    "message": "Зелено"
+  },
+  "orange": {
+    "message": "Оранжево"
+  },
+  "lavender": {
+    "message": "Лавандула"
+  },
+  "yellow": {
+    "message": "Жълто"
+  },
+  "indigo": {
+    "message": "Индиго"
+  },
+  "teal": {
+    "message": "Синьозелено"
+  },
+  "salmon": {
+    "message": "Сьомга"
+  },
+  "pink": {
+    "message": "Розово"
+  },
+  "customColor": {
+    "message": "Персонализиран цвят"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Пишете тук за филтриране --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Изтриване на тайните"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Проект"

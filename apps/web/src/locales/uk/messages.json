@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Підтвердьте пароль файлу"
   },
-  "accountBackupOptionDescription": {
-    "message": "Використовуйте ключ шифрування облікового запису, щоб зашифрувати експортований файл і дозволити його імпорт лише до поточного облікового запису Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Використовуйте ключ шифрування свого облікового запису, створений на основі імені користувача й головного пароля, щоб зашифрувати експортовані дані та обмежити можливість імпортування лише до поточного облікового запису Bitwarden."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Встановіть пароль, щоб зашифрувати експортований файл та дозволити імпорт до будь-якого облікового запису Bitwarden за допомогою цього пароля."
+    "message": "Встановіть пароль файлу, щоб зашифрувати експортовані дані та імпортувати до будь-якого облікового запису Bitwarden за допомогою цього пароля."
   },
-  "fileTypeHeading": {
-    "message": "Тип файлу"
+  "exportTypeHeading": {
+    "message": "Тип експорту"
   },
-  "accountBackup": {
-    "message": "Резервне копіювання облікового запису"
+  "accountRestricted": {
+    "message": "Обмежено обліковим записом"
   },
   "passwordProtected": {
     "message": "Захищено паролем"
@@ -5188,7 +5188,7 @@
     "message": "Експортування сховища організації"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено.",
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без історії та вкладень.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Не ви?"
   },
+  "pickAnAvatarColor": {
+    "message": "Оберіть колір аватара"
+  },
+  "customizeAvatar": {
+    "message": "Налаштувати аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар оновлено"
+  },
+  "brightBlue": {
+    "message": "Світло-синій"
+  },
+  "green": {
+    "message": "Зелений"
+  },
+  "orange": {
+    "message": "Помаранчевий"
+  },
+  "lavender": {
+    "message": "Лавандовий"
+  },
+  "yellow": {
+    "message": "Жовтий"
+  },
+  "indigo": {
+    "message": "Індиго"
+  },
+  "teal": {
+    "message": "Бірюзовий"
+  },
+  "salmon": {
+    "message": "Лососевий"
+  },
+  "pink": {
+    "message": "Рожевий"
+  },
+  "customColor": {
+    "message": "Власний колір"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Введіть для фільтрування --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Видалити секрети"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Проєкт"

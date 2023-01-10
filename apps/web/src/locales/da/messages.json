@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Bekræft filadgangskode"
   },
-  "accountBackupOptionDescription": {
-    "message": "Brug din kontos krypteringsnøgle til at kryptere eksporten og begrænse importen til udelukkende den aktuelle Bitwarden-konto."
+  "accountRestrictedOptionDescription": {
+    "message": "Brug kontokrypteringsnøglen, dannet af dit kontobrugernavn samt hovedadgangskode, for at kryptere eksporten og hindre import til andre end den aktuelle Bitwarden-konto."
   },
   "passwordProtectedOptionDescription": {
     "message": "Opsæt en adgangskode til både at kryptere eksporten samt dekryptere denne ved import til enhver Bitwarden-konto."
   },
-  "fileTypeHeading": {
-    "message": "Filtype"
+  "exportTypeHeading": {
+    "message": "Eksporttype"
   },
-  "accountBackup": {
-    "message": "Kontosikkerhedskopi"
+  "accountRestricted": {
+    "message": "Konto begrænset"
   },
   "passwordProtected": {
     "message": "Adgangskodebeskyttet"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Ikke dig?"
   },
+  "pickAnAvatarColor": {
+    "message": "Vælg avatarfarve"
+  },
+  "customizeAvatar": {
+    "message": "Tilpas avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar opdateret"
+  },
+  "brightBlue": {
+    "message": "Klar blå"
+  },
+  "green": {
+    "message": "Grøn"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavendel"
+  },
+  "yellow": {
+    "message": "Gul"
+  },
+  "indigo": {
+    "message": "Mørkeblå (indigo)"
+  },
+  "teal": {
+    "message": "Blågrøn"
+  },
+  "salmon": {
+    "message": "Laksefarvet"
+  },
+  "pink": {
+    "message": "Lyserød"
+  },
+  "customColor": {
+    "message": "Tilpasset farve"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Skriv for at filtrere --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Slet hemmeligheder"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekt"

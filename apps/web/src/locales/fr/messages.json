@@ -576,7 +576,7 @@
     "message": "La connexion avec l'appareil doit être activée dans les paramètres de l'application mobile Bitwarden. Avez-vous besoin d'une autre option?"
   },
   "loginWithMasterPassword": {
-    "message": "Connectez-vous avec le mot de passe maître"
+    "message": "Se connecter avec le mot de passe maître"
   },
   "createAccount": {
     "message": "Créer un compte"
@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Confirmer le Mot de Passe du Fichier"
   },
-  "accountBackupOptionDescription": {
-    "message": "Utilise le chiffrement de votre compte Bitwarden pour protéger l'exportation, pas celui du mot de passe maître. Cette exportation ne peut être importée que dans le compte actuel. Utilisez ceci pour créer une sauvegarde qui ne peut pas être utilisée ailleurs."
+  "accountRestrictedOptionDescription": {
+    "message": "Chiffrez le fichier avec la clé de chiffrement de votre compte, dérivée de vos nom d'utilisateur et mot de passe maître. L'importation ne sera possible que sur ce compte Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Créez un mot de passe généré par l'utilisateur pour protéger l'exportation. Utilisez ceci pour créer une exportation qui peut être utilisée dans d'autres comptes."
   },
-  "fileTypeHeading": {
-    "message": "Types de Fichier"
+  "exportTypeHeading": {
+    "message": "Type d'exportation"
   },
-  "accountBackup": {
-    "message": "Sauvegarde du Compte"
+  "accountRestricted": {
+    "message": "Restreint à ce compte"
   },
   "passwordProtected": {
     "message": "Protégé par Mot de Passe"
@@ -5475,6 +5475,45 @@
   "notYou": {
     "message": "Ce n'est pas vous ?"
   },
+  "pickAnAvatarColor": {
+    "message": "Choisissez la couleur de votre avatar"
+  },
+  "customizeAvatar": {
+    "message": "Personnaliser votre avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar mis à jour"
+  },
+  "brightBlue": {
+    "message": "Bleu Clair"
+  },
+  "green": {
+    "message": "Vert"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavande"
+  },
+  "yellow": {
+    "message": "Jaune"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Sarcelle"
+  },
+  "salmon": {
+    "message": "Saumon"
+  },
+  "pink": {
+    "message": "Rose"
+  },
+  "customColor": {
+    "message": "Couleur Personnalisée"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Tapez pour Filtrer --"
   },
@@ -5521,6 +5560,15 @@
   },
   "deleteSecrets": {
     "message": "Supprimer les Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Sélectionnez les projets auxquels le secret sera associé. Seuls les utilisateurs de l'organisation ayant accès à ces projets pourront voir le secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Écrivez ou sélectionnez des projets"
+  },
+  "typeOrSelectProject": {
+    "message": "Écrivez ou sélectionnez un projet"
   },
   "project": {
     "message": "Projet"
