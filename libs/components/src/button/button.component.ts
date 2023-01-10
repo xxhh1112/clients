@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Input, HostBinding, Component } from "@angular/core";
 
 import { ButtonLikeAbstraction, ButtonType } from "../shared/button-like.abstraction";
@@ -71,9 +72,7 @@ export class ButtonComponent implements ButtonLikeAbstraction {
       "hover:tw-no-underline",
       "focus:tw-outline-none",
     ]
-      .concat(
-        this.block == null || this.block === false ? ["tw-inline-block"] : ["tw-w-full", "tw-block"]
-      )
+      .concat(this.block ? ["tw-w-full", "tw-block"] : ["tw-inline-block"])
       .concat(buttonStyles[this.buttonType ?? "secondary"]);
   }
 
@@ -84,7 +83,17 @@ export class ButtonComponent implements ButtonLikeAbstraction {
   }
 
   @Input() buttonType: ButtonType;
-  @Input() block?: boolean;
+
+  private _block = false;
+
+  @Input()
+  get block(): boolean {
+    return this._block;
+  }
+
+  set block(value: boolean | "") {
+    this._block = coerceBooleanProperty(value);
+  }
 
   @Input() loading = false;
 
