@@ -144,22 +144,25 @@
                   class="tw-mr-3"
                 ></bit-avatar>
                 <div class="tw-flex tw-flex-col">
-                  <div class="tw-text-sm tw-font-bold tw-text-primary-500">
+                  <div class="tw-font-bold tw-text-primary-500">
                     {{ u.name ?? u.email }}
                     <span
                       bitBadge
+                      class="tw-text-xs"
                       badgeType="secondary"
                       *ngIf="u.status === userStatusType.Invited"
                       >{{ "invited" | i18n }}</span
                     >
                     <span
                       bitBadge
+                      class="tw-text-xs"
                       badgeType="warning"
                       *ngIf="u.status === userStatusType.Accepted"
                       >{{ "needsConfirmation" | i18n }}</span
                     >
                     <span
                       bitBadge
+                      class="tw-text-xs"
                       badgeType="secondary"
                       *ngIf="u.status === userStatusType.Revoked"
                       >{{ "revoked" | i18n }}</span
