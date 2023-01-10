@@ -10,7 +10,6 @@ import {
   CredentialRegistrationResult,
   Fido2Service as Fido2ServiceAbstraction,
   NoCredentialFoundError,
-  OriginMismatchError,
 } from "../../abstractions/fido2/fido2.service.abstraction";
 import { CipherType } from "../../enums/cipherType";
 import { Utils } from "../../misc/utils";
@@ -133,9 +132,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         throw new NoCredentialFoundError();
       }
 
-      if (credential.origin !== params.origin) {
-        throw new OriginMismatchError();
-      }
+      // TODO: Google doesn't work with this. Look into how we're supposed to check this
+      // if (credential.origin !== params.origin) {
+      //   throw new OriginMismatchError();
+      // }
 
       await this.fido2UserInterfaceService.confirmCredential(credential.credentialId.encoded);
     } else {
