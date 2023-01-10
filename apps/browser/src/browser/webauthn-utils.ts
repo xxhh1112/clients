@@ -6,6 +6,32 @@ import {
   CredentialRegistrationResult,
 } from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
 
+class BitAuthenticatorAttestationResponse implements AuthenticatorAttestationResponse {
+  clientDataJSON: ArrayBuffer;
+  attestationObject: ArrayBuffer;
+
+  constructor(private result: CredentialRegistrationResult) {
+    this.clientDataJSON = Fido2Utils.stringToBuffer(result.clientDataJSON);
+    this.attestationObject = Fido2Utils.stringToBuffer(result.attestationObject);
+  }
+
+  getAuthenticatorData(): ArrayBuffer {
+    return Fido2Utils.stringToBuffer(this.result.authData);
+  }
+
+  getPublicKey(): ArrayBuffer {
+    return null;
+  }
+
+  getPublicKeyAlgorithm(): number {
+    return this.result.publicKeyAlgorithm;
+  }
+
+  getTransports(): string[] {
+    return this.result.transports;
+  }
+}
+
 export class WebauthnUtils {
   static mapCredentialCreationOptions(
     options: CredentialCreationOptions,
@@ -57,12 +83,10 @@ export class WebauthnUtils {
       id: result.credentialId,
       rawId: Fido2Utils.stringToBuffer(result.credentialId),
       type: "public-key",
-      response: {
-        clientDataJSON: Fido2Utils.stringToBuffer(result.clientDataJSON),
-        attestationObject: Fido2Utils.stringToBuffer(result.attestationObject),
-      } as AuthenticatorAttestationResponse,
+      authenticatorAttachment: "cross-platform",
+      response: new BitAuthenticatorAttestationResponse(result),
       getClientExtensionResults: () => ({}),
-    };
+    } as any;
   }
 
   static mapCredentialRequestOptions(

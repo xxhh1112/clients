@@ -21,7 +21,9 @@ import { Fido2KeyView } from "../../models/view/fido2-key.view";
 import { CredentialId } from "./credential-id";
 import { joseToDer } from "./ecdsa-utils";
 
-const STANDARD_ATTESTATION_FORMAT = "packed";
+// We support self-signing, but Google won't accept it.
+// TODO: Look into supporting self-signed packed format.
+const STANDARD_ATTESTATION_FORMAT: "none" | "packed" = "none";
 
 interface BitCredential {
   credentialId: CredentialId;
@@ -59,6 +61,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
         type: "webauthn.create",
         challenge: params.challenge,
         origin: params.origin,
+        crossOrigin: false,
       })
     );
     const keyPair = await crypto.subtle.generateKey(
@@ -87,7 +90,6 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       userPresence: presence,
       userVerification: true, // TODO: Change to false
       keyPair,
-      attestationFormat: STANDARD_ATTESTATION_FORMAT,
     });
 
     const asn1Der_signature = await generateSignature({
@@ -99,10 +101,13 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     const attestationObject = new Uint8Array(
       CBOR.encode({
         fmt: attestationFormat,
-        attStmt: {
-          alg: -7,
-          sig: asn1Der_signature,
-        },
+        attStmt:
+          attestationFormat === "packed"
+            ? {
+                alg: -7,
+                sig: asn1Der_signature,
+              }
+            : {},
         authData,
       })
     );
@@ -111,6 +116,9 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       credentialId: Fido2Utils.bufferToString(credentialId.raw),
       clientDataJSON: Fido2Utils.bufferToString(clientData),
       attestationObject: Fido2Utils.bufferToString(attestationObject),
+      authData: Fido2Utils.bufferToString(authData),
+      publicKeyAlgorithm: -7,
+      transports: ["nfc", "usb"],
     };
   }
 
@@ -240,7 +248,6 @@ interface AuthDataParams {
   userPresence: boolean;
   userVerification: boolean;
   keyPair?: CryptoKeyPair;
-  attestationFormat?: "packed" | "fido-u2f";
 }
 
 async function mapCipherViewToBitCredential(cipherView: CipherView): Promise<BitCredential> {

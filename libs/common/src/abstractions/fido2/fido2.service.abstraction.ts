@@ -37,6 +37,9 @@ export interface CredentialRegistrationResult {
   credentialId: string;
   clientDataJSON: string;
   attestationObject: string;
+  authData: string;
+  publicKeyAlgorithm: number;
+  transports: string[];
 }
 
 export interface CredentialAssertParams {
