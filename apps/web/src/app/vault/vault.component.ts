@@ -394,10 +394,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       collections.push(collections[collections.length - 1].parent);
     }
 
-    return collections
-      .map((c) => c)
-      .slice(1) // 1 for self
-      .reverse();
+    return collections.map((c) => c).reverse();
   }
 
   protected applyCollectionFilter(collection: TreeNode<CollectionFilter>) {
