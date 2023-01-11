@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "message": "$APP_NAME$ Webbvalv",
+    "message": "$APP_NAME$ webbvalv",
     "description": "The title of the website in the browser window.",
     "placeholders": {
       "app_name": {
@@ -227,7 +227,7 @@
     "description": "Toggling an expand/collapse state."
   },
   "generatePassword": {
-    "message": "Generera lösenord"
+    "message": "Skapa lösenord"
   },
   "checkPassword": {
     "message": "Kontrollera om lösenordet har avslöjats."
@@ -1787,7 +1787,7 @@
     "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
-    "message": "Du har uppgraderat till Premium."
+    "message": "Du har uppgraderat till premium."
   },
   "premiumUpgradeUnlockFeatures": {
     "message": "Uppgradera ditt konto till ett premium-medlemskap och lås upp några riktigt bra extrafunktioner."
@@ -2106,7 +2106,7 @@
     "message": "Företagsnamn"
   },
   "chooseYourPlan": {
-    "message": "Välj din plan"
+    "message": "Välj abonnemang"
   },
   "users": {
     "message": "Användare"
@@ -3063,7 +3063,7 @@
     "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
-    "message": "Uppgradera plan",
+    "message": "Uppgradera abbonemanget",
     "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
@@ -3194,7 +3194,7 @@
     }
   },
   "subscriptionFreePlan": {
-    "message": "Du kan inte bjuda in fler än $COUNT$ användare utan att uppgradera din plan.",
+    "message": "Du kan inte bjuda in fler än $COUNT$ användare utan att uppgradera ditt abonnemang.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -4095,7 +4095,7 @@
     "message": "Följande organisationspolicyer är aktiva just nu:"
   },
   "sendDisableHideEmailInEffect": {
-    "message": "Användare tillåts inte dölja sin e-postadress för mottagare när de skapar eller redigerar en Send.",
+    "message": "Användare får inte dölja sin e-postadress för mottagare när de skapar eller redigerar en Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "modifiedPolicyId": {
@@ -5470,49 +5470,10 @@
     "message": "Antal användare"
   },
   "loggingInAs": {
-    "message": "Loggar in som"
+    "message": "Logga in som"
   },
   "notYou": {
     "message": "Not you?"
-  },
-  "pickAnAvatarColor": {
-    "message": "Välj en avatarfärg"
-  },
-  "customizeAvatar": {
-    "message": "Anpassa avatar"
-  },
-  "avatarUpdated": {
-    "message": "Avatar har uppdaterats"
-  },
-  "brightBlue": {
-    "message": "Ljusblå"
-  },
-  "green": {
-    "message": "Grön"
-  },
-  "orange": {
-    "message": "Orange"
-  },
-  "lavender": {
-    "message": "Lavendel"
-  },
-  "yellow": {
-    "message": "Gul"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Teal"
-  },
-  "salmon": {
-    "message": "Salmon"
-  },
-  "pink": {
-    "message": "Rosa"
-  },
-  "customColor": {
-    "message": "Anpassad färg"
   },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
@@ -5560,15 +5521,6 @@
   },
   "deleteSecrets": {
     "message": "Delete Secrets"
-  },
-  "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekt"

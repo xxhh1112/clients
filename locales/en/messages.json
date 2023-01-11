@@ -1822,22 +1822,6 @@
       }
     }
   },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
-  },
   "addons": {
     "message": "Addons"
   },
@@ -5576,15 +5560,6 @@
   },
   "deleteSecrets":{
     "message": "Delete Secrets"
-  },
-  "secretProjectAssociationDescription" :{
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects" :{
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject" :{
-    "message": "Type or select Project"
   },
   "project":{
     "message": "Project"

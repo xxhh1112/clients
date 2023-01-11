@@ -217,7 +217,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "never": {
-    "message": "Nikad"
+    "message": "Never"
   },
   "toggleVisibility": {
     "message": "Toggle visibility"
@@ -245,37 +245,37 @@
     "message": "This password was not found in any known data breaches. It should be safe to use."
   },
   "save": {
-    "message": "Spremi"
+    "message": "Save"
   },
   "cancel": {
-    "message": "Otkaži"
+    "message": "Cancel"
   },
   "canceled": {
-    "message": "Otkazano"
+    "message": "Canceled"
   },
   "close": {
-    "message": "Zatvori"
+    "message": "Close"
   },
   "delete": {
-    "message": "Izbriši"
+    "message": "Delete"
   },
   "favorite": {
-    "message": "Favorit"
+    "message": "Favorite"
   },
   "unfavorite": {
-    "message": "Izbaci iz favorita"
+    "message": "Unfavorite"
   },
   "edit": {
-    "message": "Uredi"
+    "message": "Edit"
   },
   "searchCollection": {
-    "message": "Pretraži kolekciju"
+    "message": "Search collection"
   },
   "searchFolder": {
-    "message": "Pretraži folder"
+    "message": "Search folder"
   },
   "searchFavorites": {
-    "message": "Pretraživanje favorita"
+    "message": "Search favorites"
   },
   "searchType": {
     "message": "Search type",
@@ -294,40 +294,40 @@
     "message": "Types"
   },
   "typeLogin": {
-    "message": "Prijava"
+    "message": "Login"
   },
   "typeCard": {
-    "message": "Kartica"
+    "message": "Card"
   },
   "typeIdentity": {
-    "message": "Identitet"
+    "message": "Identity"
   },
   "typeSecureNote": {
-    "message": "Sigurna bilješka"
+    "message": "Secure note"
   },
   "typeLoginPlural": {
-    "message": "Prijave"
+    "message": "Logins"
   },
   "typeCardPlural": {
-    "message": "Kartice"
+    "message": "Cards"
   },
   "typeIdentityPlural": {
-    "message": "Identiteti"
+    "message": "Identities"
   },
   "typeSecureNotePlural": {
-    "message": "Sigurna bilješka"
+    "message": "Secure notes"
   },
   "folders": {
-    "message": "Fascikle"
+    "message": "Folders"
   },
   "collections": {
-    "message": "Kolekcije"
+    "message": "Collections"
   },
   "firstName": {
-    "message": "Ime"
+    "message": "First name"
   },
   "middleName": {
-    "message": "Nadimak"
+    "message": "Middle name"
   },
   "lastName": {
     "message": "Prezime"
@@ -422,7 +422,7 @@
     "description": "Copy URI to clipboard"
   },
   "me": {
-    "message": "Ja"
+    "message": "Me"
   },
   "myVault": {
     "message": "Moj trezor"
@@ -5475,45 +5475,6 @@
   "notYou": {
     "message": "Not you?"
   },
-  "pickAnAvatarColor": {
-    "message": "Pick an avatar color"
-  },
-  "customizeAvatar": {
-    "message": "Customize avatar"
-  },
-  "avatarUpdated": {
-    "message": "Avatar updated"
-  },
-  "brightBlue": {
-    "message": "Bright Blue"
-  },
-  "green": {
-    "message": "Green"
-  },
-  "orange": {
-    "message": "Orange"
-  },
-  "lavender": {
-    "message": "Lavender"
-  },
-  "yellow": {
-    "message": "Yellow"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Teal"
-  },
-  "salmon": {
-    "message": "Salmon"
-  },
-  "pink": {
-    "message": "Pink"
-  },
-  "customColor": {
-    "message": "Custom Color"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
   },
@@ -5560,15 +5521,6 @@
   },
   "deleteSecrets": {
     "message": "Delete Secrets"
-  },
-  "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
   },
   "project": {
     "message": "Project"

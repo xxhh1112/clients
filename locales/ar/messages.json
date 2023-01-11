@@ -65,7 +65,7 @@
     "message": "رمز الأمان (CVV)"
   },
   "identityName": {
-    "message": "اسم الهوية"
+    "message": "Identity name"
   },
   "company": {
     "message": "الشركة"
@@ -672,7 +672,7 @@
     "message": "عنوان البريد الإلكتروني"
   },
   "yourVaultIsLocked": {
-    "message": "خزنتك مقفلة. تحقق من كلمة المرور الرئيسية للمتابعة."
+    "message": "Your vault is locked. Verify your master password to continue."
   },
   "unlock": {
     "message": "إلغاء القفل"
@@ -700,7 +700,7 @@
     "message": "قفل الآن"
   },
   "noItemsInList": {
-    "message": "لا توجد أية عناصر في القائمة."
+    "message": "لا توجد عناصر لعرضها."
   },
   "noCollectionsInList": {
     "message": "There are no collections to list."
@@ -921,7 +921,7 @@
     "message": "Confirm master password"
   },
   "confirmFormat": {
-    "message": "تأكيد التنسيق"
+    "message": "Confirm format"
   },
   "filePassword": {
     "message": "File password"
@@ -963,17 +963,17 @@
     "message": "Minimum complexity score"
   },
   "minNumbers": {
-    "message": "الحد الأدنى للأرقام"
+    "message": "Minimum numbers"
   },
   "minSpecial": {
-    "message": "الحد الأدنى من الأحرف الخاصة",
+    "message": "Minimum special",
     "description": "Minimum special characters"
   },
   "ambiguous": {
-    "message": "تجنب الأحرف الغامضة"
+    "message": "Avoid ambiguous characters"
   },
   "regeneratePassword": {
-    "message": "إعادة توليد كلمة المرور"
+    "message": "Regenerate password"
   },
   "length": {
     "message": "الطول"
@@ -1067,10 +1067,10 @@
     "message": "تأكيد كلمة المرور الرئيسية الجديدة"
   },
   "encKeySettings": {
-    "message": "إعدادات مفتاح التشفير"
+    "message": "Encryption key settings"
   },
   "kdfAlgorithm": {
-    "message": "خوارزمية KDF"
+    "message": "KDF algorithm"
   },
   "kdfIterations": {
     "message": "KDF iterations"
@@ -1097,7 +1097,7 @@
     "message": "تغيير KDF"
   },
   "encKeySettingsChanged": {
-    "message": "تم حفظ إعدادات مفتاح التشفير"
+    "message": "Encryption key settings saved"
   },
   "dangerZone": {
     "message": "منطقة خطرة"
@@ -1157,13 +1157,13 @@
     "message": "حسابي"
   },
   "tools": {
-    "message": "الأدوات"
+    "message": "Tools"
   },
   "importData": {
-    "message": "استيراد البيانات"
+    "message": "Import data"
   },
   "importError": {
-    "message": "خطأ في الإستيراد"
+    "message": "Import error"
   },
   "importErrorDesc": {
     "message": "There was a problem with the data you tried to import. Please resolve the errors listed below in your source file and try again."
@@ -1190,19 +1190,19 @@
     "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
   },
   "selectFormat": {
-    "message": "حدد تنسيق ملف الاستيراد"
+    "message": "Select the format of the import file"
   },
   "selectImportFile": {
-    "message": "حدّد الملف الذي تريد استيراده"
+    "message": "Select the import file"
   },
   "chooseFile": {
-    "message": "اختيار ملف"
+    "message": "Choose File"
   },
   "noFileChosen": {
     "message": "No file chosen"
   },
   "orCopyPasteFileContents": {
-    "message": "او قم بنسخ ولصق محتويات مِلَفّ الاستيراد"
+    "message": "or copy/paste the import file contents"
   },
   "instructionsFor": {
     "message": "$NAME$ Instructions",
@@ -1233,13 +1233,13 @@
     "message": "تغيير اللغة المستخدمة في خزنة الويب."
   },
   "enableFavicon": {
-    "message": "إظهار أيقونات الموقع"
+    "message": "Show website icons"
   },
   "faviconDesc": {
     "message": "Show a recognizable image next to each login."
   },
   "enableFullWidth": {
-    "message": "عرض تخطيط العرض الكامل",
+    "message": "Display full width layout",
     "description": "Allows scaling the web vault UI's width"
   },
   "enableFullWidthDesc": {
@@ -1249,7 +1249,7 @@
     "message": "Default"
   },
   "domainRules": {
-    "message": "قواعد النطاق"
+    "message": "Domain rules"
   },
   "domainRulesDesc": {
     "message": "If you have the same login across multiple different website domains, you can mark the website as \"equivalent\". \"Global\" domains are ones already created for you by Bitwarden."
@@ -1288,7 +1288,7 @@
     "message": "Domains saved"
   },
   "twoStepLogin": {
-    "message": "تسجيل الدخول بخطوتين"
+    "message": "Two-step login"
   },
   "twoStepLoginEnforcement": {
     "message": "Two-step Login Enforcement"
@@ -1301,7 +1301,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "سياسة تسجيل الدخول بخطوتين"
+    "message": "Two-step Login Policy"
   },
   "twoStepLoginOrganizationDuoDesc": {
     "message": "To enforce Two-step Login through Duo, use the options below."
@@ -1348,7 +1348,7 @@
     "message": "You already have access to Premium features because of an organization you are a member of."
   },
   "manage": {
-    "message": "إدارة"
+    "message": "Manage"
   },
   "disable": {
     "message": "Turn off"
@@ -1372,13 +1372,13 @@
     "message": "Need a two-step authenticator app? Download one of the following"
   },
   "iosDevices": {
-    "message": "أجهزة iOS"
+    "message": "iOS devices"
   },
   "androidDevices": {
-    "message": "أجهزة الأندرويد"
+    "message": "Android devices"
   },
   "windowsDevices": {
-    "message": "أجهزة ويندوز"
+    "message": "Windows devices"
   },
   "twoStepAuthenticatorAppsRecommended": {
     "message": "These apps are recommended, however, other authenticator apps will also work."
@@ -1462,10 +1462,10 @@
     "message": "If one of your YubiKeys supports NFC (such as a YubiKey NEO), you will be prompted on mobile devices whenever NFC availability is detected."
   },
   "yubikeysUpdated": {
-    "message": "تم تحديث YubiKeys"
+    "message": "YubiKeys updated"
   },
   "disableAllKeys": {
-    "message": "إلغاء تنشيط جميع المفاتيح"
+    "message": "Deactivate all keys"
   },
   "twoFactorDuoDesc": {
     "message": "Enter the Bitwarden application information from your Duo Admin panel."
@@ -1489,7 +1489,7 @@
     "message": "Enter the resulting 6 digit verification code from the email"
   },
   "sendEmail": {
-    "message": "إرسال بريد إلكتروني"
+    "message": "Send email"
   },
   "twoFactorU2fAdd": {
     "message": "Add a FIDO U2F security key to your account"
@@ -1734,7 +1734,7 @@
     "message": "Compromised data"
   },
   "website": {
-    "message": "موقع الويب"
+    "message": "Website"
   },
   "affectedUsers": {
     "message": "Affected users"
@@ -1770,7 +1770,7 @@
     "description": "Add more credit to your account's balance."
   },
   "amount": {
-    "message": "المبلغ",
+    "message": "Amount",
     "description": "Dollar amount, or quantity."
   },
   "creditDelayed": {
@@ -1799,7 +1799,7 @@
     "message": "Additional two-step login options such as YubiKey, FIDO U2F, and Duo."
   },
   "premiumSignUpEmergency": {
-    "message": "الوصول الطارئ"
+    "message": "Emergency access"
   },
   "premiumSignUpReports": {
     "message": "Password hygiene, account health, and data breach reports to keep your vault safe."
@@ -1865,19 +1865,19 @@
     }
   },
   "summary": {
-    "message": "الملخص"
+    "message": "Summary"
   },
   "total": {
-    "message": "المجموع"
+    "message": "Total"
   },
   "year": {
-    "message": "سنة"
+    "message": "year"
   },
   "yr": {
     "message": "yr"
   },
   "month": {
-    "message": "شهر"
+    "message": "month"
   },
   "monthAbbr": {
     "message": "mo.",
@@ -1950,7 +1950,7 @@
     "message": "Next charge"
   },
   "details": {
-    "message": "التفاصيل"
+    "message": "Details"
   },
   "downloadLicense": {
     "message": "Download license"
@@ -2156,13 +2156,13 @@
     "message": "For personal use, to share with family & friends."
   },
   "planNameTeams": {
-    "message": "الفِرق"
+    "message": "Teams"
   },
   "planDescTeams": {
     "message": "For businesses and other team organizations."
   },
   "planNameEnterprise": {
-    "message": "للشركات"
+    "message": "Enterprise"
   },
   "planDescEnterprise": {
     "message": "For businesses and other large organizations."
@@ -2285,7 +2285,7 @@
     "message": "We've sent a confirmation email to your team's billing email at "
   },
   "monthly": {
-    "message": "شهريا"
+    "message": "Monthly"
   },
   "annually": {
     "message": "Annually"
@@ -2867,7 +2867,7 @@
     }
   },
   "device": {
-    "message": "الجهاز"
+    "message": "Device"
   },
   "view": {
     "message": "View"
@@ -2936,10 +2936,10 @@
     "message": "End date"
   },
   "verifyEmail": {
-    "message": "التحقق من البريد الإلكتروني"
+    "message": "Verify email"
   },
   "verifyEmailDesc": {
-    "message": "تحقق من عنوان البريد الإلكتروني لحسابك لفتح الوصول إلى جميع الميزات."
+    "message": "Verify your account's email address to unlock access to all features."
   },
   "verifyEmailFirst": {
     "message": "Your account's email address first must be verified."
@@ -3014,7 +3014,7 @@
     "message": "You have requested to delete your Bitwarden account. Use the button below to confirm."
   },
   "myOrganization": {
-    "message": "منظمتي"
+    "message": "My organization"
   },
   "organizationInfo": {
     "message": "Organization info"
@@ -3311,7 +3311,7 @@
     "message": "Privacy Policy"
   },
   "filters": {
-    "message": "عوامل التصفية"
+    "message": "Filters"
   },
   "vaultTimeout": {
     "message": "مهلة الخزنة"
@@ -3320,22 +3320,22 @@
     "message": "Choose when your vault will take the vault timeout action."
   },
   "oneMinute": {
-    "message": "دقيقة واحدة"
+    "message": "1 minute"
   },
   "fiveMinutes": {
-    "message": "5 دقائق"
+    "message": "5 minutes"
   },
   "fifteenMinutes": {
-    "message": "15 دقيقة"
+    "message": "15 minutes"
   },
   "thirtyMinutes": {
-    "message": "30 دقيقة"
+    "message": "30 minutes"
   },
   "oneHour": {
-    "message": "ساعة واحدة"
+    "message": "1 hour"
   },
   "fourHours": {
-    "message": "4 ساعات"
+    "message": "4 hours"
   },
   "onRefresh": {
     "message": "On browser refresh"
@@ -3374,23 +3374,23 @@
     "message": "Who owns this item?"
   },
   "strong": {
-    "message": "قوية",
+    "message": "Strong",
     "description": "ex. A strong password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "good": {
-    "message": "جيدة",
+    "message": "Good",
     "description": "ex. A good password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "weak": {
-    "message": "ضعيفة",
+    "message": "Weak",
     "description": "ex. A weak password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "veryWeak": {
-    "message": "ضعيفة جداً",
+    "message": "Very Weak",
     "description": "ex. A very weak password. Scale: Very Weak -> Weak -> Good -> Strong"
   },
   "weakMasterPassword": {
-    "message": "كلمة المرور الرئيسية ضعيفة"
+    "message": "Weak master password"
   },
   "weakMasterPasswordDesc": {
     "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
@@ -3686,10 +3686,10 @@
     "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
   },
   "identifier": {
-    "message": "المعرف"
+    "message": "Identifier"
   },
   "organizationIdentifier": {
-    "message": "معرف المنظمة"
+    "message": "Organization identifier"
   },
   "ssoLogInWithOrgIdentifier": {
     "message": "قم بتسجيل الدخول بسرعة باستخدام بوابة تسجيل الدخول الأحادي لمؤسستك. الرجاء إدخال معرف الـSSO الخاص بمؤسستك للبدء."
@@ -3761,17 +3761,17 @@
     "message": "Organization owners and admins are exempt from this policy's enforcement."
   },
   "sendTypeFile": {
-    "message": "ملف"
+    "message": "File"
   },
   "sendTypeText": {
     "message": "نص"
   },
   "createSend": {
-    "message": "إرسال جديد",
+    "message": "New Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
-    "message": "عدّل الإرسال",
+    "message": "Edit Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
@@ -3905,7 +3905,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
-    "message": "الوصول الطارئ"
+    "message": "Emergency access"
   },
   "emergencyAccessDesc": {
     "message": "Grant and manage emergency access for trusted contacts. Trusted contacts may request access to either View or Takeover your account in case of an emergency. Visit our help page for more information and details into how zero knowledge sharing works."
@@ -3959,10 +3959,10 @@
     "message": "Time required before automatically granting access."
   },
   "oneDay": {
-    "message": "يوم واحد"
+    "message": "1 day"
   },
   "days": {
-    "message": "$DAYS$ أيام",
+    "message": "$DAYS$ days",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -4432,7 +4432,7 @@
     "message": "This organization has an Enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
   },
   "resetPasswordOrgKeysError": {
-    "message": "استجابة مفاتيح المؤسسة فارغة"
+    "message": "Organization keys response is null"
   },
   "resetPasswordDetailsError": {
     "message": "Reset password details response is null"
@@ -5215,7 +5215,7 @@
     "message": "الأمان"
   },
   "keys": {
-    "message": "المفاتيح"
+    "message": "Keys"
   },
   "billingHistory": {
     "message": "تاريخ الفوترة"
@@ -5237,13 +5237,13 @@
     "message": "المولّد"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "ما الذي ترغب في توليده؟"
+    "message": "What would you like to generate?"
   },
   "passwordType": {
     "message": "نوع كلمة المرور"
   },
   "regenerateUsername": {
-    "message": "إعادة توليد اسم المستخدم"
+    "message": "Regenerate username"
   },
   "generateUsername": {
     "message": "Generate username"
@@ -5475,45 +5475,6 @@
   "notYou": {
     "message": "ليس حسابك؟"
   },
-  "pickAnAvatarColor": {
-    "message": "Pick an avatar color"
-  },
-  "customizeAvatar": {
-    "message": "Customize avatar"
-  },
-  "avatarUpdated": {
-    "message": "Avatar updated"
-  },
-  "brightBlue": {
-    "message": "Bright Blue"
-  },
-  "green": {
-    "message": "Green"
-  },
-  "orange": {
-    "message": "Orange"
-  },
-  "lavender": {
-    "message": "Lavender"
-  },
-  "yellow": {
-    "message": "Yellow"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Teal"
-  },
-  "salmon": {
-    "message": "Salmon"
-  },
-  "pink": {
-    "message": "Pink"
-  },
-  "customColor": {
-    "message": "Custom Color"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type to Filter --"
   },
@@ -5560,15 +5521,6 @@
   },
   "deleteSecrets": {
     "message": "Delete Secrets"
-  },
-  "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
   },
   "project": {
     "message": "Project"
