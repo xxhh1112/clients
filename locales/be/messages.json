@@ -575,6 +575,9 @@
   "loginWithDeviceEnabledInfo": {
     "message": "Неабходна ўключыць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Неабходны іншы варыянт?"
   },
+  "loginWithMasterPassword": {
+    "message": "Увайсці з асноўным паролем"
+  },
   "createAccount": {
     "message": "Стварыць уліковы запіс"
   },
@@ -926,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Пацвердзіць пароль файла"
   },
-  "accountBackupOptionDescription": {
-    "message": "Выкарыстоўвайце ключ шыфравання вашага ўліковага запісу, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Выкарыстоўвайце свой ключ шыфравання, які атрыманы з імя карыстальніка і асноўнага пароля, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Прызначце пароль, каб зашыфраваць экспартаванне і імпартуйце яго ў любы ўліковы запіс Bitwarden з выкарыстаннем пароля для расшыфроўкі."
   },
-  "fileTypeHeading": {
-    "message": "Тып файла"
+  "exportTypeHeading": {
+    "message": "Тып экспартавання"
   },
-  "accountBackup": {
-    "message": "Рэзервовая копія ўліковага запісу"
+  "accountRestricted": {
+    "message": "Абмежавана ўліковым запісам"
   },
   "passwordProtected": {
     "message": "Абаронена паролем"
@@ -1287,11 +1290,24 @@
   "twoStepLogin": {
     "message": "Двухэтапны ўваход"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Прымусовы двухэтапны ўваход"
+  },
   "twoStepLoginDesc": {
     "message": "Абараніце свой уліковы запіс з дапамогай дадатковага кроку праверкі падчас уваходу."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Патрабаваць двухэтапны ўваход для карыстальнікаў вашай арганізацыі, які сканфігураваны на ўзроўні арганізацыі."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Забяспечыць параметры двухэтапнага ўваходу Bitwarden для ўдзельнікаў выкарыстоўваючы ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "палітыку двухэтапнага ўваходу"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Для прымусовага двухэтапнага ўваходу праз Duo, скарыстайцеся параметрам ніжэй."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Калі вы наладзілі SSO або плануеце гэта зрабіць, то двухэтапны ўваход можа быць рэалізаваны праз вашага пастаўшчыка ідэнтыфікацыйных даных."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Уключэнне двухэтапнага ўваходу можа цалкам заблакіраваць доступ да ўліковага запісу Bitwarden. Код аднаўлення дае магчымасць атрымаць доступ да вашага ўліковага запісу ў выпадку, калі вы не можаце скарыстацца звычайным спосабам пастаўшчыка двухэтапнага ўваходу (напрыклад, вы згубілі сваю прыладу). Падтрымка Bitwarden не зможа вам дапамагчы, калі вы згубіце доступ да свайго ўліковага запісу. Мы рэкамендуем вам запісаць або раздрукаваць код аднаўлення і захоўваць яго ў надзейным месцы."
@@ -1539,6 +1555,10 @@
   "reportsDesc": {
     "message": "Выявіце і выпраўце недахопы ў бяспецы вашых уліковых запісаў, націснуўшы на справаздачы ніжэй.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Выявіце і выпраўце недахопы ў бяспецы ўліковых запісаў вашай арганізацыі, націснуўшы на справаздачы ніжэй.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Неабароненыя вэб-сайты"
@@ -2576,6 +2596,15 @@
       }
     }
   },
+  "viewedCardNumberItemId": {
+    "message": "Прагледжаны нумар карткі для элемента $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
   "viewedSecurityCodeItemId": {
     "message": "Прагледжаны код бяспекі для элемента $ID$.",
     "placeholders": {
@@ -2986,6 +3015,9 @@
   },
   "myOrganization": {
     "message": "Мая арганізацыя"
+  },
+  "organizationInfo": {
+    "message": "Звесткі арганізацыі"
   },
   "deleteOrganization": {
     "message": "Выдаліць арганізацыю"
@@ -3683,6 +3715,12 @@
   "ssoIdentifierRequired": {
     "message": "Неабходны ідэнтыфікатар арганізацыі."
   },
+  "ssoIdentifier": {
+    "message": "Ідэнтыфікатар SSO"
+  },
+  "ssoIdentifierHint": {
+    "message": "Забяспечце гэтым ідэнтыфікатарам вашых удзельніка для ўваходу з SSO."
+  },
   "unlinkSso": {
     "message": "Адлучыць SSO"
   },
@@ -4081,8 +4119,26 @@
   "customDesc": {
     "message": "Дазваляе больш паглыблена кантраляваць дазволы карыстальніка для дадатковых канфігурацый."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Карыстальніцкія ролі з'яўляюцца ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "функцыяй для прадпрыемства",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Звяжыцеся з нашай камандай падтрымкі для паляпшэння падпіскі",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Каб уключыць дазволы карыстальніка, арганізацыя павінна мець тарыфны план Enterprise 2020."
+  },
   "permissions": {
     "message": "Дазволы"
+  },
+  "permission": {
+    "message": "Дазвол"
   },
   "managerPermissions": {
     "message": "Дазволы менеджара"
@@ -4488,6 +4544,10 @@
   },
   "clients": {
     "message": "Кліенты"
+  },
+  "client": {
+    "message": "Кліент",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Адміністратар пастаўшчыка"
@@ -5373,6 +5433,15 @@
       }
     }
   },
+  "inputMaxLength": {
+    "message": "Даўжыня ўведзеных даных не можа перавышаць наступную колькасць сімвалаў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ полі(-ёў) вышэй патрабуе вашай увагі.",
     "placeholders": {
@@ -5388,11 +5457,23 @@
   "on": {
     "message": "Уключана"
   },
+  "members": {
+    "message": "Удзельнікі"
+  },
+  "reporting": {
+    "message": "Справаздачы"
+  },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Колькасць карыстальнікаў"
+  },
+  "loggingInAs": {
+    "message": "Увайсці як"
+  },
+  "notYou": {
+    "message": "Не вы?"
   },
   "multiSelectPlaceholder": {
     "message": "- Увядзіце для фільтрацыі -"
@@ -5405,5 +5486,343 @@
   },
   "multiSelectClearAll": {
     "message": "Ачысціць усё"
+  },
+  "toggleCharacterCount": {
+    "message": "Пераключыць лічыльнік сімвалаў",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Колькасць сімвалаў пароля",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Схаваць"
+  },
+  "projects": {
+    "message": "Праекты"
+  },
+  "lastEdited": {
+    "message": "Апошні рэдагаваны"
+  },
+  "editSecret": {
+    "message": "Рэдагаваць сакрэт"
+  },
+  "addSecret": {
+    "message": "Дадаць сакрэт"
+  },
+  "copySecretName": {
+    "message": "Капіяваць назву сакрэта"
+  },
+  "copySecretValue": {
+    "message": "Капіяваць значэнне сакрэту"
+  },
+  "deleteSecret": {
+    "message": "Выдаліць сакрэт"
+  },
+  "deleteSecrets": {
+    "message": "Выдаліць сакрэты"
+  },
+  "project": {
+    "message": "Праект"
+  },
+  "editProject": {
+    "message": "Рэдагаваць праект"
+  },
+  "viewProject": {
+    "message": "Прагледзець праект"
+  },
+  "deleteProject": {
+    "message": "Выдаліць праект"
+  },
+  "deleteProjects": {
+    "message": "Выдаліць праекты"
+  },
+  "secret": {
+    "message": "Сакрэт"
+  },
+  "serviceAccount": {
+    "message": "Сэрвісны ўліковы запіс"
+  },
+  "serviceAccounts": {
+    "message": "Сэрвісныя ўліковыя запісы"
+  },
+  "new": {
+    "message": "Новы"
+  },
+  "secrets": {
+    "message": "Сакрэты"
+  },
+  "nameValuePair": {
+    "message": "Парная назва/значэнне"
+  },
+  "secretEdited": {
+    "message": "Сакрэт адрэдагаваны"
+  },
+  "secretCreated": {
+    "message": "Сакрэт створаны"
+  },
+  "newSecret": {
+    "message": "Новы сакрэт"
+  },
+  "newServiceAccount": {
+    "message": "Новы сэрвісны ўліковы запіс"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Няма сакрэтаў для паказу"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Каб пачаць, дадайце новы сакрэт або імпартуйце сакрэты."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Адсутнічаюць элементы для паказу"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Стварыць новы сэрвісны ўліковы запіс, каб пачаць аўтаматызацыю доступу да сакрэту."
+  },
+  "searchSecrets": {
+    "message": "Пошук сакрэтаў"
+  },
+  "deleteServiceAccounts": {
+    "message": "Выдаліць сэрвісныя ўліковыя запісы"
+  },
+  "deleteServiceAccount": {
+    "message": "Выдаліць сэрвісны ўліковы запіс"
+  },
+  "viewServiceAccount": {
+    "message": "Паглядзець сэрвісны ўліковы запіс"
+  },
+  "searchServiceAccounts": {
+    "message": "Пошук сэрвісных уліковых запісаў"
+  },
+  "addProject": {
+    "message": "Дадаць праект"
+  },
+  "projectEdited": {
+    "message": "Праект адрэдагаваны"
+  },
+  "projectSaved": {
+    "message": "Праект захаваны"
+  },
+  "projectCreated": {
+    "message": "Праект створаны"
+  },
+  "projectName": {
+    "message": "Назва праекта"
+  },
+  "newProject": {
+    "message": "Новы праект"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Выдаленне сакрэтаў можа паўплываць на існуючыя інтэграцыі."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Сакрэты адпраўлены ў сметніцу"
+  },
+  "serviceAccountCreated": {
+    "message": "Сэрвісныя ўліковыя запісы створаны"
+  },
+  "smAccess": {
+    "message": "Доступ"
+  },
+  "projectCommaSecret": {
+    "message": "Праект, сакрэт"
+  },
+  "serviceAccountName": {
+    "message": "Назва сэрвіснага ўліковага запісу"
+  },
+  "newSaSelectAccess": {
+    "message": "Увядзіце або выберыце праекты (сакрэты)"
+  },
+  "newSaTypeToFilter": {
+    "message": "Увядзіце, каб адфільтраваць"
+  },
+  "deleteProjectsToast": {
+    "message": "Праекты выдалены"
+  },
+  "deleteProjectToast": {
+    "message": "Праект і ўсе звязаныя сакрэты былі выдалены"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Выдаленне праекта $PROJECT$ з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Увядзіце \"$CONFIRM$\", каб працягнуць",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Выдаліць $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Выдаліць $COUNT$ праекты(-аў)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Выдаленне праектаў з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Няма праектаў для адлюстравання"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Дадаць новы праект, каб пачаць арганізоўваць сакрэты."
+  },
+  "smConfirmationRequired": {
+    "message": "Патрабуецца пацверджанне"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Немагчыма выдаліць наступныя праекты:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Сакрэт адпраўлены ў сметніцу"
+  },
+  "searchProjects": {
+    "message": "Шукаць праекты"
+  },
+  "accessTokens": {
+    "message": "Токены доступу"
+  },
+  "createAccessToken": {
+    "message": "Стварыць токены доступу"
+  },
+  "expires": {
+    "message": "Заканчваецца"
+  },
+  "canRead": {
+    "message": "Можна прачытаць"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Няма токенаў доступу для паказу"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Каб пачаць, стварыце токен доступу"
+  },
+  "downloadAccessToken": {
+    "message": "Спампуйце або скапіюйце перад закрыццём."
+  },
+  "expiresOnAccessToken": {
+    "message": "Заканчваецца:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Токены доступу не захоўваюцца і не могуць быць атрыманы"
+  },
+  "copyToken": {
+    "message": "Капіяваць токен"
+  },
+  "accessToken": {
+    "message": "Доступ да токена"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Патрабуецца дата заканчэння"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Доступ да токена створаны і скапіяваны ў буфер абмену"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Кіраванне дазволамі недаступна для бэта-версіі."
+  },
+  "revokeAccessToken": {
+    "message": "Адклікаць токен доступу"
+  },
+  "submenu": {
+    "message": "Падменю"
+  },
+  "from": {
+    "message": "Ад"
+  },
+  "to": {
+    "message": "Каму"
+  },
+  "member": {
+    "message": "Удзельнік"
+  },
+  "update": {
+    "message": "Абнавіць"
+  },
+  "role": {
+    "message": "Роля"
+  },
+  "canView": {
+    "message": "Можа праглядаць"
+  },
+  "canViewExceptPass": {
+    "message": "Можа праглядаць (без пароляў)"
+  },
+  "canEdit": {
+    "message": "Можа рэдагаваць"
+  },
+  "canEditExceptPass": {
+    "message": "Можа рэдагаваць (без пароляў)"
+  },
+  "group": {
+    "message": "Група"
+  },
+  "groupAccessAll": {
+    "message": "Гэта група можа мець доступ і змяняць усе элементы."
+  },
+  "memberAccessAll": {
+    "message": "Гэты ўдзельнік можа атрымліваць доступ і змяняць усе элементы."
+  },
+  "moreFromBitwarden": {
+    "message": "Больш ад Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Змяніць прадукты"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Перайдзіце на платны тарыфны план, каб запрасіць больш удзельнікаў.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Перайдзіце на платны тарыфны план, каб больш калекцый.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Колькасць бясплатных калекцый у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }
