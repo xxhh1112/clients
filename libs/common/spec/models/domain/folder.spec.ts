@@ -1,8 +1,5 @@
 import { FolderData } from "@bitwarden/common/models/data/folder.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { Folder } from "@bitwarden/common/models/domain/folder";
-
-import { mockFromJson } from "../../utils";
 
 describe("Folder", () => {
   let data: FolderData;
@@ -27,7 +24,6 @@ describe("Folder", () => {
 
   describe("fromJSON", () => {
     jest.mock("@bitwarden/common/models/domain/enc-string");
-    jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
 
     it("initializes nested objects", () => {
       const revisionDate = new Date("2022-08-04T01:06:40.441Z");
@@ -39,7 +35,10 @@ describe("Folder", () => {
 
       const expected = {
         revisionDate: revisionDate,
-        name: "name_fromJSON",
+        name: {
+          encryptedString: "name",
+          encryptionType: 0,
+        },
         id: "id",
       };
 
