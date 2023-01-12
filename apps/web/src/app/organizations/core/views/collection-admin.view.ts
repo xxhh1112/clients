@@ -7,6 +7,11 @@ export class CollectionAdminView extends CollectionView {
   groups: CollectionAccessSelectionView[] = [];
   users: CollectionAccessSelectionView[] = [];
 
+  /**
+   * Flag indicating the user has been explicitly assigned to this Collection
+   */
+  assigned: boolean;
+
   constructor(response?: CollectionAccessDetailsResponse) {
     super(response);
 
@@ -21,5 +26,7 @@ export class CollectionAdminView extends CollectionView {
     this.users = response.users
       ? response.users.map((g) => new CollectionAccessSelectionView(g))
       : [];
+
+    this.assigned = response.assigned;
   }
 }

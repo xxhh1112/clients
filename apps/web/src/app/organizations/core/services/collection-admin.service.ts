@@ -87,6 +87,7 @@ export class CollectionAdminService {
       if (isCollectionAccessDetailsResponse(c)) {
         view.groups = c.groups;
         view.users = c.users;
+        view.assigned = c.assigned;
       }
 
       return view;

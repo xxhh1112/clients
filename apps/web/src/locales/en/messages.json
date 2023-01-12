@@ -743,6 +743,9 @@
   "noItemsInList": {
     "message": "There are no items to list."
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "You do not have permission to view all items in this collection."
+  },
   "noCollectionsInList": {
     "message": "There are no collections to list."
   },

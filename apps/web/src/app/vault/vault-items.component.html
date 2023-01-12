@@ -74,7 +74,7 @@
       <tr bitRow *ngFor="let col of filteredCollections" alignContent="middle">
         <td bitCell (click)="selectRow(col)">
           <input
-            *ngIf="organization && col.node.id !== null"
+            *ngIf="canDeleteCollection(col.node)"
             class="tw-cursor-pointer"
             type="checkbox"
             [(ngModel)]="$any(col).checked"
@@ -115,7 +115,7 @@
         </td>
         <td bitCell>
           <button
-            *ngIf="organization && col.node.id !== null"
+            *ngIf="canEditCollection(col.node) || canDeleteCollection(col.node)"
             [bitMenuTriggerFor]="collectionOptions"
             size="small"
             bitIconButton="bwi-ellipsis-v"
@@ -124,7 +124,7 @@
           ></button>
           <bit-menu #collectionOptions>
             <button
-              *ngIf="organization?.canEditAssignedCollections || organization?.canEditAnyCollection"
+              *ngIf="canEditCollection(col.node)"
               bitMenuItem
               (click)="editCollection(col.node, 'info')"
             >
@@ -132,7 +132,7 @@
               {{ "editInfo" | i18n }}
             </button>
             <button
-              *ngIf="organization?.canEditAssignedCollections || organization?.canEditAnyCollection"
+              *ngIf="canEditCollection(col.node)"
               bitMenuItem
               (click)="editCollection(col.node, 'access')"
             >
@@ -140,9 +140,7 @@
               {{ "access" | i18n }}
             </button>
             <button
-              *ngIf="
-                organization?.canDeleteAssignedCollections || organization?.canDeleteAnyCollection
-              "
+              *ngIf="canDeleteCollection(col.node)"
               bitMenuItem
               (click)="deleteCollection(col.node)"
             >
@@ -292,7 +290,13 @@
       </tr>
     </ng-container>
   </bit-table>
-  <div class="no-items" *ngIf="!filteredCiphers.length && !filteredCollections.length">
+  <div
+    class="tw-mt-6 tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-start"
+    *ngIf="
+      showMissingCollectionPermissionMessage ||
+      (!filteredCiphers.length && !filteredCollections.length)
+    "
+  >
     <ng-container *ngIf="!loaded">
       <i
         class="bwi bwi-spinner bwi-spin text-muted"
@@ -303,10 +307,15 @@
     </ng-container>
     <ng-container *ngIf="loaded">
       <bit-icon [icon]="noItemIcon" aria-hidden="true"></bit-icon>
-      <p>{{ "noItemsInList" | i18n }}</p>
-      <button (click)="addCipher()" class="btn btn-outline-primary" *ngIf="showAddNew">
-        <i class="bwi bwi-plus bwi-fw"></i>{{ "addItem" | i18n }}
-      </button>
+      <ng-container *ngIf="showMissingCollectionPermissionMessage">
+        <p>{{ "noPermissionToViewAllCollectionItems" | i18n }}</p>
+      </ng-container>
+      <ng-container *ngIf="!showMissingCollectionPermissionMessage">
+        <p>{{ "noItemsInList" | i18n }}</p>
+        <button (click)="addCipher()" class="btn btn-outline-primary" *ngIf="showAddNew">
+          <i class="bwi bwi-plus bwi-fw"></i>{{ "addItem" | i18n }}
+        </button>
+      </ng-container>
     </ng-container>
   </div>
 </ng-container>

@@ -193,6 +193,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
         collectionCopy.icon = "bwi-collection";
         if (c instanceof CollectionAdminView) {
           collectionCopy.groups = c.groups;
+          collectionCopy.assigned = c.assigned;
         }
         const parts =
           c.name != null ? c.name.replace(/^\/+|\/+$/g, "").split(NestingDelimiter) : [];

@@ -29,8 +29,15 @@ export class CollectionAccessDetailsResponse extends CollectionResponse {
   groups: SelectionReadOnlyResponse[] = [];
   users: SelectionReadOnlyResponse[] = [];
 
+  /**
+   * Flag indicating the user has been explicitly assigned to this Collection
+   */
+  assigned: boolean;
+
   constructor(response: any) {
     super(response);
+    this.assigned = this.getResponseProperty("Assigned") || false;
+
     const groups = this.getResponseProperty("Groups");
     if (groups != null) {
       this.groups = groups.map((g: any) => new SelectionReadOnlyResponse(g));

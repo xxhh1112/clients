@@ -23,7 +23,7 @@ import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { DialogService, Icons } from "@bitwarden/components";
 
-import { GroupView } from "../organizations/core";
+import { CollectionAdminView, GroupView } from "../organizations/core";
 
 import {
   BulkDeleteDialogResult,
@@ -521,12 +521,27 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     // TODO: This should be removed but is needed since we reuse the same template
   }
 
+  canDeleteCollection(c: CollectionAdminView): boolean {
+    // TODO: This should be removed but is needed since we reuse the same template
+    return false; // Always return false for non org vault
+  }
+
   async deleteCollection(collection: CollectionView): Promise<void> {
     // TODO: This should be removed but is needed since we reuse the same template
   }
 
+  canEditCollection(c: CollectionAdminView): boolean {
+    // TODO: This should be removed but is needed since we reuse the same template
+    return false; // Always return false for non org vault
+  }
+
   async editCollection(c: CollectionView, tab: "info" | "access"): Promise<void> {
     // TODO: This should be removed but is needed since we reuse the same template
+  }
+
+  get showMissingCollectionPermissionMessage(): boolean {
+    // TODO: This should be removed but is needed since we reuse the same template
+    return false; // Always return false for non org vault
   }
 
   protected updateSearchedCollections(collections: TreeNode<CollectionFilter>[]) {

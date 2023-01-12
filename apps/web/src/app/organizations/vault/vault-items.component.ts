@@ -27,9 +27,10 @@ import {
 import { VaultFilterService } from "../../vault/vault-filter/services/abstractions/vault-filter.service";
 import { CollectionFilter } from "../../vault/vault-filter/shared/models/vault-filter.type";
 import {
-  VaultItemsComponent as BaseVaultItemsComponent,
   VaultItemRow,
+  VaultItemsComponent as BaseVaultItemsComponent,
 } from "../../vault/vault-items.component";
+import { CollectionAdminView } from "../core";
 import { GroupService } from "../core/services/group/group.service";
 import {
   CollectionDialogResult,
@@ -167,9 +168,15 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   }
 
   checkRow(item: VaultItemRow, select?: boolean) {
-    if (item instanceof TreeNode && item.node.name == "Unassigned") {
+    if (item instanceof TreeNode && item.node.id == null) {
       return;
     }
+
+    // Do not allow checking a collection we cannot delete
+    if (item instanceof TreeNode && !this.canDeleteCollection(item.node)) {
+      return;
+    }
+
     item.checked = select ?? !item.checked;
   }
 
@@ -182,6 +189,19 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
 
   get selectedCollectionIds(): string[] {
     return this.selectedCollections.map((c) => c.node.id);
+  }
+
+  canEditCollection(c: CollectionAdminView): boolean {
+    // Only edit collections if we're in the org vault and not editing "Unassigned"
+    if (this.organization === undefined || c.id === null) {
+      return false;
+    }
+
+    // Otherwise, check if we can edit the specified collection
+    return (
+      this.organization.canEditAnyCollection ||
+      (this.organization.canEditAssignedCollections && c.assigned)
+    );
   }
 
   async editCollection(c: CollectionView, tab: "info" | "access"): Promise<void> {
@@ -197,6 +217,34 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
       await this.actionPromise;
       this.actionPromise = null;
     }
+  }
+
+  get showMissingCollectionPermissionMessage(): boolean {
+    // Not filtering by collections, so no need to show message
+    if (this.activeFilter.selectedCollectionNode == null) {
+      return false;
+    }
+
+    // Filtering by all collections, so no need to show message
+    if (this.activeFilter.selectedCollectionNode.node.id == "AllCollections") {
+      return false;
+    }
+
+    // Filtering by a collection, so show message if user is not assigned
+    return !this.activeFilter.selectedCollectionNode.node.assigned;
+  }
+
+  canDeleteCollection(c: CollectionAdminView): boolean {
+    // Only delete collections if we're in the org vault and not deleting "Unassigned"
+    if (this.organization === undefined || c.id === null) {
+      return false;
+    }
+
+    // Otherwise, check if we can delete the specified collection
+    return (
+      this.organization?.canDeleteAnyCollection ||
+      (this.organization?.canDeleteAssignedCollections && c.assigned)
+    );
   }
 
   async deleteCollection(collection: CollectionView): Promise<void> {
