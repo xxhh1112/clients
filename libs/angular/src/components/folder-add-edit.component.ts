@@ -45,8 +45,7 @@ export class FolderAddEditComponent implements OnInit {
     }
 
     try {
-      const folder = await this.cryptoService.encryptView(this.folder);
-      this.formPromise = this.folderApiService.save(folder);
+      this.formPromise = this.folderApiService.save(this.folder);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

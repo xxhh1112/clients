@@ -126,9 +126,8 @@ export class EditCommand {
 
     let folderView = await this.cryptoService.decryptDomain(FolderView, folder);
     folderView = FolderExport.toView(req, folderView);
-    const encFolder = await this.cryptoService.encryptView(folderView);
     try {
-      await this.folderApiService.save(encFolder);
+      await this.folderApiService.save(folderView);
       const updatedFolder = await this.folderService.get(folder.id);
       const decFolder = await this.cryptoService.decryptDomain(FolderView, updatedFolder);
       const res = new FolderResponse(decFolder);

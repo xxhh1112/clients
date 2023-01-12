@@ -36,6 +36,10 @@ export class FolderView implements ITreeNodeObject, Encryptable<Folder> {
   }
 
   static fromJSON(obj: Jsonify<FolderView>) {
+    if (obj == null) {
+      return null;
+    }
+
     return Object.assign(new FolderView(), obj, {
       revisionDate: nullableFactory(Date, obj.revisionDate),
     });

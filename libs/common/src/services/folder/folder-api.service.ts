@@ -1,15 +1,21 @@
 import { ApiService } from "../../abstractions/api.service";
+import { CryptoService } from "../../abstractions/crypto.service";
 import { FolderApiServiceAbstraction } from "../../abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService } from "../../abstractions/folder/folder.service.abstraction";
 import { FolderData } from "../../models/data/folder.data";
-import { Folder } from "../../models/domain/folder";
 import { FolderRequest } from "../../models/request/folder.request";
 import { FolderResponse } from "../../models/response/folder.response";
+import { FolderView } from "../../models/view/folder.view";
 
 export class FolderApiService implements FolderApiServiceAbstraction {
-  constructor(private folderService: InternalFolderService, private apiService: ApiService) {}
+  constructor(
+    private folderService: InternalFolderService,
+    private cryptoService: CryptoService,
+    private apiService: ApiService
+  ) {}
 
-  async save(folder: Folder): Promise<any> {
+  async save(folderView: FolderView): Promise<any> {
+    const folder = await this.cryptoService.encryptView(folderView);
     const request = new FolderRequest(folder);
 
     let response: FolderResponse;

@@ -25,6 +25,10 @@ export class Folder implements DecryptableDomain {
   }
 
   static fromJSON(obj: Jsonify<Folder>) {
+    if (obj == null) {
+      return null;
+    }
+
     return Object.assign(new Folder(), obj, {
       name: nullableFactory(EncString, obj.name),
       revisionDate: nullableFactory(Date, obj.revisionDate),

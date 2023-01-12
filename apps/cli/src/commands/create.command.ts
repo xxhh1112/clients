@@ -149,10 +149,10 @@ export class CreateCommand {
   }
 
   private async createFolder(req: FolderExport) {
-    const folder = await this.cryptoService.encryptView(FolderExport.toView(req));
+    const folderView = FolderExport.toView(req);
     try {
-      await this.folderApiService.save(folder);
-      const newFolder = await this.folderService.get(folder.id);
+      await this.folderApiService.save(folderView);
+      const newFolder = await this.folderService.get(folderView.id);
       const decFolder = await this.cryptoService.decryptDomain(FolderView, newFolder);
       const res = new FolderResponse(decFolder);
       return Response.success(res);
