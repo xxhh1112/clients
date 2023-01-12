@@ -307,7 +307,11 @@ export default class MainBackground {
       this.cipherService,
       this.stateService
     );
-    this.folderApiService = new FolderApiService(this.folderService, this.apiService);
+    this.folderApiService = new FolderApiService(
+      this.folderService,
+      this.cryptoService,
+      this.apiService
+    );
     this.collectionService = new CollectionService(
       this.cryptoService,
       this.i18nService,
