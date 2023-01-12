@@ -1,3 +1,4 @@
+import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -7,7 +8,8 @@ import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/co
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { EventService as EventServiceAbstraction } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/fileUpload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/abstractions/folder/folder-api.service.abstraction";
@@ -38,12 +40,10 @@ import { UserVerificationService as UserVerificationServiceAbstraction } from "@
 import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
-import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -54,21 +54,19 @@ import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
-import { EventService } from "@bitwarden/common/services/event.service";
+import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
+import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
 import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { FolderApiService } from "@bitwarden/common/services/folder/folder-api.service";
 import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
-import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
 import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
 import { PolicyApiService } from "@bitwarden/common/services/policy/policy-api.service";
-import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
 import { ProviderService } from "@bitwarden/common/services/provider.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { SendService } from "@bitwarden/common/services/send.service";
-import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
 import { SyncService } from "@bitwarden/common/services/sync/sync.service";
 import { SyncNotifierService } from "@bitwarden/common/services/sync/syncNotifier.service";
@@ -83,32 +81,38 @@ import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTim
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
 
 import { BrowserApi } from "../browser/browserApi";
+import { CipherContextMenuHandler } from "../browser/cipher-context-menu-handler";
+import { ContextMenuClickedHandler } from "../browser/context-menu-clicked-handler";
+import { MainContextMenuHandler } from "../browser/main-context-menu-handler";
 import { SafariApp } from "../browser/safariApp";
+import { AutofillTabCommand } from "../commands/autofill-tab-command";
 import { flagEnabled } from "../flags";
 import { UpdateBadge } from "../listeners/update-badge";
 import { Account } from "../models/account";
 import { PopupUtilsService } from "../popup/services/popup-utils.service";
 import { AutofillService as AutofillServiceAbstraction } from "../services/abstractions/autofill.service";
-import { StateService as StateServiceAbstraction } from "../services/abstractions/state.service";
+import { BrowserStateService as StateServiceAbstraction } from "../services/abstractions/browser-state.service";
 import AutofillService from "../services/autofill.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
+import { BrowserFolderService } from "../services/browser-folder.service";
+import { BrowserOrganizationService } from "../services/browser-organization.service";
+import { BrowserPolicyService } from "../services/browser-policy.service";
+import { BrowserSettingsService } from "../services/browser-settings.service";
+import { BrowserStateService } from "../services/browser-state.service";
 import { BrowserCryptoService } from "../services/browserCrypto.service";
 import BrowserLocalStorageService from "../services/browserLocalStorage.service";
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
-import { FolderService } from "../services/folders/folder.service";
 import I18nService from "../services/i18n.service";
 import { KeyGenerationService } from "../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../services/localBackedSessionStorage.service";
-import { StateService } from "../services/state.service";
 import { VaultFilterService } from "../services/vaultFilter.service";
 import VaultTimeoutService from "../services/vaultTimeout/vaultTimeout.service";
 
 import CommandsBackground from "./commands.background";
 import ContextMenusBackground from "./contextMenus.background";
 import IdleBackground from "./idle.background";
-import IconDetails from "./models/iconDetails";
 import { NativeMessagingBackground } from "./nativeMessaging.background";
 import NotificationBackground from "./notification.background";
 import RuntimeBackground from "./runtime.background";
@@ -148,7 +152,8 @@ export default class MainBackground {
   stateService: StateServiceAbstraction;
   stateMigrationService: StateMigrationService;
   systemService: SystemServiceAbstraction;
-  eventService: EventServiceAbstraction;
+  eventCollectionService: EventCollectionServiceAbstraction;
+  eventUploadService: EventUploadServiceAbstraction;
   policyService: InternalPolicyServiceAbstraction;
   popupUtilsService: PopupUtilsService;
   sendService: SendServiceAbstraction;
@@ -165,6 +170,9 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
+  avatarUpdateService: AvatarUpdateServiceAbstraction;
+  mainContextMenuHandler: MainContextMenuHandler;
+  cipherContextMenuHandler: CipherContextMenuHandler;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -182,8 +190,6 @@ export default class MainBackground {
   private webRequestBackground: WebRequestBackground;
 
   private sidebarAction: any;
-  private buildingContextMenu: boolean;
-  private menuOptionsLoaded: any[] = [];
   private syncTimeout: any;
   private isSafari: boolean;
   private nativeMessagingBackground: NativeMessagingBackground;
@@ -227,7 +233,7 @@ export default class MainBackground {
       this.secureStorageService,
       new StateFactory(GlobalState, Account)
     );
-    this.stateService = new StateService(
+    this.stateService = new BrowserStateService(
       this.storageService,
       this.secureStorageService,
       this.memoryStorageService,
@@ -282,7 +288,7 @@ export default class MainBackground {
       this.appIdService,
       (expired: boolean) => this.logout(expired)
     );
-    this.settingsService = new SettingsService(this.stateService);
+    this.settingsService = new BrowserSettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
       this.cryptoService,
@@ -295,7 +301,7 @@ export default class MainBackground {
       this.stateService,
       this.encryptService
     );
-    this.folderService = new FolderService(
+    this.folderService = new BrowserFolderService(
       this.cryptoService,
       this.i18nService,
       this.cipherService,
@@ -317,13 +323,12 @@ export default class MainBackground {
       this.stateService
     );
     this.syncNotifierService = new SyncNotifierService();
-    this.organizationService = new OrganizationService(this.stateService);
-    this.policyService = new PolicyService(this.stateService, this.organizationService);
+    this.organizationService = new BrowserOrganizationService(this.stateService);
+    this.policyService = new BrowserPolicyService(this.stateService, this.organizationService);
     this.policyApiService = new PolicyApiService(
       this.policyService,
       this.apiService,
-      this.stateService,
-      this.organizationService
+      this.stateService
     );
     this.keyConnectorService = new KeyConnectorService(
       this.stateService,
@@ -412,12 +417,16 @@ export default class MainBackground {
       this.organizationService,
       logoutCallback
     );
-    this.eventService = new EventService(
+    this.eventUploadService = new EventUploadService(
       this.apiService,
+      this.stateService,
+      this.logService
+    );
+    this.eventCollectionService = new EventCollectionService(
       this.cipherService,
       this.stateService,
-      this.logService,
-      this.organizationService
+      this.organizationService,
+      this.eventUploadService
     );
     this.passwordGenerationService = new PasswordGenerationService(
       this.cryptoService,
@@ -429,7 +438,7 @@ export default class MainBackground {
       this.cipherService,
       this.stateService,
       this.totpService,
-      this.eventService,
+      this.eventCollectionService,
       this.logService
     );
     this.containerService = new ContainerService(this.cryptoService, this.encryptService);
@@ -526,15 +535,25 @@ export default class MainBackground {
     );
 
     this.tabsBackground = new TabsBackground(this, this.notificationBackground);
-    this.contextMenusBackground = new ContextMenusBackground(
-      this,
-      this.cipherService,
-      this.passwordGenerationService,
-      this.platformUtilsService,
-      this.authService,
-      this.eventService,
-      this.totpService
-    );
+    if (!this.popupOnlyContext) {
+      const contextMenuClickedHandler = new ContextMenuClickedHandler(
+        (options) => this.platformUtilsService.copyToClipboard(options.text, { window: self }),
+        async (_tab) => {
+          const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
+          const password = await this.passwordGenerationService.generatePassword(options);
+          this.platformUtilsService.copyToClipboard(password, { window: window });
+          this.passwordGenerationService.addHistory(password);
+        },
+        this.authService,
+        this.cipherService,
+        new AutofillTabCommand(this.autofillService),
+        this.totpService,
+        this.eventCollectionService
+      );
+
+      this.contextMenusBackground = new ContextMenusBackground(contextMenuClickedHandler);
+    }
+
     this.idleBackground = new IdleBackground(
       this.vaultTimeoutService,
       this.stateService,
@@ -551,6 +570,18 @@ export default class MainBackground {
       this.stateService,
       this.apiService
     );
+
+    this.avatarUpdateService = new AvatarUpdateService(this.apiService, this.stateService);
+
+    if (!this.popupOnlyContext) {
+      this.mainContextMenuHandler = new MainContextMenuHandler(this.stateService, this.i18nService);
+
+      this.cipherContextMenuHandler = new CipherContextMenuHandler(
+        this.mainContextMenuHandler,
+        this.authService,
+        this.cipherService
+      );
+    }
   }
 
   async bootstrap() {
@@ -560,7 +591,7 @@ export default class MainBackground {
 
     await (this.vaultTimeoutService as VaultTimeoutService).init(true);
     await (this.i18nService as I18nService).init();
-    await (this.eventService as EventService).init(true);
+    await (this.eventUploadService as EventUploadService).init(true);
     await this.runtimeBackground.init();
     await this.notificationBackground.init();
     await this.commandsBackground.init();
@@ -568,7 +599,9 @@ export default class MainBackground {
     this.twoFactorService.init();
 
     await this.tabsBackground.init();
-    await this.contextMenusBackground.init();
+    if (!this.popupOnlyContext) {
+      this.contextMenusBackground?.init();
+    }
     await this.idleBackground.init();
     await this.webRequestBackground.init();
 
@@ -589,7 +622,9 @@ export default class MainBackground {
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
-        await this.refreshBadge();
+        if (!this.isPrivateMode) {
+          await this.refreshBadge();
+        }
         this.fullSync(true);
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
@@ -606,30 +641,27 @@ export default class MainBackground {
       return;
     }
 
-    const menuDisabled = await this.stateService.getDisableContextMenuItem();
-    if (!menuDisabled) {
-      await this.buildContextMenu();
-    } else {
-      await this.contextMenusRemoveAll();
-    }
+    await MainContextMenuHandler.removeAll();
 
     if (forLocked) {
-      await this.loadMenuForNoAccessState(!menuDisabled);
+      await this.mainContextMenuHandler?.noAccess();
       this.onUpdatedRan = this.onReplacedRan = false;
       return;
     }
 
+    await this.mainContextMenuHandler?.init();
+
     const tab = await BrowserApi.getTabFromCurrentWindow();
     if (tab) {
-      await this.contextMenuReady(tab, !menuDisabled);
+      await this.cipherContextMenuHandler?.update(tab.url);
+      this.onUpdatedRan = this.onReplacedRan = false;
     }
   }
 
   async logout(expired: boolean, userId?: string) {
-    await this.eventService.uploadEvents(userId);
+    await this.eventUploadService.uploadEvents(userId);
 
     await Promise.all([
-      this.eventService.clearEvents(userId),
       this.syncService.setLastSync(new Date(0), userId),
       this.cryptoService.clearKeys(userId),
       this.settingsService.clear(userId),
@@ -654,7 +686,7 @@ export default class MainBackground {
       BrowserApi.sendMessage("updateBadge");
     }
     await this.refreshBadge();
-    await this.refreshMenu(true);
+    await this.mainContextMenuHandler.noAccess();
     await this.reseedStorage();
     this.notificationsService.updateConnection(false);
     await this.systemService.clearPendingClipboard();
@@ -728,204 +760,6 @@ export default class MainBackground {
     }
   }
 
-  private async buildContextMenu() {
-    if (!chrome.contextMenus || this.buildingContextMenu) {
-      return;
-    }
-
-    this.buildingContextMenu = true;
-    await this.contextMenusRemoveAll();
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "root",
-      contexts: ["all"],
-      title: "Bitwarden",
-    });
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "autofill",
-      parentId: "root",
-      contexts: ["all"],
-      title: this.i18nService.t("autoFill"),
-    });
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "copy-username",
-      parentId: "root",
-      contexts: ["all"],
-      title: this.i18nService.t("copyUsername"),
-    });
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "copy-password",
-      parentId: "root",
-      contexts: ["all"],
-      title: this.i18nService.t("copyPassword"),
-    });
-
-    if (await this.stateService.getCanAccessPremium()) {
-      await this.contextMenusCreate({
-        type: "normal",
-        id: "copy-totp",
-        parentId: "root",
-        contexts: ["all"],
-        title: this.i18nService.t("copyVerificationCode"),
-      });
-    }
-
-    await this.contextMenusCreate({
-      type: "separator",
-      parentId: "root",
-    });
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "generate-password",
-      parentId: "root",
-      contexts: ["all"],
-      title: this.i18nService.t("generatePasswordCopied"),
-    });
-
-    await this.contextMenusCreate({
-      type: "normal",
-      id: "copy-identifier",
-      parentId: "root",
-      contexts: ["all"],
-      title: this.i18nService.t("copyElementIdentifier"),
-    });
-
-    this.buildingContextMenu = false;
-  }
-
-  private async contextMenuReady(tab: any, contextMenuEnabled: boolean) {
-    await this.loadMenu(tab.url, tab.id, contextMenuEnabled);
-    this.onUpdatedRan = this.onReplacedRan = false;
-  }
-
-  private async loadMenu(url: string, tabId: number, contextMenuEnabled: boolean) {
-    if (!url || (!chrome.browserAction && !this.sidebarAction)) {
-      return;
-    }
-
-    this.menuOptionsLoaded = [];
-    const authStatus = await this.authService.getAuthStatus();
-    if (authStatus === AuthenticationStatus.Unlocked) {
-      try {
-        const ciphers = await this.cipherService.getAllDecryptedForUrl(url);
-        ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
-
-        if (contextMenuEnabled) {
-          ciphers.forEach((cipher) => {
-            this.loadLoginContextMenuOptions(cipher);
-          });
-        }
-
-        if (contextMenuEnabled && ciphers.length === 0) {
-          await this.loadNoLoginsContextMenuOptions(this.i18nService.t("noMatchingLogins"));
-        }
-
-        return;
-      } catch (e) {
-        this.logService.error(e);
-      }
-    }
-
-    await this.loadMenuForNoAccessState(contextMenuEnabled);
-  }
-
-  private async loadMenuForNoAccessState(contextMenuEnabled: boolean) {
-    if (contextMenuEnabled) {
-      const authed = await this.stateService.getIsAuthenticated();
-      await this.loadNoLoginsContextMenuOptions(
-        this.i18nService.t(authed ? "unlockVaultMenu" : "loginToVaultMenu")
-      );
-    }
-  }
-
-  private async loadLoginContextMenuOptions(cipher: any) {
-    if (
-      cipher == null ||
-      cipher.type !== CipherType.Login ||
-      cipher.reprompt !== CipherRepromptType.None
-    ) {
-      return;
-    }
-
-    let title = cipher.name;
-    if (cipher.login.username && cipher.login.username !== "") {
-      title += " (" + cipher.login.username + ")";
-    }
-    await this.loadContextMenuOptions(title, cipher.id, cipher);
-  }
-
-  private async loadNoLoginsContextMenuOptions(noLoginsMessage: string) {
-    await this.loadContextMenuOptions(noLoginsMessage, "noop", null);
-  }
-
-  private async loadContextMenuOptions(title: string, idSuffix: string, cipher: any) {
-    if (
-      !chrome.contextMenus ||
-      this.menuOptionsLoaded.indexOf(idSuffix) > -1 ||
-      (cipher != null && cipher.type !== CipherType.Login)
-    ) {
-      return;
-    }
-
-    this.menuOptionsLoaded.push(idSuffix);
-
-    if (cipher == null || (cipher.login.password && cipher.login.password !== "")) {
-      await this.contextMenusCreate({
-        type: "normal",
-        id: "autofill_" + idSuffix,
-        parentId: "autofill",
-        contexts: ["all"],
-        title: this.sanitizeContextMenuTitle(title),
-      });
-    }
-
-    if (cipher == null || (cipher.login.username && cipher.login.username !== "")) {
-      await this.contextMenusCreate({
-        type: "normal",
-        id: "copy-username_" + idSuffix,
-        parentId: "copy-username",
-        contexts: ["all"],
-        title: this.sanitizeContextMenuTitle(title),
-      });
-    }
-
-    if (
-      cipher == null ||
-      (cipher.login.password && cipher.login.password !== "" && cipher.viewPassword)
-    ) {
-      await this.contextMenusCreate({
-        type: "normal",
-        id: "copy-password_" + idSuffix,
-        parentId: "copy-password",
-        contexts: ["all"],
-        title: this.sanitizeContextMenuTitle(title),
-      });
-    }
-
-    const canAccessPremium = await this.stateService.getCanAccessPremium();
-    if (canAccessPremium && (cipher == null || (cipher.login.totp && cipher.login.totp !== ""))) {
-      await this.contextMenusCreate({
-        type: "normal",
-        id: "copy-totp_" + idSuffix,
-        parentId: "copy-totp",
-        contexts: ["all"],
-        title: this.sanitizeContextMenuTitle(title),
-      });
-    }
-  }
-
-  private sanitizeContextMenuTitle(title: string): string {
-    return title.replace(/&/g, "&&");
-  }
-
   private async fullSync(override = false) {
     const syncInternal = 6 * 60 * 60 * 1000; // 6 hours
     const lastSync = await this.syncService.getLastSync();
@@ -949,55 +783,5 @@ export default class MainBackground {
     }
 
     this.syncTimeout = setTimeout(async () => await this.fullSync(), 5 * 60 * 1000); // check every 5 minutes
-  }
-
-  // Browser API Helpers
-
-  private contextMenusRemoveAll() {
-    return new Promise<void>((resolve) => {
-      chrome.contextMenus.removeAll(() => {
-        resolve();
-        if (chrome.runtime.lastError) {
-          return;
-        }
-      });
-    });
-  }
-
-  private contextMenusCreate(options: any) {
-    return new Promise<void>((resolve) => {
-      chrome.contextMenus.create(options, () => {
-        resolve();
-        if (chrome.runtime.lastError) {
-          return;
-        }
-      });
-    });
-  }
-
-  private async actionSetIcon(theAction: any, suffix: string, windowId?: number): Promise<any> {
-    if (!theAction || !theAction.setIcon) {
-      return;
-    }
-
-    const options: IconDetails = {
-      path: {
-        19: "images/icon19" + suffix + ".png",
-        38: "images/icon38" + suffix + ".png",
-      },
-    };
-
-    if (this.platformUtilsService.isFirefox()) {
-      options.windowId = windowId;
-      await theAction.setIcon(options);
-    } else if (this.platformUtilsService.isSafari()) {
-      // Workaround since Safari 14.0.3 returns a pending promise
-      // which doesn't resolve within a reasonable time.
-      theAction.setIcon(options);
-    } else {
-      return new Promise<void>((resolve) => {
-        theAction.setIcon(options, () => resolve());
-      });
-    }
   }
 }

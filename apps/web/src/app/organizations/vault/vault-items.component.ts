@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
@@ -12,7 +12,6 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 
 import { VaultItemsComponent as BaseVaultItemsComponent } from "../../vault/vault-items.component";
@@ -24,9 +23,6 @@ import { VaultItemsComponent as BaseVaultItemsComponent } from "../../vault/vaul
 export class VaultItemsComponent extends BaseVaultItemsComponent {
   @Output() onEventsClicked = new EventEmitter<CipherView>();
 
-  organization: Organization;
-  accessEvents = false;
-
   protected allCiphers: CipherView[] = [];
 
   constructor(
@@ -34,7 +30,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent {
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     cipherService: CipherService,
-    eventService: EventService,
+    eventCollectionService: EventCollectionService,
     totpService: TotpService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
@@ -48,7 +44,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent {
       i18nService,
       platformUtilsService,
       cipherService,
-      eventService,
+      eventCollectionService,
       totpService,
       stateService,
       passwordRepromptService,
@@ -86,6 +82,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent {
   async search(timeout: number = null) {
     await super.search(timeout, this.allCiphers);
   }
+
   events(c: CipherView) {
     this.onEventsClicked.emit(c);
   }

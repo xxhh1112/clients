@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Deaktiviert"
   },
+  "removePassword": {
+    "message": "Passwort entfernen"
+  },
+  "removedPassword": {
+    "message": "Passwort entfernt"
+  },
+  "removePasswordConfirmation": {
+    "message": "Bist du sicher, dass du das Passwort entfernen möchtest?"
+  },
   "maxAccessCountReached": {
     "message": "Maximale Zugriffsanzahl erreicht"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Mit einem anderen Gerät anmelden"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

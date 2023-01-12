@@ -34,15 +34,6 @@ import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user
 import { KeysRequest } from "../models/request/keys.request";
 import { OrganizationConnectionRequest } from "../models/request/organization-connection.request";
 import { OrganizationImportRequest } from "../models/request/organization-import.request";
-import { OrganizationUserAcceptRequest } from "../models/request/organization-user-accept.request";
-import { OrganizationUserBulkConfirmRequest } from "../models/request/organization-user-bulk-confirm.request";
-import { OrganizationUserBulkRequest } from "../models/request/organization-user-bulk.request";
-import { OrganizationUserConfirmRequest } from "../models/request/organization-user-confirm.request";
-import { OrganizationUserInviteRequest } from "../models/request/organization-user-invite.request";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "../models/request/organization-user-reset-password-enrollment.request";
-import { OrganizationUserResetPasswordRequest } from "../models/request/organization-user-reset-password.request";
-import { OrganizationUserUpdateGroupsRequest } from "../models/request/organization-user-update-groups.request";
-import { OrganizationUserUpdateRequest } from "../models/request/organization-user-update.request";
 import { OrganizationSponsorshipCreateRequest } from "../models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../models/request/organization/organization-sponsorship-redeem.request";
 import { PasswordHintRequest } from "../models/request/password-hint.request";
@@ -71,6 +62,7 @@ import { TaxInfoUpdateRequest } from "../models/request/tax-info-update.request"
 import { TwoFactorEmailRequest } from "../models/request/two-factor-email.request";
 import { TwoFactorProviderRequest } from "../models/request/two-factor-provider.request";
 import { TwoFactorRecoveryRequest } from "../models/request/two-factor-recovery.request";
+import { UpdateAvatarRequest } from "../models/request/update-avatar.request";
 import { UpdateDomainsRequest } from "../models/request/update-domains.request";
 import { UpdateKeyRequest } from "../models/request/update-key.request";
 import { UpdateProfileRequest } from "../models/request/update-profile.request";
@@ -117,13 +109,6 @@ import {
 } from "../models/response/organization-connection.response";
 import { OrganizationExportResponse } from "../models/response/organization-export.response";
 import { OrganizationSponsorshipSyncStatusResponse } from "../models/response/organization-sponsorship-sync-status.response";
-import { OrganizationUserBulkPublicKeyResponse } from "../models/response/organization-user-bulk-public-key.response";
-import { OrganizationUserBulkResponse } from "../models/response/organization-user-bulk.response";
-import {
-  OrganizationUserDetailsResponse,
-  OrganizationUserUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
-} from "../models/response/organization-user.response";
 import { PaymentResponse } from "../models/response/payment.response";
 import { PlanResponse } from "../models/response/plan.response";
 import { PolicyResponse } from "../models/response/policy.response";
@@ -136,8 +121,8 @@ import {
 import { ProviderUserBulkPublicKeyResponse } from "../models/response/provider/provider-user-bulk-public-key.response";
 import { ProviderUserBulkResponse } from "../models/response/provider/provider-user-bulk.response";
 import {
-  ProviderUserUserDetailsResponse,
   ProviderUserResponse,
+  ProviderUserUserDetailsResponse,
 } from "../models/response/provider/provider-user.response";
 import { ProviderResponse } from "../models/response/provider/provider.response";
 import { SelectionReadOnlyResponse } from "../models/response/selection-read-only.response";
@@ -156,13 +141,18 @@ import { TwoFactorEmailResponse } from "../models/response/two-factor-email.resp
 import { TwoFactorProviderResponse } from "../models/response/two-factor-provider.response";
 import { TwoFactorRecoverResponse } from "../models/response/two-factor-recover.response";
 import {
-  TwoFactorWebAuthnResponse,
   ChallengeResponse,
+  TwoFactorWebAuthnResponse,
 } from "../models/response/two-factor-web-authn.response";
 import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { SendAccessView } from "../models/view/send-access.view";
 
+/**
+ * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
+ * api services. The `send` method is still allowed to be used within api services. For background
+ * of this decision please read https://contributing.bitwarden.com/architecture/adr/refactor-api-service.
+ */
 export abstract class ApiService {
   send: (
     method: "GET" | "POST" | "PUT" | "DELETE",
@@ -183,6 +173,7 @@ export abstract class ApiService {
   getUserSubscription: () => Promise<SubscriptionResponse>;
   getTaxInfo: () => Promise<TaxInfoResponse>;
   putProfile: (request: UpdateProfileRequest) => Promise<ProfileResponse>;
+  putAvatar: (request: UpdateAvatarRequest) => Promise<ProfileResponse>;
   putTaxInfo: (request: TaxInfoUpdateRequest) => Promise<any>;
   postPrelogin: (request: PreloginRequest) => Promise<PreloginResponse>;
   postEmailToken: (request: EmailTokenRequest) => Promise<any>;
@@ -349,82 +340,6 @@ export abstract class ApiService {
   putGroupUsers: (organizationId: string, id: string, request: string[]) => Promise<any>;
   deleteGroup: (organizationId: string, id: string) => Promise<any>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
-
-  getOrganizationUser: (
-    organizationId: string,
-    id: string
-  ) => Promise<OrganizationUserDetailsResponse>;
-  getOrganizationUserGroups: (organizationId: string, id: string) => Promise<string[]>;
-  getOrganizationUsers: (
-    organizationId: string
-  ) => Promise<ListResponse<OrganizationUserUserDetailsResponse>>;
-  getOrganizationUserResetPasswordDetails: (
-    organizationId: string,
-    id: string
-  ) => Promise<OrganizationUserResetPasswordDetailsReponse>;
-  postOrganizationUserInvite: (
-    organizationId: string,
-    request: OrganizationUserInviteRequest
-  ) => Promise<any>;
-  postOrganizationUserReinvite: (organizationId: string, id: string) => Promise<any>;
-  postManyOrganizationUserReinvite: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  postOrganizationUserAccept: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserAcceptRequest
-  ) => Promise<any>;
-  postOrganizationUserConfirm: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserConfirmRequest
-  ) => Promise<any>;
-  postOrganizationUsersPublicKey: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkPublicKeyResponse>>;
-  postOrganizationUserBulkConfirm: (
-    organizationId: string,
-    request: OrganizationUserBulkConfirmRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-
-  putOrganizationUser: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateRequest
-  ) => Promise<any>;
-  putOrganizationUserGroups: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateGroupsRequest
-  ) => Promise<any>;
-  putOrganizationUserResetPasswordEnrollment: (
-    organizationId: string,
-    userId: string,
-    request: OrganizationUserResetPasswordEnrollmentRequest
-  ) => Promise<void>;
-  putOrganizationUserResetPassword: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserResetPasswordRequest
-  ) => Promise<any>;
-  deleteOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  deleteManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  revokeOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  revokeManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  restoreOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  restoreManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
 
   getSync: () => Promise<SyncResponse>;
   postPublicImportDirectory: (request: OrganizationImportRequest) => Promise<any>;

@@ -80,11 +80,13 @@
       right) and select "Settings". Go to "Export" and find the "Export to .csv File" option. Click
       "Export" to save the CSV file.
     </ng-container>
+    <!--
     <ng-container *ngIf="format === 'keeperjson'">
       Log into the Keeper web vault (keepersecurity.com/vault). Click on your "account email" (top
       right) and select "Settings". Go to "Export" and find the "Export to .json File" option. Click
       "Export" to save the JSON file.
     </ng-container>
+    -->
     <ng-container
       *ngIf="format === 'chromecsv' || format === 'operacsv' || format === 'vivaldicsv'"
     >
@@ -285,6 +287,10 @@
     <ng-container *ngIf="format === 'yoticsv'">
       From the Yoti browser extension, click on "Settings", then "Export Saved Logins" and save the
       CSV file.
+    </ng-container>
+    <ng-container *ngIf="format === 'passkyjson'">
+      Log in to "https://vault.passky.org" &rarr; "Import & Export" &rarr; "Export" in the Passky
+      section. ("Backup" is unsupported as it is encrypted).
     </ng-container>
   </app-callout>
   <div class="row">

@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Keelatud"
   },
+  "removePassword": {
+    "message": "Eemalda parool"
+  },
+  "removedPassword": {
+    "message": "Parool on eemaldatud"
+  },
+  "removePasswordConfirmation": {
+    "message": "Oled kindel, et soovid selle parooli eemaldada?"
+  },
   "maxAccessCountReached": {
     "message": "Maksimaalne ligipääsude arv on saavutatud"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Logi sisse läbi teise seadme"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

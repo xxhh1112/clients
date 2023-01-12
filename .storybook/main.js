@@ -6,6 +6,8 @@ module.exports = {
     "../libs/components/src/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/web/src/**/*.stories.mdx",
     "../apps/web/src/**/*.stories.@(js|jsx|ts|tsx)",
+    "../bitwarden_license/bit-web/src/**/*.stories.mdx",
+    "../bitwarden_license/bit-web/src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-links",
@@ -18,6 +20,12 @@ module.exports = {
     builder: "webpack5",
     disableTelemetry: true,
   },
+  env: (config) => ({
+    ...config,
+    FLAGS: JSON.stringify({
+      secretsManager: true,
+    }),
+  }),
   webpackFinal: async (config, { configType }) => {
     config.resolve.plugins = [new TsconfigPathsPlugin()];
     return config;

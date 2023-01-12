@@ -177,7 +177,7 @@
     "message": "未指派"
   },
   "noneFolder": {
-    "message": "默認資料夾",
+    "message": "預設資料夾",
     "description": "This is the folder for uncategorized items"
   },
   "addFolder": {
@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "確認檔案密碼"
   },
-  "accountBackupOptionDescription": {
-    "message": "使用您的帳戶加密金鑰來加密匯出的資料，並限制它只能匯入至目前的 Bitwarden 帳戶。"
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
     "message": "設定一組密碼來加密匯出的資料，並使用此密碼解密以匯入至任意 Bitwarden 帳戶。"
   },
-  "fileTypeHeading": {
-    "message": "檔案類型"
+  "exportTypeHeading": {
+    "message": "Export type"
   },
-  "accountBackup": {
-    "message": "帳戶備份"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "密碼保護"
@@ -1291,7 +1291,7 @@
     "message": "兩步驟登入"
   },
   "twoStepLoginEnforcement": {
-    "message": "強制兩步驟驗證"
+    "message": "兩步驟驗證執行"
   },
   "twoStepLoginDesc": {
     "message": "在登入時執行額外的步驟來保護您的帳戶。"
@@ -1301,7 +1301,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "兩步驟登入政策"
+    "message": "兩步驟登入原則"
   },
   "twoStepLoginOrganizationDuoDesc": {
     "message": "要以 Duo 進行兩步驟登入，請使用以下的選項。"
@@ -1829,7 +1829,7 @@
     "message": "進階存取"
   },
   "premiumAccessDesc": {
-    "message": "您可以為您的組織的所有使用者添加進階存取，只需 $PRICE$ /$INTERVAL$.",
+    "message": "您可以為您的組織的所有成員添加進階存取，只需 $PRICE$ /$INTERVAL$.",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -2948,7 +2948,7 @@
     "message": "請檢查您的電子郵件收件匣以取得驗證連結。"
   },
   "emailVerified": {
-    "message": "電子郵件已驗證"
+    "message": "帳戶電子郵件已驗證"
   },
   "emailVerifiedFailed": {
     "message": "無法驗證電子郵件。請嘗試傳送一封新的驗證電子郵件。"
@@ -2972,7 +2972,7 @@
     "message": "您已被邀請加入以上組織。若想接受邀請，您需要登入或建立新的 Bitwarden 帳戶。"
   },
   "inviteAccepted": {
-    "message": "已接受邀請"
+    "message": "邀請已接受"
   },
   "inviteAcceptedDesc": {
     "message": "管理員確認您的成員身分後，您便可以存取此組織。到時我們會向您傳送電子郵件通知。"
@@ -3137,7 +3137,7 @@
     "message": "輸入您的安裝 ID"
   },
   "limitSubscriptionDesc": {
-    "message": "為您的訂閲設定席位限制。達到此限制後，您將無法邀請新的使用者。"
+    "message": "為您的訂閲設定席位限制。達到此限制後，您將無法邀請新的成員。"
   },
   "maxSeatLimit": {
     "message": "席位限制（選用）",
@@ -3158,7 +3158,7 @@
     "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的使用者超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用。"
   },
   "subscriptionUserSeats": {
-    "message": "您的訂閱當中包含最多 $COUNT$ 位使用者。",
+    "message": "您的訂閱當中包含最多 $COUNT$ 位成員。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3182,10 +3182,10 @@
     "message": "如需更多管理訂閱協助，請聯絡客戶支援。"
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
-    "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的使用者超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用。"
+    "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的成員超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用。"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的使用者超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用，直到您達到 $MAX$ 席位限制。",
+    "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的成員超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用，直到您達到 $MAX$ 席位限制。",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3194,7 +3194,7 @@
     }
   },
   "subscriptionFreePlan": {
-    "message": "除非升級方案，否則您最多只能邀請 $COUNT$ 位使用者。",
+    "message": "除非升級方案，否則您最多只能邀請 $COUNT$ 位成員。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3203,7 +3203,7 @@
     }
   },
   "subscriptionFamiliesPlan": {
-    "message": "除非升級方案，否則您最多只能邀請 $COUNT$ 位使用者。請聯絡客戶支援進行升級。",
+    "message": "除非升級方案，否則您最多只能邀請 $COUNT$ 位成員。請聯絡客戶支援進行升級。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3212,7 +3212,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "您的訂閱允許總共 $COUNT$ 位使用者。您的方案由外部組織贊助和支付費用。",
+    "message": "您的訂閱允許總共 $COUNT$ 位成員。您的方案由外部組織贊助和支付費用。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3221,7 +3221,7 @@
     }
   },
   "subscriptionMaxReached": {
-    "message": "調整訂閱將會依比例變更您的計費總額。在不增加訂閱席位的情況下，您不能邀請超過 $COUNT$ 位使用者。",
+    "message": "調整訂閱將會依比例變更您的計費總額。在不增加訂閱席位的情況下，您不能邀請超過 $COUNT$ 位成員。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3719,7 +3719,7 @@
     "message": "SSO 識別"
   },
   "ssoIdentifierHint": {
-    "message": "將該 ID 提供給您的成員，以便使用 SSO 登入"
+    "message": "將該 ID 提供給您的成員，以便使用 SSO 登入。"
   },
   "unlinkSso": {
     "message": "取消連結 SSO"
@@ -4066,7 +4066,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
-    "message": "可以管理組織原則的組織使用者豁免此原則的執行。"
+    "message": "可以管理組織原則的組織成員豁免此原則的執行。"
   },
   "sendDisabled": {
     "message": "Send 已停用",
@@ -4085,7 +4085,7 @@
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
-    "message": "可以管理組織原則的組織使用者豁免此原則的執行。"
+    "message": "可以管理組織原則的組織成員豁免此原則的執行。"
   },
   "disableHideEmail": {
     "message": "建立或編輯 Send 時，始終對收件人顯示成員的電子郵件地址。",
@@ -4118,6 +4118,21 @@
   },
   "customDesc": {
     "message": "進階設定允許更精細地控制使用者權限。"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
   },
   "permissions": {
     "message": "權限"
@@ -4399,19 +4414,19 @@
     "message": "允許管理者重設成員的主密碼。"
   },
   "resetPasswordPolicyWarning": {
-    "message": "組織使用者需要先自行註冊或被自動註冊後，管理者才能重設他們的主密碼。"
+    "message": "組織成員需要先自行註冊或被自動註冊後，管理者才能重設他們的主密碼。"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自動註冊"
   },
   "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "所有接受邀請的使用者，將會被自動註冊密碼重設，並且不允許撤銷。"
+    "message": "所有接受邀請的成員，將會被自動註冊密碼重設，並且不允許撤銷。"
   },
   "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "已經在組織中的使用者將不會被註冊密碼重設。他們需要先自行註冊後管理者才能重設他們的主密碼。"
+    "message": "已經在組織中的成員將不會被註冊密碼重設。他們需要先自行註冊後管理者才能重設他們的主密碼。"
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
-    "message": "為新使用者啟用自動註冊"
+    "message": "為新成員啟用自動註冊"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。"
@@ -5460,6 +5475,45 @@
   "notYou": {
     "message": "不是您嗎？"
   },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
+  },
   "multiSelectPlaceholder": {
     "message": "-- 輸入以進行篩選 --"
   },
@@ -5471,6 +5525,275 @@
   },
   "multiSelectClearAll": {
     "message": "全部清除"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Password character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "隱藏"
+  },
+  "projects": {
+    "message": "Projects"
+  },
+  "lastEdited": {
+    "message": "Last Edited"
+  },
+  "editSecret": {
+    "message": "Edit Secret"
+  },
+  "addSecret": {
+    "message": "Add Secret"
+  },
+  "copySecretName": {
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue": {
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret": {
+    "message": "Delete Secret"
+  },
+  "deleteSecrets": {
+    "message": "Delete Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "服務帳號"
+  },
+  "serviceAccounts": {
+    "message": "服務帳號"
+  },
+  "new": {
+    "message": "New"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "Name/Value Pair"
+  },
+  "secretEdited": {
+    "message": "Secret edited"
+  },
+  "secretCreated": {
+    "message": "Secret created"
+  },
+  "newSecret": {
+    "message": "New Secret"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No secrets to show"
+  },
+  "secretsNoItemsMessage": {
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Search Secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets sent to trash"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Project, Secret"
+  },
+  "serviceAccountName": {
+    "message": "服務帳號名稱"
+  },
+  "newSaSelectAccess": {
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "刪除 $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "需要確認"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "存取權杖"
+  },
+  "createAccessToken": {
+    "message": "建立存取權杖"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "複製權杖"
+  },
+  "accessToken": {
+    "message": "存取權杖"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
   },
   "from": {
     "message": "從"
@@ -5507,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "此成員可存取及變更所有項目。"
+  },
+  "moreFromBitwarden": {
+    "message": "More from Bitwarden"
+  },
+  "switchProducts": {
+    "message": "切換產品"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

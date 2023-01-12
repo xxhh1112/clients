@@ -39,25 +39,25 @@ import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { LoginService } from "@bitwarden/common/services/login.service";
 import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
-import { ElectronCryptoService } from "@bitwarden/electron/services/electronCrypto.service";
-import { ElectronLogService } from "@bitwarden/electron/services/electronLog.service";
-import { ElectronPlatformUtilsService } from "@bitwarden/electron/services/electronPlatformUtils.service";
-import { ElectronRendererMessagingService } from "@bitwarden/electron/services/electronRendererMessaging.service";
-import { ElectronRendererSecureStorageService } from "@bitwarden/electron/services/electronRendererSecureStorage.service";
-import { ElectronRendererStorageService } from "@bitwarden/electron/services/electronRendererStorage.service";
 
 import { Account } from "../../models/account";
-import { EncryptedMessageHandlerService } from "../../services/encryptedMessageHandlerService";
+import { ElectronCryptoService } from "../../services/electron-crypto.service";
+import { ElectronLogService } from "../../services/electron-log.service";
+import { ElectronPlatformUtilsService } from "../../services/electron-platform-utils.service";
+import { ElectronRendererMessagingService } from "../../services/electron-renderer-messaging.service";
+import { ElectronRendererSecureStorageService } from "../../services/electron-renderer-secure-storage.service";
+import { ElectronRendererStorageService } from "../../services/electron-renderer-storage.service";
+import { EncryptedMessageHandlerService } from "../../services/encrypted-message-handler.service";
 import { I18nService } from "../../services/i18n.service";
-import { NativeMessageHandlerService } from "../../services/nativeMessageHandler.service";
-import { NativeMessagingService } from "../../services/nativeMessaging.service";
-import { PasswordRepromptService } from "../../services/passwordReprompt.service";
+import { NativeMessageHandlerService } from "../../services/native-message-handler.service";
+import { NativeMessagingService } from "../../services/native-messaging.service";
+import { PasswordRepromptService } from "../../services/password-reprompt.service";
 import { StateService } from "../../services/state.service";
 import { LoginGuard } from "../guards/login.guard";
 import { SearchBarService } from "../layout/search/search-bar.service";
 
+import { DesktopFileDownloadService } from "./desktop-file-download.service";
 import { DesktopThemingService } from "./desktop-theming.service";
-import { DesktopFileDownloadService } from "./desktopFileDownloadService";
 import { InitService } from "./init.service";
 
 const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
@@ -180,6 +180,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
     {
       provide: LoginServiceAbstraction,
       useClass: LoginService,
+      deps: [StateServiceAbstraction],
     },
   ],
 })

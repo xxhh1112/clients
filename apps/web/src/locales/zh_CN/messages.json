@@ -573,7 +573,7 @@
     "message": "使用设备登录"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "设备登录必须在 Bitwarden 移动应用程序的设置中启用。需要其他选项吗？"
+    "message": "必须在 Bitwarden 移动应用程序的设置中启用设备登录。需要其他选项吗？"
   },
   "loginWithMasterPassword": {
     "message": "使用主密码登录"
@@ -582,7 +582,7 @@
     "message": "创建账户"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "初来乍到吗？"
   },
   "startTrial": {
     "message": "开始试用"
@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "确认文件密码"
   },
-  "accountBackupOptionDescription": {
-    "message": "使用您的账户加密密钥来加密导出的数据，并且限制只能导入到当前的 Bitwarden 账户。"
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
     "message": "设置一个密码用来加密导出的数据，并使用此密码解密以导入到任意 Bitwarden 账户。"
   },
-  "fileTypeHeading": {
-    "message": "文件类型"
+  "exportTypeHeading": {
+    "message": "导出类型"
   },
-  "accountBackup": {
-    "message": "账户备份"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "密码保护"
@@ -1121,7 +1121,7 @@
     "message": "清空密码库"
   },
   "purgedOrganizationVault": {
-    "message": "组织密码库已清空。"
+    "message": "清空了组织密码库。"
   },
   "vaultAccessedByProvider": {
     "message": "密码库被提供商访问。"
@@ -1291,23 +1291,23 @@
     "message": "两步登录"
   },
   "twoStepLoginEnforcement": {
-    "message": "强制两步登录"
+    "message": "两步登录实施"
   },
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
   },
   "twoStepLoginOrganizationDescStart": {
-    "message": "要强制成员使用 Bitwarden 两步登录选项，请使用 ",
+    "message": "要为成员实施 Bitwarden 两步登录选项，请使用 ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
     "message": "两步登录策略"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "要强制 Duo 方式的两步登录，请使用下面的选项。"
+    "message": "要实施 Duo 方式的两步登录，请使用下面的选项。"
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "如果您已设置或计划设置 SSO，两步登录可能已经通过您的身份提供程序强制执行了。"
+    "message": "如果您已设置或计划设置 SSO，两步登录可能已经通过您的身份提供程序实施了。"
   },
   "twoStepLoginRecoveryWarning": {
     "message": "启用两步登录可能会将您永久锁定在 Bitwarden 账户之外。如果您无法使用常规的两步登录提供程序（例如您丢失了设备），则可以使用恢复代码访问您的账户。如果您失去对您账户的访问，Bitwarden 支持也无法帮助您。我们建议您记下或打印恢复代码，并将其妥善保管。"
@@ -2444,7 +2444,7 @@
     "message": "所有者"
   },
   "ownerDesc": {
-    "message": "可以管理组织的所有方面的最高权限用户。"
+    "message": "管理您组织的所有方面，包括计费和订阅"
   },
   "clientOwnerDesc": {
     "message": "此用户应独立于提供商。如果提供商与组织断开关联，该用户将保留该组织的所有权。"
@@ -2453,19 +2453,19 @@
     "message": "管理员"
   },
   "adminDesc": {
-    "message": " 管理员可以访问和管理组织中的所有项目、集合和用户。"
+    "message": "管理组织访问权限，所有集合，成员，报告以及安全设置"
   },
   "user": {
     "message": "用户"
   },
   "userDesc": {
-    "message": "具有对组织所分配的集合有访问权限的普通用户。"
+    "message": "访问项目和将项目添加到已分配的集合"
   },
   "manager": {
     "message": "经理"
   },
   "managerDesc": {
-    "message": "经理可以访问和管理组织所分配的集合。"
+    "message": "在已分配的集合中创建、删除和管理访问权限"
   },
   "all": {
     "message": "全部"
@@ -2522,7 +2522,7 @@
     "message": "登录失败，两步登录不正确。"
   },
   "exportedVault": {
-    "message": "导出了密码库。"
+    "message": "导出了密码库"
   },
   "exportedOrganizationVault": {
     "message": "导出了组织密码库。"
@@ -2651,7 +2651,7 @@
     }
   },
   "createdCollectionId": {
-    "message": "已创建集合 $ID$。",
+    "message": "创建了集合 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2660,7 +2660,7 @@
     }
   },
   "editedCollectionId": {
-    "message": "已编辑集合 $ID$。",
+    "message": "编辑了集合 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2669,7 +2669,7 @@
     }
   },
   "deletedCollectionId": {
-    "message": "已删除集合 $ID$。",
+    "message": "删除了集合 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2678,7 +2678,7 @@
     }
   },
   "editedPolicyId": {
-    "message": "已编辑策略 $ID$。",
+    "message": "编辑了策略 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2687,7 +2687,7 @@
     }
   },
   "createdGroupId": {
-    "message": "已创建群组 $ID$。",
+    "message": "创建了群组 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2696,7 +2696,7 @@
     }
   },
   "editedGroupId": {
-    "message": "已编辑群组 $ID$。",
+    "message": "编辑了群组 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2705,7 +2705,7 @@
     }
   },
   "deletedGroupId": {
-    "message": "已删除群组 $ID$。",
+    "message": "删除了群组 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2714,7 +2714,7 @@
     }
   },
   "removedUserId": {
-    "message": "已移除用户 $ID$。",
+    "message": "移除了用户 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2723,7 +2723,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "移除 $ID$ 的访问权限",
+    "message": "移除了 $ID$ 的访问权限",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2732,7 +2732,7 @@
     }
   },
   "revokedUserId": {
-    "message": "已撤销 $ID$ 的组织访问权限。",
+    "message": "撤销了 $ID$ 的组织访问权限。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2741,7 +2741,7 @@
     }
   },
   "restoredUserId": {
-    "message": "已恢复 $ID$ 的组织访问权限。",
+    "message": "恢复了 $ID$ 的组织访问权限。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2759,7 +2759,7 @@
     }
   },
   "createdAttachmentForItem": {
-    "message": "已为项目 $ID$ 创建附件。",
+    "message": "为项目 $ID$ 创建了附件。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2768,7 +2768,7 @@
     }
   },
   "deletedAttachmentForItem": {
-    "message": "已删除项目 $ID$ 的附件。",
+    "message": "删除了项目 $ID$ 的附件。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2777,7 +2777,7 @@
     }
   },
   "editedCollectionsForItem": {
-    "message": "已为项目 $ID$ 编辑集合。",
+    "message": "编辑了项目 $ID$ 集合。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2786,7 +2786,7 @@
     }
   },
   "invitedUserId": {
-    "message": "已邀请用户 $ID$。",
+    "message": "邀请了用户 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2795,7 +2795,7 @@
     }
   },
   "confirmedUserId": {
-    "message": "已确认用户 $ID$。",
+    "message": "确认了用户 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2804,7 +2804,7 @@
     }
   },
   "editedUserId": {
-    "message": "已编辑用户 $ID$。",
+    "message": "编辑了用户 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2813,7 +2813,7 @@
     }
   },
   "editedGroupsForUser": {
-    "message": "已为用户 $ID$ 编辑群组。",
+    "message": "编辑了用户 $ID$ 的群组。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2831,7 +2831,7 @@
     }
   },
   "createdOrganizationId": {
-    "message": "已创建组织 $ID$。",
+    "message": "创建了组织 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2840,7 +2840,7 @@
     }
   },
   "addedOrganizationId": {
-    "message": "已添加组织 $ID$。",
+    "message": "添加了组织 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2849,7 +2849,7 @@
     }
   },
   "removedOrganizationId": {
-    "message": "已移除组织 $ID$。",
+    "message": "移除了组织 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2858,7 +2858,7 @@
     }
   },
   "accessedClientVault": {
-    "message": "已访问 $ID$ 组织密码库。",
+    "message": "访问了 $ID$ 组织密码库。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3611,7 +3611,7 @@
     }
   },
   "permanentlyDeletedItemId": {
-    "message": "项目 $ID$ 已永久删除",
+    "message": "永久删除了项目 $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3650,7 +3650,7 @@
     }
   },
   "restoredItemId": {
-    "message": "项目 $ID$ 已恢复",
+    "message": "恢复了项目 $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4099,7 +4099,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "modifiedPolicyId": {
-    "message": "策略 $ID$ 已修改。",
+    "message": "修改了策略 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4117,7 +4117,22 @@
     "message": "自定义"
   },
   "customDesc": {
-    "message": "高级配置允许对用户权限进行更多的粒度控制。"
+    "message": "授予成员自定义权限"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "自定义角色是 ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "企业功能",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": "。请联系我们的支持团队升级您的订阅",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "要启用自定义权限，该组织必须处于 2020 企业计划中。"
   },
   "permissions": {
     "message": "权限"
@@ -4342,7 +4357,7 @@
     }
   },
   "eventAdminPasswordReset": {
-    "message": "已重置用户 $ID$ 的主密码。",
+    "message": "重置了用户 $ID$ 的主密码。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4729,7 +4744,7 @@
     "message": "客户 ID"
   },
   "clientSecret": {
-    "message": "客户密钥"
+    "message": "客户机密"
   },
   "metadataAddress": {
     "message": "元数据地址"
@@ -4831,7 +4846,7 @@
     "message": "最多 6 个用户的高级访问权限"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "用于家庭账号密码共享的集合"
+    "message": "用于家庭机密的共享集合"
   },
   "badToken": {
     "message": "链接已失效。请让赞助方重新发送邀请。"
@@ -5460,6 +5475,45 @@
   "notYou": {
     "message": "不是你？"
   },
+  "pickAnAvatarColor": {
+    "message": "选择头像颜色"
+  },
+  "customizeAvatar": {
+    "message": "自定义头像"
+  },
+  "avatarUpdated": {
+    "message": "头像已更新"
+  },
+  "brightBlue": {
+    "message": "亮蓝色"
+  },
+  "green": {
+    "message": "绿色"
+  },
+  "orange": {
+    "message": "橙色"
+  },
+  "lavender": {
+    "message": "熏衣草紫"
+  },
+  "yellow": {
+    "message": "黄色"
+  },
+  "indigo": {
+    "message": "靛青色"
+  },
+  "teal": {
+    "message": "蓝绿色"
+  },
+  "salmon": {
+    "message": "鲑红"
+  },
+  "pink": {
+    "message": "粉红色"
+  },
+  "customColor": {
+    "message": "自定义颜色"
+  },
   "multiSelectPlaceholder": {
     "message": "-- 键入以筛选 --"
   },
@@ -5471,6 +5525,275 @@
   },
   "multiSelectClearAll": {
     "message": "清除全部"
+  },
+  "toggleCharacterCount": {
+    "message": "字符计数开关",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "密码字符计数",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "隐藏"
+  },
+  "projects": {
+    "message": "项目"
+  },
+  "lastEdited": {
+    "message": "上次编辑时间"
+  },
+  "editSecret": {
+    "message": "编辑机密"
+  },
+  "addSecret": {
+    "message": "添加机密"
+  },
+  "copySecretName": {
+    "message": "复制机密名称"
+  },
+  "copySecretValue": {
+    "message": "复制机密值"
+  },
+  "deleteSecret": {
+    "message": "删除机密"
+  },
+  "deleteSecrets": {
+    "message": "删除机密"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "项目"
+  },
+  "editProject": {
+    "message": "编辑项目"
+  },
+  "viewProject": {
+    "message": "查看项目"
+  },
+  "deleteProject": {
+    "message": "删除项目"
+  },
+  "deleteProjects": {
+    "message": "删除项目"
+  },
+  "secret": {
+    "message": "机密"
+  },
+  "serviceAccount": {
+    "message": "服务账户"
+  },
+  "serviceAccounts": {
+    "message": "服务帐户"
+  },
+  "new": {
+    "message": "新建"
+  },
+  "secrets": {
+    "message": "机密"
+  },
+  "nameValuePair": {
+    "message": "名称/值对"
+  },
+  "secretEdited": {
+    "message": "机密已编辑"
+  },
+  "secretCreated": {
+    "message": "机密已创建"
+  },
+  "newSecret": {
+    "message": "新建机密"
+  },
+  "newServiceAccount": {
+    "message": "新建服务账户"
+  },
+  "secretsNoItemsTitle": {
+    "message": "没有可显示的机密"
+  },
+  "secretsNoItemsMessage": {
+    "message": "要开始，请添加一个新的机密或导入机密。"
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "还没有要显示的内容"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "搜索机密"
+  },
+  "deleteServiceAccounts": {
+    "message": "删除服务账户"
+  },
+  "deleteServiceAccount": {
+    "message": "删除服务帐户"
+  },
+  "viewServiceAccount": {
+    "message": "查看服务账户"
+  },
+  "searchServiceAccounts": {
+    "message": "搜索服务账户"
+  },
+  "addProject": {
+    "message": "添加项目"
+  },
+  "projectEdited": {
+    "message": "项目已编辑"
+  },
+  "projectSaved": {
+    "message": "项目已保存"
+  },
+  "projectCreated": {
+    "message": "项目已创建"
+  },
+  "projectName": {
+    "message": "项目名称"
+  },
+  "newProject": {
+    "message": "新建项目"
+  },
+  "softDeleteSecretWarning": {
+    "message": "删除机密可能会影响现有的集成。"
+  },
+  "softDeletesSuccessToast": {
+    "message": "机密已发送到回收站"
+  },
+  "serviceAccountCreated": {
+    "message": "服务帐户已创建"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "项目，机密"
+  },
+  "serviceAccountName": {
+    "message": "服务账户名称"
+  },
+  "newSaSelectAccess": {
+    "message": "输入或选择项目或机密"
+  },
+  "newSaTypeToFilter": {
+    "message": "键入以筛选"
+  },
+  "deleteProjectsToast": {
+    "message": "项目已删除"
+  },
+  "deleteProjectToast": {
+    "message": "项目和所有相关的机密已被删除"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "删除项目 $PROJECT$ 是永久性的，不可撤销！",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "输入「$CONFIRM$」以继续",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "删除 $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "删除 $COUNT$ 个项目",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "删除项目是永久性的，不可撤销！"
+  },
+  "projectsNoItemsTitle": {
+    "message": "没有可显示的项目"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "需要确认"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "以下项目无法删除："
+  },
+  "softDeleteSuccessToast": {
+    "message": "机密已发送到回收站"
+  },
+  "searchProjects": {
+    "message": "搜索项目"
+  },
+  "accessTokens": {
+    "message": "访问令牌"
+  },
+  "createAccessToken": {
+    "message": "创建访问令牌"
+  },
+  "expires": {
+    "message": "到期"
+  },
+  "canRead": {
+    "message": "可以读取"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "没有可显示的访问令牌"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "要开始，请创建一个访问令牌"
+  },
+  "downloadAccessToken": {
+    "message": "关闭前下载或复制。"
+  },
+  "expiresOnAccessToken": {
+    "message": "有效期至："
+  },
+  "accessTokenCallOutTitle": {
+    "message": "访问令牌未存储，无法获取"
+  },
+  "copyToken": {
+    "message": "复制令牌"
+  },
+  "accessToken": {
+    "message": "访问令牌"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "到期日期是必需的。"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "访问令牌已创建且已复制到剪贴板"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Beta 版中的权限管理不可用。"
+  },
+  "revokeAccessToken": {
+    "message": "撤销访问令牌"
+  },
+  "submenu": {
+    "message": "子菜单"
   },
   "from": {
     "message": "从"
@@ -5507,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "此成员可以访问和修改所有项目。"
+  },
+  "moreFromBitwarden": {
+    "message": "来自 Bitwarden 的更多产品"
+  },
+  "switchProducts": {
+    "message": "切换产品"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。升级到付费计划以邀请更多成员。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "免费组织最多拥有 $SEATCOUNT$ 个成员。请联系您的组织所有者升级。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。升级到付费计划以添加更多集合。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "免费组织最多拥有 $COLLECTIONCOUNT$ 个集合。请联系您的组织所有者升级。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

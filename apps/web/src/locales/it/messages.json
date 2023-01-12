@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Conferma password del file"
   },
-  "accountBackupOptionDescription": {
-    "message": "Utilizza la chiave di crittografia del tuo account per crittare l'esportazione e limitare l'import all'attuale account Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
     "message": "Imposta una password per crittare l'esportazione e importala in qualsiasi account Bitwarden, utilizzando la password impostata."
   },
-  "fileTypeHeading": {
-    "message": "Tipo di file"
+  "exportTypeHeading": {
+    "message": "Export type"
   },
-  "accountBackup": {
-    "message": "Backup dell'account"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "Protetto da password"
@@ -4119,6 +4119,21 @@
   "customDesc": {
     "message": "Consente un controllo più granulare delle autorizzazioni utente per le configurazioni avanzate."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "I ruoli personalizzati sono una ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "feature enterprise",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contatta il nostro team di supporto per aggiornare il tuo abbonamento",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Per abilitare i permessi personalizzati, l'organizzazione deve essere su un piano Enterprise 2020."
+  },
   "permissions": {
     "message": "Permessi"
   },
@@ -5460,6 +5475,45 @@
   "notYou": {
     "message": "Non sei tu?"
   },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Scrivi per filtrare --"
   },
@@ -5471,6 +5525,275 @@
   },
   "multiSelectClearAll": {
     "message": "Cancella tutto"
+  },
+  "toggleCharacterCount": {
+    "message": "Attiva/Disattiva conteggio caratteri",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Conteggio caratteri password",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Nascondi"
+  },
+  "projects": {
+    "message": "Progetti"
+  },
+  "lastEdited": {
+    "message": "Ultima modifica"
+  },
+  "editSecret": {
+    "message": "Modifica Segreto"
+  },
+  "addSecret": {
+    "message": "Aggiungi Segreto"
+  },
+  "copySecretName": {
+    "message": "Copia Nome Segreto"
+  },
+  "copySecretValue": {
+    "message": "Copia Valore Segreto"
+  },
+  "deleteSecret": {
+    "message": "Elimina Segreto"
+  },
+  "deleteSecrets": {
+    "message": "Elimina Segreti"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Progetto"
+  },
+  "editProject": {
+    "message": "Modifica Progetto"
+  },
+  "viewProject": {
+    "message": "Visualizza Progetto"
+  },
+  "deleteProject": {
+    "message": "Elimina Progetto"
+  },
+  "deleteProjects": {
+    "message": "Elimina Progetti"
+  },
+  "secret": {
+    "message": "Segreto"
+  },
+  "serviceAccount": {
+    "message": "Account di servizio"
+  },
+  "serviceAccounts": {
+    "message": "Account di servizio"
+  },
+  "new": {
+    "message": "Nuovo"
+  },
+  "secrets": {
+    "message": "Segreti"
+  },
+  "nameValuePair": {
+    "message": "Coppia Nome/Valore"
+  },
+  "secretEdited": {
+    "message": "Segreto modificato"
+  },
+  "secretCreated": {
+    "message": "Segreto creato"
+  },
+  "newSecret": {
+    "message": "Nuovo Segreto"
+  },
+  "newServiceAccount": {
+    "message": "Nuovo Account di Servizio"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Nessun segreto da mostrare"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Per iniziare, aggiungi un nuovo segreto o importa segreti."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Niente da mostrare"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Crea un nuovo account di servizio per iniziare a automatizzare l'accesso segreto."
+  },
+  "searchSecrets": {
+    "message": "Cerca Segreti"
+  },
+  "deleteServiceAccounts": {
+    "message": "Elimina Account Di Servizio"
+  },
+  "deleteServiceAccount": {
+    "message": "Elimina Account Di Servizio"
+  },
+  "viewServiceAccount": {
+    "message": "Visualizza Account Di Servizio"
+  },
+  "searchServiceAccounts": {
+    "message": "Cerca Account di Servizio"
+  },
+  "addProject": {
+    "message": "Aggiungi Progetto"
+  },
+  "projectEdited": {
+    "message": "Progetto modificato"
+  },
+  "projectSaved": {
+    "message": "Progetto salvato"
+  },
+  "projectCreated": {
+    "message": "Progetto creato"
+  },
+  "projectName": {
+    "message": "Nome del Progetto"
+  },
+  "newProject": {
+    "message": "Nuovo Progetto"
+  },
+  "softDeleteSecretWarning": {
+    "message": "L'eliminazione dei segreti può influenzare le integrazioni esistenti."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Segreti inviati al cestino"
+  },
+  "serviceAccountCreated": {
+    "message": "Account Di Servizio Creato"
+  },
+  "smAccess": {
+    "message": "Accesso"
+  },
+  "projectCommaSecret": {
+    "message": "Progetto, Segreto"
+  },
+  "serviceAccountName": {
+    "message": "Nome account di servizio"
+  },
+  "newSaSelectAccess": {
+    "message": "Digita o seleziona progetti o segreti"
+  },
+  "newSaTypeToFilter": {
+    "message": "Digita per filtrare"
+  },
+  "deleteProjectsToast": {
+    "message": "Progetti eliminati"
+  },
+  "deleteProjectToast": {
+    "message": "Il progetto e tutti i segreti associati sono stati eliminati"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "L'eliminazione del progetto $PROJECT$ è permanente e irreversibile.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Digita \"$CONFIRM$\" per continuare",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Elimina $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Elimina $COUNT$ progetti",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "L'eliminazione dei progetti è permanente e irreversibile."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Nessun progetto da mostrare"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Aggiungi un nuovo progetto per iniziare ad organizzare i segreti."
+  },
+  "smConfirmationRequired": {
+    "message": "Conferma richiesta"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Non è stato possibile eliminare i seguenti progetti:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Segreti inviati al cestino"
+  },
+  "searchProjects": {
+    "message": "Cerca Progetti"
+  },
+  "accessTokens": {
+    "message": "Token di accesso"
+  },
+  "createAccessToken": {
+    "message": "Genera token di accesso"
+  },
+  "expires": {
+    "message": "Scade"
+  },
+  "canRead": {
+    "message": "Può Leggere"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Nessun token di accesso da mostrare"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Per iniziare, crea un token di accesso"
+  },
+  "downloadAccessToken": {
+    "message": "Scarica o copia prima della chiusura."
+  },
+  "expiresOnAccessToken": {
+    "message": "Scade il:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "I token di accesso non sono memorizzati e non possono essere recuperati"
+  },
+  "copyToken": {
+    "message": "Copia il token"
+  },
+  "accessToken": {
+    "message": "Token di accesso"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "La data di scadenza è necessaria"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Token di accesso creato e copiato negli appunti"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "La gestione delle autorizzazioni non è disponibile per beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoca Token Di Accesso"
+  },
+  "submenu": {
+    "message": "Sottomenu"
   },
   "from": {
     "message": "Da"
@@ -5507,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Questo utente può accedere e modificare tutti gli elementi."
+  },
+  "moreFromBitwarden": {
+    "message": "Altro da Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Cambia Prodotti"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Aggiorna a un piano a pagamento per invitare più membri.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Contatta il proprietario dell'organizzazione per aggiornare.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Le organizzazioni gratuite possono avere fino a $COLLECTIONCOUNT$ collezioni. Aggiorna a un piano a pagamento per aggiungere più collezioni.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Le organizzazioni gratuite possono avere fino a $COLLECTIONCOUNT$ collezioni. Contatta il proprietario della tua organizzazione per aggiornare.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

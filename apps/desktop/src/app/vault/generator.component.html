@@ -51,12 +51,12 @@
               class="icon-btn primary"
               appStopClick
               appA11yTitle="{{ 'regenerateUsername' | i18n }}"
-              (click)="regenerate()"
-              [disabled]="form.loading"
+              (click)="$any(form).loading ? false : regenerate()"
+              [attr.aria-disabled]="$any(form).loading ? 'true' : null"
             >
               <i
                 class="bwi bwi-lg bwi-generate"
-                [ngClass]="form.loading ? 'bwi-spin' : ''"
+                [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
                 aria-hidden="true"
               ></i>
             </button>
@@ -99,14 +99,12 @@
         <ng-container *ngIf="type === 'password'">
           <div class="box">
             <h2 class="box-header">
-              <button
-                type="button"
-                (click)="toggleOptions()"
-                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-expanded]="showOptions"
-              >
-                <i class="bwi bwi-plus-square" aria-hidden="true" [hidden]="showOptions"></i>
-                <i class="bwi bwi-minus-square" aria-hidden="true" [hidden]="!showOptions"></i>
+              <button type="button" (click)="toggleOptions()" [attr.aria-expanded]="showOptions">
+                <i
+                  class="bwi bwi-lg"
+                  aria-hidden="true"
+                  [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
+                ></i>
                 {{ "options" | i18n }}
               </button>
             </h2>
@@ -299,14 +297,12 @@
         <ng-container *ngIf="type === 'username'">
           <div class="box">
             <h2 class="box-header">
-              <button
-                type="button"
-                (click)="toggleOptions()"
-                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-                [attr.aria-expanded]="showOptions"
-              >
-                <i class="bwi bwi-plus-square" aria-hidden="true" [hidden]="showOptions"></i>
-                <i class="bwi bwi-minus-square" aria-hidden="true" [hidden]="!showOptions"></i>
+              <button type="button" (click)="toggleOptions()" [attr.aria-expanded]="showOptions">
+                <i
+                  class="bwi bwi-lg"
+                  aria-hidden="true"
+                  [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
+                ></i>
                 {{ "options" | i18n }}
               </button>
             </h2>
@@ -345,7 +341,7 @@
                   />
                   <label class="unstyled" for="usernameType_{{ o.value }}">
                     {{ o.name }}
-                    <div class="small text-muted" *ngIf="o.desc">{{ o.desc }}</div>
+                    <small class="help-block" *ngIf="o.desc">{{ o.desc }}</small>
                   </label>
                 </div>
               </div>
@@ -384,7 +380,7 @@
                   <input
                     id="duckduckgo-apikey"
                     type="password"
-                    name="DuckDudkGoApiKey"
+                    name="DuckDuckGoApiKey"
                     [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
                     (blur)="saveUsernameOptions()"
                   />

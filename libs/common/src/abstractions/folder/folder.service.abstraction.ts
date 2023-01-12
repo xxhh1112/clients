@@ -10,6 +10,7 @@ export abstract class FolderService {
 
   clearCache: () => Promise<void>;
   get: (id: string) => Promise<Folder>;
+  getAllFromState: () => Promise<Folder[]>;
   /**
    * @deprecated Only use in CLI!
    */

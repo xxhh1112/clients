@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Підтвердьте пароль файлу"
   },
-  "accountBackupOptionDescription": {
-    "message": "Використовуйте ключ шифрування облікового запису, щоб зашифрувати експортований файл і дозволити його імпорт лише до поточного облікового запису Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Використовуйте ключ шифрування свого облікового запису, створений на основі імені користувача й головного пароля, щоб зашифрувати експортовані дані та обмежити можливість імпортування лише до поточного облікового запису Bitwarden."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Встановіть пароль, щоб зашифрувати експортований файл та дозволити імпорт до будь-якого облікового запису Bitwarden за допомогою цього пароля."
+    "message": "Встановіть пароль файлу, щоб зашифрувати експортовані дані та імпортувати до будь-якого облікового запису Bitwarden за допомогою цього пароля."
   },
-  "fileTypeHeading": {
-    "message": "Тип файлу"
+  "exportTypeHeading": {
+    "message": "Тип експорту"
   },
-  "accountBackup": {
-    "message": "Резервне копіювання облікового запису"
+  "accountRestricted": {
+    "message": "Обмежено обліковим записом"
   },
   "passwordProtected": {
     "message": "Захищено паролем"
@@ -2444,7 +2444,7 @@
     "message": "Власник"
   },
   "ownerDesc": {
-    "message": "Користувач з найвищими привілеями, який може керувати всіма налаштуваннями організації."
+    "message": "Керування всіма налаштуваннями організації, як-от платежі й передплати"
   },
   "clientOwnerDesc": {
     "message": "Цей користувач має бути незалежним від постачальника. Якщо постачальник не пов'язаний з організацією, цей користувач підтримуватиме право власності організації."
@@ -2453,19 +2453,19 @@
     "message": "Адміністратор"
   },
   "adminDesc": {
-    "message": "Адміністратори мають доступ і можливість керування всіма записами, збірками та користувачами вашої організації."
+    "message": "Керування доступом до організації, всіма збірками, учасниками, звітами та налаштуваннями безпеки"
   },
   "user": {
     "message": "Користувач"
   },
   "userDesc": {
-    "message": "Звичайний користувач з доступом до пов'язаних збірок вашої організації."
+    "message": "Доступ та додавання елементів до призначених збірок"
   },
   "manager": {
     "message": "Менеджер"
   },
   "managerDesc": {
-    "message": "Менеджери мають доступ і можуть керувати пов'язаними збірками вашої організації."
+    "message": "Створення, видалення та керування доступом у призначених збірках"
   },
   "all": {
     "message": "Усі"
@@ -4117,7 +4117,22 @@
     "message": "Спеціальний"
   },
   "customDesc": {
-    "message": "Дозволяє детальніший контроль дозволів користувача для розширеної конфігурації."
+    "message": "Надання користувацьких дозволів учасникам"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Користувацькі ролі є ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "корпоративною функцією",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Зверніться до своєї команди підтримки або оновіть передплату",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Щоб увімкнути користувацькі дозволи, організація повинна мати тарифний план Enterprise 2020."
   },
   "permissions": {
     "message": "Дозволи"
@@ -5173,7 +5188,7 @@
     "message": "Експортування сховища організації"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено.",
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без історії та вкладень.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5460,6 +5475,45 @@
   "notYou": {
     "message": "Не ви?"
   },
+  "pickAnAvatarColor": {
+    "message": "Оберіть колір аватара"
+  },
+  "customizeAvatar": {
+    "message": "Налаштувати аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар оновлено"
+  },
+  "brightBlue": {
+    "message": "Світло-синій"
+  },
+  "green": {
+    "message": "Зелений"
+  },
+  "orange": {
+    "message": "Помаранчевий"
+  },
+  "lavender": {
+    "message": "Лавандовий"
+  },
+  "yellow": {
+    "message": "Жовтий"
+  },
+  "indigo": {
+    "message": "Індиго"
+  },
+  "teal": {
+    "message": "Бірюзовий"
+  },
+  "salmon": {
+    "message": "Лососевий"
+  },
+  "pink": {
+    "message": "Рожевий"
+  },
+  "customColor": {
+    "message": "Власний колір"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Введіть для фільтрування --"
   },
@@ -5471,6 +5525,275 @@
   },
   "multiSelectClearAll": {
     "message": "Очистити все"
+  },
+  "toggleCharacterCount": {
+    "message": "Перемкнути лічильник символів",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Кількість символів пароля",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Приховати"
+  },
+  "projects": {
+    "message": "Проєкти"
+  },
+  "lastEdited": {
+    "message": "Востаннє редаговано"
+  },
+  "editSecret": {
+    "message": "Редагувати секрет"
+  },
+  "addSecret": {
+    "message": "Додати секрет"
+  },
+  "copySecretName": {
+    "message": "Копіювати назву секрету"
+  },
+  "copySecretValue": {
+    "message": "Копіювати значення секрету"
+  },
+  "deleteSecret": {
+    "message": "Видалити секрет"
+  },
+  "deleteSecrets": {
+    "message": "Видалити секрети"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Проєкт"
+  },
+  "editProject": {
+    "message": "Редагувати проєкт"
+  },
+  "viewProject": {
+    "message": "Переглянути проєкт"
+  },
+  "deleteProject": {
+    "message": "Видалити проєкт"
+  },
+  "deleteProjects": {
+    "message": "Видалити проєкти"
+  },
+  "secret": {
+    "message": "Секрет"
+  },
+  "serviceAccount": {
+    "message": "Службовий обліковий запис"
+  },
+  "serviceAccounts": {
+    "message": "Службові облікові записи"
+  },
+  "new": {
+    "message": "Новий"
+  },
+  "secrets": {
+    "message": "Секрети"
+  },
+  "nameValuePair": {
+    "message": "Пара – Назва/Значення"
+  },
+  "secretEdited": {
+    "message": "Секрет відредаговано"
+  },
+  "secretCreated": {
+    "message": "Секрет створено"
+  },
+  "newSecret": {
+    "message": "Новий секрет"
+  },
+  "newServiceAccount": {
+    "message": "Новий службовий обліковий запис"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Немає секретів для показу"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Для початку додайте або імпортуйте секрети."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Наразі немає даних для показу"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Створіть новий службовий обліковий запис, щоб почати автоматизацію доступу до секретів."
+  },
+  "searchSecrets": {
+    "message": "Шукати секрети"
+  },
+  "deleteServiceAccounts": {
+    "message": "Видалити службові облікові записи"
+  },
+  "deleteServiceAccount": {
+    "message": "Видалити службовий обліковий запис"
+  },
+  "viewServiceAccount": {
+    "message": "Переглянути службовий обліковий запис"
+  },
+  "searchServiceAccounts": {
+    "message": "Пошук службових облікових записів"
+  },
+  "addProject": {
+    "message": "Додати проєкт"
+  },
+  "projectEdited": {
+    "message": "Проєкт відредаговано"
+  },
+  "projectSaved": {
+    "message": "Проєкт збережено"
+  },
+  "projectCreated": {
+    "message": "Проєкт створено"
+  },
+  "projectName": {
+    "message": "Назва проєкту"
+  },
+  "newProject": {
+    "message": "Новий проєкт"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Видалення секретів може вплинути на наявні інтеграції."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Секрети переміщено до смітника"
+  },
+  "serviceAccountCreated": {
+    "message": "Службовий обліковий запис створено"
+  },
+  "smAccess": {
+    "message": "Доступ"
+  },
+  "projectCommaSecret": {
+    "message": "Проєкт, секрет"
+  },
+  "serviceAccountName": {
+    "message": "Назва сервісного облікового запису"
+  },
+  "newSaSelectAccess": {
+    "message": "Введіть або виберіть проєкти чи секрети"
+  },
+  "newSaTypeToFilter": {
+    "message": "Введіть, щоб фільтрувати"
+  },
+  "deleteProjectsToast": {
+    "message": "Проєкти видалено"
+  },
+  "deleteProjectToast": {
+    "message": "Проєкт і всі пов'язані секрети було видалено"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Видалення проєкту $PROJECT$ – незворотна дія.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Введіть \"$CONFIRM$\" для продовження",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Видалити $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Видалити $COUNT$ проєктів",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Видалення проєктів – це незворотна дія."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Немає проєктів для показу"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Додайте новий проєкт, щоб почати організовувати секрети."
+  },
+  "smConfirmationRequired": {
+    "message": "Потрібне підтвердження"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Зазначені проєкти неможливо видалити:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Секрет переміщено до смітника"
+  },
+  "searchProjects": {
+    "message": "Шукати проєкти"
+  },
+  "accessTokens": {
+    "message": "Токени доступу"
+  },
+  "createAccessToken": {
+    "message": "Створити токен доступу"
+  },
+  "expires": {
+    "message": "Завершується"
+  },
+  "canRead": {
+    "message": "Може читати"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Немає токенів доступу"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Щоб розпочати, створіть токен доступу"
+  },
+  "downloadAccessToken": {
+    "message": "Завантажте чи скопіюйте перед закриттям."
+  },
+  "expiresOnAccessToken": {
+    "message": "Завершується:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Токени доступу не зберігаються і не можуть бути завантажені"
+  },
+  "copyToken": {
+    "message": "Копіювати токен"
+  },
+  "accessToken": {
+    "message": "Токен доступу"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Дата завершення обов'язкова"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Токен доступу створено і скопійовано до буфера обміну"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Керування дозволами недоступне у бета-версії."
+  },
+  "revokeAccessToken": {
+    "message": "Відкликати токен доступу"
+  },
+  "submenu": {
+    "message": "Підменю"
   },
   "from": {
     "message": "Від"
@@ -5507,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Цей учасник має доступ і може редагувати всі елементи."
+  },
+  "moreFromBitwarden": {
+    "message": "Більше від Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Змінити продукти"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Безплатні організації можуть мати до $SEATCOUNT$ учасників. Передплатіть тарифний план, щоб запросити більше учасників.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Безплатні організації можуть мати до $SEATCOUNT$ учасників. Зверніться до власника вашої організації для підвищення тарифного плану.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Безплатні організації можуть мати до $COLLECTIONCOUNT$ збірок. Передплатіть тарифний план, щоб додати більше збірок.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Безплатні організації можуть мати до $COLLECTIONCOUNT$ збірок. Зверніться до власника вашої організації для підвищення тарифного плану.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

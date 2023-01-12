@@ -308,7 +308,7 @@
     "message": "Edytuj"
   },
   "authenticatorKeyTotp": {
-    "message": "Klucz Uwierzytelniający (TOTP)"
+    "message": "Klucz uwierzytelniający (TOTP)"
   },
   "folder": {
     "message": "Folder"
@@ -734,7 +734,7 @@
     "message": "Wyloguj się"
   },
   "addNewLogin": {
-    "message": "Dodaj dane logowania"
+    "message": "Nowe dane logowania"
   },
   "addNewItem": {
     "message": "Nowy element"
@@ -836,7 +836,7 @@
     "message": "Blokowanie sejfu"
   },
   "vaultTimeoutDesc": {
-    "message": "Wybierz kiedy sejf zostanie zablokowany i wykonaj następującą akcję."
+    "message": "Wybierz, kiedy sejf zostanie zablokowany i wykonaj następującą akcję."
   },
   "immediately": {
     "message": "Natychmiast"
@@ -928,7 +928,7 @@
     "message": "Po zamknięciu okna, pokaż ikonę w pasku menu."
   },
   "enableTray": {
-    "message": "Włącz ikonę w zasobniku systemowym"
+    "message": "Pokaż ikonę w zasobniku systemowym"
   },
   "enableTrayDesc": {
     "message": "Zawsze pokazuj ikonę w zasobniku systemowym."
@@ -958,7 +958,7 @@
     "message": "Pokaż ikonę Bitwarden w Docku po zminimalizowaniu do paska menu."
   },
   "confirmTrayTitle": {
-    "message": "Potwierdź wyłączenie zasobnika systemowego"
+    "message": "Potwierdź ukrycie zasobnika systemowego"
   },
   "confirmTrayDesc": {
     "message": "Wyłączenie tej opcji spowoduje wyłącznie wszystkich innych powiązanych ustawień z zasobnikiem systemowym."
@@ -1169,7 +1169,7 @@
     "message": "Ukryj Bitwarden"
   },
   "hideOthers": {
-    "message": "Ukryj pozostałe"
+    "message": "Ukryj inne"
   },
   "showAll": {
     "message": "Pokaż wszystkie"
@@ -1462,10 +1462,10 @@
     "message": "Sposób blokowania sejfu"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Po zablokowaniu sejfu, musisz ponownie wpisać hasło główne, aby uzyskać do niego dostęp."
+    "message": "Wpisz hasło główne lub odblokuj sejf inną metodą, aby uzyskać do niego dostęp."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Po wylogowaniu się z sejfu, musisz ponownie zalogować się, aby uzyskać do niego dostęp."
+    "message": "Zaloguj się ponownie, aby uzyskać dostęp do sejfu."
   },
   "lock": {
     "message": "Zablokuj",
@@ -1566,19 +1566,19 @@
     "message": "Zaznaczając tę opcję, akceptujesz:"
   },
   "acceptPoliciesRequired": {
-    "message": "Warunki użytkowania i polityka prywatności nie zostały zaakceptowane."
+    "message": "Regulamin i polityka prywatności nie zostały zaakceptowane."
   },
   "enableBrowserIntegration": {
     "message": "Włącz połączenie z przeglądarką"
   },
   "enableBrowserIntegrationDesc": {
-    "message": "Połączenie z przeglądarką jest używane do odblokowania danymi biometrycznymi."
+    "message": "Używane do odblokowania danymi biometrycznymi."
   },
   "enableDuckDuckGoBrowserIntegration": {
     "message": "Włącz połączenie z przeglądarką DuckDuckGo"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Korzystaj z sejfu Bitwarden podczas przeglądania za pomocą DuckDuckGo."
+    "message": "Korzystaj z sejfu Bitwarden podczas przeglądania za pomocą przeglądarki DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Połączenie z przeglądarką nie jest obsługiwane"
@@ -1596,7 +1596,7 @@
     "message": "Wymagaj weryfikacji połączenia z przeglądarką"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Wymagaj sprawdzenia identyfikatora podczas tworzenia połączenia między aplikacją a przeglądarką. Po włączeniu tej funkcji, musisz zweryfikować każde nawiązywane połączenie."
+    "message": "Dodaj dodatkową warstwę zabezpieczeń, weryfikując unikalny identyfikator konta podczas tworzenia linku między aplikacją a przeglądarką. Funkcja ta wymaga weryfikacji identyfikatora przy każdym nawiązaniu połączenia."
   },
   "approve": {
     "message": "Zatwierdź"
@@ -1608,7 +1608,7 @@
     "message": "Upewnij się, że wyświetlony identyfikator jest identyczny z pokazanym w rozszerzeniu przeglądarki."
   },
   "verifyNativeMessagingConnectionTitle": {
-    "message": "$APPID$ chce połączyć się z Bitwarden",
+    "message": "Aplikacja $APPID$ chce połączyć się z Bitwarden",
     "placeholders": {
       "appid": {
         "content": "$1",
@@ -1629,7 +1629,7 @@
     "message": "Aby włączyć dane biometryczne w przeglądarce, musisz włączyć tę samą funkcję w ustawianiach aplikacji."
   },
   "personalOwnershipSubmitError": {
-    "message": "Ze względu na zasadę przedsiębiorstwa, nie możesz zapisywać elementów w osobistym sejfie. Zmień właściciela elementu na organizację i wybierz jedną z dostępnych kolekcji,."
+    "message": "Ze względu na zasadę przedsiębiorstwa, nie możesz zapisywać elementów w osobistym sejfie. Zmień właściciela elementu na organizację i wybierz jedną z dostępnych kolekcji."
   },
   "hintEqualsPassword": {
     "message": "Podpowiedź do hasła nie może być taka sama jak hasło."
@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Wyłączona"
   },
+  "removePassword": {
+    "message": "Usuń hasło"
+  },
+  "removedPassword": {
+    "message": "Hasło zostało usunięte"
+  },
+  "removePasswordConfirmation": {
+    "message": "Czy na pewno chcesz usunąć hasło?"
+  },
   "maxAccessCountReached": {
     "message": "Maksymalna liczba dostępów została osiągnięta"
   },
@@ -1798,7 +1807,7 @@
     "message": "Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek."
   },
   "emailVerificationRequired": {
-    "message": "Wymagana weryfikacja adresu e-mail"
+    "message": "Weryfikacja adresu e-mail jest wymagana"
   },
   "emailVerificationRequiredDesc": {
     "message": "Musisz zweryfikować adres e-mail, aby używać tej funkcji."
@@ -1844,7 +1853,7 @@
     "message": "Czas blokowania sejfu przekracza limit określony przez organizację."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatyczne rejestrowanie użytkowników do resetowania hasła"
+    "message": "Automatyczne rejestrowanie użytkowników"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego."
@@ -1974,7 +1983,7 @@
     "message": "Losowe słowo"
   },
   "websiteName": {
-    "message": "Nazwa witryny"
+    "message": "Nazwa strony"
   },
   "service": {
     "message": "Usługa"
@@ -1989,7 +1998,7 @@
     "message": "Szukaj w sejfie"
   },
   "forwardedEmail": {
-    "message": "Alias przekazywanego e-maila"
+    "message": "Alias przekazywanego adresu"
   },
   "forwardedEmailDesc": {
     "message": "Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania."
@@ -2002,19 +2011,19 @@
     "message": "Token dostępu API"
   },
   "apiKey": {
-    "message": "Klucz interfejsu API"
+    "message": "Klucz API"
   },
   "premiumSubcriptionRequired": {
     "message": "Wymagana jest subskrypcja Premium"
   },
   "organizationIsDisabled": {
-    "message": "Organizacja jest wyłączona."
+    "message": "Organizacja została zawieszona"
   },
   "disabledOrganizationFilterError": {
-    "message": "Nie można uzyskać dostępu do elementów w wyłączonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
+    "message": "Nie można uzyskać dostępu do elementów w zawieszonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   },
   "neverLockWarning": {
-    "message": "Czy na pewno chcesz użyć opcji „Nigdy”? Ustawienie opcji blokady na „Nigdy” powoduje zapisanie klucza szyfrowania sejfu na urządzeniu. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione."
+    "message": "Czy na pewno chcesz użyć opcji „Nigdy”? Ustawienie opcji blokady na „Nigdy” spowoduje zapisanie klucza szyfrowania sejfu na urządzeniu. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione."
   },
   "cardBrandMir": {
     "message": "Mir"
@@ -2029,13 +2038,13 @@
     "message": "Logowanie jako"
   },
   "rememberEmail": {
-    "message": "Zapamiętaj e-mail"
+    "message": "Zapamiętaj adres e-mail"
   },
   "notYou": {
     "message": "To nie Ty?"
   },
   "newAroundHere": {
-    "message": "Jesteś tu nowy(a)?"
+    "message": "Nowy użytkownik?"
   },
   "loggingInTo": {
     "message": "Logowanie do $DOMAIN$",
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Logowanie innym urządzeniem"
+  },
+  "toggleCharacterCount": {
+    "message": "Pokaż / Ukryj licznik znaków",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

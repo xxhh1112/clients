@@ -929,17 +929,17 @@
   "confirmFilePassword": {
     "message": "Fájl jelszó megerősítés"
   },
-  "accountBackupOptionDescription": {
-    "message": "Az exportálás védelme érdekében a Bitwarden fiók titkosítását használjuk, nem a mesterjelszót. Ez az exportálás csak az aktuális fiókba importálható. Ezzel máshol nem használható biztonsági másolatot hozhatunk létre."
+  "accountRestrictedOptionDescription": {
+    "message": "Használjuk a fiókjfelhasználónevéből és a fő jelszóból származó titkosítási kulcsot az exportálás titkosításához és az importálás korlátozásához csak az aktuális Bitwarden fiókra."
   },
   "passwordProtectedOptionDescription": {
     "message": "Hozzunk létre egy felhasználó által generált jelszót az exportálás védelme érdekében. Ezzel más fiókokban is használható exportálást hozhatunk létre."
   },
-  "fileTypeHeading": {
-    "message": "Fájltípus"
+  "exportTypeHeading": {
+    "message": "Exportálási típus"
   },
-  "accountBackup": {
-    "message": "Fiók biztonsági másolat"
+  "accountRestricted": {
+    "message": "Fiók korlátozás"
   },
   "passwordProtected": {
     "message": "Jelszóval védett"
@@ -4119,6 +4119,21 @@
   "customDesc": {
     "message": "A fejlett konfigurációk felhasználói engedélyeinek részletesebb ellenőrzését teszi lehetővé."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Az egyedi szerepek egy ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "vállalati funkció",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Vegyük fel a kapcsolatot a támogató csoporttal más előfizetésre áttéréshez.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Az egyedi jogosultságok engedélyezéséhez a szervezetnek Enterprise 2020 csomaggal kell rendelkeznie."
+  },
   "permissions": {
     "message": "Jogosultságok"
   },
@@ -5460,6 +5475,45 @@
   "notYou": {
     "message": "Ez tévedés?"
   },
+  "pickAnAvatarColor": {
+    "message": "Avatar szín választás"
+  },
+  "customizeAvatar": {
+    "message": "Avatar testre szabása"
+  },
+  "avatarUpdated": {
+    "message": "Az avatar frissítésre került."
+  },
+  "brightBlue": {
+    "message": "Élénk kék"
+  },
+  "green": {
+    "message": "Zöld"
+  },
+  "orange": {
+    "message": "Narancssárga"
+  },
+  "lavender": {
+    "message": "Levendula"
+  },
+  "yellow": {
+    "message": "Sárga"
+  },
+  "indigo": {
+    "message": "Indigókék"
+  },
+  "teal": {
+    "message": "Pávakék"
+  },
+  "salmon": {
+    "message": "Lazac"
+  },
+  "pink": {
+    "message": "Rózsaszín"
+  },
+  "customColor": {
+    "message": "Egyedi szín"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Szűrendő típus --"
   },
@@ -5471,6 +5525,275 @@
   },
   "multiSelectClearAll": {
     "message": "Összes törlése"
+  },
+  "toggleCharacterCount": {
+    "message": "Karakterszámláló váltás",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Jelszó karakter számláló",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Elrejtés"
+  },
+  "projects": {
+    "message": "Projektek"
+  },
+  "lastEdited": {
+    "message": "Utolsó szerkesztés"
+  },
+  "editSecret": {
+    "message": "Titkos kód szerkesztés"
+  },
+  "addSecret": {
+    "message": "Titkos kód hozzáadás"
+  },
+  "copySecretName": {
+    "message": "Titkos kódnév másolás"
+  },
+  "copySecretValue": {
+    "message": "Titkos kódérték másolás"
+  },
+  "deleteSecret": {
+    "message": "Titkos kód törlés"
+  },
+  "deleteSecrets": {
+    "message": "Titkos kódok törlése"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Projekt"
+  },
+  "editProject": {
+    "message": "Projekt szerkesztése"
+  },
+  "viewProject": {
+    "message": "Projekt megtekintése"
+  },
+  "deleteProject": {
+    "message": "Projekt törlése"
+  },
+  "deleteProjects": {
+    "message": "Projektek törlése"
+  },
+  "secret": {
+    "message": "Titkos kód"
+  },
+  "serviceAccount": {
+    "message": "Szolgáltatás fiók"
+  },
+  "serviceAccounts": {
+    "message": "Szolgáltatás fiókok"
+  },
+  "new": {
+    "message": "Új"
+  },
+  "secrets": {
+    "message": "Titkos kódok"
+  },
+  "nameValuePair": {
+    "message": "Név/érték pár"
+  },
+  "secretEdited": {
+    "message": "A titkos kód szerkesztésre került."
+  },
+  "secretCreated": {
+    "message": "A titkos kód létrejött."
+  },
+  "newSecret": {
+    "message": "Új titkos kód"
+  },
+  "newServiceAccount": {
+    "message": "Új szolgáltatás fiók"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Nincs megjeleníthető titkos kód."
+  },
+  "secretsNoItemsMessage": {
+    "message": "Az induláshoz adjunk hozzá egy új titkos kódot vagy importáljunk ilyeneket."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nincs megjeleníthető tartalom."
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Új szolgáltatás fiók létrehozása a titkos kód automatikus hozzáféréséhez."
+  },
+  "searchSecrets": {
+    "message": "Titkos kódok keresése"
+  },
+  "deleteServiceAccounts": {
+    "message": "Szolgáltatás fiókok törlése"
+  },
+  "deleteServiceAccount": {
+    "message": "Szolgáltatás fiók törlése"
+  },
+  "viewServiceAccount": {
+    "message": "Szolgáltatás fiók megtekintése"
+  },
+  "searchServiceAccounts": {
+    "message": "Szolgáltatás fiókok keresése"
+  },
+  "addProject": {
+    "message": "Projekt hozzáadása"
+  },
+  "projectEdited": {
+    "message": "A projekt szerkesztésre került."
+  },
+  "projectSaved": {
+    "message": "A projekt mentésre került."
+  },
+  "projectCreated": {
+    "message": "A projekt létrejött."
+  },
+  "projectName": {
+    "message": "Projektnév"
+  },
+  "newProject": {
+    "message": "Új projekt"
+  },
+  "softDeleteSecretWarning": {
+    "message": "A titkos kódok törlése érintheti a létező integrációkat."
+  },
+  "softDeletesSuccessToast": {
+    "message": "A titkos kód a lomtárba került."
+  },
+  "serviceAccountCreated": {
+    "message": "A szolgáltatás fiók létrejött."
+  },
+  "smAccess": {
+    "message": "Hozzáférés"
+  },
+  "projectCommaSecret": {
+    "message": "Projekt titkos kód"
+  },
+  "serviceAccountName": {
+    "message": "Szolgáltatás fiók név"
+  },
+  "newSaSelectAccess": {
+    "message": "Gépeljük be vagy válasszunk projekteket vagy titkos kódokat"
+  },
+  "newSaTypeToFilter": {
+    "message": "Gépelés a szűréshez"
+  },
+  "deleteProjectsToast": {
+    "message": "A projekt törésre került."
+  },
+  "deleteProjectToast": {
+    "message": "A projekt és az összes társított titkos kód törlésre került."
+  },
+  "deleteProjectDialogMessage": {
+    "message": "$PROJECT$ projekt törlése végleges és visszafordíthatatlan.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "\"$CONFIRM$\" begépelése a folytatáshoz",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "$PROJECT$ törlése",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "$COUNT$ projekt törlése",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "A projektek törlése végleges és visszavonhatatlan."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Nincs megjelenítendő projekt."
+  },
+  "projectsNoItemsMessage": {
+    "message": "Új projekt hozzáadása a titkos kódok szervezésének elkezdéséhez."
+  },
+  "smConfirmationRequired": {
+    "message": "Megerősítés szükséges"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "A következő projekteket nem lehet törölni:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "A titkos kód a lomtárba került."
+  },
+  "searchProjects": {
+    "message": "Projektek keresése"
+  },
+  "accessTokens": {
+    "message": "Vezérjelek elérése"
+  },
+  "createAccessToken": {
+    "message": "Elérési vezérjel létrehozása"
+  },
+  "expires": {
+    "message": "Lejárat"
+  },
+  "canRead": {
+    "message": "Olvashat"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Nincs megjelenítendő elérési vezérjel."
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Az induláshoz hozzunk létre egy elérési vezérjelet."
+  },
+  "downloadAccessToken": {
+    "message": "Letöltés vagy másolás a bezárás eőtt."
+  },
+  "expiresOnAccessToken": {
+    "message": "Lejárat:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Az elérési vezérjelek nincsnek tárolva és nem olvashatók vissza."
+  },
+  "copyToken": {
+    "message": "Vezérjel másolása"
+  },
+  "accessToken": {
+    "message": "Elérési vezérjel"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "A lejárati dátum megadása kötelező."
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Az elérési vezérjel létrejött és a vágólapra került."
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "A jofgosultság kezelő bétaként érhető el."
+  },
+  "revokeAccessToken": {
+    "message": "Elérési vezérjel visszavonása"
+  },
+  "submenu": {
+    "message": "Almenü"
   },
   "from": {
     "message": "Feladó"
@@ -5507,5 +5830,47 @@
   },
   "memberAccessAll": {
     "message": "Ez a felhasználó minden elemhez hozzáférhet és módosíthatja az összes elemet."
+  },
+  "moreFromBitwarden": {
+    "message": "További infó a Bitwardenről"
+  },
+  "switchProducts": {
+    "message": "Termékváltás"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Az ingyenes szervezeteknek legfeljebb $SEATCOUNT$ tagjai lehetnek. Frissítsünk egy fizetett csomagra további tagok meghívásához.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Az ingyenes szervezeteknek legfeljebb $SEATCOUNT$ tagjai lehetnek. Vegyük fel a kapcsolatot a szervezet tulajdonosával az áttéréshez.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Az ingyenes szervezeteknek legfeljebb $COLLECTIONCOUNT$ gyűjteményei is lehetnek. Térjünk át egy fizetett csomagra további gyűjtemények hozzáadásához.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Az ingyenes szervezeteknek legfeljebb $COLLECTIONCOUNT$ gyűjteményei is lehetnek. Vegyük fel a kapcsolatot a szervezet tulajdonosával az áttéréshez.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

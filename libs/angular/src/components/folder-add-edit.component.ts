@@ -19,6 +19,7 @@ export class FolderAddEditComponent implements OnInit {
   title: string;
   formPromise: Promise<any>;
   deletePromise: Promise<any>;
+  protected componentName = "";
 
   constructor(
     protected folderService: FolderService,
@@ -67,7 +68,9 @@ export class FolderAddEditComponent implements OnInit {
       this.i18nService.t("deleteFolder"),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
-      "warning"
+      "warning",
+      false,
+      this.componentName != "" ? this.componentName + " .modal-content" : null
     );
     if (!confirmed) {
       return false;

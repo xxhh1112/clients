@@ -5,9 +5,9 @@ import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { BadgeTypes } from "@bitwarden/components";
 
 import { CipherReportComponent } from "./cipher-report.component";
 
@@ -16,7 +16,7 @@ import { CipherReportComponent } from "./cipher-report.component";
   templateUrl: "weak-passwords-report.component.html",
 })
 export class WeakPasswordsReportComponent extends CipherReportComponent implements OnInit {
-  passwordStrengthMap = new Map<string, [string, string]>();
+  passwordStrengthMap = new Map<string, [string, BadgeTypes]>();
 
   private passwordStrengthCache = new Map<string, number>();
 
@@ -25,10 +25,9 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     protected passwordGenerationService: PasswordGenerationService,
     modalService: ModalService,
     messagingService: MessagingService,
-    stateService: StateService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, messagingService, true, stateService, passwordRepromptService);
+    super(modalService, messagingService, true, passwordRepromptService);
   }
 
   async ngOnInit() {
@@ -110,7 +109,7 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     return true;
   }
 
-  private scoreKey(score: number): [string, string] {
+  private scoreKey(score: number): [string, BadgeTypes] {
     switch (score) {
       case 4:
         return ["strong", "success"];

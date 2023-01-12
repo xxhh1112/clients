@@ -1,7 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { UserVerificationComponent } from "@bitwarden/angular/components/user-verification.component";
-
 import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
@@ -9,7 +7,6 @@ import { LockComponent } from "../accounts/lock.component";
 import { RecoverDeleteComponent } from "../accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../accounts/recover-two-factor.component";
 import { RegisterFormModule } from "../accounts/register-form/register-form.module";
-import { RegisterComponent } from "../accounts/register.component";
 import { RemovePasswordComponent } from "../accounts/remove-password.component";
 import { SetPasswordComponent } from "../accounts/set-password.component";
 import { SsoComponent } from "../accounts/sso.component";
@@ -19,14 +16,18 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
+import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { NestedCheckboxComponent } from "../components/nested-checkbox.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
+import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
+import { UserVerificationComponent } from "../components/user-verification.component";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
+import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { OrganizationCreateModule } from "../organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../organizations/layouts/organization-layout.component";
@@ -70,6 +71,7 @@ import { ApiKeyComponent } from "../settings/api-key.component";
 import { BillingHistoryViewComponent } from "../settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
+import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
 import { ChangeKdfComponent } from "../settings/change-kdf.component";
 import { ChangePasswordComponent } from "../settings/change-password.component";
@@ -124,7 +126,6 @@ import { BulkRestoreComponent } from "../vault/bulk-restore.component";
 import { BulkShareComponent } from "../vault/bulk-share.component";
 import { CollectionsComponent } from "../vault/collections.component";
 import { FolderAddEditComponent } from "../vault/folder-add-edit.component";
-import { OrganizationBadgeModule } from "../vault/organization-badge/organization-badge.module";
 import { ShareComponent } from "../vault/share.component";
 import { VaultFilterModule } from "../vault/vault-filter/vault-filter.module";
 
@@ -136,9 +137,9 @@ import { SharedModule } from ".";
   imports: [
     SharedModule,
     VaultFilterModule,
-    OrganizationBadgeModule,
     OrganizationCreateModule,
     RegisterFormModule,
+    ProductSwitcherModule,
   ],
   declarations: [
     PremiumBadgeComponent,
@@ -169,6 +170,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -222,14 +224,15 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
     RecoverTwoFactorComponent,
-    RegisterComponent,
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
@@ -293,6 +296,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -345,14 +349,15 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
     RecoverTwoFactorComponent,
-    RegisterComponent,
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,

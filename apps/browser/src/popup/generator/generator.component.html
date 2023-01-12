@@ -56,12 +56,12 @@
         type="button"
         appStopClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
-        (click)="regenerate()"
-        [disabled]="form.loading"
+        (click)="$any(form).loading ? false : regenerate()"
+        [attr.aria-disabled]="$any(form).loading ? 'true' : null"
       >
         <i
           class="bwi bwi-lg bwi-generate"
-          [ngClass]="form.loading ? 'bwi-spin' : ''"
+          [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
           aria-hidden="true"
         ></i>
       </button>
@@ -312,7 +312,9 @@
             />
             <label for="type_{{ o.value }}">
               {{ o.name }}
-              <div class="small text-muted" *ngIf="o.desc">{{ o.desc }}</div>
+              <div class="small text-muted" *ngIf="o.desc">
+                {{ o.desc }}
+              </div>
             </label>
           </div>
         </div>
@@ -351,7 +353,7 @@
             <input
               id="duckduckgo-apikey"
               type="password"
-              name="DuckDudkGoApiKey"
+              name="DuckDuckGoApiKey"
               [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
               (blur)="saveUsernameOptions()"
             />

@@ -15,7 +15,8 @@ import { CollectionService } from "@bitwarden/common/abstractions/collection.ser
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
@@ -38,6 +39,7 @@ import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abs
 import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
+import { StateMigrationService } from "@bitwarden/common/abstractions/stateMigration.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
@@ -47,6 +49,8 @@ import { UserVerificationService } from "@bitwarden/common/abstractions/userVeri
 import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AuthService } from "@bitwarden/common/services/auth.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { LoginService } from "@bitwarden/common/services/login.service";
@@ -54,9 +58,14 @@ import { SearchService } from "@bitwarden/common/services/search.service";
 
 import MainBackground from "../../background/main.background";
 import { BrowserApi } from "../../browser/browserApi";
+import { Account } from "../../models/account";
 import { AutofillService } from "../../services/abstractions/autofill.service";
-import { StateService as StateServiceAbstraction } from "../../services/abstractions/state.service";
+import { BrowserStateService as StateServiceAbstraction } from "../../services/abstractions/browser-state.service";
 import { BrowserEnvironmentService } from "../../services/browser-environment.service";
+import { BrowserOrganizationService } from "../../services/browser-organization.service";
+import { BrowserPolicyService } from "../../services/browser-policy.service";
+import { BrowserSettingsService } from "../../services/browser-settings.service";
+import { BrowserStateService } from "../../services/browser-state.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
 import BrowserMessagingService from "../../services/browserMessaging.service";
 import BrowserMessagingPrivateModePopupService from "../../services/browserMessagingPrivateModePopup.service";
@@ -187,11 +196,25 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: TokenService, useFactory: getBgService<TokenService>("tokenService"), deps: [] },
     { provide: I18nService, useFactory: getBgService<I18nService>("i18nService"), deps: [] },
     { provide: CryptoService, useFactory: getBgService<CryptoService>("cryptoService"), deps: [] },
-    { provide: EventService, useFactory: getBgService<EventService>("eventService"), deps: [] },
+    {
+      provide: EventUploadService,
+      useFactory: getBgService<EventUploadService>("eventUploadService"),
+      deps: [],
+    },
+    {
+      provide: EventCollectionService,
+      useFactory: getBgService<EventCollectionService>("eventCollectionService"),
+      deps: [],
+    },
     {
       provide: PolicyService,
-      useFactory: getBgService<PolicyService>("policyService"),
-      deps: [],
+      useFactory: (
+        stateService: StateServiceAbstraction,
+        organizationService: OrganizationService
+      ) => {
+        return new BrowserPolicyService(stateService, organizationService);
+      },
+      deps: [StateServiceAbstraction, OrganizationService],
     },
     {
       provide: PolicyApiServiceAbstraction,
@@ -212,8 +235,10 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: SyncService, useFactory: getBgService<SyncService>("syncService"), deps: [] },
     {
       provide: SettingsService,
-      useFactory: getBgService<SettingsService>("settingsService"),
-      deps: [],
+      useFactory: (stateService: StateServiceAbstraction) => {
+        return new BrowserSettingsService(stateService);
+      },
+      deps: [StateServiceAbstraction],
     },
     {
       provide: AbstractStorageService,
@@ -261,8 +286,10 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: PasswordRepromptServiceAbstraction, useClass: PasswordRepromptService },
     {
       provide: OrganizationService,
-      useFactory: getBgService<OrganizationService>("organizationService"),
-      deps: [],
+      useFactory: (stateService: StateServiceAbstraction) => {
+        return new BrowserOrganizationService(stateService);
+      },
+      deps: [StateServiceAbstraction],
     },
     {
       provide: VaultFilterService,
@@ -293,9 +320,35 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<AbstractStorageService>("memoryStorageService"),
     },
     {
-      provide: StateServiceAbstraction,
-      useFactory: getBgService<StateServiceAbstraction>("stateService"),
+      provide: StateMigrationService,
+      useFactory: getBgService<StateMigrationService>("stateMigrationService"),
       deps: [],
+    },
+    {
+      provide: StateServiceAbstraction,
+      useFactory: (
+        storageService: AbstractStorageService,
+        secureStorageService: AbstractStorageService,
+        memoryStorageService: AbstractStorageService,
+        logService: LogServiceAbstraction,
+        stateMigrationService: StateMigrationService
+      ) => {
+        return new BrowserStateService(
+          storageService,
+          secureStorageService,
+          memoryStorageService,
+          logService,
+          stateMigrationService,
+          new StateFactory(GlobalState, Account)
+        );
+      },
+      deps: [
+        AbstractStorageService,
+        SECURE_STORAGE,
+        MEMORY_STORAGE,
+        LogServiceAbstraction,
+        StateMigrationService,
+      ],
     },
     {
       provide: UsernameGenerationService,
@@ -314,20 +367,23 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: LoginServiceAbstraction,
       useClass: LoginService,
+      deps: [StateServiceAbstraction],
     },
     {
       provide: AbstractThemingService,
-      useFactory: () => {
+      useFactory: (
+        stateService: StateServiceAbstraction,
+        platformUtilsService: PlatformUtilsService
+      ) => {
         return new ThemingService(
-          getBgService<StateServiceAbstraction>("stateService")(),
+          stateService,
           // Safari doesn't properly handle the (prefers-color-scheme) media query in the popup window, it always returns light.
           // In Safari we have to use the background page instead, which comes with limitations like not dynamically changing the extension theme when the system theme is changed.
-          getBgService<PlatformUtilsService>("platformUtilsService")().isSafari()
-            ? getBgService<Window>("backgroundWindow")()
-            : window,
+          platformUtilsService.isSafari() ? getBgService<Window>("backgroundWindow")() : window,
           document
         );
       },
+      deps: [StateServiceAbstraction, PlatformUtilsService],
     },
   ],
 })

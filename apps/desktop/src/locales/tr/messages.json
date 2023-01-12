@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Devre dışı"
   },
+  "removePassword": {
+    "message": "Parolayı kaldır"
+  },
+  "removedPassword": {
+    "message": "Parola kaldırıldı"
+  },
+  "removePasswordConfirmation": {
+    "message": "Parolayı kaldırmak istediğinizden emin misiniz?"
+  },
   "maxAccessCountReached": {
     "message": "Maksimum erişim sayısına ulaşıldı"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Başka bir cihazla giriş yap"
+  },
+  "toggleCharacterCount": {
+    "message": "Karakter sayısını değiştir",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

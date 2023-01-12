@@ -269,7 +269,7 @@
     "message": "Nom"
   },
   "fullName": {
-    "message": "Nom et prénom"
+    "message": "Nom complet"
   },
   "address1": {
     "message": "Adresse 1"
@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Désactivé"
   },
+  "removePassword": {
+    "message": "Supprimer le mot de passe"
+  },
+  "removedPassword": {
+    "message": "Mot de passe supprimé"
+  },
+  "removePasswordConfirmation": {
+    "message": "Êtes-vous sûr(e) de vouloir supprimer le mot de passe ?"
+  },
   "maxAccessCountReached": {
     "message": "Nombre maximum d'accès atteint"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Connectez-vous avec un autre appareil"
+  },
+  "toggleCharacterCount": {
+    "message": "Activer/Désactiver le compte de caractères",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }
