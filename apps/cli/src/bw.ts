@@ -231,7 +231,11 @@ export class Main {
       this.stateService
     );
 
-    this.folderApiService = new FolderApiService(this.folderService, this.apiService);
+    this.folderApiService = new FolderApiService(
+      this.folderService,
+      this.cryptoService,
+      this.apiService
+    );
 
     this.collectionService = new CollectionService(
       this.cryptoService,
