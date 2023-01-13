@@ -42,18 +42,27 @@ export default class RuntimeBackground {
     }
 
     await this.checkOnInstalled();
-    const backgroundMessageListener = async (
+    const backgroundMessageListener = (
       msg: any,
       sender: chrome.runtime.MessageSender,
       sendResponse: any
     ) => {
-      const response = await this.processMessage(msg, sender);
-      sendResponse(response);
+      const messagesWithResponse = ["fido2RegisterCredentialRequest", "fido2GetCredentialRequest"];
+
+      if (messagesWithResponse.includes(msg.command)) {
+        this.processMessage(msg, sender).then(
+          (value) => sendResponse({ result: value }),
+          (error) => sendResponse({ error: { ...error, message: error.message } })
+        );
+        return true;
+      }
+
+      this.processMessage(msg, sender);
+      return false;
     };
 
     BrowserApi.messageListener("runtime.background", (msg, sender, sendResponse) => {
-      backgroundMessageListener(msg, sender, sendResponse);
-      return true;
+      return backgroundMessageListener(msg, sender, sendResponse);
     });
     if (this.main.popupOnlyContext) {
       (window as any).bitwardenBackgroundMessageListener = backgroundMessageListener;
@@ -209,17 +218,9 @@ export default class RuntimeBackground {
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
       case "fido2RegisterCredentialRequest":
-        try {
-          return { result: await this.main.fido2Service.createCredential(msg.data) };
-        } catch (error) {
-          return { error: { ...error, message: error.message } };
-        }
+        return await this.main.fido2Service.createCredential(msg.data);
       case "fido2GetCredentialRequest":
-        try {
-          return { result: await this.main.fido2Service.assertCredential(msg.data) };
-        } catch (error) {
-          return { error: { ...error, message: error.message } };
-        }
+        return await this.main.fido2Service.assertCredential(msg.data);
     }
     return undefined;
   }
