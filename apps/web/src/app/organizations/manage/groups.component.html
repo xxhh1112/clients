@@ -72,7 +72,7 @@
           </th>
         </tr>
       </ng-container>
-      <ng-container body>
+      <ng-template body>
         <tr bitRow *ngFor="let g of visibleGroups">
           <td bitCell (click)="check(g)" class="tw-cursor-pointer">
             <input type="checkbox" [(ngModel)]="g.checked" />
@@ -118,7 +118,7 @@
             </bit-menu>
           </td>
         </tr>
-      </ng-container>
+      </ng-template>
     </bit-table>
   </ng-container>
   <ng-template #addEdit></ng-template>

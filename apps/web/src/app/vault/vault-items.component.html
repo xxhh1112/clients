@@ -70,7 +70,7 @@
         </th>
       </tr>
     </ng-container>
-    <ng-container body>
+    <ng-template body>
       <tr bitRow *ngFor="let col of filteredCollections" alignContent="middle">
         <td bitCell (click)="selectRow(col)">
           <input
@@ -288,7 +288,7 @@
           </bit-menu>
         </td>
       </tr>
-    </ng-container>
+    </ng-template>
   </bit-table>
   <div
     class="tw-mt-6 tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-start"

@@ -130,7 +130,7 @@
             </th>
           </tr>
         </ng-container>
-        <ng-container body>
+        <ng-template body>
           <tr bitRow *ngFor="let u of searchedUsers" alignContent="middle">
             <td bitCell (click)="checkUser(u)">
               <input type="checkbox" [(ngModel)]="$any(u).checked" />
@@ -302,7 +302,7 @@
               </bit-menu>
             </td>
           </tr>
-        </ng-container>
+        </ng-template>
       </bit-table>
     </ng-container>
   </ng-container>
