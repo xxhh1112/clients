@@ -40,7 +40,9 @@ export class Messenger {
 
     const promise = firstValueFrom(
       this.channel.messages$.pipe(
-        filter((m) => m.metadata.requestId === requestId && m.type !== request.type)
+        filter(
+          (m) => m != undefined && m.metadata?.requestId === requestId && m.type !== request.type
+        )
       )
     );
 
