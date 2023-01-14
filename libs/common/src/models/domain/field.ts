@@ -2,64 +2,37 @@ import { Jsonify } from "type-fest";
 
 import { FieldType } from "../../enums/fieldType";
 import { LinkedIdType } from "../../enums/linkedIdType";
+import { nullableFactory } from "../../interfaces/crypto.interface";
 import { FieldData } from "../data/field.data";
-import { FieldView } from "../view/field.view";
 
-import Domain from "./domain-base";
 import { EncString } from "./enc-string";
-import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Field extends Domain {
+export class Field {
   name: EncString;
   value: EncString;
   type: FieldType;
   linkedId: LinkedIdType;
 
   constructor(obj?: FieldData) {
-    super();
     if (obj == null) {
       return;
     }
 
     this.type = obj.type;
     this.linkedId = obj.linkedId;
-    this.buildDomainModel(
-      this,
-      obj,
-      {
-        name: null,
-        value: null,
-      },
-      []
-    );
-  }
-
-  decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<FieldView> {
-    return this.decryptObj(
-      new FieldView(this),
-      {
-        name: null,
-        value: null,
-      },
-      orgId,
-      encKey
-    );
+    this.name = nullableFactory(EncString, obj.name);
+    this.value = nullableFactory(EncString, obj.value);
   }
 
   toFieldData(): FieldData {
-    const f = new FieldData();
-    this.buildDataModel(
-      this,
-      f,
-      {
-        name: null,
-        value: null,
-        type: null,
-        linkedId: null,
-      },
-      ["type", "linkedId"]
-    );
-    return f;
+    const data = new FieldData();
+
+    data.type = this.type;
+    data.linkedId = this.linkedId;
+    data.name = this.name?.encryptedString;
+    data.value = this.value?.encryptedString;
+
+    return data;
   }
 
   static fromJSON(obj: Partial<Jsonify<Field>>): Field {
@@ -67,12 +40,9 @@ export class Field extends Domain {
       return null;
     }
 
-    const name = EncString.fromJSON(obj.name);
-    const value = EncString.fromJSON(obj.value);
-
     return Object.assign(new Field(), obj, {
-      name,
-      value,
+      name: nullableFactory(EncString, obj.name),
+      value: nullableFactory(EncString, obj.value),
     });
   }
 }

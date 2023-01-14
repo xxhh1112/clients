@@ -218,7 +218,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
         continue;
       }
 
-      const cipher = await this.cipherService.encrypt(ciphers[i], encKey[0]);
+      const cipher = await ciphers[i].encrypt(this.encryptService, encKey[0]);
       request.ciphers.push(new CipherWithIdRequest(cipher));
     }
 

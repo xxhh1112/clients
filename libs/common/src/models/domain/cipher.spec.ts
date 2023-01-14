@@ -1,28 +1,23 @@
-// eslint-disable-next-line no-restricted-imports
-import { Substitute, Arg } from "@fluffy-spoon/substitute";
 import { Jsonify } from "type-fest";
 
-import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { CipherData } from "@bitwarden/common/models/data/cipher.data";
-import { Attachment } from "@bitwarden/common/models/domain/attachment";
-import { Card } from "@bitwarden/common/models/domain/card";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Field } from "@bitwarden/common/models/domain/field";
-import { Identity } from "@bitwarden/common/models/domain/identity";
-import { Login } from "@bitwarden/common/models/domain/login";
-import { Password } from "@bitwarden/common/models/domain/password";
-import { SecureNote } from "@bitwarden/common/models/domain/secure-note";
-import { CardView } from "@bitwarden/common/models/view/card.view";
-import { IdentityView } from "@bitwarden/common/models/view/identity.view";
-import { LoginView } from "@bitwarden/common/models/view/login.view";
-import { InitializerKey } from "@bitwarden/common/services/cryptography/initializer-key";
+import { mockFromJson } from "../../../spec/utils";
+import { CipherRepromptType } from "../../enums/cipherRepromptType";
+import { CipherType } from "../../enums/cipherType";
+import { FieldType } from "../../enums/fieldType";
+import { SecureNoteType } from "../../enums/secureNoteType";
+import { UriMatchType } from "../../enums/uriMatchType";
+import { InitializerKey } from "../../services/cryptography/initializer-key";
+import { CipherData } from "../data/cipher.data";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { Attachment } from "./attachment";
+import { Card } from "./card";
+import { Cipher } from "./cipher";
+import { EncString } from "./enc-string";
+import { Field } from "./field";
+import { Identity } from "./identity";
+import { Login } from "./login";
+import { Password } from "./password";
+import { SecureNote } from "./secure-note";
 
 describe("Cipher DTO", () => {
   it("Convert from empty CipherData", () => {
@@ -31,9 +26,9 @@ describe("Cipher DTO", () => {
 
     expect(cipher).toEqual({
       initializerKey: InitializerKey.Cipher,
-      id: null,
-      organizationId: null,
-      folderId: null,
+      id: undefined,
+      organizationId: undefined,
+      folderId: undefined,
       name: null,
       notes: null,
       type: undefined,
@@ -192,57 +187,6 @@ describe("Cipher DTO", () => {
       const cipher = new Cipher(cipherData);
       expect(cipher.toCipherData()).toEqual(cipherData);
     });
-
-    it("Decrypt", async () => {
-      const cipher = new Cipher();
-      cipher.id = "id";
-      cipher.organizationId = "orgId";
-      cipher.folderId = "folderId";
-      cipher.edit = true;
-      cipher.viewPassword = true;
-      cipher.organizationUseTotp = true;
-      cipher.favorite = false;
-      cipher.revisionDate = new Date("2022-01-31T12:00:00.000Z");
-      cipher.type = CipherType.Login;
-      cipher.name = mockEnc("EncryptedString");
-      cipher.notes = mockEnc("EncryptedString");
-      cipher.creationDate = new Date("2022-01-01T12:00:00.000Z");
-      cipher.deletedDate = null;
-      cipher.reprompt = CipherRepromptType.None;
-
-      const loginView = new LoginView();
-      loginView.username = "username";
-      loginView.password = "password";
-
-      const login = Substitute.for<Login>();
-      login.decrypt(Arg.any(), Arg.any()).resolves(loginView);
-      cipher.login = login;
-
-      const cipherView = await cipher.decrypt();
-
-      expect(cipherView).toMatchObject({
-        id: "id",
-        organizationId: "orgId",
-        folderId: "folderId",
-        name: "EncryptedString",
-        notes: "EncryptedString",
-        type: 1,
-        favorite: false,
-        organizationUseTotp: true,
-        edit: true,
-        viewPassword: true,
-        login: loginView,
-        attachments: null,
-        fields: null,
-        passwordHistory: null,
-        collectionIds: undefined,
-        revisionDate: new Date("2022-01-31T12:00:00.000Z"),
-        creationDate: new Date("2022-01-01T12:00:00.000Z"),
-        deletedDate: null,
-        reprompt: 0,
-        localData: undefined,
-      });
-    });
   });
 
   describe("SecureNoteCipher", () => {
@@ -301,51 +245,6 @@ describe("Cipher DTO", () => {
     it("toCipherData", () => {
       const cipher = new Cipher(cipherData);
       expect(cipher.toCipherData()).toEqual(cipherData);
-    });
-
-    it("Decrypt", async () => {
-      const cipher = new Cipher();
-      cipher.id = "id";
-      cipher.organizationId = "orgId";
-      cipher.folderId = "folderId";
-      cipher.edit = true;
-      cipher.viewPassword = true;
-      cipher.organizationUseTotp = true;
-      cipher.favorite = false;
-      cipher.revisionDate = new Date("2022-01-31T12:00:00.000Z");
-      cipher.type = CipherType.SecureNote;
-      cipher.name = mockEnc("EncryptedString");
-      cipher.notes = mockEnc("EncryptedString");
-      cipher.creationDate = new Date("2022-01-01T12:00:00.000Z");
-      cipher.deletedDate = null;
-      cipher.reprompt = CipherRepromptType.None;
-      cipher.secureNote = new SecureNote();
-      cipher.secureNote.type = SecureNoteType.Generic;
-
-      const cipherView = await cipher.decrypt();
-
-      expect(cipherView).toMatchObject({
-        id: "id",
-        organizationId: "orgId",
-        folderId: "folderId",
-        name: "EncryptedString",
-        notes: "EncryptedString",
-        type: 2,
-        favorite: false,
-        organizationUseTotp: true,
-        edit: true,
-        viewPassword: true,
-        secureNote: { type: 0 },
-        attachments: null,
-        fields: null,
-        passwordHistory: null,
-        collectionIds: undefined,
-        revisionDate: new Date("2022-01-31T12:00:00.000Z"),
-        creationDate: new Date("2022-01-01T12:00:00.000Z"),
-        deletedDate: null,
-        reprompt: 0,
-        localData: undefined,
-      });
     });
   });
 
@@ -417,57 +316,6 @@ describe("Cipher DTO", () => {
     it("toCipherData", () => {
       const cipher = new Cipher(cipherData);
       expect(cipher.toCipherData()).toEqual(cipherData);
-    });
-
-    it("Decrypt", async () => {
-      const cipher = new Cipher();
-      cipher.id = "id";
-      cipher.organizationId = "orgId";
-      cipher.folderId = "folderId";
-      cipher.edit = true;
-      cipher.viewPassword = true;
-      cipher.organizationUseTotp = true;
-      cipher.favorite = false;
-      cipher.revisionDate = new Date("2022-01-31T12:00:00.000Z");
-      cipher.type = CipherType.Card;
-      cipher.name = mockEnc("EncryptedString");
-      cipher.notes = mockEnc("EncryptedString");
-      cipher.creationDate = new Date("2022-01-01T12:00:00.000Z");
-      cipher.deletedDate = null;
-      cipher.reprompt = CipherRepromptType.None;
-
-      const cardView = new CardView();
-      cardView.cardholderName = "cardholderName";
-      cardView.number = "4111111111111111";
-
-      const card = Substitute.for<Card>();
-      card.decrypt(Arg.any(), Arg.any()).resolves(cardView);
-      cipher.card = card;
-
-      const cipherView = await cipher.decrypt();
-
-      expect(cipherView).toMatchObject({
-        id: "id",
-        organizationId: "orgId",
-        folderId: "folderId",
-        name: "EncryptedString",
-        notes: "EncryptedString",
-        type: 3,
-        favorite: false,
-        organizationUseTotp: true,
-        edit: true,
-        viewPassword: true,
-        card: cardView,
-        attachments: null,
-        fields: null,
-        passwordHistory: null,
-        collectionIds: undefined,
-        revisionDate: new Date("2022-01-31T12:00:00.000Z"),
-        creationDate: new Date("2022-01-01T12:00:00.000Z"),
-        deletedDate: null,
-        reprompt: 0,
-        localData: undefined,
-      });
     });
   });
 
@@ -564,57 +412,6 @@ describe("Cipher DTO", () => {
       const cipher = new Cipher(cipherData);
       expect(cipher.toCipherData()).toEqual(cipherData);
     });
-
-    it("Decrypt", async () => {
-      const cipher = new Cipher();
-      cipher.id = "id";
-      cipher.organizationId = "orgId";
-      cipher.folderId = "folderId";
-      cipher.edit = true;
-      cipher.viewPassword = true;
-      cipher.organizationUseTotp = true;
-      cipher.favorite = false;
-      cipher.revisionDate = new Date("2022-01-31T12:00:00.000Z");
-      cipher.type = CipherType.Identity;
-      cipher.name = mockEnc("EncryptedString");
-      cipher.notes = mockEnc("EncryptedString");
-      cipher.creationDate = new Date("2022-01-01T12:00:00.000Z");
-      cipher.deletedDate = null;
-      cipher.reprompt = CipherRepromptType.None;
-
-      const identityView = new IdentityView();
-      identityView.firstName = "firstName";
-      identityView.lastName = "lastName";
-
-      const identity = Substitute.for<Identity>();
-      identity.decrypt(Arg.any(), Arg.any()).resolves(identityView);
-      cipher.identity = identity;
-
-      const cipherView = await cipher.decrypt();
-
-      expect(cipherView).toMatchObject({
-        id: "id",
-        organizationId: "orgId",
-        folderId: "folderId",
-        name: "EncryptedString",
-        notes: "EncryptedString",
-        type: 4,
-        favorite: false,
-        organizationUseTotp: true,
-        edit: true,
-        viewPassword: true,
-        identity: identityView,
-        attachments: null,
-        fields: null,
-        passwordHistory: null,
-        collectionIds: undefined,
-        revisionDate: new Date("2022-01-31T12:00:00.000Z"),
-        creationDate: new Date("2022-01-01T12:00:00.000Z"),
-        deletedDate: null,
-        reprompt: 0,
-        localData: undefined,
-      });
-    });
   });
 
   describe("fromJSON", () => {
@@ -637,8 +434,14 @@ describe("Cipher DTO", () => {
       } as Jsonify<Cipher>);
 
       expect(actual).toMatchObject({
-        name: "myName_fromJSON",
-        notes: "myNotes_fromJSON",
+        name: {
+          encryptedString: "myName",
+          encryptionType: 0,
+        },
+        notes: {
+          encryptedString: "myNotes",
+          encryptionType: 0,
+        },
         revisionDate: revisionDate,
         attachments: ["attachment1_fromJSON", "attachment2_fromJSON"],
         fields: ["field1_fromJSON", "field2_fromJSON"],

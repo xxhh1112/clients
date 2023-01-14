@@ -1,12 +1,14 @@
 import { Jsonify } from "type-fest";
 
+import { EncryptService } from "../../abstractions/encrypt.service";
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
 import { LinkedIdType } from "../../enums/linkedIdType";
-import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
+import { Encryptable, nullableFactory } from "../../interfaces/crypto.interface";
 import { InitializerKey } from "../../services/cryptography/initializer-key";
 import { LocalData } from "../data/local.data";
 import { Cipher } from "../domain/cipher";
+import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
 import { AttachmentView } from "./attachment.view";
 import { CardView } from "./card.view";
@@ -15,10 +17,9 @@ import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
 import { PasswordHistoryView } from "./password-history.view";
 import { SecureNoteView } from "./secure-note.view";
-import { View } from "./view";
 
-export class CipherView implements View, InitializerMetadata {
-  readonly initializerKey = InitializerKey.CipherView;
+export class CipherView implements Encryptable<Cipher> {
+  static readonly initializerKey = InitializerKey.CipherView;
 
   id: string = null;
   organizationId: string = null;
@@ -44,26 +45,60 @@ export class CipherView implements View, InitializerMetadata {
   deletedDate: Date = null;
   reprompt: CipherRepromptType = CipherRepromptType.None;
 
-  constructor(c?: Cipher) {
-    if (!c) {
-      return;
+  keyIdentifier(): string | null {
+    return this.organizationId || null;
+  }
+
+  async encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Cipher> {
+    const cipher = new Cipher();
+    cipher.id = this.id;
+    cipher.organizationId = this.organizationId;
+    cipher.folderId = this.folderId;
+    cipher.name = this.name != null ? await encryptService.encrypt(this.name, key) : null;
+    cipher.notes = this.notes != null ? await encryptService.encrypt(this.notes, key) : null;
+    cipher.type = this.type;
+    cipher.favorite = this.favorite;
+    //cipher.organizationUseTotp = this.organizationUseTotp;
+    cipher.edit = this.edit;
+    //cipher.viewPassword = this.viewPassword;
+    //cipher.localData = this.localData;
+
+    switch (this.type) {
+      case CipherType.Login:
+        cipher.login = await this.login.encrypt(encryptService, key);
+        break;
+      case CipherType.Identity:
+        cipher.identity = await this.identity.encrypt(encryptService, key);
+        break;
+      case CipherType.Card:
+        cipher.card = await this.card.encrypt(encryptService, key);
+        break;
+      case CipherType.SecureNote:
+        cipher.secureNote = await this.secureNote.encrypt(encryptService, key);
+        break;
+      default:
+        break;
     }
 
-    this.id = c.id;
-    this.organizationId = c.organizationId;
-    this.folderId = c.folderId;
-    this.favorite = c.favorite;
-    this.organizationUseTotp = c.organizationUseTotp;
-    this.edit = c.edit;
-    this.viewPassword = c.viewPassword;
-    this.type = c.type;
-    this.localData = c.localData;
-    this.collectionIds = c.collectionIds;
-    this.revisionDate = c.revisionDate;
-    this.creationDate = c.creationDate;
-    this.deletedDate = c.deletedDate;
-    // Old locally stored ciphers might have reprompt == null. If so set it to None.
-    this.reprompt = c.reprompt ?? CipherRepromptType.None;
+    cipher.attachments = await Promise.all(
+      this.attachments?.map((a) => a.encrypt(encryptService, key)) ?? []
+    );
+
+    cipher.fields = await Promise.all(
+      this.fields?.map((f) => f.encrypt(encryptService, key)) ?? []
+    );
+
+    cipher.passwordHistory = await Promise.all(
+      this.passwordHistory?.map((p) => p.encrypt(encryptService, key)) ?? []
+    );
+
+    cipher.collectionIds = this.collectionIds;
+    cipher.revisionDate = this.revisionDate;
+    //cipher.creationDate = this.creationDate;
+    //cipher.deletedDate = this.deletedDate;
+    cipher.reprompt = this.reprompt;
+
+    return cipher;
   }
 
   private get item() {
@@ -143,8 +178,8 @@ export class CipherView implements View, InitializerMetadata {
 
   static fromJSON(obj: Partial<Jsonify<CipherView>>): CipherView {
     const view = new CipherView();
-    const revisionDate = obj.revisionDate == null ? null : new Date(obj.revisionDate);
-    const deletedDate = obj.deletedDate == null ? null : new Date(obj.deletedDate);
+    const revisionDate = nullableFactory(Date, obj.revisionDate);
+    const deletedDate = nullableFactory(Date, obj.deletedDate);
     const attachments = obj.attachments?.map((a: any) => AttachmentView.fromJSON(a));
     const fields = obj.fields?.map((f: any) => FieldView.fromJSON(f));
     const passwordHistory = obj.passwordHistory?.map((ph: any) => PasswordHistoryView.fromJSON(ph));
@@ -172,6 +207,72 @@ export class CipherView implements View, InitializerMetadata {
         break;
       default:
         break;
+    }
+
+    return view;
+  }
+
+  static async decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: Cipher) {
+    const view = new CipherView();
+
+    view.id = model.id;
+    view.organizationId = model.organizationId;
+    view.folderId = model.folderId;
+    view.favorite = model.favorite;
+    view.organizationUseTotp = model.organizationUseTotp;
+    view.edit = model.edit;
+    view.viewPassword = model.viewPassword;
+    view.type = model.type;
+    view.localData = model.localData;
+    view.collectionIds = model.collectionIds;
+    view.revisionDate = model.revisionDate;
+    view.creationDate = model.creationDate;
+    view.deletedDate = model.deletedDate;
+    // Old locally stored ciphers might have reprompt == null. If so set it to None.
+    view.reprompt = model.reprompt ?? CipherRepromptType.None;
+
+    view.name = await model.name?.decryptWithEncryptService(encryptService, key);
+    view.notes = await model.notes?.decryptWithEncryptService(encryptService, key);
+
+    switch (model.type) {
+      case CipherType.Login:
+        view.login = await LoginView.decrypt(encryptService, key, model.login);
+        break;
+      case CipherType.SecureNote:
+        view.secureNote = await SecureNoteView.decrypt(encryptService, key, model.secureNote);
+        break;
+      case CipherType.Card:
+        view.card = await CardView.decrypt(encryptService, key, model.card);
+        break;
+      case CipherType.Identity:
+        view.identity = await IdentityView.decrypt(encryptService, key, model.identity);
+        break;
+      default:
+        break;
+    }
+
+    if (model.attachments?.length > 0) {
+      view.attachments = await Promise.all(
+        model.attachments.map((a) => {
+          return AttachmentView.decrypt(encryptService, key, a);
+        })
+      );
+    }
+
+    if (model.fields?.length > 0) {
+      view.fields = await Promise.all(
+        model.fields.map((f) => {
+          return FieldView.decrypt(encryptService, key, f);
+        })
+      );
+    }
+
+    if (model.passwordHistory?.length > 0) {
+      view.passwordHistory = await Promise.all(
+        model.passwordHistory.map((f) => {
+          return PasswordHistoryView.decrypt(encryptService, key, f);
+        })
+      );
     }
 
     return view;

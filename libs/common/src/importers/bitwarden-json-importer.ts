@@ -5,6 +5,7 @@ import { ImportResult } from "../models/domain/import-result";
 import { CipherWithIdExport } from "../models/export/cipher-with-ids.export";
 import { CollectionWithIdExport } from "../models/export/collection-with-id.export";
 import { FolderWithIdExport } from "../models/export/folder-with-id.export";
+import { CipherView } from "../models/view/cipher.view";
 import { FolderView } from "../models/view/folder.view";
 
 import { BaseImporter } from "./base-importer";
@@ -111,7 +112,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
         });
       }
 
-      const view = await cipher.decrypt();
+      const view = await this.cryptoService.decryptDomain(CipherView, cipher);
       this.cleanupCipher(view);
       this.result.ciphers.push(view);
     }

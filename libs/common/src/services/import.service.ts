@@ -2,7 +2,6 @@ import { ApiService } from "../abstractions/api.service";
 import { CipherService } from "../abstractions/cipher.service";
 import { CollectionService } from "../abstractions/collection.service";
 import { CryptoService } from "../abstractions/crypto.service";
-import { FolderService } from "../abstractions/folder/folder.service.abstraction";
 import { I18nService } from "../abstractions/i18n.service";
 import { ImportService as ImportServiceAbstraction } from "../abstractions/import.service";
 import { CipherType } from "../enums/cipherType";
@@ -89,7 +88,6 @@ export class ImportService implements ImportServiceAbstraction {
 
   constructor(
     private cipherService: CipherService,
-    private folderService: FolderService,
     private apiService: ApiService,
     private i18nService: I18nService,
     private collectionService: CollectionService,
@@ -291,7 +289,7 @@ export class ImportService implements ImportServiceAbstraction {
     if (organizationId == null) {
       const request = new ImportCiphersRequest();
       for (let i = 0; i < importResult.ciphers.length; i++) {
-        const c = await this.cipherService.encrypt(importResult.ciphers[i]);
+        const c = await this.cryptoService.encryptView(importResult.ciphers[i]);
         request.ciphers.push(new CipherRequest(c));
       }
       if (importResult.folders != null) {
@@ -310,7 +308,7 @@ export class ImportService implements ImportServiceAbstraction {
       const request = new ImportOrganizationCiphersRequest();
       for (let i = 0; i < importResult.ciphers.length; i++) {
         importResult.ciphers[i].organizationId = organizationId;
-        const c = await this.cipherService.encrypt(importResult.ciphers[i]);
+        const c = await this.cryptoService.encryptView(importResult.ciphers[i]);
         request.ciphers.push(new CipherRequest(c));
       }
       if (importResult.collections != null) {

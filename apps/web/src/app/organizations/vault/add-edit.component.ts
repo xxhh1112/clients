@@ -4,6 +4,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -28,7 +29,6 @@ import { AddEditComponent as BaseAddEditComponent } from "../../vault/add-edit.c
   templateUrl: "../../vault/add-edit.component.html",
 })
 export class AddEditComponent extends BaseAddEditComponent {
-  originalCipher: Cipher = null;
   protected override componentName = "app-org-vault-add-edit";
 
   constructor(
@@ -47,7 +47,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     policyService: PolicyService,
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    cryptoService: CryptoService
   ) {
     super(
       cipherService,
@@ -64,7 +65,8 @@ export class AddEditComponent extends BaseAddEditComponent {
       policyService,
       organizationService,
       logService,
-      passwordRepromptService
+      passwordRepromptService,
+      cryptoService
     );
   }
 
@@ -98,7 +100,6 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     data.edit = true;
     const cipher = new Cipher(data);
-    this.originalCipher = cipher;
     return cipher;
   }
 
@@ -106,7 +107,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.encryptCipher();
     }
-    return this.cipherService.encrypt(this.cipher, null, this.originalCipher);
+    return this.cryptoService.encryptView(this.cipher);
   }
 
   protected async saveCipher(cipher: Cipher) {

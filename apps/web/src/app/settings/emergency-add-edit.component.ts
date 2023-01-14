@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -43,7 +44,8 @@ export class EmergencyAddEditComponent extends BaseAddEditComponent {
     policyService: PolicyService,
     passwordRepromptService: PasswordRepromptService,
     organizationService: OrganizationService,
-    logService: LogService
+    logService: LogService,
+    cryptoService: CryptoService
   ) {
     super(
       cipherService,
@@ -60,7 +62,8 @@ export class EmergencyAddEditComponent extends BaseAddEditComponent {
       policyService,
       organizationService,
       logService,
-      passwordRepromptService
+      passwordRepromptService,
+      cryptoService
     );
   }
 

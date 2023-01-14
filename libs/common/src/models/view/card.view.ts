@@ -1,9 +1,12 @@
 import { Jsonify } from "type-fest";
 
+import { EncryptService } from "../../abstractions/encrypt.service";
 import { CardLinkedId as LinkedId } from "../../enums/linkedIdType";
-import { linkedFieldOption } from "../../misc/linkedFieldOption.decorator";
+import { Card } from "../domain/card";
+import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
 import { ItemView } from "./item.view";
+import { linkedFieldOption } from "./linked-field-option.decorator";
 
 export class CardView extends ItemView {
   @linkedFieldOption(LinkedId.CardholderName)
@@ -78,7 +81,43 @@ export class CardView extends ItemView {
     return year.length === 2 ? "20" + year : year;
   }
 
+  async encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<Card> {
+    const card = new Card();
+
+    [card.cardholderName, card.brand, card.number, card.expMonth, card.expYear, card.code] =
+      await Promise.all([
+        this.cardholderName ? encryptService.encrypt(this.cardholderName, key) : null,
+        this.brand ? encryptService.encrypt(this.brand, key) : null,
+        this.number ? encryptService.encrypt(this.number, key) : null,
+        this.expMonth ? encryptService.encrypt(this.expMonth, key) : null,
+        this.expYear ? encryptService.encrypt(this.expYear, key) : null,
+        this.code ? encryptService.encrypt(this.code, key) : null,
+      ]);
+
+    return card;
+  }
+
   static fromJSON(obj: Partial<Jsonify<CardView>>): CardView {
     return Object.assign(new CardView(), obj);
+  }
+
+  static async decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: Card) {
+    if (model == null) {
+      return null;
+    }
+
+    const view = new CardView();
+
+    [view.cardholderName, view.brand, view.number, view.expMonth, view.expYear, view.code] =
+      await Promise.all([
+        model.cardholderName?.decryptWithEncryptService(encryptService, key),
+        model.brand?.decryptWithEncryptService(encryptService, key),
+        model.number?.decryptWithEncryptService(encryptService, key),
+        model.expMonth?.decryptWithEncryptService(encryptService, key),
+        model.expYear?.decryptWithEncryptService(encryptService, key),
+        model.code?.decryptWithEncryptService(encryptService, key),
+      ]);
+
+    return view;
   }
 }

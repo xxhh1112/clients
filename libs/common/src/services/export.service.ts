@@ -262,11 +262,7 @@ export class ExportService implements ExportServiceAbstraction {
               .filter((c) => c.deletedDate === null)
               .forEach((c) => {
                 const cipher = new Cipher(new CipherData(c));
-                exportPromises.push(
-                  cipher.decrypt().then((decCipher) => {
-                    decCiphers.push(decCipher);
-                  })
-                );
+                exportPromises.push(this.cryptoService.decryptDomain(CipherView, cipher));
               });
           }
         }

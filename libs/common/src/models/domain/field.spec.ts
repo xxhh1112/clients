@@ -1,9 +1,9 @@
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { FieldData } from "@bitwarden/common/models/data/field.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Field } from "@bitwarden/common/models/domain/field";
+import { mockFromJson } from "../../../spec/utils";
+import { FieldType } from "../../enums/fieldType";
+import { FieldData } from "../data/field.data";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { EncString } from "./enc-string";
+import { Field } from "./field";
 
 describe("Field", () => {
   let data: FieldData;
@@ -45,24 +45,6 @@ describe("Field", () => {
     expect(field.toFieldData()).toEqual(data);
   });
 
-  it("Decrypt", async () => {
-    const field = new Field();
-    field.type = FieldType.Text;
-    field.name = mockEnc("encName");
-    field.value = mockEnc("encValue");
-
-    const view = await field.decrypt(null);
-
-    expect(view).toEqual({
-      type: 0,
-      name: "encName",
-      value: "encValue",
-      newField: false,
-      showCount: false,
-      showValue: false,
-    });
-  });
-
   describe("fromJSON", () => {
     it("initializes nested objects", () => {
       jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
@@ -73,8 +55,8 @@ describe("Field", () => {
       });
 
       expect(actual).toEqual({
-        name: "myName_fromJSON",
-        value: "myValue_fromJSON",
+        name: { encryptedString: "myName", encryptionType: 0 },
+        value: { encryptedString: "myValue", encryptionType: 0 },
       });
       expect(actual).toBeInstanceOf(Field);
     });

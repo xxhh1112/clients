@@ -3,6 +3,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { CollectionsComponent as BaseCollectionsComponent } from "@bitwarden/angular/components/collections.component";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -18,9 +19,17 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     cipherService: CipherService,
-    logService: LogService
+    logService: LogService,
+    cryptoService: CryptoService
   ) {
-    super(collectionService, platformUtilsService, i18nService, cipherService, logService);
+    super(
+      collectionService,
+      platformUtilsService,
+      i18nService,
+      cipherService,
+      logService,
+      cryptoService
+    );
   }
 
   ngOnDestroy() {

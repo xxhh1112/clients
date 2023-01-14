@@ -1,8 +1,8 @@
-import { PasswordHistoryData } from "@bitwarden/common/models/data/password-history.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Password } from "@bitwarden/common/models/domain/password";
+import { mockFromJson } from "../../../spec/utils";
+import { PasswordHistoryData } from "../data/password-history.data";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { EncString } from "./enc-string";
+import { Password } from "./password";
 
 describe("Password", () => {
   let data: PasswordHistoryData;
@@ -37,19 +37,6 @@ describe("Password", () => {
     expect(password.toPasswordHistoryData()).toEqual(data);
   });
 
-  it("Decrypt", async () => {
-    const password = new Password();
-    password.password = mockEnc("password");
-    password.lastUsedDate = new Date("2022-01-31T12:00:00.000Z");
-
-    const view = await password.decrypt(null);
-
-    expect(view).toEqual({
-      password: "password",
-      lastUsedDate: new Date("2022-01-31T12:00:00.000Z"),
-    });
-  });
-
   describe("fromJSON", () => {
     it("initializes nested objects", () => {
       jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
@@ -61,7 +48,7 @@ describe("Password", () => {
       });
 
       expect(actual).toEqual({
-        password: "myPassword_fromJSON",
+        password: { encryptedString: "myPassword", encryptionType: 0 },
         lastUsedDate: lastUsedDate,
       });
       expect(actual).toBeInstanceOf(Password);

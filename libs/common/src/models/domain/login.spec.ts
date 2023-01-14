@@ -1,14 +1,9 @@
-// eslint-disable-next-line no-restricted-imports
-import { Substitute, Arg } from "@fluffy-spoon/substitute";
+import { mockFromJson } from "../../../spec/utils";
+import { UriMatchType } from "../../enums/uriMatchType";
+import { LoginData } from "../data/login.data";
 
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { LoginData } from "@bitwarden/common/models/data/login.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Login } from "@bitwarden/common/models/domain/login";
-import { LoginUri } from "@bitwarden/common/models/domain/login-uri";
-import { LoginUriView } from "@bitwarden/common/models/view/login-uri.view";
-
-import { mockEnc, mockFromJson } from "../../utils";
+import { Login } from "./login";
+import { LoginUri } from "./login-uri";
 
 describe("Login DTO", () => {
   it("Convert from empty LoginData", () => {
@@ -51,40 +46,6 @@ describe("Login DTO", () => {
     expect(login).toEqual({});
   });
 
-  it("Decrypts correctly", async () => {
-    const loginUri = Substitute.for<LoginUri>();
-    const loginUriView = new LoginUriView();
-    loginUriView.uri = "decrypted uri";
-    loginUri.decrypt(Arg.any()).resolves(loginUriView);
-
-    const login = new Login();
-    login.uris = [loginUri];
-    login.username = mockEnc("encrypted username");
-    login.password = mockEnc("encrypted password");
-    login.passwordRevisionDate = new Date("2022-01-31T12:00:00.000Z");
-    login.totp = mockEnc("encrypted totp");
-    login.autofillOnPageLoad = true;
-
-    const loginView = await login.decrypt(null);
-    expect(loginView).toEqual({
-      username: "encrypted username",
-      password: "encrypted password",
-      passwordRevisionDate: new Date("2022-01-31T12:00:00.000Z"),
-      totp: "encrypted totp",
-      uris: [
-        {
-          match: null,
-          _uri: "decrypted uri",
-          _domain: null,
-          _hostname: null,
-          _host: null,
-          _canLaunch: null,
-        },
-      ],
-      autofillOnPageLoad: true,
-    });
-  });
-
   it("Converts from LoginData and back", () => {
     const data: LoginData = {
       uris: [{ uri: "uri", match: UriMatchType.Domain }],
@@ -103,7 +64,6 @@ describe("Login DTO", () => {
 
   describe("fromJSON", () => {
     it("initializes nested objects", () => {
-      jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
       jest.spyOn(LoginUri, "fromJSON").mockImplementation(mockFromJson);
       const passwordRevisionDate = new Date("2022-01-31T12:00:00.000Z");
 
@@ -117,10 +77,10 @@ describe("Login DTO", () => {
 
       expect(actual).toEqual({
         uris: ["loginUri1_fromJSON", "loginUri2_fromJSON"] as any,
-        username: "myUsername_fromJSON",
-        password: "myPassword_fromJSON",
+        username: { encryptedString: "myUsername", encryptionType: 0 },
+        password: { encryptedString: "myPassword", encryptionType: 0 },
         passwordRevisionDate: passwordRevisionDate,
-        totp: "myTotp_fromJSON",
+        totp: { encryptedString: "myTotp", encryptionType: 0 },
       });
       expect(actual).toBeInstanceOf(Login);
     });

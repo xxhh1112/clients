@@ -1,5 +1,6 @@
-import { LinkedIdType } from "../enums/linkedIdType";
-import { ItemView } from "../models/view/item.view";
+import { LinkedIdType } from "../../enums/linkedIdType";
+
+import { ItemView } from "./item.view";
 
 export class LinkedMetadata {
   constructor(readonly propertyKey: string, private readonly _i18nKey?: string) {}

@@ -1,11 +1,11 @@
 import { Jsonify } from "type-fest";
 
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { LoginUriData } from "@bitwarden/common/models/data/login-uri.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { LoginUri } from "@bitwarden/common/models/domain/login-uri";
+import { mockEnc } from "../../../spec/utils";
+import { UriMatchType } from "../../enums/uriMatchType";
+import { LoginUriData } from "../data/login-uri.data";
+import { LoginUriView } from "../view/login-uri.view";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { LoginUri } from "./login-uri";
 
 describe("LoginUri", () => {
   let data: LoginUriData;
@@ -41,12 +41,32 @@ describe("LoginUri", () => {
     expect(loginUri.toLoginUriData()).toEqual(data);
   });
 
-  it("Decrypt", async () => {
+  describe("fromJSON", () => {
+    it("initializes nested objects", () => {
+      const actual = LoginUri.fromJSON({
+        uri: "myUri",
+      } as Jsonify<LoginUri>);
+
+      expect(actual).toEqual({
+        uri: {
+          encryptedString: "myUri",
+          encryptionType: 0,
+        },
+      });
+      expect(actual).toBeInstanceOf(LoginUri);
+    });
+
+    it("returns null if object is null", () => {
+      expect(LoginUri.fromJSON(null)).toBeNull();
+    });
+  });
+
+  it("decrypt", async () => {
     const loginUri = new LoginUri();
     loginUri.match = UriMatchType.Exact;
     loginUri.uri = mockEnc("uri");
 
-    const view = await loginUri.decrypt(null);
+    const view = await LoginUriView.decrypt(null, null, loginUri);
 
     expect(view).toEqual({
       _canLaunch: null,
@@ -55,25 +75,6 @@ describe("LoginUri", () => {
       _hostname: null,
       _uri: "uri",
       match: 3,
-    });
-  });
-
-  describe("fromJSON", () => {
-    it("initializes nested objects", () => {
-      jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
-
-      const actual = LoginUri.fromJSON({
-        uri: "myUri",
-      } as Jsonify<LoginUri>);
-
-      expect(actual).toEqual({
-        uri: "myUri_fromJSON",
-      });
-      expect(actual).toBeInstanceOf(LoginUri);
-    });
-
-    it("returns null if object is null", () => {
-      expect(LoginUri.fromJSON(null)).toBeNull();
     });
   });
 });

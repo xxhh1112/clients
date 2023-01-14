@@ -1,8 +1,6 @@
-import { IdentityData } from "@bitwarden/common/models/data/identity.data";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Identity } from "@bitwarden/common/models/domain/identity";
+import { IdentityData } from "../data/identity.data";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { Identity } from "./identity";
 
 describe("Identity", () => {
   let data: IdentityData;
@@ -86,57 +84,8 @@ describe("Identity", () => {
     expect(identity.toIdentityData()).toEqual(data);
   });
 
-  it("Decrypt", async () => {
-    const identity = new Identity();
-
-    identity.title = mockEnc("mockTitle");
-    identity.firstName = mockEnc("mockFirstName");
-    identity.middleName = mockEnc("mockMiddleName");
-    identity.lastName = mockEnc("mockLastName");
-    identity.address1 = mockEnc("mockAddress1");
-    identity.address2 = mockEnc("mockAddress2");
-    identity.address3 = mockEnc("mockAddress3");
-    identity.city = mockEnc("mockCity");
-    identity.state = mockEnc("mockState");
-    identity.postalCode = mockEnc("mockPostalCode");
-    identity.country = mockEnc("mockCountry");
-    identity.company = mockEnc("mockCompany");
-    identity.email = mockEnc("mockEmail");
-    identity.phone = mockEnc("mockPhone");
-    identity.ssn = mockEnc("mockSsn");
-    identity.username = mockEnc("mockUsername");
-    identity.passportNumber = mockEnc("mockPassportNumber");
-    identity.licenseNumber = mockEnc("mockLicenseNumber");
-
-    const view = await identity.decrypt(null);
-
-    expect(view).toEqual({
-      _firstName: "mockFirstName",
-      _lastName: "mockLastName",
-      _subTitle: null,
-      address1: "mockAddress1",
-      address2: "mockAddress2",
-      address3: "mockAddress3",
-      city: "mockCity",
-      company: "mockCompany",
-      country: "mockCountry",
-      email: "mockEmail",
-      licenseNumber: "mockLicenseNumber",
-      middleName: "mockMiddleName",
-      passportNumber: "mockPassportNumber",
-      phone: "mockPhone",
-      postalCode: "mockPostalCode",
-      ssn: "mockSsn",
-      state: "mockState",
-      title: "mockTitle",
-      username: "mockUsername",
-    });
-  });
-
   describe("fromJSON", () => {
     it("initializes nested objects", () => {
-      jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
-
       const actual = Identity.fromJSON({
         firstName: "mockFirstName",
         lastName: "mockLastName",
@@ -159,24 +108,24 @@ describe("Identity", () => {
       });
 
       expect(actual).toEqual({
-        firstName: "mockFirstName_fromJSON",
-        lastName: "mockLastName_fromJSON",
-        address1: "mockAddress1_fromJSON",
-        address2: "mockAddress2_fromJSON",
-        address3: "mockAddress3_fromJSON",
-        city: "mockCity_fromJSON",
-        company: "mockCompany_fromJSON",
-        country: "mockCountry_fromJSON",
-        email: "mockEmail_fromJSON",
-        licenseNumber: "mockLicenseNumber_fromJSON",
-        middleName: "mockMiddleName_fromJSON",
-        passportNumber: "mockPassportNumber_fromJSON",
-        phone: "mockPhone_fromJSON",
-        postalCode: "mockPostalCode_fromJSON",
-        ssn: "mockSsn_fromJSON",
-        state: "mockState_fromJSON",
-        title: "mockTitle_fromJSON",
-        username: "mockUsername_fromJSON",
+        firstName: { encryptedString: "mockFirstName", encryptionType: 0 },
+        lastName: { encryptedString: "mockLastName", encryptionType: 0 },
+        address1: { encryptedString: "mockAddress1", encryptionType: 0 },
+        address2: { encryptedString: "mockAddress2", encryptionType: 0 },
+        address3: { encryptedString: "mockAddress3", encryptionType: 0 },
+        city: { encryptedString: "mockCity", encryptionType: 0 },
+        company: { encryptedString: "mockCompany", encryptionType: 0 },
+        country: { encryptedString: "mockCountry", encryptionType: 0 },
+        email: { encryptedString: "mockEmail", encryptionType: 0 },
+        licenseNumber: { encryptedString: "mockLicenseNumber", encryptionType: 0 },
+        middleName: { encryptedString: "mockMiddleName", encryptionType: 0 },
+        passportNumber: { encryptedString: "mockPassportNumber", encryptionType: 0 },
+        phone: { encryptedString: "mockPhone", encryptionType: 0 },
+        postalCode: { encryptedString: "mockPostalCode", encryptionType: 0 },
+        ssn: { encryptedString: "mockSsn", encryptionType: 0 },
+        state: { encryptedString: "mockState", encryptionType: 0 },
+        title: { encryptedString: "mockTitle", encryptionType: 0 },
+        username: { encryptedString: "mockUsername", encryptionType: 0 },
       });
       expect(actual).toBeInstanceOf(Identity);
     });

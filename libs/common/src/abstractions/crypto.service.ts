@@ -93,6 +93,6 @@ export abstract class CryptoService {
 
   decryptDomain: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
   encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
-    folder: V
+    view: V
   ) => Promise<EncryptableDomain<V>>;
 }

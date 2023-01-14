@@ -3,6 +3,7 @@ import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import {
@@ -38,7 +39,8 @@ export class ShareComponent implements OnInit, OnDestroy {
     protected i18nService: I18nService,
     protected cipherService: CipherService,
     private logService: LogService,
-    protected organizationService: OrganizationService
+    protected organizationService: OrganizationService,
+    private cryptoService: CryptoService
   ) {}
 
   async ngOnInit() {
@@ -72,7 +74,7 @@ export class ShareComponent implements OnInit, OnDestroy {
     });
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
-    this.cipher = await cipherDomain.decrypt();
+    this.cipher = await this.cryptoService.decryptDomain(CipherView, cipherDomain);
 
     this.filterCollections();
   }
@@ -100,7 +102,7 @@ export class ShareComponent implements OnInit, OnDestroy {
     }
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
-    const cipherView = await cipherDomain.decrypt();
+    const cipherView = await this.cryptoService.decryptDomain(CipherView, cipherDomain);
     const orgs = await firstValueFrom(this.organizations$);
     const orgName =
       orgs.find((o) => o.id === this.organizationId)?.name ?? this.i18nService.t("organization");

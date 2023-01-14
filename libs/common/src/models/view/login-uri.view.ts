@@ -1,10 +1,10 @@
 import { Jsonify } from "type-fest";
 
+import { EncryptService } from "../../abstractions/encrypt.service";
 import { UriMatchType } from "../../enums/uriMatchType";
 import { Utils } from "../../misc/utils";
 import { LoginUri } from "../domain/login-uri";
-
-import { View } from "./view";
+import { SymmetricCryptoKey } from "../domain/symmetric-crypto-key";
 
 const CanLaunchWhitelist = [
   "https://",
@@ -22,7 +22,7 @@ const CanLaunchWhitelist = [
   "androidapp://",
 ];
 
-export class LoginUriView implements View {
+export class LoginUriView {
   match: UriMatchType = null;
 
   private _uri: string = null;
@@ -30,14 +30,6 @@ export class LoginUriView implements View {
   private _hostname: string = null;
   private _host: string = null;
   private _canLaunch: boolean = null;
-
-  constructor(u?: LoginUri) {
-    if (!u) {
-      return;
-    }
-
-    this.match = u.match;
-  }
 
   get uri(): string {
     return this._uri;
@@ -129,5 +121,14 @@ export class LoginUriView implements View {
 
   static fromJSON(obj: Partial<Jsonify<LoginUriView>>): LoginUriView {
     return Object.assign(new LoginUriView(), obj);
+  }
+
+  static async decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: LoginUri) {
+    const view = new LoginUriView();
+
+    view.match = model.match;
+    view.uri = await model.uri?.decryptWithEncryptService(encryptService, key);
+
+    return view;
   }
 }

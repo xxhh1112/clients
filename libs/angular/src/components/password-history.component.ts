@@ -1,6 +1,7 @@
 import { Directive, OnInit } from "@angular/core";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PasswordHistoryView } from "@bitwarden/common/models/view/password-history.view";
@@ -14,6 +15,7 @@ export class PasswordHistoryComponent implements OnInit {
     protected cipherService: CipherService,
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
+    protected cryptoService: CryptoService,
     private win: Window
   ) {}
 
@@ -33,7 +35,7 @@ export class PasswordHistoryComponent implements OnInit {
 
   protected async init() {
     const cipher = await this.cipherService.get(this.cipherId);
-    const decCipher = await cipher.decrypt();
+    const decCipher = await this.cryptoService.decryptDomain(CipherView, cipher);
     this.history = decCipher.passwordHistory == null ? [] : decCipher.passwordHistory;
   }
 }

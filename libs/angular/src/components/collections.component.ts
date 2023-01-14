@@ -2,6 +2,7 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -27,7 +28,8 @@ export class CollectionsComponent implements OnInit {
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
     protected cipherService: CipherService,
-    private logService: LogService
+    private logService: LogService,
+    private cryptoService: CryptoService
   ) {}
 
   async ngOnInit() {
@@ -37,7 +39,7 @@ export class CollectionsComponent implements OnInit {
   async load() {
     this.cipherDomain = await this.loadCipher();
     this.collectionIds = this.loadCipherCollections();
-    this.cipher = await this.cipherDomain.decrypt();
+    this.cipher = await this.cryptoService.decryptDomain(CipherView, this.cipherDomain);
     this.collections = await this.loadCollections();
 
     this.collections.forEach((c) => ((c as any).checked = false));

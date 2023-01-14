@@ -4,6 +4,7 @@ import { Observable, Subject, takeUntil, concatMap } from "rxjs";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -96,7 +97,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected policyService: PolicyService,
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    protected cryptoService: CryptoService
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
@@ -224,7 +226,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (this.cipher == null) {
       if (this.editMode) {
         const cipher = await this.loadCipher();
-        this.cipher = await cipher.decrypt();
+        this.cipher = await this.cryptoService.decryptDomain(CipherView, cipher);
 
         // Adjust Cipher Name if Cloning
         if (this.cloneMode) {
@@ -594,7 +596,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   protected encryptCipher() {
-    return this.cipherService.encrypt(this.cipher);
+    return this.cryptoService.encryptView(this.cipher);
   }
 
   protected saveCipher(cipher: Cipher) {

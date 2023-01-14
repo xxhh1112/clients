@@ -45,6 +45,7 @@ export interface Encryptable<TDomain> {
  */
 export type Decryptable<TView, TDomain extends DecryptableDomain> = {
   decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: TDomain): Promise<TView>;
+  fromJSON(obj: any): TView;
 };
 
 /**

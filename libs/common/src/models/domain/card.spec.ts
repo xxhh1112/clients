@@ -1,8 +1,8 @@
-import { CardData } from "@bitwarden/common/models/data/card.data";
-import { Card } from "@bitwarden/common/models/domain/card";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { mockFromJson } from "../../../spec/utils";
+import { CardData } from "../data/card.data";
 
-import { mockEnc, mockFromJson } from "../../utils";
+import { Card } from "./card";
+import { EncString } from "./enc-string";
 
 describe("Card", () => {
   let data: CardData;
@@ -50,28 +50,6 @@ describe("Card", () => {
     expect(card.toCardData()).toEqual(data);
   });
 
-  it("Decrypt", async () => {
-    const card = new Card();
-    card.cardholderName = mockEnc("cardHolder");
-    card.brand = mockEnc("brand");
-    card.number = mockEnc("number");
-    card.expMonth = mockEnc("expMonth");
-    card.expYear = mockEnc("expYear");
-    card.code = mockEnc("code");
-
-    const view = await card.decrypt(null);
-
-    expect(view).toEqual({
-      _brand: "brand",
-      _number: "number",
-      _subTitle: null,
-      cardholderName: "cardHolder",
-      code: "code",
-      expMonth: "expMonth",
-      expYear: "expYear",
-    });
-  });
-
   describe("fromJSON", () => {
     it("initializes nested objects", () => {
       jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
@@ -86,12 +64,12 @@ describe("Card", () => {
       });
 
       expect(actual).toEqual({
-        cardholderName: "mockCardHolder_fromJSON",
-        brand: "mockBrand_fromJSON",
-        number: "mockNumber_fromJSON",
-        expMonth: "mockExpMonth_fromJSON",
-        expYear: "mockExpYear_fromJSON",
-        code: "mockCode_fromJSON",
+        cardholderName: { encryptedString: "mockCardHolder", encryptionType: 0 },
+        brand: { encryptedString: "mockBrand", encryptionType: 0 },
+        number: { encryptedString: "mockNumber", encryptionType: 0 },
+        expMonth: { encryptedString: "mockExpMonth", encryptionType: 0 },
+        expYear: { encryptedString: "mockExpYear", encryptionType: 0 },
+        code: { encryptedString: "mockCode", encryptionType: 0 },
       });
       expect(actual).toBeInstanceOf(Card);
     });

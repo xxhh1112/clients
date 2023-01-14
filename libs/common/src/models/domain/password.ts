@@ -1,46 +1,30 @@
 import { Jsonify } from "type-fest";
 
+import { nullableFactory } from "../../interfaces/crypto.interface";
 import { PasswordHistoryData } from "../data/password-history.data";
-import { PasswordHistoryView } from "../view/password-history.view";
 
-import Domain from "./domain-base";
 import { EncString } from "./enc-string";
-import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Password extends Domain {
+export class Password {
   password: EncString;
   lastUsedDate: Date;
 
   constructor(obj?: PasswordHistoryData) {
-    super();
     if (obj == null) {
       return;
     }
 
-    this.buildDomainModel(this, obj, {
-      password: null,
-    });
+    this.password = nullableFactory(EncString, obj.password);
     this.lastUsedDate = new Date(obj.lastUsedDate);
   }
 
-  decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<PasswordHistoryView> {
-    return this.decryptObj(
-      new PasswordHistoryView(this),
-      {
-        password: null,
-      },
-      orgId,
-      encKey
-    );
-  }
-
   toPasswordHistoryData(): PasswordHistoryData {
-    const ph = new PasswordHistoryData();
-    ph.lastUsedDate = this.lastUsedDate.toISOString();
-    this.buildDataModel(this, ph, {
-      password: null,
-    });
-    return ph;
+    const data = new PasswordHistoryData();
+
+    data.lastUsedDate = this.lastUsedDate.toISOString();
+    data.password = this.password?.encryptedString;
+
+    return data;
   }
 
   static fromJSON(obj: Partial<Jsonify<Password>>): Password {
@@ -48,12 +32,9 @@ export class Password extends Domain {
       return null;
     }
 
-    const password = EncString.fromJSON(obj.password);
-    const lastUsedDate = obj.lastUsedDate == null ? null : new Date(obj.lastUsedDate);
-
     return Object.assign(new Password(), obj, {
-      password,
-      lastUsedDate,
+      password: nullableFactory(EncString, obj.password),
+      lastUsedDate: nullableFactory(Date, obj.lastUsedDate),
     });
   }
 }

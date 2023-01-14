@@ -25,6 +25,7 @@ export function BuildTestObject<T, K extends keyof T = keyof T>(
 export function mockEnc(s: string): EncString {
   const mock = Substitute.for<EncString>();
   mock.decrypt(Arg.any(), Arg.any()).resolves(s);
+  mock.decryptWithEncryptService(Arg.any(), Arg.any()).resolves(s);
 
   return mock;
 }

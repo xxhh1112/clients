@@ -1,6 +1,7 @@
-import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
-import { SecureNoteData } from "@bitwarden/common/models/data/secure-note.data";
-import { SecureNote } from "@bitwarden/common/models/domain/secure-note";
+import { SecureNoteType } from "../../enums/secureNoteType";
+import { SecureNoteData } from "../data/secure-note.data";
+
+import { SecureNote } from "./secure-note";
 
 describe("SecureNote", () => {
   let data: SecureNoteData;
@@ -31,17 +32,6 @@ describe("SecureNote", () => {
   it("toSecureNoteData", () => {
     const secureNote = new SecureNote(data);
     expect(secureNote.toSecureNoteData()).toEqual(data);
-  });
-
-  it("Decrypt", async () => {
-    const secureNote = new SecureNote();
-    secureNote.type = SecureNoteType.Generic;
-
-    const view = await secureNote.decrypt(null);
-
-    expect(view).toEqual({
-      type: 0,
-    });
   });
 
   describe("fromJSON", () => {

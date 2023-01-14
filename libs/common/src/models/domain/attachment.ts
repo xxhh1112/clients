@@ -1,14 +1,11 @@
 import { Jsonify } from "type-fest";
 
-import { Utils } from "../../misc/utils";
+import { nullableFactory } from "../../interfaces/crypto.interface";
 import { AttachmentData } from "../data/attachment.data";
-import { AttachmentView } from "../view/attachment.view";
 
-import Domain from "./domain-base";
 import { EncString } from "./enc-string";
-import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Attachment extends Domain {
+export class Attachment {
   id: string;
   url: string;
   size: string;
@@ -17,80 +14,29 @@ export class Attachment extends Domain {
   fileName: EncString;
 
   constructor(obj?: AttachmentData) {
-    super();
     if (obj == null) {
       return;
     }
 
+    this.id = obj.id;
+    this.url = obj.url;
     this.size = obj.size;
-    this.buildDomainModel(
-      this,
-      obj,
-      {
-        id: null,
-        url: null,
-        sizeName: null,
-        fileName: null,
-        key: null,
-      },
-      ["id", "url", "sizeName"]
-    );
-  }
-
-  async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<AttachmentView> {
-    const view = await this.decryptObj(
-      new AttachmentView(this),
-      {
-        fileName: null,
-      },
-      orgId,
-      encKey
-    );
-
-    if (this.key != null) {
-      view.key = await this.decryptAttachmentKey(orgId, encKey);
-    }
-
-    return view;
-  }
-
-  private async decryptAttachmentKey(orgId: string, encKey?: SymmetricCryptoKey) {
-    try {
-      if (encKey == null) {
-        encKey = await this.getKeyForDecryption(orgId);
-      }
-
-      const encryptService = Utils.getContainerService().getEncryptService();
-      const decValue = await encryptService.decryptToBytes(this.key, encKey);
-      return new SymmetricCryptoKey(decValue);
-    } catch (e) {
-      // TODO: error?
-    }
-  }
-
-  private async getKeyForDecryption(orgId: string) {
-    const cryptoService = Utils.getContainerService().getCryptoService();
-    return orgId != null
-      ? await cryptoService.getOrgKey(orgId)
-      : await cryptoService.getKeyForUserEncryption();
+    this.sizeName = obj.sizeName;
+    this.key = nullableFactory(EncString, obj.key);
+    this.fileName = nullableFactory(EncString, obj.fileName);
   }
 
   toAttachmentData(): AttachmentData {
-    const a = new AttachmentData();
-    a.size = this.size;
-    this.buildDataModel(
-      this,
-      a,
-      {
-        id: null,
-        url: null,
-        sizeName: null,
-        fileName: null,
-        key: null,
-      },
-      ["id", "url", "sizeName"]
-    );
-    return a;
+    const data = new AttachmentData();
+
+    data.id = this.id;
+    data.url = this.url;
+    data.size = this.size;
+    data.sizeName = this.sizeName;
+    data.key = this.key?.encryptedString;
+    data.fileName = this.fileName?.encryptedString;
+
+    return data;
   }
 
   static fromJSON(obj: Partial<Jsonify<Attachment>>): Attachment {
@@ -98,12 +44,9 @@ export class Attachment extends Domain {
       return null;
     }
 
-    const key = EncString.fromJSON(obj.key);
-    const fileName = EncString.fromJSON(obj.fileName);
-
     return Object.assign(new Attachment(), obj, {
-      key,
-      fileName,
+      key: nullableFactory(EncString, obj.key),
+      fileName: nullableFactory(EncString, obj.fileName),
     });
   }
 }

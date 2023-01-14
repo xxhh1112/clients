@@ -1,13 +1,11 @@
 import { Jsonify } from "type-fest";
 
+import { nullableFactory } from "../../interfaces/crypto.interface";
 import { IdentityData } from "../data/identity.data";
-import { IdentityView } from "../view/identity.view";
 
-import Domain from "./domain-base";
 import { EncString } from "./enc-string";
-import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
-export class Identity extends Domain {
+export class Identity {
   title: EncString;
   firstName: EncString;
   middleName: EncString;
@@ -28,89 +26,53 @@ export class Identity extends Domain {
   licenseNumber: EncString;
 
   constructor(obj?: IdentityData) {
-    super();
     if (obj == null) {
       return;
     }
 
-    this.buildDomainModel(
-      this,
-      obj,
-      {
-        title: null,
-        firstName: null,
-        middleName: null,
-        lastName: null,
-        address1: null,
-        address2: null,
-        address3: null,
-        city: null,
-        state: null,
-        postalCode: null,
-        country: null,
-        company: null,
-        email: null,
-        phone: null,
-        ssn: null,
-        username: null,
-        passportNumber: null,
-        licenseNumber: null,
-      },
-      []
-    );
-  }
-
-  decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<IdentityView> {
-    return this.decryptObj(
-      new IdentityView(),
-      {
-        title: null,
-        firstName: null,
-        middleName: null,
-        lastName: null,
-        address1: null,
-        address2: null,
-        address3: null,
-        city: null,
-        state: null,
-        postalCode: null,
-        country: null,
-        company: null,
-        email: null,
-        phone: null,
-        ssn: null,
-        username: null,
-        passportNumber: null,
-        licenseNumber: null,
-      },
-      orgId,
-      encKey
-    );
+    this.title = nullableFactory(EncString, obj.title);
+    this.firstName = nullableFactory(EncString, obj.firstName);
+    this.middleName = nullableFactory(EncString, obj.middleName);
+    this.lastName = nullableFactory(EncString, obj.lastName);
+    this.address1 = nullableFactory(EncString, obj.address1);
+    this.address2 = nullableFactory(EncString, obj.address2);
+    this.address3 = nullableFactory(EncString, obj.address3);
+    this.city = nullableFactory(EncString, obj.city);
+    this.state = nullableFactory(EncString, obj.state);
+    this.postalCode = nullableFactory(EncString, obj.postalCode);
+    this.country = nullableFactory(EncString, obj.country);
+    this.company = nullableFactory(EncString, obj.company);
+    this.email = nullableFactory(EncString, obj.email);
+    this.phone = nullableFactory(EncString, obj.phone);
+    this.ssn = nullableFactory(EncString, obj.ssn);
+    this.username = nullableFactory(EncString, obj.username);
+    this.passportNumber = nullableFactory(EncString, obj.passportNumber);
+    this.licenseNumber = nullableFactory(EncString, obj.licenseNumber);
   }
 
   toIdentityData(): IdentityData {
-    const i = new IdentityData();
-    this.buildDataModel(this, i, {
-      title: null,
-      firstName: null,
-      middleName: null,
-      lastName: null,
-      address1: null,
-      address2: null,
-      address3: null,
-      city: null,
-      state: null,
-      postalCode: null,
-      country: null,
-      company: null,
-      email: null,
-      phone: null,
-      ssn: null,
-      username: null,
-      passportNumber: null,
-      licenseNumber: null,
-    });
-    return i;
+    const data = new IdentityData();
+
+    data.title = this.title?.encryptedString;
+    data.firstName = this.firstName?.encryptedString;
+    data.middleName = this.middleName?.encryptedString;
+    data.lastName = this.lastName?.encryptedString;
+    data.address1 = this.address1?.encryptedString;
+    data.address2 = this.address2?.encryptedString;
+    data.address3 = this.address3?.encryptedString;
+    data.city = this.city?.encryptedString;
+    data.state = this.state?.encryptedString;
+    data.postalCode = this.postalCode?.encryptedString;
+    data.country = this.country?.encryptedString;
+    data.company = this.company?.encryptedString;
+    data.email = this.email?.encryptedString;
+    data.phone = this.phone?.encryptedString;
+    data.ssn = this.ssn?.encryptedString;
+    data.username = this.username?.encryptedString;
+    data.passportNumber = this.passportNumber?.encryptedString;
+    data.licenseNumber = this.licenseNumber?.encryptedString;
+
+    return data;
   }
 
   static fromJSON(obj: Jsonify<Identity>): Identity {
@@ -118,44 +80,25 @@ export class Identity extends Domain {
       return null;
     }
 
-    const title = EncString.fromJSON(obj.title);
-    const firstName = EncString.fromJSON(obj.firstName);
-    const middleName = EncString.fromJSON(obj.middleName);
-    const lastName = EncString.fromJSON(obj.lastName);
-    const address1 = EncString.fromJSON(obj.address1);
-    const address2 = EncString.fromJSON(obj.address2);
-    const address3 = EncString.fromJSON(obj.address3);
-    const city = EncString.fromJSON(obj.city);
-    const state = EncString.fromJSON(obj.state);
-    const postalCode = EncString.fromJSON(obj.postalCode);
-    const country = EncString.fromJSON(obj.country);
-    const company = EncString.fromJSON(obj.company);
-    const email = EncString.fromJSON(obj.email);
-    const phone = EncString.fromJSON(obj.phone);
-    const ssn = EncString.fromJSON(obj.ssn);
-    const username = EncString.fromJSON(obj.username);
-    const passportNumber = EncString.fromJSON(obj.passportNumber);
-    const licenseNumber = EncString.fromJSON(obj.licenseNumber);
-
     return Object.assign(new Identity(), obj, {
-      title,
-      firstName,
-      middleName,
-      lastName,
-      address1,
-      address2,
-      address3,
-      city,
-      state,
-      postalCode,
-      country,
-      company,
-      email,
-      phone,
-      ssn,
-      username,
-      passportNumber,
-      licenseNumber,
+      title: nullableFactory(EncString, obj.title),
+      firstName: nullableFactory(EncString, obj.firstName),
+      middleName: nullableFactory(EncString, obj.middleName),
+      lastName: nullableFactory(EncString, obj.lastName),
+      address1: nullableFactory(EncString, obj.address1),
+      address2: nullableFactory(EncString, obj.address2),
+      address3: nullableFactory(EncString, obj.address3),
+      city: nullableFactory(EncString, obj.city),
+      state: nullableFactory(EncString, obj.state),
+      postalCode: nullableFactory(EncString, obj.postalCode),
+      country: nullableFactory(EncString, obj.country),
+      company: nullableFactory(EncString, obj.company),
+      email: nullableFactory(EncString, obj.email),
+      phone: nullableFactory(EncString, obj.phone),
+      ssn: nullableFactory(EncString, obj.ssn),
+      username: nullableFactory(EncString, obj.username),
+      passportNumber: nullableFactory(EncString, obj.passportNumber),
+      licenseNumber: nullableFactory(EncString, obj.licenseNumber),
     });
   }
 }

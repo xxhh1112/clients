@@ -5,6 +5,7 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { CipherData } from "@bitwarden/common/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
@@ -35,7 +36,8 @@ export class EmergencyAccessViewComponent implements OnInit {
     private modalService: ModalService,
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private encryptService: EncryptService
   ) {}
 
   ngOnInit() {
@@ -93,7 +95,11 @@ export class EmergencyAccessViewComponent implements OnInit {
     ciphers.forEach((cipherResponse) => {
       const cipherData = new CipherData(cipherResponse);
       const cipher = new Cipher(cipherData);
-      promises.push(cipher.decrypt(oldEncKey).then((c) => decCiphers.push(c)));
+      promises.push(
+        this.encryptService
+          .decryptDomain(CipherView, cipher, oldEncKey)
+          .then((c) => decCiphers.push(c))
+      );
     });
 
     await Promise.all(promises);
