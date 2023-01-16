@@ -29,8 +29,6 @@ import {
   ColorPasswordModule,
 } from "@bitwarden/components";
 
-import { BreadcrumbsModule } from "./components/breadcrumbs/breadcrumbs.module";
-
 // Register the locales for the application
 import "./locales";
 
@@ -75,7 +73,6 @@ import "./locales";
     ColorPasswordModule,
 
     // Web specific
-    BreadcrumbsModule,
   ],
   exports: [
     CommonModule,
@@ -110,7 +107,6 @@ import "./locales";
     ColorPasswordModule,
 
     // Web specific
-    BreadcrumbsModule,
   ],
   providers: [DatePipe],
   bootstrap: [],
