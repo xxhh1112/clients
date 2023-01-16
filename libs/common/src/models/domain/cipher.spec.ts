@@ -65,7 +65,7 @@ describe("Cipher DTO", () => {
         name: "EncryptedString",
         notes: "EncryptedString",
         creationDate: "2022-01-01T12:00:00.000Z",
-        deletedDate: null,
+        deletedDate: undefined,
         reprompt: CipherRepromptType.None,
         login: {
           uris: [{ uri: "EncryptedString", match: UriMatchType.Domain }],
@@ -206,7 +206,7 @@ describe("Cipher DTO", () => {
         name: "EncryptedString",
         notes: "EncryptedString",
         creationDate: "2022-01-01T12:00:00.000Z",
-        deletedDate: null,
+        deletedDate: undefined,
         reprompt: CipherRepromptType.None,
         secureNote: {
           type: SecureNoteType.Generic,
@@ -265,7 +265,7 @@ describe("Cipher DTO", () => {
         name: "EncryptedString",
         notes: "EncryptedString",
         creationDate: "2022-01-01T12:00:00.000Z",
-        deletedDate: null,
+        deletedDate: undefined,
         reprompt: CipherRepromptType.None,
         card: {
           cardholderName: "EncryptedString",
@@ -336,7 +336,7 @@ describe("Cipher DTO", () => {
         name: "EncryptedString",
         notes: "EncryptedString",
         creationDate: "2022-01-01T12:00:00.000Z",
-        deletedDate: null,
+        deletedDate: undefined,
         reprompt: CipherRepromptType.None,
         identity: {
           title: "EncryptedString",

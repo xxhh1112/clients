@@ -596,7 +596,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   protected encryptCipher() {
-    return this.cryptoService.encryptView(this.cipher);
+    return this.cipherService.updateHistoryAndEncrypt(this.cipher);
   }
 
   protected saveCipher(cipher: Cipher) {

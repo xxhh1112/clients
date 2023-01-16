@@ -29,6 +29,7 @@ import { AddEditComponent as BaseAddEditComponent } from "../../vault/add-edit.c
   templateUrl: "../../vault/add-edit.component.html",
 })
 export class AddEditComponent extends BaseAddEditComponent {
+  protected originalCipher: Cipher = null;
   protected override componentName = "app-org-vault-add-edit";
 
   constructor(
@@ -100,6 +101,7 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     data.edit = true;
     const cipher = new Cipher(data);
+    this.originalCipher = cipher;
     return cipher;
   }
 
@@ -107,7 +109,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (!this.organization.canEditAnyCollection) {
       return super.encryptCipher();
     }
-    return this.cryptoService.encryptView(this.cipher);
+    return this.cipherService.updateHistoryAndEncrypt(this.cipher, this.originalCipher);
   }
 
   protected async saveCipher(cipher: Cipher) {

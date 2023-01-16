@@ -116,11 +116,11 @@ export class Cipher implements DecryptableDomain, InitializerMetadata {
     c.viewPassword = this.viewPassword;
     c.organizationUseTotp = this.organizationUseTotp;
     c.favorite = this.favorite;
-    c.revisionDate = this.revisionDate != null ? this.revisionDate.toISOString() : null;
+    c.revisionDate = this.revisionDate?.toISOString();
     c.type = this.type;
     c.collectionIds = this.collectionIds;
-    c.creationDate = this.creationDate != null ? this.creationDate.toISOString() : null;
-    c.deletedDate = this.deletedDate != null ? this.deletedDate.toISOString() : null;
+    c.creationDate = this.creationDate?.toISOString();
+    c.deletedDate = this.deletedDate?.toISOString();
     c.reprompt = this.reprompt;
 
     c.name = this.name?.encryptedString;

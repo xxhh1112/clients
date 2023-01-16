@@ -51,7 +51,7 @@ export class CardView extends ItemView {
   get subTitle(): string {
     if (this._subTitle == null) {
       this._subTitle = this.brand;
-      if (this.number != null && this.number.length >= 4) {
+      if (this.number?.length >= 4) {
         if (this._subTitle != null && this._subTitle !== "") {
           this._subTitle += ", ";
         } else {

@@ -6,6 +6,7 @@ import { CipherView } from "../models/view/cipher.view";
 
 export abstract class CipherService {
   clearCache: (userId?: string) => Promise<void>;
+  updateHistoryAndEncrypt: (view: CipherView, originalCipher?: Cipher) => Promise<Cipher>;
   get: (id: string) => Promise<Cipher>;
   getAll: () => Promise<Cipher[]>;
   getAllDecrypted: () => Promise<CipherView[]>;
