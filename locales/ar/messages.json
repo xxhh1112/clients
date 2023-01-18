@@ -398,7 +398,7 @@
     }
   },
   "copyValue": {
-    "message": "نسخ القيمة",
+    "message": "Copy value",
     "description": "Copy value to clipboard"
   },
   "copyPassword": {
@@ -660,7 +660,7 @@
     "message": "تم إنشاء حساب جديد لك! بإمكانك الآن تسجيل الدخول."
   },
   "trialAccountCreated": {
-    "message": "تم إنشاء الحساب بنجاح."
+    "message": "Account created successfully."
   },
   "masterPassSent": {
     "message": "We've sent you an email with your master password hint."
@@ -1822,22 +1822,6 @@
       }
     }
   },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
-  },
   "addons": {
     "message": "Addons"
   },
@@ -2442,7 +2426,7 @@
     "message": "This user can access only the selected collections."
   },
   "search": {
-    "message": "بحث"
+    "message": "Search"
   },
   "invited": {
     "message": "Invited"
@@ -3141,7 +3125,7 @@
     "message": "Account holder name"
   },
   "bankAccountType": {
-    "message": "نوع الحساب"
+    "message": "Account type"
   },
   "bankAccountTypeCompany": {
     "message": "Company (business)"

@@ -1822,22 +1822,6 @@
       }
     }
   },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Перейдите на Премиум всего за $PRICE$ /год или получите Премиум для $FAMILYPLANUSERCOUNT$ пользователей и неограниченный семейный обмен с ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "планом Bitwarden Families."
-  },
   "addons": {
     "message": "Дополнения"
   },
@@ -5278,7 +5262,7 @@
     "message": "Общий email домена"
   },
   "catchallEmailDesc": {
-    "message": "Использовать общий email домена."
+    "message": "Использовать общую почту домена."
   },
   "random": {
     "message": "Случайно",
@@ -5578,13 +5562,13 @@
     "message": "Удалить секреты"
   },
   "secretProjectAssociationDescription": {
-    "message": "Выберите проекты, с которыми будет связан секрет. Только пользователи организации, имеющие доступ к этим проектам, смогут увидеть секрет."
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
   },
   "typeOrSelectProjects": {
-    "message": "Введите или выберите проекты"
+    "message": "Type or select Projects"
   },
   "typeOrSelectProject": {
-    "message": "Введите или выберите проекты"
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Проект"
@@ -5848,7 +5832,7 @@
     "message": "Эта пользователь может иметь доступ и изменять все элементы."
   },
   "moreFromBitwarden": {
-    "message": "Больше от Bitwarden"
+    "message": "Дополнительная информация о Bitwarden"
   },
   "switchProducts": {
     "message": "Изменить продукты"

@@ -1553,11 +1553,11 @@
     "message": "Hlášení"
   },
   "reportsDesc": {
-    "message": "Kliknutím na níže uvedené přehledy zjistěte a odstraňte nedostatky v zabezpečení svých online účtů.",
+    "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "orgsReportsDesc": {
-    "message": "Kliknutím na níže uvedené přehledy zjistěte a odstraňte nedostatky v zabezpečení svých online účtů.",
+    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
@@ -1609,7 +1609,7 @@
     "message": "Hlášení o úniku hesel"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Hesla odhalená při úniku dat jsou pro útočníky snadným cílem. Změňte tato hesla, abyste předešli případným průnikům."
+    "message": "Uniklá hesla jsou hesla, která byla odhalena během známých úniků dat, zveřejněna nebo prodána hackery na dark webu."
   },
   "exposedPasswordsFound": {
     "message": "Nalezena uniklá hesla"
@@ -1821,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Doplňky"
@@ -2307,7 +2291,7 @@
     "message": "Ročně"
   },
   "annual": {
-    "message": "Roční"
+    "message": "Annual"
   },
   "basePrice": {
     "message": "Základní cena"
@@ -2337,7 +2321,7 @@
     "message": "Nápověda"
   },
   "getApps": {
-    "message": "Získání aplikací"
+    "message": "Stáhnout aplikaci"
   },
   "loggedInAs": {
     "message": "Přihlášen jako"
@@ -4952,7 +4936,7 @@
     "message": "Sponsorship created"
   },
   "emailSent": {
-    "message": "Email odeslán"
+    "message": "Email sent"
   },
   "revokeSponsorshipConfirmation": {
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
@@ -4976,7 +4960,7 @@
     "message": "Code sent"
   },
   "verificationCode": {
-    "message": "Ověřovací kód"
+    "message": "Verification code"
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
@@ -5141,7 +5125,7 @@
     "message": "Billing sync token"
   },
   "active": {
-    "message": "Aktivní"
+    "message": "Active"
   },
   "inactive": {
     "message": "Inactive"
@@ -5253,10 +5237,10 @@
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "Co chcete vygenerovat?"
+    "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Typ hesla"
+    "message": "Password type"
   },
   "regenerateUsername": {
     "message": "Regenerate username"

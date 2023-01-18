@@ -1582,7 +1582,7 @@
     "message": "Nevienam glabātavas vienumam nav nedrošu URI."
   },
   "inactive2faReport": {
-    "message": "Pierakstīšanās vienumi bez divpakāpju pārbaudes"
+    "message": "Neizmantoto 2FA pārskats"
   },
   "inactive2faReportDesc": {
     "message": "Divfaktoru autentificēšanās (2FA) ir būtisks drošības iestatījums, kas palīdz nodrošināt kontus. Ja tīmekļa vietne to piedāvā, vienmēr vajadzētu iespējot divfaktoru autentificēšanos."
@@ -1690,13 +1690,13 @@
     }
   },
   "dataBreachReport": {
-    "message": "Datu noplūde"
+    "message": "Datu pārākumu pārskats"
   },
   "breachDesc": {
-    "message": "Kontu noplūde var atklāt personisko informāciju. Noplūdušos kontus var padarīt drošus, iespējojot divpakāpju pārbaudi vai izveidojot spēcīgāku paroli."
+    "message": "\"Pārkāpums\" ir notikums, kurā urķi ir nelikumīgi piekļuvuši tās datiem un tad tos ir publicējuši. Jāpārskata datu veidi, kas ir ietekmēti (e-pasta adreses, paroles, bankas kartes utt.) un jāveic atbilstošas darbības, piemēram, paroļu nomaiņa."
   },
   "breachCheckUsernameEmail": {
-    "message": "Pārbaudīt jebkuru lietotājvārdu vai e-pasta adresi, kas tiek izmantota."
+    "message": "Jāpārbauda jebkurš lietotājvārds vai e-pasta adrese, kas tiek izmantota."
   },
   "checkBreaches": {
     "message": "Pārbaudīt datu pārkāpumus"
@@ -1821,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Iegūsti premium tikai par $PRICE$ gadā vai iegūsti premium kontus lietotājiem $FAMILYPLANUSERCOUNT$ un neierobežotu ģimenes koplietošanu ar ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plāns."
   },
   "addons": {
     "message": "Papildinājumi"
@@ -5435,7 +5419,7 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
-    "message": "Jāievada vērtība."
+    "message": "Ievade ir nepieciešama."
   },
   "inputEmail": {
     "message": "Ievadītā vērtība nav e-pasta adrese."
@@ -5492,43 +5476,43 @@
     "message": "Tas neesi Tu?"
   },
   "pickAnAvatarColor": {
-    "message": "Izvēlies avatāra krāsu"
+    "message": "Pick an avatar color"
   },
   "customizeAvatar": {
-    "message": "Pielāgot avatāru"
+    "message": "Customize avatar"
   },
   "avatarUpdated": {
-    "message": "Avatārs atjaunināts"
+    "message": "Avatar updated"
   },
   "brightBlue": {
-    "message": "Spilgti Zils"
+    "message": "Bright Blue"
   },
   "green": {
-    "message": "Zaļš"
+    "message": "Green"
   },
   "orange": {
-    "message": "Oranžs"
+    "message": "Orange"
   },
   "lavender": {
-    "message": "Lavanda"
+    "message": "Lavender"
   },
   "yellow": {
-    "message": "Dzeltens"
+    "message": "Yellow"
   },
   "indigo": {
     "message": "Indigo"
   },
   "teal": {
-    "message": "Zilganzaļa"
+    "message": "Teal"
   },
   "salmon": {
-    "message": "Lasis"
+    "message": "Salmon"
   },
   "pink": {
-    "message": "Rozā"
+    "message": "Pink"
   },
   "customColor": {
-    "message": "Pielāgota Krāsa"
+    "message": "Custom Color"
   },
   "multiSelectPlaceholder": {
     "message": "-- Rakstīt, lai atlasītu --"
@@ -5578,13 +5562,13 @@
     "message": "Izdzēst noslēpumus"
   },
   "secretProjectAssociationDescription": {
-    "message": "Atlasi projektus, ar kuriem noslēpums tiks saistīts. Noslēpumu varēs redzēt tikai tie organizācijas lietotāji, kuriem ir piekļuve šiem projektiem."
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
   },
   "typeOrSelectProjects": {
-    "message": "Ieraksti vai atlasi Projekti"
+    "message": "Type or select Projects"
   },
   "typeOrSelectProject": {
-    "message": "Ieraksti vai atlasi Projekts"
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Projekts"

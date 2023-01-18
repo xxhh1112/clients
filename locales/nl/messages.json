@@ -1609,7 +1609,7 @@
     "message": "Gelekte wachtwoorden"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Passwords exposed in a data breach are easy targets for attackers. Change these passwords to prevent potential break-ins."
+    "message": "Gelekte wachtwoorden zijn wachtwoorden die zijn ontdekt in bekende datalekken die publiekelijk zijn vrijgegeven of door hackers op het dark web worden verkocht."
   },
   "exposedPasswordsFound": {
     "message": "Gelekte wachtwoorden gevonden"
@@ -1821,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Neem Premium voor maar $PRICE$ /jaar of krijg Premium-accounts voor $FAMILYPLANUSERCOUNT$ gebruikers en ongelimiteerd delen met de family met ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families."
   },
   "addons": {
     "message": "Add-ons"
@@ -5554,28 +5538,28 @@
     "message": "Verbergen"
   },
   "projects": {
-    "message": "Projecten"
+    "message": "Projects"
   },
   "lastEdited": {
-    "message": "Laatst bewerkt"
+    "message": "Last Edited"
   },
   "editSecret": {
-    "message": "Bewerk geheim"
+    "message": "Edit Secret"
   },
   "addSecret": {
-    "message": "Geheim toevoegen"
+    "message": "Add Secret"
   },
   "copySecretName": {
-    "message": "Kopieer geheime naam"
+    "message": "Copy Secret Name"
   },
   "copySecretValue": {
-    "message": "Geheime waarde kopiëren"
+    "message": "Copy Secret Value"
   },
   "deleteSecret": {
-    "message": "Geheim verwijderen"
+    "message": "Delete Secret"
   },
   "deleteSecrets": {
-    "message": "Geheimen verwijderen"
+    "message": "Delete Secrets"
   },
   "secretProjectAssociationDescription": {
     "message": "Kies projecten om het geheim aan te koppelen. Alleen gebruikers uit de organisatie met toegang tot deze projecten kunnen het geheim zien."
@@ -5590,19 +5574,19 @@
     "message": "Project"
   },
   "editProject": {
-    "message": "Bewerk project"
+    "message": "Edit Project"
   },
   "viewProject": {
-    "message": "Bekijk project"
+    "message": "View Project"
   },
   "deleteProject": {
-    "message": "Verwijder project"
+    "message": "Delete Project"
   },
   "deleteProjects": {
-    "message": "Verwijder projecten"
+    "message": "Delete Projects"
   },
   "secret": {
-    "message": "Geheim"
+    "message": "Secret"
   },
   "serviceAccount": {
     "message": "Service Account"

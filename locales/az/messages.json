@@ -1822,22 +1822,6 @@
       }
     }
   },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Sadəcə $PRICE$ qiymətinə illik premium-a abunə olun və ya Bitwarden Ailələr planı ilə $FAMILYPLANUSERCOUNT$ istifadəçiləri üçün premium hesablar və ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "limitsiz ailə paylaşımı əldə edin."
-  },
   "addons": {
     "message": "Əlavələr"
   },
@@ -5578,13 +5562,13 @@
     "message": "\"Sirr\"ləri sil"
   },
   "secretProjectAssociationDescription": {
-    "message": "Sirrin əlaqələndiriləcəyi layihələri seçin. Yalnız bu layihələrə müraciəti olan təşkilat istifadəçiləri sirri görə biləcək."
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
   },
   "typeOrSelectProjects": {
-    "message": "Layihələri yazın və ya seçin"
+    "message": "Type or select Projects"
   },
   "typeOrSelectProject": {
-    "message": "Layihə yazın və ya seçin"
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Layihə"
