@@ -89,6 +89,7 @@ export class Main {
       this.storageService,
       null,
       this.memoryStorageService,
+      null, // TODO MDG: this should be a real account service
       this.logService,
       null,
       new StateFactory(GlobalState, Account),
