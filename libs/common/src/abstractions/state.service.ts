@@ -1,5 +1,3 @@
-import { Observable } from "rxjs";
-
 import { KdfType } from "../enums/kdfType";
 import { ThemeType } from "../enums/themeType";
 import { UriMatchType } from "../enums/uriMatchType";
@@ -14,7 +12,7 @@ import { PolicyData } from "../models/data/policy.data";
 import { ProviderData } from "../models/data/provider.data";
 import { SendData } from "../models/data/send.data";
 import { ServerConfigData } from "../models/data/server-config.data";
-import { Account, AccountSettingsSettings } from "../models/domain/account";
+import { AccountSettingsSettings } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
 import { EnvironmentUrls } from "../models/domain/environment-urls";
 import { GeneratedPasswordHistory } from "../models/domain/generated-password-history";
@@ -26,10 +24,7 @@ import { CipherView } from "../models/view/cipher.view";
 import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
 
-export abstract class StateService<T extends Account = Account> {
-  accounts$: Observable<{ [userId: string]: T }>;
-
-  addAccount: (account: T) => Promise<void>;
+export abstract class StateService {
   setActiveUser: (userId: string) => Promise<void>;
   clean: (options?: StorageOptions) => Promise<void>;
   init: () => Promise<void>;

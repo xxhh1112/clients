@@ -66,11 +66,8 @@ const DDG_SHARED_KEY = "DuckDuckGoSharedKey";
 export class StateService<
   TGlobalState extends GlobalState = GlobalState,
   TAccount extends Account = Account
-> implements StateServiceAbstraction<TAccount>
+> implements StateServiceAbstraction
 {
-  protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
-  accounts$ = this.accountsSubject.asObservable();
-
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
