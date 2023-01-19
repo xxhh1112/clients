@@ -3,7 +3,7 @@ import { ipcMain } from "electron";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { biometrics } from "@bitwarden/desktop-native";
+import { biometrics } from "@bitwarden/desktop-napi";
 
 import { WindowMain } from "../window.main";
 

@@ -12,6 +12,6 @@
     "url": "git+https://github.com/bitwarden/clients.git"
   },
   "dependencies": {
-    "@bitwarden/desktop-native": "file:../desktop_native"
+    "@bitwarden/desktop-napi": "file:../native/crates/napi"
   }
 }

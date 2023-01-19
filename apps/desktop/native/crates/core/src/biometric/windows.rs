@@ -71,6 +71,7 @@ fn set_focus(window: HWND) {
 }
 
 #[cfg(test)]
+#[cfg(feature = "manual_test")]
 mod tests {
     use super::*;
 

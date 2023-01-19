@@ -1,0 +1,18 @@
+[package]
+edition = "2021"
+exclude = ["index.node"]
+license = "GPL-3.0"
+name = "desktop_napi"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+desktop_core = { path = "../core" }
+napi = { version = "2.10.4", features = ["async"] }
+napi-derive = "2.9.3"
+tokio = { version = "1.23.0", features = ["full"] }
+
+[build-dependencies]
+napi-build = "2.0.1"

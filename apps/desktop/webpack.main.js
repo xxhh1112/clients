@@ -82,7 +82,7 @@ const main = {
   ],
   externals: {
     "electron-reload": "commonjs2 electron-reload",
-    "@bitwarden/desktop-native": "commonjs2 @bitwarden/desktop-native",
+    "@bitwarden/desktop-napi": "commonjs2 @bitwarden/desktop-napi",
   },
 };
 

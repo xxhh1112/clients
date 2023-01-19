@@ -1,19 +1,17 @@
 import { existsSync, promises as fs } from "fs";
-import { Socket } from "net";
 import { homedir, userInfo } from "os";
 import * as path from "path";
 import * as util from "util";
 
 import { ipcMain } from "electron";
-import * as ipc from "node-ipc";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { ipc, IpcMessageType } from "@bitwarden/desktop-napi";
 
 import { WindowMain } from "./window.main";
 
 export class NativeMessagingMain {
-  private connected: Socket[] = [];
-  private socket: any;
+  private connected: number[] = [];
 
   constructor(
     private logService: LogService,
@@ -23,57 +21,47 @@ export class NativeMessagingMain {
   ) {}
 
   async listen() {
-    ipc.config.id = "bitwarden";
-    ipc.config.retry = 1500;
-    if (process.platform === "darwin") {
-      if (!existsSync(`${homedir()}/tmp`)) {
-        await fs.mkdir(`${homedir()}/tmp`);
+    ipc.listen((error, msg) => {
+      switch (msg.kind) {
+        case IpcMessageType.Connected:
+          this.connected.push(msg.clientId);
+          break;
+        case IpcMessageType.Disconnected: {
+          const index = this.connected.indexOf(msg.clientId);
+          if (index > -1) {
+            this.connected.splice(index, 1);
+          }
+
+          this.logService.info("client " + index + " has disconnected!");
+          break;
+        }
+        case IpcMessageType.Message:
+          this.logService.debug("nativeMessaging message: " + msg.message);
+          this.windowMain.win.webContents.send("nativeMessaging", JSON.parse(msg.message));
+          break;
       }
-      ipc.config.socketRoot = `${homedir()}/tmp/`;
-    }
-
-    ipc.serve(() => {
-      ipc.server.on("message", (data: any, socket: any) => {
-        this.socket = socket;
-        this.windowMain.win.webContents.send("nativeMessaging", data);
-      });
-
-      ipcMain.on("nativeMessagingReply", (event, msg) => {
-        if (this.socket != null && msg != null) {
-          this.send(msg, this.socket);
-        }
-      });
-
-      ipc.server.on("connect", (socket: Socket) => {
-        this.connected.push(socket);
-      });
-
-      ipc.server.on("socket.disconnected", (socket, destroyedSocketID) => {
-        const index = this.connected.indexOf(socket);
-        if (index > -1) {
-          this.connected.splice(index, 1);
-        }
-
-        this.socket = null;
-        ipc.log("client " + destroyedSocketID + " has disconnected!");
-      });
     });
 
-    ipc.server.start();
+    ipcMain.on("nativeMessagingReply", (event, msg) => {
+      if (msg != null) {
+        this.send(msg);
+      }
+    });
   }
 
   stop() {
-    ipc.server.stop();
+    //ipc.server.stop();
     // Kill all existing connections
-    this.connected.forEach((socket) => {
+    /*this.connected.forEach((socket) => {
       if (!socket.destroyed) {
         socket.destroy();
       }
     });
+    */
   }
 
-  send(message: object, socket: any) {
-    ipc.server.emit(socket, "message", message);
+  send(message: object) {
+    ipc.send(JSON.stringify(message));
   }
 
   generateManifests() {

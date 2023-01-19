@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
 
-import { passwords } from "@bitwarden/desktop-native";
+import { passwords } from "@bitwarden/desktop-napi";
 
 import { BiometricMain } from "./biometric/biometric.main";
 
