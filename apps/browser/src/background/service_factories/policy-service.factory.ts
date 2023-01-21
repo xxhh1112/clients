@@ -2,6 +2,7 @@ import { PolicyService as AbstractPolicyService } from "@bitwarden/common/abstra
 
 import { BrowserPolicyService } from "../../services/browser-policy.service";
 
+import { accountServiceFactory, AccountServiceInitOptions } from "./account-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import {
   organizationServiceFactory,
@@ -16,7 +17,8 @@ type PolicyServiceFactoryOptions = FactoryOptions;
 
 export type PolicyServiceInitOptions = PolicyServiceFactoryOptions &
   StateServiceInitOptions &
-  OrganizationServiceInitOptions;
+  OrganizationServiceInitOptions &
+  AccountServiceInitOptions;
 
 export function policyServiceFactory(
   cache: { policyService?: AbstractPolicyService } & CachedServices,
@@ -29,7 +31,8 @@ export function policyServiceFactory(
     async () =>
       new BrowserPolicyService(
         await stateServiceFactory(cache, opts),
-        await organizationServiceFactory(cache, opts)
+        await organizationServiceFactory(cache, opts),
+        await accountServiceFactory(cache, opts)
       )
   );
 }

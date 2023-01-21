@@ -4,6 +4,7 @@ import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { Account } from "../../models/account";
 import { BrowserStateService } from "../../services/browser-state.service";
 
+import { accountServiceFactory, AccountServiceInitOptions } from "./account-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import {
@@ -30,6 +31,7 @@ export type StateServiceInitOptions = StateServiceFactoryOptions &
   DiskStorageServiceInitOptions &
   SecureStorageServiceInitOptions &
   MemoryStorageServiceInitOptions &
+  AccountServiceInitOptions &
   LogServiceInitOptions &
   StateMigrationServiceInitOptions;
 
@@ -46,6 +48,7 @@ export async function stateServiceFactory(
         await diskStorageServiceFactory(cache, opts),
         await secureStorageServiceFactory(cache, opts),
         await memoryStorageServiceFactory(cache, opts),
+        await accountServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
         await stateMigrationServiceFactory(cache, opts),
         opts.stateServiceOptions.stateFactory,

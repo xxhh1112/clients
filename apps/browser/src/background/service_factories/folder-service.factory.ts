@@ -2,6 +2,7 @@ import { FolderService as AbstractFolderService } from "@bitwarden/common/abstra
 
 import { BrowserFolderService } from "../../services/browser-folder.service";
 
+import { accountServiceFactory, AccountServiceInitOptions } from "./account-service.factory";
 import { cipherServiceFactory, CipherServiceInitOptions } from "./cipher-service.factory";
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
@@ -17,7 +18,8 @@ export type FolderServiceInitOptions = FolderServiceFactoryOptions &
   CryptoServiceInitOptions &
   CipherServiceInitOptions &
   I18nServiceInitOptions &
-  StateServiceInitOptions;
+  StateServiceInitOptions &
+  AccountServiceInitOptions;
 
 export function folderServiceFactory(
   cache: { folderService?: AbstractFolderService } & CachedServices,
@@ -32,7 +34,8 @@ export function folderServiceFactory(
         await cryptoServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
         await cipherServiceFactory(cache, opts),
-        await stateServiceFactory(cache, opts)
+        await stateServiceFactory(cache, opts),
+        await accountServiceFactory(cache, opts)
       )
   );
 }
