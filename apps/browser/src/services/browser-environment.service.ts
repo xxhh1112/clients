@@ -1,3 +1,4 @@
+import { AccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
@@ -6,8 +7,12 @@ import { devFlagEnabled, devFlagValue } from "../flags";
 import { GroupPolicyEnvironment } from "../types/group-policy-environment";
 
 export class BrowserEnvironmentService extends EnvironmentService {
-  constructor(stateService: StateService, private logService: LogService) {
-    super(stateService);
+  constructor(
+    stateService: StateService,
+    accountService: AccountService,
+    private logService: LogService
+  ) {
+    super(stateService, accountService);
   }
 
   async hasManagedEnvironment(): Promise<boolean> {

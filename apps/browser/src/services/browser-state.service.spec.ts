@@ -1,5 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { InternalAccountService } from "@bitwarden/common/abstractions/account/account.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import {
   AbstractMemoryStorageService,
@@ -26,6 +27,7 @@ describe("Browser State Service", () => {
   let secureStorageService: MockProxy<AbstractStorageService>;
   let diskStorageService: MockProxy<AbstractStorageService>;
   let logService: MockProxy<LogService>;
+  let accountService: MockProxy<InternalAccountService>;
   let stateMigrationService: MockProxy<StateMigrationService>;
   let stateFactory: MockProxy<StateFactory<GlobalState, Account>>;
   let useAccountCache: boolean;
@@ -39,6 +41,7 @@ describe("Browser State Service", () => {
     secureStorageService = mock();
     diskStorageService = mock();
     logService = mock();
+    accountService = mock();
     stateMigrationService = mock();
     stateFactory = mock();
     useAccountCache = true;
@@ -62,6 +65,7 @@ describe("Browser State Service", () => {
         diskStorageService,
         secureStorageService,
         memoryStorageService,
+        accountService,
         logService,
         stateMigrationService,
         stateFactory,

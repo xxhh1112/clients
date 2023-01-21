@@ -6,6 +6,8 @@ import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/inje
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service.abstraction";
+import { InternalAccountService as InternalAccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -201,6 +203,16 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
+      provide: InternalAccountServiceAbstraction,
+      useFactory: getBgService<InternalAccountServiceAbstraction>("accountService"),
+      deps: [],
+    },
+    {
+      provide: AccountApiServiceAbstraction,
+      useFactory: getBgService<AccountApiServiceAbstraction>("accountApiService"),
+      deps: [],
+    },
+    {
       provide: BrowserEnvironmentService,
       useExisting: EnvironmentService,
     },
@@ -227,11 +239,12 @@ function getBgService<T>(service: keyof MainBackground) {
       provide: PolicyService,
       useFactory: (
         stateService: StateServiceAbstraction,
-        organizationService: OrganizationService
+        organizationService: OrganizationService,
+        accountService: InternalAccountServiceAbstraction
       ) => {
-        return new BrowserPolicyService(stateService, organizationService);
+        return new BrowserPolicyService(stateService, organizationService, accountService);
       },
-      deps: [StateServiceAbstraction, OrganizationService],
+      deps: [StateServiceAbstraction, OrganizationService, InternalAccountServiceAbstraction],
     },
     {
       provide: PolicyApiServiceAbstraction,
@@ -252,10 +265,13 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: SyncService, useFactory: getBgService<SyncService>("syncService"), deps: [] },
     {
       provide: SettingsService,
-      useFactory: (stateService: StateServiceAbstraction) => {
-        return new BrowserSettingsService(stateService);
+      useFactory: (
+        stateService: StateServiceAbstraction,
+        accountService: InternalAccountServiceAbstraction
+      ) => {
+        return new BrowserSettingsService(stateService, accountService);
       },
-      deps: [StateServiceAbstraction],
+      deps: [StateServiceAbstraction, InternalAccountServiceAbstraction],
     },
     {
       provide: AbstractStorageService,
@@ -303,10 +319,13 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: PasswordRepromptServiceAbstraction, useClass: PasswordRepromptService },
     {
       provide: OrganizationService,
-      useFactory: (stateService: StateServiceAbstraction) => {
-        return new BrowserOrganizationService(stateService);
+      useFactory: (
+        stateService: StateServiceAbstraction,
+        accountService: InternalAccountServiceAbstraction
+      ) => {
+        return new BrowserOrganizationService(stateService, accountService);
       },
-      deps: [StateServiceAbstraction],
+      deps: [StateServiceAbstraction, InternalAccountServiceAbstraction],
     },
     {
       provide: VaultFilterService,
@@ -347,6 +366,7 @@ function getBgService<T>(service: keyof MainBackground) {
         storageService: AbstractStorageService,
         secureStorageService: AbstractStorageService,
         memoryStorageService: AbstractMemoryStorageService,
+        accountService: InternalAccountServiceAbstraction,
         logService: LogServiceAbstraction,
         stateMigrationService: StateMigrationService
       ) => {
@@ -354,6 +374,7 @@ function getBgService<T>(service: keyof MainBackground) {
           storageService,
           secureStorageService,
           memoryStorageService,
+          accountService,
           logService,
           stateMigrationService,
           new StateFactory(GlobalState, Account)

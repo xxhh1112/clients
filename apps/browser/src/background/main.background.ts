@@ -1,3 +1,5 @@
+import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/abstractions/account/account-api.service.abstraction";
+import { InternalAccountService as InternalAccountServiceAbstraction } from "@bitwarden/common/abstractions/account/account.service";
 import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
@@ -46,6 +48,7 @@ import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction }
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { AccountServiceImplementation } from "@bitwarden/common/services/account/account.service";
 import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
@@ -176,7 +179,8 @@ export default class MainBackground {
   avatarUpdateService: AvatarUpdateServiceAbstraction;
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
-
+  accountService: InternalAccountServiceAbstraction;
+  accountApiService: AccountApiServiceAbstraction;
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
 
@@ -192,7 +196,6 @@ export default class MainBackground {
   private tabsBackground: TabsBackground;
   private webRequestBackground: WebRequestBackground;
 
-  private sidebarAction: any;
   private syncTimeout: any;
   private isSafari: boolean;
   private nativeMessagingBackground: NativeMessagingBackground;
@@ -236,10 +239,13 @@ export default class MainBackground {
       this.secureStorageService,
       new StateFactory(GlobalState, Account)
     );
+    this.accountService = new AccountServiceImplementation(this.messagingService, this.logService);
+
     this.stateService = new BrowserStateService(
       this.storageService,
       this.secureStorageService,
       this.memoryStorageService,
+      this.accountService,
       this.logService,
       this.stateMigrationService,
       new StateFactory(GlobalState, Account)
@@ -283,7 +289,11 @@ export default class MainBackground {
     );
     this.tokenService = new TokenService(this.stateService);
     this.appIdService = new AppIdService(this.storageService);
-    this.environmentService = new BrowserEnvironmentService(this.stateService, this.logService);
+    this.environmentService = new BrowserEnvironmentService(
+      this.stateService,
+      this.accountService,
+      this.logService
+    );
     this.apiService = new ApiService(
       this.tokenService,
       this.platformUtilsService,
@@ -291,7 +301,7 @@ export default class MainBackground {
       this.appIdService,
       (expired: boolean) => this.logout(expired)
     );
-    this.settingsService = new BrowserSettingsService(this.stateService);
+    this.settingsService = new BrowserSettingsService(this.stateService, this.accountService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
       this.cryptoService,
@@ -308,7 +318,8 @@ export default class MainBackground {
       this.cryptoService,
       this.i18nService,
       this.cipherService,
-      this.stateService
+      this.stateService,
+      this.accountService
     );
     this.folderApiService = new FolderApiService(this.folderService, this.apiService);
     this.collectionService = new CollectionService(
@@ -326,8 +337,15 @@ export default class MainBackground {
       this.stateService
     );
     this.syncNotifierService = new SyncNotifierService();
-    this.organizationService = new BrowserOrganizationService(this.stateService);
-    this.policyService = new BrowserPolicyService(this.stateService, this.organizationService);
+    this.organizationService = new BrowserOrganizationService(
+      this.stateService,
+      this.accountService
+    );
+    this.policyService = new BrowserPolicyService(
+      this.stateService,
+      this.organizationService,
+      this.accountService
+    );
     this.policyApiService = new PolicyApiService(
       this.policyService,
       this.apiService,
@@ -375,7 +393,8 @@ export default class MainBackground {
       this.environmentService,
       this.stateService,
       this.twoFactorService,
-      this.i18nService
+      this.i18nService,
+      this.accountService
     );
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
@@ -397,6 +416,7 @@ export default class MainBackground {
       this.stateService,
       this.authService,
       this.vaultTimeoutSettingsService,
+      this.accountService,
       lockedCallback,
       logoutCallback
     );
@@ -418,6 +438,7 @@ export default class MainBackground {
       this.providerService,
       this.folderApiService,
       this.organizationService,
+      this.accountService,
       logoutCallback
     );
     this.eventUploadService = new EventUploadService(
@@ -486,16 +507,12 @@ export default class MainBackground {
       this.messagingService,
       this.platformUtilsService,
       systemUtilsServiceReloadCallback,
-      this.stateService
+      this.stateService,
+      this.accountService
     );
 
     // Other fields
     this.isSafari = this.platformUtilsService.isSafari();
-    this.sidebarAction = this.isSafari
-      ? null
-      : typeof opr !== "undefined" && opr.sidebarAction
-      ? opr.sidebarAction
-      : (window as any).chrome.sidebarAction;
 
     // Background
     this.runtimeBackground = new RuntimeBackground(
