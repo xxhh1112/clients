@@ -22,6 +22,9 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 
 import { EnvironmentComponent } from "./environment.component";
 
+// eslint-disable-next-line
+const punycode = require("punycode/");
+
 const BroadcasterSubscriptionId = "LoginComponent";
 
 @Component({
@@ -39,7 +42,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   private deferFocus: boolean = null;
 
   get loggedEmail() {
-    return this.formGroup.value.email;
+    return punycode.toUnicode(this.formGroup.value.email);
   }
 
   get selfHostedDomain() {
