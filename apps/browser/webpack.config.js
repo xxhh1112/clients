@@ -109,7 +109,10 @@ const plugins = [
   }),
   new AngularWebpackPlugin({
     tsConfigPath: "tsconfig.json",
-    entryModule: "src/popup/app.module#AppModule",
+    entryModule:
+      manifestVersion == 3
+        ? "src/popup/app.module#AppModule"
+        : "src/popup/background-app.module#BackgroundAppModule",
     sourceMap: true,
   }),
   new CleanWebpackPlugin({
@@ -245,6 +248,8 @@ if (manifestVersion == 2) {
   // Manifest v3 needs an extra helper for utilities in the content script.
   // The javascript output of this should be added to manifest.v3.json
   mainConfig.entry["content/misc-utils"] = "./src/content/misc-utils.ts";
+
+  mainConfig.entry["popup/main"] = "./src/popup/main.mv3.ts";
 
   /**
    * @type {import("webpack").Configuration}

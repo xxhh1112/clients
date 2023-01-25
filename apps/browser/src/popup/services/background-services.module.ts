@@ -74,7 +74,6 @@ import BrowserMessagingService from "../../services/browserMessaging.service";
 import BrowserMessagingPrivateModePopupService from "../../services/browserMessagingPrivateModePopup.service";
 import { VaultFilterService } from "../../services/vaultFilter.service";
 
-import { DebounceNavigationService } from "./debounceNavigationService";
 import { InitService } from "./init.service";
 import { LockGuardService } from "./lock-guard.service";
 import { PasswordRepromptService } from "./password-reprompt.service";
@@ -104,8 +103,6 @@ function getBgService<T>(service: keyof MainBackground) {
   imports: [JslibServicesModule],
   declarations: [],
   providers: [
-    InitService,
-    DebounceNavigationService,
     {
       provide: LOCALE_ID,
       useFactory: () => getBgService<I18nService>("i18nService")().translationLocale,
@@ -390,4 +387,4 @@ function getBgService<T>(service: keyof MainBackground) {
     },
   ],
 })
-export class ServicesModule {}
+export class BackgroundServicesModule {}

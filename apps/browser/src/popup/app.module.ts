@@ -66,6 +66,7 @@ import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.compo
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
+import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 
 import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
@@ -95,7 +96,8 @@ import { EffluxDatesComponent as SendEffluxDatesComponent } from "./send/efflux-
 import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
 import { SendTypeComponent } from "./send/send-type.component";
-import { ServicesModule } from "./services/services.module";
+import { DebounceNavigationService } from "./services/debounceNavigationService";
+import { InitService } from "./services/init.service";
 import { AboutComponent } from "./settings/about.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { ExportComponent } from "./settings/export.component";
@@ -193,7 +195,7 @@ registerLocaleData(localeZhTw, "zh-TW");
     OverlayModule,
     ReactiveFormsModule,
     ScrollingModule,
-    ServicesModule,
+    JslibServicesModule,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -249,7 +251,6 @@ registerLocaleData(localeZhTw, "zh-TW");
     VaultSelectComponent,
     AboutComponent,
   ],
-  providers: [CurrencyPipe, DatePipe],
-  bootstrap: [AppComponent],
+  providers: [CurrencyPipe, DatePipe, InitService, DebounceNavigationService],
 })
 export class AppModule {}
