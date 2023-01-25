@@ -17,6 +17,7 @@ import { CipherCreateRequest } from "../models/request/cipher-create.request";
 import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
 import { CipherRequest } from "../models/request/cipher.request";
+import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { CollectionRequest } from "../models/request/collection.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { DeviceVerificationRequest } from "../models/request/device-verification.request";
@@ -29,7 +30,6 @@ import { EmergencyAccessInviteRequest } from "../models/request/emergency-access
 import { EmergencyAccessPasswordRequest } from "../models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../models/request/emergency-access-update.request";
 import { EventRequest } from "../models/request/event.request";
-import { GroupRequest } from "../models/request/group.request";
 import { IapCheckRequest } from "../models/request/iap-check.request";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
@@ -42,15 +42,6 @@ import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user
 import { KeysRequest } from "../models/request/keys.request";
 import { OrganizationConnectionRequest } from "../models/request/organization-connection.request";
 import { OrganizationImportRequest } from "../models/request/organization-import.request";
-import { OrganizationUserAcceptRequest } from "../models/request/organization-user-accept.request";
-import { OrganizationUserBulkConfirmRequest } from "../models/request/organization-user-bulk-confirm.request";
-import { OrganizationUserBulkRequest } from "../models/request/organization-user-bulk.request";
-import { OrganizationUserConfirmRequest } from "../models/request/organization-user-confirm.request";
-import { OrganizationUserInviteRequest } from "../models/request/organization-user-invite.request";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "../models/request/organization-user-reset-password-enrollment.request";
-import { OrganizationUserResetPasswordRequest } from "../models/request/organization-user-reset-password.request";
-import { OrganizationUserUpdateGroupsRequest } from "../models/request/organization-user-update-groups.request";
-import { OrganizationUserUpdateRequest } from "../models/request/organization-user-update.request";
 import { OrganizationSponsorshipCreateRequest } from "../models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../models/request/organization/organization-sponsorship-redeem.request";
 import { PasswordHintRequest } from "../models/request/password-hint.request";
@@ -79,6 +70,7 @@ import { TaxInfoUpdateRequest } from "../models/request/tax-info-update.request"
 import { TwoFactorEmailRequest } from "../models/request/two-factor-email.request";
 import { TwoFactorProviderRequest } from "../models/request/two-factor-provider.request";
 import { TwoFactorRecoveryRequest } from "../models/request/two-factor-recovery.request";
+import { UpdateAvatarRequest } from "../models/request/update-avatar.request";
 import { UpdateDomainsRequest } from "../models/request/update-domains.request";
 import { UpdateKeyRequest } from "../models/request/update-key.request";
 import { UpdateProfileRequest } from "../models/request/update-profile.request";
@@ -101,7 +93,7 @@ import { BillingPaymentResponse } from "../models/response/billing-payment.respo
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { CipherResponse } from "../models/response/cipher.response";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../models/response/collection.response";
 import { DeviceVerificationResponse } from "../models/response/device-verification.response";
@@ -114,7 +106,6 @@ import {
 } from "../models/response/emergency-access.response";
 import { ErrorResponse } from "../models/response/error.response";
 import { EventResponse } from "../models/response/event.response";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/group.response";
 import { IdentityCaptchaResponse } from "../models/response/identity-captcha.response";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
@@ -126,13 +117,6 @@ import {
 } from "../models/response/organization-connection.response";
 import { OrganizationExportResponse } from "../models/response/organization-export.response";
 import { OrganizationSponsorshipSyncStatusResponse } from "../models/response/organization-sponsorship-sync-status.response";
-import { OrganizationUserBulkPublicKeyResponse } from "../models/response/organization-user-bulk-public-key.response";
-import { OrganizationUserBulkResponse } from "../models/response/organization-user-bulk.response";
-import {
-  OrganizationUserDetailsResponse,
-  OrganizationUserUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
-} from "../models/response/organization-user.response";
 import { PaymentResponse } from "../models/response/payment.response";
 import { PlanResponse } from "../models/response/plan.response";
 import { PolicyResponse } from "../models/response/policy.response";
@@ -165,13 +149,18 @@ import { TwoFactorEmailResponse } from "../models/response/two-factor-email.resp
 import { TwoFactorProviderResponse } from "../models/response/two-factor-provider.response";
 import { TwoFactorRecoverResponse } from "../models/response/two-factor-recover.response";
 import {
-  TwoFactorWebAuthnResponse,
   ChallengeResponse,
+  TwoFactorWebAuthnResponse,
 } from "../models/response/two-factor-web-authn.response";
 import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { SendAccessView } from "../models/view/send-access.view";
 
+/**
+ * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
+ * api services. The `send` method is still allowed to be used within api services. For background
+ * of this decision please read https://contributing.bitwarden.com/architecture/adr/refactor-api-service.
+ */
 export class ApiService implements ApiServiceAbstraction {
   private device: DeviceType;
   private deviceType: string;
@@ -298,6 +287,11 @@ export class ApiService implements ApiServiceAbstraction {
 
   async putProfile(request: UpdateProfileRequest): Promise<ProfileResponse> {
     const r = await this.send("PUT", "/accounts/profile", request, true, true);
+    return new ProfileResponse(r);
+  }
+
+  async putAvatar(request: UpdateAvatarRequest): Promise<ProfileResponse> {
+    const r = await this.send("PUT", "/accounts/avatar", request, true, true);
     return new ProfileResponse(r);
   }
 
@@ -809,10 +803,10 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Collections APIs
 
-  async getCollectionDetails(
+  async getCollectionAccessDetails(
     organizationId: string,
     id: string
-  ): Promise<CollectionGroupDetailsResponse> {
+  ): Promise<CollectionAccessDetailsResponse> {
     const r = await this.send(
       "GET",
       "/organizations/" + organizationId + "/collections/" + id + "/details",
@@ -820,7 +814,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true
     );
-    return new CollectionGroupDetailsResponse(r);
+    return new CollectionAccessDetailsResponse(r);
   }
 
   async getUserCollections(): Promise<ListResponse<CollectionResponse>> {
@@ -837,6 +831,19 @@ export class ApiService implements ApiServiceAbstraction {
       true
     );
     return new ListResponse(r, CollectionResponse);
+  }
+
+  async getManyCollectionsWithAccessDetails(
+    organizationId: string
+  ): Promise<ListResponse<CollectionAccessDetailsResponse>> {
+    const r = await this.send(
+      "GET",
+      "/organizations/" + organizationId + "/collections/details",
+      null,
+      true,
+      true
+    );
+    return new ListResponse(r, CollectionAccessDetailsResponse);
   }
 
   async getCollectionUsers(
@@ -906,6 +913,16 @@ export class ApiService implements ApiServiceAbstraction {
     );
   }
 
+  deleteManyCollections(request: CollectionBulkDeleteRequest): Promise<any> {
+    return this.send(
+      "DELETE",
+      "/organizations/" + request.organizationId + "/collections",
+      request,
+      true,
+      false
+    );
+  }
+
   deleteCollectionUser(
     organizationId: string,
     id: string,
@@ -922,28 +939,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Groups APIs
 
-  async getGroupDetails(organizationId: string, id: string): Promise<GroupDetailsResponse> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups/" + id + "/details",
-      null,
-      true,
-      true
-    );
-    return new GroupDetailsResponse(r);
-  }
-
-  async getGroups(organizationId: string): Promise<ListResponse<GroupResponse>> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups",
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, GroupResponse);
-  }
-
   async getGroupUsers(organizationId: string, id: string): Promise<string[]> {
     const r = await this.send(
       "GET",
@@ -955,47 +950,11 @@ export class ApiService implements ApiServiceAbstraction {
     return r;
   }
 
-  async postGroup(organizationId: string, request: GroupRequest): Promise<GroupResponse> {
-    const r = await this.send(
-      "POST",
-      "/organizations/" + organizationId + "/groups",
-      request,
-      true,
-      true
-    );
-    return new GroupResponse(r);
-  }
-
-  async putGroup(
-    organizationId: string,
-    id: string,
-    request: GroupRequest
-  ): Promise<GroupResponse> {
-    const r = await this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/groups/" + id,
-      request,
-      true,
-      true
-    );
-    return new GroupResponse(r);
-  }
-
   async putGroupUsers(organizationId: string, id: string, request: string[]): Promise<any> {
     await this.send(
       "PUT",
       "/organizations/" + organizationId + "/groups/" + id + "/users",
       request,
-      true,
-      false
-    );
-  }
-
-  deleteGroup(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/organizations/" + organizationId + "/groups/" + id,
-      null,
       true,
       false
     );
@@ -1009,281 +968,6 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       false
     );
-  }
-
-  // Organization User APIs
-
-  async getOrganizationUser(
-    organizationId: string,
-    id: string
-  ): Promise<OrganizationUserDetailsResponse> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/users/" + id,
-      null,
-      true,
-      true
-    );
-    return new OrganizationUserDetailsResponse(r);
-  }
-
-  async getOrganizationUserGroups(organizationId: string, id: string): Promise<string[]> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/users/" + id + "/groups",
-      null,
-      true,
-      true
-    );
-    return r;
-  }
-
-  async getOrganizationUsers(
-    organizationId: string
-  ): Promise<ListResponse<OrganizationUserUserDetailsResponse>> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/users",
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserUserDetailsResponse);
-  }
-
-  async getOrganizationUserResetPasswordDetails(
-    organizationId: string,
-    id: string
-  ): Promise<OrganizationUserResetPasswordDetailsReponse> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/users/" + id + "/reset-password-details",
-      null,
-      true,
-      true
-    );
-    return new OrganizationUserResetPasswordDetailsReponse(r);
-  }
-
-  postOrganizationUserInvite(
-    organizationId: string,
-    request: OrganizationUserInviteRequest
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/invite",
-      request,
-      true,
-      false
-    );
-  }
-
-  postOrganizationUserReinvite(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/" + id + "/reinvite",
-      null,
-      true,
-      false
-    );
-  }
-
-  async postManyOrganizationUserReinvite(
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
-    const r = await this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/reinvite",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkResponse);
-  }
-
-  postOrganizationUserAccept(
-    organizationId: string,
-    id: string,
-    request: OrganizationUserAcceptRequest
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/" + id + "/accept",
-      request,
-      true,
-      false
-    );
-  }
-
-  postOrganizationUserConfirm(
-    organizationId: string,
-    id: string,
-    request: OrganizationUserConfirmRequest
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/" + id + "/confirm",
-      request,
-      true,
-      false
-    );
-  }
-
-  async postOrganizationUsersPublicKey(
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ): Promise<ListResponse<OrganizationUserBulkPublicKeyResponse>> {
-    const r = await this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/public-keys",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkPublicKeyResponse);
-  }
-
-  async postOrganizationUserBulkConfirm(
-    organizationId: string,
-    request: OrganizationUserBulkConfirmRequest
-  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
-    const r = await this.send(
-      "POST",
-      "/organizations/" + organizationId + "/users/confirm",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkResponse);
-  }
-
-  putOrganizationUser(
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateRequest
-  ): Promise<any> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + id,
-      request,
-      true,
-      false
-    );
-  }
-
-  putOrganizationUserGroups(
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateGroupsRequest
-  ): Promise<any> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/groups",
-      request,
-      true,
-      false
-    );
-  }
-
-  putOrganizationUserResetPasswordEnrollment(
-    organizationId: string,
-    userId: string,
-    request: OrganizationUserResetPasswordEnrollmentRequest
-  ): Promise<void> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + userId + "/reset-password-enrollment",
-      request,
-      true,
-      false
-    );
-  }
-
-  putOrganizationUserResetPassword(
-    organizationId: string,
-    id: string,
-    request: OrganizationUserResetPasswordRequest
-  ): Promise<any> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/reset-password",
-      request,
-      true,
-      false
-    );
-  }
-
-  deleteOrganizationUser(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/organizations/" + organizationId + "/users/" + id,
-      null,
-      true,
-      false
-    );
-  }
-
-  async deleteManyOrganizationUsers(
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
-    const r = await this.send(
-      "DELETE",
-      "/organizations/" + organizationId + "/users",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkResponse);
-  }
-
-  revokeOrganizationUser(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/revoke",
-      null,
-      true,
-      false
-    );
-  }
-
-  async revokeManyOrganizationUsers(
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
-    const r = await this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/revoke",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkResponse);
-  }
-
-  restoreOrganizationUser(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/" + id + "/restore",
-      null,
-      true,
-      false
-    );
-  }
-
-  async restoreManyOrganizationUsers(
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
-    const r = await this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/users/restore",
-      request,
-      true,
-      true
-    );
-    return new ListResponse(r, OrganizationUserBulkResponse);
   }
 
   // Plan APIs
@@ -2081,7 +1765,7 @@ export class ApiService implements ApiServiceAbstraction {
     request.headers.set("Bitwarden-Client-Name", this.platformUtilsService.getClientType());
     request.headers.set(
       "Bitwarden-Client-Version",
-      await this.platformUtilsService.getApplicationVersion()
+      await this.platformUtilsService.getApplicationVersionNumber()
     );
     return this.nativeFetch(request);
   }

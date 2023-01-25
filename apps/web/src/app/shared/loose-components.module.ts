@@ -1,7 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { UserVerificationComponent } from "@bitwarden/angular/components/user-verification.component";
-
 import { AcceptEmergencyComponent } from "../accounts/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../accounts/accept-organization.component";
 import { HintComponent } from "../accounts/hint.component";
@@ -9,7 +7,6 @@ import { LockComponent } from "../accounts/lock.component";
 import { RecoverDeleteComponent } from "../accounts/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../accounts/recover-two-factor.component";
 import { RegisterFormModule } from "../accounts/register-form/register-form.module";
-import { RegisterComponent } from "../accounts/register.component";
 import { RemovePasswordComponent } from "../accounts/remove-password.component";
 import { SetPasswordComponent } from "../accounts/set-password.component";
 import { SsoComponent } from "../accounts/sso.component";
@@ -19,33 +16,25 @@ import { UpdatePasswordComponent } from "../accounts/update-password.component";
 import { UpdateTempPasswordComponent } from "../accounts/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../accounts/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../accounts/verify-recover-delete.component";
-import { NestedCheckboxComponent } from "../components/nested-checkbox.component";
+import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../components/premium-badge.component";
+import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
+import { UserVerificationComponent } from "../components/user-verification.component";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
+import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { OrganizationCreateModule } from "../organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../organizations/layouts/organization-layout.component";
-import { BulkConfirmComponent as OrgBulkConfirmComponent } from "../organizations/manage/bulk/bulk-confirm.component";
-import { BulkRemoveComponent as OrgBulkRemoveComponent } from "../organizations/manage/bulk/bulk-remove.component";
-import { BulkRestoreRevokeComponent as OrgBulkRestoreRevokeComponent } from "../organizations/manage/bulk/bulk-restore-revoke.component";
-import { BulkStatusComponent as OrgBulkStatusComponent } from "../organizations/manage/bulk/bulk-status.component";
-import { CollectionAddEditComponent as OrgCollectionAddEditComponent } from "../organizations/manage/collection-add-edit.component";
 import { CollectionsComponent as OrgManageCollectionsComponent } from "../organizations/manage/collections.component";
 import { EntityEventsComponent as OrgEntityEventsComponent } from "../organizations/manage/entity-events.component";
 import { EventsComponent as OrgEventsComponent } from "../organizations/manage/events.component";
-import { GroupAddEditComponent as OrgGroupAddEditComponent } from "../organizations/manage/group-add-edit.component";
-import { GroupsComponent as OrgGroupsComponent } from "../organizations/manage/groups.component";
 import { ManageComponent as OrgManageComponent } from "../organizations/manage/manage.component";
-import { PeopleComponent as OrgPeopleComponent } from "../organizations/manage/people.component";
-import { ResetPasswordComponent as OrgResetPasswordComponent } from "../organizations/manage/reset-password.component";
-import { UserAddEditComponent as OrgUserAddEditComponent } from "../organizations/manage/user-add-edit.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../organizations/manage/user-confirm.component";
-import { UserGroupsComponent as OrgUserGroupsComponent } from "../organizations/manage/user-groups.component";
 import { AcceptFamilySponsorshipComponent } from "../organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "../organizations/sponsorships/families-for-enterprise-setup.component";
 import { ExposedPasswordsReportComponent as OrgExposedPasswordsReportComponent } from "../organizations/tools/exposed-passwords-report.component";
@@ -70,6 +59,7 @@ import { ApiKeyComponent } from "../settings/api-key.component";
 import { BillingHistoryViewComponent } from "../settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
+import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
 import { ChangeKdfComponent } from "../settings/change-kdf.component";
 import { ChangePasswordComponent } from "../settings/change-password.component";
@@ -117,29 +107,16 @@ import { ToolsComponent } from "../tools/tools.component";
 import { AddEditCustomFieldsComponent } from "../vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/attachments.component";
-import { BulkActionsComponent } from "../vault/bulk-actions.component";
-import { BulkDeleteComponent } from "../vault/bulk-delete.component";
-import { BulkMoveComponent } from "../vault/bulk-move.component";
-import { BulkRestoreComponent } from "../vault/bulk-restore.component";
-import { BulkShareComponent } from "../vault/bulk-share.component";
 import { CollectionsComponent } from "../vault/collections.component";
 import { FolderAddEditComponent } from "../vault/folder-add-edit.component";
-import { OrganizationBadgeModule } from "../vault/organization-badge/organization-badge.module";
 import { ShareComponent } from "../vault/share.component";
-import { VaultFilterModule } from "../vault/vault-filter/vault-filter.module";
 
-import { SharedModule } from ".";
+import { SharedModule } from "./shared.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
 @NgModule({
-  imports: [
-    SharedModule,
-    VaultFilterModule,
-    OrganizationBadgeModule,
-    OrganizationCreateModule,
-    RegisterFormModule,
-  ],
+  imports: [SharedModule, OrganizationCreateModule, RegisterFormModule, ProductSwitcherModule],
   declarations: [
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
@@ -156,11 +133,6 @@ import { SharedModule } from ".";
     ApiKeyComponent,
     AttachmentsComponent,
     BillingSyncKeyComponent,
-    BulkActionsComponent,
-    BulkDeleteComponent,
-    BulkMoveComponent,
-    BulkRestoreComponent,
-    BulkShareComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,
@@ -169,6 +141,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -183,34 +156,22 @@ import { SharedModule } from ".";
     HintComponent,
     LockComponent,
     NavbarComponent,
-    NestedCheckboxComponent,
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
     OrgAttachmentsComponent,
-    OrgBulkConfirmComponent,
-    OrgBulkRestoreRevokeComponent,
-    OrgBulkRemoveComponent,
-    OrgBulkStatusComponent,
-    OrgCollectionAddEditComponent,
     OrgCollectionsComponent,
     OrgEntityEventsComponent,
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
-    OrgGroupAddEditComponent,
-    OrgGroupsComponent,
     OrgInactiveTwoFactorReportComponent,
     OrgManageCollectionsComponent,
     OrgManageComponent,
-    OrgPeopleComponent,
-    OrgResetPasswordComponent,
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
-    OrgUserAddEditComponent,
     OrgUserConfirmComponent,
-    OrgUserGroupsComponent,
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -222,14 +183,15 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
     RecoverTwoFactorComponent,
-    RegisterComponent,
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,
@@ -280,11 +242,6 @@ import { SharedModule } from ".";
     AdjustStorageComponent,
     ApiKeyComponent,
     AttachmentsComponent,
-    BulkActionsComponent,
-    BulkDeleteComponent,
-    BulkMoveComponent,
-    BulkRestoreComponent,
-    BulkShareComponent,
     ChangeEmailComponent,
     ChangeKdfComponent,
     ChangePasswordComponent,
@@ -293,6 +250,7 @@ import { SharedModule } from ".";
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
+    DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessComponent,
@@ -307,34 +265,22 @@ import { SharedModule } from ".";
     HintComponent,
     LockComponent,
     NavbarComponent,
-    NestedCheckboxComponent,
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
     OrganizationPlansComponent,
     OrgAttachmentsComponent,
-    OrgBulkConfirmComponent,
-    OrgBulkRestoreRevokeComponent,
-    OrgBulkRemoveComponent,
-    OrgBulkStatusComponent,
-    OrgCollectionAddEditComponent,
     OrgCollectionsComponent,
     OrgEntityEventsComponent,
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
-    OrgGroupAddEditComponent,
-    OrgGroupsComponent,
     OrgInactiveTwoFactorReportComponent,
     OrgManageCollectionsComponent,
     OrgManageComponent,
-    OrgPeopleComponent,
-    OrgResetPasswordComponent,
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
-    OrgUserAddEditComponent,
     OrgUserConfirmComponent,
-    OrgUserGroupsComponent,
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -345,14 +291,15 @@ import { SharedModule } from ".";
     PremiumBadgeComponent,
     PremiumComponent,
     ProfileComponent,
+    ChangeAvatarComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
     RecoverTwoFactorComponent,
-    RegisterComponent,
     RemovePasswordComponent,
     SecurityComponent,
     SecurityKeysComponent,
+    SelectableAvatarComponent,
     SendAddEditComponent,
     SendComponent,
     SendEffluxDatesComponent,

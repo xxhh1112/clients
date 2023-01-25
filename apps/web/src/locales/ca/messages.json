@@ -277,12 +277,33 @@
   "searchFavorites": {
     "message": "Cerca en preferits"
   },
-  "searchType": {
-    "message": "Cerca en tipus",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Cerca inicis de sessió",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Cerca targetes",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Cerca identitats",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Cerca notes segures",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Cerca en la caixa forta"
+  },
+  "searchMyVault": {
+    "message": "Cerca en la caixa forta"
+  },
+  "searchOrganization": {
+    "message": "Cerca organització"
+  },
+  "searchMembers": {
+    "message": "Cerca membres"
   },
   "allItems": {
     "message": "Tots els elements"
@@ -365,6 +386,9 @@
   "select": {
     "message": "Selecciona"
   },
+  "newItem": {
+    "message": "Element nou"
+  },
   "addItem": {
     "message": "Afegeix element"
   },
@@ -373,6 +397,12 @@
   },
   "viewItem": {
     "message": "Visualitza l'element"
+  },
+  "new": {
+    "message": "Nou"
+  },
+  "item": {
+    "message": "Element"
   },
   "ex": {
     "message": "ex.",
@@ -438,6 +468,9 @@
   },
   "vaultItems": {
     "message": "Elements de la caixa forta"
+  },
+  "filter": {
+    "message": "Filtre"
   },
   "moveSelectedToOrg": {
     "message": "Desplaça la selecció a l'organització"
@@ -545,6 +578,12 @@
   "deletedFolder": {
     "message": "Carpeta suprimida"
   },
+  "editInfo": {
+    "message": "Edita la informació"
+  },
+  "access": {
+    "message": "Accés"
+  },
   "loggedOut": {
     "message": "Sessió tancada"
   },
@@ -570,13 +609,13 @@
     "message": "Inicieu sessió o creeu un compte nou per accedir a la caixa forta."
   },
   "loginWithDevice": {
-    "message": "Inicieu sessió amb el dispositiu"
+    "message": "Inici de sessió amb dispositiu"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "L'inici de sessió amb el dispositiu ha d'estar activat a la configuració de l'aplicació mòbil Bitwarden. Necessiteu una altra opció?"
   },
   "loginWithMasterPassword": {
-    "message": "Inicia sessió amb la contrasenya mestra"
+    "message": "Inici de sessió amb contrasenya mestra"
   },
   "createAccount": {
     "message": "Crea un compte"
@@ -702,6 +741,9 @@
   "noItemsInList": {
     "message": "No hi ha cap element a llistar."
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "No teniu permís per veure tots els elements en aquesta col·lecció."
+  },
   "noCollectionsInList": {
     "message": "No hi ha cap col·lecció a llistar."
   },
@@ -710,6 +752,9 @@
   },
   "noUsersInList": {
     "message": "No hi ha cap usuari a llistar."
+  },
+  "noMembersInList": {
+    "message": "No hi ha cap membre a llistar."
   },
   "noEventsInList": {
     "message": "No hi ha cap esdeveniment a llistar."
@@ -855,6 +900,18 @@
       }
     }
   },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ coleccions se suprimiran permanentment.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Esteu segurs que voleu continuar?"
+  },
   "moveSelectedItemsDesc": {
     "message": "Trieu una carpeta a la que vulgueu desplaçar els $COUNT$ elements seleccionats.",
     "placeholders": {
@@ -929,17 +986,17 @@
   "confirmFilePassword": {
     "message": "Confirma la contrasenya del fitxer"
   },
-  "accountBackupOptionDescription": {
-    "message": "Utilitzeu la clau de xifratge del vostre compte per xifrar l'exportació i restringir la importació només al compte de Bitwarden actual."
+  "accountRestrictedOptionDescription": {
+    "message": "Utilitzeu la clau de xifratge del vostre compte, derivada del nom d'usuari i la contrasenya mestra, per xifrar l'exportació i restringir la importació només al compte de Bitwarden actual."
   },
   "passwordProtectedOptionDescription": {
     "message": "Establiu una contrasenya per xifrar l'exportació i importeu-la a qualsevol compte de Bitwarden mitjançant aquesta contrasenya."
   },
-  "fileTypeHeading": {
-    "message": "Tipus de fitxer"
+  "exportTypeHeading": {
+    "message": "Tipus d'exportació"
   },
-  "accountBackup": {
-    "message": "Còpia de seguretat del compte"
+  "accountRestricted": {
+    "message": "Hi ha una restricció de compte"
   },
   "passwordProtected": {
     "message": "Protegit amb contrasenya"
@@ -1221,7 +1278,7 @@
     "message": "Preferències"
   },
   "preferencesDesc": {
-    "message": "Personalitzeu la vostra experiència de caixa forta web."
+    "message": "Personalitzeu l'experiència de la caixa forta web."
   },
   "preferencesUpdated": {
     "message": "Preferències guardades"
@@ -1558,7 +1615,7 @@
   },
   "orgsReportsDesc": {
     "message": "Identifiqueu i tanqueu els forats de seguretat dels comptes en línia fent clic en els informes següents.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Llocs web no segurs"
@@ -1821,6 +1878,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Hazte Premium por sólo $PRICE$ /año, u obtén cuentas Premium para usuarios $FAMILYPLANUSERCOUNT$ y uso compartido familiar ilimitado con un ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Plan Familias Bitwarden."
   },
   "addons": {
     "message": "Complements"
@@ -2356,6 +2429,15 @@
   "deleteGroupConfirmation": {
     "message": "Esteu segur que voleu suprimir aquest grup?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Esteu segur que voleu suprimir els següents $QUANTITY$ grups?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Esteu segur que voleu suprimir aquest usuari?"
   },
@@ -2373,6 +2455,9 @@
   },
   "externalIdDesc": {
     "message": "L'identificador extern es pot utilitzar com a referència o enllaçar aquest recurs a un sistema extern, com ara un directori d'usuari."
+  },
+  "nestCollectionUnder": {
+    "message": "Anida col·lecció sota"
   },
   "accessControl": {
     "message": "Control d'accés"
@@ -2395,14 +2480,14 @@
   "editCollection": {
     "message": "Edita col·lecció"
   },
+  "collectionInfo": {
+    "message": "Informació de col·lecció"
+  },
   "deleteCollectionConfirmation": {
     "message": "Esteu segur que voleu suprimir aquesta col·lecció?"
   },
-  "editUser": {
-    "message": "Edita usuari"
-  },
-  "inviteUser": {
-    "message": "Convida usuari"
+  "editMember": {
+    "message": "Edita el membre"
   },
   "inviteUserDesc": {
     "message": "Convida un nou usuari a la vostra organització introduint l'adreça electrònica del compte de Bitwarden a continuació. Si encara no tenen un compte de Bitwarden, se us demanarà que creeu un compte nou."
@@ -2444,7 +2529,7 @@
     "message": "Propietari"
   },
   "ownerDesc": {
-    "message": "L'usuari d'accés més elevat que pot gestionar tots els aspectes de la vostra organització."
+    "message": "Gestioneu tots els aspectes de la vostra organització, incloses la facturació i les subscripcions"
   },
   "clientOwnerDesc": {
     "message": "Aquest usuari ha de ser independent del proveïdor. Si el proveïdor està desvinculat de l'organització, aquest usuari mantindrà la propietat de l'organització."
@@ -2453,19 +2538,19 @@
     "message": "Administrador"
   },
   "adminDesc": {
-    "message": "Els administradors poden accedir i gestionar tots els elements, col·leccions i usuaris de la vostra organització."
+    "message": "Gestioneu l'accés a l'organització, totes les col·leccions, els membres, els informes i la configuració de seguretat"
   },
   "user": {
     "message": "Usuari"
   },
   "userDesc": {
-    "message": "Un usuari habitual amb accés a les col·leccions assignades a la vostra organització."
+    "message": "Accediu i afegiu elements a les col·leccions assignades"
   },
   "manager": {
     "message": "Gestor"
   },
   "managerDesc": {
-    "message": "Els gestors poden accedir i gestionar les col·leccions assignades a la vostra organització."
+    "message": "Creeu, suprimiu i gestioneu l'accés a les col·leccions assignades"
   },
   "all": {
     "message": "Tot"
@@ -2668,6 +2753,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Col·leccions suprimides"
+  },
   "deletedCollectionId": {
     "message": "S'ha suprimit la col·lecció $ID$.",
     "placeholders": {
@@ -2710,6 +2798,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "S'han suprimit $QUANTITY$ grups.",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -3564,7 +3661,7 @@
     "message": "Preferència d'usuari"
   },
   "vaultTimeoutAction": {
-    "message": "Acció del temps d'espera de la caixa forta"
+    "message": "Acció quan acabe el temps d'espera de la caixa forta"
   },
   "vaultTimeoutActionLockDesc": {
     "message": "Una caixa forta bloquejada requereix que torne a introduir la contrasenya principal per accedir-ne de nou."
@@ -4117,7 +4214,22 @@
     "message": "Personalitzat"
   },
   "customDesc": {
-    "message": "Permet un control més granular dels permisos d'usuari per a configuracions avançades."
+    "message": "Concediu permisos personalitzats als membres"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Els rols personalitzats són una ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "característica empresarial",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contacta amb el nostre equip d'assistència per actualitzar la teua subscripció",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Per habilitar els permisos personalitzats, l'organització ha de tenir un pla Enterprise 2020."
   },
   "permissions": {
     "message": "Permisos"
@@ -5427,6 +5539,15 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "Els següents caràcters no estan permesos:\n$CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ camps de dalt necessiten la vostra atenció.",
     "placeholders": {
@@ -5460,6 +5581,45 @@
   "notYou": {
     "message": "No sou vosaltres?"
   },
+  "pickAnAvatarColor": {
+    "message": "Tria un color d'avatar"
+  },
+  "customizeAvatar": {
+    "message": "Personalitza avatar"
+  },
+  "avatarUpdated": {
+    "message": "S'ha actualitzat l'avatar"
+  },
+  "brightBlue": {
+    "message": "Blau brillant"
+  },
+  "green": {
+    "message": "Verd"
+  },
+  "orange": {
+    "message": "Taronja"
+  },
+  "lavender": {
+    "message": "Lavanda"
+  },
+  "yellow": {
+    "message": "Groc"
+  },
+  "indigo": {
+    "message": "Anyil"
+  },
+  "teal": {
+    "message": "Verd blavós"
+  },
+  "salmon": {
+    "message": "Salmó"
+  },
+  "pink": {
+    "message": "Rosa"
+  },
+  "customColor": {
+    "message": "Color personalitzat"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Escriviu per filtrar --"
   },
@@ -5471,6 +5631,272 @@
   },
   "multiSelectClearAll": {
     "message": "Esborra-ho tot"
+  },
+  "toggleCharacterCount": {
+    "message": "Commuta el recompte de caràcters",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Recompte de caràcters de la contrasenya",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Amaga"
+  },
+  "projects": {
+    "message": "Projectes"
+  },
+  "lastEdited": {
+    "message": "Última edició"
+  },
+  "editSecret": {
+    "message": "Edita secret"
+  },
+  "addSecret": {
+    "message": "Afig secret"
+  },
+  "copySecretName": {
+    "message": "Copia el nom del secret"
+  },
+  "copySecretValue": {
+    "message": "Copia el valor del secret"
+  },
+  "deleteSecret": {
+    "message": "Suprimeix el secret"
+  },
+  "deleteSecrets": {
+    "message": "Suprimeix els secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Selecciona los proyectos a los que se asociará el secreto. Sólo los usuarios de la organización con acceso a estos proyectos podrán verlo."
+  },
+  "typeOrSelectProjects": {
+    "message": "Teclea o selecciona proyectos"
+  },
+  "typeOrSelectProject": {
+    "message": "Teclea o selecciona proyecto"
+  },
+  "project": {
+    "message": "Projecte"
+  },
+  "editProject": {
+    "message": "Edita el projecte"
+  },
+  "viewProject": {
+    "message": "Veure el projecte"
+  },
+  "deleteProject": {
+    "message": "Suprimeix el projecte"
+  },
+  "deleteProjects": {
+    "message": "Suprimeix els projectes"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "Compte del servei"
+  },
+  "serviceAccounts": {
+    "message": "Comptes del servei"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "Nom/Parell de valors"
+  },
+  "secretEdited": {
+    "message": "S'ha editat el secret"
+  },
+  "secretCreated": {
+    "message": "S'ha creat el secret"
+  },
+  "newSecret": {
+    "message": "Secret nou"
+  },
+  "newServiceAccount": {
+    "message": "Compte nou del servei"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No hi ha cap secret per mostrar"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Per començar, afig un secret nou o importa secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Encara no hi ha res a mostrar"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Crea un compte de servei nou per començar a automatitzar l'accés secret."
+  },
+  "searchSecrets": {
+    "message": "Cerca secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "Suprimeix els comptes de servei"
+  },
+  "deleteServiceAccount": {
+    "message": "Suprimeix el compte de servei"
+  },
+  "viewServiceAccount": {
+    "message": "Veure el compte de servei"
+  },
+  "searchServiceAccounts": {
+    "message": "Cerca els comptes de servei"
+  },
+  "addProject": {
+    "message": "Afig un projecte"
+  },
+  "projectEdited": {
+    "message": "Projecte editat"
+  },
+  "projectSaved": {
+    "message": "Projecte guardat"
+  },
+  "projectCreated": {
+    "message": "Projecte creat"
+  },
+  "projectName": {
+    "message": "Nom del Projecte"
+  },
+  "newProject": {
+    "message": "Projecte nou"
+  },
+  "softDeleteSecretWarning": {
+    "message": "La supressió de secrets pot afectar les integracions existents."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets enviats a la paperera"
+  },
+  "serviceAccountCreated": {
+    "message": "Compte de servei creat"
+  },
+  "smAccess": {
+    "message": "Accés"
+  },
+  "projectCommaSecret": {
+    "message": "Projecte, secret"
+  },
+  "serviceAccountName": {
+    "message": "Nom del compte de servei"
+  },
+  "newSaSelectAccess": {
+    "message": "Escriu o selecciona projectes o secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "Escriu per a filtrar"
+  },
+  "deleteProjectsToast": {
+    "message": "Projectes suprimits"
+  },
+  "deleteProjectToast": {
+    "message": "El projecte i tots els secrets associats s'han suprimit"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "La supressió de $PROJECT$ és permanent i irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Escriu \"$CONFIRM$\" per continuar",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Suprimeix $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Suprimeix $COUNT$ projectes",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "La supressió de projectes és permanent i irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No hi ha cap projecte per mostrar"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Afig un projecte nou per començar a organitzar secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "Cal confirmació"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Els següents projectes no es poden eliminar:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "S'ha enviat el secret a la paperera"
+  },
+  "searchProjects": {
+    "message": "Cerca projectes"
+  },
+  "accessTokens": {
+    "message": "Tokens d'accès"
+  },
+  "createAccessToken": {
+    "message": "Crea un token d'accés"
+  },
+  "expires": {
+    "message": "Caduca"
+  },
+  "canRead": {
+    "message": "Pot llegir"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No hi ha tokens d'accés per mostrar"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Per començar, crea un token d'accés"
+  },
+  "downloadAccessToken": {
+    "message": "Baixa o copia abans de tancar."
+  },
+  "expiresOnAccessToken": {
+    "message": "Caduca el:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Els tokens d'accés no s'emmagatzemen i no es poden recuperar"
+  },
+  "copyToken": {
+    "message": "Copia el token"
+  },
+  "accessToken": {
+    "message": "Token d'accés"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "La data de caducitat és obligatòria"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Token d'accés creat i copiat al porta-retalls"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "La gestió de permisos no està disponible per a la versió beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoca el token d'accés"
+  },
+  "submenu": {
+    "message": "Submenú"
   },
   "from": {
     "message": "De"
@@ -5484,8 +5910,44 @@
   "update": {
     "message": "Actualitza"
   },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ més",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Informació del grup"
+  },
+  "editGroupMembersDesc": {
+    "message": "Concediu als membres accés a les col·leccions assignades al grup."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Doneu accés a les col·leccions afegint-les a aquest grup."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Doneu accés a totes les col·leccions actuals i futures."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "Si està marcat, substituirà tots els altres permisos de la col·lecció."
+  },
+  "selectMembers": {
+    "message": "Seleccioneu membres"
+  },
+  "selectCollections": {
+    "message": "Seleccioneu col·leccions"
+  },
   "role": {
     "message": "Rol"
+  },
+  "removeMember": {
+    "message": "Suprimeix membre"
+  },
+  "collection": {
+    "message": "Col·lecció"
   },
   "canView": {
     "message": "Pot veure"
@@ -5499,6 +5961,15 @@
   "canEditExceptPass": {
     "message": "Pot editar, excepte les contrasenyes"
   },
+  "noCollectionsAdded": {
+    "message": "No s'han afegit col·leccions"
+  },
+  "noMembersAdded": {
+    "message": "No s'han afegit membres"
+  },
+  "noGroupsAdded": {
+    "message": "No s'han afegit grups"
+  },
   "group": {
     "message": "Grup"
   },
@@ -5507,5 +5978,80 @@
   },
   "memberAccessAll": {
     "message": "Aquest usuari pot accedir i modificar tots els elements."
+  },
+  "membersColumnHeader": {
+    "message": "Membre/grup"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Membre"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "selectGroups": {
+    "message": "Select groups"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
+  },
+  "deleted": {
+    "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
+  },
+  "moreFromBitwarden": {
+    "message": "Més de Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Canvi de productes"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $SEATCOUNT$ membres. Actualitza a un pla de pagament per convidar més membres.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $SEATCOUNT$ membres. Poseu-vos en contacte amb el propietari de la vostra organització per actualitzar-ho.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $COLLECTIONCOUNT$ col·leccions. Actualitza a un pla de pagament per afegir més col·leccions.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $COLLECTIONCOUNT$ col·leccions. Poseu-vos en contacte amb el propietari de la vostra organització per actualitzar-ho.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

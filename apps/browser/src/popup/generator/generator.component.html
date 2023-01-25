@@ -56,12 +56,12 @@
         type="button"
         appStopClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
-        (click)="regenerate()"
-        [disabled]="form.loading"
+        (click)="$any(form).loading ? false : regenerate()"
+        [attr.aria-disabled]="$any(form).loading ? 'true' : null"
       >
         <i
           class="bwi bwi-lg bwi-generate"
-          [ngClass]="form.loading ? 'bwi-spin' : ''"
+          [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
           aria-hidden="true"
         ></i>
       </button>
@@ -312,7 +312,9 @@
             />
             <label for="type_{{ o.value }}">
               {{ o.name }}
-              <div class="small text-muted" *ngIf="o.desc">{{ o.desc }}</div>
+              <div class="small text-muted" *ngIf="o.desc">
+                {{ o.desc }}
+              </div>
             </label>
           </div>
         </div>
@@ -320,22 +322,18 @@
     </div>
     <div class="box" *ngIf="usernameOptions.type === 'forwarded'">
       <div class="box-content">
-        <div class="box-content-row" role="radiogroup" aria-labelledby="forwardTypeHeading">
-          <label id="forwardTypeHeading" class="radio-header">{{ "service" | i18n }}</label>
-          <div class="radio-group text-default" appBoxRow *ngFor="let o of forwardOptions">
-            <input
-              type="radio"
-              [(ngModel)]="usernameOptions.forwardedService"
-              name="ForwardType"
-              id="forwardtype_{{ o.value }}"
-              [value]="o.value"
-              (change)="saveUsernameOptions()"
-              [checked]="usernameOptions.forwardedService === o.value"
-            />
-            <label for="forwardtype_{{ o.value }}">
+        <div class="box-content-row" role="listbox" aria-labelledby="forwardTypeHeading">
+          <label id="forwardTypeHeading">{{ "service" | i18n }}</label>
+          <select
+            id="ForwardTypeDropdown"
+            name="ForwardType"
+            [(ngModel)]="usernameOptions.forwardedService"
+            (change)="saveUsernameOptions()"
+          >
+            <option *ngFor="let o of forwardOptions" [ngValue]="o.value" role="option">
               {{ o.name }}
-            </label>
-          </div>
+            </option>
+          </select>
         </div>
         <ng-container *ngIf="usernameOptions.forwardedService === 'simplelogin'">
           <div class="box-content-row" appBoxRow>
@@ -355,7 +353,7 @@
             <input
               id="duckduckgo-apikey"
               type="password"
-              name="DuckDudkGoApiKey"
+              name="DuckDuckGoApiKey"
               [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
               (blur)="saveUsernameOptions()"
             />

@@ -32,6 +32,7 @@
               <input
                 id="masterPassword"
                 type="{{ showPassword ? 'text' : 'password' }}"
+                aria-describedby="masterPasswordHelp"
                 class="monospaced"
                 formControlName="masterPassword"
                 appInputVerbatim
@@ -64,8 +65,9 @@
           </app-password-strength>
         </div>
       </div>
-      <div class="box-footer">
-        {{ "masterPassDesc" | i18n }}
+      <div id="masterPasswordHelp" class="box-footer">
+        <b>{{ "important" | i18n }}</b> {{ "masterPasswordHint" | i18n }}
+        {{ characterMinimumMessage }}
       </div>
     </div>
     <div class="box">
@@ -100,11 +102,22 @@
         </div>
         <div class="box-content-row" appBoxRow>
           <label for="hint">{{ "masterPassHint" | i18n }}</label>
-          <input id="hint" type="text" formControlName="hint" />
+          <input id="hint" type="text" aria-describedby="hintHelp" formControlName="hint" />
         </div>
       </div>
-      <div class="box-footer">
+      <div id="hintHelp" class="box-footer">
         {{ "masterPassHintDesc" | i18n }}
+      </div>
+      <div class="box-content row-top-padding">
+        <div
+          class="box-content-row box-content-row-checkbox box-content-row-checkbox-left box-content-row-word-break"
+          appBoxRow
+        >
+          <input type="checkbox" id="checkForBreaches" formControlName="checkForBreaches" />
+          <label for="checkForBreaches">
+            {{ "checkForBreaches" | i18n }}
+          </label>
+        </div>
       </div>
     </div>
     <div [hidden]="!showCaptcha()"><iframe id="hcaptcha_iframe" height="80"></iframe></div>

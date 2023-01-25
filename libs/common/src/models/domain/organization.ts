@@ -1,3 +1,5 @@
+import { Jsonify } from "type-fest";
+
 import { OrganizationUserStatusType } from "../../enums/organizationUserStatusType";
 import { OrganizationUserType } from "../../enums/organizationUserType";
 import { ProductType } from "../../enums/productType";
@@ -20,7 +22,9 @@ export class Organization {
   useSso: boolean;
   useKeyConnector: boolean;
   useScim: boolean;
+  useCustomPermissions: boolean;
   useResetPassword: boolean;
+  useSecretsManager: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
   seats: number;
@@ -64,7 +68,9 @@ export class Organization {
     this.useSso = obj.useSso;
     this.useKeyConnector = obj.useKeyConnector;
     this.useScim = obj.useScim;
+    this.useCustomPermissions = obj.useCustomPermissions;
     this.useResetPassword = obj.useResetPassword;
+    this.useSecretsManager = obj.useSecretsManager;
     this.selfHost = obj.selfHost;
     this.usersGetPremium = obj.usersGetPremium;
     this.seats = obj.seats;
@@ -125,23 +131,19 @@ export class Organization {
   }
 
   get canCreateNewCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.createNewCollections ?? this.permissions.manageAllCollections)
-    );
+    return this.isManager || this.permissions.createNewCollections;
   }
 
   get canEditAnyCollection() {
-    return (
-      this.isAdmin || (this.permissions.editAnyCollection ?? this.permissions.manageAllCollections)
-    );
+    return this.isAdmin || this.permissions.editAnyCollection;
+  }
+
+  get canUseAdminCollections() {
+    return this.canEditAnyCollection;
   }
 
   get canDeleteAnyCollection() {
-    return (
-      this.isAdmin ||
-      (this.permissions.deleteAnyCollection ?? this.permissions.manageAllCollections)
-    );
+    return this.isAdmin || this.permissions.deleteAnyCollection;
   }
 
   get canViewAllCollections() {
@@ -149,17 +151,11 @@ export class Organization {
   }
 
   get canEditAssignedCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.editAssignedCollections ?? this.permissions.manageAssignedCollections)
-    );
+    return this.isManager || this.permissions.editAssignedCollections;
   }
 
   get canDeleteAssignedCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.deleteAssignedCollections ?? this.permissions.manageAssignedCollections)
-    );
+    return this.isManager || this.permissions.deleteAssignedCollections;
   }
 
   get canViewAssignedCollections() {
@@ -200,5 +196,20 @@ export class Organization {
 
   get hasProvider() {
     return this.providerId != null || this.providerName != null;
+  }
+
+  get canAccessSecretsManager() {
+    return this.useSecretsManager;
+  }
+
+  static fromJSON(json: Jsonify<Organization>) {
+    if (json == null) {
+      return null;
+    }
+
+    return Object.assign(new Organization(), json, {
+      familySponsorshipLastSyncDate: new Date(json.familySponsorshipLastSyncDate),
+      familySponsorshipValidUntil: new Date(json.familySponsorshipValidUntil),
+    });
   }
 }

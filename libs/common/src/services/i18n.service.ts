@@ -7,6 +7,7 @@ export class I18nService implements I18nServiceAbstraction {
   locale$: Observable<string> = this._locale.asObservable();
   // First locale is the default (English)
   supportedTranslationLocales: string[] = ["en"];
+  defaultLocale = "en";
   translationLocale: string;
   collator: Intl.Collator;
   localeNames = new Map<string, string>([
@@ -106,14 +107,14 @@ export class I18nService implements I18nServiceAbstraction {
       this.translationLocale = this.translationLocale.slice(0, 2);
 
       if (this.supportedTranslationLocales.indexOf(this.translationLocale) === -1) {
-        this.translationLocale = this.supportedTranslationLocales[0];
+        this.translationLocale = this.defaultLocale;
       }
     }
 
     if (this.localesDirectory != null) {
       await this.loadMessages(this.translationLocale, this.localeMessages);
-      if (this.translationLocale !== this.supportedTranslationLocales[0]) {
-        await this.loadMessages(this.supportedTranslationLocales[0], this.defaultMessages);
+      if (this.translationLocale !== this.defaultLocale) {
+        await this.loadMessages(this.defaultLocale, this.defaultMessages);
       }
     }
   }
@@ -122,7 +123,7 @@ export class I18nService implements I18nServiceAbstraction {
     return this.translate(id, p1, p2, p3);
   }
 
-  translate(id: string, p1?: string, p2?: string, p3?: string): string {
+  translate(id: string, p1?: string | number, p2?: string | number, p3?: string | number): string {
     let result: string;
     // eslint-disable-next-line
     if (this.localeMessages.hasOwnProperty(id) && this.localeMessages[id]) {
@@ -136,13 +137,13 @@ export class I18nService implements I18nServiceAbstraction {
 
     if (result !== "") {
       if (p1 != null) {
-        result = result.split("__$1__").join(p1);
+        result = result.split("__$1__").join(p1.toString());
       }
       if (p2 != null) {
-        result = result.split("__$2__").join(p2);
+        result = result.split("__$2__").join(p2.toString());
       }
       if (p3 != null) {
-        result = result.split("__$3__").join(p3);
+        result = result.split("__$3__").join(p3.toString());
       }
     }
 

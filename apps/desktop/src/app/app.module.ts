@@ -58,6 +58,9 @@ import localeZhCn from "@angular/common/locales/zh-Hans";
 import localeZhTw from "@angular/common/locales/zh-Hant";
 import { NgModule } from "@angular/core";
 
+import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
+import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
+
 import { AccessibilityCookieComponent } from "./accounts/accessibility-cookie.component";
 import { DeleteAccountComponent } from "./accounts/delete-account.component";
 import { EnvironmentComponent } from "./accounts/environment.component";
@@ -90,7 +93,6 @@ import { SharedModule } from "./shared/shared.module";
 import { AddEditCustomFieldsComponent } from "./vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "./vault/add-edit.component";
 import { AttachmentsComponent } from "./vault/attachments.component";
-import { CiphersComponent } from "./vault/ciphers.component";
 import { CollectionsComponent } from "./vault/collections.component";
 import { ExportComponent } from "./vault/export.component";
 import { FolderAddEditComponent } from "./vault/folder-add-edit.component";
@@ -99,6 +101,7 @@ import { PasswordGeneratorHistoryComponent } from "./vault/password-generator-hi
 import { PasswordHistoryComponent } from "./vault/password-history.component";
 import { ShareComponent } from "./vault/share.component";
 import { VaultFilterModule } from "./vault/vault-filter/vault-filter.module";
+import { VaultItemsComponent } from "./vault/vault-items.component";
 import { VaultComponent } from "./vault/vault.component";
 import { ViewCustomFieldsComponent } from "./vault/view-custom-fields.component";
 import { ViewComponent } from "./vault/view.component";
@@ -168,8 +171,10 @@ registerLocaleData(localeZhTw, "zh-TW");
     AddEditCustomFieldsComponent,
     AppComponent,
     AttachmentsComponent,
-    CiphersComponent,
+    VaultItemsComponent,
     CollectionsComponent,
+    ColorPasswordPipe,
+    ColorPasswordCountPipe,
     DeleteAccountComponent,
     EnvironmentComponent,
     ExportComponent,

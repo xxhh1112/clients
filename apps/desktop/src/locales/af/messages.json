@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "Gedeaktiveer"
   },
+  "removePassword": {
+    "message": "Verwyder wagwoord"
+  },
+  "removedPassword": {
+    "message": "Wagwoord geverwydered"
+  },
+  "removePasswordConfirmation": {
+    "message": "Is jy seker jy wil die wagwoord verwyder?"
+  },
   "maxAccessCountReached": {
     "message": "Maks toegangsaantal bereik"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "Meld aan met 'n ander toestel"
+  },
+  "toggleCharacterCount": {
+    "message": "Tokkel karakter telling",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

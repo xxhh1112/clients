@@ -277,12 +277,33 @@
   "searchFavorites": {
     "message": "Bilatu gogokoak"
   },
-  "searchType": {
-    "message": "Bilaketa mota",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Search logins",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Search cards",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Search identities",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Search secure notes",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Kutxa Gotorrean bilatu"
+  },
+  "searchMyVault": {
+    "message": "Search my vault"
+  },
+  "searchOrganization": {
+    "message": "Search organization"
+  },
+  "searchMembers": {
+    "message": "Search members"
   },
   "allItems": {
     "message": "Elementu guztiak"
@@ -365,6 +386,9 @@
   "select": {
     "message": "Hautatu"
   },
+  "newItem": {
+    "message": "New item"
+  },
   "addItem": {
     "message": "Gehitu elementua"
   },
@@ -373,6 +397,12 @@
   },
   "viewItem": {
     "message": "Bistaratu elementua"
+  },
+  "new": {
+    "message": "New"
+  },
+  "item": {
+    "message": "Item"
   },
   "ex": {
     "message": "adb.",
@@ -438,6 +468,9 @@
   },
   "vaultItems": {
     "message": "Kuxa gotorreko elementuak"
+  },
+  "filter": {
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Mugitu hautatutako antolakundera"
@@ -544,6 +577,12 @@
   },
   "deletedFolder": {
     "message": "Karpeta ezabatuta"
+  },
+  "editInfo": {
+    "message": "Edit info"
+  },
+  "access": {
+    "message": "Access"
   },
   "loggedOut": {
     "message": "Saioa itxita"
@@ -702,6 +741,9 @@
   "noItemsInList": {
     "message": "Ez dago erakusteko elementurik."
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "You do not have permission to view all items in this collection."
+  },
   "noCollectionsInList": {
     "message": "Ez dago erakusteko bildumarik."
   },
@@ -710,6 +752,9 @@
   },
   "noUsersInList": {
     "message": "Ez dago erakusteko erabiltzailerik."
+  },
+  "noMembersInList": {
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Ez dago erakusteko gertakaririk."
@@ -855,6 +900,18 @@
       }
     }
   },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ collection(s) will be permanently deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Are you sure you want to continue?"
+  },
   "moveSelectedItemsDesc": {
     "message": "Aukeratu $COUNT$ hautatutako artikulu mugitu nahi d(it)uzun karpeta.",
     "placeholders": {
@@ -929,17 +986,17 @@
   "confirmFilePassword": {
     "message": "Fitxategi pasahitza berretsi"
   },
-  "accountBackupOptionDescription": {
-    "message": "Erabili zure kontuaren zifratze-gakoa esportazioa zifratzeko eta inportazioa egungo Bitwarden kontura bakarrik mugatzeko."
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
     "message": "Erabili pasahitza esportazioa zifratzeko eta Bitwardeneko edozein kontutara inportatzean deszifratzeko."
   },
-  "fileTypeHeading": {
-    "message": "Fitxategi mota"
+  "exportTypeHeading": {
+    "message": "Export type"
   },
-  "accountBackup": {
-    "message": "Kontuaren segurtasun kopia"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "Pasahitz babestua"
@@ -1297,17 +1354,17 @@
     "message": "Ziurtatu zure kontua saioa hastean beste urrats bat egitea eskatuz."
   },
   "twoStepLoginOrganizationDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "message": "Behartu kideei Bitwardenen saioa hasteko bi urratseko aukera, hau erabiliz",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
+    "message": "Bi urratseko saio hasieraren politika"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "To enforce Two-step Login through Duo, use the options below."
+    "message": "Duo bidezko bi urratseko saio hasiera behartzeko, erabili hurrengo aukerak."
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
+    "message": "SSO ezarrita baduzu edo hori egiteko asmoa baduzu, baliteke bi urratseko saio-hasiera iada zure identitate-hornitzailearen bidez erabiltzen aritzea."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Bi urratseko saio hasiera gaitzeak betirako blokea dezake Bitwarden kontura sartzea. Berreskuratze-kode baten bidez, zure kontura sar zaitezke, bi urratseko saio hasierako hornitzailea erabili ezin baduzu (adb. gailua galtzen baduzu). Bitwarden-ek ezingo dizu lagundu zure konturako sarbidea galtzen baduzu. Berreskuratze-kodea idatzi edo inprimatzea eta leku seguruan edukitzea gomendatzen dugu."
@@ -1557,8 +1614,8 @@
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "message": "Identifikatu eta itxi erakundetako kontuetako segurtasun hutsuneak, ondorengo txostenetan klik eginez.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Webgune ez seguruak"
@@ -1821,6 +1878,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Gehigarriak"
@@ -2356,6 +2429,15 @@
   "deleteGroupConfirmation": {
     "message": "Ziur talde hau ezabatu nahi duzula?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Ziur zaude erabiltzaile hau ezabatu nahi duzula?"
   },
@@ -2373,6 +2455,9 @@
   },
   "externalIdDesc": {
     "message": "Kanpoko Id-a erreferentzia gisa erabil daiteke edo baliabide hori kanpoko sistema batekin lotzeko, erabiltzaileen direktorio gisa adibidez."
+  },
+  "nestCollectionUnder": {
+    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Sarbide kontrola"
@@ -2395,14 +2480,14 @@
   "editCollection": {
     "message": "Editatu bilduma"
   },
+  "collectionInfo": {
+    "message": "Collection info"
+  },
   "deleteCollectionConfirmation": {
     "message": "Ziur al zaude bilduma hau ezabatu nahi duzula?"
   },
-  "editUser": {
-    "message": "Editatu erabiltzailea"
-  },
-  "inviteUser": {
-    "message": "Gonbidatu erabiltzailea"
+  "editMember": {
+    "message": "Edit member"
   },
   "inviteUserDesc": {
     "message": "Gonbidatu erabiltzaile berri bat zure erakundera, jarraian bere Bitwarden kontuko emaila sartuz (Bitwarden konturik ez badu, kontu berri bat sortzeko eskatuko zaio)."
@@ -2597,7 +2682,7 @@
     }
   },
   "viewedCardNumberItemId": {
-    "message": "Viewed Card Number for item $ID$.",
+    "message": "$ID$ elementuko txartel zenbakia ikusia.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2668,6 +2753,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Deleted collections"
+  },
   "deletedCollectionId": {
     "message": "$ID$ bilduma ezabatua.",
     "placeholders": {
@@ -2710,6 +2798,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Deleted $QUANTITY$ group(s).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -3017,7 +3114,7 @@
     "message": "Nire erakundea"
   },
   "organizationInfo": {
-    "message": "Organization info"
+    "message": "Erakundearen informazioa"
   },
   "deleteOrganization": {
     "message": "Ezabatu erakundea"
@@ -3345,7 +3442,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Sortuta",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3716,10 +3813,10 @@
     "message": "Erakundearen identifikatzailea beharrezkoa da."
   },
   "ssoIdentifier": {
-    "message": "SSO identifier"
+    "message": "SSO identifikatzailea"
   },
   "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
+    "message": "Eman ID hau kideei, SSOrekin saioa hasteko."
   },
   "unlinkSso": {
     "message": "SSO deskonektatu"
@@ -4119,11 +4216,26 @@
   "customDesc": {
     "message": "Ezarpen aurreratuetarako erabiltzaile baimenen kontrol aurreratuagoa ahalbidetzen du."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Rol pertsonalizatuak dira ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enpresaren ezaugarriak",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Jarri harremanetan gure laguntza-taldearekin zure harpidetza eguneratzeko",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Baimen pertsonalizatuak gaitzeko, erakundeak Enterprise 2020 plan batean egon behar du."
+  },
   "permissions": {
     "message": "Baimenak"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Baimena"
   },
   "managerPermissions": {
     "message": "Kudeatu baimenak"
@@ -4531,7 +4643,7 @@
     "message": "Bezeroa"
   },
   "client": {
-    "message": "Client",
+    "message": "Bezeroa",
     "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
@@ -5338,7 +5450,7 @@
     "message": "Gailu egiaztapena eguneratua"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Ziur al zaude gailu egiaztapena gaitu nahi duzula? Egiaztatze-kodearen mezu elektronikoak $EMAILA$-era iritsiko dira",
+    "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5419,11 +5531,20 @@
     }
   },
   "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
+    "message": "Sarrerak ezin ditu $COUNT$ karaktere baino gehiago eduki.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
       }
     }
   },
@@ -5443,10 +5564,10 @@
     "message": "Piztuta"
   },
   "members": {
-    "message": "Members"
+    "message": "Kideak"
   },
   "reporting": {
-    "message": "Reporting"
+    "message": "Informatzen"
   },
   "cardBrandMir": {
     "message": "Mir"
@@ -5455,57 +5576,482 @@
     "message": "Erabiltzaile kopurua"
   },
   "loggingInAs": {
-    "message": "Logging in as"
+    "message": "Honela hasi saioa"
   },
   "notYou": {
-    "message": "Not you?"
+    "message": "Ez zara zu?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Type to Filter --"
+    "message": "-- Idatzi iragazteko --"
   },
   "multiSelectLoading": {
-    "message": "Retrieving options..."
+    "message": "Aukerak berreskuratzen..."
   },
   "multiSelectNotFound": {
-    "message": "No items found"
+    "message": "Ez da elementurik aurkitu"
   },
   "multiSelectClearAll": {
-    "message": "Clear all"
+    "message": "Ezabatu dena"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Password character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "projects": {
+    "message": "Proiektuak"
+  },
+  "lastEdited": {
+    "message": "Azken edizioa"
+  },
+  "editSecret": {
+    "message": "Editatu sekretua"
+  },
+  "addSecret": {
+    "message": "Gehitu sekretua"
+  },
+  "copySecretName": {
+    "message": "Kopiatu sekretuaren izena"
+  },
+  "copySecretValue": {
+    "message": "Kopiatu sekretuaren balioa"
+  },
+  "deleteSecret": {
+    "message": "Ezabatu sekretua"
+  },
+  "deleteSecrets": {
+    "message": "Ezabatu sekretuak"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Sekretua"
+  },
+  "serviceAccount": {
+    "message": "Service Account"
+  },
+  "serviceAccounts": {
+    "message": "Service Accounts"
+  },
+  "secrets": {
+    "message": "Sekretuak"
+  },
+  "nameValuePair": {
+    "message": "Name/Value Pair"
+  },
+  "secretEdited": {
+    "message": "Sekretua editatua"
+  },
+  "secretCreated": {
+    "message": "Sekretua sortua"
+  },
+  "newSecret": {
+    "message": "Sekretu berria"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "Ez dago erakusteko sekreturik"
+  },
+  "secretsNoItemsMessage": {
+    "message": "Hasteko, sortu edo inportatu sekretu berri bat."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Zerbitzu-kontu berri bat sortu, sarbide sekretua automatizatzen hasteko."
+  },
+  "searchSecrets": {
+    "message": "Bilatu sekretuak"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Sekretuak ezabatzeak uneko integrazioei eragin ahal die."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Sekretua zakarrontzira bidalita"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Proiektua, sekretua"
+  },
+  "serviceAccountName": {
+    "message": "Service account name"
+  },
+  "newSaSelectAccess": {
+    "message": "Idatzi edo aukeratu proiektu edo sekretuak"
+  },
+  "newSaTypeToFilter": {
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "Proiektua eta honi lotutako sekretu guztiak ezabatu dira"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Gehitu proiektu berria sekretuak antolatzen hasteko."
+  },
+  "smConfirmationRequired": {
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Sekretua zakarrontzira bidalia"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Create access token"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
   },
   "from": {
-    "message": "From"
+    "message": "Igorlea"
   },
   "to": {
-    "message": "To"
+    "message": "Nora"
   },
   "member": {
-    "message": "Member"
+    "message": "Kidea"
   },
   "update": {
-    "message": "Update"
+    "message": "Eguneratu"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Group info"
+  },
+  "editGroupMembersDesc": {
+    "message": "Grant members access to the group's assigned collections."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Grant access to collections by adding them to this group."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Grant access to all current and future collections."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "If checked, this will replace all other collection permissions."
+  },
+  "selectMembers": {
+    "message": "Select members"
+  },
+  "selectCollections": {
+    "message": "Select collections"
   },
   "role": {
-    "message": "Role"
+    "message": "Rola"
+  },
+  "removeMember": {
+    "message": "Remove member"
+  },
+  "collection": {
+    "message": "Collection"
   },
   "canView": {
-    "message": "Can view"
+    "message": "Ikus dezake"
   },
   "canViewExceptPass": {
-    "message": "Can view, except passwords"
+    "message": "Ikus dezake, pasahitza izan ezik"
   },
   "canEdit": {
-    "message": "Can edit"
+    "message": "Editatu dezake"
   },
   "canEditExceptPass": {
-    "message": "Can edit, except passwords"
+    "message": "Editatu dezake, pasahitza izan ezik"
+  },
+  "noCollectionsAdded": {
+    "message": "No collections added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
+  },
+  "noGroupsAdded": {
+    "message": "No groups added"
   },
   "group": {
-    "message": "Group"
+    "message": "Taldea"
   },
   "groupAccessAll": {
-    "message": "This group can access and modify all items."
+    "message": "Talde hau elementu guztietara sartu eta aldaketak egin ditzake."
   },
   "memberAccessAll": {
-    "message": "This member can access and modify all items."
+    "message": "Kide hau elementu guztietara sartu eta aldaketak egin ditzake."
+  },
+  "membersColumnHeader": {
+    "message": "Member/Group"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Member"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "selectGroups": {
+    "message": "Select groups"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
+  },
+  "deleted": {
+    "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
+  },
+  "moreFromBitwarden": {
+    "message": "More from Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Switch Products"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

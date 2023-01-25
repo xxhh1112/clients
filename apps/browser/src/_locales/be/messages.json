@@ -196,7 +196,7 @@
     "message": "Даведка і зваротная сувязь"
   },
   "sync": {
-    "message": "Сінхранізавана"
+    "message": "Сінхранізаваць"
   },
   "syncVaultNow": {
     "message": "Сінхранізаваць сховішча зараз"
@@ -642,7 +642,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Цёмная Solarized",
+    "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {

@@ -15,26 +15,9 @@ defaults:
     shell: bash
 
 jobs:
-  setup:
-    name: Setup
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-
-      - name: Branch check
-        run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-desktop" ]]; then
-            echo "==================================="
-            echo "[!] Can only increase rollout from the 'rc' or 'hotfix-rc-desktop' branches"
-            echo "==================================="
-            exit 1
-          fi
-
   rollout:
     name: Update Rollout Percentage
     runs-on: ubuntu-22.04
-    needs: setup
     steps:
       - name: Login to Azure
         uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010
@@ -53,20 +36,6 @@ jobs:
             r2-electron-access-key,
             r2-electron-bucket-name,
             cf-prod-account"
-
-      - name: Download channel update info files from S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.retrieve-secrets.outputs.aws-electron-access-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.retrieve-secrets.outputs.aws-electron-access-key }}
-          AWS_DEFAULT_REGION: 'us-west-2'
-          AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.aws-electron-bucket-name }}
-        run: |
-          aws s3 cp $AWS_S3_BUCKET_NAME/desktop/latest.yml . \
-          --quiet
-          aws s3 cp $AWS_S3_BUCKET_NAME/desktop/latest-linux.yml . \
-          --quiet
-          aws s3 cp $AWS_S3_BUCKET_NAME/desktop/latest-mac.yml . \
-          --quiet
 
       - name: Download channel update info files from R2
         env:
@@ -99,7 +68,7 @@ jobs:
             echo
             echo "If you want to pull a staged release because it hasn’t gone well, you must increment the version \
                   number higher than your broken release. Because some of your users will be on the broken 1.0.1, \
-                  releasing a new 1.0.1 would result in them staying on a broken version.”
+                  releasing a new 1.0.1 would result in them staying on a broken version."
             exit 1
           fi
 
@@ -118,10 +87,14 @@ jobs:
           AWS_DEFAULT_REGION: 'us-west-2'
           AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.aws-electron-bucket-name }}
         run: |
-          aws s3 cp ./ $AWS_S3_BUCKET_NAME/desktop/ \
-          --include "latest*.yml" \
-          --acl "public-read" \
-          --quiet
+          aws s3 cp latest.yml $AWS_S3_BUCKET_NAME/desktop/ \
+          --acl "public-read"
+
+          aws s3 cp latest-linux.yml $AWS_S3_BUCKET_NAME/desktop/ \
+          --acl "public-read"
+
+          aws s3 cp latest-mac.yml $AWS_S3_BUCKET_NAME/desktop/ \
+          --acl "public-read"
 
       - name: Publish channel update info files to R2
         env:
@@ -131,7 +104,11 @@ jobs:
           AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.r2-electron-bucket-name }}
           CF_ACCOUNT: ${{ steps.retrieve-secrets.outputs.cf-prod-account }}
         run: |
-          aws s3 cp ./ $AWS_S3_BUCKET_NAME/desktop/ \
-          --include "latest*.yml" \
-          --quiet \
+          aws s3 cp latest.yml $AWS_S3_BUCKET_NAME/desktop/ \
+          --endpoint-url https://${CF_ACCOUNT}.r2.cloudflarestorage.com
+          
+          aws s3 cp latest-linux.yml $AWS_S3_BUCKET_NAME/desktop/ \
+          --endpoint-url https://${CF_ACCOUNT}.r2.cloudflarestorage.com
+
+          aws s3 cp latest-mac.yml $AWS_S3_BUCKET_NAME/desktop/ \
           --endpoint-url https://${CF_ACCOUNT}.r2.cloudflarestorage.com

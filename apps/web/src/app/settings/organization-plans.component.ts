@@ -52,8 +52,25 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
   @Input() showFree = true;
   @Input() showCancel = false;
   @Input() acceptingSponsorship = false;
-  @Input() product: ProductType = ProductType.Free;
-  @Input() plan: PlanType = PlanType.Free;
+  @Input()
+  get product(): ProductType {
+    return this._product;
+  }
+  set product(product: ProductType) {
+    this._product = product;
+    this.formGroup?.controls?.product?.setValue(product);
+  }
+  private _product = ProductType.Free;
+
+  @Input()
+  get plan(): PlanType {
+    return this._plan;
+  }
+  set plan(plan: PlanType) {
+    this._plan = plan;
+    this.formGroup?.controls?.plan?.setValue(plan);
+  }
+  private _plan = PlanType.Free;
   @Input() providerId: string;
   @Output() onSuccess = new EventEmitter<OnSuccessArgs>();
   @Output() onCanceled = new EventEmitter<void>();
@@ -121,7 +138,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     }
 
     if (this.createOrganization) {
-      this.formGroup.controls.name.addValidators(Validators.required);
+      this.formGroup.controls.name.addValidators([Validators.required, Validators.maxLength(50)]);
       this.formGroup.controls.billingEmail.addValidators(Validators.required);
     }
 

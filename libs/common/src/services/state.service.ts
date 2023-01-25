@@ -1,10 +1,11 @@
 import { BehaviorSubject, concatMap } from "rxjs";
+import { Jsonify } from "type-fest";
 
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
 import { StateMigrationService } from "../abstractions/stateMigration.service";
 import {
-  MemoryStorageServiceInterface,
+  AbstractMemoryStorageService,
   AbstractStorageService,
 } from "../abstractions/storage.service";
 import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
@@ -13,6 +14,7 @@ import { StorageLocation } from "../enums/storageLocation";
 import { ThemeType } from "../enums/themeType";
 import { UriMatchType } from "../enums/uriMatchType";
 import { StateFactory } from "../factories/stateFactory";
+import { Utils } from "../misc/utils";
 import { CipherData } from "../models/data/cipher.data";
 import { CollectionData } from "../models/data/collection.data";
 import { EncryptedOrganizationKeyData } from "../models/data/encrypted-organization-key.data";
@@ -65,24 +67,27 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
-  private accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
+  protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
   accounts$ = this.accountsSubject.asObservable();
 
-  private activeAccountSubject = new BehaviorSubject<string | null>(null);
+  protected activeAccountSubject = new BehaviorSubject<string | null>(null);
   activeAccount$ = this.activeAccountSubject.asObservable();
 
-  private activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
+  protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
   activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
 
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  private accountDiskCache = new Map<string, TAccount>();
+  protected accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
+
+  // default account serializer, must be overridden by child class
+  protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
 
   constructor(
     protected storageService: AbstractStorageService,
     protected secureStorageService: AbstractStorageService,
-    protected memoryStorageService: AbstractStorageService & MemoryStorageServiceInterface,
+    protected memoryStorageService: AbstractMemoryStorageService,
     protected logService: LogService,
     protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
@@ -676,7 +681,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    return this.recordToMap(account?.keys?.organizationKeys?.decrypted);
+    return Utils.recordToMap(account?.keys?.organizationKeys?.decrypted);
   }
 
   async setDecryptedOrganizationKeys(
@@ -686,7 +691,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.keys.organizationKeys.decrypted = this.mapToRecord(value);
+    account.keys.organizationKeys.decrypted = Utils.mapToRecord(value);
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -774,7 +779,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    return this.recordToMap(account?.keys?.providerKeys?.decrypted);
+    return Utils.recordToMap(account?.keys?.providerKeys?.decrypted);
   }
 
   async setDecryptedProviderKeys(
@@ -784,7 +789,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.keys.providerKeys.decrypted = this.mapToRecord(value);
+    account.keys.providerKeys.decrypted = Utils.mapToRecord(value);
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -2296,6 +2301,23 @@ export class StateService<
     )?.settings?.serverConfig;
   }
 
+  async getAvatarColor(options?: StorageOptions): Promise<string | null | undefined> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.avatarColor;
+  }
+
+  async setAvatarColor(value: string, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.avatarColor = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {
     let globals: TGlobalState;
     if (this.useMemory(options.storageLocation)) {
@@ -2378,7 +2400,7 @@ export class StateService<
     }
 
     if (this.useAccountCache) {
-      const cachedAccount = this.accountDiskCache.get(options.userId);
+      const cachedAccount = this.accountDiskCache.value[options.userId];
       if (cachedAccount != null) {
         return cachedAccount;
       }
@@ -2392,9 +2414,7 @@ export class StateService<
         ))
       : await this.storageService.get<TAccount>(options.userId, options);
 
-    if (this.useAccountCache) {
-      this.accountDiskCache.set(options.userId, account);
-    }
+    this.setDiskCache(options.userId, account);
     return account;
   }
 
@@ -2425,9 +2445,7 @@ export class StateService<
 
     await storageLocation.save(`${options.userId}`, account, options);
 
-    if (this.useAccountCache) {
-      this.accountDiskCache.delete(options.userId);
-    }
+    this.deleteDiskCache(options.userId);
   }
 
   protected async saveAccountToMemory(account: TAccount): Promise<void> {
@@ -2638,9 +2656,7 @@ export class StateService<
       userId = userId ?? state.activeUserId;
       delete state.accounts[userId];
 
-      if (this.useAccountCache) {
-        this.accountDiskCache.delete(userId);
-      }
+      this.deleteDiskCache(userId);
 
       return state;
     });
@@ -2744,7 +2760,7 @@ export class StateService<
 
   protected async state(): Promise<State<TGlobalState, TAccount>> {
     const state = await this.memoryStorageService.get<State<TGlobalState, TAccount>>(keys.state, {
-      deserializer: (s) => State.fromJSON(s),
+      deserializer: (s) => State.fromJSON(s, this.accountDeserializer),
     });
     return state;
   }
@@ -2766,49 +2782,19 @@ export class StateService<
     });
   }
 
-  private mapToRecord<V>(map: Map<string, V>): Record<string, V> {
-    return map == null ? null : Object.fromEntries(map);
+  private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {
+    if (this.useAccountCache) {
+      this.accountDiskCache.value[key] = value;
+      this.accountDiskCache.next(this.accountDiskCache.value);
+    }
   }
 
-  private recordToMap<V>(record: Record<string, V>): Map<string, V> {
-    return record == null ? null : new Map(Object.entries(record));
+  private deleteDiskCache(key: string) {
+    if (this.useAccountCache) {
+      delete this.accountDiskCache.value[key];
+      this.accountDiskCache.next(this.accountDiskCache.value);
+    }
   }
-}
-
-export function withPrototype<T>(
-  constructor: new (...args: any[]) => T,
-  converter: (input: any) => T = (i) => i
-): (
-  target: any,
-  propertyKey: string | symbol,
-  descriptor: PropertyDescriptor
-) => { value: (...args: any[]) => Promise<T> } {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
-    const originalMethod = descriptor.value;
-
-    return {
-      value: function (...args: any[]) {
-        const originalResult: Promise<T> = originalMethod.apply(this, args);
-
-        if (!(originalResult instanceof Promise)) {
-          throw new Error(
-            `Error applying prototype to stored value -- result is not a promise for method ${String(
-              propertyKey
-            )}`
-          );
-        }
-
-        return originalResult.then((result) => {
-          return result == null ||
-            result.constructor.name === constructor.prototype.constructor.name
-            ? converter(result as T)
-            : converter(
-                Object.create(constructor.prototype, Object.getOwnPropertyDescriptors(result)) as T
-              );
-        });
-      },
-    };
-  };
 }
 
 function withPrototypeForArrayMembers<T>(
@@ -2847,7 +2833,7 @@ function withPrototypeForArrayMembers<T>(
             return result.map((r) => {
               return r == null ||
                 r.constructor.name === memberConstructor.prototype.constructor.name
-                ? memberConverter(r)
+                ? r
                 : memberConverter(
                     Object.create(memberConstructor.prototype, Object.getOwnPropertyDescriptors(r))
                   );

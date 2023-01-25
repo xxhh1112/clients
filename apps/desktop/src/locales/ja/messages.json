@@ -1779,6 +1779,15 @@
   "disabled": {
     "message": "無効"
   },
+  "removePassword": {
+    "message": "パスワードを削除"
+  },
+  "removedPassword": {
+    "message": "パスワードを削除しました"
+  },
+  "removePasswordConfirmation": {
+    "message": "パスワードを削除してもよろしいですか？"
+  },
   "maxAccessCountReached": {
     "message": "最大アクセス数に達しました"
   },
@@ -2048,5 +2057,9 @@
   },
   "logInWithAnotherDevice": {
     "message": "別のデバイスでログイン"
+  },
+  "toggleCharacterCount": {
+    "message": "文字カウントを切り替える",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
   }
 }

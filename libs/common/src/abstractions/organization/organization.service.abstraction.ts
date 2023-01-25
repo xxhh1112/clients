@@ -1,11 +1,12 @@
 import { map, Observable } from "rxjs";
 
 import { Utils } from "../../misc/utils";
+import { OrganizationData } from "../../models/data/organization.data";
 import { Organization } from "../../models/domain/organization";
 import { I18nService } from "../i18n.service";
 
 export function canAccessVaultTab(org: Organization): boolean {
-  return org.isManager;
+  return org.canViewAssignedCollections || org.canViewAllCollections || org.canManageGroups;
 }
 
 export function canAccessSettingsTab(org: Organization): boolean {
@@ -34,19 +35,6 @@ export function canAccessBillingTab(org: Organization): boolean {
   return org.canManageBilling;
 }
 
-export function canManageCollections(org: Organization): boolean {
-  return (
-    org.canCreateNewCollections ||
-    org.canEditAnyCollection ||
-    org.canDeleteAnyCollection ||
-    org.canViewAssignedCollections
-  );
-}
-
-export function canAccessManageTab(org: Organization): boolean {
-  return canAccessMembersTab(org) || canAccessGroupsTab(org) || canManageCollections(org);
-}
-
 export function canAccessOrgAdmin(org: Organization): boolean {
   return (
     canAccessMembersTab(org) ||
@@ -54,8 +42,7 @@ export function canAccessOrgAdmin(org: Organization): boolean {
     canAccessReportingTab(org) ||
     canAccessBillingTab(org) ||
     canAccessSettingsTab(org) ||
-    canAccessVaultTab(org) ||
-    canAccessManageTab(org)
+    canAccessVaultTab(org)
   );
 }
 
@@ -67,6 +54,10 @@ export function canAccessAdmin(i18nService: I18nService) {
   return map<Organization[], Organization[]>((orgs) =>
     orgs.filter(canAccessOrgAdmin).sort(Utils.getSortFunction(i18nService, "name"))
   );
+}
+
+export function isNotProviderUser(org: Organization): boolean {
+  return !org.isProviderUser;
 }
 
 export abstract class OrganizationService {
@@ -82,4 +73,8 @@ export abstract class OrganizationService {
   getFromState: (id: string) => Promise<Organization>;
   canManageSponsorships: () => Promise<boolean>;
   hasOrganizations: () => boolean;
+}
+
+export abstract class InternalOrganizationService extends OrganizationService {
+  replace: (organizations: { [id: string]: OrganizationData }) => Promise<void>;
 }

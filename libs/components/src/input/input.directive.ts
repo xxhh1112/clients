@@ -1,7 +1,16 @@
-import { Directive, HostBinding, Input, Optional, Self } from "@angular/core";
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  NgZone,
+  Optional,
+  Self,
+} from "@angular/core";
 import { NgControl, Validators } from "@angular/forms";
 
-import { BitFormFieldControl } from "../form-field/form-field-control";
+import { BitFormFieldControl, InputTypes } from "../form-field/form-field-control";
 
 // Increments for each instance of this component
 let nextId = 0;
@@ -31,6 +40,7 @@ export class BitInputDirective implements BitFormFieldControl {
       "focus:tw-outline-none",
       "focus:tw-border-primary-700",
       "focus:tw-ring-1",
+      "focus:tw-ring-inset",
       "focus:tw-ring-primary-700",
       "focus:tw-z-10",
       "disabled:tw-bg-secondary-100",
@@ -41,13 +51,13 @@ export class BitInputDirective implements BitFormFieldControl {
 
   @HostBinding("attr.aria-describedby") ariaDescribedBy: string;
 
-  get labelForId(): string {
-    return this.id;
-  }
-
   @HostBinding("attr.aria-invalid") get ariaInvalid() {
     return this.hasError ? true : undefined;
   }
+
+  @HostBinding("attr.type") @Input() type?: InputTypes;
+
+  @HostBinding("attr.spellcheck") @Input() spellcheck?: boolean;
 
   @HostBinding()
   @Input()
@@ -62,13 +72,41 @@ export class BitInputDirective implements BitFormFieldControl {
   @Input() hasPrefix = false;
   @Input() hasSuffix = false;
 
+  get labelForId(): string {
+    return this.id;
+  }
+
+  private isActive = true;
+  @HostListener("blur")
+  onBlur() {
+    this.isActive = true;
+  }
+
+  @HostListener("input")
+  onInput() {
+    this.isActive = false;
+  }
+
   get hasError() {
-    return this.ngControl?.status === "INVALID" && this.ngControl?.touched;
+    return this.ngControl?.status === "INVALID" && this.ngControl?.touched && this.isActive;
   }
 
   get error(): [string, any] {
     const key = Object.keys(this.ngControl.errors)[0];
     return [key, this.ngControl.errors[key]];
   }
-  constructor(@Optional() @Self() private ngControl: NgControl) {}
+
+  constructor(
+    @Optional() @Self() private ngControl: NgControl,
+    private ngZone: NgZone,
+    private elementRef: ElementRef<HTMLInputElement>
+  ) {}
+
+  focus() {
+    this.ngZone.runOutsideAngular(() => {
+      const end = this.elementRef.nativeElement.value.length;
+      this.elementRef.nativeElement.setSelectionRange(end, end);
+      this.elementRef.nativeElement.focus();
+    });
+  }
 }

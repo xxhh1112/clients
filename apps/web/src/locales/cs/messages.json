@@ -277,12 +277,33 @@
   "searchFavorites": {
     "message": "Vyhledat v oblíbených"
   },
-  "searchType": {
-    "message": "Vyhledat v typu",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Search logins",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Search cards",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Search identities",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Search secure notes",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Vyhledat v trezoru"
+  },
+  "searchMyVault": {
+    "message": "Search my vault"
+  },
+  "searchOrganization": {
+    "message": "Search organization"
+  },
+  "searchMembers": {
+    "message": "Search members"
   },
   "allItems": {
     "message": "Všechny položky"
@@ -365,6 +386,9 @@
   "select": {
     "message": "Vybrat"
   },
+  "newItem": {
+    "message": "New item"
+  },
   "addItem": {
     "message": "Přidat položku"
   },
@@ -373,6 +397,12 @@
   },
   "viewItem": {
     "message": "Zobrazit položku"
+  },
+  "new": {
+    "message": "New"
+  },
+  "item": {
+    "message": "Item"
   },
   "ex": {
     "message": "např.",
@@ -438,6 +468,9 @@
   },
   "vaultItems": {
     "message": "Položky trezoru"
+  },
+  "filter": {
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Přesunout vybrané do organizace"
@@ -545,6 +578,12 @@
   "deletedFolder": {
     "message": "Složka byla smazána"
   },
+  "editInfo": {
+    "message": "Edit info"
+  },
+  "access": {
+    "message": "Access"
+  },
   "loggedOut": {
     "message": "Odhlášení"
   },
@@ -570,19 +609,19 @@
     "message": "Pro přístup do vašeho bezpečného trezoru se přihlaste nebo si vytvořte nový účet."
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Přihlásit se pomocí zařízení"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+    "message": "Přihlášení pomocí zařízení musí být nastaveno v nastavení mobilní aplikace Bitwarden. Potřebujete jinou volbu?"
   },
   "loginWithMasterPassword": {
-    "message": "Log in with master password"
+    "message": "Přihlásit se pomocí hlavního hesla"
   },
   "createAccount": {
     "message": "Vytvořit účet"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "Jste tu noví?"
   },
   "startTrial": {
     "message": "Zahájit zkušební verzi"
@@ -591,7 +630,7 @@
     "message": "Přihlásit se"
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Přihlášení zahájeno"
   },
   "submit": {
     "message": "Potvrdit"
@@ -651,7 +690,7 @@
     "message": "Druhé zadání hlavního hesla je povinné."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Hlavní heslo musí obsahovat alespoň 8 znaků."
   },
   "masterPassDoesntMatch": {
     "message": "Potvrzení hlavního hesla se neshoduje."
@@ -660,7 +699,7 @@
     "message": "Váš účet byl vytvořen! Můžete se přihlásit."
   },
   "trialAccountCreated": {
-    "message": "Account created successfully."
+    "message": "Účet byl úspěšně vytvořen."
   },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
@@ -694,13 +733,16 @@
     "message": "Chybné hlavní heslo"
   },
   "invalidFilePassword": {
-    "message": "Invalid file password, please use the password you entered when you created the export file."
+    "message": "Neplatné heslo souboru, použijte heslo zadané při vytvoření souboru exportu."
   },
   "lockNow": {
     "message": "Zamknout nyní"
   },
   "noItemsInList": {
     "message": "Žádné položky k zobrazení."
+  },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "You do not have permission to view all items in this collection."
   },
   "noCollectionsInList": {
     "message": "Žádné kolekce k zobrazení."
@@ -710,6 +752,9 @@
   },
   "noUsersInList": {
     "message": "Žádní uživatelé k zobrazení."
+  },
+  "noMembersInList": {
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Žádné události k zobrazení."
@@ -721,7 +766,7 @@
     "message": "Nepatříte do žádné organizace. Organizace umožňují bezpečné sdílení položek s ostatními uživateli."
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Na vaše zařízení bylo odesláno oznámení."
   },
   "versionNumber": {
     "message": "Verze $VERSION_NUMBER$",
@@ -855,6 +900,18 @@
       }
     }
   },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ collection(s) will be permanently deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Are you sure you want to continue?"
+  },
   "moveSelectedItemsDesc": {
     "message": "Vyberte složku, do které chcete přesunout $COUNT$ vybraných položek.",
     "placeholders": {
@@ -912,46 +969,46 @@
     "message": "Formát souboru"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru."
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Toto heslo bude použito pro export a import tohoto souboru"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "Potvrzení hlavního hesla"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "Potvrdit formát"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Heslo souboru"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "Potvrzení hesla souboru"
   },
-  "accountBackupOptionDescription": {
-    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Nastavte heslo pro šifrování exportu a importujte ho do libovolného účtu Bitwarden pomocí hesla pro dešifrování."
   },
-  "fileTypeHeading": {
-    "message": "Typ souboru"
+  "exportTypeHeading": {
+    "message": "Export type"
   },
-  "accountBackup": {
-    "message": "Zálohování účtu"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Chráněno heslem"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "„Heslo souboru“ a „Potvrzení hesla souboru“ se neshodují."
   },
   "confirmVaultImport": {
-    "message": "Confirm vault import"
+    "message": "Potvrdit import trezoru"
   },
   "confirmVaultImportDesc": {
-    "message": "This file is password-protected. Please enter the file password to import data."
+    "message": "Tento soubor je chráněn heslem. Zadejte prosím heslo souboru k importu dat."
   },
   "exportSuccess": {
     "message": "Data trezoru byla exportována"
@@ -1196,7 +1253,7 @@
     "message": "Vyberte soubor pro import"
   },
   "chooseFile": {
-    "message": "Choose File"
+    "message": "Zvolit soubor"
   },
   "noFileChosen": {
     "message": "Není vybrán žádný soubor"
@@ -1221,10 +1278,10 @@
     "message": "Nastavení"
   },
   "preferencesDesc": {
-    "message": "Customize your web vault experience."
+    "message": "Přizpůsobte si svůj webový trezor."
   },
   "preferencesUpdated": {
-    "message": "Preferences saved"
+    "message": "Předvolby byly uloženy"
   },
   "language": {
     "message": "Jazyk"
@@ -1291,7 +1348,7 @@
     "message": "Dvoufázové přihlášení"
   },
   "twoStepLoginEnforcement": {
-    "message": "Two-step Login Enforcement"
+    "message": "Vynucení dvoufázového přihlášení"
   },
   "twoStepLoginDesc": {
     "message": "Zabezpečte svůj účet vyžadováním dodatečného kroku při přihlašování."
@@ -1553,12 +1610,12 @@
     "message": "Hlášení"
   },
   "reportsDesc": {
-    "message": "Identify and close security gaps in your online accounts by clicking the reports below.",
+    "message": "Kliknutím na níže uvedené přehledy zjistěte a odstraňte nedostatky v zabezpečení svých online účtů.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "message": "Kliknutím na níže uvedené přehledy zjistěte a odstraňte nedostatky v zabezpečení svých online účtů.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Hlášení o nezabezpečených webech"
@@ -1609,7 +1666,7 @@
     "message": "Hlášení o úniku hesel"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Uniklá hesla jsou hesla, která byla odhalena během známých úniků dat, zveřejněna nebo prodána hackery na dark webu."
+    "message": "Hesla odhalená při úniku dat jsou pro útočníky snadným cílem. Změňte tato hesla, abyste předešli případným průnikům."
   },
   "exposedPasswordsFound": {
     "message": "Nalezena uniklá hesla"
@@ -1821,6 +1878,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Doplňky"
@@ -2291,7 +2364,7 @@
     "message": "Ročně"
   },
   "annual": {
-    "message": "Annual"
+    "message": "Roční"
   },
   "basePrice": {
     "message": "Základní cena"
@@ -2321,7 +2394,7 @@
     "message": "Nápověda"
   },
   "getApps": {
-    "message": "Stáhnout aplikaci"
+    "message": "Získání aplikací"
   },
   "loggedInAs": {
     "message": "Přihlášen jako"
@@ -2356,6 +2429,15 @@
   "deleteGroupConfirmation": {
     "message": "Opravdu chcete tuto skupinu smazat?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Opravdu chcete tohoto uživatele smazat?"
   },
@@ -2373,6 +2455,9 @@
   },
   "externalIdDesc": {
     "message": "Externí ID může být použito jako reference nebo k propojení tohoto zdroje s externím systémem, jako je adresář uživatelů."
+  },
+  "nestCollectionUnder": {
+    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Správa přístupů"
@@ -2395,14 +2480,14 @@
   "editCollection": {
     "message": "Upravit kolekci"
   },
+  "collectionInfo": {
+    "message": "Collection info"
+  },
   "deleteCollectionConfirmation": {
     "message": "Opravdu chcete tuto kolekci smazat?"
   },
-  "editUser": {
-    "message": "Upravit uživatele"
-  },
-  "inviteUser": {
-    "message": "Pozvat uživatele"
+  "editMember": {
+    "message": "Edit member"
   },
   "inviteUserDesc": {
     "message": "Pozvěte nového uživatele do vaší organizace zadáním e-mailové adresy jejich Bitwarden účtu. Pokud ještě nemají Bitwarden účet, budou vyzváni k vytvoření nového účtu."
@@ -2453,13 +2538,13 @@
     "message": "Administrátor"
   },
   "adminDesc": {
-    "message": "Administrátoři mohou prohlížet a spravovat všechny položky, sbírky a uživatele ve vaší organizaci."
+    "message": "Administrátoři mohou prohlížet a spravovat všechny položky, kolekce a uživatele ve vaší organizaci."
   },
   "user": {
     "message": "Uživatel"
   },
   "userDesc": {
-    "message": "Běžný uživatel s přístupem k přiřazeným kolekcím vaší organizace."
+    "message": "A regular user with access to your organization's collections."
   },
   "manager": {
     "message": "Správce"
@@ -2668,6 +2753,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Deleted collections"
+  },
   "deletedCollectionId": {
     "message": "Kolekce $ID$ byla smazána.",
     "placeholders": {
@@ -2710,6 +2798,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Deleted $QUANTITY$ group(s).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -4119,6 +4216,21 @@
   "customDesc": {
     "message": "Umožňuje větší kontrolu nad uživatelských oprávnění pro pokročilé konfigurace."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+  },
   "permissions": {
     "message": "Oprávnění"
   },
@@ -4921,7 +5033,7 @@
     "message": "Sponsorship created"
   },
   "emailSent": {
-    "message": "Email sent"
+    "message": "Email odeslán"
   },
   "revokeSponsorshipConfirmation": {
     "message": "After removing this account, the Families plan sponsorship will expire at the end of the billing period. You will not be able to redeem a new sponsorship offer until the existing one expires. Are you sure you want to continue?"
@@ -4945,7 +5057,7 @@
     "message": "Code sent"
   },
   "verificationCode": {
-    "message": "Verification code"
+    "message": "Ověřovací kód"
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
@@ -5110,7 +5222,7 @@
     "message": "Billing sync token"
   },
   "active": {
-    "message": "Active"
+    "message": "Aktivní"
   },
   "inactive": {
     "message": "Inactive"
@@ -5173,7 +5285,7 @@
     "message": "Exporting organization vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated password history or attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5222,10 +5334,10 @@
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Co chcete vygenerovat?"
   },
   "passwordType": {
-    "message": "Password type"
+    "message": "Typ hesla"
   },
   "regenerateUsername": {
     "message": "Regenerate username"
@@ -5427,6 +5539,15 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ výše uvedených polí vyžaduje vaši pozornost.",
     "placeholders": {
@@ -5460,8 +5581,47 @@
   "notYou": {
     "message": "Not you?"
   },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
+  },
   "multiSelectPlaceholder": {
-    "message": "-- Type to Filter --"
+    "message": "-- Type to filter --"
   },
   "multiSelectLoading": {
     "message": "Retrieving options..."
@@ -5471,6 +5631,272 @@
   },
   "multiSelectClearAll": {
     "message": "Clear all"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Password character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "projects": {
+    "message": "Projects"
+  },
+  "lastEdited": {
+    "message": "Last Edited"
+  },
+  "editSecret": {
+    "message": "Edit Secret"
+  },
+  "addSecret": {
+    "message": "Add Secret"
+  },
+  "copySecretName": {
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue": {
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret": {
+    "message": "Delete Secret"
+  },
+  "deleteSecrets": {
+    "message": "Delete Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "Service Account"
+  },
+  "serviceAccounts": {
+    "message": "Service Accounts"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "Name/Value Pair"
+  },
+  "secretEdited": {
+    "message": "Secret edited"
+  },
+  "secretCreated": {
+    "message": "Secret created"
+  },
+  "newSecret": {
+    "message": "New Secret"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No secrets to show"
+  },
+  "secretsNoItemsMessage": {
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Search Secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets sent to trash"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Project, Secret"
+  },
+  "serviceAccountName": {
+    "message": "Service account name"
+  },
+  "newSaSelectAccess": {
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Create access token"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
   },
   "from": {
     "message": "From"
@@ -5484,8 +5910,44 @@
   "update": {
     "message": "Update"
   },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Group info"
+  },
+  "editGroupMembersDesc": {
+    "message": "Grant members access to the group's assigned collections."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Grant access to collections by adding them to this group."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Grant access to all current and future collections."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "If checked, this will replace all other collection permissions."
+  },
+  "selectMembers": {
+    "message": "Select members"
+  },
+  "selectCollections": {
+    "message": "Select collections"
+  },
   "role": {
     "message": "Role"
+  },
+  "removeMember": {
+    "message": "Remove member"
+  },
+  "collection": {
+    "message": "Collection"
   },
   "canView": {
     "message": "Can view"
@@ -5499,6 +5961,15 @@
   "canEditExceptPass": {
     "message": "Can edit, except passwords"
   },
+  "noCollectionsAdded": {
+    "message": "No collections added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
+  },
+  "noGroupsAdded": {
+    "message": "No groups added"
+  },
   "group": {
     "message": "Group"
   },
@@ -5507,5 +5978,80 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
+  },
+  "membersColumnHeader": {
+    "message": "Member/Group"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Member"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "selectGroups": {
+    "message": "Select groups"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
+  },
+  "deleted": {
+    "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
+  },
+  "moreFromBitwarden": {
+    "message": "More from Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Switch Products"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

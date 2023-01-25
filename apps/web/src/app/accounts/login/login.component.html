@@ -32,18 +32,10 @@
           </div>
 
           <div class="tw-mb-3 tw-flex tw-items-start">
-            <div class="tw-flex tw-h-6 tw-items-center">
-              <input
-                id="login_input_remember-email"
-                class="tw-w-4 tw-rounded tw-border"
-                bitInput
-                type="checkbox"
-                formControlName="rememberEmail"
-              />
-            </div>
-            <bit-label class="ml-2">
-              {{ "rememberEmail" | i18n }}
-            </bit-label>
+            <bit-form-control class="tw-mb-0">
+              <input type="checkbox" bitCheckbox formControlName="rememberEmail" />
+              <bit-label>{{ "rememberEmail" | i18n }}</bit-label>
+            </bit-form-control>
           </div>
 
           <div class="tw-mb-3">
@@ -63,7 +55,8 @@
 
           <p class="tw-m-0 tw-text-sm">
             {{ "newAroundHere" | i18n }}
-            <a routerLink="/register">{{ "createAccount" | i18n }}</a>
+            <!--mousedown event is used over click because it prevents the validation from firing  -->
+            <a routerLink="/register" (mousedown)="goToRegister()">{{ "createAccount" | i18n }}</a>
           </p>
         </ng-container>
       </div>
@@ -77,18 +70,12 @@
       <bit-label>{{ "masterPass" | i18n }}</bit-label>
       <input
         id="login_input_master-password"
+        type="password"
         bitInput
-        type="{{ showPassword ? 'text' : 'password' }}"
         formControlName="masterPassword"
         appAutofocus
       />
-      <button type="button" bitSuffix bitButton (click)="togglePassword()">
-        <i
-          aria-hidden="true"
-          class="bwi bwi-lg bwi-eye"
-          [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-        ></i>
-      </button>
+      <button type="button" bitSuffix bitIconButton bitPasswordInputToggle></button>
     </bit-form-field>
     <a class="-tw-mt-2" routerLink="/hint" (mousedown)="goToHint()" (click)="setFormValues()">{{
       "getMasterPasswordHint" | i18n
@@ -120,7 +107,7 @@
   <div class="tw-mb-3">
     <a
       routerLink="/sso"
-      (click)="setFormValues()"
+      (click)="saveEmailSettings()"
       bitButton
       buttonType="secondary"
       class="tw-w-full"

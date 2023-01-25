@@ -28,10 +28,10 @@ import { CodebookCsvImporter } from "../importers/codebook-csv-importer";
 import { DashlaneCsvImporter } from "../importers/dashlane/dashlane-csv-importer";
 import { DashlaneJsonImporter } from "../importers/dashlane/dashlane-json-importer";
 import { EncryptrCsvImporter } from "../importers/encryptr-csv-importer";
-import { EnpassCsvImporter } from "../importers/enpass-csv-importer";
-import { EnpassJsonImporter } from "../importers/enpass-json-importer";
+import { EnpassCsvImporter } from "../importers/enpass/enpass-csv-importer";
+import { EnpassJsonImporter } from "../importers/enpass/enpass-json-importer";
 import { FirefoxCsvImporter } from "../importers/firefox-csv-importer";
-import { FSecureFskImporter } from "../importers/fsecure-fsk-importer";
+import { FSecureFskImporter } from "../importers/fsecure/fsecure-fsk-importer";
 import { GnomeJsonImporter } from "../importers/gnome-json-importer";
 import { ImportError } from "../importers/import-error";
 import { Importer } from "../importers/importer";
@@ -51,6 +51,7 @@ import { OnePasswordMacCsvImporter } from "../importers/onepassword/onepassword-
 import { OnePasswordWinCsvImporter } from "../importers/onepassword/onepassword-win-csv-importer";
 import { PadlockCsvImporter } from "../importers/padlock-csv-importer";
 import { PassKeepCsvImporter } from "../importers/passkeep-csv-importer";
+import { PasskyJsonImporter } from "../importers/passky/passky-json-importer";
 import { PassmanJsonImporter } from "../importers/passman-json-importer";
 import { PasspackCsvImporter } from "../importers/passpack-csv-importer";
 import { PasswordAgentCsvImporter } from "../importers/passwordagent-csv-importer";
@@ -279,6 +280,8 @@ export class ImportService implements ImportServiceAbstraction {
         return new YotiCsvImporter();
       case "nordpasscsv":
         return new NordPassCsvImporter();
+      case "passkyjson":
+        return new PasskyJsonImporter();
       default:
         return null;
     }

@@ -4,7 +4,10 @@ import { firstValueFrom, from, mergeMap, Observable } from "rxjs";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import {
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
@@ -14,12 +17,13 @@ import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
 
+import { DeprecatedVaultFilterService as DeprecatedVaultFilterServiceAbstraction } from "../../../abstractions/deprecated-vault-filter.service";
 import { DynamicTreeNode } from "../models/dynamic-tree-node.model";
 
 const NestingDelimiter = "/";
 
 @Injectable()
-export class VaultFilterService {
+export class VaultFilterService implements DeprecatedVaultFilterServiceAbstraction {
   constructor(
     protected stateService: StateService,
     protected organizationService: OrganizationService,
@@ -40,7 +44,9 @@ export class VaultFilterService {
   async buildOrganizations(): Promise<Organization[]> {
     let organizations = await this.organizationService.getAll();
     if (organizations != null) {
-      organizations = organizations.sort((a, b) => a.name.localeCompare(b.name));
+      organizations = organizations
+        .filter(isNotProviderUser)
+        .sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return organizations;
@@ -115,6 +121,6 @@ export class VaultFilterService {
     const folders = await this.getAllFoldersNested(
       await firstValueFrom(this.folderService.folderViews$)
     );
-    return ServiceUtils.getTreeNodeObject(folders, id) as TreeNode<FolderView>;
+    return ServiceUtils.getTreeNodeObjectFromList(folders, id) as TreeNode<FolderView>;
   }
 }

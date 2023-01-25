@@ -10,7 +10,7 @@
     }
   },
   "whatTypeOfItem": {
-    "message": "Hvilken type gjenstand er dette?"
+    "message": "Hva slags element er dette?"
   },
   "name": {
     "message": "Navn"
@@ -174,7 +174,7 @@
     "message": "Fjern"
   },
   "unassigned": {
-    "message": "Utilegnet"
+    "message": "Utildelt"
   },
   "noneFolder": {
     "message": "Ingen mappe",
@@ -277,12 +277,33 @@
   "searchFavorites": {
     "message": "Søk i favoritter"
   },
-  "searchType": {
-    "message": "Søk i type",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Search logins",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Search cards",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Search identities",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Search secure notes",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Søk i hvelvet"
+  },
+  "searchMyVault": {
+    "message": "Search my vault"
+  },
+  "searchOrganization": {
+    "message": "Search organization"
+  },
+  "searchMembers": {
+    "message": "Search members"
   },
   "allItems": {
     "message": "Alle elementer"
@@ -365,6 +386,9 @@
   "select": {
     "message": "Velg"
   },
+  "newItem": {
+    "message": "New item"
+  },
   "addItem": {
     "message": "Legg til element"
   },
@@ -373,6 +397,12 @@
   },
   "viewItem": {
     "message": "Vis elementet"
+  },
+  "new": {
+    "message": "New"
+  },
+  "item": {
+    "message": "Item"
   },
   "ex": {
     "message": "f.eks.",
@@ -438,6 +468,9 @@
   },
   "vaultItems": {
     "message": "Hvelvobjekter"
+  },
+  "filter": {
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Flytt valgte til organisasjon"
@@ -545,6 +578,12 @@
   "deletedFolder": {
     "message": "Slettet mappen"
   },
+  "editInfo": {
+    "message": "Edit info"
+  },
+  "access": {
+    "message": "Access"
+  },
   "loggedOut": {
     "message": "Logget av"
   },
@@ -570,19 +609,19 @@
     "message": "Logg på eller opprett en ny konto for å få tilgang til ditt sikre hvelv."
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Logg på med enhet"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
   },
   "loginWithMasterPassword": {
-    "message": "Log in with master password"
+    "message": "Logg på med hovedpassord"
   },
   "createAccount": {
     "message": "Opprett en konto"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "Er du ny her?"
   },
   "startTrial": {
     "message": "Start prøveperiode"
@@ -591,7 +630,7 @@
     "message": "Logg på"
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Pålogging startet"
   },
   "submit": {
     "message": "Send inn"
@@ -609,13 +648,13 @@
     "message": "Hovedpassord"
   },
   "masterPassDesc": {
-    "message": "Superpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er veldig viktig at du aldri glemmer ditt superpassord. Det er ingen måter å få tilbake passordet på dersom du noensinne skulle klare å glemme det."
+    "message": "Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer det. Det er ingen måter å gjenopprette hovedpassordet på dersom du glemmer det."
   },
   "masterPassImportant": {
     "message": "Hovedpassord kan ikke gjenopprettes hvis du glemmer det!"
   },
   "masterPassHintDesc": {
-    "message": "Et hint for superpassordet kan hjelpe deg med å huske på passordet dersom du skulle glemme det."
+    "message": "Et hint for hovedpassordet kan hjelpe deg med å huske på passordet dersom du skulle glemme det."
   },
   "reTypeMasterPass": {
     "message": "Skriv inn hovedpassordet på nytt"
@@ -633,10 +672,10 @@
     "message": "Passordhint"
   },
   "enterEmailToGetHint": {
-    "message": "Skriv inn din kontos E-postadresse for å motta hintet til ditt superpassord."
+    "message": "Skriv inn e-postadressen til kontoen din for å motta hintet til ditt hovedpassord."
   },
   "getMasterPasswordHint": {
-    "message": "Få et hint om superpassordet"
+    "message": "Få et hint om hovedpassordet"
   },
   "emailRequired": {
     "message": "E-postadressen er påkrevd."
@@ -651,10 +690,10 @@
     "message": "Skriv inn hovedpassordet på nytt."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Hovedpassordet må være ≥8 tegn lang."
   },
   "masterPassDoesntMatch": {
-    "message": "Superpassord-bekreftelsen er ikke samsvarende."
+    "message": "Hovedpassord-bekreftelsen samsvarer ikke."
   },
   "newAccountCreated": {
     "message": "Din nye konto har blitt opprettet! Du kan nå logge på."
@@ -663,7 +702,7 @@
     "message": "Kontoen ble opprettet."
   },
   "masterPassSent": {
-    "message": "Vi har sendt deg en E-post med hintet til superpassordet."
+    "message": "Vi har sendt deg en e-post med hintet til hovedpassordet."
   },
   "unexpectedError": {
     "message": "En uventet feil har oppstått."
@@ -672,7 +711,7 @@
     "message": "E-postadresse"
   },
   "yourVaultIsLocked": {
-    "message": "Hvelvet ditt er låst. Kontroller superpassordet ditt for å fortsette."
+    "message": "Hvelvet ditt er låst. Kontroller hovedpassordet ditt for å fortsette."
   },
   "unlock": {
     "message": "Lås opp"
@@ -691,7 +730,7 @@
     }
   },
   "invalidMasterPassword": {
-    "message": "Ugyldig superpassord"
+    "message": "Ugyldig hovedpassord"
   },
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
@@ -700,7 +739,10 @@
     "message": "Lås nå"
   },
   "noItemsInList": {
-    "message": "Det er ingen gjenstander å liste opp."
+    "message": "Det er ingen elementer å vise."
+  },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "You do not have permission to view all items in this collection."
   },
   "noCollectionsInList": {
     "message": "Det er ingen samlinger å liste opp."
@@ -710,6 +752,9 @@
   },
   "noUsersInList": {
     "message": "Det er ingen brukere å liste opp."
+  },
+  "noMembersInList": {
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Det er ingen hendelser å liste opp."
@@ -721,7 +766,7 @@
     "message": "Du tilhører ikke noen organisasjoner. Organisasjoner gjør det mulig for deg å trygt dele elementer med andre brukere."
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Et varsel har blitt sendt til enheten din."
   },
   "versionNumber": {
     "message": "Versjon $VERSION_NUMBER$",
@@ -847,13 +892,25 @@
     "message": "Rediger samlingene som dette elementet blir delt med. Kun organisasjonsbrukere med tilgang til disse samlingene vil kunne se dette elementet."
   },
   "deleteSelectedItemsDesc": {
-    "message": "Du har valgt $COUNT$ gjenstand(er) som skal slettes. Er du sikker på du vil slette alle disse gjenstandene?",
+    "message": "Du har valgt $COUNT$ elementer(er) for sletting. Er du sikker på du vil slette alle disse elementene?",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "150"
       }
     }
+  },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ collection(s) will be permanently deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Velg en mappe som du ønsker å flytte $COUNT$ valgt(e) gjenstand(er) til.",
@@ -918,37 +975,37 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "Bekreft hovedpassord"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "Bekreft format"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Filpassord"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "Bekreft filpassord"
   },
-  "accountBackupOptionDescription": {
-    "message": "Use your account encryption key to encrypt the export and restrict import to only the current Bitwarden account."
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
-  "fileTypeHeading": {
-    "message": "File type"
+  "exportTypeHeading": {
+    "message": "Export type"
   },
-  "accountBackup": {
-    "message": "Account backup"
+  "accountRestricted": {
+    "message": "Account restricted"
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Passord beskyttet"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
     "message": "“File password”  and “Confirm file password“ do not match."
   },
   "confirmVaultImport": {
-    "message": "Confirm vault import"
+    "message": "Bekreft hvelvimportering"
   },
   "confirmVaultImportDesc": {
     "message": "This file is password-protected. Please enter the file password to import data."
@@ -1076,7 +1133,7 @@
     "message": "KDF-iterasjoner"
   },
   "kdfIterationsDesc": {
-    "message": "Flere KDF-gjentakelser kan hjelpe til med å beskytte superpassordet fra å bli tvunget inn i av en angriper. Vi anbefaler en verdi på $VALUE$ eller mer.",
+    "message": "Flere KDF-gjentakelser kan hjelpe til med å beskytte hovedpassordet fra å bli tvunget inn i av en angriper. Vi anbefaler en verdi på $VALUE$ eller mer.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1196,10 +1253,10 @@
     "message": "Velg importfilen"
   },
   "chooseFile": {
-    "message": "Choose File"
+    "message": "Velg fil"
   },
   "noFileChosen": {
-    "message": "No file chosen"
+    "message": "Ingen fil er valgt"
   },
   "orCopyPasteFileContents": {
     "message": "eller kopier og lim inn importfilens innhold"
@@ -1360,7 +1417,7 @@
     "message": "Denne 2-trinnsleverandøren er aktivert på din konto."
   },
   "twoStepLoginAuthDesc": {
-    "message": "Skriv inn ditt superpassord for å endre på 2-trinnsinnloggingsinnstillingene."
+    "message": "Skriv inn ditt hovedpassord for å endre på 2-trinnsinnloggingsinnstillingene."
   },
   "twoStepAuthenticatorDesc": {
     "message": "Følg disse trinnene for å sette opp 2-trinnsinnlogging med en autentiseringsapp:"
@@ -1420,7 +1477,7 @@
     "message": "På grunn av plattformbegrensninger, kan YubiKey-er ikke bli brukt på alle Bitwarden-apper. Du burde skru på en annen 2-trinnsinnloggingsleverandør, sånn at du kan få tilgang til din konto når YubiKeys ikke kan bli brukt. Støttede plattformer:"
   },
   "twoFactorYubikeySupportUsb": {
-    "message": "Netthvelvet, datamaskinprogrammet, CLI, og alle nettleserutvidelser, på en enhet med en USB-port som støtter din YubiKey."
+    "message": "Netthvelvet, datamaskinprogrammet, ledetekst, og alle nettleserutvidelser, på en enhet med en USB-port som støtter din YubiKey."
   },
   "twoFactorYubikeySupportMobile": {
     "message": "Mobilapper på en enhet med NFC-funksjoner, eller som har en USB-port som støtter din YubiKey."
@@ -1558,7 +1615,7 @@
   },
   "orgsReportsDesc": {
     "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Rapport om usikrede nettsteder"
@@ -1570,7 +1627,7 @@
     "message": "Usikrede nettsteder ble funnet"
   },
   "unsecuredWebsitesFoundDesc": {
-    "message": "Vi fant $COUNT$ elementer i hvelvet ditt som benytter usikrede URIer. Du burde endre deres URI til å benytte https://, dersom det nettstedet tillater det.",
+    "message": "Vi fant $COUNT$ objekter i hvelvet ditt som benytter usikrede URI-er. Du burde endre deres URI-er til å benytte https://, dersom det nettstedet tillater det.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1579,7 +1636,7 @@
     }
   },
   "noUnsecuredWebsites": {
-    "message": "Ingen gjenstander i hvelvet ditt har usikrede URI-er."
+    "message": "Ingen elementer i hvelvet ditt har usikrede URI-er."
   },
   "inactive2faReport": {
     "message": "Rapport om 2FA-nettsteder"
@@ -1591,7 +1648,7 @@
     "message": "Pålogginger som støtter 2FA ble funnet"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Vi fant $COUNT$ nettsted(er) i hvelvet ditt som kanskje ikke har blitt satt opp med 2-trinnspålogging (i følge 2fa.directory). For å beskytte disse kontoene ytterligere, burde du sette opp 2-trinnspålogging.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1615,7 +1672,7 @@
     "message": "Eksponerte passord ble funnet"
   },
   "exposedPasswordsFoundDesc": {
-    "message": "Vi fant $COUNT$ gjenstander i hvelvet ditt som har passord som er eksponert i kjente databrudd. Du burde endre passordene deres til noe nytt.",
+    "message": "Vi fant $COUNT$ elementer i hvelvet ditt med passord eksponert i kjente datainnbrudd. Du bør endre passordet på dem.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1624,7 +1681,7 @@
     }
   },
   "noExposedPasswords": {
-    "message": "Ingen elementer i hvelvet ditt har passord som har vært eksponert i kjente databrudd."
+    "message": "Ingen objekter i hvelvet ditt har passord som har vært eksponert i kjente databrudd."
   },
   "checkExposedPasswords": {
     "message": "Sjekk eksponerte passord"
@@ -1648,7 +1705,7 @@
     "message": "Svake passord ble funnet"
   },
   "weakPasswordsFoundDesc": {
-    "message": "Vi fant $COUNT$ elementer i hvelvet ditt som har passord som ikke er sterke. Du burde endre dem slik at de har sterkere passord.",
+    "message": "Vi fant $COUNT$ objekter i hvelvet ditt som har passord som ikke er sterke. Du burde oppdatere dem til å bruke sterkere passord.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1657,7 +1714,7 @@
     }
   },
   "noWeakPasswords": {
-    "message": "Ingen elementer i hvelvet ditt har svake passord."
+    "message": "Ingen objekter i hvelvet ditt har svake passord."
   },
   "reusedPasswordsReport": {
     "message": "Rapport om gjenbrukte passord"
@@ -1696,7 +1753,7 @@
     "message": "Kontoer som har blitt avslørt kan lekke personlig informasjon. Gjør kontoene tryggere ved å aktivere 2FA eller ved å lage et sterkere passord."
   },
   "breachCheckUsernameEmail": {
-    "message": "Sjekk noen av brukernavnene eller E-postadressene som du bruker."
+    "message": "Sjekk de brukernavnene eller E-postadressene du bruker."
   },
   "checkBreaches": {
     "message": "Sjekk databrudd"
@@ -1821,6 +1878,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Utvidelser"
@@ -2356,6 +2429,15 @@
   "deleteGroupConfirmation": {
     "message": "Er du sikker på at du vil slette denne gruppen?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Er du sikker på at du vil slette denne brukeren?"
   },
@@ -2374,11 +2456,14 @@
   "externalIdDesc": {
     "message": "Den eksterne Id-en kan brukes som referanse eller for å koble denne ressursen til et eksternt system, for eksempel en brukerkatalog."
   },
+  "nestCollectionUnder": {
+    "message": "Nest collection under"
+  },
   "accessControl": {
     "message": "Tilgangsstyring"
   },
   "groupAccessAllItems": {
-    "message": "Denne gruppen kan få tilgang til og modifisere alle gjenstander."
+    "message": "Denne gruppen kan få tilgang til og endre alle elementer."
   },
   "groupAccessSelectedCollections": {
     "message": "Denne gruppen har bare tilgang til de valgte samlingene."
@@ -2395,14 +2480,14 @@
   "editCollection": {
     "message": "Rediger samling"
   },
+  "collectionInfo": {
+    "message": "Collection info"
+  },
   "deleteCollectionConfirmation": {
     "message": "Er du sikker på at du vil slette denne samlingen?"
   },
-  "editUser": {
-    "message": "Rediger bruker"
-  },
-  "inviteUser": {
-    "message": "Inviter bruker"
+  "editMember": {
+    "message": "Edit member"
   },
   "inviteUserDesc": {
     "message": "Inviter en ny bruker til din organisasjon ved å skrive inn E-postadressen til Bitwarden-kontoen deres nedenfor. Hvis de ikke allerede har en Bitwarden-konto, vil de bli forespurt om å lage en ny konto."
@@ -2420,7 +2505,7 @@
     "message": "Denne brukeren bruker 2-trinnsinnlogging til å beskytte kontoen sin."
   },
   "userAccessAllItems": {
-    "message": "Denne brukeren kan få tilgang til og modifisere alle gjenstander."
+    "message": "Denne brukeren kan få tilgang til og endre alle elementer."
   },
   "userAccessSelectedCollections": {
     "message": "Denne brukeren har bare tilgang til de valgte samlingene."
@@ -2567,7 +2652,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Vis alle påloggingsalternativer"
   },
   "viewedItemId": {
     "message": "Vist $ID$.",
@@ -2668,6 +2753,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Deleted collections"
+  },
   "deletedCollectionId": {
     "message": "Slettet $ID$-samlingen.",
     "placeholders": {
@@ -2710,6 +2798,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Deleted $QUANTITY$ group(s).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -2945,7 +3042,7 @@
     "message": "E-postadressen til kontoen din må verifiseres først."
   },
   "checkInboxForVerification": {
-    "message": "Se etter i din E-postkontos innboks for en verifiseringslenke."
+    "message": "Se i din E-postinnboks for en verifiseringslenke."
   },
   "emailVerified": {
     "message": "Din E-postadresse har blitt bekreftet."
@@ -3017,7 +3114,7 @@
     "message": "Min organisasjon"
   },
   "organizationInfo": {
-    "message": "Organization info"
+    "message": "Organisasjonsinfo"
   },
   "deleteOrganization": {
     "message": "Slett organisasjonen"
@@ -3263,7 +3360,7 @@
     "message": "Du bruker for øyeblikket et utdatert krypteringsoppsett."
   },
   "updateEncryptionKeyDesc": {
-    "message": "Vi har byttet over til lengre krypteringsnøkler som sørger for bedre sikkerhet og tilgang til nyere funksjoner. Å oppdatere krypteringsnøkkelen din er raskt og enkelt. Bare skriv inn superpassordet ditt nedenfor. Denne oppdateringen vil etter hvert bli påbudt."
+    "message": "Vi har byttet over til lengre krypteringsnøkler som sørger for bedre sikkerhet og tilgang til nyere funksjoner. Å oppdatere krypteringsnøkkelen din er raskt og enkelt. Bare skriv inn hovedpassordet ditt nedenfor. Denne oppdateringen vil etter hvert bli påbudt."
   },
   "updateEncryptionKeyWarning": {
     "message": "Etter å ha oppdatert krypteringsnøkkelen din, er du påkrevd å logge av og på på alle Bitwarden-appene og -programmene som du bruker for øyeblikket (deriblant mobilappen og nettleserutvidelsene). Å ikke logge av og på igjen (noe som vil laste ned din nye krypteringsnøkkel) kan føre til datakorrumpering. Vi vil forsøke å logge deg av automatisk, men det kan kanskje bli forsinket."
@@ -3345,7 +3442,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Opprettet",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3393,7 +3490,7 @@
     "message": "Svakt hovedpassord"
   },
   "weakMasterPasswordDesc": {
-    "message": "Superpassordet du har valgt er svakt. Du bør bruke et sterkt superpassord (eller en passordfrase) for å sikre Bitwarden-kontoen din på en forsvarlig måte. Er du sikker på at du vil bruke dette superpassordet?"
+    "message": "Hovedpassordet du har valgt er svakt. Du bør bruke et sterkt hovedpassord (eller en passordfrase) for å sikre Bitwarden-kontoen din på en forsvarlig måte. Er du sikker på at du vil bruke dette superpassordet?"
   },
   "rotateAccountEncKey": {
     "message": "Oppdater også krypteringsnøkkelen til kontoen min"
@@ -3429,7 +3526,7 @@
     "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Fingeravtrykksfrase"
   },
   "dontAskFingerprintAgain": {
     "message": "Ikke be om bekreftelse av fingeravtrykksfrase flere ganger",
@@ -3716,7 +3813,7 @@
     "message": "Organisasjonsidentifikator er påkrevd."
   },
   "ssoIdentifier": {
-    "message": "SSO identifier"
+    "message": "SSO-identifikator"
   },
   "ssoIdentifierHint": {
     "message": "Provide this ID to your members to login with SSO."
@@ -4119,17 +4216,32 @@
   "customDesc": {
     "message": "Tillater mer granatær kontroll med brukertillatelser for avanserte konfigurasjoner."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Custom roles is an ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise feature",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contact our support team to upgrade your subscription",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+  },
   "permissions": {
     "message": "Rettigheter"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Tillatelse"
   },
   "managerPermissions": {
     "message": "Manager Permissions"
   },
   "adminPermissions": {
-    "message": "Admin Permissions"
+    "message": "Admin-tillatelser"
   },
   "accessEventLogs": {
     "message": "Få tilgang til hendelseslogger"
@@ -4435,13 +4547,13 @@
     "message": "Superpassord bekreftelse"
   },
   "passwordConfirmationDesc": {
-    "message": "Denne handlingen er beskyttet. For å fortsette, skriv inn superpassordet på nytt for å bekrefte identiteten din."
+    "message": "Denne handlingen er beskyttet. For å fortsette, skriv inn hovedpassordet på nytt for å bekrefte identiteten din."
   },
   "reinviteSelected": {
     "message": "Send invitasjoner på nytt"
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Send varsel på nytt"
   },
   "noSelectedUsersApplicable": {
     "message": "Denne handlingen er ikke relevant for noen av de valgte brukerne."
@@ -4531,7 +4643,7 @@
     "message": "Klienter"
   },
   "client": {
-    "message": "Client",
+    "message": "Klient",
     "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
@@ -5326,16 +5438,16 @@
     "message": "API tilgangstoken"
   },
   "deviceVerification": {
-    "message": "Device verification"
+    "message": "Enhetsverifisering"
   },
   "enableDeviceVerification": {
-    "message": "Turn on device verification"
+    "message": "Skru på enhetsverifisering"
   },
   "deviceVerificationDesc": {
     "message": "Verification codes are sent to your email address when logging in from an unrecognized device"
   },
   "updatedDeviceVerification": {
-    "message": "Updated device verification"
+    "message": "Oppdaterte enhetsverifiseringen"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
     "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
@@ -5347,7 +5459,7 @@
     }
   },
   "premiumSubcriptionRequired": {
-    "message": "Premium subscription required"
+    "message": "Krever Premium-abonnement"
   },
   "scim": {
     "message": "SCIM provisioning",
@@ -5358,7 +5470,7 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDesc": {
-    "message": "Enable SCIM",
+    "message": "Skru på SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
@@ -5392,7 +5504,7 @@
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimUrl": {
-    "message": "SCIM URL",
+    "message": "SCIM-URL",
     "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
   },
   "scimApiKeyRotated": {
@@ -5404,13 +5516,13 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "inputRequired": {
-    "message": "Input is required."
+    "message": "Inndata er påkrevd."
   },
   "inputEmail": {
-    "message": "Input is not an email address."
+    "message": "Inndataen er ikke en E-postadresse."
   },
   "inputMinLength": {
-    "message": "Input must be at least $COUNT$ characters long.",
+    "message": "Inndataen må være minst $COUNT$ tegn.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5419,11 +5531,20 @@
     }
   },
   "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
+    "message": "Inndataen kan ikke ha mer enn $COUNT$ tegn.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
       }
     }
   },
@@ -5437,75 +5558,500 @@
     }
   },
   "turnOn": {
-    "message": "Turn on"
+    "message": "Slå på"
   },
   "on": {
-    "message": "On"
+    "message": "På"
   },
   "members": {
-    "message": "Members"
+    "message": "Medlemmer"
   },
   "reporting": {
-    "message": "Reporting"
+    "message": "Rapportering"
   },
   "cardBrandMir": {
     "message": "Mir"
   },
   "numberOfUsers": {
-    "message": "Number of users"
+    "message": "Antall brukere"
   },
   "loggingInAs": {
-    "message": "Logging in as"
+    "message": "Logger på som"
   },
   "notYou": {
-    "message": "Not you?"
+    "message": "Ikke deg?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Pick an avatar color"
+  },
+  "customizeAvatar": {
+    "message": "Customize avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar updated"
+  },
+  "brightBlue": {
+    "message": "Bright Blue"
+  },
+  "green": {
+    "message": "Green"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "lavender": {
+    "message": "Lavender"
+  },
+  "yellow": {
+    "message": "Yellow"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Teal"
+  },
+  "salmon": {
+    "message": "Salmon"
+  },
+  "pink": {
+    "message": "Pink"
+  },
+  "customColor": {
+    "message": "Custom Color"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Type to Filter --"
+    "message": "-- Skriv for å filtrere --"
   },
   "multiSelectLoading": {
     "message": "Retrieving options..."
   },
   "multiSelectNotFound": {
-    "message": "No items found"
+    "message": "Ingen oppføringer funnet"
   },
   "multiSelectClearAll": {
-    "message": "Clear all"
+    "message": "Tøm alle"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Password character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "projects": {
+    "message": "Projects"
+  },
+  "lastEdited": {
+    "message": "Last Edited"
+  },
+  "editSecret": {
+    "message": "Edit Secret"
+  },
+  "addSecret": {
+    "message": "Add Secret"
+  },
+  "copySecretName": {
+    "message": "Copy Secret Name"
+  },
+  "copySecretValue": {
+    "message": "Copy Secret Value"
+  },
+  "deleteSecret": {
+    "message": "Delete Secret"
+  },
+  "deleteSecrets": {
+    "message": "Delete Secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+  },
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
+  },
+  "project": {
+    "message": "Project"
+  },
+  "editProject": {
+    "message": "Edit Project"
+  },
+  "viewProject": {
+    "message": "View Project"
+  },
+  "deleteProject": {
+    "message": "Delete Project"
+  },
+  "deleteProjects": {
+    "message": "Delete Projects"
+  },
+  "secret": {
+    "message": "Secret"
+  },
+  "serviceAccount": {
+    "message": "Service Account"
+  },
+  "serviceAccounts": {
+    "message": "Service Accounts"
+  },
+  "secrets": {
+    "message": "Secrets"
+  },
+  "nameValuePair": {
+    "message": "Name/Value Pair"
+  },
+  "secretEdited": {
+    "message": "Secret edited"
+  },
+  "secretCreated": {
+    "message": "Secret created"
+  },
+  "newSecret": {
+    "message": "New Secret"
+  },
+  "newServiceAccount": {
+    "message": "New Service Account"
+  },
+  "secretsNoItemsTitle": {
+    "message": "No secrets to show"
+  },
+  "secretsNoItemsMessage": {
+    "message": "To get started, add a new secret or import secrets."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nothing to show yet"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Create a new Service Account to get started automating secret access."
+  },
+  "searchSecrets": {
+    "message": "Search Secrets"
+  },
+  "deleteServiceAccounts": {
+    "message": "Delete Service Accounts"
+  },
+  "deleteServiceAccount": {
+    "message": "Delete Service Account"
+  },
+  "viewServiceAccount": {
+    "message": "View Service Account"
+  },
+  "searchServiceAccounts": {
+    "message": "Search Service Accounts"
+  },
+  "addProject": {
+    "message": "Add Project"
+  },
+  "projectEdited": {
+    "message": "Project edited"
+  },
+  "projectSaved": {
+    "message": "Project saved"
+  },
+  "projectCreated": {
+    "message": "Project created"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "newProject": {
+    "message": "New Project"
+  },
+  "softDeleteSecretWarning": {
+    "message": "Deleting secrets can affect existing integrations."
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets sent to trash"
+  },
+  "serviceAccountCreated": {
+    "message": "Service Account Created"
+  },
+  "smAccess": {
+    "message": "Access"
+  },
+  "projectCommaSecret": {
+    "message": "Project, Secret"
+  },
+  "serviceAccountName": {
+    "message": "Service account name"
+  },
+  "newSaSelectAccess": {
+    "message": "Type or Select Projects or Secrets"
+  },
+  "newSaTypeToFilter": {
+    "message": "Type to Filter"
+  },
+  "deleteProjectsToast": {
+    "message": "Projects deleted"
+  },
+  "deleteProjectToast": {
+    "message": "The project and all associated secrets have been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Type \"$CONFIRM$\" to continue",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Delete $PROJECT$",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Delete $COUNT$ Projects",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Deleting projects is permanent and irreversible."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No projects to display"
+  },
+  "projectsNoItemsMessage": {
+    "message": "Add a new project to get started organizing secrets."
+  },
+  "smConfirmationRequired": {
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "Search Projects"
+  },
+  "accessTokens": {
+    "message": "Access tokens"
+  },
+  "createAccessToken": {
+    "message": "Create access token"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No access tokens to show"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "To get started, create an access token"
+  },
+  "downloadAccessToken": {
+    "message": "Download or copy before closing."
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "Copy token"
+  },
+  "accessToken": {
+    "message": "Access token"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "Revoke Access Token"
+  },
+  "submenu": {
+    "message": "Submenu"
   },
   "from": {
-    "message": "From"
+    "message": "Fra"
   },
   "to": {
-    "message": "To"
+    "message": "Til"
   },
   "member": {
-    "message": "Member"
+    "message": "Medlem"
   },
   "update": {
-    "message": "Update"
+    "message": "Oppdater"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Group info"
+  },
+  "editGroupMembersDesc": {
+    "message": "Grant members access to the group's assigned collections."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Grant access to collections by adding them to this group."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Grant access to all current and future collections."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "If checked, this will replace all other collection permissions."
+  },
+  "selectMembers": {
+    "message": "Select members"
+  },
+  "selectCollections": {
+    "message": "Select collections"
   },
   "role": {
-    "message": "Role"
+    "message": "Rolle"
+  },
+  "removeMember": {
+    "message": "Remove member"
+  },
+  "collection": {
+    "message": "Collection"
   },
   "canView": {
-    "message": "Can view"
+    "message": "Kan vise"
   },
   "canViewExceptPass": {
-    "message": "Can view, except passwords"
+    "message": "Kan vise, bortsett fra passord"
   },
   "canEdit": {
-    "message": "Can edit"
+    "message": "Kan redigere"
   },
   "canEditExceptPass": {
-    "message": "Can edit, except passwords"
+    "message": "Kan redigere, bortsett fra passord"
+  },
+  "noCollectionsAdded": {
+    "message": "No collections added"
+  },
+  "noMembersAdded": {
+    "message": "No members added"
+  },
+  "noGroupsAdded": {
+    "message": "No groups added"
   },
   "group": {
-    "message": "Group"
+    "message": "Gruppe"
   },
   "groupAccessAll": {
     "message": "This group can access and modify all items."
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
+  },
+  "membersColumnHeader": {
+    "message": "Member/Group"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Member"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Select groups and members"
+  },
+  "selectGroups": {
+    "message": "Select groups"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Permissions set for a member will replace permissions set by that member's group"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No members or groups added"
+  },
+  "deleted": {
+    "message": "Deleted"
+  },
+  "memberStatusFilter": {
+    "message": "Member status filter"
+  },
+  "inviteMember": {
+    "message": "Invite member"
+  },
+  "needsConfirmation": {
+    "message": "Needs confirmation"
+  },
+  "memberRole": {
+    "message": "Member role"
+  },
+  "moreFromBitwarden": {
+    "message": "Mer fra Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Bytt produkter"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Free organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Upgrade to a paid plan to add more collections.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Free organizations may have up to $COLLECTIONCOUNT$ collections. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

@@ -14,7 +14,7 @@ import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
@@ -27,19 +27,19 @@ import { CipherType } from "@bitwarden/common/enums/cipherType";
 import { EventType } from "@bitwarden/common/enums/eventType";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/models/view/folder.view";
-import { invokeMenu, RendererMenuItem } from "@bitwarden/electron/utils";
 
+import { invokeMenu, RendererMenuItem } from "../../utils";
 import { SearchBarService } from "../layout/search/search-bar.service";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
-import { CiphersComponent } from "./ciphers.component";
 import { CollectionsComponent } from "./collections.component";
 import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { GeneratorComponent } from "./generator.component";
 import { PasswordHistoryComponent } from "./password-history.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
+import { VaultItemsComponent } from "./vault-items.component";
 import { ViewComponent } from "./view.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";
@@ -51,7 +51,7 @@ const BroadcasterSubscriptionId = "VaultComponent";
 export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild(ViewComponent) viewComponent: ViewComponent;
   @ViewChild(AddEditComponent) addEditComponent: AddEditComponent;
-  @ViewChild(CiphersComponent, { static: true }) ciphersComponent: CiphersComponent;
+  @ViewChild(VaultItemsComponent, { static: true }) vaultItemsComponent: VaultItemsComponent;
   @ViewChild("generator", { read: ViewContainerRef, static: true })
   generatorModalRef: ViewContainerRef;
   @ViewChild(VaultFilterComponent, { static: true }) vaultFilterComponent: VaultFilterComponent;
@@ -94,7 +94,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private syncService: SyncService,
     private messagingService: MessagingService,
     private platformUtilsService: PlatformUtilsService,
-    private eventService: EventService,
+    private eventCollectionService: EventCollectionService,
     private totpService: TotpService,
     private passwordRepromptService: PasswordRepromptService,
     private stateService: StateService,
@@ -128,12 +128,12 @@ export class VaultComponent implements OnInit, OnDestroy {
             await this.openGenerator(false);
             break;
           case "syncCompleted":
-            await this.ciphersComponent.reload(this.activeFilter.buildFilter());
+            await this.vaultItemsComponent.reload(this.activeFilter.buildFilter());
             await this.vaultFilterComponent.reloadCollectionsAndFolders(this.activeFilter);
             await this.vaultFilterComponent.reloadOrganizations();
             break;
           case "refreshCiphers":
-            this.ciphersComponent.refresh();
+            this.vaultItemsComponent.refresh();
             break;
           case "modalShown":
             this.showingModal = true;
@@ -242,7 +242,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         selectedOrganizationId: params.selectedOrganizationId,
         myVaultOnly: params.myVaultOnly ?? false,
       });
-      await this.ciphersComponent.reload(this.activeFilter.buildFilter());
+      await this.vaultItemsComponent.reload(this.activeFilter.buildFilter());
     });
   }
 
@@ -309,7 +309,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             label: this.i18nService.t("copyPassword"),
             click: () => {
               this.copyValue(cipher, cipher.login.password, "password", "Password");
-              this.eventService.collect(EventType.Cipher_ClientCopiedPassword, cipher.id);
+              this.eventCollectionService.collect(EventType.Cipher_ClientCopiedPassword, cipher.id);
             },
           });
         }
@@ -338,7 +338,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             label: this.i18nService.t("copySecurityCode"),
             click: () => {
               this.copyValue(cipher, cipher.card.code, "securityCode", "Security Code");
-              this.eventService.collect(EventType.Cipher_ClientCopiedCardCode, cipher.id);
+              this.eventCollectionService.collect(EventType.Cipher_ClientCopiedCardCode, cipher.id);
             },
           });
         }
@@ -429,21 +429,21 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.cipherId = cipher.id;
     this.action = "view";
     this.go();
-    await this.ciphersComponent.refresh();
+    await this.vaultItemsComponent.refresh();
   }
 
   async deletedCipher(cipher: CipherView) {
     this.cipherId = null;
     this.action = null;
     this.go();
-    await this.ciphersComponent.refresh();
+    await this.vaultItemsComponent.refresh();
   }
 
   async restoredCipher(cipher: CipherView) {
     this.cipherId = null;
     this.action = null;
     this.go();
-    await this.ciphersComponent.refresh();
+    await this.vaultItemsComponent.refresh();
   }
 
   async editCipherAttachments(cipher: CipherView) {
@@ -468,7 +468,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.modal.onClosed.subscribe(async () => {
       this.modal = null;
       if (madeAttachmentChanges) {
-        await this.ciphersComponent.refresh();
+        await this.vaultItemsComponent.refresh();
       }
       madeAttachmentChanges = false;
     });
@@ -490,7 +490,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     childComponent.onSharedCipher.subscribe(async () => {
       this.modal.close();
       this.viewCipher(cipher);
-      await this.ciphersComponent.refresh();
+      await this.vaultItemsComponent.refresh();
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.modal.onClosed.subscribe(async () => {
@@ -549,7 +549,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.i18nService.t(this.calculateSearchBarLocalizationString(vaultFilter))
     );
     this.activeFilter = vaultFilter;
-    await this.ciphersComponent.reload(
+    await this.vaultItemsComponent.reload(
       this.activeFilter.buildFilter(),
       vaultFilter.status === "trash"
     );

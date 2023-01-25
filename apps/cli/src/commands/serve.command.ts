@@ -7,10 +7,10 @@ import * as koaJson from "koa-json";
 
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { FileResponse } from "@bitwarden/node/cli/models/response/fileResponse";
 
 import { Main } from "../bw";
+import { Response } from "../models/response";
+import { FileResponse } from "../models/response/file.response";
 
 import { ConfirmCommand } from "./confirm.command";
 import { CreateCommand } from "./create.command";
@@ -26,7 +26,7 @@ import { SendDeleteCommand } from "./send/delete.command";
 import { SendEditCommand } from "./send/edit.command";
 import { SendGetCommand } from "./send/get.command";
 import { SendListCommand } from "./send/list.command";
-import { SendRemovePasswordCommand } from "./send/removePassword.command";
+import { SendRemovePasswordCommand } from "./send/remove-password.command";
 import { ShareCommand } from "./share.command";
 import { StatusCommand } from "./status.command";
 import { SyncCommand } from "./sync.command";
@@ -73,6 +73,7 @@ export class ServeCommand {
       this.main.collectionService,
       this.main.organizationService,
       this.main.searchService,
+      this.main.organizationUserService,
       this.main.apiService
     );
     this.createCommand = new CreateCommand(
@@ -108,7 +109,11 @@ export class ServeCommand {
       this.main.apiService,
       this.main.folderApiService
     );
-    this.confirmCommand = new ConfirmCommand(this.main.apiService, this.main.cryptoService);
+    this.confirmCommand = new ConfirmCommand(
+      this.main.apiService,
+      this.main.cryptoService,
+      this.main.organizationUserService
+    );
     this.restoreCommand = new RestoreCommand(this.main.cipherService);
     this.shareCommand = new ShareCommand(this.main.cipherService);
     this.lockCommand = new LockCommand(this.main.vaultTimeoutService);

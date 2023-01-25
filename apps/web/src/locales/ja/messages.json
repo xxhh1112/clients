@@ -277,12 +277,33 @@
   "searchFavorites": {
     "message": "お気に入りの検索"
   },
-  "searchType": {
-    "message": "タイプの検索",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "ログイン情報を検索",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "カードを検索",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "ID を検索",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "セキュアメモを検索",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "保管庫を検索"
+  },
+  "searchMyVault": {
+    "message": "保管庫を検索"
+  },
+  "searchOrganization": {
+    "message": "組織を検索"
+  },
+  "searchMembers": {
+    "message": "メンバーを検索"
   },
   "allItems": {
     "message": "全てのアイテム"
@@ -365,6 +386,9 @@
   "select": {
     "message": "選択"
   },
+  "newItem": {
+    "message": "新しいアイテム"
+  },
   "addItem": {
     "message": "アイテムの追加"
   },
@@ -373,6 +397,12 @@
   },
   "viewItem": {
     "message": "アイテムの表示"
+  },
+  "new": {
+    "message": "新規作成"
+  },
+  "item": {
+    "message": "アイテム"
   },
   "ex": {
     "message": "例:",
@@ -438,6 +468,9 @@
   },
   "vaultItems": {
     "message": "保管庫のアイテム"
+  },
+  "filter": {
+    "message": "フィルター"
   },
   "moveSelectedToOrg": {
     "message": "選択したものを組織に移動"
@@ -544,6 +577,12 @@
   },
   "deletedFolder": {
     "message": "フォルダーを削除しました"
+  },
+  "editInfo": {
+    "message": "情報の編集"
+  },
+  "access": {
+    "message": "アクセス"
   },
   "loggedOut": {
     "message": "ログアウトしました"
@@ -702,6 +741,9 @@
   "noItemsInList": {
     "message": "表示するアイテムがありません"
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "このコレクション内のアイテムをすべて表示する権限がありません。"
+  },
   "noCollectionsInList": {
     "message": "表示するコレクションがありません"
   },
@@ -710,6 +752,9 @@
   },
   "noUsersInList": {
     "message": "表示するユーザーがありません"
+  },
+  "noMembersInList": {
+    "message": "表示できるメンバーがいません。"
   },
   "noEventsInList": {
     "message": "表示するイベントがありません"
@@ -855,6 +900,18 @@
       }
     }
   },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ 個のコレクションを完全に削除します。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "本当に続行しますか？"
+  },
   "moveSelectedItemsDesc": {
     "message": "$COUNT$個のアイテムを移動したいフォルダーを選択してください。",
     "placeholders": {
@@ -929,17 +986,17 @@
   "confirmFilePassword": {
     "message": "ファイルパスワードの確認"
   },
-  "accountBackupOptionDescription": {
-    "message": "アカウントの暗号化キーを使用してエクスポートを暗号化し、インポートを現在の Bitwarden アカウントのみに制限します。"
+  "accountRestrictedOptionDescription": {
+    "message": "アカウントのユーザー名とマスターパスワードから得られる暗号化キーを使用してエクスポートするデータを暗号化し、現在の Bitwarden アカウントのみがインポートできるよう制限します。"
   },
   "passwordProtectedOptionDescription": {
     "message": "エクスポートを暗号化するためのパスワードを設定します。そのパスワードを使用して、任意の Bitwarden アカウントにインポートします。"
   },
-  "fileTypeHeading": {
-    "message": "ファイル形式"
+  "exportTypeHeading": {
+    "message": "エクスポートの種類"
   },
-  "accountBackup": {
-    "message": "アカウントのバックアップ"
+  "accountRestricted": {
+    "message": "アカウント制限"
   },
   "passwordProtected": {
     "message": "パスワード保護あり"
@@ -1558,7 +1615,7 @@
   },
   "orgsReportsDesc": {
     "message": "以下のレポートをクリックして、組織アカウントのセキュリティギャップを特定して修正してください。",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "非セキュアウェブサイト調査"
@@ -1609,7 +1666,7 @@
     "message": "流出パスワード調査"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Exposed passwords are passwords have been uncovered in known data breaches that were released publicly or sold on the dark web by hackers."
+    "message": "Passwords exposed in a data breach are easy targets for attackers. Change these passwords to prevent potential break-ins."
   },
   "exposedPasswordsFound": {
     "message": "流出したパスワードが見つかりました"
@@ -1821,6 +1878,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "$PRICE$ /年でプレミアム会員になるか、下記のプランなら $FAMILYPLANUSERCOUNT$ 人分のプレミアムアカウントを取得して家族での共有を無制限にできるようになります：",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Bitwarden ファミリープラン"
   },
   "addons": {
     "message": "アドオン"
@@ -2356,6 +2429,15 @@
   "deleteGroupConfirmation": {
     "message": "本当にこのグループを削除してもよろしいですか？"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "次の $QUANTITY$ 個のグループを削除してもよろしいですか？",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "本当にこのユーザーを削除してもよろしいですか？"
   },
@@ -2373,6 +2455,9 @@
   },
   "externalIdDesc": {
     "message": "外部 ID は参照用や、ユーザーディレクトリーなどの外部システムへリソースをリンクするために使用できます。"
+  },
+  "nestCollectionUnder": {
+    "message": "コレクションを入れ子にする"
   },
   "accessControl": {
     "message": "アクセスコントロール"
@@ -2395,14 +2480,14 @@
   "editCollection": {
     "message": "コレクションの編集"
   },
+  "collectionInfo": {
+    "message": "コレクション情報"
+  },
   "deleteCollectionConfirmation": {
     "message": "本当にこのコレクションを削除しますか？"
   },
-  "editUser": {
-    "message": "ユーザーの編集"
-  },
-  "inviteUser": {
-    "message": "ユーザーの招待"
+  "editMember": {
+    "message": "メンバーを編集"
   },
   "inviteUserDesc": {
     "message": "組織に新しいユーザーを招待するには、そのユーザーの Bitwarden アカウントのメールアドレスを入力して下さい。Bitwarden アカウントを持っていない場合、そのユーザーはアカウントの作成を求められます。"
@@ -2668,6 +2753,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "コレクションを削除"
+  },
   "deletedCollectionId": {
     "message": "コレクション「$ID$」の削除",
     "placeholders": {
@@ -2710,6 +2798,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "$QUANTITY$ 個のグループを削除しました。",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -2831,7 +2928,7 @@
     }
   },
   "createdOrganizationId": {
-    "message": "作成した組織ID$。",
+    "message": "Created organization $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4119,6 +4216,21 @@
   "customDesc": {
     "message": "ユーザー権限をより詳細に制御できます。"
   },
+  "customDescNonEnterpriseStart": {
+    "message": "カスタムロールは",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "企業向け機能",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": "です。サブスクリプションのアップグレードについては、弊社サポートチームまでお問い合わせください。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "カスタム権限を有効にするには、組織が Enterprise 2020 プランに登録済みである必要があります。"
+  },
   "permissions": {
     "message": "権限"
   },
@@ -4723,19 +4835,19 @@
     "message": "Signed out callback path"
   },
   "authority": {
-    "message": "Authority"
+    "message": "権限"
   },
   "clientId": {
-    "message": "Client ID"
+    "message": "クライアントID"
   },
   "clientSecret": {
     "message": "Client secret"
   },
   "metadataAddress": {
-    "message": "Metadata address"
+    "message": "メタデータアドレス"
   },
   "oidcRedirectBehavior": {
-    "message": "OIDC redirect behavior"
+    "message": "OIDCリダイレクトの動作"
   },
   "getClaimsFromUserInfoEndpoint": {
     "message": "Get claims from user info endpoint"
@@ -4768,7 +4880,7 @@
     "message": "Assertion consumer service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Name ID format"
+    "message": "名前IDの形式"
   },
   "spOutboundSigningAlgorithm": {
     "message": "Outbound signing algorithm"
@@ -5427,6 +5539,15 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "次の文字は許可されていません: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "上記の $COUNT$ フィールドを確認してください。",
     "placeholders": {
@@ -5460,6 +5581,45 @@
   "notYou": {
     "message": "あなたではないですか？"
   },
+  "pickAnAvatarColor": {
+    "message": "アバターの色を選択"
+  },
+  "customizeAvatar": {
+    "message": "アバターをカスタマイズ"
+  },
+  "avatarUpdated": {
+    "message": "アバターを更新しました"
+  },
+  "brightBlue": {
+    "message": "ブライトブルー"
+  },
+  "green": {
+    "message": "グリーン"
+  },
+  "orange": {
+    "message": "オレンジ"
+  },
+  "lavender": {
+    "message": "ラベンダー"
+  },
+  "yellow": {
+    "message": "イエロー"
+  },
+  "indigo": {
+    "message": "インディゴ"
+  },
+  "teal": {
+    "message": "ティール"
+  },
+  "salmon": {
+    "message": "サーモン"
+  },
+  "pink": {
+    "message": "ピンク"
+  },
+  "customColor": {
+    "message": "カスタム色"
+  },
   "multiSelectPlaceholder": {
     "message": "-- 入力して絞り込み --"
   },
@@ -5471,6 +5631,272 @@
   },
   "multiSelectClearAll": {
     "message": "すべてクリア"
+  },
+  "toggleCharacterCount": {
+    "message": "文字カウントを切り替える",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "パスワード文字数",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "隠す"
+  },
+  "projects": {
+    "message": "プロジェクト"
+  },
+  "lastEdited": {
+    "message": "最終編集日"
+  },
+  "editSecret": {
+    "message": "シークレットを編集"
+  },
+  "addSecret": {
+    "message": "シークレットを追加"
+  },
+  "copySecretName": {
+    "message": "シークレット名をコピー"
+  },
+  "copySecretValue": {
+    "message": "シークレット値をコピー"
+  },
+  "deleteSecret": {
+    "message": "シークレットを削除"
+  },
+  "deleteSecrets": {
+    "message": "シークレットを削除"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "シークレットを関連付けるプロジェクトを選択します。これらのプロジェクトにアクセスできる組織ユーザーのみがシークレットを表示できます。"
+  },
+  "typeOrSelectProjects": {
+    "message": "プロジェクトを入力または選択"
+  },
+  "typeOrSelectProject": {
+    "message": "プロジェクトを入力または選択"
+  },
+  "project": {
+    "message": "プロジェクト"
+  },
+  "editProject": {
+    "message": "プロジェクトを編集"
+  },
+  "viewProject": {
+    "message": "プロジェクトを表示"
+  },
+  "deleteProject": {
+    "message": "プロジェクトを削除"
+  },
+  "deleteProjects": {
+    "message": "プロジェクトを削除"
+  },
+  "secret": {
+    "message": "シークレット"
+  },
+  "serviceAccount": {
+    "message": "サービスアカウント"
+  },
+  "serviceAccounts": {
+    "message": "サービスアカウント"
+  },
+  "secrets": {
+    "message": "シークレット"
+  },
+  "nameValuePair": {
+    "message": "名前と値のペア"
+  },
+  "secretEdited": {
+    "message": "シークレットを編集しました"
+  },
+  "secretCreated": {
+    "message": "シークレットを作成しました"
+  },
+  "newSecret": {
+    "message": "新しいシークレット"
+  },
+  "newServiceAccount": {
+    "message": "新しいサービスアカウント"
+  },
+  "secretsNoItemsTitle": {
+    "message": "表示するシークレットはありません"
+  },
+  "secretsNoItemsMessage": {
+    "message": "まずは新しいシークレットの追加またはインポートをしてください。"
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "まだ表示するものはありません"
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "シークレットアクセスを自動化するためには、新しいサービスアカウントを作成してください。"
+  },
+  "searchSecrets": {
+    "message": "シークレットを検索"
+  },
+  "deleteServiceAccounts": {
+    "message": "サービスアカウントを削除"
+  },
+  "deleteServiceAccount": {
+    "message": "サービスアカウントを削除"
+  },
+  "viewServiceAccount": {
+    "message": "サービスアカウントを表示"
+  },
+  "searchServiceAccounts": {
+    "message": "サービスアカウントを検索"
+  },
+  "addProject": {
+    "message": "プロジェクトを追加"
+  },
+  "projectEdited": {
+    "message": "プロジェクトを編集しました"
+  },
+  "projectSaved": {
+    "message": "プロジェクトを保存しました"
+  },
+  "projectCreated": {
+    "message": "プロジェクトを作成しました"
+  },
+  "projectName": {
+    "message": "プロジェクト名"
+  },
+  "newProject": {
+    "message": "新しいプロジェクト"
+  },
+  "softDeleteSecretWarning": {
+    "message": "シークレットを削除すると、既存の連携に影響する可能性があります。"
+  },
+  "softDeletesSuccessToast": {
+    "message": "シークレットをゴミ箱に送る"
+  },
+  "serviceAccountCreated": {
+    "message": "サービスアカウントを作成しました"
+  },
+  "smAccess": {
+    "message": "アクセス"
+  },
+  "projectCommaSecret": {
+    "message": "プロジェクト、シークレット"
+  },
+  "serviceAccountName": {
+    "message": "サービスアカウント名"
+  },
+  "newSaSelectAccess": {
+    "message": "プロジェクトまたはシークレットを入力・選択"
+  },
+  "newSaTypeToFilter": {
+    "message": "入力して絞り込む"
+  },
+  "deleteProjectsToast": {
+    "message": "プロジェクトを削除しました"
+  },
+  "deleteProjectToast": {
+    "message": "プロジェクトと関連するすべてのシークレットを削除しました"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "プロジェクト $PROJECT$ を削除すると元に戻せません。",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "「$CONFIRM$」と入力して続行",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 Projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "$PROJECT$ を削除",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "$COUNT$ 個のプロジェクトを削除",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "プロジェクトを削除すると元に戻せません。"
+  },
+  "projectsNoItemsTitle": {
+    "message": "表示するプロジェクトがありません"
+  },
+  "projectsNoItemsMessage": {
+    "message": "秘密を始めるために新しいプロジェクトを追加する。"
+  },
+  "smConfirmationRequired": {
+    "message": "Confirmation required"
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "The following projects could not be deleted:"
+  },
+  "softDeleteSuccessToast": {
+    "message": "Secret sent to trash"
+  },
+  "searchProjects": {
+    "message": "プロジェクトを検索"
+  },
+  "accessTokens": {
+    "message": "アクセストークン"
+  },
+  "createAccessToken": {
+    "message": "アクセストークンを作成"
+  },
+  "expires": {
+    "message": "Expires"
+  },
+  "canRead": {
+    "message": "Can Read"
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "表示するアクセス トークンはありません"
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "始めるにはアクセストークンを作成してください"
+  },
+  "downloadAccessToken": {
+    "message": "閉じる前にダウンロードまたはコピーする。"
+  },
+  "expiresOnAccessToken": {
+    "message": "Expires on:"
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Access tokens are not stored and cannot be retrieved"
+  },
+  "copyToken": {
+    "message": "トークンをコピー"
+  },
+  "accessToken": {
+    "message": "アクセストークン"
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Expiration date required"
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Access token created and copied to clipboard"
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Permissions management is unavailable for beta."
+  },
+  "revokeAccessToken": {
+    "message": "アクセストークンの取り消し"
+  },
+  "submenu": {
+    "message": "サブメニュー"
   },
   "from": {
     "message": "From"
@@ -5484,8 +5910,44 @@
   "update": {
     "message": "更新"
   },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ 個以上",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "グループ情報"
+  },
+  "editGroupMembersDesc": {
+    "message": "メンバーがグループに割り当てられたコレクションへのアクセスを許可します。"
+  },
+  "editGroupCollectionsDesc": {
+    "message": "このグループに追加してコレクションへのアクセスを許可します。"
+  },
+  "accessAllCollectionsDesc": {
+    "message": "現在および将来のすべてのコレクションへのアクセスを許可します。"
+  },
+  "accessAllCollectionsHelp": {
+    "message": "チェックされている場合、他のすべてのコレクション権限が置き換えられます。"
+  },
+  "selectMembers": {
+    "message": "メンバーを選択"
+  },
+  "selectCollections": {
+    "message": "コレクションを選択"
+  },
   "role": {
     "message": "役割"
+  },
+  "removeMember": {
+    "message": "メンバーを削除"
+  },
+  "collection": {
+    "message": "コレクション"
   },
   "canView": {
     "message": "閲覧可能"
@@ -5499,6 +5961,15 @@
   "canEditExceptPass": {
     "message": "パスワード以外は編集可能"
   },
+  "noCollectionsAdded": {
+    "message": "コレクションが追加されていません"
+  },
+  "noMembersAdded": {
+    "message": "メンバーが追加されていません"
+  },
+  "noGroupsAdded": {
+    "message": "グループが追加されていません"
+  },
   "group": {
     "message": "グループ"
   },
@@ -5507,5 +5978,80 @@
   },
   "memberAccessAll": {
     "message": "このメンバーはすべてのアイテムにアクセスして変更できます。"
+  },
+  "membersColumnHeader": {
+    "message": "メンバー/グループ"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "メンバー"
+  },
+  "selectGroupsAndMembers": {
+    "message": "グループとメンバーを選択"
+  },
+  "selectGroups": {
+    "message": "グループを選択"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "メンバーまたはグループが追加されていません"
+  },
+  "deleted": {
+    "message": "削除しました"
+  },
+  "memberStatusFilter": {
+    "message": "メンバーステータスのフィルター"
+  },
+  "inviteMember": {
+    "message": "メンバーを招待する"
+  },
+  "needsConfirmation": {
+    "message": "確認が必要"
+  },
+  "memberRole": {
+    "message": "メンバーロール"
+  },
+  "moreFromBitwarden": {
+    "message": "Bitwarden の詳細"
+  },
+  "switchProducts": {
+    "message": "プロダクトの切り替え"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "無料の組織では最大 $SEATCOUNT$ 人のメンバーまでです。より多くのメンバーを招待するには有料プランにアップグレードしてください。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "無料の組織では最大 $SEATCOUNT$ 人のメンバーまでです。アップグレードするには組織の所有者に連絡してください。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "無料の組織では最大 $COLLECTIONCOUNT$ コレクションまでです。さらにコレクションを追加するには有料プランにアップグレードしてください。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "無料の組織では最大 $COLLECTIONCOUNT$ コレクションまでです。アップグレードするには組織の所有者に連絡してください。",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   }
 }

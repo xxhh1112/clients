@@ -1,7 +1,8 @@
 import { shell, MenuItemConstructorOptions } from "electron";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { isMacAppStore, isWindowsStore } from "@bitwarden/electron/utils";
+
+import { isMacAppStore, isWindowsStore } from "../../utils";
 
 import { AboutMenu } from "./menu.about";
 import { IMenubarMenu } from "./menubar";
@@ -165,6 +166,7 @@ export class HelpMenu implements IMenubarMenu {
       {
         id: "android",
         label: "Android",
+        visible: !isMacAppStore(), // Apple Guideline 2.3.10 - Accurate Metadata
         click: () => {
           shell.openExternal(
             "https://play.google.com/store/apps/" + "details?id=com.x8bit.bitwarden"

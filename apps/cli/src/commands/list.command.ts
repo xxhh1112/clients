@@ -2,6 +2,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -13,14 +14,14 @@ import {
 } from "@bitwarden/common/models/response/collection.response";
 import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/list.response";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { ListResponse } from "@bitwarden/node/cli/models/response/listResponse";
 
-import { CipherResponse } from "../models/response/cipherResponse";
-import { CollectionResponse } from "../models/response/collectionResponse";
-import { FolderResponse } from "../models/response/folderResponse";
-import { OrganizationResponse } from "../models/response/organizationResponse";
-import { OrganizationUserResponse } from "../models/response/organizationUserResponse";
+import { Response } from "../models/response";
+import { CipherResponse } from "../models/response/cipher.response";
+import { CollectionResponse } from "../models/response/collection.response";
+import { FolderResponse } from "../models/response/folder.response";
+import { ListResponse } from "../models/response/list.response";
+import { OrganizationUserResponse } from "../models/response/organization-user.response";
+import { OrganizationResponse } from "../models/response/organization.response";
 import { CliUtils } from "../utils";
 
 export class ListCommand {
@@ -30,6 +31,7 @@ export class ListCommand {
     private collectionService: CollectionService,
     private organizationService: OrganizationService,
     private searchService: SearchService,
+    private organizationUserService: OrganizationUserService,
     private apiService: ApiService
   ) {}
 
@@ -202,7 +204,7 @@ export class ListCommand {
     }
 
     try {
-      const response = await this.apiService.getOrganizationUsers(options.organizationId);
+      const response = await this.organizationUserService.getAllUsers(options.organizationId);
       const res = new ListResponse(
         response.data.map((r) => {
           const u = new OrganizationUserResponse();

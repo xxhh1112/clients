@@ -34,16 +34,16 @@
         <input
           id="register-form_input_master-password"
           bitInput
-          type="{{ showPassword ? 'text' : 'password' }}"
+          type="password"
           formControlName="masterPassword"
         />
-        <button type="button" bitSuffix bitButton (click)="togglePassword()">
-          <i
-            aria-hidden="true"
-            class="bwi bwi-lg bwi-eye"
-            [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-          ></i>
-        </button>
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showPassword"
+        ></button>
         <bit-hint>
           <span class="tw-font-semibold">Important:</span>
           {{ "masterPassImportant" | i18n }}
@@ -65,16 +65,16 @@
         <input
           id="register-form_input_confirm-master-password"
           bitInput
-          type="{{ showPassword ? 'text' : 'password' }}"
+          type="password"
           formControlName="confirmMasterPassword"
         />
-        <button type="button" bitSuffix bitButton (click)="togglePassword()">
-          <i
-            aria-hidden="true"
-            class="bwi bwi-lg bwi-eye"
-            [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
-          ></i>
-        </button>
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showPassword"
+        ></button>
       </bit-form-field>
     </div>
 
@@ -112,23 +112,31 @@
       </bit-label>
     </div>
 
-    <div class="tw-mb-3 tw-flex">
+    <hr />
+    <div class="tw-flex tw-space-x-2 tw-pt-2">
       <ng-container *ngIf="!accountCreated">
-        <button type="submit" buttonType="primary" bitButton [loading]="form.loading">
+        <button
+          [block]="true"
+          type="submit"
+          buttonType="primary"
+          bitButton
+          [loading]="form.loading"
+        >
           {{ "createAccount" | i18n }}
         </button>
-        <a
-          bitButton
-          buttonType="secondary"
-          routerLink="/login"
-          class="tw-ml-3 tw-inline-flex tw-items-center tw-px-3"
-        >
+        <a bitButton [block]="true" buttonType="secondary" routerLink="/login">
           <i class="bwi bwi-sign-in tw-mr-2"></i>
           {{ "logIn" | i18n }}
         </a>
       </ng-container>
       <ng-container *ngIf="accountCreated">
-        <button type="submit" buttonType="primary" bitButton [loading]="form.loading">
+        <button
+          [block]="true"
+          type="submit"
+          buttonType="primary"
+          bitButton
+          [loading]="form.loading"
+        >
           {{ "logIn" | i18n }}
         </button>
       </ng-container>

@@ -1,7 +1,5 @@
 import * as program from "commander";
 
-import { Response } from "@bitwarden/node/cli/models/response";
-
 import { Main } from "./bw";
 import { ConfirmCommand } from "./commands/confirm.command";
 import { CreateCommand } from "./commands/create.command";
@@ -13,6 +11,7 @@ import { ImportCommand } from "./commands/import.command";
 import { ListCommand } from "./commands/list.command";
 import { RestoreCommand } from "./commands/restore.command";
 import { ShareCommand } from "./commands/share.command";
+import { Response } from "./models/response";
 import { Program } from "./program";
 import { CliUtils } from "./utils";
 
@@ -116,6 +115,7 @@ export class VaultProgram extends Program {
           this.main.collectionService,
           this.main.organizationService,
           this.main.searchService,
+          this.main.organizationUserService,
           this.main.apiService
         );
         const response = await command.run(object, cmd);
@@ -411,7 +411,11 @@ export class VaultProgram extends Program {
         }
 
         await this.exitIfLocked();
-        const command = new ConfirmCommand(this.main.apiService, this.main.cryptoService);
+        const command = new ConfirmCommand(
+          this.main.apiService,
+          this.main.cryptoService,
+          this.main.organizationUserService
+        );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
       });

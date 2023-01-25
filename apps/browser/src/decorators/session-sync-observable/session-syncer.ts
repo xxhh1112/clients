@@ -1,9 +1,9 @@
-import { BehaviorSubject, concatMap, Subscription } from "rxjs";
+import { BehaviorSubject, concatMap, ReplaySubject, Subject, Subscription } from "rxjs";
 
+import { AbstractMemoryStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { BrowserApi } from "../../browser/browserApi";
-import { StateService } from "../../services/abstractions/state.service";
 
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
@@ -11,16 +11,16 @@ export class SessionSyncer {
   subscription: Subscription;
   id = Utils.newGuid();
 
-  // everyone gets the same initial values
-  private ignoreNextUpdate = true;
+  // ignore initial values
+  private ignoreNUpdates = 0;
 
   constructor(
-    private behaviorSubject: BehaviorSubject<any>,
-    private stateService: StateService,
+    private subject: Subject<any>,
+    private memoryStorageService: AbstractMemoryStorageService,
     private metaData: SyncedItemMetadata
   ) {
-    if (!(behaviorSubject instanceof BehaviorSubject)) {
-      throw new Error("behaviorSubject must be an instance of BehaviorSubject");
+    if (!(subject instanceof Subject)) {
+      throw new Error("subject must inherit from Subject");
     }
 
     if (metaData.ctor == null && metaData.initializer == null) {
@@ -29,11 +29,26 @@ export class SessionSyncer {
   }
 
   init() {
-    if (BrowserApi.manifestVersion !== 3) {
-      return;
+    switch (this.subject.constructor) {
+      case ReplaySubject:
+        // ignore all updates currently in the buffer
+        this.ignoreNUpdates = (this.subject as any)._buffer.length;
+        break;
+      case BehaviorSubject:
+        this.ignoreNUpdates = 1;
+        break;
+      default:
+        break;
     }
 
     this.observe();
+    // must be synchronous
+    this.memoryStorageService.has(this.metaData.sessionKey).then((hasInSessionMemory) => {
+      if (hasInSessionMemory) {
+        this.update();
+      }
+    });
+
     this.listenForUpdates();
   }
 
@@ -41,11 +56,11 @@ export class SessionSyncer {
     // This may be a memory leak.
     // There is no good time to unsubscribe from this observable. Hopefully Manifest V3 clears memory from temporary
     // contexts. If so, this is handled by destruction of the context.
-    this.subscription = this.behaviorSubject
+    this.subscription = this.subject
       .pipe(
         concatMap(async (next) => {
-          if (this.ignoreNextUpdate) {
-            this.ignoreNextUpdate = false;
+          if (this.ignoreNUpdates > 0) {
+            this.ignoreNUpdates -= 1;
             return;
           }
           await this.updateSession(next);
@@ -66,14 +81,20 @@ export class SessionSyncer {
     if (message.command != this.updateMessageCommand || message.id === this.id) {
       return;
     }
+    this.update();
+  }
+
+  async update() {
     const builder = SyncedItemMetadata.builder(this.metaData);
-    const value = await this.stateService.getFromSessionMemory(this.metaData.sessionKey, builder);
-    this.ignoreNextUpdate = true;
-    this.behaviorSubject.next(value);
+    const value = await this.memoryStorageService.getBypassCache(this.metaData.sessionKey, {
+      deserializer: builder,
+    });
+    this.ignoreNUpdates = 1;
+    this.subject.next(value);
   }
 
   private async updateSession(value: any) {
-    await this.stateService.setInSessionMemory(this.metaData.sessionKey, value);
+    await this.memoryStorageService.save(this.metaData.sessionKey, value);
     await BrowserApi.sendMessage(this.updateMessageCommand, { id: this.id });
   }
 

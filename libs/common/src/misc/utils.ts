@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 import { getHostname, parse } from "tldts";
+import { Merge } from "type-fest";
 
 import { CryptoService } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
@@ -55,6 +56,10 @@ export class Utils {
   }
 
   static fromB64ToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
+
     if (Utils.isNode) {
       return new Uint8Array(Buffer.from(str, "base64"));
     } else {
@@ -108,6 +113,9 @@ export class Utils {
   }
 
   static fromBufferToB64(buffer: ArrayBuffer): string {
+    if (buffer == null) {
+      return null;
+    }
     if (Utils.isNode) {
       return Buffer.from(buffer).toString("base64");
     } else {
@@ -423,6 +431,73 @@ export class Utils {
     return this.global.bitwardenContainerService;
   }
 
+  static validateHexColor(color: string) {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
+  }
+
+  /**
+   * Converts map to a Record<string, V> with the same data. Inverse of recordToMap
+   * Useful in toJSON methods, since Maps are not serializable
+   * @param map
+   * @returns
+   */
+  static mapToRecord<K extends string | number, V>(map: Map<K, V>): Record<string, V> {
+    if (map == null) {
+      return null;
+    }
+    if (!(map instanceof Map)) {
+      return map;
+    }
+    return Object.fromEntries(map);
+  }
+
+  /**
+   * Converts record to a Map<string, V> with the same data. Inverse of mapToRecord
+   * Useful in fromJSON methods, since Maps are not serializable
+   *
+   * Warning: If the record has string keys that are numbers, they will be converted to numbers in the map
+   * @param record
+   * @returns
+   */
+  static recordToMap<K extends string | number, V>(record: Record<K, V>): Map<K, V> {
+    if (record == null) {
+      return null;
+    } else if (record instanceof Map) {
+      return record;
+    }
+
+    const entries = Object.entries(record);
+    if (entries.length === 0) {
+      return new Map();
+    }
+
+    if (isNaN(Number(entries[0][0]))) {
+      return new Map(entries) as Map<K, V>;
+    } else {
+      return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
+    }
+  }
+
+  /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */
+  static merge<Destination, Source>(
+    destination: Destination,
+    source: Source
+  ): Merge<Destination, Source> {
+    return Object.assign(destination, source) as unknown as Merge<Destination, Source>;
+  }
+
+  /**
+   * encodeURIComponent escapes all characters except the following:
+   * alphabetic, decimal digits, - _ . ! ~ * ' ( )
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#encoding_for_rfc3986
+   */
+  static encodeRFC3986URIComponent(str: string): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+    );
+  }
+
   private static isMobile(win: Window) {
     let mobile = false;
     ((a) => {
@@ -438,6 +513,10 @@ export class Utils {
       }
     })(win.navigator.userAgent || win.navigator.vendor || (win as any).opera);
     return mobile || win.navigator.userAgent.match(/iPad/i) != null;
+  }
+
+  static delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private static isAppleMobile(win: Window) {
