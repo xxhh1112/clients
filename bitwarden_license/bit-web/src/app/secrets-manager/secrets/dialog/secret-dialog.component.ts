@@ -130,6 +130,7 @@ export class SecretDialogComponent implements OnInit {
       await this.createSecret(secretView);
     } else {
       secretView.id = this.data.secretId;
+      secretView.organizationId = this.data.organizationId;
       await this.updateSecret(secretView);
     }
     this.dialogRef.close();

@@ -78,12 +78,24 @@ export class SecretService {
 
   async update(organizationId: string, secretView: SecretView) {
     const request = await this.getSecretRequest(organizationId, secretView);
-    const r = await this.apiService.send("PUT", "/secrets/" + secretView.id, request, true, true);
+    const r = await this.apiService.send(
+      "PUT",
+      "/secrets/" + organizationId + "/" + secretView.id,
+      request,
+      true,
+      true
+    );
     this._secret.next(await this.createSecretView(new SecretResponse(r)));
   }
 
-  async delete(secretIds: string[]) {
-    const r = await this.apiService.send("POST", "/secrets/delete", secretIds, true, true);
+  async delete(secretIds: string[], organizationId: string) {
+    const r = await this.apiService.send(
+      "POST",
+      "/secrets/" + organizationId + "/delete",
+      secretIds,
+      true,
+      true
+    );
 
     const responseErrors: string[] = [];
     r.data.forEach((element: { error: string }) => {
@@ -120,6 +132,7 @@ export class SecretService {
     request.value = value.encryptedString;
     request.note = note.encryptedString;
     request.projectIds = [];
+    request.organizationId = organizationId;
 
     secretView.projects?.forEach((e) => request.projectIds.push(e.id));
 

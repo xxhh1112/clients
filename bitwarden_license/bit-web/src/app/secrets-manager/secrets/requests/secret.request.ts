@@ -3,4 +3,5 @@ export class SecretRequest {
   value: string;
   note: string;
   projectIds?: string[];
+  organizationId: string;
 }

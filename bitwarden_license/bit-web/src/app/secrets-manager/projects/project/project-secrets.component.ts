@@ -23,7 +23,7 @@ import { SecretService } from "../../secrets/secret.service";
 export class ProjectSecretsComponent {
   secrets$: Observable<SecretListView[]>;
 
-  private organizationId: string;
+  protected organizationId: string;
   private projectId: string;
 
   constructor(
@@ -62,6 +62,7 @@ export class ProjectSecretsComponent {
     this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
       data: {
         secretIds: secretIds,
+        organizationId: this.organizationId,
       },
     });
   }

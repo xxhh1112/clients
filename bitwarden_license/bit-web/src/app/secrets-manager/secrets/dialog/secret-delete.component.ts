@@ -8,6 +8,7 @@ import { SecretService } from "../secret.service";
 
 export interface SecretDeleteOperation {
   secretIds: string[];
+  organizationId: string;
 }
 
 @Component({
@@ -28,7 +29,7 @@ export class SecretDeleteDialogComponent {
   }
 
   delete = async () => {
-    await this.secretService.delete(this.data.secretIds);
+    await this.secretService.delete(this.data.secretIds, this.data.organizationId);
     this.dialogRef.close();
     const message =
       this.data.secretIds.length === 1 ? "softDeleteSuccessToast" : "softDeletesSuccessToast";
