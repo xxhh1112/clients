@@ -16,6 +16,9 @@ import { ProductType } from "@bitwarden/common/enums/productType";
 
 import { OrganizationPlansComponent } from "../../settings/organization-plans.component";
 
+// eslint-disable-next-line
+const punycode = require("punycode/");
+
 @Component({
   selector: "app-billing",
   templateUrl: "./billing.component.html",
@@ -58,7 +61,7 @@ export class BillingComponent extends OrganizationPlansComponent {
     const additionalSeats = this.product == ProductType.Families ? 0 : 1;
     this.formGroup.patchValue({
       name: this.orgInfoForm.value.name,
-      billingEmail: this.orgInfoForm.value.email,
+      billingEmail: punycode.toUnicode(this.orgInfoForm.value.email),
       additionalSeats: additionalSeats,
       plan: this.plan,
       product: this.product,

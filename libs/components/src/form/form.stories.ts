@@ -10,6 +10,7 @@ import {
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { ButtonModule } from "../button";
 import { CheckboxModule } from "../checkbox";
@@ -59,7 +60,10 @@ export default {
 const fb = new FormBuilder();
 const exampleFormObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, Validators.email, forbiddenNameValidator(/bit/i)]],
+  email: [
+    "",
+    [Validators.required, Validators.pattern(Utils.regexpEmail), forbiddenNameValidator(/bit/i)],
+  ],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
 });

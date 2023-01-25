@@ -2,6 +2,7 @@ import { UntypedFormBuilder, FormsModule, ReactiveFormsModule, Validators } from
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { ButtonModule } from "../button";
 import { InputModule } from "../input/input.module";
@@ -43,7 +44,7 @@ const fb = new UntypedFormBuilder();
 
 const formObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, Validators.email]],
+  email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
 });
 
 function submit() {

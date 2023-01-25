@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 // Increments for each instance of this component
 let nextId = 0;
@@ -24,6 +25,15 @@ export class BitErrorComponent {
     switch (this.error[0]) {
       case "required":
         return this.i18nService.t("inputRequired");
+      case "pattern":
+        if (this.error[1].requiredPattern == Utils.regexpEmail) {
+          return this.i18nService.t("inputEmail");
+        }
+        // Attempt to show a custom error message.
+        if (this.error[1]?.message) {
+          return this.error[1]?.message;
+        }
+        return this.error;
       case "email":
         return this.i18nService.t("inputEmail");
       case "minlength":

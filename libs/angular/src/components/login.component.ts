@@ -24,6 +24,9 @@ import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
+// eslint-disable-next-line
+const punycode = require("punycode/");
+
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
   showPassword = false;
@@ -38,7 +41,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   paramEmailSet = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, Validators.email]],
+    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
     masterPassword: ["", [Validators.required, Validators.minLength(8)]],
     rememberEmail: [false],
   });
@@ -48,7 +51,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   protected forcePasswordResetRoute = "update-temp-password";
 
   get loggedEmail() {
-    return this.formGroup.value.email;
+    return punycode.toUnicode(this.formGroup.value.email);
   }
 
   constructor(
@@ -125,7 +128,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
 
     try {
       const credentials = new PasswordLogInCredentials(
-        data.email,
+        punycode.toUnicode(data.email),
         data.masterPassword,
         this.captchaToken,
         null

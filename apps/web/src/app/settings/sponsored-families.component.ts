@@ -10,6 +10,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { PlanSponsorshipType } from "@bitwarden/common/enums/planSponsorshipType";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 
 interface RequestSponsorshipForm {
@@ -50,7 +51,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       sponsorshipEmail: new FormControl("", {
-        validators: [Validators.email],
+        validators: [Validators.pattern(Utils.regexpEmail)],
         asyncValidators: [
           notAllowedValueAsync(async () => await this.stateService.getEmail(), true),
         ],

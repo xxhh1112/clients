@@ -25,6 +25,7 @@ import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 import { PlanType } from "@bitwarden/common/enums/planType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ProductType } from "@bitwarden/common/enums/productType";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { OrganizationCreateRequest } from "@bitwarden/common/models/request/organization-create.request";
@@ -35,6 +36,9 @@ import { PlanResponse } from "@bitwarden/common/models/response/plan.response";
 
 import { PaymentComponent } from "./payment.component";
 import { TaxInfoComponent } from "./tax-info.component";
+
+// eslint-disable-next-line
+const punycode = require("punycode/");
 
 interface OnSuccessArgs {
   organizationId: string;
@@ -86,12 +90,12 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   formGroup = this.formBuilder.group({
     name: [""],
-    billingEmail: ["", [Validators.email]],
+    billingEmail: ["", [Validators.pattern(Utils.regexpEmail)]],
     businessOwned: [false],
     premiumAccessAddon: [false],
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
-    clientOwnerEmail: ["", [Validators.email]],
+    clientOwnerEmail: ["", [Validators.pattern(Utils.regexpEmail)]],
     businessName: [""],
     plan: [this.plan],
     product: [this.product],
@@ -429,7 +433,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     request.key = key;
     request.collectionName = collectionCt;
     request.name = this.formGroup.controls.name.value;
-    request.billingEmail = this.formGroup.controls.billingEmail.value;
+    request.billingEmail = punycode.toUnicode(this.formGroup.controls.billingEmail.value);
     request.keys = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
 
     if (this.selectedPlan.type === PlanType.Free) {
@@ -461,7 +465,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
     if (this.providerId) {
       const providerRequest = new ProviderOrganizationCreateRequest(
-        this.formGroup.controls.clientOwnerEmail.value,
+        punycode.ToUnicode(this.formGroup.controls.clientOwnerEmail.value),
         request
       );
       const providerKey = await this.cryptoService.getProviderKey(this.providerId);

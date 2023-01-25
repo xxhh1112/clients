@@ -7,6 +7,10 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { Utils } from "@bitwarden/common/misc/utils";
+
+// eslint-disable-next-line
+const punycode = require("punycode/");
 
 @Component({
   selector: "app-home",
@@ -16,7 +20,7 @@ export class HomeComponent implements OnInit {
   loginInitiated = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, Validators.email]],
+    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
     rememberEmail: [false],
   });
 
@@ -71,7 +75,7 @@ export class HomeComponent implements OnInit {
   }
 
   setFormValues() {
-    this.loginService.setEmail(this.formGroup.value.email);
+    this.loginService.setEmail(punycode.toUnicode(this.formGroup.value.email));
     this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
   }
 }

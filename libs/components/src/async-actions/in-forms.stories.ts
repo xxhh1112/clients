@@ -5,6 +5,7 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { delay, of } from "rxjs";
 
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
@@ -43,7 +44,7 @@ const template = `
 class PromiseExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Validators.email]],
+    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
   });
 
   constructor(private formBuilder: FormBuilder) {}
@@ -80,7 +81,7 @@ class PromiseExampleComponent {
 class ObservableExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Validators.email]],
+    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
   });
 
   constructor(private formBuilder: FormBuilder) {}

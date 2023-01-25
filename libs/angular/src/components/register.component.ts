@@ -16,6 +16,7 @@ import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwo
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
@@ -26,6 +27,9 @@ import { PasswordColorText } from "../shared/components/password-strength/passwo
 import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
+
+// eslint-disable-next-line
+const punycode = require("punycode/");
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
@@ -43,7 +47,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   formGroup = this.formBuilder.group(
     {
-      email: ["", [Validators.required, Validators.email]],
+      email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
       name: [""],
       masterPassword: ["", [Validators.required, Validators.minLength(8)]],
       confirmMasterPassword: ["", [Validators.required, Validators.minLength(8)]],
@@ -97,7 +101,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   async submit(showToast = true) {
     let email = this.formGroup.value.email;
-    email = email.trim().toLowerCase();
+    email = punycode.toUnicode(email.trim().toLowerCase());
     let name = this.formGroup.value.name;
     name = name === "" ? null : name; // Why do we do this?
     const masterPassword = this.formGroup.value.masterPassword;
