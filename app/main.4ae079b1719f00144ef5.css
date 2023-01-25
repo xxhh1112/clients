@@ -664,11 +664,14 @@
 .tw-h-full{
     height: 100%;
 }
-.tw-h-28{
-    height: 7rem;
+.tw-h-1{
+    height: 0.25rem;
 }
 .tw-h-4{
     height: 1rem;
+}
+.tw-h-28{
+    height: 7rem;
 }
 .tw-h-\[28rem\]{
     height: 28rem;
@@ -1173,6 +1176,10 @@
     --tw-bg-opacity: 1;
     background-color: rgb(var(--color-background-alt3) / var(--tw-bg-opacity));
 }
+.tw-bg-secondary-100{
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-secondary-100) / var(--tw-bg-opacity));
+}
 .tw-bg-text-contrast{
     --tw-bg-opacity: 1;
     background-color: rgb(var(--color-text-contrast) / var(--tw-bg-opacity));
@@ -1184,10 +1191,6 @@
 .tw-bg-background-alt2{
     --tw-bg-opacity: 1;
     background-color: rgb(var(--color-background-alt2) / var(--tw-bg-opacity));
-}
-.tw-bg-secondary-100{
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-secondary-100) / var(--tw-bg-opacity));
 }
 .\!tw-bg-transparent{
     background-color: transparent !important;
@@ -1452,10 +1455,6 @@
     font-size: 1.5rem;
     line-height: 2rem;
 }
-.tw-text-5xl{
-    font-size: 3rem;
-    line-height: 1;
-}
 .tw-font-bold{
     font-weight: 700;
 }
@@ -1568,10 +1567,6 @@
     --tw-text-opacity: 1;
     color: rgb(var(--color-text-alt2) / var(--tw-text-opacity));
 }
-.tw-text-warning{
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-warning-500) / var(--tw-text-opacity));
-}
 .tw-text-success{
     --tw-text-opacity: 1;
     color: rgb(var(--color-success-500) / var(--tw-text-opacity));
@@ -1579,6 +1574,10 @@
 .tw-text-info{
     --tw-text-opacity: 1;
     color: rgb(var(--color-info-500) / var(--tw-text-opacity));
+}
+.tw-text-warning{
+    --tw-text-opacity: 1;
+    color: rgb(var(--color-warning-500) / var(--tw-text-opacity));
 }
 .tw-underline{
     -webkit-text-decoration-line: underline;
@@ -2207,12 +2206,12 @@
     --tw-ring-offset-width: 0px !important;
 }
 
-.disabled\:tw-cursor-auto:disabled{
-    cursor: auto;
-}
-
 .disabled\:tw-cursor-not-allowed:disabled{
     cursor: not-allowed;
+}
+
+.disabled\:tw-cursor-auto:disabled{
+    cursor: auto;
 }
 
 .disabled\:tw-border:disabled{
@@ -2473,4 +2472,4 @@
 }
 
 
-/*# sourceMappingURL=main.02e6b3f8f946f8a2663f.css.map*/
+/*# sourceMappingURL=main.4ae079b1719f00144ef5.css.map*/
