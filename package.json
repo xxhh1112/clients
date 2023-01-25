@@ -181,7 +181,7 @@
     "papaparse": "^5.3.2",
     "popper.js": "^1.16.1",
     "proper-lockfile": "^4.1.2",
-    "punycode": "^2.2.0",
+    "punycode": "^2.3.0",
     "qrious": "4.0.2",
     "rxjs": "^7.5.5",
     "sweetalert2": "^10.16.6",
