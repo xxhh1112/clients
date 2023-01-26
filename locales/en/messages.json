@@ -135,7 +135,7 @@
   },
   "mx": {
     "message": "Mx"
-  },  
+  },
   "dr": {
     "message": "Dr"
   },
@@ -2043,6 +2043,9 @@
     "message": "Updated license"
   },
   "manageSubscription": {
+    "message": "Manage subscription"
+  },
+  "launchCloudSubscription": {
     "message": "Launch Cloud Subscription"
   },
   "storage": {
