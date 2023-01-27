@@ -28,7 +28,10 @@ import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SendService as SendServiceAbstraction } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
-import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
+import {
+  AbstractMemoryStorageService,
+  AbstractStorageService,
+} from "@bitwarden/common/abstractions/storage.service";
 import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { SyncNotifierService as SyncNotifierServiceAbstraction } from "@bitwarden/common/abstractions/sync/syncNotifier.service.abstraction";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
@@ -123,7 +126,7 @@ export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
   storageService: AbstractStorageService;
   secureStorageService: AbstractStorageService;
-  memoryStorageService: AbstractStorageService;
+  memoryStorageService: AbstractMemoryStorageService;
   i18nService: I18nServiceAbstraction;
   platformUtilsService: PlatformUtilsServiceAbstraction;
   logService: LogServiceAbstraction;
@@ -679,6 +682,9 @@ export default class MainBackground {
       this.vaultFilterService.clear(),
     ]);
 
+    //Needs to be checked before state is cleaned
+    const needStorageReseed = await this.needsStorageReseed();
+
     await this.stateService.clean({ userId: userId });
 
     if (userId == null || userId === (await this.stateService.getUserId())) {
@@ -686,15 +692,23 @@ export default class MainBackground {
       this.messagingService.send("doneLoggingOut", { expired: expired, userId: userId });
     }
 
+    if (needStorageReseed) {
+      await this.reseedStorage();
+    }
+
     if (BrowserApi.manifestVersion === 3) {
       BrowserApi.sendMessage("updateBadge");
     }
     await this.refreshBadge();
     await this.mainContextMenuHandler.noAccess();
-    await this.reseedStorage();
     this.notificationsService.updateConnection(false);
     await this.systemService.clearPendingClipboard();
     await this.systemService.startProcessReload(this.authService);
+  }
+
+  private async needsStorageReseed(): Promise<boolean> {
+    const currentVaultTimeout = await this.stateService.getVaultTimeout();
+    return currentVaultTimeout == null ? false : true;
   }
 
   async collectPageDetailsForContentScript(tab: any, sender: string, frameId: number = null) {
@@ -734,11 +748,6 @@ export default class MainBackground {
       !this.platformUtilsService.isVivaldi() &&
       !this.platformUtilsService.isOpera()
     ) {
-      return;
-    }
-
-    const currentVaultTimeout = await this.stateService.getVaultTimeout();
-    if (currentVaultTimeout == null) {
       return;
     }
 
