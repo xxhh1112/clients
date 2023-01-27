@@ -1,6 +1,6 @@
 import { concatMap, filter, firstValueFrom, Observable } from "rxjs";
 
-import { Message } from "./message";
+import { Message, MessageType } from "./message";
 
 type PostMessageFunction = (message: MessageWithMetadata) => void;
 
@@ -11,6 +11,10 @@ export type Channel = {
 
 export type Metadata = { requestId: string };
 export type MessageWithMetadata = Message & { metadata: Metadata };
+type Handler = (
+  message: Message,
+  abortController?: AbortController
+) => Promise<Message | undefined>;
 
 // TODO: This class probably duplicates functionality but I'm not especially familiar with
 // the inner workings of the browser extension yet.
@@ -32,9 +36,42 @@ export class Messenger {
     });
   }
 
-  constructor(private channel: Channel) {}
+  handler?: Handler;
+  abortControllers = new Map<string, AbortController>();
 
-  request(request: Message): Promise<Message> {
+  constructor(private channel: Channel) {
+    this.channel.messages$
+      .pipe(
+        concatMap(async (message) => {
+          if (this.handler === undefined) {
+            return;
+          }
+
+          const abortController = new AbortController();
+          this.abortControllers.set(message.metadata.requestId, abortController);
+          const handlerResponse = await this.handler(message, abortController);
+          this.abortControllers.delete(message.metadata.requestId);
+
+          if (handlerResponse === undefined) {
+            return;
+          }
+
+          const metadata: Metadata = { requestId: message.metadata.requestId };
+          this.channel.postMessage({ ...handlerResponse, metadata });
+        })
+      )
+      .subscribe();
+
+    this.channel.messages$.subscribe((message) => {
+      if (message.type !== MessageType.AbortRequest) {
+        return;
+      }
+
+      this.abortControllers.get(message.abortedRequestId)?.abort();
+    });
+  }
+
+  request(request: Message, abortController?: AbortController): Promise<Message> {
     const requestId = Date.now().toString();
     const metadata: Metadata = { requestId };
 
@@ -46,25 +83,18 @@ export class Messenger {
       )
     );
 
+    const abortListener = () =>
+      this.channel.postMessage({
+        metadata: { requestId: `${requestId}-abort` },
+        type: MessageType.AbortRequest,
+        abortedRequestId: requestId,
+      });
+    abortController?.signal.addEventListener("abort", abortListener);
+
     this.channel.postMessage({ ...request, metadata });
 
-    return promise;
-  }
-
-  addHandler(handler: (message: Message) => Promise<Message | undefined>) {
-    this.channel.messages$
-      .pipe(
-        concatMap(async (message) => {
-          const handlerResponse = await handler(message);
-
-          if (handlerResponse === undefined) {
-            return;
-          }
-
-          const metadata: Metadata = { requestId: message.metadata.requestId };
-          this.channel.postMessage({ ...handlerResponse, metadata });
-        })
-      )
-      .subscribe();
+    return promise.finally(() =>
+      abortController?.signal.removeEventListener("abort", abortListener)
+    );
   }
 }

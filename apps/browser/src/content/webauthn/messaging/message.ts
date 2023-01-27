@@ -40,10 +40,12 @@ export type CredentialGetResponse = {
 
 export type AbortRequest = {
   type: MessageType.AbortRequest;
+  abortedRequestId: string;
 };
 
 export type AbortResponse = {
   type: MessageType.AbortResponse;
+  abortedRequestId: string;
 };
 
 export type Message =

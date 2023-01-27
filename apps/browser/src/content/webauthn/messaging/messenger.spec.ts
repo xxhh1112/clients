@@ -18,8 +18,8 @@ describe("Messenger", () => {
 
     handlerA = new TestMessageHandler();
     handlerB = new TestMessageHandler();
-    messengerA.addHandler(handlerA.handler);
-    messengerB.addHandler(handlerB.handler);
+    messengerA.handler = handlerA.handler;
+    messengerB.handler = handlerB.handler;
   });
 
   it("should deliver message to B when sending request from A", () => {
@@ -42,6 +42,25 @@ describe("Messenger", () => {
     const returned = await requestPromise;
 
     expect(returned).toMatchObject(response);
+  });
+
+  it("should deliver abort signal to B when requesting abort", () => {
+    const abortController = new AbortController();
+    messengerA.request(createRequest(), abortController);
+    abortController.abort();
+
+    const received = handlerB.recieve();
+
+    expect(received[0].abortController.signal.aborted).toBe(true);
+  });
+
+  it.skip("should abort request and throw error when abort is requested from A", () => {
+    const abortController = new AbortController();
+    const requestPromise = messengerA.request(createRequest(), abortController);
+
+    abortController.abort();
+
+    expect(requestPromise).toThrow();
   });
 });
 
@@ -78,16 +97,23 @@ class TestChannelPair {
 }
 
 class TestMessageHandler {
-  readonly handler: (message: TestMessage) => Promise<Message | undefined>;
+  readonly handler: (
+    message: TestMessage,
+    abortController?: AbortController
+  ) => Promise<Message | undefined>;
 
-  private recievedMessages: { message: TestMessage; respond: (response: TestMessage) => void }[] =
-    [];
+  private recievedMessages: {
+    message: TestMessage;
+    respond: (response: TestMessage) => void;
+    abortController?: AbortController;
+  }[] = [];
 
   constructor() {
-    this.handler = (message) =>
+    this.handler = (message, abortController) =>
       new Promise((resolve, reject) => {
         this.recievedMessages.push({
           message,
+          abortController,
           respond: (response) => resolve(response),
         });
       });
