@@ -22,21 +22,37 @@ describe("Messenger", () => {
     messengerB.addHandler(handlerB.handler);
   });
 
-  it("should deliver message to B when sending request to A", () => {
-    const message = createMessage();
-    messengerA.request(message);
+  it("should deliver message to B when sending request from A", () => {
+    const request = createRequest();
+    messengerA.request(request);
 
     const received = handlerB.recieve();
 
     expect(received.length).toBe(1);
-    expect(received[0].message).toMatchObject(message);
+    expect(received[0].message).toMatchObject(request);
+  });
+
+  it("should return response from B when sending request from A", async () => {
+    const request = createRequest();
+    const response = createResponse();
+    const requestPromise = messengerA.request(request);
+    const received = handlerB.recieve();
+    received[0].respond(response);
+
+    const returned = await requestPromise;
+
+    expect(returned).toMatchObject(response);
   });
 });
 
 type TestMessage = Message & { testId: string };
 
-function createMessage(): TestMessage {
-  return { testId: Utils.newGuid(), type: "TestMessage" } as any;
+function createRequest(): TestMessage {
+  return { testId: Utils.newGuid(), type: "TestRequest" } as any;
+}
+
+function createResponse(): TestMessage {
+  return { testId: Utils.newGuid(), type: "TestResponse" } as any;
 }
 
 class TestChannelPair {
@@ -49,12 +65,14 @@ class TestChannelPair {
 
     this.channelA = {
       messages$: subjectA,
-      postMessage: (message) => subjectB.next(message),
+      postMessage: (message) => {
+        subjectB.next(message);
+      },
     };
 
     this.channelB = {
       messages$: subjectB,
-      postMessage: (message) => subjectB.next(message),
+      postMessage: (message) => subjectA.next(message),
     };
   }
 }
