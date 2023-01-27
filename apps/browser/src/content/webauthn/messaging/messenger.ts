@@ -4,13 +4,13 @@ import { Message } from "./message";
 
 type PostMessageFunction = (message: MessageWithMetadata) => void;
 
-type Channel = {
+export type Channel = {
   messages$: Observable<MessageWithMetadata>;
   postMessage: PostMessageFunction;
 };
 
-type Metadata = { requestId: string };
-type MessageWithMetadata = Message & { metadata: Metadata };
+export type Metadata = { requestId: string };
+export type MessageWithMetadata = Message & { metadata: Metadata };
 
 // TODO: This class probably duplicates functionality but I'm not especially familiar with
 // the inner workings of the browser extension yet.
@@ -32,7 +32,7 @@ export class Messenger {
     });
   }
 
-  private constructor(private channel: Channel) {}
+  constructor(private channel: Channel) {}
 
   request(request: Message): Promise<Message> {
     const requestId = Date.now().toString();
