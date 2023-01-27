@@ -45,7 +45,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
   ) {}
 
   async createCredential(
-    params: CredentialRegistrationParams
+    params: CredentialRegistrationParams,
+    abortController?: AbortController
   ): Promise<CredentialRegistrationResult> {
     const presence = await this.fido2UserInterfaceService.confirmNewCredential({
       credentialName: params.rp.name,

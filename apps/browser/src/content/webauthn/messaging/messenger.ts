@@ -12,7 +12,7 @@ export type Channel = {
 export type Metadata = { requestId: string };
 export type MessageWithMetadata = Message & { metadata: Metadata };
 type Handler = (
-  message: Message,
+  message: MessageWithMetadata,
   abortController?: AbortController
 ) => Promise<Message | undefined>;
 
@@ -37,7 +37,7 @@ export class Messenger {
   }
 
   handler?: Handler;
-  abortControllers = new Map<string, AbortController>();
+  private abortControllers = new Map<string, AbortController>();
 
   constructor(private channel: Channel) {
     this.channel.messages$

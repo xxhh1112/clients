@@ -18,6 +18,7 @@ export default class RuntimeBackground {
   private pageDetailsToAutoFill: any[] = [];
   private onInstalledReason: string = null;
   private lockedVaultPendingNotifications: LockedVaultPendingNotificationsItem[] = [];
+  private abortControllers = new Map<string, AbortController>();
 
   constructor(
     private main: MainBackground,
@@ -218,10 +219,17 @@ export default class RuntimeBackground {
       case "getClickedElementResponse":
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
+      case "fido2AbortRequest":
+        this.abortControllers.get(msg.abortedRequestId)?.abort();
+        break;
       case "fido2RegisterCredentialRequest":
-        return await this.main.fido2Service.createCredential(msg.data);
+        return await this.main.fido2Service
+          .createCredential(msg.data, this.createAbortController(msg.requestId))
+          .finally(() => this.abortControllers.delete(msg.requestId));
       case "fido2GetCredentialRequest":
-        return await this.main.fido2Service.assertCredential(msg.data);
+        return await this.main.fido2Service
+          .assertCredential(msg.data, this.createAbortController(msg.requestId))
+          .finally(() => this.abortControllers.delete(msg.requestId));
     }
     return undefined;
   }
@@ -257,5 +265,11 @@ export default class RuntimeBackground {
         this.onInstalledReason = null;
       }
     }, 100);
+  }
+
+  private createAbortController(id: string): AbortController {
+    const abortController = new AbortController();
+    this.abortControllers.set(id, abortController);
+    return abortController;
   }
 }

@@ -66,7 +66,7 @@ describe("Messenger", () => {
   });
 });
 
-type TestMessage = Message & { testId: string };
+type TestMessage = MessageWithMetadata & { testId: string };
 
 function createRequest(): TestMessage {
   return { testId: Utils.newGuid(), type: "TestRequest" } as any;

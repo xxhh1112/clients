@@ -85,6 +85,12 @@ export class OriginMismatchError extends Fido2Error {
 }
 
 export abstract class Fido2Service {
-  createCredential: (params: CredentialRegistrationParams) => Promise<CredentialRegistrationResult>;
-  assertCredential: (params: CredentialAssertParams) => Promise<CredentialAssertResult>;
+  createCredential: (
+    params: CredentialRegistrationParams,
+    abortController?: AbortController
+  ) => Promise<CredentialRegistrationResult>;
+  assertCredential: (
+    params: CredentialAssertParams,
+    abortController?: AbortController
+  ) => Promise<CredentialAssertResult>;
 }
