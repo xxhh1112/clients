@@ -44,6 +44,17 @@ describe("Messenger", () => {
     expect(returned).toMatchObject(response);
   });
 
+  it("should throw error from B when sending request from A that fails", async () => {
+    const request = createRequest();
+    const error = new Error("Test error");
+    const requestPromise = messengerA.request(request);
+    const received = handlerB.recieve();
+
+    received[0].reject(error);
+
+    await expect(requestPromise).rejects.toThrow();
+  });
+
   it("should deliver abort signal to B when requesting abort", () => {
     const abortController = new AbortController();
     messengerA.request(createRequest(), abortController);
@@ -52,15 +63,6 @@ describe("Messenger", () => {
     const received = handlerB.recieve();
 
     expect(received[0].abortController.signal.aborted).toBe(true);
-  });
-
-  it.skip("should abort request and throw error when abort is requested from A", () => {
-    const abortController = new AbortController();
-    const requestPromise = messengerA.request(createRequest(), abortController);
-
-    abortController.abort();
-
-    expect(requestPromise).toThrow();
   });
 });
 
@@ -105,6 +107,7 @@ class TestMessageHandler {
   private recievedMessages: {
     message: TestMessage;
     respond: (response: TestMessage) => void;
+    reject: (error: Error) => void;
     abortController?: AbortController;
   }[] = [];
 
@@ -115,6 +118,7 @@ class TestMessageHandler {
           message,
           abortController,
           respond: (response) => resolve(response),
+          reject: (error) => reject(error),
         });
       });
   }

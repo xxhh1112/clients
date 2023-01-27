@@ -14,6 +14,7 @@ export enum MessageType {
   CredentialGetResponse,
   AbortRequest,
   AbortResponse,
+  ErrorResponse,
 }
 
 export type CredentialCreationRequest = {
@@ -43,6 +44,11 @@ export type AbortRequest = {
   abortedRequestId: string;
 };
 
+export type ErrorResponse = {
+  type: MessageType.ErrorResponse;
+  error: string;
+};
+
 export type AbortResponse = {
   type: MessageType.AbortResponse;
   abortedRequestId: string;
@@ -54,4 +60,5 @@ export type Message =
   | CredentialGetRequest
   | CredentialGetResponse
   | AbortRequest
-  | AbortResponse;
+  | AbortResponse
+  | ErrorResponse;

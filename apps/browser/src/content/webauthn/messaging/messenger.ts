@@ -49,15 +49,26 @@ export class Messenger {
 
           const abortController = new AbortController();
           this.abortControllers.set(message.metadata.requestId, abortController);
-          const handlerResponse = await this.handler(message, abortController);
-          this.abortControllers.delete(message.metadata.requestId);
 
-          if (handlerResponse === undefined) {
-            return;
+          try {
+            const handlerResponse = await this.handler(message, abortController);
+
+            if (handlerResponse === undefined) {
+              return;
+            }
+
+            const metadata: Metadata = { requestId: message.metadata.requestId };
+            this.channel.postMessage({ ...handlerResponse, metadata });
+          } catch (error) {
+            const metadata: Metadata = { requestId: message.metadata.requestId };
+            this.channel.postMessage({
+              type: MessageType.ErrorResponse,
+              metadata,
+              error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+            });
+          } finally {
+            this.abortControllers.delete(message.metadata.requestId);
           }
-
-          const metadata: Metadata = { requestId: message.metadata.requestId };
-          this.channel.postMessage({ ...handlerResponse, metadata });
         })
       )
       .subscribe();
@@ -71,7 +82,7 @@ export class Messenger {
     });
   }
 
-  request(request: Message, abortController?: AbortController): Promise<Message> {
+  async request(request: Message, abortController?: AbortController): Promise<Message> {
     const requestId = Date.now().toString();
     const metadata: Metadata = { requestId };
 
@@ -93,8 +104,15 @@ export class Messenger {
 
     this.channel.postMessage({ ...request, metadata });
 
-    return promise.finally(() =>
-      abortController?.signal.removeEventListener("abort", abortListener)
-    );
+    const response = await promise;
+    abortController?.signal.removeEventListener("abort", abortListener);
+
+    if (response.type === MessageType.ErrorResponse) {
+      const error = new Error();
+      Object.assign(error, JSON.parse(response.error));
+      throw error;
+    }
+
+    return response;
   }
 }
