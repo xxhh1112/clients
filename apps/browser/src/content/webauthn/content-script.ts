@@ -7,7 +7,7 @@ s.src = chrome.runtime.getURL("content/webauthn/page-script.js");
 
 const messenger = Messenger.forDOMCommunication(window);
 
-messenger.addHandler(async (message) => {
+messenger.handler = async (message, abortController) => {
   if (message.type === MessageType.CredentialCreationRequest) {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
@@ -16,10 +16,13 @@ messenger.addHandler(async (message) => {
           data: message.data,
         },
         (response) => {
+          if (response.error !== undefined) {
+            return reject(response.error);
+          }
+
           resolve({
             type: MessageType.CredentialCreationResponse,
             result: response.result,
-            error: response.error,
           });
         }
       );
@@ -34,10 +37,13 @@ messenger.addHandler(async (message) => {
           data: message.data,
         },
         (response) => {
+          if (response.error !== undefined) {
+            return reject(response.error);
+          }
+
           resolve({
             type: MessageType.CredentialGetResponse,
             result: response.result,
-            error: response.error,
           });
         }
       );
@@ -45,4 +51,4 @@ messenger.addHandler(async (message) => {
   }
 
   return undefined;
-});
+};
