@@ -38,7 +38,6 @@
 ./libs/common/spec/shared/interceptConsole.ts
 ./libs/common/spec/models/view/passwordHistoryView.spec.ts
 ./libs/common/spec/models/view/cipherView.spec.ts
-./libs/common/spec/models/view/folderView.spec.ts
 ./libs/common/spec/models/view/attachmentView.spec.ts
 ./libs/common/spec/models/view/loginView.spec.ts
 ./libs/common/spec/models/domain/loginUri.spec.ts

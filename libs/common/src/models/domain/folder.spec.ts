@@ -1,5 +1,6 @@
-import { FolderData } from "@bitwarden/common/models/data/folder.data";
-import { Folder } from "@bitwarden/common/models/domain/folder";
+import { FolderData } from "../data/folder.data";
+
+import { Folder } from "./folder";
 
 describe("Folder", () => {
   let data: FolderData;
@@ -20,6 +21,12 @@ describe("Folder", () => {
       name: { encryptedString: "encName", encryptionType: 0 },
       revisionDate: new Date("2022-01-31T12:00:00.000Z"),
     });
+  });
+
+  it("keyIdentifier", () => {
+    const folder = new Folder(data);
+
+    expect(folder.keyIdentifier()).toEqual(null);
   });
 
   describe("fromJSON", () => {

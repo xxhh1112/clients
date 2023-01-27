@@ -1,11 +1,11 @@
 import { mock } from "jest-mock-extended";
 
-import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Folder } from "@bitwarden/common/models/domain/folder";
-import { FolderView } from "@bitwarden/common/models/view/folder.view";
+import { mockEnc } from "../../../spec/utils";
+import { EncryptService } from "../../abstractions/encrypt.service";
+import { EncString } from "../domain/enc-string";
+import { Folder } from "../domain/folder";
 
-import { mockEnc } from "../../utils";
+import { FolderView } from "./folder.view";
 
 describe("FolderView", () => {
   describe("fromJSON", () => {
