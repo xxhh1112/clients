@@ -23,6 +23,9 @@ import { joseToDer } from "./ecdsa-utils";
 // We support self-signing, but Google won't accept it.
 // TODO: Look into supporting self-signed packed format.
 const STANDARD_ATTESTATION_FORMAT: "none" | "packed" = "none";
+const DEFAULT_TIMEOUT = 120000;
+const MIN_TIMEOUT = 30000;
+const MAX_TIMEOUT = 600000;
 
 interface BitCredential {
   credentialId: CredentialId;
@@ -46,8 +49,13 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
   async createCredential(
     params: CredentialRegistrationParams,
-    abortController?: AbortController
+    abortController = new AbortController()
   ): Promise<CredentialRegistrationResult> {
+    // Comment: Timeouts could potentially be implemented using decorators.
+    // But since I try to use decorators a little as possible and only
+    // for the most generic solutions, I'm gonne leave this as is untill peer review.
+    const timeout = setAbortTimeout(abortController);
+
     const presence = await this.fido2UserInterfaceService.confirmNewCredential(
       {
         credentialName: params.rp.name,
@@ -115,6 +123,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       })
     );
 
+    clearTimeout(timeout);
+
     return {
       credentialId: Fido2Utils.bufferToString(credentialId.raw),
       clientDataJSON: Fido2Utils.bufferToString(clientData),
@@ -127,8 +137,9 @@ export class Fido2Service implements Fido2ServiceAbstraction {
 
   async assertCredential(
     params: CredentialAssertParams,
-    abortController?: AbortController
+    abortController = new AbortController()
   ): Promise<CredentialAssertResult> {
+    const timeout = setAbortTimeout(abortController);
     let credential: BitCredential | undefined;
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
@@ -185,6 +196,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       privateKey: credential.keyValue,
     });
 
+    clearTimeout(timeout);
+
     return {
       credentialId: credential.credentialId.encoded,
       clientDataJSON: Fido2Utils.bufferToString(clientData),
@@ -194,10 +207,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     };
   }
 
-  private async getCredential(
-    allowedCredentialIds: string[],
-    abortController?: AbortController
-  ): Promise<BitCredential | undefined> {
+  private async getCredential(allowedCredentialIds: string[]): Promise<BitCredential | undefined> {
     let cipher: Cipher | undefined;
     for (const allowedCredential of allowedCredentialIds) {
       cipher = await this.cipherService.get(allowedCredential);
@@ -413,4 +423,10 @@ function authDataFlags(options: Flags): number {
   }
 
   return flags;
+}
+
+function setAbortTimeout(abortController: AbortController, timeout = DEFAULT_TIMEOUT): number {
+  // TODO: Set different timeouts depending on `userVerification` value
+  const clampedTimeout = Math.max(MIN_TIMEOUT, Math.min(timeout, MAX_TIMEOUT));
+  return window.setTimeout(() => abortController.abort(), clampedTimeout);
 }

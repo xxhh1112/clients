@@ -188,4 +188,8 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 
     return false;
   }
+
+  private setAbortTimeout(abortController: AbortController) {
+    return setTimeout(() => abortController.abort());
+  }
 }
