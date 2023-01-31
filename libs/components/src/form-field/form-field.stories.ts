@@ -69,10 +69,7 @@ const formObj = fb.group({
 
 const defaultFormObj = fb.group({
   name: ["", [Validators.required]],
-  email: [
-    "",
-    [Validators.required, Validators.pattern(Utils.regexpEmail), forbiddenNameValidator(/bit/i)],
-  ],
+  email: ["", [Validators.required, Utils.emailValidator, forbiddenNameValidator(/bit/i)]],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
 });

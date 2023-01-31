@@ -28,7 +28,9 @@ import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
 
 import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
-// eslint-disable-next-line
+// punycode needs to be required here to override built-in node module
+// https://github.com/mathiasbynens/punycode.js#installation
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const punycode = require("punycode/");
 
 @Directive()
@@ -47,7 +49,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   formGroup = this.formBuilder.group(
     {
-      email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
+      email: ["", [Validators.required, Utils.emailValidator]],
       name: [""],
       masterPassword: ["", [Validators.required, Validators.minLength(8)]],
       confirmMasterPassword: ["", [Validators.required, Validators.minLength(8)]],

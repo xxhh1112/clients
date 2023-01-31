@@ -22,7 +22,9 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 
 import { EnvironmentComponent } from "./environment.component";
 
-// eslint-disable-next-line
+// punycode needs to be required here to override built-in node module
+// https://github.com/mathiasbynens/punycode.js#installation
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const punycode = require("punycode/");
 
 const BroadcasterSubscriptionId = "LoginComponent";

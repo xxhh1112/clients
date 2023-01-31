@@ -44,7 +44,7 @@ const fb = new UntypedFormBuilder();
 
 const formObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
+  email: ["", [Validators.required, Utils.emailValidator]],
 });
 
 function submit() {

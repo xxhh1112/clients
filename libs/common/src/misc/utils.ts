@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-escape */
+import { AbstractControl, ValidationErrors } from "@angular/forms";
 import { getHostname, parse } from "tldts";
 import { Merge } from "type-fest";
 
@@ -7,6 +8,10 @@ import { EncryptService } from "../abstractions/encrypt.service";
 import { I18nService } from "../abstractions/i18n.service";
 
 const nodeURL = typeof window === "undefined" ? require("url") : null;
+// punycode needs to be required here to override built-in node module
+// https://github.com/mathiasbynens/punycode.js#installation
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const punycode = require("punycode/");
 
 declare global {
   /* eslint-disable-next-line no-var */
@@ -28,9 +33,10 @@ export class Utils {
   // Transpiled version of /\p{Emoji_Presentation}/gu using https://mothereff.in/regexpu. Used for compatability in older browsers.
   static regexpEmojiPresentation =
     /(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])/g;
-  // Similar regex to the one used on server-side validation
-  // eslint-disable-next-line
-  static regexpEmail = /^[\x00-\x7F]+@.+\.\p{L}+$/u;
+  // Adaptation from Angular EmailValidator regex (https://github.com/angular/angular/blob/4dcbb6aef9ec6d1f1fe9a926d0b40c72139a013b/packages/forms/src/validators.ts#L127)
+  // to allow diacritics and match the server side unit tests
+  static regexpEmail =
+    /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[\p{L}\.!#$%&'*+/=?^_`{|}~-](?:[\p{L}\.!#$%&'*+/=?^_`{|}~-]{0,61})?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}\p{L})?)+$/u;
 
   static readonly validHosts: string[] = ["localhost"];
 
@@ -540,6 +546,21 @@ export class Utils {
     }
 
     return null;
+  }
+
+  /**
+   * Validator based on the Validators.Email (https://github.com/angular/angular/blob/4dcbb6aef9ec6d1f1fe9a926d0b40c72139a013b/packages/forms/src/validators.ts#L493).
+   * Using a custom Regexp and converting to unicode the email value before validating it
+   */
+  static emailValidator(control: AbstractControl): ValidationErrors | null {
+    if (
+      control.value == null ||
+      ((typeof control.value === "string" || Array.isArray(control.value)) &&
+        control.value.length === 0)
+    ) {
+      return null; // don't validate empty values to allow optional controls
+    }
+    return Utils.regexpEmail.test(punycode.toUnicode(control.value)) ? null : { email: true };
   }
 }
 

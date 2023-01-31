@@ -44,7 +44,7 @@ const template = `
 class PromiseExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
+    email: ["", [Validators.required, Utils.emailValidator]],
   });
 
   constructor(private formBuilder: FormBuilder) {}
@@ -81,7 +81,7 @@ class PromiseExampleComponent {
 class ObservableExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
+    email: ["", [Validators.required, Utils.emailValidator]],
   });
 
   constructor(private formBuilder: FormBuilder) {}

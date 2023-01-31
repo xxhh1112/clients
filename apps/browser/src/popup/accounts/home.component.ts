@@ -9,7 +9,9 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 
-// eslint-disable-next-line
+// punycode needs to be required here to override built-in node module
+// https://github.com/mathiasbynens/punycode.js#installation
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const punycode = require("punycode/");
 
 @Component({
@@ -20,7 +22,7 @@ export class HomeComponent implements OnInit {
   loginInitiated = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, Validators.pattern(Utils.regexpEmail)]],
+    email: ["", [Validators.required, Utils.emailValidator]],
     rememberEmail: [false],
   });
 

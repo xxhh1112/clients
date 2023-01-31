@@ -37,7 +37,9 @@ import { PlanResponse } from "@bitwarden/common/models/response/plan.response";
 import { PaymentComponent } from "./payment.component";
 import { TaxInfoComponent } from "./tax-info.component";
 
-// eslint-disable-next-line
+// punycode needs to be required here to override built-in node module
+// https://github.com/mathiasbynens/punycode.js#installation
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const punycode = require("punycode/");
 
 interface OnSuccessArgs {
@@ -90,12 +92,12 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   formGroup = this.formBuilder.group({
     name: [""],
-    billingEmail: ["", [Validators.pattern(Utils.regexpEmail)]],
+    billingEmail: ["", [Utils.emailValidator]],
     businessOwned: [false],
     premiumAccessAddon: [false],
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
-    clientOwnerEmail: ["", [Validators.pattern(Utils.regexpEmail)]],
+    clientOwnerEmail: ["", [Utils.emailValidator]],
     businessName: [""],
     plan: [this.plan],
     product: [this.product],

@@ -51,7 +51,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       sponsorshipEmail: new FormControl("", {
-        validators: [Validators.pattern(Utils.regexpEmail)],
+        validators: [Utils.emailValidator],
         asyncValidators: [
           notAllowedValueAsync(async () => await this.stateService.getEmail(), true),
         ],
