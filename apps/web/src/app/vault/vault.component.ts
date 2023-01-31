@@ -23,6 +23,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
+import { KdfType, DEFAULT_PBKDF2_ITERATIONS } from "@bitwarden/common/enums/kdfType";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/models/view/cipher.view";
@@ -69,7 +70,9 @@ export class VaultComponent implements OnInit, OnDestroy {
   showBrowserOutdated = false;
   showUpdateKey = false;
   showPremiumCallout = false;
+  showLowKdf = false;
   trashCleanupWarning: string = null;
+  kdfIterations: number;
   activeFilter: VaultFilter = new VaultFilter();
   private destroy$ = new Subject<void>();
 
@@ -96,6 +99,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.showVerifyEmail = !(await this.tokenService.getEmailVerified());
     this.showBrowserOutdated = window.navigator.userAgent.indexOf("MSIE") !== -1;
+    this.showLowKdf = await this.isLowKdfIteration();
     this.trashCleanupWarning = this.i18nService.t(
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
@@ -127,12 +131,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             await this.editCipher(cipherView);
           }
         }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-
-    this.route.queryParams
-      .pipe(
+        switchMap(() => this.route.queryParams),
         switchMap(async (params) => {
           const cipherId = getCipherIdFromParams(params);
           if (cipherId) {
@@ -177,7 +176,8 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.showBrowserOutdated ||
       this.showPremiumCallout ||
       this.showUpdateKey ||
-      this.showVerifyEmail
+      this.showVerifyEmail ||
+      this.showLowKdf
     );
   }
 
@@ -332,6 +332,10 @@ export class VaultComponent implements OnInit, OnDestroy {
     component.folderId = this.activeFilter.folderId;
   }
 
+  async navigateToCipher(cipher: CipherView) {
+    this.go({ itemId: cipher?.id });
+  }
+
   async editCipher(cipher: CipherView) {
     return this.editCipherId(cipher?.id);
   }
@@ -382,6 +386,12 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async updateKey() {
     await this.modalService.openViewRef(UpdateKeyComponent, this.updateKeyModalRef);
+  }
+
+  async isLowKdfIteration() {
+    const kdfType = await this.stateService.getKdfType();
+    const kdfOptions = await this.stateService.getKdfConfig();
+    return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
   }
 
   get breadcrumbs(): TreeNode<CollectionFilter>[] {

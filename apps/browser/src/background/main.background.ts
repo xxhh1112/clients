@@ -98,6 +98,7 @@ import { BrowserStateService as StateServiceAbstraction } from "../services/abst
 import AutofillService from "../services/autofill.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import { BrowserFolderService } from "../services/browser-folder.service";
+import { BrowserI18nService } from "../services/browser-i18n.service";
 import { BrowserOrganizationService } from "../services/browser-organization.service";
 import { BrowserPolicyService } from "../services/browser-policy.service";
 import { BrowserSettingsService } from "../services/browser-settings.service";
@@ -107,7 +108,6 @@ import BrowserLocalStorageService from "../services/browserLocalStorage.service"
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
-import I18nService from "../services/i18n.service";
 import { KeyGenerationService } from "../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../services/localBackedSessionStorage.service";
 import { VaultFilterService } from "../services/vaultFilter.service";
@@ -192,7 +192,6 @@ export default class MainBackground {
   private tabsBackground: TabsBackground;
   private webRequestBackground: WebRequestBackground;
 
-  private sidebarAction: any;
   private syncTimeout: any;
   private isSafari: boolean;
   private nativeMessagingBackground: NativeMessagingBackground;
@@ -266,7 +265,7 @@ export default class MainBackground {
       },
       window
     );
-    this.i18nService = new I18nService(BrowserApi.getUILanguage(window));
+    this.i18nService = new BrowserI18nService(BrowserApi.getUILanguage(window), this.stateService);
     this.encryptService = flagEnabled("multithreadDecryption")
       ? new MultithreadEncryptServiceImplementation(
           this.cryptoFunctionService,
@@ -491,11 +490,6 @@ export default class MainBackground {
 
     // Other fields
     this.isSafari = this.platformUtilsService.isSafari();
-    this.sidebarAction = this.isSafari
-      ? null
-      : typeof opr !== "undefined" && opr.sidebarAction
-      ? opr.sidebarAction
-      : (window as any).chrome.sidebarAction;
 
     // Background
     this.runtimeBackground = new RuntimeBackground(
@@ -593,7 +587,7 @@ export default class MainBackground {
     await this.stateService.init();
 
     await (this.vaultTimeoutService as VaultTimeoutService).init(true);
-    await (this.i18nService as I18nService).init();
+    await (this.i18nService as BrowserI18nService).init();
     await (this.eventUploadService as EventUploadService).init(true);
     await this.runtimeBackground.init();
     await this.notificationBackground.init();
@@ -678,6 +672,9 @@ export default class MainBackground {
       this.vaultFilterService.clear(),
     ]);
 
+    //Needs to be checked before state is cleaned
+    const needStorageReseed = await this.needsStorageReseed();
+
     await this.stateService.clean({ userId: userId });
 
     if (userId == null || userId === (await this.stateService.getUserId())) {
@@ -685,15 +682,23 @@ export default class MainBackground {
       this.messagingService.send("doneLoggingOut", { expired: expired, userId: userId });
     }
 
+    if (needStorageReseed) {
+      await this.reseedStorage();
+    }
+
     if (BrowserApi.manifestVersion === 3) {
       BrowserApi.sendMessage("updateBadge");
     }
     await this.refreshBadge();
     await this.mainContextMenuHandler.noAccess();
-    await this.reseedStorage();
     this.notificationsService.updateConnection(false);
     await this.systemService.clearPendingClipboard();
     await this.systemService.startProcessReload(this.authService);
+  }
+
+  private async needsStorageReseed(): Promise<boolean> {
+    const currentVaultTimeout = await this.stateService.getVaultTimeout();
+    return currentVaultTimeout == null ? false : true;
   }
 
   async collectPageDetailsForContentScript(tab: any, sender: string, frameId: number = null) {
@@ -733,11 +738,6 @@ export default class MainBackground {
       !this.platformUtilsService.isVivaldi() &&
       !this.platformUtilsService.isOpera()
     ) {
-      return;
-    }
-
-    const currentVaultTimeout = await this.stateService.getVaultTimeout();
-    if (currentVaultTimeout == null) {
       return;
     }
 

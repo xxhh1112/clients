@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <ng-container>
   <bit-table
     *ngIf="filteredCiphers.length || filteredCollections.length"
@@ -12,6 +14,7 @@
           <input
             class="tw-mr-2"
             type="checkbox"
+            bitCheckbox
             id="checkAll"
             (change)="checkAll($any($event.target).checked)"
             [(ngModel)]="isAllChecked"
@@ -71,22 +74,29 @@
       </tr>
     </ng-container>
     <ng-template body>
-      <tr bitRow *ngFor="let col of filteredCollections" alignContent="middle">
-        <td bitCell (click)="selectRow(col)">
+      <tr
+        bitRow
+        *ngFor="let col of filteredCollections"
+        (click)="navigateCollection(col)"
+        class="tw-cursor-pointer"
+        alignContent="middle"
+      >
+        <td bitCell (click)="checkRow(col)" appStopProp>
           <input
             *ngIf="canDeleteCollection(col.node)"
             class="tw-cursor-pointer"
             type="checkbox"
+            bitCheckbox
             [(ngModel)]="$any(col).checked"
             appStopProp
           />
         </td>
-        <td bitCell (click)="selectRow(col)">
+        <td bitCell>
           <div class="icon" aria-hidden="true">
             <i class="bwi bwi-fw bwi-lg bwi-collection"></i>
           </div>
         </td>
-        <td bitCell (click)="selectRow(col)">
+        <td bitCell>
           <button
             bitLink
             class="tw-text-start"
@@ -96,7 +106,7 @@
             {{ col.node.name }}
           </button>
         </td>
-        <td bitCell (click)="selectRow(col)">
+        <td bitCell>
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
@@ -114,7 +124,7 @@
             ></app-group-badge>
           </ng-container>
         </td>
-        <td bitCell class="tw-text-right" (click)="selectRow(col)">
+        <td bitCell class="tw-text-right">
           <button
             *ngIf="canEditCollection(col.node) || canDeleteCollection(col.node)"
             [bitMenuTriggerFor]="collectionOptions"
@@ -154,14 +164,20 @@
           </bit-menu>
         </td>
       </tr>
-      <tr bitRow *ngFor="let c of filteredCiphers" alignContent="middle">
-        <td bitCell (click)="selectRow(c)">
-          <input type="checkbox" [(ngModel)]="$any(c).checked" appStopProp />
+      <tr
+        bitRow
+        *ngFor="let c of filteredCiphers"
+        class="tw-cursor-pointer"
+        (click)="selectCipher(c)"
+        alignContent="middle"
+      >
+        <td bitCell (click)="checkRow(c)" appStopProp>
+          <input type="checkbox" bitCheckbox [(ngModel)]="$any(c).checked" appStopProp />
         </td>
-        <td bitCell (click)="selectRow(c)">
+        <td bitCell>
           <app-vault-icon [cipher]="c"></app-vault-icon>
         </td>
-        <td bitCell class="tw-break-all" (click)="selectRow(c)">
+        <td bitCell class="tw-break-all">
           <button
             bitLink
             class="tw-text-start"
@@ -193,7 +209,7 @@
           <br />
           <span class="tw-text-sm tw-text-muted" appStopProp>{{ c.subTitle }}</span>
         </td>
-        <td bitCell (click)="selectRow(c)">
+        <td bitCell>
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ c.organizationId | orgNameFromId: organizations }}"
@@ -211,7 +227,7 @@
             ></app-collection-badge>
           </ng-container>
         </td>
-        <td bitCell class="tw-text-right" (click)="selectRow(c)">
+        <td bitCell class="tw-text-right">
           <button
             [bitMenuTriggerFor]="cipherOptions"
             size="small"
