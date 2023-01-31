@@ -54,7 +54,7 @@ export class SecretService {
   async getSecretsByProject(organizationId: string, projectId: string): Promise<SecretListView[]> {
     const r = await this.apiService.send(
       "GET",
-      "/projects/" + projectId + "/secrets",
+      "/projects/" + projectId + "/" + organizationId + "/secrets",
       null,
       true,
       true
