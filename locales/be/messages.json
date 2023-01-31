@@ -277,33 +277,12 @@
   "searchFavorites": {
     "message": "Пошук у абраным"
   },
-  "searchLogin": {
-    "message": "Search logins",
-    "description": "Search Login type"
-  },
-  "searchCard": {
-    "message": "Search cards",
-    "description": "Search Card type"
-  },
-  "searchIdentity": {
-    "message": "Search identities",
-    "description": "Search Identity type"
-  },
-  "searchSecureNote": {
-    "message": "Search secure notes",
-    "description": "Search Secure Note type"
+  "searchType": {
+    "message": "Пошук па тыпу",
+    "description": "Search item type"
   },
   "searchVault": {
     "message": "Пошук у сховішчы"
-  },
-  "searchMyVault": {
-    "message": "Search my vault"
-  },
-  "searchOrganization": {
-    "message": "Search organization"
-  },
-  "searchMembers": {
-    "message": "Search members"
   },
   "allItems": {
     "message": "Усе элементы"
@@ -386,9 +365,6 @@
   "select": {
     "message": "Выбраць"
   },
-  "newItem": {
-    "message": "New item"
-  },
   "addItem": {
     "message": "Дадаць элемент"
   },
@@ -397,12 +373,6 @@
   },
   "viewItem": {
     "message": "Прагледзець элемент"
-  },
-  "new": {
-    "message": "Новы"
-  },
-  "item": {
-    "message": "Item"
   },
   "ex": {
     "message": "напр.",
@@ -468,9 +438,6 @@
   },
   "vaultItems": {
     "message": "Элементы сховішча"
-  },
-  "filter": {
-    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Перамясціць выбранае ў арганізацыю"
@@ -577,12 +544,6 @@
   },
   "deletedFolder": {
     "message": "Папка выдалена"
-  },
-  "editInfo": {
-    "message": "Edit info"
-  },
-  "access": {
-    "message": "Access"
   },
   "loggedOut": {
     "message": "Вы выйшлі"
@@ -741,9 +702,6 @@
   "noItemsInList": {
     "message": "У спісе адсутнічаюць элементы."
   },
-  "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
-  },
   "noCollectionsInList": {
     "message": "У спісе адсутнічаюць калекцыі."
   },
@@ -752,9 +710,6 @@
   },
   "noUsersInList": {
     "message": "У спісе адсутнічаюць карыстальнікі."
-  },
-  "noMembersInList": {
-    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "У спісе адсутнічаюць падзеі."
@@ -899,18 +854,6 @@
         "example": "150"
       }
     }
-  },
-  "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collection(s) will be permanently deleted.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
-  },
-  "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Выберыце папку ў якую вы хочаце перамясціць выбраныя элементы (колькасць: $COUNT$ шт.).",
@@ -1615,7 +1558,7 @@
   },
   "orgsReportsDesc": {
     "message": "Выявіце і выпраўце недахопы ў бяспецы ўліковых запісаў вашай арганізацыі, націснуўшы на справаздачы ніжэй.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Неабароненыя вэб-сайты"
@@ -1878,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Перайдзіце на прэміяльны тарыфны план усяго за $PRICE$/год або атрымайце прэміяльныя ўліковыя запісы для $FAMILYPLANUSERCOUNT$ карыстальнікаў і неабмежаванае сямейнае абагуленне з ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Тарыфны план Bitwarden Families."
   },
   "addons": {
     "message": "Дадаткі"
@@ -2429,15 +2356,6 @@
   "deleteGroupConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэту групу?"
   },
-  "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
-      }
-    }
-  },
   "removeUserConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэтага карыстальніка?"
   },
@@ -2455,9 +2373,6 @@
   },
   "externalIdDesc": {
     "message": "Знешні ідэнтыфікатар можа быць выкарыстаны ў якасці спасылкі для сувязі гэтага рэсурсу са знешняй сістэмай, такой як каталог карыстальніка."
-  },
-  "nestCollectionUnder": {
-    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Кантроль доступу"
@@ -2480,14 +2395,14 @@
   "editCollection": {
     "message": "Рэдагаваць калекцыю"
   },
-  "collectionInfo": {
-    "message": "Collection info"
-  },
   "deleteCollectionConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэту калекцыю?"
   },
-  "editMember": {
-    "message": "Edit member"
+  "editUser": {
+    "message": "Рэдагаваць карыстальніка"
+  },
+  "inviteUser": {
+    "message": "Запрасіць карыстальніка"
   },
   "inviteUserDesc": {
     "message": "Запрасіць новага карыстальніка ў вашу арганізацыю, увёўшы яго электронную пошту ўліковага запісу Bitwarden. Калі ён не мае ўліковага запісу, то ён атрымае запыт на яго стварэнне."
@@ -2753,9 +2668,6 @@
       }
     }
   },
-  "deletedCollections": {
-    "message": "Deleted collections"
-  },
   "deletedCollectionId": {
     "message": "Выдалена калекцыя $ID$.",
     "placeholders": {
@@ -2798,15 +2710,6 @@
       "id": {
         "content": "$1",
         "example": "Developers"
-      }
-    }
-  },
-  "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
       }
     }
   },
@@ -5539,15 +5442,6 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ полі(-ёў) вышэй патрабуе вашай увагі.",
     "placeholders": {
@@ -5580,45 +5474,6 @@
   },
   "notYou": {
     "message": "Не вы?"
-  },
-  "pickAnAvatarColor": {
-    "message": "Выберыце колер аватара"
-  },
-  "customizeAvatar": {
-    "message": "Дапасаваць аватар"
-  },
-  "avatarUpdated": {
-    "message": "Аватар абноўлены"
-  },
-  "brightBlue": {
-    "message": "Ярка-блакітны"
-  },
-  "green": {
-    "message": "Зялёны"
-  },
-  "orange": {
-    "message": "Аранжавы"
-  },
-  "lavender": {
-    "message": "Пурпурны"
-  },
-  "yellow": {
-    "message": "Жоўты"
-  },
-  "indigo": {
-    "message": "Індыга"
-  },
-  "teal": {
-    "message": "Сіне-зялёны"
-  },
-  "salmon": {
-    "message": "Ласосевы"
-  },
-  "pink": {
-    "message": "Ружовы"
-  },
-  "customColor": {
-    "message": "Карыстальніцкі колер"
   },
   "multiSelectPlaceholder": {
     "message": "- Увядзіце для фільтрацыі -"
@@ -5667,15 +5522,6 @@
   "deleteSecrets": {
     "message": "Выдаліць сакрэты"
   },
-  "secretProjectAssociationDescription": {
-    "message": "Выберыце праекты з якімі будзе звязаны сакрэт. Толькі карыстальнікі арганізацыі з доступам да гэтых праектаў змогуць бачыць сакрэт."
-  },
-  "typeOrSelectProjects": {
-    "message": "Увядзіце або выберыце праекты"
-  },
-  "typeOrSelectProject": {
-    "message": "Увядзіце або выберыце праект"
-  },
   "project": {
     "message": "Праект"
   },
@@ -5699,6 +5545,9 @@
   },
   "serviceAccounts": {
     "message": "Сэрвісныя ўліковыя запісы"
+  },
+  "new": {
+    "message": "Новы"
   },
   "secrets": {
     "message": "Сакрэты"
@@ -5910,44 +5759,8 @@
   "update": {
     "message": "Абнавіць"
   },
-  "plusNMore": {
-    "message": "+ $QUANTITY$ more",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "5"
-      }
-    }
-  },
-  "groupInfo": {
-    "message": "Group info"
-  },
-  "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
-  },
-  "editGroupCollectionsDesc": {
-    "message": "Grant access to collections by adding them to this group."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "selectCollections": {
-    "message": "Select collections"
-  },
   "role": {
     "message": "Роля"
-  },
-  "removeMember": {
-    "message": "Remove member"
-  },
-  "collection": {
-    "message": "Collection"
   },
   "canView": {
     "message": "Можа праглядаць"
@@ -5961,15 +5774,6 @@
   "canEditExceptPass": {
     "message": "Можа рэдагаваць (без пароляў)"
   },
-  "noCollectionsAdded": {
-    "message": "No collections added"
-  },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
-  "noGroupsAdded": {
-    "message": "No groups added"
-  },
   "group": {
     "message": "Група"
   },
@@ -5978,39 +5782,6 @@
   },
   "memberAccessAll": {
     "message": "Гэты ўдзельнік можа атрымліваць доступ і змяняць усе элементы."
-  },
-  "membersColumnHeader": {
-    "message": "Member/Group"
-  },
-  "groupAndMemberColumnHeader": {
-    "message": "Member"
-  },
-  "selectGroupsAndMembers": {
-    "message": "Select groups and members"
-  },
-  "selectGroups": {
-    "message": "Select groups"
-  },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
-  },
-  "noMembersOrGroupsAdded": {
-    "message": "No members or groups added"
-  },
-  "deleted": {
-    "message": "Deleted"
-  },
-  "memberStatusFilter": {
-    "message": "Member status filter"
-  },
-  "inviteMember": {
-    "message": "Invite member"
-  },
-  "needsConfirmation": {
-    "message": "Needs confirmation"
-  },
-  "memberRole": {
-    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "Больш ад Bitwarden"

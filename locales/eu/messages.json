@@ -277,33 +277,12 @@
   "searchFavorites": {
     "message": "Bilatu gogokoak"
   },
-  "searchLogin": {
-    "message": "Search logins",
-    "description": "Search Login type"
-  },
-  "searchCard": {
-    "message": "Search cards",
-    "description": "Search Card type"
-  },
-  "searchIdentity": {
-    "message": "Search identities",
-    "description": "Search Identity type"
-  },
-  "searchSecureNote": {
-    "message": "Search secure notes",
-    "description": "Search Secure Note type"
+  "searchType": {
+    "message": "Bilaketa mota",
+    "description": "Search item type"
   },
   "searchVault": {
     "message": "Kutxa Gotorrean bilatu"
-  },
-  "searchMyVault": {
-    "message": "Search my vault"
-  },
-  "searchOrganization": {
-    "message": "Search organization"
-  },
-  "searchMembers": {
-    "message": "Search members"
   },
   "allItems": {
     "message": "Elementu guztiak"
@@ -386,9 +365,6 @@
   "select": {
     "message": "Hautatu"
   },
-  "newItem": {
-    "message": "New item"
-  },
   "addItem": {
     "message": "Gehitu elementua"
   },
@@ -397,12 +373,6 @@
   },
   "viewItem": {
     "message": "Bistaratu elementua"
-  },
-  "new": {
-    "message": "New"
-  },
-  "item": {
-    "message": "Item"
   },
   "ex": {
     "message": "adb.",
@@ -468,9 +438,6 @@
   },
   "vaultItems": {
     "message": "Kuxa gotorreko elementuak"
-  },
-  "filter": {
-    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Mugitu hautatutako antolakundera"
@@ -577,12 +544,6 @@
   },
   "deletedFolder": {
     "message": "Karpeta ezabatuta"
-  },
-  "editInfo": {
-    "message": "Edit info"
-  },
-  "access": {
-    "message": "Access"
   },
   "loggedOut": {
     "message": "Saioa itxita"
@@ -741,9 +702,6 @@
   "noItemsInList": {
     "message": "Ez dago erakusteko elementurik."
   },
-  "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
-  },
   "noCollectionsInList": {
     "message": "Ez dago erakusteko bildumarik."
   },
@@ -752,9 +710,6 @@
   },
   "noUsersInList": {
     "message": "Ez dago erakusteko erabiltzailerik."
-  },
-  "noMembersInList": {
-    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Ez dago erakusteko gertakaririk."
@@ -899,18 +854,6 @@
         "example": "150"
       }
     }
-  },
-  "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collection(s) will be permanently deleted.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
-  },
-  "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Aukeratu $COUNT$ hautatutako artikulu mugitu nahi d(it)uzun karpeta.",
@@ -1615,7 +1558,7 @@
   },
   "orgsReportsDesc": {
     "message": "Identifikatu eta itxi erakundetako kontuetako segurtasun hutsuneak, ondorengo txostenetan klik eginez.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Webgune ez seguruak"
@@ -1878,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Gehigarriak"
@@ -2429,15 +2356,6 @@
   "deleteGroupConfirmation": {
     "message": "Ziur talde hau ezabatu nahi duzula?"
   },
-  "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
-      }
-    }
-  },
   "removeUserConfirmation": {
     "message": "Ziur zaude erabiltzaile hau ezabatu nahi duzula?"
   },
@@ -2455,9 +2373,6 @@
   },
   "externalIdDesc": {
     "message": "Kanpoko Id-a erreferentzia gisa erabil daiteke edo baliabide hori kanpoko sistema batekin lotzeko, erabiltzaileen direktorio gisa adibidez."
-  },
-  "nestCollectionUnder": {
-    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Sarbide kontrola"
@@ -2480,14 +2395,14 @@
   "editCollection": {
     "message": "Editatu bilduma"
   },
-  "collectionInfo": {
-    "message": "Collection info"
-  },
   "deleteCollectionConfirmation": {
     "message": "Ziur al zaude bilduma hau ezabatu nahi duzula?"
   },
-  "editMember": {
-    "message": "Edit member"
+  "editUser": {
+    "message": "Editatu erabiltzailea"
+  },
+  "inviteUser": {
+    "message": "Gonbidatu erabiltzailea"
   },
   "inviteUserDesc": {
     "message": "Gonbidatu erabiltzaile berri bat zure erakundera, jarraian bere Bitwarden kontuko emaila sartuz (Bitwarden konturik ez badu, kontu berri bat sortzeko eskatuko zaio)."
@@ -2753,9 +2668,6 @@
       }
     }
   },
-  "deletedCollections": {
-    "message": "Deleted collections"
-  },
   "deletedCollectionId": {
     "message": "$ID$ bilduma ezabatua.",
     "placeholders": {
@@ -2798,15 +2710,6 @@
       "id": {
         "content": "$1",
         "example": "Developers"
-      }
-    }
-  },
-  "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
       }
     }
   },
@@ -5450,7 +5353,7 @@
     "message": "Gailu egiaztapena eguneratua"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Are you sure you want to turn on device verification? The verification code emails will arrive at: $EMAIL$",
+    "message": "Ziur al zaude gailu egiaztapena gaitu nahi duzula? Egiaztatze-kodearen mezu elektronikoak $EMAILA$-era iritsiko dira",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5539,15 +5442,6 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ eremuk zure arreta behar dute.",
     "placeholders": {
@@ -5580,45 +5474,6 @@
   },
   "notYou": {
     "message": "Ez zara zu?"
-  },
-  "pickAnAvatarColor": {
-    "message": "Pick an avatar color"
-  },
-  "customizeAvatar": {
-    "message": "Customize avatar"
-  },
-  "avatarUpdated": {
-    "message": "Avatar updated"
-  },
-  "brightBlue": {
-    "message": "Bright Blue"
-  },
-  "green": {
-    "message": "Green"
-  },
-  "orange": {
-    "message": "Orange"
-  },
-  "lavender": {
-    "message": "Lavender"
-  },
-  "yellow": {
-    "message": "Yellow"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Teal"
-  },
-  "salmon": {
-    "message": "Salmon"
-  },
-  "pink": {
-    "message": "Pink"
-  },
-  "customColor": {
-    "message": "Custom Color"
   },
   "multiSelectPlaceholder": {
     "message": "-- Idatzi iragazteko --"
@@ -5667,15 +5522,6 @@
   "deleteSecrets": {
     "message": "Ezabatu sekretuak"
   },
-  "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
-  },
   "project": {
     "message": "Project"
   },
@@ -5699,6 +5545,9 @@
   },
   "serviceAccounts": {
     "message": "Service Accounts"
+  },
+  "new": {
+    "message": "New"
   },
   "secrets": {
     "message": "Sekretuak"
@@ -5910,44 +5759,8 @@
   "update": {
     "message": "Eguneratu"
   },
-  "plusNMore": {
-    "message": "+ $QUANTITY$ more",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "5"
-      }
-    }
-  },
-  "groupInfo": {
-    "message": "Group info"
-  },
-  "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
-  },
-  "editGroupCollectionsDesc": {
-    "message": "Grant access to collections by adding them to this group."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "selectCollections": {
-    "message": "Select collections"
-  },
   "role": {
     "message": "Rola"
-  },
-  "removeMember": {
-    "message": "Remove member"
-  },
-  "collection": {
-    "message": "Collection"
   },
   "canView": {
     "message": "Ikus dezake"
@@ -5961,15 +5774,6 @@
   "canEditExceptPass": {
     "message": "Editatu dezake, pasahitza izan ezik"
   },
-  "noCollectionsAdded": {
-    "message": "No collections added"
-  },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
-  "noGroupsAdded": {
-    "message": "No groups added"
-  },
   "group": {
     "message": "Taldea"
   },
@@ -5978,39 +5782,6 @@
   },
   "memberAccessAll": {
     "message": "Kide hau elementu guztietara sartu eta aldaketak egin ditzake."
-  },
-  "membersColumnHeader": {
-    "message": "Member/Group"
-  },
-  "groupAndMemberColumnHeader": {
-    "message": "Member"
-  },
-  "selectGroupsAndMembers": {
-    "message": "Select groups and members"
-  },
-  "selectGroups": {
-    "message": "Select groups"
-  },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
-  },
-  "noMembersOrGroupsAdded": {
-    "message": "No members or groups added"
-  },
-  "deleted": {
-    "message": "Deleted"
-  },
-  "memberStatusFilter": {
-    "message": "Member status filter"
-  },
-  "inviteMember": {
-    "message": "Invite member"
-  },
-  "needsConfirmation": {
-    "message": "Needs confirmation"
-  },
-  "memberRole": {
-    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "More from Bitwarden"

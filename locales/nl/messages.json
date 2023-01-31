@@ -277,33 +277,12 @@
   "searchFavorites": {
     "message": "Favorieten doorzoeken"
   },
-  "searchLogin": {
-    "message": "Search logins",
-    "description": "Search Login type"
-  },
-  "searchCard": {
-    "message": "Search cards",
-    "description": "Search Card type"
-  },
-  "searchIdentity": {
-    "message": "Search identities",
-    "description": "Search Identity type"
-  },
-  "searchSecureNote": {
-    "message": "Search secure notes",
-    "description": "Search Secure Note type"
+  "searchType": {
+    "message": "Categorie doorzoeken",
+    "description": "Search item type"
   },
   "searchVault": {
     "message": "Kluis doorzoeken"
-  },
-  "searchMyVault": {
-    "message": "Search my vault"
-  },
-  "searchOrganization": {
-    "message": "Search organization"
-  },
-  "searchMembers": {
-    "message": "Search members"
   },
   "allItems": {
     "message": "Alle Items"
@@ -386,9 +365,6 @@
   "select": {
     "message": "Selecteren"
   },
-  "newItem": {
-    "message": "New item"
-  },
   "addItem": {
     "message": "Item toevoegen"
   },
@@ -397,12 +373,6 @@
   },
   "viewItem": {
     "message": "Item weergeven"
-  },
-  "new": {
-    "message": "Nieuw"
-  },
-  "item": {
-    "message": "Item"
   },
   "ex": {
     "message": "bijv.",
@@ -468,9 +438,6 @@
   },
   "vaultItems": {
     "message": "Kluis-items"
-  },
-  "filter": {
-    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Selectie naar organisatie verplaatsen"
@@ -577,12 +544,6 @@
   },
   "deletedFolder": {
     "message": "Map is verwijderd"
-  },
-  "editInfo": {
-    "message": "Edit info"
-  },
-  "access": {
-    "message": "Access"
   },
   "loggedOut": {
     "message": "Uitgelogd"
@@ -741,9 +702,6 @@
   "noItemsInList": {
     "message": "Er zijn geen items om weer te geven."
   },
-  "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
-  },
   "noCollectionsInList": {
     "message": "Er zijn geen verzamelingen om weer te geven."
   },
@@ -752,9 +710,6 @@
   },
   "noUsersInList": {
     "message": "Er zijn geen gebruikers om weer te geven."
-  },
-  "noMembersInList": {
-    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Er zijn geen gebeurtenissen om weer te geven."
@@ -899,18 +854,6 @@
         "example": "150"
       }
     }
-  },
-  "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collection(s) will be permanently deleted.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
-  },
-  "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Kies een map waar je de $COUNT$ geselecteerde item(s) heen wilt verplaatsen.",
@@ -1615,7 +1558,7 @@
   },
   "orgsReportsDesc": {
     "message": "Identificeer en sluit beveiligingsgaten in je de accounts van je organisatie door op één van de onderstaande rapporten te klikken.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Niet-beveiligde websites"
@@ -1666,7 +1609,7 @@
     "message": "Gelekte wachtwoorden"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Wachtwoorden die zijn blootgesteld gedurende een datalek zijn gemakkelijke doelwitten voor aanvallers. Wijzig deze wachtwoorden om potentiële inbraken te voorkomen."
+    "message": "Gelekte wachtwoorden zijn wachtwoorden die zijn ontdekt in bekende datalekken die publiekelijk zijn vrijgegeven of door hackers op het dark web worden verkocht."
   },
   "exposedPasswordsFound": {
     "message": "Gelekte wachtwoorden gevonden"
@@ -1878,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Neem Premium voor maar $PRICE$ /jaar of krijg Premium-accounts voor $FAMILYPLANUSERCOUNT$ gebruikers en ongelimiteerd delen met de family met ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families."
   },
   "addons": {
     "message": "Add-ons"
@@ -2429,15 +2356,6 @@
   "deleteGroupConfirmation": {
     "message": "Weet je zeker dat je deze groep wilt verwijderen?"
   },
-  "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
-      }
-    }
-  },
   "removeUserConfirmation": {
     "message": "Weet je zeker dat je deze gebruiker wilt verwijderen?"
   },
@@ -2455,9 +2373,6 @@
   },
   "externalIdDesc": {
     "message": "Je kunt het externe ID gebruiken als referentie of om een koppeling te leggen tussen deze bron en een extern systeem zoals een directory met gebruikers."
-  },
-  "nestCollectionUnder": {
-    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Toegangsbeheer"
@@ -2480,14 +2395,14 @@
   "editCollection": {
     "message": "Verzameling bewerken"
   },
-  "collectionInfo": {
-    "message": "Collection info"
-  },
   "deleteCollectionConfirmation": {
     "message": "Weet je zeker dat je deze verzameling wilt verwijderen?"
   },
-  "editMember": {
-    "message": "Edit member"
+  "editUser": {
+    "message": "Gebruiker bewerken"
+  },
+  "inviteUser": {
+    "message": "Gebruiker uitnodigen"
   },
   "inviteUserDesc": {
     "message": "Nodig een nieuwe gebruiker uit voor je organisatie door het e-mailadres van hun Bitwarden-account hieronder in te vullen. Als ze nog geen Bitwarden-account hebben, kunnen ze een nieuw account aanmaken."
@@ -2753,9 +2668,6 @@
       }
     }
   },
-  "deletedCollections": {
-    "message": "Deleted collections"
-  },
   "deletedCollectionId": {
     "message": "Verzameling verwijderd $ID$.",
     "placeholders": {
@@ -2798,15 +2710,6 @@
       "id": {
         "content": "$1",
         "example": "Developers"
-      }
-    }
-  },
-  "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
       }
     }
   },
@@ -5539,15 +5442,6 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ veld(en) hierboven hebben je aandacht nodig.",
     "placeholders": {
@@ -5581,45 +5475,6 @@
   "notYou": {
     "message": "Ben jij dit niet?"
   },
-  "pickAnAvatarColor": {
-    "message": "Kies een kleur voor je avatar"
-  },
-  "customizeAvatar": {
-    "message": "Avatar aanpassen"
-  },
-  "avatarUpdated": {
-    "message": "Avatar bijgewerkt"
-  },
-  "brightBlue": {
-    "message": "Helderblauw"
-  },
-  "green": {
-    "message": "Groen"
-  },
-  "orange": {
-    "message": "Oranje"
-  },
-  "lavender": {
-    "message": "Lavendel"
-  },
-  "yellow": {
-    "message": "Geel"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Groenblauw"
-  },
-  "salmon": {
-    "message": "Zalm"
-  },
-  "pink": {
-    "message": "Roze"
-  },
-  "customColor": {
-    "message": "Aangepaste kleur"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type om te filteren --"
   },
@@ -5644,67 +5499,61 @@
     "message": "Verbergen"
   },
   "projects": {
-    "message": "Projecten"
+    "message": "Projects"
   },
   "lastEdited": {
-    "message": "Laatst bewerkt"
+    "message": "Last Edited"
   },
   "editSecret": {
-    "message": "Bewerk geheim"
+    "message": "Edit Secret"
   },
   "addSecret": {
-    "message": "Geheim toevoegen"
+    "message": "Add Secret"
   },
   "copySecretName": {
-    "message": "Kopieer geheime naam"
+    "message": "Copy Secret Name"
   },
   "copySecretValue": {
-    "message": "Geheime waarde kopiëren"
+    "message": "Copy Secret Value"
   },
   "deleteSecret": {
-    "message": "Geheim verwijderen"
+    "message": "Delete Secret"
   },
   "deleteSecrets": {
-    "message": "Geheimen verwijderen"
-  },
-  "secretProjectAssociationDescription": {
-    "message": "Kies projecten om het geheim aan te koppelen. Alleen gebruikers uit de organisatie met toegang tot deze projecten kunnen het geheim zien."
-  },
-  "typeOrSelectProjects": {
-    "message": "Typ of kies projecten"
-  },
-  "typeOrSelectProject": {
-    "message": "Typ of kies een project"
+    "message": "Delete Secrets"
   },
   "project": {
     "message": "Project"
   },
   "editProject": {
-    "message": "Bewerk project"
+    "message": "Edit Project"
   },
   "viewProject": {
-    "message": "Bekijk project"
+    "message": "View Project"
   },
   "deleteProject": {
-    "message": "Verwijder project"
+    "message": "Delete Project"
   },
   "deleteProjects": {
-    "message": "Verwijder projecten"
+    "message": "Delete Projects"
   },
   "secret": {
-    "message": "Geheim"
+    "message": "Secret"
   },
   "serviceAccount": {
-    "message": "Service-account"
+    "message": "Service Account"
   },
   "serviceAccounts": {
-    "message": "Service-accounts"
+    "message": "Service Accounts"
+  },
+  "new": {
+    "message": "New"
   },
   "secrets": {
     "message": "Secrets"
   },
   "nameValuePair": {
-    "message": "Naam/waarde paar"
+    "message": "Name/Value Pair"
   },
   "secretEdited": {
     "message": "Secret edited"
@@ -5725,7 +5574,7 @@
     "message": "To get started, add a new secret or import secrets."
   },
   "serviceAccountsNoItemsTitle": {
-    "message": "Geen inhoud beschikbaar"
+    "message": "Nothing to show yet"
   },
   "serviceAccountsNoItemsMessage": {
     "message": "Create a new Service Account to get started automating secret access."
@@ -5746,22 +5595,22 @@
     "message": "Search Service Accounts"
   },
   "addProject": {
-    "message": "Project toevoegen"
+    "message": "Add Project"
   },
   "projectEdited": {
-    "message": "Project bewerkt"
+    "message": "Project edited"
   },
   "projectSaved": {
-    "message": "Project opgeslagen"
+    "message": "Project saved"
   },
   "projectCreated": {
-    "message": "Project aangemaakt"
+    "message": "Project created"
   },
   "projectName": {
-    "message": "Projectnaam"
+    "message": "Project Name"
   },
   "newProject": {
-    "message": "Nieuw Project"
+    "message": "New Project"
   },
   "softDeleteSecretWarning": {
     "message": "Deleting secrets can affect existing integrations."
@@ -5773,13 +5622,13 @@
     "message": "Service Account Created"
   },
   "smAccess": {
-    "message": "Toegang"
+    "message": "Access"
   },
   "projectCommaSecret": {
     "message": "Project, Secret"
   },
   "serviceAccountName": {
-    "message": "Service account naam"
+    "message": "Service account name"
   },
   "newSaSelectAccess": {
     "message": "Type or Select Projects or Secrets"
@@ -5788,13 +5637,13 @@
     "message": "Type to Filter"
   },
   "deleteProjectsToast": {
-    "message": "Projecten verwijderd"
+    "message": "Projects deleted"
   },
   "deleteProjectToast": {
     "message": "The project and all associated secrets have been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "Het verwijderen van project $PROJECT$ is permanent en onomkeerbaar.",
+    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5803,7 +5652,7 @@
     }
   },
   "deleteProjectInputLabel": {
-    "message": "Typ \"$CONFIRM$\" om door te gaan",
+    "message": "Type \"$CONFIRM$\" to continue",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5812,7 +5661,7 @@
     }
   },
   "deleteProjectConfirmMessage": {
-    "message": "$PROJECT$ verwijderen",
+    "message": "Delete $PROJECT$",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5821,7 +5670,7 @@
     }
   },
   "deleteProjectsConfirmMessage": {
-    "message": "$COUNT$ projecten verwijderen",
+    "message": "Delete $COUNT$ Projects",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5830,25 +5679,25 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Het verwijderen van projecten is permanent en onomkeerbaar."
+    "message": "Deleting projects is permanent and irreversible."
   },
   "projectsNoItemsTitle": {
-    "message": "Geen projecten om weer te geven"
+    "message": "No projects to display"
   },
   "projectsNoItemsMessage": {
     "message": "Add a new project to get started organizing secrets."
   },
   "smConfirmationRequired": {
-    "message": "Bevestiging vereist"
+    "message": "Confirmation required"
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "De volgende projecten konden niet worden verwijderd:"
+    "message": "The following projects could not be deleted:"
   },
   "softDeleteSuccessToast": {
     "message": "Secret sent to trash"
   },
   "searchProjects": {
-    "message": "Zoek projecten"
+    "message": "Search Projects"
   },
   "accessTokens": {
     "message": "Access tokens"
@@ -5857,10 +5706,10 @@
     "message": "Create access token"
   },
   "expires": {
-    "message": "Verloopt"
+    "message": "Expires"
   },
   "canRead": {
-    "message": "Kan lezen"
+    "message": "Can Read"
   },
   "accessTokensNoItemsTitle": {
     "message": "No access tokens to show"
@@ -5869,31 +5718,31 @@
     "message": "To get started, create an access token"
   },
   "downloadAccessToken": {
-    "message": "Download of kopieer voordat u afsluit."
+    "message": "Download or copy before closing."
   },
   "expiresOnAccessToken": {
-    "message": "Verloopt op:"
+    "message": "Expires on:"
   },
   "accessTokenCallOutTitle": {
     "message": "Access tokens are not stored and cannot be retrieved"
   },
   "copyToken": {
-    "message": "Kopieer token"
+    "message": "Copy token"
   },
   "accessToken": {
-    "message": "Toegangstoken"
+    "message": "Access token"
   },
   "accessTokenExpirationRequired": {
-    "message": "Vervaldatum vereist"
+    "message": "Expiration date required"
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Toegangstoken aangemaakt en gekopieerd naar klembord"
+    "message": "Access token created and copied to clipboard"
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "Beheer van machtigingen is niet beschikbaar in deze beta."
+    "message": "Permissions management is unavailable for beta."
   },
   "revokeAccessToken": {
-    "message": "Toegangstoken intrekken"
+    "message": "Revoke Access Token"
   },
   "submenu": {
     "message": "Submenu"
@@ -5910,44 +5759,8 @@
   "update": {
     "message": "Bijwerken"
   },
-  "plusNMore": {
-    "message": "+ $QUANTITY$ more",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "5"
-      }
-    }
-  },
-  "groupInfo": {
-    "message": "Group info"
-  },
-  "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
-  },
-  "editGroupCollectionsDesc": {
-    "message": "Grant access to collections by adding them to this group."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "selectCollections": {
-    "message": "Select collections"
-  },
   "role": {
     "message": "Rol"
-  },
-  "removeMember": {
-    "message": "Remove member"
-  },
-  "collection": {
-    "message": "Collection"
   },
   "canView": {
     "message": "Kan bekijken"
@@ -5961,15 +5774,6 @@
   "canEditExceptPass": {
     "message": "Kan bekijken, behalve wachtwoorden"
   },
-  "noCollectionsAdded": {
-    "message": "No collections added"
-  },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
-  "noGroupsAdded": {
-    "message": "No groups added"
-  },
   "group": {
     "message": "Groep"
   },
@@ -5978,39 +5782,6 @@
   },
   "memberAccessAll": {
     "message": "Deze gebruiker kan alle items inzien en bewerken."
-  },
-  "membersColumnHeader": {
-    "message": "Member/Group"
-  },
-  "groupAndMemberColumnHeader": {
-    "message": "Member"
-  },
-  "selectGroupsAndMembers": {
-    "message": "Select groups and members"
-  },
-  "selectGroups": {
-    "message": "Select groups"
-  },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
-  },
-  "noMembersOrGroupsAdded": {
-    "message": "No members or groups added"
-  },
-  "deleted": {
-    "message": "Deleted"
-  },
-  "memberStatusFilter": {
-    "message": "Member status filter"
-  },
-  "inviteMember": {
-    "message": "Invite member"
-  },
-  "needsConfirmation": {
-    "message": "Needs confirmation"
-  },
-  "memberRole": {
-    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "Meer van Bitwarden"

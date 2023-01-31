@@ -277,33 +277,12 @@
   "searchFavorites": {
     "message": "പ്രിയങ്കരങ്ങൾ തിരയുക"
   },
-  "searchLogin": {
-    "message": "Search logins",
-    "description": "Search Login type"
-  },
-  "searchCard": {
-    "message": "Search cards",
-    "description": "Search Card type"
-  },
-  "searchIdentity": {
-    "message": "Search identities",
-    "description": "Search Identity type"
-  },
-  "searchSecureNote": {
-    "message": "Search secure notes",
-    "description": "Search Secure Note type"
+  "searchType": {
+    "message": "തരം തിരയുക",
+    "description": "Search item type"
   },
   "searchVault": {
     "message": "വാൾട് തിരയുക"
-  },
-  "searchMyVault": {
-    "message": "Search my vault"
-  },
-  "searchOrganization": {
-    "message": "Search organization"
-  },
-  "searchMembers": {
-    "message": "Search members"
   },
   "allItems": {
     "message": "എല്ലാ ഇനങ്ങൾ"
@@ -386,9 +365,6 @@
   "select": {
     "message": "തിരഞ്ഞെടുക്കുക"
   },
-  "newItem": {
-    "message": "New item"
-  },
   "addItem": {
     "message": "ഇനം ചേർക്കുക"
   },
@@ -397,12 +373,6 @@
   },
   "viewItem": {
     "message": "ഇനം കാണുക"
-  },
-  "new": {
-    "message": "New"
-  },
-  "item": {
-    "message": "Item"
   },
   "ex": {
     "message": "ഉദാഹരണം.",
@@ -468,9 +438,6 @@
   },
   "vaultItems": {
     "message": "Vault items"
-  },
-  "filter": {
-    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Move selected to organization"
@@ -577,12 +544,6 @@
   },
   "deletedFolder": {
     "message": "ഇല്ലാതാക്കിയ ഫോൾഡർ"
-  },
-  "editInfo": {
-    "message": "Edit info"
-  },
-  "access": {
-    "message": "Access"
   },
   "loggedOut": {
     "message": "ലോഗ് ഔട്ട് ചെയ്തിരിക്കുന്നു"
@@ -741,9 +702,6 @@
   "noItemsInList": {
     "message": "പ്രദർശിപ്പിക്കാൻ ഇനങ്ങളൊന്നുമില്ല."
   },
-  "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
-  },
   "noCollectionsInList": {
     "message": "പ്രദർശിപ്പിക്കാൻ കളക്ഷൻസ് ഒന്നും ഇല്ല."
   },
@@ -752,9 +710,6 @@
   },
   "noUsersInList": {
     "message": "പ്രദർശിപ്പിക്കാൻ  ഉപയോക്താക്കളൊന്നുമില്ല."
-  },
-  "noMembersInList": {
-    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "പ്രദർശിപ്പിക്കാൻ  ഇവന്റുകളൊന്നുമില്ല."
@@ -899,18 +854,6 @@
         "example": "150"
       }
     }
-  },
-  "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collection(s) will be permanently deleted.",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
-  },
-  "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "$COUNT$ തിരഞ്ഞെടുത്ത ഇനങ്ങൾ നീക്കാൻ ആഗ്രഹിക്കുന്ന ഒരു ഫോൾഡർ തിരഞ്ഞെടുക്കുക).",
@@ -1615,7 +1558,7 @@
   },
   "orgsReportsDesc": {
     "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Unsecured Websites Report"
@@ -1666,7 +1609,7 @@
     "message": "Exposed Passwords Report"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Passwords exposed in a data breach are easy targets for attackers. Change these passwords to prevent potential break-ins."
+    "message": "Exposed passwords are passwords that have been uncovered in known data breaches that were released publicly or sold on the dark web by hackers."
   },
   "exposedPasswordsFound": {
     "message": "Exposed Passwords Found"
@@ -1878,22 +1821,6 @@
         "example": "$10"
       }
     }
-  },
-  "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
-    "placeholders": {
-      "price": {
-        "content": "$1",
-        "example": "$10"
-      },
-      "familyplanusercount": {
-        "content": "$2",
-        "example": "6"
-      }
-    }
-  },
-  "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Addons"
@@ -2429,15 +2356,6 @@
   "deleteGroupConfirmation": {
     "message": "ഈ ഗ്രൂപ്പ് ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?"
   },
-  "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
-      }
-    }
-  },
   "removeUserConfirmation": {
     "message": "ഈ ഉപയോക്താവിനെ നീക്കംചെയ്യണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?"
   },
@@ -2455,9 +2373,6 @@
   },
   "externalIdDesc": {
     "message": "ബാഹ്യ ഐഡി ഒരു റഫറൻസായി ഉപയോഗിക്കാം അല്ലെങ്കിൽ ഈ ഉറവിടം ഒരു ഉപയോക്തൃ ഡയറക്ടറി പോലുള്ള ഒരു ബാഹ്യ സിസ്റ്റത്തിലേക്ക് ലിങ്കുചെയ്യാൻ കഴിയും."
-  },
-  "nestCollectionUnder": {
-    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "പ്രവേശന നിയന്ത്രണം"
@@ -2480,14 +2395,14 @@
   "editCollection": {
     "message": "കളക്ഷൻ എഡിറ്റുചെയ്യുക"
   },
-  "collectionInfo": {
-    "message": "Collection info"
-  },
   "deleteCollectionConfirmation": {
     "message": "ഈ കളക്ഷൻ  ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?"
   },
-  "editMember": {
-    "message": "Edit member"
+  "editUser": {
+    "message": "ഉപയോക്താവിനെ എഡിറ്റുചെയ്യുക"
+  },
+  "inviteUser": {
+    "message": "ഉപയോക്താവിനെ ക്ഷണിക്കുക"
   },
   "inviteUserDesc": {
     "message": "നിങ്ങളുടെ ഓർ‌ഗനൈസേഷനിലേക്ക് ഒരു പുതിയ ഉപയോക്താവിനെ അവരുടെ ബിറ്റ്‌വർ‌ഡൻ‌ അക്ക email ണ്ട് ഇമെയിൽ‌ വിലാസം നൽ‌കിക്കൊണ്ട് ക്ഷണിക്കുക. അവർക്ക് ഇതിനകം ഒരു ബിറ്റ്വാർഡൻ അക്ക have ണ്ട് ഇല്ലെങ്കിൽ, ഒരു പുതിയ അക്ക create ണ്ട് സൃഷ്ടിക്കാൻ അവരോട് ആവശ്യപ്പെടും."
@@ -2753,9 +2668,6 @@
       }
     }
   },
-  "deletedCollections": {
-    "message": "Deleted collections"
-  },
   "deletedCollectionId": {
     "message": "Deleted collection $ID$.",
     "placeholders": {
@@ -2798,15 +2710,6 @@
       "id": {
         "content": "$1",
         "example": "Developers"
-      }
-    }
-  },
-  "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "3"
       }
     }
   },
@@ -5539,15 +5442,6 @@
       }
     }
   },
-  "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
-    "placeholders": {
-      "characters": {
-        "content": "$1",
-        "example": "@, #, $, %"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
@@ -5581,47 +5475,8 @@
   "notYou": {
     "message": "Not you?"
   },
-  "pickAnAvatarColor": {
-    "message": "Pick an avatar color"
-  },
-  "customizeAvatar": {
-    "message": "Customize avatar"
-  },
-  "avatarUpdated": {
-    "message": "Avatar updated"
-  },
-  "brightBlue": {
-    "message": "Bright Blue"
-  },
-  "green": {
-    "message": "Green"
-  },
-  "orange": {
-    "message": "Orange"
-  },
-  "lavender": {
-    "message": "Lavender"
-  },
-  "yellow": {
-    "message": "Yellow"
-  },
-  "indigo": {
-    "message": "Indigo"
-  },
-  "teal": {
-    "message": "Teal"
-  },
-  "salmon": {
-    "message": "Salmon"
-  },
-  "pink": {
-    "message": "Pink"
-  },
-  "customColor": {
-    "message": "Custom Color"
-  },
   "multiSelectPlaceholder": {
-    "message": "-- Type to filter --"
+    "message": "-- Type to Filter --"
   },
   "multiSelectLoading": {
     "message": "Retrieving options..."
@@ -5667,15 +5522,6 @@
   "deleteSecrets": {
     "message": "Delete Secrets"
   },
-  "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
-  },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
-  },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
-  },
   "project": {
     "message": "Project"
   },
@@ -5699,6 +5545,9 @@
   },
   "serviceAccounts": {
     "message": "Service Accounts"
+  },
+  "new": {
+    "message": "New"
   },
   "secrets": {
     "message": "Secrets"
@@ -5910,44 +5759,8 @@
   "update": {
     "message": "Update"
   },
-  "plusNMore": {
-    "message": "+ $QUANTITY$ more",
-    "placeholders": {
-      "quantity": {
-        "content": "$1",
-        "example": "5"
-      }
-    }
-  },
-  "groupInfo": {
-    "message": "Group info"
-  },
-  "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
-  },
-  "editGroupCollectionsDesc": {
-    "message": "Grant access to collections by adding them to this group."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
-  "selectMembers": {
-    "message": "Select members"
-  },
-  "selectCollections": {
-    "message": "Select collections"
-  },
   "role": {
     "message": "Role"
-  },
-  "removeMember": {
-    "message": "Remove member"
-  },
-  "collection": {
-    "message": "Collection"
   },
   "canView": {
     "message": "Can view"
@@ -5961,15 +5774,6 @@
   "canEditExceptPass": {
     "message": "Can edit, except passwords"
   },
-  "noCollectionsAdded": {
-    "message": "No collections added"
-  },
-  "noMembersAdded": {
-    "message": "No members added"
-  },
-  "noGroupsAdded": {
-    "message": "No groups added"
-  },
   "group": {
     "message": "Group"
   },
@@ -5978,39 +5782,6 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
-  },
-  "membersColumnHeader": {
-    "message": "Member/Group"
-  },
-  "groupAndMemberColumnHeader": {
-    "message": "Member"
-  },
-  "selectGroupsAndMembers": {
-    "message": "Select groups and members"
-  },
-  "selectGroups": {
-    "message": "Select groups"
-  },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
-  },
-  "noMembersOrGroupsAdded": {
-    "message": "No members or groups added"
-  },
-  "deleted": {
-    "message": "Deleted"
-  },
-  "memberStatusFilter": {
-    "message": "Member status filter"
-  },
-  "inviteMember": {
-    "message": "Invite member"
-  },
-  "needsConfirmation": {
-    "message": "Needs confirmation"
-  },
-  "memberRole": {
-    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "More from Bitwarden"
