@@ -4,7 +4,6 @@ import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/models/domain/storage-options";
 import { StateService as BaseStateService } from "@bitwarden/common/services/state.service";
 
-import { browserSession, sessionSync } from "../decorators/session-sync-observable";
 import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../models/browserGroupingsComponentState";
@@ -12,24 +11,24 @@ import { BrowserSendComponentState } from "../models/browserSendComponentState";
 
 import { BrowserStateService as StateServiceAbstraction } from "./abstractions/browser-state.service";
 
-@browserSession
+// @browserSession
 export class BrowserStateService
   extends BaseStateService<GlobalState, Account>
   implements StateServiceAbstraction
 {
-  @sessionSync({
-    initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
-    initializeAs: "record",
-  })
+  // @sessionSync({
+  //   initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
+  //   initializeAs: "record",
+  // })
   protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
-  @sessionSync({ ctor: String })
+  // @sessionSync({ ctor: String })
   protected activeAccountSubject: BehaviorSubject<string>;
-  @sessionSync({ initializer: (value) => !!value })
+  // @sessionSync({ initializer: (value) => !!value })
   protected activeAccountUnlockedSubject: BehaviorSubject<boolean>;
-  @sessionSync({
-    initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
-    initializeAs: "record",
-  })
+  // @sessionSync({
+  //   initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
+  //   initializeAs: "record",
+  // })
   protected accountDiskCache: BehaviorSubject<Record<string, Account>>;
 
   protected accountDeserializer = Account.fromJSON;

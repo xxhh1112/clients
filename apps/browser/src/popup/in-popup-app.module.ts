@@ -2,10 +2,10 @@ import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 import { AppModule } from "./app.module";
-import { Mv3ServicesModule } from "./services/mv3-services.module";
+import { InPopupServices } from "./services/in-popup-services.module";
 
 @NgModule({
-  imports: [AppModule, Mv3ServicesModule],
+  imports: [AppModule, InPopupServices],
   bootstrap: [AppComponent],
 })
-export class Mv3AppModule {}
+export class InPopupAppModule {}

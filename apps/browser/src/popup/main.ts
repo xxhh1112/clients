@@ -3,14 +3,14 @@ import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
 require("./scss/popup.scss");
 
-import { BackgroundAppModule } from "./background-app.module";
+import { InPopupAppModule } from "./in-popup-app.module";
 
 if (process.env.ENV === "production") {
   enableProdMode();
 }
 
 function init() {
-  platformBrowserDynamic().bootstrapModule(BackgroundAppModule, { preserveWhitespaces: true });
+  platformBrowserDynamic().bootstrapModule(InPopupAppModule, { preserveWhitespaces: true });
 }
 
 init();

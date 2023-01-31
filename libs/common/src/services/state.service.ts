@@ -133,21 +133,19 @@ export class StateService<
   }
 
   async initAccountState() {
-    if (this.isRecoveredSession) {
-      return;
-    }
-
     await this.updateState(async (state) => {
-      state.authenticatedAccounts =
-        (await this.storageService.get<string[]>(keys.authenticatedAccounts)) ?? [];
-      for (const i in state.authenticatedAccounts) {
-        if (i != null) {
-          await this.syncAccountFromDisk(state.authenticatedAccounts[i]);
+      if (!this.isRecoveredSession) {
+        state.authenticatedAccounts =
+          (await this.storageService.get<string[]>(keys.authenticatedAccounts)) ?? [];
+        for (const i in state.authenticatedAccounts) {
+          if (i != null) {
+            await this.syncAccountFromDisk(state.authenticatedAccounts[i]);
+          }
         }
-      }
-      const storedActiveUser = await this.storageService.get<string>(keys.activeUserId);
-      if (storedActiveUser != null) {
-        state.activeUserId = storedActiveUser;
+        const storedActiveUser = await this.storageService.get<string>(keys.activeUserId);
+        if (storedActiveUser != null) {
+          state.activeUserId = storedActiveUser;
+        }
       }
       await this.pushAccounts();
       this.activeAccountSubject.next(state.activeUserId);

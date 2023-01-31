@@ -2,9 +2,11 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
 import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/guards/unauth.guard";
-import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/injection-tokens";
-import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
-import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import {
+  MEMORY_STORAGE,
+  SECURE_STORAGE,
+  WINDOW,
+} from "@bitwarden/angular/services/injection-tokens";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -12,6 +14,7 @@ import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunc
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
@@ -28,10 +31,14 @@ import {
 } from "@bitwarden/common/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
+import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
 
 import { NativeMessagingBackground } from "../../background/nativeMessaging.background";
@@ -45,15 +52,18 @@ import { BrowserStateService } from "../../services/browser-state.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
 import BrowserLocalStorageService from "../../services/browserLocalStorage.service";
 import BrowserMessagingService from "../../services/browserMessaging.service";
-import BrowserPlatformUtilsService from "../../services/browserPlatformUtils.service";
+import BrowserMessagingPrivateModeBackgroundService from "../../services/browserMessagingPrivateModeBackground.service";
 import I18nService from "../../services/i18n.service";
+import { ManifestVersion, MANIFEST_VERSION } from "../../services/injection-tokens";
 import { KeyGenerationService } from "../../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../../services/localBackedSessionStorage.service";
 import { VaultFilterService } from "../../services/vaultFilter.service";
+import VaultTimeoutService from "../../services/vaultTimeout/vaultTimeout.service";
 import { AppComponent } from "../app.component";
 
 import { InitService } from "./init.service";
 import { LockGuardService } from "./lock-guard.service";
+import { PopupBrowserPlatformUtilsService } from "./popup-browser-platform-utils.service";
 import { PopupUtilsService } from "./popup-utils.service";
 import { UnauthGuardService } from "./unauth-guard.service";
 
@@ -67,22 +77,50 @@ import { UnauthGuardService } from "./unauth-guard.service";
     {
       provide: APP_INITIALIZER,
       useFactory: (
-        initService: InitService,
         cryptoService: CryptoService,
         encryptService: EncryptService,
-        i18nService: I18nServiceAbstraction
+        initService: InitService,
+        vaultTimeoutService: VaultTimeoutServiceAbstraction,
+        i18nService: I18nServiceAbstraction,
+        eventUploadService: EventUploadServiceAbstraction,
+        twoFactorService: TwoFactorService,
+        window: Window
       ) => {
         // TODO: This could be refactored
+        // This emulates main.background.ts bootstrap()
         return async () => {
-          await initService.init()();
-          // TODO: DONT
-          await (i18nService as any).init();
           const container = new ContainerService(cryptoService, encryptService);
-          container.attachToGlobal(self);
+          container.attachToGlobal(window);
+
+          // This already does stateservice.init()
+          await initService.init()();
+          // All these casts are not ideal
+          // TODO: Since this isn't async this feels like it should be in the constructor?
+          (vaultTimeoutService as VaultTimeoutService).init(true);
+          await (i18nService as I18nService).init();
+          // Also feels like ctor work
+          (eventUploadService as EventUploadService).init(true);
+          // Same
+          twoFactorService.init();
+
+          // TODO: Notifications service?
         };
       },
-      deps: [InitService, CryptoService, EncryptService, I18nServiceAbstraction],
+      deps: [
+        CryptoService,
+        EncryptService,
+        InitService,
+        VaultTimeoutServiceAbstraction,
+        I18nServiceAbstraction,
+        EventUploadServiceAbstraction,
+        TwoFactorService,
+        WINDOW,
+      ],
       multi: true,
+    },
+    {
+      provide: MANIFEST_VERSION,
+      useFactory: () => BrowserApi.manifestVersion,
     },
     { provide: BaseLockGuardService, useClass: LockGuardService },
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
@@ -91,7 +129,17 @@ import { UnauthGuardService } from "./unauth-guard.service";
       provide: MessagingService,
       // TODO: This totally gets rid of in process messaging towards what was a fake in process background service
       // this will probably need a replacement
-      useClass: BrowserMessagingService,
+      useFactory: () => {
+        return new (class extends MessagingService {
+          backgroundMessaging = new BrowserMessagingService();
+          inProcessMessaging = new BrowserMessagingPrivateModeBackgroundService();
+
+          send = (subscriber: string, arg: any = {}) => {
+            this.backgroundMessaging.send(subscriber, arg);
+            this.inProcessMessaging.send(subscriber, arg);
+          };
+        })();
+      },
     },
     {
       provide: I18nServiceAbstraction,
@@ -100,11 +148,13 @@ import { UnauthGuardService } from "./unauth-guard.service";
     {
       provide: PlatformUtilsService,
       useFactory: (
+        i18nService: I18nServiceAbstraction,
         messagingService: MessagingService,
         nativeMessagingBackground: NativeMessagingBackground,
         systemService: SystemServiceAbstraction
       ) => {
-        return new BrowserPlatformUtilsService(
+        return new PopupBrowserPlatformUtilsService(
+          i18nService,
           messagingService,
           (clipboardValue, clearMs) => {
             if (systemService != null) {
@@ -127,7 +177,12 @@ import { UnauthGuardService } from "./unauth-guard.service";
           window
         );
       },
-      deps: [MessagingService, NativeMessagingBackground, SystemServiceAbstraction],
+      deps: [
+        I18nServiceAbstraction,
+        MessagingService,
+        NativeMessagingBackground,
+        SystemServiceAbstraction,
+      ],
     },
     {
       provide: NativeMessagingBackground,
@@ -170,15 +225,20 @@ import { UnauthGuardService } from "./unauth-guard.service";
     {
       provide: MEMORY_STORAGE,
       useFactory: (
+        manifestVersion: ManifestVersion,
         cryptoFunctionService: CryptoFunctionService,
         logService: LogServiceAbstraction
       ) => {
-        return new LocalBackedSessionStorageService(
-          new EncryptServiceImplementation(cryptoFunctionService, logService, false),
-          new KeyGenerationService(cryptoFunctionService)
-        );
+        if (manifestVersion === 2) {
+          return new MemoryStorageService();
+        } else {
+          return new LocalBackedSessionStorageService(
+            new EncryptServiceImplementation(cryptoFunctionService, logService, false),
+            new KeyGenerationService(cryptoFunctionService)
+          );
+        }
       },
-      deps: [CryptoFunctionService, LogServiceAbstraction],
+      deps: [MANIFEST_VERSION, CryptoFunctionService, LogServiceAbstraction],
     },
     {
       provide: StateServiceAbstraction,
@@ -212,42 +272,17 @@ import { UnauthGuardService } from "./unauth-guard.service";
       deps: [],
     },
     {
-      provide: AbstractThemingService,
-      useFactory: (stateService: StateServiceAbstraction) => {
-        return new ThemingService(stateService, window, document);
-      },
-      deps: [StateServiceAbstraction],
-    },
-    {
       provide: BrowserEnvironmentService,
       useExisting: EnvironmentService,
     },
     {
       provide: EnvironmentService,
-      useFactory: (stateService: StateServiceAbstraction, logService: LogServiceAbstraction) => {
-        return new BrowserEnvironmentService(stateService, logService);
-      },
+      useClass: BrowserEnvironmentService,
       deps: [StateServiceAbstraction, LogServiceAbstraction],
     },
     {
       provide: VaultFilterService,
-      useFactory: (
-        stateService: StateServiceAbstraction,
-        organizationService: OrganizationService,
-        folderService: FolderService,
-        cipherService: CipherService,
-        collectionService: CollectionService,
-        policyService: PolicyService
-      ) => {
-        return new VaultFilterService(
-          stateService,
-          organizationService,
-          folderService,
-          cipherService,
-          collectionService,
-          policyService
-        );
-      },
+      useClass: VaultFilterService,
       deps: [
         StateServiceAbstraction,
         OrganizationService,
@@ -259,21 +294,14 @@ import { UnauthGuardService } from "./unauth-guard.service";
     },
     {
       provide: AutofillServiceAbstraction,
-      useFactory: (
-        cipherService: CipherService,
-        stateService: StateServiceAbstraction,
-        totpService: TotpService,
-        eventCollectionService: EventCollectionService,
-        logService: LogServiceAbstraction
-      ) => {
-        return new AutofillService(
-          cipherService,
-          stateService,
-          totpService,
-          eventCollectionService,
-          logService
-        );
-      },
+      useClass: AutofillService,
+      deps: [
+        CipherService,
+        StateServiceAbstraction,
+        TotpService,
+        EventCollectionService,
+        LogServiceAbstraction,
+      ],
     },
     {
       provide: FileDownloadService,
@@ -282,4 +310,4 @@ import { UnauthGuardService } from "./unauth-guard.service";
   ],
   bootstrap: [AppComponent],
 })
-export class Mv3ServicesModule {}
+export class InPopupServices {}
