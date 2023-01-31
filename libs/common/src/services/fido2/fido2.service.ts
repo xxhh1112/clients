@@ -48,10 +48,13 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     params: CredentialRegistrationParams,
     abortController?: AbortController
   ): Promise<CredentialRegistrationResult> {
-    const presence = await this.fido2UserInterfaceService.confirmNewCredential({
-      credentialName: params.rp.name,
-      userName: params.user.displayName,
-    });
+    const presence = await this.fido2UserInterfaceService.confirmNewCredential(
+      {
+        credentialName: params.rp.name,
+        userName: params.user.displayName,
+      },
+      abortController
+    );
 
     const attestationFormat = STANDARD_ATTESTATION_FORMAT;
     const encoder = new TextEncoder();
@@ -122,7 +125,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     };
   }
 
-  async assertCredential(params: CredentialAssertParams): Promise<CredentialAssertResult> {
+  async assertCredential(
+    params: CredentialAssertParams,
+    abortController?: AbortController
+  ): Promise<CredentialAssertResult> {
     let credential: BitCredential | undefined;
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
@@ -138,7 +144,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       //   throw new OriginMismatchError();
       // }
 
-      await this.fido2UserInterfaceService.confirmCredential(credential.credentialId.encoded);
+      await this.fido2UserInterfaceService.confirmCredential(
+        credential.credentialId.encoded,
+        abortController
+      );
     } else {
       // We're looking for a resident key
       const credentials = await this.getCredentialsByRp(params.rpId);
@@ -148,7 +157,8 @@ export class Fido2Service implements Fido2ServiceAbstraction {
       }
 
       const pickedId = await this.fido2UserInterfaceService.pickCredential(
-        credentials.map((c) => c.credentialId.encoded)
+        credentials.map((c) => c.credentialId.encoded),
+        abortController
       );
       credential = credentials.find((c) => c.credentialId.encoded === pickedId);
     }
@@ -184,7 +194,10 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     };
   }
 
-  private async getCredential(allowedCredentialIds: string[]): Promise<BitCredential | undefined> {
+  private async getCredential(
+    allowedCredentialIds: string[],
+    abortController?: AbortController
+  ): Promise<BitCredential | undefined> {
     let cipher: Cipher | undefined;
     for (const allowedCredential of allowedCredentialIds) {
       cipher = await this.cipherService.get(allowedCredential);

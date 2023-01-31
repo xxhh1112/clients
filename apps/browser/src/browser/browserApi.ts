@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { TabMessage } from "../types/tab-messages";
 
@@ -144,6 +146,14 @@ export class BrowserApi {
         return callback(msg, sender, sendResponse) === true;
       }
     );
+  }
+
+  static messageListener$() {
+    return new Observable<unknown>((subscriber) => {
+      const handler = (message: unknown) => subscriber.next(message);
+      chrome.runtime.onMessage.addListener(handler);
+      return () => chrome.runtime.onMessage.removeListener(handler);
+    });
   }
 
   static sendMessage(subscriber: string, arg: any = {}) {

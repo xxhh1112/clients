@@ -1,4 +1,4 @@
-import { filter, first, lastValueFrom, Subject, takeUntil } from "rxjs";
+import { filter, first, lastValueFrom, Observable, Subject, takeUntil } from "rxjs";
 
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
@@ -37,7 +37,10 @@ export type BrowserFido2Message = { requestId: string } & (
       type: "ConfirmNewCredentialResponse";
     }
   | {
-      type: "RequestCancelled";
+      type: "AbortRequest";
+    }
+  | {
+      type: "AbortResponse";
       fallbackRequested: boolean;
     }
 );
@@ -51,17 +54,31 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     BrowserApi.sendMessage(BrowserFido2MessageName, msg);
   }
 
-  private messages$ = new Subject<BrowserFido2Message>();
-  private destroy$ = new Subject<void>();
-
-  constructor(private popupUtilsService: PopupUtilsService) {
-    BrowserApi.messageListener(BrowserFido2MessageName, this.processMessage.bind(this));
+  static onAbort$(requestId: string): Observable<BrowserFido2Message> {
+    const messages$ = BrowserApi.messageListener$() as Observable<BrowserFido2Message>;
+    return messages$.pipe(
+      filter((message) => message.type === "AbortRequest" && message.requestId === requestId),
+      first()
+    );
   }
 
-  async confirmCredential(cipherId: string): Promise<boolean> {
+  private messages$ = BrowserApi.messageListener$() as Observable<BrowserFido2Message>;
+  private destroy$ = new Subject<void>();
+
+  constructor(private popupUtilsService: PopupUtilsService) {}
+
+  async confirmCredential(
+    cipherId: string,
+    abortController = new AbortController()
+  ): Promise<boolean> {
     const requestId = Utils.newGuid();
     const data: BrowserFido2Message = { type: "ConfirmCredentialRequest", cipherId, requestId };
     const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+
+    const abortHandler = () =>
+      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
+    abortController.signal.addEventListener("abort", abortHandler);
+
     this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
@@ -80,17 +97,27 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       return true;
     }
 
-    if (response.type === "RequestCancelled") {
+    if (response.type === "AbortResponse") {
       throw new RequestAbortedError(response.fallbackRequested);
     }
+
+    abortController.signal.removeEventListener("abort", abortHandler);
 
     return false;
   }
 
-  async pickCredential(cipherIds: string[]): Promise<string> {
+  async pickCredential(
+    cipherIds: string[],
+    abortController = new AbortController()
+  ): Promise<string> {
     const requestId = Utils.newGuid();
     const data: BrowserFido2Message = { type: "PickCredentialRequest", cipherIds, requestId };
     const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+
+    const abortHandler = () =>
+      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
+    abortController.signal.addEventListener("abort", abortHandler);
+
     this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
@@ -105,7 +132,7 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       )
     );
 
-    if (response.type === "RequestCancelled") {
+    if (response.type === "AbortResponse") {
       throw new RequestAbortedError(response.fallbackRequested);
     }
 
@@ -113,10 +140,15 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       throw new RequestAbortedError();
     }
 
+    abortController.signal.removeEventListener("abort", abortHandler);
+
     return response.cipherId;
   }
 
-  async confirmNewCredential({ credentialName, userName }: NewCredentialParams): Promise<boolean> {
+  async confirmNewCredential(
+    { credentialName, userName }: NewCredentialParams,
+    abortController = new AbortController()
+  ): Promise<boolean> {
     const requestId = Utils.newGuid();
     const data: BrowserFido2Message = {
       type: "ConfirmNewCredentialRequest",
@@ -125,6 +157,11 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       userName,
     };
     const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+
+    const abortHandler = () =>
+      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
+    abortController.signal.addEventListener("abort", abortHandler);
+
     this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
@@ -143,14 +180,12 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
       return true;
     }
 
-    if (response.type === "RequestCancelled") {
+    if (response.type === "AbortResponse") {
       throw new RequestAbortedError(response.fallbackRequested);
     }
 
-    return false;
-  }
+    abortController.signal.removeEventListener("abort", abortHandler);
 
-  private processMessage(msg: BrowserFido2Message) {
-    this.messages$.next(msg);
+    return false;
   }
 }

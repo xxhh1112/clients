@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, Subject, takeUntil } from "rxjs";
+import { concatMap, Subject, switchMap, takeUntil } from "rxjs";
 
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/enums/cipherType";
@@ -53,6 +53,16 @@ export class Fido2Component implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe();
+
+    this.activatedRoute.queryParamMap
+      .pipe(
+        switchMap((queryParamMap) => {
+          const data = JSON.parse(queryParamMap.get("data"));
+          return BrowserFido2UserInterfaceService.onAbort$(data.requestId);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.cancel(false));
   }
 
   async pick(cipher: CipherView) {
@@ -91,7 +101,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     const data = this.data;
     BrowserFido2UserInterfaceService.sendMessage({
       requestId: data.requestId,
-      type: "RequestCancelled",
+      type: "AbortResponse",
       fallbackRequested: fallback,
     });
   }
