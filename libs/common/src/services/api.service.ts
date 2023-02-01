@@ -7,16 +7,8 @@ import { DeviceType } from "../enums/deviceType";
 import { OrganizationConnectionType } from "../enums/organizationConnectionType";
 import { Utils } from "../misc/utils";
 import { SetKeyConnectorKeyRequest } from "../models/request/account/set-key-connector-key.request";
-import { AttachmentRequest } from "../models/request/attachment.request";
 import { BitPayInvoiceRequest } from "../models/request/bit-pay-invoice.request";
-import { CipherBulkDeleteRequest } from "../models/request/cipher-bulk-delete.request";
-import { CipherBulkMoveRequest } from "../models/request/cipher-bulk-move.request";
-import { CipherBulkShareRequest } from "../models/request/cipher-bulk-share.request";
-import { CipherCollectionsRequest } from "../models/request/cipher-collections.request";
-import { CipherCreateRequest } from "../models/request/cipher-create.request";
-import { CipherPartialRequest } from "../models/request/cipher-partial.request";
-import { CipherShareRequest } from "../models/request/cipher-share.request";
-import { CipherRequest } from "../models/request/cipher.request";
+import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { CollectionRequest } from "../models/request/collection.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { DeviceVerificationRequest } from "../models/request/device-verification.request";
@@ -29,14 +21,11 @@ import { EmergencyAccessInviteRequest } from "../models/request/emergency-access
 import { EmergencyAccessPasswordRequest } from "../models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../models/request/emergency-access-update.request";
 import { EventRequest } from "../models/request/event.request";
-import { GroupRequest } from "../models/request/group.request";
 import { IapCheckRequest } from "../models/request/iap-check.request";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
 import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
 import { UserApiTokenRequest } from "../models/request/identity-token/user-api-token.request";
-import { ImportCiphersRequest } from "../models/request/import-ciphers.request";
-import { ImportOrganizationCiphersRequest } from "../models/request/import-organization-ciphers.request";
 import { KdfRequest } from "../models/request/kdf.request";
 import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user-key.request";
 import { KeysRequest } from "../models/request/keys.request";
@@ -84,16 +73,13 @@ import { UpdateTwoFactorYubioOtpRequest } from "../models/request/update-two-fac
 import { VerifyDeleteRecoverRequest } from "../models/request/verify-delete-recover.request";
 import { VerifyEmailRequest } from "../models/request/verify-email.request";
 import { ApiKeyResponse } from "../models/response/api-key.response";
-import { AttachmentUploadDataResponse } from "../models/response/attachment-upload-data.response";
-import { AttachmentResponse } from "../models/response/attachment.response";
 import { AuthRequestResponse } from "../models/response/auth-request.response";
 import { RegisterResponse } from "../models/response/authentication/register.response";
 import { BillingHistoryResponse } from "../models/response/billing-history.response";
 import { BillingPaymentResponse } from "../models/response/billing-payment.response";
 import { BreachAccountResponse } from "../models/response/breach-account.response";
-import { CipherResponse } from "../models/response/cipher.response";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
 } from "../models/response/collection.response";
 import { DeviceVerificationResponse } from "../models/response/device-verification.response";
@@ -106,7 +92,6 @@ import {
 } from "../models/response/emergency-access.response";
 import { ErrorResponse } from "../models/response/error.response";
 import { EventResponse } from "../models/response/event.response";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/group.response";
 import { IdentityCaptchaResponse } from "../models/response/identity-captcha.response";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
@@ -141,7 +126,6 @@ import { SendFileUploadDataResponse } from "../models/response/send-file-upload-
 import { SendResponse } from "../models/response/send.response";
 import { SsoPreValidateResponse } from "../models/response/sso-pre-validate.response";
 import { SubscriptionResponse } from "../models/response/subscription.response";
-import { SyncResponse } from "../models/response/sync.response";
 import { TaxInfoResponse } from "../models/response/tax-info.response";
 import { TaxRateResponse } from "../models/response/tax-rate.response";
 import { TwoFactorAuthenticatorResponse } from "../models/response/two-factor-authenticator.response";
@@ -156,6 +140,19 @@ import {
 import { TwoFactorYubiKeyResponse } from "../models/response/two-factor-yubi-key.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { SendAccessView } from "../models/view/send-access.view";
+import { AttachmentRequest } from "../vault/models/request/attachment.request";
+import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
+import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
+import { CipherBulkShareRequest } from "../vault/models/request/cipher-bulk-share.request";
+import { CipherCollectionsRequest } from "../vault/models/request/cipher-collections.request";
+import { CipherCreateRequest } from "../vault/models/request/cipher-create.request";
+import { CipherPartialRequest } from "../vault/models/request/cipher-partial.request";
+import { CipherShareRequest } from "../vault/models/request/cipher-share.request";
+import { CipherRequest } from "../vault/models/request/cipher.request";
+import { AttachmentUploadDataResponse } from "../vault/models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "../vault/models/response/attachment.response";
+import { CipherResponse } from "../vault/models/response/cipher.response";
+import { SyncResponse } from "../vault/models/response/sync.response";
 
 /**
  * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
@@ -663,23 +660,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("POST", path, request, true, false);
   }
 
-  postImportCiphers(request: ImportCiphersRequest): Promise<any> {
-    return this.send("POST", "/ciphers/import", request, true, false);
-  }
-
-  postImportOrganizationCiphers(
-    organizationId: string,
-    request: ImportOrganizationCiphersRequest
-  ): Promise<any> {
-    return this.send(
-      "POST",
-      "/ciphers/import-organization?organizationId=" + organizationId,
-      request,
-      true,
-      false
-    );
-  }
-
   putDeleteCipher(id: string): Promise<any> {
     return this.send("PUT", "/ciphers/" + id + "/delete", null, true, false);
   }
@@ -804,10 +784,10 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Collections APIs
 
-  async getCollectionDetails(
+  async getCollectionAccessDetails(
     organizationId: string,
     id: string
-  ): Promise<CollectionGroupDetailsResponse> {
+  ): Promise<CollectionAccessDetailsResponse> {
     const r = await this.send(
       "GET",
       "/organizations/" + organizationId + "/collections/" + id + "/details",
@@ -815,7 +795,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true
     );
-    return new CollectionGroupDetailsResponse(r);
+    return new CollectionAccessDetailsResponse(r);
   }
 
   async getUserCollections(): Promise<ListResponse<CollectionResponse>> {
@@ -832,6 +812,19 @@ export class ApiService implements ApiServiceAbstraction {
       true
     );
     return new ListResponse(r, CollectionResponse);
+  }
+
+  async getManyCollectionsWithAccessDetails(
+    organizationId: string
+  ): Promise<ListResponse<CollectionAccessDetailsResponse>> {
+    const r = await this.send(
+      "GET",
+      "/organizations/" + organizationId + "/collections/details",
+      null,
+      true,
+      true
+    );
+    return new ListResponse(r, CollectionAccessDetailsResponse);
   }
 
   async getCollectionUsers(
@@ -901,6 +894,16 @@ export class ApiService implements ApiServiceAbstraction {
     );
   }
 
+  deleteManyCollections(request: CollectionBulkDeleteRequest): Promise<any> {
+    return this.send(
+      "DELETE",
+      "/organizations/" + request.organizationId + "/collections",
+      request,
+      true,
+      false
+    );
+  }
+
   deleteCollectionUser(
     organizationId: string,
     id: string,
@@ -917,28 +920,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Groups APIs
 
-  async getGroupDetails(organizationId: string, id: string): Promise<GroupDetailsResponse> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups/" + id + "/details",
-      null,
-      true,
-      true
-    );
-    return new GroupDetailsResponse(r);
-  }
-
-  async getGroups(organizationId: string): Promise<ListResponse<GroupResponse>> {
-    const r = await this.send(
-      "GET",
-      "/organizations/" + organizationId + "/groups",
-      null,
-      true,
-      true
-    );
-    return new ListResponse(r, GroupResponse);
-  }
-
   async getGroupUsers(organizationId: string, id: string): Promise<string[]> {
     const r = await this.send(
       "GET",
@@ -950,47 +931,11 @@ export class ApiService implements ApiServiceAbstraction {
     return r;
   }
 
-  async postGroup(organizationId: string, request: GroupRequest): Promise<GroupResponse> {
-    const r = await this.send(
-      "POST",
-      "/organizations/" + organizationId + "/groups",
-      request,
-      true,
-      true
-    );
-    return new GroupResponse(r);
-  }
-
-  async putGroup(
-    organizationId: string,
-    id: string,
-    request: GroupRequest
-  ): Promise<GroupResponse> {
-    const r = await this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/groups/" + id,
-      request,
-      true,
-      true
-    );
-    return new GroupResponse(r);
-  }
-
   async putGroupUsers(organizationId: string, id: string, request: string[]): Promise<any> {
     await this.send(
       "PUT",
       "/organizations/" + organizationId + "/groups/" + id + "/users",
       request,
-      true,
-      false
-    );
-  }
-
-  deleteGroup(organizationId: string, id: string): Promise<any> {
-    return this.send(
-      "DELETE",
-      "/organizations/" + organizationId + "/groups/" + id,
-      null,
       true,
       false
     );
