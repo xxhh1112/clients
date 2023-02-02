@@ -1,4 +1,12 @@
-import { BehaviorSubject, concatMap, ReplaySubject, skip, Subject, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  Observable,
+  ReplaySubject,
+  skip,
+  Subject,
+  Subscription,
+  switchMap,
+} from "rxjs";
 
 import { AbstractMemoryStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { skipFrom } from "@bitwarden/common/misc/skip-from.operator";
@@ -62,9 +70,7 @@ export class SessionSyncer {
     this.subscription = stream
       .pipe(
         skipFrom(this.skip$),
-        concatMap(async (next) => {
-          await this.updateSession(next);
-        })
+        switchMap((next) => this.updateSession$(next))
       )
       .subscribe();
   }
@@ -77,11 +83,11 @@ export class SessionSyncer {
     );
   }
 
-  async updateFromMessage(message: any) {
+  async updateFromMessage(message: { command: string; id: string }) {
     if (message.command != this.updateMessageCommand || message.id === this.id) {
       return;
     }
-    this.update();
+    await this.update();
   }
 
   async update() {
@@ -93,9 +99,23 @@ export class SessionSyncer {
     this.subject.next(value);
   }
 
-  private async updateSession(value: any) {
-    await this.memoryStorageService.save(this.metaData.sessionKey, value);
-    await BrowserApi.sendMessage(this.updateMessageCommand, { id: this.id });
+  private updateSession$(value: any) {
+    return new Observable((subscriber) => {
+      let isAborted = false;
+
+      if (!isAborted) {
+        this.memoryStorageService.save(this.metaData.sessionKey, value).then(() => {
+          if (!isAborted) {
+            BrowserApi.sendMessage(this.updateMessageCommand, { id: this.id });
+            subscriber.next();
+          }
+        });
+      }
+
+      return () => {
+        isAborted = true;
+      };
+    });
   }
 
   private get updateMessageCommand() {

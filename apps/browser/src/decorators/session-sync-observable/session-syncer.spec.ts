@@ -1,6 +1,6 @@
 import { awaitAsync } from "@bitwarden/angular/../test-utils";
 import { mock, MockProxy } from "jest-mock-extended";
-import { BehaviorSubject, ReplaySubject } from "rxjs";
+import { BehaviorSubject, ReplaySubject, Subject } from "rxjs";
 
 import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 
@@ -140,26 +140,40 @@ describe("session syncer", () => {
   describe("a value is emitted on the observable", () => {
     let sendMessageSpy: jest.SpyInstance;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       sendMessageSpy = jest.spyOn(BrowserApi, "sendMessage");
+      storageService.save.mockImplementation(() => Promise.resolve());
 
-      sut.init();
+      await sut.init();
 
       behaviorSubject.next("test");
     });
 
     it("should update the session memory", async () => {
-      // await finishing of fire-and-forget operation
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await awaitAsync(100);
       expect(storageService.save).toHaveBeenCalledTimes(1);
       expect(storageService.save).toHaveBeenCalledWith(sessionKey, "test");
     });
 
     it("should update sessionSyncers in other contexts", async () => {
       // await finishing of fire-and-forget operation
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await awaitAsync(100);
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect(sendMessageSpy).toHaveBeenCalledWith(`${sessionKey}_update`, { id: sut.id });
+    });
+
+    it("should abort if a new value comes in", async () => {
+      behaviorSubject.next("ping");
+      behaviorSubject.next("ping");
+      behaviorSubject.next("ping");
+      behaviorSubject.next("ping");
+      behaviorSubject.next("ping");
+
+      // await finishing of fire-and-forget operation
+      await awaitAsync(100);
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(2);
       expect(sendMessageSpy).toHaveBeenCalledWith(`${sessionKey}_update`, { id: sut.id });
     });
   });
