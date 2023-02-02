@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       })
     );
     button.btnElement.addEventListener("click", () => {
+      if (type === "crypto-wallet") {
+        alert("Saving type `crypto-wallet` is currently not supported");
+        return;
+      }
+
       clickedSaveButton(type, hashedValue);
     });
   }
