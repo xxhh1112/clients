@@ -409,27 +409,11 @@ app-root {
 }
 
 @media only screen and (min-width: 601px) {
-  app-login header {
+  form header {
     padding: 0 calc((100% - 500px) / 2);
   }
 
-  app-login main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock main {
+  form main {
     padding: 0 calc((100% - 500px) / 2);
   }
 }
