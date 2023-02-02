@@ -142,7 +142,7 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     window.setTimeout(() => {
       if (!this.editMode) {
-        if (this.cipher.name != null && this.cipher.name !== "") {
+        if (this.type === CipherType.Login && this.cipher.name != null && this.cipher.name !== "") {
           document.getElementById("loginUsername").focus();
         } else {
           document.getElementById("name").focus();
