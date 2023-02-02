@@ -1,6 +1,7 @@
 import { BehaviorSubject, concatMap, ReplaySubject, skip, Subject, Subscription } from "rxjs";
 
 import { AbstractMemoryStorageService } from "@bitwarden/common/abstractions/storage.service";
+import { skipFrom } from "@bitwarden/common/misc/skip-from.operator";
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { BrowserApi } from "../../browser/browserApi";
@@ -12,7 +13,7 @@ export class SessionSyncer {
   id = Utils.newGuid();
 
   // ignore initial values
-  private ignoreNUpdates = 0;
+  private skip$ = new Subject<number>();
 
   constructor(
     private subject: Subject<any>,
@@ -29,19 +30,20 @@ export class SessionSyncer {
   }
 
   async init() {
+    let initialIgnore = 0;
     switch (this.subject.constructor) {
       case ReplaySubject:
         // ignore all updates currently in the buffer
-        this.ignoreNUpdates = (this.subject as any)._buffer.length;
+        initialIgnore = (this.subject as any)._buffer.length;
         break;
       case BehaviorSubject:
-        this.ignoreNUpdates = 1;
+        initialIgnore = 1;
         break;
       default:
         break;
     }
 
-    await this.observe();
+    await this.observe(initialIgnore);
     // must be synchronous
     const hasInSessionMemory = await this.memoryStorageService.has(this.metaData.sessionKey);
     if (hasInSessionMemory) {
@@ -51,20 +53,16 @@ export class SessionSyncer {
     this.listenForUpdates();
   }
 
-  private async observe() {
-    const stream = this.subject.pipe(skip(this.ignoreNUpdates));
-    this.ignoreNUpdates = 0;
+  private async observe(initialIgnore: number) {
+    const stream = this.subject.pipe(skip(initialIgnore));
 
     // This may be a memory leak.
     // There is no good time to unsubscribe from this observable. Hopefully Manifest V3 clears memory from temporary
     // contexts. If so, this is handled by destruction of the context.
     this.subscription = stream
       .pipe(
+        skipFrom(this.skip$),
         concatMap(async (next) => {
-          if (this.ignoreNUpdates > 0) {
-            this.ignoreNUpdates -= 1;
-            return;
-          }
           await this.updateSession(next);
         })
       )
@@ -91,7 +89,7 @@ export class SessionSyncer {
     const value = await this.memoryStorageService.getBypassCache(this.metaData.sessionKey, {
       deserializer: builder,
     });
-    this.ignoreNUpdates = 1;
+    this.skip$.next(1);
     this.subject.next(value);
   }
 

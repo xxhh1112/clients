@@ -85,22 +85,33 @@ describe("session syncer", () => {
       replaySubject.next("3");
       sut = new SessionSyncer(replaySubject, storageService, metaData);
       // block observing the subject
-      jest.spyOn(sut as any, "observe").mockImplementation();
+      const observeSpy = jest.spyOn(sut as any, "observe").mockImplementation();
 
       sut.init();
 
-      expect(sut["ignoreNUpdates"]).toBe(3);
+      expect(observeSpy).toHaveBeenCalledWith(3);
     });
 
     it("should ignore BehaviorSubject's initial value", () => {
       const behaviorSubject = new BehaviorSubject<string>("initial");
       sut = new SessionSyncer(behaviorSubject, storageService, metaData);
       // block observing the subject
-      jest.spyOn(sut as any, "observe").mockImplementation();
+      const observeSpy = jest.spyOn(sut as any, "observe").mockImplementation();
 
       sut.init();
 
-      expect(sut["ignoreNUpdates"]).toBe(1);
+      expect(observeSpy).toHaveBeenCalledWith(1);
+    });
+
+    it("should not ignore Subject's first value", () => {
+      const behaviorSubject = new Subject<string>();
+      sut = new SessionSyncer(behaviorSubject, storageService, metaData);
+      // block observing the subject
+      const observeSpy = jest.spyOn(sut as any, "observe").mockImplementation();
+
+      sut.init();
+
+      expect(observeSpy).toHaveBeenCalledWith(0);
     });
 
     it("should grab an initial value from storage if it exists", async () => {
