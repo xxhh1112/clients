@@ -21,6 +21,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
 import { BrowserApi } from "../../../../browser/browserApi";
+import { Base64CipherParser } from "../../../../popup/services/base64-cipher-parser.service";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 
 @Component({
@@ -75,6 +76,19 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
+      if (params.type) {
+        const type = parseInt(params.type, null);
+        this.type = type;
+      }
+
+      if (params.temp) {
+        const parser = new Base64CipherParser();
+        const tempCipher = parser.parse(this.type, params.temp);
+        if (tempCipher != null) {
+          this.cipher = tempCipher;
+        }
+      }
+
       if (params.cipherId) {
         this.cipherId = params.cipherId;
       }
@@ -87,10 +101,6 @@ export class AddEditComponent extends BaseAddEditComponent {
           this.collectionIds = [collection.id];
           this.organizationId = collection.organizationId;
         }
-      }
-      if (params.type) {
-        const type = parseInt(params.type, null);
-        this.type = type;
       }
       this.editMode = !params.cipherId;
 

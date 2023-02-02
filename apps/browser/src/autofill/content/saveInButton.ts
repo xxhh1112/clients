@@ -1,5 +1,3 @@
-import AddLoginRuntimeMessage from "../../background/models/addLoginRuntimeMessage";
-
 document.addEventListener("DOMContentLoaded", (event) => {
   const buttons: Button[] = [];
   for (const saveButton of document.querySelectorAll("onepassword-save-button")) {
@@ -25,6 +23,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   for (const button of buttons) {
     button.btnElement.disabled = false;
     const type = button.btnElement.getAttribute("data-onepassword-type");
+    const hashedValue = button.btnElement.getAttribute("value");
     const label = button.btnElement.querySelector(".label");
     const icon = button.btnElement.querySelector("#onepassword-icon");
     const infoLabel = button.infoElement.querySelector("#onepassword-info-icon span");
@@ -71,19 +70,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
       })
     );
     button.btnElement.addEventListener("click", () => {
-      // TODO: check if type is supported ands end error if not.
-      clickedSaveButton(button);
+      clickedSaveButton(type, hashedValue);
     });
   }
 
-  function clickedSaveButton(button: Button) {
-    const login = new AddLoginRuntimeMessage();
-    login.username = "testuserfromsave";
-    login.password = "123141234";
-    login.url = document.URL;
+  function clickedSaveButton(type: string, hashedValue: string) {
     chrome.runtime.sendMessage({
-      command: "bgAddLogin",
-      login: login,
+      command: "saveinbutton",
+      type: type,
+      hash: hashedValue,
     });
   }
 

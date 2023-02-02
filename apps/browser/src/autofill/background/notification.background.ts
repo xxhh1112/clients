@@ -100,6 +100,9 @@ export default class NotificationBackground {
       case "bgNeverSave":
         await this.saveNever(sender.tab);
         break;
+      case "saveinbutton":
+        await this.openAddEdit(msg);
+        break;
       case "collectPageDetailsResponse":
         switch (msg.sender) {
           case "notificationBar": {
@@ -463,5 +466,23 @@ export default class NotificationBackground {
     return !(await firstValueFrom(
       this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
     ));
+  }
+
+  private async openAddEdit(msg: any) {
+    let numericType = 1;
+    if (msg.type === "login") {
+      numericType = 1;
+    }
+    if (msg.type === "credit-card") {
+      numericType = 3;
+    }
+    if (msg.type === "identity") {
+      numericType = 4;
+    }
+    await BrowserApi.createNewTab(
+      `popup/index.html?uilocation=popout#/add-cipher?type=${numericType}&temp=${msg.hash}`,
+      true,
+      true
+    );
   }
 }
