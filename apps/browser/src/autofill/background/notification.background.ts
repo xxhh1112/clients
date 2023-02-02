@@ -101,6 +101,22 @@ export default class NotificationBackground {
         await this.saveNever(sender.tab);
         break;
       case "saveinbutton":
+        if ((await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked) {
+          const retryMessage: LockedVaultPendingNotificationsItem = {
+            commandToRetry: {
+              msg: msg,
+              sender: sender,
+            },
+            target: "notification.background",
+          };
+          await BrowserApi.tabSendMessageData(
+            sender.tab,
+            "addToLockedVaultPendingNotifications",
+            retryMessage
+          );
+          await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin");
+          return;
+        }
         await this.openAddEdit(msg);
         break;
       case "collectPageDetailsResponse":
