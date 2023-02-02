@@ -145,7 +145,7 @@ const mainConfig = {
     "content/autofiller": "./src/autofill/content/autofiller.ts",
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
-    "content/saveInButton": "./src/autofill/content/saveInButton.ts",
+    "content/saveInButton": "./src/autofill/content/save-in-button.ts",
     "content/message_handler": "./src/autofill/content/message_handler.ts",
     "notification/bar": "./src/autofill/notification/bar.js",
     "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
