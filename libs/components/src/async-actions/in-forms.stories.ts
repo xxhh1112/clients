@@ -4,8 +4,8 @@ import { action } from "@storybook/addon-actions";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { delay, of } from "rxjs";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
@@ -44,7 +44,7 @@ const template = `
 class PromiseExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Utils.emailValidator]],
+    email: ["", [Validators.required, emailAllowingDiacritics]],
   });
 
   constructor(private formBuilder: FormBuilder) {}
@@ -81,7 +81,7 @@ class PromiseExampleComponent {
 class ObservableExampleComponent {
   formObj = this.formBuilder.group({
     name: ["", [Validators.required]],
-    email: ["", [Validators.required, Utils.emailValidator]],
+    email: ["", [Validators.required, emailAllowingDiacritics]],
   });
 
   constructor(private formBuilder: FormBuilder) {}

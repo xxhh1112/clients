@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { map, Observable, Subject, takeUntil } from "rxjs";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { notAllowedValueAsync } from "@bitwarden/angular/validators/notAllowedValueAsync.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -9,7 +10,6 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PlanSponsorshipType } from "@bitwarden/common/enums/planSponsorshipType";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -51,7 +51,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       sponsorshipEmail: new FormControl("", {
-        validators: [Utils.emailValidator],
+        validators: [emailAllowingDiacritics],
         asyncValidators: [
           notAllowedValueAsync(async () => await this.stateService.getEmail(), true),
         ],

@@ -1,8 +1,8 @@
 import { UntypedFormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { Utils } from "@bitwarden/common/misc/utils";
 
 import { ButtonModule } from "../button";
 import { InputModule } from "../input/input.module";
@@ -44,7 +44,7 @@ const fb = new UntypedFormBuilder();
 
 const formObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, Utils.emailValidator]],
+  email: ["", [Validators.required, emailAllowingDiacritics]],
 });
 
 function submit() {

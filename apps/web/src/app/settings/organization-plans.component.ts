@@ -11,6 +11,7 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -24,7 +25,6 @@ import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 import { PlanType } from "@bitwarden/common/enums/planType";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { ProductType } from "@bitwarden/common/enums/productType";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { OrganizationCreateRequest } from "@bitwarden/common/models/request/organization-create.request";
@@ -92,12 +92,12 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   formGroup = this.formBuilder.group({
     name: [""],
-    billingEmail: ["", [Utils.emailValidator]],
+    billingEmail: ["", [emailAllowingDiacritics]],
     businessOwned: [false],
     premiumAccessAddon: [false],
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
-    clientOwnerEmail: ["", [Utils.emailValidator]],
+    clientOwnerEmail: ["", [emailAllowingDiacritics]],
     businessName: [""],
     plan: [this.plan],
     product: [this.product],

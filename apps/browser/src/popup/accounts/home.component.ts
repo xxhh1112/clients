@@ -2,12 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LoginService } from "@bitwarden/common/abstractions/login.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { Utils } from "@bitwarden/common/misc/utils";
 
 // punycode needs to be required here to override built-in node module
 // https://github.com/mathiasbynens/punycode.js#installation
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   loginInitiated = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, Utils.emailValidator]],
+    email: ["", [Validators.required, emailAllowingDiacritics]],
     rememberEmail: [false],
   });
 
