@@ -9,8 +9,8 @@ import {
 } from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { Utils } from "@bitwarden/common/misc/utils";
 
 import { ButtonModule } from "../button";
 import { CheckboxModule } from "../checkbox";
@@ -60,7 +60,7 @@ export default {
 const fb = new FormBuilder();
 const exampleFormObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, Utils.emailValidator, forbiddenNameValidator(/bit/i)]],
+  email: ["", [Validators.required, emailAllowingDiacritics, forbiddenNameValidator(/bit/i)]],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
 });

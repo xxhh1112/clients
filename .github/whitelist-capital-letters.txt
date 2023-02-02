@@ -26,6 +26,7 @@
 ./libs/angular/src/scss/webfonts/Open_Sans-normal-400.woff
 ./libs/angular/src/components/captchaProtected.component.ts
 ./libs/angular/src/validators/inputsFieldMatch.validator.ts
+./libs/angular/src/validators/emailAllowingDiacritics.validator.ts
 ./libs/angular/src/validators/notAllowedValueAsync.validator.ts
 ./libs/angular/src/services/theming/themeBuilder.ts
 ./libs/angular/src/interfaces/selectOptions.ts
