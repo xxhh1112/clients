@@ -18,6 +18,7 @@ import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
 import { HomeComponent } from "./accounts/home.component";
 import { LockComponent } from "./accounts/lock.component";
+import { LoginWithDeviceComponent } from "./accounts/login-with-device.component";
 import { LoginComponent } from "./accounts/login.component";
 import { RegisterComponent } from "./accounts/register.component";
 import { RemovePasswordComponent } from "./accounts/remove-password.component";
@@ -32,6 +33,7 @@ import { SendAddEditComponent } from "./send/send-add-edit.component";
 import { SendGroupingsComponent } from "./send/send-groupings.component";
 import { SendTypeComponent } from "./send/send-type.component";
 import { DebounceNavigationService } from "./services/debounceNavigationService";
+import { AutofillComponent } from "./settings/autofill.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
@@ -65,6 +67,12 @@ const routes: Routes = [
     component: LoginComponent,
     canActivate: [UnauthGuard],
     data: { state: "login" },
+  },
+  {
+    path: "login-with-device",
+    component: LoginWithDeviceComponent,
+    canActivate: [UnauthGuard],
+    data: { state: "login-with-device" },
   },
   {
     path: "lock",
@@ -186,6 +194,12 @@ const routes: Routes = [
     component: ExportComponent,
     canActivate: [AuthGuard],
     data: { state: "export" },
+  },
+  {
+    path: "autofill",
+    component: AutofillComponent,
+    canActivate: [AuthGuard],
+    data: { state: "autofill" },
   },
   {
     path: "folders",
