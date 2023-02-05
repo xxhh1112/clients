@@ -80,7 +80,7 @@
     "message": "Numéro de permis"
   },
   "email": {
-    "message": "Courriel"
+    "message": "E-mail"
   },
   "phone": {
     "message": "Téléphone"
@@ -132,9 +132,6 @@
   },
   "ms": {
     "message": "Mlle"
-  },
-  "mx": {
-    "message": "Mx"
   },
   "dr": {
     "message": "Dr"
@@ -303,13 +300,10 @@
     "message": "Rechercher dans mon coffre"
   },
   "searchOrganization": {
-    "message": "Rechercher une organisation"
+    "message": "Recherche dans les organisations"
   },
   "searchMembers": {
     "message": "Rechercher dans les membres"
-  },
-  "searchGroups": {
-    "message": "Rechercher des groupes"
   },
   "allItems": {
     "message": "Tous les éléments"
@@ -405,8 +399,7 @@
     "message": "Afficher l'élément"
   },
   "new": {
-    "message": "Nouveau",
-    "description": "for adding new items"
+    "message": "Nouveau"
   },
   "item": {
     "message": "Élément"
@@ -474,7 +467,7 @@
     "message": "Coffres"
   },
   "vaultItems": {
-    "message": "Éléments du coffre"
+    "message": "Objets du Coffre"
   },
   "filter": {
     "message": "Filtre"
@@ -685,10 +678,10 @@
     "message": "Obtenir l'indice du mot de passe principal"
   },
   "emailRequired": {
-    "message": "L'adresse électronique est requise."
+    "message": "L'adresse e-mail est requise."
   },
   "invalidEmail": {
-    "message": "Adresse électronique invalide."
+    "message": "Adresse e-mail invalide."
   },
   "masterPasswordRequired": {
     "message": "Le mot de passe principal est requis."
@@ -715,7 +708,7 @@
     "message": "Une erreur inattendue est survenue."
   },
   "emailAddress": {
-    "message": "Adresse électronique"
+    "message": "Adresse e-mail"
   },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe principal pour continuer."
@@ -788,7 +781,7 @@
     "message": "Saisissez le code de vérification à 6 chiffres depuis votre application d'authentification."
   },
   "enterVerificationCodeEmail": {
-    "message": "Saisissez le code de vérification à 6 chiffres qui a été envoyé par courriel à $EMAIL$.",
+    "message": "Saisissez le code de vérification à 6 chiffres qui vous a été envoyé par e-mail à $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -797,7 +790,7 @@
     }
   },
   "verificationCodeEmailSent": {
-    "message": "Courriel de vérification envoyé à $EMAIL$.",
+    "message": "E-mail de vérification envoyé à $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -809,7 +802,7 @@
     "message": "Rester connecté"
   },
   "sendVerificationCodeEmailAgain": {
-    "message": "Envoyer à nouveau le courriel de code de vérification"
+    "message": "Envoyer à nouveau l'e-mail du code de vérification"
   },
   "useAnotherTwoStepMethod": {
     "message": "Utiliser une autre méthode d'authentification à deux facteurs"
@@ -875,10 +868,10 @@
     "message": "(Migré depuis FIDO)"
   },
   "emailTitle": {
-    "message": "Courriel"
+    "message": "E-mail"
   },
   "emailDesc": {
-    "message": "Les codes de vérification vous seront envoyés par courriel."
+    "message": "Les codes de vérification vous seront envoyés par e-mail."
   },
   "continue": {
     "message": "Continuer"
@@ -958,7 +951,7 @@
     "message": "Confirmer l'export du coffre"
   },
   "exportWarningDesc": {
-    "message": "Cet export contient vos données de coffre dans un format non chiffré. Vous ne devriez pas stocker ou envoyer le fichier exporté par des canaux non sécurisés (comme le courriel). Supprimez-le immédiatement dès que vous avez fini de l'utiliser."
+    "message": "Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que l'e-mail). Supprimez-le immédiatement après l'avoir utilisé."
   },
   "encExportKeyWarningDesc": {
     "message": "Cet export chiffre vos données en utilisant la clé de chiffrement de votre compte. Si jamais vous modifiez la clé de chiffrement de votre compte, vous devriez exporter à nouveau car vous ne pourrez pas déchiffrer ce fichier."
@@ -1083,19 +1076,19 @@
     "message": "Compte mis à jour"
   },
   "changeEmail": {
-    "message": "Changer le courriel"
+    "message": "Changer l'e-mail"
   },
   "changeEmailTwoFactorWarning": {
     "message": "En poursuivant, l'adresse électronique de votre compte sera changée. L'adresse électronique utilisée pour l'authentification à deux facteurs ne sera pas changée. Vous pouvez changer cette adresse électronique dans les paramètres d'authentification à deux facteurs."
   },
   "newEmail": {
-    "message": "Nouveau courriel"
+    "message": "Nouvel e-mail"
   },
   "code": {
     "message": "Code"
   },
   "changeEmailDesc": {
-    "message": "Nous avons envoyé un code de vérification à $EMAIL$. Veuillez vérifier votre courriel contenant ce code et saisissez-le ci-dessous pour finaliser le changement d'adresse électronique.",
+    "message": "Nous avons envoyé un code de vérification à $EMAIL$. Veuillez consulter votre boîte de réception pour trouver ce code et l'entrer ci-dessous pour finaliser votre changement d'adresse e-mail.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1107,7 +1100,7 @@
     "message": "En poursuivant, vous serez déconnecté de votre session en cours, ce qui vous obligera à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure."
   },
   "emailChanged": {
-    "message": "Courriel sauvegardé"
+    "message": "Adresse e-mail modifiée"
   },
   "logBackIn": {
     "message": "Veuillez vous reconnecter."
@@ -1137,7 +1130,7 @@
     "message": "Algorithme KDF"
   },
   "kdfIterations": {
-    "message": "Itérations KDF"
+    "message": "Nombre d'itérations de KDF"
   },
   "kdfIterationsDesc": {
     "message": "Des itérations KDF plus élevées peuvent aider à protéger votre mot de passe principal contre une attaque par force brute. Nous recommandons une valeur de $VALUE$ ou plus.",
@@ -1149,7 +1142,7 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Un réglage trop élevé des itérations, de la mémoire et du parallélisme KDF peut entraîner des performances médiocres lors de la connexion (et du déverrouillage) à Bitwarden sur des appareils plus lents ou plus anciens. Nous vous recommandons d'augmenter la valeur par incréments de $INCREMENT$ et de tester ensuite tous vos appareils.",
+    "message": "Si vous définissez un nombre d'itérations KDF trop élevé, les performances risquent d'être mauvaises lorsque vous vous connectez (et déverrouillez) Bitwarden sur des périphériques dont les processeurs sont plus lents. Nous vous recommandons d'augmenter la valeur par incréments de $INCREMENT$, puis de tester tous vos appareils.",
     "placeholders": {
       "increment": {
         "content": "$1",
@@ -1157,21 +1150,8 @@
       }
     }
   },
-  "kdfMemory": {
-    "message": "Mémoire KDF (Mo)",
-    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
-  },
-  "argon2Warning": {
-    "message": "Un réglage trop élevé des itérations, de la mémoire et du parallélisme KDF peut entraîner des performances médiocres lors de la connexion (et du déverrouillage) à Bitwarden sur des appareils plus lents ou plus anciens. Nous vous recommandons de les modifier individuellement par petits incréments, puis de tester tous vos appareils."
-  },
-  "kdfParallelism": {
-    "message": "Parallélisme KDF"
-  },
-  "argon2Desc": {
-    "message": "Des itérations KDF, une mémoire et un parallélisme plus élevés peuvent contribuer à protéger votre mot de passe principal contre l'attaque par force brute d'un assaillant."
-  },
   "changeKdf": {
-    "message": "Changer KDF"
+    "message": "Modifier KDF"
   },
   "encKeySettingsChanged": {
     "message": "Paramètres de la clé de chiffrement modifiés"
@@ -1298,10 +1278,10 @@
     "message": "Préférences"
   },
   "preferencesDesc": {
-    "message": "Personnalisez l'expérience de votre coffre web."
+    "message": "Personnaliser l'expérience de votre coffre web."
   },
   "preferencesUpdated": {
-    "message": "Préférences sauvegardées"
+    "message": "Préférences mises à jour"
   },
   "language": {
     "message": "Langue"
@@ -1560,13 +1540,13 @@
     "message": "Suivre ces étapes pour mettre en place l'authentification à deux facteurs avec courriel :"
   },
   "twoFactorEmailEnterEmail": {
-    "message": "Saisissez le courriel où vous souhaitez recevoir les codes de vérification"
+    "message": "Entrez l'e-mail où vous souhaitez recevoir les codes de vérification"
   },
   "twoFactorEmailEnterCode": {
-    "message": "Saisissez le code de vérification à 6 chiffres obtenu dans le courriel"
+    "message": "Entrez le code de vérification à 6 chiffres reçu par e-mail"
   },
   "sendEmail": {
-    "message": "Envoyer le courriel"
+    "message": "Envoyer l'e-mail"
   },
   "twoFactorU2fAdd": {
     "message": "Ajouter une clé de sécurité FIDO U2F à votre compte"
@@ -1770,10 +1750,10 @@
     "message": "Rapport sur les fuites de données"
   },
   "breachDesc": {
-    "message": "Les comptes ayant fait l'objet d'une brèche de données peuvent exposer vos informations personnelles. Sécurisez les comptes ayant fait l'objet d'une brèche de données en activant la fonction 2FA ou en créant un mot de passe plus robuste."
+    "message": "Une « fuite » est un incident où les données d'un site ont été obtenues illégalement par des pirates informatiques, puis rendues publiques. Examinez les types de données qui ont été compromis (adresses électroniques, mots de passe, cartes de crédit, etc.) et prenez les mesures appropriées, comme la modification des mots de passe."
   },
   "breachCheckUsernameEmail": {
-    "message": "Vérifiez tous les noms d'utilisateur ou adresses électroniques que vous utilisez."
+    "message": "Vérifiez tous les noms d'utilisateur ou les adresses électroniques que vous utilisez."
   },
   "checkBreaches": {
     "message": "Vérifier les fuites"
@@ -2057,9 +2037,6 @@
   "manageSubscription": {
     "message": "Gérer l'abonnement"
   },
-  "launchCloudSubscription": {
-    "message": "Démarrer l'Abonnement Cloud"
-  },
   "storage": {
     "message": "Stockage"
   },
@@ -2181,7 +2158,7 @@
     "message": "Pour créer une organisation sur une instance auto-hébergée vous devez fournir un fichier de licence valide."
   },
   "accountEmailMustBeVerified": {
-    "message": "L'adresse électronique de votre compte doit être vérifiée."
+    "message": "L'adresse e-mail de votre compte doit être vérifiée."
   },
   "newOrganizationDesc": {
     "message": "Les organisations permettent de partager des parties de votre coffre avec d'autres personnes ainsi que de gérer des utilisateurs pour une entité spécifique comme une famille, une petite équipe ou une grande entreprise."
@@ -2196,7 +2173,7 @@
     "message": "Ce compte est détenu par une entreprise."
   },
   "billingEmail": {
-    "message": "Courriel de facturation"
+    "message": "E-mail de facturation"
   },
   "businessName": {
     "message": "Nom de l'entreprise"
@@ -2378,7 +2355,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "Nous avons envoyé un courriel de confirmation sur le courriel de facturation de votre équipe à "
+    "message": "Nous avons envoyé un e-mail de confirmation à l'adresse e-mail de facturation de votre équipe à "
   },
   "monthly": {
     "message": "Mensuel"
@@ -2512,20 +2489,11 @@
   "editMember": {
     "message": "Éditer le membre"
   },
-  "fieldOnTabRequiresAttention": {
-    "message": "Un champ de l'onglet '$TAB$' requiert votre attention.",
-    "placeholders": {
-      "tab": {
-        "content": "$1",
-        "example": "Collection info"
-      }
-    }
-  },
   "inviteUserDesc": {
-    "message": "Invitez un nouvel utilisateur dans votre organisation en saisissant l'adresse électronique de son compte Bitwarden ci-dessous. S'il n'a pas encore de compte Bitwarden, il lui sera demandé de créer un nouveau compte."
+    "message": "Invitez de nouveaux utilisateurs à votre organisation en entrant l'adresse e-mail de leur compte Bitwarden ci-dessous. S'ils n’ont pas déjà un compte Bitwarden, il leur sera demandé d'en créer un nouveau."
   },
   "inviteMultipleEmailDesc": {
-    "message": "Saisissez jusqu'à $COUNT$ courriels en les séparant par une virgule.",
+    "message": "Vous pouvez inviter jusqu'à $COUNT$ utilisateurs à la fois en séparant les adresses e-mail par une virgule.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2555,7 +2523,7 @@
     "message": "Confirmé"
   },
   "clientOwnerEmail": {
-    "message": "Courriel du propriétaire du client"
+    "message": "Adresse e-mail du propriétaire du client"
   },
   "owner": {
     "message": "Propriétaire"
@@ -2759,7 +2727,7 @@
     }
   },
   "autofilledItemId": {
-    "message": "Élément $ID$ saisi automatiquement.",
+    "message": "L’élément $ID$ a été rempli automatiquement.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3065,28 +3033,28 @@
     "message": "Date de fin"
   },
   "verifyEmail": {
-    "message": "Vérifier le courriel"
+    "message": "Vérifier l'adresse e-mail"
   },
   "verifyEmailDesc": {
-    "message": "Vérifiez l'adresse électronique de votre compte pour débloquer l'accès à toutes les fonctionnalités."
+    "message": "Vérifiez l'adresse e-mail de votre compte pour débloquer l'ensemble des fonctionnalités."
   },
   "verifyEmailFirst": {
-    "message": "L'adresse électronique de votre compte doit d'abord être vérifiée."
+    "message": "L'adresse e-mail de votre compte doit d'abord être vérifiée."
   },
   "checkInboxForVerification": {
     "message": "Vérifiez votre boîte de réception pour le lien de vérification."
   },
   "emailVerified": {
-    "message": "Courriel du compte vérifié"
+    "message": "Votre adresse e-mail a été vérifiée."
   },
   "emailVerifiedFailed": {
-    "message": "Impossible de vérifier votre courriel. Essayez en envoyant un nouveau courriel de vérification."
+    "message": "Impossible de vérifier votre adresse e-mail. Essayez de renvoyer un nouvel e-mail de vérification."
   },
   "emailVerificationRequired": {
-    "message": "Vérification de courriel requise"
+    "message": "Vérification de l'adresse e-mail nécessaire"
   },
   "emailVerificationRequiredDesc": {
-    "message": "Vous devez vérifier votre courriel pour utiliser cette fonctionnalité."
+    "message": "Vous devez vérifier votre adresse e-mail pour utiliser cette fonctionnalité."
   },
   "updateBrowser": {
     "message": "Mettre à jour le navigateur"
@@ -3104,7 +3072,7 @@
     "message": "Invitation acceptée"
   },
   "inviteAcceptedDesc": {
-    "message": "Vous pourrez accéder à cette organisation dès qu'un administrateur aura confirmé votre adhésion. Nous vous enverrons un courriel lorsque cela se produira."
+    "message": "Vous pourrez accéder à cette organisation dès qu'un administrateur aura confirmé votre inscription. Nous vous enverrons un e-mail lorsque ce sera fait."
   },
   "inviteAcceptFailed": {
     "message": "Impossible d’accepter l’invitation. Demandez à un administrateur de l'organisation d’envoyer une nouvelle invitation."
@@ -3119,7 +3087,7 @@
     }
   },
   "rememberEmail": {
-    "message": "Se souvenir du courriel"
+    "message": "Se souvenir de l'e-mail"
   },
   "recoverAccountTwoStepDesc": {
     "message": "Si vous ne pouvez pas accéder à votre compte par les méthodes normales d'authentification à deux facteurs, vous pouvez utiliser votre code de récupération d'authentification à deux facteurs pour désactiver tous les fournisseurs à deux facteurs sur votre compte."
@@ -3134,10 +3102,10 @@
     "message": "En savoir plus"
   },
   "deleteRecoverDesc": {
-    "message": "Saisissez votre adresse électronique ci-dessous pour récupérer et supprimer votre compte."
+    "message": "Entrez votre adresse e-mail ci-dessous pour récupérer et supprimer votre compte."
   },
   "deleteRecoverEmailSent": {
-    "message": "Si votre compte existe, nous vous avons envoyé un courriel avec des instructions supplémentaires."
+    "message": "Si votre compte existe, nous vous avons envoyé un e-mail avec des instructions supplémentaires."
   },
   "deleteRecoverConfirmDesc": {
     "message": "Vous avez demandé de supprimer votre compte Bitwarden. Cliquez sur le bouton ci-dessous pour confirmer."
@@ -3983,7 +3951,7 @@
     "message": "Êtes-vous sûr de vouloir supprimer le mot de passe ?"
   },
   "hideEmail": {
-    "message": "Masquer mon adresse électronique aux destinataires."
+    "message": "Cacher mon adresse e-mail aux destinataires."
   },
   "disableThisSend": {
     "message": "Désactiver ce Send pour que personne ne puisse y accéder.",
@@ -4064,7 +4032,7 @@
     "message": "Modifier le contact d'urgence"
   },
   "inviteEmergencyContactDesc": {
-    "message": "Invitez un nouveau contact d'urgence en saisissant l'adresse électronique de son compte Bitwarden ci-dessous. S'il n'a pas encore de compte Bitwarden, il lui sera demandé de créer un nouveau compte."
+    "message": "Invitez un nouveau contact d'urgence en entrant l'adresse e-mail de leur compte Bitwarden ci-dessous. S'ils n'ont pas encore de compte Bitwarden, ils seront invités à en créer un."
   },
   "emergencyAccessRecoveryInitiated": {
     "message": "Accès d'urgence initié"
@@ -4118,7 +4086,7 @@
     }
   },
   "emergencyInviteAcceptedDesc": {
-    "message": "Vous pourrez accéder aux options d'urgence pour cet utilisateur après que votre identité aura été confirmée. Nous vous enverrons un courriel lorsque cela se produira."
+    "message": "Vous pourrez accéder aux options d'urgence pour cet utilisateur après la confirmation de votre identité. Nous vous enverrons un e-mail lorsque cela se produira."
   },
   "requestAccess": {
     "message": "Demander l’accès"
@@ -4133,7 +4101,7 @@
     }
   },
   "requestSent": {
-    "message": "Accès d'urgence demandé pour $USER$. Nous vous informerons par courriel lorsqu'il sera possible de continuer.",
+    "message": "Accès d'urgence demandé pour $USER$. Nous vous informerons par e-mail quand il sera possible de continuer.",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -4217,14 +4185,14 @@
     "message": "Les utilisateurs de l'organisation qui peuvent gérer les politiques de l'organisation sont exonérés de l'application de cette politique."
   },
   "disableHideEmail": {
-    "message": "Toujours afficher l'adresse électronique du membre avec les destinataires lors de la création ou de l'édition d'un Send.",
+    "message": "Interdire aux utilisateurs de masquer leur adresse e-mail aux destinataires lors de la création ou de la modification d'un Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
     "message": "Les politiques d'organisation suivantes sont actuellement en vigueur :"
   },
   "sendDisableHideEmailInEffect": {
-    "message": "Les utilisateurs ne sont pas autorisés à masquer leur adresse électronique aux destinataires lors de la création ou de l'édition d'un Send.",
+    "message": "Les utilisateurs ne sont pas autorisés à masquer leur adresse e-mail aux destinataires lors de la création ou de la modification d'un Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "modifiedPolicyId": {
@@ -4419,7 +4387,7 @@
     }
   },
   "viewSendHiddenEmailWarning": {
-    "message": "L'utilisateur de Bitwarden qui a créé ce Send a choisi de masquer son adresse électronique. Vous devriez vous assurer que vous faites confiance à la source de ce lien avant d'utiliser ou de télécharger son contenu.",
+    "message": "L'utilisateur Bitwarden qui a créé ce Send a choisi de masquer son adresse e-mail. Vous devez vous assurer que vous faites confiance à la source de ce lien avant d'utiliser ou de télécharger son contenu.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDateIsInvalid": {
@@ -4691,7 +4659,7 @@
     "message": "Les utilisateurs de service peuvent gérer toutes les organisations clientes et y accéder."
   },
   "providerInviteUserDesc": {
-    "message": "Invitez un nouvel utilisateur à votre fournisseur en saisissant l'adresse électronique de son compte Bitwarden ci-dessous. S'il n'a pas encore de compte Bitwarden, il lui sera demandé de créer un nouveau compte."
+    "message": "Invitez de nouveaux utilisateurs à votre fournisseur en entrant l'adresse e-mail de leur compte Bitwarden ci-dessous. S'ils n’ont pas déjà un compte Bitwarden, il leur sera demandé d'en créer un nouveau."
   },
   "joinProvider": {
     "message": "Rejoindre le fournisseur"
@@ -4703,7 +4671,7 @@
     "message": "Impossible d'accepter l'invitation. Demandez à un administrateur du fournisseur d'envoyer une nouvelle invitation."
   },
   "providerInviteAcceptedDesc": {
-    "message": "Vous pourrez accéder à ce fournisseur dès qu'un administrateur aura confirmé votre adhésion. Nous vous enverrons un courriel lorsque cela se produira."
+    "message": "Vous pourrez accéder à ce fournisseur dès qu'un administrateur aura confirmé votre inscription. Nous vous enverrons un e-mail lorsque ce sera fait."
   },
   "providerUsersNeedConfirmed": {
     "message": "Il y a des utilisateurs qui ont accepté leur invitation, mais qui doivent encore être confirmés. Les utilisateurs n'auront pas accès au fournisseur tant qu'ils n'auront pas été confirmés."
@@ -4891,7 +4859,7 @@
     "message": "Types de claim personnalisés pour l'identifiant de l'utilisateur"
   },
   "additionalEmailClaimTypes": {
-    "message": "Types de réclamation par courriel"
+    "message": "Types de claim pour l'e-mail"
   },
   "additionalNameClaimTypes": {
     "message": "Types de claim personnalisés pour le nom"
@@ -4963,7 +4931,7 @@
     "message": "Bitwarden Familles gratuit"
   },
   "sponsoredFamiliesEligible": {
-    "message": "Vous et votre famille êtes éligibles à Bitwarden Familles gratuitement. Réclamez-le avec votre courriel personnel pour sécuriser vos données, même lorsque vous n'êtes pas au travail."
+    "message": "Vous et votre famille êtes éligibles pour profiter gratuitement de Bitwarden Familles. Utilisez votre adresse e-mail personnelle pour obtenir votre accès et garder vos données en sécurité même lorsque vous n'êtes pas au travail."
   },
   "sponsoredFamiliesEligibleCard": {
     "message": "Obtenez votre abonnement Bitwarden Familles gratuit aujourd'hui pour garder vos données en sécurité même lorsque vous n'êtes pas au travail."
@@ -4993,7 +4961,7 @@
     "message": "Quelle offre Familles gratuite aimeriez-vous obtenir ?"
   },
   "sponsoredFamiliesEmail": {
-    "message": "Saisissez votre courriel personnel pour réclamer Bitwarden Familles"
+    "message": "Entrez votre adresse e-mail personnelle pour obtenir Bitwarden Familles"
   },
   "sponsoredFamiliesLeaveCopy": {
     "message": "Si vous supprimez une offre ou si vous n'êtes plus membre de l'organisation de parrainage, votre parrainage Familles expirera à la prochaine date de renouvellement."
@@ -5005,7 +4973,7 @@
     "message": "Il vous a été offert un plan organisation Bitwarden \"Families\" gratuit. Pour continuer, vous devez vous connecter au compte qui a reçu l'offre."
   },
   "sponsoredFamiliesAcceptFailed": {
-    "message": "Impossible d'accepter l'offre. Veuillez renvoyer le courriel de l'offre depuis votre compte d'entreprise et réessayer."
+    "message": "Impossible d'accepter l'offre. Veuillez renvoyer l'e-mail de l'offre depuis votre compte professionnel et réessayer."
   },
   "sponsoredFamiliesAcceptFailedShort": {
     "message": "Impossible d'accepter l'offre. $DESCRIPTION$",
@@ -5038,7 +5006,7 @@
     }
   },
   "resendEmailLabel": {
-    "message": "Renvoyer le courriel de parrainage au parrainage $NAME$",
+    "message": "Renvoyer l'e-mail d'invitation au parrainage \"$NAME$\"",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -5065,7 +5033,7 @@
     "message": "Parrainage créé"
   },
   "emailSent": {
-    "message": "Courriel envoyé"
+    "message": "E-mail envoyé"
   },
   "revokeSponsorshipConfirmation": {
     "message": "Après avoir supprimé ce compte, le propriétaire de l'organisation Familles sera responsable de cet abonnement et des factures associées. Êtes-vous sûr de vouloir continuer ?"
@@ -5241,6 +5209,9 @@
   "billingSyncApiKeyRotated": {
     "message": "Jeton permuté."
   },
+  "billingSync": {
+    "message": "Synchronisation de Facturation"
+  },
   "billingSyncDesc": {
     "message": "La Synchronisation de Facturation fournit des forfaits Familles Gratuits pour les membres et des capacités de facturation avancées en liant votre Bitwarden auto-hébergé au serveur cloud Bitwarden."
   },
@@ -5292,15 +5263,6 @@
   "required": {
     "message": "requis"
   },
-  "characterMaximum": {
-    "message": "$MAX$ caractères maximum",
-    "placeholders": {
-      "max": {
-        "content": "$1",
-        "example": "100"
-      }
-    }
-  },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Requis si l'ID d'Entité n'est pas une URL."
   },
@@ -5323,7 +5285,7 @@
     "message": "Export du coffre de l'organisation"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus. Seules les informations sur les éléments du coffre seront exportées et n'incluront pas l'historique des mots de passe associés ou pièces jointes.",
+    "message": "Seuls les éléments du coffre personnel associé à l'adresse e-mail $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5413,7 +5375,7 @@
     "message": "Élément inconnu, vous devrez peut-être vous connecter avec un autre compte pour accéder à cet élément."
   },
   "cannotSponsorSelf": {
-    "message": "Vous ne pouvez pas réclamer pour le compte actif. Saisissez un courriel différent."
+    "message": "Vous ne pouvez pas réclamer pour le compte actif. Entrez un e-mail différent."
   },
   "revokeWhenExpired": {
     "message": "Expire le $DATE$",
@@ -5482,13 +5444,13 @@
     "message": "Activer la Vérification de l'Appareil"
   },
   "deviceVerificationDesc": {
-    "message": "Les codes de vérification sont envoyés à votre adresse électronique lorsque vous vous connectez à partir d'un appareil non reconnu"
+    "message": "Lorsque cette option est activée, les codes de vérification sont envoyés à votre adresse e-mail lorsque vous vous connectez à partir d'un appareil inconnu"
   },
   "updatedDeviceVerification": {
     "message": "Vérification de l'Appareil mise à jour"
   },
   "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
-    "message": "Êtes-vous sûr de vouloir activer la vérification des appareils ? Les courriels de code de vérification arriveront à : $EMAIL$",
+    "message": "Êtes-vous sûr de vouloir activer la Vérification de l'Appareil ? Les e-mails de code de vérification arriveront à : $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5557,7 +5519,7 @@
     "message": "Entrée requise."
   },
   "inputEmail": {
-    "message": "L'entrée n'est pas une adresse électronique."
+    "message": "L'entrée n'est pas une adresse e-mail."
   },
   "inputMinLength": {
     "message": "L'entrée doit comporter au moins $COUNT$ caractères.",
@@ -5583,18 +5545,6 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
-      }
-    }
-  },
-  "multipleInputEmails": {
-    "message": "1 ou plusieurs courriels sont invalides"
-  },
-  "tooManyEmails": {
-    "message": "Vous ne pouvez soumettre que jusqu'à $COUNT$ courriels à la fois",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
       }
     }
   },
@@ -5635,7 +5585,7 @@
     "message": "Choisissez la couleur de votre avatar"
   },
   "customizeAvatar": {
-    "message": "Personnaliser l'avatar"
+    "message": "Personnaliser votre avatar"
   },
   "avatarUpdated": {
     "message": "Avatar mis à jour"
@@ -5857,7 +5807,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 projects"
+        "example": "Delete 3 Projects"
       }
     }
   },
@@ -5940,7 +5890,7 @@
     "message": "Jeton d'accès créé et copié dans le presse-papiers"
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "La gestion des permissions n'est pas disponible pour la bêta."
+    "message": "La gestion des permissions n'est pas disponible pour la version bêta."
   },
   "revokeAccessToken": {
     "message": "Révoquer le jeton d'accès"
@@ -6103,56 +6053,5 @@
         "example": "2"
       }
     }
-  },
-  "licenseAndBillingManagement": {
-    "message": "Gestion des licences et de la facturation"
-  },
-  "automaticSync": {
-    "message": "Synchronisation automatique"
-  },
-  "manualUpload": {
-    "message": "Téléversement manuel"
-  },
-  "manualUploadDesc": {
-    "message": "Si vous ne voulez pas opter pour la synchronisation de la facturation, téléchargez manuellement votre licence ici."
-  },
-  "syncLicense": {
-    "message": "Synchroniser la licence"
-  },
-  "licenseSyncSuccess": {
-    "message": "Licence synchronisée avec succès"
-  },
-  "licenseUploadSuccess": {
-    "message": "Licence téléversée avec succès"
-  },
-  "lastLicenseSync": {
-    "message": "Dernière synchronisation de licence"
-  },
-  "billingSyncHelp": {
-    "message": "Aide sur la Synchronisation de la Facturation"
-  },
-  "uploadLicense": {
-    "message": "Téléverser la licence"
-  },
-  "lowKdfIterations": {
-    "message": "Itérations KDF basses"
-  },
-  "lowKdfIterationsDesc": {
-    "message": "Augmentez vos paramètres de chiffrement KDF pour améliorer la sécurité de votre compte."
-  },
-  "changeKdfSettings": {
-    "message": "Changer les paramètres KDF"
-  },
-  "changeKdfLoggedOutWarning": {
-    "message": "En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure. Nous vous recommandons d'exporter votre coffre avant de changer vos paramètres de chiffrement afin d'éviter une perte de données."
-  },
-  "secretsManagerBeta": {
-    "message": "Gestionnaire de secrets bêta"
-  },
-  "secretsManagerBetaDesc": {
-    "message": "Permettre à l'utilisateur un accès gratuit au gestionnaire de secrets pendant le programme bêta."
-  },
-  "userAccessSecretsManager": {
-    "message": "Cet utilisateur peut accéder au gestionnaire de secrets bêta"
   }
 }

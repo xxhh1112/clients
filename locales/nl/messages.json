@@ -133,9 +133,6 @@
   "ms": {
     "message": "Mej."
   },
-  "mx": {
-    "message": "Mx"
-  },
   "dr": {
     "message": "Dr."
   },
@@ -281,35 +278,32 @@
     "message": "Favorieten doorzoeken"
   },
   "searchLogin": {
-    "message": "Logins zoeken",
+    "message": "Search logins",
     "description": "Search Login type"
   },
   "searchCard": {
-    "message": "Kaarten zoeken",
+    "message": "Search cards",
     "description": "Search Card type"
   },
   "searchIdentity": {
-    "message": "Identiteiten zoeken",
+    "message": "Search identities",
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "Veilige notities zoeken",
+    "message": "Search secure notes",
     "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Kluis doorzoeken"
   },
   "searchMyVault": {
-    "message": "Mijn kluis doorzoeken"
+    "message": "Search my vault"
   },
   "searchOrganization": {
-    "message": "Organisaties zoeken"
+    "message": "Search organization"
   },
   "searchMembers": {
-    "message": "Leden zoeken"
-  },
-  "searchGroups": {
-    "message": "Groepen zoeken"
+    "message": "Search members"
   },
   "allItems": {
     "message": "Alle Items"
@@ -393,7 +387,7 @@
     "message": "Selecteren"
   },
   "newItem": {
-    "message": "Nieuw item"
+    "message": "New item"
   },
   "addItem": {
     "message": "Item toevoegen"
@@ -405,8 +399,7 @@
     "message": "Item weergeven"
   },
   "new": {
-    "message": "Nieuw",
-    "description": "for adding new items"
+    "message": "Nieuw"
   },
   "item": {
     "message": "Item"
@@ -586,10 +579,10 @@
     "message": "Map is verwijderd"
   },
   "editInfo": {
-    "message": "Info bewerken"
+    "message": "Edit info"
   },
   "access": {
-    "message": "Toegang"
+    "message": "Access"
   },
   "loggedOut": {
     "message": "Uitgelogd"
@@ -749,7 +742,7 @@
     "message": "Er zijn geen items om weer te geven."
   },
   "noPermissionToViewAllCollectionItems": {
-    "message": "Je hebt geen rechten om alle items in deze collectie te zien."
+    "message": "You do not have permission to view all items in this collection."
   },
   "noCollectionsInList": {
     "message": "Er zijn geen verzamelingen om weer te geven."
@@ -761,7 +754,7 @@
     "message": "Er zijn geen gebruikers om weer te geven."
   },
   "noMembersInList": {
-    "message": "Er zijn geen leden op weer te geven."
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Er zijn geen gebeurtenissen om weer te geven."
@@ -908,7 +901,7 @@
     }
   },
   "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collectie(s) permanent verwijderen.",
+    "message": "$COUNT$ collection(s) will be permanently deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -917,7 +910,7 @@
     }
   },
   "deleteSelectedConfirmation": {
-    "message": "Weet je zeker dat je wilt doorgaan?"
+    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Kies een map waar je de $COUNT$ geselecteerde item(s) heen wilt verplaatsen.",
@@ -1156,19 +1149,6 @@
         "example": "50,000"
       }
     }
-  },
-  "kdfMemory": {
-    "message": "KDF geheugen (MB)",
-    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
-  },
-  "argon2Warning": {
-    "message": "Je KDF-iteraties, geheugen en parallellisatie te hoog instellen kan leiden tot slechte prestaties bij het inloggen (en ontgrendelen) van Bitwarden op langzamere of oudere apparaten. We adviseren je deze waarden individueel in kleine stappen op te hogen en vervolgens al je apparaten te testen."
-  },
-  "kdfParallelism": {
-    "message": "KDF-parallellisatie"
-  },
-  "argon2Desc": {
-    "message": "Hogere instellingen voor KDF-iteraties, geheugen en parallellisatie kunnen je hoofdwachtwoord beschermen tegen brute-foce-aanvallen."
   },
   "changeKdf": {
     "message": "KDF wijzigen"
@@ -2057,9 +2037,6 @@
   "manageSubscription": {
     "message": "Abonnement beheren"
   },
-  "launchCloudSubscription": {
-    "message": "Cloudabonnement starten"
-  },
   "storage": {
     "message": "Opslagruimte"
   },
@@ -2453,7 +2430,7 @@
     "message": "Weet je zeker dat je deze groep wilt verwijderen?"
   },
   "deleteMultipleGroupsConfirmation": {
-    "message": "Weet je zeker dat je de volgende $QUANTITY$ groep(en) wilt verwijderen?",
+    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2480,7 +2457,7 @@
     "message": "Je kunt het externe ID gebruiken als referentie of om een koppeling te leggen tussen deze bron en een extern systeem zoals een directory met gebruikers."
   },
   "nestCollectionUnder": {
-    "message": "Plaats collectie onder"
+    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Toegangsbeheer"
@@ -2504,22 +2481,13 @@
     "message": "Verzameling bewerken"
   },
   "collectionInfo": {
-    "message": "Collectieinformatie"
+    "message": "Collection info"
   },
   "deleteCollectionConfirmation": {
     "message": "Weet je zeker dat je deze verzameling wilt verwijderen?"
   },
   "editMember": {
-    "message": "Lid wijzigen"
-  },
-  "fieldOnTabRequiresAttention": {
-    "message": "Een veld op het tabblad '$TAB$' vereist je aandacht.",
-    "placeholders": {
-      "tab": {
-        "content": "$1",
-        "example": "Collection info"
-      }
-    }
+    "message": "Edit member"
   },
   "inviteUserDesc": {
     "message": "Nodig een nieuwe gebruiker uit voor je organisatie door het e-mailadres van hun Bitwarden-account hieronder in te vullen. Als ze nog geen Bitwarden-account hebben, kunnen ze een nieuw account aanmaken."
@@ -2786,7 +2754,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Verwijderde collecties"
+    "message": "Deleted collections"
   },
   "deletedCollectionId": {
     "message": "Verzameling verwijderd $ID$.",
@@ -2834,7 +2802,7 @@
     }
   },
   "deletedManyGroups": {
-    "message": "$QUANTITY$ groep(en) verwijderd.",
+    "message": "Deleted $QUANTITY$ group(s).",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -5241,6 +5209,9 @@
   "billingSyncApiKeyRotated": {
     "message": "Token geroteerd."
   },
+  "billingSync": {
+    "message": "Factureringssynchronisatie"
+  },
   "billingSyncDesc": {
     "message": "Factureringssynchronisatie biedt leden gratis Families-plannen en geavanceerde factureringsmogelijkheden door je zelfgehoste Bitwarden te koppelen aan de Bitwarden-cloudserver."
   },
@@ -5291,15 +5262,6 @@
   },
   "required": {
     "message": "vereist"
-  },
-  "characterMaximum": {
-    "message": "Maximaal $MAX$ tekens",
-    "placeholders": {
-      "max": {
-        "content": "$1",
-        "example": "100"
-      }
-    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Vereist als Entiteit ID geen URL is."
@@ -5578,23 +5540,11 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "De volgende tekens zijn niet toegestaan: $CHARACTERS$",
+    "message": "The following characters are not allowed: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
-      }
-    }
-  },
-  "multipleInputEmails": {
-    "message": "Een of meer e-mailadressen zijn ongeldig"
-  },
-  "tooManyEmails": {
-    "message": "Je kunt maximaal $COUNT$ e-mailberichten per keer versturen",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
       }
     }
   },
@@ -5763,10 +5713,10 @@
     "message": "Secret created"
   },
   "newSecret": {
-    "message": "New secret"
+    "message": "New Secret"
   },
   "newServiceAccount": {
-    "message": "New service account"
+    "message": "New Service Account"
   },
   "secretsNoItemsTitle": {
     "message": "No secrets to show"
@@ -5778,22 +5728,22 @@
     "message": "Geen inhoud beschikbaar"
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Create a new service account to get started automating secret access."
+    "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "Search secrets"
+    "message": "Search Secrets"
   },
   "deleteServiceAccounts": {
-    "message": "Delete service accounts"
+    "message": "Delete Service Accounts"
   },
   "deleteServiceAccount": {
-    "message": "Delete service account"
+    "message": "Delete Service Account"
   },
   "viewServiceAccount": {
-    "message": "View service account"
+    "message": "View Service Account"
   },
   "searchServiceAccounts": {
-    "message": "Search service accounts"
+    "message": "Search Service Accounts"
   },
   "addProject": {
     "message": "Project toevoegen"
@@ -5820,7 +5770,7 @@
     "message": "Secrets sent to trash"
   },
   "serviceAccountCreated": {
-    "message": "Service account created"
+    "message": "Service Account Created"
   },
   "smAccess": {
     "message": "Toegang"
@@ -5832,10 +5782,10 @@
     "message": "Service account naam"
   },
   "newSaSelectAccess": {
-    "message": "Type or select projects or secrets"
+    "message": "Type or Select Projects or Secrets"
   },
   "newSaTypeToFilter": {
-    "message": "Type to filter"
+    "message": "Type to Filter"
   },
   "deleteProjectsToast": {
     "message": "Projecten verwijderd"
@@ -5857,7 +5807,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 projects"
+        "example": "Delete 3 Projects"
       }
     }
   },
@@ -5961,7 +5911,7 @@
     "message": "Bijwerken"
   },
   "plusNMore": {
-    "message": "+ $QUANTITY$ meer",
+    "message": "+ $QUANTITY$ more",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -5970,34 +5920,34 @@
     }
   },
   "groupInfo": {
-    "message": "Groepsinformatie"
+    "message": "Group info"
   },
   "editGroupMembersDesc": {
-    "message": "Geef leden toegang tot de aan de groep toegewezen collecties."
+    "message": "Grant members access to the group's assigned collections."
   },
   "editGroupCollectionsDesc": {
-    "message": "Geef toegang tot collecties door ze aan deze groep toe te voegen."
+    "message": "Grant access to collections by adding them to this group."
   },
   "accessAllCollectionsDesc": {
-    "message": "Geef toegang tot alle huidige en toekomstige collecties."
+    "message": "Grant access to all current and future collections."
   },
   "accessAllCollectionsHelp": {
-    "message": "Indien aangevinkt, vervangt dit alle andere rechten op collecties."
+    "message": "If checked, this will replace all other collection permissions."
   },
   "selectMembers": {
-    "message": "Leden selecteren"
+    "message": "Select members"
   },
   "selectCollections": {
-    "message": "Collecties selecteren"
+    "message": "Select collections"
   },
   "role": {
     "message": "Rol"
   },
   "removeMember": {
-    "message": "Lid verwijderen"
+    "message": "Remove member"
   },
   "collection": {
-    "message": "Collectie"
+    "message": "Collection"
   },
   "canView": {
     "message": "Kan bekijken"
@@ -6012,13 +5962,13 @@
     "message": "Kan bekijken, behalve wachtwoorden"
   },
   "noCollectionsAdded": {
-    "message": "Geen collecties toegevoegd"
+    "message": "No collections added"
   },
   "noMembersAdded": {
-    "message": "Geen leden toegevoegd"
+    "message": "No members added"
   },
   "noGroupsAdded": {
-    "message": "Geen groepen toegevoegd"
+    "message": "No groups added"
   },
   "group": {
     "message": "Groep"
@@ -6030,37 +5980,37 @@
     "message": "Deze gebruiker kan alle items inzien en bewerken."
   },
   "membersColumnHeader": {
-    "message": "Lid/Groep"
+    "message": "Member/Group"
   },
   "groupAndMemberColumnHeader": {
-    "message": "Lid"
+    "message": "Member"
   },
   "selectGroupsAndMembers": {
-    "message": "Groepen en leden selecteren"
+    "message": "Select groups and members"
   },
   "selectGroups": {
-    "message": "Groepen selecteren"
+    "message": "Select groups"
   },
   "userPermissionOverrideHelper": {
-    "message": "Ingestelde rechten voor een lid vervangen ingestelde rechten door de groep van het lid"
+    "message": "Permissions set for a member will replace permissions set by that member's group"
   },
   "noMembersOrGroupsAdded": {
-    "message": "Geen leden of groepen toegevoegd"
+    "message": "No members or groups added"
   },
   "deleted": {
-    "message": "Verwijderd"
+    "message": "Deleted"
   },
   "memberStatusFilter": {
-    "message": "Lid status filter"
+    "message": "Member status filter"
   },
   "inviteMember": {
-    "message": "Lid uitnodigen"
+    "message": "Invite member"
   },
   "needsConfirmation": {
-    "message": "Bevestiging nodig"
+    "message": "Needs confirmation"
   },
   "memberRole": {
-    "message": "Rol van lid"
+    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "Meer van Bitwarden"
@@ -6103,56 +6053,5 @@
         "example": "2"
       }
     }
-  },
-  "licenseAndBillingManagement": {
-    "message": "Licentie- en facturatiebeheer"
-  },
-  "automaticSync": {
-    "message": "Automatisch synchroniseren"
-  },
-  "manualUpload": {
-    "message": "Handmatig uploaden"
-  },
-  "manualUploadDesc": {
-    "message": "Als je geen gebruik wilt maken van facturatiesynchronisatie, upload dan hier je licentie."
-  },
-  "syncLicense": {
-    "message": "Licentie synchroniseren"
-  },
-  "licenseSyncSuccess": {
-    "message": "Licentie gesynchroniseerd"
-  },
-  "licenseUploadSuccess": {
-    "message": "Licentie geüpload"
-  },
-  "lastLicenseSync": {
-    "message": "Laatste licentie-synchronisatie"
-  },
-  "billingSyncHelp": {
-    "message": "Hulp bij facturatiesynchronisatie"
-  },
-  "uploadLicense": {
-    "message": "Licentie uploaden"
-  },
-  "lowKdfIterations": {
-    "message": "Low KDF Iterations"
-  },
-  "lowKdfIterationsDesc": {
-    "message": "Increase your KDF encryption settings to improve the security of your account."
-  },
-  "changeKdfSettings": {
-    "message": "Change KDF settings"
-  },
-  "changeKdfLoggedOutWarning": {
-    "message": "Als je doorgaat zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief. We raden je aan je kluis te exporteren voordat je je versleutelingsinstellingen wijzigt om gegevensverlies te voorkomen."
-  },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Bèta"
-  },
-  "secretsManagerBetaDesc": {
-    "message": "Gebruikerstoegang tot de Secrets Manager inschakelen is gratis tijdens het bètaprogramma."
-  },
-  "userAccessSecretsManager": {
-    "message": "Deze gebruiker heeft toegang tot de Secrets Manager Bèta"
   }
 }

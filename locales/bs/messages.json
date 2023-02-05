@@ -133,9 +133,6 @@
   "ms": {
     "message": "gđica."
   },
-  "mx": {
-    "message": "Mx"
-  },
   "dr": {
     "message": "dr"
   },
@@ -205,10 +202,10 @@
     "message": "Tačno"
   },
   "startsWith": {
-    "message": "Počinje sa"
+    "message": "Starts with"
   },
   "regEx": {
-    "message": "Regularni izraz",
+    "message": "Regular expression",
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
@@ -223,10 +220,10 @@
     "message": "Nikad"
   },
   "toggleVisibility": {
-    "message": "Prikaži/Sakrij"
+    "message": "Toggle visibility"
   },
   "toggleCollapse": {
-    "message": "Sažmi/Proširi",
+    "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
   },
   "generatePassword": {
@@ -293,7 +290,7 @@
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "Traži bilješke",
+    "message": "Search secure notes",
     "description": "Search Secure Note type"
   },
   "searchVault": {
@@ -308,14 +305,11 @@
   "searchMembers": {
     "message": "Search members"
   },
-  "searchGroups": {
-    "message": "Search groups"
-  },
   "allItems": {
-    "message": "Sve stavke"
+    "message": "All items"
   },
   "favorites": {
-    "message": "Favoriti"
+    "message": "Favorites"
   },
   "types": {
     "message": "Types"
@@ -405,11 +399,10 @@
     "message": "Prikaz Stavke"
   },
   "new": {
-    "message": "Novo",
-    "description": "for adding new items"
+    "message": "New"
   },
   "item": {
-    "message": "Stavke"
+    "message": "Item"
   },
   "ex": {
     "message": "npr.",
@@ -471,7 +464,7 @@
     "message": "Trezor"
   },
   "vaults": {
-    "message": "Trezori"
+    "message": "Vaults"
   },
   "vaultItems": {
     "message": "Vault items"
@@ -589,7 +582,7 @@
     "message": "Edit info"
   },
   "access": {
-    "message": "Pristup"
+    "message": "Access"
   },
   "loggedOut": {
     "message": "Logged out"
@@ -601,16 +594,16 @@
     "message": "Are you sure you want to log out?"
   },
   "logOut": {
-    "message": "Odjavi se"
+    "message": "Log out"
   },
   "ok": {
-    "message": "Uredu"
+    "message": "Ok"
   },
   "yes": {
-    "message": "Da"
+    "message": "Yes"
   },
   "no": {
-    "message": "Ne"
+    "message": "No"
   },
   "loginOrCreateNewAccount": {
     "message": "Log in or create a new account to access your secure vault."
@@ -673,10 +666,10 @@
     "message": "Master password hint"
   },
   "settings": {
-    "message": "Podešavanja"
+    "message": "Settings"
   },
   "passwordHint": {
-    "message": "Nagovještaj lozinke"
+    "message": "Password hint"
   },
   "enterEmailToGetHint": {
     "message": "Enter your account email address to receive your master password hint."
@@ -715,16 +708,16 @@
     "message": "An unexpected error has occurred."
   },
   "emailAddress": {
-    "message": "Email adresa"
+    "message": "Email address"
   },
   "yourVaultIsLocked": {
     "message": "Your vault is locked. Verify your master password to continue."
   },
   "unlock": {
-    "message": "Otključaj"
+    "message": "Unlock"
   },
   "loggedInAsEmailOn": {
-    "message": "Prijavljen kao $EMAIL$ na $HOSTNAME$.",
+    "message": "Logged in as $EMAIL$ on $HOSTNAME$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -743,7 +736,7 @@
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
-    "message": "Zaključaj odmah"
+    "message": "Lock now"
   },
   "noItemsInList": {
     "message": "There are no items to list."
@@ -1149,26 +1142,13 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Setting your KDF iterations too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend that you increase the value in increments of $INCREMENT$ and then test all of your devices.",
+    "message": "Setting your KDF iterations too high could result in poor performance when logging into (and unlocking) Bitwarden on devices with slower CPUs. We recommend that you increase the value in increments of $INCREMENT$ and then test all of your devices.",
     "placeholders": {
       "increment": {
         "content": "$1",
         "example": "50,000"
       }
     }
-  },
-  "kdfMemory": {
-    "message": "KDF memory (MB)",
-    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
-  },
-  "argon2Warning": {
-    "message": "Setting your KDF iterations, memory, and parallelism too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend changing these individually in small increments and then test all of your devices."
-  },
-  "kdfParallelism": {
-    "message": "KDF parallelism"
-  },
-  "argon2Desc": {
-    "message": "Higher KDF iterations, memory, and parallelism can help protect your master password from being brute forced by an attacker."
   },
   "changeKdf": {
     "message": "Change KDF"
@@ -2057,9 +2037,6 @@
   "manageSubscription": {
     "message": "Manage subscription"
   },
-  "launchCloudSubscription": {
-    "message": "Launch Cloud Subscription"
-  },
   "storage": {
     "message": "Storage"
   },
@@ -2512,20 +2489,11 @@
   "editMember": {
     "message": "Edit member"
   },
-  "fieldOnTabRequiresAttention": {
-    "message": "A field on the '$TAB$' tab requires your attention.",
-    "placeholders": {
-      "tab": {
-        "content": "$1",
-        "example": "Collection info"
-      }
-    }
-  },
   "inviteUserDesc": {
     "message": "Invite a new user to your organization by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
   },
   "inviteMultipleEmailDesc": {
-    "message": "Enter up to $COUNT$ emails by separating with a comma.",
+    "message": "You can invite up to $COUNT$ users at a time by comma separating a list of email addresses.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5241,8 +5209,11 @@
   "billingSyncApiKeyRotated": {
     "message": "Token rotated"
   },
+  "billingSync": {
+    "message": "Billing sync"
+  },
   "billingSyncDesc": {
-    "message": "Billing sync unlocks Families sponsorships and automatic license syncing on your server. After making updates in the Bitwarden cloud server, select Sync License to apply changes."
+    "message": "Billing sync provides Free Families plans for members and advanced billing capabilities by linking your self-hosted Bitwarden to the Bitwarden cloud server."
   },
   "billingSyncKeyDesc": {
     "message": "A billing sync token from your cloud organization's subscription settings is required to complete this form."
@@ -5291,15 +5262,6 @@
   },
   "required": {
     "message": "required"
-  },
-  "characterMaximum": {
-    "message": "$MAX$ character maximum",
-    "placeholders": {
-      "max": {
-        "content": "$1",
-        "example": "100"
-      }
-    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Required if Entity ID is not a URL."
@@ -5586,18 +5548,6 @@
       }
     }
   },
-  "multipleInputEmails": {
-    "message": "1 or more emails are invalid"
-  },
-  "tooManyEmails": {
-    "message": "You can only submit up to $COUNT$ emails at a time",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
-      }
-    }
-  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
@@ -5697,25 +5647,25 @@
     "message": "Projects"
   },
   "lastEdited": {
-    "message": "Last edited"
+    "message": "Last Edited"
   },
   "editSecret": {
-    "message": "Edit secret"
+    "message": "Edit Secret"
   },
   "addSecret": {
-    "message": "Add secret"
+    "message": "Add Secret"
   },
   "copySecretName": {
-    "message": "Copy secret name"
+    "message": "Copy Secret Name"
   },
   "copySecretValue": {
-    "message": "Copy secret value"
+    "message": "Copy Secret Value"
   },
   "deleteSecret": {
-    "message": "Delete secret"
+    "message": "Delete Secret"
   },
   "deleteSecrets": {
-    "message": "Delete secrets"
+    "message": "Delete Secrets"
   },
   "secretProjectAssociationDescription": {
     "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
@@ -5730,31 +5680,31 @@
     "message": "Project"
   },
   "editProject": {
-    "message": "Edit project"
+    "message": "Edit Project"
   },
   "viewProject": {
-    "message": "View project"
+    "message": "View Project"
   },
   "deleteProject": {
-    "message": "Delete project"
+    "message": "Delete Project"
   },
   "deleteProjects": {
-    "message": "Delete projects"
+    "message": "Delete Projects"
   },
   "secret": {
     "message": "Secret"
   },
   "serviceAccount": {
-    "message": "Service account"
+    "message": "Service Account"
   },
   "serviceAccounts": {
-    "message": "Service accounts"
+    "message": "Service Accounts"
   },
   "secrets": {
     "message": "Secrets"
   },
   "nameValuePair": {
-    "message": "Name/Value pair"
+    "message": "Name/Value Pair"
   },
   "secretEdited": {
     "message": "Secret edited"
@@ -5763,10 +5713,10 @@
     "message": "Secret created"
   },
   "newSecret": {
-    "message": "New secret"
+    "message": "New Secret"
   },
   "newServiceAccount": {
-    "message": "New service account"
+    "message": "New Service Account"
   },
   "secretsNoItemsTitle": {
     "message": "No secrets to show"
@@ -5778,25 +5728,25 @@
     "message": "Nothing to show yet"
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Create a new service account to get started automating secret access."
+    "message": "Create a new Service Account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "Search secrets"
+    "message": "Search Secrets"
   },
   "deleteServiceAccounts": {
-    "message": "Delete service accounts"
+    "message": "Delete Service Accounts"
   },
   "deleteServiceAccount": {
-    "message": "Delete service account"
+    "message": "Delete Service Account"
   },
   "viewServiceAccount": {
-    "message": "View service account"
+    "message": "View Service Account"
   },
   "searchServiceAccounts": {
-    "message": "Search service accounts"
+    "message": "Search Service Accounts"
   },
   "addProject": {
-    "message": "Add project"
+    "message": "Add Project"
   },
   "projectEdited": {
     "message": "Project edited"
@@ -5808,10 +5758,10 @@
     "message": "Project created"
   },
   "projectName": {
-    "message": "Project name"
+    "message": "Project Name"
   },
   "newProject": {
-    "message": "New project"
+    "message": "New Project"
   },
   "softDeleteSecretWarning": {
     "message": "Deleting secrets can affect existing integrations."
@@ -5820,7 +5770,7 @@
     "message": "Secrets sent to trash"
   },
   "serviceAccountCreated": {
-    "message": "Service account created"
+    "message": "Service Account Created"
   },
   "smAccess": {
     "message": "Access"
@@ -5832,10 +5782,10 @@
     "message": "Service account name"
   },
   "newSaSelectAccess": {
-    "message": "Type or select projects or secrets"
+    "message": "Type or Select Projects or Secrets"
   },
   "newSaTypeToFilter": {
-    "message": "Type to filter"
+    "message": "Type to Filter"
   },
   "deleteProjectsToast": {
     "message": "Projects deleted"
@@ -5857,7 +5807,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 projects"
+        "example": "Delete 3 Projects"
       }
     }
   },
@@ -5898,7 +5848,7 @@
     "message": "Secret sent to trash"
   },
   "searchProjects": {
-    "message": "Search projects"
+    "message": "Search Projects"
   },
   "accessTokens": {
     "message": "Access tokens"
@@ -5943,7 +5893,7 @@
     "message": "Permissions management is unavailable for beta."
   },
   "revokeAccessToken": {
-    "message": "Revoke access token"
+    "message": "Revoke Access Token"
   },
   "submenu": {
     "message": "Submenu"
@@ -6066,7 +6016,7 @@
     "message": "More from Bitwarden"
   },
   "switchProducts": {
-    "message": "Switch products"
+    "message": "Switch Products"
   },
   "freeOrgInvLimitReachedManageBilling": {
     "message": "Free organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
@@ -6103,56 +6053,5 @@
         "example": "2"
       }
     }
-  },
-  "licenseAndBillingManagement": {
-    "message": "License and billing management"
-  },
-  "automaticSync": {
-    "message": "Automatic sync"
-  },
-  "manualUpload": {
-    "message": "Manual upload"
-  },
-  "manualUploadDesc": {
-    "message": "If you do not want to opt into billing sync, manually upload your license here."
-  },
-  "syncLicense": {
-    "message": "Sync license"
-  },
-  "licenseSyncSuccess": {
-    "message": "Successfully synced license"
-  },
-  "licenseUploadSuccess": {
-    "message": "Successfully uploaded license"
-  },
-  "lastLicenseSync": {
-    "message": "Last license sync"
-  },
-  "billingSyncHelp": {
-    "message": "Billing Sync help"
-  },
-  "uploadLicense": {
-    "message": "Upload license"
-  },
-  "lowKdfIterations": {
-    "message": "Low KDF Iterations"
-  },
-  "lowKdfIterationsDesc": {
-    "message": "Increase your KDF encryption settings to improve the security of your account."
-  },
-  "changeKdfSettings": {
-    "message": "Change KDF settings"
-  },
-  "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
-  },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
-  },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
-  },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
   }
 }

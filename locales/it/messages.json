@@ -133,9 +133,6 @@
   "ms": {
     "message": "Sig.na"
   },
-  "mx": {
-    "message": "Mx"
-  },
   "dr": {
     "message": "Dott."
   },
@@ -308,9 +305,6 @@
   "searchMembers": {
     "message": "Cerca membri"
   },
-  "searchGroups": {
-    "message": "Search groups"
-  },
   "allItems": {
     "message": "Tutti gli elementi"
   },
@@ -405,8 +399,7 @@
     "message": "Visualizza elemento"
   },
   "new": {
-    "message": "Nuovo",
-    "description": "for adding new items"
+    "message": "Nuovo"
   },
   "item": {
     "message": "Elemento"
@@ -749,7 +742,7 @@
     "message": "Non ci sono elementi da mostrare."
   },
   "noPermissionToViewAllCollectionItems": {
-    "message": "Non hai i permessi per visualizzare tutti gli elementi in questa raccolta."
+    "message": "Non hai i permessi per visualizzare tutti gli elementi in questa collezione."
   },
   "noCollectionsInList": {
     "message": "Nessuna raccolta da visualizzare."
@@ -908,7 +901,7 @@
     }
   },
   "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ raccolte selezionate saranno eliminate definitivamente.",
+    "message": "Il numero di collezioni selezionate ($COUNT$) sarà eliminato permanemtenente.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -994,7 +987,7 @@
     "message": "Conferma password del file"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Utilizza la chiave di crittografia dell'account, derivata dal nome utente e dalla password principale dell'account, per criptare l'esportazione e limitare l'importazione solo all'account Bitwarden corrente."
+    "message": "Utilizzare la chiave di crittografia dell'account, derivata dal nome utente e dalla password principale dell'account, per crittografare l'esportazione e limitare l'importazione solo all'account Bitwarden corrente."
   },
   "passwordProtectedOptionDescription": {
     "message": "Imposta una password per crittare l'esportazione e importala in qualsiasi account Bitwarden, utilizzando la password impostata."
@@ -1156,19 +1149,6 @@
         "example": "50,000"
       }
     }
-  },
-  "kdfMemory": {
-    "message": "KDF memory (MB)",
-    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
-  },
-  "argon2Warning": {
-    "message": "Setting your KDF iterations, memory, and parallelism too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend changing these individually in small increments and then test all of your devices."
-  },
-  "kdfParallelism": {
-    "message": "KDF parallelism"
-  },
-  "argon2Desc": {
-    "message": "Higher KDF iterations, memory, and parallelism can help protect your master password from being brute forced by an attacker."
   },
   "changeKdf": {
     "message": "Cambia KDF"
@@ -1900,7 +1880,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Passa a premium per soli $PRICE$ /anno, o aggiungi account premium per $FAMILYPLANUSERCOUNT$ utenti e condivisione in famiglia senza limiti con un ",
+    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1913,7 +1893,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Piano famiglia di Bitwarden."
+    "message": "Piano familiare di Bitwarden."
   },
   "addons": {
     "message": "Estensioni"
@@ -2056,9 +2036,6 @@
   },
   "manageSubscription": {
     "message": "Gestisci abbonamento"
-  },
-  "launchCloudSubscription": {
-    "message": "Launch Cloud Subscription"
   },
   "storage": {
     "message": "Spazio di archiviazione"
@@ -2453,7 +2430,7 @@
     "message": "Sei sicuro di voler eliminare questo gruppo?"
   },
   "deleteMultipleGroupsConfirmation": {
-    "message": "Sei sicuro di voler eliminare questi $QUANTITY$ gruppi?",
+    "message": "Sei sicuro di voler eliminare questi gruppi ($QUANTITY$)?",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2480,7 +2457,7 @@
     "message": "L'id esterno può essere usato come un riferimento o per collegare questa risorsa ad un sistema esterno come ad esempio una directory utente."
   },
   "nestCollectionUnder": {
-    "message": "Raccolta annidata"
+    "message": "Collezioni innestate sotto"
   },
   "accessControl": {
     "message": "Controllo di accesso"
@@ -2504,22 +2481,13 @@
     "message": "Modifica raccolta"
   },
   "collectionInfo": {
-    "message": "Informazioni sulla raccolta"
+    "message": "Informazioni sulla collezione"
   },
   "deleteCollectionConfirmation": {
     "message": "Sei sicuro di voler eliminare questa raccolta?"
   },
   "editMember": {
     "message": "Modifica membro"
-  },
-  "fieldOnTabRequiresAttention": {
-    "message": "A field on the '$TAB$' tab requires your attention.",
-    "placeholders": {
-      "tab": {
-        "content": "$1",
-        "example": "Collection info"
-      }
-    }
   },
   "inviteUserDesc": {
     "message": "Invita un nuovo utente alla tua organizzazione inserendo il suo indirizzo email dell'account Bitwarden di seguito. Se non hanno già un account Bitwarden, verrà richiesto di creare un nuovo account."
@@ -2786,7 +2754,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Raccolte eliminate"
+    "message": "Collezioni eliminate"
   },
   "deletedCollectionId": {
     "message": "Raccolta $ID$ eliminata.",
@@ -5241,6 +5209,9 @@
   "billingSyncApiKeyRotated": {
     "message": "Token ruotato."
   },
+  "billingSync": {
+    "message": "Sincronizzazione fatturazione"
+  },
   "billingSyncDesc": {
     "message": "La sincronizzazione fatturazione fornisce piani Famiglie Gratis per i membri e funzionalità di fatturazione avanzate collegando il tuo Bitwarden self-hosted al server cloud Bitwarden."
   },
@@ -5291,15 +5262,6 @@
   },
   "required": {
     "message": "obbligatorio"
-  },
-  "characterMaximum": {
-    "message": "$MAX$ character maximum",
-    "placeholders": {
-      "max": {
-        "content": "$1",
-        "example": "100"
-      }
-    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Richiesto se l'Entity ID non è un URL."
@@ -5578,23 +5540,11 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "I seguenti caratteri non sono permessi: $CHARACTERS$",
+    "message": "I seguenti caratteri non sono validi: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
-      }
-    }
-  },
-  "multipleInputEmails": {
-    "message": "1 or more emails are invalid"
-  },
-  "tooManyEmails": {
-    "message": "You can only submit up to $COUNT$ emails at a time",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "20"
       }
     }
   },
@@ -5683,7 +5633,7 @@
     "message": "Cancella tutto"
   },
   "toggleCharacterCount": {
-    "message": "Attiva/disattiva conteggio caratteri",
+    "message": "Attiva/Disattiva conteggio caratteri",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
@@ -5700,46 +5650,46 @@
     "message": "Ultima modifica"
   },
   "editSecret": {
-    "message": "Modifica segreto"
+    "message": "Modifica Segreto"
   },
   "addSecret": {
-    "message": "Aggiungi segreto"
+    "message": "Aggiungi Segreto"
   },
   "copySecretName": {
-    "message": "Copia nome segreto"
+    "message": "Copia Nome Segreto"
   },
   "copySecretValue": {
-    "message": "Copia valore segreto"
+    "message": "Copia Valore Segreto"
   },
   "deleteSecret": {
-    "message": "Elimina segreto"
+    "message": "Elimina Segreto"
   },
   "deleteSecrets": {
-    "message": "Elimina segreti"
+    "message": "Elimina Segreti"
   },
   "secretProjectAssociationDescription": {
-    "message": "Seleziona i progetti a cui sarà associato il segreto. Solo gli utenti dell'organizzazione con accesso a questi progetti saranno in grado di vedere il segreto."
+    "message": "Seleziona i progetti con cui sarà associato il segreto. Solo gli utenti dell'organizzazione con accesso a questi progetti saranno in grado di vedere il segreto."
   },
   "typeOrSelectProjects": {
-    "message": "Digita o seleziona progetti"
+    "message": "Digita o seleziona Progetti"
   },
   "typeOrSelectProject": {
-    "message": "Digita o seleziona progetto"
+    "message": "Digita o seleziona Progetto"
   },
   "project": {
     "message": "Progetto"
   },
   "editProject": {
-    "message": "Modifica progetto"
+    "message": "Modifica Progetto"
   },
   "viewProject": {
-    "message": "Visualizza progetto"
+    "message": "Visualizza Progetto"
   },
   "deleteProject": {
-    "message": "Elimina progetto"
+    "message": "Elimina Progetto"
   },
   "deleteProjects": {
-    "message": "Elimina progetti"
+    "message": "Elimina Progetti"
   },
   "secret": {
     "message": "Segreto"
@@ -5754,7 +5704,7 @@
     "message": "Segreti"
   },
   "nameValuePair": {
-    "message": "Coppia nome/valore"
+    "message": "Coppia Nome/Valore"
   },
   "secretEdited": {
     "message": "Segreto modificato"
@@ -5763,10 +5713,10 @@
     "message": "Segreto creato"
   },
   "newSecret": {
-    "message": "Nuovo segreto"
+    "message": "Nuovo Segreto"
   },
   "newServiceAccount": {
-    "message": "Nuovo account di servizio"
+    "message": "Nuovo Account di Servizio"
   },
   "secretsNoItemsTitle": {
     "message": "Nessun segreto da mostrare"
@@ -5775,28 +5725,28 @@
     "message": "Per iniziare, aggiungi un nuovo segreto o importa segreti."
   },
   "serviceAccountsNoItemsTitle": {
-    "message": "Ancora niente da mostrare"
+    "message": "Niente da mostrare"
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Crea un nuovo account di servizio per iniziare ad automatizzare l'accesso segreto."
+    "message": "Crea un nuovo account di servizio per iniziare a automatizzare l'accesso segreto."
   },
   "searchSecrets": {
-    "message": "Cerca segreti"
+    "message": "Cerca Segreti"
   },
   "deleteServiceAccounts": {
-    "message": "Elimina account di servizio"
+    "message": "Elimina Account Di Servizio"
   },
   "deleteServiceAccount": {
-    "message": "Elimina account di servizio"
+    "message": "Elimina Account Di Servizio"
   },
   "viewServiceAccount": {
-    "message": "Visualizza account di servizio"
+    "message": "Visualizza Account Di Servizio"
   },
   "searchServiceAccounts": {
-    "message": "Cerca account di servizio"
+    "message": "Cerca Account di Servizio"
   },
   "addProject": {
-    "message": "Aggiungi progetto"
+    "message": "Aggiungi Progetto"
   },
   "projectEdited": {
     "message": "Progetto modificato"
@@ -5808,10 +5758,10 @@
     "message": "Progetto creato"
   },
   "projectName": {
-    "message": "Nome del progetto"
+    "message": "Nome del Progetto"
   },
   "newProject": {
-    "message": "Nuovo progetto"
+    "message": "Nuovo Progetto"
   },
   "softDeleteSecretWarning": {
     "message": "L'eliminazione dei segreti può influenzare le integrazioni esistenti."
@@ -5820,13 +5770,13 @@
     "message": "Segreti inviati al cestino"
   },
   "serviceAccountCreated": {
-    "message": "Account di servizio creato"
+    "message": "Account Di Servizio Creato"
   },
   "smAccess": {
     "message": "Accesso"
   },
   "projectCommaSecret": {
-    "message": "Progetto, segreto"
+    "message": "Progetto, Segreto"
   },
   "serviceAccountName": {
     "message": "Nome account di servizio"
@@ -5857,7 +5807,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 projects"
+        "example": "Delete 3 Projects"
       }
     }
   },
@@ -5886,7 +5836,7 @@
     "message": "Nessun progetto da mostrare"
   },
   "projectsNoItemsMessage": {
-    "message": "Aggiungi un nuovo progetto per iniziare a organizzare i segreti."
+    "message": "Aggiungi un nuovo progetto per iniziare ad organizzare i segreti."
   },
   "smConfirmationRequired": {
     "message": "Conferma richiesta"
@@ -5934,16 +5884,16 @@
     "message": "Token di accesso"
   },
   "accessTokenExpirationRequired": {
-    "message": "La data di scadenza è obbligatoria"
+    "message": "La data di scadenza è necessaria"
   },
   "accessTokenCreatedAndCopied": {
     "message": "Token di accesso creato e copiato negli appunti"
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "La gestione delle autorizzazioni non è disponibile nella versione beta."
+    "message": "La gestione delle autorizzazioni non è disponibile per beta."
   },
   "revokeAccessToken": {
-    "message": "Revoca token di accesso"
+    "message": "Revoca Token Di Accesso"
   },
   "submenu": {
     "message": "Sottomenu"
@@ -5970,34 +5920,34 @@
     }
   },
   "groupInfo": {
-    "message": "Informazioni sul gruppo"
+    "message": "Info di gruppo"
   },
   "editGroupMembersDesc": {
-    "message": "Concedi ai membri l'accesso alle raccolte associate al gruppo."
+    "message": "Grant members access to the group's assigned collections."
   },
   "editGroupCollectionsDesc": {
-    "message": "Concedi l'accesso alle raccolte aggiungendole a questo gruppo."
+    "message": "Grant access to collections by adding them to this group."
   },
   "accessAllCollectionsDesc": {
-    "message": "Concedi l'accesso a tutte le raccolte attuali e future."
+    "message": "Grant access to all current and future collections."
   },
   "accessAllCollectionsHelp": {
-    "message": "Se selezionato, questo sostituirà tutte le altre autorizzazioni per le raccolte."
+    "message": "If checked, this will replace all other collection permissions."
   },
   "selectMembers": {
-    "message": "Seleziona membri"
+    "message": "Select members"
   },
   "selectCollections": {
-    "message": "Seleziona raccolte"
+    "message": "Select collections"
   },
   "role": {
     "message": "Ruolo"
   },
   "removeMember": {
-    "message": "Rimuovi membro"
+    "message": "Remove member"
   },
   "collection": {
-    "message": "Raccolta"
+    "message": "Collection"
   },
   "canView": {
     "message": "Può visualizzare"
@@ -6012,13 +5962,13 @@
     "message": "Può modificare, eccetto le password"
   },
   "noCollectionsAdded": {
-    "message": "Nessuna raccolta aggiunta"
+    "message": "No collections added"
   },
   "noMembersAdded": {
-    "message": "Nessun membro aggiunto"
+    "message": "No members added"
   },
   "noGroupsAdded": {
-    "message": "Nessun gruppo aggiunto"
+    "message": "No groups added"
   },
   "group": {
     "message": "Gruppo"
@@ -6030,46 +5980,46 @@
     "message": "Questo utente può accedere e modificare tutti gli elementi."
   },
   "membersColumnHeader": {
-    "message": "Membro/gruppo"
+    "message": "Member/Group"
   },
   "groupAndMemberColumnHeader": {
-    "message": "Membro"
+    "message": "Member"
   },
   "selectGroupsAndMembers": {
-    "message": "Seleziona gruppi e membri"
+    "message": "Select groups and members"
   },
   "selectGroups": {
     "message": "Seleziona gruppi"
   },
   "userPermissionOverrideHelper": {
-    "message": "I permessi impostati per un membro sostituiranno i permessi impostati dal gruppo di quel membro"
+    "message": "Permissions set for a member will replace permissions set by that member's group"
   },
   "noMembersOrGroupsAdded": {
-    "message": "Nessun membro o gruppo aggiunto"
+    "message": "No members or groups added"
   },
   "deleted": {
-    "message": "Eliminato"
+    "message": "Deleted"
   },
   "memberStatusFilter": {
-    "message": "Filtro stato del membro"
+    "message": "Member status filter"
   },
   "inviteMember": {
-    "message": "Invita membro"
+    "message": "Invite member"
   },
   "needsConfirmation": {
-    "message": "Conferma necessaria"
+    "message": "Needs confirmation"
   },
   "memberRole": {
-    "message": "Ruolo del membro"
+    "message": "Member role"
   },
   "moreFromBitwarden": {
     "message": "Altro da Bitwarden"
   },
   "switchProducts": {
-    "message": "Cambia prodotti"
+    "message": "Cambia Prodotti"
   },
   "freeOrgInvLimitReachedManageBilling": {
-    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Aggiorna a un piano a pagamento per aggiungere più membri.",
+    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Aggiorna a un piano a pagamento per invitare più membri.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -6078,7 +6028,7 @@
     }
   },
   "freeOrgInvLimitReachedNoManageBilling": {
-    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Contatta il proprietario dell'organizzazione per l'upgrade.",
+    "message": "Le organizzazioni gratuite possono avere fino a $SEATCOUNT$ membri. Contatta il proprietario dell'organizzazione per aggiornare.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -6096,63 +6046,12 @@
     }
   },
   "freeOrgMaxCollectionReachedNoManageBilling": {
-    "message": "Le organizzazioni gratuite possono avere fino a $COLLECTIONCOUNT$ collezioni. Contatta il proprietario della tua organizzazione per l'upgrade.",
+    "message": "Le organizzazioni gratuite possono avere fino a $COLLECTIONCOUNT$ collezioni. Contatta il proprietario della tua organizzazione per aggiornare.",
     "placeholders": {
       "COLLECTIONCOUNT": {
         "content": "$1",
         "example": "2"
       }
     }
-  },
-  "licenseAndBillingManagement": {
-    "message": "License and billing management"
-  },
-  "automaticSync": {
-    "message": "Automatic sync"
-  },
-  "manualUpload": {
-    "message": "Manual upload"
-  },
-  "manualUploadDesc": {
-    "message": "If you do not want to opt into billing sync, manually upload your license here."
-  },
-  "syncLicense": {
-    "message": "Sync license"
-  },
-  "licenseSyncSuccess": {
-    "message": "Successfully synced license"
-  },
-  "licenseUploadSuccess": {
-    "message": "Successfully uploaded license"
-  },
-  "lastLicenseSync": {
-    "message": "Last license sync"
-  },
-  "billingSyncHelp": {
-    "message": "Billing Sync help"
-  },
-  "uploadLicense": {
-    "message": "Upload license"
-  },
-  "lowKdfIterations": {
-    "message": "Low KDF Iterations"
-  },
-  "lowKdfIterationsDesc": {
-    "message": "Increase your KDF encryption settings to improve the security of your account."
-  },
-  "changeKdfSettings": {
-    "message": "Change KDF settings"
-  },
-  "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
-  },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
-  },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
-  },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
   }
 }
