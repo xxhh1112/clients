@@ -93,7 +93,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
 
   async ngOnInit() {
     await super.ngOnInit();
-    await this.checkSelfHosted();
+    await this.getLoginWithDevice(this.loggedEmail);
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(() => {
         switch (message.command) {
@@ -140,7 +140,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onSaved.subscribe(async () => {
       modal.close();
-      await this.checkSelfHosted();
+      await this.getLoginWithDevice(this.loggedEmail);
     });
   }
 
@@ -176,11 +176,5 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   private focusInput() {
     const email = this.loggedEmail;
     document.getElementById(email == null || email === "" ? "email" : "masterPassword").focus();
-  }
-
-  private async checkSelfHosted() {
-    this.selfHosted = this.environmentService.isSelfHosted();
-
-    await this.getLoginWithDevice(this.loggedEmail);
   }
 }
