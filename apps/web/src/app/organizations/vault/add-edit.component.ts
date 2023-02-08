@@ -73,6 +73,7 @@ export class AddEditComponent extends BaseAddEditComponent {
    * @deprecated Rewrite this entire modal to use `DialogService` and then use `DIALOG_DATA` instead.
    * The dialog should probably also fetch its own collection instead of getting them from
    * external components, so `this.collections` should be set to protected.
+   * For more information see: https://bitwarden.atlassian.net/browse/EC-1071
    */
   setCollections(collections: CollectionView[]) {
     this.collections = collections;
