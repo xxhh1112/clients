@@ -13,6 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -66,6 +67,16 @@ export class AddEditComponent extends BaseAddEditComponent {
       logService,
       passwordRepromptService
     );
+  }
+
+  /**
+   * @deprecated Rewrite this entire modal to use `DialogService` and then use `DIALOG_DATA` instead.
+   * The dialog should probably also fetch its own collection instead of getting them from
+   * external components, so `this.collections` should be set to protected.
+   */
+  setCollections(collections: CollectionView[]) {
+    this.collections = collections;
+    this.writeableCollections = collections;
   }
 
   protected allowOwnershipAssignment() {

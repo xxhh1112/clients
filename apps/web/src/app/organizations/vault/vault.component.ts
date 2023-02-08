@@ -221,9 +221,11 @@ export class VaultComponent implements OnInit, OnDestroy {
     const component = await this.editCipher(null);
     component.organizationId = this.organization.id;
     component.type = this.activeFilter.cipherType;
-    component.collections = (
-      await firstValueFrom(this.vaultFilterService.filteredCollections$)
-    ).filter((c) => !c.readOnly && c.id != null);
+    component.setCollections(
+      (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
+        (c) => !c.readOnly && c.id != null
+      )
+    );
     if (this.activeFilter.collectionId) {
       component.collectionIds = [this.activeFilter.collectionId];
     }
