@@ -47,6 +47,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { Fido2Component } from "../webauthn/popup/fido2/fido2.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -55,7 +56,6 @@ import { PrivateModeWarningComponent } from "./components/private-mode-warning.c
 import { SendListComponent } from "./components/send-list.component";
 import { SetPinComponent } from "./components/set-pin.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
-import { Fido2Component } from "./fido2/fido2.component";
 import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "./send/efflux-dates.component";

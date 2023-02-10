@@ -10,7 +10,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceService,
-} from "../../services/fido2/browser-fido2-user-interface.service";
+} from "../../../services/fido2/browser-fido2-user-interface.service";
 
 @Component({
   selector: "app-fido2",
