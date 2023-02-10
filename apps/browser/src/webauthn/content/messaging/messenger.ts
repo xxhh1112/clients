@@ -2,6 +2,8 @@ import { concatMap, filter, firstValueFrom, Observable } from "rxjs";
 
 import { Message, MessageType } from "./message";
 
+const SENDER = "bitwarden-webauthn";
+
 type PostMessageFunction = (message: MessageWithMetadata) => void;
 
 export type Channel = {
@@ -9,7 +11,7 @@ export type Channel = {
   postMessage: PostMessageFunction;
 };
 
-export type Metadata = { requestId: string };
+export type Metadata = { SENDER: typeof SENDER; requestId: string };
 export type MessageWithMetadata = Message & { metadata: Metadata };
 type Handler = (
   message: MessageWithMetadata,
@@ -42,6 +44,7 @@ export class Messenger {
   constructor(private channel: Channel) {
     this.channel.messages$
       .pipe(
+        filter((message) => message?.metadata?.SENDER === SENDER),
         concatMap(async (message) => {
           if (this.handler === undefined) {
             return;
@@ -57,10 +60,10 @@ export class Messenger {
               return;
             }
 
-            const metadata: Metadata = { requestId: message.metadata.requestId };
+            const metadata: Metadata = { SENDER, requestId: message.metadata.requestId };
             this.channel.postMessage({ ...handlerResponse, metadata });
           } catch (error) {
-            const metadata: Metadata = { requestId: message.metadata.requestId };
+            const metadata: Metadata = { SENDER, requestId: message.metadata.requestId };
             this.channel.postMessage({
               type: MessageType.ErrorResponse,
               metadata,
@@ -84,7 +87,7 @@ export class Messenger {
 
   async request(request: Message, abortController?: AbortController): Promise<Message> {
     const requestId = Date.now().toString();
-    const metadata: Metadata = { requestId };
+    const metadata: Metadata = { SENDER, requestId };
 
     const promise = firstValueFrom(
       this.channel.messages$.pipe(
@@ -96,7 +99,7 @@ export class Messenger {
 
     const abortListener = () =>
       this.channel.postMessage({
-        metadata: { requestId: `${requestId}-abort` },
+        metadata: { SENDER, requestId: `${requestId}-abort` },
         type: MessageType.AbortRequest,
         abortedRequestId: requestId,
       });
