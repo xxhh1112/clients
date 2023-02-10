@@ -14,6 +14,7 @@ import {
   CredentialRegistrationResult,
   Fido2Service as Fido2ServiceAbstraction,
   NoCredentialFoundError,
+  UserVerification,
 } from "../abstractions/fido2.service.abstraction";
 import { Fido2KeyView } from "../models/view/fido2-key.view";
 
@@ -23,9 +24,18 @@ import { joseToDer } from "./ecdsa-utils";
 // We support self-signing, but Google won't accept it.
 // TODO: Look into supporting self-signed packed format.
 const STANDARD_ATTESTATION_FORMAT: "none" | "packed" = "none";
-const DEFAULT_TIMEOUT = 120000;
-const MIN_TIMEOUT = 30000;
-const MAX_TIMEOUT = 600000;
+const TIMEOUTS = {
+  NO_VERIFICATION: {
+    DEFAULT: 120000,
+    MIN: 30000,
+    MAX: 180000,
+  },
+  WITH_VERIFICATION: {
+    DEFAULT: 300000,
+    MIN: 30000,
+    MAX: 600000,
+  },
+};
 
 interface BitCredential {
   credentialId: CredentialId;
@@ -54,7 +64,11 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     // Comment: Timeouts could potentially be implemented using decorators.
     // But since I try to use decorators a little as possible and only
     // for the most generic solutions, I'm gonne leave this as is untill peer review.
-    const timeout = setAbortTimeout(abortController);
+    const timeout = setAbortTimeout(
+      abortController,
+      params.authenticatorSelection.userVerification,
+      params.timeout
+    );
 
     const presence = await this.fido2UserInterfaceService.confirmNewCredential(
       {
@@ -139,7 +153,7 @@ export class Fido2Service implements Fido2ServiceAbstraction {
     params: CredentialAssertParams,
     abortController = new AbortController()
   ): Promise<CredentialAssertResult> {
-    const timeout = setAbortTimeout(abortController);
+    const timeout = setAbortTimeout(abortController, params.userVerification, params.timeout);
     let credential: BitCredential | undefined;
 
     if (params.allowedCredentialIds && params.allowedCredentialIds.length > 0) {
@@ -426,8 +440,26 @@ function authDataFlags(options: Flags): number {
   return flags;
 }
 
-function setAbortTimeout(abortController: AbortController, timeout = DEFAULT_TIMEOUT): number {
-  // TODO: Set different timeouts depending on `userVerification` value
-  const clampedTimeout = Math.max(MIN_TIMEOUT, Math.min(timeout, MAX_TIMEOUT));
+function setAbortTimeout(
+  abortController: AbortController,
+  userVerification: UserVerification,
+  timeout?: number
+): number {
+  let clampedTimeout: number;
+
+  if (userVerification === "discouraged") {
+    timeout = timeout ?? TIMEOUTS.NO_VERIFICATION.DEFAULT;
+    clampedTimeout = Math.max(
+      TIMEOUTS.NO_VERIFICATION.MIN,
+      Math.min(timeout, TIMEOUTS.NO_VERIFICATION.MAX)
+    );
+  } else {
+    timeout = timeout ?? TIMEOUTS.WITH_VERIFICATION.DEFAULT;
+    clampedTimeout = Math.max(
+      TIMEOUTS.WITH_VERIFICATION.MIN,
+      Math.min(timeout, TIMEOUTS.WITH_VERIFICATION.MAX)
+    );
+  }
+
   return window.setTimeout(() => abortController.abort(), clampedTimeout);
 }

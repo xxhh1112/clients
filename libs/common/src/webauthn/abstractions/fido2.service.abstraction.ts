@@ -1,3 +1,5 @@
+export type UserVerification = "discouraged" | "preferred" | "required";
+
 export interface CredentialRegistrationParams {
   origin: string;
   attestation?: "direct" | "enterprise" | "indirect" | "none";
@@ -5,7 +7,7 @@ export interface CredentialRegistrationParams {
     // authenticatorAttachment?: AuthenticatorAttachment; // not used
     requireResidentKey?: boolean;
     residentKey?: "discouraged" | "preferred" | "required";
-    userVerification?: "discouraged" | "preferred" | "required";
+    userVerification?: UserVerification;
   };
   challenge: string; // b64 encoded
   excludeCredentials?: {
@@ -48,7 +50,7 @@ export interface CredentialAssertParams {
   rpId: string;
   origin: string;
   challenge: string;
-  userVerification?: "discouraged" | "preferred" | "required";
+  userVerification?: UserVerification;
   timeout: number;
 }
 
