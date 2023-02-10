@@ -15,11 +15,11 @@
       <ng-container *ngIf="loading" #spinner>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" aria-hidden="true"></i>
       </ng-container>
-      <bit-tab-group *ngIf="!loading" [selectedIndex]="tabIndex">
+      <bit-tab-group *ngIf="!loading" [(selectedIndex)]="tabIndex">
         <bit-tab label="{{ 'collectionInfo' | i18n }}">
           <bit-form-field>
             <bit-label>{{ "name" | i18n }}</bit-label>
-            <input bitInput formControlName="name" required />
+            <input bitInput formControlName="name" />
           </bit-form-field>
 
           <bit-form-field>
@@ -30,15 +30,24 @@
 
           <bit-form-field>
             <bit-label>{{ "nestCollectionUnder" | i18n }}</bit-label>
-            <select bitInput formControlName="parent">
-              <option [ngValue]="null">-</option>
-              <option *ngIf="deletedParentName" disabled [ngValue]="deletedParentName">
-                {{ deletedParentName }} ({{ "deleted" | i18n }})
-              </option>
-              <option *ngFor="let collection of nestOptions" [ngValue]="collection.name">
-                {{ collection.name }}
-              </option>
-            </select>
+            <bit-select bitInput formControlName="parent">
+              <bit-option [value]="undefined" [label]="'noCollection' | i18n"> </bit-option>
+              <bit-option
+                *ngIf="deletedParentName"
+                disabled
+                icon="bwi-collection"
+                [value]="deletedParentName"
+                label="{{ deletedParentName }} ({{ 'deleted' | i18n }})"
+              >
+              </bit-option>
+              <bit-option
+                *ngFor="let collection of nestOptions"
+                icon="bwi-collection"
+                [value]="collection.name"
+                [label]="collection.name"
+              >
+              </bit-option>
+            </bit-select>
           </bit-form-field>
         </bit-tab>
         <bit-tab label="{{ 'access' | i18n }}">

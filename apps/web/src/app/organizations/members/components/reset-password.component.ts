@@ -19,6 +19,7 @@ import { OrganizationUserResetPasswordRequest } from "@bitwarden/common/abstract
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
@@ -156,6 +157,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
           const kdfType = response.kdf;
           const kdfIterations = response.kdfIterations;
+          const kdfMemory = response.kdfMemory;
+          const kdfParallelism = response.kdfParallelism;
           const resetPasswordKey = response.resetPasswordKey;
           const encryptedPrivateKey = response.encryptedPrivateKey;
 
@@ -175,7 +178,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             this.newPassword,
             this.email.trim().toLowerCase(),
             kdfType,
-            kdfIterations
+            new KdfConfig(kdfIterations, kdfMemory, kdfParallelism)
           );
           const newPasswordHash = await this.cryptoService.hashPassword(this.newPassword, newKey);
 

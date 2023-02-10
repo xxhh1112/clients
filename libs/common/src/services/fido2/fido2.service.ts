@@ -1,6 +1,5 @@
 import { CBOR } from "cbor-redux";
 
-import { CipherService } from "../../abstractions/cipher.service";
 import { Fido2UserInterfaceService } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../../abstractions/fido2/fido2-utils";
 import {
@@ -11,11 +10,12 @@ import {
   Fido2Service as Fido2ServiceAbstraction,
   NoCredentialFoundError,
 } from "../../abstractions/fido2/fido2.service.abstraction";
-import { CipherType } from "../../enums/cipherType";
 import { Utils } from "../../misc/utils";
-import { Cipher } from "../../models/domain/cipher";
-import { CipherView } from "../../models/view/cipher.view";
 import { Fido2KeyView } from "../../models/view/fido2-key.view";
+import { CipherService } from "../../vault/abstractions/cipher.service";
+import { CipherType } from "../../vault/enums/cipher-type";
+import { Cipher } from "../../vault/models/domain/cipher";
+import { CipherView } from "../../vault/models/view/cipher.view";
 
 import { CredentialId } from "./credential-id";
 import { joseToDer } from "./ecdsa-utils";
