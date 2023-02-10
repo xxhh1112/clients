@@ -1,4 +1,6 @@
 /* eslint-disable no-useless-escape */
+import * as path from "path";
+
 import { getHostname, parse } from "tldts";
 import { Merge } from "type-fest";
 
@@ -34,6 +36,7 @@ export class Utils {
     /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[\p{L}\.!#$%&'*+/=?^_`{|}~-](?:[\p{L}\.!#$%&'*+/=?^_`{|}~-]{0,61})?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}\p{L})?)+$/u;
 
   static readonly validHosts: string[] = ["localhost"];
+  static readonly minimumPasswordLength = 10;
 
   static init() {
     if (Utils.inited) {
@@ -501,6 +504,15 @@ export class Utils {
       /[!'()*]/g,
       (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
     );
+  }
+
+  /**
+   * Normalizes a path for defense against attacks like traversals
+   * @param denormalizedPath
+   * @returns
+   */
+  static normalizePath(denormalizedPath: string): string {
+    return path.normalize(decodeURIComponent(denormalizedPath)).replace(/^(\.\.(\/|\\|$))+/, "");
   }
 
   private static isMobile(win: Window) {

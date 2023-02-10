@@ -18,7 +18,10 @@ import { FormControlModule } from "../form-control";
 import { FormFieldModule } from "../form-field";
 import { InputModule } from "../input/input.module";
 import { RadioButtonModule } from "../radio-button";
+import { SelectModule } from "../select";
 import { I18nMockService } from "../utils/i18n-mock.service";
+
+import { countries } from "./countries";
 
 export default {
   title: "Component Library/Form",
@@ -33,12 +36,14 @@ export default {
         FormControlModule,
         CheckboxModule,
         RadioButtonModule,
+        SelectModule,
       ],
       providers: [
         {
           provide: I18nService,
           useFactory: () => {
             return new I18nMockService({
+              selectPlaceholder: "-- Select --",
               required: "required",
               checkboxRequired: "Option is required",
               inputRequired: "Input is required.",
@@ -61,6 +66,7 @@ const fb = new FormBuilder();
 const exampleFormObj = fb.group({
   name: ["", [Validators.required]],
   email: ["", [Validators.required, emailAllowingDiacritics, forbiddenNameValidator(/bit/i)]],
+  country: [undefined as string | undefined, [Validators.required]],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
 });
@@ -91,6 +97,13 @@ const FullExampleTemplate: Story = (args) => ({
         <input bitInput formControlName="email" />
       </bit-form-field>
 
+      <bit-form-field>
+        <bit-label>Country</bit-label>
+        <bit-select formControlName="country">
+          <bit-option *ngFor="let country of countries" [value]="country.value" [label]="country.name"></bit-option>
+        </bit-select>
+      </bit-form-field>
+
       <bit-form-control>
         <bit-label>Agree to terms</bit-label>
         <input type="checkbox" bitCheckbox formControlName="terms">
@@ -116,3 +129,6 @@ const FullExampleTemplate: Story = (args) => ({
 });
 
 export const FullExample = FullExampleTemplate.bind({});
+FullExample.args = {
+  countries,
+};
