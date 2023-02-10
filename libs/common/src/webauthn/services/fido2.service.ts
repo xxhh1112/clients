@@ -319,6 +319,7 @@ async function generateAuthData(params: AuthDataParams) {
   authData.push(flags);
 
   // add 4 bytes of counter - we use time in epoch seconds as monotonic counter
+  // TODO: Consider changing this to a cryptographically safe random number
   const now = new Date().getTime() / 1000;
   authData.push(
     ((now & 0xff000000) >> 24) & 0xff,
