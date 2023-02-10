@@ -31,6 +31,7 @@ export interface CredentialRegistrationParams {
     id: string; // b64 encoded
     displayName: string;
   };
+  timeout: number;
 }
 
 export interface CredentialRegistrationResult {
@@ -47,6 +48,8 @@ export interface CredentialAssertParams {
   rpId: string;
   origin: string;
   challenge: string;
+  userVerification?: "discouraged" | "preferred" | "required";
+  timeout: number;
 }
 
 export interface CredentialAssertResult {

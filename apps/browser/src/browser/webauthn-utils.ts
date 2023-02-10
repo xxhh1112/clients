@@ -73,6 +73,7 @@ export class WebauthnUtils {
         id: Fido2Utils.bufferToString(keyOptions.user.id),
         displayName: keyOptions.user.displayName,
       },
+      timeout: keyOptions.timeout,
     };
   }
 
@@ -105,6 +106,8 @@ export class WebauthnUtils {
         keyOptions.allowCredentials?.map((c) => Fido2Utils.bufferToString(c.id)) ?? [],
       challenge: Fido2Utils.bufferToString(keyOptions.challenge),
       rpId: keyOptions.rpId,
+      userVerification: keyOptions.userVerification,
+      timeout: keyOptions.timeout,
     };
   }
 
