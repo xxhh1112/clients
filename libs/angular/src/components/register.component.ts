@@ -1,3 +1,5 @@
+import * as punycode from "punycode";
+
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -26,13 +28,8 @@ import { RegisterRequest } from "@bitwarden/common/models/request/register.reque
 
 import { CaptchaProtectedComponent } from "../auth/components/captcha-protected.component";
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
-import { emailAllowingDiacritics } from "../validators/emailAllowingDiacritics.validator";
+import { emailAllowingDiacritics } from "../validators/email-allow-diacritics.validator";
 import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {

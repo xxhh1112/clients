@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { delay, of } from "rxjs";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 

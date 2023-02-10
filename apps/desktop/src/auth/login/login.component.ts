@@ -19,13 +19,8 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-
 import { EnvironmentComponent } from "../environment.component";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
+import * as punycode from "punycode";
 
 const BroadcasterSubscriptionId = "LoginComponent";
 

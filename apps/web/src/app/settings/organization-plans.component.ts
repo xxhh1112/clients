@@ -1,3 +1,5 @@
+import * as punycode from "punycode";
+
 import {
   Component,
   EventEmitter,
@@ -11,7 +13,7 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -36,11 +38,6 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 
 import { PaymentComponent } from "./payment.component";
 import { TaxInfoComponent } from "./tax-info.component";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
 
 interface OnSuccessArgs {
   organizationId: string;
@@ -467,7 +464,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
     if (this.providerId) {
       const providerRequest = new ProviderOrganizationCreateRequest(
-        punycode.ToUnicode(this.formGroup.controls.clientOwnerEmail.value),
+        punycode.toUnicode(this.formGroup.controls.clientOwnerEmail.value),
         request
       );
       const providerKey = await this.cryptoService.getProviderKey(this.providerId);

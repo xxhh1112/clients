@@ -2,17 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/emailAllowingDiacritics.validator";
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
+import * as punycode from "punycode";
 
 @Component({
   selector: "app-home",

@@ -1,3 +1,5 @@
+import * as punycode from "punycode";
+
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { UntypedFormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -15,11 +17,6 @@ import { ProductType } from "@bitwarden/common/enums/productType";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { OrganizationPlansComponent } from "../../settings/organization-plans.component";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
 
 @Component({
   selector: "app-billing",

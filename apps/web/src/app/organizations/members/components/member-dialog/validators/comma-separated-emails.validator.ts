@@ -1,10 +1,12 @@
-import { AbstractControl, ValidationErrors, Validators } from "@angular/forms";
+import { AbstractControl, ValidationErrors } from "@angular/forms";
+
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 
 function validateEmails(emails: string) {
   return (
     emails
       .split(",")
-      .map((email) => Validators.email(<AbstractControl>{ value: email.trim() }))
+      .map((email) => emailAllowingDiacritics(<AbstractControl>{ value: email.trim() }))
       .find((_) => _ !== null) === undefined
   );
 }

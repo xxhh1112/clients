@@ -21,13 +21,9 @@ import { LoginService } from "@bitwarden/common/auth/abstractions/login.service"
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { Utils } from "@bitwarden/common/misc/utils";
-
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
-
-// punycode needs to be required here to override built-in node module
-// https://github.com/mathiasbynens/punycode.js#installation
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const punycode = require("punycode/");
+import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
+import * as punycode from "punycode";
 
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
@@ -43,7 +39,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   paramEmailSet = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, Validators.email]],
+    email: ["", [Validators.required, emailAllowingDiacritics]],
     masterPassword: ["", [Validators.required, Validators.minLength(8)]],
     rememberEmail: [false],
   });
