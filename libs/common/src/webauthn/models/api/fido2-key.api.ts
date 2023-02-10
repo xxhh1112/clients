@@ -1,4 +1,4 @@
-import { BaseResponse } from "../response/base.response";
+import { BaseResponse } from "../../../models/response/base.response";
 
 export class Fido2KeyApi extends BaseResponse {
   keyType: "ECDSA";

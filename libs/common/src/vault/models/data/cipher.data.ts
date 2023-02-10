@@ -1,4 +1,4 @@
-import { Fido2KeyData } from "../../../models/data/fido2-key.data";
+import { Fido2KeyData } from "../../../webauthn/models/data/fido2-key.data";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { CipherResponse } from "../response/cipher.response";

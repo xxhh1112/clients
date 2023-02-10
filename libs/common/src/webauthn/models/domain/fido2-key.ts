@@ -1,11 +1,10 @@
 import { Jsonify } from "type-fest";
 
+import Domain from "../../../models/domain/domain-base";
+import { EncString } from "../../../models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
 import { Fido2KeyData } from "../data/fido2-key.data";
 import { Fido2KeyView } from "../view/fido2-key.view";
-
-import Domain from "./domain-base";
-import { EncString } from "./enc-string";
-import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class Fido2Key extends Domain {
   keyType: EncString;

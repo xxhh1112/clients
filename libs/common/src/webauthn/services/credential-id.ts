@@ -1,4 +1,4 @@
-import { Fido2Utils } from "../../abstractions/fido2/fido2-utils";
+import { Fido2Utils } from "../abstractions/fido2-utils";
 
 export class InvalidCredentialIdEncodingError extends Error {
   constructor(readonly input: unknown) {

@@ -1,10 +1,10 @@
-import { Fido2Utils } from "@bitwarden/common/abstractions/fido2/fido2-utils";
+import { Fido2Utils } from "@bitwarden/common/webauthn/abstractions/fido2-utils";
 import {
   CredentialAssertParams,
   CredentialAssertResult,
   CredentialRegistrationParams,
   CredentialRegistrationResult,
-} from "@bitwarden/common/abstractions/fido2/fido2.service.abstraction";
+} from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
 
 class BitAuthenticatorAttestationResponse implements AuthenticatorAttestationResponse {
   clientDataJSON: ArrayBuffer;

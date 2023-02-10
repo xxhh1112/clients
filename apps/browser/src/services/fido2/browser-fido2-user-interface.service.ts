@@ -1,12 +1,12 @@
 import { filter, first, lastValueFrom, Observable, Subject, takeUntil } from "rxjs";
 
+import { Utils } from "@bitwarden/common/misc/utils";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   NewCredentialParams,
-} from "@bitwarden/common/abstractions/fido2/fido2-user-interface.service.abstraction";
-import { Utils } from "@bitwarden/common/misc/utils";
+} from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
+import { RequestAbortedError } from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
 
-import { RequestAbortedError } from "../../../../../libs/common/src/abstractions/fido2/fido2.service.abstraction";
 import { BrowserApi } from "../../browser/browserApi";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 

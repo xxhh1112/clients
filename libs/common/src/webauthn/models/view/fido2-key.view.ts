@@ -1,6 +1,6 @@
 import { Jsonify } from "type-fest";
 
-import { ItemView } from "../../vault/models/view/item.view";
+import { ItemView } from "../../../vault/models/view/item.view";
 
 export class Fido2KeyView extends ItemView {
   keyType: "ECDSA";

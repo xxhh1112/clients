@@ -2,9 +2,9 @@ import { Jsonify } from "type-fest";
 
 import { LinkedIdType } from "../../../enums/linkedIdType";
 import { InitializerMetadata } from "../../../interfaces/initializer-metadata.interface";
-import { Fido2KeyView } from "../../../models/view/fido2-key.view";
 import { View } from "../../../models/view/view";
 import { InitializerKey } from "../../../services/cryptography/initializer-key";
+import { Fido2KeyView } from "../../../webauthn/models/view/fido2-key.view";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { LocalData } from "../data/local.data";
