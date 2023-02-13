@@ -1,3 +1,5 @@
+import * as punycode from "punycode";
+
 import { Directive, NgZone, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -21,9 +23,10 @@ import { LoginService } from "@bitwarden/common/auth/abstractions/login.service"
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { Utils } from "@bitwarden/common/misc/utils";
+
+import { EmailAllowingDiacritics } from "../../validators/email-allow-diacritics.validator";
+
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
-import * as punycode from "punycode";
 
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
@@ -39,7 +42,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   paramEmailSet = false;
 
   formGroup = this.formBuilder.group({
-    email: ["", [Validators.required, emailAllowingDiacritics]],
+    email: ["", [Validators.required, EmailAllowingDiacritics]],
     masterPassword: ["", [Validators.required, Validators.minLength(8)]],
     rememberEmail: [false],
   });

@@ -9,7 +9,7 @@ import {
 } from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
+import { EmailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { AsyncActionsModule } from "../async-actions";
@@ -72,7 +72,7 @@ const formObj = fb.group({
 
 const defaultFormObj = fb.group({
   name: ["", [Validators.required]],
-  email: ["", [Validators.required, emailAllowingDiacritics, forbiddenNameValidator(/bit/i)]],
+  email: ["", [Validators.required, EmailAllowingDiacritics, forbiddenNameValidator(/bit/i)]],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
 });

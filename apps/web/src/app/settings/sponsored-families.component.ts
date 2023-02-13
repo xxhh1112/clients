@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { map, Observable, Subject, takeUntil } from "rxjs";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
+import { EmailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { notAllowedValueAsync } from "@bitwarden/angular/validators/notAllowedValueAsync.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -51,7 +51,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       sponsorshipEmail: new FormControl("", {
-        validators: [emailAllowingDiacritics],
+        validators: [EmailAllowingDiacritics],
         asyncValidators: [
           notAllowedValueAsync(async () => await this.stateService.getEmail(), true),
         ],

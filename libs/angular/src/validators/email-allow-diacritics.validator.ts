@@ -6,7 +6,7 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
  * Validator based on the Validators.Email (https://github.com/angular/angular/blob/4dcbb6aef9ec6d1f1fe9a926d0b40c72139a013b/packages/forms/src/validators.ts#L493).
  * Using a custom Regexp and converting to unicode the email value before validating it
  */
-export function emailAllowingDiacritics(control: AbstractControl): ValidationErrors | null {
+export function EmailAllowingDiacritics(control: AbstractControl): ValidationErrors | null {
   // Adaptation from Angular EmailValidator regex (https://github.com/angular/angular/blob/4dcbb6aef9ec6d1f1fe9a926d0b40c72139a013b/packages/forms/src/validators.ts#L127)
   // to allow diacritics and match the server side unit tests
   /* eslint-disable-next-line no-var */

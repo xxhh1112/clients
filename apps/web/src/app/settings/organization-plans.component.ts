@@ -13,7 +13,7 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
-import { emailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
+import { EmailAllowingDiacritics } from "@bitwarden/angular/validators/email-allow-diacritics.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -89,12 +89,12 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   formGroup = this.formBuilder.group({
     name: [""],
-    billingEmail: ["", [emailAllowingDiacritics]],
+    billingEmail: ["", [EmailAllowingDiacritics]],
     businessOwned: [false],
     premiumAccessAddon: [false],
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
-    clientOwnerEmail: ["", [emailAllowingDiacritics]],
+    clientOwnerEmail: ["", [EmailAllowingDiacritics]],
     businessName: [""],
     plan: [this.plan],
     product: [this.product],

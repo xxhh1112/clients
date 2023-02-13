@@ -28,7 +28,7 @@ import { RegisterRequest } from "@bitwarden/common/models/request/register.reque
 
 import { CaptchaProtectedComponent } from "../auth/components/captcha-protected.component";
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
-import { emailAllowingDiacritics } from "../validators/email-allow-diacritics.validator";
+import { EmailAllowingDiacritics } from "../validators/email-allow-diacritics.validator";
 import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
 
 @Directive()
@@ -49,7 +49,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
 
   formGroup = this.formBuilder.group(
     {
-      email: ["", [Validators.required, emailAllowingDiacritics]],
+      email: ["", [Validators.required, EmailAllowingDiacritics]],
       name: [""],
       masterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
       confirmMasterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
