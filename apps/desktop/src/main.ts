@@ -9,6 +9,7 @@ import { StateService } from "@bitwarden/common/services/state.service";
 
 import { BiometricMain } from "./main/biometric/biometric.main";
 import { DesktopCredentialStorageListener } from "./main/desktop-credential-storage-listener";
+import { ImporterMain } from "./main/importer.main";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
 import { NativeMessagingMain } from "./main/native-messaging.main";
@@ -37,6 +38,7 @@ export class Main {
   menuMain: MenuMain;
   powerMonitorMain: PowerMonitorMain;
   trayMain: TrayMain;
+  importerMain: ImporterMain;
   biometricMain: BiometricMain;
   nativeMessagingMain: NativeMessagingMain;
 
@@ -109,6 +111,7 @@ export class Main {
     this.menuMain = new MenuMain(this);
     this.powerMonitorMain = new PowerMonitorMain(this);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.stateService);
+    this.importerMain = new ImporterMain();
 
     this.messagingService = new ElectronMainMessagingService(this.windowMain, (message) => {
       this.messagingMain.onMessage(message);

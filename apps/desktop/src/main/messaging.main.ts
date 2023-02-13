@@ -80,6 +80,9 @@ export class MessagingMain {
         this.main.nativeMessagingMain.removeDdgManifests();
         this.main.nativeMessagingMain.stop();
         break;
+      case "import":
+        this.import(message.service, message.args);
+        break;
       default:
         break;
     }
@@ -162,6 +165,16 @@ Terminal=false`;
     this.main.windowMain.win.webContents.send("messagingService", {
       command: "windowIsFocused",
       windowIsFocused: windowIsFocused,
+    });
+  }
+
+  private import(service: string, args: string[]) {
+    this.main.importerMain.import(service, args).then((output) => {
+      this.main.windowMain.win.webContents.send("messagingService", {
+        command: "importSuccess",
+        service: service,
+        output: output,
+      });
     });
   }
 }

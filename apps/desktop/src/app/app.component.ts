@@ -368,6 +368,9 @@ export class AppComponent implements OnInit, OnDestroy {
               await this.openLoginApproval(message.notificationId);
             }
             break;
+          case "importSuccess":
+            // console.log(message);
+            break;
         }
       });
     });

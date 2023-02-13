@@ -25,6 +25,13 @@
     "provider": "generic",
     "url": "https://artifacts.bitwarden.com/desktop"
   },
+  "extraFiles": [
+    {
+      "from": "resources/bin/${os}",
+      "to": "Resources/bin",
+      "filter": ["**/*"]
+    }
+  ],
   "mac": {
     "electronUpdaterCompatibility": ">=0.0.1",
     "category": "public.app-category.productivity",
