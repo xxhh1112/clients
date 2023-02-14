@@ -1,5 +1,3 @@
-import { Jsonify } from "type-fest";
-
 import {
   ServerConfigData,
   ThirdPartyServerConfigData,
@@ -38,13 +36,5 @@ export class ServerConfig {
 
   expiresSoon(): boolean {
     return this.getAgeInMilliseconds() >= eighteenHoursInMilliseconds;
-  }
-
-  static fromJSON(obj: Jsonify<ServerConfig>): ServerConfig {
-    if (obj == null) {
-      return null;
-    }
-
-    return new ServerConfig(obj);
   }
 }

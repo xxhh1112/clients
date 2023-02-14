@@ -187,10 +187,6 @@ describe("session syncer", () => {
       jest.spyOn(SyncedItemMetadata, "builder").mockReturnValue(builder);
       storageService.getBypassCache.mockResolvedValue("test");
 
-      // Expect no circular messaging
-      await awaitAsync();
-      expect(sendMessageSpy).toHaveBeenCalledTimes(0);
-
       await sut.updateFromMessage({ command: `${sessionKey}_update`, id: "different_id" });
       await awaitAsync();
 
