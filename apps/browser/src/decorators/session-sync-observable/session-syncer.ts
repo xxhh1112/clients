@@ -89,7 +89,7 @@ export class SessionSyncer {
   async update() {
     const builder = SyncedItemMetadata.builder(this.metaData);
     const value = await this.memoryStorageService.getBypassCache(this.metaData.sessionKey, {
-      deserializer: builder,
+      deserializer: (obj) => builder(JSON.parse(JSON.stringify(obj))),
     });
     this.ignoreNUpdates = 1;
     this.subject.next(value);
