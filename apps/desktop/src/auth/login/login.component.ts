@@ -1,3 +1,5 @@
+import * as punycode from "punycode";
+
 import { Component, NgZone, OnDestroy, ViewChild, ViewContainerRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -19,8 +21,8 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+
 import { EnvironmentComponent } from "../environment.component";
-import * as punycode from "punycode";
 
 const BroadcasterSubscriptionId = "LoginComponent";
 
