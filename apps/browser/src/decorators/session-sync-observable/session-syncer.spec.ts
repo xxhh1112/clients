@@ -53,8 +53,8 @@ describe("session syncer", () => {
         new SessionSyncer(behaviorSubject, storageService, {
           propertyKey,
           sessionKey,
-          ctor: String,
           initializeAs: "object",
+          initializer: () => null,
         })
       ).toBeDefined();
       expect(
@@ -72,6 +72,7 @@ describe("session syncer", () => {
           propertyKey,
           sessionKey,
           initializeAs: "object",
+          initializer: null,
         });
       }).toThrowError("ctor or initializer must be provided");
     });

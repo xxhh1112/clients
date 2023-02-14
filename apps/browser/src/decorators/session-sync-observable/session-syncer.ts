@@ -23,7 +23,7 @@ export class SessionSyncer {
       throw new Error("subject must inherit from Subject");
     }
 
-    if (metaData.ctor == null && metaData.initializer == null) {
+    if (metaData.initializer == null) {
       throw new Error("ctor or initializer must be provided");
     }
   }
