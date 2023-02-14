@@ -24,7 +24,7 @@ export class SessionSyncer {
     }
 
     if (metaData.initializer == null) {
-      throw new Error("ctor or initializer must be provided");
+      throw new Error("initializer must be provided");
     }
   }
 
