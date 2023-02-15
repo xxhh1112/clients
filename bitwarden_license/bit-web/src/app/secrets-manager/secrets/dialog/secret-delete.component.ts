@@ -29,8 +29,8 @@ export class SecretDeleteDialogComponent {
   }
 
   delete = async () => {
-    await this.secretService.delete(this.data.secretIds, this.data.organizationId);
-    this.dialogRef.close();
+    await this.secretService.delete(this.data.secretIds);
+    this.dialogRef.close(this.data.secretIds);
     const message =
       this.data.secretIds.length === 1 ? "softDeleteSuccessToast" : "softDeletesSuccessToast";
     this.platformUtilsService.showToast("success", null, this.i18nService.t(message));
