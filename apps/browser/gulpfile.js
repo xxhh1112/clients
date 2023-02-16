@@ -215,14 +215,6 @@ function stdOutProc(proc) {
   proc.stderr.on("data", (data) => console.error(data.toString()));
 }
 
-function ciCoverage(cb) {
-  return gulp
-    .src(paths.coverage + "**/*")
-    .pipe(filter(["**", "!coverage/coverage*.zip"]))
-    .pipe(zip(`coverage${buildString()}.zip`))
-    .pipe(gulp.dest(paths.coverage));
-}
-
 exports["dist:firefox"] = distFirefox;
 exports["dist:chrome"] = distChrome;
 exports["dist:opera"] = distOpera;
@@ -232,5 +224,3 @@ exports["dist:safari:mas"] = distSafariMas;
 exports["dist:safari:masdev"] = distSafariMasDev;
 exports["dist:safari:dmg"] = distSafariDmg;
 exports.dist = gulp.parallel(distFirefox, distChrome, distOpera, distEdge);
-exports["ci:coverage"] = ciCoverage;
-exports.ci = ciCoverage;

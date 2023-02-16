@@ -146,9 +146,6 @@ jobs:
       - name: Build Manifest v3
         run: npm run dist:mv3
 
-      - name: Gulp
-        run: gulp ci
-
       - name: Build sources for reviewers
         shell: cmd
         run: |
@@ -224,14 +221,6 @@ jobs:
         with:
           name: browser-source-${{ env._BUILD_NUMBER }}.zip
           path: browser-source.zip
-          if-no-files-found: error
-
-      - name: Upload coverage artifact
-        if: false
-        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535  # v3.0.0
-        with:
-          name: coverage-${{ env._BUILD_NUMBER }}.zip
-          path: apps/browser/coverage/coverage-${{ env._BUILD_NUMBER }}.zip
           if-no-files-found: error
 
   build-safari:
