@@ -3,7 +3,6 @@ const fs = require("fs");
 
 const del = require("del");
 const gulp = require("gulp");
-const filter = require("gulp-filter");
 const gulpif = require("gulp-if");
 const jeditor = require("gulp-json-editor");
 const replace = require("gulp-replace");
@@ -14,22 +13,7 @@ const manifest = require("./src/manifest.json");
 const paths = {
   build: "./build/",
   dist: "./dist/",
-  coverage: "./coverage/",
-  node_modules: "./node_modules/",
-  popupDir: "./src/popup/",
-  cssDir: "./src/popup/css/",
   safari: "./src/safari/",
-};
-
-const filters = {
-  fonts: [
-    "!build/popup/fonts/*",
-    "build/popup/fonts/Open_Sans*.woff",
-    "build/popup/fonts/bwi-font.woff2",
-    "build/popup/fonts/bwi-font.woff",
-    "build/popup/fonts/bwi-font.ttf",
-  ],
-  safari: ["!build/safari/**/*"],
 };
 
 function buildString() {
@@ -50,7 +34,6 @@ function distFileName(browserName, ext) {
 function dist(browserName, manifest) {
   return gulp
     .src(paths.build + "**/*")
-    .pipe(filter(["**"].concat(filters.fonts).concat(filters.safari)))
     .pipe(gulpif("popup/index.html", replace("__BROWSER__", "browser_" + browserName)))
     .pipe(gulpif("manifest.json", jeditor(manifest)))
     .pipe(zip(distFileName(browserName, "zip")))
@@ -191,7 +174,6 @@ function safariCopyBuild(source, dest) {
     gulp
       .src(source)
       .on("error", reject)
-      .pipe(filter(["**"].concat(filters.fonts)))
       .pipe(gulpif("popup/index.html", replace("__BROWSER__", "browser_safari")))
       .pipe(
         gulpif(

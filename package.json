@@ -101,7 +101,6 @@
     "eslint-plugin-rxjs-angular": "^2.0.0",
     "eslint-plugin-tailwindcss": "^3.8.3",
     "gulp": "^4.0.2",
-    "gulp-filter": "^7.0.0",
     "gulp-if": "^3.0.0",
     "gulp-json-editor": "^2.5.5",
     "gulp-replace": "^1.1.0",
