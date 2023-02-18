@@ -33,6 +33,7 @@ export class CollectionService implements CollectionServiceAbstraction {
     const collection = new Collection();
     collection.id = model.id;
     collection.organizationId = model.organizationId;
+    collection.externalId = model.externalId;
     collection.readOnly = model.readOnly;
     collection.name = await this.cryptoService.encrypt(model.name, key);
     return collection;

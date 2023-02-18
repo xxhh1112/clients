@@ -341,6 +341,7 @@ export abstract class BaseImporter {
     result.collections = result.folders.map((f) => {
       const collection = new CollectionView();
       collection.name = f.name;
+      collection.id = f.id;
       return collection;
     });
     result.folderRelationships = [];
