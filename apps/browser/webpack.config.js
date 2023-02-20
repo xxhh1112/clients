@@ -9,11 +9,14 @@ const TerserPlugin = require("terser-webpack-plugin");
 const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 const configurator = require("./config/config");
 
+const allowedBrowsers = ["chrome", "edge", "firefox", "opera", "safari"];
+
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
 }
 const ENV = (process.env.ENV = process.env.NODE_ENV);
 const manifestVersion = process.env.MANIFEST_VERSION == 3 ? 3 : 2;
+const browser = allowedBrowsers.includes(process.env.BROWSER) ? process.env.BROWSER : "chrome";
 
 console.log(`Building Manifest Version ${manifestVersion} app`);
 const envConfig = configurator.load(ENV);
@@ -98,9 +101,16 @@ const plugins = [
   }),
   new CopyWebpackPlugin({
     patterns: [
-      manifestVersion == 3
-        ? { from: "./src/manifest.v3.json", to: "manifest.json" }
-        : "./src/manifest.json",
+      {
+        from: "./manifest.js",
+        to: "manifest.json",
+        transform(content, absoluteFrom) {
+          delete require.cache[require.resolve(absoluteFrom)];
+
+          const manifest = require(absoluteFrom);
+          return manifest(browser, manifestVersion);
+        },
+      },
       { from: "./src/managed_schema.json", to: "managed_schema.json" },
       { from: "./src/_locales", to: "_locales" },
       { from: "./src/images", to: "images" },
