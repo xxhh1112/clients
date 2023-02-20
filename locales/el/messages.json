@@ -134,7 +134,7 @@
     "message": "Κα"
   },
   "mx": {
-    "message": "Mx στα Ελληνικά"
+    "message": "Mx"
   },
   "dr": {
     "message": "Dr"
@@ -281,35 +281,35 @@
     "message": "Αναζήτηση στα Αγαπημένα"
   },
   "searchLogin": {
-    "message": "Αναζήτηση σε συνδέσεις",
+    "message": "Search logins",
     "description": "Search Login type"
   },
   "searchCard": {
-    "message": "Αναζήτηση σε κάρτες",
+    "message": "Search cards",
     "description": "Search Card type"
   },
   "searchIdentity": {
-    "message": "Αναζήτηση σε ταυτότητες",
+    "message": "Search identities",
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "Αναζήτηση σε ασφαλείς σημειώσεις",
+    "message": "Search secure notes",
     "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Αναζήτηση στο Vault"
   },
   "searchMyVault": {
-    "message": "Αναζήτηση στο vault"
+    "message": "Search my vault"
   },
   "searchOrganization": {
-    "message": "Αναζήτηση σε οργανισμό"
+    "message": "Search organization"
   },
   "searchMembers": {
-    "message": "Αναζήτηση μελών"
+    "message": "Search members"
   },
   "searchGroups": {
-    "message": "Αναζήτηση ομάδων"
+    "message": "Search groups"
   },
   "allItems": {
     "message": "Όλα τα στοιχεία"
@@ -393,7 +393,7 @@
     "message": "Επιλογή"
   },
   "newItem": {
-    "message": "Νέο στοιχείο"
+    "message": "New item"
   },
   "addItem": {
     "message": "Προσθήκη στοιχείου"
@@ -405,11 +405,11 @@
     "message": "Προβολή Στοιχείου"
   },
   "new": {
-    "message": "Νέο",
+    "message": "New",
     "description": "for adding new items"
   },
   "item": {
-    "message": "Στοιχείο"
+    "message": "Item"
   },
   "ex": {
     "message": "πχ.",
@@ -477,7 +477,7 @@
     "message": "Αντικείμενα Vault"
   },
   "filter": {
-    "message": "Φίλτρο"
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Μετακίνηση Επιλεγμένων στον Οργανισμό"
@@ -586,10 +586,10 @@
     "message": "Διαγραφή φακέλου"
   },
   "editInfo": {
-    "message": "Επεξεργασία πληροφοριών"
+    "message": "Edit info"
   },
   "access": {
-    "message": "Πρόσβαση"
+    "message": "Access"
   },
   "loggedOut": {
     "message": "Αποσυνδεθήκατε"
@@ -616,28 +616,28 @@
     "message": "Συνδεθείτε ή δημιουργήστε νέο λογαριασμό για να αποκτήσετε πρόσβαση στο vault σας."
   },
   "loginWithDevice": {
-    "message": "Σύνδεση με χρήση συσκευής"
+    "message": "Log in with device"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
   },
   "loginWithMasterPassword": {
-    "message": "Συνδεθείτε με τον κύριο κωδικό πρόσβασης"
+    "message": "Log in with master password"
   },
   "createAccount": {
     "message": "Δημιουργία Λογαριασμού"
   },
   "newAroundHere": {
-    "message": "Νέος/α στα μέρη μας;"
+    "message": "New around here?"
   },
   "startTrial": {
-    "message": "Έναρξη δοκιμής"
+    "message": "Start trial"
   },
   "logIn": {
     "message": "Είσοδος"
   },
   "logInInitiated": {
-    "message": "Η σύνδεση ξεκίνησε"
+    "message": "Log in initiated"
   },
   "submit": {
     "message": "Υποβολή"
@@ -691,20 +691,13 @@
     "message": "Μη έγκυρη διεύθυνση e-mail."
   },
   "masterPasswordRequired": {
-    "message": "Απαιτείται ο κύριος κωδικός."
+    "message": "Master password is required."
   },
   "confirmMasterPasswordRequired": {
-    "message": "Απαιτείται επιβεβαίωση του κύριου κωδικού."
+    "message": "Master password retype is required."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
-    "description": "The Master Password must be at least a specific number of characters long.",
-    "placeholders": {
-      "value": {
-        "content": "$1",
-        "example": "8"
-      }
-    }
+    "message": "Master password must be at least 8 characters long."
   },
   "masterPassDoesntMatch": {
     "message": "Η επιβεβαίωση του κύριου κωδικού δεν ταιριάζει."
@@ -713,7 +706,7 @@
     "message": "Ο λογαριασμός σας έχει δημιουργηθεί! Τώρα μπορείτε να συνδεθείτε."
   },
   "trialAccountCreated": {
-    "message": "Η δημιουργία του λογαριασμού ολοκληρώθηκε με επιτυχία."
+    "message": "Account created successfully."
   },
   "masterPassSent": {
     "message": "Σας στείλαμε ένα email με την υπόδειξη του κύριου κωδικού."
@@ -756,7 +749,7 @@
     "message": "Δεν υπάρχουν στοιχεία στη λίστα."
   },
   "noPermissionToViewAllCollectionItems": {
-    "message": "Δεν έχετε άδεια να δείτε όλα τα στοιχεία σε αυτήν τη συλλογή."
+    "message": "You do not have permission to view all items in this collection."
   },
   "noCollectionsInList": {
     "message": "Δεν υπάρχουν συλλογές στη λίστα."
@@ -768,7 +761,7 @@
     "message": "Δεν υπάρχουν χρήστες στη λίστα."
   },
   "noMembersInList": {
-    "message": "Δεν υπάρχουν μέλη προς εμφάνιση."
+    "message": "There are no members to list."
   },
   "noEventsInList": {
     "message": "Δεν υπάρχουν γεγονότα στη λίστα."
@@ -780,7 +773,7 @@
     "message": "Δεν συμμετέχετε σε κάποιον οργανισμό. Οι οργανισμοί επιτρέπουν την ασφαλή κοινοποίηση στοιχείων με άλλους χρήστες."
   },
   "notificationSentDevice": {
-    "message": "Μια ειδοποίηση έχει σταλεί στη συσκευή σας."
+    "message": "A notification has been sent to your device."
   },
   "versionNumber": {
     "message": "Έκδοση $VERSION_NUMBER$",
@@ -924,7 +917,7 @@
     }
   },
   "deleteSelectedConfirmation": {
-    "message": "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
+    "message": "Are you sure you want to continue?"
   },
   "moveSelectedItemsDesc": {
     "message": "Επιλέξτε ένα φάκελο στον οποίο θέλετε να μετακινήσετε το $COUNT$ επιλεγμένο(α) στοιχεία.",
@@ -983,7 +976,7 @@
     "message": "Μορφή Αρχείου"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Αυτή η εξαγωγή αρχείου θα προστατεύεται με κωδικό και θα απαιτείται ο κωδικός του αρχείου για αποκρυπτογράφηση."
+    "message": "This file export will be password protected and require the file password to decrypt."
   },
   "exportPasswordDescription": {
     "message": "This password will be used to export and import this file"
@@ -1013,7 +1006,7 @@
     "message": "Account restricted"
   },
   "passwordProtected": {
-    "message": "Προστατευμένο με κωδικό"
+    "message": "Password protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
     "message": "“File password”  and “Confirm file password“ do not match."
@@ -1172,7 +1165,7 @@
     "message": "Setting your KDF iterations, memory, and parallelism too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend changing these individually in small increments and then test all of your devices."
   },
   "kdfParallelism": {
-    "message": "Παράλληλη Διαδικασία Υπολογισμού Κλειδιού KDF"
+    "message": "KDF parallelism"
   },
   "argon2Desc": {
     "message": "Higher KDF iterations, memory, and parallelism can help protect your master password from being brute forced by an attacker."
@@ -1255,9 +1248,6 @@
   "importSuccess": {
     "message": "Τα δεδομένα έχουν εισαχθεί με επιτυχία στο vault σας."
   },
-  "dataExportSuccess": {
-    "message": "Data successfully exported"
-  },
   "importWarning": {
     "message": "Εισάγετε δεδομένα στο $ORGANIZATION$. Τα δεδομένα σας μπορεί να μοιραστούν με μέλη αυτού του οργανισμού. Θέλετε να προχωρήσετε;",
     "placeholders": {
@@ -1283,10 +1273,10 @@
     "message": "Επιλέξτε το αρχείο εισαγωγής"
   },
   "chooseFile": {
-    "message": "Επιλογή Αρχείου"
+    "message": "Choose File"
   },
   "noFileChosen": {
-    "message": "Δεν επιλέχθηκε κανένα αρχείο"
+    "message": "No file chosen"
   },
   "orCopyPasteFileContents": {
     "message": "ή αντιγράψτε/επικολλήστε τα περιεχόμενα του αρχείου εισαγωγής"
@@ -1320,10 +1310,10 @@
     "message": "Αλλάξτε γλώσσα που χρησιμοποιείται από το web vault."
   },
   "enableFavicon": {
-    "message": "Εμφάνιση εικονιδίων ιστοτόπων"
+    "message": "Show website icons"
   },
   "faviconDesc": {
-    "message": "Εμφάνιση μιας αναγνωρίσιμης εικόνας δίπλα σε κάθε σύνδεση."
+    "message": "Show a recognizable image next to each login."
   },
   "enableFullWidth": {
     "message": "Ενεργοποίηση διάταξης πλήρους πλάτους",
@@ -1977,7 +1967,7 @@
     "message": "έτος"
   },
   "yr": {
-    "message": "έτος"
+    "message": "yr"
   },
   "month": {
     "message": "μήνας"
@@ -5680,9 +5670,6 @@
   "customColor": {
     "message": "Custom Color"
   },
-  "selectPlaceholder": {
-    "message": "-- Select --"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type to filter --"
   },
@@ -5733,8 +5720,11 @@
   "secretProjectAssociationDescription": {
     "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
   },
-  "selectProjects": {
-    "message": "Select projects"
+  "typeOrSelectProjects": {
+    "message": "Type or select Projects"
+  },
+  "typeOrSelectProject": {
+    "message": "Type or select Project"
   },
   "project": {
     "message": "Project"
@@ -5920,7 +5910,7 @@
     "message": "Expires"
   },
   "canRead": {
-    "message": "Can read"
+    "message": "Can Read"
   },
   "accessTokensNoItemsTitle": {
     "message": "No access tokens to show"
@@ -5954,16 +5944,6 @@
   },
   "revokeAccessToken": {
     "message": "Revoke access token"
-  },
-  "revokeAccessTokens": {
-    "message": "Revoke access tokens"
-  },
-  "revokeAccessTokenDesc": {
-    "message": "Revoking access tokens is permanent and irreversible."
-  },
-  "accessTokenRevoked": {
-    "message": "Access tokens revoked",
-    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Submenu"
@@ -6019,9 +5999,6 @@
   "collection": {
     "message": "Collection"
   },
-  "noCollection": {
-    "message": "No collection"
-  },
   "canView": {
     "message": "Can view"
   },
@@ -6051,135 +6028,6 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
-  },
-  "domainVerification": {
-    "message": "Domain verification"
-  },
-  "newDomain": {
-    "message": "New domain"
-  },
-  "noDomains": {
-    "message": "No domains"
-  },
-  "noDomainsSubText": {
-    "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
-  },
-  "verifyDomain": {
-    "message": "Verify domain"
-  },
-  "reverifyDomain": {
-    "message": "Reverify domain"
-  },
-  "copyDnsTxtRecord": {
-    "message": "Copy DNS TXT record"
-  },
-  "dnsTxtRecord": {
-    "message": "DNS TXT record"
-  },
-  "dnsTxtRecordInputHint": {
-    "message": "Copy and paste the TXT record into your DNS Provider."
-  },
-  "domainNameInputHint": {
-    "message": "Example: mydomain.com. Subdomains require separate entries to be verified."
-  },
-  "automaticDomainVerification": {
-    "message": "Automatic Domain Verification"
-  },
-  "automaticDomainVerificationProcess": {
-    "message": "Bitwarden will attempt to verify the domain 3 times during the first 72 hours. If the domain can’t be verified, check the DNS record in your host and manually verify. The domain will be removed from your organization in 7 days if it is not verified"
-  },
-  "invalidDomainNameMessage": {
-    "message": "Input is not a valid format. Format: mydomain.com. Subdomains require separate entries to be verified."
-  },
-  "removeDomain": {
-    "message": "Remove domain"
-  },
-  "removeDomainWarning": {
-    "message": "Removing a domain cannot be undone. Are you sure you want to continue?"
-  },
-  "domainRemoved": {
-    "message": "Domain removed"
-  },
-  "domainSaved": {
-    "message": "Domain saved"
-  },
-  "domainVerified": {
-    "message": "Domain verified"
-  },
-  "duplicateDomainError": {
-    "message": "You can't claim the same domain twice."
-  },
-  "domainNotAvailable": {
-    "message": "Someone else is using $DOMAIN$. Use a different domain to continue.",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainNotVerified": {
-    "message": "$DOMAIN$ not verified. Check your DNS record.",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainStatusVerified": {
-    "message": "Verified"
-  },
-  "domainStatusUnverified": {
-    "message": "Unverified"
-  },
-  "domainNameTh": {
-    "message": "Name"
-  },
-  "domainStatusTh": {
-    "message": "Status"
-  },
-  "lastChecked": {
-    "message": "Last checked"
-  },
-  "domainFormInvalid": {
-    "message": "There are form errors that need your attention"
-  },
-  "addedDomain": {
-    "message": "Added domain $DOMAIN$",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "removedDomain": {
-    "message": "Removed domain $DOMAIN$",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainVerifiedEvent": {
-    "message": "$DOMAIN$ verified",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ not verified",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
   },
   "membersColumnHeader": {
     "message": "Member/Group"
@@ -6256,36 +6104,6 @@
       }
     }
   },
-  "server": {
-    "message": "Server"
-  },
-  "exportData": {
-    "message": "Export data"
-  },
-  "exportingOrganizationSecretDataTitle": {
-    "message": "Exporting Organization Secret Data"
-  },
-  "exportingOrganizationSecretDataDescription": {
-    "message": "Only the Secrets Manager data associated with $ORGANIZATION$ will be exported. Items in other products or from other organizations will not be included.",
-    "placeholders": {
-      "ORGANIZATION": {
-        "content": "$1",
-        "example": "My Org Name"
-      }
-    }
-  },
-  "fileUpload": {
-    "message": "File upload"
-  },
-  "acceptedFormats": {
-    "message": "Accepted Formats:"
-  },
-  "copyPasteImportContents": {
-    "message": "Copy & paste import contents:"
-  },
-  "or": {
-    "message": "or"
-  },
   "licenseAndBillingManagement": {
     "message": "License and billing management"
   },
@@ -6314,34 +6132,7 @@
     "message": "Billing Sync help"
   },
   "uploadLicense": {
-    "message": "Μεταφόρτωση άδειας"
-  },
-  "projectPeopleDescription": {
-    "message": "Grant groups or people access to this project."
-  },
-  "projectPeopleSelectHint": {
-    "message": "Πληκτρολογήστε ή επιλέξτε άτομα ή ομάδες"
-  },
-  "projectServiceAccountsDescription": {
-    "message": "Grant service accounts access to this project."
-  },
-  "projectServiceAccountsSelectHint": {
-    "message": "Type or select service accounts"
-  },
-  "projectEmptyPeopleAccessPolicies": {
-    "message": "Add people or groups to start collaborating"
-  },
-  "projectEmptyServiceAccountAccessPolicies": {
-    "message": "Add service accounts to grant access"
-  },
-  "canWrite": {
-    "message": "Can write"
-  },
-  "canReadWrite": {
-    "message": "Can read, write"
-  },
-  "groupSlashUser": {
-    "message": "Group/User"
+    "message": "Upload license"
   },
   "lowKdfIterations": {
     "message": "Low KDF Iterations"
@@ -6363,33 +6154,5 @@
   },
   "userAccessSecretsManager": {
     "message": "This user can access the Secrets Manager Beta"
-  },
-  "important": {
-    "message": "Important:"
-  },
-  "viewAll": {
-    "message": "View all"
-  },
-  "showingPortionOfTotal": {
-    "message": "Showing $PORTION$ of $TOTAL$",
-    "placeholders": {
-      "portion": {
-        "content": "$1",
-        "example": "2"
-      },
-      "total": {
-        "content": "$2",
-        "example": "5"
-      }
-    }
-  },
-  "resolveTheErrorsBelowAndTryAgain": {
-    "message": "Resolve the errors below and try again."
-  },
-  "description": {
-    "message": "Description"
-  },
-  "errorReadingImportFile": {
-    "message": "An error occurred when trying to read the import file"
   }
 }

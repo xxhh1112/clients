@@ -697,14 +697,7 @@
     "message": "Type je hoofdwachtwoord opnieuw in."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
-    "description": "The Master Password must be at least a specific number of characters long.",
-    "placeholders": {
-      "value": {
-        "content": "$1",
-        "example": "8"
-      }
-    }
+    "message": "Hoofdwachtwoord moet minstens 8 karakters lang zijn."
   },
   "masterPassDoesntMatch": {
     "message": "De hoofdwachtwoorden komen niet overeen."
@@ -1254,9 +1247,6 @@
   },
   "importSuccess": {
     "message": "De gegevens zijn in je kluis geïmporteerd."
-  },
-  "dataExportSuccess": {
-    "message": "Gegevens succesvol geëxporteerd"
   },
   "importWarning": {
     "message": "Je importeert gegevens naar $ORGANIZATION$. Je gegevens kunnen gedeeld worden met de leden van deze organisatie. Wil je doorgaan?",
@@ -5680,9 +5670,6 @@
   "customColor": {
     "message": "Aangepaste kleur"
   },
-  "selectPlaceholder": {
-    "message": "-- Selecteer --"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type om te filteren --"
   },
@@ -5733,8 +5720,11 @@
   "secretProjectAssociationDescription": {
     "message": "Kies projecten om het geheim aan te koppelen. Alleen gebruikers uit de organisatie met toegang tot deze projecten kunnen het geheim zien."
   },
-  "selectProjects": {
-    "message": "Projecten selecteren"
+  "typeOrSelectProjects": {
+    "message": "Typ of kies projecten"
+  },
+  "typeOrSelectProject": {
+    "message": "Typ of kies een project"
   },
   "project": {
     "message": "Project"
@@ -5761,49 +5751,49 @@
     "message": "Service-accounts"
   },
   "secrets": {
-    "message": "Geheimen"
+    "message": "Secrets"
   },
   "nameValuePair": {
     "message": "Naam/waarde paar"
   },
   "secretEdited": {
-    "message": "Geheim bewerkt"
+    "message": "Secret edited"
   },
   "secretCreated": {
-    "message": "Geheim aangemaakt"
+    "message": "Secret created"
   },
   "newSecret": {
-    "message": "Nieuw geheim"
+    "message": "New secret"
   },
   "newServiceAccount": {
-    "message": "Nieuw service account"
+    "message": "New service account"
   },
   "secretsNoItemsTitle": {
-    "message": "Geen geheimen om weer te geven"
+    "message": "No secrets to show"
   },
   "secretsNoItemsMessage": {
-    "message": "Om te starten, voeg een nieuw geheim toe of importeer een geheim."
+    "message": "To get started, add a new secret or import secrets."
   },
   "serviceAccountsNoItemsTitle": {
     "message": "Geen inhoud beschikbaar"
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Maak een nieuw service account aan om te beginnen met het automatiseren van geheime toegang."
+    "message": "Create a new service account to get started automating secret access."
   },
   "searchSecrets": {
-    "message": "Geheimen zoeken"
+    "message": "Search secrets"
   },
   "deleteServiceAccounts": {
-    "message": "Verwijder service accounts"
+    "message": "Delete service accounts"
   },
   "deleteServiceAccount": {
-    "message": "Verwijder service account"
+    "message": "Delete service account"
   },
   "viewServiceAccount": {
-    "message": "Bekijk service account"
+    "message": "View service account"
   },
   "searchServiceAccounts": {
-    "message": "Zoek service account"
+    "message": "Search service accounts"
   },
   "addProject": {
     "message": "Project toevoegen"
@@ -5824,34 +5814,34 @@
     "message": "Nieuw Project"
   },
   "softDeleteSecretWarning": {
-    "message": "Verwijderen van geheimen kan invloed hebben op bestaande integraties."
+    "message": "Deleting secrets can affect existing integrations."
   },
   "softDeletesSuccessToast": {
-    "message": "Geheimen verplaatst naar prullenbak"
+    "message": "Secrets sent to trash"
   },
   "serviceAccountCreated": {
-    "message": "Service account aangemaakt"
+    "message": "Service account created"
   },
   "smAccess": {
     "message": "Toegang"
   },
   "projectCommaSecret": {
-    "message": "Project, geheim"
+    "message": "Project, Secret"
   },
   "serviceAccountName": {
     "message": "Service account naam"
   },
   "newSaSelectAccess": {
-    "message": "Typ of selecteer projecten of geheimen"
+    "message": "Type or select projects or secrets"
   },
   "newSaTypeToFilter": {
-    "message": "Typ om te filteren"
+    "message": "Type to filter"
   },
   "deleteProjectsToast": {
     "message": "Projecten verwijderd"
   },
   "deleteProjectToast": {
-    "message": "Het project en alle bijbehorende geheimen zijn verwijderd"
+    "message": "The project and all associated secrets have been deleted"
   },
   "deleteProjectDialogMessage": {
     "message": "Het verwijderen van project $PROJECT$ is permanent en onomkeerbaar.",
@@ -5896,7 +5886,7 @@
     "message": "Geen projecten om weer te geven"
   },
   "projectsNoItemsMessage": {
-    "message": "Voeg een nieuw project toe om te starten met het organiseren van geheimen."
+    "message": "Add a new project to get started organizing secrets."
   },
   "smConfirmationRequired": {
     "message": "Bevestiging vereist"
@@ -5905,16 +5895,16 @@
     "message": "De volgende projecten konden niet worden verwijderd:"
   },
   "softDeleteSuccessToast": {
-    "message": "Geheim verplaatst naar prullenbak"
+    "message": "Secret sent to trash"
   },
   "searchProjects": {
     "message": "Zoek projecten"
   },
   "accessTokens": {
-    "message": "Toegangstoken"
+    "message": "Access tokens"
   },
   "createAccessToken": {
-    "message": "Toegangstoken aanmaken"
+    "message": "Create access token"
   },
   "expires": {
     "message": "Verloopt"
@@ -5923,10 +5913,10 @@
     "message": "Kan lezen"
   },
   "accessTokensNoItemsTitle": {
-    "message": "Geen toegangstokens om weer te geven"
+    "message": "No access tokens to show"
   },
   "accessTokensNoItemsDesc": {
-    "message": "Om te starten, creeer een toegangstoken"
+    "message": "To get started, create an access token"
   },
   "downloadAccessToken": {
     "message": "Download of kopieer voordat u afsluit."
@@ -5935,7 +5925,7 @@
     "message": "Verloopt op:"
   },
   "accessTokenCallOutTitle": {
-    "message": "Toegangstokens zijn niet opgeslagen en kunnen niet worden opgehaald"
+    "message": "Access tokens are not stored and cannot be retrieved"
   },
   "copyToken": {
     "message": "Kopieer token"
@@ -5954,16 +5944,6 @@
   },
   "revokeAccessToken": {
     "message": "Toegangstoken intrekken"
-  },
-  "revokeAccessTokens": {
-    "message": "Toegangstokens intrekken"
-  },
-  "revokeAccessTokenDesc": {
-    "message": "Toegangstokens intrekken is permanent en onomkeerbaar."
-  },
-  "accessTokenRevoked": {
-    "message": "Toegangstokens ingetrokken",
-    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Submenu"
@@ -6019,9 +5999,6 @@
   "collection": {
     "message": "Collectie"
   },
-  "noCollection": {
-    "message": "Geen collectie"
-  },
   "canView": {
     "message": "Kan bekijken"
   },
@@ -6051,135 +6028,6 @@
   },
   "memberAccessAll": {
     "message": "Deze gebruiker kan alle items inzien en bewerken."
-  },
-  "domainVerification": {
-    "message": "Domeinverificatie"
-  },
-  "newDomain": {
-    "message": "Nieuw domein"
-  },
-  "noDomains": {
-    "message": "Geen domeinen"
-  },
-  "noDomainsSubText": {
-    "message": "Door een domein te verbinden kunnen leden het SSO-identificatieveld tijdens het inloggen met SSO overslaan."
-  },
-  "verifyDomain": {
-    "message": "Domein verifiëren"
-  },
-  "reverifyDomain": {
-    "message": "Domein herverifiëren"
-  },
-  "copyDnsTxtRecord": {
-    "message": "DNS TXT record kopiëren"
-  },
-  "dnsTxtRecord": {
-    "message": "DNS TXT record"
-  },
-  "dnsTxtRecordInputHint": {
-    "message": "Kopieer en plak het TXT-record in je DNS-provider."
-  },
-  "domainNameInputHint": {
-    "message": "Voorbeeld: mijndomein.com. Subdomeinen moet je afzonderlijk verifiëren."
-  },
-  "automaticDomainVerification": {
-    "message": "Automatische domeinverificatie"
-  },
-  "automaticDomainVerificationProcess": {
-    "message": "Bitwarden probeert het domein gedurende de eerste 72 uur driemaal te verifiëren. Als het domein niet geverifieerd kan worden, controleer dan het DNS-record in je host en controleer het handmatig. Het domein wordt binnen 7 dagen verwijderd uit je organisatie als het niet geverifieerd is"
-  },
-  "invalidDomainNameMessage": {
-    "message": "Invoer is geen geldig formaat. Formaat: mijndomein.com. Subdomeinen moet je afzonderlijk verifiëren."
-  },
-  "removeDomain": {
-    "message": "Domein verwijderen"
-  },
-  "removeDomainWarning": {
-    "message": "Je kunt het verwijderen van een domein niet ongedaan maken. Weet je zeker dat je wilt doorgaan?"
-  },
-  "domainRemoved": {
-    "message": "Domein verwijderd"
-  },
-  "domainSaved": {
-    "message": "Domein opgeslagen"
-  },
-  "domainVerified": {
-    "message": "Domein geverifieerd"
-  },
-  "duplicateDomainError": {
-    "message": "Je kunt hetzelfde domein niet tweemaal opeisen."
-  },
-  "domainNotAvailable": {
-    "message": "Iemand anders gebruikt $DOMAIN$ al. Gebruik een ander domein om door te gaan.",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainNotVerified": {
-    "message": "$DOMAIN$ niet geverifieerd. Controleer je DNS-record.",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainStatusVerified": {
-    "message": "Geverifiëerd"
-  },
-  "domainStatusUnverified": {
-    "message": "Niet geverifieerd"
-  },
-  "domainNameTh": {
-    "message": "Naam"
-  },
-  "domainStatusTh": {
-    "message": "Status"
-  },
-  "lastChecked": {
-    "message": "Laatst gecontroleerd"
-  },
-  "domainFormInvalid": {
-    "message": "Er zijn formulierfouten die je aandacht vereisen"
-  },
-  "addedDomain": {
-    "message": "Domein $DOMAIN$ toegevoegd",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "removedDomain": {
-    "message": "Domein $DOMAIN$ verwijderd",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainVerifiedEvent": {
-    "message": "$DOMAIN$ geverifieerd",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
-  },
-  "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ niet geverifieerd",
-    "placeholders": {
-      "DOMAIN": {
-        "content": "$1",
-        "example": "bitwarden.com"
-      }
-    }
   },
   "membersColumnHeader": {
     "message": "Lid/Groep"
@@ -6256,36 +6104,6 @@
       }
     }
   },
-  "server": {
-    "message": "Server"
-  },
-  "exportData": {
-    "message": "Gegevens exporteren"
-  },
-  "exportingOrganizationSecretDataTitle": {
-    "message": "Geheime gegevens van de organisatie exporteren"
-  },
-  "exportingOrganizationSecretDataDescription": {
-    "message": "Exporteert alleen de organisatiekluis van $ORGANIZATION$. Items in andere producten of van andere organisaties zijn niet inbegrepen.",
-    "placeholders": {
-      "ORGANIZATION": {
-        "content": "$1",
-        "example": "My Org Name"
-      }
-    }
-  },
-  "fileUpload": {
-    "message": "Bestand uploaden"
-  },
-  "acceptedFormats": {
-    "message": "Toegestane formaten:"
-  },
-  "copyPasteImportContents": {
-    "message": "Kopieer en plak de inhoud van de import:"
-  },
-  "or": {
-    "message": "of"
-  },
   "licenseAndBillingManagement": {
     "message": "Licentie- en facturatiebeheer"
   },
@@ -6316,41 +6134,14 @@
   "uploadLicense": {
     "message": "Licentie uploaden"
   },
-  "projectPeopleDescription": {
-    "message": "Groepen of mensen toegang tot dit project geven."
-  },
-  "projectPeopleSelectHint": {
-    "message": "Typ of selecteer mensen of groepen"
-  },
-  "projectServiceAccountsDescription": {
-    "message": "Serviceaccounts toegang geven tot dit project."
-  },
-  "projectServiceAccountsSelectHint": {
-    "message": "Typ of selecteer serviceaccounts"
-  },
-  "projectEmptyPeopleAccessPolicies": {
-    "message": "Mensen of groepen toevoegen om samen te werken"
-  },
-  "projectEmptyServiceAccountAccessPolicies": {
-    "message": "Serviceaccounts toevoegen om toegang te verlenen"
-  },
-  "canWrite": {
-    "message": "Kan schrijven"
-  },
-  "canReadWrite": {
-    "message": "Kan lezen, schrijven"
-  },
-  "groupSlashUser": {
-    "message": "Groep/Gebruiker"
-  },
   "lowKdfIterations": {
-    "message": "Weinig KDF-iteraties"
+    "message": "Low KDF Iterations"
   },
   "lowKdfIterationsDesc": {
-    "message": "Verhoog je KDF-versleutelingsinstellingen om je account beter te beveiligen."
+    "message": "Increase your KDF encryption settings to improve the security of your account."
   },
   "changeKdfSettings": {
-    "message": "KDF-instellingen wijzigen"
+    "message": "Change KDF settings"
   },
   "changeKdfLoggedOutWarning": {
     "message": "Als je doorgaat zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief. We raden je aan je kluis te exporteren voordat je je versleutelingsinstellingen wijzigt om gegevensverlies te voorkomen."
@@ -6363,33 +6154,5 @@
   },
   "userAccessSecretsManager": {
     "message": "Deze gebruiker heeft toegang tot de Secrets Manager Bèta"
-  },
-  "important": {
-    "message": "Important:"
-  },
-  "viewAll": {
-    "message": "View all"
-  },
-  "showingPortionOfTotal": {
-    "message": "Showing $PORTION$ of $TOTAL$",
-    "placeholders": {
-      "portion": {
-        "content": "$1",
-        "example": "2"
-      },
-      "total": {
-        "content": "$2",
-        "example": "5"
-      }
-    }
-  },
-  "resolveTheErrorsBelowAndTryAgain": {
-    "message": "Los onderstaande fouten op en probeer het opnieuw."
-  },
-  "description": {
-    "message": "Omschrijving"
-  },
-  "errorReadingImportFile": {
-    "message": "Er is een fout opgetreden bij het lezen van het bronbestand"
   }
 }
