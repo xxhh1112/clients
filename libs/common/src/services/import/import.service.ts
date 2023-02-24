@@ -71,7 +71,7 @@ import { YotiCsvImporter } from "../../importers/yoti-csv-importer";
 import { ZohoVaultCsvImporter } from "../../importers/zohovault-csv-importer";
 import { Utils } from "../../misc/utils";
 import { ImportResult } from "../../models/domain/import-result";
-import { CollectionRequest } from "../../models/request/collection.request";
+import { CollectionWithIdRequest } from "../../models/request/collection-with-id.request";
 import { ImportCiphersRequest } from "../../models/request/import-ciphers.request";
 import { ImportOrganizationCiphersRequest } from "../../models/request/import-organization-ciphers.request";
 import { KvpRequest } from "../../models/request/kvp.request";
@@ -80,7 +80,7 @@ import { CipherService } from "../../vault/abstractions/cipher.service";
 import { FolderService } from "../../vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "../../vault/enums/cipher-type";
 import { CipherRequest } from "../../vault/models/request/cipher.request";
-import { FolderRequest } from "../../vault/models/request/folder.request";
+import { FolderWithIdRequest } from "../../vault/models/request/folder-with-id.request";
 import { CipherView } from "../../vault/models/view/cipher.view";
 
 export class ImportService implements ImportServiceAbstraction {
@@ -300,7 +300,7 @@ export class ImportService implements ImportServiceAbstraction {
       if (importResult.folders != null) {
         for (let i = 0; i < importResult.folders.length; i++) {
           const f = await this.folderService.encrypt(importResult.folders[i]);
-          request.folders.push(new FolderRequest(f));
+          request.folders.push(new FolderWithIdRequest(f));
         }
       }
       if (importResult.folderRelationships != null) {
@@ -320,7 +320,7 @@ export class ImportService implements ImportServiceAbstraction {
         for (let i = 0; i < importResult.collections.length; i++) {
           importResult.collections[i].organizationId = organizationId;
           const c = await this.collectionService.encrypt(importResult.collections[i]);
-          request.collections.push(new CollectionRequest(c));
+          request.collections.push(new CollectionWithIdRequest(c));
         }
       }
       if (importResult.collectionRelationships != null) {

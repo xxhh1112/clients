@@ -62,9 +62,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
       for (const c of this.results.collections as CollectionWithIdExport[]) {
         const collection = CollectionWithIdExport.toDomain(c);
         if (collection != null) {
-          collection.id = c.id;
           collection.organizationId = this.organizationId;
-          collection.externalId = c.externalId;
           const view = await collection.decrypt();
           groupingsMap.set(c.id, this.result.collections.length);
           this.result.collections.push(view);
@@ -74,7 +72,6 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
       for (const f of this.results.folders as FolderWithIdExport[]) {
         const folder = FolderWithIdExport.toDomain(f);
         if (folder != null) {
-          folder.id = f.id;
           const view = await folder.decrypt();
           groupingsMap.set(f.id, this.result.folders.length);
           this.result.folders.push(view);
@@ -124,7 +121,6 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
       this.results.collections.forEach((c: CollectionWithIdExport) => {
         const collection = CollectionWithIdExport.toView(c);
         if (collection != null) {
-          collection.id = c.id;
           collection.organizationId = null;
           groupingsMap.set(c.id, this.result.collections.length);
           this.result.collections.push(collection);
@@ -134,7 +130,6 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
       this.results.folders.forEach((f: FolderWithIdExport) => {
         const folder = FolderWithIdExport.toView(f);
         if (folder != null) {
-          folder.id = f.id;
           groupingsMap.set(f.id, this.result.folders.length);
           this.result.folders.push(folder);
         }

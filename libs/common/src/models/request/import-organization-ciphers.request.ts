@@ -1,10 +1,10 @@
 import { CipherRequest } from "../../vault/models/request/cipher.request";
 
-import { CollectionRequest } from "./collection.request";
+import { CollectionWithIdRequest } from "./collection-with-id.request";
 import { KvpRequest } from "./kvp.request";
 
 export class ImportOrganizationCiphersRequest {
   ciphers: CipherRequest[] = [];
-  collections: CollectionRequest[] = [];
+  collections: CollectionWithIdRequest[] = [];
   collectionRelationships: KvpRequest<number, number>[] = [];
 }
