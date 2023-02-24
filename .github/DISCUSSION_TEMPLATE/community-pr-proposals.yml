@@ -2,7 +2,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Welcome to the Bitwarden clients repo! As an open source project, Bitwarden is built in part by you—the community! To learn how to submit a pull request for consideration, please review [https://contributing.bitwarden.com/](https://contributing.bitwarden.com/). To keep discussion on topic, posts that do not include a specific PR proposal (for a code contribution you wish to develop) will be removed. For feature requests and community discussion, please visit https://community.bitwarden.com/
+        As an open source project, Bitwarden is built in part by you—the community! To learn how to submit a pull request for consideration, please review [https://contributing.bitwarden.com/](https://contributing.bitwarden.com/). To keep discussion on topic, posts that do not include a specific PR proposal (for a code contribution you wish to develop) will be removed. For feature requests and community discussion, please visit https://community.bitwarden.com/
   - type: textarea
     attributes:
       label: Code Contribution Proposal
