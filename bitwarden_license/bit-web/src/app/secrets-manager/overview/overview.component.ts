@@ -1,17 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  map,
-  Observable,
-  switchMap,
-  Subject,
-  takeUntil,
-  combineLatest,
-  startWith,
-  distinct,
-} from "rxjs";
+import { map, Observable, switchMap, Subject, takeUntil, combineLatest, startWith } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../models/view/project-list.view";
@@ -73,7 +65,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private secretService: SecretService,
     private serviceAccountService: ServiceAccountService,
     private dialogService: DialogService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private stateService: StateService
   ) {
     /**
      * We want to remount the `sm-onboarding` component on route change.
@@ -83,10 +76,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const orgId$ = this.route.params.pipe(
-      map((p) => p.organizationId),
-      distinct()
-    );
+    const orgId$ = this.route.params.pipe(map((p) => p.organizationId));
 
     orgId$
       .pipe(
@@ -113,18 +103,18 @@ export class OverviewComponent implements OnInit, OnDestroy {
     ]).pipe(switchMap(([orgId]) => this.serviceAccountService.getServiceAccounts(orgId)));
 
     this.view$ = combineLatest([projects$, secrets$, serviceAccounts$]).pipe(
-      map(([projects, secrets, serviceAccounts]) => {
+      switchMap(async ([projects, secrets, serviceAccounts]) => {
         return {
           latestProjects: this.getRecentItems(projects, this.tableSize),
           latestSecrets: this.getRecentItems(secrets, this.tableSize),
           allProjects: projects,
           allSecrets: secrets,
-          tasks: {
+          tasks: await this.refreshTasks({
             importSecrets: secrets.length > 0,
             createSecret: secrets.length > 0,
             createProject: projects.length > 0,
             createServiceAccount: serviceAccounts.length > 0,
-          },
+          }),
         };
       })
     );
@@ -216,5 +206,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
         operation: OperationType.Add,
       },
     });
+  }
+
+  private async refreshTasks(tasks: Tasks): Promise<Tasks> {
+    const prevTasks = await this.stateService.getSMOnboardingTasks();
+    const newlyCompletedTasks = Object.fromEntries(
+      Object.entries(tasks).filter(([_k, v]) => v === true)
+    );
+    const nextTasks = { ...prevTasks, ...newlyCompletedTasks };
+    this.stateService.setSMOnboardingTasks(nextTasks);
+    return nextTasks as Tasks;
   }
 }
