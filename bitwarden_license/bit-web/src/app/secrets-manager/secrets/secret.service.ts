@@ -165,29 +165,17 @@ export class SecretService {
   private async createSecretView(secretResponse: SecretResponse): Promise<SecretView> {
     const orgKey = await this.getOrganizationKey(secretResponse.organizationId);
 
-    const secretView = new SecretView();
-    secretView.id = secretResponse.id;
-    secretView.organizationId = secretResponse.organizationId;
-    secretView.creationDate = new Date(secretResponse.creationDate);
-    secretView.revisionDate = new Date(secretResponse.revisionDate);
-
-    const [name, value, note] = await Promise.all([
-      this.encryptService.decryptToUtf8(new EncString(secretResponse.name), orgKey),
-      this.encryptService.decryptToUtf8(new EncString(secretResponse.value), orgKey),
-      this.encryptService.decryptToUtf8(new EncString(secretResponse.note), orgKey),
-    ]);
-    secretView.name = name;
-    secretView.value = value;
-    secretView.note = note;
+    const view = await this.encryptService.decryptDomain(
+      SecretView,
+      secretResponse.toSecret(),
+      orgKey
+    );
 
     if (secretResponse.projects != null) {
-      secretView.projects = await this.decryptProjectsMappedToSecrets(
-        orgKey,
-        secretResponse.projects
-      );
+      view.projects = await this.decryptProjectsMappedToSecrets(orgKey, secretResponse.projects);
     }
 
-    return secretView;
+    return view;
   }
 
   private async createSecretsListView(
@@ -203,22 +191,12 @@ export class SecretService {
 
     return await Promise.all(
       secrets.secrets.map(async (s: SecretListItemResponse) => {
-        const secretListView = new SecretListView();
-        secretListView.id = s.id;
-        secretListView.organizationId = s.organizationId;
-        secretListView.name = await this.encryptService.decryptToUtf8(
-          new EncString(s.name),
-          orgKey
-        );
-        secretListView.creationDate = new Date(s.creationDate);
-        secretListView.revisionDate = new Date(s.revisionDate);
+        const view = await this.encryptService.decryptDomain(SecretListView, s.toSecret(), orgKey);
 
         const projectIds = s.projects?.map((p) => p.id);
-        secretListView.projects = projectsMappedToSecretsView.filter((p) =>
-          projectIds.includes(p.id)
-        );
+        view.projects = projectsMappedToSecretsView.filter((p) => projectIds.includes(p.id));
 
-        return secretListView;
+        return view;
       })
     );
   }

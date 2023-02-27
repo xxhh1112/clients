@@ -1,4 +1,7 @@
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
+
+import { Secret } from "../../models/secret";
 
 import { SecretProjectResponse } from "./secret-project.response";
 
@@ -20,5 +23,16 @@ export class SecretListItemResponse extends BaseResponse {
 
     const project = this.getResponseProperty("projects");
     this.projects = project == null ? null : project.map((k: any) => new SecretProjectResponse(k));
+  }
+
+  toSecret() {
+    const domain = new Secret();
+    domain.id = this.id;
+    domain.organizationId = this.organizationId;
+    domain.name = new EncString(this.name);
+    domain.creationDate = new Date(this.creationDate);
+    domain.revisionDate = new Date(this.revisionDate);
+
+    return domain;
   }
 }
