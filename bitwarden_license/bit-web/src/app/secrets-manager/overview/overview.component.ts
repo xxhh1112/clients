@@ -14,7 +14,7 @@ import {
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
-import { ProjectListView } from "../models/view/project-list.view";
+import { ProjectView } from "../models/view/project.view";
 import { SecretListView } from "../models/view/secret-list.view";
 import {
   ProjectDeleteDialogComponent,
@@ -60,9 +60,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
   protected userIsAdmin: boolean;
 
   protected view$: Observable<{
-    allProjects: ProjectListView[];
+    allProjects: ProjectView[];
     allSecrets: SecretListView[];
-    latestProjects: ProjectListView[];
+    latestProjects: ProjectView[];
     latestSecrets: SecretListView[];
     tasks: Tasks;
   }>;
@@ -137,10 +137,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private getRecentItems<T extends { revisionDate: string }[]>(items: T, length: number): T {
+  private getRecentItems<T extends { revisionDate: Date }[]>(items: T, length: number): T {
     return items
       .sort((a, b) => {
-        return new Date(b.revisionDate).getTime() - new Date(a.revisionDate).getTime();
+        return b.revisionDate.getTime() - a.revisionDate.getTime();
       })
       .slice(0, length) as T;
   }
@@ -174,7 +174,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDeleteProjectDialog(event: ProjectListView[]) {
+  openDeleteProjectDialog(event: ProjectView[]) {
     this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
       data: {
         projects: event,

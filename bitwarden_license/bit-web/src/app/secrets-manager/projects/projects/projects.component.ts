@@ -4,7 +4,7 @@ import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
 import { DialogService } from "@bitwarden/components";
 
-import { ProjectListView } from "../../models/view/project-list.view";
+import { ProjectView } from "../../models/view/project.view";
 import {
   ProjectDeleteDialogComponent,
   ProjectDeleteOperation,
@@ -21,7 +21,7 @@ import { ProjectService } from "../project.service";
   templateUrl: "./projects.component.html",
 })
 export class ProjectsComponent implements OnInit {
-  protected projects$: Observable<ProjectListView[]>;
+  protected projects$: Observable<ProjectView[]>;
   protected search: string;
 
   private organizationId: string;
@@ -43,7 +43,7 @@ export class ProjectsComponent implements OnInit {
     );
   }
 
-  private async getProjects(): Promise<ProjectListView[]> {
+  private async getProjects(): Promise<ProjectView[]> {
     return await this.projectService.getProjects(this.organizationId);
   }
 
@@ -66,7 +66,7 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  openDeleteProjectDialog(event: ProjectListView[]) {
+  openDeleteProjectDialog(event: ProjectView[]) {
     this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
       data: {
         projects: event,

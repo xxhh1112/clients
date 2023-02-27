@@ -12,7 +12,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { DialogService } from "@bitwarden/components";
 
-import { ProjectListView } from "../../models/view/project-list.view";
+import { ProjectView } from "../../models/view/project.view";
 import {
   BulkOperationStatus,
   BulkStatusDetails,
@@ -21,7 +21,7 @@ import {
 import { ProjectService } from "../project.service";
 
 export interface ProjectDeleteOperation {
-  projects: ProjectListView[];
+  projects: ProjectView[];
 }
 
 @Component({

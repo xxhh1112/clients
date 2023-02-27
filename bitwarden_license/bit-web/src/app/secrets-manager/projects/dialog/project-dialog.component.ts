@@ -67,6 +67,8 @@ export class ProjectDialogComponent implements OnInit {
     }
 
     const projectView = this.getProjectView();
+    projectView.organizationId = this.data.organizationId;
+
     if (this.data.operation === OperationType.Add) {
       const newProject = await this.createProject(projectView);
       this.router.navigate(["sm", this.data.organizationId, "projects", newProject.id]);
@@ -78,13 +80,13 @@ export class ProjectDialogComponent implements OnInit {
   };
 
   private async createProject(projectView: ProjectView) {
-    const newProject = await this.projectService.create(this.data.organizationId, projectView);
+    const newProject = await this.projectService.create(projectView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("projectCreated"));
     return newProject;
   }
 
   private async updateProject(projectView: ProjectView) {
-    await this.projectService.update(this.data.organizationId, projectView);
+    await this.projectService.update(projectView);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("projectSaved"));
   }
 

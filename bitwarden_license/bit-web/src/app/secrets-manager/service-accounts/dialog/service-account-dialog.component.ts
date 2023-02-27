@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
-import { ProjectListView } from "../../models/view/project-list.view";
+import { ProjectView } from "../../models/view/project.view";
 import { SecretListView } from "../../models/view/secret-list.view";
 import { ServiceAccountView } from "../../models/view/service-account.view";
 import { ProjectService } from "../../projects/project.service";
@@ -21,7 +21,7 @@ export interface ServiceAccountOperation {
   templateUrl: "./service-account-dialog.component.html",
 })
 export class ServiceAccountDialogComponent implements OnInit {
-  projects: ProjectListView[];
+  projects: ProjectView[];
   secrets: SecretListView[];
 
   formGroup = new FormGroup({

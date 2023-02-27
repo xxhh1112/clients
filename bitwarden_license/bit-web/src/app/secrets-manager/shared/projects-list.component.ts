@@ -4,25 +4,25 @@ import { Subject, takeUntil } from "rxjs";
 
 import { TableDataSource } from "@bitwarden/components";
 
-import { ProjectListView } from "../models/view/project-list.view";
+import { ProjectView } from "../models/view/project.view";
 
 @Component({
   selector: "sm-projects-list",
   templateUrl: "./projects-list.component.html",
 })
 export class ProjectsListComponent implements OnDestroy {
-  protected dataSource = new TableDataSource<ProjectListView>();
+  protected dataSource = new TableDataSource<ProjectView>();
 
   @Input()
-  get projects(): ProjectListView[] {
+  get projects(): ProjectView[] {
     return this._projects;
   }
-  set projects(projects: ProjectListView[]) {
+  set projects(projects: ProjectView[]) {
     this.selection.clear();
     this._projects = projects;
     this.dataSource.data = projects;
   }
-  private _projects: ProjectListView[];
+  private _projects: ProjectView[];
 
   @Input()
   set search(search: string) {
@@ -30,7 +30,7 @@ export class ProjectsListComponent implements OnDestroy {
   }
 
   @Output() editProjectEvent = new EventEmitter<string>();
-  @Output() deleteProjectEvent = new EventEmitter<ProjectListView[]>();
+  @Output() deleteProjectEvent = new EventEmitter<ProjectView[]>();
   @Output() onProjectCheckedEvent = new EventEmitter<string[]>();
   @Output() newProjectEvent = new EventEmitter();
 

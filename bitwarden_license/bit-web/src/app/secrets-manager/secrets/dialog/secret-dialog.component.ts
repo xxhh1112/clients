@@ -7,7 +7,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { DialogService } from "@bitwarden/components";
 
-import { ProjectListView } from "../../models/view/project-list.view";
+import { ProjectView } from "../../models/view/project.view";
 import { SecretProjectView } from "../../models/view/secret-project.view";
 import { SecretView } from "../../models/view/secret.view";
 import { ProjectService } from "../../projects/project.service";
@@ -40,7 +40,7 @@ export class SecretDialogComponent implements OnInit {
   });
 
   protected loading = false;
-  projects: ProjectListView[];
+  projects: ProjectView[];
   selectedProjects: SecretProjectView[] = [];
 
   private destroy$ = new Subject<void>();

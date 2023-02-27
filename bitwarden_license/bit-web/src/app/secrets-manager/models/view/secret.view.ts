@@ -6,7 +6,7 @@ export class SecretView {
   name: string;
   value: string;
   note: string;
-  creationDate: string;
-  revisionDate: string;
+  creationDate: Date;
+  revisionDate: Date;
   projects: SecretProjectView[];
 }

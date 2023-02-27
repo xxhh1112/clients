@@ -168,8 +168,8 @@ export class SecretService {
     const secretView = new SecretView();
     secretView.id = secretResponse.id;
     secretView.organizationId = secretResponse.organizationId;
-    secretView.creationDate = secretResponse.creationDate;
-    secretView.revisionDate = secretResponse.revisionDate;
+    secretView.creationDate = new Date(secretResponse.creationDate);
+    secretView.revisionDate = new Date(secretResponse.revisionDate);
 
     const [name, value, note] = await Promise.all([
       this.encryptService.decryptToUtf8(new EncString(secretResponse.name), orgKey),
@@ -210,8 +210,8 @@ export class SecretService {
           new EncString(s.name),
           orgKey
         );
-        secretListView.creationDate = s.creationDate;
-        secretListView.revisionDate = s.revisionDate;
+        secretListView.creationDate = new Date(s.creationDate);
+        secretListView.revisionDate = new Date(s.revisionDate);
 
         const projectIds = s.projects?.map((p) => p.id);
         secretListView.projects = projectsMappedToSecretsView.filter((p) =>
