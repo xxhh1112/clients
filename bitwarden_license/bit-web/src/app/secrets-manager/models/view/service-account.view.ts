@@ -1,10 +1,10 @@
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { Encryptable } from "@bitwarden/common/interfaces/crypto.interface";
+import { Encryptable, KeyRetrieval } from "@bitwarden/common/interfaces/crypto.interface";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { ServiceAccount } from "../service-account";
 
-export class ServiceAccountView implements Encryptable<ServiceAccount> {
+export class ServiceAccountView implements Encryptable<ServiceAccount>, KeyRetrieval {
   id: string;
   organizationId: string;
   name: string;

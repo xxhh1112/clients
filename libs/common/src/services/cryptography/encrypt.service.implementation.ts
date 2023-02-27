@@ -3,12 +3,7 @@ import { EncryptService } from "../../abstractions/encrypt.service";
 import { LogService } from "../../abstractions/log.service";
 import { EncryptionType } from "../../enums/encryptionType";
 import { IEncrypted } from "../../interfaces/IEncrypted";
-import {
-  Decryptable,
-  DecryptableDomain,
-  Encryptable,
-  EncryptableDomain,
-} from "../../interfaces/crypto.interface";
+import { Decryptable, Encryptable, EncryptableDomain } from "../../interfaces/crypto.interface";
 import { OldDecryptable } from "../../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
@@ -167,7 +162,7 @@ export class EncryptServiceImplementation implements EncryptService {
     return await Promise.all(items.map((item) => item.decrypt(key)));
   }
 
-  async decryptDomain<V, D extends DecryptableDomain>(
+  async decryptDomain<V, D>(
     view: Decryptable<V, D>,
     domain: D,
     key: SymmetricCryptoKey

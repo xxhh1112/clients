@@ -29,10 +29,6 @@ export class AccessTokenView implements Encryptable<AccessToken> {
     return view;
   }
 
-  keyIdentifier(): string | null {
-    return null;
-  }
-
   async encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<AccessToken> {
     const model = new AccessToken();
 

@@ -13,9 +13,9 @@ export function nullableFactory<T extends new (...args: any[]) => any>(
 }
 
 /**
- * Domain model that can be decrypted using views.
+ * Model with a key identifier.
  */
-export interface DecryptableDomain {
+export interface KeyRetrieval {
   /**
    * Unique GUID for the key used to encrypt the data
    */
@@ -33,17 +33,12 @@ export interface Encryptable<TDomain> {
    * @param key Key used to encrypt the data
    */
   encrypt(encryptService: EncryptService, key: SymmetricCryptoKey): Promise<TDomain>;
-
-  /**
-   * Unique GUID for the key used to encrypt the data
-   */
-  keyIdentifier(): string | null;
 }
 
 /**
  * Helper type for defining the static decrypt operation on view models.
  */
-export type Decryptable<TView, TDomain extends DecryptableDomain> = {
+export type Decryptable<TView, TDomain> = {
   decrypt(encryptService: EncryptService, key: SymmetricCryptoKey, model: TDomain): Promise<TView>;
 };
 

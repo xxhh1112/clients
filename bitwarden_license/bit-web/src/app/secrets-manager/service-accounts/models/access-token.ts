@@ -7,8 +7,4 @@ export class AccessToken {
   expireAt?: Date;
   creationDate: Date;
   revisionDate: Date;
-
-  keyIdentifier(): string | null {
-    return null;
-  }
 }

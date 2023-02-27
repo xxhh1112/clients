@@ -1,10 +1,5 @@
 import { IEncrypted } from "../interfaces/IEncrypted";
-import {
-  Decryptable,
-  DecryptableDomain,
-  Encryptable,
-  EncryptableDomain,
-} from "../interfaces/crypto.interface";
+import { Decryptable, Encryptable, EncryptableDomain } from "../interfaces/crypto.interface";
 import { OldDecryptable } from "../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../interfaces/initializer-metadata.interface";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
@@ -29,7 +24,7 @@ export abstract class EncryptService {
     view: V,
     key: SymmetricCryptoKey
   ) => Promise<EncryptableDomain<V>>;
-  abstract decryptDomain: <V, D extends DecryptableDomain>(
+  abstract decryptDomain: <V, D>(
     view: Decryptable<V, D>,
     domain: D,
     key: SymmetricCryptoKey

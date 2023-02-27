@@ -4,7 +4,7 @@ import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
 import {
   Decryptable,
-  DecryptableDomain,
+  KeyRetrieval,
   Encryptable,
   EncryptableDomain,
 } from "../interfaces/crypto.interface";
@@ -92,8 +92,8 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
 
-  decryptDomain: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
-  encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
+  decryptDomain: <V, D extends KeyRetrieval>(view: Decryptable<V, D>, model: D) => Promise<V>;
+  encryptView: <V extends Encryptable<EncryptableDomain<V>> & KeyRetrieval>(
     folder: V
   ) => Promise<EncryptableDomain<V>>;
 }

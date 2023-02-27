@@ -1,6 +1,7 @@
+import { KeyRetrieval } from "@bitwarden/common/interfaces/crypto.interface";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 
-export class Project {
+export class Project implements KeyRetrieval {
   id: string;
   organizationId: string;
   name: EncString;

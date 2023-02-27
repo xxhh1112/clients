@@ -1,10 +1,10 @@
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { Encryptable } from "@bitwarden/common/interfaces/crypto.interface";
+import { Encryptable, KeyRetrieval } from "@bitwarden/common/interfaces/crypto.interface";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { Project } from "../project";
 
-export class ProjectView implements Encryptable<Project> {
+export class ProjectView implements Encryptable<Project>, KeyRetrieval {
   id: string;
   organizationId: string;
   name: string;

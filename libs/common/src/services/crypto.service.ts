@@ -18,7 +18,7 @@ import {
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
 import {
   Decryptable,
-  DecryptableDomain,
+  KeyRetrieval,
   Encryptable,
   EncryptableDomain,
 } from "../interfaces/crypto.interface";
@@ -719,16 +719,13 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  async decryptDomain<V, D extends DecryptableDomain>(
-    view: Decryptable<V, D>,
-    domain: D
-  ): Promise<V> {
+  async decryptDomain<V, D extends KeyRetrieval>(view: Decryptable<V, D>, domain: D): Promise<V> {
     const key = await this.getKeyFromIdentifier(domain.keyIdentifier());
 
     return await this.encryptService.decryptDomain(view, domain, key);
   }
 
-  async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
+  async encryptView<V extends Encryptable<EncryptableDomain<V>> & KeyRetrieval>(
     view: V
   ): Promise<EncryptableDomain<V>> {
     const key = await this.getKeyFromIdentifier(view.keyIdentifier());
