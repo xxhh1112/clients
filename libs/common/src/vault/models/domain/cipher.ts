@@ -1,6 +1,6 @@
 import { Jsonify } from "type-fest";
 
-import { Decryptable } from "../../../interfaces/decryptable.interface";
+import { OldDecryptable } from "../../../interfaces/decryptable.interface";
 import Domain from "../../../models/domain/domain-base";
 import { EncString } from "../../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
@@ -19,7 +19,7 @@ import { Login } from "./login";
 import { Password } from "./password";
 import { SecureNote } from "./secure-note";
 
-export class Cipher extends Domain implements Decryptable<CipherView> {
+export class Cipher extends Domain implements OldDecryptable<CipherView> {
   readonly initializerKey = InitializerKey.Cipher;
 
   id: string;

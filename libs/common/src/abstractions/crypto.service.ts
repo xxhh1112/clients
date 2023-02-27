@@ -2,6 +2,12 @@ import { KdfConfig } from "../auth/models/domain/kdf-config";
 import { HashPurpose } from "../enums/hashPurpose";
 import { KdfType } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../interfaces/crypto.interface";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
@@ -85,4 +91,9 @@ export abstract class CryptoService {
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   randomNumber: (min: number, max: number) => Promise<number>;
   validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
+
+  decryptDomain: <V, D extends DecryptableDomain>(view: Decryptable<V, D>, model: D) => Promise<V>;
+  encryptView: <V extends Encryptable<EncryptableDomain<V>>>(
+    folder: V
+  ) => Promise<EncryptableDomain<V>>;
 }

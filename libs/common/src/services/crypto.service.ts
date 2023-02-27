@@ -16,6 +16,12 @@ import {
   KdfType,
 } from "../enums/kdfType";
 import { KeySuffixOptions } from "../enums/keySuffixOptions";
+import {
+  Decryptable,
+  DecryptableDomain,
+  Encryptable,
+  EncryptableDomain,
+} from "../interfaces/crypto.interface";
 import { sequentialize } from "../misc/sequentialize";
 import { Utils } from "../misc/utils";
 import { EFFLongWordList } from "../misc/wordlist";
@@ -711,6 +717,29 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     return true;
+  }
+
+  async decryptDomain<V, D extends DecryptableDomain>(
+    view: Decryptable<V, D>,
+    domain: D
+  ): Promise<V> {
+    const key = await this.getKeyFromIdentifier(domain.keyIdentifier());
+
+    return await this.encryptService.decryptDomain(view, domain, key);
+  }
+
+  async encryptView<V extends Encryptable<EncryptableDomain<V>>>(
+    view: V
+  ): Promise<EncryptableDomain<V>> {
+    const key = await this.getKeyFromIdentifier(view.keyIdentifier());
+
+    return this.encryptService.encryptView(view, key);
+  }
+
+  private async getKeyFromIdentifier(keyIdentifier: string | null): Promise<SymmetricCryptoKey> {
+    return Utils.isNullOrWhitespace(keyIdentifier)
+      ? await this.getKeyForUserEncryption()
+      : await this.getOrgKey(keyIdentifier);
   }
 
   // ---HELPERS---
