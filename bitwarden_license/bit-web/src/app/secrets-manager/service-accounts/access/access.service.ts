@@ -6,7 +6,6 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
@@ -45,7 +44,7 @@ export class AccessService {
     );
     const results = new ListResponse(r, AccessTokenResponse);
 
-    return await this.createAccessTokenViews(organizationId, results.data);
+    return await this.decryptMany(organizationId, results.data);
   }
 
   async createAccessToken(
@@ -63,7 +62,7 @@ export class AccessService {
     );
     const encryptionKey = new SymmetricCryptoKey(key);
 
-    const request = await this.createAccessTokenRequest(
+    const request = await this.makeAccessTokenRequest(
       organizationId,
       encryptionKey,
       accessTokenView
@@ -96,48 +95,42 @@ export class AccessService {
     this._accessToken.next(null);
   }
 
-  private async createAccessTokenRequest(
+  private async makeAccessTokenRequest(
     organizationId: string,
     encryptionKey: SymmetricCryptoKey,
     accessTokenView: AccessTokenView
   ): Promise<AccessTokenRequest> {
-    const organizationKey = await this.getOrganizationKey(organizationId);
-    const accessTokenRequest = new AccessTokenRequest();
-    const [name, encryptedPayload, key] = await Promise.all([
-      await this.encryptService.encrypt(accessTokenView.name, organizationKey),
+    const key = await this.getOrganizationKey(organizationId);
+
+    const accessToken = await this.encryptService.encryptView(accessTokenView, key);
+
+    const request = new AccessTokenRequest();
+    request.name = accessToken.name;
+
+    [request.encryptedPayload, request.key] = await Promise.all([
       await this.encryptService.encrypt(
-        JSON.stringify({ encryptionKey: organizationKey.keyB64 }),
+        JSON.stringify({ encryptionKey: key.keyB64 }),
         encryptionKey
       ),
-      await this.encryptService.encrypt(encryptionKey.keyB64, organizationKey),
+      await this.encryptService.encrypt(encryptionKey.keyB64, key),
     ]);
 
-    accessTokenRequest.name = name;
-    accessTokenRequest.encryptedPayload = encryptedPayload;
-    accessTokenRequest.key = key;
-    accessTokenRequest.expireAt = accessTokenView.expireAt;
-    return accessTokenRequest;
+    request.expireAt = accessTokenView.expireAt;
+    return request;
   }
 
   private async getOrganizationKey(organizationId: string): Promise<SymmetricCryptoKey> {
     return await this.cryptoService.getOrgKey(organizationId);
   }
 
-  private async createAccessTokenViews(
+  private async decryptMany(
     organizationId: string,
     accessTokenResponses: AccessTokenResponse[]
   ): Promise<AccessTokenView[]> {
-    const orgKey = await this.getOrganizationKey(organizationId);
+    const key = await this.getOrganizationKey(organizationId);
     return await Promise.all(
-      accessTokenResponses.map(async (s) => {
-        const view = new AccessTokenView();
-        view.id = s.id;
-        view.name = await this.encryptService.decryptToUtf8(new EncString(s.name), orgKey);
-        view.scopes = s.scopes;
-        view.expireAt = s.expireAt ? new Date(s.expireAt) : null;
-        view.creationDate = new Date(s.creationDate);
-        view.revisionDate = new Date(s.revisionDate);
-        return view;
+      accessTokenResponses.map(async (at) => {
+        return await this.encryptService.decryptDomain(AccessTokenView, at.toAccessToken(), key);
       })
     );
   }

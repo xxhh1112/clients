@@ -1,4 +1,8 @@
+import { nullableFactory } from "@bitwarden/common/interfaces/crypto.interface";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
+
+import { AccessToken } from "../access-token";
 
 export class AccessTokenResponse extends BaseResponse {
   id: string;
@@ -16,5 +20,18 @@ export class AccessTokenResponse extends BaseResponse {
     this.expireAt = this.getResponseProperty("ExpireAt");
     this.creationDate = this.getResponseProperty("CreationDate");
     this.revisionDate = this.getResponseProperty("RevisionDate");
+  }
+
+  toAccessToken() {
+    const accessToken = new AccessToken();
+
+    accessToken.id = this.id;
+    accessToken.name = new EncString(this.name);
+    accessToken.scopes = this.scopes;
+    accessToken.expireAt = nullableFactory(Date, this.expireAt);
+    accessToken.creationDate = new Date(this.creationDate);
+    accessToken.revisionDate = new Date(this.revisionDate);
+
+    return accessToken;
   }
 }
