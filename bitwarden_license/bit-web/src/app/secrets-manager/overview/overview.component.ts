@@ -34,6 +34,10 @@ import {
 import { ServiceAccountService } from "../service-accounts/service-account.service";
 
 type Tasks = {
+  [organizationId: string]: OrganizationTasks;
+};
+
+type OrganizationTasks = {
   importSecrets: boolean;
   createSecret: boolean;
   createProject: boolean;
@@ -55,7 +59,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     allSecrets: SecretListView[];
     latestProjects: ProjectListView[];
     latestSecrets: SecretListView[];
-    tasks: Tasks;
+    tasks: OrganizationTasks;
   }>;
 
   constructor(
@@ -102,14 +106,14 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
     ]).pipe(switchMap(([orgId]) => this.serviceAccountService.getServiceAccounts(orgId)));
 
-    this.view$ = combineLatest([projects$, secrets$, serviceAccounts$]).pipe(
-      switchMap(async ([projects, secrets, serviceAccounts]) => {
+    this.view$ = combineLatest([projects$, secrets$, serviceAccounts$, orgId$]).pipe(
+      switchMap(async ([projects, secrets, serviceAccounts, orgId]) => {
         return {
           latestProjects: this.getRecentItems(projects, this.tableSize),
           latestSecrets: this.getRecentItems(secrets, this.tableSize),
           allProjects: projects,
           allSecrets: secrets,
-          tasks: await this.refreshTasks({
+          tasks: await this.saveCompletedTasks(orgId, {
             importSecrets: secrets.length > 0,
             createSecret: secrets.length > 0,
             createProject: projects.length > 0,
@@ -131,6 +135,22 @@ export class OverviewComponent implements OnInit, OnDestroy {
         return new Date(b.revisionDate).getTime() - new Date(a.revisionDate).getTime();
       })
       .slice(0, length) as T;
+  }
+
+  private async saveCompletedTasks(
+    organizationId: string,
+    orgTasks: OrganizationTasks
+  ): Promise<OrganizationTasks> {
+    const prevTasks = (await this.stateService.getSMOnboardingTasks()) as Tasks;
+    const newlyCompletedOrgTasks = Object.fromEntries(
+      Object.entries(orgTasks).filter(([_k, v]) => v === true)
+    );
+    const nextOrgTasks = { ...prevTasks[organizationId], ...newlyCompletedOrgTasks };
+    this.stateService.setSMOnboardingTasks({
+      ...prevTasks,
+      [organizationId]: nextOrgTasks,
+    });
+    return nextOrgTasks as OrganizationTasks;
   }
 
   // Projects ---
@@ -206,15 +226,5 @@ export class OverviewComponent implements OnInit, OnDestroy {
         operation: OperationType.Add,
       },
     });
-  }
-
-  private async refreshTasks(tasks: Tasks): Promise<Tasks> {
-    const prevTasks = await this.stateService.getSMOnboardingTasks();
-    const newlyCompletedTasks = Object.fromEntries(
-      Object.entries(tasks).filter(([_k, v]) => v === true)
-    );
-    const nextTasks = { ...prevTasks, ...newlyCompletedTasks };
-    this.stateService.setSMOnboardingTasks(nextTasks);
-    return nextTasks as Tasks;
   }
 }

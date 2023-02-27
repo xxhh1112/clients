@@ -2364,14 +2364,16 @@ export class StateService<
     );
   }
 
-  async getSMOnboardingTasks(options?: StorageOptions): Promise<Record<string, boolean>> {
+  async getSMOnboardingTasks(
+    options?: StorageOptions
+  ): Promise<Record<string, Record<string, boolean>>> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.settings?.smOnboardingTasks;
   }
 
   async setSMOnboardingTasks(
-    value: Record<string, boolean>,
+    value: Record<string, Record<string, boolean>>,
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(
