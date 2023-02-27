@@ -3,9 +3,6 @@ import { Subject } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
 import { ServiceAccountView } from "../models/view/service-account.view";
@@ -21,11 +18,7 @@ export class ServiceAccountService {
 
   serviceAccount$ = this._serviceAccount.asObservable();
 
-  constructor(
-    private cryptoService: CryptoService,
-    private apiService: ApiService,
-    private encryptService: EncryptService
-  ) {}
+  constructor(private cryptoService: CryptoService, private apiService: ApiService) {}
 
   async getServiceAccounts(organizationId: string): Promise<ServiceAccountView[]> {
     const r = await this.apiService.send(
@@ -36,12 +29,11 @@ export class ServiceAccountService {
       true
     );
     const results = new ListResponse(r, ServiceAccountResponse);
-    return await this.createServiceAccountViews(organizationId, results.data);
+    return await this.decryptMany(results.data);
   }
 
-  async create(organizationId: string, serviceAccountView: ServiceAccountView) {
-    const orgKey = await this.getOrganizationKey(organizationId);
-    const request = await this.getServiceAccountRequest(orgKey, serviceAccountView);
+  async create(organizationId: string, view: ServiceAccountView) {
+    const request = await this.makeServiceAccountRequest(view);
     const r = await this.apiService.send(
       "POST",
       "/organizations/" + organizationId + "/service-accounts",
@@ -49,48 +41,25 @@ export class ServiceAccountService {
       true,
       true
     );
-    this._serviceAccount.next(
-      await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r))
-    );
+    this._serviceAccount.next(await this.decrypt(new ServiceAccountResponse(r)));
   }
 
-  private async getOrganizationKey(organizationId: string): Promise<SymmetricCryptoKey> {
-    return await this.cryptoService.getOrgKey(organizationId);
-  }
+  private async makeServiceAccountRequest(view: ServiceAccountView) {
+    const serviceAccount = await this.cryptoService.encryptView(view);
 
-  private async getServiceAccountRequest(
-    organizationKey: SymmetricCryptoKey,
-    serviceAccountView: ServiceAccountView
-  ) {
     const request = new ServiceAccountRequest();
-    request.name = await this.encryptService.encrypt(serviceAccountView.name, organizationKey);
+    request.name = serviceAccount.name;
     return request;
   }
 
-  private async createServiceAccountView(
-    organizationKey: SymmetricCryptoKey,
-    serviceAccountResponse: ServiceAccountResponse
-  ): Promise<ServiceAccountView> {
-    const serviceAccountView = new ServiceAccountView();
-    serviceAccountView.id = serviceAccountResponse.id;
-    serviceAccountView.organizationId = serviceAccountResponse.organizationId;
-    serviceAccountView.creationDate = serviceAccountResponse.creationDate;
-    serviceAccountView.revisionDate = serviceAccountResponse.revisionDate;
-    serviceAccountView.name = await this.encryptService.decryptToUtf8(
-      new EncString(serviceAccountResponse.name),
-      organizationKey
-    );
-    return serviceAccountView;
+  private async decrypt(response: ServiceAccountResponse): Promise<ServiceAccountView> {
+    return this.cryptoService.decryptDomain(ServiceAccountView, response.toServiceAccount());
   }
 
-  private async createServiceAccountViews(
-    organizationId: string,
-    serviceAccountResponses: ServiceAccountResponse[]
-  ): Promise<ServiceAccountView[]> {
-    const orgKey = await this.getOrganizationKey(organizationId);
+  private async decryptMany(responses: ServiceAccountResponse[]): Promise<ServiceAccountView[]> {
     return await Promise.all(
-      serviceAccountResponses.map(async (s: ServiceAccountResponse) => {
-        return await this.createServiceAccountView(orgKey, s);
+      responses.map(async (s) => {
+        return await this.decrypt(s);
       })
     );
   }
