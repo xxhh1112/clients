@@ -19,6 +19,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 import { BrowserApi } from "../browser/browserApi";
+import { fromChromeEvent } from "../listeners/from-chrome-event";
 import { BrowserStateService } from "../services/abstractions/browser-state.service";
 
 import { routerTransition } from "./app-routing.animations";
@@ -58,6 +59,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       this.activeUserId = userId;
+
+      if (userId == null) {
+        this.router.navigate(["home"]);
+      }
     });
 
     this.ngZone.runOutsideAngular(() => {
@@ -84,9 +89,8 @@ export class AppComponent implements OnInit, OnDestroy {
               });
             }
 
-            if (this.activeUserId === null) {
-              this.router.navigate(["home"]);
-            }
+            // TODO: We need to verify that the state is what you would expect logged out state to be
+            await this.stateService.clean({ userId: msg.userId });
           });
           this.changeDetectorRef.detectChanges();
         });
@@ -130,7 +134,13 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     };
 
-    BrowserApi.messageListener("app.component", (window as any).bitwardenPopupMainMessageListener);
+    fromChromeEvent(chrome.runtime.onMessage)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([message, sender, sendResponse]) => {
+        (window as any).bitwardenPopupMainMessageListener(message, sender);
+      });
+
+    // BrowserApi.messageListener("app.component", (window as any).bitwardenPopupMainMessageListener);
 
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(async (event) => {
@@ -186,7 +196,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     const now = new Date().getTime();
-    if (this.lastActivity != null && now - this.lastActivity < 250) {
+    if (this.lastActivity != null && now - this.lastActivity < 500) {
       return;
     }
 

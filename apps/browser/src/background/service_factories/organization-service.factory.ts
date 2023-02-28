@@ -1,5 +1,3 @@
-import { OrganizationService as AbstractOrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-
 import { BrowserOrganizationService } from "../../services/browser-organization.service";
 
 import { FactoryOptions, CachedServices, factory } from "./factory-options";
@@ -11,9 +9,9 @@ export type OrganizationServiceInitOptions = OrganizationServiceFactoryOptions &
   StateServiceInitOptions;
 
 export function organizationServiceFactory(
-  cache: { organizationService?: AbstractOrganizationService } & CachedServices,
+  cache: { organizationService?: BrowserOrganizationService } & CachedServices,
   opts: OrganizationServiceInitOptions
-): Promise<AbstractOrganizationService> {
+): Promise<BrowserOrganizationService> {
   return factory(
     cache,
     "organizationService",

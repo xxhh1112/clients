@@ -1,5 +1,6 @@
 import { CipherContextMenuHandler } from "../browser/cipher-context-menu-handler";
 import { ContextMenuClickedHandler } from "../browser/context-menu-clicked-handler";
+import { RuntimeHandler } from "../browser/runtime-handler";
 
 import { combine } from "./combine";
 import { onCommandListener } from "./onCommandListener";
@@ -30,6 +31,7 @@ const runtimeMessageListener = combine<
   UpdateBadge.messageListener,
   CipherContextMenuHandler.messageListener,
   ContextMenuClickedHandler.messageListener,
+  RuntimeHandler.messageListener,
 ]);
 
 export {

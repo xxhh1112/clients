@@ -131,4 +131,14 @@ export class BrowserStateService
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
   }
+
+  override async setLastActive(value: number, options?: StorageOptions): Promise<void> {
+    const activeUserId = options?.userId ?? (await this.getActiveUserIdFromStorage());
+    await this.memoryStorageService.save(`lastActive__${activeUserId}`, value);
+  }
+
+  override async getLastActive(options?: StorageOptions): Promise<number> {
+    const activeUserId = options?.userId ?? (await this.getActiveUserIdFromStorage());
+    return this.memoryStorageService.get<number>(`lastActive__${activeUserId}`);
+  }
 }

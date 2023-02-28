@@ -1,5 +1,3 @@
-import { FolderService as AbstractFolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-
 import { BrowserFolderService } from "../../services/browser-folder.service";
 
 import { cipherServiceFactory, CipherServiceInitOptions } from "./cipher-service.factory";
@@ -20,9 +18,9 @@ export type FolderServiceInitOptions = FolderServiceFactoryOptions &
   StateServiceInitOptions;
 
 export function folderServiceFactory(
-  cache: { folderService?: AbstractFolderService } & CachedServices,
+  cache: { folderService?: BrowserFolderService } & CachedServices,
   opts: FolderServiceInitOptions
-): Promise<AbstractFolderService> {
+): Promise<BrowserFolderService> {
   return factory(
     cache,
     "folderService",

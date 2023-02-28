@@ -1,5 +1,3 @@
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-
 import BrowserPlatformUtilsService from "../../services/browserPlatformUtils.service";
 
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
@@ -17,9 +15,9 @@ export type PlatformUtilsServiceInitOptions = PlatformUtilsServiceFactoryOptions
   MessagingServiceInitOptions;
 
 export function platformUtilsServiceFactory(
-  cache: { platformUtilsService?: PlatformUtilsService } & CachedServices,
+  cache: { platformUtilsService?: BrowserPlatformUtilsService } & CachedServices,
   opts: PlatformUtilsServiceInitOptions
-): Promise<PlatformUtilsService> {
+): Promise<BrowserPlatformUtilsService> {
   return factory(
     cache,
     "platformUtilsService",

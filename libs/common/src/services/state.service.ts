@@ -2821,7 +2821,7 @@ function withPrototypeForArrayMembers<T>(
         return originalResult.then((result) => {
           if (result == null) {
             return null;
-          } else if (!(result instanceof Array)) {
+          } else if (!(result instanceof Array || Array.isArray(result))) {
             throw new Error(
               `Attempted to retrieve non array type from state as an array for method ${String(
                 propertyKey

@@ -8,7 +8,6 @@ import { ThemingService } from "@bitwarden/angular/services/theming/theming.serv
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
-import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
@@ -32,7 +31,6 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
@@ -48,8 +46,6 @@ import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.ab
 import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
-import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
@@ -151,7 +147,7 @@ function getBgService<T>(service: keyof MainBackground) {
       },
       deps: [CipherService, LogServiceAbstraction, I18nService],
     },
-    { provide: AuditService, useFactory: getBgService<AuditService>("auditService"), deps: [] },
+    // { provide: AuditService, useFactory: getBgService<AuditService>("auditService"), deps: [] },
     {
       provide: FileUploadService,
       useFactory: getBgService<FileUploadService>("fileUploadService"),
@@ -216,11 +212,11 @@ function getBgService<T>(service: keyof MainBackground) {
       },
       deps: [StateServiceAbstraction, OrganizationService],
     },
-    {
-      provide: PolicyApiServiceAbstraction,
-      useFactory: getBgService<PolicyApiServiceAbstraction>("policyApiService"),
-      deps: [],
-    },
+    // {
+    //   provide: PolicyApiServiceAbstraction,
+    //   useFactory: getBgService<PolicyApiServiceAbstraction>("policyApiService"),
+    //   deps: [],
+    // },
     {
       provide: PlatformUtilsService,
       useFactory: getBgService<PlatformUtilsService>("platformUtilsService"),
@@ -258,11 +254,11 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<KeyConnectorService>("keyConnectorService"),
       deps: [],
     },
-    {
-      provide: UserVerificationService,
-      useFactory: getBgService<UserVerificationService>("userVerificationService"),
-      deps: [],
-    },
+    // {
+    //   provide: UserVerificationService,
+    //   useFactory: getBgService<UserVerificationService>("userVerificationService"),
+    //   deps: [],
+    // },
     {
       provide: VaultTimeoutSettingsService,
       useFactory: getBgService<VaultTimeoutSettingsService>("vaultTimeoutSettingsService"),
@@ -350,11 +346,11 @@ function getBgService<T>(service: keyof MainBackground) {
         StateMigrationService,
       ],
     },
-    {
-      provide: UsernameGenerationService,
-      useFactory: getBgService<UsernameGenerationService>("usernameGenerationService"),
-      deps: [],
-    },
+    // {
+    //   provide: UsernameGenerationService,
+    //   useFactory: getBgService<UsernameGenerationService>("usernameGenerationService"),
+    //   deps: [],
+    // },
     {
       provide: BaseStateServiceAbstraction,
       useExisting: StateServiceAbstraction,

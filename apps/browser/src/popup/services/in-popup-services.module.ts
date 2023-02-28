@@ -3,10 +3,15 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/guards/unauth.guard";
 import {
+  LOCKED_CALLBACK,
+  LOGOUT_CALLBACK,
   MEMORY_STORAGE,
   SECURE_STORAGE,
   WINDOW,
 } from "@bitwarden/angular/services/injection-tokens";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
+import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -18,29 +23,39 @@ import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService as LogServiceAbstraction } from "@bitwarden/common/abstractions/log.service";
+import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
+import {
+  LogService,
+  LogService as LogServiceAbstraction,
+} from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService } from "@bitwarden/common/abstractions/stateMigration.service";
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
 } from "@bitwarden/common/abstractions/storage.service";
+import { SyncNotifierService } from "@bitwarden/common/abstractions/sync/syncNotifier.service.abstraction";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
+import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { AuthService } from "@bitwarden/common/services/auth.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
-import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
+import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
 
+import MainBackground from "../../background/main.background";
 import { NativeMessagingBackground } from "../../background/nativeMessaging.background";
 import { BrowserApi } from "../../browser/browserApi";
 import { Account } from "../../models/account";
@@ -54,7 +69,13 @@ import BrowserLocalStorageService from "../../services/browserLocalStorage.servi
 import BrowserMessagingService from "../../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../../services/browserMessagingPrivateModeBackground.service";
 import I18nService from "../../services/i18n.service";
-import { ManifestVersion, MANIFEST_VERSION } from "../../services/injection-tokens";
+import {
+  BACKGROUND_MESSAGING_SERVICE,
+  COMBINED_MESSAGING_SERVICE,
+  IN_POPUP_MESSAGING_SERVICE,
+  ManifestVersion,
+  MANIFEST_VERSION,
+} from "../../services/injection-tokens";
 import { KeyGenerationService } from "../../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../../services/localBackedSessionStorage.service";
 import { VaultFilterService } from "../../services/vaultFilter.service";
@@ -66,6 +87,12 @@ import { LockGuardService } from "./lock-guard.service";
 import { PopupBrowserPlatformUtilsService } from "./popup-browser-platform-utils.service";
 import { PopupUtilsService } from "./popup-utils.service";
 import { UnauthGuardService } from "./unauth-guard.service";
+
+function getBgService<T>(service: keyof MainBackground) {
+  return mainBackground ? (mainBackground[service] as any as T) : null;
+}
+
+const mainBackground: MainBackground = (BrowserApi.getBackgroundPage() as any)?.bitwardenMain;
 
 @NgModule({
   providers: [
@@ -126,20 +153,28 @@ import { UnauthGuardService } from "./unauth-guard.service";
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
     { provide: PopupUtilsService, useFactory: () => new PopupUtilsService(false) },
     {
-      provide: MessagingService,
-      // TODO: This totally gets rid of in process messaging towards what was a fake in process background service
-      // this will probably need a replacement
+      provide: IN_POPUP_MESSAGING_SERVICE,
       useFactory: () => {
+        return new BrowserMessagingPrivateModeBackgroundService();
+      },
+    },
+    {
+      provide: BACKGROUND_MESSAGING_SERVICE,
+      useFactory: () => {
+        return new BrowserMessagingService();
+      },
+    },
+    {
+      provide: COMBINED_MESSAGING_SERVICE,
+      useFactory: (backgroundMessaging: MessagingService, inPopupMessaging: MessagingService) => {
         return new (class extends MessagingService {
-          backgroundMessaging = new BrowserMessagingService();
-          inProcessMessaging = new BrowserMessagingPrivateModeBackgroundService();
-
           send = (subscriber: string, arg: any = {}) => {
-            this.backgroundMessaging.send(subscriber, arg);
-            this.inProcessMessaging.send(subscriber, arg);
+            backgroundMessaging.send(subscriber, arg);
+            inPopupMessaging.send(subscriber, arg);
           };
         })();
       },
+      deps: [BACKGROUND_MESSAGING_SERVICE, IN_POPUP_MESSAGING_SERVICE],
     },
     {
       provide: I18nServiceAbstraction,
@@ -179,7 +214,7 @@ import { UnauthGuardService } from "./unauth-guard.service";
       },
       deps: [
         I18nServiceAbstraction,
-        MessagingService,
+        IN_POPUP_MESSAGING_SERVICE,
         NativeMessagingBackground,
         SystemServiceAbstraction,
       ],
@@ -230,7 +265,7 @@ import { UnauthGuardService } from "./unauth-guard.service";
         logService: LogServiceAbstraction
       ) => {
         if (manifestVersion === 2) {
-          return new MemoryStorageService();
+          return getBgService("memoryStorageService");
         } else {
           return new LocalBackedSessionStorageService(
             new EncryptServiceImplementation(cryptoFunctionService, logService, false),
@@ -255,7 +290,8 @@ import { UnauthGuardService } from "./unauth-guard.service";
           memoryStorageService,
           logService,
           stateMigrationService,
-          new StateFactory(GlobalState, Account)
+          new StateFactory(GlobalState, Account),
+          false
         );
       },
       deps: [
@@ -306,6 +342,72 @@ import { UnauthGuardService } from "./unauth-guard.service";
     {
       provide: FileDownloadService,
       useClass: BrowserFileDownloadService,
+    },
+    {
+      provide: VaultTimeoutServiceAbstraction,
+      useClass: VaultTimeoutService,
+      deps: [
+        CipherService,
+        FolderService,
+        CollectionService,
+        CryptoService,
+        PlatformUtilsService,
+        BACKGROUND_MESSAGING_SERVICE,
+        SearchService,
+        KeyConnectorServiceAbstraction,
+        StateServiceAbstraction,
+        AuthServiceAbstraction,
+        VaultTimeoutSettingsService,
+        LOCKED_CALLBACK,
+        LOGOUT_CALLBACK,
+      ],
+    },
+    {
+      provide: LOGOUT_CALLBACK,
+      useFactory: (messagingService: MessagingService) => {
+        return (expired: boolean, userId?: string) => {
+          messagingService.send("logout", { expired, userId });
+        };
+      },
+      deps: [IN_POPUP_MESSAGING_SERVICE],
+    },
+    {
+      provide: KeyConnectorServiceAbstraction,
+      useClass: KeyConnectorService,
+      deps: [
+        StateServiceAbstraction,
+        CryptoService,
+        ApiService,
+        TokenService,
+        LogService,
+        OrganizationService,
+        CryptoFunctionService,
+        SyncNotifierService,
+        BACKGROUND_MESSAGING_SERVICE,
+        LOGOUT_CALLBACK,
+      ],
+    },
+    {
+      provide: AuthServiceAbstraction,
+      useClass: AuthService,
+      deps: [
+        CryptoService,
+        ApiService,
+        TokenService,
+        AppIdService,
+        PlatformUtilsService,
+        IN_POPUP_MESSAGING_SERVICE,
+        LogService,
+        KeyConnectorServiceAbstraction,
+        EnvironmentService,
+        StateServiceAbstraction,
+        TwoFactorService,
+        I18nServiceAbstraction,
+      ],
+    },
+    {
+      provide: MessagingService,
+      useExisting: BACKGROUND_MESSAGING_SERVICE,
     },
   ],
   bootstrap: [AppComponent],

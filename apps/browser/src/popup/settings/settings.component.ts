@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2";
@@ -17,6 +17,7 @@ import { DeviceType } from "@bitwarden/common/enums/deviceType";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
+import { COMBINED_MESSAGING_SERVICE } from "../../services/injection-tokens";
 import { SetPinComponent } from "../components/set-pin.component";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
@@ -61,7 +62,7 @@ export class SettingsComponent implements OnInit {
     private i18nService: I18nService,
     private vaultTimeoutService: VaultTimeoutService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
-    public messagingService: MessagingService,
+    @Inject(COMBINED_MESSAGING_SERVICE) public messagingService: MessagingService,
     private router: Router,
     private environmentService: EnvironmentService,
     private cryptoService: CryptoService,
