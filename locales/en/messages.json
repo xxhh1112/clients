@@ -5864,7 +5864,7 @@
     "message": "Service account name"
   },
   "newSaSelectAccess":{
-    "message": "Type or select projects or secrets"
+    "message": "Type or select projects"
   },
   "newSaTypeToFilter":{
     "message": "Type to filter"
@@ -6362,6 +6362,15 @@
   "projectEmptyServiceAccountAccessPolicies": {
     "message": "Add service accounts to grant access"
   },
+  "serviceAccountPeopleDescription": {
+    "message": "Grant groups or people access to this service account."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Assign projects to this service account. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Add projects to grant access"
+  },
   "canWrite": {
     "message": "Can write"
   },
@@ -6419,6 +6428,19 @@
   },
   "errorReadingImportFile": {
     "message": "An error occurred when trying to read the import file"
+  },
+  "accessedSecret": {
+    "message": "Accessed secret $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
   },
   "createSecret": {
     "message": "Create a secret"
@@ -6490,15 +6512,12 @@
   },
   "exposedMasterPasswordDesc": {
     "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
-  }, 
+  },
   "weakAndExposedMasterPassword": {
     "message": "Weak and Exposed Master Password"
   },
   "weakAndBreachedMasterPasswordDesc": {
     "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
-  },
-  "important": {
-    "message": "Important:"
   },
   "characterMinimum": {
     "message": "$LENGTH$ character minimum",
