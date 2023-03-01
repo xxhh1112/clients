@@ -24,7 +24,7 @@ export class LastPassCsvImporter extends BaseImporter implements Importer {
       const cipherIndex = result.ciphers.length;
       let folderIndex = result.folders.length;
       let grouping = value.grouping;
-      const bWCollectionId = value.bwcollectionid;
+      const groupingId = value.groupingid;
       if (grouping != null) {
         // eslint-disable-next-line
         grouping = grouping.replace(/\\/g, "/").replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -73,7 +73,7 @@ export class LastPassCsvImporter extends BaseImporter implements Importer {
       if (addFolder) {
         const f = new FolderView();
         f.name = grouping;
-        f.id = bWCollectionId;
+        f.id = groupingId;
         result.folders.push(f);
       }
       if (hasFolder) {
