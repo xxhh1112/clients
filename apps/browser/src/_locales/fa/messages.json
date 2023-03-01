@@ -430,7 +430,14 @@
     "message": "نوشتن مجدد کلمه عبور اصلی ضروری است."
   },
   "masterPasswordMinlength": {
-    "message": "طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "کلمه عبور اصلی با تکرار آن مطابقت ندارد."
@@ -960,7 +967,10 @@
     "message": "اگر یک فرم ورودی شناسایی شد، وقتی صفحه وب بارگذاری شد، به صورت خودکار پر شود."
   },
   "experimentalFeature": {
-    "message": "در حال حاضر این یک ویژگی آزمایشی است. با مسئولیت خود استفاده کنید."
+    "message": "وب‌سایت‌های در معرض خطر یا نامعتبر می‌توانند از پر کردن خودکار در بارگذاری صفحه سوء استفاده کنند."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "درباره پر کردن خودکار بیشتر بدانید"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "تنظیم تکمیل خودکار پیش‌فرض برای موارد ورود به سیستم"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "دکتر"
+  },
+  "mx": {
+    "message": "عنوان"
   },
   "firstName": {
     "message": "نام"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "ایمیل را به خاطر بسپار"
+  },
+  "loginWithDevice": {
+    "message": "ورود با دستگاه"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "ورود به سیستم با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "عبارت اثر انگشت"
+  },
+  "fingerprintMatchInfo": {
+    "message": "لطفاً مطمئن شوید که قفل گاوصندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد."
+  },
+  "resendNotification": {
+    "message": "ارسال مجدد اعلان"
+  },
+  "viewAllLoginOptions": {
+    "message": "مشاهده همه گزینه‌های ورود به سیستم"
+  },
+  "notificationSentDevice": {
+    "message": "یک اعلان به دستگاه شما ارسال شده است."
+  },
+  "logInInitiated": {
+    "message": "ورود به سیستم آغاز شد"
+  },
+  "exposedMasterPassword": {
+    "message": "کلمه عبور اصلی افشا شده"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "کلمه عبور اصلی ضعیف و افشا شده"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟"
+  },
+  "checkForBreaches": {
+    "message": "نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید"
+  },
+  "important": {
+    "message": "مهم:"
+  },
+  "masterPasswordHint": {
+    "message": "کلمه عبور اصلی شما در صورت فراموشی قابل بازیابی نیست!"
+  },
+  "characterMinimum": {
+    "message": "حداقل کاراکتر $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

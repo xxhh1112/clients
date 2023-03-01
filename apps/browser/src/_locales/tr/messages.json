@@ -430,7 +430,14 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parola onayı eşleşmiyor."
@@ -960,7 +967,10 @@
     "message": "Sayfa yüklendiğinde giriş formu tespit edilirse otomatik olarak formu doldur."
   },
   "experimentalFeature": {
-    "message": "Bu şu anda deneysel bir özelliktir. Kullanımı sizin sorumluluğunuzdadır."
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Otomatik doldurma hakkında bilgi alın"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Hesaplar için varsayılan otomatik doldurma ayarı"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Ad"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "E-postayı hatırla"
+  },
+  "loginWithDevice": {
+    "message": "Cihazla giriş yap"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Cihazla girişi Bitwarden mobil uygulamasının ayarlarından etkinleştirmelisiniz. Başka bir seçeneğe mi ihtiyacınız var?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Parmak izi ifadesi"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Lütfen kasanızın kilidinin açık olduğundan ve parmak izi ifadesinin diğer cihazla eşleştiğinden emin olun."
+  },
+  "resendNotification": {
+    "message": "Bildirimi yeniden gönder"
+  },
+  "viewAllLoginOptions": {
+    "message": "Tüm giriş seçeneklerini gör"
+  },
+  "notificationSentDevice": {
+    "message": "Cihazınıza bir bildirim gönderildi."
+  },
+  "logInInitiated": {
+    "message": "Giriş başlatıldı"
+  },
+  "exposedMasterPassword": {
+    "message": "Açığa Çıkmış Ana Parola"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Bu parola bir veri ihlalinde tespit edildi. Hesabınızı korumak için aynı parolayı farklı yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zayıf ve Açığa Çıkmış Ana Parola"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?"
+  },
+  "checkForBreaches": {
+    "message": "Bilinen veri ihlallerinde bu parolayı kontrol et"
+  },
+  "important": {
+    "message": "Önemli:"
+  },
+  "masterPasswordHint": {
+    "message": "Ana parolanızı unutursanız kurtaramazsınız!"
+  },
+  "characterMinimum": {
+    "message": "En az $LENGTH$ karakter",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Otomatik doldurma nasıl yapılır?"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Bu sayfadan bir kayıt seçin veya ayarlardan bir kısayol ayarlayın. Sayfa yüklenirken otomatik doldurmayı da deneyebilirsiniz."
+  },
+  "gotIt": {
+    "message": "Anladım"
+  },
+  "autofillSettings": {
+    "message": "Otomatik doldurma ayarları"
+  },
+  "autofillShortcut": {
+    "message": "Otomatik doldurma klavye kısayolu"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Otomatik doldurma kısayolu ayarlanmamış. Bunu tarayıcının ayarlarından değiştirebilirsiniz."
+  },
+  "autofillShortcutText": {
+    "message": "Otomatik doldurma kısayolu: $COMMAND$. Bunu tarayıcının ayarlarından değiştirebilirsiniz.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Varsayılan otomatik doldurma kısayolu: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

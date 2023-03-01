@@ -21,9 +21,9 @@ export class BrowserStateService
   //   initializeAs: "record",
   // })
   protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
-  // @sessionSync({ ctor: String })
+  // @sessionSync({ initializer: (s: string) => s })
   protected activeAccountSubject: BehaviorSubject<string>;
-  // @sessionSync({ initializer: (value) => !!value })
+  // @sessionSync({ initializer: (b: boolean) => b })
   protected activeAccountUnlockedSubject: BehaviorSubject<boolean>;
   // @sessionSync({
   //   initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account

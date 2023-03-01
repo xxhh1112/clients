@@ -430,7 +430,14 @@
     "message": "Повторното въвеждане на главната парола е задължително."
   },
   "masterPasswordMinlength": {
-    "message": "Главната парола трябва да е дълга поне 8 знака."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -960,7 +967,10 @@
     "message": "При засичане на формуляр за вписване при зареждането на уеб страницата автоматично да се попълват данните на съответстващата регистрация."
   },
   "experimentalFeature": {
-    "message": "Това все още е в експериментална фаза, ползвате го на собствена глава."
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Научете повече относно автоматичното попълване"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Стандартна настройка за автоматичното попълване"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Д-р"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Собствено име"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "Запомняне на е-пощата"
+  },
+  "loginWithDevice": {
+    "message": "Вписване с устройство"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Вписването с устройство трябва да е включено в настройките на приложението на Битуорден. Друга настройка ли търсите?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Уникална фраза"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Уверете се, че трезорът Ви е отключен и че Уникалната фраза съвпада с другото устройство."
+  },
+  "resendNotification": {
+    "message": "Повторно изпращане на известието"
+  },
+  "viewAllLoginOptions": {
+    "message": "Вижте всички възможности за вписване"
+  },
+  "notificationSentDevice": {
+    "message": "Към устройството Ви е изпратено известие."
+  },
+  "logInInitiated": {
+    "message": "Вписването е стартирано"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Проверяване в известните случаи на изтекли данни за тази парола"
+  },
+  "important": {
+    "message": "Важно:"
+  },
+  "masterPasswordHint": {
+    "message": "Главната парола не може да бъде възстановена, ако я забравите!"
+  },
+  "characterMinimum": {
+    "message": "Минимум $LENGTH$ знака",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Как се ползва автоматичното попълване"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Изберете елемент от тази страница или задайте клавишна комбинация в настройките. Можете да опитате и функцията за автоматично попълване при зареждане на страницата."
+  },
+  "gotIt": {
+    "message": "Разбрано"
+  },
+  "autofillSettings": {
+    "message": "Настройки за автоматичното попълване"
+  },
+  "autofillShortcut": {
+    "message": "Клавишна комбинация за автоматично попълване"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Няма зададена клавишна комбинация за автоматичното попълване. Променете това в настройките на браузъра."
+  },
+  "autofillShortcutText": {
+    "message": "Клавишната комбинация за автоматично попълване е: $COMMAND$. Може да я промените в настройките на браузъра.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Стандартна клавишна комбинация за автоматично попълване: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

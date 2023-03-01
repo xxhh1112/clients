@@ -184,6 +184,7 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
       showConfirmButton: true,
       confirmButtonText: confirmText == null ? this.i18nService.t("ok") : confirmText,
       target: target != null ? target : "body",
+      onOpen: () => Swal.getConfirmButton().focus(),
     });
 
     if (bootstrapModal != null) {
@@ -198,6 +199,10 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
   }
 
   isSelfHost(): boolean {
+    return WebPlatformUtilsService.isSelfHost();
+  }
+
+  static isSelfHost(): boolean {
     return process.env.ENV.toString() === "selfhosted";
   }
 
@@ -256,5 +261,9 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage() {
     return false;
+  }
+
+  getAutofillKeyboardShortcut(): Promise<string> {
+    return null;
   }
 }

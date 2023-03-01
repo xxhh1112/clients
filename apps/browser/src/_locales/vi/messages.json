@@ -430,7 +430,14 @@
     "message": "Yêu cầu nhập lại mật khẩu chính."
   },
   "masterPasswordMinlength": {
-    "message": "Mật khẩu chính phải có ít nhất 8 kí tự."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Xác nhận mật khẩu chính không khớp."
@@ -960,7 +967,10 @@
     "message": "Nếu phát hiện biểu mẫu đăng nhập, thực hiện tự động điền khi trang web tải xong."
   },
   "experimentalFeature": {
-    "message": "Đây là một tính năng thử nghiệm. Sử dụng nó có thể gây ra rủi ro cho bạn."
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Tìm hiểu thêm về tự động điền"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Cài đặt tự động điền mặc định cho mục đăng nhập"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Bác sĩ"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Tên"
@@ -1446,7 +1459,7 @@
     "message": "Tổ chức của bạn yêu cầu mật khẩu chính của bạn phải đáp ứng các yêu cầu sau:"
   },
   "policyInEffectMinComplexity": {
-    "message": "Minimum complexity score of $SCORE$",
+    "message": "Điểm phức tạp tối thiểu của $SCORE$",
     "placeholders": {
       "score": {
         "content": "$1",
@@ -1488,7 +1501,7 @@
     "message": "Bạn đồng ý với những điều sau khi nhấn chọn ô này:"
   },
   "acceptPoliciesRequired": {
-    "message": "Terms of Service and Privacy Policy have not been acknowledged."
+    "message": "Điều khoản sử dụng và Chính sách quyền riêng tư chưa được đồng ý."
   },
   "termsOfService": {
     "message": "Điều khoản sử dụng"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "Ghi nhớ email"
+  },
+  "loginWithDevice": {
+    "message": "Đăng nhập bằng thiết bị"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Cụm từ dấu vân tay"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+  },
+  "resendNotification": {
+    "message": "Gửi lại thông báo"
+  },
+  "viewAllLoginOptions": {
+    "message": "Xem tất cả tùy chọn đăng nhập"
+  },
+  "notificationSentDevice": {
+    "message": "Một thông báo đã được gửi đến thiết bị của bạn."
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Quan trọng:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ ký tự tối thiểu",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

@@ -133,6 +133,9 @@
   "ms": {
     "message": "Ms"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -305,6 +308,9 @@
   "searchMembers": {
     "message": "Üyelerde ara"
   },
+  "searchGroups": {
+    "message": "Gruplarda ara"
+  },
   "allItems": {
     "message": "Tüm kayıtlar"
   },
@@ -399,7 +405,8 @@
     "message": "Kaydı göster"
   },
   "new": {
-    "message": "Yeni"
+    "message": "Yeni",
+    "description": "for adding new items"
   },
   "item": {
     "message": "Kayıt"
@@ -690,7 +697,14 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parola onayı eşleşmiyor."
@@ -1150,6 +1164,19 @@
       }
     }
   },
+  "kdfMemory": {
+    "message": "KDF belleği (MB)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "KDF yinelemelerinizi, belleğinizi ve paralelliğinizi çok yüksek ayarlamak, daha yavaş veya daha eski cihazlarda Bitwarden'da oturum açarken (ve kilidini açarken) düşük performansa neden olabilir. Bunları tek tek küçük artışlarla değiştirmenizi ve ardından tüm cihazlarınızı test etmenizi öneririz."
+  },
+  "kdfParallelism": {
+    "message": "KDF paralelliği"
+  },
+  "argon2Desc": {
+    "message": "Daha yüksek KDF yinelemeleri, bellek ve paralellik, ana parolanızın bir saldırgan tarafından kaba zorlamaya karşı korunmasına yardımcı olabilir."
+  },
   "changeKdf": {
     "message": "KDF'i değiştir"
   },
@@ -1227,6 +1254,9 @@
   },
   "importSuccess": {
     "message": "Veriler başarıyla içe aktarıldı"
+  },
+  "dataExportSuccess": {
+    "message": "Veriler başarıyla dışa aktarıldı"
   },
   "importWarning": {
     "message": "$ORGANIZATION$ kuruluşuna veri aktarıyorsunuz. Verileriniz bu kuruluşun üyeleriyle paylaşılabilir. Devam etmek istiyor musunuz?",
@@ -1880,7 +1910,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Yalnızca $PRICE$/yıl karşılığında premium'a geçin veya $FAMILYPLANUSERCOUNT$ kullanıcıları için premium hesaplar ve bir kullanıcıyla sınırsız aile paylaşımı elde edin ",
+    "message": "Yalnızca $PRICE$/yıl karşılığında premium'a geçin veya $FAMILYPLANUSERCOUNT$ kullanıcı için premium hesap alıp sınırsız aile paylaşımı elde edin ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1893,7 +1923,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Aileleri planı."
+    "message": "Bitwarden Aile planı."
   },
   "addons": {
     "message": "Eklentiler"
@@ -2036,6 +2066,9 @@
   },
   "manageSubscription": {
     "message": "Aboneliği yönet"
+  },
+  "launchCloudSubscription": {
+    "message": "Bulut Aboneliğini Başlatın"
   },
   "storage": {
     "message": "Depolama"
@@ -2445,7 +2478,7 @@
     "message": "Bir üye kaldırıldıktan sonra kuruluş verilerine erişemez ve bu işlem geri alınamaz. Üyeyi kuruluşa geri eklemek için yeniden davet etmeniz ve kişinin daveti kabul etmesi gerekir."
   },
   "revokeUserConfirmation": {
-    "message": "Bir üye fesh edildiğinde, artık kuruluş verilerine erişimi olmaz. Üye erişimini hızlı bir şekilde geri yüklemek için İptal Edildi sekmesine gidin."
+    "message": "Bir üyelikten çıkıldığında, artık kuruluş verilerine erişimi olmaz. Üye erişimini hızlı bir şekilde düzeltmek için İptal Edilenler sekmesine gidin."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Uyarı! Bu kullanıcı, şifrelemesini yönetmek için Key Connector'a ihtiyaç duyuyor. Bu kullanıcıyı kuruluşunuzdan çıkarırsanız hesabı kalıcı olarak devre dışı kalacaktır. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?"
@@ -2488,6 +2521,15 @@
   },
   "editMember": {
     "message": "Üyeyi düzenle"
+  },
+  "fieldOnTabRequiresAttention": {
+    "message": "'$TAB$' sekmesindeki bir alanla ilgilenmeniz gerekiyor.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
   },
   "inviteUserDesc": {
     "message": "Aşağıya Bitwarden hesabının e-posta adresini girerek kuruluşunuza yeni bir kullanıcı davet edin. Halihazırda bir Bitwarden hesabı yoksa yeni bir hesap oluşturması istenecektir."
@@ -4628,7 +4670,7 @@
     "message": "Sağlayıcı kurulumu"
   },
   "setupProviderLoginDesc": {
-    "message": "Yeni bir sağlayıcı kurmaya davet edildiniz. Devam etmek için oturum açmanız veya yeni bir Bitwarden hesabı oluşturmanız gerekir."
+    "message": "Yeni bir sağlayıcı kurmaya davet edildiniz. Devam etmek için giriş yapmanız veya yeni bir Bitwarden hesabı oluşturmanız gerekli."
   },
   "setupProviderDesc": {
     "message": "Sağlayıcı kurulumunu tamamlamak için lütfen aşağıdaki ayrıntıları girin. Herhangi bir sorunuz varsa Müşteri Desteği ile iletişime geçin."
@@ -4683,7 +4725,7 @@
     "message": "Yeni müşteri kuruluşu"
   },
   "newClientOrganizationDesc": {
-    "message": "Sağlayıcı olarak sizinle ilişkilendirilecek yeni bir müşteri organizasyonu oluşturun. Bu kuruluşa erişebilecek ve yönetebileceksiniz."
+    "message": "Sağlayıcı olarak sizinle ilişkilendirilecek yeni bir müşteri kuruluşu oluşturun. Bu kuruluşa erişebilecek ve onu yönetebileceksiniz."
   },
   "addExistingOrganization": {
     "message": "Mevcut kuruluşu ekle"
@@ -4741,7 +4783,7 @@
     }
   },
   "detachOrganizationConfirmation": {
-    "message": "Bu organizasyonu ayırmak istediğinizden emin misiniz? Kuruluş var olmaya devam edecek, ancak artık sağlayıcı tarafından yönetilmeyecek."
+    "message": "Bu kuruluşu ayırmak istediğinizden emin misiniz? Kuruluş var olmaya devam edecek, ancak artık sağlayıcı tarafından yönetilmeyecek."
   },
   "add": {
     "message": "Ekle"
@@ -4853,7 +4895,7 @@
     "message": "Kullanıcı bilgileri uç noktasından hak talepleri alın"
   },
   "additionalScopes": {
-    "message": "Özel Kapsamlar"
+    "message": "Özel kapsamlar"
   },
   "additionalUserIdClaimTypes": {
     "message": "Özel Kullanıcı Kimliği Talep Türleri"
@@ -4910,7 +4952,7 @@
     "message": "Tek çıkış (SLO) servis URL'si"
   },
   "idpX509PublicCert": {
-    "message": "X509 Genel Sertifika"
+    "message": "X509 açık sertifikası"
   },
   "idpOutboundSigningAlgorithm": {
     "message": "Çıkış imza algoritması"
@@ -4925,7 +4967,7 @@
     "message": "İmza doğrulama istekleri"
   },
   "ssoSettingsSaved": {
-    "message": "Tek Oturum Açma yapılandırması kaydedildi."
+    "message": "Tek oturum açma yapılandırması kaydedildi"
   },
   "sponsoredFamilies": {
     "message": "Ücretsiz Bitwarden Aile"
@@ -5209,9 +5251,6 @@
   "billingSyncApiKeyRotated": {
     "message": "Anahtar yenilendi."
   },
-  "billingSync": {
-    "message": "Faturalandırma Eşitlemesi"
-  },
   "billingSyncDesc": {
     "message": "Faturalandırma Eşitlemesi, şirket içinde barındırılan Bitwarden'ınızı Bitwarden bulut sunucusuna bağlayarak üyeler için Ücretsiz Aile planları ve gelişmiş faturalandırma özellikleri sağlar."
   },
@@ -5262,6 +5301,15 @@
   },
   "required": {
     "message": "zorunlu"
+  },
+  "characterMaximum": {
+    "message": "en fazla $MAX$ karakter",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Varlık Kimliği bir URL değilse gereklidir."
@@ -5548,6 +5596,18 @@
       }
     }
   },
+  "multipleInputEmails": {
+    "message": "Bir veya birden fazla e-posta geçersiz"
+  },
+  "tooManyEmails": {
+    "message": "Bir seferde en fazla $COUNT$ e-posta gönderebilirsiniz",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "Üstteki $COUNT$ alan(lar) la ilgilenmeniz gerekiyor.",
     "placeholders": {
@@ -5620,6 +5680,9 @@
   "customColor": {
     "message": "Özel Renk"
   },
+  "selectPlaceholder": {
+    "message": "-- Seçin --"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Filtrelemek İçin Yazın --"
   },
@@ -5667,14 +5730,17 @@
   "deleteSecrets": {
     "message": "Sırları Sil"
   },
+  "hardDeleteSecret": {
+    "message": "Sırrı kalıcı olarak sil"
+  },
+  "hardDeleteSecrets": {
+    "message": "Sırları kalıcı olarak sil"
+  },
   "secretProjectAssociationDescription": {
     "message": "Sırrın ilişkilendirileceği projeleri seçin. Yalnızca bu projelere erişimi olan kuruluş kullanıcıları sırrı görebilir."
   },
-  "typeOrSelectProjects": {
-    "message": "Projeleri yazın veya seçin"
-  },
-  "typeOrSelectProject": {
-    "message": "Projeyi yazın veya seçin"
+  "selectProjects": {
+    "message": "Projeleri seçin"
   },
   "project": {
     "message": "Proje"
@@ -5724,6 +5790,9 @@
   "secretsNoItemsMessage": {
     "message": "Başlamak için yeni bir gizli dizin ekleyin veya gizli dizinleri içe aktarın."
   },
+  "secretsTrashNoItemsMessage": {
+    "message": "Çöpte sır yok."
+  },
   "serviceAccountsNoItemsTitle": {
     "message": "Henüz gösterecek bir şey yok"
   },
@@ -5769,6 +5838,15 @@
   "softDeletesSuccessToast": {
     "message": "Çöpe atılan sırlar"
   },
+  "hardDeleteSecretConfirmation": {
+    "message": "Bu sırrı kalıcı olarak silmek istediğinizden emin misiniz?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Bu sırları kalıcı olarak silmek istediğinizden emin misiniz?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Sırlar kalıcı olarak silindi"
+  },
   "serviceAccountCreated": {
     "message": "Hizmet Hesabı Oluşturuldu"
   },
@@ -5807,7 +5885,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 Projects"
+        "example": "Delete 3 projects"
       }
     }
   },
@@ -5846,6 +5924,9 @@
   },
   "softDeleteSuccessToast": {
     "message": "Çöpe atılan sır"
+  },
+  "hardDeleteSuccessToast": {
+    "message": "Sır kalıcı olarak silindi"
   },
   "searchProjects": {
     "message": "Projeleri ara"
@@ -5894,6 +5975,16 @@
   },
   "revokeAccessToken": {
     "message": "Erişim anahtarını İptal Et"
+  },
+  "revokeAccessTokens": {
+    "message": "Erişim anahtarını iptal et"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Erişim belirteçlerini iptal etmek kalıcıdır ve geri alınamaz."
+  },
+  "accessTokenRevoked": {
+    "message": "Erişim belirteçleri iptal edildi",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Alt menü"
@@ -5949,6 +6040,9 @@
   "collection": {
     "message": "Koleksiyon"
   },
+  "noCollection": {
+    "message": "Koleksiyon yok"
+  },
   "canView": {
     "message": "Görüntüleyebilir"
   },
@@ -5978,6 +6072,138 @@
   },
   "memberAccessAll": {
     "message": "Bu kullanıcı tüm kayıtlara erişebilir ve kayıtları değiştirebilir."
+  },
+  "domainVerification": {
+    "message": "Alan adı doğrulama"
+  },
+  "newDomain": {
+    "message": "Yeni alan adı"
+  },
+  "noDomains": {
+    "message": "Alan adı yok"
+  },
+  "noDomainsSubText": {
+    "message": "Bir alan adının bağlanması, üyelerin SSO ile Oturum Açma sırasında SSO tanımlayıcı alanını atlamalarına olanak tanır."
+  },
+  "verifyDomain": {
+    "message": "Alan adını doğrula"
+  },
+  "reverifyDomain": {
+    "message": "Alan adını yeniden doğrula"
+  },
+  "copyDnsTxtRecord": {
+    "message": "DNS TXT kaydını kopyala"
+  },
+  "dnsTxtRecord": {
+    "message": "DNS TXT kaydı"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "TXT kaydını kopyalayıp DNS sağlayıcınıza yapıştırın."
+  },
+  "domainNameInputHint": {
+    "message": "Örnek: mydomain.com. Alt alan adlarının doğrulanması için ayrı girişler gerekir."
+  },
+  "automaticDomainVerification": {
+    "message": "Otomatik Alan Doğrulaması"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden, ilk 72 saat içinde etki alanını 3 kez doğrulamaya çalışacak. Alan doğrulanamıyorsa barındırıcınızdaki DNS kaydını kontrol edin ve manuel olarak doğrulayın. Alan adı, doğrulanmamışsa kuruluşunuzdan 7 gün içinde kaldırılacaktır"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Giriş geçerli bir format değil. Biçim: mydomain.com. Alt alan adlarının doğrulanması için ayrı girişler gerekir."
+  },
+  "removeDomain": {
+    "message": "Alan adını kaldır"
+  },
+  "removeDomainWarning": {
+    "message": "Alan adını kaldırma işlemi geri alınamaz. Devam etmek istediğinizden emin misiniz?"
+  },
+  "domainRemoved": {
+    "message": "Alan adı kaldırıldı"
+  },
+  "domainSaved": {
+    "message": "Alan adı kaydedildi"
+  },
+  "domainVerified": {
+    "message": "Alan adı doğrulandı"
+  },
+  "duplicateDomainError": {
+    "message": "Aynı etki alanını iki kez talep edemezsiniz."
+  },
+  "domainNotAvailable": {
+    "message": "Başka biri $DOMAIN$ kullanıyor. Devam etmek için farklı bir etki alanı kullanın.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ doğrulanmadı. DNS kaydınızı kontrol edin.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Doğrulandı"
+  },
+  "domainStatusUnverified": {
+    "message": "Doğrulanmadı"
+  },
+  "domainNameTh": {
+    "message": "İsim"
+  },
+  "domainStatusTh": {
+    "message": "Durum"
+  },
+  "lastChecked": {
+    "message": "Son kontrol"
+  },
+  "editDomain": {
+    "message": "Alan adını düzenle"
+  },
+  "domainFormInvalid": {
+    "message": "İlgilenmeniz gereken form hataları var"
+  },
+  "addedDomain": {
+    "message": "$DOMAIN$ alan adı eklendi",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "$DOMAIN$ alan adı kaldırıldı",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ doğrulandı",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ doğrulanmadı",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
   "membersColumnHeader": {
     "message": "Üye/Grup"
@@ -6051,6 +6277,237 @@
       "COLLECTIONCOUNT": {
         "content": "$1",
         "example": "2"
+      }
+    }
+  },
+  "server": {
+    "message": "Sunucu"
+  },
+  "exportData": {
+    "message": "Verileri dışarı aktar"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Kuruluş Gizli Verilerini Dışa Aktarma"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Yalnızca $ORGANIZATION$ ile ilişkili Secrets Manager verileri dışa aktarılacaktır. Diğer ürünlerdeki veya diğer kuruluşlardaki öğeler dahil edilmeyecektir.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Dosya yükleme"
+  },
+  "acceptedFormats": {
+    "message": "Kabul edilen biçimler:"
+  },
+  "copyPasteImportContents": {
+    "message": "İçe aktarılacak içerikleri kopyalayıp yapıştırın:"
+  },
+  "or": {
+    "message": "veya"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Lisans ve fatura yönetimi"
+  },
+  "automaticSync": {
+    "message": "Otomatik eşitleme"
+  },
+  "manualUpload": {
+    "message": "Elle yükleme"
+  },
+  "manualUploadDesc": {
+    "message": "Fatura senkronizasyonunu etkinleştirmek istemiyorsanız, lisansınızı buradan elle yükleyin."
+  },
+  "syncLicense": {
+    "message": "Lisansı eşitle"
+  },
+  "licenseSyncSuccess": {
+    "message": "Lisans başarıyla eşitlendi"
+  },
+  "licenseUploadSuccess": {
+    "message": "Lisans başarıyla yüklendi"
+  },
+  "lastLicenseSync": {
+    "message": "Son lisans eşitlemesi"
+  },
+  "billingSyncHelp": {
+    "message": "Fatura Eşitlemesi yardımı"
+  },
+  "uploadLicense": {
+    "message": "Lisansı yükle"
+  },
+  "projectPeopleDescription": {
+    "message": "Gruplara veya kişilere bu projeye erişim izni verin."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Kişileri veya grupları yazın veya seçin"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Hizmet hesaplarına bu projeye erişim izni verin."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Hizmet hesaplarını yazın veya seçin"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Ortak çalışmaya başlamak için kişi veya grup ekleyin"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Erişim vermek için hizmet hesapları ekleyin"
+  },
+  "canWrite": {
+    "message": "Yazabilir"
+  },
+  "canReadWrite": {
+    "message": "Okuyabilir, yazabilir"
+  },
+  "groupSlashUser": {
+    "message": "Grup/Kullanıcı"
+  },
+  "lowKdfIterations": {
+    "message": "Düşük KDF Yinelemeleri"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Hesabınızın güvenliğini artırmak için KDF şifreleme ayarlarınızı yükseltin."
+  },
+  "changeKdfSettings": {
+    "message": "KDF ayarlarını değiştir"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Devam etmek, mevcut oturumunuzdan çıkmanıza neden olacak ve tekrar oturum açmanızı gerektirecektir. Diğer cihazlardaki etkin oturumlar, bir saate kadar etkin kalmaya devam edebilir. Veri kaybını önlemek için şifreleme ayarlarınızı değiştirmeden önce kasanızı dışa aktarmanızı öneririz."
+  },
+  "secretsManagerBeta": {
+    "message": "Secrets Manager Beta"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Beta programı sırasında Secrets Manager'a kullanıcı erişimini ücretsiz olarak etkinleştirin."
+  },
+  "userAccessSecretsManager": {
+    "message": "Bu kullanıcı Secrets Manager Beta'ya erişebilir"
+  },
+  "important": {
+    "message": "Önemli:"
+  },
+  "viewAll": {
+    "message": "Tümünü göster"
+  },
+  "showingPortionOfTotal": {
+    "message": "$PORTION$/$TOTAL$ gösteriliyor",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Aşağıdaki hataları düzeltip yeniden deneyin."
+  },
+  "description": {
+    "message": "Açıklama"
+  },
+  "errorReadingImportFile": {
+    "message": "İçe aktarma dosyası okunurken bir hata oluştu"
+  },
+  "createSecret": {
+    "message": "Bir sır oluştur"
+  },
+  "createProject": {
+    "message": "Proje oluştur"
+  },
+  "createServiceAccount": {
+    "message": "Bir hizmet hesabı oluşturun"
+  },
+  "downloadThe": {
+    "message": "İndir",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Gizlilik Yöneticisi CLI"
+  },
+  "importSecrets": {
+    "message": "Sırları içe aktar"
+  },
+  "getStarted": {
+    "message": "Başla"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ Tamamlandı",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Sırrı geri yükle"
+  },
+  "restoreSecrets": {
+    "message": "Sırları geri yükle"
+  },
+  "restoreSecretPrompt": {
+    "message": "Bu sırrı geri yüklemek istediğinizden emin misiniz?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Bu sırları geri yüklemek istediğinizden emin misiniz?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Sır geri yüklendi"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Sırlar geri yüklendi"
+  },
+  "selectionIsRequired": {
+    "message": "Seçim yapmanız gerekiyor."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Beta programı boyunca Secrets Manager'a kuruluş erişimini ücretsiz olarak etkinleştirebilirsiniz. Üyeler sayfası üzerinden kullanıcılara Beta'ya erişim izni verebilirsiniz."
+  },
+  "secretsManagerEnable": {
+    "message": "Secrets Manager Beta'yı etkinleştir"
+  },
+  "checkForBreaches": {
+    "message": "Bu parola için bilinen veri ihlallerini kontrol edin"
+  },
+  "exposedMasterPassword": {
+    "message": "Açığa Çıkmış Ana Parola"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Bu parola bir veri ihlalinde tespit edildi. Hesabınızı korumak için aynı parolayı farklı yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zayıf ve Açığa Çıkmış Ana Parola"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Hem zayıf hem de veri ihlalinde yer alan bir tespit edildi. Hesabınızı korumak için güçlü bir parola seçin ve o parolayı başka yerlerde kullanmayın. Bu parolayı kullanmak istediğinizden emin misiniz?"
+  },
+  "characterMinimum": {
+    "message": "En az $LENGTH$ karakter",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Ana parola en az $LENGTH$ karakter uzunluğunda olmalıdır.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
       }
     }
   }

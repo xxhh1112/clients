@@ -430,7 +430,14 @@
     "message": "Huvudlösenord måste anges igen."
   },
   "masterPasswordMinlength": {
-    "message": "Huvudlösenordet måste vara minst 8 tecken långt."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Bekräftelsen för huvudlösenordet stämde ej."
@@ -960,7 +967,10 @@
     "message": "Utför automatisk ifyllnad om ett inloggningsformulär upptäcks när webbsidan laddas."
   },
   "experimentalFeature": {
-    "message": "Detta är för närvarande en experimentell funktion. Använd på egen risk."
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardinställning för autofyll för inloggningsobjekt"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Förnamn"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "Kom ihåg e-postadress"
+  },
+  "loginWithDevice": {
+    "message": "Logga in med enhet"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrycksfras"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "viewAllLoginOptions": {
+    "message": "Visa alla inloggningsalternativ"
+  },
+  "notificationSentDevice": {
+    "message": "En avisering har skickats till din enhet."
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "exposedMasterPassword": {
+    "message": "Huvudlösenordet har avslöjats"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Huvudlösenordet är svagt och har avslöjats"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?"
+  },
+  "checkForBreaches": {
+    "message": "Kontrollera kända dataintrång för detta lösenord"
+  },
+  "important": {
+    "message": "Viktigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Ditt huvudlösenord kan inte återställas om du glömmer det!"
+  },
+  "characterMinimum": {
+    "message": "Minst $LENGTH$ tecken",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

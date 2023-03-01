@@ -133,6 +133,9 @@
   "ms": {
     "message": "Міс"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Доктор"
   },
@@ -305,6 +308,9 @@
   "searchMembers": {
     "message": "Шукати учасників"
   },
+  "searchGroups": {
+    "message": "Пошук в групах"
+  },
   "allItems": {
     "message": "Всі елементи"
   },
@@ -399,7 +405,8 @@
     "message": "Перегляд запису"
   },
   "new": {
-    "message": "Новий"
+    "message": "Новий",
+    "description": "for adding new items"
   },
   "item": {
     "message": "Запис"
@@ -612,7 +619,7 @@
     "message": "Увійти з пристроєм"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Необхідно увімкнути вхід з пристроєм у налаштуваннях мобільної програми Bitwarden. Потрібен інший варіант?"
+    "message": "Потрібно увімкнути схвалення запитів на вхід у налаштуваннях мобільної програми Bitwarden. Потрібен інший варіант?"
   },
   "loginWithMasterPassword": {
     "message": "Увійти з головним паролем"
@@ -651,7 +658,7 @@
     "message": "Головний пароль використовується для доступу до вашого сховища. Дуже важливо, щоб ви запам'ятали його. Якщо ви забудете головний пароль, його неможливо буде відновити."
   },
   "masterPassImportant": {
-    "message": "Головний пароль неможливо відновити, якщо ви забудете його!"
+    "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
   },
   "masterPassHintDesc": {
     "message": "Якщо ви забудете головний пароль, підказка може допомогти вам згадати його."
@@ -690,7 +697,14 @@
     "message": "Необхідно повторно ввести головний пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Довжина головного пароля має бути принаймні 8 символів."
+    "message": "Довжина головного пароля має бути принаймні $VALUE$ символів.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -892,7 +906,7 @@
     "message": "Редагуйте збірки, з якими цей запис знаходиться в спільному доступі. Лише учасники організацій з доступом до цих збірок матимуть можливість бачити цей запис."
   },
   "deleteSelectedItemsDesc": {
-    "message": "Ви обрали $COUNT$ записів для видалення. Ви справді хочете їх видалити?",
+    "message": "Записи ($COUNT$) будуть переміщені до смітника.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1142,13 +1156,26 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Встановлення надто великого значення KDF-ітерацій може призвести до повільної роботи під час входу (і розблокування) Bitwarden на пристроях з повільнішим процесором. Рекомендуємо збільшувати значення поступово з кроком $INCREMENT$, після чого випробувати роботу на всіх пристроях.",
+    "message": "Встановлення надто великого значення KDF-ітерацій може призвести до повільної роботи під час входу (і розблокування) Bitwarden на повільніших і старіших пристроях. Ми рекомендуємо збільшувати значення з кроком $INCREMENT$, а потім випробувати на кожному пристрої.",
     "placeholders": {
       "increment": {
         "content": "$1",
         "example": "50,000"
       }
     }
+  },
+  "kdfMemory": {
+    "message": "KDF пам'ять (МБ)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "Встановлення надто великого значення KDF-ітерацій, пам'яті й паралелізму може призвести до повільної роботи під час входу (і розблокування) Bitwarden на повільніших і старіших пристроях. Ми рекомендуємо змінювати їх окремо з невеликим кроком, а потім випробувати на кожному пристрої."
+  },
+  "kdfParallelism": {
+    "message": "KDF паралелізм"
+  },
+  "argon2Desc": {
+    "message": "Вищі значення KDF-ітерацій, пам'яті й паралелізму можуть допомогти захистити ваш головний пароль від грубого зламу зловмисником."
   },
   "changeKdf": {
     "message": "Змінити KDF"
@@ -1217,7 +1244,7 @@
     "message": "Інструменти"
   },
   "importData": {
-    "message": "Імпорт даних"
+    "message": "Імпортувати дані"
   },
   "importError": {
     "message": "Помилка імпорту"
@@ -1227,6 +1254,9 @@
   },
   "importSuccess": {
     "message": "Дані успішно імпортовано"
+  },
+  "dataExportSuccess": {
+    "message": "Дані успішно експортовано"
   },
   "importWarning": {
     "message": "Ви імпортуєте дані до $ORGANIZATION$. Ваші дані можуть бути доступними учасникам цієї організації. Ви хочете продовжити?",
@@ -2037,6 +2067,9 @@
   "manageSubscription": {
     "message": "Керувати передплатою"
   },
+  "launchCloudSubscription": {
+    "message": "Запустити хмарну передплату"
+  },
   "storage": {
     "message": "Сховище"
   },
@@ -2454,7 +2487,7 @@
     "message": "Зовнішній ID"
   },
   "externalIdDesc": {
-    "message": "Зовнішній ID може використовуватись в якості посилання або для зв'язку цього ресурсу із зовнішньою системою, такою як каталок користувача."
+    "message": "Зовнішній ID – це незашифроване посилання, призначене для використання Bitwarden Directory Connector і API."
   },
   "nestCollectionUnder": {
     "message": "Розмістити збірку під"
@@ -2489,11 +2522,20 @@
   "editMember": {
     "message": "Редагувати учасника"
   },
+  "fieldOnTabRequiresAttention": {
+    "message": "Поле у вкладці '$TAB$' потребує вашої уваги.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
+  },
   "inviteUserDesc": {
     "message": "Запросіть нового користувача до вашої організації, ввівши адресу е-пошти його облікового запису Bitwarden. Якщо він ще не має облікового запису, він отримає запит на його створення."
   },
   "inviteMultipleEmailDesc": {
-    "message": "Ви можете запросити до $COUNT$ користувачів за раз, розділивши адреси е-пошти комою.",
+    "message": "Введіть не більш ніж $COUNT$ адрес е-пошти, розділяючи їх комою.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2985,7 +3027,7 @@
     "message": "Доступ до груп"
   },
   "groupAccessUserDesc": {
-    "message": "Змінюйте приналежність користувача до груп."
+    "message": "Надавайте учасникам доступ до збірок, додавши їх до 1 або більше груп."
   },
   "invitedUsers": {
     "message": "Запрошені користувачі"
@@ -3021,10 +3063,10 @@
     }
   },
   "confirmUsers": {
-    "message": "Підтвердити користувачів"
+    "message": "Підтвердити учасників"
   },
   "usersNeedConfirmed": {
-    "message": "У вас є користувачі, які підтвердили ваше запрошення, але все ще мають бути схвалені. Користувачі не матимуть доступу до організації доки ви їх не затвердите."
+    "message": "У вас є учасники, які прийняли запрошення, але все ще потребують затвердження. Учасники не матимуть доступу до організації доки ви їх не затвердите."
   },
   "startDate": {
     "message": "Дата початку"
@@ -3490,7 +3532,7 @@
     "message": "Слабкий головний пароль"
   },
   "weakMasterPasswordDesc": {
-    "message": "Обраний вами головний пароль є слабким. Для належного захисту свого облікового запису Bitwarden, вам слід використовувати надійний головний пароль (або парольну фразу). Ви впевнені, що хочете використати цей пароль?"
+    "message": "Виявлено слабкий пароль. Використовуйте надійний пароль для захисту свого облікового запису. Ви дійсно хочете використати слабкий пароль?"
   },
   "rotateAccountEncKey": {
     "message": "Також оновити ключ шифрування мого облікового запису"
@@ -3738,7 +3780,7 @@
     "message": "Відновити записи"
   },
   "restoreSelectedItemsDesc": {
-    "message": "Ви вибрали $COUNT$ записів для відновлення. Ви справді хочете відновити всі ці записи?",
+    "message": "Вибрані записи ($COUNT$) для відновлення. Ви справді хочете відновити всі ці записи?",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5209,11 +5251,8 @@
   "billingSyncApiKeyRotated": {
     "message": "Токен оновлено"
   },
-  "billingSync": {
-    "message": "Платіжна синхронізація"
-  },
   "billingSyncDesc": {
-    "message": "Платіжна синхронізація надає безплатні сімейні тарифні плани для учасників, а також розширені можливості передплати завдяки зв'язку вашого власного розміщеного Bitwarden з хмарним сервером Bitwarden."
+    "message": "Платіжна синхронізація дає доступ до спонсорованих сімейних тарифних планів та автоматичної синхронізації ліцензій на вашому сервері. Виконавши оновлення на сервері Bitwarden, виберіть \"Синхронізувати ліцензію\" для застосування змін."
   },
   "billingSyncKeyDesc": {
     "message": "Для завершення цієї форми необхідний токен платіжної синхронізації з налаштувань передплати організації в хмарному сховищі."
@@ -5262,6 +5301,15 @@
   },
   "required": {
     "message": "обов’язково"
+  },
+  "characterMaximum": {
+    "message": "Максимум $MAX$ символів",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Обов'язково, якщо ID елемента не є URL."
@@ -5548,6 +5596,18 @@
       }
     }
   },
+  "multipleInputEmails": {
+    "message": "1 або більше адрес е-пошти недійсні"
+  },
+  "tooManyEmails": {
+    "message": "Ви можете подавати не більш ніж $COUNT$ адрес е-пошти за раз",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ поле (поля) вище потребують вашої уваги.",
     "placeholders": {
@@ -5620,6 +5680,9 @@
   "customColor": {
     "message": "Власний колір"
   },
+  "selectPlaceholder": {
+    "message": "-- Оберіть--"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Введіть для фільтрування --"
   },
@@ -5667,14 +5730,17 @@
   "deleteSecrets": {
     "message": "Видалити секрети"
   },
+  "hardDeleteSecret": {
+    "message": "Остаточно видалити секрет"
+  },
+  "hardDeleteSecrets": {
+    "message": "Остаточно видалити секрети"
+  },
   "secretProjectAssociationDescription": {
     "message": "Оберіть проєкти, з якими буде пов'язано секретний ключ."
   },
-  "typeOrSelectProjects": {
-    "message": "Введіть або виберіть проєкти"
-  },
-  "typeOrSelectProject": {
-    "message": "Введіть або виберіть проєкт"
+  "selectProjects": {
+    "message": "Виберіть проєкти"
   },
   "project": {
     "message": "Проєкт"
@@ -5724,6 +5790,9 @@
   "secretsNoItemsMessage": {
     "message": "Для початку додайте або імпортуйте секрети."
   },
+  "secretsTrashNoItemsMessage": {
+    "message": "У смітнику немає секретів."
+  },
   "serviceAccountsNoItemsTitle": {
     "message": "Наразі немає даних для показу"
   },
@@ -5731,7 +5800,7 @@
     "message": "Створіть новий службовий обліковий запис, щоб почати автоматизацію доступу до секретів."
   },
   "searchSecrets": {
-    "message": "Шукати секрети"
+    "message": "Пошук секретів"
   },
   "deleteServiceAccounts": {
     "message": "Видалити службові облікові записи"
@@ -5768,6 +5837,15 @@
   },
   "softDeletesSuccessToast": {
     "message": "Секрети переміщено до смітника"
+  },
+  "hardDeleteSecretConfirmation": {
+    "message": "Ви дійсно хочете остаточно видалити цей секрет?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Ви дійсно хочете остаточно видалити ці секрети?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Секрети остаточно видалено"
   },
   "serviceAccountCreated": {
     "message": "Службовий обліковий запис створено"
@@ -5807,7 +5885,7 @@
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 Projects"
+        "example": "Delete 3 projects"
       }
     }
   },
@@ -5847,8 +5925,11 @@
   "softDeleteSuccessToast": {
     "message": "Секрет переміщено до смітника"
   },
+  "hardDeleteSuccessToast": {
+    "message": "Секрет остаточно видалено"
+  },
   "searchProjects": {
-    "message": "Шукати проєкти"
+    "message": "Пошук проєктів"
   },
   "accessTokens": {
     "message": "Токени доступу"
@@ -5894,6 +5975,16 @@
   },
   "revokeAccessToken": {
     "message": "Відкликати токен доступу"
+  },
+  "revokeAccessTokens": {
+    "message": "Відкликати токени доступу"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Відкликання токенів доступу – це остаточна та незворотна дія."
+  },
+  "accessTokenRevoked": {
+    "message": "Токени доступу відкликано",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Підменю"
@@ -5949,6 +6040,9 @@
   "collection": {
     "message": "Збірка"
   },
+  "noCollection": {
+    "message": "Немає збірки"
+  },
   "canView": {
     "message": "Може переглядати"
   },
@@ -5978,6 +6072,138 @@
   },
   "memberAccessAll": {
     "message": "Цей учасник має доступ і може редагувати всі елементи."
+  },
+  "domainVerification": {
+    "message": "Перевірка доменів"
+  },
+  "newDomain": {
+    "message": "Новий домен"
+  },
+  "noDomains": {
+    "message": "Немає доменів"
+  },
+  "noDomainsSubText": {
+    "message": "Під'єднання домену дозволяє учасникам не використовувати поле ідентифікатора SSO під час входу з SSO."
+  },
+  "verifyDomain": {
+    "message": "Підтвердити домен"
+  },
+  "reverifyDomain": {
+    "message": "Повторно підтвердити домен"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Копіювати TXT-запис для DNS"
+  },
+  "dnsTxtRecord": {
+    "message": "TXT-запис для DNS"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Скопіюйте і вставте TXT-запис у відповідне поле свого DNS-провайдера."
+  },
+  "domainNameInputHint": {
+    "message": "Зразок: mydomain.com. Для піддоменів потрібно підтвердити окремі записи."
+  },
+  "automaticDomainVerification": {
+    "message": "Автоматичне підтвердження доменів"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden намагатиметься підтвердити домен 3 рази впродовж 72 годин. Якщо не вдасться підтвердити домен, перевірте DNS-запис у вашого провайдера й підтвердьте його вручну. Якщо домен не буде підтверджено протягом 7 днів, його буде вилучено з вашої організації"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Неправильний формат введення. Правильний формат: mydomain.com. Для підтвердження піддоменів потрібно ввести окремі записи."
+  },
+  "removeDomain": {
+    "message": "Вилучити домен"
+  },
+  "removeDomainWarning": {
+    "message": "Вилучення домену – це незворотна дія. Ви дійсно хочете продовжити?"
+  },
+  "domainRemoved": {
+    "message": "Домен вилучено"
+  },
+  "domainSaved": {
+    "message": "Домен збережено"
+  },
+  "domainVerified": {
+    "message": "Домен підтверджено"
+  },
+  "duplicateDomainError": {
+    "message": "Не можна запитати той самий домен двічі."
+  },
+  "domainNotAvailable": {
+    "message": "Хтось вже використовує $DOMAIN$. Щоб продовжити, використайте інший домен.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ не підтверджено. Перевірте свій DNS-запис.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Підтверджено"
+  },
+  "domainStatusUnverified": {
+    "message": "Не підтверджено"
+  },
+  "domainNameTh": {
+    "message": "Ім'я"
+  },
+  "domainStatusTh": {
+    "message": "Стан"
+  },
+  "lastChecked": {
+    "message": "Востаннє перевірено"
+  },
+  "editDomain": {
+    "message": "Редагувати домен"
+  },
+  "domainFormInvalid": {
+    "message": "У формі є помилки, що потребують вашої уваги"
+  },
+  "addedDomain": {
+    "message": "Домен $DOMAIN$ додано",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Домен $DOMAIN$ вилучено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "Домен $DOMAIN$ підтверджено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "Домен $DOMAIN$ не підтверджено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
   "membersColumnHeader": {
     "message": "Учасник/Група"
@@ -6051,6 +6277,237 @@
       "COLLECTIONCOUNT": {
         "content": "$1",
         "example": "2"
+      }
+    }
+  },
+  "server": {
+    "message": "Сервер"
+  },
+  "exportData": {
+    "message": "Експортувати дані"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Експорт секретних даних організації"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Будуть експортовані лише дані менеджера секретів, пов'язані з $ORGANIZATION$. Елементи інших продуктів чи інших організацій не будуть включені.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Вивантаження файлу"
+  },
+  "acceptedFormats": {
+    "message": "Прийнятні формати:"
+  },
+  "copyPasteImportContents": {
+    "message": "Скопіюйте і вставте вміст імпорту:"
+  },
+  "or": {
+    "message": "або"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Керування ліцензіями й платежами"
+  },
+  "automaticSync": {
+    "message": "Автоматична синхронізація"
+  },
+  "manualUpload": {
+    "message": "Ручне вивантаження"
+  },
+  "manualUploadDesc": {
+    "message": "Якщо ви не хочете користуватися платіжною синхронізацією, вивантажте вашу ліцензію вручну."
+  },
+  "syncLicense": {
+    "message": "Синхронізувати ліцензію"
+  },
+  "licenseSyncSuccess": {
+    "message": "Ліцензію успішно синхронізовано"
+  },
+  "licenseUploadSuccess": {
+    "message": "Ліцензію успішно вивантажено"
+  },
+  "lastLicenseSync": {
+    "message": "Остання синхронізація ліцензії"
+  },
+  "billingSyncHelp": {
+    "message": "Допомога з платіжною синхронізацією"
+  },
+  "uploadLicense": {
+    "message": "Вивантажити ліцензію"
+  },
+  "projectPeopleDescription": {
+    "message": "Надайте групам або людям доступ до цього проєкту."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Введіть або виберіть людей або групи"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Надайте службовим обліковим записам доступ до цього проєкту."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Введіть або виберіть службові облікові записи"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Додайте людей або групи, щоб почати співпрацю"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Додайте службові облікові записи для надання доступу"
+  },
+  "canWrite": {
+    "message": "Може записувати"
+  },
+  "canReadWrite": {
+    "message": "Може читати й записувати"
+  },
+  "groupSlashUser": {
+    "message": "Група/Користувач"
+  },
+  "lowKdfIterations": {
+    "message": "Низький показник KDF-ітерацій"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Налаштуйте вищий рівень KDF-шифрування для вдосконалення безпеки облікового запису."
+  },
+  "changeKdfSettings": {
+    "message": "Змінити налаштування KDF"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Продовжуючи, ви вийдете з поточного сеансу і необхідно буде виконати вхід знову. Активні сеанси на інших пристроях можуть залишатися активними протягом години. Ми рекомендуємо експортувати ваше сховище перед зміною налаштувань шифрування для запобігання втрати даних."
+  },
+  "secretsManagerBeta": {
+    "message": "Керування секретами (бета-версія)"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Дозвольте користувачам доступ до керування секретами безплатно, доки триває програма бета-тестування."
+  },
+  "userAccessSecretsManager": {
+    "message": "Цей користувач має доступ до бета-версії керування секретами"
+  },
+  "important": {
+    "message": "Важливо:"
+  },
+  "viewAll": {
+    "message": "Переглянути все"
+  },
+  "showingPortionOfTotal": {
+    "message": "Показано $PORTION$ з $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Розв'яжіть зазначені помилки та повторіть спробу."
+  },
+  "description": {
+    "message": "Опис"
+  },
+  "errorReadingImportFile": {
+    "message": "Під час спроби прочитання імпортованого файлу сталася помилка"
+  },
+  "createSecret": {
+    "message": "Створити секрет"
+  },
+  "createProject": {
+    "message": "Створити проєкт"
+  },
+  "createServiceAccount": {
+    "message": "Створити службовий обліковий запис"
+  },
+  "downloadThe": {
+    "message": "Завантажити",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Керування секретами CLI"
+  },
+  "importSecrets": {
+    "message": "Імпортувати секрети"
+  },
+  "getStarted": {
+    "message": "Початок роботи"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ завершено",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Відновити секрет"
+  },
+  "restoreSecrets": {
+    "message": "Відновити секрети"
+  },
+  "restoreSecretPrompt": {
+    "message": "Ви дійсно хочете відновити цей секрет?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Ви дійсно хочете відновити ці секрети?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Секрет відновлено"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Секрети відновлено"
+  },
+  "selectionIsRequired": {
+    "message": "Потрібен вибір."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Увімкніть доступ організації до керування секретами безплатно упродовж періоду бета-тестування. Користувачам можна надати доступ в бета-версії в меню учасників."
+  },
+  "secretsManagerEnable": {
+    "message": "Увімкнути керування секретами (бета-версія)"
+  },
+  "checkForBreaches": {
+    "message": "Перевірити відомі витоки даних для цього пароля"
+  },
+  "exposedMasterPassword": {
+    "message": "Головний пароль викрито"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знайдено у витоку даних. Використовуйте унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати викритий пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабкий і викритий головний пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?"
+  },
+  "characterMinimum": {
+    "message": "Мінімум $LENGTH$ символів",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Довжина головного пароля має бути принаймні $LENGTH$ символів.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
       }
     }
   }

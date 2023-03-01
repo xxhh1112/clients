@@ -430,7 +430,14 @@
     "message": "Skriv inn hovedpassordet på nytt."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedpassordet må være minst åtte tegn."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Superpassord-bekreftelsen er ikke samsvarende."
@@ -960,7 +967,10 @@
     "message": "Dersom et innloggingskjema blir oppdaget, utfør automatisk en auto-utfylling når nettstedet lastes inn."
   },
   "experimentalFeature": {
-    "message": "Dette er for øyeblikket en eksperimentell egenskap. Bruk det på din egen risiko."
+    "message": "Kompromitterte eller upålitelige nettsider kan utnytte auto-utfylling når du laster inn siden."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Lær mer om auto-utfylling"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standard autofyll innstilling for innloggingselementer"
@@ -1123,6 +1133,9 @@
   "dr": {
     "message": "Dr."
   },
+  "mx": {
+    "message": "Nøytral"
+  },
   "firstName": {
     "message": "Fornavn"
   },
@@ -1278,7 +1291,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Skru av/på innstillinger"
+    "message": "Skru innstillinger av/på"
   },
   "toggleCurrentUris": {
     "message": "Veksle nåværende URI-er",
@@ -1312,7 +1325,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Opprettet",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -2030,18 +2043,117 @@
     }
   },
   "loginWithMasterPassword": {
-    "message": "Log in with master password"
+    "message": "Logg på med hovedpassord"
   },
   "loggingInAs": {
-    "message": "Logging in as"
+    "message": "Logger på som"
   },
   "notYou": {
-    "message": "Not you?"
+    "message": "Ikke deg?"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "Er du ny her?"
   },
   "rememberEmail": {
-    "message": "Remember email"
+    "message": "Husk e-post"
+  },
+  "loginWithDevice": {
+    "message": "Logg inn med enhet"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Logg på med enhet må settes opp i Bitwarden-innstillingene. Trenger du et annet alternativ?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrykksfrase"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Kontroller at hvelvet ditt er låst opp, og at fingeravtrykksfrasen er lik på den andre enheten."
+  },
+  "resendNotification": {
+    "message": "Send varslingen på nytt"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vis alle innloggingsalternativer"
+  },
+  "notificationSentDevice": {
+    "message": "Et varsel er sendt til enheten din."
+  },
+  "logInInitiated": {
+    "message": "Innlogging startet"
+  },
+  "exposedMasterPassword": {
+    "message": "Eksponert hovedpassord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Passord funnet i et databrudd. Bruk et unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et utsatt passord?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Svakt og eksponert hovedpassord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Svakt passord identifisert og funnet i et databrudd. Bruk et sterkt og unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke dette passordet?"
+  },
+  "checkForBreaches": {
+    "message": "Sjekk kjente databrudd for dette passordet"
+  },
+  "important": {
+    "message": "Viktig:"
+  },
+  "masterPasswordHint": {
+    "message": "Hovedpassordet ditt kan ikke gjenopprettes hvis du glemmer det!"
+  },
+  "characterMinimum": {
+    "message": "Minst $LENGTH$ tegn",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

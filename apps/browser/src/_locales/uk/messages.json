@@ -430,7 +430,14 @@
     "message": "Необхідно повторно ввести головний пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Довжина головного пароля має бути принаймні 8 символів."
+    "message": "Довжина головного пароля має бути принаймні $VALUE$ символів.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -960,7 +967,10 @@
     "message": "Якщо виявлено форму входу, автоматично заповнювати її під час завантаження вебсторінки."
   },
   "experimentalFeature": {
-    "message": "Це експериментальна функція. При її використанні ви берете ризик на себе."
+    "message": "Скомпрометовані або ненадійні вебсайти можуть використати функцію автозаповнення під час завантаження сторінки для завдання шкоди."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Дізнатися більше про автозаповнення"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Типове налаштування автозаповнення для записів входу"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Доктор"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Ім’я"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "Запам'ятати е-пошту"
+  },
+  "loginWithDevice": {
+    "message": "Увійти з пристроєм"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Потрібно увімкнути схвалення запитів на вхід у налаштуваннях програми Bitwarden. Потрібен інший варіант?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза відбитка"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Переконайтеся, що ваше сховище розблоковане, а фраза відбитка збігається з іншим пристроєм."
+  },
+  "resendNotification": {
+    "message": "Надіслати сповіщення ще раз"
+  },
+  "viewAllLoginOptions": {
+    "message": "Переглянути всі варіанти входу"
+  },
+  "notificationSentDevice": {
+    "message": "Сповіщення було надіслано на ваш пристрій."
+  },
+  "logInInitiated": {
+    "message": "Ініційовано вхід"
+  },
+  "exposedMasterPassword": {
+    "message": "Головний пароль викрито"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знайдено у витоку даних. Використовуйте унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати викритий пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабкий і викритий головний пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Перевірити відомі витоки даних для цього пароля"
+  },
+  "important": {
+    "message": "Важливо:"
+  },
+  "masterPasswordHint": {
+    "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
+  },
+  "characterMinimum": {
+    "message": "Мінімум $LENGTH$ символів",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Як працює автозаповнення"
+  },
+  "autofillSelectInfo": {
+    "message": "Виберіть елемент на цій сторінці або скористайтеся комбінацією клавіш: $COMMAND$. Ви також можете спробувати автозаповнення під час завантаження сторінки.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Виберіть елемент на цій сторінці або встановіть комбінацію клавіш. Ви також можете спробувати автозаповнення під час завантаження сторінки."
+  },
+  "gotIt": {
+    "message": "Зрозуміло"
+  },
+  "autofillSettings": {
+    "message": "Налаштування автозаповнення"
+  },
+  "autofillShortcut": {
+    "message": "Комбінації клавіш автозаповнення"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Комбінацію клавіш для автозаповнення не встановлено. Змініть це в налаштуваннях браузера."
+  },
+  "autofillShortcutText": {
+    "message": "Комбінація клавіш автозаповнення: $COMMAND$. Змініть це в налаштуваннях браузера.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Типова комбінація клавіш автозаповнення: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

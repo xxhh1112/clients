@@ -1,9 +1,6 @@
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { KeyConnectorService } from "@bitwarden/common/abstractions/keyConnector.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -11,19 +8,19 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
 import { SystemService } from "@bitwarden/common/abstractions/system.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
-import { FolderService } from "@bitwarden/common/services/folder/folder.service";
 import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
 
-import { authServiceFactory } from "../background/service_factories/auth-service.factory";
-import {
-  cipherServiceFactory,
-  CipherServiceInitOptions,
-} from "../background/service_factories/cipher-service.factory";
+import { authServiceFactory } from "../auth/background/service-factories/auth-service.factory";
+import { keyConnectorServiceFactory } from "../auth/background/service-factories/key-connector-service.factory";
 import { collectionServiceFactory } from "../background/service_factories/collection-service.factory";
 import { cryptoServiceFactory } from "../background/service_factories/crypto-service.factory";
 import {
@@ -31,8 +28,6 @@ import {
   EventUploadServiceInitOptions,
 } from "../background/service_factories/event-upload-service.factory";
 import { CachedServices } from "../background/service_factories/factory-options";
-import { folderServiceFactory } from "../background/service_factories/folder-service.factory";
-import { keyConnectorServiceFactory } from "../background/service_factories/key-connector-service.factory";
 import { messagingServiceFactory } from "../background/service_factories/messaging-service.factory";
 import { passwordGenerationServiceFactory } from "../background/service_factories/password-generation-service.factory";
 import { platformUtilsServiceFactory } from "../background/service_factories/platform-utils-service.factory";
@@ -49,10 +44,15 @@ import {
   systemServiceFactory,
   SystemServiceInitOptions,
 } from "../background/service_factories/system-service.factory";
-import { vaultFilterServiceFactory } from "../background/service_factories/vault-filter-service.factory";
 import { vaultTimeoutSettingsServiceFactory } from "../background/service_factories/vault-timeout-settings-service.factory";
 import { Account } from "../models/account";
-import { VaultFilterService } from "../services/vaultFilter.service";
+import {
+  cipherServiceFactory,
+  CipherServiceInitOptions,
+} from "../vault/background/service_factories/cipher-service.factory";
+import { folderServiceFactory } from "../vault/background/service_factories/folder-service.factory";
+import { vaultFilterServiceFactory } from "../vault/background/service_factories/vault-filter-service.factory";
+import { VaultFilterService } from "../vault/services/vault-filter.service";
 
 import { BrowserApi } from "./browserApi";
 

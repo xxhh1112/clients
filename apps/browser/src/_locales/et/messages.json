@@ -430,7 +430,14 @@
     "message": "Vajalik on ülemparooli uuesti sisestamine."
   },
   "masterPasswordMinlength": {
-    "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ülemparoolid ei ühti."
@@ -798,7 +805,7 @@
     "message": "Täname, et toetad Bitwardenit."
   },
   "premiumPrice": {
-    "message": "Kõik see ainult %price% aastas!",
+    "message": "Kõik see ainult $PRICE$ / aastas!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -828,7 +835,7 @@
     "message": "Sisesta autentimise rakendusest 6 kohaline number."
   },
   "enterVerificationCodeEmail": {
-    "message": "Sisesta 6 kohaline number, mis saadeti e-posti aadressile",
+    "message": "Sisesta 6 kohaline number, mis saadeti e-posti aadressile $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -960,7 +967,10 @@
     "message": "Sisselogimise vormi tuvastamisel sisestatakse sinna kontoandmed automaatselt."
   },
   "experimentalFeature": {
-    "message": "See funktsioon on katsetusjärgus. Kasuta omal vastutusel."
+    "message": "Häkitud või ebausaldusväärsed veebilehed võivad lehe laadimisel automaatset sisestamist kuritarvitada."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Rohkem infot automaattäite kohta"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Vaikevalik kontoandmete täitmiseks"
@@ -1122,6 +1132,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Eesnimi"
@@ -2043,5 +2056,104 @@
   },
   "rememberEmail": {
     "message": "Mäleta e-posti aadressi"
+  },
+  "loginWithDevice": {
+    "message": "Logi sisse seadme kaudu"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Bitwardeni rakenduse seadistuses peab olema konfigureeritud sisselogimine läbi seadme. Vajad teist valikut?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Sõrmejälje fraas"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad."
+  },
+  "resendNotification": {
+    "message": "Saada märguanne uuesti"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vaata kõiki valikuid"
+  },
+  "notificationSentDevice": {
+    "message": "Sinu seadmesse saadeti teavitus."
+  },
+  "logInInitiated": {
+    "message": "Sisselogimine on käivitatud"
+  },
+  "exposedMasterPassword": {
+    "message": "Ülemparool on haavatav"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Nõrk ja haavatav ülemparool"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?"
+  },
+  "checkForBreaches": {
+    "message": "Otsi seda parooli teadaolevatest andmeleketest"
+  },
+  "important": {
+    "message": "Tähtis:"
+  },
+  "masterPasswordHint": {
+    "message": "Ülemparooli ei saa taastada, kui sa selle unustama peaksid!"
+  },
+  "characterMinimum": {
+    "message": "Minimaalselt $LENGTH$ tähemärki",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

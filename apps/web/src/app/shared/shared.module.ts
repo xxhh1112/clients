@@ -23,9 +23,11 @@ import {
   LinkModule,
   MenuModule,
   MultiSelectModule,
+  RadioButtonModule,
   TableModule,
   TabsModule,
   ToggleGroupModule,
+  TypographyModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -66,9 +68,11 @@ import "./locales";
     LinkModule,
     MenuModule,
     MultiSelectModule,
+    RadioButtonModule,
     TableModule,
     TabsModule,
     ToggleGroupModule,
+    TypographyModule,
 
     // Web specific
   ],
@@ -98,9 +102,11 @@ import "./locales";
     LinkModule,
     MenuModule,
     MultiSelectModule,
+    RadioButtonModule,
     TableModule,
     TabsModule,
     ToggleGroupModule,
+    TypographyModule,
 
     // Web specific
   ],

@@ -1,5 +1,5 @@
-import { CipherContextMenuHandler } from "../browser/cipher-context-menu-handler";
-import { ContextMenuClickedHandler } from "../browser/context-menu-clicked-handler";
+import { CipherContextMenuHandler } from "../autofill/browser/cipher-context-menu-handler";
+import { ContextMenuClickedHandler } from "../autofill/browser/context-menu-clicked-handler";
 import { RuntimeHandler } from "../browser/runtime-handler";
 
 import { combine } from "./combine";

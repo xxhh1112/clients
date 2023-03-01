@@ -10,7 +10,9 @@ export class OrganizationUserResponse extends BaseResponse {
   userId: string;
   type: OrganizationUserType;
   status: OrganizationUserStatusType;
+  externalId: string;
   accessAll: boolean;
+  accessSecretsManager: boolean;
   permissions: PermissionsApi;
   resetPasswordEnrolled: boolean;
   collections: SelectionReadOnlyResponse[] = [];
@@ -23,7 +25,9 @@ export class OrganizationUserResponse extends BaseResponse {
     this.type = this.getResponseProperty("Type");
     this.status = this.getResponseProperty("Status");
     this.permissions = new PermissionsApi(this.getResponseProperty("Permissions"));
+    this.externalId = this.getResponseProperty("ExternalId");
     this.accessAll = this.getResponseProperty("AccessAll");
+    this.accessSecretsManager = this.getResponseProperty("AccessSecretsManager");
     this.resetPasswordEnrolled = this.getResponseProperty("ResetPasswordEnrolled");
 
     const collections = this.getResponseProperty("Collections");
@@ -40,6 +44,7 @@ export class OrganizationUserResponse extends BaseResponse {
 export class OrganizationUserUserDetailsResponse extends OrganizationUserResponse {
   name: string;
   email: string;
+  avatarColor: string;
   twoFactorEnabled: boolean;
   usesKeyConnector: boolean;
 
@@ -47,6 +52,7 @@ export class OrganizationUserUserDetailsResponse extends OrganizationUserRespons
     super(response);
     this.name = this.getResponseProperty("Name");
     this.email = this.getResponseProperty("Email");
+    this.avatarColor = this.getResponseProperty("AvatarColor");
     this.twoFactorEnabled = this.getResponseProperty("TwoFactorEnabled");
     this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector") ?? false;
   }
@@ -61,6 +67,8 @@ export class OrganizationUserDetailsResponse extends OrganizationUserResponse {
 export class OrganizationUserResetPasswordDetailsReponse extends BaseResponse {
   kdf: KdfType;
   kdfIterations: number;
+  kdfMemory?: number;
+  kdfParallelism?: number;
   resetPasswordKey: string;
   encryptedPrivateKey: string;
 
@@ -68,6 +76,8 @@ export class OrganizationUserResetPasswordDetailsReponse extends BaseResponse {
     super(response);
     this.kdf = this.getResponseProperty("Kdf");
     this.kdfIterations = this.getResponseProperty("KdfIterations");
+    this.kdfMemory = this.getResponseProperty("KdfMemory");
+    this.kdfParallelism = this.getResponseProperty("KdfParallelism");
     this.resetPasswordKey = this.getResponseProperty("ResetPasswordKey");
     this.encryptedPrivateKey = this.getResponseProperty("EncryptedPrivateKey");
   }

@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
-import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/guards/lock.guard";
-import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/guards/unauth.guard";
+import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/auth/guards/lock.guard";
+import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
 import {
   LOCKED_CALLBACK,
   LOGOUT_CALLBACK,
@@ -11,8 +11,6 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
-import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/abstractions/auth.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -21,9 +19,7 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
-import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/abstractions/keyConnector.service";
 import {
   LogService,
   LogService as LogServiceAbstraction,
@@ -39,29 +35,35 @@ import {
   AbstractMemoryStorageService,
   AbstractStorageService,
 } from "@bitwarden/common/abstractions/storage.service";
-import { SyncNotifierService } from "@bitwarden/common/abstractions/sync/syncNotifier.service.abstraction";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abstractions/system.service";
-import { TokenService } from "@bitwarden/common/abstractions/token.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { TwoFactorService } from "@bitwarden/common/abstractions/twoFactor.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
-import { AuthService } from "@bitwarden/common/services/auth.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
-import { KeyConnectorService } from "@bitwarden/common/services/keyConnector.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { SyncNotifierService } from "@bitwarden/common/vault/abstractions/sync/sync-notifier.service.abstraction";
 
+import { LockGuardService } from "../../auth/popup/services/lock-guard.service";
+import { UnauthGuardService } from "../../auth/popup/services/unauth-guard.service";
+import { AutofillService as AutofillServiceAbstraction } from "../../autofill/services/abstractions/autofill.service";
+import AutofillService from "../../autofill/services/autofill.service";
 import MainBackground from "../../background/main.background";
 import { NativeMessagingBackground } from "../../background/nativeMessaging.background";
 import { BrowserApi } from "../../browser/browserApi";
 import { Account } from "../../models/account";
-import { AutofillService as AutofillServiceAbstraction } from "../../services/abstractions/autofill.service";
 import { BrowserStateService as StateServiceAbstraction } from "../../services/abstractions/browser-state.service";
-import AutofillService from "../../services/autofill.service";
 import { BrowserEnvironmentService } from "../../services/browser-environment.service";
 import { BrowserStateService } from "../../services/browser-state.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
@@ -78,15 +80,13 @@ import {
 } from "../../services/injection-tokens";
 import { KeyGenerationService } from "../../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../../services/localBackedSessionStorage.service";
-import { VaultFilterService } from "../../services/vaultFilter.service";
 import VaultTimeoutService from "../../services/vaultTimeout/vaultTimeout.service";
+import { VaultFilterService } from "../../vault/services/vault-filter.service";
 import { AppComponent } from "../app.component";
 
 import { InitService } from "./init.service";
-import { LockGuardService } from "./lock-guard.service";
 import { PopupBrowserPlatformUtilsService } from "./popup-browser-platform-utils.service";
 import { PopupUtilsService } from "./popup-utils.service";
-import { UnauthGuardService } from "./unauth-guard.service";
 
 function getBgService<T>(service: keyof MainBackground) {
   return mainBackground ? (mainBackground[service] as any as T) : null;

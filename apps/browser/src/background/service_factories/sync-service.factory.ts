@@ -1,20 +1,30 @@
-import { SyncService as AbstractSyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
-import { SyncService } from "@bitwarden/common/services/sync/sync.service";
+import { SyncService as AbstractSyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
+
+import {
+  keyConnectorServiceFactory,
+  KeyConnectorServiceInitOptions,
+} from "../../auth/background/service-factories/key-connector-service.factory";
+import {
+  cipherServiceFactory,
+  CipherServiceInitOptions,
+} from "../../vault/background/service_factories/cipher-service.factory";
+import {
+  folderApiServiceFactory,
+  FolderApiServiceInitOptions,
+} from "../../vault/background/service_factories/folder-api-service.factory";
+import {
+  folderServiceFactory,
+  FolderServiceInitOptions,
+} from "../../vault/background/service_factories/folder-service.factory";
 
 import { apiServiceFactory, ApiServiceInitOptions } from "./api-service.factory";
-import { cipherServiceFactory, CipherServiceInitOptions } from "./cipher-service.factory";
 import {
   collectionServiceFactory,
   CollectionServiceInitOptions,
 } from "./collection-service.factory";
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
-import { folderApiServiceFactory, FolderApiServiceInitOptions } from "./folder-api-service.factory";
-import { folderServiceFactory, FolderServiceInitOptions } from "./folder-service.factory";
-import {
-  keyConnectorServiceFactory,
-  KeyConnectorServiceInitOptions,
-} from "./key-connector-service.factory";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import { messagingServiceFactory, MessagingServiceInitOptions } from "./messaging-service.factory";
 import {
