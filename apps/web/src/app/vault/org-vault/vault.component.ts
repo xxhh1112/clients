@@ -257,6 +257,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     const defaultComponentParameters = (comp: AddEditComponent) => {
       comp.organization = this.organization;
+      comp.organizationId = this.organization.id;
       comp.cipherId = cipherId;
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
       comp.onSavedCipher.subscribe(async () => {
