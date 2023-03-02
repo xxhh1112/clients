@@ -1,6 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Observable, switchMap, Subject, takeUntil, combineLatest, startWith } from "rxjs";
+import {
+  map,
+  Observable,
+  switchMap,
+  Subject,
+  takeUntil,
+  combineLatest,
+  startWith,
+  distinctUntilChanged,
+} from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
@@ -87,7 +96,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const orgId$ = this.route.params.pipe(map((p) => p.organizationId));
+    const orgId$ = this.route.params.pipe(
+      map((p) => p.organizationId),
+      distinctUntilChanged()
+    );
 
     orgId$
       .pipe(
