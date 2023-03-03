@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, Input, QueryList } from "@angular/core";
+import { Component, ContentChildren, Input, QueryList } from "@angular/core";
 
 import { OnboardingTaskComponent } from "./onboarding-task.component";
 
@@ -6,16 +6,12 @@ import { OnboardingTaskComponent } from "./onboarding-task.component";
   selector: "sm-onboarding",
   templateUrl: "./onboarding.component.html",
 })
-export class OnboardingComponent implements AfterContentInit {
+export class OnboardingComponent {
   @ContentChildren(OnboardingTaskComponent) tasks: QueryList<OnboardingTaskComponent>;
   @Input() title: string;
 
   protected open = true;
-  protected visible = false;
-
-  ngAfterContentInit() {
-    this.visible = !this.isComplete;
-  }
+  protected dismissed = false;
 
   protected get amountCompleted(): number {
     return this.tasks.filter((task) => task.completed).length;
@@ -34,6 +30,6 @@ export class OnboardingComponent implements AfterContentInit {
   }
 
   protected dismiss() {
-    this.visible = false;
+    this.dismissed = true;
   }
 }

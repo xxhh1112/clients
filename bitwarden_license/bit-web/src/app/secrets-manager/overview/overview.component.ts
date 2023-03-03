@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import {
   map,
   Observable,
@@ -9,6 +9,7 @@ import {
   combineLatest,
   startWith,
   distinctUntilChanged,
+  zip,
 } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -61,11 +62,11 @@ type OrganizationTasks = {
 })
 export class OverviewComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
-  private prevShouldReuseRoute: any;
   private tableSize = 10;
   private organizationId: string;
   protected organizationName: string;
   protected userIsAdmin: boolean;
+  protected loading = true;
 
   protected view$: Observable<{
     allProjects: ProjectListView[];
@@ -73,11 +74,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
     latestProjects: ProjectListView[];
     latestSecrets: SecretListView[];
     tasks: OrganizationTasks;
+    showOnboarding: boolean;
   }>;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private projectService: ProjectService,
     private secretService: SecretService,
     private serviceAccountService: ServiceAccountService,
@@ -86,18 +87,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService
-  ) {
-    /**
-     * We want to remount the `sm-onboarding` component on route change.
-     * The component only toggles its visibility on init and on user dismissal.
-     */
-    this.prevShouldReuseRoute = this.router.routeReuseStrategy.shouldReuseRoute;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-  }
+  ) {}
 
   ngOnInit() {
     const orgId$ = this.route.params.pipe(
-      map((p) => p.organizationId),
+      map((params) => params.organizationId),
       distinctUntilChanged()
     );
 
@@ -110,6 +104,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.organizationId = org.id;
         this.organizationName = org.name;
         this.userIsAdmin = org.isAdmin;
+        this.loading = true;
       });
 
     const projects$ = combineLatest([
@@ -126,26 +121,32 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
     ]).pipe(switchMap(([orgId]) => this.serviceAccountService.getServiceAccounts(orgId)));
 
-    this.view$ = combineLatest([projects$, secrets$, serviceAccounts$, orgId$]).pipe(
+    this.view$ = zip([projects$, secrets$, serviceAccounts$, orgId$]).pipe(
       switchMap(async ([projects, secrets, serviceAccounts, orgId]) => {
+        const tasks = await this.saveCompletedTasks(orgId, {
+          importSecrets: secrets.length > 0,
+          createSecret: secrets.length > 0,
+          createProject: projects.length > 0,
+          createServiceAccount: serviceAccounts.length > 0,
+        });
+
         return {
           latestProjects: this.getRecentItems(projects, this.tableSize),
           latestSecrets: this.getRecentItems(secrets, this.tableSize),
           allProjects: projects,
           allSecrets: secrets,
-          tasks: await this.saveCompletedTasks(orgId, {
-            importSecrets: secrets.length > 0,
-            createSecret: secrets.length > 0,
-            createProject: projects.length > 0,
-            createServiceAccount: serviceAccounts.length > 0,
-          }),
+          tasks,
+          showOnboarding: this.showOnboarding(tasks),
         };
       })
     );
+
+    this.view$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.loading = false;
+    });
   }
 
   ngOnDestroy(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = this.prevShouldReuseRoute;
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -172,6 +173,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
       [organizationId]: nextOrgTasks,
     });
     return nextOrgTasks as OrganizationTasks;
+  }
+
+  private showOnboarding(ot: OrganizationTasks) {
+    return !(ot.createProject && ot.createSecret && ot.createServiceAccount && ot.importSecrets);
   }
 
   // Projects ---
