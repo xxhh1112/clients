@@ -2062,9 +2062,6 @@
   "updateLicense": {
     "message": "Update license"
   },
-  "updatedLicense": {
-    "message": "Updated license"
-  },
   "manageSubscription": {
     "message": "Manage subscription"
   },
@@ -6605,5 +6602,8 @@
         "example": "14"
       }
     }
+  },
+  "dismiss": {
+    "message": "Dismiss"
   }
 }
