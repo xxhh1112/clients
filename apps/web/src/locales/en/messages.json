@@ -6605,5 +6605,11 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "noItemsVaultIndividual": {
+    "message": "Get started by importing data or saving an item to your vault."
+  },
+  "noItemsVaultOrganization": {
+    "message": "Once an administrator confirms your organization membership, you will receive an email and may access organization items."
   }
 }
