@@ -1,10 +1,24 @@
+import { AbstractStorageService } from "../../abstractions/storage.service";
+
 import { MigrationBuilder } from "./migration-builder";
 import { MigrationHelper } from "./migration-helper";
 import { MinVersionMigrator } from "./migrations/min-version";
 
-const migratationBuilder = new MigrationBuilder<6>();
+export const MIN_VERSION = 6;
+export type MinVersion = typeof MIN_VERSION;
 
-export async function migrate(): Promise<void> {
-  const migrationHelper = new MigrationHelper(0);
-  await migratationBuilder.with(MinVersionMigrator).migrate(migrationHelper);
+const migrationBuilder = new MigrationBuilder<MinVersion>().with(MinVersionMigrator);
+
+export async function migrate(storageService: AbstractStorageService): Promise<void> {
+  const migrationHelper = new MigrationHelper(await currentVersion(storageService), storageService);
+  migrationBuilder.migrate(migrationHelper);
+}
+
+async function currentVersion(stateService: AbstractStorageService) {
+  let state = await stateService.get<number>("stateVersion");
+  if (!state) {
+    // Pre v7
+    state = (await stateService.get<{ stateVersion: number }>("global")).stateVersion;
+  }
+  return state ?? 0;
 }

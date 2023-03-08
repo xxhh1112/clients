@@ -1,14 +1,21 @@
+import { MinVersion, MIN_VERSION } from "..";
 import { MigrationHelper } from "../migration-helper";
-import { VersionMigrator } from "../migrator";
+import { IRREVERSIBLE, Migrator } from "../migrator";
 
-export const MIN_VERSION = 6;
-export type MinVersion = 6;
-export const MIN_VERSION_ERROR = `Your local data is too old to be migrated.`;
+export function minVersionError(current: number) {
+  return `Your local data is too old to be migrated. Your current state version is ${current}, but minimum version is ${MIN_VERSION}.`;
+}
 
-export class MinVersionMigrator extends VersionMigrator<MinVersion, MinVersion> {
+export class MinVersionMigrator extends Migrator<MinVersion, MinVersion> {
+  fromVersion: 6;
+  toVersion: 6;
+
   async migrate(helper: MigrationHelper): Promise<void> {
     if (helper.currentVersion < MIN_VERSION) {
-      throw new Error(MIN_VERSION_ERROR);
+      throw new Error(minVersionError(helper.currentVersion));
     }
+  }
+  async rollback(helper: MigrationHelper): Promise<void> {
+    throw IRREVERSIBLE;
   }
 }

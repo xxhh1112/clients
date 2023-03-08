@@ -1,13 +1,13 @@
-import { Jsonify } from "type-fest";
+import { AbstractStorageService } from "../../abstractions/storage.service";
 
 export class MigrationHelper {
-  constructor(public currentVersion: number) {}
+  constructor(public currentVersion: number, private storageService: AbstractStorageService) {}
 
-  async get<T>(key: string): Promise<Jsonify<T>> {
-    throw new Error("Not implemented");
+  get<T>(key: string): Promise<T> {
+    return this.storageService.get<T>(key);
   }
 
   set<T>(key: string, value: T): Promise<void> {
-    throw new Error("Not implemented");
+    return this.storageService.save(key, value);
   }
 }
