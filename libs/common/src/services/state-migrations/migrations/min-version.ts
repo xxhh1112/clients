@@ -7,9 +7,12 @@ export function minVersionError(current: number) {
 }
 
 export class MinVersionMigrator extends Migrator<MinVersion, MinVersion> {
-  fromVersion: 6;
-  toVersion: 6;
+  fromVersion: MinVersion = MIN_VERSION;
+  toVersion: MinVersion = MIN_VERSION;
 
+  shouldMigrate(helper: MigrationHelper): Promise<boolean> {
+    return Promise.resolve(helper.currentVersion < MIN_VERSION);
+  }
   async migrate(helper: MigrationHelper): Promise<void> {
     if (helper.currentVersion < MIN_VERSION) {
       throw new Error(minVersionError(helper.currentVersion));

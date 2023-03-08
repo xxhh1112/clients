@@ -7,6 +7,12 @@ export class MigrationBuilder<TCurrent extends number = 0> {
   constructor(private migrations: Migrator<any, any>[] = []) {}
 
   with<TTo extends number>(migrator: Constructor<Migrator<TCurrent, TTo>>): MigrationBuilder<TTo> {
+    const migratorInstance = new migrator();
+
+    if (migratorInstance.fromVersion == null || migratorInstance.toVersion == null) {
+      throw new Error("Migrator must instantiate fromVersion and toVersion properties");
+    }
+
     this.migrations.push(new migrator());
     return new MigrationBuilder<TTo>(this.migrations);
   }
@@ -17,7 +23,7 @@ export class MigrationBuilder<TCurrent extends number = 0> {
         promise.then(async () => {
           if (helper.currentVersion === migrator.fromVersion) {
             await migrator.migrate(helper);
-            helper.currentVersion = migrator.toVersion;
+            await migrator.updateVersion(helper);
           }
         }),
       Promise.resolve()
