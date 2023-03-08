@@ -6,7 +6,6 @@ import { Subject, switchMap, takeUntil } from "rxjs";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { UserVerificationPromptComponent } from "@bitwarden/web-vault/app/components/user-verification-prompt.component";
@@ -20,13 +19,22 @@ import { SecretsManagerPortingService } from "../services/sm-porting.service";
 })
 export class SecretsManagerExportComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-
+  private readonly exportFormatDict = {
+    // name : file extension
+    "Bitwarden (json)": "json",
+  } as const;
+  protected exportFormatKeys = Object.keys(this.exportFormatDict);
   protected orgName: string;
   protected orgId: string;
-  protected exportFormats: string[] = ["Bitwarden (json)"];
 
   protected formGroup = new FormGroup({
-    format: new FormControl("Bitwarden (json)", [Validators.required]),
+    formatKey: new FormControl<keyof typeof this.exportFormatDict>(
+      {
+        value: "Bitwarden (json)",
+        disabled: true,
+      },
+      [Validators.required]
+    ),
   });
 
   constructor(
@@ -36,7 +44,6 @@ export class SecretsManagerExportComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private smPortingService: SecretsManagerPortingService,
     private fileDownloadService: FileDownloadService,
-    private logService: LogService,
     private modalService: ModalService,
     private secretsManagerApiService: SecretsManagerPortingApiService
   ) {}
@@ -51,8 +58,6 @@ export class SecretsManagerExportComponent implements OnInit, OnDestroy {
         this.orgName = organization.name;
         this.orgId = organization.id;
       });
-
-    this.formGroup.get("format").disable();
   }
 
   async ngOnDestroy() {
@@ -72,16 +77,14 @@ export class SecretsManagerExportComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.doExport();
+    const format = this.exportFormatDict[this.formGroup.get("formatKey").value];
+    await this.doExport(format);
   };
 
-  private async doExport() {
-    const exportData = await this.secretsManagerApiService.export(
-      this.orgId,
-      this.formGroup.get("format").value
-    );
+  private async doExport(format: string) {
+    const exportData = await this.secretsManagerApiService.export(this.orgId, format);
 
-    await this.downloadFile(exportData, this.formGroup.get("format").value);
+    await this.downloadFile(exportData, format);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("dataExportSuccess"));
   }
 
