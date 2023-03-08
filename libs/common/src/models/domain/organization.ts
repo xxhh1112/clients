@@ -208,6 +208,10 @@ export class Organization {
     return this.useSecretsManager && this.accessSecretsManager;
   }
 
+  get useLicenseSync() {
+    return this.planProductType === ProductType.Enterprise;
+  }
+
   static fromJSON(json: Jsonify<Organization>) {
     if (json == null) {
       return null;

@@ -110,8 +110,8 @@ export class OrganizationSubscriptionSelfhostComponent implements OnInit, OnDest
 
   async loadOrganizationConnection() {
     if (!this.firstLoaded) {
-      const cloudCommunicationEnabled = await this.apiService.getCloudCommunicationsEnabled();
-      this.disableLicenseSyncControl = !cloudCommunicationEnabled;
+      this.disableLicenseSyncControl =
+        !this.userOrg.useLicenseSync || !(await this.apiService.getCloudCommunicationsEnabled());
     }
 
     if (this.disableLicenseSyncControl) {
