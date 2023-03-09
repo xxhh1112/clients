@@ -177,5 +177,6 @@ describe("NordPass CSV Importer", () => {
     expect(result.folders.length).toBe(1);
     const folder = result.folders[0];
     expect(folder.name).toBe("notesFolder");
+    expect(folder.id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
   });
 });

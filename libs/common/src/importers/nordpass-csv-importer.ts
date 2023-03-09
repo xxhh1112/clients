@@ -27,6 +27,7 @@ type nodePassCsvParsed = {
   city: string;
   country: string;
   state: string;
+  bwcollectionid: string;
 };
 
 export class NordPassCsvImporter extends BaseImporter implements Importer {
@@ -45,7 +46,7 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
       }
 
       if (!this.organization) {
-        this.processFolder(result, record.folder);
+        this.processFolder(result, record.folder, record.bwcollectionid);
       }
 
       const cipher = new CipherView();

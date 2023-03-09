@@ -54,6 +54,7 @@ export const testData: KeeperJsonExport = {
       folders: [
         {
           folder: "Optional Private Folder 1",
+          bwcollectionid: "e7def091-d3c8-4b03-96e3-afb200f6c3bc",
         },
       ],
     },

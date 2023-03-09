@@ -4,6 +4,7 @@ import { ImportResult } from "@bitwarden/common/models/domain/import-result";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 function baseExcept(result: ImportResult) {
   expect(result).not.toBeNull();
@@ -20,6 +21,35 @@ function expectLogin(cipher: CipherView) {
   expect(cipher.login.username).toBe("someUser");
   expect(cipher.login.password).toBe("myPassword");
   expect(cipher.login.totp).toBe("Y64VEVMBTSXCYIWRSHRNDZW62MPGVU2G");
+}
+
+function expectItemWithFolderId(
+  cipher: CipherView,
+  folder: FolderView,
+  relationship: [number, number]
+) {
+  expect(cipher.type).toBe(CipherType.SecureNote);
+
+  expect(cipher.name).toBe("New note");
+  expect(cipher.notes).toBe("Lorem ipsum dolor sit amet.");
+
+  expect(folder.name).toBe("Shopping");
+  expect(folder.id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
+  expect(relationship.length).toBe(2);
+}
+
+function expectItemWithFolder(
+  cipher: CipherView,
+  folder: FolderView,
+  relationship: [number, number]
+) {
+  expect(cipher.type).toBe(CipherType.SecureNote);
+
+  expect(cipher.name).toBe("New note");
+  expect(cipher.notes).toBe("Lorem ipsum dolor sit amet.");
+
+  expect(folder.name).toBe("Shopping");
+  expect(relationship.length).toBe(2);
 }
 
 const CipherData = [
@@ -198,5 +228,33 @@ describe("Lastpass CSV Importer", () => {
 
     const cipher = result.ciphers[0];
     expectLogin(cipher);
+  });
+
+  it("should parse bwcollectionid as folderId", async () => {
+    const input = `url,username,password,totp,extra,name,grouping,fav,bwcollectionid
+http://sn,,,,"Lorem ipsum dolor sit amet.",New note,Shopping,0,e7def091-d3c8-4b03-96e3-afb200f6c3bc`;
+
+    const importer = new Importer();
+    const result = await importer.parse(input);
+    baseExcept(result);
+
+    const cipher = result.ciphers[0];
+    const folder = result.folders[0];
+    const relationship = result.folderRelationships[0];
+    expectItemWithFolderId(cipher, folder, relationship);
+  });
+
+  it("should parse folder without bwCollectionId", async () => {
+    const input = `url,username,password,totp,extra,name,grouping,fav
+http://sn,,,,"Lorem ipsum dolor sit amet.",New note,Shopping,0`;
+
+    const importer = new Importer();
+    const result = await importer.parse(input);
+    baseExcept(result);
+
+    const cipher = result.ciphers[0];
+    const folder = result.folders[0];
+    const relationship = result.folderRelationships[0];
+    expectItemWithFolder(cipher, folder, relationship);
   });
 });

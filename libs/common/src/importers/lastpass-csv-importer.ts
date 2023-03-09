@@ -3,7 +3,6 @@ import { ImportResult } from "../models/domain/import-result";
 import { CipherType } from "../vault/enums/cipher-type";
 import { CardView } from "../vault/models/view/card.view";
 import { CipherView } from "../vault/models/view/cipher.view";
-import { FolderView } from "../vault/models/view/folder.view";
 import { IdentityView } from "../vault/models/view/identity.view";
 import { LoginView } from "../vault/models/view/login.view";
 import { SecureNoteView } from "../vault/models/view/secure-note.view";
@@ -21,24 +20,10 @@ export class LastPassCsvImporter extends BaseImporter implements Importer {
     }
 
     results.forEach((value) => {
-      const cipherIndex = result.ciphers.length;
-      let folderIndex = result.folders.length;
       let grouping = value.grouping;
       if (grouping != null) {
         // eslint-disable-next-line
         grouping = grouping.replace(/\\/g, "/").replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-      }
-      const hasFolder = this.getValueOrDefault(grouping, "(none)") !== "(none)";
-      let addFolder = hasFolder;
-
-      if (hasFolder) {
-        for (let i = 0; i < result.folders.length; i++) {
-          if (result.folders[i].name === grouping) {
-            addFolder = false;
-            folderIndex = i;
-            break;
-          }
-        }
       }
 
       const cipher = this.buildBaseCipher(value);
@@ -69,14 +54,7 @@ export class LastPassCsvImporter extends BaseImporter implements Importer {
 
       result.ciphers.push(cipher);
 
-      if (addFolder) {
-        const f = new FolderView();
-        f.name = grouping;
-        result.folders.push(f);
-      }
-      if (hasFolder) {
-        result.folderRelationships.push([cipherIndex, folderIndex]);
-      }
+      this.processFolder(result, grouping, value.bwcollectionid);
     });
 
     if (this.organization) {

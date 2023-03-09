@@ -78,7 +78,7 @@ export class DashlaneCsvImporter extends BaseImporter implements Importer {
 
       const rowKeys = Object.keys(row);
       if (rowKeys[0] === "username") {
-        this.processFolder(result, row.category);
+        this.processFolder(result, row.category, row.bwcollectionid);
         this.parseCredentialsRecord(cipher, row);
       }
 

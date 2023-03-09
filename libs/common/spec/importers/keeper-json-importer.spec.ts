@@ -84,6 +84,7 @@ describe("Keeper Json Importer", () => {
     const folders = result.folders;
     expect(folders.length).toBe(2);
     expect(folders[0].name).toBe("Optional Private Folder 1");
+    expect(folders[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(folders[1].name).toBe("My Customer 1");
 
     expect(result.folderRelationships[0]).toEqual([0, 0]);
@@ -99,6 +100,7 @@ describe("Keeper Json Importer", () => {
     const collections = result.collections;
     expect(collections.length).toBe(2);
     expect(collections[0].name).toBe("Optional Private Folder 1");
+    expect(collections[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(collections[1].name).toBe("My Customer 1");
 
     expect(result.collectionRelationships[0]).toEqual([0, 0]);

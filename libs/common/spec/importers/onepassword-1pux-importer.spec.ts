@@ -659,6 +659,7 @@ describe("1Password 1Pux Importer", () => {
     const folders = result.folders;
     expect(folders.length).toBe(5);
     expect(folders[0].name).toBe("Movies");
+    expect(folders[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(folders[1].name).toBe("Finance");
     expect(folders[2].name).toBe("Travel");
     expect(folders[3].name).toBe("Education");
@@ -681,6 +682,7 @@ describe("1Password 1Pux Importer", () => {
     const collections = result.collections;
     expect(collections.length).toBe(5);
     expect(collections[0].name).toBe("Movies");
+    expect(collections[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(collections[1].name).toBe("Finance");
     expect(collections[2].name).toBe("Travel");
     expect(collections[3].name).toBe("Education");

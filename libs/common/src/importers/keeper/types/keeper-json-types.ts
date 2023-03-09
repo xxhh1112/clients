@@ -38,4 +38,5 @@ export interface FoldersEntity {
   shared_folder?: string | null;
   can_edit?: boolean | null;
   can_share?: boolean | null;
+  bwcollectionid?: string | null;
 }

@@ -86,6 +86,7 @@ describe("Keeper CSV Importer", () => {
 
     const folder1 = folders.shift();
     expect(folder1.name).toBe("Foo");
+    expect(folder1.id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
 
     //With subfolders
     const folder2 = folders.shift();
@@ -109,6 +110,7 @@ describe("Keeper CSV Importer", () => {
 
     const collections1 = collections.shift();
     expect(collections1.name).toBe("Foo");
+    expect(collections1.id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
 
     //With subCollection
     const collections2 = collections.shift();

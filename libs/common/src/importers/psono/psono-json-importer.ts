@@ -50,7 +50,7 @@ export class PsonoJsonImporter extends BaseImporter implements Importer {
         return;
       }
 
-      this.processFolder(result, folder.name);
+      this.processFolder(result, folder.name, folder.bwcollectionid);
 
       this.handleItemParsing(result, folder.items);
     });

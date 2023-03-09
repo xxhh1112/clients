@@ -4,6 +4,7 @@ export const FoldersTestData: PsonoJsonExport = {
   folders: [
     {
       name: "TestFolder",
+      bwcollectionid: "e7def091-d3c8-4b03-96e3-afb200f6c3bc",
       items: [
         {
           type: "website_password",

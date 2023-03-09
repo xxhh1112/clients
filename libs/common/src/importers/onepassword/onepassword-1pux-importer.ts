@@ -132,7 +132,8 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
 
     if (overview.tags != null && overview.tags.length > 0) {
       const folderName = this.capitalize(overview.tags[0]);
-      this.processFolder(this.result, folderName);
+      const folderId = overview.tags.length > 0 ? overview.tags[1] : null;
+      this.processFolder(this.result, folderName, folderId);
     }
   }
 

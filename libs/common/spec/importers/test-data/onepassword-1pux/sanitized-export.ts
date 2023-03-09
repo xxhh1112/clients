@@ -404,7 +404,7 @@ export const SanitizedExport: ExportData = {
                     url: "https://app.plex.tv",
                   },
                 ],
-                tags: ["Movies"],
+                tags: ["Movies", "e7def091-d3c8-4b03-96e3-afb200f6c3bc"],
                 title: "Plex",
                 url: "https://app.plex.tv",
                 ps: 100,

@@ -416,7 +416,7 @@ export abstract class BaseImporter {
     }
   }
 
-  protected processFolder(result: ImportResult, folderName: string) {
+  protected processFolder(result: ImportResult, folderName: string, folderId?: string) {
     let folderIndex = result.folders.length;
     const hasFolder = !this.isNullOrWhitespace(folderName);
     // Replace backslashes with forward slashes, ensuring we create sub-folders
@@ -426,6 +426,9 @@ export abstract class BaseImporter {
     if (hasFolder) {
       for (let i = 0; i < result.folders.length; i++) {
         if (result.folders[i].name === folderName) {
+          if (result.folders[i].id == null && folderId != null) {
+            result.folders[i].id = folderId;
+          }
           addFolder = false;
           folderIndex = i;
           break;
@@ -436,6 +439,7 @@ export abstract class BaseImporter {
     if (addFolder) {
       const f = new FolderView();
       f.name = folderName;
+      f.id = folderId ?? null;
       result.folders.push(f);
     }
     if (hasFolder) {

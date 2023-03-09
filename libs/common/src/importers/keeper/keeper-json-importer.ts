@@ -56,12 +56,12 @@ export class KeeperJsonImporter extends BaseImporter implements Importer {
 
     record.folders.forEach((item) => {
       if (item.folder != null) {
-        this.processFolder(result, item.folder);
+        this.processFolder(result, item.folder, item.bwcollectionid);
         return;
       }
 
       if (item.shared_folder != null) {
-        this.processFolder(result, item.shared_folder);
+        this.processFolder(result, item.shared_folder, item.bwcollectionid);
         return;
       }
     });

@@ -15,6 +15,7 @@ export interface PsonoJsonExport {
 export interface FoldersEntity {
   name: string;
   items: PsonoItemTypes[] | null;
+  bwcollectionid?: string;
 }
 
 export interface RecordBase {

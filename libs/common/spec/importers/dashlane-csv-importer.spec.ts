@@ -36,6 +36,7 @@ describe("Dashlane CSV Importer", () => {
     expect(result.success).toBe(true);
     expect(result.folders.length).toBe(1);
     expect(result.folders[0].name).toBe("Entertainment");
+    expect(result.folders[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(result.folderRelationships[0]).toEqual([0, 0]);
   });
 

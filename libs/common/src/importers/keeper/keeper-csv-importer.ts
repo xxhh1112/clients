@@ -16,7 +16,8 @@ export class KeeperCsvImporter extends BaseImporter implements Importer {
         return;
       }
 
-      this.processFolder(result, value[0]);
+      let hasRunProcessFolder;
+
       const cipher = this.initLoginCipher();
 
       const notes = this.getValueOrDefault(value[5]);
@@ -34,10 +35,17 @@ export class KeeperCsvImporter extends BaseImporter implements Importer {
         for (let i = 7; i < value.length; i = i + 2) {
           if (value[i] == "TFC:Keeper") {
             cipher.login.totp = value[i + 1];
+          } else if (value[i] == "bwcollectionid") {
+            hasRunProcessFolder = true;
+            this.processFolder(result, value[0], value[i + 1]);
           } else {
             this.processKvp(cipher, value[i], value[i + 1]);
           }
         }
+      }
+
+      if (!hasRunProcessFolder) {
+        this.processFolder(result, value[0]);
       }
 
       this.cleanupCipher(cipher);
