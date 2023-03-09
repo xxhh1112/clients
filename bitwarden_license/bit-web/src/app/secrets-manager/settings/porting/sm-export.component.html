@@ -9,7 +9,7 @@
 
   <bit-form-field class="tw-max-w-sm">
     <bit-label>{{ "fileFormat" | i18n }}</bit-label>
-    <select bitInput formControlName="formatKey" [disabled]="true">
+    <select bitInput formControlName="formatKey">
       <option *ngFor="let format of exportFormatKeys" [ngValue]="format">{{ format }}</option>
     </select>
   </bit-form-field>
