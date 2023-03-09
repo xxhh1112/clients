@@ -11,7 +11,7 @@ describe("moveStateVersion", () => {
   beforeEach(() => {
     helper = mock();
 
-    sut = new MoveStateVersionMigrator();
+    sut = new MoveStateVersionMigrator(6, 7);
   });
 
   describe("migrate", () => {
