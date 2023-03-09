@@ -16,7 +16,6 @@ import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstrac
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
-import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/abstractions/stateMigration.service";
 import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
@@ -35,7 +34,6 @@ import { ModalService } from "./modal.service";
 import { PolicyListService } from "./policy-list.service";
 import { RouterService } from "./router.service";
 import { Account, GlobalState, StateService } from "./state";
-import { StateMigrationService } from "./state-migration.service";
 import { WebFileDownloadService } from "./web-file-download.service";
 import { WebPlatformUtilsService } from "./web-platform-utils.service";
 
@@ -83,11 +81,6 @@ import { WebPlatformUtilsService } from "./web-platform-utils.service";
     },
     { provide: MessagingServiceAbstraction, useClass: BroadcasterMessagingService },
     { provide: ModalServiceAbstraction, useClass: ModalService },
-    {
-      provide: StateMigrationServiceAbstraction,
-      useClass: StateMigrationService,
-      deps: [AbstractStorageService, SECURE_STORAGE, STATE_FACTORY],
-    },
     StateService,
     {
       provide: BaseStateServiceAbstraction,

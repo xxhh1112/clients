@@ -3,7 +3,6 @@ import { Jsonify } from "type-fest";
 
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
-import { StateMigrationService } from "../abstractions/stateMigration.service";
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
@@ -45,6 +44,8 @@ import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
 import { CipherView } from "../vault/models/view/cipher.view";
+
+import { migrate } from "./state-migrations";
 
 const keys = {
   state: "state",
@@ -90,7 +91,6 @@ export class StateService<
     protected secureStorageService: AbstractStorageService,
     protected memoryStorageService: AbstractMemoryStorageService,
     protected logService: LogService,
-    protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
     protected useAccountCache: boolean = true
   ) {
@@ -118,9 +118,7 @@ export class StateService<
       return;
     }
 
-    if (await this.stateMigrationService.needsMigration()) {
-      await this.stateMigrationService.migrate();
-    }
+    await migrate(this.storageService);
 
     await this.state().then(async (state) => {
       if (state == null) {

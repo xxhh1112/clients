@@ -36,7 +36,6 @@
 ./libs/common/spec/models/domain/sendText.spec.ts
 ./libs/common/spec/matchers/toEqualBuffer.spec.ts
 ./libs/common/spec/matchers/toEqualBuffer.ts
-./libs/common/spec/services/stateMigration.service.spec.ts
 ./libs/common/spec/services/consoleLog.service.spec.ts
 ./libs/common/src/misc/nodeUtils.ts
 ./libs/common/src/misc/linkedFieldOption.decorator.ts
@@ -82,7 +81,6 @@
 ./libs/common/src/abstractions/userVerification/userVerification.service.abstraction.ts
 ./libs/common/src/abstractions/userVerification/userVerification-api.service.abstraction.ts
 ./libs/common/src/abstractions/platformUtils.service.ts
-./libs/common/src/abstractions/stateMigration.service.ts
 ./libs/common/src/abstractions/fileDownload/fileDownloadBuilder.ts
 ./libs/common/src/abstractions/fileDownload/fileDownload.service.ts
 ./libs/common/src/abstractions/fileDownload/fileDownloadRequest.ts
@@ -96,7 +94,6 @@
 ./libs/common/src/abstractions/appId.service.ts
 ./libs/common/src/abstractions/usernameGeneration.service.ts
 ./libs/common/src/services/azureFileUpload.service.ts
-./libs/common/src/services/stateMigration.service.ts
 ./libs/common/src/services/passwordGeneration.service.ts
 ./libs/common/src/services/consoleLog.service.ts
 ./libs/common/src/services/formValidationErrors.service.ts

@@ -41,7 +41,6 @@ import {
   StateService as BaseStateServiceAbstraction,
   StateService,
 } from "@bitwarden/common/abstractions/state.service";
-import { StateMigrationService } from "@bitwarden/common/abstractions/stateMigration.service";
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
@@ -378,35 +377,22 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<AbstractStorageService>("memoryStorageService"),
     },
     {
-      provide: StateMigrationService,
-      useFactory: getBgService<StateMigrationService>("stateMigrationService"),
-      deps: [],
-    },
-    {
       provide: StateServiceAbstraction,
       useFactory: (
         storageService: AbstractStorageService,
         secureStorageService: AbstractStorageService,
         memoryStorageService: AbstractMemoryStorageService,
-        logService: LogServiceAbstraction,
-        stateMigrationService: StateMigrationService
+        logService: LogServiceAbstraction
       ) => {
         return new BrowserStateService(
           storageService,
           secureStorageService,
           memoryStorageService,
           logService,
-          stateMigrationService,
           new StateFactory(GlobalState, Account)
         );
       },
-      deps: [
-        AbstractStorageService,
-        SECURE_STORAGE,
-        MEMORY_STORAGE,
-        LogServiceAbstraction,
-        StateMigrationService,
-      ],
+      deps: [AbstractStorageService, SECURE_STORAGE, MEMORY_STORAGE, LogServiceAbstraction],
     },
     {
       provide: UsernameGenerationService,

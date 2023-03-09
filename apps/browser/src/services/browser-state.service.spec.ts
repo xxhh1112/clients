@@ -10,7 +10,6 @@ import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { State } from "@bitwarden/common/models/domain/state";
 import { SendView } from "@bitwarden/common/models/view/send.view";
-import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
 
 import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
@@ -26,7 +25,6 @@ describe("Browser State Service", () => {
   let secureStorageService: MockProxy<AbstractStorageService>;
   let diskStorageService: MockProxy<AbstractStorageService>;
   let logService: MockProxy<LogService>;
-  let stateMigrationService: MockProxy<StateMigrationService>;
   let stateFactory: MockProxy<StateFactory<GlobalState, Account>>;
   let useAccountCache: boolean;
 
@@ -39,7 +37,6 @@ describe("Browser State Service", () => {
     secureStorageService = mock();
     diskStorageService = mock();
     logService = mock();
-    stateMigrationService = mock();
     stateFactory = mock();
     useAccountCache = true;
 
@@ -63,7 +60,6 @@ describe("Browser State Service", () => {
         secureStorageService,
         memoryStorageService,
         logService,
-        stateMigrationService,
         stateFactory,
         useAccountCache
       );
