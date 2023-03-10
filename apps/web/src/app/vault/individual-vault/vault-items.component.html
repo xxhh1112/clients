@@ -339,7 +339,8 @@
       <span class="sr-only">{{ "loading" | i18n }}</span>
     </ng-container>
     <ng-container *ngIf="loaded">
-      <bit-icon [icon]="noItemIcon" aria-hidden="true"></bit-icon>
+      <app-empty-vault [vaultType]="vaultType"></app-empty-vault>
+      <!--<bit-icon [icon]="noItemIcon" aria-hidden="true"></bit-icon>
       <ng-container *ngIf="showMissingCollectionPermissionMessage">
         <p>{{ "noPermissionToViewAllCollectionItems" | i18n }}</p>
       </ng-container>
@@ -355,7 +356,7 @@
           <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
           {{ "newItem" | i18n }}
         </button>
-      </ng-container>
+      </ng-container> -->
     </ng-container>
   </div>
 </ng-container>

@@ -1,11 +1,13 @@
-import { Directive, Input } from "@angular/core";
+import { Directive, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subject } from "@microsoft/signalr/dist/esm/Subject";
+import { firstValueFrom } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-
-import { VaultFilterService } from "../vault-filter/services/vault-filter.service";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
 
 export enum VaultType {
   All = "all",
@@ -14,10 +16,11 @@ export enum VaultType {
 }
 
 @Directive()
-export class EmptyVaultComponent {
+export class EmptyVaultComponent implements OnInit, OnDestroy {
   @Input() organizationId: string;
   @Input() vaultType: VaultType;
 
+  protected destroy$ = new Subject<void>();
   private userStatus: OrganizationUserStatusType;
   private activePersonalOwnershipPolicy: boolean;
 
@@ -28,7 +31,7 @@ export class EmptyVaultComponent {
   individualText: string;
   organizationText: string;
   constructor(
-    private vaultFilterService: VaultFilterService,
+    private policyService: PolicyService,
     private organizationUserService: OrganizationUserService,
     private i18nService: I18nService,
     private stateService: StateService
@@ -37,11 +40,22 @@ export class EmptyVaultComponent {
     this.organizationText = this.i18nService.t("noItemsVaultOrganization");
   }
 
+  ngOnInit(): void {
+    this.setupCases();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   async checkPolicies() {
-    this.activePersonalOwnershipPolicy =
-      await this.vaultFilterService.checkForPersonalOwnershipPolicy();
+    this.activePersonalOwnershipPolicy = await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+    );
     if (this.organizationId && this.vaultType === VaultType.Organization) {
       const userId = await this.stateService.getUserId();
+      // TODO: is this the best way to grab org user information? It's an api call every time.
       this.userStatus = (
         await this.organizationUserService.getOrganizationUser(this.organizationId, userId)
       ).status;
@@ -51,8 +65,7 @@ export class EmptyVaultComponent {
   async setupCases() {
     await this.checkPolicies();
 
-    this.showImportButton = false;
-    this.showCreateButton = false;
+    this.showImportButton = this.showCreateButton = false;
 
     switch (this.vaultType) {
       case VaultType.Individual:
@@ -68,8 +81,7 @@ export class EmptyVaultComponent {
   setupForIndividualVault() {
     this.displayText = this.individualText;
     if (!this.activePersonalOwnershipPolicy) {
-      this.showImportButton = true;
-      this.showCreateButton = true;
+      this.showImportButton = this.showCreateButton = true;
     }
   }
 
@@ -77,12 +89,8 @@ export class EmptyVaultComponent {
     switch (this.userStatus) {
       case OrganizationUserStatusType.Accepted:
         this.displayText = this.organizationText;
-        if (this.activePersonalOwnershipPolicy) {
-          this.showImportButton = false;
-          this.showCreateButton = false;
-        } else {
-          this.showImportButton = true;
-          this.showCreateButton = true;
+        if (!this.activePersonalOwnershipPolicy) {
+          this.showImportButton = this.showCreateButton = true;
         }
         break;
       case OrganizationUserStatusType.Confirmed:
@@ -91,8 +99,7 @@ export class EmptyVaultComponent {
           this.showImportButton = false;
           this.showCreateButton = true;
         } else {
-          this.showImportButton = true;
-          this.showCreateButton = true;
+          this.showImportButton = this.showCreateButton = true;
         }
         break;
     }

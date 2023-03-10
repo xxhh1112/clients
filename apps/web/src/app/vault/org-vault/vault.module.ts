@@ -6,6 +6,7 @@ import { LooseComponentsModule } from "../../shared/loose-components.module";
 import { SharedModule } from "../../shared/shared.module";
 import { OrganizationBadgeModule } from "../../vault/individual-vault/organization-badge/organization-badge.module";
 import { PipesModule } from "../../vault/individual-vault/pipes/pipes.module";
+import { EmptyVaultComponent } from "../components/empty-vault/empty-vault.component";
 
 import { CollectionBadgeModule } from "./collection-badge/collection-badge.module";
 import { GroupBadgeModule } from "./group-badge/group-badge.module";
@@ -27,7 +28,7 @@ import { VaultComponent } from "./vault.component";
     PipesModule,
     BreadcrumbsModule,
   ],
-  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent],
+  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent, EmptyVaultComponent],
   exports: [VaultComponent],
 })
 export class VaultModule {}

@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { BreadcrumbsModule } from "@bitwarden/components";
 
 import { LooseComponentsModule, SharedModule } from "../../shared";
+import { EmptyVaultComponent } from "../components/empty-vault/empty-vault.component";
 import { CollectionBadgeModule } from "../org-vault/collection-badge/collection-badge.module";
 import { GroupBadgeModule } from "../org-vault/group-badge/group-badge.module";
 
@@ -28,7 +29,7 @@ import { VaultComponent } from "./vault.component";
     BulkDialogsModule,
     BreadcrumbsModule,
   ],
-  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent],
+  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent, EmptyVaultComponent],
   exports: [VaultComponent],
 })
 export class VaultModule {}

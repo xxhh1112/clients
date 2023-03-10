@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core
 import { lastValueFrom } from "rxjs";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
+import { VaultType } from "@bitwarden/angular/vault/components/empty-vault.component";
 import { VaultItemsComponent as BaseVaultItemsComponent } from "@bitwarden/angular/vault/components/vault-items.component";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -70,6 +71,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   profileName: string;
   noItemIcon = Icons.Search;
   groups: GroupView[] = [];
+  vaultType = VaultType.Individual;
 
   protected pageSizeLimit = 200;
   protected isAllChecked = false;
