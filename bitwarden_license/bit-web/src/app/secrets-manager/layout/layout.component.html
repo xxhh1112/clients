@@ -1,10 +1,11 @@
 <div class="tw-flex tw-w-full">
-  <nav
-    class="tw-fixed tw-max-h-screen tw-min-h-screen tw-w-60 tw-overflow-auto tw-bg-background-alt3"
-  >
+  <bit-side-nav>
     <router-outlet name="sidebar"></router-outlet>
-  </nav>
-  <main class="tw-ml-60 tw-min-h-screen tw-min-w-0 tw-flex-1 tw-p-6">
+  </bit-side-nav>
+  <main
+    class="tw-min-h-screen tw-min-w-0 tw-flex-1 tw-p-6"
+    [ngClass]="true ? 'tw-ml-60' : 'tw-ml-0'"
+  >
     <router-outlet></router-outlet>
   </main>
 </div>

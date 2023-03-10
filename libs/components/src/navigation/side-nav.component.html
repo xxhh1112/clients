@@ -1,0 +1,7 @@
+<nav class="tw-fixed tw-max-h-screen tw-min-h-screen tw-overflow-auto tw-bg-background-alt3">
+  <ng-content></ng-content>
+  <bit-nav-item
+    [icon]="(sideNavService.expanded$ | async) ? 'bwi-angle-left' : 'bwi-angle-right'"
+    (mainContentClicked)="sideNavService.toggleExpanded()"
+  ></bit-nav-item>
+</nav>
