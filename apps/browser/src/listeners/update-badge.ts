@@ -1,5 +1,6 @@
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
@@ -9,6 +10,7 @@ import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { authServiceFactory } from "../auth/background/service-factories/auth-service.factory";
+import { environmentServiceFactory } from "../background/service_factories/environment-service.factory";
 import { searchServiceFactory } from "../background/service_factories/search-service.factory";
 import { stateServiceFactory } from "../background/service_factories/state-service.factory";
 import { BrowserApi } from "../browser/browserApi";
@@ -27,6 +29,7 @@ export class UpdateBadge {
   private authService: AuthService;
   private stateService: BrowserStateService;
   private cipherService: CipherService;
+  private environmentService: EnvironmentService;
   private badgeAction: typeof chrome.action;
   private sidebarAction: OperaSidebarAction | FirefoxSidebarAction;
   private inited = false;
@@ -103,6 +106,9 @@ export class UpdateBadge {
 
     await this.setBadgeBackgroundColor();
 
+    const tab = await this.getTab(opts?.tabId, opts?.windowId);
+    const badgeOpts: BadgeOptions = { tab, windowId: tab?.windowId };
+
     switch (authStatus) {
       case AuthenticationStatus.LoggedOut: {
         await this.setLoggedOut();
@@ -113,11 +119,12 @@ export class UpdateBadge {
         break;
       }
       case AuthenticationStatus.Unlocked: {
-        const tab = await this.getTab(opts?.tabId, opts?.windowId);
-        await this.setUnlocked({ tab, windowId: tab?.windowId });
+        await this.setUnlocked(badgeOpts);
         break;
       }
     }
+
+    await this.setTrustedSite(badgeOpts);
   }
 
   async setLoggedOut(): Promise<void> {
@@ -128,6 +135,28 @@ export class UpdateBadge {
   async setLocked() {
     await this.setBadgeIcon("_locked");
     await this.clearBadgeText();
+  }
+
+  async setTrustedSite({ tab }: BadgeOptions) {
+    await this.initServices();
+
+    const tabHost = new URL(tab?.url).host;
+    const webVaultHost = new URL(this.environmentService.getWebVaultUrl()).host;
+    if (!["bitwarden.com", webVaultHost].includes(tabHost)) {
+      return false;
+    }
+
+    try {
+      const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
+      const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
+      if (ciphers.length !== 0 && !disableBadgeCounter) {
+        return false;
+      }
+    } catch {
+      /** Expected CipherService "No key" error if unauthenticated. */
+    }
+
+    await Promise.all([this.setBadgeText("✓", tab?.id), this.setBadgeBackgroundColor("#017E45")]);
   }
 
   private async clearBadgeText() {
@@ -285,6 +314,8 @@ export class UpdateBadge {
       ...opts,
       cipherServiceOptions: { searchServiceFactory: () => searchService },
     });
+
+    this.environmentService = await environmentServiceFactory(serviceCache, opts);
 
     // Needed for cipher decryption
     if (!self.bitwardenContainerService) {
