@@ -4,9 +4,6 @@ import { MigrationHelper } from "../migration-helper";
 import { Migrator } from "../migrator";
 
 export class MoveStateVersionMigrator extends Migrator<6, 7> {
-  fromVersion: 6 = 6;
-  toVersion: 7 = 7;
-
   shouldMigrate(helper: MigrationHelper): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
