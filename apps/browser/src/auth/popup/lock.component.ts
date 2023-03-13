@@ -1,4 +1,4 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, Inject, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
@@ -17,6 +17,7 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
+import { COMBINED_MESSAGING_SERVICE } from "../../services/injection-tokens";
 
 @Component({
   selector: "app-lock",
@@ -32,7 +33,7 @@ export class LockComponent extends BaseLockComponent {
     router: Router,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
-    messagingService: MessagingService,
+    @Inject(COMBINED_MESSAGING_SERVICE) messagingService: MessagingService,
     cryptoService: CryptoService,
     vaultTimeoutService: VaultTimeoutService,
     vaultTimeoutSettingsService: VaultTimeoutSettingsService,

@@ -15,6 +15,7 @@ import Swal, { SweetAlertIcon } from "sweetalert2";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 
@@ -49,7 +50,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    private notificationsService: NotificationsService
   ) {}
 
   async ngOnInit() {
@@ -75,8 +77,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     (window as any).bitwardenPopupMainMessageListener = async (
       msg: any,
-      sender: any,
-      sendResponse: any
+      sender: never,
+      sendResponse: (r: any) => void
     ) => {
       if (msg.command === "doneLoggingOut") {
         this.ngZone.run(async () => {
@@ -128,6 +130,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.ngZone.run(async () => {
           this.router.navigate(["/remove-password"]);
         });
+      } else if (msg.command === "unlocked" || msg.command === "loggedIn") {
+        this.notificationsService.updateConnection(msg.command === "unlocked");
       } else {
         msg.webExtSender = sender;
         this.broadcasterService.send(msg);

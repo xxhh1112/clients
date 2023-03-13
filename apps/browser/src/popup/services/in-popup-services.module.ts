@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
+import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
@@ -25,6 +25,7 @@ import {
   LogService as LogServiceAbstraction,
 } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
@@ -47,9 +48,7 @@ import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
-import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
-import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
 import { SystemService } from "@bitwarden/common/services/system.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -86,6 +85,7 @@ import { AppComponent } from "../app.component";
 
 import { InitService } from "./init.service";
 import { PopupBrowserPlatformUtilsService } from "./popup-browser-platform-utils.service";
+import { Mv2PopupInitializer, Mv3PopupInitializer, PopupInitializer } from "./popup-initializer";
 import { PopupUtilsService } from "./popup-utils.service";
 
 function getBgService<T>(service: keyof MainBackground) {
@@ -102,47 +102,62 @@ const mainBackground: MainBackground = (BrowserApi.getBackgroundPage() as any)?.
       deps: [I18nServiceAbstraction],
     },
     {
-      provide: APP_INITIALIZER,
+      provide: PopupInitializer,
       useFactory: (
+        manifestVersion: ManifestVersion,
         cryptoService: CryptoService,
         encryptService: EncryptService,
+        window: Window,
         initService: InitService,
         vaultTimeoutService: VaultTimeoutServiceAbstraction,
         i18nService: I18nServiceAbstraction,
         eventUploadService: EventUploadServiceAbstraction,
         twoFactorService: TwoFactorService,
-        window: Window
+        injector: Injector
       ) => {
-        // TODO: This could be refactored
-        // This emulates main.background.ts bootstrap()
-        return async () => {
-          const container = new ContainerService(cryptoService, encryptService);
-          container.attachToGlobal(window);
-
-          // This already does stateservice.init()
-          await initService.init()();
-          // All these casts are not ideal
-          // TODO: Since this isn't async this feels like it should be in the constructor?
-          (vaultTimeoutService as VaultTimeoutService).init(true);
-          await (i18nService as I18nService).init();
-          // Also feels like ctor work
-          (eventUploadService as EventUploadService).init(true);
-          // Same
-          twoFactorService.init();
-
-          // TODO: Notifications service?
-        };
+        if (manifestVersion === 2) {
+          return new Mv2PopupInitializer(
+            cryptoService,
+            encryptService,
+            window,
+            initService,
+            vaultTimeoutService,
+            i18nService,
+            eventUploadService,
+            twoFactorService
+          );
+        } else {
+          return new Mv3PopupInitializer(
+            cryptoService,
+            encryptService,
+            window,
+            initService,
+            vaultTimeoutService,
+            i18nService,
+            eventUploadService,
+            twoFactorService,
+            injector.get(EnvironmentService),
+            injector.get(NotificationsService)
+          );
+        }
       },
       deps: [
+        MANIFEST_VERSION,
         CryptoService,
         EncryptService,
+        WINDOW,
         InitService,
         VaultTimeoutServiceAbstraction,
         I18nServiceAbstraction,
         EventUploadServiceAbstraction,
         TwoFactorService,
-        WINDOW,
+        Injector,
       ],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (popupInitializer: PopupInitializer) => () => popupInitializer.initialize(),
+      deps: [PopupInitializer],
       multi: true,
     },
     {
@@ -352,7 +367,7 @@ const mainBackground: MainBackground = (BrowserApi.getBackgroundPage() as any)?.
         CollectionService,
         CryptoService,
         PlatformUtilsService,
-        BACKGROUND_MESSAGING_SERVICE,
+        IN_POPUP_MESSAGING_SERVICE,
         SearchService,
         KeyConnectorServiceAbstraction,
         StateServiceAbstraction,
