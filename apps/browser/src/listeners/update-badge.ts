@@ -143,14 +143,14 @@ export class UpdateBadge {
     const tabHost = new URL(tab?.url).host;
     const webVaultHost = new URL(this.environmentService.getWebVaultUrl()).host;
     if (!["bitwarden.com", webVaultHost].includes(tabHost)) {
-      return false;
+      return;
     }
 
     try {
       const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
       const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
       if (ciphers.length !== 0 && !disableBadgeCounter) {
-        return false;
+        return;
       }
     } catch {
       /** Expected CipherService "No key" error if unauthenticated. */
