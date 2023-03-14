@@ -85,6 +85,7 @@ import { flagEnabled } from "../flags";
 import { UpdateBadge } from "../listeners/update-badge";
 import { Account } from "../models/account";
 import { BrowserStateService as StateServiceAbstraction } from "../services/abstractions/browser-state.service";
+import BrowserApiMemoryStorageService from "../services/browser-api-memory-storage.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import { BrowserI18nService } from "../services/browser-i18n.service";
 import { BrowserOrganizationService } from "../services/browser-organization.service";
@@ -106,6 +107,7 @@ import CommandsBackground from "./commands.background";
 import IdleBackground from "./idle.background";
 import { NativeMessagingBackground } from "./nativeMessaging.background";
 import RuntimeBackground from "./runtime.background";
+import { listenForStorageServiceProxyCommands } from "./storage-service-proxy.background";
 import WebRequestBackground from "./webRequest.background";
 
 export default class MainBackground {
@@ -202,13 +204,18 @@ export default class MainBackground {
     this.cryptoFunctionService = new WebCryptoFunctionService(window);
     this.storageService = new BrowserLocalStorageService();
     this.secureStorageService = new BrowserLocalStorageService();
-    this.memoryStorageService =
-      BrowserApi.manifestVersion === 3
-        ? new LocalBackedSessionStorageService(
-            new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, false),
-            new KeyGenerationService(this.cryptoFunctionService)
-          )
-        : new MemoryStorageService();
+    let sessionStorage: AbstractStorageService;
+    if (BrowserApi.manifestVersion === 3) {
+      sessionStorage = new BrowserApiMemoryStorageService();
+    } else {
+      sessionStorage = new MemoryStorageService();
+      listenForStorageServiceProxyCommands(sessionStorage);
+    }
+    this.memoryStorageService = new LocalBackedSessionStorageService(
+      new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, false),
+      new KeyGenerationService(this.cryptoFunctionService),
+      sessionStorage
+    );
     this.stateMigrationService = new StateMigrationService(
       this.storageService,
       this.secureStorageService,

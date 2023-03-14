@@ -147,6 +147,29 @@ export class BrowserApi {
     return chrome.runtime.sendMessage(message);
   }
 
+  static sendMessageWithResponse<TResponse>(
+    subscriber: string,
+    args: Record<string, unknown> = {}
+  ): Promise<TResponse> {
+    const message = Object.assign({}, { command: subscriber }, args);
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(message, (response) => {
+        resolve(response);
+      });
+    });
+  }
+
+  static receiveMessage<T>(
+    subscriber: string,
+    callback: (message: any, sender: chrome.runtime.MessageSender) => Promise<T>
+  ) {
+    chrome.runtime.onMessage.addListener((message: any, sender, response) => {
+      if (message.command === subscriber) {
+        return callback(message, sender);
+      }
+    });
+  }
+
   static async closeLoginTab() {
     const tabs = await BrowserApi.tabsQuery({
       active: true,

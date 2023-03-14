@@ -1,5 +1,5 @@
 import AbstractChromeStorageService from "./abstractChromeStorageApi.service";
 
-export default class BrowserMemoryStorageService extends AbstractChromeStorageService {
+export default class BrowserApiMemoryStorageService extends AbstractChromeStorageService {
   protected chromeStorageApi = chrome.storage.session;
 }

@@ -164,7 +164,6 @@
 ./apps/browser/src/services/localBackedSessionStorage.service.spec.ts
 ./apps/browser/src/services/browserMessagingPrivateModeBackground.service.ts
 ./apps/browser/src/services/browserPlatformUtils.service.spec.ts
-./apps/browser/src/services/browserMemoryStorage.service.ts
 ./apps/browser/src/services/vaultTimeout/vaultTimeout.service.ts
 ./apps/browser/src/services/browserCrypto.service.ts
 ./apps/browser/src/services/browserPlatformUtils.service.ts

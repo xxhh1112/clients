@@ -59,11 +59,11 @@ import { LockGuardService } from "../../auth/popup/services/lock-guard.service";
 import { UnauthGuardService } from "../../auth/popup/services/unauth-guard.service";
 import { AutofillService as AutofillServiceAbstraction } from "../../autofill/services/abstractions/autofill.service";
 import AutofillService from "../../autofill/services/autofill.service";
-import MainBackground from "../../background/main.background";
 import { NativeMessagingBackground } from "../../background/nativeMessaging.background";
 import { BrowserApi } from "../../browser/browserApi";
 import { Account } from "../../models/account";
 import { BrowserStateService as StateServiceAbstraction } from "../../services/abstractions/browser-state.service";
+import BrowserApiMemoryStorageService from "../../services/browser-api-memory-storage.service";
 import { BrowserEnvironmentService } from "../../services/browser-environment.service";
 import { BrowserStateService } from "../../services/browser-state.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
@@ -80,6 +80,7 @@ import {
 } from "../../services/injection-tokens";
 import { KeyGenerationService } from "../../services/keyGeneration.service";
 import { LocalBackedSessionStorageService } from "../../services/localBackedSessionStorage.service";
+import { ProxyStorageService } from "../../services/proxy-storage.service";
 import VaultTimeoutService from "../../services/vaultTimeout/vaultTimeout.service";
 import { VaultFilterService } from "../../vault/services/vault-filter.service";
 import { AppComponent } from "../app.component";
@@ -87,12 +88,6 @@ import { AppComponent } from "../app.component";
 import { InitService } from "./init.service";
 import { PopupBrowserPlatformUtilsService } from "./popup-browser-platform-utils.service";
 import { PopupUtilsService } from "./popup-utils.service";
-
-function getBgService<T>(service: keyof MainBackground) {
-  return mainBackground ? (mainBackground[service] as any as T) : null;
-}
-
-const mainBackground: MainBackground = (BrowserApi.getBackgroundPage() as any)?.bitwardenMain;
 
 @NgModule({
   providers: [
@@ -264,14 +259,11 @@ const mainBackground: MainBackground = (BrowserApi.getBackgroundPage() as any)?.
         cryptoFunctionService: CryptoFunctionService,
         logService: LogServiceAbstraction
       ) => {
-        if (manifestVersion === 2) {
-          return getBgService("memoryStorageService");
-        } else {
-          return new LocalBackedSessionStorageService(
-            new EncryptServiceImplementation(cryptoFunctionService, logService, false),
-            new KeyGenerationService(cryptoFunctionService)
-          );
-        }
+        return new LocalBackedSessionStorageService(
+          new EncryptServiceImplementation(cryptoFunctionService, logService, false),
+          new KeyGenerationService(cryptoFunctionService),
+          manifestVersion === 3 ? new BrowserApiMemoryStorageService() : new ProxyStorageService()
+        );
       },
       deps: [MANIFEST_VERSION, CryptoFunctionService, LogServiceAbstraction],
     },

@@ -1,33 +1,41 @@
 import { Jsonify } from "type-fest";
 
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { AbstractMemoryStorageService } from "@bitwarden/common/abstractions/storage.service";
+import {
+  AbstractMemoryStorageService,
+  AbstractStorageService,
+} from "@bitwarden/common/abstractions/storage.service";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { MemoryStorageOptions } from "@bitwarden/common/models/domain/storage-options";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
+import { BrowserApi } from "../browser/browserApi";
 import { devFlag } from "../decorators/dev-flag.decorator";
 import { devFlagEnabled } from "../flags";
 
 import { AbstractKeyGenerationService } from "./abstractions/abstractKeyGeneration.service";
 import BrowserLocalStorageService from "./browserLocalStorage.service";
-import BrowserMemoryStorageService from "./browserMemoryStorage.service";
 
 const keys = {
   encKey: "localEncryptionKey",
   sessionKey: "session",
 };
 
+const UPDATE_CACHE_COMMAND = "localbackedsessionstorage_updatecache";
+
 export class LocalBackedSessionStorageService extends AbstractMemoryStorageService {
   private cache = new Map<string, unknown>();
   private localStorage = new BrowserLocalStorageService();
-  private sessionStorage = new BrowserMemoryStorageService();
 
   constructor(
     private encryptService: EncryptService,
-    private keyGenerationService: AbstractKeyGenerationService
+    private keyGenerationService: AbstractKeyGenerationService,
+    private sessionStorage: AbstractStorageService
   ) {
     super();
+    BrowserApi.receiveMessage(UPDATE_CACHE_COMMAND, (message) => {
+      return this.refreshCache(message.key, message.value, false);
+    });
   }
 
   async get<T>(key: string, options?: MemoryStorageOptions<T>): Promise<T> {
@@ -58,11 +66,7 @@ export class LocalBackedSessionStorageService extends AbstractMemoryStorageServi
   }
 
   async save<T>(key: string, obj: T): Promise<void> {
-    if (obj == null) {
-      this.cache.delete(key);
-    } else {
-      this.cache.set(key, obj);
-    }
+    await this.refreshCache(key, obj);
 
     const sessionEncKey = await this.getSessionEncKey();
     const localSession = (await this.getLocalSession(sessionEncKey)) ?? {};
@@ -138,6 +142,18 @@ export class LocalBackedSessionStorageService extends AbstractMemoryStorageServi
       await this.sessionStorage.remove(keys.encKey);
     } else {
       await this.sessionStorage.save(keys.encKey, input);
+    }
+  }
+
+  async refreshCache(key: string, value: unknown, sync = true) {
+    if (value == null) {
+      this.cache.delete(key);
+    } else {
+      this.cache.set(key, value);
+    }
+
+    if (sync) {
+      await BrowserApi.sendMessageWithResponse(UPDATE_CACHE_COMMAND, { key, value });
     }
   }
 }
