@@ -101,6 +101,7 @@ import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.comp
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
 import { ToolsComponent } from "../tools/tools.component";
+import { EmptyVaultComponent } from "../vault/components/empty-vault/empty-vault.component";
 import { PasswordRepromptComponent } from "../vault/components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
 import { AddEditCustomFieldsComponent } from "../vault/individual-vault/add-edit-custom-fields.component";
@@ -157,6 +158,7 @@ import { SharedModule } from "./shared.module";
     HintComponent,
     LockComponent,
     NavbarComponent,
+    EmptyVaultComponent,
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
