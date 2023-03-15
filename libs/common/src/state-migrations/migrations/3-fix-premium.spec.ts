@@ -1,6 +1,7 @@
 import { MockProxy } from "jest-mock-extended";
 
-import { TokenService } from "../../../auth/services/token.service";
+// eslint-disable-next-line import/no-restricted-paths -- Import is OK, since we're using it for static token decoding
+import { TokenService } from "../../auth/services/token.service";
 import { MigrationHelper } from "../migration-helper";
 import { mockMigrationHelper } from "../migration-helper.spec";
 

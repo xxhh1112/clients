@@ -1,6 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { AbstractStorageService } from "../../abstractions/storage.service";
+// eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
+import { AbstractStorageService } from "../abstractions/storage.service";
 
 import { builder, currentVersion } from "./migrate";
 import { MigrationBuilder } from "./migration-builder";

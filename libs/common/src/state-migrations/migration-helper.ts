@@ -1,4 +1,4 @@
-import { AbstractStorageService } from "../../abstractions/storage.service";
+import { AbstractStorageService } from "../abstractions/storage.service";
 
 export class MigrationHelper {
   constructor(public currentVersion: number, private storageService: AbstractStorageService) {}

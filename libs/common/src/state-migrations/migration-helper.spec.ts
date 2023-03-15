@@ -1,6 +1,6 @@
 import { MockProxy, mock } from "jest-mock-extended";
 
-import { AbstractStorageService } from "../../abstractions/storage.service";
+import { AbstractStorageService } from "../abstractions/storage.service";
 
 import { MigrationHelper } from "./migration-helper";
 

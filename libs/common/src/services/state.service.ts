@@ -45,7 +45,7 @@ import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
 import { CipherView } from "../vault/models/view/cipher.view";
 
-import { migrate } from "./state-migrations";
+import { migrate } from "../state-migrations";
 
 const keys = {
   state: "state",
