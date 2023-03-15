@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Aiuto e segnalazioni"
   },
+  "helpCenter": {
+    "message": "Centro assistenza Bitwarden"
+  },
+  "communityForums": {
+    "message": "Esplora i forum della community Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Contatta l'assistenza Bitwarden"
+  },
   "sync": {
     "message": "Sincronizza"
   },
@@ -430,7 +439,14 @@
     "message": "È necessario reinserire la password principale."
   },
   "masterPasswordMinlength": {
-    "message": "La password principale deve essere lunga almeno 8 caratteri."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Come utilizzare l'autocompletamento"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Seleziona un elemento da questa pagina o imposta una scorciatoia nelle impostazioni. Puoi anche provare il completamento automatico al caricamento della pagina."
+  },
+  "gotIt": {
+    "message": "Capito"
+  },
+  "autofillSettings": {
+    "message": "Impostazioni di autocompletamento"
+  },
+  "autofillShortcut": {
+    "message": "Scorciatoia da tastiera per l'autocompletamento"
+  },
+  "autofillShortcutNotSet": {
+    "message": "La scorciatoia per l'autocompletamento non è stata impostata. Impostala nelle impostazioni del browser."
+  },
+  "autofillShortcutText": {
+    "message": "La scorciatoia per l'autocompletamento è: $COMMAND$. Cambiala nelle impostazioni del browser.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Scorciatoia per l'autocompletamento di default: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

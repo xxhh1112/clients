@@ -67,7 +67,7 @@
     "message": "Pièces jointes"
   },
   "viewItem": {
-    "message": "Voir l'élément"
+    "message": "Afficher l'élément"
   },
   "name": {
     "message": "Nom"
@@ -392,7 +392,7 @@
     "message": "Re-générer un mot de passe"
   },
   "copyPassword": {
-    "message": "Copier mot de passe"
+    "message": "Copier le mot de passe"
   },
   "copyUri": {
     "message": "Copier l'URI"
@@ -491,7 +491,7 @@
     "message": "Dossier supprimé"
   },
   "loginOrCreateNewAccount": {
-    "message": "Identifiez-vous ou créez un nouveau compte pour accéder à votre coffre sécurisé."
+    "message": "Connectez-vous ou créez un nouveau compte pour accéder à votre coffre sécurisé."
   },
   "createAccount": {
     "message": "Créer un compte"
@@ -542,7 +542,14 @@
     "message": "Une nouvelle saisie du mot de passe principal est nécessaire."
   },
   "masterPasswordMinlength": {
-    "message": "Le mot de passe principal doit comporter au moins 8 caractères."
+    "message": "Le mot de passe principal doit comporter au moins $VALUE$ caractères.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmation du mot de passe principal ne correspond pas."
@@ -746,7 +753,7 @@
     "message": "Ajouter un dossier"
   },
   "view": {
-    "message": "Voir"
+    "message": "Affichage"
   },
   "account": {
     "message": "Compte"
@@ -1036,7 +1043,7 @@
     "message": "Inconnu"
   },
   "copyUsername": {
-    "message": "Copier nom d'utilisateur"
+    "message": "Copier le nom d'utilisateur"
   },
   "copyNumber": {
     "message": "Copier le numéro",
@@ -1140,7 +1147,7 @@
     "message": "Zoom arrière"
   },
   "resetZoom": {
-    "message": "Taille réelle"
+    "message": "Réinitialiser le zoom"
   },
   "toggleFullScreen": {
     "message": "Afficher en plein écran"

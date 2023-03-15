@@ -281,35 +281,35 @@
     "message": "Pesquisar Favoritos"
   },
   "searchLogin": {
-    "message": "Search logins",
+    "message": "Buscar credenciais",
     "description": "Search Login type"
   },
   "searchCard": {
-    "message": "Search cards",
+    "message": "Buscar cartões",
     "description": "Search Card type"
   },
   "searchIdentity": {
-    "message": "Search identities",
+    "message": "Buscar identidades",
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "Search secure notes",
+    "message": "Buscar notas seguras",
     "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Pesquisar no Cofre"
   },
   "searchMyVault": {
-    "message": "Search my vault"
+    "message": "Buscar no meu cofre"
   },
   "searchOrganization": {
-    "message": "Search organization"
+    "message": "Buscar na organização"
   },
   "searchMembers": {
-    "message": "Search members"
+    "message": "Buscar membros"
   },
   "searchGroups": {
-    "message": "Search groups"
+    "message": "Buscar grupos"
   },
   "allItems": {
     "message": "Todos os Itens"
@@ -393,7 +393,7 @@
     "message": "Selecionar"
   },
   "newItem": {
-    "message": "New item"
+    "message": "Novo item"
   },
   "addItem": {
     "message": "Adicionar Item"
@@ -405,7 +405,7 @@
     "message": "Visualizar Item"
   },
   "new": {
-    "message": "New",
+    "message": "Novo",
     "description": "for adding new items"
   },
   "item": {
@@ -477,7 +477,7 @@
     "message": "Itens do Cofre"
   },
   "filter": {
-    "message": "Filter"
+    "message": "Filtro"
   },
   "moveSelectedToOrg": {
     "message": "Mover Selecionados para a Organização"
@@ -586,10 +586,10 @@
     "message": "Pasta excluída"
   },
   "editInfo": {
-    "message": "Edit info"
+    "message": "Editar info"
   },
   "access": {
-    "message": "Access"
+    "message": "Acesso"
   },
   "loggedOut": {
     "message": "Sessão encerrada"
@@ -622,7 +622,7 @@
     "message": "Login com dispositivo deve ser habilitado nas configurações do aplicativo móvel do Bitwarden. Necessita de outra opção?"
   },
   "loginWithMasterPassword": {
-    "message": "Log in with master password"
+    "message": "Entrar com senha mestra"
   },
   "createAccount": {
     "message": "Criar conta"
@@ -697,7 +697,14 @@
     "message": "A senha mestra é necessária."
   },
   "masterPasswordMinlength": {
-    "message": "A senha mestra deve possuir no mínimo 8 caracteres."
+    "message": "A senha mestra deve ter pelo menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -749,7 +756,7 @@
     "message": "Não há itens para listar."
   },
   "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
+    "message": "Você não tem permissão para visualizar todos os itens desta coleção."
   },
   "noCollectionsInList": {
     "message": "Não há coleções para listar."
@@ -761,7 +768,7 @@
     "message": "Não há usuários para listar."
   },
   "noMembersInList": {
-    "message": "There are no members to list."
+    "message": "Não há membros para listar."
   },
   "noEventsInList": {
     "message": "Não há eventos para listar."
@@ -908,7 +915,7 @@
     }
   },
   "deleteSelectedCollectionsDesc": {
-    "message": "$COUNT$ collection(s) will be permanently deleted.",
+    "message": "$COUNT$ coleção(ões) serão excluídas permanentemente.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -917,7 +924,7 @@
     }
   },
   "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
+    "message": "Tem certeza que deseja continuar?"
   },
   "moveSelectedItemsDesc": {
     "message": "Escolha uma pasta para a qual você deseja mover os $COUNT$ itens selecionados.",
@@ -994,16 +1001,16 @@
     "message": "Confirmar senha do arquivo"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Use sua chave criptográfica da conta, derivada do nome de usuário e Senha Mestra da sua conta, para criptografar a exportação e restringir importação para apenas a conta atual do Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Defina uma senha para criptografar a exportação e importá-la para qualquer conta do Bitwarden usando a senha para descriptografar."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Tipo da exportação"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Conta restrita"
   },
   "passwordProtected": {
     "message": "Protegido por Senha"
@@ -1158,17 +1165,17 @@
     }
   },
   "kdfMemory": {
-    "message": "KDF memory (MB)",
+    "message": "Memória KDF (MB)",
     "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
   },
   "argon2Warning": {
-    "message": "Setting your KDF iterations, memory, and parallelism too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend changing these individually in small increments and then test all of your devices."
+    "message": "Configurar as suas iterações KDF, memória e paralelismo muito altos pode resultar em baixo desempenho ao iniciar (e desbloquear) o Bitwarden em dispositivos mais lentos ou mais antigos. Recomendamos alterá-los individualmente em pequenos incrementos e, em seguida, testar todos os seus dispositivos."
   },
   "kdfParallelism": {
-    "message": "KDF parallelism"
+    "message": "Paralelismo KDF"
   },
   "argon2Desc": {
-    "message": "Higher KDF iterations, memory, and parallelism can help protect your master password from being brute forced by an attacker."
+    "message": "Mais iterações KDF, memória e paralelismo podem ajudar a proteger sua senha mestra de ser descoberta por força bruta por um invasor."
   },
   "changeKdf": {
     "message": "Alterar KDF"
@@ -1248,6 +1255,9 @@
   "importSuccess": {
     "message": "Os dados foram importados com sucesso para o seu cofre."
   },
+  "dataExportSuccess": {
+    "message": "Dados exportados com sucesso"
+  },
   "importWarning": {
     "message": "Você está importando dados para $ORGANIZATION$. Seus dados podem ser compartilhados com membros desta organização. Você deseja continuar?",
     "placeholders": {
@@ -1273,10 +1283,10 @@
     "message": "Selecione o arquivo de importação"
   },
   "chooseFile": {
-    "message": "Choose File"
+    "message": "Selecionar Arquivo"
   },
   "noFileChosen": {
-    "message": "No file chosen"
+    "message": "Nenhum arquivo escolhido"
   },
   "orCopyPasteFileContents": {
     "message": "ou copie/cole o conteúdo do arquivo de importação"
@@ -1368,23 +1378,23 @@
     "message": "Login em Duas Etapas"
   },
   "twoStepLoginEnforcement": {
-    "message": "Two-step Login Enforcement"
+    "message": "Requerer Login em Duas Etapas"
   },
   "twoStepLoginDesc": {
     "message": "Proteja a sua conta exigindo uma etapa adicional ao iniciar sessão."
   },
   "twoStepLoginOrganizationDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "message": "Requerer Login em Duas Etapas no Bitwarden para membros usando o ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
+    "message": "Política de Login em Duas Etapas"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "To enforce Two-step Login through Duo, use the options below."
+    "message": "Para aplicar o Login em Duas Etapas pelo Duo, use as opções abaixo."
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
+    "message": "Se você tem SSO configurado ou planeja ter, o Login em Duas Etapas já pode ser requerido por meio do seu Provedor de Identidade."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Ativar o login em duas etapas pode bloquear você permanentemente da sua conta no Bitwarden. Um código de recuperação permite que você acesse sua conta no caso de não poder mais usar seu provedor de login em duas etapas normalmente (por exemplo, você perde seu dispositivo). O suporte do Bitwarden não poderá ajudá-lo se você perder o acesso à sua conta. Recomendamos que você anote ou imprima o código de recuperação e mantenha-o em um local seguro."
@@ -1634,7 +1644,7 @@
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "orgsReportsDesc": {
-    "message": "Identify and close security gaps in your organization's accounts by clicking the reports below.",
+    "message": "Identifique e feche as brechas de segurança nas contas da sua organização clicando nos relatórios abaixo.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
@@ -1668,7 +1678,7 @@
     "message": "Credenciais Sem 2FA Encontradas"
   },
   "inactive2faFoundDesc": {
-    "message": "We found $COUNT$ website(s) in your vault that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
+    "message": "Encontramos $COUNT$ site(s) no seu cofre que pode(m) não estar configurados com login em duas etapas (segundo o site 2fa.directory). Para proteger ainda mais essas contas, você deve configurar o login em duas etapas.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1686,7 +1696,7 @@
     "message": "Relatório de Senhas Expostas"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Passwords exposed in a data breach are easy targets for attackers. Change these passwords to prevent potential break-ins."
+    "message": "As senhas expostas em um vazamento de dados são alvos fáceis para os atacantes. Altere estas senhas para evitar possíveis invasões."
   },
   "exposedPasswordsFound": {
     "message": "Senhas Expostas Encontradas"
@@ -1900,7 +1910,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "message": "Seja premium por apenas $PRICE$ /ano, ou obtenha contas premium para $FAMILYPLANUSERCOUNT$ usuários e compartilhamento familiar ilimitado com um ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1913,7 +1923,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
+    "message": "Bitwarden plano Família."
   },
   "addons": {
     "message": "Complementos"
@@ -2051,14 +2061,11 @@
   "updateLicense": {
     "message": "Atualizar Licença"
   },
-  "updatedLicense": {
-    "message": "Licença atualizada"
-  },
   "manageSubscription": {
     "message": "Gerenciar Assinatura"
   },
   "launchCloudSubscription": {
-    "message": "Launch Cloud Subscription"
+    "message": "Iniciar Assinatura na Nuvem"
   },
   "storage": {
     "message": "Armazenamento"
@@ -2453,7 +2460,7 @@
     "message": "Você tem certeza que deseja excluir este grupo?"
   },
   "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "message": "Você tem certeza que deseja excluir os seguintes $QUANTITY$ grupo(s)?",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2480,7 +2487,7 @@
     "message": "O ID externo pode ser usado como referência ou vincular esse recurso a um sistema externo, como um diretório de usuários."
   },
   "nestCollectionUnder": {
-    "message": "Nest collection under"
+    "message": "Aninhar coleção em"
   },
   "accessControl": {
     "message": "Controle de Acesso"
@@ -2504,16 +2511,16 @@
     "message": "Editar Coleção"
   },
   "collectionInfo": {
-    "message": "Collection info"
+    "message": "Informações da coleção"
   },
   "deleteCollectionConfirmation": {
     "message": "Você tem certeza que deseja excluir esta coleção?"
   },
   "editMember": {
-    "message": "Edit member"
+    "message": "Editar membro"
   },
   "fieldOnTabRequiresAttention": {
-    "message": "A field on the '$TAB$' tab requires your attention.",
+    "message": "Um campo na aba '$TAB$' requer sua atenção.",
     "placeholders": {
       "tab": {
         "content": "$1",
@@ -2714,7 +2721,7 @@
     }
   },
   "viewedCardNumberItemId": {
-    "message": "Viewed Card Number for item $ID$.",
+    "message": "Número do cartão visualizado para o item $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2786,7 +2793,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Deleted collections"
+    "message": "Coleções excluídas"
   },
   "deletedCollectionId": {
     "message": "Coleção excluída $ID$.",
@@ -2834,7 +2841,7 @@
     }
   },
   "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
+    "message": "$QUANTITY$ grupo(s) excluídos.",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -3146,7 +3153,7 @@
     "message": "Minha Organização"
   },
   "organizationInfo": {
-    "message": "Organization info"
+    "message": "Informações da organização"
   },
   "deleteOrganization": {
     "message": "Excluir Organização"
@@ -3845,10 +3852,10 @@
     "message": "O Identificador da Organização é obrigatório."
   },
   "ssoIdentifier": {
-    "message": "SSO identifier"
+    "message": "Identificador SSO"
   },
   "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
+    "message": "Forneça este ID aos seus membros para fazer login com SSO."
   },
   "unlinkSso": {
     "message": "Desvincular SSO"
@@ -4249,25 +4256,25 @@
     "message": "Permite controle mais granular das permissões de usuário para configurações avançadas."
   },
   "customDescNonEnterpriseStart": {
-    "message": "Custom roles is an ",
+    "message": "Papéis personalizados é um ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseLink": {
-    "message": "enterprise feature",
+    "message": "funcionalidade empresarial",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseEnd": {
-    "message": ". Contact our support team to upgrade your subscription",
+    "message": ". Contacte a nossa equipe de suporte para atualizar a sua assinatura",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customNonEnterpriseError": {
-    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+    "message": "Para ativar as permissões personalizadas, a organização deve estar em um plano Enterprise 2020."
   },
   "permissions": {
     "message": "Permissões"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Permissão"
   },
   "managerPermissions": {
     "message": "Permissões de Gerente"
@@ -4675,7 +4682,7 @@
     "message": "Clientes"
   },
   "client": {
-    "message": "Client",
+    "message": "Cliente",
     "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
@@ -5293,7 +5300,7 @@
     "message": "obrigatório"
   },
   "characterMaximum": {
-    "message": "$MAX$ character maximum",
+    "message": "máximo de $MAX$ caracteres",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -5569,7 +5576,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
+    "message": "A entrada não pode exceder $COUNT$ caracteres.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5578,7 +5585,7 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
+    "message": "Os seguintes caracteres não são permitidos: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
@@ -5587,10 +5594,10 @@
     }
   },
   "multipleInputEmails": {
-    "message": "1 or more emails are invalid"
+    "message": "1 ou mais e-mails são inválidos"
   },
   "tooManyEmails": {
-    "message": "You can only submit up to $COUNT$ emails at a time",
+    "message": "Você só pode enviar até $COUNT$ e-mails por vez",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5614,10 +5621,10 @@
     "message": "Ligado"
   },
   "members": {
-    "message": "Members"
+    "message": "Membros"
   },
   "reporting": {
-    "message": "Reporting"
+    "message": "Reportando"
   },
   "cardBrandMir": {
     "message": "Mir"
@@ -5626,49 +5633,52 @@
     "message": "Número de usuários"
   },
   "loggingInAs": {
-    "message": "Logging in as"
+    "message": "Entrando como"
   },
   "notYou": {
-    "message": "Not you?"
+    "message": "Não é você?"
   },
   "pickAnAvatarColor": {
-    "message": "Pick an avatar color"
+    "message": "Escolha uma cor de avatar"
   },
   "customizeAvatar": {
-    "message": "Customize avatar"
+    "message": "Personalizar avatar"
   },
   "avatarUpdated": {
-    "message": "Avatar updated"
+    "message": "Avatar atualizado"
   },
   "brightBlue": {
-    "message": "Bright Blue"
+    "message": "Azul Claro"
   },
   "green": {
-    "message": "Green"
+    "message": "Verde"
   },
   "orange": {
-    "message": "Orange"
+    "message": "Laranja"
   },
   "lavender": {
-    "message": "Lavender"
+    "message": "Lavanda"
   },
   "yellow": {
-    "message": "Yellow"
+    "message": "Amarelo"
   },
   "indigo": {
-    "message": "Indigo"
+    "message": "Índigo"
   },
   "teal": {
-    "message": "Teal"
+    "message": "Turquesa"
   },
   "salmon": {
-    "message": "Salmon"
+    "message": "Salmão"
   },
   "pink": {
-    "message": "Pink"
+    "message": "Rosa"
   },
   "customColor": {
-    "message": "Custom Color"
+    "message": "Cor personalizada"
+  },
+  "selectPlaceholder": {
+    "message": "-- Selecione --"
   },
   "multiSelectPlaceholder": {
     "message": "-- Digite para filtrar --"
@@ -5683,168 +5693,272 @@
     "message": "Limpar todos"
   },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Alternar contagem de caracteres",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
-    "message": "Password character count",
+    "message": "Contagem de caracteres da senha",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "hide": {
-    "message": "Hide"
+    "message": "Ocultar"
   },
   "projects": {
-    "message": "Projects"
+    "message": "Projetos",
+    "description": "Description for the Projects field."
   },
   "lastEdited": {
-    "message": "Last edited"
+    "message": "Última edição",
+    "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "Edit secret"
+    "message": "Editar segredo",
+    "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "Add secret"
+    "message": "Adicionar segredo",
+    "description": "Action to create a new secret."
   },
   "copySecretName": {
-    "message": "Copy secret name"
+    "message": "Copiar nome do segredo",
+    "description": "Action to copy the name of a secret to the system's clipboard."
   },
   "copySecretValue": {
-    "message": "Copy secret value"
+    "message": "Copiar valor do segredo",
+    "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "Delete secret"
+    "message": "Excluir segredo",
+    "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "Delete secrets"
+    "message": "Excluir segredos",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Excluir permanentemente o segredo"
+  },
+  "hardDeleteSecrets": {
+    "message": "Excluir permanentemente os segredos"
   },
   "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret."
+    "message": "Selecione os projetos aos quais o segredo será associado. Somente os usuários da organização com acesso a estes projetos poderão ver o segredo.",
+    "description": "A prompt explaining how secrets can be associated with projects."
   },
-  "typeOrSelectProjects": {
-    "message": "Type or select Projects"
+  "selectProjects": {
+    "message": "Selecionar projetos",
+    "description": "A label for a type-to-filter input field to choose projects."
   },
-  "typeOrSelectProject": {
-    "message": "Type or select Project"
+  "searchProjects": {
+    "message": "Pesquisar projetos",
+    "description": "Label for the search bar used to search projects."
   },
   "project": {
-    "message": "Project"
+    "message": "Projecto",
+    "description": "Similar to collections, projects can be used to group secrets."
   },
   "editProject": {
-    "message": "Edit project"
+    "message": "Editar projeto",
+    "description": "The action to modify an existing project."
   },
   "viewProject": {
-    "message": "View project"
+    "message": "Ver projeto",
+    "description": "The action to view details of a project."
   },
   "deleteProject": {
-    "message": "Delete project"
+    "message": "Excluir projeto",
+    "description": "The action to delete a project from the system."
   },
   "deleteProjects": {
-    "message": "Delete projects"
+    "message": "Excluir projetos",
+    "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "Secret"
+    "message": "Segredo",
+    "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "Service account"
+    "message": "Conta de serviço",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "Service accounts"
+    "message": "Contas de Serviço",
+    "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "Secrets"
+    "message": "Segredos",
+    "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "Name/Value pair"
+    "message": "Par de Nome/Valor",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
-    "message": "Secret edited"
+    "message": "Secreto editado",
+    "description": "Notification for the successful editing of a secret."
   },
   "secretCreated": {
-    "message": "Secret created"
+    "message": "Segredo criado",
+    "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "New secret"
+    "message": "Novo segredo",
+    "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "New service account"
+    "message": "Nova conta de serviço",
+    "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "No secrets to show"
+    "message": "Sem segredos para mostrar",
+    "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "To get started, add a new secret or import secrets."
+    "message": "Para começar, adicione um novo segredo ou importe segredos.",
+    "description": "Message to encourage the user to start adding secrets."
   },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Nothing to show yet"
+  "secretsTrashNoItemsMessage": {
+    "message": "Não há segredos no lixo."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Create a new service account to get started automating secret access."
+    "message": "Crie uma nova conta de serviço para começar a automatizar o acesso secreto.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Nada para mostrar ainda",
+    "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "Search secrets"
+    "message": "Pesquisar segredos",
+    "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "Delete service accounts"
+    "message": "Excluir contas de serviço",
+    "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "Delete service account"
+    "message": "Excluir conta de serviço",
+    "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "View service account"
+    "message": "Ver conta de serviço",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "Deleting service account $SERVICE_ACCOUNT$ is permanent and irreversible.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Deleting service accounts is permanent and irreversible."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Delete $COUNT$ service accounts",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "The service account have been deleted"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Service accounts deleted"
   },
   "searchServiceAccounts": {
-    "message": "Search service accounts"
+    "message": "Pesquisar contas de serviço",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Edit service account",
+    "description": "Title for editing a service account."
   },
   "addProject": {
-    "message": "Add project"
+    "message": "Adicionar projeto",
+    "description": "Title for creating a new project."
   },
   "projectEdited": {
-    "message": "Project edited"
+    "message": "Projeto editado",
+    "description": "Notification for the successful editing of a project."
   },
   "projectSaved": {
-    "message": "Project saved"
+    "message": "Projeto salvo",
+    "description": "Notification for the successful saving of a project."
   },
   "projectCreated": {
-    "message": "Project created"
+    "message": "Projeto criado",
+    "description": "Notification for the successful creation of a project."
   },
   "projectName": {
-    "message": "Project name"
+    "message": "Nome do projeto",
+    "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "New project"
+    "message": "Novo projeto",
+    "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
-    "message": "Deleting secrets can affect existing integrations."
+    "message": "Excluir segredos pode afetar integrações existentes.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "Secrets sent to trash"
+    "message": "Segredos enviados para lixeira",
+    "description": "Notifies that the selected secrets have been moved to the trash"
   },
-  "serviceAccountCreated": {
-    "message": "Service account created"
+  "hardDeleteSecretConfirmation": {
+    "message": "Tem certeza de que deseja excluir permanentemente este segredo?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Tem certeza que deseja excluir estes segredos permanentemente?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Segredos excluídos permanentemente"
   },
   "smAccess": {
-    "message": "Access"
+    "message": "Acesso",
+    "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
-    "message": "Project, Secret"
+    "message": "Projeto, Segredo",
+    "description": ""
   },
   "serviceAccountName": {
-    "message": "Service account name"
+    "message": "Nome da conta de serviço",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Conta de serviço criada",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Service account updated",
+    "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Type or select projects or secrets"
+    "message": "Digite ou selecione projetos ou segredos",
+    "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "Type to filter"
+    "message": "Digite para filtrar",
+    "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
-    "message": "Projects deleted"
+    "message": "Projetos excluídos",
+    "description": "Notifies that the selected projects have been deleted"
   },
   "deleteProjectToast": {
-    "message": "The project and all associated secrets have been deleted"
+    "message": "O projeto e todos os segredos associados foram excluídos",
+    "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "Deleting project $PROJECT$ is permanent and irreversible.",
+    "message": "Excluir o projeto $PROJECT$ é permanente e irreversível.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5853,7 +5967,8 @@
     }
   },
   "deleteProjectInputLabel": {
-    "message": "Type \"$CONFIRM$\" to continue",
+    "message": "Digite \"$CONFIRM$\" para continuar",
+    "description": "Users are prompted to type 'confirm' to delete a project",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5862,7 +5977,8 @@
     }
   },
   "deleteProjectConfirmMessage": {
-    "message": "Delete $PROJECT$",
+    "message": "Excluir $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5871,7 +5987,8 @@
     }
   },
   "deleteProjectsConfirmMessage": {
-    "message": "Delete $COUNT$ Projects",
+    "message": "Excluir $COUNT$ Projetos",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5880,70 +5997,101 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Deleting projects is permanent and irreversible."
+    "message": "A exclusão de projetos é permanente e irreversível.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
-    "message": "No projects to display"
+    "message": "Nenhum projeto para exibir",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "Add a new project to get started organizing secrets."
+    "message": "Adicione um novo projeto para começar a organizar segredos.",
+    "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
-    "message": "Confirmation required"
+    "message": "Confirmação necessária",
+    "description": "Indicates that user confirmation is required for an action to proceed."
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "The following projects could not be deleted:"
+    "message": "Os seguintes projetos não puderam ser excluídos:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "Secret sent to trash"
+    "message": "Segredo enviado para lixeira",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
-  "searchProjects": {
-    "message": "Search projects"
+  "hardDeleteSuccessToast": {
+    "message": "Segredo excluído permanentemente"
   },
   "accessTokens": {
-    "message": "Access tokens"
+    "message": "Tokens de acesso",
+    "description": "Title for the section displaying access tokens."
   },
   "createAccessToken": {
-    "message": "Create access token"
+    "message": "Criar token de acesso",
+    "description": "Button label for creating a new access token."
   },
   "expires": {
-    "message": "Expires"
+    "message": "Expira em",
+    "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "Can Read"
+    "message": "Pode ler",
+    "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "No access tokens to show"
+    "message": "Nenhum token de acesso para exibir",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "To get started, create an access token"
+    "message": "Para começar, crie um token de acesso",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
-    "message": "Download or copy before closing."
+    "message": "Baixe ou copie antes de fechar.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "Expires on:"
+    "message": "Expira em:",
+    "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "Access tokens are not stored and cannot be retrieved"
+    "message": "Access tokens are not stored and cannot be retrieved",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
-    "message": "Copy token"
+    "message": "Copy token",
+    "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "Access token"
+    "message": "Access token",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
-    "message": "Expiration date required"
+    "message": "Expiration date required",
+    "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Access token created and copied to clipboard"
+    "message": "Access token created and copied to clipboard",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta."
+    "message": "Permissions management is unavailable for beta.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "Revoke access token"
+    "message": "Revoke access token",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Revoke access tokens"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Revoking access tokens is permanent and irreversible."
+  },
+  "accessTokenRevoked": {
+    "message": "Access tokens revoked",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Submenu"
@@ -5961,7 +6109,7 @@
     "message": "Update"
   },
   "plusNMore": {
-    "message": "+ $QUANTITY$ more",
+    "message": "+ $QUANTITY$ mais",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -5970,10 +6118,10 @@
     }
   },
   "groupInfo": {
-    "message": "Group info"
+    "message": "Informações do grupo"
   },
   "editGroupMembersDesc": {
-    "message": "Grant members access to the group's assigned collections."
+    "message": "Conceder acesso às coleções atribuídas ao grupo."
   },
   "editGroupCollectionsDesc": {
     "message": "Grant access to collections by adding them to this group."
@@ -5998,6 +6146,9 @@
   },
   "collection": {
     "message": "Collection"
+  },
+  "noCollection": {
+    "message": "No collection"
   },
   "canView": {
     "message": "Can view"
@@ -6028,6 +6179,138 @@
   },
   "memberAccessAll": {
     "message": "This member can access and modify all items."
+  },
+  "domainVerification": {
+    "message": "Domain verification"
+  },
+  "newDomain": {
+    "message": "Novo domínio"
+  },
+  "noDomains": {
+    "message": "No domains"
+  },
+  "noDomainsSubText": {
+    "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
+  },
+  "verifyDomain": {
+    "message": "Verificar domínio"
+  },
+  "reverifyDomain": {
+    "message": "Reverificar domínio"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Copy DNS TXT record"
+  },
+  "dnsTxtRecord": {
+    "message": "DNS TXT record"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Copy and paste the TXT record into your DNS Provider."
+  },
+  "domainNameInputHint": {
+    "message": "Example: mydomain.com. Subdomains require separate entries to be verified."
+  },
+  "automaticDomainVerification": {
+    "message": "Automatic Domain Verification"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden will attempt to verify the domain 3 times during the first 72 hours. If the domain can’t be verified, check the DNS record in your host and manually verify. The domain will be removed from your organization in 7 days if it is not verified"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Input is not a valid format. Format: mydomain.com. Subdomains require separate entries to be verified."
+  },
+  "removeDomain": {
+    "message": "Remover domínio"
+  },
+  "removeDomainWarning": {
+    "message": "Removing a domain cannot be undone. Are you sure you want to continue?"
+  },
+  "domainRemoved": {
+    "message": "Domínio removido"
+  },
+  "domainSaved": {
+    "message": "Domínio salvo"
+  },
+  "domainVerified": {
+    "message": "Domínio verificado"
+  },
+  "duplicateDomainError": {
+    "message": "You can't claim the same domain twice."
+  },
+  "domainNotAvailable": {
+    "message": "Someone else is using $DOMAIN$. Use a different domain to continue.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ not verified. Check your DNS record.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Verificado"
+  },
+  "domainStatusUnverified": {
+    "message": "Não verificado"
+  },
+  "domainNameTh": {
+    "message": "Nome"
+  },
+  "domainStatusTh": {
+    "message": "Status"
+  },
+  "lastChecked": {
+    "message": "Last checked"
+  },
+  "editDomain": {
+    "message": "Edit domain"
+  },
+  "domainFormInvalid": {
+    "message": "There are form errors that need your attention"
+  },
+  "addedDomain": {
+    "message": "Added domain $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Removed domain $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ verified",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ not verified",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
   "membersColumnHeader": {
     "message": "Member/Group"
@@ -6104,6 +6387,36 @@
       }
     }
   },
+  "server": {
+    "message": "Server"
+  },
+  "exportData": {
+    "message": "Exportar dados"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Exporting Organization Secret Data"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Only the Secrets Manager data associated with $ORGANIZATION$ will be exported. Items in other products or from other organizations will not be included.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "File upload"
+  },
+  "acceptedFormats": {
+    "message": "Formatos Aceitos:"
+  },
+  "copyPasteImportContents": {
+    "message": "Copy & paste import contents:"
+  },
+  "or": {
+    "message": "ou"
+  },
   "licenseAndBillingManagement": {
     "message": "License and billing management"
   },
@@ -6134,6 +6447,39 @@
   "uploadLicense": {
     "message": "Upload license"
   },
+  "projectPeopleDescription": {
+    "message": "Grant groups or people access to this project."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Type or select people or groups"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Grant service accounts access to this project."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Type or select service accounts"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Add people or groups to start collaborating"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Add service accounts to grant access"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Grant groups or people access to this service account."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Assign projects to this service account. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Add projects to grant access"
+  },
+  "canReadWrite": {
+    "message": "Can read, write"
+  },
+  "groupSlashUser": {
+    "message": "Group/User"
+  },
   "lowKdfIterations": {
     "message": "Low KDF Iterations"
   },
@@ -6147,12 +6493,172 @@
     "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
+    "message": "Gerenciador de Segredos Beta"
   },
   "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+    "message": "Permitir o acesso do usuário ao Gerenciador de Segredos sem custos durante o programa Beta."
   },
   "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+    "message": "Este usuário pode acessar o Gerenciador de Segredos Beta"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "viewAll": {
+    "message": "Visualizar tudo"
+  },
+  "showingPortionOfTotal": {
+    "message": "Mostrando $PORTION$ de $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resolva os erros abaixo e tente novamente."
+  },
+  "description": {
+    "message": "Descrição"
+  },
+  "errorReadingImportFile": {
+    "message": "Ocorreu um erro ao tentar ler o arquivo de importação"
+  },
+  "accessedSecret": {
+    "message": "Accessed secret $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Crie um segredo"
+  },
+  "createProject": {
+    "message": "Criar um projeto"
+  },
+  "createServiceAccount": {
+    "message": "Criar conta de serviço"
+  },
+  "downloadThe": {
+    "message": "Baixe o",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Gerenciador de Segredos CLI"
+  },
+  "importSecrets": {
+    "message": "Importar segredos"
+  },
+  "getStarted": {
+    "message": "Vamos começar"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ Completos",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Restaurar segredo"
+  },
+  "restoreSecrets": {
+    "message": "Restaurar segredos"
+  },
+  "restoreSecretPrompt": {
+    "message": "Tem certeza de que deseja restaurar este segredo?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Tem certeza de que deseja restaurar estes segredos?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Segredo restaurado"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Segredos restaurados"
+  },
+  "selectionIsRequired": {
+    "message": "Seleção é necessária."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Ative o acesso da organização ao Gerenciador de Segredos sem custos durante o programa Beta. Os usuários podem ter acesso ao Beta em Membros."
+  },
+  "secretsManagerEnable": {
+    "message": "Habilitar Gerenciador de Segredos Beta"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Access tokens still available"
+  },
+  "saPeopleWarningMessage": {
+    "message": "Removing people from a service account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a service account."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Remove access to this project"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "This action will remove your access to the project."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Remove access to this service account"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "This action will remove your access to the service account."
+  },
+  "removeAccess": {
+    "message": "Remove access"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Master password must be at least $LENGTH$ characters long.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Dismiss"
   }
 }

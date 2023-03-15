@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Даведка і зваротная сувязь"
   },
+  "helpCenter": {
+    "message": "Даведачны цэнтр Bitwarden"
+  },
+  "communityForums": {
+    "message": "Наведайце форумы супольнасці Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Звярніцеся ў службу падтрымкі Bitwarden"
+  },
   "sync": {
     "message": "Сінхранізаваць"
   },
@@ -430,7 +439,14 @@
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Асноўны пароль павінен быць даўжынёй не менш за 8 сімвалаў."
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $VALUE$ сімвалаў.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Пацвярджэнне асноўнага пароля не супадае."
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Як аўтазапоўніць"
+  },
+  "autofillSelectInfo": {
+    "message": "Выберыце элемент на гэтай старонцы або скарыстайцеся спалучэннем клавіш: $COMMAND$. Вы таксама можаце паспрабаваць аўтазапаўненне пры загрузцы старонкі.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Выберыце элемент на гэтай старонцы або задайце спалучэнні клавіш у наладах. Вы таксама можаце паспрабаваць аўтазапаўненне пры загрузцы старонкі."
+  },
+  "gotIt": {
+    "message": "Зразумела"
+  },
+  "autofillSettings": {
+    "message": "Налады аўтазапаўнення"
+  },
+  "autofillShortcut": {
+    "message": "Спалучэнні клавіш аўтазапаўнення"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Спалучэнні клавіш аўтазапаўнення не зададзены. Змяніце гэта ў наладах браўзера."
+  },
+  "autofillShortcutText": {
+    "message": "Спалучэнні клавіш аўтазапаўнення: $COMMAND$. Змяніце гэта ў наладах браўзера.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Прадвызначаная спалучэнні клавіш аўтазапаўнення: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Kömək və əks əlaqə"
   },
+  "helpCenter": {
+    "message": "Bitwarden Kömək mərkəzi"
+  },
+  "communityForums": {
+    "message": "Bitwarden cəmiyyət forumlarını kəşf et"
+  },
+  "contactSupport": {
+    "message": "Bitwarden dəstəyi ilə əlaqə saxla"
+  },
   "sync": {
     "message": "Eyniləşdirmə"
   },
@@ -430,7 +439,14 @@
     "message": "Ana parolun yenidən yazılması lazımdır."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
+    "message": "Ana parol ən azı $VALUE$ simvol uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parol təsdiqləməsi uyğun gəlmir."
@@ -960,7 +976,7 @@
     "message": "Giriş formu aşkarlananda, səhifə yüklənən zaman formu avto-doldurma icra edilsin."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
   },
   "learnMoreAboutAutofill": {
     "message": "Avto-doldurma haqqında daha ətraflı"
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Avto-doldurma necə edilir"
+  },
+  "autofillSelectInfo": {
+    "message": "Bu səhifədən bir element seçin və ya qısayol istifadə edin: $COMMAND$. Həmçinin səhifə yüklənəndə avto-doldurmanı sınaya bilərsiniz.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Bu səhifədən bir element seçin və ya tənzimləmələrdə bir qısayol tənzimləyin. Həmçinin səhifə yüklənəndə avto-doldurmanı sınaya bilərsiniz."
+  },
+  "gotIt": {
+    "message": "Anladım"
+  },
+  "autofillSettings": {
+    "message": "Avto-doldurma tənzimləmələri"
+  },
+  "autofillShortcut": {
+    "message": "Avto-doldurma klaviatura qısayolu"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Avto-doldurma qısayolu tənzimlənməyib. Bunu brauzerin tənzimləmələrində dəyişdirin."
+  },
+  "autofillShortcutText": {
+    "message": "Avto-doldurma qısayolu: $COMMAND$. Bunu brauzerin tənzimləmələrində dəyişdirin.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "İlkin avto-doldurma qısayolu: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

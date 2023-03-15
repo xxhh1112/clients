@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "ヘルプ＆フィードバック"
   },
+  "helpCenter": {
+    "message": "Bitwarden ヘルプセンター"
+  },
+  "communityForums": {
+    "message": "Bitwarden コミュニティフォーラムを探索"
+  },
+  "contactSupport": {
+    "message": "Bitwarden サポートへの問い合わせ"
+  },
   "sync": {
     "message": "同期"
   },
@@ -430,7 +439,14 @@
     "message": "マスターパスワードの再入力が必要です。"
   },
   "masterPasswordMinlength": {
-    "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
+    "message": "マスターパスワードは少なくとも $VALUE$ 文字以上でなければなりません。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "マスターパスワードが一致しません。"
@@ -960,7 +976,7 @@
     "message": "ページ読み込み時にログインフォームを検出したとき、ログイン情報を自動入力します。"
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "ウイルス感染したり信頼できないウェブサイトは、ページの読み込み時の自動入力を悪用できてしまいます。"
   },
   "learnMoreAboutAutofill": {
     "message": "自動入力についての詳細"
@@ -2084,7 +2100,7 @@
     "message": "脆弱で流出済みのマスターパスワード"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？"
+    "message": "入力されたパスワードは脆弱かつ流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？"
   },
   "checkForBreaches": {
     "message": "このパスワードの既知のデータ流出を確認"
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "自動入力する方法"
+  },
+  "autofillSelectInfo": {
+    "message": "このページからアイテムを選択するか、ショートカット: $COMMAND$を使用します。ページの読み込み時に自動入力を試すこともできます。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "このページからアイテムを選択するか、設定でショートカットを設定します。ページの読み込み時に自動入力を試すこともできます。"
+  },
+  "gotIt": {
+    "message": "了解"
+  },
+  "autofillSettings": {
+    "message": "自動入力の設定"
+  },
+  "autofillShortcut": {
+    "message": "自動入力キーボードショートカット"
+  },
+  "autofillShortcutNotSet": {
+    "message": "自動入力のショートカットが設定されていません。ブラウザの設定で変更してください。"
+  },
+  "autofillShortcutText": {
+    "message": "自動入力のショートカットは $COMMAND$ です。ブラウザの設定でこれを変更してください。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "デフォルトの自動入力ショートカットは $COMMAND$ です。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

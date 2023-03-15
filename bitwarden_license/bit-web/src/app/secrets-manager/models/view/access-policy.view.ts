@@ -10,16 +10,44 @@ export class UserProjectAccessPolicyView extends BaseAccessPolicyView {
   organizationUserId: string;
   organizationUserName: string;
   grantedProjectId: string;
+  userId: string;
+}
+
+export class UserServiceAccountAccessPolicyView extends BaseAccessPolicyView {
+  organizationUserId: string;
+  organizationUserName: string;
+  grantedServiceAccountId: string;
+  userId: string;
 }
 
 export class GroupProjectAccessPolicyView extends BaseAccessPolicyView {
   groupId: string;
   groupName: string;
   grantedProjectId: string;
+  currentUserInGroup: boolean;
+}
+
+export class GroupServiceAccountAccessPolicyView extends BaseAccessPolicyView {
+  groupId: string;
+  groupName: string;
+  grantedServiceAccountId: string;
+  currentUserInGroup: boolean;
 }
 
 export class ServiceAccountProjectAccessPolicyView extends BaseAccessPolicyView {
   serviceAccountId: string;
   serviceAccountName: string;
   grantedProjectId: string;
+  grantedProjectName: string;
+}
+
+export class ProjectAccessPoliciesView {
+  userAccessPolicies: UserProjectAccessPolicyView[];
+  groupAccessPolicies: GroupProjectAccessPolicyView[];
+  serviceAccountAccessPolicies: ServiceAccountProjectAccessPolicyView[];
+}
+
+export class ServiceAccountAccessPoliciesView {
+  userAccessPolicies: UserServiceAccountAccessPolicyView[];
+  groupAccessPolicies: GroupServiceAccountAccessPolicyView[];
 }

@@ -10,13 +10,13 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 @Component({
   selector: "app-register-form",
@@ -28,6 +28,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
   @Input() referenceDataValue: ReferenceEventRequest;
 
   showErrorSummary = false;
+  characterMinimumMessage: string;
 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
@@ -39,7 +40,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     apiService: ApiService,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
-    passwordGenerationService: PasswordGenerationService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
     private policyService: PolicyService,
     environmentService: EnvironmentService,
     logService: LogService,
@@ -63,13 +64,17 @@ export class RegisterFormComponent extends BaseRegisterComponent {
   }
 
   async ngOnInit() {
-    // TODO: Remove once breach checks are added for web
-    this.formGroup.patchValue({ checkForBreaches: false });
     await super.ngOnInit();
     this.referenceData = this.referenceDataValue;
 
     if (this.queryParamEmail) {
       this.formGroup.get("email")?.setValue(this.queryParamEmail);
+    }
+
+    if (this.enforcedPolicyOptions != null && this.enforcedPolicyOptions.minLength > 0) {
+      this.characterMinimumMessage = "";
+    } else {
+      this.characterMinimumMessage = this.i18nService.t("characterMinimum", this.minimumLength);
     }
   }
 

@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { PasswordRepromptComponent } from "../../../src/vault/components/password-reprompt.component";
 import { AcceptEmergencyComponent } from "../../auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../../auth/accept-organization.component";
 import { HintComponent } from "../../auth/hint.component";
@@ -34,15 +33,6 @@ import { UpdatePasswordComponent } from "../../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../../auth/verify-recover-delete.component";
-import { PremiumBadgeComponent } from "../../vault/components/premium-badge.component";
-import { AddEditCustomFieldsComponent } from "../../vault/individual-vault/add-edit-custom-fields.component";
-import { AddEditComponent } from "../../vault/individual-vault/add-edit.component";
-import { AttachmentsComponent } from "../../vault/individual-vault/attachments.component";
-import { CollectionsComponent } from "../../vault/individual-vault/collections.component";
-import { FolderAddEditComponent } from "../../vault/individual-vault/folder-add-edit.component";
-import { ShareComponent } from "../../vault/individual-vault/share.component";
-import { AddEditComponent as OrgAddEditComponent } from "../../vault/org-vault/add-edit.component";
-import { AttachmentsComponent as OrgAttachmentsComponent } from "../../vault/org-vault/attachments.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { OrganizationSwitcherComponent } from "../components/organization-switcher.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
@@ -84,7 +74,7 @@ import { BillingHistoryComponent } from "../settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../settings/billing-sync-key.component";
 import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
-import { ChangeKdfComponent } from "../settings/change-kdf.component";
+import { ChangeKdfModule } from "../settings/change-kdf/change-kdf.module";
 import { ChangePasswordComponent } from "../settings/change-password.component";
 import { CreateOrganizationComponent } from "../settings/create-organization.component";
 import { DeleteAccountComponent } from "../settings/delete-account.component";
@@ -111,13 +101,29 @@ import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.comp
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
 import { ToolsComponent } from "../tools/tools.component";
+import { PasswordRepromptComponent } from "../vault/components/password-reprompt.component";
+import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
+import { AddEditCustomFieldsComponent } from "../vault/individual-vault/add-edit-custom-fields.component";
+import { AddEditComponent } from "../vault/individual-vault/add-edit.component";
+import { AttachmentsComponent } from "../vault/individual-vault/attachments.component";
+import { CollectionsComponent } from "../vault/individual-vault/collections.component";
+import { FolderAddEditComponent } from "../vault/individual-vault/folder-add-edit.component";
+import { ShareComponent } from "../vault/individual-vault/share.component";
+import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-edit.component";
+import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
 
 import { SharedModule } from "./shared.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
 @NgModule({
-  imports: [SharedModule, OrganizationCreateModule, RegisterFormModule, ProductSwitcherModule],
+  imports: [
+    SharedModule,
+    OrganizationCreateModule,
+    RegisterFormModule,
+    ProductSwitcherModule,
+    ChangeKdfModule,
+  ],
   declarations: [
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
@@ -135,7 +141,6 @@ import { SharedModule } from "./shared.module";
     AttachmentsComponent,
     BillingSyncKeyComponent,
     ChangeEmailComponent,
-    ChangeKdfComponent,
     ChangePasswordComponent,
     CollectionsComponent,
     CreateOrganizationComponent,
@@ -245,7 +250,6 @@ import { SharedModule } from "./shared.module";
     ApiKeyComponent,
     AttachmentsComponent,
     ChangeEmailComponent,
-    ChangeKdfComponent,
     ChangePasswordComponent,
     CollectionsComponent,
     CreateOrganizationComponent,

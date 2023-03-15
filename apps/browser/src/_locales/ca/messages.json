@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Ajuda i comentaris"
   },
+  "helpCenter": {
+    "message": "Centre d'ajuda de Bitwarden"
+  },
+  "communityForums": {
+    "message": "Explora els fòrums de la comunitat de Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Contacta amb l'assistència de Bitwarden"
+  },
   "sync": {
     "message": "Sincronització"
   },
@@ -430,7 +439,14 @@
     "message": "Cal tornar a escriure la contrasenya mestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contrasenya ha de contenir almenys 8 caràcters."
+    "message": "La contrasenya mestra ha de contenir almenys $VALUE$ caràcters.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmació de la contrasenya mestra no coincideix."
@@ -960,7 +976,7 @@
     "message": "Si es detecta un formulari d'inici de sessió, es realitza automàticament un emplenament automàtic quan es carrega la pàgina web."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Els llocs web compromesos o no fiables poden aprofitar-se de l'emplenament automàtic en carregar de la pàgina."
   },
   "learnMoreAboutAutofill": {
     "message": "Obteniu més informació sobre l'emplenament automàtic"
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Com emplenar automàticament"
+  },
+  "autofillSelectInfo": {
+    "message": "Seleccioneu un element d'aquesta pàgina o utilitzeu la drecera: $COMMAND$. També podeu provar l'emplenament automàtic en carregar la pàgina.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Seleccioneu un element d'aquesta pàgina o definiu una drecera a la configuració. També podeu provar l'emplenament automàtic en carregar la pàgina."
+  },
+  "gotIt": {
+    "message": "D'acord"
+  },
+  "autofillSettings": {
+    "message": "Configuració d'emplenament automàtic"
+  },
+  "autofillShortcut": {
+    "message": "Drecera de teclat d'emplenament automàtic"
+  },
+  "autofillShortcutNotSet": {
+    "message": "La drecera d'emplenament automàtic no està configurada. Canvieu-ho a la configuració del navegador."
+  },
+  "autofillShortcutText": {
+    "message": "La drecera d'emplenament automàtic és: $COMMAND$. Canvieu-ho a la configuració del navegador.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Drecera d'emplenament automàtic per defecte: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

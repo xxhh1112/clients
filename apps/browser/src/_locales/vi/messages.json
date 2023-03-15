@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Trợ giúp & phản hồi"
   },
+  "helpCenter": {
+    "message": "Bitwarden Help center"
+  },
+  "communityForums": {
+    "message": "Explore Bitwarden community forums"
+  },
+  "contactSupport": {
+    "message": "Contact Bitwarden support"
+  },
   "sync": {
     "message": "Đồng bộ"
   },
@@ -430,7 +439,14 @@
     "message": "Yêu cầu nhập lại mật khẩu chính."
   },
   "masterPasswordMinlength": {
-    "message": "Mật khẩu chính phải có ít nhất 8 kí tự."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Xác nhận mật khẩu chính không khớp."
@@ -963,7 +979,7 @@
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
   },
   "learnMoreAboutAutofill": {
-    "message": "Learn more about auto-fill"
+    "message": "Tìm hiểu thêm về tự động điền"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Cài đặt tự động điền mặc định cho mục đăng nhập"
@@ -1452,7 +1468,7 @@
     "message": "Tổ chức của bạn yêu cầu mật khẩu chính của bạn phải đáp ứng các yêu cầu sau:"
   },
   "policyInEffectMinComplexity": {
-    "message": "Minimum complexity score of $SCORE$",
+    "message": "Điểm phức tạp tối thiểu của $SCORE$",
     "placeholders": {
       "score": {
         "content": "$1",
@@ -1494,7 +1510,7 @@
     "message": "Bạn đồng ý với những điều sau khi nhấn chọn ô này:"
   },
   "acceptPoliciesRequired": {
-    "message": "Terms of Service and Privacy Policy have not been acknowledged."
+    "message": "Điều khoản sử dụng và Chính sách quyền riêng tư chưa được đồng ý."
   },
   "termsOfService": {
     "message": "Điều khoản sử dụng"
@@ -2051,25 +2067,25 @@
     "message": "Ghi nhớ email"
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Đăng nhập bằng thiết bị"
   },
   "loginWithDeviceEnabledInfo": {
     "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Cụm từ dấu vân tay"
   },
   "fingerprintMatchInfo": {
     "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Gửi lại thông báo"
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Xem tất cả tùy chọn đăng nhập"
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Một thông báo đã được gửi đến thiết bị của bạn."
   },
   "logInInitiated": {
     "message": "Log in initiated"
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

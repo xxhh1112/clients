@@ -19,10 +19,19 @@ apps/web/src/connectors @bitwarden/team-auth-dev
 libs/angular/src/auth @bitwarden/team-auth-dev
 libs/common/src/auth @bitwarden/team-auth-dev
 
+## Tools team files ##
+apps/browser/src/app/tools @bitwarden/team-tools-dev
+apps/cli/src/app/tools @bitwarden/team-tools-dev
+apps/desktop/src/app/tools @bitwarden/team-tools-dev
+apps/web/src/app/tools @bitwarden/team-tools-dev
+libs/angular/src/tools @bitwarden/team-tools-dev
+libs/common/src/tools @bitwarden/team-tools-dev
+
 ## Vault team files ##
+apps/browser/src/autofill @bitwarden/team-vault-dev
 apps/browser/src/vault @bitwarden/team-vault-dev
 apps/cli/src/vault @bitwarden/team-vault-dev
 apps/desktop/src/vault @bitwarden/team-vault-dev
-apps/web/src/vault @bitwarden/team-vault-dev
+apps/web/src/app/vault @bitwarden/team-vault-dev
 libs/angular/src/vault @bitwarden/team-vault-dev
 libs/common/src/vault @bitwarden/team-vault-dev

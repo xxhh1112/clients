@@ -4,6 +4,7 @@ import { firstValueFrom } from "rxjs";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -11,7 +12,6 @@ import { OrganizationUserService } from "@bitwarden/common/abstractions/organiza
 import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SendService } from "@bitwarden/common/abstractions/send.service";
@@ -25,6 +25,7 @@ import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { SendWithIdRequest } from "@bitwarden/common/models/request/send-with-id.request";
 import { UpdateKeyRequest } from "@bitwarden/common/models/request/update-key.request";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -39,15 +40,18 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   rotateEncKey = false;
   currentMasterPassword: string;
   masterPasswordHint: string;
+  checkForBreaches = true;
+  characterMinimumMessage = "";
 
   constructor(
     i18nService: I18nService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
     stateService: StateService,
-    passwordGenerationService: PasswordGenerationService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
     platformUtilsService: PlatformUtilsService,
     policyService: PolicyService,
+    private auditService: AuditService,
     private folderService: FolderService,
     private cipherService: CipherService,
     private syncService: SyncService,
@@ -77,6 +81,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
     this.masterPasswordHint = (await this.apiService.getProfile()).masterPasswordHint;
     await super.ngOnInit();
+
+    this.characterMinimumMessage = this.i18nService.t("characterMinimum", this.minimumLength);
   }
 
   async rotateEncKeyClicked() {
@@ -131,6 +137,20 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     if (!hasEncKey) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("updateKey"));
       return;
+    }
+
+    if (this.masterPasswordHint != null && this.masterPasswordHint == this.masterPassword) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("hintEqualsPassword")
+      );
+      return;
+    }
+
+    this.leakedPassword = false;
+    if (this.checkForBreaches) {
+      this.leakedPassword = (await this.auditService.passwordLeaked(this.masterPassword)) > 0;
     }
 
     await super.submit();

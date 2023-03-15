@@ -19,6 +19,11 @@ import { EventResponse } from "@bitwarden/common/models/response/event.response"
 import { BaseEventsComponent } from "../../common/base.events.component";
 import { EventService } from "../../core";
 
+const EVENT_SYSTEM_USER_TO_TRANSLATION: Record<EventSystemUser, string> = {
+  [EventSystemUser.SCIM]: null, // SCIM acronym not able to be translated so just display SCIM
+  [EventSystemUser.DomainVerification]: "domainVerification",
+};
+
 @Component({
   selector: "app-org-events",
   templateUrl: "events.component.html",
@@ -134,12 +139,30 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
     }
 
     if (r.systemUser != null) {
+      const systemUserI18nKey: string = EVENT_SYSTEM_USER_TO_TRANSLATION[r.systemUser];
+
+      if (systemUserI18nKey) {
+        return {
+          name: this.i18nService.t(systemUserI18nKey),
+        };
+      } else {
+        return {
+          name: EventSystemUser[r.systemUser],
+        };
+      }
+    }
+
+    if (r.serviceAccountId) {
       return {
-        name: EventSystemUser[r.systemUser],
+        name: this.i18nService.t("serviceAccount") + " " + this.getShortId(r.serviceAccountId),
       };
     }
 
     return null;
+  }
+
+  private getShortId(id: string) {
+    return id?.substring(0, 8);
   }
 
   ngOnDestroy() {

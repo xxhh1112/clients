@@ -1,5 +1,3 @@
-<!-- Please remove this disable statement when editing this file! -->
-<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <!-- This a higher order component that composes `NavItemComponent`  -->
 <bit-nav-item
   [text]="text"
@@ -10,9 +8,11 @@
   [treeDepth]="treeDepth"
   (mainContentClicked)="mainContentClicked.emit()"
   [ariaLabel]="ariaLabel"
+  [exactMatch]="exactMatch"
 >
   <ng-template #button>
     <button
+      type="button"
       class="tw-ml-auto"
       [bitIconButton]="
         open ? 'bwi-angle-up' : variant === 'tree' ? 'bwi-angle-right' : 'bwi-angle-down'

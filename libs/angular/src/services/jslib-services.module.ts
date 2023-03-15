@@ -22,13 +22,17 @@ import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstrac
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
+import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain-api.service.abstraction";
+import {
+  OrgDomainServiceAbstraction,
+  OrgDomainInternalServiceAbstraction,
+} from "@bitwarden/common/abstractions/organization-domain/org-domain.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
 import {
   InternalOrganizationService,
   OrganizationService as OrganizationServiceAbstraction,
 } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import {
@@ -44,7 +48,6 @@ import { AbstractStorageService } from "@bitwarden/common/abstractions/storage.s
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
-import { UsernameGenerationService as UsernameGenerationServiceAbstraction } from "@bitwarden/common/abstractions/usernameGeneration.service";
 import { ValidationService as ValidationServiceAbstraction } from "@bitwarden/common/abstractions/validation.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
@@ -90,10 +93,11 @@ import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
+import { OrgDomainApiService } from "@bitwarden/common/services/organization-domain/org-domain-api.service";
+import { OrgDomainService } from "@bitwarden/common/services/organization-domain/org-domain.service";
 import { OrganizationUserServiceImplementation } from "@bitwarden/common/services/organization-user/organization-user.service.implementation";
 import { OrganizationApiService } from "@bitwarden/common/services/organization/organization-api.service";
 import { OrganizationService } from "@bitwarden/common/services/organization/organization.service";
-import { PasswordGenerationService } from "@bitwarden/common/services/passwordGeneration.service";
 import { PolicyApiService } from "@bitwarden/common/services/policy/policy-api.service";
 import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
 import { ProviderService } from "@bitwarden/common/services/provider.service";
@@ -102,11 +106,18 @@ import { SendService } from "@bitwarden/common/services/send.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateService } from "@bitwarden/common/services/state.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
-import { UsernameGenerationService } from "@bitwarden/common/services/usernameGeneration.service";
 import { ValidationService } from "@bitwarden/common/services/validation.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/services/webCryptoFunction.service";
+import {
+  PasswordGenerationService,
+  PasswordGenerationServiceAbstraction,
+} from "@bitwarden/common/tools/generator/password";
+import {
+  UsernameGenerationService,
+  UsernameGenerationServiceAbstraction,
+} from "@bitwarden/common/tools/generator/username";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import {
@@ -601,6 +612,20 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: LoginServiceAbstraction,
       useClass: LoginService,
       deps: [StateServiceAbstraction],
+    },
+    {
+      provide: OrgDomainServiceAbstraction,
+      useClass: OrgDomainService,
+      deps: [PlatformUtilsServiceAbstraction, I18nServiceAbstraction],
+    },
+    {
+      provide: OrgDomainInternalServiceAbstraction,
+      useExisting: OrgDomainServiceAbstraction,
+    },
+    {
+      provide: OrgDomainApiServiceAbstraction,
+      useClass: OrgDomainApiService,
+      deps: [OrgDomainServiceAbstraction, ApiServiceAbstraction],
     },
   ],
 })

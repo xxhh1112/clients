@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Help & reacties"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hulpcentrum"
+  },
+  "communityForums": {
+    "message": "Ontdek Bitwarden community-forums"
+  },
+  "contactSupport": {
+    "message": "Contacteer Bitwarden support"
+  },
   "sync": {
     "message": "Synchroniseren"
   },
@@ -430,7 +439,14 @@
     "message": "Type je hoofdwachtwoord opnieuw in."
   },
   "masterPasswordMinlength": {
-    "message": "Het hoofdwachtwoord moet minimaal 8 tekens lang zijn."
+    "message": "Hoofdwachtwoord moet minstens $VALUE$ tekens lang zijn.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De hoofdwachtwoorden komen niet overeen."
@@ -2101,6 +2117,51 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Hoe automatisch aanvullen"
+  },
+  "autofillSelectInfo": {
+    "message": "Kies een item van deze pagina of gebruik de snelkoppeling: $COMMAND$. Je kunt ook automatisch invullen bij het laden van een pagina proberen.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Kies een item van deze pagina of stel een snelkoppeling in de instellingen in. Je kunt ook automatisch invullen bij het laden van een pagina proberen."
+  },
+  "gotIt": {
+    "message": "Ik snap het"
+  },
+  "autofillSettings": {
+    "message": "Instellingen automatisch invullen"
+  },
+  "autofillShortcut": {
+    "message": "Snelkoppeling automatisch invullen"
+  },
+  "autofillShortcutNotSet": {
+    "message": "De sneltoets voor automatisch invullen is niet ingesteld. Wijzig dit in de instellingen van de browser."
+  },
+  "autofillShortcutText": {
+    "message": "De sneltoets voor automatisch invullen is: $COMMAND$. Wijzig dit in de instellingen van de browser.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standaard snelkoppeling voor automatisch invullen:: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }
