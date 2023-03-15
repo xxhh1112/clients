@@ -1,4 +1,8 @@
-import { builder } from "./migrate";
+import { mock, MockProxy } from "jest-mock-extended";
+
+import { AbstractStorageService } from "../../abstractions/storage.service";
+
+import { builder, currentVersion } from "./migrate";
 import { MigrationBuilder } from "./migration-builder";
 import { MigrationHelper } from "./migration-helper";
 import { Migrator } from "./migrator";
@@ -33,5 +37,35 @@ describe("migrate", () => {
 
   it("should load migration builder", () => {
     expect(builder()).toBeInstanceOf(MigrationBuilder);
+  });
+});
+
+describe("currentVersion", () => {
+  let storage: MockProxy<AbstractStorageService>;
+
+  beforeEach(() => {
+    storage = mock();
+  });
+
+  it("should return 0 if no version", async () => {
+    storage.get.mockReturnValueOnce(null);
+    expect(await currentVersion(storage)).toEqual(0);
+  });
+
+  it("should return version", async () => {
+    storage.get.calledWith("stateVersion").mockReturnValueOnce(1 as any);
+    expect(await currentVersion(storage)).toEqual(1);
+  });
+
+  it("should return version from global", async () => {
+    storage.get.calledWith("stateVersion").mockReturnValueOnce(null);
+    storage.get.calledWith("global").mockReturnValueOnce({ stateVersion: 1 } as any);
+    expect(await currentVersion(storage)).toEqual(1);
+  });
+
+  it("should prefer root version to global", async () => {
+    storage.get.calledWith("stateVersion").mockReturnValue(1 as any);
+    storage.get.calledWith("global").mockReturnValue({ stateVersion: 2 } as any);
+    expect(await currentVersion(storage)).toEqual(1);
   });
 });
