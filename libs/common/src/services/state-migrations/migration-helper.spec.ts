@@ -62,11 +62,11 @@ describe("RemoveLegacyEtmKeyMigrator", () => {
 });
 
 /** Helper to create well-mocked migration helpers in migration tests */
-export function mockMigrationHelper(json: any): MockProxy<MigrationHelper> {
+export function mockMigrationHelper(storageJson: any): MockProxy<MigrationHelper> {
   const storage: MockProxy<AbstractStorageService> = mock();
-  storage.get.mockImplementation((key) => (json as any)[key]);
+  storage.get.mockImplementation((key) => (storageJson as any)[key]);
   storage.save.mockImplementation(async (key, value) => {
-    (json as any)[key] = value;
+    (storageJson as any)[key] = value;
   });
   const helper = new MigrationHelper(0, storage);
 

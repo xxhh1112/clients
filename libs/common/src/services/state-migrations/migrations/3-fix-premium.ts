@@ -1,6 +1,6 @@
 import { TokenService } from "../../../auth/services/token.service";
 import { MigrationHelper } from "../migration-helper";
-import { Migrator, IRREVERSIBLE } from "../migrator";
+import { Migrator, IRREVERSIBLE, Direction } from "../migrator";
 
 type ExpectedAccountType = {
   profile?: { hasPremiumPersonally?: boolean };
@@ -34,5 +34,12 @@ export class FixPremiumMigrator extends Migrator<2, 3> {
 
   rollback(helper: MigrationHelper): Promise<void> {
     throw IRREVERSIBLE;
+  }
+
+  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+    const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
+    helper.currentVersion = endVersion;
+    const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);
+    await helper.set("global", { ...global, stateVersion: endVersion });
   }
 }

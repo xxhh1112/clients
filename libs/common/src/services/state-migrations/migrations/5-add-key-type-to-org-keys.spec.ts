@@ -5,49 +5,61 @@ import { mockMigrationHelper } from "../migration-helper.spec";
 
 import { AddKeyTypeToOrgKeysMigrator } from "./5-add-key-type-to-org-keys";
 
-const migrateExampleJSON = {
-  authenticatedAccounts: [
-    "c493ed01-4e08-4e88-abc7-332f380ca760",
-    "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
-  ],
-  "c493ed01-4e08-4e88-abc7-332f380ca760": {
-    keys: {
-      organizationKeys: {
-        encrypted: {
-          orgOneId: "orgOneEncKey",
-          orgTwoId: "orgTwoEncKey",
+function migrateExampleJSON() {
+  return {
+    global: {
+      stateVersion: 4,
+      otherStuff: "otherStuff",
+    },
+    authenticatedAccounts: [
+      "c493ed01-4e08-4e88-abc7-332f380ca760",
+      "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
+    ],
+    "c493ed01-4e08-4e88-abc7-332f380ca760": {
+      keys: {
+        organizationKeys: {
+          encrypted: {
+            orgOneId: "orgOneEncKey",
+            orgTwoId: "orgTwoEncKey",
+          },
         },
+        otherStuff: "otherStuff",
       },
       otherStuff: "otherStuff",
     },
-    otherStuff: "otherStuff",
-  },
-};
+  };
+}
 
-const rollbackExampleJSON = {
-  authenticatedAccounts: [
-    "c493ed01-4e08-4e88-abc7-332f380ca760",
-    "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
-  ],
-  "c493ed01-4e08-4e88-abc7-332f380ca760": {
-    keys: {
-      organizationKeys: {
-        encrypted: {
-          orgOneId: {
-            type: "organization",
-            key: "orgOneEncKey",
-          },
-          orgTwoId: {
-            type: "organization",
-            key: "orgTwoEncKey",
+function rollbackExampleJSON() {
+  return {
+    global: {
+      stateVersion: 5,
+      otherStuff: "otherStuff",
+    },
+    authenticatedAccounts: [
+      "c493ed01-4e08-4e88-abc7-332f380ca760",
+      "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
+    ],
+    "c493ed01-4e08-4e88-abc7-332f380ca760": {
+      keys: {
+        organizationKeys: {
+          encrypted: {
+            orgOneId: {
+              type: "organization",
+              key: "orgOneEncKey",
+            },
+            orgTwoId: {
+              type: "organization",
+              key: "orgTwoEncKey",
+            },
           },
         },
+        otherStuff: "otherStuff",
       },
       otherStuff: "otherStuff",
     },
-    otherStuff: "otherStuff",
-  },
-};
+  };
+}
 
 describe("AddKeyTypeToOrgKeysMigrator", () => {
   let helper: MockProxy<MigrationHelper>;
@@ -55,7 +67,7 @@ describe("AddKeyTypeToOrgKeysMigrator", () => {
 
   describe("migrate", () => {
     beforeEach(() => {
-      helper = mockMigrationHelper(migrateExampleJSON);
+      helper = mockMigrationHelper(migrateExampleJSON());
       sut = new AddKeyTypeToOrgKeysMigrator(4, 5);
     });
 
@@ -81,11 +93,21 @@ describe("AddKeyTypeToOrgKeysMigrator", () => {
         otherStuff: "otherStuff",
       });
     });
+
+    it("should update version", async () => {
+      await sut.updateVersion(helper, "up");
+
+      expect(helper.set).toHaveBeenCalledTimes(1);
+      expect(helper.set).toHaveBeenCalledWith("global", {
+        stateVersion: 5,
+        otherStuff: "otherStuff",
+      });
+    });
   });
 
   describe("rollback", () => {
     beforeEach(() => {
-      helper = mockMigrationHelper(rollbackExampleJSON);
+      helper = mockMigrationHelper(rollbackExampleJSON());
       sut = new AddKeyTypeToOrgKeysMigrator(4, 5);
     });
 
@@ -102,6 +124,16 @@ describe("AddKeyTypeToOrgKeysMigrator", () => {
           },
           otherStuff: "otherStuff",
         },
+        otherStuff: "otherStuff",
+      });
+    });
+
+    it("should update version down", async () => {
+      await sut.updateVersion(helper, "down");
+
+      expect(helper.set).toHaveBeenCalledTimes(1);
+      expect(helper.set).toHaveBeenCalledWith("global", {
+        stateVersion: 4,
         otherStuff: "otherStuff",
       });
     });

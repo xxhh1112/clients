@@ -1,5 +1,5 @@
 import { MigrationHelper } from "../migration-helper";
-import { Migrator } from "../migrator";
+import { Direction, Migrator } from "../migrator";
 
 type ExpectedAccountType = { keys?: { organizationKeys?: { encrypted: Record<string, string> } } };
 type NewAccountType = {
@@ -54,5 +54,12 @@ export class AddKeyTypeToOrgKeysMigrator extends Migrator<4, 5> {
     }
 
     Promise.all(accounts.map(async ({ id, account }) => updateOrgKey(id, account)));
+  }
+
+  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+    const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
+    helper.currentVersion = endVersion;
+    const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);
+    await helper.set("global", { ...global, stateVersion: endVersion });
   }
 }

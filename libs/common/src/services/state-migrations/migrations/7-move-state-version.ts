@@ -1,7 +1,7 @@
 import { JsonObject } from "type-fest";
 
 import { MigrationHelper } from "../migration-helper";
-import { Migrator } from "../migrator";
+import { Direction, Migrator } from "../migrator";
 
 export class MoveStateVersionMigrator extends Migrator<6, 7> {
   shouldMigrate(helper: MigrationHelper): Promise<boolean> {
@@ -23,5 +23,17 @@ export class MoveStateVersionMigrator extends Migrator<6, 7> {
     const version = await helper.get<number>("stateVersion");
     const global = await helper.get<JsonObject>("global");
     await helper.set("global", { ...global, stateVersion: version });
+    await helper.set("stateVersion", undefined);
+  }
+
+  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+    const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
+    helper.currentVersion = endVersion;
+    if (direction === "up") {
+      await helper.set("stateVersion", endVersion);
+    } else {
+      const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);
+      await helper.set("global", { ...global, stateVersion: endVersion });
+    }
   }
 }

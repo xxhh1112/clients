@@ -1,5 +1,5 @@
 import { MigrationHelper } from "../migration-helper";
-import { IRREVERSIBLE, Migrator } from "../migrator";
+import { Direction, IRREVERSIBLE, Migrator } from "../migrator";
 
 type ExpectedAccountType = { profile?: { everBeenUnlocked?: boolean } };
 
@@ -19,5 +19,12 @@ export class RemoveEverBeenUnlockedMigrator extends Migrator<3, 4> {
 
   rollback(helper: MigrationHelper): Promise<void> {
     throw IRREVERSIBLE;
+  }
+
+  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+    const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
+    helper.currentVersion = endVersion;
+    const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);
+    await helper.set("global", { ...global, stateVersion: endVersion });
   }
 }

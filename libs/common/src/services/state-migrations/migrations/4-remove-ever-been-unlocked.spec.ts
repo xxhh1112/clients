@@ -5,34 +5,40 @@ import { mockMigrationHelper } from "../migration-helper.spec";
 
 import { RemoveEverBeenUnlockedMigrator } from "./4-remove-ever-been-unlocked";
 
-const migrateExampleJSON = {
-  authenticatedAccounts: [
-    "c493ed01-4e08-4e88-abc7-332f380ca760",
-    "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
-  ],
-  "c493ed01-4e08-4e88-abc7-332f380ca760": {
-    profile: {
+function migrateExampleJSON() {
+  return {
+    global: {
+      stateVersion: 3,
       otherStuff: "otherStuff",
-      everBeenUnlocked: true,
+    },
+    authenticatedAccounts: [
+      "c493ed01-4e08-4e88-abc7-332f380ca760",
+      "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
+    ],
+    "c493ed01-4e08-4e88-abc7-332f380ca760": {
+      profile: {
+        otherStuff: "otherStuff",
+        everBeenUnlocked: true,
+      },
+      otherStuff: "otherStuff",
+    },
+    "23e61a5f-2ece-4f5e-b499-f0bc489482a9": {
+      profile: {
+        otherStuff: "otherStuff",
+        everBeenUnlocked: false,
+      },
+      otherStuff: "otherStuff",
     },
     otherStuff: "otherStuff",
-  },
-  "23e61a5f-2ece-4f5e-b499-f0bc489482a9": {
-    profile: {
-      otherStuff: "otherStuff",
-      everBeenUnlocked: false,
-    },
-    otherStuff: "otherStuff",
-  },
-  otherStuff: "otherStuff",
-};
+  };
+}
 
 describe("RemoveEverBeenUnlockedMigrator", () => {
   let helper: MockProxy<MigrationHelper>;
   let sut: RemoveEverBeenUnlockedMigrator;
 
   beforeEach(() => {
-    helper = mockMigrationHelper(migrateExampleJSON);
+    helper = mockMigrationHelper(migrateExampleJSON());
     sut = new RemoveEverBeenUnlockedMigrator(3, 4);
   });
 
@@ -50,6 +56,18 @@ describe("RemoveEverBeenUnlockedMigrator", () => {
         profile: {
           otherStuff: "otherStuff",
         },
+        otherStuff: "otherStuff",
+      });
+    });
+  });
+
+  describe("updateVersion", () => {
+    it("should update version up", async () => {
+      await sut.updateVersion(helper, "up");
+
+      expect(helper.set).toHaveBeenCalledTimes(1);
+      expect(helper.set).toHaveBeenCalledWith("global", {
+        stateVersion: 4,
         otherStuff: "otherStuff",
       });
     });

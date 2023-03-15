@@ -1,5 +1,5 @@
 import { MigrationHelper } from "../migration-helper";
-import { IRREVERSIBLE, Migrator } from "../migrator";
+import { Direction, IRREVERSIBLE, Migrator } from "../migrator";
 
 type ExpectedAccountType = { keys?: { legacyEtmKey?: string } };
 
@@ -19,5 +19,12 @@ export class RemoveLegacyEtmKeyMigrator extends Migrator<5, 6> {
 
   async rollback(helper: MigrationHelper): Promise<void> {
     throw IRREVERSIBLE;
+  }
+
+  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+    const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
+    helper.currentVersion = endVersion;
+    const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);
+    await helper.set("global", { ...global, stateVersion: endVersion });
   }
 }

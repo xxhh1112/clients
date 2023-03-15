@@ -6,35 +6,41 @@ import { mockMigrationHelper } from "../migration-helper.spec";
 
 import { FixPremiumMigrator } from "./3-fix-premium";
 
-const migrateExampleJSON = {
-  authenticatedAccounts: [
-    "c493ed01-4e08-4e88-abc7-332f380ca760",
-    "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
-  ],
-  "c493ed01-4e08-4e88-abc7-332f380ca760": {
-    profile: {
+function migrateExampleJSON() {
+  return {
+    global: {
+      stateVersion: 2,
       otherStuff: "otherStuff",
-      hasPremiumPersonally: null as boolean,
     },
-    tokens: {
+    authenticatedAccounts: [
+      "c493ed01-4e08-4e88-abc7-332f380ca760",
+      "23e61a5f-2ece-4f5e-b499-f0bc489482a9",
+    ],
+    "c493ed01-4e08-4e88-abc7-332f380ca760": {
+      profile: {
+        otherStuff: "otherStuff",
+        hasPremiumPersonally: null as boolean,
+      },
+      tokens: {
+        otherStuff: "otherStuff",
+        accessToken: "accessToken",
+      },
       otherStuff: "otherStuff",
-      accessToken: "accessToken",
+    },
+    "23e61a5f-2ece-4f5e-b499-f0bc489482a9": {
+      profile: {
+        otherStuff: "otherStuff",
+        hasPremiumPersonally: true,
+      },
+      tokens: {
+        otherStuff: "otherStuff",
+        accessToken: "accessToken",
+      },
+      otherStuff: "otherStuff",
     },
     otherStuff: "otherStuff",
-  },
-  "23e61a5f-2ece-4f5e-b499-f0bc489482a9": {
-    profile: {
-      otherStuff: "otherStuff",
-      hasPremiumPersonally: true,
-    },
-    tokens: {
-      otherStuff: "otherStuff",
-      accessToken: "accessToken",
-    },
-    otherStuff: "otherStuff",
-  },
-  otherStuff: "otherStuff",
-};
+  };
+}
 
 jest.mock("../../../auth/services/token.service", () => ({
   TokenService: {
@@ -48,7 +54,7 @@ describe("FixPremiumMigrator", () => {
   const decodeTokenSpy = TokenService.decodeToken as jest.Mock;
 
   beforeEach(() => {
-    helper = mockMigrationHelper(migrateExampleJSON);
+    helper = mockMigrationHelper(migrateExampleJSON());
     sut = new FixPremiumMigrator(2, 3);
   });
 
@@ -87,6 +93,18 @@ describe("FixPremiumMigrator", () => {
       await sut.migrate(helper);
 
       expect(helper.set).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("updateVersion", () => {
+    it("should update version", async () => {
+      await sut.updateVersion(helper, "up");
+
+      expect(helper.set).toHaveBeenCalledTimes(1);
+      expect(helper.set).toHaveBeenCalledWith("global", {
+        stateVersion: 3,
+        otherStuff: "otherStuff",
+      });
     });
   });
 });
