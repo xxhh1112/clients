@@ -40,6 +40,10 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
 
   private destroy$ = new Subject<void>();
 
+  get gradientStyle() {
+    return `background: linear-gradient(0deg, rgba(208, 214, 230, 0.5) 0%, rgba(208, 214, 229, 0) 79.16%);`;
+  }
+
   constructor(
     apiService: ApiService,
     appIdService: AppIdService,
