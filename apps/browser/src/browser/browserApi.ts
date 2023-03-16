@@ -127,8 +127,44 @@ export class BrowserApi {
     return Promise.resolve(chrome.extension.getViews({ type: "popup" }).length > 0);
   }
 
-  static createNewTab(url: string, extensionPage = false, active = true) {
-    chrome.tabs.create({ url: url, active: active });
+  static createNewTab(url: string, active = true, openerTab?: chrome.tabs.Tab) {
+    chrome.tabs.create({ url: url, active: active, openerTabId: openerTab?.id });
+  }
+
+  static openBitwardenExtensionTab(
+    relativeUrl: string,
+    active = true,
+    openerTab?: chrome.tabs.Tab
+  ) {
+    if (relativeUrl.includes("uilocation=tab")) {
+      this.createNewTab(relativeUrl, active, openerTab);
+      return;
+    }
+
+    const fullUrl = chrome.extension.getURL(relativeUrl);
+    const parsedUrl = new URL(fullUrl);
+    parsedUrl.searchParams.set("uilocation", "tab");
+    this.createNewTab(parsedUrl.toString(), active, openerTab);
+  }
+
+  static async closeBitwardenExtensionTab() {
+    const tabs = await BrowserApi.tabsQuery({
+      active: true,
+      title: "Bitwarden",
+      windowType: "normal",
+      currentWindow: true,
+    });
+
+    if (tabs.length === 0) {
+      return;
+    }
+
+    const tabToClose = tabs[tabs.length - 1];
+    chrome.tabs.remove(tabToClose.id);
+
+    if (tabToClose.openerTabId) {
+      this.focusSpecifiedTab(tabToClose.openerTabId);
+    }
   }
 
   static messageListener(
@@ -145,6 +181,29 @@ export class BrowserApi {
   static sendMessage(subscriber: string, arg: any = {}) {
     const message = Object.assign({}, { command: subscriber }, arg);
     return chrome.runtime.sendMessage(message);
+  }
+
+  static sendMessageWithResponse<TResponse>(
+    subscriber: string,
+    args: Record<string, unknown> = {}
+  ): Promise<TResponse> {
+    const message = Object.assign({}, { command: subscriber }, args);
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(message, (response) => {
+        resolve(response);
+      });
+    });
+  }
+
+  static receiveMessage<T>(
+    subscriber: string,
+    callback: (message: any, sender: chrome.runtime.MessageSender) => Promise<T>
+  ) {
+    chrome.runtime.onMessage.addListener((message: any, sender, response) => {
+      if (message.command === subscriber) {
+        return callback(message, sender);
+      }
+    });
   }
 
   static async closeLoginTab() {

@@ -22,7 +22,6 @@ import { LogService as LogServiceAbstraction } from "@bitwarden/common/abstracti
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
@@ -49,6 +48,7 @@ import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -223,8 +223,8 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
-      provide: PasswordGenerationService,
-      useFactory: getBgService<PasswordGenerationService>("passwordGenerationService"),
+      provide: PasswordGenerationServiceAbstraction,
+      useFactory: getBgService<PasswordGenerationServiceAbstraction>("passwordGenerationService"),
       deps: [],
     },
     { provide: ApiService, useFactory: getBgService<ApiService>("apiService"), deps: [] },

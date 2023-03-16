@@ -116,6 +116,17 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.search$
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => this.searchVault());
+
+    // activate autofill on page load if policy is set
+    if (await this.stateService.getActivateAutoFillOnPageLoadFromPolicy()) {
+      await this.stateService.setEnableAutoFillOnPageLoad(true);
+      await this.stateService.setActivateAutoFillOnPageLoadFromPolicy(false);
+      this.platformUtilsService.showToast(
+        "info",
+        null,
+        this.i18nService.t("autofillPageLoadPolicyActivated")
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -294,9 +305,9 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
 
   private setAutofillCalloutText(command: string) {
     if (command) {
-      this.autofillCalloutText = this.i18nService.t("autofillSelectInfo", command);
+      this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithCommand", command);
     } else {
-      this.autofillCalloutText = this.i18nService.t("autofillSelectInfoNoCommand");
+      this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithoutCommand");
     }
   }
 }
