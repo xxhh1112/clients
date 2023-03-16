@@ -11,7 +11,6 @@ import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
 import { KdfConfig } from "../auth/models/domain/kdf-config";
 import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
 import { KdfType } from "../enums/kdfType";
-import { StorageLocation } from "../enums/storageLocation";
 import { ThemeType } from "../enums/themeType";
 import { UriMatchType } from "../enums/uriMatchType";
 import { StateFactory } from "../factories/stateFactory";
@@ -41,6 +40,7 @@ import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
 import { migrate } from "../state-migrations";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { StorageLocation } from "../types/storage";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
@@ -105,7 +105,7 @@ export class StateService<
           }
 
           // FIXME: This should be refactored into AuthService or a similar service,
-          //  as checking for the existance of the crypto key is a low level
+          //  as checking for the existence of the crypto key is a low level
           //  implementation detail.
           this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
         })
@@ -1571,7 +1571,7 @@ export class StateService<
 
   async setEnvironmentUrls(value: EnvironmentUrls, options?: StorageOptions): Promise<void> {
     // Global values are set on each change and the current global settings are passed to any newly authed accounts.
-    // This is to allow setting environement values before an account is active, while still allowing individual accounts to have their own environments.
+    // This is to allow setting environment values before an account is active, while still allowing individual accounts to have their own environments.
     const globals = await this.getGlobals(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
@@ -2505,20 +2505,14 @@ export class StateService<
   }
 
   protected useMemory(storageLocation: StorageLocation) {
-    return storageLocation === StorageLocation.Memory || storageLocation === StorageLocation.Both;
+    return storageLocation === "memory";
   }
 
   protected useDisk(storageLocation: StorageLocation) {
-    return storageLocation === StorageLocation.Disk || storageLocation === StorageLocation.Both;
+    return storageLocation === "disk";
   }
 
-  protected async saveAccount(
-    account: TAccount,
-    options: StorageOptions = {
-      storageLocation: StorageLocation.Both,
-      useSecureStorage: false,
-    }
-  ) {
+  protected async saveAccount(account: TAccount, options: StorageOptions) {
     return this.useMemory(options.storageLocation)
       ? await this.saveAccountToMemory(account)
       : await this.saveAccountToDisk(account, options);
@@ -2664,14 +2658,14 @@ export class StateService<
 
   protected async defaultInMemoryOptions(): Promise<StorageOptions> {
     return {
-      storageLocation: StorageLocation.Memory,
+      storageLocation: "memory",
       userId: (await this.state()).activeUserId,
     };
   }
 
   protected async defaultOnDiskOptions(): Promise<StorageOptions> {
     return {
-      storageLocation: StorageLocation.Disk,
+      storageLocation: "disk",
       htmlStorageLocation: HtmlStorageLocation.Session,
       userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
@@ -2680,7 +2674,7 @@ export class StateService<
 
   protected async defaultOnDiskLocalOptions(): Promise<StorageOptions> {
     return {
-      storageLocation: StorageLocation.Disk,
+      storageLocation: "disk",
       htmlStorageLocation: HtmlStorageLocation.Local,
       userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
@@ -2689,7 +2683,7 @@ export class StateService<
 
   protected async defaultOnDiskMemoryOptions(): Promise<StorageOptions> {
     return {
-      storageLocation: StorageLocation.Disk,
+      storageLocation: "disk",
       htmlStorageLocation: HtmlStorageLocation.Memory,
       userId: (await this.state())?.activeUserId ?? (await this.getUserId()),
       useSecureStorage: false,
@@ -2698,7 +2692,7 @@ export class StateService<
 
   protected async defaultSecureStorageOptions(): Promise<StorageOptions> {
     return {
-      storageLocation: StorageLocation.Disk,
+      storageLocation: "disk",
       useSecureStorage: true,
       userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
     };
