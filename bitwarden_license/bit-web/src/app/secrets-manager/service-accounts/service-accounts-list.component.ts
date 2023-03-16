@@ -2,6 +2,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
+import { Guid } from "@bitwarden/common/types/guid";
 import { TableDataSource } from "@bitwarden/components";
 
 import { ServiceAccountView } from "../models/view/service-account.view";
@@ -32,7 +33,7 @@ export class ServiceAccountsListComponent implements OnDestroy {
   @Output() newServiceAccountEvent = new EventEmitter();
   @Output() deleteServiceAccountsEvent = new EventEmitter<ServiceAccountView[]>();
   @Output() onServiceAccountCheckedEvent = new EventEmitter<string[]>();
-  @Output() editServiceAccountEvent = new EventEmitter<string>();
+  @Output() editServiceAccountEvent = new EventEmitter<Guid>();
 
   private destroy$: Subject<void> = new Subject<void>();
 

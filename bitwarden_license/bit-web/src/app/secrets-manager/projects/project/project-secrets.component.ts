@@ -4,6 +4,7 @@ import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { Guid } from "@bitwarden/common/types/guid";
 import { DialogService } from "@bitwarden/components";
 
 import { SecretListView } from "../../models/view/secret-list.view";
@@ -26,8 +27,8 @@ import { SecretsListComponent } from "../../shared/secrets-list.component";
 export class ProjectSecretsComponent {
   secrets$: Observable<SecretListView[]>;
 
-  private organizationId: string;
-  private projectId: string;
+  private organizationId: Guid;
+  private projectId: Guid;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,7 +54,7 @@ export class ProjectSecretsComponent {
     return await this.secretService.getSecretsByProject(this.organizationId, this.projectId);
   }
 
-  openEditSecret(secretId: string) {
+  openEditSecret(secretId: Guid) {
     this.dialogService.open<unknown, SecretOperation>(SecretDialogComponent, {
       data: {
         organizationId: this.organizationId,
