@@ -118,7 +118,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
       { name: "Maestro", value: "Maestro" },
       { name: "UnionPay", value: "UnionPay" },
       { name: "RuPay", value: "RuPay" },
-      { name: i18nService.t("cardBrandMir"), value: "Mir" },
       { name: i18nService.t("other"), value: "Other" },
     ];
     this.cardExpMonthOptions = [
@@ -201,8 +200,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
           this.ownershipOptions.push({ name: o.name, value: o.id });
         }
       });
-    if (!this.allowPersonal) {
-      this.organizationId = this.ownershipOptions[0].value;
+    if (!this.allowPersonal && this.organizationId == undefined) {
+      this.organizationId = this.defaultOwnerId;
     }
   }
 
@@ -220,12 +219,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.title = this.i18nService.t("addItem");
     }
 
-    const addEditCipherInfo: any = await this.stateService.getAddEditCipherInfo();
-    if (addEditCipherInfo != null) {
-      this.cipher = addEditCipherInfo.cipher;
-      this.collectionIds = addEditCipherInfo.collectionIds;
-    }
-    await this.stateService.setAddEditCipherInfo(null);
+    const loadedAddEditCipherInfo = await this.loadAddEditCipherInfo();
 
     if (this.cipher == null) {
       if (this.editMode) {
@@ -255,7 +249,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.cipher != null && (!this.editMode || addEditCipherInfo != null || this.cloneMode)) {
+    if (this.cipher != null && (!this.editMode || loadedAddEditCipherInfo || this.cloneMode)) {
       await this.organizationChanged();
       if (
         this.collectionIds != null &&
@@ -617,5 +611,28 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   protected restoreCipher() {
     return this.cipherService.restoreWithServer(this.cipher.id);
+  }
+
+  get defaultOwnerId(): string | null {
+    return this.ownershipOptions[0].value;
+  }
+
+  async loadAddEditCipherInfo(): Promise<boolean> {
+    const addEditCipherInfo: any = await this.stateService.getAddEditCipherInfo();
+    const loadedSavedInfo = addEditCipherInfo != null;
+
+    if (loadedSavedInfo) {
+      this.cipher = addEditCipherInfo.cipher;
+      this.collectionIds = addEditCipherInfo.collectionIds;
+
+      if (!this.editMode && !this.allowPersonal && this.cipher.organizationId == null) {
+        // This is a new cipher and personal ownership isn't allowed, so we need to set the default owner
+        this.cipher.organizationId = this.defaultOwnerId;
+      }
+    }
+
+    await this.stateService.setAddEditCipherInfo(null);
+
+    return loadedSavedInfo;
   }
 }

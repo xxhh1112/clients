@@ -14,6 +14,11 @@ import { UserVerificationPromptComponent } from "@bitwarden/web-vault/app/compon
 import { SecretsManagerPortingApiService } from "../services/sm-porting-api.service";
 import { SecretsManagerPortingService } from "../services/sm-porting.service";
 
+type ExportFormat = {
+  name: string;
+  fileExtension: string;
+};
+
 @Component({
   selector: "sm-export",
   templateUrl: "./sm-export.component.html",
@@ -23,10 +28,10 @@ export class SecretsManagerExportComponent implements OnInit, OnDestroy {
 
   protected orgName: string;
   protected orgId: string;
-  protected exportFormats: string[] = ["json"];
+  protected exportFormats: ExportFormat[] = [{ name: "Bitwarden (json)", fileExtension: "json" }];
 
   protected formGroup = new FormGroup({
-    format: new FormControl("json", [Validators.required]),
+    format: new FormControl(0, [Validators.required]),
   });
 
   constructor(
@@ -76,17 +81,11 @@ export class SecretsManagerExportComponent implements OnInit, OnDestroy {
   };
 
   private async doExport() {
-    try {
-      const exportData = await this.secretsManagerApiService.export(
-        this.orgId,
-        this.formGroup.get("format").value
-      );
+    const fileExtension = this.exportFormats[this.formGroup.get("format").value].fileExtension;
+    const exportData = await this.secretsManagerApiService.export(this.orgId, fileExtension);
 
-      await this.downloadFile(exportData, this.formGroup.get("format").value);
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("dataExportSuccess"));
-    } catch (e) {
-      this.logService.error(e);
-    }
+    await this.downloadFile(exportData, fileExtension);
+    this.platformUtilsService.showToast("success", null, this.i18nService.t("dataExportSuccess"));
   }
 
   private async downloadFile(data: string, format: string) {

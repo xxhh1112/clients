@@ -28,6 +28,8 @@ import { EntityEventsComponent } from "../../organizations/manage/entity-events.
 import { CollectionsComponent } from "../../organizations/vault/collections.component";
 import { VaultFilterService } from "../../vault/individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/individual-vault/vault-filter/shared/models/vault-filter.model";
+import { RoutedVaultFilterBridgeService } from "../individual-vault/vault-filter/services/routed-vault-filter-bridge.service";
+import { RoutedVaultFilterService } from "../individual-vault/vault-filter/services/routed-vault-filter.service";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
@@ -39,6 +41,7 @@ const BroadcasterSubscriptionId = "OrgVaultComponent";
 @Component({
   selector: "app-org-vault",
   templateUrl: "vault.component.html",
+  providers: [RoutedVaultFilterService, RoutedVaultFilterBridgeService],
 })
 export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild("vaultFilter", { static: true })
@@ -62,6 +65,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
     protected vaultFilterService: VaultFilterService,
+    private routedVaultFilterBridgeService: RoutedVaultFilterBridgeService,
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
     private syncService: SyncService,
@@ -139,22 +143,18 @@ export class VaultComponent implements OnInit, OnDestroy {
       });
       await this.syncService.fullSync(false);
     }
+
+    this.routedVaultFilterBridgeService.activeFilter$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((activeFilter) => {
+        this.activeFilter = activeFilter;
+      });
   }
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  async applyVaultFilter(filter: VaultFilter) {
-    this.activeFilter = filter;
-    this.vaultItemsComponent.showAddNew = !this.activeFilter.isDeleted;
-    await this.vaultItemsComponent.reload(
-      this.activeFilter.buildFilter(),
-      this.activeFilter.isDeleted
-    );
-    this.go();
   }
 
   async refreshItems() {
@@ -223,7 +223,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
 
     await this.editCipher(null, (comp) => {
-      comp.organizationId = this.organization.id;
       comp.type = this.activeFilter.cipherType;
       comp.collections = collections;
       if (this.activeFilter.collectionId) {
@@ -257,6 +256,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     const defaultComponentParameters = (comp: AddEditComponent) => {
       comp.organization = this.organization;
+      comp.organizationId = this.organization.id;
       comp.cipherId = cipherId;
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
       comp.onSavedCipher.subscribe(async () => {
@@ -301,7 +301,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     await this.editCipher(cipher, (comp) => {
       comp.cloneMode = true;
       comp.collections = collections;
-      comp.organizationId = this.organization.id;
       comp.collectionIds = cipher.collectionIds;
     });
   }

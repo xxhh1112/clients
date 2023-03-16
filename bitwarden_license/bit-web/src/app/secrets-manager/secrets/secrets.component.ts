@@ -7,6 +7,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { DialogService } from "@bitwarden/components";
 
 import { SecretListView } from "../models/view/secret-list.view";
+import { SecretsListComponent } from "../shared/secrets-list.component";
 
 import {
   SecretDeleteDialogComponent,
@@ -66,10 +67,10 @@ export class SecretsComponent implements OnInit {
     });
   }
 
-  openDeleteSecret(secretIds: string[]) {
+  openDeleteSecret(event: SecretListView[]) {
     this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
       data: {
-        secretIds: secretIds,
+        secrets: event,
       },
     });
   }
@@ -84,21 +85,15 @@ export class SecretsComponent implements OnInit {
   }
 
   copySecretName(name: string) {
-    this.platformUtilsService.copyToClipboard(name);
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("valueCopied", this.i18nService.t("name"))
-    );
+    SecretsListComponent.copySecretName(name, this.platformUtilsService, this.i18nService);
   }
 
-  async copySecretValue(id: string) {
-    const secret = await this.secretService.getBySecretId(id);
-    this.platformUtilsService.copyToClipboard(secret.value);
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("valueCopied", this.i18nService.t("value"))
+  copySecretValue(id: string) {
+    SecretsListComponent.copySecretValue(
+      id,
+      this.platformUtilsService,
+      this.i18nService,
+      this.secretService
     );
   }
 }

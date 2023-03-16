@@ -32,7 +32,6 @@ import {
   AccountSettingsSettings,
 } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
-import { GeneratedPasswordHistory } from "../models/domain/generated-password-history";
 import { GlobalState } from "../models/domain/global-state";
 import { Policy } from "../models/domain/policy";
 import { State } from "../models/domain/state";
@@ -41,10 +40,12 @@ import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 import { WindowState } from "../models/domain/window-state";
 import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
 import { CipherView } from "../vault/models/view/cipher.view";
+import { AddEditCipherInfo } from "../vault/types/add-edit-cipher-info";
 
 const keys = {
   state: "state",
@@ -220,13 +221,13 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getAddEditCipherInfo(options?: StorageOptions): Promise<any> {
+  async getAddEditCipherInfo(options?: StorageOptions): Promise<AddEditCipherInfo> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.data?.addEditCipherInfo;
   }
 
-  async setAddEditCipherInfo(value: any, options?: StorageOptions): Promise<void> {
+  async setAddEditCipherInfo(value: AddEditCipherInfo, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
@@ -1582,7 +1583,7 @@ export class StateService<
     );
   }
 
-  async getEquivalentDomains(options?: StorageOptions): Promise<any> {
+  async getEquivalentDomains(options?: StorageOptions): Promise<string[][]> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.settings?.equivalentDomains;
@@ -2356,6 +2357,48 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
     account.settings.avatarColor = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getActivateAutoFillOnPageLoadFromPolicy(options?: StorageOptions): Promise<boolean> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.activateAutoFillOnPageLoadFromPolicy;
+  }
+
+  async setActivateAutoFillOnPageLoadFromPolicy(
+    value: boolean,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.activateAutoFillOnPageLoadFromPolicy = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getSMOnboardingTasks(
+    options?: StorageOptions
+  ): Promise<Record<string, Record<string, boolean>>> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.smOnboardingTasks;
+  }
+
+  async setSMOnboardingTasks(
+    value: Record<string, Record<string, boolean>>,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.smOnboardingTasks = value;
     return await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())

@@ -2,7 +2,6 @@ import { CollectionService } from "@bitwarden/common/abstractions/collection.ser
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
@@ -15,6 +14,7 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
@@ -68,7 +68,7 @@ export class RuntimeHandler {
     private folderService: FolderService,
     private collectionService: CollectionService,
     private policyService: PolicyService,
-    private passwordGenerationService: PasswordGenerationService,
+    private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private keyConnectorService: KeyConnectorService,
     private vaultFilterService: VaultFilterService,
