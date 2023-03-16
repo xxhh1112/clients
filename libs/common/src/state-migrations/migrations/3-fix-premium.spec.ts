@@ -1,6 +1,6 @@
 import { MockProxy } from "jest-mock-extended";
 
-// eslint-disable-next-line import/no-restricted-paths -- Import is OK, since we're using it for static token decoding
+// eslint-disable-next-line import/no-restricted-paths -- Used for testing migration, which requires import
 import { TokenService } from "../../auth/services/token.service";
 import { MigrationHelper } from "../migration-helper";
 import { mockMigrationHelper } from "../migration-helper.spec";
@@ -43,7 +43,7 @@ function migrateExampleJSON() {
   };
 }
 
-jest.mock("../../../auth/services/token.service", () => ({
+jest.mock("../../auth/services/token.service", () => ({
   TokenService: {
     decodeToken: jest.fn(),
   },

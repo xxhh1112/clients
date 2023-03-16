@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
 export class MigrationHelper {
