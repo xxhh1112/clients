@@ -40,7 +40,7 @@ import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
 import { migrate } from "../state-migrations";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
-import { StorageLocation } from "../types/storage";
+import { StorageKey, StorageLocation } from "../types/storage";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
@@ -111,6 +111,31 @@ export class StateService<
         })
       )
       .subscribe();
+  }
+
+  async get<T>(location: StorageLocation, key: StorageKey): Promise<T | null> {
+    return this.getStorageServiceFor(location).get<T>(key);
+  }
+
+  async set<T>(location: StorageLocation, key: StorageKey, value: T): Promise<void> {
+    return this.getStorageServiceFor(location).save(key, value);
+  }
+
+  async remove(location: StorageLocation, key: StorageKey): Promise<void> {
+    return this.getStorageServiceFor(location).remove(key);
+  }
+
+  private getStorageServiceFor(location: StorageLocation) {
+    switch (location) {
+      case "disk":
+        return this.storageService;
+      case "secure":
+        return this.secureStorageService;
+      case "memory":
+        return this.memoryStorageService;
+      default:
+        throw new Error("Invalid storage location");
+    }
   }
 
   async init(): Promise<void> {

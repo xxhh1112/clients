@@ -22,6 +22,7 @@ import { WindowState } from "../models/domain/window-state";
 import { CollectionView } from "../models/view/collection.view";
 import { SendView } from "../models/view/send.view";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { StorageKey, StorageLocation } from "../types/storage";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
@@ -32,6 +33,10 @@ export abstract class StateService<T extends Account = Account> {
   accounts$: Observable<{ [userId: string]: T }>;
   activeAccount$: Observable<string>;
   activeAccountUnlocked$: Observable<boolean>;
+
+  abstract set<T>(location: StorageLocation, key: StorageKey, value: T): Promise<void>;
+  abstract get<T>(location: StorageLocation, key: StorageKey): Promise<T | null>;
+  abstract remove(location: StorageLocation, key: StorageKey): Promise<void>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
