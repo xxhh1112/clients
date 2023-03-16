@@ -7,6 +7,7 @@ import { CollectionBadgeModule } from "../org-vault/collection-badge/collection-
 import { GroupBadgeModule } from "../org-vault/group-badge/group-badge.module";
 
 import { BulkDialogsModule } from "./bulk-action-dialogs/bulk-dialogs.module";
+import { EmptyVaultComponent } from "./empty-vault/empty-vault.component";
 import { OrganizationBadgeModule } from "./organization-badge/organization-badge.module";
 import { PipesModule } from "./pipes/pipes.module";
 import { VaultFilterModule } from "./vault-filter/vault-filter.module";
@@ -28,7 +29,7 @@ import { VaultComponent } from "./vault.component";
     BulkDialogsModule,
     BreadcrumbsModule,
   ],
-  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent],
+  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent, EmptyVaultComponent],
   exports: [VaultComponent],
 })
 export class VaultModule {}

@@ -18,7 +18,8 @@ export enum VaultType {
 @Directive()
 export class EmptyVaultComponent implements OnInit, OnDestroy {
   @Input() organizationId: string;
-  @Input() vaultType: VaultType;
+  private vaultType: VaultType; //wont be used i think
+  @Input() activeFilter: any;
 
   protected destroy$ = new Subject<void>();
   private userStatus: OrganizationUserStatusType;

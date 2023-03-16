@@ -8,6 +8,7 @@ import { OrganizationBadgeModule } from "../../vault/individual-vault/organizati
 import { PipesModule } from "../../vault/individual-vault/pipes/pipes.module";
 
 import { CollectionBadgeModule } from "./collection-badge/collection-badge.module";
+import { EmptyVaultComponent } from "./empty-vault.component";
 import { GroupBadgeModule } from "./group-badge/group-badge.module";
 import { VaultFilterModule } from "./vault-filter/vault-filter.module";
 import { VaultHeaderComponent } from "./vault-header/vault-header.component";
@@ -27,7 +28,7 @@ import { VaultComponent } from "./vault.component";
     PipesModule,
     BreadcrumbsModule,
   ],
-  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent],
+  declarations: [VaultComponent, VaultItemsComponent, VaultHeaderComponent, EmptyVaultComponent],
   exports: [VaultComponent],
 })
 export class VaultModule {}
