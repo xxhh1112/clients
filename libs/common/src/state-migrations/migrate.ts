@@ -13,19 +13,21 @@ import { MinVersionMigrator } from "./migrations/min-version";
 export const MIN_VERSION = 2;
 export type MinVersion = typeof MIN_VERSION;
 
-export function builder(): MigrationBuilder<number> {
-  return MigrationBuilder.create()
-    .with(MinVersionMigrator)
-    .with(FixPremiumMigrator, 2, 3)
-    .with(RemoveEverBeenUnlockedMigrator, 3, 4)
-    .with(AddKeyTypeToOrgKeysMigrator, 4, 5)
-    .with(RemoveLegacyEtmKeyMigrator, 5, 6)
-    .with(MoveStateVersionMigrator, 6, 7);
-}
+export const builder: MigrationBuilder<number> = MigrationBuilder.create()
+  .with(MinVersionMigrator)
+  .with(FixPremiumMigrator, 2, 3)
+  .with(RemoveEverBeenUnlockedMigrator, 3, 4)
+  .with(AddKeyTypeToOrgKeysMigrator, 4, 5)
+  .with(RemoveLegacyEtmKeyMigrator, 5, 6)
+  .with(MoveStateVersionMigrator, 6, 7);
 
 export async function migrate(storageService: AbstractStorageService): Promise<void> {
   const migrationHelper = new MigrationHelper(await currentVersion(storageService), storageService);
-  builder().migrate(migrationHelper);
+  if (migrationHelper.currentVersion < 0) {
+    // Nothing to migrate
+    return;
+  }
+  builder.migrate(migrationHelper);
 }
 
 export async function currentVersion(stateService: AbstractStorageService) {
@@ -34,5 +36,5 @@ export async function currentVersion(stateService: AbstractStorageService) {
     // Pre v7
     state = (await stateService.get<{ stateVersion: number }>("global"))?.stateVersion;
   }
-  return state ?? 0;
+  return state ?? -1;
 }

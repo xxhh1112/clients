@@ -3,7 +3,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
-import { builder, currentVersion } from "./migrate";
+import { builder, currentVersion, migrate } from "./migrate";
 import { MigrationBuilder } from "./migration-builder";
 import { MigrationHelper } from "./migration-helper";
 import { Migrator } from "./migrator";
@@ -37,7 +37,15 @@ describe("migrate", () => {
   });
 
   it("should load migration builder", () => {
-    expect(builder()).toBeInstanceOf(MigrationBuilder);
+    expect(builder).toBeInstanceOf(MigrationBuilder);
+  });
+
+  it("should not run migrations if state is empty", async () => {
+    const storage = mock<AbstractStorageService>();
+    storage.get.mockReturnValueOnce(null);
+    const migrateSpy = jest.spyOn(builder["migrations"][0].migrator, "migrate");
+    await migrate(storage);
+    expect(migrateSpy).not.toHaveBeenCalled();
   });
 });
 
@@ -48,9 +56,9 @@ describe("currentVersion", () => {
     storage = mock();
   });
 
-  it("should return 0 if no version", async () => {
+  it("should return -1 if no version", async () => {
     storage.get.mockReturnValueOnce(null);
-    expect(await currentVersion(storage)).toEqual(0);
+    expect(await currentVersion(storage)).toEqual(-1);
   });
 
   it("should return version", async () => {
