@@ -200,3 +200,9 @@ app-sponsored-families {
     }
   }
 }
+
+.login-gradient {
+  @include themify($themes) {
+    background: themed("loginGradient");
+  }
+}

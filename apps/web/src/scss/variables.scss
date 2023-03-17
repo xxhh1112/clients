@@ -105,6 +105,7 @@ $darkBlue1: #4c525f;
 $darkBlue2: #3c424e;
 $darkDarkBlue1: #2f343d;
 $darkDarkBlue2: #1f242e;
+$darkDarkBlue3: #17181a;
 $darkInputColor: $white;
 $darkInputPlaceholderColor: $darkGrey1;
 
@@ -193,7 +194,8 @@ $themes: (
     listItemActive: $body-color,
     listItemBorder: rgba(0, 0, 0, 0.125),
     loadingSvg: url("../images/loading.svg"),
-    logoSuffix: "dark",
+    loginGradient: linear-gradient(0deg, rgba(208, 214, 230, 0.5) 0%, rgba(208, 214, 229, 0) 79.16%),
+    logoSuffix: "primary",
     mfaLogoSuffix: ".png",
     navActiveBackground: $white,
     navActiveWeight: 600,
@@ -294,7 +296,7 @@ $themes: (
     inputDisabledColor: $darkGrey1,
     inputPlaceholderColor: $darkInputPlaceholderColor,
     inputTextColor: $darkInputColor,
-    layoutFrontendColor: $darkDarkBlue2,
+    layoutFrontendColor: $darkDarkBlue3,
     learnMoreHover: $darkPrimary-alt,
     linkColor: $darkLinks,
     linkColorHover: $darkLinks,
@@ -302,6 +304,7 @@ $themes: (
     listItemActive: $darkPrimary,
     listItemBorder: $darkBlue1,
     loadingSvg: url("../images/loading-white.svg"),
+    loginGradient: linear-gradient(0deg, rgba(42, 44, 48, 0.5) 0%, rgba(42, 44, 48, 0) 80.01%),
     logoSuffix: "white",
     mfaLogoSuffix: "-w.png",
     navActiveBackground: $darkDarkBlue2,
