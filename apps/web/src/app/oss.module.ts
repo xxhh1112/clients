@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { LoginModule } from "../auth/login/login.module";
+import { TwoFactorModule } from "../auth/settings/two-factor/two-factor.module";
 
 import { TrialInitiationModule } from "./accounts/trial-initiation/trial-initiation.module";
 import { OrganizationCreateModule } from "./organizations/create/organization-create.module";
@@ -21,6 +22,7 @@ import { VaultFilterModule } from "./vault/individual-vault/vault-filter/vault-f
     OrganizationUserModule,
     OrganizationCreateModule,
     LoginModule,
+    TwoFactorModule,
   ],
   exports: [
     SharedModule,

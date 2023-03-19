@@ -17,14 +17,6 @@ import { EmergencyAccessTakeoverComponent } from "../../auth/settings/emergency-
 import { EmergencyAccessViewComponent } from "../../auth/settings/emergency-access/emergency-access-view.component";
 import { EmergencyAccessComponent } from "../../auth/settings/emergency-access/emergency-access.component";
 import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/emergency-add-edit.component";
-import { TwoFactorAuthenticatorComponent } from "../../auth/settings/two-factor-authenticator.component";
-import { TwoFactorDuoComponent } from "../../auth/settings/two-factor-duo.component";
-import { TwoFactorEmailComponent } from "../../auth/settings/two-factor-email.component";
-import { TwoFactorRecoveryComponent } from "../../auth/settings/two-factor-recovery.component";
-import { TwoFactorSetupComponent } from "../../auth/settings/two-factor-setup.component";
-import { TwoFactorVerifyComponent } from "../../auth/settings/two-factor-verify.component";
-import { TwoFactorWebAuthnComponent } from "../../auth/settings/two-factor-webauthn.component";
-import { TwoFactorYubiKeyComponent } from "../../auth/settings/two-factor-yubikey.component";
 import { VerifyEmailComponent } from "../../auth/settings/verify-email.component";
 import { SsoComponent } from "../../auth/sso.component";
 import { TwoFactorOptionsComponent } from "../../auth/two-factor-options.component";
@@ -210,16 +202,8 @@ import { SharedModule } from "./shared.module";
     SubscriptionComponent,
     TaxInfoComponent,
     ToolsComponent,
-    TwoFactorAuthenticatorComponent,
     TwoFactorComponent,
-    TwoFactorDuoComponent,
-    TwoFactorEmailComponent,
     TwoFactorOptionsComponent,
-    TwoFactorRecoveryComponent,
-    TwoFactorSetupComponent,
-    TwoFactorVerifyComponent,
-    TwoFactorWebAuthnComponent,
-    TwoFactorYubiKeyComponent,
     UpdateKeyComponent,
     UpdateLicenseComponent,
     UpdatePasswordComponent,
@@ -318,16 +302,8 @@ import { SharedModule } from "./shared.module";
     SubscriptionComponent,
     TaxInfoComponent,
     ToolsComponent,
-    TwoFactorAuthenticatorComponent,
     TwoFactorComponent,
-    TwoFactorDuoComponent,
-    TwoFactorEmailComponent,
     TwoFactorOptionsComponent,
-    TwoFactorRecoveryComponent,
-    TwoFactorSetupComponent,
-    TwoFactorVerifyComponent,
-    TwoFactorWebAuthnComponent,
-    TwoFactorYubiKeyComponent,
     UpdateKeyComponent,
     UpdateLicenseComponent,
     UpdatePasswordComponent,

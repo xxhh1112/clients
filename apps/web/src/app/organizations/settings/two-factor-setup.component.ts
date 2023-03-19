@@ -8,12 +8,12 @@ import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.serv
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 
-import { TwoFactorDuoComponent } from "../../../auth/settings/two-factor-duo.component";
-import { TwoFactorSetupComponent as BaseTwoFactorSetupComponent } from "../../../auth/settings/two-factor-setup.component";
+import { TwoFactorDuoComponent } from "../../../auth/settings/two-factor/two-factor-duo.component";
+import { TwoFactorSetupComponent as BaseTwoFactorSetupComponent } from "../../../auth/settings/two-factor/two-factor-setup.component";
 
 @Component({
   selector: "app-two-factor-setup",
-  templateUrl: "../../../auth/settings/two-factor-setup.component.html",
+  templateUrl: "../../../auth/settings/two-factor/two-factor-setup.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent {
