@@ -1,0 +1,35 @@
+<bit-dialog>
+  <span bitDialogTitle>
+    {{ "twoStepLogin" | i18n }}
+    <small>{{ title }}</small>
+  </span>
+  <span bitDialogContent>
+    <ng-container *ngIf="authed">
+      <ng-content select="[bitDialogContent]"></ng-content>
+    </ng-container>
+
+    <ng-container *ngIf="!authed">
+      <p>{{ "twoStepLoginAuthDesc" | i18n }}</p>
+      <app-user-verification
+        [ngModel]="secret"
+        (ngModelChange)="secretChange.emit($event)"
+        ngDefaultControl
+        name="secret"
+      ></app-user-verification>
+    </ng-container>
+  </span>
+  <div bitDialogFooter class="tw-flex tw-gap-2">
+    <ng-container *ngIf="authed">
+      <ng-content select="[bitDialogFooter]"></ng-content>
+    </ng-container>
+
+    <ng-container *ngIf="!authed">
+      <button type="submit" bitButton buttonType="primary" bitFormButton>
+        {{ "continue" | i18n }}
+      </button>
+      <button type="button" bitButton buttonType="secondary" bitFormButton bitDialogClose>
+        {{ "close" | i18n }}
+      </button>
+    </ng-container>
+  </div>
+</bit-dialog>

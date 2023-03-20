@@ -1,5 +1,14 @@
-import { Component, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { ComponentType } from "@angular/cdk/overlay";
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewChild,
+  ViewContainerRef,
+} from "@angular/core";
+import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -10,10 +19,11 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { TwoFactorProviders } from "@bitwarden/common/auth/services/two-factor.service";
 import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { DialogService } from "@bitwarden/components";
 
-import { TwoFactorAuthenticatorComponent } from "./two-factor-authenticator.component";
+import { AuthenticatorDialogComponent } from "./two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "./two-factor-duo.component";
-import { TwoFactorEmailComponent } from "./two-factor-email.component";
+import { EmailDialogComponent } from "./two-factor-email.component";
 import { TwoFactorRecoveryComponent } from "./two-factor-recovery.component";
 import { TwoFactorWebAuthnComponent } from "./two-factor-webauthn.component";
 import { TwoFactorYubiKeyComponent } from "./two-factor-yubikey.component";
@@ -25,13 +35,9 @@ import { TwoFactorYubiKeyComponent } from "./two-factor-yubikey.component";
 export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   @ViewChild("recoveryTemplate", { read: ViewContainerRef, static: true })
   recoveryModalRef: ViewContainerRef;
-  @ViewChild("authenticatorTemplate", { read: ViewContainerRef, static: true })
-  authenticatorModalRef: ViewContainerRef;
   @ViewChild("yubikeyTemplate", { read: ViewContainerRef, static: true })
   yubikeyModalRef: ViewContainerRef;
   @ViewChild("duoTemplate", { read: ViewContainerRef, static: true }) duoModalRef: ViewContainerRef;
-  @ViewChild("emailTemplate", { read: ViewContainerRef, static: true })
-  emailModalRef: ViewContainerRef;
   @ViewChild("webAuthnTemplate", { read: ViewContainerRef, static: true })
   webAuthnModalRef: ViewContainerRef;
 
@@ -53,7 +59,8 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
     protected modalService: ModalService,
     protected messagingService: MessagingService,
     protected policyService: PolicyService,
-    private stateService: StateService
+    private stateService: StateService,
+    private dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -114,14 +121,10 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   async manage(type: TwoFactorProviderType) {
     switch (type) {
       case TwoFactorProviderType.Authenticator: {
-        const authComp = await this.openModal(
-          this.authenticatorModalRef,
-          TwoFactorAuthenticatorComponent
+        this.openDialogAndSubscribeUpdate(
+          AuthenticatorDialogComponent,
+          TwoFactorProviderType.Authenticator
         );
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        authComp.onUpdated.subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Authenticator);
-        });
         break;
       }
       case TwoFactorProviderType.Yubikey: {
@@ -141,11 +144,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         break;
       }
       case TwoFactorProviderType.Email: {
-        const emailComp = await this.openModal(this.emailModalRef, TwoFactorEmailComponent);
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        emailComp.onUpdated.subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Email);
-        });
+        this.openDialogAndSubscribeUpdate(EmailDialogComponent, TwoFactorProviderType.Email);
         break;
       }
       case TwoFactorProviderType.WebAuthn: {
@@ -162,6 +161,24 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
       default:
         break;
     }
+  }
+
+  private openDialogAndSubscribeUpdate<C = unknown>(
+    type: ComponentType<C>,
+    providerType: TwoFactorProviderType
+  ) {
+    const eventEmitter = new EventEmitter<boolean>();
+    const dialogRef = this.dialogService.open(type, {
+      data: { updated: eventEmitter },
+    });
+
+    eventEmitter.pipe(takeUntil(this.destroy$)).subscribe((enabled: boolean) => {
+      this.updateStatus(enabled, providerType);
+    });
+
+    firstValueFrom(dialogRef.closed).then(() => {
+      eventEmitter.complete();
+    });
   }
 
   recoveryCode() {

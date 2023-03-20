@@ -7,6 +7,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
+import { DialogService } from "@bitwarden/components";
 
 import { TwoFactorDuoComponent } from "../../../auth/settings/two-factor/two-factor-duo.component";
 import { TwoFactorSetupComponent as BaseTwoFactorSetupComponent } from "../../../auth/settings/two-factor/two-factor-setup.component";
@@ -24,9 +25,10 @@ export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent {
     messagingService: MessagingService,
     policyService: PolicyService,
     private route: ActivatedRoute,
-    stateService: StateService
+    stateService: StateService,
+    dialogService: DialogService
   ) {
-    super(apiService, modalService, messagingService, policyService, stateService);
+    super(apiService, modalService, messagingService, policyService, stateService, dialogService);
   }
 
   async ngOnInit() {

@@ -1,85 +1,112 @@
-import { Component } from "@angular/core";
+import { DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, EventEmitter, Inject } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { TwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/two-factor-email.request";
 import { UpdateTwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/update-two-factor-email.request";
 import { TwoFactorEmailResponse } from "@bitwarden/common/auth/models/response/two-factor-email.response";
-import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Verification } from "@bitwarden/common/types/verification";
 
-import { TwoFactorBaseComponent } from "./two-factor-base.component";
+import { TwoFactorSettingsService } from "./two-factor-settings.service";
+
+export interface TwoFactorEmailOptions {
+  updated: EventEmitter<boolean>;
+}
 
 @Component({
   selector: "app-two-factor-email",
   templateUrl: "two-factor-email.component.html",
 })
-export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
-  type = TwoFactorProviderType.Email;
-  email: string;
-  token: string;
-  sentEmail: string;
-  formPromise: Promise<TwoFactorEmailResponse>;
-  emailPromise: Promise<unknown>;
+export class EmailDialogComponent {
+  protected sentEmail: string;
+  protected enabled: boolean;
+  protected secret: Verification;
+
+  protected authed = false;
+
+  protected formGroup = this.formBuilder.group({
+    email: ["", Validators.required],
+    token: ["", Validators.required],
+  });
 
   constructor(
-    apiService: ApiService,
-    i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService,
-    logService: LogService,
-    userVerificationService: UserVerificationService,
-    private stateService: StateService
-  ) {
-    super(apiService, i18nService, platformUtilsService, logService, userVerificationService);
-  }
+    @Inject(DIALOG_DATA) private data: TwoFactorEmailOptions,
+    private formBuilder: FormBuilder,
+    private apiService: ApiService,
+    private userVerificationService: UserVerificationService,
+    private stateService: StateService,
+    private twoFactorSettingsService: TwoFactorSettingsService
+  ) {}
 
-  auth(authResponse: AuthResponse<TwoFactorEmailResponse>) {
-    super.auth(authResponse);
-    return this.processResponse(authResponse.response);
-  }
-
-  submit() {
-    if (this.enabled) {
-      return super.disable(this.formPromise);
-    } else {
-      return this.enable();
+  protected submit = async () => {
+    // First step is to auth
+    if (!this.authed) {
+      return this.auth();
     }
-  }
 
-  async sendEmail() {
-    try {
-      const request = await this.buildRequestModel(TwoFactorEmailRequest);
-      request.email = this.email;
-      this.emailPromise = this.apiService.postTwoFactorEmailSetup(request);
-      await this.emailPromise;
-      this.sentEmail = this.email;
-    } catch (e) {
-      this.logService.error(e);
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.invalid) {
+      return;
     }
+
+    const request = await this.userVerificationService.buildRequest(
+      this.secret,
+      UpdateTwoFactorEmailRequest
+    );
+
+    request.email = this.formGroup.value.email;
+    request.token = this.formGroup.value.token;
+
+    const response = await this.apiService.putTwoFactorEmail(request);
+
+    await this.processResponse(response);
+
+    this.data.updated.emit(this.enabled);
+  };
+
+  protected sendEmail = async () => {
+    const email = this.formGroup.value.email;
+
+    const request = await this.userVerificationService.buildRequest(
+      this.secret,
+      TwoFactorEmailRequest
+    );
+    request.email = email;
+    await this.apiService.postTwoFactorEmailSetup(request);
+
+    this.sentEmail = email;
+  };
+
+  protected async auth() {
+    const request = await this.userVerificationService.buildRequest(this.secret);
+    const response = await this.apiService.getTwoFactorEmail(request);
+
+    await this.processResponse(response);
+
+    this.authed = true;
   }
 
-  protected async enable() {
-    const request = await this.buildRequestModel(UpdateTwoFactorEmailRequest);
-    request.email = this.email;
-    request.token = this.token;
+  protected disable = async () => {
+    this.enabled = await this.twoFactorSettingsService.disable(
+      this.secret,
+      TwoFactorProviderType.Email
+    );
 
-    return super.enable(async () => {
-      this.formPromise = this.apiService.putTwoFactorEmail(request);
-      const response = await this.formPromise;
-      await this.processResponse(response);
-    });
-  }
+    this.data.updated.emit(this.enabled);
+  };
 
   private async processResponse(response: TwoFactorEmailResponse) {
-    this.token = null;
-    this.email = response.email;
+    this.formGroup.patchValue({ email: response.email });
     this.enabled = response.enabled;
-    if (!this.enabled && (this.email == null || this.email === "")) {
-      this.email = await this.stateService.getEmail();
+
+    // Fallback to current user email
+    if (!response.enabled && Utils.isNullOrEmpty(this.formGroup.value.email)) {
+      this.formGroup.patchValue({ email: await this.stateService.getEmail() });
     }
   }
 }
