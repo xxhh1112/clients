@@ -2,6 +2,8 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { Guid } from "@bitwarden/common/types/guid";
 import { TableDataSource } from "@bitwarden/components";
 
@@ -39,7 +41,10 @@ export class ServiceAccountsListComponent implements OnDestroy {
 
   selection = new SelectionModel<string>(true, []);
 
-  constructor() {
+  constructor(
+    private i18nService: I18nService,
+    private platformUtilsService: PlatformUtilsService
+  ) {
     this.selection.changed
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) => this.onServiceAccountCheckedEvent.emit(this.selection.selected));
@@ -70,6 +75,12 @@ export class ServiceAccountsListComponent implements OnDestroy {
     if (this.selection.selected.length >= 1) {
       this.deleteServiceAccountsEvent.emit(
         this.serviceAccounts.filter((sa) => this.selection.isSelected(sa.id))
+      );
+    } else {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected")
       );
     }
   }
