@@ -1,5 +1,7 @@
 import { MockProxy, mock } from "jest-mock-extended";
 
+// eslint-disable-next-line import/no-restricted-paths -- Needed to print log messages
+import { LogService } from "../abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
@@ -20,13 +22,15 @@ const exampleJSON = {
 
 describe("RemoveLegacyEtmKeyMigrator", () => {
   let storage: MockProxy<AbstractStorageService>;
+  let logService: MockProxy<LogService>;
   let sut: MigrationHelper;
 
   beforeEach(() => {
+    logService = mock();
     storage = mock();
     storage.get.mockImplementation((key) => (exampleJSON as any)[key]);
 
-    sut = new MigrationHelper(0, storage);
+    sut = new MigrationHelper(0, storage, logService);
   });
 
   describe("get", () => {
@@ -64,12 +68,13 @@ describe("RemoveLegacyEtmKeyMigrator", () => {
 
 /** Helper to create well-mocked migration helpers in migration tests */
 export function mockMigrationHelper(storageJson: any): MockProxy<MigrationHelper> {
+  const logService: MockProxy<LogService> = mock();
   const storage: MockProxy<AbstractStorageService> = mock();
   storage.get.mockImplementation((key) => (storageJson as any)[key]);
   storage.save.mockImplementation(async (key, value) => {
     (storageJson as any)[key] = value;
   });
-  const helper = new MigrationHelper(0, storage);
+  const helper = new MigrationHelper(0, storage, logService);
 
   const mockHelper = mock<MigrationHelper>();
   mockHelper.get.mockImplementation((key) => helper.get(key));

@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-restricted-paths -- Needed to print log messages
+import { LogService } from "../abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
@@ -21,20 +23,32 @@ export const builder: MigrationBuilder<number> = MigrationBuilder.create()
   .with(RemoveLegacyEtmKeyMigrator, 5, 6)
   .with(MoveStateVersionMigrator, 6, 7);
 
-export async function migrate(storageService: AbstractStorageService): Promise<void> {
-  const migrationHelper = new MigrationHelper(await currentVersion(storageService), storageService);
+export async function migrate(
+  storageService: AbstractStorageService,
+  logService: LogService
+): Promise<void> {
+  const migrationHelper = new MigrationHelper(
+    await currentVersion(storageService, logService),
+    storageService,
+    logService
+  );
   if (migrationHelper.currentVersion < 0) {
-    // Nothing to migrate
+    // Cannot determine state, assuming empty so we don't repeatedly apply a migration.
     return;
   }
   builder.migrate(migrationHelper);
 }
 
-export async function currentVersion(stateService: AbstractStorageService) {
+export async function currentVersion(stateService: AbstractStorageService, logService: LogService) {
   let state = await stateService.get<number>("stateVersion");
   if (state == null) {
     // Pre v7
     state = (await stateService.get<{ stateVersion: number }>("global"))?.stateVersion;
   }
-  return state ?? -1;
+  if (state == null) {
+    logService.info("No state version found, assuming empty state.");
+    return -1;
+  }
+  logService.info(`State version: ${state}`);
+  return state;
 }

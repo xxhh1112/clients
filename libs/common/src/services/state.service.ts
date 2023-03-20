@@ -118,7 +118,7 @@ export class StateService<
       return;
     }
 
-    await migrate(this.storageService);
+    await migrate(this.storageService, this.logService);
 
     await this.state().then(async (state) => {
       if (state == null) {

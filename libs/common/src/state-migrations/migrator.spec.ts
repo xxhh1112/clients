@@ -1,5 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+// eslint-disable-next-line import/no-restricted-paths -- Needed to print log messages
+import { LogService } from "../abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
@@ -17,12 +19,14 @@ describe("migrator default methods", () => {
   }
 
   let storage: MockProxy<AbstractStorageService>;
+  let logService: MockProxy<LogService>;
   let helper: MigrationHelper;
   let sut: TestMigrator;
 
   beforeEach(() => {
     storage = mock();
-    helper = new MigrationHelper(0, storage);
+    logService = mock();
+    helper = new MigrationHelper(0, storage, logService);
     sut = new TestMigrator(0, 1);
   });
 

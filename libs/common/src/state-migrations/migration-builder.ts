@@ -88,9 +88,20 @@ export class MigrationBuilder<TCurrent extends number = 0> {
     helper: MigrationHelper,
     direction: Direction
   ): Promise<void> {
+    const shouldMigrate = await migrator.shouldMigrate(helper, direction);
+    helper.info(
+      `Migrator ${migrator.constructor.name} (to version ${migrator.toVersion}) should migrate: ${shouldMigrate} - ${direction}`
+    );
     if (await migrator.shouldMigrate(helper, direction)) {
       const method = direction === "up" ? migrator.migrate : migrator.rollback;
-      await method(helper).then(() => migrator.updateVersion(helper, direction));
+      await method(helper);
+      helper.info(
+        `Migrator ${migrator.constructor.name} (to version ${migrator.toVersion}) migrated - ${direction}`
+      );
+      await migrator.updateVersion(helper, direction);
+      helper.info(
+        `Migrator ${migrator.constructor.name} (to version ${migrator.toVersion}) updated version - ${direction}`
+      );
     }
   }
 }
