@@ -113,6 +113,17 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     return this.isPaging() ? this.pagedCiphers : this.ciphers;
   }
 
+  /**
+   * Flag to determine if the 3rd "ownership" column (Owner, Collections, or Groups) should be shown.
+   */
+  protected get showOwnershipColumn() {
+    return (
+      !this.organization || // "Owner" is always shown for personal vault
+      !this.activeFilter.selectedCollectionNode || // "Collections" when filtering by all items
+      this.organization.useGroups // "Groups" when filtering by collections
+    );
+  }
+
   constructor(
     searchService: SearchService,
     protected i18nService: I18nService,

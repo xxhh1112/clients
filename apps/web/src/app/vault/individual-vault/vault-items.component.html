@@ -25,7 +25,7 @@
           }}</label>
         </th>
         <th bitCell class="tw-w-1/2">{{ "name" | i18n }}</th>
-        <th bitCell class="tw-w-max">
+        <th bitCell class="tw-w-max" *ngIf="showOwnershipColumn">
           <ng-container *ngIf="!organization">{{ "owner" | i18n }}</ng-container>
           <ng-container *ngIf="organization">
             {{ (activeFilter.selectedCollectionNode ? "groups" : "collections") | i18n }}
@@ -110,7 +110,7 @@
             {{ col.node.name }}
           </button>
         </td>
-        <td bitCell>
+        <td bitCell *ngIf="showOwnershipColumn">
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ col.node.organizationId | orgNameFromId: organizations }}"
@@ -221,7 +221,7 @@
           <br />
           <span class="tw-text-sm tw-text-muted" appStopProp>{{ c.subTitle }}</span>
         </td>
-        <td bitCell>
+        <td bitCell *ngIf="showOwnershipColumn">
           <ng-container *ngIf="!organization">
             <app-org-badge
               organizationName="{{ c.organizationId | orgNameFromId: organizations }}"
