@@ -5,6 +5,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { Utils } from "../../misc/utils";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CipherType } from "../../vault/enums/cipher-type";
+import { Cipher } from "../../vault/models/domain/cipher";
 import { CipherView } from "../../vault/models/view/cipher.view";
 import {
   Fido2AutenticatorErrorCode,
@@ -12,7 +13,7 @@ import {
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
-import { Fido2KeyView } from "../models/view/fido2-key.view";
+import { Fido2Key } from "../models/domain/fido2-key";
 
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
 
@@ -31,15 +32,19 @@ describe("FidoAuthenticatorService", () => {
 
   describe("authenticatorMakeCredential", () => {
     describe("when vault contains excluded credential", () => {
-      let excludedCipher: CipherView;
+      let excludedCipherView: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        excludedCipher = createCipherView();
+        const excludedCipher = createCipher();
+        excludedCipherView = await excludedCipher.decrypt();
         params = await createCredentialParams({
           excludeList: [{ id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" }],
         });
-        cipherService.getAllDecrypted.mockResolvedValue([excludedCipher]);
+        cipherService.get.mockImplementation(async (id) =>
+          id === excludedCipher.id ? excludedCipher : undefined
+        );
+        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
       });
 
       /** Spec: wait for user presence */
@@ -62,6 +67,19 @@ describe("FidoAuthenticatorService", () => {
         );
       });
     });
+
+    // Spec: If the pubKeyCredParams parameter does not contain a valid COSEAlgorithmIdentifier value that is supported by the authenticator, terminate this procedure and return error code
+    it("should throw error when input does not contain any supported algorithms", async () => {
+      const params = await createCredentialParams({
+        pubKeyCredParams: [{ alg: 9001, type: "public-key" }],
+      });
+
+      const result = async () => await authenticator.makeCredential(params);
+
+      await expect(result).rejects.toThrowError(
+        Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM]
+      );
+    });
   });
 });
 
@@ -82,7 +100,7 @@ async function createCredentialParams(
     },
     pubKeyCredParams: params.pubKeyCredParams ?? [
       {
-        alg: -1, // ES256
+        alg: -7, // ES256
         type: "public-key",
       },
     ],
@@ -106,11 +124,11 @@ async function createCredentialParams(
   };
 }
 
-function createCipherView(id = Utils.newGuid()): CipherView {
-  const cipher = new CipherView();
+function createCipher(id = Utils.newGuid()): Cipher {
+  const cipher = new Cipher();
   cipher.id = id;
   cipher.type = CipherType.Fido2Key;
-  cipher.fido2Key = new Fido2KeyView();
+  cipher.fido2Key = new Fido2Key();
   return cipher;
 }
 

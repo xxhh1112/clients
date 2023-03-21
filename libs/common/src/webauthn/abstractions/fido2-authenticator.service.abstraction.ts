@@ -2,8 +2,14 @@ export abstract class Fido2AuthenticatorService {
   makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => void;
 }
 
+export enum Fido2AlgorithmIdentifier {
+  ES256 = -7,
+  RS256 = -257,
+}
+
 export enum Fido2AutenticatorErrorCode {
   CTAP2_ERR_CREDENTIAL_EXCLUDED,
+  CTAP2_ERR_UNSUPPORTED_ALGORITHM,
 }
 
 export class Fido2AutenticatorError extends Error {
