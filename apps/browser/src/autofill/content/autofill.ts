@@ -28,6 +28,7 @@
   */
 
 import AutofillPageDetails from "../models/autofill-page-details";
+import AutofillScript from '../models/autofill-script';
 
 /*
   MODIFICATIONS FROM ORIGINAL
@@ -154,7 +155,7 @@ function queryDoc(
 }
 // END MODIFICATION
 
-function collect(document: Document): string {
+function collect(document: any): string {
   // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
@@ -162,7 +163,7 @@ function collect(document: Document): string {
 
   document.elementsByOPID = {};
 
-  function getPageDetails(theDoc: Document, oneShotId) {
+  function getPageDetails(theDoc: any, oneShotId: string) {
     // start helpers
 
     /**
@@ -171,7 +172,7 @@ function collect(document: Document): string {
      * @param {string} attrName
      * @returns {string} The value of the attribute
      */
-    function getElementAttrValue(el: HTMLElement, attrName: string) {
+    function getElementAttrValue(el: any, attrName: string) {
       var attrVal = el[attrName];
       if ("string" == typeof attrVal) {
         return attrVal;
@@ -185,7 +186,7 @@ function collect(document: Document): string {
      * @param {HTMLElement} el
      * @returns {any} Value of the element
      */
-    function getElementValue(el: HTMLInputElement) {
+    function getElementValue(el: any) {
       switch (toLowerString(el.type)) {
         case "checkbox":
           return el.checked ? "✓" : "";
@@ -209,11 +210,9 @@ function collect(document: Document): string {
     }
 
     /**
-     * If `el` is a `<select>` element, return an array of all of the options' `text` properties.
-     * @param {HTMLElement} el
-     * @returns {string[]} An array of options for the given `<select>` element
+     * If `el` is a `<select>` element, return an object containing an array of all of the options' `text` properties.
      */
-    function getSelectElementOptions(el: HTMLSelectElement) {
+    function getSelectElementOptions(el: HTMLSelectElement): { options: string[] } {
       if (!el.options) {
         return null;
       }
@@ -240,7 +239,7 @@ function collect(document: Document): string {
      * @param {HTMLElement} el
      * @returns {string} A string containing the label, or null if not found
      */
-    function getLabelTop(el: HTMLElement) {
+    function getLabelTop(el: any): string {
       var parent;
 
       // Traverse up the DOM until we reach either the top or the table data element containing our field
@@ -283,9 +282,9 @@ function collect(document: Document): string {
      * @param {HTMLElement} el
      * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
      */
-    function getLabelTag(el: HTMLElement) {
+    function getLabelTag(el: any): string {
       var docLabel,
-        theLabels = [];
+        theLabels: any[] = [];
 
       if (el.labels && el.labels.length && 0 < el.labels.length) {
         theLabels = Array.prototype.slice.call(el.labels);
@@ -355,7 +354,7 @@ function collect(document: Document): string {
      * @param {any} val
      * @param {*} d
      */
-    function addProp(obj, prop, val, d) {
+    function addProp(obj: any, prop: any, val: any, d: any = undefined) {
       if ((0 !== d && d === val) || null === val || void 0 === val) {
         return;
       }
@@ -404,7 +403,7 @@ function collect(document: Document): string {
     var theFields = Array.prototype.slice
       .call(getFormElements(theDoc, 50))
       .map(function (el, elIndex) {
-        var field = {},
+        var field: Record<string, any> = {},
           opId = "__" + elIndex,
           elMaxLen = -1 == el.maxLength ? 999 : el.maxLength;
 
@@ -439,7 +438,7 @@ function collect(document: Document): string {
           addProp(field, "label-data", getElementAttrValue(el, "data-label"));
           addProp(field, "label-aria", getElementAttrValue(el, "aria-label"));
           addProp(field, "label-top", getLabelTop(el));
-          var labelArr = [];
+          var labelArr: any = [];
           for (var sib = el; sib && sib.nextSibling; ) {
             sib = sib.nextSibling;
             if (isKnownTag(sib)) {
@@ -496,10 +495,10 @@ function collect(document: Document): string {
 
     // test form fields
     theFields
-      .filter(function (f) {
+      .filter(function (f: any) {
         return f.fakeTested;
       })
-      .forEach(function (f) {
+      .forEach(function (f: any) {
         var el = theDoc.elementsByOPID[f.opid];
         el.getBoundingClientRect();
 
@@ -542,8 +541,8 @@ function collect(document: Document): string {
       url: theView.location.href,
       documentUrl: theDoc.location.href,
       forms: (function (forms) {
-        var formObj = {};
-        forms.forEach(function (f) {
+        var formObj: any = {};
+        forms.forEach(function (f: any) {
           formObj[f.opid] = f;
         });
         return formObj;
@@ -556,7 +555,7 @@ function collect(document: Document): string {
     // START MODIFICATION
     var theTitle = queryDoc(theDoc, theDoc, function (node) {
       return node.hasAttribute("data-onepassword-title");
-    });
+    }) as any;
     // END MODIFICATION
     if (theTitle && theTitle.dataset[DISPLAY_TITLE_ATTRIBUE]) {
       pageDetails.displayTitle = theTitle.dataset.onepasswordTitle;
@@ -573,7 +572,7 @@ function collect(document: Document): string {
    * @param {string} fonor The event name
    * @returns
    */
-  function doEventOnElement(kedol, fonor) {
+  function doEventOnElement(kedol: any, fonor: string) {
     var quebo;
     isFirefox
       ? ((quebo = document.createEvent("KeyboardEvent")),
@@ -593,7 +592,7 @@ function collect(document: Document): string {
    * @param {string} s
    * @returns {string} Clean text
    */
-  function cleanText(s) {
+  function cleanText(s: string): string {
     var sVal = null;
     s &&
       ((sVal = s.replace(/^\\s+|\\s+$|\\r?\\n.*$/gm, "")), (sVal = 0 < sVal.length ? sVal : null));
@@ -606,7 +605,7 @@ function collect(document: Document): string {
    * @param {string[]} arr An array of `textContent` or `innerText` values
    * @param {HTMLElement} el The element to push to the array
    */
-  function checkNodeType(arr, el) {
+  function checkNodeType(arr: string[], el: HTMLElement) {
     var theText = "";
     3 === el.nodeType
       ? (theText = el.nodeValue)
@@ -620,7 +619,7 @@ function collect(document: Document): string {
    * @param {HTMLElement} el The element to check
    * @returns {boolean} Returns `true` if `el` is an HTML element from a known set and `false` otherwise
    */
-  function isKnownTag(el) {
+  function isKnownTag(el: any) {
     if (el && void 0 !== el) {
       var tags = "select option input form textarea button table iframe body head script".split(
         " "
@@ -643,7 +642,7 @@ function collect(document: Document): string {
    * @param {string[]} arr An array of `textContent` or `innerText` values
    * @param {number} steps The number of steps to take up the DOM tree
    */
-  function shiftForLeftLabel(el, arr, steps) {
+  function shiftForLeftLabel(el: any, arr: string[], steps: number) {
     var sib;
     for (steps || (steps = 0); el && el.previousSibling; ) {
       el = el.previousSibling;
@@ -676,7 +675,7 @@ function collect(document: Document): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns `true` if the element is visible and `false` otherwise
    */
-  function isElementVisible(el) {
+  function isElementVisible(el: any) {
     var theEl = el;
     // Get the top level document
     el = (el = el.ownerDocument) ? el.defaultView : {};
@@ -714,7 +713,7 @@ function collect(document: Document): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
    */
-  function isElementViewable(el) {
+  function isElementViewable(el: HTMLInputElement) {
     var theDoc = el.ownerDocument.documentElement,
       rect = el.getBoundingClientRect(), // getBoundingClientRect is relative to the viewport
       docScrollWidth = theDoc.scrollWidth, // scrollWidth is the width of the document including any overflow
@@ -783,7 +782,7 @@ function collect(document: Document): string {
       }
 
       // Walk up the DOM tree to check the parent element
-      pointEl = pointEl.parentNode;
+      pointEl = pointEl.parentNode as Element;
     }
 
     // If the for loop exited because we found the element we're looking for, return true, as it's viewable
@@ -796,7 +795,7 @@ function collect(document: Document): string {
    * @param {number} opId
    * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
    */
-  function getElementForOPID(opId) {
+  function getElementForOPID(opId: number) {
     var theEl;
     if (void 0 === opId || null === opId) {
       return null;
@@ -835,7 +834,7 @@ function collect(document: Document): string {
   /*
    * inputEl MUST BE an instanceof HTMLInputElement, else inputEl.type.toLowerCase will throw an error
    */
-  function isRelevantInputField(inputEl) {
+  function isRelevantInputField(inputEl: HTMLInputElement) {
     if (inputEl.hasAttribute("data-bwignore")) {
       return false;
     }
@@ -851,7 +850,7 @@ function collect(document: Document): string {
    * @param {number} limit The maximum number of elements to return
    * @returns An array of HTMLElements
    */
-  function getFormElements(theDoc, limit) {
+  function getFormElements(theDoc: Document, limit: number) {
     // START MODIFICATION
 
     var els = queryDocAll(theDoc, theDoc.body, function (el) {
@@ -902,7 +901,7 @@ function collect(document: Document): string {
    * @param {HTMLElement} el
    * @param {boolean} setVal Set the value of the element to its original value
    */
-  function focusElement(el, setVal) {
+  function focusElement(el: any, setVal: boolean) {
     if (setVal) {
       var initialValue = el.value;
       el.focus();
@@ -918,7 +917,7 @@ function collect(document: Document): string {
   return JSON.stringify(getPageDetails(document, "oneshotUUID"));
 }
 
-function fill(document, fillScript) {
+function fill(document: any, fillScript: AutofillScript): string {
   var markTheFilling = true,
     animateTheFilling = true;
 
