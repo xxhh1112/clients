@@ -53,7 +53,7 @@ import AutofillPageDetails from "../models/autofill-page-details";
  * We need to use the correct implementation based on browser.
  */
 // START MODIFICATION
-var getShadowRoot: (element: Node) => Node;
+var getShadowRoot: (element: Element) => Element;
 
 if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
   // Chromium 88+
@@ -81,10 +81,10 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  */
 function queryDocAll(
   doc: Document,
-  rootEl: HTMLElement,
-  filterCallback: (el: HTMLElement) => boolean
+  rootEl: Element,
+  filterCallback: (el: Element) => boolean
 ): Node[] {
-  var accumulatedNodes: Node[] = [];
+  var accumulatedNodes: Element[] = [];
 
   // mutates accumulatedNodes
   accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes);
@@ -94,14 +94,14 @@ function queryDocAll(
 
 function accumulatingQueryDocAll(
   doc: Document,
-  rootEl: Node,
-  filterCallback: (el: Node) => boolean,
-  accumulatedNodes: Node[]
+  rootEl: Element,
+  filterCallback: (el: Element) => boolean,
+  accumulatedNodes: Element[]
 ): void {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node: Node;
+  var node: Element;
 
-  while ((node = treeWalker.nextNode())) {
+  while ((node = treeWalker.nextNode() as Element)) {
     if (filterCallback(node)) {
       accumulatedNodes.push(node);
     }
@@ -122,11 +122,15 @@ function accumulatingQueryDocAll(
  * Returns an element like Document.querySelector does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Node) => boolean): Node {
+function queryDoc(
+  doc: Document,
+  rootEl: Element,
+  filterCallback: (el: Element) => boolean
+): Element {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node;
+  var node: Element;
 
-  while ((node = treeWalker.nextNode())) {
+  while ((node = treeWalker.nextNode() as Element)) {
     if (filterCallback(node)) {
       return node;
     }
