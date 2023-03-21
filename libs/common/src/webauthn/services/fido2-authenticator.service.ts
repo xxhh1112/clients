@@ -1,5 +1,7 @@
 import { CipherService } from "../../vault/services/cipher.service";
 import {
+  Fido2AutenticatorError,
+  Fido2AutenticatorErrorCode,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction,
 } from "../abstractions/fido2-authenticator.service.abstraction";
@@ -17,12 +19,16 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ) {}
 
   async makeCredential(params: Fido2AuthenticatorMakeCredentialsParams): Promise<void> {
-    this.userInterface.confirmDuplicateCredential(
+    const userConfirmation = await this.userInterface.confirmDuplicateCredential(
       [Fido2Utils.bufferToString(params.excludeList[0].id)],
       {
         credentialName: params.rp.name,
         userName: params.user.name,
       }
     );
+
+    if (!userConfirmation) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
+    }
   }
 }

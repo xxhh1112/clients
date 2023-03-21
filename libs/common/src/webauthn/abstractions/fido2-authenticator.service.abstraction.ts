@@ -2,6 +2,16 @@ export abstract class Fido2AuthenticatorService {
   makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => void;
 }
 
+export enum Fido2AutenticatorErrorCode {
+  CTAP2_ERR_CREDENTIAL_EXCLUDED,
+}
+
+export class Fido2AutenticatorError extends Error {
+  constructor(readonly errorCode: Fido2AutenticatorErrorCode) {
+    super(Fido2AutenticatorErrorCode[errorCode]);
+  }
+}
+
 /**
  * Parameters for {@link Fido2AuthenticatorService.makeCredential}
  *

@@ -6,7 +6,10 @@ import { Utils } from "../../misc/utils";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CipherType } from "../../vault/enums/cipher-type";
 import { CipherView } from "../../vault/models/view/cipher.view";
-import { Fido2AuthenticatorMakeCredentialsParams } from "../abstractions/fido2-authenticator.service.abstraction";
+import {
+  Fido2AutenticatorErrorCode,
+  Fido2AuthenticatorMakeCredentialsParams,
+} from "../abstractions/fido2-authenticator.service.abstraction";
 import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
 import { Fido2KeyView } from "../models/view/fido2-key.view";
@@ -40,12 +43,23 @@ describe("FidoAuthenticatorService", () => {
       });
 
       /** Spec: wait for user presence */
-      it("should wait for confirmation from user", async () => {
+      it("should request confirmation from user", async () => {
         userInterface.confirmDuplicateCredential.mockResolvedValue(true);
 
         await authenticator.makeCredential(params);
 
         expect(userInterface.confirmDuplicateCredential).toHaveBeenCalled();
+      });
+
+      /** Spec: then terminate this procedure and return error code */
+      it("should throw error if user denies duplication", async () => {
+        userInterface.confirmDuplicateCredential.mockResolvedValue(false);
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED]
+        );
       });
     });
   });
