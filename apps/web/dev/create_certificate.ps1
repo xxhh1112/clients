@@ -3,7 +3,7 @@
 # Certificate Authority used to sign the server certificate.
 # Server certificate used by the server.
 #
-# The CA is added to the machines trust.
+# The CA is added to the users trust.
 
 $caParams = @{
     'KeyAlgorithm'      = 'RSA';
