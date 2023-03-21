@@ -56,7 +56,7 @@ export type VaultItemRow = (CipherView | TreeNode<CollectionFilter>) & { checked
 })
 export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDestroy {
   @Input() showAddNew = true;
-  @Input() activeFilter: any;
+  @Input() activeFilter: VaultFilter;
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onAttachmentsClicked = new EventEmitter<CipherView>();
   @Output() onShareClicked = new EventEmitter<CipherView>();

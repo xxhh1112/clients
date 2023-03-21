@@ -1,4 +1,13 @@
-import { Directive, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Directive,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
 import { Subject } from "@microsoft/signalr/dist/esm/Subject";
 import { firstValueFrom } from "rxjs";
 
@@ -16,21 +25,25 @@ export enum VaultType {
 }
 
 @Directive()
-export class EmptyVaultComponent implements OnInit, OnDestroy {
-  @Input() organizationId: string;
-  private vaultType: VaultType; //wont be used i think
-  @Input() activeFilter: any;
+export class EmptyVaultComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() showAddNew = true;
+  @Output() onAddCipher = new EventEmitter<void>();
+
+  individualText: string;
+  organizationText: string;
+  displayText: string;
+
+  vaultType: VaultType;
+
+  showImportButton = false;
+  showCreateButton = false;
+
+  organizationId: string;
 
   protected destroy$ = new Subject<void>();
   private userStatus: OrganizationUserStatusType;
   private activePersonalOwnershipPolicy: boolean;
 
-  displayText: string;
-  showImportButton: boolean;
-  showCreateButton: boolean;
-
-  individualText: string;
-  organizationText: string;
   constructor(
     private policyService: PolicyService,
     private organizationUserService: OrganizationUserService,
@@ -41,8 +54,18 @@ export class EmptyVaultComponent implements OnInit, OnDestroy {
     this.organizationText = this.i18nService.t("noItemsVaultOrganization");
   }
 
-  ngOnInit(): void {
-    this.setupCases();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.activeFilter) {
+      this.setupCases();
+    }
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.checkPolicies();
+  }
+
+  addCipher() {
+    this.onAddCipher.emit();
   }
 
   ngOnDestroy() {
@@ -64,8 +87,6 @@ export class EmptyVaultComponent implements OnInit, OnDestroy {
   }
 
   async setupCases() {
-    await this.checkPolicies();
-
     this.showImportButton = this.showCreateButton = false;
 
     switch (this.vaultType) {
@@ -82,7 +103,8 @@ export class EmptyVaultComponent implements OnInit, OnDestroy {
   setupForIndividualVault() {
     this.displayText = this.individualText;
     if (!this.activePersonalOwnershipPolicy) {
-      this.showImportButton = this.showCreateButton = true;
+      this.showImportButton = true;
+      this.showCreateButton = this.showAddNew;
     }
   }
 
@@ -91,16 +113,18 @@ export class EmptyVaultComponent implements OnInit, OnDestroy {
       case OrganizationUserStatusType.Accepted:
         this.displayText = this.organizationText;
         if (!this.activePersonalOwnershipPolicy) {
-          this.showImportButton = this.showCreateButton = true;
+          this.showImportButton = true;
+          this.showCreateButton = this.showAddNew;
         }
         break;
       case OrganizationUserStatusType.Confirmed:
         this.displayText = this.individualText;
         if (this.activePersonalOwnershipPolicy) {
           this.showImportButton = false;
-          this.showCreateButton = true;
+          this.showCreateButton = this.showAddNew;
         } else {
-          this.showImportButton = this.showCreateButton = true;
+          this.showImportButton = true;
+          this.showCreateButton = this.showAddNew;
         }
         break;
     }

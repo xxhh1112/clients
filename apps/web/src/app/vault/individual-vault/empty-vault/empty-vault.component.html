@@ -1,6 +1,22 @@
-{{ displayText }}
-{{ activeFilter }}
-<pre>
-  {{ showImportButton }}
-  {{ showCreateButton }}
-</pre>
+<div class="tw-flex tw-w-96 tw-flex-col tw-content-center tw-items-center">
+  <div class="tw-pt-20 tw-pb-6">
+    <bit-icon [icon]="icon" aria-hidden="true"></bit-icon>
+  </div>
+  <div>
+    <span class="tw-text-lg tw-font-bold">Your vault is empty</span>
+    <i class="bwi bwi-question-circle" aria-hidden="true"></i>
+  </div>
+  <div class="tw-pb-6 tw-text-center">
+    {{ displayText }}
+  </div>
+  <div class="tw-flex tw-flex-row tw-content-center tw-items-center tw-gap-4">
+    <button type="button" bitButton buttonType="secondary" [routerLink]="['/', 'tools', 'import']">
+      <i class="bwi bwi-save bwi-fw tw-rotate-180" aria-hidden="true"></i>
+      {{ "importData" | i18n }}
+    </button>
+    <button type="button" bitButton buttonType="secondary" (click)="addCipher()">
+      <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
+      {{ "newItem" | i18n }}
+    </button>
+  </div>
+</div>
