@@ -189,6 +189,15 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     return false;
   }
 
+  async confirmDuplicateCredential(
+    existingCipherIds: string[],
+    newCredential: NewCredentialParams,
+    abortController?: AbortController
+  ) {
+    // Not Implemented
+    return false;
+  }
+
   private setAbortTimeout(abortController: AbortController) {
     return setTimeout(() => abortController.abort());
   }

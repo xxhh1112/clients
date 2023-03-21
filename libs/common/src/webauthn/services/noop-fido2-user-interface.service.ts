@@ -2,15 +2,19 @@ import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } fro
 import { RequestAbortedError } from "../abstractions/fido2.service.abstraction";
 
 export class Fido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  async confirmCredential(cipherId: string): Promise<boolean> {
+  async confirmCredential(): Promise<boolean> {
     return false;
   }
 
-  pickCredential(cipherIds: string[]): Promise<string> {
+  pickCredential(): Promise<string> {
     throw new RequestAbortedError();
   }
 
   async confirmNewCredential(): Promise<boolean> {
+    return false;
+  }
+
+  async confirmDuplicateCredential() {
     return false;
   }
 }

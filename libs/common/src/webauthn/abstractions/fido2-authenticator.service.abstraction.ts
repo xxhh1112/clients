@@ -18,18 +18,19 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
     id?: string;
   };
   user: {
-    name: string;
-    displayName: string;
     id: BufferSource;
+    name?: string;
+    displayName?: string;
+    icon?: string;
   };
   pubKeyCredParams: {
     alg: number;
-    // type: "public-key"; // not used
+    type: "public-key"; // not used
   }[];
   excludeList?: {
     id: BufferSource;
     transports?: ("ble" | "internal" | "nfc" | "usb")[];
-    // type: "public-key"; // not used
+    type: "public-key"; // not used
   }[];
   extensions?: {
     appid?: string;
