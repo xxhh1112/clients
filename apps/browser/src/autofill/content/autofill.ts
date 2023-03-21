@@ -27,7 +27,7 @@
   SOFTWARE.
   */
 
-import AutofillPageDetails from '../models/autofill-page-details';
+import AutofillPageDetails from "../models/autofill-page-details";
 
 /*
   MODIFICATIONS FROM ORIGINAL
@@ -79,7 +79,11 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  * Returns elements like Document.querySelectorAll does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDocAll(doc: Document, rootEl: HTMLElement, filterCallback: (el: HTMLElement) => boolean): Node[] {
+function queryDocAll(
+  doc: Document,
+  rootEl: HTMLElement,
+  filterCallback: (el: HTMLElement) => boolean
+): Node[] {
   var accumulatedNodes: Node[] = [];
 
   // mutates accumulatedNodes
@@ -88,7 +92,12 @@ function queryDocAll(doc: Document, rootEl: HTMLElement, filterCallback: (el: HT
   return accumulatedNodes;
 }
 
-function accumulatingQueryDocAll(doc: Document, rootEl: Node, filterCallback: (el: Node) => boolean, accumulatedNodes: Node[]): void {
+function accumulatingQueryDocAll(
+  doc: Document,
+  rootEl: Node,
+  filterCallback: (el: Node) => boolean,
+  accumulatedNodes: Node[]
+): void {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
   var node: Node;
 
@@ -141,7 +150,7 @@ function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Node) => boo
 }
 // END MODIFICATION
 
-function collect(document: Document, undefined: any): string {
+function collect(document: Document): string {
   // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
@@ -165,36 +174,6 @@ function collect(document: Document, undefined: any): string {
       }
       attrVal = el.getAttribute(attrName);
       return "string" == typeof attrVal ? attrVal : null;
-    }
-
-    // has the element been fake tested?
-    function checkIfFakeTested(field, el) {
-      if (
-        -1 === ["text", "password"].indexOf(el.type.toLowerCase()) ||
-        !(
-          passwordRegEx.test(field.value) ||
-          passwordRegEx.test(field.htmlID) ||
-          passwordRegEx.test(field.htmlName) ||
-          passwordRegEx.test(field.placeholder) ||
-          passwordRegEx.test(field["label-tag"]) ||
-          passwordRegEx.test(field["label-data"]) ||
-          passwordRegEx.test(field["label-aria"])
-        )
-      ) {
-        return false;
-      }
-
-      if (!field.visible) {
-        return true;
-      }
-
-      if ("password" == el.type.toLowerCase()) {
-        return false;
-      }
-
-      var elType = el.type;
-      focusElement(el, true);
-      return elType !== el.type;
     }
 
     /**
@@ -235,15 +214,17 @@ function collect(document: Document, undefined: any): string {
         return null;
       }
 
-      var options = Array.prototype.slice.call(el.options).map(function (option: HTMLOptionElement) {
-        var optionText = option.text
-          ? toLowerString(option.text)
-              .replace(/\\s/gm, "")
-              .replace(/[~`!@$%^&*()\\-_+=:;'\"\\[\\]|\\\\,<.>\\?]/gm, "")
-          : null;
+      var options = Array.prototype.slice
+        .call(el.options)
+        .map(function (option: HTMLOptionElement) {
+          var optionText = option.text
+            ? toLowerString(option.text)
+                .replace(/\\s/gm, "")
+                .replace(/[~`!@$%^&*()\\-_+=:;'\"\\[\\]|\\\\,<.>\\?]/gm, "")
+            : null;
 
-        return [optionText ? optionText : null, option.value];
-      });
+          return [optionText ? optionText : null, option.value];
+        });
 
       return {
         options: options,
@@ -391,11 +372,7 @@ function collect(document: Document, undefined: any): string {
     // END MODIFICATION
     // end helpers
 
-    var theView = theDoc.defaultView ? theDoc.defaultView : window,
-      passwordRegEx = RegExp(
-        "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|(\\\\b|_|-)passe(\\\\b|_|-)|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
-        "i"
-      );
+    var theView = theDoc.defaultView ? theDoc.defaultView : window;
 
     // get all the docs
     // START MODIFICATION
@@ -937,10 +914,7 @@ function collect(document: Document, undefined: any): string {
   return JSON.stringify(getPageDetails(document, "oneshotUUID"));
 }
 
-function fill(document, fillScript, undefined) {
-  var isFirefox =
-    navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
-
+function fill(document, fillScript) {
   var markTheFilling = true,
     animateTheFilling = true;
 
