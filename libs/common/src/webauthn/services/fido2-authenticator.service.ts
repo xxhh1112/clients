@@ -41,6 +41,14 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     if (params.pubKeyCredParams.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM);
     }
+
+    if (params.options?.rk != undefined && typeof params.options.rk !== "boolean") {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION);
+    }
+
+    if (params.options?.uv != undefined && typeof params.options.uv !== "boolean") {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION);
+    }
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {

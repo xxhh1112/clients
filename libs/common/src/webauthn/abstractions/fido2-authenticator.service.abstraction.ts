@@ -10,6 +10,7 @@ export enum Fido2AlgorithmIdentifier {
 export enum Fido2AutenticatorErrorCode {
   CTAP2_ERR_CREDENTIAL_EXCLUDED,
   CTAP2_ERR_UNSUPPORTED_ALGORITHM,
+  CTAP2_ERR_INVALID_OPTION,
 }
 
 export class Fido2AutenticatorError extends Error {

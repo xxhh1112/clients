@@ -80,6 +80,30 @@ describe("FidoAuthenticatorService", () => {
         Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM]
       );
     });
+
+    describe("when options parameter is present", () => {
+      /** Spec: If the option is known but not valid for this command, terminate this procedure */
+      it("should throw error when rk has invalid value", async () => {
+        const params = await createCredentialParams({ options: { rk: "invalid-value" as any } });
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
+        );
+      });
+
+      /** Spec: If the option is known but not valid for this command, terminate this procedure */
+      it("should throw error when uv has invalid value", async () => {
+        const params = await createCredentialParams({ options: { uv: "invalid-value" as any } });
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
+        );
+      });
+    });
   });
 });
 
