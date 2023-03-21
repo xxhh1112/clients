@@ -30,6 +30,14 @@
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from '../models/autofill-script';
 
+type AutofillDocument = Document & {
+  elementsByOPID: Record<string, Element>
+}
+
+type AutofillElement<T extends Element = Element> = T & {
+  opid: string
+}
+
 /*
   MODIFICATIONS FROM ORIGINAL
 
@@ -84,7 +92,7 @@ function queryDocAll(
   doc: Document,
   rootEl: Element,
   filterCallback: (el: Element) => boolean
-): Node[] {
+): Element[] {
   var accumulatedNodes: Element[] = [];
 
   // mutates accumulatedNodes
@@ -155,7 +163,7 @@ function queryDoc(
 }
 // END MODIFICATION
 
-function collect(document: any): string {
+function collect(document: AutofillDocument): string {
   // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
@@ -293,7 +301,7 @@ function collect(document: any): string {
           // START MODIFICATION
           var elId = JSON.stringify(el.id);
           var labelsByReferencedId = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && node.htmlFor === elId;
+            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elId;
           });
           theLabels = theLabels.concat(labelsByReferencedId);
           // END MODIFICATION
@@ -303,7 +311,7 @@ function collect(document: any): string {
           // START MODIFICATION
           var elName = JSON.stringify(el.name);
           docLabel = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && node.htmlFor === elName;
+            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elName;
           });
           // END MODIFICATION
 
@@ -354,7 +362,7 @@ function collect(document: any): string {
      * @param {any} val
      * @param {*} d
      */
-    function addProp(obj: any, prop: any, val: any, d: any = undefined) {
+    function addProp(obj: any, prop: any, val: any, d?: any) {
       if ((0 !== d && d === val) || null === val || void 0 === val) {
         return;
       }
@@ -392,8 +400,8 @@ function collect(document: any): string {
       addProp(op, "htmlName", getElementAttrValue(formEl, "name"));
       addProp(op, "htmlID", getElementAttrValue(formEl, "id"));
       formOpId = getElementAttrValue(formEl, "action");
-      formOpId = new URL(formOpId, window.location.href);
-      addProp(op, "htmlAction", formOpId ? formOpId.href : null);
+      formOpId = new URL(formOpId, window.location.href) as any;
+      addProp(op, "htmlAction", formOpId ? (formOpId as unknown as URL).href : null);
       addProp(op, "htmlMethod", getElementAttrValue(formEl, "method"));
 
       return op;
@@ -642,7 +650,7 @@ function collect(document: any): string {
    * @param {string[]} arr An array of `textContent` or `innerText` values
    * @param {number} steps The number of steps to take up the DOM tree
    */
-  function shiftForLeftLabel(el: any, arr: string[], steps: number) {
+  function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
     var sib;
     for (steps || (steps = 0); el && el.previousSibling; ) {
       el = el.previousSibling;
