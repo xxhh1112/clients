@@ -27,6 +27,8 @@
   SOFTWARE.
   */
 
+import AutofillPageDetails from '../models/autofill-page-details';
+
 /*
   MODIFICATIONS FROM ORIGINAL
 
@@ -51,7 +53,7 @@
  * We need to use the correct implementation based on browser.
  */
 // START MODIFICATION
-var getShadowRoot;
+var getShadowRoot: (element: Node) => Node;
 
 if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
   // Chromium 88+
@@ -77,8 +79,8 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  * Returns elements like Document.querySelectorAll does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDocAll(doc, rootEl, filterCallback) {
-  var accumulatedNodes = [];
+function queryDocAll(doc: Document, rootEl: HTMLElement, filterCallback: (el: HTMLElement) => boolean): Node[] {
+  var accumulatedNodes: Node[] = [];
 
   // mutates accumulatedNodes
   accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes);
@@ -86,9 +88,9 @@ function queryDocAll(doc, rootEl, filterCallback) {
   return accumulatedNodes;
 }
 
-function accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes) {
+function accumulatingQueryDocAll(doc: Document, rootEl: Node, filterCallback: (el: Node) => boolean, accumulatedNodes: Node[]): void {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node;
+  var node: Node;
 
   while ((node = treeWalker.nextNode())) {
     if (filterCallback(node)) {
@@ -111,7 +113,7 @@ function accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes) 
  * Returns an element like Document.querySelector does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDoc(doc, rootEl, filterCallback) {
+function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Node) => boolean): Node {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
   var node;
 
@@ -139,7 +141,7 @@ function queryDoc(doc, rootEl, filterCallback) {
 }
 // END MODIFICATION
 
-function collect(document, undefined) {
+function collect(document: Document, undefined: any): string {
   // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
@@ -147,7 +149,7 @@ function collect(document, undefined) {
 
   document.elementsByOPID = {};
 
-  function getPageDetails(theDoc, oneShotId) {
+  function getPageDetails(theDoc: Document, oneShotId) {
     // start helpers
 
     /**
@@ -156,7 +158,7 @@ function collect(document, undefined) {
      * @param {string} attrName
      * @returns {string} The value of the attribute
      */
-    function getElementAttrValue(el, attrName) {
+    function getElementAttrValue(el: HTMLElement, attrName: string) {
       var attrVal = el[attrName];
       if ("string" == typeof attrVal) {
         return attrVal;
@@ -200,7 +202,7 @@ function collect(document, undefined) {
      * @param {HTMLElement} el
      * @returns {any} Value of the element
      */
-    function getElementValue(el) {
+    function getElementValue(el: HTMLInputElement) {
       switch (toLowerString(el.type)) {
         case "checkbox":
           return el.checked ? "✓" : "";
@@ -228,12 +230,12 @@ function collect(document, undefined) {
      * @param {HTMLElement} el
      * @returns {string[]} An array of options for the given `<select>` element
      */
-    function getSelectElementOptions(el) {
+    function getSelectElementOptions(el: HTMLSelectElement) {
       if (!el.options) {
         return null;
       }
 
-      var options = Array.prototype.slice.call(el.options).map(function (option) {
+      var options = Array.prototype.slice.call(el.options).map(function (option: HTMLOptionElement) {
         var optionText = option.text
           ? toLowerString(option.text)
               .replace(/\\s/gm, "")
@@ -253,7 +255,7 @@ function collect(document, undefined) {
      * @param {HTMLElement} el
      * @returns {string} A string containing the label, or null if not found
      */
-    function getLabelTop(el) {
+    function getLabelTop(el: HTMLElement) {
       var parent;
 
       // Traverse up the DOM until we reach either the top or the table data element containing our field
@@ -296,7 +298,7 @@ function collect(document, undefined) {
      * @param {HTMLElement} el
      * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
      */
-    function getLabelTag(el) {
+    function getLabelTag(el: HTMLElement) {
       var docLabel,
         theLabels = [];
 
@@ -381,7 +383,7 @@ function collect(document, undefined) {
      * @param {string} s
      * @returns Lowercase string
      */
-    function toLowerString(s) {
+    function toLowerString(s: string) {
       return "string" === typeof s ? s.toLowerCase() : ("" + s).toLowerCase();
     }
     // START MODIFICATION
@@ -1501,7 +1503,7 @@ function fill(document, fillScript, undefined) {
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.command === "collectPageDetails") {
     var pageDetails = collect(document);
-    var pageDetailsObj = JSON.parse(pageDetails);
+    var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     chrome.runtime.sendMessage({
       command: "collectPageDetailsResponse",
       tab: msg.tab,
@@ -1516,7 +1518,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     return true;
   } else if (msg.command === "collectPageDetailsImmediately") {
     var pageDetails = collect(document);
-    var pageDetailsObj = JSON.parse(pageDetails);
+    var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     sendResponse(pageDetailsObj);
     return true;
   }
