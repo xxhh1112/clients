@@ -79,7 +79,7 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should not request confirmation from user", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+        userInterface.confirmNewCredential.mockResolvedValue(true);
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -115,17 +115,20 @@ describe("FidoAuthenticatorService", () => {
       });
 
       /** Spec: wait for user presence */
-      it("should request confirmation from user", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+      it("should inform user", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
 
-        await authenticator.makeCredential(params);
+        try {
+          await authenticator.makeCredential(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
 
-        expect(userInterface.confirmDuplicateCredential).toHaveBeenCalled();
+        expect(userInterface.informExcludedCredential).toHaveBeenCalled();
       });
 
       /** Spec: then terminate this procedure and return error code */
-      it("should throw error if user denies duplication", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(false);
+      it("should throw error", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -135,8 +138,8 @@ describe("FidoAuthenticatorService", () => {
       });
 
       /** Departure from spec: Check duplication last instead of first */
-      it("should not request confirmation from user when input data does not pass checks", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+      it("should not inform user of duplication when input data does not pass checks", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -145,7 +148,7 @@ describe("FidoAuthenticatorService", () => {
             // eslint-disable-next-line no-empty
           } catch {}
         }
-        expect(userInterface.confirmDuplicateCredential).not.toHaveBeenCalled();
+        expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
       });
     });
 
