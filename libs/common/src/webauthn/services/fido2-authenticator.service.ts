@@ -49,6 +49,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     if (params.options?.uv != undefined && typeof params.options.uv !== "boolean") {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION);
     }
+
+    if (params.pinAuth != undefined) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID);
+    }
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {

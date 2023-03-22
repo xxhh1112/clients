@@ -104,6 +104,25 @@ describe("FidoAuthenticatorService", () => {
         );
       });
     });
+
+    /**
+     * Spec: Optionally, if the extensions parameter is present, process any extensions that this authenticator supports.
+     * Currently not supported.
+     */
+    describe.skip("when extensions parameter is present", () => undefined);
+
+    /** Spec: If pinAuth parameter is present and the pinProtocol is not supported */
+    describe("when pinAuth parameter is present", () => {
+      it("should throw error", async () => {
+        const params = await createCredentialParams({ pinAuth: { key: "value" } });
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID]
+        );
+      });
+    });
   });
 });
 
@@ -145,6 +164,7 @@ async function createCredentialParams(
       rk: false as boolean,
       uv: false as boolean,
     },
+    pinAuth: params.pinAuth,
   };
 }
 
