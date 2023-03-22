@@ -34,25 +34,26 @@ describe("FidoAuthenticatorService", () => {
   });
 
   describe("authenticatorMakeCredential", () => {
-    // Spec: If the pubKeyCredParams parameter does not contain a valid COSEAlgorithmIdentifier value that is supported by the authenticator, terminate this procedure and return error code
-    it("should throw error when input does not contain any supported algorithms", async () => {
-      const params = await createCredentialParams({
-        pubKeyCredParams: [{ alg: 9001, type: "public-key" }],
-      });
+    let invalidParams!: InvalidParams;
 
-      const result = async () => await authenticator.makeCredential(params);
-
-      await expect(result).rejects.toThrowError(
-        Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM]
-      );
+    beforeEach(async () => {
+      invalidParams = await createInvalidParams();
     });
 
-    describe("when options parameter is present", () => {
+    describe("invalid input parameters", () => {
+      // Spec: If the pubKeyCredParams parameter does not contain a valid COSEAlgorithmIdentifier value that is supported by the authenticator, terminate this procedure and return error code
+      it("should throw error when input does not contain any supported algorithms", async () => {
+        const result = async () =>
+          await authenticator.makeCredential(invalidParams.unsupportedAlgorithm);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM]
+        );
+      });
+
       /** Spec: If the option is known but not valid for this command, terminate this procedure */
       it("should throw error when rk has invalid value", async () => {
-        const params = await createCredentialParams({ options: { rk: "invalid-value" as any } });
-
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(invalidParams.invalidRk);
 
         await expect(result).rejects.toThrowError(
           Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
@@ -61,13 +62,33 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the option is known but not valid for this command, terminate this procedure */
       it("should throw error when uv has invalid value", async () => {
-        const params = await createCredentialParams({ options: { uv: "invalid-value" as any } });
-
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(invalidParams.invalidUv);
 
         await expect(result).rejects.toThrowError(
           Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
         );
+      });
+
+      /** Spec: If pinAuth parameter is present and the pinProtocol is not supported */
+      it("should throw error when pinAuth parameter is present", async () => {
+        const result = async () => await authenticator.makeCredential(invalidParams.pinAuthPresent);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID]
+        );
+      });
+
+      it("should not request confirmation from user", async () => {
+        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+        const invalidParams = await createInvalidParams();
+
+        for (const p of Object.values(invalidParams)) {
+          try {
+            await authenticator.makeCredential(p);
+            // eslint-disable-next-line no-empty
+          } catch {}
+        }
+        expect(userInterface.confirmNewCredential).not.toHaveBeenCalled();
       });
     });
 
@@ -76,19 +97,6 @@ describe("FidoAuthenticatorService", () => {
      * Currently not supported.
      */
     describe.skip("when extensions parameter is present", () => undefined);
-
-    /** Spec: If pinAuth parameter is present and the pinProtocol is not supported */
-    describe("when pinAuth parameter is present", () => {
-      it("should throw error", async () => {
-        const params = await createCredentialParams({ pinAuth: { key: "value" } });
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID]
-        );
-      });
-    });
 
     describe("when vault contains excluded credential", () => {
       let excludedCipherView: CipherView;
@@ -129,14 +137,9 @@ describe("FidoAuthenticatorService", () => {
       /** Departure from spec: Check duplication last instead of first */
       it("should not request confirmation from user when input data does not pass checks", async () => {
         userInterface.confirmDuplicateCredential.mockResolvedValue(true);
-        const paramsList: Fido2AuthenticatorMakeCredentialsParams[] = [
-          { ...params, options: { rk: "invalid-value" as any } },
-          { ...params, options: { uv: "invalid-value" as any } },
-          { ...params, pinAuth: { key: "value" } },
-          { ...params, pubKeyCredParams: [{ alg: 9001, type: "public-key" }] },
-        ];
+        const invalidParams = await createInvalidParams();
 
-        for (const p of paramsList) {
+        for (const p of Object.values(invalidParams)) {
           try {
             await authenticator.makeCredential(p);
             // eslint-disable-next-line no-empty
@@ -171,25 +174,6 @@ describe("FidoAuthenticatorService", () => {
           Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
         );
       });
-    });
-
-    it("should not request confirmation from user when input data does not pass checks", async () => {
-      userInterface.confirmDuplicateCredential.mockResolvedValue(true);
-      const params = await createCredentialParams();
-      const paramsList: Fido2AuthenticatorMakeCredentialsParams[] = [
-        { ...params, options: { rk: "invalid-value" as any } },
-        { ...params, options: { uv: "invalid-value" as any } },
-        { ...params, pinAuth: { key: "value" } },
-        { ...params, pubKeyCredParams: [{ alg: 9001, type: "public-key" }] },
-      ];
-
-      for (const p of paramsList) {
-        try {
-          await authenticator.makeCredential(p);
-          // eslint-disable-next-line no-empty
-        } catch {}
-      }
-      expect(userInterface.confirmNewCredential).not.toHaveBeenCalled();
     });
   });
 });
@@ -233,6 +217,18 @@ async function createCredentialParams(
       uv: false as boolean,
     },
     pinAuth: params.pinAuth,
+  };
+}
+
+type InvalidParams = Awaited<ReturnType<typeof createInvalidParams>>;
+async function createInvalidParams() {
+  return {
+    unsupportedAlgorithm: await createCredentialParams({
+      pubKeyCredParams: [{ alg: 9001, type: "public-key" }],
+    }),
+    invalidRk: await createCredentialParams({ options: { rk: "invalid-value" as any } }),
+    invalidUv: await createCredentialParams({ options: { uv: "invalid-value" as any } }),
+    pinAuthPresent: await createCredentialParams({ pinAuth: { key: "value" } }),
   };
 }
 
