@@ -28,15 +28,19 @@
   */
 
 import AutofillPageDetails from "../models/autofill-page-details";
-import AutofillScript from '../models/autofill-script';
+import AutofillScript from "../models/autofill-script";
 
 type AutofillDocument = Document & {
-  elementsByOPID: Record<string, Element>
-}
+  elementsByOPID: Record<string, Element>;
+  elementForOPID: (opId: string) => AutofillElement;
+};
 
 type AutofillElement<T extends Element = Element> = T & {
-  opid: string
-}
+  opid: string;
+};
+
+type AutofillInputElement = AutofillElement<HTMLInputElement>;
+type AutofillLabelElement = AutofillElement<HTMLLabelElement>;
 
 /*
   MODIFICATIONS FROM ORIGINAL
@@ -62,7 +66,7 @@ type AutofillElement<T extends Element = Element> = T & {
  * We need to use the correct implementation based on browser.
  */
 // START MODIFICATION
-var getShadowRoot: (element: Element) => Element;
+var getShadowRoot: (element: AutofillElement) => AutofillElement;
 
 if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
   // Chromium 88+
@@ -88,29 +92,29 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  * Returns elements like Document.querySelectorAll does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDocAll(
+function queryDocAll<T extends AutofillElement = AutofillElement>(
   doc: Document,
-  rootEl: Element,
-  filterCallback: (el: Element) => boolean
-): Element[] {
-  var accumulatedNodes: Element[] = [];
+  rootEl: AutofillElement,
+  filterCallback: (el: T) => boolean
+): T[] {
+  var accumulatedNodes: T[] = [];
 
   // mutates accumulatedNodes
-  accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes);
+  accumulatingQueryDocAll<T>(doc, rootEl, filterCallback, accumulatedNodes);
 
   return accumulatedNodes;
 }
 
-function accumulatingQueryDocAll(
+function accumulatingQueryDocAll<T extends AutofillElement = AutofillElement>(
   doc: Document,
-  rootEl: Element,
-  filterCallback: (el: Element) => boolean,
-  accumulatedNodes: Element[]
+  rootEl: AutofillElement,
+  filterCallback: (el: AutofillElement) => boolean,
+  accumulatedNodes: T[]
 ): void {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node: Element;
+  var node: T;
 
-  while ((node = treeWalker.nextNode() as Element)) {
+  while ((node = treeWalker.nextNode() as T)) {
     if (filterCallback(node)) {
       accumulatedNodes.push(node);
     }
@@ -133,13 +137,13 @@ function accumulatingQueryDocAll(
  */
 function queryDoc(
   doc: Document,
-  rootEl: Element,
-  filterCallback: (el: Element) => boolean
-): Element {
+  rootEl: AutofillElement,
+  filterCallback: (el: AutofillElement) => boolean
+): AutofillElement {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node: Element;
+  var node: AutofillElement;
 
-  while ((node = treeWalker.nextNode() as Element)) {
+  while ((node = treeWalker.nextNode() as AutofillElement)) {
     if (filterCallback(node)) {
       return node;
     }
@@ -301,7 +305,7 @@ function collect(document: AutofillDocument): string {
           // START MODIFICATION
           var elId = JSON.stringify(el.id);
           var labelsByReferencedId = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elId;
+            return node.nodeName === "LABEL" && (node as AutofillLabelElement).htmlFor === elId;
           });
           theLabels = theLabels.concat(labelsByReferencedId);
           // END MODIFICATION
@@ -311,7 +315,7 @@ function collect(document: AutofillDocument): string {
           // START MODIFICATION
           var elName = JSON.stringify(el.name);
           docLabel = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elName;
+            return node.nodeName === "LABEL" && (node as AutofillLabelElement).htmlFor === elName;
           });
           // END MODIFICATION
 
@@ -773,7 +777,7 @@ function collect(document: AutofillDocument): string {
             ? (window.innerHeight - topOffset) / 2
             : rect.height / 2)
       );
-      pointEl && pointEl !== el && pointEl !== document;
+      pointEl && pointEl !== el && pointEl !== (document as any);
 
     ) {
       // If the element we found is a label, and the element we're checking has labels
@@ -800,10 +804,10 @@ function collect(document: AutofillDocument): string {
 
   /**
    * Retrieve the element from the document with the specified `opid` property
-   * @param {number} opId
+   * @param {string} opId
    * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
    */
-  function getElementForOPID(opId: number) {
+  function getElementForOPID(opId: string): AutofillElement {
     var theEl;
     if (void 0 === opId || null === opId) {
       return null;
@@ -811,7 +815,7 @@ function collect(document: AutofillDocument): string {
 
     try {
       var formEls = Array.prototype.slice.call(getFormElements(document));
-      var filteredFormEls = formEls.filter(function (el) {
+      var filteredFormEls = formEls.filter(function (el: AutofillElement) {
         return el.opid == opId;
       });
 
@@ -842,7 +846,7 @@ function collect(document: AutofillDocument): string {
   /*
    * inputEl MUST BE an instanceof HTMLInputElement, else inputEl.type.toLowerCase will throw an error
    */
-  function isRelevantInputField(inputEl: HTMLInputElement) {
+  function isRelevantInputField(inputEl: AutofillElement) {
     if (inputEl.hasAttribute("data-bwignore")) {
       return false;
     }
@@ -858,7 +862,7 @@ function collect(document: AutofillDocument): string {
    * @param {number} limit The maximum number of elements to return
    * @returns An array of HTMLElements
    */
-  function getFormElements(theDoc: Document, limit: number) {
+  function getFormElements(theDoc: Document, limit?: number) {
     // START MODIFICATION
 
     var els = queryDocAll(theDoc, theDoc.body, function (el) {
@@ -887,7 +891,9 @@ function collect(document: AutofillDocument): string {
       }
 
       var el = els[i];
-      var type = el.type ? el.type.toLowerCase() : el.type;
+      var type = (el as AutofillInputElement).type
+        ? (el as AutofillInputElement).type.toLowerCase()
+        : (el as AutofillInputElement).type;
       if (type === "checkbox" || type === "radio") {
         unimportantEls.push(el);
       } else {
@@ -909,7 +915,7 @@ function collect(document: AutofillDocument): string {
    * @param {HTMLElement} el
    * @param {boolean} setVal Set the value of the element to its original value
    */
-  function focusElement(el: any, setVal: boolean) {
+  function focusElement(el: AutofillInputElement, setVal: boolean) {
     if (setVal) {
       var initialValue = el.value;
       el.focus();
@@ -931,12 +937,14 @@ function fill(document: any, fillScript: AutofillScript): string {
 
   function queryPasswordInputs() {
     return queryDocAll(document, document.body, function (el) {
-      return el.nodeName === "INPUT" && el.type.toLowerCase() === "password";
+      return (
+        el.nodeName === "INPUT" && (el as AutofillInputElement).type.toLowerCase() === "password"
+      );
     });
   }
 
   // Check if URL is not secure when the original saved one was
-  function urlNotSecure(savedURLs) {
+  function urlNotSecure(savedURLs: string[]) {
     var passwordInputs = null;
     if (!savedURLs) {
       return false;
@@ -960,7 +968,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     return self.origin == null || self.origin === "null";
   }
 
-  function doFill(fillScript) {
+  function doFill(fillScript: AutofillScript) {
     var fillScriptOps,
       theOpIds = [],
       fillScriptProperties = fillScript.properties,
@@ -1081,7 +1089,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     touch_all_fields: touchAllFields,
     simple_set_value_by_query: doSimpleSetByQuery,
     focus_by_opid: doFocusByOpId,
-    delay: null,
+    delay: null as number,
   };
 
   // normalize the op versus the reference
@@ -1100,8 +1108,8 @@ function fill(document: any, fillScript: AutofillScript): string {
   }
 
   // do a fill by opid operation
-  function doFillByOpId(opId, op) {
-    var el = getElementByOpId(opId);
+  function doFillByOpId(opId: string, op: string) {
+    var el = getElementByOpId(opId) as AutofillInputElement;
     return el ? (fillTheElement(el, op), [el]) : null;
   }
 
@@ -1111,11 +1119,11 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} op
    * @returns {HTMLElement}
    */
-  function doFillByQuery(query, op) {
+  function doFillByQuery(query: string, op: string) {
     var elements = selectAllFromDoc(query);
     return Array.prototype.map.call(
       Array.prototype.slice.call(elements),
-      function (el) {
+      function (el: AutofillElement) {
         fillTheElement(el, op);
         return el;
       },
@@ -1129,16 +1137,19 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} valueToSet
    * @returns {Array} Array of elements that were set.
    */
-  function doSimpleSetByQuery(query, valueToSet) {
+  function doSimpleSetByQuery(query: string, valueToSet: string): AutofillElement[] {
     var elements = selectAllFromDoc(query),
-      arr = [];
-    Array.prototype.forEach.call(Array.prototype.slice.call(elements), function (el) {
-      el.disabled ||
-        el.a ||
-        el.readOnly ||
-        void 0 === el.value ||
-        ((el.value = valueToSet), arr.push(el));
-    });
+      arr: AutofillElement[] = [];
+    Array.prototype.forEach.call(
+      Array.prototype.slice.call(elements),
+      function (el: AutofillInputElement) {
+        el.disabled ||
+          el.a ||
+          el.readOnly ||
+          void 0 === el.value ||
+          ((el.value = valueToSet), arr.push(el));
+      }
+    );
     return arr;
   }
 
@@ -1147,7 +1158,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {number} opId
    * @returns
    */
-  function doFocusByOpId(opId) {
+  function doFocusByOpId(opId: string) {
     var el = getElementByOpId(opId);
     if (el) {
       "function" === typeof el.click && el.click(),
@@ -1186,7 +1197,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     );
   }
 
-  var checkRadioTrueOps = {
+  var checkRadioTrueOps: Record<string, boolean> = {
       true: true,
       y: true,
       1: true,
@@ -1200,9 +1211,9 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @param {string} op
    */
-  function fillTheElement(el, op) {
-    var shouldCheck;
-    if (el && null !== op && void 0 !== op && !(el.disabled || el.a || el.readOnly)) {
+  function fillTheElement(el: AutofillInputElement, op: string) {
+    var shouldCheck: boolean;
+    if (el && null !== op && void 0 !== op && !(el.disabled || (el as any).a || el.readOnly)) {
       switch (
         (markTheFilling && el.form && !el.form.opfilled && (el.form.opfilled = true),
         el.type ? el.type.toLowerCase() : null)
@@ -1241,7 +1252,10 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @param {*} afterValSetFunc The function to perform after the operations are complete.
    */
-  function doAllFillOperations(el, afterValSetFunc) {
+  function doAllFillOperations(
+    el: AutofillInputElement,
+    afterValSetFunc: (el: AutofillInputElement) => void
+  ) {
     setValueForElement(el);
     afterValSetFunc(el);
     setValueForElementByEvent(el);
@@ -1266,8 +1280,8 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} eventName
    * @returns {Event} A normalized event
    */
-  function normalizeEvent(el, eventName) {
-    var ev;
+  function normalizeEvent(el: AutofillElement, eventName: string) {
+    var ev: any;
     if ("KeyboardEvent" in window) {
       ev = new window.KeyboardEvent(eventName, {
         bubbles: true,
@@ -1291,7 +1305,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.
    * @param {HTMLElement} el
    */
-  function setValueForElement(el) {
+  function setValueForElement(el: AutofillInputElement) {
     var valueToSet = el.value;
     clickElement(el);
     doFocusElement(el, false);
@@ -1306,7 +1320,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
    * @param {HTMLElement} el
    */
-  function setValueForElementByEvent(el) {
+  function setValueForElementByEvent(el: AutofillInputElement) {
     var valueToSet = el.value,
       ev1 = el.ownerDocument.createEvent("HTMLEvents"),
       ev2 = el.ownerDocument.createEvent("HTMLEvents");
@@ -1327,7 +1341,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
    */
-  function clickElement(el) {
+  function clickElement(el: AutofillInputElement) {
     if (!el || (el && "function" !== typeof el.click)) {
       return false;
     }
@@ -1339,12 +1353,12 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Get all the elements on the DOM that are likely to be a password field
    * @returns {Array} Array of elements
    */
-  function getAllFields() {
+  function getAllFields(): AutofillInputElement[] {
     var r = RegExp(
       "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
       "i"
     );
-    return queryDocAll(document, document.body, function (el) {
+    return queryDocAll<AutofillInputElement>(document, document.body, function (el) {
       return (
         el.nodeName === "INPUT" && el.type.toLowerCase() === "text" && el.value && r.test(el.value)
       );
@@ -1367,7 +1381,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns true if we can see the element to apply styling.
    */
-  function canSeeElementToStyle(el) {
+  function canSeeElementToStyle(el: AutofillElement) {
     var currentEl;
     if ((currentEl = animateTheFilling)) {
       a: {
@@ -1408,10 +1422,12 @@ function fill(document: any, fillScript: AutofillScript): string {
 
   /**
    * Find the element for the given `opid`.
-   * @param {number} theOpId
+   * @param {string} theOpId
    * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
    */
-  function getElementByOpId(theOpId) {
+  function getElementByOpId(
+    theOpId: string
+  ): AutofillElement<HTMLInputElement | HTMLSelectElement | HTMLButtonElement | HTMLSpanElement> {
     var theElement;
     if (void 0 === theOpId || null === theOpId) {
       return null;
@@ -1451,7 +1467,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} theSelector
    * @returns
    */
-  function selectAllFromDoc(theSelector) {
+  function selectAllFromDoc(theSelector: string) {
     // START MODIFICATION
     return queryDocAll(document, document, function (node) {
       return node.matches(theSelector);
@@ -1464,7 +1480,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @param {boolean} setValue Re-set the value after focusing
    */
-  function doFocusElement(el, setValue) {
+  function doFocusElement(el: AutofillInputElement, setValue: boolean) {
     if (setValue) {
       var existingValue = el.value;
       el.focus();
@@ -1487,7 +1503,7 @@ function fill(document: any, fillScript: AutofillScript): string {
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.command === "collectPageDetails") {
-    var pageDetails = collect(document);
+    var pageDetails = collect(document as AutofillDocument);
     var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     chrome.runtime.sendMessage({
       command: "collectPageDetailsResponse",
@@ -1502,7 +1518,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     sendResponse();
     return true;
   } else if (msg.command === "collectPageDetailsImmediately") {
-    var pageDetails = collect(document);
+    var pageDetails = collect(document as AutofillDocument);
     var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     sendResponse(pageDetailsObj);
     return true;
