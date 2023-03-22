@@ -12,6 +12,7 @@ export enum Fido2AutenticatorErrorCode {
   CTAP2_ERR_UNSUPPORTED_ALGORITHM,
   CTAP2_ERR_INVALID_OPTION,
   CTAP2_ERR_PIN_AUTH_INVALID,
+  CTAP2_ERR_OPERATION_DENIED,
 }
 
 export class Fido2AutenticatorError extends Error {

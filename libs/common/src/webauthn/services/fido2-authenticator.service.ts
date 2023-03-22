@@ -53,6 +53,17 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     if (params.pinAuth != undefined) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID);
     }
+
+    if (!duplicateExists) {
+      const userVerification = await this.userInterface.confirmNewCredential({
+        credentialName: params.rp.name,
+        userName: params.user.name,
+      });
+
+      if (!userVerification) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+      }
+    }
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {

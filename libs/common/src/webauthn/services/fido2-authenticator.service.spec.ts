@@ -11,7 +11,10 @@ import {
   Fido2AutenticatorErrorCode,
   Fido2AuthenticatorMakeCredentialsParams,
 } from "../abstractions/fido2-authenticator.service.abstraction";
-import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.service.abstraction";
+import {
+  Fido2UserInterfaceService,
+  NewCredentialParams,
+} from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
 import { Fido2Key } from "../models/domain/fido2-key";
 
@@ -120,6 +123,33 @@ describe("FidoAuthenticatorService", () => {
 
         await expect(result).rejects.toThrowError(
           Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID]
+        );
+      });
+    });
+
+    describe("when input passes all initial checks", () => {
+      /** Spec: show the items contained within the user and rp parameter structures to the user. */
+      it("should request confirmation from user", async () => {
+        userInterface.confirmNewCredential.mockResolvedValue(true);
+        const params = await createCredentialParams();
+
+        await authenticator.makeCredential(params);
+
+        expect(userInterface.confirmNewCredential).toHaveBeenCalledWith({
+          credentialName: params.rp.name,
+          userName: params.user.name,
+        } as NewCredentialParams);
+      });
+
+      /** Spec: If the user declines permission */
+      it("should throw error if user denies creation request", async () => {
+        userInterface.confirmNewCredential.mockResolvedValue(false);
+        const params = await createCredentialParams();
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
         );
       });
     });
