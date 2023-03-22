@@ -1,3 +1,5 @@
+import { CipherType } from "../../vault/enums/cipher-type";
+import { CipherView } from "../../vault/models/view/cipher.view";
 import { CipherService } from "../../vault/services/cipher.service";
 import {
   Fido2AlgorithmIdentifier,
@@ -8,6 +10,9 @@ import {
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
+import { Fido2KeyView } from "../models/view/fido2-key.view";
+
+const KeyUsages: KeyUsage[] = ["sign"];
 
 /**
  * Bitwarden implementation of the Authenticator API described by the FIDO Alliance
@@ -40,12 +45,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     // We deviate from this because we allow duplicates to be created if the user confirms it,
     // and we don't want to ask the user for confirmation if the input params haven't already
     // been verified.
-    const duplicateExists = await this.vaultContainsId(
+    const isExcluded = await this.vaultContainsId(
       params.excludeList.map((key) => Fido2Utils.bufferToString(key.id))
     );
     let userVerification = false;
 
-    if (duplicateExists) {
+    if (isExcluded) {
       userVerification = await this.userInterface.confirmDuplicateCredential(
         [Fido2Utils.bufferToString(params.excludeList[0].id)],
         {
@@ -60,11 +65,17 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       });
     }
 
-    if (!userVerification && duplicateExists) {
+    if (!userVerification && isExcluded) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
-    } else if (!userVerification && !duplicateExists) {
+    } else if (!userVerification && !isExcluded) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
     }
+
+    const keyPair = await this.createKeyPair();
+    const vaultItem = await this.createVaultItem(params, keyPair.privateKey);
+
+    const encrypted = await this.cipherService.encrypt(vaultItem);
+    await this.cipherService.createWithServer(encrypted);
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {
@@ -75,5 +86,38 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     }
 
     return false;
+  }
+
+  private async createKeyPair() {
+    return await crypto.subtle.generateKey(
+      {
+        name: "ECDSA",
+        namedCurve: "P-256",
+      },
+      true,
+      KeyUsages
+    );
+  }
+
+  private async createVaultItem(
+    params: Fido2AuthenticatorMakeCredentialsParams,
+    keyValue: CryptoKey
+  ): Promise<CipherView> {
+    const pcks8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
+
+    const view = new CipherView();
+    view.type = CipherType.Fido2Key;
+    view.name = params.rp.name;
+
+    view.fido2Key = new Fido2KeyView();
+    view.fido2Key.keyType = "ECDSA";
+    view.fido2Key.keyCurve = "P-256";
+    view.fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
+    view.fido2Key.rpId = params.rp.id;
+    view.fido2Key.rpName = params.rp.name;
+    view.fido2Key.userHandle = Fido2Utils.bufferToString(params.user.id);
+    view.fido2Key.userName = params.user.name;
+
+    return view;
   }
 }
