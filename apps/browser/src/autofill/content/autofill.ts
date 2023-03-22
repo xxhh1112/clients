@@ -94,7 +94,7 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  */
 function queryDocAll<T extends AutofillElement = AutofillElement>(
   doc: Document,
-  rootEl: AutofillElement,
+  rootEl: Node,
   filterCallback: (el: T) => boolean
 ): T[] {
   var accumulatedNodes: T[] = [];
@@ -107,7 +107,7 @@ function queryDocAll<T extends AutofillElement = AutofillElement>(
 
 function accumulatingQueryDocAll<T extends AutofillElement = AutofillElement>(
   doc: Document,
-  rootEl: AutofillElement,
+  rootEl: Node,
   filterCallback: (el: AutofillElement) => boolean,
   accumulatedNodes: T[]
 ): void {
@@ -1183,11 +1183,11 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} query
    * @returns
    */
-  function doClickByQuery(query) {
-    query = selectAllFromDoc(query);
+  function doClickByQuery(query: string) {
+    query = selectAllFromDoc(query) as any;
     return Array.prototype.map.call(
       Array.prototype.slice.call(query),
-      function (el) {
+      function (el: AutofillInputElement) {
         clickElement(el);
         "function" === typeof el.click && el.click();
         "function" === typeof el.focus && doFocusElement(el, true);
@@ -1381,7 +1381,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns true if we can see the element to apply styling.
    */
-  function canSeeElementToStyle(el: AutofillElement) {
+  function canSeeElementToStyle(el: AutofillInputElement) {
     var currentEl;
     if ((currentEl = animateTheFilling)) {
       a: {
@@ -1411,7 +1411,7 @@ function fill(document: any, fillScript: AutofillScript): string {
       }
     }
     // START MODIFICATION
-    if (el && !el.type && el.tagName.toLowerCase() === "span") {
+    if (el && !(el as any).type && el.tagName.toLowerCase() === "span") {
       return true;
     }
     // END MODIFICATION
