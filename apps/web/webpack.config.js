@@ -176,7 +176,7 @@ const plugins = [
 ];
 
 // ref: https://webpack.js.org/configuration/dev-server/#devserver
-let certSuffix = fs.existsSync("dev-server.local.pem") ? ".local" : ".shared";
+let cert = fs.existsSync("dev-server.local.pem") ? "dev-server.local.pem" : "dev-server.shared.pem";
 const devServer =
   NODE_ENV !== "development"
     ? {}
@@ -184,7 +184,8 @@ const devServer =
         server: {
           type: "https",
           options: {
-            pfx: fs.readFileSync("dev-cert.pfx"),
+            cert: fs.readFileSync(cert),
+            key: fs.readFileSync(cert),
           },
         },
         // host: '192.168.1.9',
