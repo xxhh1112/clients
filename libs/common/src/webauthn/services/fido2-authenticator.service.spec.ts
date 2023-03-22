@@ -34,43 +34,6 @@ describe("FidoAuthenticatorService", () => {
   });
 
   describe("authenticatorMakeCredential", () => {
-    describe("when vault contains excluded credential", () => {
-      let excludedCipherView: CipherView;
-      let params: Fido2AuthenticatorMakeCredentialsParams;
-
-      beforeEach(async () => {
-        const excludedCipher = createCipher();
-        excludedCipherView = await excludedCipher.decrypt();
-        params = await createCredentialParams({
-          excludeList: [{ id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" }],
-        });
-        cipherService.get.mockImplementation(async (id) =>
-          id === excludedCipher.id ? excludedCipher : undefined
-        );
-        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
-      });
-
-      /** Spec: wait for user presence */
-      it("should request confirmation from user", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
-
-        await authenticator.makeCredential(params);
-
-        expect(userInterface.confirmDuplicateCredential).toHaveBeenCalled();
-      });
-
-      /** Spec: then terminate this procedure and return error code */
-      it("should throw error if user denies duplication", async () => {
-        userInterface.confirmDuplicateCredential.mockResolvedValue(false);
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED]
-        );
-      });
-    });
-
     // Spec: If the pubKeyCredParams parameter does not contain a valid COSEAlgorithmIdentifier value that is supported by the authenticator, terminate this procedure and return error code
     it("should throw error when input does not contain any supported algorithms", async () => {
       const params = await createCredentialParams({
@@ -127,6 +90,62 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
+    describe("when vault contains excluded credential", () => {
+      let excludedCipherView: CipherView;
+      let params: Fido2AuthenticatorMakeCredentialsParams;
+
+      beforeEach(async () => {
+        const excludedCipher = createCipher();
+        excludedCipherView = await excludedCipher.decrypt();
+        params = await createCredentialParams({
+          excludeList: [{ id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" }],
+        });
+        cipherService.get.mockImplementation(async (id) =>
+          id === excludedCipher.id ? excludedCipher : undefined
+        );
+        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
+      });
+
+      /** Spec: wait for user presence */
+      it("should request confirmation from user", async () => {
+        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+
+        await authenticator.makeCredential(params);
+
+        expect(userInterface.confirmDuplicateCredential).toHaveBeenCalled();
+      });
+
+      /** Spec: then terminate this procedure and return error code */
+      it("should throw error if user denies duplication", async () => {
+        userInterface.confirmDuplicateCredential.mockResolvedValue(false);
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED]
+        );
+      });
+
+      /** Departure from spec: Check duplication last instead of first */
+      it("should not request confirmation from user when input data does not pass checks", async () => {
+        userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+        const paramsList: Fido2AuthenticatorMakeCredentialsParams[] = [
+          { ...params, options: { rk: "invalid-value" as any } },
+          { ...params, options: { uv: "invalid-value" as any } },
+          { ...params, pinAuth: { key: "value" } },
+          { ...params, pubKeyCredParams: [{ alg: 9001, type: "public-key" }] },
+        ];
+
+        for (const p of paramsList) {
+          try {
+            await authenticator.makeCredential(p);
+            // eslint-disable-next-line no-empty
+          } catch {}
+        }
+        expect(userInterface.confirmDuplicateCredential).not.toHaveBeenCalled();
+      });
+    });
+
     describe("when input passes all initial checks", () => {
       /** Spec: show the items contained within the user and rp parameter structures to the user. */
       it("should request confirmation from user", async () => {
@@ -152,6 +171,25 @@ describe("FidoAuthenticatorService", () => {
           Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
         );
       });
+    });
+
+    it("should not request confirmation from user when input data does not pass checks", async () => {
+      userInterface.confirmDuplicateCredential.mockResolvedValue(true);
+      const params = await createCredentialParams();
+      const paramsList: Fido2AuthenticatorMakeCredentialsParams[] = [
+        { ...params, options: { rk: "invalid-value" as any } },
+        { ...params, options: { uv: "invalid-value" as any } },
+        { ...params, pinAuth: { key: "value" } },
+        { ...params, pubKeyCredParams: [{ alg: 9001, type: "public-key" }] },
+      ];
+
+      for (const p of paramsList) {
+        try {
+          await authenticator.makeCredential(p);
+          // eslint-disable-next-line no-empty
+        } catch {}
+      }
+      expect(userInterface.confirmNewCredential).not.toHaveBeenCalled();
     });
   });
 });

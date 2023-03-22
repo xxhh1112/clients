@@ -20,24 +20,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ) {}
 
   async makeCredential(params: Fido2AuthenticatorMakeCredentialsParams): Promise<void> {
-    const duplicateExists = await this.vaultContainsId(
-      params.excludeList.map((key) => Fido2Utils.bufferToString(key.id))
-    );
-
-    if (duplicateExists) {
-      const userConfirmation = await this.userInterface.confirmDuplicateCredential(
-        [Fido2Utils.bufferToString(params.excludeList[0].id)],
-        {
-          credentialName: params.rp.name,
-          userName: params.user.name,
-        }
-      );
-
-      if (!userConfirmation) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
-      }
-    }
-
     if (params.pubKeyCredParams.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM);
     }
@@ -54,15 +36,34 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID);
     }
 
-    if (!duplicateExists) {
-      const userVerification = await this.userInterface.confirmNewCredential({
+    // In the spec the `excludeList` is checked first.
+    // We deviate from this because we allow duplicates to be created if the user confirms it,
+    // and we don't want to ask the user for confirmation if the input params haven't already
+    // been verified.
+    const duplicateExists = await this.vaultContainsId(
+      params.excludeList.map((key) => Fido2Utils.bufferToString(key.id))
+    );
+    let userVerification = false;
+
+    if (duplicateExists) {
+      userVerification = await this.userInterface.confirmDuplicateCredential(
+        [Fido2Utils.bufferToString(params.excludeList[0].id)],
+        {
+          credentialName: params.rp.name,
+          userName: params.user.name,
+        }
+      );
+    } else {
+      userVerification = await this.userInterface.confirmNewCredential({
         credentialName: params.rp.name,
         userName: params.user.name,
       });
+    }
 
-      if (!userVerification) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
-      }
+    if (!userVerification && duplicateExists) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
+    } else if (!userVerification && !duplicateExists) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
     }
   }
 
