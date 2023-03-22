@@ -658,7 +658,7 @@
     "message": "Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно."
   },
   "masterPassImportant": {
-    "message": "Мастер-пароли невозможно восстановить, если вы их забудете!"
+    "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
   },
   "masterPassHintDesc": {
     "message": "Подсказка к мастер-паролю может помочь вам его вспомнить."
@@ -697,7 +697,14 @@
     "message": "Необходимо повторно ввести мастер-пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Мастер-пароль должен содержать не менее 8 символов."
+    "message": "Мастер-пароль должен содержать не менее $VALUE$ символов.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Мастер-пароли не совпадают."
@@ -1247,6 +1254,9 @@
   },
   "importSuccess": {
     "message": "Данные успешно импортированы"
+  },
+  "dataExportSuccess": {
+    "message": "Данные успешно экспортированы"
   },
   "importWarning": {
     "message": "Вы импортируете данные в $ORGANIZATION$. Члены этой организации могут получить доступ к вашим данным. Хотите продолжить?",
@@ -2050,9 +2060,6 @@
   },
   "updateLicense": {
     "message": "Обновить лицензию"
-  },
-  "updatedLicense": {
-    "message": "Лицензия обновлена"
   },
   "manageSubscription": {
     "message": "Управление подпиской"
@@ -3522,7 +3529,7 @@
     "message": "Слабый мастер-пароль"
   },
   "weakMasterPasswordDesc": {
-    "message": "Вы выбрали слабый мастер-пароль. Для надежной защиты аккаунта Bitwarden следует использовать сильный мастер-пароль (или парольную фразу). Вы действительно хотите использовать этот мастер-пароль?"
+    "message": "Обнаружен слабый пароль. Для защиты аккаунта следует установить надежный пароль. Вы уверены, что хотите использовать слабый пароль?"
   },
   "rotateAccountEncKey": {
     "message": "Также сменить ключ шифрования моего аккаунта"
@@ -4462,7 +4469,7 @@
     "message": "Отказаться от сброса пароля"
   },
   "enrollPasswordResetSuccess": {
-    "message": "Регистрация успешна!"
+    "message": "Записано успешно!"
   },
   "withdrawPasswordResetSuccess": {
     "message": "Запись успешно отменена!"
@@ -4546,7 +4553,7 @@
     "message": "Пользователи организации должны зарегистрироваться самостоятельно или быть зарегистрированными автоматически, чтобы администраторы могли сбросить их мастер-пароль."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Автоматическое развертывание"
+    "message": "Автоматическое регистрация"
   },
   "resetPasswordPolicyAutoEnrollDescription": {
     "message": "Все пользователи будут автоматически зарегистрированы на сброс пароля, после того как их приглашение будет принято, и им не будет разрешено отказаться от его выполнения."
@@ -4579,7 +4586,7 @@
     "message": "Подтверждение мастер-пароля"
   },
   "passwordConfirmationDesc": {
-    "message": "Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность."
+    "message": "Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности."
   },
   "reinviteSelected": {
     "message": "Отправить приглашения повторно"
@@ -5670,6 +5677,9 @@
   "customColor": {
     "message": "Пользовательский цвет"
   },
+  "selectPlaceholder": {
+    "message": "-- Выбрать --"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Введите для фильтрации --"
   },
@@ -5694,157 +5704,261 @@
     "message": "Скрыть"
   },
   "projects": {
-    "message": "Проекты"
+    "message": "Проекты",
+    "description": "Description for the Projects field."
   },
   "lastEdited": {
-    "message": "Последнее изменение"
+    "message": "Последнее изменение",
+    "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "Изменить секрет"
+    "message": "Изменить секрет",
+    "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "Добавить секрет"
+    "message": "Добавить секрет",
+    "description": "Action to create a new secret."
   },
   "copySecretName": {
-    "message": "Скопировать название секрета"
+    "message": "Скопировать название секрета",
+    "description": "Action to copy the name of a secret to the system's clipboard."
   },
   "copySecretValue": {
-    "message": "Скопировать значение секрета"
+    "message": "Скопировать значение секрета",
+    "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "Удалить секрет"
+    "message": "Удалить секрет",
+    "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "Удалить секреты"
+    "message": "Удалить секреты",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Окончательно удалить секрет"
+  },
+  "hardDeleteSecrets": {
+    "message": "Окончательно удалить секреты"
   },
   "secretProjectAssociationDescription": {
-    "message": "Выберите проекты, с которыми будет связан секрет. Только пользователи организации, имеющие доступ к этим проектам, смогут увидеть секрет."
+    "message": "Выберите проекты, с которыми будет связан секрет. Только пользователи организации, имеющие доступ к этим проектам, смогут увидеть секрет.",
+    "description": "A prompt explaining how secrets can be associated with projects."
   },
-  "typeOrSelectProjects": {
-    "message": "Введите или выберите проекты"
+  "selectProjects": {
+    "message": "Выберите проекты",
+    "description": "A label for a type-to-filter input field to choose projects."
   },
-  "typeOrSelectProject": {
-    "message": "Введите или выберите проекты"
+  "searchProjects": {
+    "message": "Поиск проектов",
+    "description": "Label for the search bar used to search projects."
   },
   "project": {
-    "message": "Проект"
+    "message": "Проект",
+    "description": "Similar to collections, projects can be used to group secrets."
   },
   "editProject": {
-    "message": "Изменить проект"
+    "message": "Изменить проект",
+    "description": "The action to modify an existing project."
   },
   "viewProject": {
-    "message": "Просмотреть проект"
+    "message": "Просмотреть проект",
+    "description": "The action to view details of a project."
   },
   "deleteProject": {
-    "message": "Удалить проект"
+    "message": "Удалить проект",
+    "description": "The action to delete a project from the system."
   },
   "deleteProjects": {
-    "message": "Удалить проекты"
+    "message": "Удалить проекты",
+    "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "Секрет"
+    "message": "Секрет",
+    "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "Сервисный аккаунт"
+    "message": "Сервисный аккаунт",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "Сервисные аккаунты"
+    "message": "Сервисные аккаунты",
+    "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "Секреты"
+    "message": "Секреты",
+    "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "Пара название/значение"
+    "message": "Пара название/значение",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
-    "message": "Секрет изменен"
+    "message": "Секрет изменен",
+    "description": "Notification for the successful editing of a secret."
   },
   "secretCreated": {
-    "message": "Секрет создан"
+    "message": "Секрет создан",
+    "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "Новый секрет"
+    "message": "Новый секрет",
+    "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "Новый сервисный аккаунт"
+    "message": "Новый сервисный аккаунт",
+    "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "Нет секретов для отображения"
+    "message": "Нет секретов для отображения",
+    "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "Чтобы начать, добавьте новый секрет или импортируйте их."
+    "message": "Чтобы начать, добавьте новый секрет или импортируйте их.",
+    "description": "Message to encourage the user to start adding secrets."
   },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Пока нечего показать"
+  "secretsTrashNoItemsMessage": {
+    "message": "В корзине нет секретов."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Чтобы приступить к автоматизации секретного доступа, создайте новый сервисный аккаунт."
+    "message": "Чтобы приступить к автоматизации секретного доступа, создайте новый сервисный аккаунт.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Пока нечего показать",
+    "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "Поиск секретов"
+    "message": "Поиск секретов",
+    "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "Удалить сервисные аккаунты"
+    "message": "Удалить сервисные аккаунты",
+    "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "Удалить сервисный аккаунт"
+    "message": "Удалить сервисный аккаунт",
+    "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "Просмотреть сервисный аккаунт"
+    "message": "Просмотреть сервисный аккаунт",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "Удаление сервисного аккаунта $SERVICE_ACCOUNT$ окончательно и необратимо.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Удаление сервисных аккаунтов окончательно и необратимо."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Сервисных аккаунтов к удалению: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Сервисный аккаунт удален"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Сервисные аккаунты удалены"
   },
   "searchServiceAccounts": {
-    "message": "Поиск сервисных аккаунтов"
+    "message": "Поиск сервисных аккаунтов",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Изменить сервисный аккаунт",
+    "description": "Title for editing a service account."
   },
   "addProject": {
-    "message": "Добавить проект"
+    "message": "Добавить проект",
+    "description": "Title for creating a new project."
   },
   "projectEdited": {
-    "message": "Проект изменен"
+    "message": "Проект изменен",
+    "description": "Notification for the successful editing of a project."
   },
   "projectSaved": {
-    "message": "Проект сохранен"
+    "message": "Проект сохранен",
+    "description": "Notification for the successful saving of a project."
   },
   "projectCreated": {
-    "message": "Проект создан"
+    "message": "Проект создан",
+    "description": "Notification for the successful creation of a project."
   },
   "projectName": {
-    "message": "Название проекта"
+    "message": "Название проекта",
+    "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "Новый проект"
+    "message": "Новый проект",
+    "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
-    "message": "Удаление секретов может повлиять на существующие интеграции."
+    "message": "Удаление секретов может повлиять на существующие интеграции.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "Секреты отправлены в корзину"
+    "message": "Секреты отправлены в корзину",
+    "description": "Notifies that the selected secrets have been moved to the trash"
   },
-  "serviceAccountCreated": {
-    "message": "Сервисный аккаунт создан"
+  "hardDeleteSecretConfirmation": {
+    "message": "Вы уверены, что хотите удалить этот секрет?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Вы уверены, что хотите удалить эти секреты?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Секреты удалены окончательно"
   },
   "smAccess": {
-    "message": "Доступ"
+    "message": "Доступ",
+    "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
-    "message": "Проект, секрет"
+    "message": "Проект, секрет",
+    "description": ""
   },
   "serviceAccountName": {
-    "message": "Название сервисного аккаунта"
+    "message": "Название сервисного аккаунта",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Сервисный аккаунт создан",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Сервисный аккаунт изменен",
+    "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Введите или выберите проекты или секреты"
+    "message": "Введите или выберите проекты или секреты",
+    "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "Введите для фильтрации"
+    "message": "Введите для фильтрации",
+    "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
-    "message": "Проект удален"
+    "message": "Проект удален",
+    "description": "Notifies that the selected projects have been deleted"
   },
   "deleteProjectToast": {
-    "message": "Проект и все связанные с ним секреты были удалены"
+    "message": "Проект удалены",
+    "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
     "message": "Удаление проекта $PROJECT$ окончательно и необратимо.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5854,6 +5968,7 @@
   },
   "deleteProjectInputLabel": {
     "message": "Наберите \"$CONFIRM$\", чтобы продолжить",
+    "description": "Users are prompted to type 'confirm' to delete a project",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5863,6 +5978,7 @@
   },
   "deleteProjectConfirmMessage": {
     "message": "Удалить $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5872,6 +5988,7 @@
   },
   "deleteProjectsConfirmMessage": {
     "message": "Удалить проектов: $COUNT$",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5880,70 +5997,101 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Удаление проектов окончательно и необратимо."
+    "message": "Удаление проектов окончательно и необратимо.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
-    "message": "Нет проектов для отображения"
+    "message": "Нет проектов для отображения",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "Добавить новый проект, чтобы приступить к организации секретов."
+    "message": "Добавить новый проект, чтобы приступить к организации секретов.",
+    "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
-    "message": "Требуется подтверждение"
+    "message": "Требуется подтверждение",
+    "description": "Indicates that user confirmation is required for an action to proceed."
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "Следующие проекты не могут быть удалены:"
+    "message": "Следующие проекты не могут быть удалены:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "Секрет отправлен в корзину"
+    "message": "Секрет отправлен в корзину",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
-  "searchProjects": {
-    "message": "Поиск проектов"
+  "hardDeleteSuccessToast": {
+    "message": "Секрет удален окончательно"
   },
   "accessTokens": {
-    "message": "Токены доступа"
+    "message": "Токены доступа",
+    "description": "Title for the section displaying access tokens."
   },
   "createAccessToken": {
-    "message": "Создать токен доступа"
+    "message": "Создать токен доступа",
+    "description": "Button label for creating a new access token."
   },
   "expires": {
-    "message": "Истекает"
+    "message": "Истекает",
+    "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "Может читать"
+    "message": "Может читать",
+    "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "Нет токенов доступа для отображения"
+    "message": "Нет токенов доступа для отображения",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "Чтобы начать работу, создайте токен доступа"
+    "message": "Чтобы начать работу, создайте токен доступа",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
-    "message": "Скачайте или скопируйте перед закрытием."
+    "message": "Скачайте или скопируйте перед закрытием.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "Истекает:"
+    "message": "Истекает:",
+    "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "Токены доступа не сохраняются и не могут быть получены"
+    "message": "Токены доступа не сохраняются и не могут быть получены",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
-    "message": "Скопировать токен"
+    "message": "Скопировать токен",
+    "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "Токен доступа"
+    "message": "Токен доступа",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
-    "message": "Срок действия обязателен"
+    "message": "Срок действия обязателен",
+    "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Токен доступа создан и скопирован в буфер обмена"
+    "message": "Токен доступа создан и скопирован в буфер обмена",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "Управление разрешениями недоступно в бета-версии."
+    "message": "Управление разрешениями недоступно в бета-версии.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "Отозвать токен доступа"
+    "message": "Отозвать токен доступа",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Отозвать токены доступа"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Отзыв токенов доступа является окончательным и необратимым."
+  },
+  "accessTokenRevoked": {
+    "message": "Токены доступа отозваны",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Подменю"
@@ -5999,6 +6147,9 @@
   "collection": {
     "message": "Коллекция"
   },
+  "noCollection": {
+    "message": "Нет коллекций"
+  },
   "canView": {
     "message": "Может просматривать"
   },
@@ -6028,6 +6179,138 @@
   },
   "memberAccessAll": {
     "message": "Эта пользователь может иметь доступ и изменять все элементы."
+  },
+  "domainVerification": {
+    "message": "Верификация домена"
+  },
+  "newDomain": {
+    "message": "Новый домен"
+  },
+  "noDomains": {
+    "message": "Нет доменов"
+  },
+  "noDomainsSubText": {
+    "message": "Подключение домена позволит пользователям пропускать поле идентификатора SSO при авторизации с помощью SSO."
+  },
+  "verifyDomain": {
+    "message": "Верифицировать домен"
+  },
+  "reverifyDomain": {
+    "message": "Повторно верифицировать домен"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Скопировать запись DNS TXT"
+  },
+  "dnsTxtRecord": {
+    "message": "Запись DNS TXT"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Скопируйте и вставьте TXT-запись к своему провайдеру DNS."
+  },
+  "domainNameInputHint": {
+    "message": "Пример: mydomain.com. Для верификации субдоменов необходимы отдельные записи."
+  },
+  "automaticDomainVerification": {
+    "message": "Автоматическая верификация домена"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden попытается верифицировать домен 3 раза в течение первых 72 часов. Если верифицировать домен не удастся, проверьте DNS-запись на вашем хосте и верифицируйте вручную. Домен будет удален из вашей организации через 7 дней, если он не будет верифицирован"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Введенные данные не соответствуют формату. Формат: mydomain.com. Для верификации субдоменов необходимы отдельные записи."
+  },
+  "removeDomain": {
+    "message": "Удалить домен"
+  },
+  "removeDomainWarning": {
+    "message": "Удаление домена не может быть отменено. Вы уверены, что хотите продолжить?"
+  },
+  "domainRemoved": {
+    "message": "Домен удален"
+  },
+  "domainSaved": {
+    "message": "Домен сохранен"
+  },
+  "domainVerified": {
+    "message": "Домен верифицирован"
+  },
+  "duplicateDomainError": {
+    "message": "Вы не можете заявить один и тот же домен дважды."
+  },
+  "domainNotAvailable": {
+    "message": "Кто-то другой использует домен $DOMAIN$. Для продолжения используйте другой домен.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ не верифицирован. Проверьте запись DNS.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Верифицирован"
+  },
+  "domainStatusUnverified": {
+    "message": "Неверифицирован"
+  },
+  "domainNameTh": {
+    "message": "Название"
+  },
+  "domainStatusTh": {
+    "message": "Статус"
+  },
+  "lastChecked": {
+    "message": "Последняя проверка"
+  },
+  "editDomain": {
+    "message": "Редактировать домен"
+  },
+  "domainFormInvalid": {
+    "message": "Имеются ошибки в форме, которые требуют вашего внимания"
+  },
+  "addedDomain": {
+    "message": "Добавлен домен $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Удален домен $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ верифицирован",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ не верифицирован",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
   "membersColumnHeader": {
     "message": "Участник/Группа"
@@ -6104,6 +6387,36 @@
       }
     }
   },
+  "server": {
+    "message": "Сервер"
+  },
+  "exportData": {
+    "message": "Экспорт данных"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Экспорт секретных данных организации"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Будут экспортированы только данные менеджера секретов, связанные с $ORGANIZATION$. Элементы в других продуктах или из других организаций включены не будут.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Загрузить файл"
+  },
+  "acceptedFormats": {
+    "message": "Допустимые форматы:"
+  },
+  "copyPasteImportContents": {
+    "message": "Скопировать и вставить содержимое импорта:"
+  },
+  "or": {
+    "message": "или"
+  },
   "licenseAndBillingManagement": {
     "message": "Управление лицензиями и выставлением счетов"
   },
@@ -6134,6 +6447,39 @@
   "uploadLicense": {
     "message": "Загрузить лицензию"
   },
+  "projectPeopleDescription": {
+    "message": "Предоставить группам или людям доступ к этому проекту."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Введите или выберите людей или группы"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Предоставить сервисным аккаунтам доступ к этому проекту."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Введите или выберите сервисные аккаунты"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Добавить людей или группы, чтобы начать совместную работу"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Добавить сервисные аккаунты для предоставления доступа"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Предоставить группам или людям доступ к этому сервисному аккаунту."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Назначить проекты этому сервисному аккаунту. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Добавить проекты для предоставления доступа"
+  },
+  "canReadWrite": {
+    "message": "Может читать, записывать"
+  },
+  "groupSlashUser": {
+    "message": "Группа/Пользователь"
+  },
   "lowKdfIterations": {
     "message": "Низкие итерации KDF"
   },
@@ -6154,5 +6500,165 @@
   },
   "userAccessSecretsManager": {
     "message": "Этот пользователь может получить доступ к Менеджеру секретов Beta"
+  },
+  "important": {
+    "message": "Важно:"
+  },
+  "viewAll": {
+    "message": "Посмотреть все"
+  },
+  "showingPortionOfTotal": {
+    "message": "Показаны $PORTION$ из $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Устраните указанные ниже ошибки и повторите попытку."
+  },
+  "description": {
+    "message": "Описание"
+  },
+  "errorReadingImportFile": {
+    "message": "Произошла ошибка при попытке чтения импортируемого файла"
+  },
+  "accessedSecret": {
+    "message": "Получен доступ к секрету $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Создать секрет"
+  },
+  "createProject": {
+    "message": "Создать проект"
+  },
+  "createServiceAccount": {
+    "message": "Создать сервисный аккаунт"
+  },
+  "downloadThe": {
+    "message": "Скачать",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Менеджер секретов CLI"
+  },
+  "importSecrets": {
+    "message": "Импорт секретов"
+  },
+  "getStarted": {
+    "message": "Начать"
+  },
+  "complete": {
+    "message": "Выполнено $COMPLETED$/$TOTAL$",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Восстановить секрет"
+  },
+  "restoreSecrets": {
+    "message": "Восстановить секреты"
+  },
+  "restoreSecretPrompt": {
+    "message": "Уверены, что хотите восстановить этот секрет?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Уверены, что хотите восстановить эти секреты?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Секрет восстановлен"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Секреты восстановлены"
+  },
+  "selectionIsRequired": {
+    "message": "Требуется выбор."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Включите доступ организации к Менеджеру секретов бесплатно во время программы бета-тестирования. Пользователям может быть предоставлен доступ к бета-версии в разделе Участники."
+  },
+  "secretsManagerEnable": {
+    "message": "Менеджер секретов Бета"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Токены доступа по-прежнему доступны"
+  },
+  "saPeopleWarningMessage": {
+    "message": "Удаление пользователей из сервисного аккаунта не приводит к удалению созданных ими токенов доступа. В целях обеспечения безопасности рекомендуется отзывать токены доступа, созданные пользователями, удаленными из сервисного аккаунта."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Удалить доступ к этому проекту"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "Это действие лишит вас доступа к проекту."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Удалить доступ к этому сервисному аккаунту"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "Это действие лишит вас доступа к сервисному аккаунту."
+  },
+  "removeAccess": {
+    "message": "Удалить доступ"
+  },
+  "checkForBreaches": {
+    "message": "Проверьте известные случаи утечки данных для этого пароля"
+  },
+  "exposedMasterPassword": {
+    "message": "Мастер-пароль скомпрометирован"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабый и скомпрометированный мастер-пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?"
+  },
+  "characterMinimum": {
+    "message": "Минимум символов: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Мастер-пароль должен содержать не менее $LENGTH$ символов.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Отклонить"
   }
 }
