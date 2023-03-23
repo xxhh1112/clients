@@ -12,7 +12,7 @@ export class FixPremiumMigrator extends Migrator<2, 3> {
   async migrate(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts<ExpectedAccountType>();
 
-    async function fixPremium(id: string, account: ExpectedAccountType) {
+    async function fixPremium(userId: string, account: ExpectedAccountType) {
       if (account?.profile?.hasPremiumPersonally === null && account.tokens?.accessToken != null) {
         let decodedToken: { premium: boolean };
         try {
@@ -26,11 +26,11 @@ export class FixPremiumMigrator extends Migrator<2, 3> {
         }
 
         account.profile.hasPremiumPersonally = decodedToken?.premium;
-        return helper.set(id, account);
+        return helper.set(userId, account);
       }
     }
 
-    await Promise.all(accounts.map(async ({ id, account }) => fixPremium(id, account)));
+    await Promise.all(accounts.map(async ({ userId, account }) => fixPremium(userId, account)));
   }
 
   rollback(helper: MigrationHelper): Promise<void> {

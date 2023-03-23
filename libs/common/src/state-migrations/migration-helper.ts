@@ -24,11 +24,14 @@ export class MigrationHelper {
   }
 
   async getAccounts<ExpectedAccountType>(): Promise<
-    { id: string; account: ExpectedAccountType }[]
+    { userId: string; account: ExpectedAccountType }[]
   > {
     const userIds = (await this.get<string[]>("authenticatedAccounts")) ?? [];
     return Promise.all(
-      userIds.map(async (id) => ({ id, account: await this.get<ExpectedAccountType>(id) }))
+      userIds.map(async (userId) => ({
+        userId,
+        account: await this.get<ExpectedAccountType>(userId),
+      }))
     );
   }
 }

@@ -51,8 +51,8 @@ describe("RemoveLegacyEtmKeyMigrator", () => {
     it("should return all accounts", async () => {
       const accounts = await sut.getAccounts();
       expect(accounts).toEqual([
-        { id: "c493ed01-4e08-4e88-abc7-332f380ca760", account: { otherStuff: "otherStuff" } },
-        { id: "23e61a5f-2ece-4f5e-b499-f0bc489482a9", account: { otherStuff: "otherStuff" } },
+        { userId: "c493ed01-4e08-4e88-abc7-332f380ca760", account: { otherStuff: "otherStuff" } },
+        { userId: "23e61a5f-2ece-4f5e-b499-f0bc489482a9", account: { otherStuff: "otherStuff" } },
       ]);
     });
 

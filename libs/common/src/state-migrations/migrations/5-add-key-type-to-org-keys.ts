@@ -12,7 +12,7 @@ export class AddKeyTypeToOrgKeysMigrator extends Migrator<4, 5> {
   async migrate(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts();
 
-    async function updateOrgKey(id: string, account: ExpectedAccountType) {
+    async function updateOrgKey(userId: string, account: ExpectedAccountType) {
       const encryptedOrgKeys = account?.keys?.organizationKeys?.encrypted;
       if (encryptedOrgKeys == null) {
         return;
@@ -28,16 +28,16 @@ export class AddKeyTypeToOrgKeysMigrator extends Migrator<4, 5> {
       });
       (account as any).keys.organizationKeys.encrypted = newOrgKeys;
 
-      await helper.set(id, account);
+      await helper.set(userId, account);
     }
 
-    Promise.all(accounts.map(async ({ id, account }) => updateOrgKey(id, account)));
+    Promise.all(accounts.map(async ({ userId, account }) => updateOrgKey(userId, account)));
   }
 
   async rollback(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts();
 
-    async function updateOrgKey(id: string, account: NewAccountType) {
+    async function updateOrgKey(userId: string, account: NewAccountType) {
       const encryptedOrgKeys = account?.keys?.organizationKeys?.encrypted;
       if (encryptedOrgKeys == null) {
         return;
@@ -50,10 +50,10 @@ export class AddKeyTypeToOrgKeysMigrator extends Migrator<4, 5> {
       });
       (account as any).keys.organizationKeys.encrypted = newOrgKeys;
 
-      await helper.set(id, account);
+      await helper.set(userId, account);
     }
 
-    Promise.all(accounts.map(async ({ id, account }) => updateOrgKey(id, account)));
+    Promise.all(accounts.map(async ({ userId, account }) => updateOrgKey(userId, account)));
   }
 
   // Override is necessary because default implementation assumes `stateVersion` at the root, but for this version

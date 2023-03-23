@@ -7,14 +7,16 @@ export class RemoveEverBeenUnlockedMigrator extends Migrator<3, 4> {
   async migrate(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts<ExpectedAccountType>();
 
-    async function removeEverBeenUnlocked(id: string, account: ExpectedAccountType) {
+    async function removeEverBeenUnlocked(userId: string, account: ExpectedAccountType) {
       if (account?.profile?.everBeenUnlocked != null) {
         delete account.profile.everBeenUnlocked;
-        return helper.set(id, account);
+        return helper.set(userId, account);
       }
     }
 
-    Promise.all(accounts.map(async ({ id, account }) => removeEverBeenUnlocked(id, account)));
+    Promise.all(
+      accounts.map(async ({ userId, account }) => removeEverBeenUnlocked(userId, account))
+    );
   }
 
   rollback(helper: MigrationHelper): Promise<void> {
