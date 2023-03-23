@@ -33,6 +33,10 @@ describe("RemoveLegacyEtmKeyMigrator", () => {
     sut = new MigrationHelper(0, storage, logService);
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe("get", () => {
     it("should delegate to storage.get", async () => {
       await sut.get("key");
@@ -44,6 +48,13 @@ describe("RemoveLegacyEtmKeyMigrator", () => {
     it("should delegate to storage.save", async () => {
       await sut.set("key", "value");
       expect(storage.save).toHaveBeenCalledWith("key", "value");
+    });
+  });
+
+  describe("remove", () => {
+    it("should delegate to storage.remove", async () => {
+      await sut.remove("key");
+      expect(storage.remove).toHaveBeenCalledWith("key");
     });
   });
 

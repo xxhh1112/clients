@@ -19,6 +19,11 @@ export class MigrationHelper {
     return this.storageService.save(key, value);
   }
 
+  remove(key: string): Promise<void> {
+    this.logService.info(`Removing ${key}`);
+    return this.storageService.remove(key);
+  }
+
   info(message: string): void {
     this.logService.info(message);
   }
