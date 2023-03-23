@@ -57,20 +57,42 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
     }
 
-    const userVerification = await this.userInterface.confirmNewCredential({
-      credentialName: params.rp.name,
-      userName: params.user.name,
-    });
+    if (params.options?.rk) {
+      const userVerification = await this.userInterface.confirmNewCredential({
+        credentialName: params.rp.name,
+        userName: params.user.name,
+      });
 
-    if (!userVerification) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+      if (!userVerification) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+      }
+
+      const keyPair = await this.createKeyPair();
+
+      const cipher = new CipherView();
+      cipher.type = CipherType.Fido2Key;
+      cipher.name = params.rp.name;
+      cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+      const encrypted = await this.cipherService.encrypt(cipher);
+      await this.cipherService.createWithServer(encrypted);
+    } else {
+      const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential({
+        credentialName: params.rp.name,
+        userName: params.user.name,
+      });
+
+      if (cipherId === undefined) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+      }
+
+      const keyPair = await this.createKeyPair();
+
+      const encrypted = await this.cipherService.get(cipherId);
+      const cipher = await encrypted.decrypt();
+      cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+      const reencrypted = await this.cipherService.encrypt(cipher);
+      await this.cipherService.updateWithServer(reencrypted);
     }
-
-    const keyPair = await this.createKeyPair();
-    const vaultItem = await this.createVaultItem(params, keyPair.privateKey);
-
-    const encrypted = await this.cipherService.encrypt(vaultItem);
-    await this.cipherService.createWithServer(encrypted);
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {
@@ -94,25 +116,21 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     );
   }
 
-  private async createVaultItem(
+  private async createKeyView(
     params: Fido2AuthenticatorMakeCredentialsParams,
     keyValue: CryptoKey
-  ): Promise<CipherView> {
+  ): Promise<Fido2KeyView> {
     const pcks8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
 
-    const view = new CipherView();
-    view.type = CipherType.Fido2Key;
-    view.name = params.rp.name;
+    const fido2Key = new Fido2KeyView();
+    fido2Key.keyType = "ECDSA";
+    fido2Key.keyCurve = "P-256";
+    fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
+    fido2Key.rpId = params.rp.id;
+    fido2Key.rpName = params.rp.name;
+    fido2Key.userHandle = Fido2Utils.bufferToString(params.user.id);
+    fido2Key.userName = params.user.name;
 
-    view.fido2Key = new Fido2KeyView();
-    view.fido2Key.keyType = "ECDSA";
-    view.fido2Key.keyCurve = "P-256";
-    view.fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
-    view.fido2Key.rpId = params.rp.id;
-    view.fido2Key.rpName = params.rp.name;
-    view.fido2Key.userHandle = Fido2Utils.bufferToString(params.user.id);
-    view.fido2Key.userName = params.user.name;
-
-    return view;
+    return fido2Key;
   }
 }

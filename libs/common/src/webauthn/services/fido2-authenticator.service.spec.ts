@@ -6,6 +6,7 @@ import { Utils } from "../../misc/utils";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CipherType } from "../../vault/enums/cipher-type";
 import { Cipher } from "../../vault/models/domain/cipher";
+import { Login } from "../../vault/models/domain/login";
 import { CipherView } from "../../vault/models/view/cipher.view";
 import {
   Fido2AutenticatorErrorCode,
@@ -153,10 +154,15 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("creation of discoverable credential", () => {
+      let params: Fido2AuthenticatorMakeCredentialsParams;
+
+      beforeEach(async () => {
+        params = await createCredentialParams({ options: { rk: true } });
+      });
+
       /** Spec: show the items contained within the user and rp parameter structures to the user. */
       it("should request confirmation from user", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(true);
-        const params = await createCredentialParams();
 
         await authenticator.makeCredential(params);
 
@@ -170,7 +176,6 @@ describe("FidoAuthenticatorService", () => {
         const encryptedCipher = Symbol();
         userInterface.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
-        const params = await createCredentialParams({ options: { rk: true } });
 
         await authenticator.makeCredential(params);
 
@@ -196,6 +201,72 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
       it("should throw error if user denies creation request", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(false);
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
+        );
+      });
+    });
+
+    describe("creation of non-discoverable credential", () => {
+      let existingCipherView: CipherView;
+      let params: Fido2AuthenticatorMakeCredentialsParams;
+
+      beforeEach(async () => {
+        const existingCipher = createCipher({ type: CipherType.Login });
+        existingCipher.login = new Login();
+        existingCipher.fido2Key = undefined;
+        existingCipherView = await existingCipher.decrypt();
+        params = await createCredentialParams();
+        cipherService.get.mockImplementation(async (id) =>
+          id === existingCipher.id ? existingCipher : undefined
+        );
+        cipherService.getAllDecrypted.mockResolvedValue([existingCipherView]);
+      });
+
+      /** Spec: show the items contained within the user and rp parameter structures to the user. */
+      it("should request confirmation from user", async () => {
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+
+        await authenticator.makeCredential(params);
+
+        expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith({
+          credentialName: params.rp.name,
+          userName: params.user.name,
+        } as NewCredentialParams);
+      });
+
+      it("should save credential to vault if request confirmed by user", async () => {
+        const encryptedCipher = Symbol();
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+        cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
+
+        await authenticator.makeCredential(params);
+
+        const saved = cipherService.encrypt.mock.lastCall?.[0];
+        expect(saved).toEqual(
+          expect.objectContaining({
+            type: CipherType.Login,
+            name: existingCipherView.name,
+
+            fido2Key: expect.objectContaining({
+              keyType: "ECDSA",
+              keyCurve: "P-256",
+              rpId: params.rp.id,
+              rpName: params.rp.name,
+              userHandle: Fido2Utils.bufferToString(params.user.id),
+              userName: params.user.name,
+            }),
+          })
+        );
+        expect(cipherService.updateWithServer).toHaveBeenCalledWith(encryptedCipher);
+      });
+
+      /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
+      it("should throw error if user denies creation request", async () => {
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
         const params = await createCredentialParams();
 
         const result = async () => await authenticator.makeCredential(params);
@@ -262,11 +333,11 @@ async function createInvalidParams() {
   };
 }
 
-function createCipher(id = Utils.newGuid()): Cipher {
+function createCipher(data: Partial<Cipher> = {}): Cipher {
   const cipher = new Cipher();
-  cipher.id = id;
-  cipher.type = CipherType.Fido2Key;
-  cipher.fido2Key = new Fido2Key();
+  cipher.id = data.id ?? Utils.newGuid();
+  cipher.type = data.type ?? CipherType.Fido2Key;
+  cipher.fido2Key = data.fido2Key ?? new Fido2Key();
   return cipher;
 }
 

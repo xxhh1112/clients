@@ -10,6 +10,10 @@ export abstract class Fido2UserInterfaceService {
     params: NewCredentialParams,
     abortController?: AbortController
   ) => Promise<boolean>;
+  confirmNewNonDiscoverableCredential: (
+    params: NewCredentialParams,
+    abortController?: AbortController
+  ) => Promise<string | undefined>;
   informExcludedCredential: (
     existingCipherIds: string[],
     newCredential: NewCredentialParams,
