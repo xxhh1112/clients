@@ -152,7 +152,7 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    describe("when input passes all initial checks", () => {
+    describe("creation of discoverable credential", () => {
       /** Spec: show the items contained within the user and rp parameter structures to the user. */
       it("should request confirmation from user", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(true);
@@ -166,20 +166,6 @@ describe("FidoAuthenticatorService", () => {
         } as NewCredentialParams);
       });
 
-      /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
-      it("should throw error if user denies creation request", async () => {
-        userInterface.confirmNewCredential.mockResolvedValue(false);
-        const params = await createCredentialParams();
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
-        );
-      });
-    });
-
-    describe("creation of discoverable credential", () => {
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = Symbol();
         userInterface.confirmNewCredential.mockResolvedValue(true);
@@ -205,6 +191,18 @@ describe("FidoAuthenticatorService", () => {
           })
         );
         expect(cipherService.createWithServer).toHaveBeenCalledWith(encryptedCipher);
+      });
+
+      /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
+      it("should throw error if user denies creation request", async () => {
+        userInterface.confirmNewCredential.mockResolvedValue(false);
+        const params = await createCredentialParams();
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(
+          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
+        );
       });
     });
   });
