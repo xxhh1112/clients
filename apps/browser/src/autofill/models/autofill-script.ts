@@ -7,6 +7,7 @@ export default class AutofillScript {
   autosubmit: any = null;
   savedUrls: string[];
   untrustedIframe: boolean;
+  itemType: string;
 
   constructor(documentUUID: string) {
     this.documentUUID = documentUUID;

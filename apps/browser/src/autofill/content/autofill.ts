@@ -30,17 +30,33 @@
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 
+/**
+ * The Document with additional custom properties added by this script
+ */
 type AutofillDocument = Document & {
   elementsByOPID: Record<string, Element>;
-  elementForOPID: (opId: string) => AutofillElement;
+  elementForOPID: (opId: string) => Element;
 };
 
-type AutofillElement<T extends Element = Element> = T & {
+/**
+ * A HTMLElement (usually a form element) with additional custom properties added by this script
+ */
+type Autofill<T> = T & {
   opid: string;
-};
+}
+type AutofillForm = Autofill<HTMLFormElement>;
+type AutofillFormElement = Autofill<FormElement>;
 
-type AutofillInputElement = AutofillElement<HTMLInputElement>;
-type AutofillLabelElement = AutofillElement<HTMLLabelElement>;
+/**
+ * This script's definition of a Form Element (only a subset of HTML form elements)
+ * This is defined by getFormElements
+ */
+type FormElement = HTMLInputElement | HTMLSelectElement | HTMLSpanElement;
+
+/**
+ * A Form Element that we can set a value on
+ */
+type FillableControl = HTMLInputElement | HTMLSelectElement;
 
 /*
   MODIFICATIONS FROM ORIGINAL
@@ -66,7 +82,7 @@ type AutofillLabelElement = AutofillElement<HTMLLabelElement>;
  * We need to use the correct implementation based on browser.
  */
 // START MODIFICATION
-var getShadowRoot: (element: AutofillElement) => AutofillElement;
+var getShadowRoot: (element: Element) => Element;
 
 if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
   // Chromium 88+
@@ -92,7 +108,7 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
  * Returns elements like Document.querySelectorAll does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDocAll<T extends AutofillElement = AutofillElement>(
+function queryDocAll<T extends Element = Element>(
   doc: Document,
   rootEl: Node,
   filterCallback: (el: T) => boolean
@@ -105,10 +121,10 @@ function queryDocAll<T extends AutofillElement = AutofillElement>(
   return accumulatedNodes;
 }
 
-function accumulatingQueryDocAll<T extends AutofillElement = AutofillElement>(
+function accumulatingQueryDocAll<T extends Element = Element>(
   doc: Document,
   rootEl: Node,
-  filterCallback: (el: AutofillElement) => boolean,
+  filterCallback: (el: Element) => boolean,
   accumulatedNodes: T[]
 ): void {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
@@ -137,13 +153,13 @@ function accumulatingQueryDocAll<T extends AutofillElement = AutofillElement>(
  */
 function queryDoc(
   doc: Document,
-  rootEl: AutofillElement,
-  filterCallback: (el: AutofillElement) => boolean
-): AutofillElement {
+  rootEl: Element,
+  filterCallback: (el: Element) => boolean
+): Element {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node: AutofillElement;
+  var node: Element;
 
-  while ((node = treeWalker.nextNode() as AutofillElement)) {
+  while ((node = treeWalker.nextNode() as Element)) {
     if (filterCallback(node)) {
       return node;
     }
@@ -167,13 +183,13 @@ function queryDoc(
 }
 // END MODIFICATION
 
-function collect(document: AutofillDocument): string {
+function collect(document: Document): string {
   // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
   // END MODIFICATION
 
-  document.elementsByOPID = {};
+  (document as AutofillDocument).elementsByOPID = {};
 
   function getPageDetails(theDoc: any, oneShotId: string) {
     // start helpers
@@ -294,9 +310,9 @@ function collect(document: AutofillDocument): string {
      * @param {HTMLElement} el
      * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
      */
-    function getLabelTag(el: any): string {
+    function getLabelTag(el: FillableControl): string {
       var docLabel,
-        theLabels: any[] = [];
+        theLabels: HTMLLabelElement[] = [];
 
       if (el.labels && el.labels.length && 0 < el.labels.length) {
         theLabels = Array.prototype.slice.call(el.labels);
@@ -304,8 +320,8 @@ function collect(document: AutofillDocument): string {
         if (el.id) {
           // START MODIFICATION
           var elId = JSON.stringify(el.id);
-          var labelsByReferencedId = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && (node as AutofillLabelElement).htmlFor === elId;
+          var labelsByReferencedId = queryDocAll<HTMLLabelElement>(theDoc, theDoc.body, function (node) {
+            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elId;
           });
           theLabels = theLabels.concat(labelsByReferencedId);
           // END MODIFICATION
@@ -314,8 +330,8 @@ function collect(document: AutofillDocument): string {
         if (el.name) {
           // START MODIFICATION
           var elName = JSON.stringify(el.name);
-          docLabel = queryDocAll(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && (node as AutofillLabelElement).htmlFor === elName;
+          docLabel = queryDocAll<HTMLLabelElement>(theDoc, theDoc.body, function (node) {
+            return node.nodeName === "LABEL" && node.htmlFor === elName;
           });
           // END MODIFICATION
 
@@ -326,21 +342,21 @@ function collect(document: AutofillDocument): string {
           }
         }
 
-        for (var theEl = el; theEl && theEl != theDoc; theEl = theEl.parentNode) {
-          if ("label" === toLowerString(theEl.tagName) && -1 === theLabels.indexOf(theEl)) {
-            theLabels.push(theEl);
+        for (var theEl: Element = el; theEl && theEl != theDoc; theEl = theEl.parentNode as Element) {
+          if ("label" === toLowerString(theEl.tagName) && -1 === theLabels.indexOf(theEl as HTMLLabelElement)) {
+            theLabels.push(theEl as HTMLLabelElement);
           }
         }
       }
 
       if (0 === theLabels.length) {
-        theEl = el.parentNode;
+        theEl = el.parentNode as Element;
         if (
           "dd" === theEl.tagName.toLowerCase() &&
           null !== theEl.previousElementSibling &&
           "dt" === theEl.previousElementSibling.tagName.toLowerCase()
         ) {
-          theLabels.push(theEl.previousElementSibling);
+          theLabels.push(theEl.previousElementSibling as HTMLLabelElement);
         }
       }
 
@@ -396,10 +412,10 @@ function collect(document: AutofillDocument): string {
     });
     var theForms = formNodes.map(function (formEl, elIndex) {
       // END MODIFICATION
-      var op = {},
+      var op: Record<string, string> = {},
         formOpId = "__form__" + elIndex;
 
-      formEl.opid = formOpId;
+      (formEl as AutofillForm).opid = formOpId;
       op.opid = formOpId;
       addProp(op, "htmlName", getElementAttrValue(formEl, "name"));
       addProp(op, "htmlID", getElementAttrValue(formEl, "id"));
@@ -414,17 +430,17 @@ function collect(document: AutofillDocument): string {
     // get all the form fields
     var theFields = Array.prototype.slice
       .call(getFormElements(theDoc, 50))
-      .map(function (el, elIndex) {
+      .map(function (el: FormElement, elIndex: number) {
         var field: Record<string, any> = {},
           opId = "__" + elIndex,
-          elMaxLen = -1 == el.maxLength ? 999 : el.maxLength;
+          elMaxLen = -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
 
         if (!elMaxLen || ("number" === typeof elMaxLen && isNaN(elMaxLen))) {
           elMaxLen = 999;
         }
 
         theDoc.elementsByOPID[opId] = el;
-        el.opid = opId;
+        (el as AutofillFormElement).opid = opId;
         field.opid = opId;
         field.elementNumber = elIndex;
         addProp(field, "maxLength", Math.min(elMaxLen, 999), 999);
@@ -445,8 +461,8 @@ function collect(document: AutofillDocument): string {
         }
         // END MODIFICATION
 
-        if ("hidden" != toLowerString(el.type)) {
-          addProp(field, "label-tag", getLabelTag(el));
+        if ("hidden" != toLowerString((el as FillableControl).type)) {
+          addProp(field, "label-tag", getLabelTag((el as FillableControl)));
           addProp(field, "label-data", getElementAttrValue(el, "data-label"));
           addProp(field, "label-aria", getElementAttrValue(el, "aria-label"));
           addProp(field, "label-top", getLabelTop(el));
@@ -469,7 +485,7 @@ function collect(document: AutofillDocument): string {
         addProp(field, "rel", getElementAttrValue(el, "rel"));
         addProp(field, "type", toLowerString(getElementAttrValue(el, "type")));
         addProp(field, "value", getElementValue(el));
-        addProp(field, "checked", el.checked, false);
+        addProp(field, "checked", (el as HTMLInputElement).checked, false);
         addProp(
           field,
           "autoCompleteType",
@@ -478,15 +494,15 @@ function collect(document: AutofillDocument): string {
             el.getAttribute("autocomplete"),
           "off"
         );
-        addProp(field, "disabled", el.disabled);
-        addProp(field, "readonly", el.b || el.readOnly);
-        addProp(field, "selectInfo", getSelectElementOptions(el));
+        addProp(field, "disabled", (el as FillableControl).disabled);
+        addProp(field, "readonly", (el as any).b || (el as HTMLInputElement).readOnly);
+        addProp(field, "selectInfo", getSelectElementOptions(el as HTMLSelectElement));
         addProp(field, "aria-hidden", "true" == el.getAttribute("aria-hidden"), false);
         addProp(field, "aria-disabled", "true" == el.getAttribute("aria-disabled"), false);
         addProp(field, "aria-haspopup", "true" == el.getAttribute("aria-haspopup"), false);
         addProp(field, "data-unmasked", el.dataset.unmasked);
         addProp(field, "data-stripe", getElementAttrValue(el, "data-stripe"));
-        addProp(field, "onepasswordFieldType", el.dataset.onepasswordFieldType || el.type);
+        addProp(field, "onepasswordFieldType", el.dataset.onepasswordFieldType || (el as FillableControl).type);
         addProp(field, "onepasswordDesignation", el.dataset.onepasswordDesignation);
         addProp(field, "onepasswordSignInUrl", el.dataset.onepasswordSignInUrl);
         addProp(field, "onepasswordSectionTitle", el.dataset.onepasswordSectionTitle);
@@ -494,8 +510,8 @@ function collect(document: AutofillDocument): string {
         addProp(field, "onepasswordSectionFieldTitle", el.dataset.onepasswordSectionFieldTitle);
         addProp(field, "onepasswordSectionFieldValue", el.dataset.onepasswordSectionFieldValue);
 
-        if (el.form) {
-          field.form = getElementAttrValue(el.form, "opid");
+        if ((el as HTMLInputElement | HTMLSelectElement).form) {
+          field.form = getElementAttrValue((el as HTMLInputElement | HTMLSelectElement).form, "opid");
         }
 
         // START MODIFICATION
@@ -547,7 +563,7 @@ function collect(document: AutofillDocument): string {
       });
 
     // build out the page details object. this is the final result
-    var pageDetails = {
+    var pageDetails: AutofillPageDetails = {
       documentUUID: oneShotId,
       title: theDoc.title,
       url: theView.location.href,
@@ -576,7 +592,7 @@ function collect(document: AutofillDocument): string {
     return pageDetails;
   }
 
-  document.elementForOPID = getElementForOPID;
+  (document as AutofillDocument).elementForOPID = getElementForOPID;
 
   /**
    * Do the event on the element.
@@ -585,7 +601,7 @@ function collect(document: AutofillDocument): string {
    * @returns
    */
   function doEventOnElement(kedol: any, fonor: string) {
-    var quebo;
+    var quebo: any;
     isFirefox
       ? ((quebo = document.createEvent("KeyboardEvent")),
         quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
@@ -725,7 +741,7 @@ function collect(document: AutofillDocument): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
    */
-  function isElementViewable(el: HTMLInputElement) {
+  function isElementViewable(el: FormElement) {
     var theDoc = el.ownerDocument.documentElement,
       rect = el.getBoundingClientRect(), // getBoundingClientRect is relative to the viewport
       docScrollWidth = theDoc.scrollWidth, // scrollWidth is the width of the document including any overflow
@@ -785,12 +801,12 @@ function collect(document: AutofillDocument): string {
         pointEl.tagName &&
         "string" === typeof pointEl.tagName &&
         "label" === pointEl.tagName.toLowerCase() &&
-        el.labels &&
-        0 < el.labels.length
+        (el as FillableControl).labels &&
+        0 < (el as FillableControl).labels.length
       ) {
         // Return true if the element we found is one of the labels for the element we're checking.
         // This means that the element we're looking for is considered viewable
-        return 0 <= Array.prototype.slice.call(el.labels).indexOf(pointEl);
+        return 0 <= Array.prototype.slice.call((el as FillableControl).labels).indexOf(pointEl);
       }
 
       // Walk up the DOM tree to check the parent element
@@ -807,7 +823,7 @@ function collect(document: AutofillDocument): string {
    * @param {string} opId
    * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
    */
-  function getElementForOPID(opId: string): AutofillElement {
+  function getElementForOPID(opId: string): Element {
     var theEl;
     if (void 0 === opId || null === opId) {
       return null;
@@ -815,7 +831,7 @@ function collect(document: AutofillDocument): string {
 
     try {
       var formEls = Array.prototype.slice.call(getFormElements(document));
-      var filteredFormEls = formEls.filter(function (el: AutofillElement) {
+      var filteredFormEls = formEls.filter(function (el: AutofillFormElement) {
         return el.opid == opId;
       });
 
@@ -846,7 +862,7 @@ function collect(document: AutofillDocument): string {
   /*
    * inputEl MUST BE an instanceof HTMLInputElement, else inputEl.type.toLowerCase will throw an error
    */
-  function isRelevantInputField(inputEl: AutofillElement) {
+  function isRelevantInputField(inputEl: HTMLInputElement) {
     if (inputEl.hasAttribute("data-bwignore")) {
       return false;
     }
@@ -862,17 +878,17 @@ function collect(document: AutofillDocument): string {
    * @param {number} limit The maximum number of elements to return
    * @returns An array of HTMLElements
    */
-  function getFormElements(theDoc: Document, limit?: number) {
+  function getFormElements(theDoc: Document, limit?: number): FormElement[] {
     // START MODIFICATION
 
-    var els = queryDocAll(theDoc, theDoc.body, function (el) {
+    var els = queryDocAll<FormElement>(theDoc, theDoc.body, function (el) {
       switch (el.nodeName) {
         case "SELECT":
           return true;
         case "SPAN":
           return el.hasAttribute("data-bwautofill");
         case "INPUT":
-          return isRelevantInputField(el);
+          return isRelevantInputField(el as HTMLInputElement);
         default:
           return false;
       }
@@ -891,9 +907,9 @@ function collect(document: AutofillDocument): string {
       }
 
       var el = els[i];
-      var type = (el as AutofillInputElement).type
-        ? (el as AutofillInputElement).type.toLowerCase()
-        : (el as AutofillInputElement).type;
+      var type = (el as HTMLInputElement).type
+        ? (el as HTMLInputElement).type.toLowerCase()
+        : (el as HTMLInputElement).type;
       if (type === "checkbox" || type === "radio") {
         unimportantEls.push(el);
       } else {
@@ -915,7 +931,7 @@ function collect(document: AutofillDocument): string {
    * @param {HTMLElement} el
    * @param {boolean} setVal Set the value of the element to its original value
    */
-  function focusElement(el: AutofillInputElement, setVal: boolean) {
+  function focusElement(el: HTMLInputElement | HTMLSelectElement, setVal: boolean) {
     if (setVal) {
       var initialValue = el.value;
       el.focus();
@@ -931,14 +947,14 @@ function collect(document: AutofillDocument): string {
   return JSON.stringify(getPageDetails(document, "oneshotUUID"));
 }
 
-function fill(document: any, fillScript: AutofillScript): string {
+function fill(document: Document, fillScript: AutofillScript): string {
   var markTheFilling = true,
     animateTheFilling = true;
 
   function queryPasswordInputs() {
     return queryDocAll(document, document.body, function (el) {
       return (
-        el.nodeName === "INPUT" && (el as AutofillInputElement).type.toLowerCase() === "password"
+        el.nodeName === "INPUT" && (el as HTMLInputElement).type.toLowerCase() === "password"
       );
     });
   }
@@ -970,11 +986,11 @@ function fill(document: any, fillScript: AutofillScript): string {
 
   function doFill(fillScript: AutofillScript) {
     var fillScriptOps,
-      theOpIds = [],
+      theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
-      operationDelayMs = 1,
-      doOperation,
-      operationsToDo = [];
+      operationDelayMs: number = 1,
+      doOperation: (ops: any, theOperation: () => void) => void,
+      operationsToDo: string[] = [];
 
     fillScriptProperties &&
       fillScriptProperties.delay_between_operations &&
@@ -1109,7 +1125,7 @@ function fill(document: any, fillScript: AutofillScript): string {
 
   // do a fill by opid operation
   function doFillByOpId(opId: string, op: string) {
-    var el = getElementByOpId(opId) as AutofillInputElement;
+    var el = getElementByOpId(opId) as FillableControl;
     return el ? (fillTheElement(el, op), [el]) : null;
   }
 
@@ -1123,7 +1139,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     var elements = selectAllFromDoc(query);
     return Array.prototype.map.call(
       Array.prototype.slice.call(elements),
-      function (el: AutofillElement) {
+      function (el: FillableControl) {
         fillTheElement(el, op);
         return el;
       },
@@ -1137,15 +1153,15 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} valueToSet
    * @returns {Array} Array of elements that were set.
    */
-  function doSimpleSetByQuery(query: string, valueToSet: string): AutofillElement[] {
+  function doSimpleSetByQuery(query: string, valueToSet: string): FillableControl[] {
     var elements = selectAllFromDoc(query),
-      arr: AutofillElement[] = [];
+      arr: FillableControl[] = [];
     Array.prototype.forEach.call(
       Array.prototype.slice.call(elements),
-      function (el: AutofillInputElement) {
+      function (el: FillableControl) {
         el.disabled ||
-          el.a ||
-          el.readOnly ||
+          (el as any).a ||
+          (el as HTMLInputElement).readOnly ||
           void 0 === el.value ||
           ((el.value = valueToSet), arr.push(el));
       }
@@ -1158,8 +1174,8 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {number} opId
    * @returns
    */
-  function doFocusByOpId(opId: string) {
-    var el = getElementByOpId(opId);
+  function doFocusByOpId(opId: string): null {
+    var el = getElementByOpId(opId) as FillableControl;
     if (el) {
       "function" === typeof el.click && el.click(),
         "function" === typeof el.focus && doFocusElement(el, true);
@@ -1173,8 +1189,8 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {number} opId
    * @returns
    */
-  function doClickByOpId(opId) {
-    var el = getElementByOpId(opId);
+  function doClickByOpId(opId: string) {
+    var el = getElementByOpId(opId) as FillableControl;
     return el ? (clickElement(el) ? [el] : null) : null;
   }
 
@@ -1187,7 +1203,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     query = selectAllFromDoc(query) as any;
     return Array.prototype.map.call(
       Array.prototype.slice.call(query),
-      function (el: AutofillInputElement) {
+      function (el: HTMLInputElement) {
         clickElement(el);
         "function" === typeof el.click && el.click();
         "function" === typeof el.focus && doFocusElement(el, true);
@@ -1211,9 +1227,9 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @param {string} op
    */
-  function fillTheElement(el: AutofillInputElement, op: string) {
+  function fillTheElement(el: FillableControl, op: string) {
     var shouldCheck: boolean;
-    if (el && null !== op && void 0 !== op && !(el.disabled || (el as any).a || el.readOnly)) {
+    if (el && null !== op && void 0 !== op && !(el.disabled || (el as any).a || (el as HTMLInputElement).readOnly)) {
       switch (
         (markTheFilling && el.form && !el.form.opfilled && (el.form.opfilled = true),
         el.type ? el.type.toLowerCase() : null)
@@ -1224,8 +1240,8 @@ function fill(document: any, fillScript: AutofillScript): string {
             1 <= op.length &&
             checkRadioTrueOps.hasOwnProperty(op.toLowerCase()) &&
             true === checkRadioTrueOps[op.toLowerCase()];
-          el.checked === shouldCheck ||
-            doAllFillOperations(el, function (theEl) {
+          (el as HTMLInputElement).checked === shouldCheck ||
+            doAllFillOperations(el, function (theEl: HTMLInputElement) {
               theEl.checked = shouldCheck;
             });
           break;
@@ -1253,8 +1269,8 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {*} afterValSetFunc The function to perform after the operations are complete.
    */
   function doAllFillOperations(
-    el: AutofillInputElement,
-    afterValSetFunc: (el: AutofillInputElement) => void
+    el: FillableControl,
+    afterValSetFunc: (el: FillableControl) => void
   ) {
     setValueForElement(el);
     afterValSetFunc(el);
@@ -1272,7 +1288,7 @@ function fill(document: any, fillScript: AutofillScript): string {
     // END MODIFICATION
   }
 
-  document.elementForOPID = getElementByOpId;
+  (document as AutofillDocument).elementForOPID = getElementByOpId;
 
   /**
    * Normalize the event based on API support
@@ -1280,7 +1296,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {string} eventName
    * @returns {Event} A normalized event
    */
-  function normalizeEvent(el: AutofillElement, eventName: string) {
+  function normalizeEvent(el: FillableControl, eventName: string) {
     var ev: any;
     if ("KeyboardEvent" in window) {
       ev = new window.KeyboardEvent(eventName, {
@@ -1305,7 +1321,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.
    * @param {HTMLElement} el
    */
-  function setValueForElement(el: AutofillInputElement) {
+  function setValueForElement(el: FillableControl) {
     var valueToSet = el.value;
     clickElement(el);
     doFocusElement(el, false);
@@ -1320,7 +1336,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
    * @param {HTMLElement} el
    */
-  function setValueForElementByEvent(el: AutofillInputElement) {
+  function setValueForElementByEvent(el: FillableControl) {
     var valueToSet = el.value,
       ev1 = el.ownerDocument.createEvent("HTMLEvents"),
       ev2 = el.ownerDocument.createEvent("HTMLEvents");
@@ -1341,7 +1357,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
    */
-  function clickElement(el: AutofillInputElement) {
+  function clickElement(el: HTMLElement) {
     if (!el || (el && "function" !== typeof el.click)) {
       return false;
     }
@@ -1353,12 +1369,12 @@ function fill(document: any, fillScript: AutofillScript): string {
    * Get all the elements on the DOM that are likely to be a password field
    * @returns {Array} Array of elements
    */
-  function getAllFields(): AutofillInputElement[] {
+  function getAllFields(): HTMLInputElement[] {
     var r = RegExp(
       "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
       "i"
     );
-    return queryDocAll<AutofillInputElement>(document, document.body, function (el) {
+    return queryDocAll<HTMLInputElement>(document, document.body, function (el) {
       return (
         el.nodeName === "INPUT" && el.type.toLowerCase() === "text" && el.value && r.test(el.value)
       );
@@ -1381,13 +1397,13 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @returns {boolean} Returns true if we can see the element to apply styling.
    */
-  function canSeeElementToStyle(el: AutofillInputElement) {
-    var currentEl;
+  function canSeeElementToStyle(el: HTMLElement) {
+    var currentEl: any;
     if ((currentEl = animateTheFilling)) {
       a: {
         currentEl = el;
         for (
-          var owner = el.ownerDocument, owner = owner ? owner.defaultView : {}, theStyle;
+          var owner: any = el.ownerDocument, owner = owner ? owner.defaultView : {}, theStyle;
           currentEl && currentEl !== document;
 
         ) {
@@ -1411,12 +1427,12 @@ function fill(document: any, fillScript: AutofillScript): string {
       }
     }
     // START MODIFICATION
-    if (el && !(el as any).type && el.tagName.toLowerCase() === "span") {
+    if (el && !(el as FillableControl).type && el.tagName.toLowerCase() === "span") {
       return true;
     }
     // END MODIFICATION
     return currentEl
-      ? -1 !== "email text password number tel url".split(" ").indexOf(el.type || "")
+      ? -1 !== "email text password number tel url".split(" ").indexOf((el as HTMLInputElement).type || "")
       : false;
   }
 
@@ -1427,14 +1443,14 @@ function fill(document: any, fillScript: AutofillScript): string {
    */
   function getElementByOpId(
     theOpId: string
-  ): AutofillElement<HTMLInputElement | HTMLSelectElement | HTMLButtonElement | HTMLSpanElement> {
+  ): HTMLInputElement | HTMLSelectElement | HTMLButtonElement | HTMLSpanElement {
     var theElement;
     if (void 0 === theOpId || null === theOpId) {
       return null;
     }
     try {
       // START MODIFICATION
-      var filteredElements = queryDocAll(document, document.body, function (el) {
+      var filteredElements = queryDocAll<Autofill<FormElement | HTMLButtonElement>>(document, document.body, function (el) {
         switch (el.nodeName) {
           case "INPUT":
           case "SELECT":
@@ -1480,7 +1496,7 @@ function fill(document: any, fillScript: AutofillScript): string {
    * @param {HTMLElement} el
    * @param {boolean} setValue Re-set the value after focusing
    */
-  function doFocusElement(el: AutofillInputElement, setValue: boolean) {
+  function doFocusElement(el: FillableControl, setValue: boolean): void {
     if (setValue) {
       var existingValue = el.value;
       el.focus();
@@ -1503,7 +1519,7 @@ function fill(document: any, fillScript: AutofillScript): string {
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.command === "collectPageDetails") {
-    var pageDetails = collect(document as AutofillDocument);
+    var pageDetails = collect(document);
     var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     chrome.runtime.sendMessage({
       command: "collectPageDetailsResponse",
@@ -1518,7 +1534,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     sendResponse();
     return true;
   } else if (msg.command === "collectPageDetailsImmediately") {
-    var pageDetails = collect(document as AutofillDocument);
+    var pageDetails = collect(document);
     var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
     sendResponse(pageDetailsObj);
     return true;

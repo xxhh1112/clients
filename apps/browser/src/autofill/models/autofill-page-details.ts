@@ -21,4 +21,6 @@ export default class AutofillPageDetails {
    */
   fields: AutofillField[];
   collectedTimestamp: number;
+
+  displayTitle?: string;
 }
