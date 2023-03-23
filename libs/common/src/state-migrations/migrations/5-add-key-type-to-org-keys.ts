@@ -56,7 +56,9 @@ export class AddKeyTypeToOrgKeysMigrator extends Migrator<4, 5> {
     Promise.all(accounts.map(async ({ id, account }) => updateOrgKey(id, account)));
   }
 
-  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+  // Override is necessary because default implementation assumes `stateVersion` at the root, but for this version
+  // it is nested inside a global object.
+  override async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
     const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
     helper.currentVersion = endVersion;
     const global: { stateVersion: number } = (await helper.get("global")) || ({} as any);

@@ -11,7 +11,8 @@ export class MinVersionMigrator extends Migrator<0, MinVersion> {
     super(0, MIN_VERSION);
   }
 
-  shouldMigrate(helper: MigrationHelper): Promise<boolean> {
+  // Overrides the default implementation to catch any version that may be passed in.
+  override shouldMigrate(helper: MigrationHelper): Promise<boolean> {
     return Promise.resolve(helper.currentVersion < MIN_VERSION);
   }
   async migrate(helper: MigrationHelper): Promise<void> {

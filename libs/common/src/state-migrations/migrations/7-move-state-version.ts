@@ -4,10 +4,6 @@ import { MigrationHelper } from "../migration-helper";
 import { Direction, Migrator } from "../migrator";
 
 export class MoveStateVersionMigrator extends Migrator<6, 7> {
-  shouldMigrate(helper: MigrationHelper): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-
   async migrate(helper: MigrationHelper): Promise<void> {
     const global = await helper.get<{ stateVersion: number }>("global");
     if (global.stateVersion) {
@@ -26,7 +22,9 @@ export class MoveStateVersionMigrator extends Migrator<6, 7> {
     await helper.set("stateVersion", undefined);
   }
 
-  async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
+  // Override is necessary because default implementation assumes `stateVersion` at the root, but this migration moves
+  // it from a `global` object to root.This makes for unique rollback versioning.
+  override async updateVersion(helper: MigrationHelper, direction: Direction): Promise<void> {
     const endVersion = direction === "up" ? this.toVersion : this.fromVersion;
     helper.currentVersion = endVersion;
     if (direction === "up") {
