@@ -2,8 +2,8 @@
 import { LogService } from "../abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
-
-import { Guid } from "./migrate";
+// eslint-disable-next-line import/no-restricted-paths -- Type interface to ensure Guids are used
+import { Guid } from "../types/guid";
 
 export class MigrationHelper {
   constructor(

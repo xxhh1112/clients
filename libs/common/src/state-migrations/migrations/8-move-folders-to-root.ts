@@ -1,4 +1,5 @@
-import { Guid } from "../migrate";
+// eslint-disable-next-line import/no-restricted-paths -- Type interface to ensure Guids are used
+import { Guid } from "../../types/guid";
 import { MigrationHelper } from "../migration-helper";
 import { Migrator } from "../migrator";
 
