@@ -352,13 +352,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: ApiServiceAbstraction,
       useClass: ApiService,
-      deps: [
-        TokenServiceAbstraction,
-        PlatformUtilsServiceAbstraction,
-        EnvironmentServiceAbstraction,
-        AppIdServiceAbstraction,
-        LOGOUT_CALLBACK,
-      ],
+      deps: [PlatformUtilsServiceAbstraction, EnvironmentServiceAbstraction, LOGOUT_CALLBACK],
     },
     {
       provide: FileUploadServiceAbstraction,
