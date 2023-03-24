@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 
 import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import { Guid } from "../../../types/guid";
 import { FolderData } from "../../models/data/folder.data";
 import { Folder } from "../../models/domain/folder";
 import { FolderView } from "../../models/view/folder.view";
@@ -24,8 +25,8 @@ export abstract class FolderService {
 }
 
 export abstract class InternalFolderService extends FolderService {
-  upsert: (folder: FolderData | FolderData[]) => Promise<void>;
-  replace: (folders: { [id: string]: FolderData }) => Promise<void>;
+  upsert: (folder: FolderData) => Promise<void>;
+  replace: (folders: Record<Guid, FolderData>) => Promise<void>;
   clear: (userId: string) => Promise<any>;
-  delete: (id: string | string[]) => Promise<any>;
+  delete: (id: string) => Promise<any>;
 }
