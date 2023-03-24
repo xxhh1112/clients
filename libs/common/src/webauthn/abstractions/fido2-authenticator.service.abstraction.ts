@@ -8,16 +8,16 @@ export enum Fido2AlgorithmIdentifier {
 }
 
 export enum Fido2AutenticatorErrorCode {
-  CTAP2_ERR_CREDENTIAL_EXCLUDED,
-  CTAP2_ERR_UNSUPPORTED_ALGORITHM,
-  CTAP2_ERR_INVALID_OPTION,
-  CTAP2_ERR_PIN_AUTH_INVALID,
-  CTAP2_ERR_OPERATION_DENIED,
+  Unknown = "UnknownError",
+  NotSupported = "NotSupportedError",
+  InvalidState = "InvalidStateError",
+  NotAllowed = "NotAllowedError",
+  Constraint = "ConstraintError",
 }
 
 export class Fido2AutenticatorError extends Error {
   constructor(readonly errorCode: Fido2AutenticatorErrorCode) {
-    super(Fido2AutenticatorErrorCode[errorCode]);
+    super(errorCode);
   }
 }
 
@@ -25,41 +25,45 @@ export class Fido2AutenticatorError extends Error {
  * Parameters for {@link Fido2AuthenticatorService.makeCredential}
  *
  * @note
- * This interface uses the parameter names defined in `fido-v2.0-ps-20190130`
- * but the parameter values use the corresponding data structures defined in
- * `WD-webauthn-3-20210427`. This is to avoid the unnecessary complexity of
- * converting data to CBOR and back.
+ * This interface represents the input parameters described in
+ * https://www.w3.org/TR/webauthn-3/#sctn-op-make-cred
  */
 export interface Fido2AuthenticatorMakeCredentialsParams {
-  clientDataHash: BufferSource;
-  rp: {
+  /** The hash of the serialized client data, provided by the client. */
+  hash: BufferSource;
+  /** The Relying Party's PublicKeyCredentialRpEntity. */
+  rpEntity: {
     name: string;
     id?: string;
   };
-  user: {
+  /** The user account’s PublicKeyCredentialUserEntity, containing the user handle given by the Relying Party. */
+  userEntity: {
     id: BufferSource;
     name?: string;
     displayName?: string;
     icon?: string;
   };
-  pubKeyCredParams: {
+  /** A sequence of pairs of PublicKeyCredentialType and public key algorithms (COSEAlgorithmIdentifier) requested by the Relying Party. This sequence is ordered from most preferred to least preferred. The authenticator makes a best-effort to create the most preferred credential that it can. */
+  credTypesAndPubKeyAlgs: {
     alg: number;
     type: "public-key"; // not used
   }[];
-  excludeList?: {
+  /** An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials. */
+  excludeCredentialDescriptorList?: {
     id: BufferSource;
     transports?: ("ble" | "internal" | "nfc" | "usb")[];
     type: "public-key"; // not used
   }[];
+  /** A map from extension identifiers to their authenticator extension inputs, created by the client based on the extensions requested by the Relying Party, if any. */
   extensions?: {
     appid?: string;
     appidExclude?: string;
     credProps?: boolean;
     uvm?: boolean;
   };
-  options?: {
-    rk?: boolean;
-    uv?: boolean;
-  };
-  pinAuth?: unknown;
+  /** The effective resident key requirement for credential creation, a Boolean value determined by the client. */
+  requireResidentKey: boolean;
+  requireUserVerification: boolean;
+  /** The constant Boolean value true. It is included here as a pseudo-parameter to simplify applying this abstract authenticator model to implementations that may wish to make a test of user presence optional although WebAuthn does not. */
+  // requireUserPresence: true; // Always performed
 }

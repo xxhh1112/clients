@@ -15,8 +15,8 @@ import { Fido2KeyView } from "../models/view/fido2-key.view";
 const KeyUsages: KeyUsage[] = ["sign"];
 
 /**
- * Bitwarden implementation of the Authenticator API described by the FIDO Alliance
- * https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html
+ * Bitwarden implementation of the WebAuthn Authenticator Model described by W3C
+ * https://www.w3.org/TR/webauthn-3/#sctn-authenticator-model
  */
 export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstraction {
   constructor(
@@ -25,64 +25,67 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ) {}
 
   async makeCredential(params: Fido2AuthenticatorMakeCredentialsParams): Promise<void> {
-    if (params.pubKeyCredParams.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM);
+    if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
     }
 
-    if (params.options?.rk != undefined && typeof params.options.rk !== "boolean") {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION);
+    if (params.requireResidentKey != undefined && typeof params.requireResidentKey !== "boolean") {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
     }
 
-    if (params.options?.uv != undefined && typeof params.options.uv !== "boolean") {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION);
+    if (
+      params.requireUserVerification != undefined &&
+      typeof params.requireUserVerification !== "boolean"
+    ) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
     }
 
-    if (params.pinAuth != undefined) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID);
+    if (params.requireUserVerification) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
     const isExcluded = await this.vaultContainsId(
-      params.excludeList.map((key) => Fido2Utils.bufferToString(key.id))
+      params.excludeCredentialDescriptorList.map((key) => Fido2Utils.bufferToString(key.id))
     );
 
     if (isExcluded) {
       await this.userInterface.informExcludedCredential(
-        [Fido2Utils.bufferToString(params.excludeList[0].id)],
+        [Fido2Utils.bufferToString(params.excludeCredentialDescriptorList[0].id)],
         {
-          credentialName: params.rp.name,
-          userName: params.user.name,
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.name,
         }
       );
 
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED);
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    if (params.options?.rk) {
+    if (params.requireResidentKey) {
       const userVerification = await this.userInterface.confirmNewCredential({
-        credentialName: params.rp.name,
-        userName: params.user.name,
+        credentialName: params.rpEntity.name,
+        userName: params.userEntity.name,
       });
 
       if (!userVerification) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
       const keyPair = await this.createKeyPair();
 
       const cipher = new CipherView();
       cipher.type = CipherType.Fido2Key;
-      cipher.name = params.rp.name;
+      cipher.name = params.rpEntity.name;
       cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
       const encrypted = await this.cipherService.encrypt(cipher);
       await this.cipherService.createWithServer(encrypted);
     } else {
       const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential({
-        credentialName: params.rp.name,
-        userName: params.user.name,
+        credentialName: params.rpEntity.name,
+        userName: params.userEntity.name,
       });
 
       if (cipherId === undefined) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED);
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
       const keyPair = await this.createKeyPair();
@@ -126,10 +129,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     fido2Key.keyType = "ECDSA";
     fido2Key.keyCurve = "P-256";
     fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
-    fido2Key.rpId = params.rp.id;
-    fido2Key.rpName = params.rp.name;
-    fido2Key.userHandle = Fido2Utils.bufferToString(params.user.id);
-    fido2Key.userName = params.user.name;
+    fido2Key.rpId = params.rpEntity.id;
+    fido2Key.rpName = params.rpEntity.name;
+    fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
+    fido2Key.userName = params.userEntity.name;
 
     return fido2Key;
   }

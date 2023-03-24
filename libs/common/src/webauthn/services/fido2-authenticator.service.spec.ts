@@ -42,41 +42,36 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("invalid input parameters", () => {
-      // Spec: If the pubKeyCredParams parameter does not contain a valid COSEAlgorithmIdentifier value that is supported by the authenticator, terminate this procedure and return error code
+      // Spec: Check if at least one of the specified combinations of PublicKeyCredentialType and cryptographic parameters in credTypesAndPubKeyAlgs is supported. If not, return an error code equivalent to "NotSupportedError" and terminate the operation.
       it("should throw error when input does not contain any supported algorithms", async () => {
         const result = async () =>
           await authenticator.makeCredential(invalidParams.unsupportedAlgorithm);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_UNSUPPORTED_ALGORITHM]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotSupported);
       });
 
-      /** Spec: If the option is known but not valid for this command, terminate this procedure */
-      it("should throw error when rk has invalid value", async () => {
+      it("should throw error when requireResidentKey has invalid value", async () => {
         const result = async () => await authenticator.makeCredential(invalidParams.invalidRk);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
 
-      /** Spec: If the option is known but not valid for this command, terminate this procedure */
-      it("should throw error when uv has invalid value", async () => {
+      it("should throw error when requireUserVerification has invalid value", async () => {
         const result = async () => await authenticator.makeCredential(invalidParams.invalidUv);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_INVALID_OPTION]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
 
-      /** Spec: If pinAuth parameter is present and the pinProtocol is not supported */
-      it("should throw error when pinAuth parameter is present", async () => {
-        const result = async () => await authenticator.makeCredential(invalidParams.pinAuthPresent);
+      /**
+       * Spec: If requireUserVerification is true and the authenticator cannot perform user verification, return an error code equivalent to "ConstraintError" and terminate the operation.
+       * Deviation: User verification is checked before checking for excluded credentials
+       * */
+      it("should throw error if requireUserVerification is set to true", async () => {
+        const params = await createCredentialParams({ requireUserVerification: true });
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_PIN_AUTH_INVALID]
-        );
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Constraint);
       });
 
       it("should not request confirmation from user", async () => {
@@ -93,10 +88,6 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    /**
-     * Spec: Optionally, if the extensions parameter is present, process any extensions that this authenticator supports.
-     * Currently not supported.
-     */
     describe.skip("when extensions parameter is present", () => undefined);
 
     describe("when vault contains excluded credential", () => {
@@ -107,7 +98,9 @@ describe("FidoAuthenticatorService", () => {
         const excludedCipher = createCipher();
         excludedCipherView = await excludedCipher.decrypt();
         params = await createCredentialParams({
-          excludeList: [{ id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" }],
+          excludeCredentialDescriptorList: [
+            { id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" },
+          ],
         });
         cipherService.get.mockImplementation(async (id) =>
           id === excludedCipher.id ? excludedCipher : undefined
@@ -115,7 +108,10 @@ describe("FidoAuthenticatorService", () => {
         cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
       });
 
-      /** Spec: wait for user presence */
+      /**
+       * Spec: collect an authorization gesture confirming user consent for creating a new credential.
+       * Deviation: Consent is not asked and the user is simply informed of the situation.
+       **/
       it("should inform user", async () => {
         userInterface.informExcludedCredential.mockResolvedValue();
 
@@ -127,18 +123,15 @@ describe("FidoAuthenticatorService", () => {
         expect(userInterface.informExcludedCredential).toHaveBeenCalled();
       });
 
-      /** Spec: then terminate this procedure and return error code */
+      /** Spec: return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
         userInterface.informExcludedCredential.mockResolvedValue();
 
         const result = async () => await authenticator.makeCredential(params);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_CREDENTIAL_EXCLUDED]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
 
-      /** Departure from spec: Check duplication last instead of first */
       it("should not inform user of duplication when input data does not pass checks", async () => {
         userInterface.informExcludedCredential.mockResolvedValue();
         const invalidParams = await createInvalidParams();
@@ -157,18 +150,21 @@ describe("FidoAuthenticatorService", () => {
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        params = await createCredentialParams({ options: { rk: true } });
+        params = await createCredentialParams({ requireResidentKey: true });
       });
 
-      /** Spec: show the items contained within the user and rp parameter structures to the user. */
+      /**
+       * Spec: Collect an authorization gesture confirming user consent for creating a new credential. The prompt for the authorization gesture is shown by the authenticator if it has its own output capability. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name and userEntity.displayName, if possible.
+       * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
+       * */
       it("should request confirmation from user", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(true);
 
         await authenticator.makeCredential(params);
 
         expect(userInterface.confirmNewCredential).toHaveBeenCalledWith({
-          credentialName: params.rp.name,
-          userName: params.user.name,
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.name,
         } as NewCredentialParams);
       });
 
@@ -183,30 +179,28 @@ describe("FidoAuthenticatorService", () => {
         expect(saved).toEqual(
           expect.objectContaining({
             type: CipherType.Fido2Key,
-            name: params.rp.name,
+            name: params.rpEntity.name,
 
             fido2Key: expect.objectContaining({
               keyType: "ECDSA",
               keyCurve: "P-256",
-              rpId: params.rp.id,
-              rpName: params.rp.name,
-              userHandle: Fido2Utils.bufferToString(params.user.id),
-              userName: params.user.name,
+              rpId: params.rpEntity.id,
+              rpName: params.rpEntity.name,
+              userHandle: Fido2Utils.bufferToString(params.userEntity.id),
+              userName: params.userEntity.name,
             }),
           })
         );
         expect(cipherService.createWithServer).toHaveBeenCalledWith(encryptedCipher);
       });
 
-      /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
+      /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(false);
 
         const result = async () => await authenticator.makeCredential(params);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
     });
 
@@ -226,15 +220,18 @@ describe("FidoAuthenticatorService", () => {
         cipherService.getAllDecrypted.mockResolvedValue([existingCipherView]);
       });
 
-      /** Spec: show the items contained within the user and rp parameter structures to the user. */
+      /**
+       * Spec: Collect an authorization gesture confirming user consent for creating a new credential. The prompt for the authorization gesture is shown by the authenticator if it has its own output capability. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name and userEntity.displayName, if possible.
+       * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
+       * */
       it("should request confirmation from user", async () => {
         userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
 
         await authenticator.makeCredential(params);
 
         expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith({
-          credentialName: params.rp.name,
-          userName: params.user.name,
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.name,
         } as NewCredentialParams);
       });
 
@@ -254,26 +251,24 @@ describe("FidoAuthenticatorService", () => {
             fido2Key: expect.objectContaining({
               keyType: "ECDSA",
               keyCurve: "P-256",
-              rpId: params.rp.id,
-              rpName: params.rp.name,
-              userHandle: Fido2Utils.bufferToString(params.user.id),
-              userName: params.user.name,
+              rpId: params.rpEntity.id,
+              rpName: params.rpEntity.name,
+              userHandle: Fido2Utils.bufferToString(params.userEntity.id),
+              userName: params.userEntity.name,
             }),
           })
         );
         expect(cipherService.updateWithServer).toHaveBeenCalledWith(encryptedCipher);
       });
 
-      /** Spec: If the user declines permission, return the CTAP2_ERR_OPERATION_DENIED error. */
+      /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
         userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
         const params = await createCredentialParams();
 
         const result = async () => await authenticator.makeCredential(params);
 
-        await expect(result).rejects.toThrowError(
-          Fido2AutenticatorErrorCode[Fido2AutenticatorErrorCode.CTAP2_ERR_OPERATION_DENIED]
-        );
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
     });
   });
@@ -283,41 +278,38 @@ async function createCredentialParams(
   params: Partial<Fido2AuthenticatorMakeCredentialsParams> = {}
 ): Promise<Fido2AuthenticatorMakeCredentialsParams> {
   return {
-    clientDataHash: params.clientDataHash ?? (await createClientDataHash()),
-    rp: params.rp ?? {
+    hash: params.hash ?? (await createClientDataHash()),
+    rpEntity: params.rpEntity ?? {
       name: "Bitwarden",
       id: RpId,
     },
-    user: params.user ?? {
+    userEntity: params.userEntity ?? {
       id: randomBytes(64),
       name: "jane.doe@bitwarden.com",
       displayName: "Jane Doe",
       icon: " data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOhJREFUeNpiFI+9E8DAwDAfiAUYSAMfgDiQBVmzlSYnUTqPXf/OANWzngVZ87pKKaIMCGp/BjeEhRjFMKAjx8bQFC2CIs9CpHNxAiYGCsEQM4Cfiwm3AY9f/yZogIcRN4ZahAFv/jAcu4E7xMNtecEYpAakFqsX8me9Yvj07R+G5jR3foaJqWJgOZAaZMAIzAv/kQV05NgZ5hdIMMiKQJIIyEYrDU6wrYkTXjBcefQTvwGwwCoJFGJIBdoMArN3fmToWf+O4SMW14EMeI8rJ8Jcgexn9BwJCoNEaNbEACCN+DSDsjNAgAEAri9Zii/uDMsAAAAASUVORK5CYII=",
     },
-    pubKeyCredParams: params.pubKeyCredParams ?? [
+    credTypesAndPubKeyAlgs: params.credTypesAndPubKeyAlgs ?? [
       {
         alg: -7, // ES256
         type: "public-key",
       },
     ],
-    excludeList: params.excludeList ?? [
+    excludeCredentialDescriptorList: params.excludeCredentialDescriptorList ?? [
       {
         id: randomBytes(16),
         transports: ["internal"],
         type: "public-key",
       },
     ],
+    requireResidentKey: params.requireResidentKey ?? false,
+    requireUserVerification: params.requireUserVerification ?? false,
     extensions: params.extensions ?? {
       appid: undefined,
       appidExclude: undefined,
       credProps: undefined,
       uvm: false as boolean,
     },
-    options: params.options ?? {
-      rk: false as boolean,
-      uv: false as boolean,
-    },
-    pinAuth: params.pinAuth,
   };
 }
 
@@ -325,11 +317,10 @@ type InvalidParams = Awaited<ReturnType<typeof createInvalidParams>>;
 async function createInvalidParams() {
   return {
     unsupportedAlgorithm: await createCredentialParams({
-      pubKeyCredParams: [{ alg: 9001, type: "public-key" }],
+      credTypesAndPubKeyAlgs: [{ alg: 9001, type: "public-key" }],
     }),
-    invalidRk: await createCredentialParams({ options: { rk: "invalid-value" as any } }),
-    invalidUv: await createCredentialParams({ options: { uv: "invalid-value" as any } }),
-    pinAuthPresent: await createCredentialParams({ pinAuth: { key: "value" } }),
+    invalidRk: await createCredentialParams({ requireResidentKey: "invalid-value" as any }),
+    invalidUv: await createCredentialParams({ requireUserVerification: "invalid-value" as any }),
   };
 }
 
