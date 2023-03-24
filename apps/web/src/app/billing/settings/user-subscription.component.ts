@@ -63,17 +63,6 @@ export class UserSubscriptionComponent implements OnInit {
       return;
     }
 
-    if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("manageSubscriptionFromStore"),
-        this.i18nService.t("cancelSubscription"),
-        null,
-        null,
-        "warning"
-      );
-      return;
-    }
-
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("reinstateConfirmation"),
       this.i18nService.t("reinstateSubscription"),
@@ -96,17 +85,6 @@ export class UserSubscriptionComponent implements OnInit {
 
   async cancel() {
     if (this.loading) {
-      return;
-    }
-
-    if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("manageSubscriptionFromStore"),
-        this.i18nService.t("cancelSubscription"),
-        null,
-        null,
-        "warning"
-      );
       return;
     }
 
@@ -161,26 +139,16 @@ export class UserSubscriptionComponent implements OnInit {
     }
   }
 
-  adjustStorage(add: boolean) {
-    if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("cannotPerformInAppPurchase"),
-        this.i18nService.t(add ? "addStorage" : "removeStorage"),
-        null,
-        null,
-        "warning"
-      );
-      return;
-    }
-    this.adjustStorageAdd = add;
-    this.showAdjustStorage = true;
-  }
-
   closeStorage(load: boolean) {
     this.showAdjustStorage = false;
     if (load) {
       this.load();
     }
+  }
+
+  adjustStorage(add: boolean) {
+    this.adjustStorageAdd = add;
+    this.showAdjustStorage = true;
   }
 
   get subscriptionMarkedForCancel() {
@@ -205,10 +173,6 @@ export class UserSubscriptionComponent implements OnInit {
 
   get storageProgressWidth() {
     return this.storagePercentage < 5 ? 5 : 0;
-  }
-
-  get usingInAppPurchase() {
-    return this.sub != null ? this.sub.usingInAppPurchase : false;
   }
 
   get title(): string {
