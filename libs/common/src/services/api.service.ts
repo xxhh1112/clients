@@ -1,3 +1,4 @@
+import { ApiHelperService } from "../abstractions/api-helper.service.abstraction";
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
 import { EnvironmentService } from "../abstractions/environment.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
@@ -40,6 +41,7 @@ import {
 } from "../admin-console/models/response/provider/provider-user.response";
 import { ProviderResponse } from "../admin-console/models/response/provider/provider.response";
 import { SelectionReadOnlyResponse } from "../admin-console/models/response/selection-read-only.response";
+import { TokenApiService } from "../auth/abstractions/token-api.service.abstraction";
 import { DeviceVerificationRequest } from "../auth/models/request/device-verification.request";
 import { EmailTokenRequest } from "../auth/models/request/email-token.request";
 import { EmailRequest } from "../auth/models/request/email.request";
@@ -159,6 +161,8 @@ export class ApiService implements ApiServiceAbstraction {
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
+    private apiHelperService: ApiHelperService,
+    private tokenApiService: TokenApiService,
     private logoutCallback: (expired: boolean) => Promise<void>,
     private customUserAgent: string = null
   ) {
@@ -1555,7 +1559,7 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async postEventsCollect(request: EventRequest[]): Promise<any> {
-    const authHeader = await this.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveBearerToken();
     const headers = new Headers({
       "Device-Type": this.deviceType,
       Authorization: "Bearer " + authHeader,
@@ -1607,7 +1611,7 @@ export class ApiService implements ApiServiceAbstraction {
   // Key Connector
 
   async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
-    const authHeader = await this.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveBearerToken();
 
     const response = await this.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
@@ -1632,7 +1636,7 @@ export class ApiService implements ApiServiceAbstraction {
     keyConnectorUrl: string,
     request: KeyConnectorUserKeyRequest
   ): Promise<void> {
-    const authHeader = await this.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveBearerToken();
 
     const response = await this.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
@@ -1685,20 +1689,11 @@ export class ApiService implements ApiServiceAbstraction {
   // Helpers
 
   async fetch(request: Request): Promise<Response> {
-    if (request.method === "GET") {
-      request.headers.set("Cache-Control", "no-store");
-      request.headers.set("Pragma", "no-cache");
-    }
-    request.headers.set("Bitwarden-Client-Name", this.platformUtilsService.getClientType());
-    request.headers.set(
-      "Bitwarden-Client-Version",
-      await this.platformUtilsService.getApplicationVersionNumber()
-    );
-    return this.nativeFetch(request);
+    return this.apiHelperService.fetch(request);
   }
 
   nativeFetch(request: Request): Promise<Response> {
-    return fetch(request);
+    return this.apiHelperService.nativeFetch(request);
   }
 
   async preValidateSso(identifier: string): Promise<SsoPreValidateResponse> {
@@ -1827,99 +1822,91 @@ export class ApiService implements ApiServiceAbstraction {
     apiUrl?: string,
     alterHeaders?: (headers: Headers) => void
   ): Promise<any> {
-    apiUrl = Utils.isNullOrWhitespace(apiUrl) ? this.environmentService.getApiUrl() : apiUrl;
-
-    // Prevent directory traversal from malicious paths
-    const pathParts = path.split("?");
-    const requestUrl =
-      apiUrl + Utils.normalizePath(pathParts[0]) + (pathParts.length > 1 ? `?${pathParts[1]}` : "");
-
-    const headers = new Headers({
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
-
-    const requestInit: RequestInit = {
-      cache: "no-store",
-      credentials: this.getCredentials(),
-      method: method,
-    };
-
+    // TODO: test that this works
     if (authed) {
-      const authHeader = await this.getActiveBearerToken();
-      headers.set("Authorization", "Bearer " + authHeader);
-    }
-    if (body != null) {
-      if (typeof body === "string") {
-        requestInit.body = body;
-        headers.set("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-      } else if (typeof body === "object") {
-        if (body instanceof FormData) {
-          requestInit.body = body;
-        } else {
-          headers.set("Content-Type", "application/json; charset=utf-8");
-          requestInit.body = JSON.stringify(body);
-        }
-      }
-    }
-    if (hasResponse) {
-      headers.set("Accept", "application/json");
-    }
-    if (alterHeaders != null) {
-      alterHeaders(headers);
+      const originalAlterHeaders = alterHeaders;
+      // Modify the alterHeaders function to include the auth header
+      alterHeaders = async (headers: Headers) => {
+        const activeAccessToken = await this.tokenApiService.getActiveBearerToken();
+        headers.set("Authorization", "Bearer " + activeAccessToken);
+
+        originalAlterHeaders(headers);
+      };
     }
 
-    requestInit.headers = headers;
-    const response = await this.fetch(new Request(requestUrl, requestInit));
+    const requestUrl = this.apiHelperService.buildRequestUrl(path, apiUrl);
+    const request = await this.apiHelperService.createRequest(
+      method,
+      requestUrl,
+      body,
+      hasResponse,
+      alterHeaders
+    );
+    const response = await this.apiHelperService.fetch(request);
 
-    const responseType = response.headers.get("content-type");
-    const responseIsJson = responseType != null && responseType.indexOf("application/json") !== -1;
+    return this.handleResponse(response, hasResponse, authed);
+  }
+
+  private async handleResponse(
+    response: Response,
+    hasResponse: boolean,
+    authed: boolean
+  ): Promise<any> {
+    const responseIsJson = this.apiHelperService.isJsonResponse(response);
+
     if (hasResponse && response.status === 200 && responseIsJson) {
-      const responseJson = await response.json();
-      return responseJson;
+      return this.handleSuccess(response);
     } else if (response.status !== 200) {
       const error = await this.handleError(response, false, authed);
       return Promise.reject(error);
     }
   }
 
+  private handleSuccess(response: Response): Promise<any> {
+    return response.json();
+  }
+
   private async handleError(
-    response: Response,
+    errorResponse: Response,
     tokenError: boolean,
     authed: boolean
   ): Promise<ErrorResponse> {
-    let responseJson: any = null;
-    if (this.isJsonResponse(response)) {
-      responseJson = await response.json();
-    } else if (this.isTextResponse(response)) {
-      responseJson = { Message: await response.text() };
-    }
+    const errorResponseJson = await this.apiHelperService.getErrorResponseJson(errorResponse);
 
     if (authed) {
-      if (
-        response.status === 401 ||
-        response.status === 403 ||
-        (tokenError &&
-          response.status === 400 &&
-          responseJson != null &&
-          responseJson.error === "invalid_grant")
-      ) {
-        await this.logoutCallback(true);
-        return null;
-      }
+      // If we are authed, we could receive errors which require us to logout
+      return await this.handleAuthedError(errorResponse, tokenError, errorResponseJson);
+    } else {
+      return this.apiHelperService.handleUnauthedError(
+        errorResponse,
+        tokenError,
+        errorResponseJson
+      );
     }
-
-    return new ErrorResponse(responseJson, response.status, tokenError);
   }
 
-  private qsStringify(params: any): string {
-    return Object.keys(params)
-      .map((key) => {
-        return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
-      })
-      .join("&");
+  private async handleAuthedError(
+    errorResponse: Response,
+    tokenError: boolean,
+    errorResponseJson: any
+  ) {
+    if (
+      errorResponse.status === 401 ||
+      errorResponse.status === 403 ||
+      (tokenError &&
+        errorResponse.status === 400 &&
+        errorResponseJson != null &&
+        errorResponseJson.error === "invalid_grant")
+    ) {
+      await this.logoutCallback(true);
+      return null;
+    }
+
+    return this.apiHelperService.buildErrorResponse(
+      errorResponseJson,
+      errorResponse.status,
+      tokenError
+    );
   }
 
   private getCredentials(): RequestCredentials {
@@ -1942,15 +1929,5 @@ export class ApiService implements ApiServiceAbstraction {
       base += "continuationToken=" + token;
     }
     return base;
-  }
-
-  private isJsonResponse(response: Response): boolean {
-    const typeHeader = response.headers.get("content-type");
-    return typeHeader != null && typeHeader.indexOf("application/json") > -1;
-  }
-
-  private isTextResponse(response: Response): boolean {
-    const typeHeader = response.headers.get("content-type");
-    return typeHeader != null && typeHeader.indexOf("text") > -1;
   }
 }

@@ -2,6 +2,7 @@ import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
 import { AvatarUpdateService as AccountUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
+import { ApiHelperService as ApiHelperServiceAbstraction } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -85,6 +86,7 @@ import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { AnonymousHubService } from "@bitwarden/common/services/anonymousHub.service";
+import { ApiHelperServiceImplementation } from "@bitwarden/common/services/api-helper.service.implementation";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -352,7 +354,13 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: ApiServiceAbstraction,
       useClass: ApiService,
-      deps: [PlatformUtilsServiceAbstraction, EnvironmentServiceAbstraction, LOGOUT_CALLBACK],
+      deps: [
+        PlatformUtilsServiceAbstraction,
+        EnvironmentServiceAbstraction,
+        ApiHelperServiceAbstraction,
+        TokenApiServiceAbstraction,
+        LOGOUT_CALLBACK,
+      ],
     },
     {
       provide: FileUploadServiceAbstraction,
@@ -640,6 +648,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         TokenServiceAbstraction,
         AppIdServiceAbstraction,
       ],
+    },
+    {
+      provide: ApiHelperServiceAbstraction,
+      useClass: ApiHelperServiceImplementation,
+      deps: [PlatformUtilsServiceAbstraction, EnvironmentServiceAbstraction],
     },
   ],
 })
