@@ -2,7 +2,7 @@
 import * as path from "path";
 
 import { getHostname, parse } from "tldts";
-import { Merge } from "type-fest";
+import { ConditionalKeys, IterableElement, Merge } from "type-fest";
 
 import { CryptoService } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
@@ -482,6 +482,18 @@ export class Utils {
     } else {
       return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
     }
+  }
+
+  static recordByProperty<
+    T extends Array<any>,
+    V extends IterableElement<T>,
+    K extends ConditionalKeys<V, string | number | symbol>,
+    TKey extends V[K] & (string | number | symbol)
+  >(array: T, key: K): Record<TKey, V> {
+    return array?.reduce((acc: Record<TKey, V>, item: V) => {
+      acc[item[key]] = item; // cast guaranteed by ConditionalKeys
+      return acc;
+    }, {} as Record<TKey, V>);
   }
 
   /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */

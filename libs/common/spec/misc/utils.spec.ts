@@ -310,6 +310,34 @@ describe("Utils Service", () => {
     });
   });
 
+  describe("recordByProperty", () => {
+    class Test {
+      id: string;
+      name: string;
+      invalid: Utils;
+      constructor(id: string, name: string) {
+        this.id = id;
+        this.name = name;
+      }
+    }
+
+    it("should handle null", () => {
+      expect(Utils.recordByProperty(null as Test[], "id")).toBeUndefined();
+    });
+
+    it("should handle empty array", () => {
+      expect(Utils.recordByProperty([], "id")).toEqual({});
+    });
+
+    it("should handle collisions", () => {
+      const test1 = new Test("1", "test1");
+      const test2 = new Test("1", "test2");
+      expect(Utils.recordByProperty([test1, test2], "id")).toEqual({
+        1: test2,
+      });
+    });
+  });
+
   describe("encodeRFC3986URIComponent", () => {
     it("returns input string with expected encoded chars", () => {
       expect(Utils.encodeRFC3986URIComponent("test'user@example.com")).toBe(
