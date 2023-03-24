@@ -66,6 +66,7 @@ import {
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
+import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
@@ -73,6 +74,7 @@ import { AccountServiceImplementation } from "@bitwarden/common/auth/services/ac
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
+import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
@@ -634,6 +636,16 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: OrgDomainApiServiceAbstraction,
       useClass: OrgDomainApiService,
       deps: [OrgDomainServiceAbstraction, ApiServiceAbstraction],
+    },
+    {
+      provide: TokenApiServiceAbstraction,
+      useClass: TokenApiServiceImplementation,
+      deps: [
+        PlatformUtilsServiceAbstraction,
+        EnvironmentServiceAbstraction,
+        TokenServiceAbstraction,
+        AppIdServiceAbstraction,
+      ],
     },
   ],
 })

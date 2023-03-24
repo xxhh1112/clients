@@ -50,11 +50,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { DeviceRequest } from "../auth/models/request/identity-token/device.request";
-import { PasswordTokenRequest } from "../auth/models/request/identity-token/password-token.request";
-import { SsoTokenRequest } from "../auth/models/request/identity-token/sso-token.request";
-import { TokenTwoFactorRequest } from "../auth/models/request/identity-token/token-two-factor.request";
-import { UserApiTokenRequest } from "../auth/models/request/identity-token/user-api-token.request";
 import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector-user-key.request";
 import { PasswordHintRequest } from "../auth/models/request/password-hint.request";
 import { PasswordRequest } from "../auth/models/request/password.request";
@@ -83,9 +78,6 @@ import {
   EmergencyAccessTakeoverResponse,
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
-import { IdentityCaptchaResponse } from "../auth/models/response/identity-captcha.response";
-import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
-import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
@@ -192,69 +184,6 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   // Auth APIs
-
-  async postIdentityToken(
-    request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
-  ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse> {
-    const headers = new Headers({
-      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      Accept: "application/json",
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
-    request.alterIdentityTokenHeaders(headers);
-
-    const identityToken =
-      request instanceof UserApiTokenRequest
-        ? request.toIdentityToken()
-        : request.toIdentityToken(this.platformUtilsService.getClientType());
-
-    const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
-        body: this.qsStringify(identityToken),
-        credentials: this.getCredentials(),
-        cache: "no-store",
-        headers: headers,
-        method: "POST",
-      })
-    );
-
-    let responseJson: any = null;
-    if (this.isJsonResponse(response)) {
-      responseJson = await response.json();
-    }
-
-    if (responseJson != null) {
-      if (response.status === 200) {
-        return new IdentityTokenResponse(responseJson);
-      } else if (
-        response.status === 400 &&
-        responseJson.TwoFactorProviders2 &&
-        Object.keys(responseJson.TwoFactorProviders2).length
-      ) {
-        await this.tokenService.clearTwoFactorToken();
-        return new IdentityTwoFactorResponse(responseJson);
-      } else if (
-        response.status === 400 &&
-        responseJson.HCaptcha_SiteKey &&
-        Object.keys(responseJson.HCaptcha_SiteKey).length
-      ) {
-        return new IdentityCaptchaResponse(responseJson);
-      }
-    }
-
-    return Promise.reject(new ErrorResponse(responseJson, response.status, true));
-  }
-
-  async refreshIdentityToken(): Promise<any> {
-    try {
-      await this.doAuthRefresh();
-    } catch (e) {
-      return Promise.reject(null);
-    }
-  }
 
   async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
     const r = await this.send("POST", "/auth-requests/", request, false, true);
@@ -1759,15 +1688,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Helpers
 
-  async getActiveBearerToken(): Promise<string> {
-    let accessToken = await this.tokenService.getToken();
-    if (await this.tokenService.tokenNeedsRefresh()) {
-      await this.doAuthRefresh();
-      accessToken = await this.tokenService.getToken();
-    }
-    return accessToken;
-  }
-
   async fetch(request: Request): Promise<Response> {
     if (request.method === "GET") {
       request.headers.set("Cache-Control", "no-store");
@@ -1900,85 +1820,6 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       false
     );
-  }
-
-  protected async doAuthRefresh(): Promise<void> {
-    const refreshToken = await this.tokenService.getRefreshToken();
-    if (refreshToken != null && refreshToken !== "") {
-      return this.doRefreshToken();
-    }
-
-    const clientId = await this.tokenService.getClientId();
-    const clientSecret = await this.tokenService.getClientSecret();
-    if (!Utils.isNullOrWhitespace(clientId) && !Utils.isNullOrWhitespace(clientSecret)) {
-      return this.doApiTokenRefresh();
-    }
-
-    throw new Error("Cannot refresh token, no refresh token or api keys are stored");
-  }
-
-  protected async doRefreshToken(): Promise<void> {
-    const refreshToken = await this.tokenService.getRefreshToken();
-    if (refreshToken == null || refreshToken === "") {
-      throw new Error();
-    }
-    const headers = new Headers({
-      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      Accept: "application/json",
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
-
-    const decodedToken = await this.tokenService.decodeToken();
-    const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
-        body: this.qsStringify({
-          grant_type: "refresh_token",
-          client_id: decodedToken.client_id,
-          refresh_token: refreshToken,
-        }),
-        cache: "no-store",
-        credentials: this.getCredentials(),
-        headers: headers,
-        method: "POST",
-      })
-    );
-
-    if (response.status === 200) {
-      const responseJson = await response.json();
-      const tokenResponse = new IdentityTokenResponse(responseJson);
-      await this.tokenService.setTokens(
-        tokenResponse.accessToken,
-        tokenResponse.refreshToken,
-        null
-      );
-    } else {
-      const error = await this.handleError(response, true, true);
-      return Promise.reject(error);
-    }
-  }
-
-  protected async doApiTokenRefresh(): Promise<void> {
-    const clientId = await this.tokenService.getClientId();
-    const clientSecret = await this.tokenService.getClientSecret();
-
-    const appId = await this.appIdService.getAppId();
-    const deviceRequest = new DeviceRequest(appId, this.platformUtilsService);
-    const tokenRequest = new UserApiTokenRequest(
-      clientId,
-      clientSecret,
-      new TokenTwoFactorRequest(),
-      deviceRequest
-    );
-
-    const response = await this.postIdentityToken(tokenRequest);
-    if (!(response instanceof IdentityTokenResponse)) {
-      throw new Error("Invalid response received when refreshing api token");
-    }
-
-    await this.tokenService.setToken(response.accessToken);
   }
 
   async send(

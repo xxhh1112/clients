@@ -45,9 +45,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { PasswordTokenRequest } from "../auth/models/request/identity-token/password-token.request";
-import { SsoTokenRequest } from "../auth/models/request/identity-token/sso-token.request";
-import { UserApiTokenRequest } from "../auth/models/request/identity-token/user-api-token.request";
 import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector-user-key.request";
 import { PasswordHintRequest } from "../auth/models/request/password-hint.request";
 import { PasswordRequest } from "../auth/models/request/password.request";
@@ -76,9 +73,6 @@ import {
   EmergencyAccessTakeoverResponse,
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
-import { IdentityCaptchaResponse } from "../auth/models/response/identity-captcha.response";
-import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
-import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
@@ -161,11 +155,6 @@ export abstract class ApiService {
     apiUrl?: string,
     alterHeaders?: (headers: Headers) => void
   ) => Promise<any>;
-
-  postIdentityToken: (
-    request: PasswordTokenRequest | SsoTokenRequest | UserApiTokenRequest
-  ) => Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse>;
-  refreshIdentityToken: () => Promise<any>;
 
   getProfile: () => Promise<ProfileResponse>;
   getUserSubscription: () => Promise<SubscriptionResponse>;
@@ -528,7 +517,6 @@ export abstract class ApiService {
   postBitPayInvoice: (request: BitPayInvoiceRequest) => Promise<string>;
   postSetupPayment: () => Promise<string>;
 
-  getActiveBearerToken: () => Promise<string>;
   fetch: (request: Request) => Promise<Response>;
   nativeFetch: (request: Request) => Promise<Response>;
 
