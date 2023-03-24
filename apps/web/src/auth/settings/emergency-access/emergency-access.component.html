@@ -26,7 +26,7 @@
 
 <bit-table *ngIf="trustedContacts?.length">
   <ng-template body>
-    <tr *ngFor="let c of trustedContacts; let i = index">
+    <tr *ngFor="let c of trustedContacts">
       <td bitCell width="30">
         <bit-avatar
           [text]="c | userName"
@@ -37,32 +37,11 @@
       </td>
       <td bitCell>
         <button type="button" bitLink (click)="edit(c)">{{ c.email }}</button>
-        <span
-          bitBadge
-          badgeType="secondary"
-          *ngIf="c.status === emergencyAccessStatusType.Invited"
-          >{{ "invited" | i18n }}</span
-        >
-        <span
-          bitBadge
-          badgeType="warning"
-          *ngIf="c.status === emergencyAccessStatusType.Accepted"
-          >{{ "accepted" | i18n }}</span
-        >
-        <span
-          bitBadge
-          badgeType="warning"
-          *ngIf="c.status === emergencyAccessStatusType.RecoveryInitiated"
-          >{{ "emergencyAccessRecoveryInitiated" | i18n }}</span
-        >
-        <span bitBadge *ngIf="c.status === emergencyAccessStatusType.RecoveryApproved">{{
-          "emergencyAccessRecoveryApproved" | i18n
-        }}</span>
 
-        <span bitBadge *ngIf="c.type === emergencyAccessType.View">{{ "view" | i18n }}</span>
-        <span bitBadge *ngIf="c.type === emergencyAccessType.Takeover">{{
-          "takeover" | i18n
-        }}</span>
+        <app-emergency-access-status-badges
+          [status]="c.status"
+          [type]="c.type"
+        ></app-emergency-access-status-badges>
 
         <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
@@ -145,7 +124,7 @@
 
 <bit-table *ngIf="grantedContacts?.length">
   <ng-template body>
-    <tr *ngFor="let c of grantedContacts; let i = index">
+    <tr *ngFor="let c of grantedContacts">
       <td bitCell width="30">
         <bit-avatar
           [text]="c | userName"
@@ -156,32 +135,11 @@
       </td>
       <td bitCell>
         <span>{{ c.email }}</span>
-        <span bitBadge *ngIf="c.status === emergencyAccessStatusType.Invited">{{
-          "invited" | i18n
-        }}</span>
-        <span
-          bitBadge
-          badgeType="warning"
-          *ngIf="c.status === emergencyAccessStatusType.Accepted"
-          >{{ "accepted" | i18n }}</span
-        >
-        <span
-          bitBadge
-          badgeType="warning"
-          *ngIf="c.status === emergencyAccessStatusType.RecoveryInitiated"
-          >{{ "emergencyAccessRecoveryInitiated" | i18n }}</span
-        >
-        <span
-          bitBadge
-          badgeType="success"
-          *ngIf="c.status === emergencyAccessStatusType.RecoveryApproved"
-          >{{ "emergencyAccessRecoveryApproved" | i18n }}</span
-        >
 
-        <span bitBadge *ngIf="c.type === emergencyAccessType.View">{{ "view" | i18n }}</span>
-        <span bitBadge *ngIf="c.type === emergencyAccessType.Takeover">{{
-          "takeover" | i18n
-        }}</span>
+        <app-emergency-access-status-badges
+          [status]="c.status"
+          [type]="c.type"
+        ></app-emergency-access-status-badges>
 
         <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
