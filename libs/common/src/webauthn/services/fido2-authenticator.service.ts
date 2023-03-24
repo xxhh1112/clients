@@ -70,14 +70,18 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
-      const keyPair = await this.createKeyPair();
+      try {
+        const keyPair = await this.createKeyPair();
 
-      const cipher = new CipherView();
-      cipher.type = CipherType.Fido2Key;
-      cipher.name = params.rpEntity.name;
-      cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
-      const encrypted = await this.cipherService.encrypt(cipher);
-      await this.cipherService.createWithServer(encrypted);
+        const cipher = new CipherView();
+        cipher.type = CipherType.Fido2Key;
+        cipher.name = params.rpEntity.name;
+        cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+        const encrypted = await this.cipherService.encrypt(cipher);
+        await this.cipherService.createWithServer(encrypted);
+      } catch {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
     } else {
       const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential({
         credentialName: params.rpEntity.name,
@@ -88,13 +92,17 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
-      const keyPair = await this.createKeyPair();
+      try {
+        const keyPair = await this.createKeyPair();
 
-      const encrypted = await this.cipherService.get(cipherId);
-      const cipher = await encrypted.decrypt();
-      cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
-      const reencrypted = await this.cipherService.encrypt(cipher);
-      await this.cipherService.updateWithServer(reencrypted);
+        const encrypted = await this.cipherService.get(cipherId);
+        const cipher = await encrypted.decrypt();
+        cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+        const reencrypted = await this.cipherService.encrypt(cipher);
+        await this.cipherService.updateWithServer(reencrypted);
+      } catch {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
     }
   }
 

@@ -202,6 +202,18 @@ describe("FidoAuthenticatorService", () => {
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
+
+      /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
+      it("should throw unkown error if creation fails", async () => {
+        const encryptedCipher = Symbol();
+        userInterface.confirmNewCredential.mockResolvedValue(true);
+        cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
+        cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
+      });
     });
 
     describe("creation of non-discoverable credential", () => {
@@ -269,6 +281,18 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.makeCredential(params);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+
+      /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
+      it("should throw unkown error if creation fails", async () => {
+        const encryptedCipher = Symbol();
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+        cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
+        cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
     });
   });
