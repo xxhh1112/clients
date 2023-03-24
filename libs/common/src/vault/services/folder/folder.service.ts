@@ -18,7 +18,7 @@ import { FolderStateService } from "./folder-state.service";
 export class FolderService implements InternalFolderServiceAbstraction {
   protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
   protected _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
-  private userId: Guid;
+  private currentUserId: Guid;
 
   folders$ = this._folders.asObservable();
   folderViews$ = this._folderViews.asObservable();
@@ -44,8 +44,8 @@ export class FolderService implements InternalFolderServiceAbstraction {
             return;
           }
 
-          this.userId = userId as Guid;
-          await this.updateStateFromDisk(this.userId);
+          this.currentUserId = userId as Guid;
+          await this.updateStateFromDisk(this.currentUserId);
         })
       )
       .subscribe();
@@ -70,11 +70,11 @@ export class FolderService implements InternalFolderServiceAbstraction {
   }
 
   async getAllFromState(): Promise<Folder[]> {
-    if (!this.userId) {
+    if (!this.currentUserId) {
       return null;
     }
 
-    const stored = await this.folderStateService.getFolders(this.userId);
+    const stored = await this.folderStateService.getFolders(this.currentUserId);
     return Object.values(stored);
   }
 
@@ -83,65 +83,65 @@ export class FolderService implements InternalFolderServiceAbstraction {
    * @param id id of the folder
    */
   async getFromState(id: Guid): Promise<Folder> {
-    if (!this.userId) {
+    if (!this.currentUserId) {
       return null;
     }
 
-    return (await this.folderStateService.getFolders(this.userId))[id];
+    return (await this.folderStateService.getFolders(this.currentUserId))[id];
   }
 
   /**
    * @deprecated Only use in CLI!
    */
   async getAllDecryptedFromState(): Promise<FolderView[]> {
-    if (!this.userId) {
+    if (!this.currentUserId) {
       return null;
     }
-    const stored = await this.folderStateService.getFolders(this.userId);
+    const stored = await this.folderStateService.getFolders(this.currentUserId);
 
     return await this.decryptFolders(Object.values(stored));
   }
 
   async upsert(data: FolderData): Promise<void> {
-    if (!this.userId) {
+    if (!this.currentUserId) {
       return;
     }
 
-    const allData = await this.folderStateService.getFolderData(this.userId);
+    const allData = await this.folderStateService.getFolderData(this.currentUserId);
     allData[data.id as Guid] = data;
 
-    await this.updateState({ data: allData });
+    await this.updateState({ userId: this.currentUserId, data: allData });
   }
 
   async replace(data: Record<Guid, FolderData>): Promise<void> {
-    await this.updateState({ data });
+    await this.updateState({ userId: this.currentUserId, data });
   }
 
   async clear(userId?: Guid): Promise<any> {
-    if (userId == null || userId == this.userId) {
-      userId = this.userId;
+    if (userId == null || userId == this.currentUserId) {
+      userId = this.currentUserId;
       this._folders.next([]);
       this._folderViews.next([]);
     }
     await this.folderStateService.removeFolders(userId);
   }
 
-  async delete(id: string): Promise<any> {
-    const data = await this.folderStateService.getFolderData(this.userId);
+  async delete(folderId: string): Promise<any> {
+    const data = await this.folderStateService.getFolderData(this.currentUserId);
     if (data == null) {
       return;
     }
 
-    delete data[id as Guid];
+    delete data[folderId as Guid];
 
-    await this.updateState({ data });
+    await this.updateState({ userId: this.currentUserId, data });
 
     // Items in a deleted folder are re-assigned to "No Folder"
     const ciphers = await this.stateService.getEncryptedCiphers();
     if (ciphers != null) {
       const updates: CipherData[] = [];
       for (const cId in ciphers) {
-        if (ciphers[cId].folderId === id) {
+        if (ciphers[cId].folderId === folderId) {
           ciphers[cId].folderId = null;
           updates.push(ciphers[cId]);
         }
@@ -154,20 +154,22 @@ export class FolderService implements InternalFolderServiceAbstraction {
 
   private async updateStateFromDisk(userId: Guid) {
     const data = await this.folderStateService.getFolderData(userId);
-    await this.updateState({ data, updateDisk: false });
+    await this.updateState({ userId, data, updateDisk: false });
   }
 
   private async updateState({
+    userId,
     data,
     updateDisk = true,
   }: {
+    userId: Guid;
     data: Record<Guid, FolderData>;
     updateDisk?: boolean;
   }) {
     const folders = Object.values(data).map((f) => new Folder(f));
     this._folders.next(folders);
     if (updateDisk) {
-      await this.folderStateService.setFolders(this.userId, data);
+      await this.folderStateService.setFolders(userId, data);
     }
 
     if (await this.cryptoService.hasKey()) {

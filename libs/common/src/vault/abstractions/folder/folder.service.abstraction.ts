@@ -12,12 +12,12 @@ export abstract class FolderService {
 
   clearCache: () => Promise<void>;
   encrypt: (model: FolderView, key?: SymmetricCryptoKey) => Promise<Folder>;
-  get: (id: string) => Promise<Folder>;
+  get: (folderId: string) => Promise<Folder>;
   getAllFromState: () => Promise<Folder[]>;
   /**
    * @deprecated Only use in CLI!
    */
-  getFromState: (id: string) => Promise<Folder>;
+  getFromState: (folderId: string) => Promise<Folder>;
   /**
    * @deprecated Only use in CLI!
    */
@@ -28,5 +28,5 @@ export abstract class InternalFolderService extends FolderService {
   upsert: (folder: FolderData) => Promise<void>;
   replace: (folders: Record<Guid, FolderData>) => Promise<void>;
   clear: (userId: string) => Promise<any>;
-  delete: (id: string) => Promise<any>;
+  delete: (folderId: string) => Promise<any>;
 }
