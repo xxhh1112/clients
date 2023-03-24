@@ -16,8 +16,7 @@ import { RecoverDeleteComponent } from "../auth/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../auth/recover-two-factor.component";
 import { RemovePasswordComponent } from "../auth/remove-password.component";
 import { SetPasswordComponent } from "../auth/set-password.component";
-import { EmergencyAccessViewComponent } from "../auth/settings/emergency-access/emergency-access-view.component";
-import { EmergencyAccessComponent } from "../auth/settings/emergency-access/emergency-access.component";
+import { EmergencyAccessModule } from "../auth/settings/emergency-access";
 import { SsoComponent } from "../auth/sso.component";
 import { TwoFactorComponent } from "../auth/two-factor.component";
 import { UpdatePasswordComponent } from "../auth/update-password.component";
@@ -200,18 +199,7 @@ const routes: Routes = [
           },
           {
             path: "emergency-access",
-            children: [
-              {
-                path: "",
-                component: EmergencyAccessComponent,
-                data: { titleId: "emergencyAccess" },
-              },
-              {
-                path: ":id",
-                component: EmergencyAccessViewComponent,
-                data: { titleId: "emergencyAccess" },
-              },
-            ],
+            loadChildren: () => EmergencyAccessModule,
           },
           {
             path: "sponsored-families",

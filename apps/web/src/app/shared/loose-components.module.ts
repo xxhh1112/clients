@@ -14,8 +14,6 @@ import { EmergencyAccessAddEditComponent } from "../../auth/settings/emergency-a
 import { EmergencyAccessAttachmentsComponent } from "../../auth/settings/emergency-access/emergency-access-attachments.component";
 import { EmergencyAccessConfirmComponent } from "../../auth/settings/emergency-access/emergency-access-confirm.component";
 import { EmergencyAccessTakeoverComponent } from "../../auth/settings/emergency-access/emergency-access-takeover.component";
-import { EmergencyAccessViewComponent } from "../../auth/settings/emergency-access/emergency-access-view.component";
-import { EmergencyAccessComponent } from "../../auth/settings/emergency-access/emergency-access.component";
 import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/emergency-add-edit.component";
 import { TwoFactorAuthenticatorComponent } from "../../auth/settings/two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "../../auth/settings/two-factor-duo.component";
@@ -150,10 +148,8 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
-    EmergencyAccessComponent,
     EmergencyAccessConfirmComponent,
     EmergencyAccessTakeoverComponent,
-    EmergencyAccessViewComponent,
     EmergencyAddEditComponent,
     FamiliesForEnterpriseSetupComponent,
     FolderAddEditComponent,
@@ -259,10 +255,8 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
-    EmergencyAccessComponent,
     EmergencyAccessConfirmComponent,
     EmergencyAccessTakeoverComponent,
-    EmergencyAccessViewComponent,
     EmergencyAddEditComponent,
     FamiliesForEnterpriseSetupComponent,
     FolderAddEditComponent,
