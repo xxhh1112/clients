@@ -1,41 +1,33 @@
-<!-- Please remove this disable statement when editing this file! -->
-<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="page-header">
   <h1>{{ "emergencyAccess" | i18n }}</h1>
 </div>
+
 <p>
   {{ "emergencyAccessDesc" | i18n }}
-  <a href="https://bitwarden.com/help/emergency-access/" target="_blank" rel="noopener">
+  <a bitLink href="https://bitwarden.com/help/emergency-access/" target="_blank" rel="noopener">
     {{ "learnMore" | i18n }}.
   </a>
 </p>
 
-<p *ngIf="isOrganizationOwner">
-  <b>{{ "warning" | i18n }}:</b> {{ "emergencyAccessOwnerWarning" | i18n }}
-</p>
+<bit-callout type="warning" *ngIf="isOrganizationOwner">
+  {{ "emergencyAccessOwnerWarning" | i18n }}
+</bit-callout>
 
-<div class="page-header d-flex">
-  <h2>
+<div class="tw-flex tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-pb-2">
+  <h2 bitTypography="h2" noMargin class="tw-mb-0 tw-grow tw-self-end">
     {{ "trustedEmergencyContacts" | i18n }}
     <app-premium-badge></app-premium-badge>
   </h2>
-  <div class="ml-auto d-flex">
-    <button
-      class="btn btn-sm btn-outline-primary ml-3"
-      type="button"
-      (click)="invite()"
-      [disabled]="!canAccessPremium"
-    >
-      <i aria-hidden="true" class="bwi bwi-plus bwi-fw"></i>
-      {{ "addEmergencyContact" | i18n }}
-    </button>
-  </div>
+  <button bitButton type="button" (click)="invite()" [disabled]="!canAccessPremium">
+    <i aria-hidden="true" class="bwi bwi-plus bwi-fw"></i>
+    {{ "addEmergencyContact" | i18n }}
+  </button>
 </div>
 
-<table class="table table-hover table-list mb-0" *ngIf="trustedContacts && trustedContacts.length">
-  <tbody>
+<bit-table *ngIf="trustedContacts?.length">
+  <ng-template body>
     <tr *ngFor="let c of trustedContacts; let i = index">
-      <td width="30">
+      <td bitCell width="30">
         <bit-avatar
           [text]="c | userName"
           [id]="c.granteeId"
@@ -43,8 +35,8 @@
           size="small"
         ></bit-avatar>
       </td>
-      <td>
-        <a href="#" appStopClick (click)="edit(c)">{{ c.email }}</a>
+      <td bitCell>
+        <button type="button" bitLink (click)="edit(c)">{{ c.email }}</button>
         <span
           bitBadge
           badgeType="secondary"
@@ -72,19 +64,18 @@
           "takeover" | i18n
         }}</span>
 
-        <small class="text-muted d-block" *ngIf="c.name">{{ c.name }}</small>
+        <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
-      <td class="table-list-options">
+      <td bitCell class="tw-w-0">
         <button
           [bitMenuTriggerFor]="trustedContactOptions"
-          class="tw-border-none tw-bg-transparent tw-text-main"
+          bitIconButton="bwi-ellipsis-v"
           type="button"
           appA11yTitle="{{ 'options' | i18n }}"
-        >
-          <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
-        </button>
+        ></button>
         <bit-menu #trustedContactOptions>
           <button
+            type="button"
             bitMenuItem
             *ngIf="c.status === emergencyAccessStatusType.Invited"
             (click)="reinvite(c)"
@@ -93,6 +84,7 @@
             {{ "resendInvitation" | i18n }}
           </button>
           <button
+            type="button"
             bitMenuItem
             *ngIf="c.status === emergencyAccessStatusType.Accepted"
             (click)="confirm(c)"
@@ -101,6 +93,7 @@
             {{ "confirm" | i18n }}
           </button>
           <button
+            type="button"
             bitMenuItem
             *ngIf="c.status === emergencyAccessStatusType.RecoveryInitiated"
             (click)="approve(c)"
@@ -109,6 +102,7 @@
             {{ "approve" | i18n }}
           </button>
           <button
+            type="button"
             bitMenuItem
             *ngIf="
               c.status === emergencyAccessStatusType.RecoveryInitiated ||
@@ -119,17 +113,17 @@
             <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
             {{ "reject" | i18n }}
           </button>
-          <button bitMenuItem (click)="remove(c)">
+          <button type="button" bitMenuItem (click)="remove(c)">
             <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
             {{ "remove" | i18n }}
           </button>
         </bit-menu>
       </td>
     </tr>
-  </tbody>
-</table>
+  </ng-template>
+</bit-table>
 
-<ng-container *ngIf="!trustedContacts || !trustedContacts.length">
+<ng-container *ngIf="!trustedContacts?.length">
   <p *ngIf="loaded">{{ "noTrustedContacts" | i18n }}</p>
   <ng-container *ngIf="!loaded">
     <i
@@ -141,14 +135,18 @@
   </ng-container>
 </ng-container>
 
-<div class="page-header spaced-header">
-  <h2>{{ "designatedEmergencyContacts" | i18n }}</h2>
+<div
+  class="tw-mt-10 tw-flex tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-pb-2"
+>
+  <h2 bitTypography="h2" noMargin class="tw-mb-0 tw-grow tw-self-end">
+    {{ "designatedEmergencyContacts" | i18n }}
+  </h2>
 </div>
 
-<table class="table table-hover table-list mb-0" *ngIf="grantedContacts && grantedContacts.length">
-  <tbody>
+<bit-table *ngIf="grantedContacts?.length">
+  <ng-template body>
     <tr *ngFor="let c of grantedContacts; let i = index">
-      <td width="30">
+      <td bitCell width="30">
         <bit-avatar
           [text]="c | userName"
           [id]="c.grantorId"
@@ -156,7 +154,7 @@
           size="small"
         ></bit-avatar>
       </td>
-      <td>
+      <td bitCell>
         <span>{{ c.email }}</span>
         <span bitBadge *ngIf="c.status === emergencyAccessStatusType.Invited">{{
           "invited" | i18n
@@ -185,19 +183,18 @@
           "takeover" | i18n
         }}</span>
 
-        <small class="text-muted d-block" *ngIf="c.name">{{ c.name }}</small>
+        <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
-      <td class="table-list-options">
+      <td bitCell class="tw-w-0">
         <button
           [bitMenuTriggerFor]="grantedContactOptions"
-          class="tw-border-none tw-bg-transparent tw-text-main"
+          bitIconButton="bwi-ellipsis-v"
           type="button"
           appA11yTitle="{{ 'options' | i18n }}"
-        >
-          <i class="bwi bwi-ellipsis-v bwi-lg" aria-hidden="true"></i>
-        </button>
+        ></button>
         <bit-menu #grantedContactOptions>
           <button
+            type="button"
             bitMenuItem
             *ngIf="c.status === emergencyAccessStatusType.Confirmed"
             (click)="requestAccess(c)"
@@ -206,6 +203,7 @@
             {{ "requestAccess" | i18n }}
           </button>
           <button
+            type="button"
             bitMenuItem
             *ngIf="
               c.status === emergencyAccessStatusType.RecoveryApproved &&
@@ -217,6 +215,7 @@
             {{ "takeover" | i18n }}
           </button>
           <button
+            type="button"
             bitMenuItem
             *ngIf="
               c.status === emergencyAccessStatusType.RecoveryApproved &&
@@ -227,17 +226,17 @@
             <i class="bwi bwi-fw bwi-eye" aria-hidden="true"></i>
             {{ "view" | i18n }}
           </button>
-          <button bitMenuItem (click)="remove(c)">
+          <button type="button" bitMenuItem (click)="remove(c)">
             <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
             {{ "remove" | i18n }}
           </button>
         </bit-menu>
       </td>
     </tr>
-  </tbody>
-</table>
+  </ng-template>
+</bit-table>
 
-<ng-container *ngIf="!grantedContacts || !grantedContacts.length">
+<ng-container *ngIf="!grantedContacts?.length">
   <p *ngIf="loaded">{{ "noGrantedAccess" | i18n }}</p>
   <ng-container *ngIf="!loaded">
     <i
