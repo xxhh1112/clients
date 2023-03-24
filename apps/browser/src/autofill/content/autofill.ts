@@ -28,7 +28,7 @@
   */
 
 import AutofillPageDetails from "../models/autofill-page-details";
-import AutofillScript from "../models/autofill-script";
+import AutofillScript, { FillScript, FillScriptOp } from "../models/autofill-script";
 
 /**
  * The Document with additional custom properties added by this script
@@ -467,7 +467,7 @@ function collect(document: Document): string {
           addProp(field, "label-aria", getElementAttrValue(el, "aria-label"));
           addProp(field, "label-top", getLabelTop(el));
           var labelArr: any = [];
-          for (var sib = el; sib && sib.nextSibling; ) {
+          for (var sib: Node = el; sib && sib.nextSibling; ) {
             sib = sib.nextSibling;
             if (isKnownTag(sib)) {
               break;
@@ -633,11 +633,11 @@ function collect(document: Document): string {
    * @param {string[]} arr An array of `textContent` or `innerText` values
    * @param {HTMLElement} el The element to push to the array
    */
-  function checkNodeType(arr: string[], el: HTMLElement) {
+  function checkNodeType(arr: string[], el: Node) {
     var theText = "";
     3 === el.nodeType
       ? (theText = el.nodeValue)
-      : 1 === el.nodeType && (theText = el.textContent || el.innerText);
+      : 1 === el.nodeType && (theText = el.textContent || (el as HTMLElement).innerText);
     (theText = cleanText(theText)) && arr.push(theText);
   }
 
@@ -952,7 +952,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
     animateTheFilling = true;
 
   function queryPasswordInputs() {
-    return queryDocAll(document, document.body, function (el) {
+    return queryDocAll<HTMLInputElement>(document, document.body, function (el) {
       return (
         el.nodeName === "INPUT" && (el as HTMLInputElement).type.toLowerCase() === "password"
       );
@@ -989,7 +989,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
       theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
       operationDelayMs: number = 1,
-      doOperation: (ops: any, theOperation: () => void) => void,
+      doOperation: (ops: FillScript[], theOperation: () => void) => void,
       operationsToDo: string[] = [];
 
     fillScriptProperties &&
@@ -1016,8 +1016,8 @@ function fill(document: Document, fillScript: AutofillScript): string {
       }
     }
 
-    doOperation = function (ops, theOperation) {
-      var op = ops[0];
+    doOperation = function (ops: FillScript[], theOperation) {
+      var op: FillScript = ops[0];
       if (void 0 === op) {
         theOperation();
       } else {
@@ -1110,7 +1110,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
 
   // normalize the op versus the reference
   function normalizeOp(op) {
-    var thisOperation;
+    var thisOperation: FillScriptOp;
     if (op.hasOwnProperty("operation") && op.hasOwnProperty("parameters")) {
       (thisOperation = op.operation), (op = op.parameters);
     } else {

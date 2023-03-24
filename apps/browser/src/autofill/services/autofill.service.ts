@@ -17,7 +17,7 @@ import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
-import AutofillScript from "../models/autofill-script";
+import AutofillScript, { FillScriptOp } from "../models/autofill-script";
 
 import {
   AutoFillOptions,
@@ -1469,9 +1469,9 @@ export default class AutofillService implements AutofillServiceInterface {
 
     // Prioritize password field over others.
     if (lastPasswordField) {
-      fillScript.script.push(["focus_by_opid", lastPasswordField.opid]);
+      fillScript.script.push([FillScriptOp.focus, lastPasswordField.opid]);
     } else if (lastField) {
-      fillScript.script.push(["focus_by_opid", lastField.opid]);
+      fillScript.script.push([FillScriptOp.focus, lastField.opid]);
     }
 
     return fillScript;
@@ -1482,10 +1482,10 @@ export default class AutofillService implements AutofillServiceInterface {
       value = value.substr(0, value.length);
     }
     if (field.tagName !== "span") {
-      fillScript.script.push(["click_on_opid", field.opid]);
-      fillScript.script.push(["focus_by_opid", field.opid]);
+      fillScript.script.push([FillScriptOp.click, field.opid]);
+      fillScript.script.push([FillScriptOp.focus, field.opid]);
     }
-    fillScript.script.push(["fill_by_opid", field.opid, value]);
+    fillScript.script.push([FillScriptOp.fill, field.opid, value]);
   }
 
   static forCustomFieldsOnly(field: AutofillField): boolean {
