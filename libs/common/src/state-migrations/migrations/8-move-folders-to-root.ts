@@ -1,29 +1,30 @@
+import { Guid } from "../migrate";
 import { MigrationHelper } from "../migration-helper";
 import { Migrator } from "../migrator";
 
 type ExpectedFolderData = {
-  id: string;
+  id: Guid;
   name: string;
   revisionDate: string;
 };
 type ExpectedAccountType = {
   data?: {
     folders?: {
-      encrypted?: Record<string, ExpectedFolderData>;
+      encrypted?: Record<Guid, ExpectedFolderData>;
     };
   };
 };
 type NewAccountType = {
   data?: Record<string, unknown>;
 };
-type NewFolderType = Record<string, ExpectedFolderData>;
+type NewFolderType = Record<Guid, ExpectedFolderData>;
 
 /** Key used for data persistence. This value should not change without an associated state migration */
 const SERVICE_KEY = "folder";
 /** Key used for data persistence. This value should not change without an associated state migration */
 const FOLDERS_KEY = "folders";
 
-function accountFoldersKey(userId: string) {
+function accountFoldersKey(userId: Guid) {
   return `account.${userId}.${SERVICE_KEY}.${FOLDERS_KEY}`;
 }
 
@@ -31,7 +32,7 @@ export class MoveFoldersToRootMigrator extends Migrator<7, 8> {
   async migrate(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts<ExpectedAccountType>();
 
-    async function moveFolders(userId: string, account: ExpectedAccountType) {
+    async function moveFolders(userId: Guid, account: ExpectedAccountType) {
       if (account?.data?.folders?.encrypted != null) {
         await helper.set(accountFoldersKey(userId), account.data.folders.encrypted);
         delete account.data.folders;
@@ -45,7 +46,7 @@ export class MoveFoldersToRootMigrator extends Migrator<7, 8> {
   async rollback(helper: MigrationHelper): Promise<void> {
     const accounts = await helper.getAccounts<NewAccountType>();
 
-    async function revertFoldersMove(userId: string, account: NewAccountType) {
+    async function revertFoldersMove(userId: Guid, account: NewAccountType) {
       const newFolders = await helper.get<NewFolderType>(accountFoldersKey(userId));
       if (account?.data == null) {
         return;

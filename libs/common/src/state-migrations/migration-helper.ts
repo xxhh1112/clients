@@ -3,6 +3,8 @@ import { LogService } from "../abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
 import { AbstractStorageService } from "../abstractions/storage.service";
 
+import { Guid } from "./migrate";
+
 export class MigrationHelper {
   constructor(
     public currentVersion: number,
@@ -29,9 +31,9 @@ export class MigrationHelper {
   }
 
   async getAccounts<ExpectedAccountType>(): Promise<
-    { userId: string; account: ExpectedAccountType }[]
+    { userId: Guid; account: ExpectedAccountType }[]
   > {
-    const userIds = (await this.get<string[]>("authenticatedAccounts")) ?? [];
+    const userIds = (await this.get<Guid[]>("authenticatedAccounts")) ?? [];
     return Promise.all(
       userIds.map(async (userId) => ({
         userId,

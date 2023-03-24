@@ -12,6 +12,9 @@ import { RemoveLegacyEtmKeyMigrator } from "./migrations/6-remove-legacy-etm-key
 import { MoveStateVersionMigrator } from "./migrations/7-move-state-version";
 import { MinVersionMigrator } from "./migrations/min-version";
 
+// eslint-disable-next-line import/no-restricted-paths -- Re-exporting Guid type for use within this module
+export { Guid } from "../types/guid";
+
 export const MIN_VERSION = 2;
 export type MinVersion = typeof MIN_VERSION;
 
