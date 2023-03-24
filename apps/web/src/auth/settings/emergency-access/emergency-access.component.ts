@@ -19,9 +19,9 @@ import {
 } from "@bitwarden/common/auth/models/response/emergency-access.response";
 import { Utils } from "@bitwarden/common/misc/utils";
 
-import { EmergencyAccessAddEditComponent } from "./emergency-access-add-edit.component";
-import { EmergencyAccessConfirmComponent } from "./emergency-access-confirm.component";
-import { EmergencyAccessTakeoverComponent } from "./emergency-access-takeover.component";
+import { EmergencyAccessAddEditComponent } from "./dialogs/emergency-access-add-edit.component";
+import { EmergencyAccessConfirmComponent } from "./dialogs/emergency-access-confirm.component";
+import { EmergencyAccessTakeoverComponent } from "./dialogs/emergency-access-takeover.component";
 
 @Component({
   selector: "emergency-access",

@@ -10,7 +10,7 @@ import { EmergencyAccessUpdateRequest } from "@bitwarden/common/auth/models/requ
 
 @Component({
   selector: "emergency-access-add-edit",
-  templateUrl: "emergency-access-add-edit.component.html",
+  templateUrl: "emergency-access-dialog.component.html",
 })
 export class EmergencyAccessAddEditComponent implements OnInit {
   @Input() name: string;

@@ -10,10 +10,10 @@ import { RegisterFormModule } from "../../auth/register-form/register-form.modul
 import { RemovePasswordComponent } from "../../auth/remove-password.component";
 import { SetPasswordComponent } from "../../auth/set-password.component";
 import { DeauthorizeSessionsComponent } from "../../auth/settings/deauthorize-sessions.component";
-import { EmergencyAccessAddEditComponent } from "../../auth/settings/emergency-access/emergency-access-add-edit.component";
+import { EmergencyAccessConfirmComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-confirm.component";
+import { EmergencyAccessAddEditComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-dialog.component";
+import { EmergencyAccessTakeoverComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-takeover.component";
 import { EmergencyAccessAttachmentsComponent } from "../../auth/settings/emergency-access/emergency-access-attachments.component";
-import { EmergencyAccessConfirmComponent } from "../../auth/settings/emergency-access/emergency-access-confirm.component";
-import { EmergencyAccessTakeoverComponent } from "../../auth/settings/emergency-access/emergency-access-takeover.component";
 import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/emergency-add-edit.component";
 import { TwoFactorAuthenticatorComponent } from "../../auth/settings/two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "../../auth/settings/two-factor-duo.component";
