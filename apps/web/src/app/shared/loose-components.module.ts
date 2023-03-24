@@ -11,7 +11,6 @@ import { RemovePasswordComponent } from "../../auth/remove-password.component";
 import { SetPasswordComponent } from "../../auth/set-password.component";
 import { DeauthorizeSessionsComponent } from "../../auth/settings/deauthorize-sessions.component";
 import { EmergencyAccessConfirmComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-confirm.component";
-import { EmergencyAccessAddEditComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-dialog.component";
 import { EmergencyAccessTakeoverComponent } from "../../auth/settings/emergency-access/dialogs/emergency-access-takeover.component";
 import { EmergencyAccessAttachmentsComponent } from "../../auth/settings/emergency-access/emergency-access-attachments.component";
 import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/emergency-add-edit.component";
@@ -146,7 +145,6 @@ import { SharedModule } from "./shared.module";
     DeleteAccountComponent,
     DomainRulesComponent,
     DynamicAvatarComponent,
-    EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessConfirmComponent,
     EmergencyAccessTakeoverComponent,
@@ -253,7 +251,6 @@ import { SharedModule } from "./shared.module";
     DeleteAccountComponent,
     DomainRulesComponent,
     DynamicAvatarComponent,
-    EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
     EmergencyAccessConfirmComponent,
     EmergencyAccessTakeoverComponent,

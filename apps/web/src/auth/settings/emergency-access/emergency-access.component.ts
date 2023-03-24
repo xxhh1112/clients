@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -18,10 +19,16 @@ import {
   EmergencyAccessGrantorDetailsResponse,
 } from "@bitwarden/common/auth/models/response/emergency-access.response";
 import { Utils } from "@bitwarden/common/misc/utils";
+import { DialogService } from "@bitwarden/components";
 
-import { EmergencyAccessAddEditComponent } from "./dialogs/emergency-access-add-edit.component";
 import { EmergencyAccessConfirmComponent } from "./dialogs/emergency-access-confirm.component";
+import {
+  EmergencyAccessDialogComponent,
+  EmergencyAccessDialogData,
+  EmergencyAccessDialogResult,
+} from "./dialogs/emergency-access-dialog.component";
 import { EmergencyAccessTakeoverComponent } from "./dialogs/emergency-access-takeover.component";
+import { EmergencyAccessService } from "./emergency-access.service";
 
 @Component({
   selector: "emergency-access",
@@ -29,7 +36,6 @@ import { EmergencyAccessTakeoverComponent } from "./dialogs/emergency-access-tak
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class EmergencyAccessComponent implements OnInit {
-  @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("takeoverTemplate", { read: ViewContainerRef, static: true })
   takeoverModalRef: ViewContainerRef;
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
@@ -54,7 +60,9 @@ export class EmergencyAccessComponent implements OnInit {
     private userNamePipe: UserNamePipe,
     private logService: LogService,
     private stateService: StateService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private dialogService: DialogService,
+    private emergencyAccessService: EmergencyAccessService
   ) {}
 
   async ngOnInit() {
@@ -78,25 +86,27 @@ export class EmergencyAccessComponent implements OnInit {
   }
 
   async edit(details: EmergencyAccessGranteeDetailsResponse) {
-    const [modal] = await this.modalService.openViewRef(
-      EmergencyAccessAddEditComponent,
-      this.addEditModalRef,
-      (comp) => {
-        comp.name = this.userNamePipe.transform(details);
-        comp.emergencyAccessId = details?.id;
-        comp.readOnly = !this.canAccessPremium;
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onSaved.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-        comp.onDeleted.subscribe(() => {
-          modal.close();
-          this.remove(details);
-        });
-      }
-    );
+    const dialogRef = this.dialogService.open<
+      EmergencyAccessDialogResult,
+      EmergencyAccessDialogData
+    >(EmergencyAccessDialogComponent, {
+      data: {
+        name: this.userNamePipe.transform(details),
+        emergencyAccessId: details?.id,
+        readOnly: !this.canAccessPremium,
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.closed);
+
+    switch (result) {
+      case EmergencyAccessDialogResult.Close:
+        break;
+      case EmergencyAccessDialogResult.Save:
+      case EmergencyAccessDialogResult.Delete:
+        this.load();
+        break;
+    }
   }
 
   invite() {
@@ -169,33 +179,14 @@ export class EmergencyAccessComponent implements OnInit {
   async remove(
     details: EmergencyAccessGranteeDetailsResponse | EmergencyAccessGrantorDetailsResponse
   ) {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("removeUserConfirmation"),
-      this.userNamePipe.transform(details),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
-    if (!confirmed) {
-      return false;
+    const name = this.userNamePipe.transform(details);
+    const deleted = await this.emergencyAccessService.delete(details.id, name);
+
+    if (!deleted) {
+      return;
     }
 
-    try {
-      await this.apiService.deleteEmergencyAccess(details.id);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("removedUserId", this.userNamePipe.transform(details))
-      );
-
-      if (details instanceof EmergencyAccessGranteeDetailsResponse) {
-        this.removeGrantee(details);
-      } else {
-        this.removeGrantor(details);
-      }
-    } catch (e) {
-      this.logService.error(e);
-    }
+    await this.load();
   }
 
   async requestAccess(details: EmergencyAccessGrantorDetailsResponse) {

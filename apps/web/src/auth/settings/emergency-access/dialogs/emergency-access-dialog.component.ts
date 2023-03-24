@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, Inject, Input, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -8,38 +10,57 @@ import { EmergencyAccessType } from "@bitwarden/common/auth/enums/emergency-acce
 import { EmergencyAccessInviteRequest } from "@bitwarden/common/auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessUpdateRequest } from "@bitwarden/common/auth/models/request/emergency-access-update.request";
 
+import { EmergencyAccessService } from "../emergency-access.service";
+
+export type EmergencyAccessDialogData = {
+  name: string;
+  emergencyAccessId: string;
+  readOnly: boolean;
+};
+
+export enum EmergencyAccessDialogResult {
+  Close,
+  Save,
+  Delete,
+}
+
 @Component({
-  selector: "emergency-access-add-edit",
   templateUrl: "emergency-access-dialog.component.html",
 })
-export class EmergencyAccessAddEditComponent implements OnInit {
+export class EmergencyAccessDialogComponent implements OnInit {
   @Input() name: string;
-  @Input() emergencyAccessId: string;
-  @Output() onSaved = new EventEmitter();
-  @Output() onDeleted = new EventEmitter();
+  @Input() id: string;
 
   loading = true;
   readOnly = false;
   editMode = false;
-  title: string;
-  email: string;
-  type: EmergencyAccessType = EmergencyAccessType.View;
 
-  formPromise: Promise<any>;
+  protected emergencyAccessType = EmergencyAccessType;
+  protected waitTimes: { name: string; value: number }[];
 
-  emergencyAccessType = EmergencyAccessType;
-  waitTimes: { name: string; value: number }[];
-  waitTime: number;
+  formGroup = this.formBuilder.group({
+    email: ["", [Validators.required]],
+    type: [EmergencyAccessType.View, [Validators.required]],
+    waitTime: [7, [Validators.required]],
+  });
 
   constructor(
+    @Inject(DIALOG_DATA) private data: EmergencyAccessDialogData,
+    private dialogRef: DialogRef<EmergencyAccessDialogResult>,
     private apiService: ApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private logService: LogService
+    private logService: LogService,
+    private formBuilder: FormBuilder,
+    private emergencyAccessService: EmergencyAccessService
   ) {}
 
   async ngOnInit() {
-    this.editMode = this.loading = this.emergencyAccessId != null;
+    this.id = this.data.emergencyAccessId;
+    this.name = this.data.name;
+    this.readOnly = this.data.readOnly;
+
+    this.editMode = this.loading = this.id != null;
 
     this.waitTimes = [
       { name: this.i18nService.t("oneDay"), value: 1 },
@@ -51,53 +72,55 @@ export class EmergencyAccessAddEditComponent implements OnInit {
     ];
 
     if (this.editMode) {
-      this.editMode = true;
-      this.title = this.i18nService.t("editEmergencyContact");
       try {
-        const emergencyAccess = await this.apiService.getEmergencyAccess(this.emergencyAccessId);
-        this.type = emergencyAccess.type;
-        this.waitTime = emergencyAccess.waitTimeDays;
+        const emergencyAccess = await this.apiService.getEmergencyAccess(this.id);
+
+        this.formGroup.patchValue({
+          type: emergencyAccess.type,
+          waitTime: emergencyAccess.waitTimeDays,
+        });
       } catch (e) {
         this.logService.error(e);
       }
-    } else {
-      this.title = this.i18nService.t("inviteEmergencyContact");
-      this.waitTime = this.waitTimes[2].value;
     }
 
     this.loading = false;
   }
 
-  async submit() {
-    try {
-      if (this.editMode) {
-        const request = new EmergencyAccessUpdateRequest();
-        request.type = this.type;
-        request.waitTimeDays = this.waitTime;
+  submit = async () => {
+    const data = this.formGroup.value;
 
-        this.formPromise = this.apiService.putEmergencyAccess(this.emergencyAccessId, request);
-      } else {
-        const request = new EmergencyAccessInviteRequest();
-        request.email = this.email.trim();
-        request.type = this.type;
-        request.waitTimeDays = this.waitTime;
+    if (this.editMode) {
+      const request = new EmergencyAccessUpdateRequest();
+      request.type = data.type;
+      request.waitTimeDays = data.waitTime;
 
-        this.formPromise = this.apiService.postEmergencyAccessInvite(request);
-      }
+      await this.apiService.putEmergencyAccess(this.id, request);
+    } else {
+      const request = new EmergencyAccessInviteRequest();
+      request.email = data.email;
+      request.type = data.type;
+      request.waitTimeDays = data.waitTime;
 
-      await this.formPromise;
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.name)
-      );
-      this.onSaved.emit();
-    } catch (e) {
-      this.logService.error(e);
+      await this.apiService.postEmergencyAccessInvite(request);
     }
-  }
 
-  async delete() {
-    this.onDeleted.emit();
-  }
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.name)
+    );
+
+    this.dialogRef.close(EmergencyAccessDialogResult.Save);
+  };
+
+  delete = async () => {
+    const deleted = await this.emergencyAccessService.delete(this.id, this.name);
+
+    if (!deleted) {
+      return;
+    }
+
+    this.dialogRef.close(EmergencyAccessDialogResult.Delete);
+  };
 }
