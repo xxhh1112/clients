@@ -13,7 +13,7 @@ export abstract class SyncService {
   syncUpsertFolder: (notification: SyncFolderNotification, isEdit: boolean) => Promise<boolean>;
   syncDeleteFolder: (notification: SyncFolderNotification) => Promise<boolean>;
   syncUpsertCipher: (notification: SyncCipherNotification, isEdit: boolean) => Promise<boolean>;
-  syncDeleteCipher: (notification: SyncFolderNotification) => Promise<boolean>;
+  syncDeleteCipher: (notification: SyncCipherNotification) => Promise<boolean>;
   syncUpsertSend: (notification: SyncSendNotification, isEdit: boolean) => Promise<boolean>;
   syncDeleteSend: (notification: SyncSendNotification) => Promise<boolean>;
 }
