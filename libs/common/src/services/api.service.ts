@@ -163,7 +163,6 @@ export class ApiService implements ApiServiceAbstraction {
     private environmentService: EnvironmentService,
     private apiHelperService: ApiHelperService,
     private tokenApiService: TokenApiService,
-    private logoutCallback: (expired: boolean) => Promise<void>,
     private customUserAgent: string = null
   ) {
     this.device = platformUtilsService.getDevice();
@@ -1844,31 +1843,7 @@ export class ApiService implements ApiServiceAbstraction {
     );
     const response = await this.apiHelperService.fetch(request);
 
-    // TODO: api helper service must handle errors in order for token api service
-    // doRefreshToken to work
-    // Luckily, this doesn't re-introduce circular service dependencies
-    // as the api helper service doesn't depend on the token api service
-    // and it still won't with these changes.
-    return this.handleResponse(response, hasResponse, authed);
-  }
-
-  private async handleResponse(
-    response: Response,
-    hasResponse: boolean,
-    authed: boolean
-  ): Promise<any> {
-    const responseIsJson = this.apiHelperService.isJsonResponse(response);
-
-    if (hasResponse && response.status === 200 && responseIsJson) {
-      return this.handleSuccess(response);
-    } else if (response.status !== 200) {
-      const error = await this.handleError(response, false, authed);
-      return Promise.reject(error);
-    }
-  }
-
-  private handleSuccess(response: Response): Promise<any> {
-    return response.json();
+    return this.apiHelperService.handleResponse(response, hasResponse, authed);
   }
 
   private async handleError(
@@ -1876,44 +1851,10 @@ export class ApiService implements ApiServiceAbstraction {
     tokenError: boolean,
     authed: boolean
   ): Promise<ErrorResponse> {
-    const errorResponseJson = await this.apiHelperService.getErrorResponseJson(errorResponse);
-
-    if (authed) {
-      // If we are authed, we could receive errors which require us to logout
-      return await this.handleAuthedError(errorResponse, tokenError, errorResponseJson);
-    } else {
-      return this.apiHelperService.handleUnauthedError(
-        errorResponse,
-        tokenError,
-        errorResponseJson
-      );
-    }
+    return await this.apiHelperService.handleError(errorResponse, tokenError, authed);
   }
 
-  private async handleAuthedError(
-    errorResponse: Response,
-    tokenError: boolean,
-    errorResponseJson: any
-  ) {
-    if (
-      errorResponse.status === 401 ||
-      errorResponse.status === 403 ||
-      (tokenError &&
-        errorResponse.status === 400 &&
-        errorResponseJson != null &&
-        errorResponseJson.error === "invalid_grant")
-    ) {
-      await this.logoutCallback(true);
-      return null;
-    }
-
-    return this.apiHelperService.buildErrorResponse(
-      errorResponseJson,
-      errorResponse.status,
-      tokenError
-    );
-  }
-
+  // TODO: replace this with calls to the apiHelperService.getCredentials() method
   private getCredentials(): RequestCredentials {
     if (!this.isWebClient || this.environmentService.hasBaseUrl()) {
       return "include";

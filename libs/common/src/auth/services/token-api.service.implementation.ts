@@ -139,13 +139,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
         null
       );
     } else {
-      // TODO: ok, so our initial assumptions about
-      // none of our requests to the identity service being "authed" were
-      // technically correct in that, when refreshing via refresh token, we
-      // have an "authed" request except we don't attach the auth header.
-      // This discovery will require moving all the error handling logic
-      // (both authed & unauthed) into the api helper service from the api service.
-      const error = await this.handleError(response, true, true);
+      const error = await this.apiHelperService.handleError(response, true, true);
       return Promise.reject(error);
     }
   }

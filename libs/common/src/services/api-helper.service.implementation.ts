@@ -20,6 +20,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
+    private logoutCallback: (expired: boolean) => Promise<void>,
     private customUserAgent: string
   ) {
     this.device = platformUtilsService.getDevice();
@@ -130,15 +131,22 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
 
   //#region Http Response Handling
 
-  async handleUnauthedError(
-    errorResponse: Response,
-    tokenError: boolean
-  ): Promise<ErrorResponse | null> {
-    const errorResponseJson = await this.getErrorResponseJson(errorResponse);
-    return this.buildErrorResponse(errorResponseJson, errorResponse.status, tokenError);
+  async handleResponse(response: Response, hasResponse: boolean, authed: boolean): Promise<any> {
+    const responseIsJson = this.isJsonResponse(response);
+
+    if (hasResponse && response.status === 200 && responseIsJson) {
+      return this.handleSuccess(response);
+    } else if (response.status !== 200) {
+      const error = await this.handleError(response, false, authed);
+      return Promise.reject(error);
+    }
   }
 
-  async getErrorResponseJson(errorResponse: Response): Promise<any> {
+  private handleSuccess(response: Response): Promise<any> {
+    return response.json();
+  }
+
+  private async getErrorResponseJson(errorResponse: Response): Promise<any> {
     if (this.isJsonResponse(errorResponse)) {
       return await errorResponse.json();
     } else if (this.isTextResponse(errorResponse)) {
@@ -146,12 +154,55 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     }
   }
 
-  buildErrorResponse(
+  async handleError(
+    errorResponse: Response,
+    tokenError: boolean,
+    authed: boolean
+  ): Promise<ErrorResponse> {
+    const errorResponseJson = await this.getErrorResponseJson(errorResponse);
+
+    if (authed) {
+      // If we are authed, we could receive errors which require us to logout
+      return await this.handleAuthedError(errorResponse, tokenError, errorResponseJson);
+    } else {
+      return this.handleUnauthedError(errorResponse, tokenError, errorResponseJson);
+    }
+  }
+
+  private buildErrorResponse(
     errorResponseJson: any,
     responseStatus: number,
     tokenError: boolean
   ): ErrorResponse {
     return new ErrorResponse(errorResponseJson, responseStatus, tokenError);
+  }
+
+  private async handleAuthedError(
+    errorResponse: Response,
+    tokenError: boolean,
+    errorResponseJson: any
+  ): Promise<ErrorResponse | null> {
+    if (
+      errorResponse.status === 401 ||
+      errorResponse.status === 403 ||
+      (tokenError &&
+        errorResponse.status === 400 &&
+        errorResponseJson != null &&
+        errorResponseJson.error === "invalid_grant")
+    ) {
+      await this.logoutCallback(true);
+      return null;
+    }
+
+    return this.buildErrorResponse(errorResponseJson, errorResponse.status, tokenError);
+  }
+
+  private async handleUnauthedError(
+    errorResponse: Response,
+    tokenError: boolean,
+    errorResponseJson?: any
+  ): Promise<ErrorResponse> {
+    return this.buildErrorResponse(errorResponseJson, errorResponse.status, tokenError);
   }
 
   //#endregion Http Response Handling
