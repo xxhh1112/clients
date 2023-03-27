@@ -6,7 +6,8 @@ export abstract class ApiHelperService {
   buildRequestUrl: (path: string, apiUrl?: string) => string;
 
   // Note: createRequest && send here do not deal with auth.
-  // For authed requests, the auth bearer token is attached in the api service.
+  // For authed requests, the auth bearer token is attached in the api service
+  // to avoid circular service dependencies
   createRequest: (
     method: "GET" | "POST" | "PUT" | "DELETE",
     requestUrl: string,
@@ -26,19 +27,13 @@ export abstract class ApiHelperService {
 
   //#region Http Response Handling
 
-  handleUnauthedError: (
-    response: Response,
+  handleResponse: (response: Response, hasResponse: boolean, authed: boolean) => Promise<any>;
+
+  handleError: (
+    errorResponse: Response,
     tokenError: boolean,
-    responseBodyJson?: any
-  ) => Promise<ErrorResponse | null>;
-
-  getErrorResponseJson: (errorResponse: Response) => Promise<any>;
-
-  buildErrorResponse: (
-    errorResponseJson: any,
-    responseStatus: number,
-    tokenError: boolean
-  ) => ErrorResponse;
+    authed: boolean
+  ) => Promise<ErrorResponse>;
 
   //#endregion Http Response Handling
 

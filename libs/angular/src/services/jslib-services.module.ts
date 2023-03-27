@@ -370,7 +370,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         EnvironmentServiceAbstraction,
         ApiHelperServiceAbstraction,
         TokenApiServiceAbstraction,
-        LOGOUT_CALLBACK,
       ],
     },
     {
@@ -664,7 +663,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: ApiHelperServiceAbstraction,
       useClass: ApiHelperServiceImplementation,
-      deps: [PlatformUtilsServiceAbstraction, EnvironmentServiceAbstraction],
+      deps: [PlatformUtilsServiceAbstraction, EnvironmentServiceAbstraction, LOGOUT_CALLBACK],
     },
   ],
 })
