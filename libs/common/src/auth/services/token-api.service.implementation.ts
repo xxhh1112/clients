@@ -112,29 +112,23 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     if (refreshToken == null || refreshToken === "") {
       throw new Error();
     }
-    const headers = new Headers({
-      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      Accept: "application/json",
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
 
     const decodedToken = await this.tokenService.decodeToken();
-    const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
-        body: this.qsStringify({
-          grant_type: "refresh_token",
-          client_id: decodedToken.client_id,
-          refresh_token: refreshToken,
-        }),
-        cache: "no-store",
-        credentials: this.getCredentials(),
-        headers: headers,
-        method: "POST",
-      })
+
+    const requestBody = this.apiHelperService.qsStringify({
+      grant_type: "refresh_token",
+      client_id: decodedToken.client_id,
+      refresh_token: refreshToken,
+    });
+
+    const fetchReq = await this.apiHelperService.createRequest(
+      "POST",
+      `${this.identityBaseUrl}/connect/token`,
+      requestBody,
+      true
     );
+
+    const response = await this.apiHelperService.fetch(fetchReq);
 
     if (response.status === 200) {
       const responseJson = await response.json();
@@ -145,6 +139,12 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
         null
       );
     } else {
+      // TODO: ok, so our initial assumptions about
+      // none of our requests to the identity service being "authed" were
+      // technically correct in that, when refreshing via refresh token, we
+      // have an "authed" request except we don't attach the auth header.
+      // This discovery will require moving all the error handling logic
+      // (both authed & unauthed) into the api helper service from the api service.
       const error = await this.handleError(response, true, true);
       return Promise.reject(error);
     }
