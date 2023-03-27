@@ -11,7 +11,7 @@ export class EmergencyAccessService {
     private i18nService: I18nService,
     private apiService: ApiService
   ) {}
-  
+
   async delete(id: string, name: string) {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("removeUserConfirmation"),
@@ -26,11 +26,7 @@ export class EmergencyAccessService {
     }
 
     await this.apiService.deleteEmergencyAccess(id);
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("removedUserId", name)
-    );
+    this.platformUtilsService.showToast("success", null, this.i18nService.t("removedUserId", name));
 
     return true;
   }

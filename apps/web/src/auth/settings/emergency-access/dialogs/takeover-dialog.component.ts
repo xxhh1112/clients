@@ -1,7 +1,10 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs";
 
 import { ChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
+import { InputsFieldMatch } from "@bitwarden/angular/validators/inputsFieldMatch.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -15,29 +18,36 @@ import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { EmergencyAccessPasswordRequest } from "@bitwarden/common/auth/models/request/emergency-access-password.request";
-import { KdfType } from "@bitwarden/common/enums/kdfType";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 @Component({
-  selector: "emergency-access-takeover",
-  templateUrl: "emergency-access-takeover.component.html",
+  templateUrl: "takeover-dialog.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class EmergencyAccessTakeoverComponent
-  extends ChangePasswordComponent
-  implements OnInit, OnDestroy
-{
-  @Output() onDone = new EventEmitter();
-  @Input() emergencyAccessId: string;
-  @Input() name: string;
-  @Input() email: string;
-  @Input() kdf: KdfType;
-  @Input() kdfIterations: number;
+export class TakeoverDialogComponent extends ChangePasswordComponent implements OnInit, OnDestroy {
+  emergencyAccessId: string;
+  name: string;
+  email: string;
 
-  formPromise: Promise<any>;
+  protected formGroup = this.formBuilder.group(
+    {
+      masterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
+      confirmMasterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
+    },
+    {
+      validator: InputsFieldMatch.validateFormInputsMatch(
+        "masterPassword",
+        "confirmMasterPassword",
+        this.i18nService.t("masterPassDoesntMatch")
+      ),
+    }
+  );
+  protected showPassword = false;
 
   constructor(
+    @Inject(DIALOG_DATA) private data: any,
+    private dialogRef: DialogRef,
     i18nService: I18nService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
@@ -46,7 +56,8 @@ export class EmergencyAccessTakeoverComponent
     platformUtilsService: PlatformUtilsService,
     policyService: PolicyService,
     private apiService: ApiService,
-    private logService: LogService
+    private logService: LogService,
+    private formBuilder: FormBuilder
   ) {
     super(
       i18nService,
@@ -78,7 +89,7 @@ export class EmergencyAccessTakeoverComponent
     super.ngOnDestroy();
   }
 
-  async submit() {
+  submit = async () => {
     if (!(await this.strongPassword())) {
       return;
     }
@@ -119,10 +130,6 @@ export class EmergencyAccessTakeoverComponent
 
     this.apiService.postEmergencyAccessPassword(this.emergencyAccessId, request);
 
-    try {
-      this.onDone.emit();
-    } catch (e) {
-      this.logService.error(e);
-    }
-  }
+    this.dialogRef.close();
+  };
 }

@@ -13,7 +13,7 @@
   {{ "emergencyAccessOwnerWarning" | i18n }}
 </bit-callout>
 
-<div class="tw-flex tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-pb-2">
+<div class="tw-flex tw-pb-2">
   <h2 bitTypography="h2" noMargin class="tw-mb-0 tw-grow tw-self-end">
     {{ "trustedEmergencyContacts" | i18n }}
     <app-premium-badge></app-premium-badge>
@@ -25,6 +25,13 @@
 </div>
 
 <bit-table *ngIf="trustedContacts?.length">
+  <ng-container header>
+    <tr>
+      <th bitCell colspan="2">{{ "name" | i18n }}</th>
+      <th bitCell>{{ "userAccess" | i18n }}</th>
+      <th bitCell class="tw-w-0"></th>
+    </tr>
+  </ng-container>
   <ng-template body>
     <tr *ngFor="let c of trustedContacts">
       <td bitCell width="30">
@@ -45,7 +52,10 @@
 
         <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
-      <td bitCell class="tw-w-0">
+      <td bitCell>
+        {{ c.type | appEmergencyAccessType | i18n }}
+      </td>
+      <td bitCell>
         <button
           [bitMenuTriggerFor]="trustedContactOptions"
           bitIconButton="bwi-ellipsis-v"
@@ -93,8 +103,10 @@
             {{ "reject" | i18n }}
           </button>
           <button type="button" bitMenuItem (click)="remove(c)">
-            <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
-            {{ "remove" | i18n }}
+            <span class="tw-text-danger">
+              <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
+              {{ "remove" | i18n }}
+            </span>
           </button>
         </bit-menu>
       </td>
@@ -143,6 +155,9 @@
 
         <small class="tw-block tw-text-muted" *ngIf="c.name">{{ c.name }}</small>
       </td>
+      <td bitCell>
+        {{ c.type | appEmergencyAccessType | i18n }}
+      </td>
       <td bitCell class="tw-w-0">
         <button
           [bitMenuTriggerFor]="grantedContactOptions"
@@ -185,8 +200,10 @@
             {{ "view" | i18n }}
           </button>
           <button type="button" bitMenuItem (click)="remove(c)">
-            <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
-            {{ "remove" | i18n }}
+            <span class="tw-text-danger">
+              <i class="bwi bwi-fw bwi-close" aria-hidden="true"></i>
+              {{ "remove" | i18n }}
+            </span>
           </button>
         </bit-menu>
       </td>
@@ -205,6 +222,3 @@
     <span class="sr-only">{{ "loading" | i18n }}</span>
   </ng-container>
 </ng-container>
-
-<ng-template #takeoverTemplate></ng-template>
-<ng-template #confirmTemplate></ng-template>

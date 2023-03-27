@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -21,13 +20,13 @@ import {
 import { Utils } from "@bitwarden/common/misc/utils";
 import { DialogService } from "@bitwarden/components";
 
-import { EmergencyAccessConfirmComponent } from "./dialogs/emergency-access-confirm.component";
+import { ConfirmData, ConfirmDialogComponent } from "./dialogs/confirm-dialog.component";
 import {
   EmergencyAccessDialogComponent,
   EmergencyAccessDialogData,
   EmergencyAccessDialogResult,
 } from "./dialogs/emergency-access-dialog.component";
-import { EmergencyAccessTakeoverComponent } from "./dialogs/emergency-access-takeover.component";
+import { TakeoverDialogComponent } from "./dialogs/takeover-dialog.component";
 import { EmergencyAccessService } from "./emergency-access.service";
 
 @Component({
@@ -36,11 +35,6 @@ import { EmergencyAccessService } from "./emergency-access.service";
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class EmergencyAccessComponent implements OnInit {
-  @ViewChild("takeoverTemplate", { read: ViewContainerRef, static: true })
-  takeoverModalRef: ViewContainerRef;
-  @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
-  confirmModalRef: ViewContainerRef;
-
   loaded = false;
   canAccessPremium: boolean;
   trustedContacts: EmergencyAccessGranteeDetailsResponse[];
@@ -53,7 +47,6 @@ export class EmergencyAccessComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private i18nService: I18nService,
-    private modalService: ModalService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
     private messagingService: MessagingService,
@@ -138,30 +131,19 @@ export class EmergencyAccessComponent implements OnInit {
 
     const autoConfirm = await this.stateService.getAutoConfirmFingerPrints();
     if (autoConfirm == null || !autoConfirm) {
-      const [modal] = await this.modalService.openViewRef(
-        EmergencyAccessConfirmComponent,
-        this.confirmModalRef,
-        (comp) => {
-          comp.name = this.userNamePipe.transform(contact);
-          comp.emergencyAccessId = contact.id;
-          comp.userId = contact?.granteeId;
-          // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-          comp.onConfirmed.subscribe(async () => {
-            modal.close();
+      const dialogRef = this.dialogService.open<unknown, ConfirmData>(ConfirmDialogComponent, {
+        data: {
+          name: this.userNamePipe.transform(contact),
+          userId: contact?.granteeId,
+          emergencyAccessId: contact.id,
+        },
+      });
 
-            comp.formPromise = this.doConfirmation(contact);
-            await comp.formPromise;
+      const result = await firstValueFrom(dialogRef.closed);
 
-            updateUser();
-            this.platformUtilsService.showToast(
-              "success",
-              null,
-              this.i18nService.t("hasBeenConfirmed", this.userNamePipe.transform(contact))
-            );
-          });
-        }
-      );
-      return;
+      if (!result) {
+        return;
+      }
     }
 
     this.actionPromise = this.doConfirmation(contact);
@@ -251,6 +233,8 @@ export class EmergencyAccessComponent implements OnInit {
   }
 
   async takeover(details: EmergencyAccessGrantorDetailsResponse) {
+    const dialogRef = this.dialogService.open(TakeoverDialogComponent, {});
+    /*
     const [modal] = await this.modalService.openViewRef(
       EmergencyAccessTakeoverComponent,
       this.takeoverModalRef,
@@ -270,6 +254,7 @@ export class EmergencyAccessComponent implements OnInit {
         });
       }
     );
+    */
   }
 
   private removeGrantee(details: EmergencyAccessGranteeDetailsResponse) {

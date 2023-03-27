@@ -1,0 +1,59 @@
+<form [formGroup]="formGroup">
+  <bit-dialog>
+    <ng-container bitDialogTitle>
+      {{ "takeover" | i18n }}
+      <small class="text-muted" *ngIf="name">{{ name }}</small>
+    </ng-container>
+
+    <div bitDialogContent>
+      <bit-callout type="warning">{{ "loggedOutWarning" | i18n }}</bit-callout>
+
+      <app-callout
+        type="info"
+        [enforcedPolicyOptions]="enforcedPolicyOptions"
+        *ngIf="enforcedPolicyOptions"
+      ></app-callout>
+
+      <bit-form-field>
+        <bit-label>{{ "newMasterPass" | i18n }}</bit-label>
+        <input bitInput formControlName="masterPassword" type="password" />
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showPassword"
+        ></button>
+      </bit-form-field>
+
+      <app-password-strength
+        [password]="formGroup.value.masterPassword"
+        [email]="this.email"
+        [showText]="true"
+        (passwordStrengthResult)="getStrengthResult($event)"
+        class="tw-mb-3 tw-block"
+      ></app-password-strength>
+
+      <bit-form-field>
+        <bit-label>{{ "confirmNewMasterPass" | i18n }}</bit-label>
+        <input bitInput formControlName="confirmMasterPassword" type="password" />
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showPassword"
+        ></button>
+      </bit-form-field>
+    </div>
+
+    <div bitDialogFooter class="tw-flex tw-gap-2">
+      <button type="submit" bitButton buttonType="primary" bitFormButton>
+        {{ "save" | i18n }}
+      </button>
+      <button type="button" bitButton buttonType="secondary" bitFormButton bitDialogClose>
+        {{ "cancel" | i18n }}
+      </button>
+    </div>
+  </bit-dialog>
+</form>
