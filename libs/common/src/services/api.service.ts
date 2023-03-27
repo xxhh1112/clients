@@ -1740,6 +1740,11 @@ export class ApiService implements ApiServiceAbstraction {
     );
     const response = await this.apiHelperService.fetch(request);
 
+    // TODO: api helper service must handle errors in order for token api service
+    // doRefreshToken to work
+    // Luckily, this doesn't re-introduce circular service dependencies
+    // as the api helper service doesn't depend on the token api service
+    // and it still won't with these changes.
     return this.handleResponse(response, hasResponse, authed);
   }
 
