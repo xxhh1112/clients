@@ -1466,7 +1466,7 @@ export class ApiService implements ApiServiceAbstraction {
     const response = await this.fetch(
       new Request(this.environmentService.getEventsUrl() + "/collect", {
         cache: "no-store",
-        credentials: this.getCredentials(),
+        credentials: this.apiHelperService.getCredentials(),
         method: "POST",
         body: JSON.stringify(request),
         headers: headers,
@@ -1607,7 +1607,7 @@ export class ApiService implements ApiServiceAbstraction {
     const response = await this.fetch(
       new Request(this.environmentService.getIdentityUrl() + path, {
         cache: "no-store",
-        credentials: this.getCredentials(),
+        credentials: this.apiHelperService.getCredentials(),
         headers: headers,
         method: "GET",
       })
@@ -1748,14 +1748,6 @@ export class ApiService implements ApiServiceAbstraction {
     authed: boolean
   ): Promise<ErrorResponse> {
     return await this.apiHelperService.handleError(errorResponse, tokenError, authed);
-  }
-
-  // TODO: replace this with calls to the apiHelperService.getCredentials() method
-  private getCredentials(): RequestCredentials {
-    if (!this.isWebClient || this.environmentService.hasBaseUrl()) {
-      return "include";
-    }
-    return undefined;
   }
 
   private addEventParameters(base: string, start: string, end: string, token: string) {

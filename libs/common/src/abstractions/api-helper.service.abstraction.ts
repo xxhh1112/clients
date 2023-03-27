@@ -41,6 +41,7 @@ export abstract class ApiHelperService {
 
   qsStringify: (params: any) => string;
   isJsonResponse: (response: Response) => boolean;
+  getCredentials: () => RequestCredentials;
 
   //#endregion Utility
 }
