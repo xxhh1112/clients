@@ -188,6 +188,7 @@ describe("FidoAuthenticatorService", () => {
               rpId: params.rpEntity.id,
               rpName: params.rpEntity.name,
               userHandle: Fido2Utils.bufferToString(params.userEntity.id),
+              counter: 0,
               userName: params.userEntity.name,
             }),
           })
@@ -268,6 +269,7 @@ describe("FidoAuthenticatorService", () => {
               rpId: params.rpEntity.id,
               rpName: params.rpEntity.name,
               userHandle: Fido2Utils.bufferToString(params.userEntity.id),
+              counter: 0,
               userName: params.userEntity.name,
             }),
           })

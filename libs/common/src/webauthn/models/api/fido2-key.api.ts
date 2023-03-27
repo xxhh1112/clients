@@ -7,6 +7,7 @@ export class Fido2KeyApi extends BaseResponse {
   keyValue: string;
   rpId: string;
   userHandle: string;
+  counter: number;
 
   // Extras
   rpName: string;
@@ -24,9 +25,10 @@ export class Fido2KeyApi extends BaseResponse {
     this.keyCurve = this.getResponseProperty("KeyCurve");
     this.keyValue = this.getResponseProperty("keyValue");
     this.rpId = this.getResponseProperty("RpId");
+    this.userHandle = this.getResponseProperty("UserHandle");
+    this.counter = this.getResponseProperty("Counter");
     this.rpName = this.getResponseProperty("RpName");
     this.userName = this.getResponseProperty("UserName");
-    this.userHandle = this.getResponseProperty("UserHandle");
     this.origin = this.getResponseProperty("Origin");
   }
 }

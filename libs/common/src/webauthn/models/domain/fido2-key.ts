@@ -13,6 +13,7 @@ export class Fido2Key extends Domain {
   keyValue: EncString;
   rpId: EncString;
   userHandle: EncString;
+  counter: EncString;
 
   // Extras
   rpName: EncString;
@@ -35,6 +36,7 @@ export class Fido2Key extends Domain {
         keyValue: null,
         rpId: null,
         userHandle: null,
+        counter: null,
         rpName: null,
         userName: null,
         origin: null,
@@ -53,6 +55,7 @@ export class Fido2Key extends Domain {
         keyValue: null,
         rpId: null,
         userHandle: null,
+        counter: null,
         rpName: null,
         userName: null,
         origin: null,
@@ -71,6 +74,7 @@ export class Fido2Key extends Domain {
       keyValue: null,
       rpId: null,
       userHandle: null,
+      counter: null,
       rpName: null,
       userName: null,
       origin: null,
@@ -89,6 +93,7 @@ export class Fido2Key extends Domain {
     const keyValue = EncString.fromJSON(obj.keyValue);
     const rpId = EncString.fromJSON(obj.rpId);
     const userHandle = EncString.fromJSON(obj.userHandle);
+    const counter = EncString.fromJSON(obj.counter);
     const rpName = EncString.fromJSON(obj.rpName);
     const userName = EncString.fromJSON(obj.userName);
     const origin = EncString.fromJSON(obj.origin);
@@ -100,6 +105,7 @@ export class Fido2Key extends Domain {
       keyValue,
       rpId,
       userHandle,
+      counter,
       rpName,
       userName,
       origin,

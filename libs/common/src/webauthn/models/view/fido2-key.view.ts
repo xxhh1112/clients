@@ -9,6 +9,7 @@ export class Fido2KeyView extends ItemView {
   keyValue: string;
   rpId: string;
   userHandle: string;
+  counter: number;
 
   // Extras
   rpName: string;

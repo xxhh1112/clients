@@ -7,6 +7,7 @@ export class Fido2KeyData {
   keyValue: string;
   rpId: string;
   userHandle: string;
+  counter: number;
 
   // Extras
   rpName: string;
@@ -24,6 +25,7 @@ export class Fido2KeyData {
     this.keyValue = data.keyValue;
     this.rpId = data.rpId;
     this.userHandle = data.userHandle;
+    this.counter = data.counter;
     this.rpName = data.rpName;
     this.userName = data.userName;
     this.origin = data.origin;

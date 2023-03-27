@@ -139,8 +139,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     fido2Key.keyCurve = "P-256";
     fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
     fido2Key.rpId = params.rpEntity.id;
-    fido2Key.rpName = params.rpEntity.name;
     fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
+    fido2Key.counter = 0;
+    fido2Key.rpName = params.rpEntity.name;
     fido2Key.userName = params.userEntity.name;
 
     return fido2Key;
