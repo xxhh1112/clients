@@ -1,12 +1,15 @@
 import { BaseResponse } from "../../../models/response/base.response";
 
 export class Fido2KeyApi extends BaseResponse {
-  keyType: "ECDSA";
+  keyType: "public-key";
+  keyAlgorithm: "ECDSA";
   keyCurve: "P-256";
   keyValue: string;
   rpId: string;
-  rpName: string;
   userHandle: string;
+
+  // Extras
+  rpName: string;
   userName: string;
   origin: string;
 
@@ -17,12 +20,13 @@ export class Fido2KeyApi extends BaseResponse {
     }
 
     this.keyType = this.getResponseProperty("KeyType");
+    this.keyAlgorithm = this.getResponseProperty("KeyType");
     this.keyCurve = this.getResponseProperty("KeyCurve");
     this.keyValue = this.getResponseProperty("keyValue");
     this.rpId = this.getResponseProperty("RpId");
     this.rpName = this.getResponseProperty("RpName");
-    this.userHandle = this.getResponseProperty("UserHandle");
     this.userName = this.getResponseProperty("UserName");
+    this.userHandle = this.getResponseProperty("UserHandle");
     this.origin = this.getResponseProperty("Origin");
   }
 }

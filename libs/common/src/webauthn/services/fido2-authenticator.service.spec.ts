@@ -182,7 +182,8 @@ describe("FidoAuthenticatorService", () => {
             name: params.rpEntity.name,
 
             fido2Key: expect.objectContaining({
-              keyType: "ECDSA",
+              keyType: "public-key",
+              keyAlgorithm: "ECDSA",
               keyCurve: "P-256",
               rpId: params.rpEntity.id,
               rpName: params.rpEntity.name,
@@ -261,7 +262,8 @@ describe("FidoAuthenticatorService", () => {
             name: existingCipherView.name,
 
             fido2Key: expect.objectContaining({
-              keyType: "ECDSA",
+              keyType: "public-key",
+              keyAlgorithm: "ECDSA",
               keyCurve: "P-256",
               rpId: params.rpEntity.id,
               rpName: params.rpEntity.name,

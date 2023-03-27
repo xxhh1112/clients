@@ -8,11 +8,14 @@ import { Fido2KeyView } from "../view/fido2-key.view";
 
 export class Fido2Key extends Domain {
   keyType: EncString;
+  keyAlgorithm: EncString;
   keyCurve: EncString;
   keyValue: EncString;
   rpId: EncString;
-  rpName: EncString;
   userHandle: EncString;
+
+  // Extras
+  rpName: EncString;
   userName: EncString;
   origin: EncString;
 
@@ -27,11 +30,12 @@ export class Fido2Key extends Domain {
       obj,
       {
         keyType: null,
+        keyAlgorithm: null,
         keyCurve: null,
         keyValue: null,
         rpId: null,
-        rpName: null,
         userHandle: null,
+        rpName: null,
         userName: null,
         origin: null,
       },
@@ -44,11 +48,12 @@ export class Fido2Key extends Domain {
       new Fido2KeyView(),
       {
         keyType: null,
+        keyAlgorithm: null,
         keyCurve: null,
         keyValue: null,
         rpId: null,
-        rpName: null,
         userHandle: null,
+        rpName: null,
         userName: null,
         origin: null,
       },
@@ -61,11 +66,12 @@ export class Fido2Key extends Domain {
     const i = new Fido2KeyData();
     this.buildDataModel(this, i, {
       keyType: null,
+      keyAlgorithm: null,
       keyCurve: null,
       keyValue: null,
       rpId: null,
-      rpName: null,
       userHandle: null,
+      rpName: null,
       userName: null,
       origin: null,
     });
@@ -78,21 +84,23 @@ export class Fido2Key extends Domain {
     }
 
     const keyType = EncString.fromJSON(obj.keyType);
+    const keyAlgorithm = EncString.fromJSON(obj.keyAlgorithm);
     const keyCurve = EncString.fromJSON(obj.keyCurve);
     const keyValue = EncString.fromJSON(obj.keyValue);
     const rpId = EncString.fromJSON(obj.rpId);
-    const rpName = EncString.fromJSON(obj.rpName);
     const userHandle = EncString.fromJSON(obj.userHandle);
+    const rpName = EncString.fromJSON(obj.rpName);
     const userName = EncString.fromJSON(obj.userName);
     const origin = EncString.fromJSON(obj.origin);
 
     return Object.assign(new Fido2Key(), obj, {
       keyType,
+      keyAlgorithm,
       keyCurve,
       keyValue,
       rpId,
-      rpName,
       userHandle,
+      rpName,
       userName,
       origin,
     });

@@ -134,7 +134,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const pcks8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
 
     const fido2Key = new Fido2KeyView();
-    fido2Key.keyType = "ECDSA";
+    fido2Key.keyType = "public-key";
+    fido2Key.keyAlgorithm = "ECDSA";
     fido2Key.keyCurve = "P-256";
     fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
     fido2Key.rpId = params.rpEntity.id;
