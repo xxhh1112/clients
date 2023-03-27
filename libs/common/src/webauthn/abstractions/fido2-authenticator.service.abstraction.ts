@@ -1,5 +1,10 @@
 export abstract class Fido2AuthenticatorService {
-  makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => void;
+  /**
+   * This method triggers the generation of a new credential in the authenticator
+   *
+   * @return {Uint8Array} Attestation object
+   **/
+  makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => Promise<Uint8Array>;
 }
 
 export enum Fido2AlgorithmIdentifier {

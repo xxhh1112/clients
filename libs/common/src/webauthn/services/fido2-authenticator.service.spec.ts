@@ -1,5 +1,6 @@
 import { TextEncoder } from "util";
 
+import { CBOR } from "cbor-redux";
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { Utils } from "../../misc/utils";
@@ -19,7 +20,7 @@ import {
 import { Fido2Utils } from "../abstractions/fido2-utils";
 import { Fido2Key } from "../models/domain/fido2-key";
 
-import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
+import { AAGUID, Fido2AuthenticatorService } from "./fido2-authenticator.service";
 
 const RpId = "bitwarden.com";
 
@@ -159,6 +160,11 @@ describe("FidoAuthenticatorService", () => {
        * */
       it("should request confirmation from user", async () => {
         userInterface.confirmNewCredential.mockResolvedValue(true);
+        cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
+        cipherService.createWithServer.mockImplementation(async (cipher) => {
+          cipher.id = Utils.newGuid();
+          return cipher;
+        });
 
         await authenticator.makeCredential(params);
 
@@ -169,9 +175,13 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should save credential to vault if request confirmed by user", async () => {
-        const encryptedCipher = Symbol();
+        const encryptedCipher = {};
         userInterface.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
+        cipherService.createWithServer.mockImplementation(async (cipher) => {
+          cipher.id = Utils.newGuid();
+          return cipher;
+        });
 
         await authenticator.makeCredential(params);
 
@@ -207,7 +217,7 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
-        const encryptedCipher = Symbol();
+        const encryptedCipher = {};
         userInterface.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
@@ -297,6 +307,57 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.makeCredential(params);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
+      });
+    });
+
+    describe("attestation of new credential", () => {
+      const cipherId = "75280e7e-a72e-4d6c-bf1e-d37238352f9b";
+      const cipherIdBytes = new Uint8Array([
+        0x75, 0x28, 0x0e, 0x7e, 0xa7, 0x2e, 0x4d, 0x6c, 0xbf, 0x1e, 0xd3, 0x72, 0x38, 0x35, 0x2f,
+        0x9b,
+      ]);
+      let params: Fido2AuthenticatorMakeCredentialsParams;
+
+      beforeEach(async () => {
+        params = await createCredentialParams({ requireResidentKey: true });
+        userInterface.confirmNewCredential.mockResolvedValue(true);
+        cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
+        cipherService.createWithServer.mockImplementation(async (cipher) => {
+          cipher.id = cipherId;
+          return cipher;
+        });
+      });
+
+      it.only("should throw error if user denies creation request", async () => {
+        const result = await authenticator.makeCredential(params);
+
+        const attestationObject = CBOR.decode(result.buffer);
+
+        const encAuthData: Uint8Array = attestationObject.authData;
+        const rpIdHash = encAuthData.slice(0, 32);
+        const flags = encAuthData.slice(32, 33);
+        const counter = encAuthData.slice(33, 37);
+        const aaguid = encAuthData.slice(37, 53);
+        const credentialIdLength = encAuthData.slice(53, 55);
+        const credentialId = encAuthData.slice(55, 71);
+        // Public key format is not tested here since it will be tested
+        // by the assertion tests.
+        // const publicKey = encAuthData.slice(87);
+
+        expect(attestationObject.fmt).toBe("none");
+        expect(attestationObject.attStmt).toEqual({});
+        expect(rpIdHash).toEqual(
+          new Uint8Array([
+            0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
+            0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
+            0xd0, 0x5c, 0x3d, 0xc3,
+          ])
+        );
+        expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
+        expect(counter).toEqual(new Uint8Array([0, 0, 0, 0])); // 0 because of new counter
+        expect(aaguid).toEqual(AAGUID);
+        expect(credentialIdLength).toEqual(new Uint8Array([0, 16])); // 16 bytes because we're using GUIDs
+        expect(credentialId).toEqual(cipherIdBytes);
       });
     });
   });
