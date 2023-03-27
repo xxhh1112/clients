@@ -7,6 +7,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -39,7 +40,8 @@ export class PremiumComponent implements OnInit {
     private messagingService: MessagingService,
     private syncService: SyncService,
     private logService: LogService,
-    private stateService: StateService
+    private stateService: StateService,
+    private tokenApiService: TokenApiService
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -116,7 +118,7 @@ export class PremiumComponent implements OnInit {
   }
 
   async finalizePremium() {
-    await this.apiService.refreshIdentityToken();
+    await this.tokenApiService.refreshIdentityToken();
     await this.syncService.fullSync(true);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("premiumUpdated"));
     this.messagingService.send("purchasedPremium");

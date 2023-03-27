@@ -6,6 +6,7 @@ import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { SsoLogInCredentials } from "../models/domain/log-in-credentials";
@@ -28,7 +29,8 @@ export class SsoLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    tokenApiService: TokenApiService
   ) {
     super(
       cryptoService,
@@ -39,7 +41,8 @@ export class SsoLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      tokenApiService
     );
   }
 
