@@ -10,7 +10,8 @@ import { ErrorResponse } from "../models/response/error.response";
 
 /**
  * API Helper Service which provides common functionality for API services
- * like http request creation and error handling with no auth knowledge.
+ * like http request creation (w/o auth concerns), request execution,
+ * and response handling (w/ or w/o auth concerns)
  */
 export class ApiHelperServiceImplementation implements ApiHelperService {
   private device: DeviceType;
