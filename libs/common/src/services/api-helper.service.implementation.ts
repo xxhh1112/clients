@@ -226,7 +226,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     return typeHeader != null && typeHeader.indexOf("text") > -1;
   }
 
-  private getCredentials(): RequestCredentials | undefined {
+  getCredentials(): RequestCredentials | undefined {
     if (!this.isWebClient || this.environmentService.hasBaseUrl()) {
       return "include";
     }
