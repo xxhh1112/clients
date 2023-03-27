@@ -107,7 +107,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
 
   //#endregion Http Request Creation
 
-  //#region Http Request Execution Methods
+  //#region Http Request Execution
 
   async fetch(request: Request): Promise<Response> {
     if (request.method === "GET") {
@@ -126,9 +126,9 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     return fetch(request);
   }
 
-  //#endregion Http Request Execution Methods
+  //#endregion Http Request Execution
 
-  //#region Http Response Handling Methods
+  //#region Http Response Handling
 
   async handleUnauthedError(
     errorResponse: Response,
@@ -154,9 +154,9 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     return new ErrorResponse(errorResponseJson, responseStatus, tokenError);
   }
 
-  //#endregion Http Response Handling Methods
+  //#endregion Http Response Handling
 
-  //#region Utility methods
+  //#region Utility
   qsStringify(params: any): string {
     return Object.keys(params)
       .map((key) => {
@@ -182,5 +182,5 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     return undefined;
   }
 
-  //#endregion Utility methods
+  //#endregion Utility
 }

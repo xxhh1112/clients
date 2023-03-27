@@ -1,7 +1,7 @@
 import { ErrorResponse } from "../models/response/error.response";
 
 export abstract class ApiHelperService {
-  //#region Http Request Creation Methods
+  //#region Http Request Creation
 
   buildRequestUrl: (path: string, apiUrl?: string) => string;
 
@@ -15,16 +15,16 @@ export abstract class ApiHelperService {
     alterHeaders?: (headers: Headers) => Promise<void> | void
   ) => Promise<Request>;
 
-  //#endregion Http Request Creation Methods
+  //#endregion Http Request Creation
 
-  //#region Http Request Execution Methods
+  //#region Http Request Execution
 
   fetch: (request: Request) => Promise<Response>;
   nativeFetch: (request: Request) => Promise<Response>;
 
-  //#endregion Http Request Execution Methods
+  //#endregion Http Request Execution
 
-  //#region Http Response Handling Methods
+  //#region Http Response Handling
 
   handleUnauthedError: (
     response: Response,
@@ -40,12 +40,12 @@ export abstract class ApiHelperService {
     tokenError: boolean
   ) => ErrorResponse;
 
-  //#endregion Http Response Handling Methods
+  //#endregion Http Response Handling
 
-  //#region Utility Methods
+  //#region Utility
 
   qsStringify: (params: any) => string;
   isJsonResponse: (response: Response) => boolean;
 
-  //#endregion Utility methods
+  //#endregion Utility
 }
