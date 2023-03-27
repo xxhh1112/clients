@@ -647,6 +647,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         EnvironmentServiceAbstraction,
         TokenServiceAbstraction,
         AppIdServiceAbstraction,
+        ApiHelperServiceAbstraction,
       ],
     },
     {

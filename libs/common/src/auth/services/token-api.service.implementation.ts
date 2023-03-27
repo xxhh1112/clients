@@ -1,3 +1,4 @@
+import { ApiHelperService } from "../../abstractions/api-helper.service.abstraction";
 import { AppIdService } from "../../abstractions/appId.service";
 import { EnvironmentService } from "../../abstractions/environment.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
@@ -19,11 +20,14 @@ import { TokenService } from "./token.service";
  * Service for interacting with the Bitwarden Identity API for token management.
  */
 export class TokenApiServiceImplementation implements TokenApiServiceAbstraction {
+  private identityBaseUrl: string = this.environmentService.getIdentityUrl();
+
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
     private tokenService: TokenService,
-    private appIdService: AppIdService
+    private appIdService: AppIdService,
+    private apiHelperService: ApiHelperService
   ) {}
 
   async getActiveBearerToken(): Promise<string> {
@@ -38,33 +42,23 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
   async postIdentityToken(
     request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
   ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse> {
-    const headers = new Headers({
-      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      Accept: "application/json",
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
-    request.alterIdentityTokenHeaders(headers);
-
     const identityToken =
       request instanceof UserApiTokenRequest
         ? request.toIdentityToken()
         : request.toIdentityToken(this.platformUtilsService.getClientType());
 
-    const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
-        body: this.qsStringify(identityToken),
-        credentials: this.getCredentials(),
-        cache: "no-store",
-        headers: headers,
-        method: "POST",
-      })
+    const fetchReq = await this.apiHelperService.createRequest(
+      "POST",
+      `${this.identityBaseUrl}/connect/token`,
+      identityToken,
+      true,
+      request.alterIdentityTokenHeaders
     );
 
+    const response = await this.apiHelperService.fetch(fetchReq);
+
     let responseJson: any = null;
-    if (this.isJsonResponse(response)) {
+    if (this.apiHelperService.isJsonResponse(response)) {
       responseJson = await response.json();
     }
 
