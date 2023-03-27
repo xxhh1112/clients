@@ -5,9 +5,6 @@ import { DeviceType } from "../enums/deviceType";
 import { Utils } from "../misc/utils";
 import { ErrorResponse } from "../models/response/error.response";
 
-// TODO: consider creating folder in services called api-communication?
-// caveat: it requires updating all references to the api service abstraction & implementation
-
 /**
  * API Helper Service which provides common functionality for API services
  * like http request creation (w/o auth concerns), request execution,
