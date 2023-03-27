@@ -8,6 +8,7 @@ import { StateService } from "../../abstractions/state.service";
 import { HashPurpose } from "../../enums";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { AuthService } from "../abstractions/auth.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { AuthResult } from "../models/domain/auth-result";
@@ -41,6 +42,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
+    tokenApiService: TokenApiService,
     private authService: AuthService
   ) {
     super(
@@ -52,7 +54,8 @@ export class PasswordLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      tokenApiService
     );
   }
 

@@ -25,6 +25,7 @@ import { OrganizationCreateRequest } from "@bitwarden/common/admin-console/model
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
 import { OrganizationUpgradeRequest } from "@bitwarden/common/admin-console/models/request/organization-upgrade.request";
 import { ProviderOrganizationCreateRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-organization-create.request";
+import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { PaymentMethodType, PlanType } from "@bitwarden/common/billing/enums";
 import { PlanResponse } from "@bitwarden/common/billing/models/response/plan.response";
 import { ProductType } from "@bitwarden/common/enums";
@@ -112,7 +113,8 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     private logService: LogService,
     private messagingService: MessagingService,
     private formBuilder: UntypedFormBuilder,
-    private organizationApiService: OrganizationApiServiceAbstraction
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private tokenApiService: TokenApiService
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -368,7 +370,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
           );
         }
 
-        await this.apiService.refreshIdentityToken();
+        await this.tokenApiService.refreshIdentityToken();
         await this.syncService.fullSync(true);
 
         if (!this.acceptingSponsorship && !this.isInTrialFlow) {
@@ -495,7 +497,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     const response = await this.organizationApiService.createLicense(fd);
     const orgId = response.id;
 
-    await this.apiService.refreshIdentityToken();
+    await this.tokenApiService.refreshIdentityToken();
 
     // Org Keys live outside of the OrganizationLicense - add the keys to the org here
     const request = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);

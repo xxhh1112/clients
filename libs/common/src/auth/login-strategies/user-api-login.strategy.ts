@@ -9,6 +9,7 @@ import { StateService } from "../../abstractions/state.service";
 import { TokenService } from "../../auth/abstractions/token.service";
 import { TwoFactorService } from "../../auth/abstractions/two-factor.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { UserApiLogInCredentials } from "../models/domain/log-in-credentials";
 import { UserApiTokenRequest } from "../models/request/identity-token/user-api-token.request";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
@@ -29,7 +30,8 @@ export class UserApiLogInStrategy extends LogInStrategy {
     stateService: StateService,
     twoFactorService: TwoFactorService,
     private environmentService: EnvironmentService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    tokenApiService: TokenApiService
   ) {
     super(
       cryptoService,
@@ -40,7 +42,8 @@ export class UserApiLogInStrategy extends LogInStrategy {
       messagingService,
       logService,
       stateService,
-      twoFactorService
+      twoFactorService,
+      tokenApiService
     );
   }
 

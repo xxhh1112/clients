@@ -407,6 +407,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         FolderApiServiceAbstraction,
         OrganizationServiceAbstraction,
         SendApiServiceAbstraction,
+        TokenApiServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -493,6 +494,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         AuthServiceAbstraction,
         MessagingServiceAbstraction,
+        TokenApiServiceAbstraction,
       ],
     },
     {

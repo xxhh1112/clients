@@ -15,6 +15,7 @@ import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { CollectionDetailsResponse } from "../../../admin-console/models/response/collection.response";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
+import { TokenApiService } from "../../../auth/abstractions/token-api.service.abstraction";
 import { sequentialize } from "../../../misc/sequentialize";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
@@ -56,6 +57,7 @@ export class SyncService implements SyncServiceAbstraction {
     private folderApiService: FolderApiServiceAbstraction,
     private organizationService: InternalOrganizationService,
     private sendApiService: SendApiService,
+    private tokenApiService: TokenApiService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
 
@@ -100,7 +102,7 @@ export class SyncService implements SyncServiceAbstraction {
     }
 
     try {
-      await this.apiService.refreshIdentityToken();
+      await this.tokenApiService.refreshIdentityToken();
       const response = await this.apiService.getSync();
 
       await this.syncProfile(response.profile);

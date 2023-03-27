@@ -4,6 +4,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 
 @Component({
@@ -20,11 +21,12 @@ export class VerifyEmailComponent {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private tokenApiService: TokenApiService
   ) {}
 
   async verifyEmail(): Promise<void> {
-    await this.apiService.refreshIdentityToken();
+    await this.tokenApiService.refreshIdentityToken();
     if (await this.tokenService.getEmailVerified()) {
       this.onVerified.emit(true);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("emailVerified"));

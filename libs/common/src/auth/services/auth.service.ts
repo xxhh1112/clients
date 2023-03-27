@@ -18,6 +18,7 @@ import { ErrorResponse } from "../../models/response/error.response";
 import { AuthRequestPushNotification } from "../../models/response/notification.response";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { AuthenticationStatus } from "../enums/authentication-status";
@@ -92,7 +93,8 @@ export class AuthService implements AuthServiceAbstraction {
     protected stateService: StateService,
     protected twoFactorService: TwoFactorService,
     protected i18nService: I18nService,
-    protected encryptService: EncryptService
+    protected encryptService: EncryptService,
+    protected tokenApiService: TokenApiService
   ) {}
 
   async logIn(
@@ -122,6 +124,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
+          this.tokenApiService,
           this
         );
         break;
@@ -136,7 +139,8 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
-          this.keyConnectorService
+          this.keyConnectorService,
+          this.tokenApiService
         );
         break;
       case AuthenticationType.UserApi:
@@ -151,7 +155,8 @@ export class AuthService implements AuthServiceAbstraction {
           this.stateService,
           this.twoFactorService,
           this.environmentService,
-          this.keyConnectorService
+          this.keyConnectorService,
+          this.tokenApiService
         );
         break;
       case AuthenticationType.Passwordless:
@@ -165,7 +170,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
-          this
+          this.tokenApiService
         );
         break;
     }

@@ -7,6 +7,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { Account, AccountProfile, AccountTokens } from "../../models/domain/account";
 import { KeysRequest } from "../../models/request/keys.request";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { TwoFactorProviderType } from "../enums/two-factor-provider-type";
@@ -39,7 +40,8 @@ export abstract class LogInStrategy {
     protected messagingService: MessagingService,
     protected logService: LogService,
     protected stateService: StateService,
-    protected twoFactorService: TwoFactorService
+    protected twoFactorService: TwoFactorService,
+    protected tokenApiService: TokenApiService
   ) {}
 
   abstract logIn(
@@ -64,7 +66,7 @@ export abstract class LogInStrategy {
   protected async startLogIn(): Promise<AuthResult> {
     this.twoFactorService.clearSelectedProvider();
 
-    const response = await this.apiService.postIdentityToken(this.tokenRequest);
+    const response = await this.tokenApiService.postIdentityToken(this.tokenRequest);
 
     if (response instanceof IdentityTwoFactorResponse) {
       return this.processTwoFactorResponse(response);
