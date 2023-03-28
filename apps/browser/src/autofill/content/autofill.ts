@@ -1,6 +1,13 @@
 /* eslint-disable no-var, no-console, no-prototype-builtins */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix
-// them all now
+// These eslint rules are disabled because the original JS was not written with them in mind
+// and we don't want to fix them all now
+
+/*
+  Original code copyright (c) 2014 AgileBits pursuant to the copyright notice below
+
+  Modifications and additions are the copyright of Bitwarden and are covered by the
+  licensing applicable to this repository
+*/
 
 /*
   1Password Extension
@@ -63,29 +70,9 @@ type FormElement = HTMLInputElement | HTMLSelectElement | HTMLSpanElement;
 type FillableControl = HTMLInputElement | HTMLSelectElement;
 
 /*
-  MODIFICATIONS FROM ORIGINAL
-
-  1.  Populate isFirefox
-  2.  Remove isChrome and isSafari since they are not used.
-  3.  Unminify and format to meet Mozilla review requirements.
-  4.  Remove unnecessary input types from getFormElements query selector and limit number of elements returned.
-  5.  Remove fakeTested prop.
-  6.  Rename com.agilebits.* stuff to com.bitwarden.*
-  7.  Remove "some useful globals" on window
-  8.  Add ability to autofill span[data-bwautofill] elements
-  9.  Add new handler, for new command that responds with page details in response callback
-  10. Handle sandbox iframe and sandbox rule in CSP
-  11. Work on array of saved urls instead of just one to determine if we should autofill non-https sites
-  12. Remove setting of attribute com.browser.browser.userEdited on user-inputs
-  13. Handle null value URLs in urlNotSecure
-  14. Implement new HTML element query logic to be able to traverse into ShadowRoot
-  */
-
-/*
  * `openOrClosedShadowRoot` is only available to WebExtensions.
  * We need to use the correct implementation based on browser.
  */
-// START MODIFICATION
 var getShadowRoot: (element: Element) => ShadowRoot;
 type FirefoxElement = Element & {
   openOrClosedShadowRoot: ShadowRoot;
@@ -184,13 +171,10 @@ function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Element) => 
 
   return null;
 }
-// END MODIFICATION
 
 function collect(document: Document): string {
-  // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
-  // END MODIFICATION
 
   (document as AutofillDocument).elementsByOPID = {};
 
@@ -231,11 +215,9 @@ function collect(document: Document): string {
           return el;
 
         default:
-          // START MODIFICATION
           if (!el.type && el.tagName.toLowerCase() === "span") {
             return el.innerText;
           }
-          // END MODIFICATION
           return el.value;
       }
     }
@@ -322,7 +304,6 @@ function collect(document: Document): string {
         theLabels = Array.prototype.slice.call(el.labels);
       } else {
         if (el.id) {
-          // START MODIFICATION
           var elId = JSON.stringify(el.id);
           var labelsByReferencedId = queryDocAll<HTMLLabelElement>(
             theDoc,
@@ -332,16 +313,13 @@ function collect(document: Document): string {
             }
           );
           theLabels = theLabels.concat(labelsByReferencedId);
-          // END MODIFICATION
         }
 
         if (el.name) {
-          // START MODIFICATION
           var elName = JSON.stringify(el.name);
           docLabel = queryDocAll<HTMLLabelElement>(theDoc, theDoc.body, function (node) {
             return node.nodeName === "LABEL" && node.htmlFor === elName;
           });
-          // END MODIFICATION
 
           for (var labelIndex = 0; labelIndex < docLabel.length; labelIndex++) {
             if (-1 === theLabels.indexOf(docLabel[labelIndex])) {
@@ -413,20 +391,15 @@ function collect(document: Document): string {
     function toLowerString(s: string) {
       return "string" === typeof s ? s.toLowerCase() : ("" + s).toLowerCase();
     }
-    // START MODIFICATION
-    // renamed queryDoc to queryDocAll and moved to top
-    // END MODIFICATION
     // end helpers
 
     var theView = theDoc.defaultView ? theDoc.defaultView : window;
 
     // get all the docs
-    // START MODIFICATION
     var formNodes = queryDocAll(theDoc, theDoc.body, function (el) {
       return el.nodeName === "FORM";
     });
     var theForms = formNodes.map(function (formEl, elIndex) {
-      // END MODIFICATION
       var op: Record<string, string> = {},
         formOpId = "__form__" + elIndex;
 
@@ -468,14 +441,12 @@ function collect(document: Document): string {
         addProp(field, "tabindex", getElementAttrValue(el, "tabindex"));
         addProp(field, "title", getElementAttrValue(el, "title"));
 
-        // START MODIFICATION
         var elTagName = el.tagName.toLowerCase();
         addProp(field, "tagName", elTagName);
 
         if (elTagName === "span") {
           return field;
         }
-        // END MODIFICATION
 
         if ("hidden" != toLowerString((el as FillableControl).type)) {
           addProp(field, "label-tag", getLabelTag(el as FillableControl));
@@ -536,10 +507,6 @@ function collect(document: Document): string {
             "opid"
           );
         }
-
-        // START MODIFICATION
-        //addProp(field, 'fakeTested', checkIfFakeTested(field, el), false);
-        // END MODIFICATION
 
         return field;
       });
@@ -603,11 +570,9 @@ function collect(document: Document): string {
     };
 
     // get proper page title. maybe they are using the special meta tag?
-    // START MODIFICATION
     var theTitle = queryDoc(theDoc, theDoc, function (node) {
       return node.hasAttribute("data-onepassword-title");
     }) as any;
-    // END MODIFICATION
     if (theTitle && theTitle.dataset[DISPLAY_TITLE_ATTRIBUE]) {
       pageDetails.displayTitle = theTitle.dataset.onepasswordTitle;
     }
@@ -735,12 +700,10 @@ function collect(document: Document): string {
     // walk the dom tree until we reach the top
     for (var elStyle; theEl && theEl !== document; ) {
       // Calculate the style of the element
-      // START MODIFICATION
       elStyle =
         el.getComputedStyle && theEl instanceof Element
           ? el.getComputedStyle(theEl, null)
           : theEl.style;
-      // END MODIFICATION
 
       // If there's no computed style at all, we're done, as we know that it's not hidden
       if (!elStyle) {
@@ -904,8 +867,6 @@ function collect(document: Document): string {
    * @returns An array of HTMLElements
    */
   function getFormElements(theDoc: Document, limit?: number): FormElement[] {
-    // START MODIFICATION
-
     var els = queryDocAll<FormElement>(theDoc, theDoc.body, function (el) {
       switch (el.nodeName) {
         case "SELECT":
@@ -949,7 +910,6 @@ function collect(document: Document): string {
 
     return returnEls;
   }
-  // END MODIFICATION
 
   /**
    * Focus the element `el` and optionally restore its original value
@@ -1280,12 +1240,10 @@ function fill(document: Document, fillScript: AutofillScript): string {
         default:
           el.value == op ||
             doAllFillOperations(el, function (theEl) {
-              // START MODIFICATION
               if (!theEl.type && theEl.tagName.toLowerCase() === "span") {
                 theEl.innerText = op;
                 return;
               }
-              // END MODIFICATION
               theEl.value = op;
             });
       }
@@ -1305,7 +1263,6 @@ function fill(document: Document, fillScript: AutofillScript): string {
     afterValSetFunc(el);
     setValueForElementByEvent(el);
 
-    // START MODIFICATION
     if (canSeeElementToStyle(el)) {
       el.classList.add("com-bitwarden-browser-animated-fill");
       setTimeout(function () {
@@ -1314,7 +1271,6 @@ function fill(document: Document, fillScript: AutofillScript): string {
         }
       }, styleTimeout);
     }
-    // END MODIFICATION
   }
 
   (document as AutofillDocument).elementForOPID = getElementByOpId;
@@ -1436,12 +1392,11 @@ function fill(document: Document, fillScript: AutofillScript): string {
           currentEl && currentEl !== document;
 
         ) {
-          // START MODIFICATION
           theStyle =
             owner.getComputedStyle && currentEl instanceof Element
               ? owner.getComputedStyle(currentEl, null)
               : currentEl.style;
-          // END MODIFICATION
+
           if (!theStyle) {
             currentEl = true;
             break a;
@@ -1455,11 +1410,9 @@ function fill(document: Document, fillScript: AutofillScript): string {
         currentEl = currentEl === document;
       }
     }
-    // START MODIFICATION
     if (el && !(el as FillableControl).type && el.tagName.toLowerCase() === "span") {
       return true;
     }
-    // END MODIFICATION
     return currentEl
       ? -1 !==
           "email text password number tel url"
@@ -1481,7 +1434,6 @@ function fill(document: Document, fillScript: AutofillScript): string {
       return null;
     }
     try {
-      // START MODIFICATION
       var filteredElements = queryDocAll<Autofill<FormElement | HTMLButtonElement>>(
         document,
         document.body,
@@ -1498,7 +1450,6 @@ function fill(document: Document, fillScript: AutofillScript): string {
           return false;
         }
       );
-      // END MODIFICATION
       if (0 < filteredElements.length) {
         (theElement = filteredElements[0]),
           1 < filteredElements.length &&
@@ -1521,11 +1472,9 @@ function fill(document: Document, fillScript: AutofillScript): string {
    * @returns
    */
   function selectAllFromDoc(theSelector: string) {
-    // START MODIFICATION
     return queryDocAll(document, document, function (node) {
       return node.matches(theSelector);
     });
-    // END MODIFICATION
   }
 
   /**
