@@ -43,7 +43,7 @@ type AutofillDocument = Document & {
  */
 type Autofill<T> = T & {
   opid: string;
-}
+};
 type AutofillForm = Autofill<HTMLFormElement>;
 type AutofillFormElement = Autofill<FormElement>;
 
@@ -82,9 +82,12 @@ type FillableControl = HTMLInputElement | HTMLSelectElement;
  * We need to use the correct implementation based on browser.
  */
 // START MODIFICATION
-var getShadowRoot: (element: Element) => Element;
+var getShadowRoot: (element: Element) => ShadowRoot;
+type FirefoxElement = Element & {
+  openOrClosedShadowRoot: ShadowRoot
+}
 
-if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
+if ((chrome as any).dom && (chrome as any).dom.openOrClosedShadowRoot) {
   // Chromium 88+
   // https://developer.chrome.com/docs/extensions/reference/dom/
   getShadowRoot = function (element) {
@@ -92,7 +95,7 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
       return null;
     }
 
-    return chrome.dom.openOrClosedShadowRoot(element);
+    return (chrome as any).dom.openOrClosedShadowRoot(element);
   };
 } else {
   getShadowRoot = function (element) {
@@ -100,7 +103,7 @@ if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/openOrClosedShadowRoot
     // Fallback to usual shadowRoot if it doesn't exist, which will only find open ShadowRoots, not closed ones.
     // https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot#browser_compatibility
-    return element.openOrClosedShadowRoot || element.shadowRoot;
+    return (element as FirefoxElement).openOrClosedShadowRoot || element.shadowRoot;
   };
 }
 
@@ -153,7 +156,7 @@ function accumulatingQueryDocAll<T extends Element = Element>(
  */
 function queryDoc(
   doc: Document,
-  rootEl: Element,
+  rootEl: Node,
   filterCallback: (el: Element) => boolean
 ): Element {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
@@ -320,9 +323,13 @@ function collect(document: Document): string {
         if (el.id) {
           // START MODIFICATION
           var elId = JSON.stringify(el.id);
-          var labelsByReferencedId = queryDocAll<HTMLLabelElement>(theDoc, theDoc.body, function (node) {
-            return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elId;
-          });
+          var labelsByReferencedId = queryDocAll<HTMLLabelElement>(
+            theDoc,
+            theDoc.body,
+            function (node) {
+              return node.nodeName === "LABEL" && (node as HTMLLabelElement).htmlFor === elId;
+            }
+          );
           theLabels = theLabels.concat(labelsByReferencedId);
           // END MODIFICATION
         }
@@ -342,8 +349,15 @@ function collect(document: Document): string {
           }
         }
 
-        for (var theEl: Element = el; theEl && theEl != theDoc; theEl = theEl.parentNode as Element) {
-          if ("label" === toLowerString(theEl.tagName) && -1 === theLabels.indexOf(theEl as HTMLLabelElement)) {
+        for (
+          var theEl: Element = el;
+          theEl && theEl != theDoc;
+          theEl = theEl.parentNode as Element
+        ) {
+          if (
+            "label" === toLowerString(theEl.tagName) &&
+            -1 === theLabels.indexOf(theEl as HTMLLabelElement)
+          ) {
             theLabels.push(theEl as HTMLLabelElement);
           }
         }
@@ -433,7 +447,8 @@ function collect(document: Document): string {
       .map(function (el: FormElement, elIndex: number) {
         var field: Record<string, any> = {},
           opId = "__" + elIndex,
-          elMaxLen = -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
+          elMaxLen =
+            -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
 
         if (!elMaxLen || ("number" === typeof elMaxLen && isNaN(elMaxLen))) {
           elMaxLen = 999;
@@ -462,7 +477,7 @@ function collect(document: Document): string {
         // END MODIFICATION
 
         if ("hidden" != toLowerString((el as FillableControl).type)) {
-          addProp(field, "label-tag", getLabelTag((el as FillableControl)));
+          addProp(field, "label-tag", getLabelTag(el as FillableControl));
           addProp(field, "label-data", getElementAttrValue(el, "data-label"));
           addProp(field, "label-aria", getElementAttrValue(el, "aria-label"));
           addProp(field, "label-top", getLabelTop(el));
@@ -502,7 +517,11 @@ function collect(document: Document): string {
         addProp(field, "aria-haspopup", "true" == el.getAttribute("aria-haspopup"), false);
         addProp(field, "data-unmasked", el.dataset.unmasked);
         addProp(field, "data-stripe", getElementAttrValue(el, "data-stripe"));
-        addProp(field, "onepasswordFieldType", el.dataset.onepasswordFieldType || (el as FillableControl).type);
+        addProp(
+          field,
+          "onepasswordFieldType",
+          el.dataset.onepasswordFieldType || (el as FillableControl).type
+        );
         addProp(field, "onepasswordDesignation", el.dataset.onepasswordDesignation);
         addProp(field, "onepasswordSignInUrl", el.dataset.onepasswordSignInUrl);
         addProp(field, "onepasswordSectionTitle", el.dataset.onepasswordSectionTitle);
@@ -511,7 +530,10 @@ function collect(document: Document): string {
         addProp(field, "onepasswordSectionFieldValue", el.dataset.onepasswordSectionFieldValue);
 
         if ((el as HTMLInputElement | HTMLSelectElement).form) {
-          field.form = getElementAttrValue((el as HTMLInputElement | HTMLSelectElement).form, "opid");
+          field.form = getElementAttrValue(
+            (el as HTMLInputElement | HTMLSelectElement).form,
+            "opid"
+          );
         }
 
         // START MODIFICATION
@@ -953,9 +975,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
 
   function queryPasswordInputs() {
     return queryDocAll<HTMLInputElement>(document, document.body, function (el) {
-      return (
-        el.nodeName === "INPUT" && (el as HTMLInputElement).type.toLowerCase() === "password"
-      );
+      return el.nodeName === "INPUT" && (el as HTMLInputElement).type.toLowerCase() === "password";
     });
   }
 
@@ -989,7 +1009,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
       theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
       operationDelayMs: number = 1,
-      doOperation: (ops: FillScript[], theOperation: () => void) => void,
+      doOperation: (ops: FillScript[], theOperation: () => void) => void,
       operationsToDo: string[] = [];
 
     fillScriptProperties &&
@@ -1229,7 +1249,12 @@ function fill(document: Document, fillScript: AutofillScript): string {
    */
   function fillTheElement(el: FillableControl, op: string) {
     var shouldCheck: boolean;
-    if (el && null !== op && void 0 !== op && !(el.disabled || (el as any).a || (el as HTMLInputElement).readOnly)) {
+    if (
+      el &&
+      null !== op &&
+      void 0 !== op &&
+      !(el.disabled || (el as any).a || (el as HTMLInputElement).readOnly)
+    ) {
       switch (
         (markTheFilling && el.form && !el.form.opfilled && (el.form.opfilled = true),
         el.type ? el.type.toLowerCase() : null)
@@ -1432,7 +1457,10 @@ function fill(document: Document, fillScript: AutofillScript): string {
     }
     // END MODIFICATION
     return currentEl
-      ? -1 !== "email text password number tel url".split(" ").indexOf((el as HTMLInputElement).type || "")
+      ? -1 !==
+          "email text password number tel url"
+            .split(" ")
+            .indexOf((el as HTMLInputElement).type || "")
       : false;
   }
 
@@ -1450,18 +1478,22 @@ function fill(document: Document, fillScript: AutofillScript): string {
     }
     try {
       // START MODIFICATION
-      var filteredElements = queryDocAll<Autofill<FormElement | HTMLButtonElement>>(document, document.body, function (el) {
-        switch (el.nodeName) {
-          case "INPUT":
-          case "SELECT":
-          case "BUTTON":
-            return el.opid === theOpId;
-          case "SPAN":
-            return el.hasAttribute("data-bwautofill") && el.opid === theOpId;
-        }
+      var filteredElements = queryDocAll<Autofill<FormElement | HTMLButtonElement>>(
+        document,
+        document.body,
+        function (el) {
+          switch (el.nodeName) {
+            case "INPUT":
+            case "SELECT":
+            case "BUTTON":
+              return el.opid === theOpId;
+            case "SPAN":
+              return el.hasAttribute("data-bwautofill") && el.opid === theOpId;
+          }
 
-        return false;
-      });
+          return false;
+        }
+      );
       // END MODIFICATION
       if (0 < filteredElements.length) {
         (theElement = filteredElements[0]),
