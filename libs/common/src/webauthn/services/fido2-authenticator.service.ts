@@ -123,7 +123,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         attStmt: {},
         authData: await generateAuthData({
           rpId: params.rpEntity.id,
-          credentialId: cipher.id,
+          credentialId: params.requireResidentKey ? cipher.id : cipher.fido2Key.nonDiscoverableId,
           counter: cipher.fido2Key.counter,
           userPresence: true,
           userVerification: false,
@@ -153,13 +153,15 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {
-    for (const id of ids) {
-      if ((await this.cipherService.get(id)) != undefined) {
-        return true;
-      }
-    }
+    const ciphers = await this.cipherService.getAllDecrypted();
 
-    return false;
+    return ciphers.some(
+      (cipher) =>
+        (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
+        (cipher.type === CipherType.Login &&
+          cipher.fido2Key != undefined &&
+          ids.includes(cipher.fido2Key.nonDiscoverableId))
+    );
   }
 
   private async createKeyPair() {
@@ -180,6 +182,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const pcks8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
 
     const fido2Key = new Fido2KeyView();
+    fido2Key.nonDiscoverableId = params.requireResidentKey ? null : Utils.newGuid();
     fido2Key.keyType = "public-key";
     fido2Key.keyAlgorithm = "ECDSA";
     fido2Key.keyCurve = "P-256";

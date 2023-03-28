@@ -3,6 +3,7 @@ import { Jsonify } from "type-fest";
 import { ItemView } from "../../../vault/models/view/item.view";
 
 export class Fido2KeyView extends ItemView {
+  nonDiscoverableId: string;
   keyType: "public-key";
   keyAlgorithm: "ECDSA";
   keyCurve: "P-256";

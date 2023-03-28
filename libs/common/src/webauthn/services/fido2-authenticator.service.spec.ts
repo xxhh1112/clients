@@ -92,7 +92,67 @@ describe("FidoAuthenticatorService", () => {
 
     describe.skip("when extensions parameter is present", () => undefined);
 
-    describe("when vault contains excluded credential", () => {
+    describe("when vault contains excluded non-discoverable credential", () => {
+      let excludedCipherView: CipherView;
+      let params: Fido2AuthenticatorMakeCredentialsParams;
+
+      beforeEach(async () => {
+        const excludedCipher = createCipher({ type: CipherType.Login });
+        excludedCipherView = await excludedCipher.decrypt();
+        excludedCipherView.fido2Key.nonDiscoverableId = Utils.newGuid();
+        params = await createParams({
+          excludeCredentialDescriptorList: [
+            {
+              id: Fido2Utils.stringToBuffer(excludedCipherView.fido2Key.nonDiscoverableId),
+              type: "public-key",
+            },
+          ],
+        });
+        cipherService.get.mockImplementation(async (id) =>
+          id === excludedCipher.id ? excludedCipher : undefined
+        );
+        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
+      });
+
+      /**
+       * Spec: collect an authorization gesture confirming user consent for creating a new credential.
+       * Deviation: Consent is not asked and the user is simply informed of the situation.
+       **/
+      it("should inform user", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
+
+        try {
+          await authenticator.makeCredential(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
+
+        expect(userInterface.informExcludedCredential).toHaveBeenCalled();
+      });
+
+      /** Spec: return an error code equivalent to "NotAllowedError" and terminate the operation. */
+      it("should throw error", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
+
+        const result = async () => await authenticator.makeCredential(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+
+      it("should not inform user of duplication when input data does not pass checks", async () => {
+        userInterface.informExcludedCredential.mockResolvedValue();
+        const invalidParams = await createInvalidParams();
+
+        for (const p of Object.values(invalidParams)) {
+          try {
+            await authenticator.makeCredential(p);
+            // eslint-disable-next-line no-empty
+          } catch {}
+        }
+        expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("when vault contains excluded discoverable credential", () => {
       let excludedCipherView: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -153,6 +213,7 @@ describe("FidoAuthenticatorService", () => {
 
       beforeEach(async () => {
         params = await createParams({ requireResidentKey: true });
+        cipherService.getAllDecrypted.mockResolvedValue([]);
       });
 
       /**
@@ -193,6 +254,7 @@ describe("FidoAuthenticatorService", () => {
             name: params.rpEntity.name,
 
             fido2Key: expect.objectContaining({
+              nonDiscoverableId: null,
               keyType: "public-key",
               keyAlgorithm: "ECDSA",
               keyCurve: "P-256",
@@ -274,6 +336,7 @@ describe("FidoAuthenticatorService", () => {
             name: existingCipherView.name,
 
             fido2Key: expect.objectContaining({
+              nonDiscoverableId: expect.anything(),
               keyType: "public-key",
               keyAlgorithm: "ECDSA",
               keyCurve: "P-256",
@@ -311,56 +374,82 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    describe("attestation of new credential", () => {
-      const cipherId = "75280e7e-a72e-4d6c-bf1e-d37238352f9b";
-      const cipherIdBytes = new Uint8Array([
-        0x75, 0x28, 0x0e, 0x7e, 0xa7, 0x2e, 0x4d, 0x6c, 0xbf, 0x1e, 0xd3, 0x72, 0x38, 0x35, 0x2f,
-        0x9b,
-      ]);
-      let params: Fido2AuthenticatorMakeCredentialsParams;
+    for (const requireResidentKey of [true, false]) {
+      describe(`attestation of new ${
+        requireResidentKey ? "discoverable" : "non-discoverable"
+      } credential`, () => {
+        const cipherId = "75280e7e-a72e-4d6c-bf1e-d37238352f9b";
+        const cipherIdBytes = new Uint8Array([
+          0x75, 0x28, 0x0e, 0x7e, 0xa7, 0x2e, 0x4d, 0x6c, 0xbf, 0x1e, 0xd3, 0x72, 0x38, 0x35, 0x2f,
+          0x9b,
+        ]);
+        const nonDiscoverableId = "52217b91-73f1-4fea-b3f2-54a7959fd5aa";
+        const nonDiscoverableIdBytes = new Uint8Array([
+          0x52, 0x21, 0x7b, 0x91, 0x73, 0xf1, 0x4f, 0xea, 0xb3, 0xf2, 0x54, 0xa7, 0x95, 0x9f, 0xd5,
+          0xaa,
+        ]);
+        let params: Fido2AuthenticatorMakeCredentialsParams;
 
-      beforeEach(async () => {
-        params = await createParams({ requireResidentKey: true });
-        userInterface.confirmNewCredential.mockResolvedValue(true);
-        cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
-        cipherService.createWithServer.mockImplementation(async (cipher) => {
-          cipher.id = cipherId;
-          return cipher;
+        beforeEach(async () => {
+          const cipher = createCipher({ id: cipherId, type: CipherType.Login });
+          params = await createParams({ requireResidentKey });
+          userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(cipherId);
+          userInterface.confirmNewCredential.mockResolvedValue(true);
+          cipherService.get.mockImplementation(async (cipherId) =>
+            cipherId === cipher.id ? cipher : undefined
+          );
+          cipherService.getAllDecrypted.mockResolvedValue([await cipher.decrypt()]);
+          cipherService.encrypt.mockImplementation(async (cipher) => {
+            cipher.fido2Key.nonDiscoverableId = nonDiscoverableId; // Replace id for testability
+            return {} as any;
+          });
+          cipherService.createWithServer.mockImplementation(async (cipher) => {
+            cipher.id = cipherId;
+            return cipher;
+          });
+          cipherService.updateWithServer.mockImplementation(async (cipher) => {
+            cipher.id = cipherId;
+            return cipher;
+          });
+        });
+
+        it("should return attestation object", async () => {
+          const result = await authenticator.makeCredential(params);
+
+          const attestationObject = CBOR.decode(result.buffer);
+
+          const encAuthData: Uint8Array = attestationObject.authData;
+          const rpIdHash = encAuthData.slice(0, 32);
+          const flags = encAuthData.slice(32, 33);
+          const counter = encAuthData.slice(33, 37);
+          const aaguid = encAuthData.slice(37, 53);
+          const credentialIdLength = encAuthData.slice(53, 55);
+          const credentialId = encAuthData.slice(55, 71);
+          // Public key format is not tested here since it will be tested
+          // by the assertion tests.
+          // const publicKey = encAuthData.slice(87);
+
+          expect(attestationObject.fmt).toBe("none");
+          expect(attestationObject.attStmt).toEqual({});
+          expect(rpIdHash).toEqual(
+            new Uint8Array([
+              0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
+              0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
+              0xd0, 0x5c, 0x3d, 0xc3,
+            ])
+          );
+          expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
+          expect(counter).toEqual(new Uint8Array([0, 0, 0, 0])); // 0 because of new counter
+          expect(aaguid).toEqual(AAGUID);
+          expect(credentialIdLength).toEqual(new Uint8Array([0, 16])); // 16 bytes because we're using GUIDs
+          if (requireResidentKey) {
+            expect(credentialId).toEqual(cipherIdBytes);
+          } else {
+            expect(credentialId).toEqual(nonDiscoverableIdBytes);
+          }
         });
       });
-
-      it("should throw error if user denies creation request", async () => {
-        const result = await authenticator.makeCredential(params);
-
-        const attestationObject = CBOR.decode(result.buffer);
-
-        const encAuthData: Uint8Array = attestationObject.authData;
-        const rpIdHash = encAuthData.slice(0, 32);
-        const flags = encAuthData.slice(32, 33);
-        const counter = encAuthData.slice(33, 37);
-        const aaguid = encAuthData.slice(37, 53);
-        const credentialIdLength = encAuthData.slice(53, 55);
-        const credentialId = encAuthData.slice(55, 71);
-        // Public key format is not tested here since it will be tested
-        // by the assertion tests.
-        // const publicKey = encAuthData.slice(87);
-
-        expect(attestationObject.fmt).toBe("none");
-        expect(attestationObject.attStmt).toEqual({});
-        expect(rpIdHash).toEqual(
-          new Uint8Array([
-            0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
-            0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
-            0xd0, 0x5c, 0x3d, 0xc3,
-          ])
-        );
-        expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
-        expect(counter).toEqual(new Uint8Array([0, 0, 0, 0])); // 0 because of new counter
-        expect(aaguid).toEqual(AAGUID);
-        expect(credentialIdLength).toEqual(new Uint8Array([0, 16])); // 16 bytes because we're using GUIDs
-        expect(credentialId).toEqual(cipherIdBytes);
-      });
-    });
+    }
 
     async function createParams(
       params: Partial<Fido2AuthenticatorMakeCredentialsParams> = {}
@@ -469,6 +558,7 @@ function createCipher(data: Partial<Cipher> = {}): Cipher {
   const cipher = new Cipher();
   cipher.id = data.id ?? Utils.newGuid();
   cipher.type = data.type ?? CipherType.Fido2Key;
+  cipher.login = data.type ?? data.type === CipherType.Login ? new Login() : null;
   cipher.fido2Key = data.fido2Key ?? new Fido2Key();
   return cipher;
 }

@@ -1,6 +1,7 @@
 import { Fido2KeyApi } from "../api/fido2-key.api";
 
 export class Fido2KeyData {
+  nonDiscoverableId: string;
   keyType: "public-key";
   keyAlgorithm: "ECDSA";
   keyCurve: "P-256";
@@ -19,6 +20,7 @@ export class Fido2KeyData {
       return;
     }
 
+    this.nonDiscoverableId = data.nonDiscoverableId;
     this.keyType = data.keyType;
     this.keyAlgorithm = data.keyAlgorithm;
     this.keyCurve = data.keyCurve;
