@@ -53,13 +53,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
-    const isExcluded = await this.vaultContainsId(
-      params.excludeCredentialDescriptorList.map((key) => Fido2Utils.bufferToString(key.id))
-    );
-
+    const isExcluded = await this.vaultContainsCredentials(params.excludeCredentialDescriptorList);
     if (isExcluded) {
       await this.userInterface.informExcludedCredential(
-        [Fido2Utils.bufferToString(params.excludeCredentialDescriptorList[0].id)],
+        [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
         {
           credentialName: params.rpEntity.name,
           userName: params.userEntity.name,
@@ -152,9 +149,23 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     throw new Error("Not implemented");
   }
 
-  private async vaultContainsId(ids: string[]): Promise<boolean> {
-    const ciphers = await this.cipherService.getAllDecrypted();
+  private async vaultContainsCredentials(
+    credentials: PublicKeyCredentialDescriptor[]
+  ): Promise<boolean> {
+    const ids: string[] = [];
 
+    for (const credential of credentials) {
+      try {
+        ids.push(Utils.guidToStandardFormat(credential.id));
+        // eslint-disable-next-line no-empty
+      } catch {}
+    }
+
+    if (ids.length === 0) {
+      return false;
+    }
+
+    const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.some(
       (cipher) =>
         (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||

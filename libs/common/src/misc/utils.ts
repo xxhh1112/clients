@@ -618,7 +618,11 @@ export class Utils {
   }
 
   /** Convert raw 16 byte array to standard format (XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX) UUID. */
-  static guidToStandardFormat(arr: Uint8Array) {
+  static guidToStandardFormat(bufferSource: BufferSource) {
+    const arr =
+      bufferSource instanceof ArrayBuffer
+        ? new Uint8Array(bufferSource)
+        : new Uint8Array(bufferSource.buffer);
     // Note: Be careful editing this code!  It's been tuned for performance
     // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
     const guid = (

@@ -103,7 +103,7 @@ describe("FidoAuthenticatorService", () => {
         params = await createParams({
           excludeCredentialDescriptorList: [
             {
-              id: Fido2Utils.stringToBuffer(excludedCipherView.fido2Key.nonDiscoverableId),
+              id: Utils.guidToRawFormat(excludedCipherView.fido2Key.nonDiscoverableId),
               type: "public-key",
             },
           ],
@@ -161,7 +161,7 @@ describe("FidoAuthenticatorService", () => {
         excludedCipherView = await excludedCipher.decrypt();
         params = await createParams({
           excludeCredentialDescriptorList: [
-            { id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" },
+            { id: Utils.guidToRawFormat(excludedCipher.id), type: "public-key" },
           ],
         });
         cipherService.get.mockImplementation(async (id) =>
