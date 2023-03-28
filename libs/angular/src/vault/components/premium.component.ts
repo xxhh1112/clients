@@ -1,10 +1,10 @@
 import { Directive, OnInit } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 
 @Directive()
 export class PremiumComponent implements OnInit {
@@ -15,7 +15,7 @@ export class PremiumComponent implements OnInit {
   constructor(
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
-    protected apiService: ApiService,
+    protected tokenApiService: TokenApiService,
     private logService: LogService,
     protected stateService: StateService
   ) {}
@@ -26,7 +26,7 @@ export class PremiumComponent implements OnInit {
 
   async refresh() {
     try {
-      this.refreshPromise = this.apiService.refreshIdentityToken();
+      this.refreshPromise = this.tokenApiService.refreshIdentityToken();
       await this.refreshPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("refreshComplete"));
       this.isPremium = await this.stateService.getCanAccessPremium();
