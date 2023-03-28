@@ -10,8 +10,8 @@ import { RegisterFormModule } from "../../auth/register-form/register-form.modul
 import { RemovePasswordComponent } from "../../auth/remove-password.component";
 import { SetPasswordComponent } from "../../auth/set-password.component";
 import { DeauthorizeSessionsComponent } from "../../auth/settings/deauthorize-sessions.component";
-import { EmergencyAccessAttachmentsComponent } from "../../auth/settings/emergency-access/emergency-access-attachments.component";
-import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/emergency-add-edit.component";
+import { EmergencyAccessAttachmentsComponent } from "../../auth/settings/emergency-access/view/emergency-access-attachments.component";
+import { EmergencyAddEditComponent } from "../../auth/settings/emergency-access/view/emergency-add-edit.component";
 import { TwoFactorAuthenticatorComponent } from "../../auth/settings/two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "../../auth/settings/two-factor-duo.component";
 import { TwoFactorEmailComponent } from "../../auth/settings/two-factor-email.component";

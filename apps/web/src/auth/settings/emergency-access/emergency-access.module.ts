@@ -7,10 +7,10 @@ import { ConfirmDialogComponent } from "./dialogs/confirm-dialog.component";
 import { EmergencyAccessDialogComponent } from "./dialogs/emergency-access-dialog.component";
 import { TakeoverDialogComponent } from "./dialogs/takeover-dialog.component";
 import { EmergencyAccessRoutingModule } from "./emergency-access-routing.module";
-import { EmergencyAccessViewComponent } from "./emergency-access-view.component";
 import { EmergencyAccessComponent } from "./emergency-access.component";
 import { EmergencyAccessService } from "./emergency-access.service";
 import { StatusBadgeComponent } from "./status-badges.component";
+import { EmergencyAccessViewComponent } from "./view/emergency-access-view.component";
 
 @NgModule({
   imports: [SharedModule, LooseComponentsModule, EmergencyAccessRoutingModule],
