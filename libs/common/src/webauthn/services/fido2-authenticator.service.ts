@@ -8,6 +8,8 @@ import {
   Fido2AlgorithmIdentifier,
   Fido2AutenticatorError,
   Fido2AutenticatorErrorCode,
+  Fido2AuthenticatorGetAssertionParams,
+  Fido2AuthenticatorGetAssertionResult,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction,
 } from "../abstractions/fido2-authenticator.service.abstraction";
@@ -31,7 +33,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService
   ) {}
-
   async makeCredential(params: Fido2AuthenticatorMakeCredentialsParams): Promise<Uint8Array> {
     if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
@@ -132,6 +133,23 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     );
 
     return attestationObject;
+  }
+
+  async getAssertion(
+    params: Fido2AuthenticatorGetAssertionParams
+  ): Promise<Fido2AuthenticatorGetAssertionResult> {
+    if (
+      params.requireUserVerification != undefined &&
+      typeof params.requireUserVerification !== "boolean"
+    ) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+    }
+
+    if (params.requireUserVerification) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
+    }
+
+    throw new Error("Not implemented");
   }
 
   private async vaultContainsId(ids: string[]): Promise<boolean> {

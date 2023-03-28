@@ -1,10 +1,17 @@
 export abstract class Fido2AuthenticatorService {
   /**
-   * This method triggers the generation of a new credential in the authenticator
+   * Create and save a new credential
    *
    * @return {Uint8Array} Attestation object
    **/
   makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => Promise<Uint8Array>;
+
+  /**
+   * Generate an assertion using an existing credential
+   */
+  getAssertion: (
+    params: Fido2AuthenticatorGetAssertionParams
+  ) => Promise<Fido2AuthenticatorGetAssertionResult>;
 }
 
 export enum Fido2AlgorithmIdentifier {
@@ -24,6 +31,12 @@ export class Fido2AutenticatorError extends Error {
   constructor(readonly errorCode: Fido2AutenticatorErrorCode) {
     super(errorCode);
   }
+}
+
+export interface PublicKeyCredentialDescriptor {
+  id: BufferSource;
+  transports?: ("ble" | "internal" | "nfc" | "usb")[];
+  type: "public-key";
 }
 
 /**
@@ -54,11 +67,7 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
     type: "public-key"; // not used
   }[];
   /** An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials. */
-  excludeCredentialDescriptorList?: {
-    id: BufferSource;
-    transports?: ("ble" | "internal" | "nfc" | "usb")[];
-    type: "public-key"; // not used
-  }[];
+  excludeCredentialDescriptorList?: PublicKeyCredentialDescriptor[];
   /** A map from extension identifiers to their authenticator extension inputs, created by the client based on the extensions requested by the Relying Party, if any. */
   extensions?: {
     appid?: string;
@@ -72,5 +81,27 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
   requireResidentKey: boolean;
   requireUserVerification: boolean;
   /** The constant Boolean value true. It is included here as a pseudo-parameter to simplify applying this abstract authenticator model to implementations that may wish to make a test of user presence optional although WebAuthn does not. */
-  // requireUserPresence: true; // Always performed
+  // requireUserPresence: true; // Always required
+}
+
+export interface Fido2AuthenticatorGetAssertionParams {
+  /** The caller’s RP ID, as determined by the user agent and the client. */
+  rpId: string;
+  /** The hash of the serialized client data, provided by the client. */
+  hash: BufferSource;
+  allowCredentialDescriptorList: PublicKeyCredentialDescriptor[];
+  /** The effective user verification requirement for assertion, a Boolean value provided by the client. */
+  requireUserVerification: boolean;
+  /** The constant Boolean value true. It is included here as a pseudo-parameter to simplify applying this abstract authenticator model to implementations that may wish to make a test of user presence optional although WebAuthn does not. */
+  // requireUserPresence: boolean; // Always required
+  extensions: unknown;
+}
+
+export interface Fido2AuthenticatorGetAssertionResult {
+  selectedCredential?: {
+    id: string;
+    userHandle: Uint8Array;
+  };
+  authenticatorData: Uint8Array;
+  signature: Uint8Array;
 }

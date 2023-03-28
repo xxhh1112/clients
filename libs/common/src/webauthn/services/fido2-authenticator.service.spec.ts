@@ -11,6 +11,7 @@ import { Login } from "../../vault/models/domain/login";
 import { CipherView } from "../../vault/models/view/cipher.view";
 import {
   Fido2AutenticatorErrorCode,
+  Fido2AuthenticatorGetAssertionParams,
   Fido2AuthenticatorMakeCredentialsParams,
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import {
@@ -35,7 +36,7 @@ describe("FidoAuthenticatorService", () => {
     authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
   });
 
-  describe("authenticatorMakeCredential", () => {
+  describe("makeCredential", () => {
     let invalidParams!: InvalidParams;
 
     beforeEach(async () => {
@@ -68,7 +69,7 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: User verification is checked before checking for excluded credentials
        * */
       it("should throw error if requireUserVerification is set to true", async () => {
-        const params = await createCredentialParams({ requireUserVerification: true });
+        const params = await createParams({ requireUserVerification: true });
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -98,7 +99,7 @@ describe("FidoAuthenticatorService", () => {
       beforeEach(async () => {
         const excludedCipher = createCipher();
         excludedCipherView = await excludedCipher.decrypt();
-        params = await createCredentialParams({
+        params = await createParams({
           excludeCredentialDescriptorList: [
             { id: Fido2Utils.stringToBuffer(excludedCipher.id), type: "public-key" },
           ],
@@ -151,7 +152,7 @@ describe("FidoAuthenticatorService", () => {
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        params = await createCredentialParams({ requireResidentKey: true });
+        params = await createParams({ requireResidentKey: true });
       });
 
       /**
@@ -237,7 +238,7 @@ describe("FidoAuthenticatorService", () => {
         existingCipher.login = new Login();
         existingCipher.fido2Key = undefined;
         existingCipherView = await existingCipher.decrypt();
-        params = await createCredentialParams();
+        params = await createParams();
         cipherService.get.mockImplementation(async (id) =>
           id === existingCipher.id ? existingCipher : undefined
         );
@@ -290,7 +291,7 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
         userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
-        const params = await createCredentialParams();
+        const params = await createParams();
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -319,7 +320,7 @@ describe("FidoAuthenticatorService", () => {
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        params = await createCredentialParams({ requireResidentKey: true });
+        params = await createParams({ requireResidentKey: true });
         userInterface.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
         cipherService.createWithServer.mockImplementation(async (cipher) => {
@@ -328,7 +329,7 @@ describe("FidoAuthenticatorService", () => {
         });
       });
 
-      it.only("should throw error if user denies creation request", async () => {
+      it("should throw error if user denies creation request", async () => {
         const result = await authenticator.makeCredential(params);
 
         const attestationObject = CBOR.decode(result.buffer);
@@ -360,58 +361,109 @@ describe("FidoAuthenticatorService", () => {
         expect(credentialId).toEqual(cipherIdBytes);
       });
     });
+
+    async function createParams(
+      params: Partial<Fido2AuthenticatorMakeCredentialsParams> = {}
+    ): Promise<Fido2AuthenticatorMakeCredentialsParams> {
+      return {
+        hash: params.hash ?? (await createClientDataHash()),
+        rpEntity: params.rpEntity ?? {
+          name: "Bitwarden",
+          id: RpId,
+        },
+        userEntity: params.userEntity ?? {
+          id: randomBytes(64),
+          name: "jane.doe@bitwarden.com",
+          displayName: "Jane Doe",
+          icon: " data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOhJREFUeNpiFI+9E8DAwDAfiAUYSAMfgDiQBVmzlSYnUTqPXf/OANWzngVZ87pKKaIMCGp/BjeEhRjFMKAjx8bQFC2CIs9CpHNxAiYGCsEQM4Cfiwm3AY9f/yZogIcRN4ZahAFv/jAcu4E7xMNtecEYpAakFqsX8me9Yvj07R+G5jR3foaJqWJgOZAaZMAIzAv/kQV05NgZ5hdIMMiKQJIIyEYrDU6wrYkTXjBcefQTvwGwwCoJFGJIBdoMArN3fmToWf+O4SMW14EMeI8rJ8Jcgexn9BwJCoNEaNbEACCN+DSDsjNAgAEAri9Zii/uDMsAAAAASUVORK5CYII=",
+        },
+        credTypesAndPubKeyAlgs: params.credTypesAndPubKeyAlgs ?? [
+          {
+            alg: -7, // ES256
+            type: "public-key",
+          },
+        ],
+        excludeCredentialDescriptorList: params.excludeCredentialDescriptorList ?? [
+          {
+            id: randomBytes(16),
+            transports: ["internal"],
+            type: "public-key",
+          },
+        ],
+        requireResidentKey: params.requireResidentKey ?? false,
+        requireUserVerification: params.requireUserVerification ?? false,
+        extensions: params.extensions ?? {
+          appid: undefined,
+          appidExclude: undefined,
+          credProps: undefined,
+          uvm: false as boolean,
+        },
+      };
+    }
+
+    type InvalidParams = Awaited<ReturnType<typeof createInvalidParams>>;
+    async function createInvalidParams() {
+      return {
+        unsupportedAlgorithm: await createParams({
+          credTypesAndPubKeyAlgs: [{ alg: 9001, type: "public-key" }],
+        }),
+        invalidRk: await createParams({ requireResidentKey: "invalid-value" as any }),
+        invalidUv: await createParams({
+          requireUserVerification: "invalid-value" as any,
+        }),
+      };
+    }
+  });
+
+  describe("getAssertion", () => {
+    let invalidParams!: InvalidParams;
+
+    beforeEach(async () => {
+      invalidParams = await createInvalidParams();
+    });
+
+    describe("invalid input parameters", () => {
+      it("should throw error when requireUserVerification has invalid value", async () => {
+        const result = async () => await authenticator.getAssertion(invalidParams.invalidUv);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
+      });
+
+      /** Deviation: User verification is checked before checking for credentials */
+      it("should throw error if requireUserVerification is set to true", async () => {
+        const params = await createParams({ requireUserVerification: true });
+
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Constraint);
+      });
+    });
+
+    async function createParams(
+      params: Partial<Fido2AuthenticatorGetAssertionParams> = {}
+    ): Promise<Fido2AuthenticatorGetAssertionParams> {
+      return {
+        rpId: params.rpId ?? RpId,
+        hash: params.hash ?? (await createClientDataHash()),
+        allowCredentialDescriptorList: params.allowCredentialDescriptorList ?? [],
+        requireUserVerification: params.requireUserVerification ?? false,
+        extensions: params.extensions ?? {},
+      };
+    }
+
+    type InvalidParams = Awaited<ReturnType<typeof createInvalidParams>>;
+    async function createInvalidParams() {
+      const emptyRpId = await createParams();
+      emptyRpId.rpId = undefined as any;
+      return {
+        emptyRpId,
+        invalidUv: await createParams({
+          requireUserVerification: "invalid-value" as any,
+        }),
+      };
+    }
   });
 });
-
-async function createCredentialParams(
-  params: Partial<Fido2AuthenticatorMakeCredentialsParams> = {}
-): Promise<Fido2AuthenticatorMakeCredentialsParams> {
-  return {
-    hash: params.hash ?? (await createClientDataHash()),
-    rpEntity: params.rpEntity ?? {
-      name: "Bitwarden",
-      id: RpId,
-    },
-    userEntity: params.userEntity ?? {
-      id: randomBytes(64),
-      name: "jane.doe@bitwarden.com",
-      displayName: "Jane Doe",
-      icon: " data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOhJREFUeNpiFI+9E8DAwDAfiAUYSAMfgDiQBVmzlSYnUTqPXf/OANWzngVZ87pKKaIMCGp/BjeEhRjFMKAjx8bQFC2CIs9CpHNxAiYGCsEQM4Cfiwm3AY9f/yZogIcRN4ZahAFv/jAcu4E7xMNtecEYpAakFqsX8me9Yvj07R+G5jR3foaJqWJgOZAaZMAIzAv/kQV05NgZ5hdIMMiKQJIIyEYrDU6wrYkTXjBcefQTvwGwwCoJFGJIBdoMArN3fmToWf+O4SMW14EMeI8rJ8Jcgexn9BwJCoNEaNbEACCN+DSDsjNAgAEAri9Zii/uDMsAAAAASUVORK5CYII=",
-    },
-    credTypesAndPubKeyAlgs: params.credTypesAndPubKeyAlgs ?? [
-      {
-        alg: -7, // ES256
-        type: "public-key",
-      },
-    ],
-    excludeCredentialDescriptorList: params.excludeCredentialDescriptorList ?? [
-      {
-        id: randomBytes(16),
-        transports: ["internal"],
-        type: "public-key",
-      },
-    ],
-    requireResidentKey: params.requireResidentKey ?? false,
-    requireUserVerification: params.requireUserVerification ?? false,
-    extensions: params.extensions ?? {
-      appid: undefined,
-      appidExclude: undefined,
-      credProps: undefined,
-      uvm: false as boolean,
-    },
-  };
-}
-
-type InvalidParams = Awaited<ReturnType<typeof createInvalidParams>>;
-async function createInvalidParams() {
-  return {
-    unsupportedAlgorithm: await createCredentialParams({
-      credTypesAndPubKeyAlgs: [{ alg: 9001, type: "public-key" }],
-    }),
-    invalidRk: await createCredentialParams({ requireResidentKey: "invalid-value" as any }),
-    invalidUv: await createCredentialParams({ requireUserVerification: "invalid-value" as any }),
-  };
-}
 
 function createCipher(data: Partial<Cipher> = {}): Cipher {
   const cipher = new Cipher();
