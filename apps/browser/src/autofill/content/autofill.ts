@@ -1,3 +1,7 @@
+/* eslint-disable no-var, no-console, no-prototype-builtins */
+// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix
+// them all now
+
 /*
   1Password Extension
 
@@ -84,8 +88,8 @@ type FillableControl = HTMLInputElement | HTMLSelectElement;
 // START MODIFICATION
 var getShadowRoot: (element: Element) => ShadowRoot;
 type FirefoxElement = Element & {
-  openOrClosedShadowRoot: ShadowRoot
-}
+  openOrClosedShadowRoot: ShadowRoot;
+};
 
 if ((chrome as any).dom && (chrome as any).dom.openOrClosedShadowRoot) {
   // Chromium 88+
@@ -154,11 +158,7 @@ function accumulatingQueryDocAll<T extends Element = Element>(
  * Returns an element like Document.querySelector does, but traverses the document and shadow
  * roots, yielding a visited node only if it passes the predicate in filterCallback.
  */
-function queryDoc(
-  doc: Document,
-  rootEl: Node,
-  filterCallback: (el: Element) => boolean
-): Element {
+function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Element) => boolean): Element {
   var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
   var node: Element;
 
@@ -254,6 +254,7 @@ function collect(document: Document): string {
           var optionText = option.text
             ? toLowerString(option.text)
                 .replace(/\\s/gm, "")
+                // eslint-disable-next-line no-useless-escape
                 .replace(/[~`!@$%^&*()\\-_+=:;'\"\\[\\]|\\\\,<.>\\?]/gm, "")
             : null;
 
@@ -728,6 +729,7 @@ function collect(document: Document): string {
   function isElementVisible(el: any) {
     var theEl = el;
     // Get the top level document
+    // eslint-disable-next-line no-cond-assign
     el = (el = el.ownerDocument) ? el.defaultView : {};
 
     // walk the dom tree until we reach the top
@@ -868,6 +870,7 @@ function collect(document: Document): string {
     } catch (e) {
       console.error("An unexpected error occurred: " + e);
     } finally {
+      // eslint-disable-next-line no-unsafe-finally
       return theEl;
     }
   }
@@ -1009,7 +1012,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
     var fillScriptOps,
       theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
-      operationDelayMs: number = 1,
+      operationDelayMs = 1,
       doOperation: (ops: FillScript[], theOperation: () => void) => void,
       operationsToDo: string[] = [];
 
@@ -1507,6 +1510,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
     } catch (e) {
       console.error("An unexpected error occurred: " + e);
     } finally {
+      // eslint-disable-next-line no-unsafe-finally
       return theElement;
     }
   }
