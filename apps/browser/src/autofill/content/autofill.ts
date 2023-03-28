@@ -141,37 +141,6 @@ function accumulatingQueryDocAll<T extends Element = Element>(
   }
 }
 
-/*
- * Returns an element like Document.querySelector does, but traverses the document and shadow
- * roots, yielding a visited node only if it passes the predicate in filterCallback.
- */
-function queryDoc(doc: Document, rootEl: Node, filterCallback: (el: Element) => boolean): Element {
-  var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-  var node: Element;
-
-  while ((node = treeWalker.nextNode() as Element)) {
-    if (filterCallback(node)) {
-      return node;
-    }
-
-    // If node contains a ShadowRoot we want to step into it and also traverse all child nodes inside.
-    var nodeShadowRoot = getShadowRoot(node);
-
-    if (!nodeShadowRoot) {
-      continue;
-    }
-
-    // recursively traverse into ShadowRoot
-    var subQueryResult = queryDoc(doc, nodeShadowRoot, filterCallback);
-
-    if (subQueryResult) {
-      return subQueryResult;
-    }
-  }
-
-  return null;
-}
-
 function collect(document: Document): string {
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
@@ -568,14 +537,6 @@ function collect(document: Document): string {
       fields: theFields,
       collectedTimestamp: new Date().getTime(),
     };
-
-    // get proper page title. maybe they are using the special meta tag?
-    var theTitle = queryDoc(theDoc, theDoc, function (node) {
-      return node.hasAttribute("data-onepassword-title");
-    }) as any;
-    if (theTitle && theTitle.dataset[DISPLAY_TITLE_ATTRIBUE]) {
-      pageDetails.displayTitle = theTitle.dataset.onepasswordTitle;
-    }
 
     return pageDetails;
   }
