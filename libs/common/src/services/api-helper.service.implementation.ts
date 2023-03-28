@@ -19,7 +19,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
     private logoutCallback: (expired: boolean) => Promise<void>,
-    private customUserAgent: string
+    private customUserAgent: string = null
   ) {
     this.device = platformUtilsService.getDevice();
     this.deviceType = this.device.toString();
