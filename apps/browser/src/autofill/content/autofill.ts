@@ -1006,38 +1006,8 @@ function fill(document: Document, fillScript: AutofillScript): string {
     fillScriptOps = fillScript.script;
     doOperation(fillScriptOps, function () {
       // Done now
-      // Do we have anything to autosubmit?
-      if (fillScript.hasOwnProperty("autosubmit") && "function" == typeof autosubmit) {
-        (fillScript.itemType && "fillLogin" !== fillScript.itemType) ||
-          (0 < operationsToDo.length
-            ? setTimeout(function () {
-                autosubmit(
-                  fillScript.autosubmit,
-                  fillScriptProperties.allow_clicky_autosubmit,
-                  operationsToDo
-                );
-              }, AUTOSUBMIT_DELAY)
-            : DEBUG_AUTOSUBMIT &&
-              console.log(
-                "[AUTOSUBMIT] Not attempting to submit since no fields were filled: ",
-                operationsToDo
-              ));
-      }
-
-      // handle protectedGlobalPage
-      if ("object" == typeof protectedGlobalPage) {
-        protectedGlobalPage.b(
-          "fillItemResults",
-          {
-            documentUUID: documentUUID,
-            fillContextIdentifier: fillScript.fillContextIdentifier,
-            usedOpids: theOpIds,
-          },
-          function () {
-            fillingItemType = null;
-          }
-        );
-      }
+      // Removed autosubmit logic because we don't use it and it relied on undeclared variables
+      // Removed protectedGlobalPage logic because it relied on undeclared variables
     });
   }
 
