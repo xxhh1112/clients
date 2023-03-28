@@ -5,6 +5,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { Utils } from "../../misc/utils";
 import { ErrorResponse } from "../../models/response/error.response";
 import { TokenApiService as TokenApiServiceAbstraction } from "../abstractions/token-api.service.abstraction";
+import { TokenService } from "../abstractions/token.service";
 import { DeviceRequest } from "../models/request/identity-token/device.request";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
@@ -13,8 +14,6 @@ import { UserApiTokenRequest } from "../models/request/identity-token/user-api-t
 import { IdentityCaptchaResponse } from "../models/response/identity-captcha.response";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
-
-import { TokenService } from "./token.service";
 
 /**
  * Service for interacting with the Bitwarden Identity API for token management.
