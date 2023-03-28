@@ -2,10 +2,10 @@ import * as FormData from "form-data";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import * as fe from "node-fetch";
 
-import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
+import { ApiHelperService } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { ApiService } from "@bitwarden/common/services/api.service";
 
 (global as any).fetch = fe.default;
@@ -16,19 +16,17 @@ import { ApiService } from "@bitwarden/common/services/api.service";
 
 export class NodeApiService extends ApiService {
   constructor(
-    tokenService: TokenService,
     platformUtilsService: PlatformUtilsService,
     environmentService: EnvironmentService,
-    appIdService: AppIdService,
-    logoutCallback: (expired: boolean) => Promise<void>,
+    apiHelperService: ApiHelperService,
+    tokenApiService: TokenApiService,
     customUserAgent: string = null
   ) {
     super(
-      tokenService,
       platformUtilsService,
       environmentService,
-      appIdService,
-      logoutCallback,
+      apiHelperService,
+      tokenApiService,
       customUserAgent
     );
   }
