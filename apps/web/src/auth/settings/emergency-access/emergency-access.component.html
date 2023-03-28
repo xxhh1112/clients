@@ -18,7 +18,7 @@
     {{ "trustedEmergencyContacts" | i18n }}
     <app-premium-badge></app-premium-badge>
   </h2>
-  <button bitButton type="button" (click)="invite()" [disabled]="!canAccessPremium">
+  <button bitButton type="button" (click)="invite()" [disabled]="!canAccessPremium || disabled">
     <i aria-hidden="true" class="bwi bwi-plus bwi-fw"></i>
     {{ "addEmergencyContact" | i18n }}
   </button>
@@ -43,7 +43,7 @@
         ></bit-avatar>
       </td>
       <td bitCell>
-        <button type="button" bitLink (click)="edit(c)">{{ c.email }}</button>
+        <button type="button" bitLink (click)="edit(c)" [disabled]="disabled">{{ c.email }}</button>
 
         <app-emergency-access-status-badges
           [status]="c.status"
@@ -61,6 +61,7 @@
           bitIconButton="bwi-ellipsis-v"
           type="button"
           appA11yTitle="{{ 'options' | i18n }}"
+          [disabled]="disabled"
         ></button>
         <bit-menu #trustedContactOptions>
           <button
@@ -126,9 +127,7 @@
   </ng-container>
 </ng-container>
 
-<div
-  class="tw-mt-10 tw-flex tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-pb-2"
->
+<div class="tw-pb-2">
   <h2 bitTypography="h2" noMargin class="tw-mb-0 tw-grow tw-self-end">
     {{ "designatedEmergencyContacts" | i18n }}
   </h2>
@@ -164,6 +163,7 @@
           bitIconButton="bwi-ellipsis-v"
           type="button"
           appA11yTitle="{{ 'options' | i18n }}"
+          [disabled]="disabled"
         ></button>
         <bit-menu #grantedContactOptions>
           <button

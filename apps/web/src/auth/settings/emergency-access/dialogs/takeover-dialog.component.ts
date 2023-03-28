@@ -1,34 +1,35 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { takeUntil } from "rxjs";
 
 import { ChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
 import { InputsFieldMatch } from "@bitwarden/angular/validators/inputsFieldMatch.validator";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
-import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
-import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
-import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
-import { EmergencyAccessPasswordRequest } from "@bitwarden/common/auth/models/request/emergency-access-password.request";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+
+import { EmergencyAccessService } from "../emergency-access.service";
+
+export type TakeoverData = {
+  id: string;
+
+  name: string;
+  email: string;
+};
 
 @Component({
   templateUrl: "takeover-dialog.component.html",
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TakeoverDialogComponent extends ChangePasswordComponent implements OnInit, OnDestroy {
-  emergencyAccessId: string;
-  name: string;
-  email: string;
+  private emergencyAccessId: string;
+
+  protected name: string;
+  protected email: string;
+  protected showPassword = false;
 
   protected formGroup = this.formBuilder.group(
     {
@@ -43,7 +44,6 @@ export class TakeoverDialogComponent extends ChangePasswordComponent implements 
       ),
     }
   );
-  protected showPassword = false;
 
   constructor(
     @Inject(DIALOG_DATA) private data: any,
@@ -55,9 +55,8 @@ export class TakeoverDialogComponent extends ChangePasswordComponent implements 
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     platformUtilsService: PlatformUtilsService,
     policyService: PolicyService,
-    private apiService: ApiService,
-    private logService: LogService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private emergencyAccessService: EmergencyAccessService
   ) {
     super(
       i18nService,
@@ -71,20 +70,15 @@ export class TakeoverDialogComponent extends ChangePasswordComponent implements 
   }
 
   async ngOnInit() {
-    const response = await this.apiService.getEmergencyGrantorPolicies(this.emergencyAccessId);
-    if (response.data != null && response.data.length > 0) {
-      const policies = response.data.map(
-        (policyResponse: PolicyResponse) => new Policy(new PolicyData(policyResponse))
-      );
+    this.emergencyAccessId = this.data.id;
+    this.name = this.data.name;
+    this.email = this.data.email;
 
-      this.policyService
-        .masterPasswordPolicyOptions$(policies)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((enforcedPolicyOptions) => (this.enforcedPolicyOptions = enforcedPolicyOptions));
-    }
+    this.enforcedPolicyOptions = await this.emergencyAccessService.getPasswordPolicies(
+      this.emergencyAccessId
+    );
   }
 
-  // eslint-disable-next-line rxjs-angular/prefer-takeuntil
   ngOnDestroy(): void {
     super.ngOnDestroy();
   }
@@ -94,41 +88,17 @@ export class TakeoverDialogComponent extends ChangePasswordComponent implements 
       return;
     }
 
-    const takeoverResponse = await this.apiService.postEmergencyAccessTakeover(
-      this.emergencyAccessId
+    this.emergencyAccessService.takeover(
+      this.emergencyAccessId,
+      this.formGroup.value.masterPassword,
+      this.email
     );
 
-    const oldKeyBuffer = await this.cryptoService.rsaDecrypt(takeoverResponse.keyEncrypted);
-    const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer);
-
-    if (oldEncKey == null) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("unexpectedError")
-      );
-      return;
-    }
-
-    const key = await this.cryptoService.makeKey(
-      this.masterPassword,
-      this.email,
-      takeoverResponse.kdf,
-      new KdfConfig(
-        takeoverResponse.kdfIterations,
-        takeoverResponse.kdfMemory,
-        takeoverResponse.kdfParallelism
-      )
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("passwordResetFor", this.name)
     );
-    const masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, key);
-
-    const encKey = await this.cryptoService.remakeEncKey(key, oldEncKey);
-
-    const request = new EmergencyAccessPasswordRequest();
-    request.newMasterPasswordHash = masterPasswordHash;
-    request.key = encKey[1].encryptedString;
-
-    this.apiService.postEmergencyAccessPassword(this.emergencyAccessId, request);
 
     this.dialogRef.close();
   };

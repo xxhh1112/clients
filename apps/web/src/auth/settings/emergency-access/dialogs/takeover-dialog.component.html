@@ -28,7 +28,7 @@
 
       <app-password-strength
         [password]="formGroup.value.masterPassword"
-        [email]="this.email"
+        [email]="email"
         [showText]="true"
         (passwordStrengthResult)="getStrengthResult($event)"
         class="tw-mb-3 tw-block"
