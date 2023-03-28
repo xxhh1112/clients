@@ -13,6 +13,7 @@ import { PolicyService } from "@bitwarden/common/admin-console/services/policy/p
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
+import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
@@ -21,6 +22,7 @@ import { ClientType, KeySuffixOptions, LogLevelType } from "@bitwarden/common/en
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { ApiHelperServiceImplementation } from "@bitwarden/common/services/api-helper.service.implementation";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
@@ -87,6 +89,7 @@ export class Main {
   cryptoService: CryptoService;
   tokenService: TokenService;
   appIdService: AppIdService;
+  apiHelperService: ApiHelperServiceImplementation;
   apiService: NodeApiService;
   environmentService: EnvironmentService;
   settingsService: SettingsService;
@@ -107,6 +110,7 @@ export class Main {
   searchService: SearchService;
   cryptoFunctionService: NodeCryptoFunctionService;
   encryptService: EncryptServiceImplementation;
+  tokenApiService: TokenApiServiceImplementation;
   authService: AuthService;
   policyService: PolicyService;
   program: Program;
@@ -202,12 +206,27 @@ export class Main {
       " (" +
       this.platformUtilsService.getDeviceString().toUpperCase() +
       ")";
-    this.apiService = new NodeApiService(
-      this.tokenService,
+
+    this.apiHelperService = new ApiHelperServiceImplementation(
       this.platformUtilsService,
       this.environmentService,
-      this.appIdService,
       async (expired: boolean) => await this.logout(),
+      customUserAgent
+    );
+
+    this.tokenApiService = new TokenApiServiceImplementation(
+      this.platformUtilsService,
+      this.environmentService,
+      this.tokenService,
+      this.appIdService,
+      this.apiHelperService
+    );
+
+    this.apiService = new NodeApiService(
+      this.platformUtilsService,
+      this.environmentService,
+      this.apiHelperService,
+      this.tokenApiService,
       customUserAgent
     );
 
@@ -303,7 +322,8 @@ export class Main {
       this.stateService,
       this.twoFactorService,
       this.i18nService,
-      this.encryptService
+      this.encryptService,
+      this.tokenApiService
     );
 
     const lockedCallback = async () =>
@@ -349,6 +369,7 @@ export class Main {
       this.folderApiService,
       this.organizationService,
       this.sendApiService,
+      this.tokenApiService,
       async (expired: boolean) => await this.logout()
     );
 
