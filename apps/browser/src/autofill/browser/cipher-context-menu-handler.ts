@@ -47,9 +47,10 @@ export class CipherContextMenuHandler {
     const stateFactory = new StateFactory(GlobalState, Account);
     let searchService: SearchService | null = null;
     const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
-      apiServiceOptions: {
+      apiHelperServiceOptions: {
         logoutCallback: NOT_IMPLEMENTED,
       },
+      apiServiceOptions: {},
       cipherServiceOptions: {
         searchServiceFactory: () => searchService,
       },

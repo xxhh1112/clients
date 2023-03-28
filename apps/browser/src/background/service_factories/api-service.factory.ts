@@ -2,11 +2,11 @@ import { ApiService as AbstractApiService } from "@bitwarden/common/abstractions
 import { ApiService } from "@bitwarden/common/services/api.service";
 
 import {
-  tokenServiceFactory,
-  TokenServiceInitOptions,
-} from "../../auth/background/service-factories/token-service.factory";
+  tokenApiServiceFactory,
+  TokenApiServiceInitOptions,
+} from "../../auth/background/service-factories/token-api-service.factory";
 
-import { AppIdServiceInitOptions, appIdServiceFactory } from "./app-id-service.factory";
+import { apiHelperServiceFactory, ApiHelperServiceInitOptions } from "./api-helper-service.factory";
 import {
   environmentServiceFactory,
   EnvironmentServiceInitOptions,
@@ -19,16 +19,15 @@ import {
 
 type ApiServiceFactoryOptions = FactoryOptions & {
   apiServiceOptions: {
-    logoutCallback: (expired: boolean) => Promise<void>;
     customUserAgent?: string;
   };
 };
 
 export type ApiServiceInitOptions = ApiServiceFactoryOptions &
-  TokenServiceInitOptions &
   PlatformUtilsServiceInitOptions &
   EnvironmentServiceInitOptions &
-  AppIdServiceInitOptions;
+  ApiHelperServiceInitOptions &
+  TokenApiServiceInitOptions;
 
 export function apiServiceFactory(
   cache: { apiService?: AbstractApiService } & CachedServices,
@@ -40,11 +39,10 @@ export function apiServiceFactory(
     opts,
     async () =>
       new ApiService(
-        await tokenServiceFactory(cache, opts),
         await platformUtilsServiceFactory(cache, opts),
         await environmentServiceFactory(cache, opts),
-        await appIdServiceFactory(cache, opts),
-        opts.apiServiceOptions.logoutCallback,
+        await apiHelperServiceFactory(cache, opts),
+        await tokenApiServiceFactory(cache, opts),
         opts.apiServiceOptions.customUserAgent
       )
   );

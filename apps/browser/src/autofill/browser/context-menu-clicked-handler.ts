@@ -65,7 +65,8 @@ export class ContextMenuClickedHandler {
     const stateFactory = new StateFactory(GlobalState, Account);
     let searchService: SearchService | null = null;
     const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
-      apiServiceOptions: {
+      apiServiceOptions: {},
+      apiHelperServiceOptions: {
         logoutCallback: NOT_IMPLEMENTED,
       },
       cipherServiceOptions: {
