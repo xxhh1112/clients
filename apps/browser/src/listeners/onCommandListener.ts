@@ -50,7 +50,8 @@ const doAutoFillLogin = async (tab: chrome.tabs.Tab): Promise<void> => {
     stateMigrationServiceOptions: {
       stateFactory: new StateFactory(GlobalState, Account),
     },
-    apiServiceOptions: {
+    apiServiceOptions: {},
+    apiHelperServiceOptions: {
       logoutCallback: () => Promise.resolve(),
     },
     keyConnectorServiceOptions: {

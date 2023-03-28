@@ -1,4 +1,5 @@
 import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
+import { ApiHelperService as ApiHelperServiceAbstraction } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -36,10 +37,12 @@ import { PolicyApiService } from "@bitwarden/common/admin-console/services/polic
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
+import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
@@ -47,6 +50,7 @@ import { UserVerificationService } from "@bitwarden/common/auth/services/user-ve
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
+import { ApiHelperServiceImplementation } from "@bitwarden/common/services/api-helper.service.implementation";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -140,6 +144,8 @@ export default class MainBackground {
   cryptoFunctionService: CryptoFunctionServiceAbstraction;
   tokenService: TokenServiceAbstraction;
   appIdService: AppIdServiceAbstraction;
+  tokenApiService: TokenApiServiceAbstraction;
+  apiHelperService: ApiHelperServiceAbstraction;
   apiService: ApiServiceAbstraction;
   environmentService: BrowserEnvironmentService;
   settingsService: SettingsServiceAbstraction;
@@ -290,13 +296,28 @@ export default class MainBackground {
     this.tokenService = new TokenService(this.stateService);
     this.appIdService = new AppIdService(this.storageService);
     this.environmentService = new BrowserEnvironmentService(this.stateService, this.logService);
-    this.apiService = new ApiService(
-      this.tokenService,
+
+    this.apiHelperService = new ApiHelperServiceImplementation(
       this.platformUtilsService,
       this.environmentService,
-      this.appIdService,
       (expired: boolean) => this.logout(expired)
     );
+
+    this.tokenApiService = new TokenApiServiceImplementation(
+      this.platformUtilsService,
+      this.environmentService,
+      this.tokenService,
+      this.appIdService,
+      this.apiHelperService
+    );
+
+    this.apiService = new ApiService(
+      this.platformUtilsService,
+      this.environmentService,
+      this.apiHelperService,
+      this.tokenApiService
+    );
+
     this.settingsService = new BrowserSettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService);
     this.cipherFileUploadService = new CipherFileUploadService(
@@ -378,7 +399,8 @@ export default class MainBackground {
       this.stateService,
       this.twoFactorService,
       this.i18nService,
-      this.encryptService
+      this.encryptService,
+      this.tokenApiService
     );
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
@@ -433,6 +455,7 @@ export default class MainBackground {
       this.folderApiService,
       this.organizationService,
       this.sendApiService,
+      this.tokenApiService,
       logoutCallback
     );
     this.eventUploadService = new EventUploadService(
@@ -478,7 +501,8 @@ export default class MainBackground {
       this.logService,
       this.stateService,
       this.authService,
-      this.messagingService
+      this.messagingService,
+      this.tokenApiService
     );
 
     this.userVerificationApiService = new UserVerificationApiService(this.apiService);

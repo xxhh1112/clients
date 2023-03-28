@@ -266,14 +266,15 @@ export class UpdateBadge {
       stateMigrationServiceOptions: {
         stateFactory: new StateFactory(GlobalState, Account),
       },
-      apiServiceOptions: {
-        logoutCallback: () => Promise.reject("not implemented"),
-      },
+      apiServiceOptions: {},
       keyConnectorServiceOptions: {
         logoutCallback: () => Promise.reject("not implemented"),
       },
       i18nServiceOptions: {
         systemLanguage: BrowserApi.getUILanguage(self),
+      },
+      apiHelperServiceOptions: {
+        logoutCallback: () => Promise.reject("not implemented"),
       },
     };
     this.stateService = await stateServiceFactory(serviceCache, opts);

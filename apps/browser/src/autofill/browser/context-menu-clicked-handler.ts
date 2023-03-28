@@ -62,7 +62,8 @@ export class ContextMenuClickedHandler {
   static async mv3Create(cachedServices: CachedServices) {
     const stateFactory = new StateFactory(GlobalState, Account);
     const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
-      apiServiceOptions: {
+      apiServiceOptions: {},
+      apiHelperServiceOptions: {
         logoutCallback: NOT_IMPLEMENTED,
       },
       cryptoFunctionServiceOptions: {

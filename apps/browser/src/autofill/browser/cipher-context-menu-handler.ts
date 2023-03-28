@@ -44,9 +44,10 @@ export class CipherContextMenuHandler {
   static async create(cachedServices: CachedServices) {
     const stateFactory = new StateFactory(GlobalState, Account);
     const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
-      apiServiceOptions: {
+      apiHelperServiceOptions: {
         logoutCallback: NOT_IMPLEMENTED,
       },
+      apiServiceOptions: {},
       cryptoFunctionServiceOptions: {
         win: self,
       },
