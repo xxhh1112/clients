@@ -986,6 +986,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
       return false;
     }
 
+    let confirmResult: boolean;
     return savedURLs.some((url) => url?.indexOf("https://") === 0) &&
       "http:" === document.location.protocol &&
       ((passwordInputs = queryPasswordInputs()),
@@ -993,7 +994,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
         ((confirmResult = confirm(
           "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page.\n\nDo you still wish to fill this login?"
         )),
-        0 == confirmResult))
+        false == confirmResult))
       ? true
       : false;
   }
