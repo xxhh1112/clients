@@ -1385,9 +1385,6 @@ function fill(document: Document, fillScript: AutofillScript): string {
         (theElement = filteredElements[0]),
           1 < filteredElements.length &&
             console.warn("More than one element found with opid " + theOpId);
-      } else {
-        var elIndex = parseInt(theOpId.split("__")[1], 10);
-        isNaN(elIndex) || (theElement = elements[elIndex]);
       }
     } catch (e) {
       console.error("An unexpected error occurred: " + e);
