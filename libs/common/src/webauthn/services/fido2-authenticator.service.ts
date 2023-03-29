@@ -146,25 +146,28 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
-    let credentialOptions: Fido2KeyView[];
+    let credentialOptions: CipherView[];
 
     // eslint-disable-next-line no-empty
     if (params.allowCredentialDescriptorList?.length > 0) {
-      const ciphers = await this.findNonDiscoverableCredentials(
+      credentialOptions = await this.findNonDiscoverableCredentials(
         params.allowCredentialDescriptorList,
         params.rpId
       );
-      credentialOptions = ciphers.map((c) => c.fido2Key);
     } else {
-      const ciphers = await this.findDiscoverableCredentials(params.rpId);
-      credentialOptions = ciphers.map((c) => c.fido2Key);
+      credentialOptions = await this.findDiscoverableCredentials(params.rpId);
     }
 
     if (credentialOptions.length === 0) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    throw new Error("Not implemented");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const selectedCredential = await this.userInterface.pickCredential(
+      credentialOptions.map((cipher) => cipher.id)
+    );
+
+    return null;
   }
 
   private async vaultContainsCredentials(

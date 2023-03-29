@@ -7,8 +7,8 @@ import { Utils } from "../../misc/utils";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CipherType } from "../../vault/enums/cipher-type";
 import { Cipher } from "../../vault/models/domain/cipher";
-import { Login } from "../../vault/models/domain/login";
 import { CipherView } from "../../vault/models/view/cipher.view";
+import { LoginView } from "../../vault/models/view/login.view";
 import {
   Fido2AutenticatorErrorCode,
   Fido2AuthenticatorGetAssertionParams,
@@ -19,7 +19,7 @@ import {
   NewCredentialParams,
 } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
-import { Fido2Key } from "../models/domain/fido2-key";
+import { Fido2KeyView } from "../models/view/fido2-key.view";
 
 import { AAGUID, Fido2AuthenticatorService } from "./fido2-authenticator.service";
 
@@ -93,25 +93,26 @@ describe("FidoAuthenticatorService", () => {
     describe.skip("when extensions parameter is present", () => undefined);
 
     describe("vault contains excluded non-discoverable credential", () => {
-      let excludedCipherView: CipherView;
+      let excludedCipher: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        const excludedCipher = createCipher({ type: CipherType.Login });
-        excludedCipherView = await excludedCipher.decrypt();
-        excludedCipherView.fido2Key.nonDiscoverableId = Utils.newGuid();
+        excludedCipher = createCipherView(
+          { type: CipherType.Login },
+          { nonDiscoverableId: Utils.newGuid() }
+        );
         params = await createParams({
           excludeCredentialDescriptorList: [
             {
-              id: Utils.guidToRawFormat(excludedCipherView.fido2Key.nonDiscoverableId),
+              id: Utils.guidToRawFormat(excludedCipher.fido2Key.nonDiscoverableId),
               type: "public-key",
             },
           ],
         });
         cipherService.get.mockImplementation(async (id) =>
-          id === excludedCipher.id ? excludedCipher : undefined
+          id === excludedCipher.id ? ({ decrypt: () => excludedCipher } as any) : undefined
         );
-        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
+        cipherService.getAllDecrypted.mockResolvedValue([excludedCipher]);
       });
 
       /**
@@ -161,8 +162,8 @@ describe("FidoAuthenticatorService", () => {
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        const excludedCipher = createCipher();
-        excludedCipherView = await excludedCipher.decrypt();
+        const excludedCipher = createCipherView();
+        excludedCipherView = await excludedCipher;
         params = await createParams({
           excludeCredentialDescriptorList: [
             { id: Utils.guidToRawFormat(excludedCipher.id), type: "public-key" },
@@ -300,19 +301,16 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("creation of non-discoverable credential", () => {
-      let existingCipherView: CipherView;
+      let existingCipher: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        const existingCipher = createCipher({ type: CipherType.Login });
-        existingCipher.login = new Login();
-        existingCipher.fido2Key = undefined;
-        existingCipherView = await existingCipher.decrypt();
+        existingCipher = createCipherView({ type: CipherType.Login });
         params = await createParams();
         cipherService.get.mockImplementation(async (id) =>
-          id === existingCipher.id ? existingCipher : undefined
+          id === existingCipher.id ? ({ decrypt: () => existingCipher } as any) : undefined
         );
-        cipherService.getAllDecrypted.mockResolvedValue([existingCipherView]);
+        cipherService.getAllDecrypted.mockResolvedValue([existingCipher]);
       });
 
       /**
@@ -320,7 +318,7 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
        * */
       it("should request confirmation from user", async () => {
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
 
         await authenticator.makeCredential(params);
 
@@ -332,7 +330,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = Symbol();
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
 
         await authenticator.makeCredential(params);
@@ -341,7 +339,7 @@ describe("FidoAuthenticatorService", () => {
         expect(saved).toEqual(
           expect.objectContaining({
             type: CipherType.Login,
-            name: existingCipherView.name,
+            name: existingCipher.name,
 
             fido2Key: expect.objectContaining({
               nonDiscoverableId: expect.anything(),
@@ -372,7 +370,7 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = Symbol();
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipherView.id);
+        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
 
@@ -399,14 +397,14 @@ describe("FidoAuthenticatorService", () => {
         let params: Fido2AuthenticatorMakeCredentialsParams;
 
         beforeEach(async () => {
-          const cipher = createCipher({ id: cipherId, type: CipherType.Login });
+          const cipher = createCipherView({ id: cipherId, type: CipherType.Login });
           params = await createParams({ requireResidentKey });
           userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(cipherId);
           userInterface.confirmNewCredential.mockResolvedValue(true);
           cipherService.get.mockImplementation(async (cipherId) =>
-            cipherId === cipher.id ? cipher : undefined
+            cipherId === cipher.id ? ({ decrypt: () => cipher } as any) : undefined
           );
-          cipherService.getAllDecrypted.mockResolvedValue([await cipher.decrypt()]);
+          cipherService.getAllDecrypted.mockResolvedValue([await cipher]);
           cipherService.encrypt.mockImplementation(async (cipher) => {
             cipher.fido2Key.nonDiscoverableId = nonDiscoverableId; // Replace id for testability
             return {} as any;
@@ -537,14 +535,14 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("vault is missing non-discoverable credential", () => {
-      let excludedId: string;
+      let credentialId: string;
       let params: Fido2AuthenticatorGetAssertionParams;
 
       beforeEach(async () => {
-        excludedId = Utils.newGuid();
+        credentialId = Utils.newGuid();
         params = await createParams({
           allowCredentialDescriptorList: [
-            { id: Utils.guidToRawFormat(excludedId), type: "public-key" },
+            { id: Utils.guidToRawFormat(credentialId), type: "public-key" },
           ],
           rpId: RpId,
         });
@@ -560,8 +558,8 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should throw error if credential exists but rpId does not match", async () => {
-        const cipher = await createCipher({ type: CipherType.Login }).decrypt();
-        cipher.fido2Key.nonDiscoverableId = excludedId;
+        const cipher = await createCipherView({ type: CipherType.Login });
+        cipher.fido2Key.nonDiscoverableId = credentialId;
         cipher.fido2Key.rpId = "mismatch-rpid";
         cipherService.getAllDecrypted.mockResolvedValue([cipher]);
 
@@ -587,6 +585,36 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.getAssertion(params);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+    });
+
+    describe("assertion of non-discoverable credential", () => {
+      let credentialIds: string[];
+      let ciphers: CipherView[];
+      let params: Fido2AuthenticatorGetAssertionParams;
+
+      beforeEach(async () => {
+        credentialIds = [Utils.newGuid(), Utils.newGuid()];
+        ciphers = await Promise.all(
+          credentialIds.map((id) =>
+            createCipherView({ type: CipherType.Login }, { nonDiscoverableId: id, rpId: RpId })
+          )
+        );
+        params = await createParams({
+          allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
+            id: Utils.guidToRawFormat(credentialId),
+            type: "public-key",
+          })),
+          rpId: RpId,
+        });
+        cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+      });
+
+      /** Spec: Prompt the user to select a public key credential source selectedCredential from credentialOptions. */
+      it("should request confirmation from the user", async () => {
+        await authenticator.getAssertion(params);
+
+        expect(userInterface.pickCredential).toHaveBeenCalledWith(ciphers.map((c) => c.id));
       });
     });
 
@@ -616,12 +644,17 @@ describe("FidoAuthenticatorService", () => {
   });
 });
 
-function createCipher(data: Partial<Cipher> = {}): Cipher {
-  const cipher = new Cipher();
+function createCipherView(
+  data: Partial<Omit<CipherView, "fido2Key">> = {},
+  fido2Key: Partial<Fido2KeyView> = {}
+): CipherView {
+  const cipher = new CipherView();
   cipher.id = data.id ?? Utils.newGuid();
   cipher.type = data.type ?? CipherType.Fido2Key;
-  cipher.login = data.type ?? data.type === CipherType.Login ? new Login() : null;
-  cipher.fido2Key = data.fido2Key ?? new Fido2Key();
+  cipher.login = data.type ?? data.type === CipherType.Login ? new LoginView() : null;
+  cipher.fido2Key = new Fido2KeyView();
+  cipher.fido2Key.nonDiscoverableId = fido2Key.nonDiscoverableId;
+  cipher.fido2Key.rpId = fido2Key.rpId;
   return cipher;
 }
 
