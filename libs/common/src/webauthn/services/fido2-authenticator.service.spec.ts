@@ -537,14 +537,49 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("vault is missing non-discoverable credential", () => {
+      let excludedId: string;
+      let params: Fido2AuthenticatorGetAssertionParams;
+
+      beforeEach(async () => {
+        excludedId = Utils.newGuid();
+        params = await createParams({
+          allowCredentialDescriptorList: [
+            { id: Utils.guidToRawFormat(excludedId), type: "public-key" },
+          ],
+          rpId: RpId,
+        });
+      });
+
+      /** Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation. */
+      it("should throw error if no credential exists", async () => {
+        cipherService.getAllDecrypted.mockResolvedValue([]);
+
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+
+      it("should throw error if credential exists but rpId does not match", async () => {
+        const cipher = await createCipher({ type: CipherType.Login }).decrypt();
+        cipher.fido2Key.nonDiscoverableId = excludedId;
+        cipher.fido2Key.rpId = "mismatch-rpid";
+        cipherService.getAllDecrypted.mockResolvedValue([cipher]);
+
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+    });
+
+    describe("vault is missing discoverable credential", () => {
       let params: Fido2AuthenticatorGetAssertionParams;
 
       beforeEach(async () => {
         params = await createParams({
-          allowCredentialDescriptorList: [
-            { id: Utils.guidToRawFormat(Utils.newGuid()), type: "public-key" },
-          ],
+          allowCredentialDescriptorList: [],
+          rpId: RpId,
         });
+        cipherService.getAllDecrypted.mockResolvedValue([]);
       });
 
       /** Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation. */

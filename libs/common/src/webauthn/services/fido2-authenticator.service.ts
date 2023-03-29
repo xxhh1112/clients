@@ -146,6 +146,24 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
+    let credentialOptions: Fido2KeyView[];
+
+    // eslint-disable-next-line no-empty
+    if (params.allowCredentialDescriptorList?.length > 0) {
+      const ciphers = await this.findNonDiscoverableCredentials(
+        params.allowCredentialDescriptorList,
+        params.rpId
+      );
+      credentialOptions = ciphers.map((c) => c.fido2Key);
+    } else {
+      const ciphers = await this.findDiscoverableCredentials(params.rpId);
+      credentialOptions = ciphers.map((c) => c.fido2Key);
+    }
+
+    if (credentialOptions.length === 0) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+    }
+
     throw new Error("Not implemented");
   }
 
@@ -172,6 +190,40 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         (cipher.type === CipherType.Login &&
           cipher.fido2Key != undefined &&
           ids.includes(cipher.fido2Key.nonDiscoverableId))
+    );
+  }
+
+  private async findNonDiscoverableCredentials(
+    credentials: PublicKeyCredentialDescriptor[],
+    rpId: string
+  ): Promise<CipherView[]> {
+    const ids: string[] = [];
+
+    for (const credential of credentials) {
+      try {
+        ids.push(Utils.guidToStandardFormat(credential.id));
+        // eslint-disable-next-line no-empty
+      } catch {}
+    }
+
+    if (ids.length === 0) {
+      return undefined;
+    }
+
+    const ciphers = await this.cipherService.getAllDecrypted();
+    return ciphers.filter(
+      (cipher) =>
+        cipher.type === CipherType.Login &&
+        cipher.fido2Key != undefined &&
+        cipher.fido2Key.rpId === rpId &&
+        ids.includes(cipher.fido2Key.nonDiscoverableId)
+    );
+  }
+
+  private async findDiscoverableCredentials(rpId: string): Promise<CipherView[]> {
+    const ciphers = await this.cipherService.getAllDecrypted();
+    return ciphers.filter(
+      (cipher) => cipher.type === CipherType.Fido2Key && cipher.fido2Key.rpId === rpId
     );
   }
 
