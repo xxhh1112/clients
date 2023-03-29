@@ -1821,7 +1821,6 @@ export class ApiService implements ApiServiceAbstraction {
     apiUrl?: string,
     alterHeaders?: (headers: Headers) => void
   ): Promise<any> {
-    // TODO: test that this works
     if (authed) {
       const originalAlterHeaders = alterHeaders;
       // Modify the alterHeaders function to include the auth header
@@ -1829,7 +1828,10 @@ export class ApiService implements ApiServiceAbstraction {
         const activeAccessToken = await this.tokenApiService.getActiveBearerToken();
         headers.set("Authorization", "Bearer " + activeAccessToken);
 
-        originalAlterHeaders(headers);
+        // Execute the original function if it exists
+        if (originalAlterHeaders) {
+          originalAlterHeaders(headers);
+        }
       };
     }
 
