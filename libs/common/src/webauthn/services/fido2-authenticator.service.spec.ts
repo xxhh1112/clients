@@ -588,7 +588,7 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    describe("assertion of non-discoverable credential", () => {
+    describe("vault contains credential", () => {
       let credentialIds: string[];
       let ciphers: CipherView[];
       let params: Fido2AuthenticatorGetAssertionParams;
@@ -612,9 +612,65 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: Prompt the user to select a public key credential source selectedCredential from credentialOptions. */
       it("should request confirmation from the user", async () => {
+        userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
+
         await authenticator.getAssertion(params);
 
         expect(userInterface.pickCredential).toHaveBeenCalledWith(ciphers.map((c) => c.id));
+      });
+
+      /** Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation. */
+      it("should throw error", async () => {
+        userInterface.pickCredential.mockResolvedValue(undefined);
+
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+    });
+
+    describe("assertion of non-discoverable credential", () => {
+      let credentialIds: string[];
+      let ciphers: CipherView[];
+      let params: Fido2AuthenticatorGetAssertionParams;
+
+      beforeEach(async () => {
+        credentialIds = [Utils.newGuid(), Utils.newGuid()];
+        ciphers = await Promise.all(
+          credentialIds.map((id) =>
+            createCipherView(
+              { type: CipherType.Login },
+              { nonDiscoverableId: id, rpId: RpId, counter: 9000 }
+            )
+          )
+        );
+        params = await createParams({
+          allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
+            id: Utils.guidToRawFormat(credentialId),
+            type: "public-key",
+          })),
+          rpId: RpId,
+        });
+        cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+        userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
+      });
+
+      /** Spec: Increment the credential associated signature counter */
+      it("should increment counter", async () => {
+        const encrypted = Symbol();
+        cipherService.encrypt.mockResolvedValue(encrypted as any);
+
+        await authenticator.getAssertion(params);
+
+        expect(cipherService.encrypt).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: ciphers[0].id,
+            fido2Key: expect.objectContaining({
+              counter: 9001,
+            }),
+          })
+        );
+        expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
       });
     });
 
@@ -651,10 +707,12 @@ function createCipherView(
   const cipher = new CipherView();
   cipher.id = data.id ?? Utils.newGuid();
   cipher.type = data.type ?? CipherType.Fido2Key;
+  cipher.localData = {};
   cipher.login = data.type ?? data.type === CipherType.Login ? new LoginView() : null;
   cipher.fido2Key = new Fido2KeyView();
   cipher.fido2Key.nonDiscoverableId = fido2Key.nonDiscoverableId;
-  cipher.fido2Key.rpId = fido2Key.rpId;
+  cipher.fido2Key.rpId = fido2Key.rpId ?? RpId;
+  cipher.fido2Key.counter = fido2Key.counter ?? 0;
   return cipher;
 }
 

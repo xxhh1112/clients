@@ -162,12 +162,19 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const selectedCredential = await this.userInterface.pickCredential(
+    const selectedCredentialId = await this.userInterface.pickCredential(
       credentialOptions.map((cipher) => cipher.id)
     );
+    const selectedCredential = credentialOptions.find((c) => c.id === selectedCredentialId);
 
-    return null;
+    if (selectedCredential === undefined) {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+    }
+
+    ++selectedCredential.fido2Key.counter;
+    selectedCredential.localData.lastUsedDate = new Date().getTime();
+    const encrypted = await this.cipherService.encrypt(selectedCredential);
+    await this.cipherService.updateWithServer(encrypted);
   }
 
   private async vaultContainsCredentials(
