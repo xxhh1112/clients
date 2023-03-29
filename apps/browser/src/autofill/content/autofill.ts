@@ -39,7 +39,11 @@
   */
 
 import AutofillPageDetails from "../models/autofill-page-details";
-import AutofillScript, { FillScript, FillScriptOp } from "../models/autofill-script";
+import AutofillScript, {
+  AutofillScriptOptions,
+  FillScript,
+  FillScriptOp,
+} from "../models/autofill-script";
 
 /**
  * The Document with additional custom properties added by this script
@@ -930,12 +934,12 @@ function fill(document: Document, fillScript: AutofillScript): string {
   }
 
   function doFill(fillScript: AutofillScript) {
-    var fillScriptOps,
+    var fillScriptOps: AutofillScriptOptions | FillScript[], // This variable is re-assigned and its type changes
       theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
       operationDelayMs = 1,
-      doOperation: (ops: FillScript[], theOperation: () => void) => void,
-      operationsToDo: string[] = [];
+      doOperation: (ops: any, theOperation: () => void) => void,
+      operationsToDo: any[] = [];
 
     fillScriptProperties &&
       fillScriptProperties.delay_between_operations &&
@@ -962,13 +966,14 @@ function fill(document: Document, fillScript: AutofillScript): string {
     }
 
     doOperation = function (ops: FillScript[], theOperation) {
-      var op: FillScript = ops[0];
+      // Note: this allows for the FillScript to be an object or an array. We only ever use an array
+      var op = ops[0];
       if (void 0 === op) {
         theOperation();
       } else {
         // should we delay?
-        if ("delay" === op.operation || "delay" === op[0]) {
-          operationDelayMs = op.parameters ? op.parameters[0] : op[1];
+        if ("delay" === (op as any).operation || "delay" === op[0]) {
+          operationDelayMs = (op as any).parameters ? (op as any).parameters[0] : op[1];
         } else {
           if ((op = normalizeOp(op))) {
             for (var opIndex = 0; opIndex < op.length; opIndex++) {
@@ -984,6 +989,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
           );
         }
         setTimeout(function () {
+          // Recursively execute the next FillScript
           doOperation(ops.slice(1), theOperation);
         }, operationDelayMs);
       }
@@ -1020,21 +1026,27 @@ function fill(document: Document, fillScript: AutofillScript): string {
     touch_all_fields: touchAllFields,
     simple_set_value_by_query: doSimpleSetByQuery,
     focus_by_opid: doFocusByOpId,
-    delay: null as number,
+    delay: null as any,
   };
 
-  // normalize the op versus the reference
-  function normalizeOp(op) {
+  /**
+   * Performs the operation specified by the FillScript
+   */
+  function normalizeOp(op: FillScript) {
     var thisOperation: FillScriptOp;
+
+    // If the FillScript is an object - unused
     if (op.hasOwnProperty("operation") && op.hasOwnProperty("parameters")) {
-      (thisOperation = op.operation), (op = op.parameters);
+      (thisOperation = (op as any).operation), (op = (op as any).parameters);
     } else {
+      // If the FillScript is an array - this is what we use
       if ("[object Array]" === Object.prototype.toString.call(op)) {
-        (thisOperation = op[0]), (op = op.splice(1));
+        (thisOperation = op[0]), ((op as any) = op.splice(1));
       } else {
         return null;
       }
     }
+
     return thisFill.hasOwnProperty(thisOperation) ? thisFill[thisOperation].apply(this, op) : null;
   }
 

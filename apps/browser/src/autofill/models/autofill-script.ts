@@ -2,23 +2,24 @@
 export enum FillScriptOp {
   click = "click_on_opid",
   focus = "focus_by_opid",
-  fill = "fill_by_opid"
+  fill = "fill_by_opid",
+  delay = "delay",
 }
 
-export type FillScript = [op: FillScriptOp, opid: string, value?: string]
+export type FillScript = [op: FillScriptOp, opid: string, value?: string];
 
 export type AutofillScriptOptions = {
-  animate?: boolean,
-  markFilling?: boolean,
-}
+  animate?: boolean;
+  markFilling?: boolean;
+};
 
 export type AutofillScriptProperties = {
   delay_between_operations?: number;
-}
+};
 
 export default class AutofillScript {
   script: FillScript[] = [];
-  documentUUID: string = "";
+  documentUUID = "";
   properties: AutofillScriptProperties = {};
   options: AutofillScriptOptions = {};
   metadata: any = {}; // Unused, not written or read
