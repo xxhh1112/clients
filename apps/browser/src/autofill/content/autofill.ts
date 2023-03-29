@@ -938,7 +938,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
       theOpIds: string[] = [],
       fillScriptProperties = fillScript.properties,
       operationDelayMs = 1,
-      doOperation: (ops: any, theOperation: () => void) => void,
+      doOperation: (ops: any, callback: () => void) => void,
       operationsToDo: any[] = [];
 
     fillScriptProperties &&
@@ -965,11 +965,14 @@ function fill(document: Document, fillScript: AutofillScript): string {
       }
     }
 
-    doOperation = function (ops: FillScript[], theOperation) {
+    /**
+     * Performs all the operations specified in the `ops` FillScript array
+     */
+    doOperation = function (ops: FillScript[], callback) {
       // Note: this allows for the FillScript to be an object or an array. We only ever use an array
       var op = ops[0];
       if (void 0 === op) {
-        theOperation();
+        callback();
       } else {
         // should we delay?
         if ("delay" === (op as any).operation || "delay" === op[0]) {
@@ -990,7 +993,7 @@ function fill(document: Document, fillScript: AutofillScript): string {
         }
         setTimeout(function () {
           // Recursively execute the next FillScript
-          doOperation(ops.slice(1), theOperation);
+          doOperation(ops.slice(1), callback);
         }, operationDelayMs);
       }
     };
@@ -1017,8 +1020,11 @@ function fill(document: Document, fillScript: AutofillScript): string {
     });
   }
 
-  // fill for reference
-  var thisFill = {
+  /**
+   * This contains all possible FillScript operations, which matches the FillScriptOp enum. We only use some of them.
+   * This is accessed by indexing on the FillScriptOp, e.g. thisFill[FillScriptOp].
+   */
+  var thisFill: Record<FillScriptOp | string, any> = {
     fill_by_opid: doFillByOpId,
     fill_by_query: doFillByQuery,
     click_on_opid: doClickByOpId,
