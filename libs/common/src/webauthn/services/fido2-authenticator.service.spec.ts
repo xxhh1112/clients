@@ -92,7 +92,7 @@ describe("FidoAuthenticatorService", () => {
 
     describe.skip("when extensions parameter is present", () => undefined);
 
-    describe("when vault contains excluded non-discoverable credential", () => {
+    describe("vault contains excluded non-discoverable credential", () => {
       let excludedCipherView: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -150,9 +150,13 @@ describe("FidoAuthenticatorService", () => {
         }
         expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
       });
+
+      it.todo(
+        "should not throw error if the excluded credential has been marked as deleted in the vault"
+      );
     });
 
-    describe("when vault contains excluded discoverable credential", () => {
+    describe("vault contains excluded discoverable credential", () => {
       let excludedCipherView: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -206,6 +210,10 @@ describe("FidoAuthenticatorService", () => {
         }
         expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
       });
+
+      it.todo(
+        "should not throw error if the excluded credential has been marked as deleted in the vault"
+      );
     });
 
     describe("creation of discoverable credential", () => {
@@ -525,6 +533,25 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.getAssertion(params);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Constraint);
+      });
+    });
+
+    describe("vault is missing non-discoverable credential", () => {
+      let params: Fido2AuthenticatorGetAssertionParams;
+
+      beforeEach(async () => {
+        params = await createParams({
+          allowCredentialDescriptorList: [
+            { id: Utils.guidToRawFormat(Utils.newGuid()), type: "public-key" },
+          ],
+        });
+      });
+
+      /** Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation. */
+      it("should throw error", async () => {
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
     });
 
