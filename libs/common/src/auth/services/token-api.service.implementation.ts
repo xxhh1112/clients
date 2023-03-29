@@ -19,8 +19,6 @@ import { IdentityTwoFactorResponse } from "../models/response/identity-two-facto
  * Service for interacting with the Bitwarden Identity API for token management.
  */
 export class TokenApiServiceImplementation implements TokenApiServiceAbstraction {
-  private identityBaseUrl: string = this.environmentService.getIdentityUrl();
-
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
@@ -48,10 +46,12 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
 
     const fetchReq = await this.apiHelperService.createRequest(
       "POST",
-      `${this.identityBaseUrl}/connect/token`,
-      identityToken,
+      `${this.environmentService.getIdentityUrl()}/connect/token`,
+      this.apiHelperService.qsStringify(identityToken),
       true,
-      request.alterIdentityTokenHeaders
+      // Create an arrow function so that the alterIdentityTokenHeaders will be
+      // be called with the correct context for "this" and email will be defined in the method.
+      (headers) => request.alterIdentityTokenHeaders(headers)
     );
 
     const response = await this.apiHelperService.fetch(fetchReq);
@@ -122,7 +122,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
 
     const fetchReq = await this.apiHelperService.createRequest(
       "POST",
-      `${this.identityBaseUrl}/connect/token`,
+      `${this.environmentService.getIdentityUrl()}/connect/token`,
       requestBody,
       true
     );
