@@ -11,6 +11,7 @@ import { HashPurpose } from "../../enums";
 import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { AuthService } from "../abstractions/auth.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { PasswordLogInCredentials } from "../models/domain/log-in-credentials";
@@ -39,6 +40,7 @@ describe("PasswordLogInStrategy", () => {
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
   let twoFactorService: MockProxy<TwoFactorService>;
+  let tokenApiService: MockProxy<TokenApiService>;
   let authService: MockProxy<AuthService>;
 
   let passwordLogInStrategy: PasswordLogInStrategy;
@@ -54,6 +56,7 @@ describe("PasswordLogInStrategy", () => {
     logService = mock<LogService>();
     stateService = mock<StateService>();
     twoFactorService = mock<TwoFactorService>();
+    tokenApiService = mock<TokenApiService>();
     authService = mock<AuthService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
@@ -78,17 +81,18 @@ describe("PasswordLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
+      tokenApiService,
       authService
     );
     credentials = new PasswordLogInCredentials(email, masterPassword);
 
-    apiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
+    tokenApiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
   });
 
   it("sends master password credentials to the server", async () => {
     await passwordLogInStrategy.logIn(credentials);
 
-    expect(apiService.postIdentityToken).toHaveBeenCalledWith(
+    expect(tokenApiService.postIdentityToken).toHaveBeenCalledWith(
       expect.objectContaining({
         email: email,
         masterPasswordHash: hashedPassword,

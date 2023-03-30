@@ -9,6 +9,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { Utils } from "../../misc/utils";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { SsoLogInCredentials } from "../models/domain/log-in-credentials";
@@ -26,6 +27,7 @@ describe("SsoLogInStrategy", () => {
   let logService: MockProxy<LogService>;
   let stateService: MockProxy<StateService>;
   let twoFactorService: MockProxy<TwoFactorService>;
+  let tokenApiService: MockProxy<TokenApiService>;
   let keyConnectorService: MockProxy<KeyConnectorService>;
 
   let ssoLogInStrategy: SsoLogInStrategy;
@@ -49,6 +51,7 @@ describe("SsoLogInStrategy", () => {
     logService = mock<LogService>();
     stateService = mock<StateService>();
     twoFactorService = mock<TwoFactorService>();
+    tokenApiService = mock<TokenApiService>();
     keyConnectorService = mock<KeyConnectorService>();
 
     tokenService.getTwoFactorToken.mockResolvedValue(null);
@@ -65,17 +68,18 @@ describe("SsoLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
-      keyConnectorService
+      keyConnectorService,
+      tokenApiService
     );
     credentials = new SsoLogInCredentials(ssoCode, ssoCodeVerifier, ssoRedirectUrl, ssoOrgId);
   });
 
   it("sends SSO information to server", async () => {
-    apiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
+    tokenApiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
 
     await ssoLogInStrategy.logIn(credentials);
 
-    expect(apiService.postIdentityToken).toHaveBeenCalledWith(
+    expect(tokenApiService.postIdentityToken).toHaveBeenCalledWith(
       expect.objectContaining({
         code: ssoCode,
         codeVerifier: ssoCodeVerifier,
@@ -94,7 +98,7 @@ describe("SsoLogInStrategy", () => {
   it("does not set keys for new SSO user flow", async () => {
     const tokenResponse = identityTokenResponseFactory();
     tokenResponse.key = null;
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    tokenApiService.postIdentityToken.mockResolvedValue(tokenResponse);
 
     await ssoLogInStrategy.logIn(credentials);
 
@@ -106,7 +110,7 @@ describe("SsoLogInStrategy", () => {
     const tokenResponse = identityTokenResponseFactory();
     tokenResponse.keyConnectorUrl = keyConnectorUrl;
 
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    tokenApiService.postIdentityToken.mockResolvedValue(tokenResponse);
 
     await ssoLogInStrategy.logIn(credentials);
 
@@ -118,7 +122,7 @@ describe("SsoLogInStrategy", () => {
     tokenResponse.keyConnectorUrl = keyConnectorUrl;
     tokenResponse.key = null;
 
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    tokenApiService.postIdentityToken.mockResolvedValue(tokenResponse);
 
     await ssoLogInStrategy.logIn(credentials);
 
