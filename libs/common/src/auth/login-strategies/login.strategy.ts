@@ -98,7 +98,7 @@ export abstract class LogInStrategy {
   }
 
   protected async saveAccountInformation(tokenResponse: IdentityTokenResponse) {
-    const accountInformation = await this.tokenService.decodeToken(tokenResponse.accessToken);
+    const accountInformation = await this.tokenService.decodeAccessToken(tokenResponse.accessToken);
     await this.stateService.addAccount(
       new Account({
         profile: {

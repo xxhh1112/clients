@@ -28,10 +28,10 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
   ) {}
 
   async getActiveBearerToken(): Promise<string> {
-    let accessToken = await this.tokenService.getToken();
-    if (await this.tokenService.tokenNeedsRefresh()) {
+    let accessToken = await this.tokenService.getAccessToken();
+    if (await this.tokenService.accessTokenNeedsRefresh()) {
       await this.doAuthRefresh();
-      accessToken = await this.tokenService.getToken();
+      accessToken = await this.tokenService.getAccessToken();
     }
     return accessToken;
   }
@@ -112,7 +112,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
       throw new Error();
     }
 
-    const decodedToken = await this.tokenService.decodeToken();
+    const decodedToken = await this.tokenService.decodeAccessToken();
 
     const requestBody = this.apiHelperService.qsStringify({
       grant_type: "refresh_token",
@@ -161,6 +161,6 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
       throw new Error("Invalid response received when refreshing api token");
     }
 
-    await this.tokenService.setToken(response.accessToken);
+    await this.tokenService.setAccessToken(response.accessToken);
   }
 }

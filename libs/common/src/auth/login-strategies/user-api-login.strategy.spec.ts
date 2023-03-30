@@ -56,7 +56,7 @@ describe("UserApiLogInStrategy", () => {
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.getTwoFactorToken.mockResolvedValue(null);
-    tokenService.decodeToken.mockResolvedValue({});
+    tokenService.decodeAccessToken.mockResolvedValue({});
 
     apiLogInStrategy = new UserApiLogInStrategy(
       cryptoService,
