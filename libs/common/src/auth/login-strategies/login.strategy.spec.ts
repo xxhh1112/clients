@@ -97,7 +97,7 @@ describe("LogInStrategy", () => {
     authService = mock<AuthService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
-    tokenService.decodeToken.calledWith(accessToken).mockResolvedValue(decodedToken);
+    tokenService.decodeAccessToken.calledWith(accessToken).mockResolvedValue(decodedToken);
 
     // The base class is abstract so we test it via PasswordLogInStrategy
     passwordLogInStrategy = new PasswordLogInStrategy(

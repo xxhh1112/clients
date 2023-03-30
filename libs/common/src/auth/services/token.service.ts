@@ -4,7 +4,7 @@ import { TokenService as TokenServiceAbstraction } from "../abstractions/token.s
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 export class TokenService implements TokenServiceAbstraction {
-  static decodeToken(token: string): Promise<any> {
+  static decodeJwtToken(token: string): Promise<any> {
     if (token == null) {
       throw new Error("Token not provided.");
     }
@@ -30,7 +30,7 @@ export class TokenService implements TokenServiceAbstraction {
     refreshToken: string,
     clientIdClientSecret: [string, string]
   ): Promise<any> {
-    await this.setToken(accessToken);
+    await this.setAccessToken(accessToken);
     await this.setRefreshToken(refreshToken);
     if (clientIdClientSecret != null) {
       await this.setClientId(clientIdClientSecret[0]);
@@ -54,11 +54,11 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.getApiKeyClientSecret();
   }
 
-  async setToken(token: string): Promise<void> {
+  async setAccessToken(token: string): Promise<void> {
     await this.stateService.setAccessToken(token);
   }
 
-  async getToken(): Promise<string> {
+  async getAccessToken(): Promise<string> {
     return await this.stateService.getAccessToken();
   }
 
@@ -70,8 +70,8 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.getRefreshToken();
   }
 
-  async setTwoFactorToken(tokenResponse: IdentityTokenResponse): Promise<any> {
-    return await this.stateService.setTwoFactorToken(tokenResponse.twoFactorToken);
+  async setTwoFactorToken(idTokenResponse: IdentityTokenResponse): Promise<any> {
+    return await this.stateService.setTwoFactorToken(idTokenResponse.twoFactorToken);
   }
 
   async getTwoFactorToken(): Promise<string> {
@@ -82,7 +82,7 @@ export class TokenService implements TokenServiceAbstraction {
     return await this.stateService.setTwoFactorToken(null);
   }
 
-  async clearToken(userId?: string): Promise<any> {
+  async clearTokens(userId?: string): Promise<any> {
     await this.stateService.setAccessToken(null, { userId: userId });
     await this.stateService.setRefreshToken(null, { userId: userId });
     await this.stateService.setApiKeyClientId(null, { userId: userId });
@@ -92,44 +92,44 @@ export class TokenService implements TokenServiceAbstraction {
   // jwthelper methods
   // ref https://github.com/auth0/angular-jwt/blob/master/src/angularJwt/services/jwt.js
 
-  async decodeToken(token?: string): Promise<any> {
+  async decodeAccessToken(token?: string): Promise<any> {
     token = token ?? (await this.stateService.getAccessToken());
 
     if (token == null) {
       throw new Error("Token not found.");
     }
 
-    return TokenService.decodeToken(token);
+    return TokenService.decodeJwtToken(token);
   }
 
-  async getTokenExpirationDate(): Promise<Date> {
-    const decoded = await this.decodeToken();
-    if (typeof decoded.exp === "undefined") {
+  async getAccessTokenExpirationDate(): Promise<Date> {
+    const decodedAccessToken = await this.decodeAccessToken();
+    if (typeof decodedAccessToken.exp === "undefined") {
       return null;
     }
 
     const d = new Date(0); // The 0 here is the key, which sets the date to the epoch
-    d.setUTCSeconds(decoded.exp);
+    d.setUTCSeconds(decodedAccessToken.exp);
     return d;
   }
 
-  async tokenSecondsRemaining(offsetSeconds = 0): Promise<number> {
-    const d = await this.getTokenExpirationDate();
-    if (d == null) {
+  async accessTokenSecondsRemaining(offsetSeconds = 0): Promise<number> {
+    const expDate = await this.getAccessTokenExpirationDate();
+    if (expDate == null) {
       return 0;
     }
 
-    const msRemaining = d.valueOf() - (new Date().valueOf() + offsetSeconds * 1000);
+    const msRemaining = expDate.valueOf() - (new Date().valueOf() + offsetSeconds * 1000);
     return Math.round(msRemaining / 1000);
   }
 
-  async tokenNeedsRefresh(minutes = 5): Promise<boolean> {
-    const sRemaining = await this.tokenSecondsRemaining();
+  async accessTokenNeedsRefresh(minutes = 5): Promise<boolean> {
+    const sRemaining = await this.accessTokenSecondsRemaining();
     return sRemaining < 60 * minutes;
   }
 
-  async getUserId(): Promise<string> {
-    const decoded = await this.decodeToken();
+  async getUserIdFromAccessToken(): Promise<string> {
+    const decoded = await this.decodeAccessToken();
     if (typeof decoded.sub === "undefined") {
       throw new Error("No user id found");
     }
@@ -137,8 +137,8 @@ export class TokenService implements TokenServiceAbstraction {
     return decoded.sub as string;
   }
 
-  async getEmail(): Promise<string> {
-    const decoded = await this.decodeToken();
+  async getEmailFromAccessToken(): Promise<string> {
+    const decoded = await this.decodeAccessToken();
     if (typeof decoded.email === "undefined") {
       throw new Error("No email found");
     }
@@ -146,8 +146,8 @@ export class TokenService implements TokenServiceAbstraction {
     return decoded.email as string;
   }
 
-  async getEmailVerified(): Promise<boolean> {
-    const decoded = await this.decodeToken();
+  async getEmailVerifiedFromAccessToken(): Promise<boolean> {
+    const decoded = await this.decodeAccessToken();
     if (typeof decoded.email_verified === "undefined") {
       throw new Error("No email verification found");
     }
@@ -155,8 +155,8 @@ export class TokenService implements TokenServiceAbstraction {
     return decoded.email_verified as boolean;
   }
 
-  async getName(): Promise<string> {
-    const decoded = await this.decodeToken();
+  async getNameFromAccessToken(): Promise<string> {
+    const decoded = await this.decodeAccessToken();
     if (typeof decoded.name === "undefined") {
       return null;
     }
@@ -164,8 +164,8 @@ export class TokenService implements TokenServiceAbstraction {
     return decoded.name as string;
   }
 
-  async getIssuer(): Promise<string> {
-    const decoded = await this.decodeToken();
+  async getIssuerFromAccessToken(): Promise<string> {
+    const decoded = await this.decodeAccessToken();
     if (typeof decoded.iss === "undefined") {
       throw new Error("No issuer found");
     }
@@ -173,8 +173,8 @@ export class TokenService implements TokenServiceAbstraction {
     return decoded.iss as string;
   }
 
-  async getIsExternal(): Promise<boolean> {
-    const decoded = await this.decodeToken();
+  async getIsExternalFromAccessToken(): Promise<boolean> {
+    const decoded = await this.decodeAccessToken();
 
     return Array.isArray(decoded.amr) && decoded.amr.includes("external");
   }

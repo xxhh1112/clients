@@ -72,7 +72,7 @@ export class PremiumComponent implements OnInit {
 
     try {
       if (this.selfHosted) {
-        if (!this.tokenService.getEmailVerified()) {
+        if (!this.tokenService.getEmailVerifiedFromAccessToken()) {
           this.platformUtilsService.showToast(
             "error",
             this.i18nService.t("errorOccurred"),

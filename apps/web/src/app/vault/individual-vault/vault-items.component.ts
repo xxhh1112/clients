@@ -152,7 +152,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
     await super.load(filter, deleted);
     this.updateSearchedCollections(this.collections);
-    this.profileName = await this.tokenService.getName();
+    this.profileName = await this.tokenService.getNameFromAccessToken();
     this.organizations = await this.organizationService.getAll();
     this.userHasPremiumAccess = await this.stateService.getCanAccessPremium();
   }

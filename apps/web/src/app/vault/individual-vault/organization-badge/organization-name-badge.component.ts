@@ -33,12 +33,13 @@ export class OrganizationNameBadgeComponent implements OnInit {
     if (this.isMe) {
       this.color = await this.avatarService.loadColorFromState();
       if (this.color == null) {
-        const userId = await this.tokenService.getUserId();
+        const userId = await this.tokenService.getUserIdFromAccessToken();
         if (userId != null) {
           this.color = Utils.stringToColor(userId);
         } else {
           const userName =
-            (await this.tokenService.getName()) ?? (await this.tokenService.getEmail());
+            (await this.tokenService.getNameFromAccessToken()) ??
+            (await this.tokenService.getEmailFromAccessToken());
           this.color = Utils.stringToColor(userName.toUpperCase());
         }
       }
