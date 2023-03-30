@@ -10,6 +10,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { Utils } from "../../misc/utils";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
+import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { UserApiLogInCredentials } from "../models/domain/log-in-credentials";
@@ -29,6 +30,7 @@ describe("UserApiLogInStrategy", () => {
   let twoFactorService: MockProxy<TwoFactorService>;
   let keyConnectorService: MockProxy<KeyConnectorService>;
   let environmentService: MockProxy<EnvironmentService>;
+  let tokenApiService: MockProxy<TokenApiService>;
 
   let apiLogInStrategy: UserApiLogInStrategy;
   let credentials: UserApiLogInCredentials;
@@ -50,6 +52,7 @@ describe("UserApiLogInStrategy", () => {
     twoFactorService = mock<TwoFactorService>();
     keyConnectorService = mock<KeyConnectorService>();
     environmentService = mock<EnvironmentService>();
+    tokenApiService = mock<TokenApiService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.getTwoFactorToken.mockResolvedValue(null);
@@ -66,17 +69,18 @@ describe("UserApiLogInStrategy", () => {
       stateService,
       twoFactorService,
       environmentService,
-      keyConnectorService
+      keyConnectorService,
+      tokenApiService
     );
 
     credentials = new UserApiLogInCredentials(apiClientId, apiClientSecret);
   });
 
   it("sends api key credentials to the server", async () => {
-    apiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
+    tokenApiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
     await apiLogInStrategy.logIn(credentials);
 
-    expect(apiService.postIdentityToken).toHaveBeenCalledWith(
+    expect(tokenApiService.postIdentityToken).toHaveBeenCalledWith(
       expect.objectContaining({
         clientId: apiClientId,
         clientSecret: apiClientSecret,
@@ -92,7 +96,7 @@ describe("UserApiLogInStrategy", () => {
   });
 
   it("sets the local environment after a successful login", async () => {
-    apiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
+    tokenApiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
 
     await apiLogInStrategy.logIn(credentials);
 
@@ -105,7 +109,7 @@ describe("UserApiLogInStrategy", () => {
     const tokenResponse = identityTokenResponseFactory();
     tokenResponse.apiUseKeyConnector = true;
 
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    tokenApiService.postIdentityToken.mockResolvedValue(tokenResponse);
     environmentService.getKeyConnectorUrl.mockReturnValue(keyConnectorUrl);
 
     await apiLogInStrategy.logIn(credentials);
