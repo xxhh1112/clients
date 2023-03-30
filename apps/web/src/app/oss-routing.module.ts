@@ -27,6 +27,7 @@ import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.comp
 import { flagEnabled, Flags } from "../utils/flags";
 
 import { TrialInitiationComponent } from "./accounts/trial-initiation/trial-initiation.component";
+import { OrganizationModule } from "./admin-console/organizations/organization.module";
 import { AcceptFamilySponsorshipComponent } from "./admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
 import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
@@ -34,16 +35,15 @@ import { SponsoredFamiliesComponent } from "./admin-console/settings/sponsored-f
 import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
-import { OrganizationModule } from "./organizations/organization.module";
 import { ReportsModule } from "./reports";
-import { AccessComponent } from "./send/access.component";
-import { SendComponent } from "./send/send.component";
 import { AccountComponent } from "./settings/account.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
 import { PreferencesComponent } from "./settings/preferences.component";
 import { SecurityRoutingModule } from "./settings/security-routing.module";
 import { SettingsComponent } from "./settings/settings.component";
 import { GeneratorComponent } from "./tools/generator.component";
+import { AccessComponent } from "./tools/send/access.component";
+import { SendComponent } from "./tools/send/send.component";
 import { ToolsComponent } from "./tools/tools.component";
 import { VaultModule } from "./vault/individual-vault/vault.module";
 
