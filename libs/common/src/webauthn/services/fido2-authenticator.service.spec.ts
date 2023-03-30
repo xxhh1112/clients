@@ -435,7 +435,9 @@ describe("FidoAuthenticatorService", () => {
         it("should return attestation object", async () => {
           const result = await authenticator.makeCredential(params);
 
-          const attestationObject = CBOR.decode(result.buffer);
+          const attestationObject = CBOR.decode(
+            Fido2Utils.bufferSourceToUint8Array(result.attestationObject).buffer
+          );
 
           const encAuthData: Uint8Array = attestationObject.authData;
           const rpIdHash = encAuthData.slice(0, 32);

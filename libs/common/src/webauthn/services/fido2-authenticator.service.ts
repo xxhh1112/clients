@@ -10,6 +10,7 @@ import {
   Fido2AutenticatorErrorCode,
   Fido2AuthenticatorGetAssertionParams,
   Fido2AuthenticatorGetAssertionResult,
+  Fido2AuthenticatorMakeCredentialResult,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction,
 } from "../abstractions/fido2-authenticator.service.abstraction";
@@ -35,7 +36,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService
   ) {}
-  async makeCredential(params: Fido2AuthenticatorMakeCredentialsParams): Promise<Uint8Array> {
+  async makeCredential(
+    params: Fido2AuthenticatorMakeCredentialsParams
+  ): Promise<Fido2AuthenticatorMakeCredentialResult> {
     if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
     }
@@ -116,22 +119,29 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
     }
 
+    const credentialId = params.requireResidentKey ? cipher.id : cipher.fido2Key.nonDiscoverableId;
+    const authData = await generateAuthData({
+      rpId: params.rpEntity.id,
+      credentialId,
+      counter: cipher.fido2Key.counter,
+      userPresence: true,
+      userVerification: false,
+      keyPair,
+    });
     const attestationObject = new Uint8Array(
       CBOR.encode({
         fmt: "none",
         attStmt: {},
-        authData: await generateAuthData({
-          rpId: params.rpEntity.id,
-          credentialId: params.requireResidentKey ? cipher.id : cipher.fido2Key.nonDiscoverableId,
-          counter: cipher.fido2Key.counter,
-          userPresence: true,
-          userVerification: false,
-          keyPair,
-        }),
+        authData,
       })
     );
 
-    return attestationObject;
+    return {
+      credentialId: Fido2Utils.stringToBuffer(credentialId),
+      attestationObject,
+      authData,
+      publicKeyAlgorithm: -7,
+    };
   }
 
   async getAssertion(

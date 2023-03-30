@@ -4,13 +4,17 @@ export abstract class Fido2AuthenticatorService {
    *
    * @return {Uint8Array} Attestation object
    **/
-  makeCredential: (params: Fido2AuthenticatorMakeCredentialsParams) => Promise<Uint8Array>;
+  makeCredential: (
+    params: Fido2AuthenticatorMakeCredentialsParams,
+    abortController?: AbortController
+  ) => Promise<Fido2AuthenticatorMakeCredentialResult>;
 
   /**
    * Generate an assertion using an existing credential
    */
   getAssertion: (
-    params: Fido2AuthenticatorGetAssertionParams
+    params: Fido2AuthenticatorGetAssertionParams,
+    abortController?: AbortController
   ) => Promise<Fido2AuthenticatorGetAssertionResult>;
 }
 
@@ -82,6 +86,13 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
   requireUserVerification: boolean;
   /** The constant Boolean value true. It is included here as a pseudo-parameter to simplify applying this abstract authenticator model to implementations that may wish to make a test of user presence optional although WebAuthn does not. */
   // requireUserPresence: true; // Always required
+}
+
+export interface Fido2AuthenticatorMakeCredentialResult {
+  credentialId: BufferSource;
+  attestationObject: BufferSource;
+  authData: BufferSource;
+  publicKeyAlgorithm: number;
 }
 
 export interface Fido2AuthenticatorGetAssertionParams {
