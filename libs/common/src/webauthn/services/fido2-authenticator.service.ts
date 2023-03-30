@@ -173,38 +173,42 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    const selectedCredentialId =
-      params.allowCredentialDescriptorList?.length > 0
-        ? selectedCipher.fido2Key.nonDiscoverableId
-        : selectedCipher.id;
+    try {
+      const selectedCredentialId =
+        params.allowCredentialDescriptorList?.length > 0
+          ? selectedCipher.fido2Key.nonDiscoverableId
+          : selectedCipher.id;
 
-    ++selectedCipher.fido2Key.counter;
-    selectedCipher.localData.lastUsedDate = new Date().getTime();
-    const encrypted = await this.cipherService.encrypt(selectedCipher);
-    await this.cipherService.updateWithServer(encrypted);
+      ++selectedCipher.fido2Key.counter;
+      selectedCipher.localData.lastUsedDate = new Date().getTime();
+      const encrypted = await this.cipherService.encrypt(selectedCipher);
+      await this.cipherService.updateWithServer(encrypted);
 
-    const authenticatorData = await generateAuthData({
-      rpId: selectedCipher.fido2Key.rpId,
-      credentialId: selectedCredentialId,
-      counter: selectedCipher.fido2Key.counter,
-      userPresence: true,
-      userVerification: false,
-    });
+      const authenticatorData = await generateAuthData({
+        rpId: selectedCipher.fido2Key.rpId,
+        credentialId: selectedCredentialId,
+        counter: selectedCipher.fido2Key.counter,
+        userPresence: true,
+        userVerification: false,
+      });
 
-    const signature = await generateSignature({
-      authData: authenticatorData,
-      clientData: params.hash,
-      privateKey: await getPrivateKeyFromCipher(selectedCipher),
-    });
+      const signature = await generateSignature({
+        authData: authenticatorData,
+        clientData: params.hash,
+        privateKey: await getPrivateKeyFromCipher(selectedCipher),
+      });
 
-    return {
-      authenticatorData,
-      selectedCredential: {
-        id: selectedCredentialId,
-        userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
-      },
-      signature,
-    };
+      return {
+        authenticatorData,
+        selectedCredential: {
+          id: selectedCredentialId,
+          userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
+        },
+        signature,
+      };
+    } catch {
+      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+    }
   }
 
   private async vaultContainsCredentials(

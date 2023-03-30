@@ -724,6 +724,15 @@ describe("FidoAuthenticatorService", () => {
           // Signatures are non-deterministic, and webcrypto can't verify DER signature format
           // expect(result.signature).toMatchSnapshot();
         });
+
+        /** Spec: If any error occurred while generating the assertion signature, return an error code equivalent to "UnknownError" and terminate the operation. */
+        it("should throw unkown error if creation fails", async () => {
+          cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
+
+          const result = async () => await authenticator.getAssertion(params);
+
+          await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
+        });
       });
     }
 
