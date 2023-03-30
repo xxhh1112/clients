@@ -26,7 +26,7 @@ export class PremiumComponent implements OnInit {
 
   async refresh() {
     try {
-      this.refreshPromise = this.tokenApiService.refreshIdentityToken();
+      this.refreshPromise = this.tokenApiService.refreshAccessToken();
       await this.refreshPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("refreshComplete"));
       this.isPremium = await this.stateService.getCanAccessPremium();

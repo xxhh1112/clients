@@ -102,7 +102,7 @@ export class SyncService implements SyncServiceAbstraction {
     }
 
     try {
-      await this.tokenApiService.refreshIdentityToken();
+      await this.tokenApiService.refreshAccessToken();
       const response = await this.apiService.getSync();
 
       await this.syncProfile(response.profile);

@@ -9,9 +9,9 @@ import { IdentityTwoFactorResponse } from "../models/response/identity-two-facto
  * Service for interacting with the Bitwarden Identity API for token management.
  */
 export abstract class TokenApiService {
-  getActiveBearerToken: () => Promise<string>;
+  getActiveAccessToken: () => Promise<string>;
   postIdentityToken: (
     request: PasswordTokenRequest | SsoTokenRequest | UserApiTokenRequest
   ) => Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse>;
-  refreshIdentityToken: () => Promise<any>;
+  refreshAccessToken: () => Promise<any>;
 }

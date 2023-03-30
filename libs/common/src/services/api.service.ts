@@ -1454,7 +1454,7 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async postEventsCollect(request: EventRequest[]): Promise<any> {
-    const authHeader = await this.tokenApiService.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveAccessToken();
     const headers = new Headers({
       "Device-Type": this.deviceType,
       Authorization: "Bearer " + authHeader,
@@ -1506,7 +1506,7 @@ export class ApiService implements ApiServiceAbstraction {
   // Key Connector
 
   async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
-    const authHeader = await this.tokenApiService.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveAccessToken();
 
     const response = await this.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
@@ -1531,7 +1531,7 @@ export class ApiService implements ApiServiceAbstraction {
     keyConnectorUrl: string,
     request: KeyConnectorUserKeyRequest
   ): Promise<void> {
-    const authHeader = await this.tokenApiService.getActiveBearerToken();
+    const authHeader = await this.tokenApiService.getActiveAccessToken();
 
     const response = await this.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
@@ -1721,7 +1721,7 @@ export class ApiService implements ApiServiceAbstraction {
       const originalAlterHeaders = alterHeaders;
       // Modify the alterHeaders function to include the auth header
       alterHeaders = async (headers: Headers) => {
-        const activeAccessToken = await this.tokenApiService.getActiveBearerToken();
+        const activeAccessToken = await this.tokenApiService.getActiveAccessToken();
         headers.set("Authorization", "Bearer " + activeAccessToken);
 
         // Execute the original function if it exists

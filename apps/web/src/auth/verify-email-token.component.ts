@@ -36,7 +36,7 @@ export class VerifyEmailTokenComponent implements OnInit {
             new VerifyEmailRequest(qParams.userId, qParams.token)
           );
           if (await this.stateService.getIsAuthenticated()) {
-            await this.tokenApiService.refreshIdentityToken();
+            await this.tokenApiService.refreshAccessToken();
           }
           this.platformUtilsService.showToast("success", null, this.i18nService.t("emailVerified"));
           this.router.navigate(["/"]);

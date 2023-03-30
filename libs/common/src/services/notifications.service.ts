@@ -69,7 +69,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
 
     this.signalrConnection = new signalR.HubConnectionBuilder()
       .withUrl(this.url + "/hub", {
-        accessTokenFactory: () => this.tokenApiService.getActiveBearerToken(),
+        accessTokenFactory: () => this.tokenApiService.getActiveAccessToken(),
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
