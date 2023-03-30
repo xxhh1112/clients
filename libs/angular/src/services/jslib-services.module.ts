@@ -68,6 +68,7 @@ import { AccountsApiService as AccountsApiServiceAbstraction } from "@bitwarden/
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
+import { SsoApiService as SsoApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
 import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -77,6 +78,7 @@ import { AccountsApiServiceImplementation } from "@bitwarden/common/auth/service
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
+import { SsoApiServiceImplementation } from "@bitwarden/common/auth/services/sso-api.service.implementation";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
@@ -661,6 +663,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: AccountsApiServiceAbstraction,
       useClass: AccountsApiServiceImplementation,
+      deps: [EnvironmentServiceAbstraction, ApiServiceAbstraction],
+    },
+    {
+      provide: SsoApiServiceAbstraction,
+      useClass: SsoApiServiceImplementation,
       deps: [EnvironmentServiceAbstraction, ApiServiceAbstraction],
     },
     {

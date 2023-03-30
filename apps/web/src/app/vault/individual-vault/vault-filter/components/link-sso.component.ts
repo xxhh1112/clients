@@ -11,6 +11,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoApiService } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 @Component({
@@ -32,7 +33,8 @@ export class LinkSsoComponent extends SsoComponent implements AfterContentInit {
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     stateService: StateService,
     environmentService: EnvironmentService,
-    logService: LogService
+    logService: LogService,
+    ssoApiService: SsoApiService
   ) {
     super(
       authService,
@@ -45,7 +47,8 @@ export class LinkSsoComponent extends SsoComponent implements AfterContentInit {
       cryptoFunctionService,
       environmentService,
       passwordGenerationService,
-      logService
+      logService,
+      ssoApiService
     );
 
     this.returnUri = "/settings/organizations";

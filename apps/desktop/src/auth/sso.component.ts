@@ -10,6 +10,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoApiService } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -30,7 +31,8 @@ export class SsoComponent extends BaseSsoComponent {
     cryptoFunctionService: CryptoFunctionService,
     environmentService: EnvironmentService,
     passwordGenerationService: PasswordGenerationServiceAbstraction,
-    logService: LogService
+    logService: LogService,
+    ssoApiService: SsoApiService
   ) {
     super(
       authService,
@@ -43,7 +45,8 @@ export class SsoComponent extends BaseSsoComponent {
       cryptoFunctionService,
       environmentService,
       passwordGenerationService,
-      logService
+      logService,
+      ssoApiService
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);

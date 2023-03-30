@@ -10,6 +10,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoApiService } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { SsoLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
@@ -49,7 +50,8 @@ export class SsoComponent {
     protected cryptoFunctionService: CryptoFunctionService,
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
-    protected logService: LogService
+    protected logService: LogService,
+    protected ssoApiService: SsoApiService
   ) {}
 
   async ngOnInit() {
@@ -96,7 +98,7 @@ export class SsoComponent {
       return;
     }
 
-    this.initiateSsoFormPromise = this.apiService.preValidateSso(this.identifier);
+    this.initiateSsoFormPromise = this.ssoApiService.preValidateSso(this.identifier);
     const response = await this.initiateSsoFormPromise;
 
     const authorizeUrl = await this.buildAuthorizeUrl(

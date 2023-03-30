@@ -74,7 +74,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
 import { TwoFactorEmailResponse } from "../auth/models/response/two-factor-email.response";
@@ -513,8 +512,6 @@ export abstract class ApiService {
 
   fetch: (request: Request) => Promise<Response>;
   nativeFetch: (request: Request) => Promise<Response>;
-
-  preValidateSso: (identifier: string) => Promise<SsoPreValidateResponse>;
 
   postCreateSponsorship: (
     sponsorshipOrgId: string,

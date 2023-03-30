@@ -79,7 +79,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
 import { TwoFactorEmailResponse } from "../auth/models/response/two-factor-email.response";
@@ -1665,37 +1664,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   nativeFetch(request: Request): Promise<Response> {
     return this.apiHelperService.nativeFetch(request);
-  }
-
-  async preValidateSso(identifier: string): Promise<SsoPreValidateResponse> {
-    if (identifier == null || identifier === "") {
-      throw new Error("Organization Identifier was not provided.");
-    }
-    const headers = new Headers({
-      Accept: "application/json",
-      "Device-Type": this.deviceType,
-    });
-    if (this.customUserAgent != null) {
-      headers.set("User-Agent", this.customUserAgent);
-    }
-
-    const path = `/account/prevalidate?domainHint=${encodeURIComponent(identifier)}`;
-    const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + path, {
-        cache: "no-store",
-        credentials: this.apiHelperService.getCredentials(),
-        headers: headers,
-        method: "GET",
-      })
-    );
-
-    if (response.status === 200) {
-      const body = await response.json();
-      return new SsoPreValidateResponse(body);
-    } else {
-      const error = await this.handleError(response, false, true);
-      return Promise.reject(error);
-    }
   }
 
   async postCreateSponsorship(
