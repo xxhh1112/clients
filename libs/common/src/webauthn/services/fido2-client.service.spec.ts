@@ -1,5 +1,11 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { Utils } from "../../misc/utils";
+import {
+  Fido2AutenticatorError,
+  Fido2AutenticatorErrorCode,
+  Fido2AuthenticatorMakeCredentialResult,
+} from "../abstractions/fido2-authenticator.service.abstraction";
 import { CreateCredentialParams } from "../abstractions/fido2-client.service.abstraction";
 
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
@@ -115,6 +121,57 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
+    describe("creating a new credential", () => {
+      it("should call authenticator.makeCredential", async () => {
+        const params = createParams({
+          authenticatorSelection: { residentKey: "required", userVerification: "required" },
+        });
+        authenticator.makeCredential.mockResolvedValue(createAuthenticatorMakeResult());
+
+        await client.createCredential(params);
+
+        expect(authenticator.makeCredential).toHaveBeenCalledWith(
+          expect.objectContaining({
+            requireResidentKey: true,
+            requireUserVerification: true,
+            rpEntity: expect.objectContaining({
+              id: RpId,
+            }),
+            userEntity: expect.objectContaining({
+              displayName: params.user.displayName,
+            }),
+          }),
+          expect.anything()
+        );
+      });
+
+      // Spec: If any authenticator returns an error status equivalent to "InvalidStateError", Return a DOMException whose name is "InvalidStateError" and terminate this algorithm.
+      it("should throw error if authenticator throws InvalidState", async () => {
+        const params = createParams();
+        authenticator.makeCredential.mockRejectedValue(
+          new Fido2AutenticatorError(Fido2AutenticatorErrorCode.InvalidState)
+        );
+
+        const result = async () => await client.createCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "InvalidStateError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
+      // This keeps sensetive information form leaking
+      it("should throw NotAllowedError if authenticator throws unknown error", async () => {
+        const params = createParams();
+        authenticator.makeCredential.mockRejectedValue(new Error("unknown error"));
+
+        const result = async () => await client.createCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotAllowedError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+    });
+
     function createParams(params: Partial<CreateCredentialParams> = {}): CreateCredentialParams {
       return {
         origin: params.origin ?? "bitwarden.com",
@@ -141,5 +198,19 @@ describe("FidoAuthenticatorService", () => {
         timeout: params.timeout,
       };
     }
+
+    function createAuthenticatorMakeResult(): Fido2AuthenticatorMakeCredentialResult {
+      return {
+        credentialId: Utils.guidToRawFormat(Utils.newGuid()),
+        attestationObject: randomBytes(128),
+        authData: randomBytes(64),
+        publicKeyAlgorithm: -7,
+      };
+    }
   });
 });
+
+/** This is a fake function that always returns the same byte sequence */
+function randomBytes(length: number) {
+  return new Uint8Array(Array.from({ length }, (_, k) => k % 255));
+}

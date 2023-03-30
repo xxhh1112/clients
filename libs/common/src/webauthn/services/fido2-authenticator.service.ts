@@ -137,7 +137,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     );
 
     return {
-      credentialId: Fido2Utils.stringToBuffer(credentialId),
+      credentialId: Utils.guidToRawFormat(credentialId),
       attestationObject,
       authData,
       publicKeyAlgorithm: -7,

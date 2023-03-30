@@ -25,7 +25,7 @@ export interface CreateCredentialParams {
   excludeCredentials?: {
     id: string; // b64 encoded
     transports?: ("ble" | "internal" | "nfc" | "usb")[];
-    // type: "public-key"; // not used
+    type: "public-key";
   }[];
   extensions?: {
     appid?: string;
