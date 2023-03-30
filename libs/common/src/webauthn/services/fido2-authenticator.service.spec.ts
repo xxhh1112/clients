@@ -629,50 +629,85 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    describe("assertion of non-discoverable credential", () => {
-      let credentialIds: string[];
-      let ciphers: CipherView[];
-      let params: Fido2AuthenticatorGetAssertionParams;
+    for (const residentKey of [true, false]) {
+      describe(`assertion of ${
+        residentKey ? "discoverable" : "non-discoverable"
+      } credential`, () => {
+        let credentialIds: string[];
+        let selectedCredentialId: string;
+        let ciphers: CipherView[];
+        let params: Fido2AuthenticatorGetAssertionParams;
 
-      beforeEach(async () => {
-        credentialIds = [Utils.newGuid(), Utils.newGuid()];
-        ciphers = await Promise.all(
-          credentialIds.map((id) =>
-            createCipherView(
-              { type: CipherType.Login },
-              { nonDiscoverableId: id, rpId: RpId, counter: 9000 }
-            )
-          )
-        );
-        params = await createParams({
-          allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
-            id: Utils.guidToRawFormat(credentialId),
-            type: "public-key",
-          })),
-          rpId: RpId,
+        beforeEach(async () => {
+          credentialIds = [Utils.newGuid(), Utils.newGuid()];
+          if (residentKey) {
+            ciphers = credentialIds.map((id) =>
+              createCipherView({ type: CipherType.Fido2Key }, { rpId: RpId, counter: 9000 })
+            );
+            selectedCredentialId = ciphers[0].id;
+            params = await createParams({
+              allowCredentialDescriptorList: undefined,
+              rpId: RpId,
+            });
+          } else {
+            ciphers = credentialIds.map((id) =>
+              createCipherView(
+                { type: CipherType.Login },
+                { nonDiscoverableId: id, rpId: RpId, counter: 9000 }
+              )
+            );
+            selectedCredentialId = credentialIds[0];
+            params = await createParams({
+              allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
+                id: Utils.guidToRawFormat(credentialId),
+                type: "public-key",
+              })),
+              rpId: RpId,
+            });
+          }
+          cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+          userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
         });
-        cipherService.getAllDecrypted.mockResolvedValue(ciphers);
-        userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
+
+        /** Spec: Increment the credential associated signature counter */
+        it("should increment counter", async () => {
+          const encrypted = Symbol();
+          cipherService.encrypt.mockResolvedValue(encrypted as any);
+
+          await authenticator.getAssertion(params);
+
+          expect(cipherService.encrypt).toHaveBeenCalledWith(
+            expect.objectContaining({
+              id: ciphers[0].id,
+              fido2Key: expect.objectContaining({
+                counter: 9001,
+              }),
+            })
+          );
+          expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
+        });
+
+        it("should return an assertion result", async () => {
+          const result = await authenticator.getAssertion(params);
+
+          const encAuthData = result.authenticatorData;
+          const rpIdHash = encAuthData.slice(0, 32);
+          const flags = encAuthData.slice(32, 33);
+          const counter = encAuthData.slice(33, 37);
+
+          expect(result.selectedCredential.id).toBe(selectedCredentialId);
+          expect(rpIdHash).toEqual(
+            new Uint8Array([
+              0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
+              0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
+              0xd0, 0x5c, 0x3d, 0xc3,
+            ])
+          );
+          expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
+          expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // 9001 in hex
+        });
       });
-
-      /** Spec: Increment the credential associated signature counter */
-      it("should increment counter", async () => {
-        const encrypted = Symbol();
-        cipherService.encrypt.mockResolvedValue(encrypted as any);
-
-        await authenticator.getAssertion(params);
-
-        expect(cipherService.encrypt).toHaveBeenCalledWith(
-          expect.objectContaining({
-            id: ciphers[0].id,
-            fido2Key: expect.objectContaining({
-              counter: 9001,
-            }),
-          })
-        );
-        expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
-      });
-    });
+    }
 
     async function createParams(
       params: Partial<Fido2AuthenticatorGetAssertionParams> = {}
@@ -713,6 +748,7 @@ function createCipherView(
   cipher.fido2Key.nonDiscoverableId = fido2Key.nonDiscoverableId;
   cipher.fido2Key.rpId = fido2Key.rpId ?? RpId;
   cipher.fido2Key.counter = fido2Key.counter ?? 0;
+  cipher.fido2Key.userHandle = Fido2Utils.bufferToString(randomBytes(16));
   return cipher;
 }
 
@@ -729,6 +765,7 @@ async function createClientDataHash() {
   return await crypto.subtle.digest({ name: "SHA-256" }, clientData);
 }
 
+/** This is a fake function that always returns the same byte sequence */
 function randomBytes(length: number) {
-  return new Uint8Array(Array.from({ length }, () => Math.floor(Math.random() * 255)));
+  return new Uint8Array(Array.from({ length }, (_, k) => k % 255));
 }

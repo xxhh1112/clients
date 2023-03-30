@@ -146,35 +146,63 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
-    let credentialOptions: CipherView[];
+    let cipherOptions: CipherView[];
 
     // eslint-disable-next-line no-empty
     if (params.allowCredentialDescriptorList?.length > 0) {
-      credentialOptions = await this.findNonDiscoverableCredentials(
+      cipherOptions = await this.findNonDiscoverableCredentials(
         params.allowCredentialDescriptorList,
         params.rpId
       );
     } else {
-      credentialOptions = await this.findDiscoverableCredentials(params.rpId);
+      cipherOptions = await this.findDiscoverableCredentials(params.rpId);
     }
 
-    if (credentialOptions.length === 0) {
+    if (cipherOptions.length === 0) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    const selectedCredentialId = await this.userInterface.pickCredential(
-      credentialOptions.map((cipher) => cipher.id)
+    const selectedCipherId = await this.userInterface.pickCredential(
+      cipherOptions.map((cipher) => cipher.id)
     );
-    const selectedCredential = credentialOptions.find((c) => c.id === selectedCredentialId);
+    const selectedCipher = cipherOptions.find((c) => c.id === selectedCipherId);
 
-    if (selectedCredential === undefined) {
+    if (selectedCipher === undefined) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    ++selectedCredential.fido2Key.counter;
-    selectedCredential.localData.lastUsedDate = new Date().getTime();
-    const encrypted = await this.cipherService.encrypt(selectedCredential);
+    const selectedCredentialId =
+      params.allowCredentialDescriptorList?.length > 0
+        ? selectedCipher.fido2Key.nonDiscoverableId
+        : selectedCipher.id;
+
+    ++selectedCipher.fido2Key.counter;
+    selectedCipher.localData.lastUsedDate = new Date().getTime();
+    const encrypted = await this.cipherService.encrypt(selectedCipher);
     await this.cipherService.updateWithServer(encrypted);
+
+    const authenticatorData = await generateAuthData({
+      rpId: selectedCipher.fido2Key.rpId,
+      credentialId: selectedCredentialId,
+      counter: selectedCipher.fido2Key.counter,
+      userPresence: true,
+      userVerification: false,
+    });
+
+    // const signature = await generateSignature({
+    //   authData,
+    //   clientData,
+    //   privateKey: credential.keyValue,
+    // });
+
+    return {
+      authenticatorData,
+      selectedCredential: {
+        id: selectedCredentialId,
+        userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
+      },
+      signature: null,
+    };
   }
 
   private async vaultContainsCredentials(
@@ -305,18 +333,18 @@ async function generateAuthData(params: AuthDataParams) {
     counter & 0x000000ff
   );
 
-  // attestedCredentialData
-  const attestedCredentialData: Array<number> = [];
-
-  attestedCredentialData.push(...AAGUID);
-
-  // credentialIdLength (2 bytes) and credential Id
-  const rawId = Utils.guidToRawFormat(params.credentialId);
-  const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
-  attestedCredentialData.push(...credentialIdLength);
-  attestedCredentialData.push(...rawId);
-
   if (params.keyPair) {
+    // attestedCredentialData
+    const attestedCredentialData: Array<number> = [];
+
+    attestedCredentialData.push(...AAGUID);
+
+    // credentialIdLength (2 bytes) and credential Id
+    const rawId = Utils.guidToRawFormat(params.credentialId);
+    const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
+    attestedCredentialData.push(...credentialIdLength);
+    attestedCredentialData.push(...rawId);
+
     const publicKeyJwk = await crypto.subtle.exportKey("jwk", params.keyPair.publicKey);
     // COSE format of the EC256 key
     const keyX = Utils.fromUrlB64ToArray(publicKeyJwk.x);

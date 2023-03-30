@@ -98,9 +98,9 @@ export interface Fido2AuthenticatorGetAssertionParams {
 }
 
 export interface Fido2AuthenticatorGetAssertionResult {
-  selectedCredential?: {
+  selectedCredential: {
     id: string;
-    userHandle: Uint8Array;
+    userHandle?: Uint8Array;
   };
   authenticatorData: Uint8Array;
   signature: Uint8Array;
