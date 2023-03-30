@@ -17,6 +17,8 @@ import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.
 import { Fido2Utils } from "../abstractions/fido2-utils";
 import { Fido2KeyView } from "../models/view/fido2-key.view";
 
+import { joseToDer } from "./ecdsa-utils";
+
 // AAGUID: 6e8248d5-b479-40db-a3d8-11116f7e8349
 export const AAGUID = new Uint8Array([
   0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49,
@@ -79,12 +81,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       try {
-        keyPair = await this.createKeyPair();
+        keyPair = await createKeyPair();
 
         cipher = new CipherView();
         cipher.type = CipherType.Fido2Key;
         cipher.name = params.rpEntity.name;
-        cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+        cipher.fido2Key = await createKeyView(params, keyPair.privateKey);
         const encrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.createWithServer(encrypted); // encrypted.id is assigned inside here
         cipher.id = encrypted.id;
@@ -102,11 +104,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       try {
-        keyPair = await this.createKeyPair();
+        keyPair = await createKeyPair();
 
         const encrypted = await this.cipherService.get(cipherId);
         cipher = await encrypted.decrypt();
-        cipher.fido2Key = await this.createKeyView(params, keyPair.privateKey);
+        cipher.fido2Key = await createKeyView(params, keyPair.privateKey);
         const reencrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.updateWithServer(reencrypted);
       } catch {
@@ -189,11 +191,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       userVerification: false,
     });
 
-    // const signature = await generateSignature({
-    //   authData,
-    //   clientData,
-    //   privateKey: credential.keyValue,
-    // });
+    const signature = await generateSignature({
+      authData: authenticatorData,
+      clientData: params.hash,
+      privateKey: await getPrivateKeyFromCipher(selectedCipher),
+    });
 
     return {
       authenticatorData,
@@ -201,7 +203,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         id: selectedCredentialId,
         userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
       },
-      signature: null,
+      signature,
     };
   }
 
@@ -264,38 +266,55 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       (cipher) => cipher.type === CipherType.Fido2Key && cipher.fido2Key.rpId === rpId
     );
   }
+}
 
-  private async createKeyPair() {
-    return await crypto.subtle.generateKey(
-      {
-        name: "ECDSA",
-        namedCurve: "P-256",
-      },
-      true,
-      KeyUsages
-    );
+async function createKeyPair() {
+  return await crypto.subtle.generateKey(
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    KeyUsages
+  );
+}
+
+async function createKeyView(
+  params: Fido2AuthenticatorMakeCredentialsParams,
+  keyValue: CryptoKey
+): Promise<Fido2KeyView> {
+  if (keyValue.algorithm.name !== "ECDSA" && (keyValue.algorithm as any).namedCurve !== "P-256") {
+    throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
   }
 
-  private async createKeyView(
-    params: Fido2AuthenticatorMakeCredentialsParams,
-    keyValue: CryptoKey
-  ): Promise<Fido2KeyView> {
-    const pcks8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
+  const pkcs8Key = await crypto.subtle.exportKey("pkcs8", keyValue);
+  const fido2Key = new Fido2KeyView();
+  fido2Key.nonDiscoverableId = params.requireResidentKey ? null : Utils.newGuid();
+  fido2Key.keyType = "public-key";
+  fido2Key.keyAlgorithm = "ECDSA";
+  fido2Key.keyCurve = "P-256";
+  fido2Key.keyValue = Fido2Utils.bufferToString(pkcs8Key);
+  fido2Key.rpId = params.rpEntity.id;
+  fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
+  fido2Key.counter = 0;
+  fido2Key.rpName = params.rpEntity.name;
+  fido2Key.userName = params.userEntity.name;
 
-    const fido2Key = new Fido2KeyView();
-    fido2Key.nonDiscoverableId = params.requireResidentKey ? null : Utils.newGuid();
-    fido2Key.keyType = "public-key";
-    fido2Key.keyAlgorithm = "ECDSA";
-    fido2Key.keyCurve = "P-256";
-    fido2Key.keyValue = Fido2Utils.bufferToString(pcks8Key);
-    fido2Key.rpId = params.rpEntity.id;
-    fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
-    fido2Key.counter = 0;
-    fido2Key.rpName = params.rpEntity.name;
-    fido2Key.userName = params.userEntity.name;
+  return fido2Key;
+}
 
-    return fido2Key;
-  }
+async function getPrivateKeyFromCipher(cipher: CipherView): Promise<CryptoKey> {
+  const keyBuffer = Fido2Utils.stringToBuffer(cipher.fido2Key.keyValue);
+  return await crypto.subtle.importKey(
+    "pkcs8",
+    keyBuffer,
+    {
+      name: cipher.fido2Key.keyType,
+      namedCurve: cipher.fido2Key.keyCurve,
+    } as EcKeyImportParams,
+    true,
+    KeyUsages
+  );
 }
 
 interface AuthDataParams {
@@ -364,6 +383,32 @@ async function generateAuthData(params: AuthDataParams) {
   }
 
   return new Uint8Array(authData);
+}
+
+interface SignatureParams {
+  authData: Uint8Array;
+  clientData: BufferSource;
+  privateKey: CryptoKey;
+}
+
+async function generateSignature(params: SignatureParams) {
+  const clientData = Fido2Utils.bufferSourceToUint8Array(params.clientData);
+  const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
+  const sigBase = new Uint8Array([...params.authData, ...new Uint8Array(clientDataHash)]);
+  const p1336_signature = new Uint8Array(
+    await crypto.subtle.sign(
+      {
+        name: "ECDSA",
+        hash: { name: "SHA-256" },
+      },
+      params.privateKey,
+      sigBase
+    )
+  );
+
+  const asn1Der_signature = joseToDer(p1336_signature, "ES256");
+
+  return asn1Der_signature;
 }
 
 interface Flags {

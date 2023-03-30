@@ -11,11 +11,16 @@ export class Fido2Utils {
     return Utils.fromUrlB64ToArray(str);
   }
 
-  private static bufferSourceToUint8Array(bufferSource: BufferSource) {
-    if (bufferSource instanceof ArrayBuffer) {
+  static bufferSourceToUint8Array(bufferSource: BufferSource) {
+    if (Fido2Utils.isArrayBuffer(bufferSource)) {
       return new Uint8Array(bufferSource);
     } else {
       return new Uint8Array(bufferSource.buffer);
     }
+  }
+
+  /** Utility function to identify type of bufferSource. Necessary because of differences between runtimes */
+  static isArrayBuffer(bufferSource: BufferSource): bufferSource is ArrayBuffer {
+    return bufferSource instanceof ArrayBuffer || bufferSource.buffer === undefined;
   }
 }

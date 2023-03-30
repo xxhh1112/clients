@@ -30,10 +30,23 @@ describe("FidoAuthenticatorService", () => {
   let userInterface!: MockProxy<Fido2UserInterfaceService>;
   let authenticator!: Fido2AuthenticatorService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     cipherService = mock<CipherService>();
     userInterface = mock<Fido2UserInterfaceService>();
     authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
+
+    // crypto.subtle.importKey doesn't work properly in jest, so we need to mock it with new keys.
+    const privateKey = (
+      await crypto.subtle.generateKey(
+        {
+          name: "ECDSA",
+          namedCurve: "P-256",
+        },
+        true,
+        ["sign"]
+      )
+    ).privateKey;
+    crypto.subtle.importKey = jest.fn().mockResolvedValue(privateKey);
   });
 
   describe("makeCredential", () => {
@@ -696,6 +709,9 @@ describe("FidoAuthenticatorService", () => {
           const counter = encAuthData.slice(33, 37);
 
           expect(result.selectedCredential.id).toBe(selectedCredentialId);
+          expect(result.selectedCredential.userHandle).toEqual(
+            Fido2Utils.stringToBuffer(ciphers[0].fido2Key.userHandle)
+          );
           expect(rpIdHash).toEqual(
             new Uint8Array([
               0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
@@ -705,6 +721,8 @@ describe("FidoAuthenticatorService", () => {
           );
           expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
           expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // 9001 in hex
+          // Signatures are non-deterministic, and webcrypto can't verify DER signature format
+          // expect(result.signature).toMatchSnapshot();
         });
       });
     }
@@ -748,7 +766,13 @@ function createCipherView(
   cipher.fido2Key.nonDiscoverableId = fido2Key.nonDiscoverableId;
   cipher.fido2Key.rpId = fido2Key.rpId ?? RpId;
   cipher.fido2Key.counter = fido2Key.counter ?? 0;
-  cipher.fido2Key.userHandle = Fido2Utils.bufferToString(randomBytes(16));
+  cipher.fido2Key.userHandle = fido2Key.userHandle ?? Fido2Utils.bufferToString(randomBytes(16));
+  cipher.fido2Key.keyAlgorithm = fido2Key.keyAlgorithm ?? "ECDSA";
+  cipher.fido2Key.keyCurve = fido2Key.keyCurve ?? "P-256";
+  cipher.fido2Key.keyValue =
+    fido2Key.keyValue ??
+    "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTC-7XDZipXbaVBlnkjlBgO16ZmqBZWejK2iYo6lV0dehRANCAASOcM2WduNq1DriRYN7ZekvZz-bRhA-qNT4v0fbp5suUFJyWmgOQ0bybZcLXHaerK5Ep1JiSrQcewtQNgLtry7f";
+
   return cipher;
 }
 
