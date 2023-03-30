@@ -27,15 +27,19 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     private apiHelperService: ApiHelperService
   ) {}
 
-  async getActiveBearerToken(): Promise<string> {
+  async getActiveAccessToken(): Promise<string> {
     let accessToken = await this.tokenService.getAccessToken();
     if (await this.tokenService.accessTokenNeedsRefresh()) {
-      await this.doAuthRefresh();
+      await this.refreshAccessToken();
       accessToken = await this.tokenService.getAccessToken();
     }
     return accessToken;
   }
 
+  /**
+   * Authenticate with the Identity API using the provided request.
+   * Exchanges the id token for an access token.
+   */
   async postIdentityToken(
     request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
   ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse> {
@@ -83,30 +87,32 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     return Promise.reject(new ErrorResponse(responseJson, response.status, true));
   }
 
-  async refreshIdentityToken(): Promise<any> {
+  async refreshAccessToken(): Promise<any> {
     try {
-      await this.doAuthRefresh();
+      await this._refreshAccessToken();
     } catch (e) {
       return Promise.reject(null);
     }
   }
 
-  private async doAuthRefresh(): Promise<void> {
+  private async _refreshAccessToken(): Promise<void> {
+    // if we have a refresh token, use it to get a new access token and refresh token
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken != null && refreshToken !== "") {
-      return this.doRefreshToken();
+      return this.refreshAccessTokenViaRefreshToken();
     }
 
+    // if we have client creds, use them to get a new access token and refresh token
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
     if (!Utils.isNullOrWhitespace(clientId) && !Utils.isNullOrWhitespace(clientSecret)) {
-      return this.doApiTokenRefresh();
+      return this.refreshAccessTokenViaClientCredentials(clientId, clientSecret);
     }
 
     throw new Error("Cannot refresh token, no refresh token or api keys are stored");
   }
 
-  private async doRefreshToken(): Promise<void> {
+  private async refreshAccessTokenViaRefreshToken(): Promise<void> {
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken == null || refreshToken === "") {
       throw new Error();
@@ -143,10 +149,10 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     }
   }
 
-  private async doApiTokenRefresh(): Promise<void> {
-    const clientId = await this.tokenService.getClientId();
-    const clientSecret = await this.tokenService.getClientSecret();
-
+  private async refreshAccessTokenViaClientCredentials(
+    clientId: string,
+    clientSecret: string
+  ): Promise<void> {
     const appId = await this.appIdService.getAppId();
     const deviceRequest = new DeviceRequest(appId, this.platformUtilsService);
     const tokenRequest = new UserApiTokenRequest(
@@ -158,7 +164,9 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
 
     const response = await this.postIdentityToken(tokenRequest);
     if (!(response instanceof IdentityTokenResponse)) {
-      throw new Error("Invalid response received when refreshing api token");
+      throw new Error(
+        "Invalid response received when refreshing access token via client credentials"
+      );
     }
 
     await this.tokenService.setAccessToken(response.accessToken);

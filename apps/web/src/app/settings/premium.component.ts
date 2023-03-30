@@ -118,7 +118,7 @@ export class PremiumComponent implements OnInit {
   }
 
   async finalizePremium() {
-    await this.tokenApiService.refreshIdentityToken();
+    await this.tokenApiService.refreshAccessToken();
     await this.syncService.fullSync(true);
     this.platformUtilsService.showToast("success", null, this.i18nService.t("premiumUpdated"));
     this.messagingService.send("purchasedPremium");

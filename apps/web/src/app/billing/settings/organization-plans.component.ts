@@ -371,7 +371,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
           );
         }
 
-        await this.tokenApiService.refreshIdentityToken();
+        await this.tokenApiService.refreshAccessToken();
         await this.syncService.fullSync(true);
 
         if (!this.acceptingSponsorship && !this.isInTrialFlow) {
@@ -498,7 +498,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     const response = await this.organizationApiService.createLicense(fd);
     const orgId = response.id;
 
-    await this.tokenApiService.refreshIdentityToken();
+    await this.tokenApiService.refreshAccessToken();
 
     // Org Keys live outside of the OrganizationLicense - add the keys to the org here
     const request = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);

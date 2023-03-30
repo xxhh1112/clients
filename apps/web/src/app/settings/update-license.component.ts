@@ -52,7 +52,7 @@ export class UpdateLicenseComponent {
       }
 
       this.formPromise = updatePromise.then(() => {
-        return this.tokenApiService.refreshIdentityToken();
+        return this.tokenApiService.refreshAccessToken();
       });
 
       await this.formPromise;
