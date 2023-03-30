@@ -82,6 +82,22 @@ describe("FidoAuthenticatorService", () => {
         await rejects.toMatchObject({ name: "SecurityError" });
         await rejects.toBeInstanceOf(DOMException);
       });
+
+      // Spec: If credTypesAndPubKeyAlgs is empty, return a DOMException whose name is "NotSupportedError", and terminate this algorithm.
+      it("should throw error if no support key algorithms were found", async () => {
+        const params = createParams({
+          pubKeyCredParams: [
+            { alg: -9001, type: "public-key" },
+            { alg: -7, type: "not-supported" as any },
+          ],
+        });
+
+        const result = async () => await client.createCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotSupportedError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
     });
 
     function createParams(params: Partial<CreateCredentialParams> = {}): CreateCredentialParams {
@@ -96,6 +112,7 @@ describe("FidoAuthenticatorService", () => {
         pubKeyCredParams: params.pubKeyCredParams ?? [
           {
             alg: -7,
+            type: "public-key",
           },
         ],
         rp: params.rp ?? {

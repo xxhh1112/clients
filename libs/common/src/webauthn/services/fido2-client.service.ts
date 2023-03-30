@@ -7,6 +7,7 @@ import {
   CreateCredentialParams,
   CreateCredentialResult,
   Fido2ClientService as Fido2ClientServiceAbstraction,
+  PublicKeyCredentialParam,
 } from "../abstractions/fido2-client.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
 
@@ -36,7 +37,21 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new DOMException("'rp.id' does not match origin effective domain", "SecurityError");
     }
 
-    throw new Error("Not implemented");
+    let credTypesAndPubKeyAlgs: PublicKeyCredentialParam[];
+    if (params.pubKeyCredParams?.length > 0) {
+      credTypesAndPubKeyAlgs = params.pubKeyCredParams.filter(
+        (kp) => kp.alg === -7 && kp.type === "public-key"
+      );
+    } else {
+      credTypesAndPubKeyAlgs = [
+        { alg: -7, type: "public-key" },
+        { alg: -257, type: "public-key" },
+      ];
+    }
+
+    if (credTypesAndPubKeyAlgs.length === 0) {
+      throw new DOMException("No supported key algorithms were found", "NotSupportedError");
+    }
   }
 
   assertCredential(

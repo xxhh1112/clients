@@ -33,10 +33,7 @@ export interface CreateCredentialParams {
     credProps?: boolean;
     uvm?: boolean;
   };
-  pubKeyCredParams: {
-    alg: number;
-    // type: "public-key"; // not used
-  }[];
+  pubKeyCredParams: PublicKeyCredentialParam[];
   rp: {
     id?: string;
     name: string;
@@ -72,6 +69,11 @@ export interface AssertCredentialResult {
   authenticatorData: string;
   signature: string;
   userHandle: string;
+}
+
+export interface PublicKeyCredentialParam {
+  alg: number;
+  type: "public-key";
 }
 
 export class Fido2Error extends Error {
