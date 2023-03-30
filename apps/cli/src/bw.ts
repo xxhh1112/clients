@@ -11,6 +11,8 @@ import { OrganizationApiService } from "@bitwarden/common/admin-console/services
 import { OrganizationService } from "@bitwarden/common/admin-console/services/organization/organization.service";
 import { PolicyService } from "@bitwarden/common/admin-console/services/policy/policy.service";
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
+import { AccountsApiService as AccountsApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
+import { AccountsApiServiceImplementation } from "@bitwarden/common/auth/services/accounts-api.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
@@ -131,6 +133,7 @@ export class Main {
   userVerificationApiService: UserVerificationApiService;
   organizationApiService: OrganizationApiServiceAbstraction;
   syncNotifierService: SyncNotifierService;
+  accountsApiService: AccountsApiServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -299,6 +302,11 @@ export class Main {
 
     this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
 
+    this.accountsApiService = new AccountsApiServiceImplementation(
+      this.environmentService,
+      this.apiService
+    );
+
     this.authService = new AuthService(
       this.cryptoService,
       this.apiService,
@@ -313,7 +321,8 @@ export class Main {
       this.twoFactorService,
       this.i18nService,
       this.encryptService,
-      this.tokenApiService
+      this.tokenApiService,
+      this.accountsApiService
     );
 
     const lockedCallback = async () =>

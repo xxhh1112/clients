@@ -3,7 +3,6 @@ import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -13,6 +12,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountsApiService } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -30,7 +30,6 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
-    apiService: ApiService,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
     passwordGenerationService: PasswordGenerationServiceAbstraction,
@@ -38,7 +37,8 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
     logService: LogService,
-    auditService: AuditService
+    auditService: AuditService,
+    accountsApiService: AccountsApiService
   ) {
     super(
       formValidationErrorService,
@@ -47,13 +47,13 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
       router,
       i18nService,
       cryptoService,
-      apiService,
       stateService,
       platformUtilsService,
       passwordGenerationService,
       environmentService,
       logService,
-      auditService
+      auditService,
+      accountsApiService
     );
   }
 

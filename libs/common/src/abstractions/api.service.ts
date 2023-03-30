@@ -74,8 +74,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { PreloginResponse } from "../auth/models/response/prelogin.response";
-import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
@@ -104,8 +102,6 @@ import { IapCheckRequest } from "../models/request/iap-check.request";
 import { KdfRequest } from "../models/request/kdf.request";
 import { KeysRequest } from "../models/request/keys.request";
 import { OrganizationImportRequest } from "../models/request/organization-import.request";
-import { PreloginRequest } from "../models/request/prelogin.request";
-import { RegisterRequest } from "../models/request/register.request";
 import { SendAccessRequest } from "../models/request/send-access.request";
 import { SendRequest } from "../models/request/send.request";
 import { StorageRequest } from "../models/request/storage.request";
@@ -162,7 +158,6 @@ export abstract class ApiService {
   putProfile: (request: UpdateProfileRequest) => Promise<ProfileResponse>;
   putAvatar: (request: UpdateAvatarRequest) => Promise<ProfileResponse>;
   putTaxInfo: (request: TaxInfoUpdateRequest) => Promise<any>;
-  postPrelogin: (request: PreloginRequest) => Promise<PreloginResponse>;
   postEmailToken: (request: EmailTokenRequest) => Promise<any>;
   postEmail: (request: EmailRequest) => Promise<any>;
   postPassword: (request: PasswordRequest) => Promise<any>;
@@ -171,7 +166,6 @@ export abstract class ApiService {
   postSecurityStamp: (request: SecretVerificationRequest) => Promise<any>;
   getAccountRevisionDate: () => Promise<number>;
   postPasswordHint: (request: PasswordHintRequest) => Promise<any>;
-  postRegister: (request: RegisterRequest) => Promise<RegisterResponse>;
   postPremium: (data: FormData) => Promise<PaymentResponse>;
   postIapCheck: (request: IapCheckRequest) => Promise<any>;
   postReinstatePremium: () => Promise<any>;

@@ -36,11 +36,13 @@ import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common
 import { CollectionService } from "@bitwarden/common/admin-console/services/collection.service";
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
+import { AccountsApiService as AccountsApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import { AccountsApiServiceImplementation } from "@bitwarden/common/auth/services/accounts-api.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
@@ -181,6 +183,7 @@ export default class MainBackground {
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
   avatarUpdateService: AvatarUpdateServiceAbstraction;
+  accountsApiService: AccountsApiServiceAbstraction;
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
 
@@ -384,6 +387,12 @@ export default class MainBackground {
         that.runtimeBackground.processMessage(message, that as any, null);
       };
     })();
+
+    this.accountsApiService = new AccountsApiServiceImplementation(
+      this.environmentService,
+      this.apiService
+    );
+
     this.authService = new AuthService(
       this.cryptoService,
       this.apiService,
@@ -398,7 +407,8 @@ export default class MainBackground {
       this.twoFactorService,
       this.i18nService,
       this.encryptService,
-      this.tokenApiService
+      this.tokenApiService,
+      this.accountsApiService
     );
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(

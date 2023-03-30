@@ -79,8 +79,6 @@ import {
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { PreloginResponse } from "../auth/models/response/prelogin.response";
-import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
@@ -111,8 +109,6 @@ import { IapCheckRequest } from "../models/request/iap-check.request";
 import { KdfRequest } from "../models/request/kdf.request";
 import { KeysRequest } from "../models/request/keys.request";
 import { OrganizationImportRequest } from "../models/request/organization-import.request";
-import { PreloginRequest } from "../models/request/prelogin.request";
-import { RegisterRequest } from "../models/request/register.request";
 import { SendAccessRequest } from "../models/request/send-access.request";
 import { SendRequest } from "../models/request/send.request";
 import { StorageRequest } from "../models/request/storage.request";
@@ -253,18 +249,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("PUT", "/accounts/tax", request, true, false);
   }
 
-  async postPrelogin(request: PreloginRequest): Promise<PreloginResponse> {
-    const r = await this.send(
-      "POST",
-      "/accounts/prelogin",
-      request,
-      false,
-      true,
-      this.environmentService.getIdentityUrl()
-    );
-    return new PreloginResponse(r);
-  }
-
   postEmailToken(request: EmailTokenRequest): Promise<any> {
     return this.send("POST", "/accounts/email-token", request, true, false);
   }
@@ -296,18 +280,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   postPasswordHint(request: PasswordHintRequest): Promise<any> {
     return this.send("POST", "/accounts/password-hint", request, false, false);
-  }
-
-  async postRegister(request: RegisterRequest): Promise<RegisterResponse> {
-    const r = await this.send(
-      "POST",
-      "/accounts/register",
-      request,
-      false,
-      true,
-      this.environmentService.getIdentityUrl()
-    );
-    return new RegisterResponse(r);
   }
 
   async postPremium(data: FormData): Promise<PaymentResponse> {

@@ -64,6 +64,7 @@ import {
   AccountService as AccountServiceAbstraction,
   InternalAccountService,
 } from "@bitwarden/common/auth/abstractions/account.service";
+import { AccountsApiService as AccountsApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
@@ -72,6 +73,7 @@ import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
+import { AccountsApiServiceImplementation } from "@bitwarden/common/auth/services/accounts-api.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
@@ -234,6 +236,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         I18nServiceAbstraction,
         EncryptService,
         TokenApiServiceAbstraction,
+        AccountsApiServiceAbstraction,
       ],
     },
     {
@@ -642,6 +645,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       useClass: OrgDomainApiService,
       deps: [OrgDomainServiceAbstraction, ApiServiceAbstraction],
     },
+    // TODO: Auth services like TokenApiService && AccountsApiService
+    //  should probably move to a new auth module at some point in the future
     {
       provide: TokenApiServiceAbstraction,
       useClass: TokenApiServiceImplementation,
@@ -652,6 +657,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         AppIdServiceAbstraction,
         ApiHelperServiceAbstraction,
       ],
+    },
+    {
+      provide: AccountsApiServiceAbstraction,
+      useClass: AccountsApiServiceImplementation,
+      deps: [EnvironmentServiceAbstraction, ApiServiceAbstraction],
     },
     {
       provide: ApiHelperServiceAbstraction,

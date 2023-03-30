@@ -2,7 +2,6 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -14,14 +13,15 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountsApiService } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
+import { RegisterRequest } from "@bitwarden/common/auth/models/request/register.request";
 import { RegisterResponse } from "@bitwarden/common/auth/models/response/register.response";
 import { DEFAULT_KDF_CONFIG, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
-import { RegisterRequest } from "@bitwarden/common/models/request/register.request";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { CaptchaProtectedComponent } from "../auth/components/captcha-protected.component";
@@ -84,13 +84,13 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     protected router: Router,
     i18nService: I18nService,
     protected cryptoService: CryptoService,
-    protected apiService: ApiService,
     protected stateService: StateService,
     platformUtilsService: PlatformUtilsService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     environmentService: EnvironmentService,
     protected logService: LogService,
-    protected auditService: AuditService
+    protected auditService: AuditService,
+    protected accountsApiService: AccountsApiService
   ) {
     super(environmentService, i18nService, platformUtilsService);
     this.showTerms = !platformUtilsService.isSelfHost();
@@ -305,7 +305,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     if (!(await this.validateRegistration(showToast)).isValid) {
       return { successful: false };
     }
-    this.formPromise = this.apiService.postRegister(request);
+    this.formPromise = this.accountsApiService.postRegister(request);
     try {
       const response = await this.formPromise;
       return { successful: true, captchaBypassToken: response.captchaBypassToken };

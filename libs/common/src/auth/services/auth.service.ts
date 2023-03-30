@@ -14,9 +14,9 @@ import { KdfType } from "../../enums/kdfType";
 import { KeySuffixOptions } from "../../enums/keySuffixOptions";
 import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
-import { PreloginRequest } from "../../models/request/prelogin.request";
 import { ErrorResponse } from "../../models/response/error.response";
 import { AuthRequestPushNotification } from "../../models/response/notification.response";
+import { AccountsApiService } from "../abstractions/accounts-api.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
@@ -38,6 +38,7 @@ import {
 } from "../models/domain/log-in-credentials";
 import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
 import { PasswordlessAuthRequest } from "../models/request/passwordless-auth.request";
+import { PreloginRequest } from "../models/request/prelogin.request";
 import { AuthRequestResponse } from "../models/response/auth-request.response";
 
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
@@ -95,7 +96,8 @@ export class AuthService implements AuthServiceAbstraction {
     protected twoFactorService: TwoFactorService,
     protected i18nService: I18nService,
     protected encryptService: EncryptService,
-    protected tokenApiService: TokenApiService
+    protected tokenApiService: TokenApiService,
+    protected accountsApiService: AccountsApiService
   ) {}
 
   async logIn(
@@ -260,7 +262,9 @@ export class AuthService implements AuthServiceAbstraction {
     let kdf: KdfType = null;
     let kdfConfig: KdfConfig = null;
     try {
-      const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(email));
+      const preloginResponse = await this.accountsApiService.postPrelogin(
+        new PreloginRequest(email)
+      );
       if (preloginResponse != null) {
         kdf = preloginResponse.kdf;
         kdfConfig = new KdfConfig(

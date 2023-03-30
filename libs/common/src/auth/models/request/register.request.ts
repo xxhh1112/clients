@@ -1,8 +1,8 @@
-import { CaptchaProtectedRequest } from "../../auth/models/request/captcha-protected.request";
-import { KdfType } from "../../enums/kdfType";
+import { KdfType } from "../../../enums/kdfType";
+import { KeysRequest } from "../../../models/request/keys.request";
+import { ReferenceEventRequest } from "../../../models/request/reference-event.request";
 
-import { KeysRequest } from "./keys.request";
-import { ReferenceEventRequest } from "./reference-event.request";
+import { CaptchaProtectedRequest } from "./captcha-protected.request";
 
 export class RegisterRequest implements CaptchaProtectedRequest {
   masterPasswordHint: string;

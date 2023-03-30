@@ -3,7 +3,6 @@ import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -14,6 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountsApiService } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -37,14 +37,14 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
-    apiService: ApiService,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     private policyService: PolicyService,
     environmentService: EnvironmentService,
     logService: LogService,
-    auditService: AuditService
+    auditService: AuditService,
+    accountsApiService: AccountsApiService
   ) {
     super(
       formValidationErrorService,
@@ -53,13 +53,13 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       router,
       i18nService,
       cryptoService,
-      apiService,
       stateService,
       platformUtilsService,
       passwordGenerationService,
       environmentService,
       logService,
-      auditService
+      auditService,
+      accountsApiService
     );
   }
 
