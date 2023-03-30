@@ -73,7 +73,7 @@ export abstract class LogInStrategy {
     } else if (response instanceof IdentityCaptchaResponse) {
       return this.processCaptchaResponse(response);
     } else if (response instanceof IdentityTokenResponse) {
-      return this.processTokenResponse(response);
+      return this.processIdTokenResponse(response);
     }
 
     throw new Error("Invalid response object.");
@@ -125,7 +125,7 @@ export abstract class LogInStrategy {
     );
   }
 
-  protected async processTokenResponse(response: IdentityTokenResponse): Promise<AuthResult> {
+  protected async processIdTokenResponse(response: IdentityTokenResponse): Promise<AuthResult> {
     const result = new AuthResult();
     result.resetMasterPassword = response.resetMasterPassword;
     result.forcePasswordReset = response.forcePasswordReset;
