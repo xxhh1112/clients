@@ -1,5 +1,6 @@
 import { parse } from "tldts";
 
+import { Utils } from "../../misc/utils";
 import { Fido2AuthenticatorService } from "../abstractions/fido2-authenticator.service.abstraction";
 import {
   AssertCredentialParams,
@@ -14,9 +15,9 @@ import { Fido2Utils } from "../abstractions/fido2-utils";
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   constructor(private authenticator: Fido2AuthenticatorService) {}
 
-  createCredential(
+  async createCredential(
     params: CreateCredentialParams,
-    abortController?: AbortController
+    abortController: AbortController = new AbortController()
   ): Promise<CreateCredentialResult> {
     if (!params.sameOriginWithAncestors) {
       throw new DOMException("Invalid 'sameOriginWithAncestors' value", "NotAllowedError");
@@ -51,6 +52,24 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
     if (credTypesAndPubKeyAlgs.length === 0) {
       throw new DOMException("No supported key algorithms were found", "NotSupportedError");
+    }
+
+    const collectedClientData = {
+      type: "webauthn.create",
+      challenge: params.challenge,
+      origin: params.origin,
+      crossOrigin: !params.sameOriginWithAncestors,
+      // tokenBinding: {} // Not currently supported
+    };
+    const clientDataJSON = JSON.stringify(collectedClientData);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const clientDataHash = await crypto.subtle.digest(
+      { name: "SHA-256" },
+      Utils.fromByteStringToArray(clientDataJSON)
+    );
+
+    if (abortController.signal.aborted) {
+      throw new DOMException(undefined, "AbortError");
     }
   }
 

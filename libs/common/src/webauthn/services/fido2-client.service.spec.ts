@@ -100,6 +100,21 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
+    describe("aborting", () => {
+      // Spec: If the options.signal is present and its aborted flag is set to true, return a DOMException whose name is "AbortError" and terminate this algorithm.
+      it("should throw error if aborting using abort controller", async () => {
+        const params = createParams({});
+        const abortController = new AbortController();
+        abortController.abort();
+
+        const result = async () => await client.createCredential(params, abortController);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "AbortError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+    });
+
     function createParams(params: Partial<CreateCredentialParams> = {}): CreateCredentialParams {
       return {
         origin: params.origin ?? "bitwarden.com",
