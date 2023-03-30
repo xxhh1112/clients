@@ -12,7 +12,7 @@ export class SsoApiServiceImplementation implements SsoApiServiceAbstraction {
     }
     const responseBody = await this.apiService.send(
       "GET",
-      `/account/prevalidate?domainHint=${encodeURIComponent(identifier)}`,
+      `/sso/prevalidate?domainHint=${encodeURIComponent(identifier)}`,
       null,
       false,
       true,
