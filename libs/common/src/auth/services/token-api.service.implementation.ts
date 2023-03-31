@@ -99,8 +99,8 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
   private async _refreshAccessToken(): Promise<void> {
     // if we have a refresh token, use it to get a new access token and refresh token
     const refreshToken = await this.tokenService.getRefreshToken();
-    if (refreshToken != null && refreshToken !== "") {
-      return this.refreshAccessTokenViaRefreshToken();
+    if (!Utils.isNullOrWhitespace(refreshToken)) {
+      return this.refreshAccessTokenViaRefreshToken(refreshToken);
     }
 
     // if we have client creds, use them to get a new access token and refresh token
@@ -113,9 +113,8 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     throw new Error("Cannot refresh token, no refresh token or api keys are stored");
   }
 
-  private async refreshAccessTokenViaRefreshToken(): Promise<void> {
-    const refreshToken = await this.tokenService.getRefreshToken();
-    if (refreshToken == null || refreshToken === "") {
+  private async refreshAccessTokenViaRefreshToken(refreshToken: string): Promise<void> {
+    if (Utils.isNullOrWhitespace(refreshToken)) {
       throw new Error();
     }
 
