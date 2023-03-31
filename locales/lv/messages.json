@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Atcelt abonementu"
   },
+  "subscriptionExpiration": {
+    "message": "Abonementa izbeigšanās"
+  },
   "subscriptionCanceled": {
     "message": "Abonements ir atcelts."
   },
@@ -5875,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Pakalpojumu konts tika izdzēsts"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Pakalpojumu konti ir izdzēsti"
@@ -6036,8 +6039,8 @@
     "message": "Piekļuves pilnvaras",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Izveidot piekļuves pilnvaru",
+  "newAccessToken": {
+    "message": "Jauna piekļuves pilnvara",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6669,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Noraidīt"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

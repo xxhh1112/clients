@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Annuler l'abonnement"
   },
+  "subscriptionExpiration": {
+    "message": "Expiration de l'abonnement"
+  },
   "subscriptionCanceled": {
     "message": "L'abonnement a été annulé."
   },
@@ -5875,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Le compte de service a été supprimé"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Comptes de service supprimés"
@@ -6036,8 +6039,8 @@
     "message": "Jetons d'accès",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Créer un jeton d'accès",
+  "newAccessToken": {
+    "message": "Nouveau jeton d'accès",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6669,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Rejeter"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Cette fonctionnalité n'est pas disponible pour les organisations gratuites. Contactez le propriétaire de votre organisation pour une mise à niveau."
   }
 }

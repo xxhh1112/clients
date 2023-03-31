@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Avbryt abonnementet"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "Abonnementet har blitt avbrutt."
   },
@@ -5875,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Tjenestekontoen er slettet"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Tjenestekontoer slettet"
@@ -6036,8 +6039,8 @@
     "message": "Tilgangstoken",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Opprett tilgangstoken",
+  "newAccessToken": {
+    "message": "New access token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6669,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Avvis"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }
