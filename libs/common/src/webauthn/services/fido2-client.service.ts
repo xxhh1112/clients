@@ -20,6 +20,8 @@ import {
 } from "../abstractions/fido2-client.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
 
+import { isValidRpId } from "./domain-utils";
+
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   constructor(private authenticator: Fido2AuthenticatorService) {}
 
@@ -36,14 +38,15 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new TypeError("Invalid 'user.id' length");
     }
 
-    const { domain: effectiveDomain } = parse(params.origin, { allowPrivateDomains: true });
-    if (effectiveDomain == undefined) {
-      throw new DOMException("'origin' is not a valid domain", "SecurityError");
+    const parsedOrigin = parse(params.origin, { allowPrivateDomains: true });
+    const rpId = params.rp.id ?? parsedOrigin.domain;
+
+    if (parsedOrigin.domain == undefined || !params.origin.startsWith("https://")) {
+      throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
 
-    const rpId = params.rp.id ?? effectiveDomain;
-    if (effectiveDomain !== rpId) {
-      throw new DOMException("'rp.id' does not match origin effective domain", "SecurityError");
+    if (!isValidRpId(rpId, params.origin)) {
+      throw new DOMException("'rp.id' cannot be used with the current origin", "SecurityError");
     }
 
     let credTypesAndPubKeyAlgs: PublicKeyCredentialParam[];
@@ -72,19 +75,15 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const clientDataJSON = JSON.stringify(collectedClientData);
     const clientDataJSONBytes = Utils.fromByteStringToArray(clientDataJSON);
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
-
     if (abortController.signal.aborted) {
       throw new DOMException(undefined, "AbortError");
     }
-
     const timeout = setAbortTimeout(
       abortController,
       params.authenticatorSelection?.userVerification,
       params.timeout
     );
-
     const excludeCredentialDescriptorList: PublicKeyCredentialDescriptor[] = [];
-
     if (params.excludeCredentials !== undefined) {
       for (const credential of params.excludeCredentials) {
         try {
@@ -97,7 +96,6 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         } catch {}
       }
     }
-
     const makeCredentialParams: Fido2AuthenticatorMakeCredentialsParams = {
       requireResidentKey:
         params.authenticatorSelection?.residentKey === "required" ||
@@ -117,7 +115,6 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         displayName: params.user.displayName,
       },
     };
-
     let makeCredentialResult;
     try {
       makeCredentialResult = await this.authenticator.makeCredential(
@@ -133,12 +130,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       }
       throw new DOMException(undefined, "NotAllowedError");
     }
-
     if (abortController.signal.aborted) {
       throw new DOMException(undefined, "AbortError");
     }
     clearTimeout(timeout);
-
     return {
       credentialId: Fido2Utils.bufferToString(makeCredentialResult.credentialId),
       attestationObject: Fido2Utils.bufferToString(makeCredentialResult.attestationObject),
@@ -158,9 +153,15 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new DOMException("'origin' is not a valid domain", "SecurityError");
     }
 
-    const rpId = params.rpId ?? effectiveDomain;
-    if (effectiveDomain !== rpId) {
-      throw new DOMException("'rp.id' does not match origin effective domain", "SecurityError");
+    const parsedOrigin = parse(params.origin, { allowPrivateDomains: true });
+    const rpId = params.rpId ?? parsedOrigin.domain;
+
+    if (parsedOrigin.domain == undefined || !params.origin.startsWith("https://")) {
+      throw new DOMException("'origin' is not a valid https origin", "SecurityError");
+    }
+
+    if (!isValidRpId(rpId, params.origin)) {
+      throw new DOMException("'rp.id' cannot be used with the current origin", "SecurityError");
     }
 
     const collectedClientData = {

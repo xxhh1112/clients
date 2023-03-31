@@ -28,7 +28,7 @@ describe("FidoAuthenticatorService", () => {
   });
 
   describe("createCredential", () => {
-    describe("invalid input parameters", () => {
+    describe("input parameters validation", () => {
       // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
       it("should throw error if sameOriginWithAncestors is false", async () => {
         const params = createParams({ sameOriginWithAncestors: false });
@@ -81,10 +81,23 @@ describe("FidoAuthenticatorService", () => {
       });
 
       // Spec: If options.rp.id is not a registrable domain suffix of and is not equal to effectiveDomain, return a DOMException whose name is "SecurityError", and terminate this algorithm.
-      it("should throw error if rp.id does not match origin effective domain", async () => {
+      it("should throw error if rp.id is not valid for this origin", async () => {
         const params = createParams({
-          origin: "passwordless.dev",
-          rp: { id: "bitwarden.com", name: "Bitwarden" },
+          origin: "https://passwordless.dev",
+          rp: { id: "bitwarden.com", name: "Bitwraden" },
+        });
+
+        const result = async () => await client.createCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "SecurityError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
+      it("should throw error if origin is not an https domain", async () => {
+        const params = createParams({
+          origin: "http://passwordless.dev",
+          rp: { id: "bitwarden.com", name: "Bitwraden" },
         });
 
         const result = async () => await client.createCredential(params);
@@ -179,7 +192,7 @@ describe("FidoAuthenticatorService", () => {
 
     function createParams(params: Partial<CreateCredentialParams> = {}): CreateCredentialParams {
       return {
-        origin: params.origin ?? "bitwarden.com",
+        origin: params.origin ?? "https://bitwarden.com",
         sameOriginWithAncestors: params.sameOriginWithAncestors ?? true,
         attestation: params.attestation,
         authenticatorSelection: params.authenticatorSelection,
@@ -234,9 +247,22 @@ describe("FidoAuthenticatorService", () => {
       });
 
       // Spec: If options.rp.id is not a registrable domain suffix of and is not equal to effectiveDomain, return a DOMException whose name is "SecurityError", and terminate this algorithm.
-      it("should throw error if rp.id does not match origin effective domain", async () => {
+      it("should throw error if rp.id is not valid for this origin", async () => {
         const params = createParams({
-          origin: "passwordless.dev",
+          origin: "https://passwordless.dev",
+          rpId: "bitwarden.com",
+        });
+
+        const result = async () => await client.assertCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "SecurityError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
+      it("should throw error if origin is not an http domain", async () => {
+        const params = createParams({
+          origin: "http://passwordless.dev",
           rpId: "bitwarden.com",
         });
 
@@ -345,7 +371,7 @@ describe("FidoAuthenticatorService", () => {
       return {
         allowedCredentialIds: params.allowedCredentialIds ?? [],
         challenge: params.challenge ?? Fido2Utils.bufferToString(randomBytes(16)),
-        origin: params.origin ?? RpId,
+        origin: params.origin ?? "https://bitwarden.com",
         rpId: params.rpId ?? RpId,
         timeout: params.timeout,
         userVerification: params.userVerification,

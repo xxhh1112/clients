@@ -115,7 +115,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         cipher.fido2Key = await createKeyView(params, keyPair.privateKey);
         const reencrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.updateWithServer(reencrypted);
-      } catch {
+      } catch (error) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
     }
