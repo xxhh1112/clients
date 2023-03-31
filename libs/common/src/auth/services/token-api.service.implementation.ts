@@ -54,7 +54,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
       this.apiHelperService.qsStringify(identityToken),
       true,
       // Create an arrow function so that the alterIdentityTokenHeaders will be
-      // be called with the correct context for "this" and email will be defined in the method.
+      // called with the correct context for "this" and email will be defined in the method.
       (headers) => request.alterIdentityTokenHeaders(headers)
     );
 
