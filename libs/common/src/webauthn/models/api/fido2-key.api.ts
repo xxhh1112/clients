@@ -22,7 +22,7 @@ export class Fido2KeyApi extends BaseResponse {
 
     this.nonDiscoverableId = this.getResponseProperty("NonDiscoverableId");
     this.keyType = this.getResponseProperty("KeyType");
-    this.keyAlgorithm = this.getResponseProperty("KeyType");
+    this.keyAlgorithm = this.getResponseProperty("KeyAlgorithm");
     this.keyCurve = this.getResponseProperty("KeyCurve");
     this.keyValue = this.getResponseProperty("keyValue");
     this.rpId = this.getResponseProperty("RpId");

@@ -254,7 +254,7 @@ describe("FidoAuthenticatorService", () => {
 
         expect(userInterface.confirmNewCredential).toHaveBeenCalledWith({
           credentialName: params.rpEntity.name,
-          userName: params.userEntity.name,
+          userName: params.userEntity.displayName,
         } as NewCredentialParams);
       });
 
@@ -284,7 +284,7 @@ describe("FidoAuthenticatorService", () => {
               rpName: params.rpEntity.name,
               userHandle: Fido2Utils.bufferToString(params.userEntity.id),
               counter: 0,
-              userName: params.userEntity.name,
+              userName: params.userEntity.displayName,
             }),
           })
         );
@@ -337,7 +337,7 @@ describe("FidoAuthenticatorService", () => {
 
         expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith({
           credentialName: params.rpEntity.name,
-          userName: params.userEntity.name,
+          userName: params.userEntity.displayName,
         } as NewCredentialParams);
       });
 
@@ -363,7 +363,7 @@ describe("FidoAuthenticatorService", () => {
               rpName: params.rpEntity.name,
               userHandle: Fido2Utils.bufferToString(params.userEntity.id),
               counter: 0,
-              userName: params.userEntity.name,
+              userName: params.userEntity.displayName,
             }),
           })
         );

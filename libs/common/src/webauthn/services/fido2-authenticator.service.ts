@@ -65,7 +65,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
         {
           credentialName: params.rpEntity.name,
-          userName: params.userEntity.name,
+          userName: params.userEntity.displayName,
         }
       );
 
@@ -77,7 +77,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     if (params.requireResidentKey) {
       const userVerification = await this.userInterface.confirmNewCredential({
         credentialName: params.rpEntity.name,
-        userName: params.userEntity.name,
+        userName: params.userEntity.displayName,
       });
 
       if (!userVerification) {
@@ -100,7 +100,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     } else {
       const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential({
         credentialName: params.rpEntity.name,
-        userName: params.userEntity.name,
+        userName: params.userEntity.displayName,
       });
 
       if (cipherId === undefined) {
@@ -191,7 +191,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
           : selectedCipher.id;
 
       ++selectedCipher.fido2Key.counter;
-      selectedCipher.localData.lastUsedDate = new Date().getTime();
+
+      selectedCipher.localData = {
+        ...selectedCipher.localData,
+        lastUsedDate: new Date().getTime(),
+      };
       const encrypted = await this.cipherService.encrypt(selectedCipher);
       await this.cipherService.updateWithServer(encrypted);
 
@@ -268,6 +272,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
+        !cipher.isDeleted &&
         cipher.type === CipherType.Login &&
         cipher.fido2Key != undefined &&
         cipher.fido2Key.rpId === rpId &&
@@ -278,7 +283,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   private async findDiscoverableCredentials(rpId: string): Promise<CipherView[]> {
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
-      (cipher) => cipher.type === CipherType.Fido2Key && cipher.fido2Key.rpId === rpId
+      (cipher) =>
+        !cipher.isDeleted && cipher.type === CipherType.Fido2Key && cipher.fido2Key.rpId === rpId
     );
   }
 }
@@ -313,7 +319,7 @@ async function createKeyView(
   fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
   fido2Key.counter = 0;
   fido2Key.rpName = params.rpEntity.name;
-  fido2Key.userName = params.userEntity.name;
+  fido2Key.userName = params.userEntity.displayName;
 
   return fido2Key;
 }
@@ -324,7 +330,7 @@ async function getPrivateKeyFromCipher(cipher: CipherView): Promise<CryptoKey> {
     "pkcs8",
     keyBuffer,
     {
-      name: cipher.fido2Key.keyType,
+      name: cipher.fido2Key.keyAlgorithm,
       namedCurve: cipher.fido2Key.keyCurve,
     } as EcKeyImportParams,
     true,
