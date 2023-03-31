@@ -110,12 +110,12 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
       return this.refreshAccessTokenViaClientCredentials(clientId, clientSecret);
     }
 
-    throw new Error("Cannot refresh token, no refresh token or api keys are stored");
+    throw new Error("Cannot refresh access token; no refresh token or api keys are stored");
   }
 
   private async refreshAccessTokenViaRefreshToken(refreshToken: string): Promise<void> {
     if (Utils.isNullOrWhitespace(refreshToken)) {
-      throw new Error();
+      throw new Error("Cannot refresh access token; no refresh token provided");
     }
 
     const decodedToken = await this.tokenService.decodeAccessToken();
