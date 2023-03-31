@@ -70,6 +70,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
         return new IdentityTokenResponse(responseJson);
       } else if (
         response.status === 400 &&
+        // TODO: Refactor TwoFactorProviders2 to something more specific (tech debt: PM-1696)
         responseJson.TwoFactorProviders2 &&
         Object.keys(responseJson.TwoFactorProviders2).length
       ) {
