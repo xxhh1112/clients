@@ -125,6 +125,7 @@ export class CipherRequest {
         break;
       case CipherType.Fido2Key:
         this.fido2Key = new Fido2KeyApi();
+        this.fido2Key.nonDiscoverableId = cipher.fido2Key.nonDiscoverableId.encryptedString;
         this.fido2Key.keyType =
           cipher.fido2Key.keyType != null
             ? (cipher.fido2Key.keyType.encryptedString as "public-key")
@@ -147,8 +148,6 @@ export class CipherRequest {
           cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
         this.fido2Key.userName =
           cipher.fido2Key.userName != null ? cipher.fido2Key.userName.encryptedString : null;
-        this.fido2Key.origin =
-          cipher.fido2Key.origin != null ? cipher.fido2Key.origin.encryptedString : null;
         break;
       default:
         break;

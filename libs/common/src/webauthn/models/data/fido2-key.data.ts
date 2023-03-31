@@ -13,7 +13,6 @@ export class Fido2KeyData {
   // Extras
   rpName: string;
   userName: string;
-  origin: string;
 
   constructor(data?: Fido2KeyApi) {
     if (data == null) {
@@ -30,6 +29,5 @@ export class Fido2KeyData {
     this.counter = data.counter;
     this.rpName = data.rpName;
     this.userName = data.userName;
-    this.origin = data.origin;
   }
 }

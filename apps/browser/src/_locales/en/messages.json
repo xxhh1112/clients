@@ -2062,9 +2062,6 @@
   "rpName": {
     "message": "Relying party"
   },
-  "origin": {
-    "message": "Origin"
-  },
   "loginWithDevice": {
     "message": "Log in with device"
   },

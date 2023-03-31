@@ -15,7 +15,6 @@ export class Fido2KeyView extends ItemView {
   // Extras
   rpName: string;
   userName: string;
-  origin: string;
 
   get subTitle(): string {
     return this.userName;
