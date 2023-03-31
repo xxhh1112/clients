@@ -61,6 +61,7 @@ export interface AssertCredentialParams {
   challenge: string;
   userVerification?: UserVerification;
   timeout: number;
+  sameOriginWithAncestors: boolean;
 }
 
 export interface AssertCredentialResult {

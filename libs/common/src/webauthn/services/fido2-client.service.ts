@@ -4,8 +4,10 @@ import { Utils } from "../../misc/utils";
 import {
   Fido2AutenticatorError,
   Fido2AutenticatorErrorCode,
+  Fido2AuthenticatorGetAssertionParams,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService,
+  PublicKeyCredentialDescriptor,
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import {
   AssertCredentialParams,
@@ -23,7 +25,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
   async createCredential(
     params: CreateCredentialParams,
-    abortController: AbortController = new AbortController()
+    abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
     if (!params.sameOriginWithAncestors) {
       throw new DOMException("Invalid 'sameOriginWithAncestors' value", "NotAllowedError");
@@ -81,6 +83,21 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       params.timeout
     );
 
+    const excludeCredentialDescriptorList: PublicKeyCredentialDescriptor[] = [];
+
+    if (params.excludeCredentials !== undefined) {
+      for (const credential of params.excludeCredentials) {
+        try {
+          excludeCredentialDescriptorList.push({
+            id: Fido2Utils.stringToBuffer(credential.id),
+            transports: credential.transports,
+            type: credential.type,
+          });
+          // eslint-disable-next-line no-empty
+        } catch {}
+      }
+    }
+
     const makeCredentialParams: Fido2AuthenticatorMakeCredentialsParams = {
       requireResidentKey:
         params.authenticatorSelection?.residentKey === "required" ||
@@ -88,11 +105,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
           params.authenticatorSelection?.requireResidentKey === true),
       requireUserVerification: params.authenticatorSelection?.userVerification === "required",
       enterpriseAttestationPossible: params.attestation === "enterprise",
-      excludeCredentialDescriptorList: params.excludeCredentials?.map((c) => ({
-        id: Fido2Utils.stringToBuffer(c.id),
-        transports: c.transports,
-        type: c.type,
-      })),
+      excludeCredentialDescriptorList,
       credTypesAndPubKeyAlgs,
       hash: clientDataHash,
       rpEntity: {
@@ -136,11 +149,87 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     };
   }
 
-  assertCredential(
+  async assertCredential(
     params: AssertCredentialParams,
-    abortController?: AbortController
+    abortController = new AbortController()
   ): Promise<AssertCredentialResult> {
-    throw new Error("Not implemented");
+    const { domain: effectiveDomain } = parse(params.origin, { allowPrivateDomains: true });
+    if (effectiveDomain == undefined) {
+      throw new DOMException("'origin' is not a valid domain", "SecurityError");
+    }
+
+    const rpId = params.rpId ?? effectiveDomain;
+    if (effectiveDomain !== rpId) {
+      throw new DOMException("'rp.id' does not match origin effective domain", "SecurityError");
+    }
+
+    const collectedClientData = {
+      type: "webauthn.create",
+      challenge: params.challenge,
+      origin: params.origin,
+      crossOrigin: !params.sameOriginWithAncestors,
+      // tokenBinding: {} // Not currently supported
+    };
+    const clientDataJSON = JSON.stringify(collectedClientData);
+    const clientDataJSONBytes = Utils.fromByteStringToArray(clientDataJSON);
+    const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
+
+    if (abortController.signal.aborted) {
+      throw new DOMException(undefined, "AbortError");
+    }
+
+    const timeout = setAbortTimeout(abortController, params.userVerification, params.timeout);
+
+    const allowCredentialDescriptorList: PublicKeyCredentialDescriptor[] = [];
+    for (const id of params.allowedCredentialIds) {
+      try {
+        allowCredentialDescriptorList.push({
+          id: Utils.guidToRawFormat(id),
+          type: "public-key",
+        });
+        // eslint-disable-next-line no-empty
+      } catch {}
+    }
+
+    const getAssertionParams: Fido2AuthenticatorGetAssertionParams = {
+      rpId,
+      requireUserVerification: params.userVerification === "required",
+      hash: clientDataHash,
+      allowCredentialDescriptorList,
+      extensions: {},
+    };
+
+    let getAssertionResult;
+    try {
+      getAssertionResult = await this.authenticator.getAssertion(
+        getAssertionParams,
+        abortController
+      );
+    } catch (error) {
+      if (
+        error instanceof Fido2AutenticatorError &&
+        error.errorCode === Fido2AutenticatorErrorCode.InvalidState
+      ) {
+        throw new DOMException(undefined, "InvalidStateError");
+      }
+      throw new DOMException(undefined, "NotAllowedError");
+    }
+
+    if (abortController.signal.aborted) {
+      throw new DOMException(undefined, "AbortError");
+    }
+    clearTimeout(timeout);
+
+    return {
+      authenticatorData: Fido2Utils.bufferToString(getAssertionResult.authenticatorData),
+      clientDataJSON,
+      credentialId: getAssertionResult.selectedCredential.id,
+      userHandle:
+        getAssertionResult.selectedCredential.userHandle !== undefined
+          ? Fido2Utils.bufferToString(getAssertionResult.selectedCredential.userHandle)
+          : undefined,
+      signature: Fido2Utils.bufferToString(getAssertionResult.signature),
+    };
   }
 }
 
