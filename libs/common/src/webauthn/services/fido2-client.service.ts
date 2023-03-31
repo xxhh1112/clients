@@ -159,7 +159,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     const collectedClientData = {
-      type: "webauthn.create",
+      type: "webauthn.get",
       challenge: params.challenge,
       origin: params.origin,
       crossOrigin: !params.sameOriginWithAncestors,

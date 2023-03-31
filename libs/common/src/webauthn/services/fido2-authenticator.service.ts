@@ -123,7 +123,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const credentialId = params.requireResidentKey ? cipher.id : cipher.fido2Key.nonDiscoverableId;
     const authData = await generateAuthData({
       rpId: params.rpEntity.id,
-      credentialId,
+      credentialId: Utils.guidToRawFormat(credentialId),
       counter: cipher.fido2Key.counter,
       userPresence: true,
       userVerification: false,
@@ -201,7 +201,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       const authenticatorData = await generateAuthData({
         rpId: selectedCipher.fido2Key.rpId,
-        credentialId: selectedCredentialId,
+        credentialId: Utils.guidToRawFormat(selectedCredentialId),
         counter: selectedCipher.fido2Key.counter,
         userPresence: true,
         userVerification: false,
@@ -209,7 +209,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       const signature = await generateSignature({
         authData: authenticatorData,
-        clientData: params.hash,
+        clientDataHash: params.hash,
         privateKey: await getPrivateKeyFromCipher(selectedCipher),
       });
 
@@ -340,7 +340,7 @@ async function getPrivateKeyFromCipher(cipher: CipherView): Promise<CryptoKey> {
 
 interface AuthDataParams {
   rpId: string;
-  credentialId: string;
+  credentialId: BufferSource;
   userPresence: boolean;
   userVerification: boolean;
   counter: number;
@@ -380,7 +380,7 @@ async function generateAuthData(params: AuthDataParams) {
     attestedCredentialData.push(...AAGUID);
 
     // credentialIdLength (2 bytes) and credential Id
-    const rawId = Utils.guidToRawFormat(params.credentialId);
+    const rawId = Fido2Utils.bufferSourceToUint8Array(params.credentialId);
     const credentialIdLength = [(rawId.length - (rawId.length & 0xff)) / 256, rawId.length & 0xff];
     attestedCredentialData.push(...credentialIdLength);
     attestedCredentialData.push(...rawId);
@@ -408,14 +408,15 @@ async function generateAuthData(params: AuthDataParams) {
 
 interface SignatureParams {
   authData: Uint8Array;
-  clientData: BufferSource;
+  clientDataHash: BufferSource;
   privateKey: CryptoKey;
 }
 
 async function generateSignature(params: SignatureParams) {
-  const clientData = Fido2Utils.bufferSourceToUint8Array(params.clientData);
-  const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientData);
-  const sigBase = new Uint8Array([...params.authData, ...new Uint8Array(clientDataHash)]);
+  const sigBase = new Uint8Array([
+    ...params.authData,
+    ...Fido2Utils.bufferSourceToUint8Array(params.clientDataHash),
+  ]);
   const p1336_signature = new Uint8Array(
     await crypto.subtle.sign(
       {

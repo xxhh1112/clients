@@ -34,19 +34,6 @@ describe("FidoAuthenticatorService", () => {
     cipherService = mock<CipherService>();
     userInterface = mock<Fido2UserInterfaceService>();
     authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
-
-    // crypto.subtle.importKey doesn't work properly in jest, so we need to mock it with new keys.
-    const privateKey = (
-      await crypto.subtle.generateKey(
-        {
-          name: "ECDSA",
-          namedCurve: "P-256",
-        },
-        true,
-        ["sign"]
-      )
-    ).privateKey;
-    crypto.subtle.importKey = jest.fn().mockResolvedValue(privateKey);
   });
 
   describe("makeCredential", () => {
@@ -648,16 +635,24 @@ describe("FidoAuthenticatorService", () => {
       describe(`assertion of ${
         residentKey ? "discoverable" : "non-discoverable"
       } credential`, () => {
+        let keyPair: CryptoKeyPair;
         let credentialIds: string[];
         let selectedCredentialId: string;
         let ciphers: CipherView[];
         let params: Fido2AuthenticatorGetAssertionParams;
 
         beforeEach(async () => {
+          keyPair = await createKeyPair();
           credentialIds = [Utils.newGuid(), Utils.newGuid()];
+          const keyValue = Fido2Utils.bufferToString(
+            await crypto.subtle.exportKey("pkcs8", keyPair.privateKey)
+          );
           if (residentKey) {
             ciphers = credentialIds.map((id) =>
-              createCipherView({ type: CipherType.Fido2Key }, { rpId: RpId, counter: 9000 })
+              createCipherView(
+                { type: CipherType.Fido2Key },
+                { rpId: RpId, counter: 9000, keyValue }
+              )
             );
             selectedCredentialId = ciphers[0].id;
             params = await createParams({
@@ -723,8 +718,20 @@ describe("FidoAuthenticatorService", () => {
           );
           expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
           expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // 9001 in hex
-          // Signatures are non-deterministic, and webcrypto can't verify DER signature format
-          // expect(result.signature).toMatchSnapshot();
+
+          // Verify signature
+          // TODO: Cannot verify signature because it has been converted into DER format
+          // const sigBase = new Uint8Array([
+          //   ...result.authenticatorData,
+          //   ...Fido2Utils.bufferSourceToUint8Array(params.hash),
+          // ]);
+          // const isValidSignature = await crypto.subtle.verify(
+          //   { name: "ECDSA", hash: { name: "SHA-256" } },
+          //   keyPair.publicKey,
+          //   result.signature,
+          //   sigBase
+          // );
+          // expect(isValidSignature).toBe(true);
         });
 
         /** Spec: If any error occurred while generating the assertion signature, return an error code equivalent to "UnknownError" and terminate the operation. */
@@ -803,4 +810,15 @@ async function createClientDataHash() {
 /** This is a fake function that always returns the same byte sequence */
 function randomBytes(length: number) {
   return new Uint8Array(Array.from({ length }, (_, k) => k % 255));
+}
+
+async function createKeyPair() {
+  return await crypto.subtle.generateKey(
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    ["sign", "verify"]
+  );
 }
