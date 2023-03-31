@@ -446,10 +446,10 @@ describe("FidoAuthenticatorService", () => {
           const aaguid = encAuthData.slice(37, 53);
           const credentialIdLength = encAuthData.slice(53, 55);
           const credentialId = encAuthData.slice(55, 71);
-          // Public key format is not tested here since it will be tested
-          // by the assertion tests.
+          // Unsure how to test public key
           // const publicKey = encAuthData.slice(87);
 
+          expect(encAuthData.length).toBe(71 + 77);
           expect(attestationObject.fmt).toBe("none");
           expect(attestationObject.attStmt).toEqual({});
           expect(rpIdHash).toEqual(
@@ -710,7 +710,7 @@ describe("FidoAuthenticatorService", () => {
           const flags = encAuthData.slice(32, 33);
           const counter = encAuthData.slice(33, 37);
 
-          expect(result.selectedCredential.id).toBe(selectedCredentialId);
+          expect(result.selectedCredential.id).toEqual(Utils.guidToRawFormat(selectedCredentialId));
           expect(result.selectedCredential.userHandle).toEqual(
             Fido2Utils.stringToBuffer(ciphers[0].fido2Key.userHandle)
           );

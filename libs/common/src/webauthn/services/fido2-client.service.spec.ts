@@ -318,8 +318,12 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("assert non-discoverable credential", () => {
-      it("should call authenticator.makeCredential", async () => {
-        const allowedCredentialIds = [Utils.newGuid(), Utils.newGuid(), "not-a-guid"];
+      it("should call authenticator.assertCredential", async () => {
+        const allowedCredentialIds = [
+          Fido2Utils.bufferToString(Utils.guidToRawFormat(Utils.newGuid())),
+          Fido2Utils.bufferToString(Utils.guidToRawFormat(Utils.newGuid())),
+          Fido2Utils.bufferToString(Utils.fromByteStringToArray("not-a-guid")),
+        ];
         const params = createParams({
           userVerification: "required",
           allowedCredentialIds,
@@ -334,10 +338,13 @@ describe("FidoAuthenticatorService", () => {
             rpId: RpId,
             allowCredentialDescriptorList: [
               expect.objectContaining({
-                id: Utils.guidToRawFormat(allowedCredentialIds[0]),
+                id: Fido2Utils.stringToBuffer(allowedCredentialIds[0]),
               }),
               expect.objectContaining({
-                id: Utils.guidToRawFormat(allowedCredentialIds[1]),
+                id: Fido2Utils.stringToBuffer(allowedCredentialIds[1]),
+              }),
+              expect.objectContaining({
+                id: Fido2Utils.stringToBuffer(allowedCredentialIds[2]),
               }),
             ],
           }),
@@ -347,7 +354,7 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("assert discoverable credential", () => {
-      it("should call authenticator.makeCredential", async () => {
+      it("should call authenticator.assertCredential", async () => {
         const params = createParams({
           userVerification: "required",
           allowedCredentialIds: [],

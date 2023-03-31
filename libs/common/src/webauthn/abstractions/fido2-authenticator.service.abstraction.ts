@@ -110,7 +110,7 @@ export interface Fido2AuthenticatorGetAssertionParams {
 
 export interface Fido2AuthenticatorGetAssertionResult {
   selectedCredential: {
-    id: string;
+    id: Uint8Array;
     userHandle?: Uint8Array;
   };
   authenticatorData: Uint8Array;

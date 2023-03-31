@@ -32,7 +32,19 @@ navigator.credentials.create = async (
       throw new Error("Something went wrong.");
     }
 
-    return WebauthnUtils.mapCredentialRegistrationResult(response.result);
+    console.log(response.result);
+
+    let mappedResult;
+    try {
+      mappedResult = WebauthnUtils.mapCredentialRegistrationResult(response.result);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+
+    console.log(mappedResult);
+
+    return mappedResult;
   } catch (error) {
     if (error && error.fallbackRequested) {
       return await browserCredentials.create(options);
@@ -59,6 +71,8 @@ navigator.credentials.get = async (
     if (response.type !== MessageType.CredentialGetResponse) {
       throw new Error("Something went wrong.");
     }
+
+    console.log(response.result);
 
     return WebauthnUtils.mapCredentialAssertResult(response.result);
   } catch (error) {

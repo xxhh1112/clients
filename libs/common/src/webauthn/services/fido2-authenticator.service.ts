@@ -212,7 +212,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       return {
         authenticatorData,
         selectedCredential: {
-          id: selectedCredentialId,
+          id: Utils.guidToRawFormat(selectedCredentialId),
           userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
         },
         signature,

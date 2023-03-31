@@ -83,19 +83,13 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       params.authenticatorSelection?.userVerification,
       params.timeout
     );
-    const excludeCredentialDescriptorList: PublicKeyCredentialDescriptor[] = [];
-    if (params.excludeCredentials !== undefined) {
-      for (const credential of params.excludeCredentials) {
-        try {
-          excludeCredentialDescriptorList.push({
-            id: Fido2Utils.stringToBuffer(credential.id),
-            transports: credential.transports,
-            type: credential.type,
-          });
-          // eslint-disable-next-line no-empty
-        } catch {}
-      }
-    }
+    const excludeCredentialDescriptorList: PublicKeyCredentialDescriptor[] =
+      params.excludeCredentials?.map((credential) => ({
+        id: Fido2Utils.stringToBuffer(credential.id),
+        transports: credential.transports,
+        type: credential.type,
+      })) ?? [];
+
     const makeCredentialParams: Fido2AuthenticatorMakeCredentialsParams = {
       requireResidentKey:
         params.authenticatorSelection?.residentKey === "required" ||
@@ -138,9 +132,9 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       credentialId: Fido2Utils.bufferToString(makeCredentialResult.credentialId),
       attestationObject: Fido2Utils.bufferToString(makeCredentialResult.attestationObject),
       authData: Fido2Utils.bufferToString(makeCredentialResult.authData),
+      clientDataJSON: Fido2Utils.bufferToString(clientDataJSONBytes),
       publicKeyAlgorithm: makeCredentialResult.publicKeyAlgorithm,
-      clientDataJSON,
-      transports: ["web-extension"],
+      transports: ["hybrid"],
     };
   }
 
@@ -181,16 +175,11 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
     const timeout = setAbortTimeout(abortController, params.userVerification, params.timeout);
 
-    const allowCredentialDescriptorList: PublicKeyCredentialDescriptor[] = [];
-    for (const id of params.allowedCredentialIds) {
-      try {
-        allowCredentialDescriptorList.push({
-          id: Utils.guidToRawFormat(id),
-          type: "public-key",
-        });
-        // eslint-disable-next-line no-empty
-      } catch {}
-    }
+    const allowCredentialDescriptorList: PublicKeyCredentialDescriptor[] =
+      params.allowedCredentialIds.map((id) => ({
+        id: Fido2Utils.stringToBuffer(id),
+        type: "public-key",
+      }));
 
     const getAssertionParams: Fido2AuthenticatorGetAssertionParams = {
       rpId,
@@ -223,8 +212,8 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
     return {
       authenticatorData: Fido2Utils.bufferToString(getAssertionResult.authenticatorData),
-      clientDataJSON,
-      credentialId: getAssertionResult.selectedCredential.id,
+      clientDataJSON: Fido2Utils.bufferToString(clientDataJSONBytes),
+      credentialId: Fido2Utils.bufferToString(getAssertionResult.selectedCredential.id),
       userHandle:
         getAssertionResult.selectedCredential.userHandle !== undefined
           ? Fido2Utils.bufferToString(getAssertionResult.selectedCredential.userHandle)
