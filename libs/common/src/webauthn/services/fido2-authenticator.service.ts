@@ -1,9 +1,9 @@
 import { CBOR } from "cbor-redux";
 
 import { Utils } from "../../misc/utils";
+import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CipherType } from "../../vault/enums/cipher-type";
 import { CipherView } from "../../vault/models/view/cipher.view";
-import { CipherService } from "../../vault/services/cipher.service";
 import {
   Fido2AlgorithmIdentifier,
   Fido2AutenticatorError,
@@ -13,6 +13,7 @@ import {
   Fido2AuthenticatorMakeCredentialResult,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction,
+  PublicKeyCredentialDescriptor,
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import { Fido2UserInterfaceService } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";

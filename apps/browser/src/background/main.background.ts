@@ -82,9 +82,11 @@ import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
+import { Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-authenticator.service.abstraction";
+import { Fido2ClientService as Fido2ClientServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
 import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
-import { Fido2Service as Fido2ServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
-import { Fido2Service } from "@bitwarden/common/webauthn/services/fido2.service";
+import { Fido2AuthenticatorService } from "@bitwarden/common/webauthn/services/fido2-authenticator.service";
+import { Fido2ClientService } from "@bitwarden/common/webauthn/services/fido2-client.service";
 
 import ContextMenusBackground from "../autofill/background/context-menus.background";
 import NotificationBackground from "../autofill/background/notification.background";
@@ -178,7 +180,8 @@ export default class MainBackground {
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
   fido2UserInterfaceService: Fido2UserInterfaceServiceAbstraction;
-  fido2Service: Fido2ServiceAbstraction;
+  fido2AuthenticatorService: Fido2AuthenticatorServiceAbstraction;
+  fido2ClientService: Fido2ClientServiceAbstraction;
   avatarUpdateService: AvatarUpdateServiceAbstraction;
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
@@ -481,7 +484,11 @@ export default class MainBackground {
     );
 
     this.fido2UserInterfaceService = new BrowserFido2UserInterfaceService(this.popupUtilsService);
-    this.fido2Service = new Fido2Service(this.fido2UserInterfaceService, this.cipherService);
+    this.fido2AuthenticatorService = new Fido2AuthenticatorService(
+      this.cipherService,
+      this.fido2UserInterfaceService
+    );
+    this.fido2ClientService = new Fido2ClientService(this.fido2AuthenticatorService);
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =

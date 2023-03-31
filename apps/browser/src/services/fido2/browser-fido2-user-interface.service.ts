@@ -5,12 +5,23 @@ import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   NewCredentialParams,
 } from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
-import { RequestAbortedError } from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
+
+export class Fido2Error extends Error {
+  constructor(message: string, readonly fallbackRequested = false) {
+    super(message);
+  }
+}
+
+export class RequestAbortedError extends Fido2Error {
+  constructor(fallbackRequested = false) {
+    super("Fido2 request was aborted", fallbackRequested);
+  }
+}
 
 export type BrowserFido2Message = { requestId: string } & (
   | {
@@ -196,6 +207,21 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
   ) {
     // Not Implemented
     return false;
+  }
+
+  async confirmNewNonDiscoverableCredential(
+    params: NewCredentialParams,
+    abortController?: AbortController
+  ): Promise<string> {
+    return null;
+  }
+
+  async informExcludedCredential(
+    existingCipherIds: string[],
+    newCredential: NewCredentialParams,
+    abortController?: AbortController
+  ): Promise<void> {
+    // Not Implemented
   }
 
   private setAbortTimeout(abortController: AbortController) {

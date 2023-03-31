@@ -127,7 +127,11 @@ export class CipherRequest {
         this.fido2Key = new Fido2KeyApi();
         this.fido2Key.keyType =
           cipher.fido2Key.keyType != null
-            ? (cipher.fido2Key.keyType.encryptedString as "ECDSA")
+            ? (cipher.fido2Key.keyType.encryptedString as "public-key")
+            : null;
+        this.fido2Key.keyAlgorithm =
+          cipher.fido2Key.keyAlgorithm != null
+            ? (cipher.fido2Key.keyAlgorithm.encryptedString as "ECDSA")
             : null;
         this.fido2Key.keyCurve =
           cipher.fido2Key.keyCurve != null

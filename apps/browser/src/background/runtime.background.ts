@@ -223,11 +223,11 @@ export default class RuntimeBackground {
         this.abortControllers.get(msg.abortedRequestId)?.abort();
         break;
       case "fido2RegisterCredentialRequest":
-        return await this.main.fido2Service
+        return await this.main.fido2ClientService
           .createCredential(msg.data, this.createAbortController(msg.requestId))
           .finally(() => this.abortControllers.delete(msg.requestId));
       case "fido2GetCredentialRequest":
-        return await this.main.fido2Service
+        return await this.main.fido2ClientService
           .assertCredential(msg.data, this.createAbortController(msg.requestId))
           .finally(() => this.abortControllers.delete(msg.requestId));
     }

@@ -24,7 +24,7 @@ export interface CreateCredentialParams {
   challenge: string; // b64 encoded
   excludeCredentials?: {
     id: string; // b64 encoded
-    transports?: ("ble" | "internal" | "nfc" | "usb")[];
+    transports?: ("ble" | "hybrid" | "internal" | "nfc" | "usb")[];
     type: "public-key";
   }[];
   extensions?: {

@@ -1,16 +1,16 @@
-import { Fido2Utils } from "@bitwarden/common/webauthn/abstractions/fido2-utils";
 import {
-  CredentialAssertParams,
-  CredentialAssertResult,
-  CredentialRegistrationParams,
-  CredentialRegistrationResult,
-} from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
+  CreateCredentialParams,
+  CreateCredentialResult,
+  AssertCredentialParams,
+  AssertCredentialResult,
+} from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
+import { Fido2Utils } from "@bitwarden/common/webauthn/abstractions/fido2-utils";
 
 class BitAuthenticatorAttestationResponse implements AuthenticatorAttestationResponse {
   clientDataJSON: ArrayBuffer;
   attestationObject: ArrayBuffer;
 
-  constructor(private result: CredentialRegistrationResult) {
+  constructor(private result: CreateCredentialResult) {
     this.clientDataJSON = Fido2Utils.stringToBuffer(result.clientDataJSON);
     this.attestationObject = Fido2Utils.stringToBuffer(result.attestationObject);
   }
@@ -35,8 +35,9 @@ class BitAuthenticatorAttestationResponse implements AuthenticatorAttestationRes
 export class WebauthnUtils {
   static mapCredentialCreationOptions(
     options: CredentialCreationOptions,
-    origin: string
-  ): CredentialRegistrationParams {
+    origin: string,
+    sameOriginWithAncestors: boolean
+  ): CreateCredentialParams {
     const keyOptions = options.publicKey;
 
     if (keyOptions == undefined) {
@@ -55,15 +56,12 @@ export class WebauthnUtils {
       excludeCredentials: keyOptions.excludeCredentials?.map((credential) => ({
         id: Fido2Utils.bufferToString(credential.id),
         transports: credential.transports,
+        type: credential.type,
       })),
-      extensions: {
-        appid: keyOptions.extensions?.appid,
-        appidExclude: keyOptions.extensions?.appidExclude,
-        credProps: keyOptions.extensions?.credProps,
-        uvm: keyOptions.extensions?.uvm,
-      },
+      extensions: undefined, // extensions not currently supported
       pubKeyCredParams: keyOptions.pubKeyCredParams.map((params) => ({
         alg: params.alg,
+        type: params.type,
       })),
       rp: {
         id: keyOptions.rp.id,
@@ -74,12 +72,11 @@ export class WebauthnUtils {
         displayName: keyOptions.user.displayName,
       },
       timeout: keyOptions.timeout,
+      sameOriginWithAncestors,
     };
   }
 
-  static mapCredentialRegistrationResult(
-    result: CredentialRegistrationResult
-  ): PublicKeyCredential {
+  static mapCredentialRegistrationResult(result: CreateCredentialResult): PublicKeyCredential {
     return {
       id: result.credentialId,
       rawId: Fido2Utils.stringToBuffer(result.credentialId),
@@ -92,8 +89,9 @@ export class WebauthnUtils {
 
   static mapCredentialRequestOptions(
     options: CredentialRequestOptions,
-    origin: string
-  ): CredentialAssertParams {
+    origin: string,
+    sameOriginWithAncestors: boolean
+  ): AssertCredentialParams {
     const keyOptions = options.publicKey;
 
     if (keyOptions == undefined) {
@@ -108,10 +106,11 @@ export class WebauthnUtils {
       rpId: keyOptions.rpId,
       userVerification: keyOptions.userVerification,
       timeout: keyOptions.timeout,
+      sameOriginWithAncestors,
     };
   }
 
-  static mapCredentialAssertResult(result: CredentialAssertResult): PublicKeyCredential {
+  static mapCredentialAssertResult(result: AssertCredentialResult): PublicKeyCredential {
     return {
       id: result.credentialId,
       rawId: Fido2Utils.stringToBuffer(result.credentialId),

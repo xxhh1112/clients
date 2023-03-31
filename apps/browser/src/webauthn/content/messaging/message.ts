@@ -1,9 +1,9 @@
 import {
-  CredentialAssertParams,
-  CredentialAssertResult,
-  CredentialRegistrationParams,
-  CredentialRegistrationResult,
-} from "@bitwarden/common/webauthn/abstractions/fido2.service.abstraction";
+  CreateCredentialParams,
+  CreateCredentialResult,
+  AssertCredentialParams,
+  AssertCredentialResult,
+} from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
 
 export enum MessageType {
   CredentialCreationRequest,
@@ -17,22 +17,22 @@ export enum MessageType {
 
 export type CredentialCreationRequest = {
   type: MessageType.CredentialCreationRequest;
-  data: CredentialRegistrationParams;
+  data: CreateCredentialParams;
 };
 
 export type CredentialCreationResponse = {
   type: MessageType.CredentialCreationResponse;
-  result?: CredentialRegistrationResult;
+  result?: CreateCredentialResult;
 };
 
 export type CredentialGetRequest = {
   type: MessageType.CredentialGetRequest;
-  data: CredentialAssertParams;
+  data: AssertCredentialParams;
 };
 
 export type CredentialGetResponse = {
   type: MessageType.CredentialGetResponse;
-  result?: CredentialAssertResult;
+  result?: AssertCredentialResult;
 };
 
 export type AbortRequest = {
