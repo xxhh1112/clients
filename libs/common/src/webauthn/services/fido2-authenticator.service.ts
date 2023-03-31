@@ -351,7 +351,7 @@ async function generateAuthData(params: AuthDataParams) {
 
   const flags = authDataFlags({
     extensionData: false,
-    attestationData: false,
+    attestationData: params.keyPair != undefined,
     userVerification: params.userVerification,
     userPresence: params.userPresence,
   });
