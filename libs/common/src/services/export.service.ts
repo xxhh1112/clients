@@ -1,7 +1,5 @@
 import * as papa from "papaparse";
 
-import { BitwardenPasswordProtectedFileFormat } from "@bitwarden/importer/src/importers/bitwarden/bitwarden-password-protected-types";
-
 import { ApiService } from "../abstractions/api.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
@@ -67,7 +65,7 @@ export class ExportService implements ExportServiceAbstraction {
     const encKeyValidation = await this.cryptoService.encrypt(Utils.newGuid(), key);
     const encText = await this.cryptoService.encrypt(clearText, key);
 
-    const jsonDoc: BitwardenPasswordProtectedFileFormat = {
+    const jsonDoc = {
       encrypted: true,
       passwordProtected: true,
       salt: salt,
