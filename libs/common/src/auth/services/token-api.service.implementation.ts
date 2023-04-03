@@ -88,6 +88,9 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
     return Promise.reject(new ErrorResponse(responseJson, response.status, true));
   }
 
+  // TODO: Tech Debt (PM-1733): investigate why this covers up error messages
+  // See if we can just make a public refreshAccessToken method
+  // without this method wrapping a private method.
   async refreshAccessToken(): Promise<any> {
     try {
       await this._refreshAccessToken();
