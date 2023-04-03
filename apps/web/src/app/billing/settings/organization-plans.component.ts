@@ -370,7 +370,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
           );
         }
 
-        await this.tokenApiService.refreshAccessToken();
         await this.syncService.fullSync(true);
 
         if (!this.acceptingSponsorship && !this.isInTrialFlow) {
