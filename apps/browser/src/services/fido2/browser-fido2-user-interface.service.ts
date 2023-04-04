@@ -48,6 +48,15 @@ export type BrowserFido2Message = { requestId: string } & (
       type: "ConfirmNewCredentialResponse";
     }
   | {
+      type: "ConfirmNewNonDiscoverableCredentialRequest";
+      credentialName: string;
+      userName: string;
+    }
+  | {
+      type: "ConfirmNewNonDiscoverableCredentialResponse";
+      cipherId: string;
+    }
+  | {
       type: "AbortRequest";
     }
   | {
@@ -201,10 +210,47 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
   }
 
   async confirmNewNonDiscoverableCredential(
-    params: NewCredentialParams,
+    { credentialName, userName }: NewCredentialParams,
     abortController?: AbortController
   ): Promise<string> {
-    return null;
+    const requestId = Utils.newGuid();
+    const data: BrowserFido2Message = {
+      type: "ConfirmNewNonDiscoverableCredentialRequest",
+      requestId,
+      credentialName,
+      userName,
+    };
+    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+
+    const abortHandler = () =>
+      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
+    abortController.signal.addEventListener("abort", abortHandler);
+
+    this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      { center: true }
+    );
+
+    const response = await lastValueFrom(
+      this.messages$.pipe(
+        filter((msg) => msg.requestId === requestId),
+        first(),
+        takeUntil(this.destroy$)
+      )
+    );
+
+    if (response.type === "ConfirmNewNonDiscoverableCredentialResponse") {
+      return response.cipherId;
+    }
+
+    if (response.type === "AbortResponse") {
+      throw new RequestAbortedError(response.fallbackRequested);
+    }
+
+    abortController.signal.removeEventListener("abort", abortHandler);
+
+    return undefined;
   }
 
   async informExcludedCredential(

@@ -1,4 +1,5 @@
 import { LoginApi } from "../../../models/api/login.api";
+import { Fido2KeyData } from "../../../webauthn/models/data/fido2-key.data";
 
 import { LoginUriData } from "./login-uri.data";
 
@@ -9,6 +10,7 @@ export class LoginData {
   passwordRevisionDate: string;
   totp: string;
   autofillOnPageLoad: boolean;
+  fido2Key?: Fido2KeyData;
 
   constructor(data?: LoginApi) {
     if (data == null) {
@@ -23,6 +25,10 @@ export class LoginData {
 
     if (data.uris) {
       this.uris = data.uris.map((u) => new LoginUriData(u));
+    }
+
+    if (data.fido2Key) {
+      this.fido2Key = new Fido2KeyData(data.fido2Key);
     }
   }
 }

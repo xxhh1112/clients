@@ -48,6 +48,10 @@ export class Fido2Component implements OnInit, OnDestroy {
                 return cipher.decrypt();
               })
             );
+          } else if (this.data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
+            this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
+              (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
+            );
           }
         }),
         takeUntil(this.destroy$)
@@ -66,11 +70,19 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   async pick(cipher: CipherView) {
-    BrowserFido2UserInterfaceService.sendMessage({
-      requestId: this.data.requestId,
-      cipherId: cipher.id,
-      type: "PickCredentialResponse",
-    });
+    if (this.data?.type === "PickCredentialRequest") {
+      BrowserFido2UserInterfaceService.sendMessage({
+        requestId: this.data.requestId,
+        cipherId: cipher.id,
+        type: "PickCredentialResponse",
+      });
+    } else if (this.data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
+      BrowserFido2UserInterfaceService.sendMessage({
+        requestId: this.data.requestId,
+        cipherId: cipher.id,
+        type: "ConfirmNewNonDiscoverableCredentialResponse",
+      });
+    }
 
     window.close();
   }

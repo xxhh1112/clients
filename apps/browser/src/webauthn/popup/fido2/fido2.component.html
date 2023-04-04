@@ -11,7 +11,12 @@
         Authenticate
       </button>
     </ng-container>
-    <ng-container *ngIf="data.type == 'PickCredentialRequest'">
+    <ng-container
+      *ngIf="
+        data.type == 'PickCredentialRequest' ||
+        data.type == 'ConfirmNewNonDiscoverableCredentialRequest'
+      "
+    >
       A site is asking for authentication, please choose one of the following credentials to use:
       <div class="box list">
         <div class="box-content">

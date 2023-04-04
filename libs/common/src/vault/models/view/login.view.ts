@@ -3,6 +3,7 @@ import { Jsonify } from "type-fest";
 import { LoginLinkedId as LinkedId } from "../../../enums/linkedIdType";
 import { linkedFieldOption } from "../../../misc/linkedFieldOption.decorator";
 import { Utils } from "../../../misc/utils";
+import { Fido2KeyView } from "../../../webauthn/models/view/fido2-key.view";
 import { Login } from "../domain/login";
 
 import { ItemView } from "./item.view";
@@ -18,6 +19,7 @@ export class LoginView extends ItemView {
   totp: string = null;
   uris: LoginUriView[] = null;
   autofillOnPageLoad: boolean = null;
+  fido2Key?: Fido2KeyView;
 
   constructor(l?: Login) {
     super();
@@ -67,10 +69,12 @@ export class LoginView extends ItemView {
     const passwordRevisionDate =
       obj.passwordRevisionDate == null ? null : new Date(obj.passwordRevisionDate);
     const uris = obj.uris?.map((uri: any) => LoginUriView.fromJSON(uri));
+    const fido2Key = obj.fido2Key == null ? null : Fido2KeyView.fromJSON(obj.fido2Key);
 
     return Object.assign(new LoginView(), obj, {
       passwordRevisionDate: passwordRevisionDate,
-      uris: uris,
+      uris,
+      fido2Key,
     });
   }
 }

@@ -1,3 +1,4 @@
+import { Fido2KeyApi } from "../../webauthn/models/api/fido2-key.api";
 import { BaseResponse } from "../response/base.response";
 
 import { LoginUriApi } from "./login-uri.api";
@@ -9,6 +10,7 @@ export class LoginApi extends BaseResponse {
   passwordRevisionDate: string;
   totp: string;
   autofillOnPageLoad: boolean;
+  fido2Key?: Fido2KeyApi;
 
   constructor(data: any = null) {
     super(data);
@@ -24,6 +26,11 @@ export class LoginApi extends BaseResponse {
     const uris = this.getResponseProperty("Uris");
     if (uris != null) {
       this.uris = uris.map((u: any) => new LoginUriApi(u));
+    }
+
+    const fido2Key = this.getResponseProperty("Fido2Key");
+    if (fido2Key != null) {
+      this.fido2Key = new Fido2KeyApi(fido2Key);
     }
   }
 }

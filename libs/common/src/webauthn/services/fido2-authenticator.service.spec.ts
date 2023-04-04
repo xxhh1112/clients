@@ -104,7 +104,7 @@ describe("FidoAuthenticatorService", () => {
         params = await createParams({
           excludeCredentialDescriptorList: [
             {
-              id: Utils.guidToRawFormat(excludedCipher.fido2Key.nonDiscoverableId),
+              id: Utils.guidToRawFormat(excludedCipher.login.fido2Key.nonDiscoverableId),
               type: "public-key",
             },
           ],
@@ -162,15 +162,16 @@ describe("FidoAuthenticatorService", () => {
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
       beforeEach(async () => {
-        const excludedCipher = createCipherView();
-        excludedCipherView = await excludedCipher;
+        excludedCipherView = createCipherView();
         params = await createParams({
           excludeCredentialDescriptorList: [
-            { id: Utils.guidToRawFormat(excludedCipher.id), type: "public-key" },
+            { id: Utils.guidToRawFormat(excludedCipherView.id), type: "public-key" },
           ],
         });
         cipherService.get.mockImplementation(async (id) =>
-          id === excludedCipher.id ? excludedCipher : undefined
+          id === excludedCipherView.id
+            ? ({ decrypt: async () => excludedCipherView } as any)
+            : undefined
         );
         cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
       });
@@ -237,12 +238,15 @@ describe("FidoAuthenticatorService", () => {
           return cipher;
         });
 
-        await authenticator.makeCredential(params);
+        await authenticator.makeCredential(params, new AbortController());
 
-        expect(userInterface.confirmNewCredential).toHaveBeenCalledWith({
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-        } as NewCredentialParams);
+        expect(userInterface.confirmNewCredential).toHaveBeenCalledWith(
+          {
+            credentialName: params.rpEntity.name,
+            userName: params.userEntity.displayName,
+          } as NewCredentialParams,
+          expect.anything()
+        );
       });
 
       it("should save credential to vault if request confirmed by user", async () => {
@@ -320,12 +324,15 @@ describe("FidoAuthenticatorService", () => {
       it("should request confirmation from user", async () => {
         userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
 
-        await authenticator.makeCredential(params);
+        await authenticator.makeCredential(params, new AbortController());
 
-        expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith({
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-        } as NewCredentialParams);
+        expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
+          {
+            credentialName: params.rpEntity.name,
+            userName: params.userEntity.displayName,
+          } as NewCredentialParams,
+          expect.anything()
+        );
       });
 
       it("should save credential to vault if request confirmed by user", async () => {
@@ -341,16 +348,18 @@ describe("FidoAuthenticatorService", () => {
             type: CipherType.Login,
             name: existingCipher.name,
 
-            fido2Key: expect.objectContaining({
-              nonDiscoverableId: expect.anything(),
-              keyType: "public-key",
-              keyAlgorithm: "ECDSA",
-              keyCurve: "P-256",
-              rpId: params.rpEntity.id,
-              rpName: params.rpEntity.name,
-              userHandle: Fido2Utils.bufferToString(params.userEntity.id),
-              counter: 0,
-              userName: params.userEntity.displayName,
+            login: expect.objectContaining({
+              fido2Key: expect.objectContaining({
+                nonDiscoverableId: expect.anything(),
+                keyType: "public-key",
+                keyAlgorithm: "ECDSA",
+                keyCurve: "P-256",
+                rpId: params.rpEntity.id,
+                rpName: params.rpEntity.name,
+                userHandle: Fido2Utils.bufferToString(params.userEntity.id),
+                counter: 0,
+                userName: params.userEntity.displayName,
+              }),
             }),
           })
         );
@@ -406,7 +415,9 @@ describe("FidoAuthenticatorService", () => {
           );
           cipherService.getAllDecrypted.mockResolvedValue([await cipher]);
           cipherService.encrypt.mockImplementation(async (cipher) => {
-            cipher.fido2Key.nonDiscoverableId = nonDiscoverableId; // Replace id for testability
+            if (!requireResidentKey) {
+              cipher.login.fido2Key.nonDiscoverableId = nonDiscoverableId; // Replace id for testability
+            }
             return {} as any;
           });
           cipherService.createWithServer.mockImplementation(async (cipher) => {
@@ -561,8 +572,8 @@ describe("FidoAuthenticatorService", () => {
 
       it("should throw error if credential exists but rpId does not match", async () => {
         const cipher = await createCipherView({ type: CipherType.Login });
-        cipher.fido2Key.nonDiscoverableId = credentialId;
-        cipher.fido2Key.rpId = "mismatch-rpid";
+        cipher.login.fido2Key.nonDiscoverableId = credentialId;
+        cipher.login.fido2Key.rpId = "mismatch-rpid";
         cipherService.getAllDecrypted.mockResolvedValue([cipher]);
 
         const result = async () => await authenticator.getAssertion(params);
@@ -639,6 +650,7 @@ describe("FidoAuthenticatorService", () => {
         let credentialIds: string[];
         let selectedCredentialId: string;
         let ciphers: CipherView[];
+        let fido2Keys: Fido2KeyView[];
         let params: Fido2AuthenticatorGetAssertionParams;
 
         beforeEach(async () => {
@@ -654,6 +666,7 @@ describe("FidoAuthenticatorService", () => {
                 { rpId: RpId, counter: 9000, keyValue }
               )
             );
+            fido2Keys = ciphers.map((c) => c.fido2Key);
             selectedCredentialId = ciphers[0].id;
             params = await createParams({
               allowCredentialDescriptorList: undefined,
@@ -666,6 +679,7 @@ describe("FidoAuthenticatorService", () => {
                 { nonDiscoverableId: id, rpId: RpId, counter: 9000 }
               )
             );
+            fido2Keys = ciphers.map((c) => c.login.fido2Key);
             selectedCredentialId = credentialIds[0];
             params = await createParams({
               allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
@@ -686,15 +700,28 @@ describe("FidoAuthenticatorService", () => {
 
           await authenticator.getAssertion(params);
 
-          expect(cipherService.encrypt).toHaveBeenCalledWith(
-            expect.objectContaining({
-              id: ciphers[0].id,
-              fido2Key: expect.objectContaining({
-                counter: 9001,
-              }),
-            })
-          );
           expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
+          if (residentKey) {
+            expect(cipherService.encrypt).toHaveBeenCalledWith(
+              expect.objectContaining({
+                id: ciphers[0].id,
+                fido2Key: expect.objectContaining({
+                  counter: 9001,
+                }),
+              })
+            );
+          } else {
+            expect(cipherService.encrypt).toHaveBeenCalledWith(
+              expect.objectContaining({
+                id: ciphers[0].id,
+                login: expect.objectContaining({
+                  fido2Key: expect.objectContaining({
+                    counter: 9001,
+                  }),
+                }),
+              })
+            );
+          }
         });
 
         it("should return an assertion result", async () => {
@@ -707,7 +734,7 @@ describe("FidoAuthenticatorService", () => {
 
           expect(result.selectedCredential.id).toEqual(Utils.guidToRawFormat(selectedCredentialId));
           expect(result.selectedCredential.userHandle).toEqual(
-            Fido2Utils.stringToBuffer(ciphers[0].fido2Key.userHandle)
+            Fido2Utils.stringToBuffer(fido2Keys[0].userHandle)
           );
           expect(rpIdHash).toEqual(
             new Uint8Array([
@@ -779,17 +806,24 @@ function createCipherView(
   cipher.id = data.id ?? Utils.newGuid();
   cipher.type = data.type ?? CipherType.Fido2Key;
   cipher.localData = {};
-  cipher.login = data.type ?? data.type === CipherType.Login ? new LoginView() : null;
-  cipher.fido2Key = new Fido2KeyView();
-  cipher.fido2Key.nonDiscoverableId = fido2Key.nonDiscoverableId;
-  cipher.fido2Key.rpId = fido2Key.rpId ?? RpId;
-  cipher.fido2Key.counter = fido2Key.counter ?? 0;
-  cipher.fido2Key.userHandle = fido2Key.userHandle ?? Fido2Utils.bufferToString(randomBytes(16));
-  cipher.fido2Key.keyAlgorithm = fido2Key.keyAlgorithm ?? "ECDSA";
-  cipher.fido2Key.keyCurve = fido2Key.keyCurve ?? "P-256";
-  cipher.fido2Key.keyValue =
-    fido2Key.keyValue ??
+
+  const fido2KeyView = new Fido2KeyView();
+  fido2KeyView.nonDiscoverableId = fido2Key.nonDiscoverableId;
+  fido2KeyView.rpId = fido2Key.rpId ?? RpId;
+  fido2KeyView.counter = fido2Key.counter ?? 0;
+  fido2KeyView.userHandle = fido2Key.userHandle ?? Fido2Utils.bufferToString(randomBytes(16));
+  fido2KeyView.keyAlgorithm = fido2Key.keyAlgorithm ?? "ECDSA";
+  fido2KeyView.keyCurve = fido2Key.keyCurve ?? "P-256";
+  fido2KeyView.keyValue =
+    fido2KeyView.keyValue ??
     "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTC-7XDZipXbaVBlnkjlBgO16ZmqBZWejK2iYo6lV0dehRANCAASOcM2WduNq1DriRYN7ZekvZz-bRhA-qNT4v0fbp5suUFJyWmgOQ0bybZcLXHaerK5Ep1JiSrQcewtQNgLtry7f";
+
+  if (cipher.type === CipherType.Login) {
+    cipher.login = new LoginView();
+    cipher.login.fido2Key = fido2KeyView;
+  } else {
+    cipher.fido2Key = fido2KeyView;
+  }
 
   return cipher;
 }

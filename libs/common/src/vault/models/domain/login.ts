@@ -3,6 +3,7 @@ import { Jsonify } from "type-fest";
 import Domain from "../../../models/domain/domain-base";
 import { EncString } from "../../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import { Fido2Key } from "../../../webauthn/models/domain/fido2-key";
 import { LoginData } from "../data/login.data";
 import { LoginView } from "../view/login.view";
 
@@ -15,6 +16,7 @@ export class Login extends Domain {
   passwordRevisionDate?: Date;
   totp: EncString;
   autofillOnPageLoad: boolean;
+  fido2Key: Fido2Key;
 
   constructor(obj?: LoginData) {
     super();
@@ -42,6 +44,10 @@ export class Login extends Domain {
         this.uris.push(new LoginUri(u));
       });
     }
+
+    if (obj.fido2Key) {
+      this.fido2Key = new Fido2Key(obj.fido2Key);
+    }
   }
 
   async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<LoginView> {
@@ -62,6 +68,10 @@ export class Login extends Domain {
         const uri = await this.uris[i].decrypt(orgId, encKey);
         view.uris.push(uri);
       }
+    }
+
+    if (this.fido2Key != null) {
+      view.fido2Key = await this.fido2Key.decrypt(orgId, encKey);
     }
 
     return view;
@@ -85,6 +95,10 @@ export class Login extends Domain {
       });
     }
 
+    if (this.fido2Key != null) {
+      l.fido2Key = this.fido2Key.toFido2KeyData();
+    }
+
     return l;
   }
 
@@ -99,13 +113,15 @@ export class Login extends Domain {
     const passwordRevisionDate =
       obj.passwordRevisionDate == null ? null : new Date(obj.passwordRevisionDate);
     const uris = obj.uris?.map((uri: any) => LoginUri.fromJSON(uri));
+    const fido2Key = obj.fido2Key == null ? null : Fido2Key.fromJSON(obj.fido2Key);
 
     return Object.assign(new Login(), obj, {
       username,
       password,
       totp,
-      passwordRevisionDate: passwordRevisionDate,
-      uris: uris,
+      passwordRevisionDate,
+      uris,
+      fido2Key,
     });
   }
 }

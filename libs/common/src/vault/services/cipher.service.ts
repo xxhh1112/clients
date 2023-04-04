@@ -1117,6 +1117,27 @@ export class CipherService implements CipherServiceAbstraction {
             cipher.login.uris.push(loginUri);
           }
         }
+
+        if (model.login.fido2Key != null) {
+          cipher.login.fido2Key = new Fido2Key();
+          await this.encryptObjProperty(
+            model.login.fido2Key,
+            cipher.login.fido2Key,
+            {
+              nonDiscoverableId: null,
+              keyType: null,
+              keyAlgorithm: null,
+              keyCurve: null,
+              keyValue: null,
+              rpId: null,
+              rpName: null,
+              userHandle: null,
+              userName: null,
+              origin: null,
+            },
+            key
+          );
+        }
         return;
       case CipherType.SecureNote:
         cipher.secureNote = new SecureNote();

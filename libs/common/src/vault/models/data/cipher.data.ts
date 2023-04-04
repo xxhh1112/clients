@@ -60,6 +60,8 @@ export class CipherData {
     switch (this.type) {
       case CipherType.Login:
         this.login = new LoginData(response.login);
+        this.fido2Key =
+          response.fido2Key != undefined ? new Fido2KeyData(response.fido2Key) : undefined;
         break;
       case CipherType.SecureNote:
         this.secureNote = new SecureNoteData(response.secureNote);

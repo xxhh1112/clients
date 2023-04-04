@@ -63,6 +63,44 @@ export class CipherRequest {
             return uri;
           });
         }
+
+        if (cipher.login.fido2Key != null) {
+          this.login.fido2Key = new Fido2KeyApi();
+          this.login.fido2Key.nonDiscoverableId =
+            cipher.login.fido2Key.nonDiscoverableId != null
+              ? cipher.login.fido2Key.nonDiscoverableId.encryptedString
+              : null;
+          this.login.fido2Key.keyType =
+            cipher.login.fido2Key.keyType != null
+              ? (cipher.login.fido2Key.keyType.encryptedString as "public-key")
+              : null;
+          this.login.fido2Key.keyAlgorithm =
+            cipher.login.fido2Key.keyAlgorithm != null
+              ? (cipher.login.fido2Key.keyAlgorithm.encryptedString as "ECDSA")
+              : null;
+          this.login.fido2Key.keyCurve =
+            cipher.login.fido2Key.keyCurve != null
+              ? (cipher.login.fido2Key.keyCurve.encryptedString as "P-256")
+              : null;
+          this.login.fido2Key.keyValue =
+            cipher.login.fido2Key.keyValue != null
+              ? cipher.login.fido2Key.keyValue.encryptedString
+              : null;
+          this.login.fido2Key.rpId =
+            cipher.login.fido2Key.rpId != null ? cipher.login.fido2Key.rpId.encryptedString : null;
+          this.login.fido2Key.rpName =
+            cipher.login.fido2Key.rpName != null
+              ? cipher.login.fido2Key.rpName.encryptedString
+              : null;
+          this.login.fido2Key.userHandle =
+            cipher.login.fido2Key.userHandle != null
+              ? cipher.login.fido2Key.userHandle.encryptedString
+              : null;
+          this.login.fido2Key.userName =
+            cipher.login.fido2Key.userName != null
+              ? cipher.login.fido2Key.userName.encryptedString
+              : null;
+        }
         break;
       case CipherType.SecureNote:
         this.secureNote = new SecureNoteApi();

@@ -38,7 +38,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     private userInterface: Fido2UserInterfaceService
   ) {}
   async makeCredential(
-    params: Fido2AuthenticatorMakeCredentialsParams
+    params: Fido2AuthenticatorMakeCredentialsParams,
+    abortController?: AbortController
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
     if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
@@ -66,19 +67,24 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         {
           credentialName: params.rpEntity.name,
           userName: params.userEntity.displayName,
-        }
+        },
+        abortController
       );
 
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
     let cipher: CipherView;
+    let fido2Key: Fido2KeyView;
     let keyPair: CryptoKeyPair;
     if (params.requireResidentKey) {
-      const userVerification = await this.userInterface.confirmNewCredential({
-        credentialName: params.rpEntity.name,
-        userName: params.userEntity.displayName,
-      });
+      const userVerification = await this.userInterface.confirmNewCredential(
+        {
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.displayName,
+        },
+        abortController
+      );
 
       if (!userVerification) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
@@ -90,7 +96,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         cipher = new CipherView();
         cipher.type = CipherType.Fido2Key;
         cipher.name = params.rpEntity.name;
-        cipher.fido2Key = await createKeyView(params, keyPair.privateKey);
+        cipher.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
         const encrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.createWithServer(encrypted); // encrypted.id is assigned inside here
         cipher.id = encrypted.id;
@@ -98,10 +104,13 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
     } else {
-      const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential({
-        credentialName: params.rpEntity.name,
-        userName: params.userEntity.displayName,
-      });
+      const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential(
+        {
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.displayName,
+        },
+        abortController
+      );
 
       if (cipherId === undefined) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
@@ -112,19 +121,21 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
         const encrypted = await this.cipherService.get(cipherId);
         cipher = await encrypted.decrypt();
-        cipher.fido2Key = await createKeyView(params, keyPair.privateKey);
+        cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
         const reencrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.updateWithServer(reencrypted);
-      } catch (error) {
+      } catch {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
     }
 
-    const credentialId = params.requireResidentKey ? cipher.id : cipher.fido2Key.nonDiscoverableId;
+    const credentialId =
+      cipher.type === CipherType.Fido2Key ? cipher.id : cipher.login.fido2Key.nonDiscoverableId;
+
     const authData = await generateAuthData({
       rpId: params.rpEntity.id,
       credentialId: Utils.guidToRawFormat(credentialId),
-      counter: cipher.fido2Key.counter,
+      counter: fido2Key.counter,
       userPresence: true,
       userVerification: false,
       keyPair,
@@ -185,12 +196,16 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     }
 
     try {
+      const selectedFido2Key =
+        selectedCipher.type === CipherType.Login
+          ? selectedCipher.login.fido2Key
+          : selectedCipher.fido2Key;
       const selectedCredentialId =
-        params.allowCredentialDescriptorList?.length > 0
-          ? selectedCipher.fido2Key.nonDiscoverableId
+        selectedCipher.type === CipherType.Login
+          ? selectedFido2Key.nonDiscoverableId
           : selectedCipher.id;
 
-      ++selectedCipher.fido2Key.counter;
+      ++selectedFido2Key.counter;
 
       selectedCipher.localData = {
         ...selectedCipher.localData,
@@ -200,9 +215,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       await this.cipherService.updateWithServer(encrypted);
 
       const authenticatorData = await generateAuthData({
-        rpId: selectedCipher.fido2Key.rpId,
+        rpId: selectedFido2Key.rpId,
         credentialId: Utils.guidToRawFormat(selectedCredentialId),
-        counter: selectedCipher.fido2Key.counter,
+        counter: selectedFido2Key.counter,
         userPresence: true,
         userVerification: false,
       });
@@ -210,14 +225,14 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       const signature = await generateSignature({
         authData: authenticatorData,
         clientDataHash: params.hash,
-        privateKey: await getPrivateKeyFromCipher(selectedCipher),
+        privateKey: await getPrivateKeyFromFido2Key(selectedFido2Key),
       });
 
       return {
         authenticatorData,
         selectedCredential: {
           id: Utils.guidToRawFormat(selectedCredentialId),
-          userHandle: Fido2Utils.stringToBuffer(selectedCipher.fido2Key.userHandle),
+          userHandle: Fido2Utils.stringToBuffer(selectedFido2Key.userHandle),
         },
         signature,
       };
@@ -247,8 +262,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       (cipher) =>
         (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
         (cipher.type === CipherType.Login &&
-          cipher.fido2Key != undefined &&
-          ids.includes(cipher.fido2Key.nonDiscoverableId))
+          cipher.login.fido2Key != undefined &&
+          ids.includes(cipher.login.fido2Key.nonDiscoverableId))
     );
   }
 
@@ -274,9 +289,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       (cipher) =>
         !cipher.isDeleted &&
         cipher.type === CipherType.Login &&
-        cipher.fido2Key != undefined &&
-        cipher.fido2Key.rpId === rpId &&
-        ids.includes(cipher.fido2Key.nonDiscoverableId)
+        cipher.login.fido2Key != undefined &&
+        cipher.login.fido2Key.rpId === rpId &&
+        ids.includes(cipher.login.fido2Key.nonDiscoverableId)
     );
   }
 
@@ -324,14 +339,14 @@ async function createKeyView(
   return fido2Key;
 }
 
-async function getPrivateKeyFromCipher(cipher: CipherView): Promise<CryptoKey> {
-  const keyBuffer = Fido2Utils.stringToBuffer(cipher.fido2Key.keyValue);
+async function getPrivateKeyFromFido2Key(fido2Key: Fido2KeyView): Promise<CryptoKey> {
+  const keyBuffer = Fido2Utils.stringToBuffer(fido2Key.keyValue);
   return await crypto.subtle.importKey(
     "pkcs8",
     keyBuffer,
     {
-      name: cipher.fido2Key.keyAlgorithm,
-      namedCurve: cipher.fido2Key.keyCurve,
+      name: fido2Key.keyAlgorithm,
+      namedCurve: fido2Key.keyCurve,
     } as EcKeyImportParams,
     true,
     KeyUsages
