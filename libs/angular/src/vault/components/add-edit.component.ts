@@ -2,26 +2,27 @@ import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angu
 import { Observable, Subject, takeUntil, concatMap } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import {
   isNotProviderUser,
   OrganizationService,
-} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+} from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums/organization-user-status-type";
+import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { EventType } from "@bitwarden/common/enums/eventType";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
 import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -99,7 +100,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected policyService: PolicyService,
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    protected sendApiService: SendApiService
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
@@ -118,7 +120,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
       { name: "Maestro", value: "Maestro" },
       { name: "UnionPay", value: "UnionPay" },
       { name: "RuPay", value: "RuPay" },
-      { name: i18nService.t("cardBrandMir"), value: "Mir" },
       { name: i18nService.t("other"), value: "Other" },
     ];
     this.cardExpMonthOptions = [
@@ -201,8 +202,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
           this.ownershipOptions.push({ name: o.name, value: o.id });
         }
       });
-    if (!this.allowPersonal) {
-      this.organizationId = this.ownershipOptions[0].value;
+    if (!this.allowPersonal && this.organizationId == undefined) {
+      this.organizationId = this.defaultOwnerId;
     }
   }
 
@@ -220,12 +221,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.title = this.i18nService.t("addItem");
     }
 
-    const addEditCipherInfo: any = await this.stateService.getAddEditCipherInfo();
-    if (addEditCipherInfo != null) {
-      this.cipher = addEditCipherInfo.cipher;
-      this.collectionIds = addEditCipherInfo.collectionIds;
-    }
-    await this.stateService.setAddEditCipherInfo(null);
+    const loadedAddEditCipherInfo = await this.loadAddEditCipherInfo();
 
     if (this.cipher == null) {
       if (this.editMode) {
@@ -255,7 +251,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.cipher != null && (!this.editMode || addEditCipherInfo != null || this.cloneMode)) {
+    if (this.cipher != null && (!this.editMode || loadedAddEditCipherInfo || this.cloneMode)) {
       await this.organizationChanged();
       if (
         this.collectionIds != null &&
@@ -617,5 +613,28 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   protected restoreCipher() {
     return this.cipherService.restoreWithServer(this.cipher.id);
+  }
+
+  get defaultOwnerId(): string | null {
+    return this.ownershipOptions[0].value;
+  }
+
+  async loadAddEditCipherInfo(): Promise<boolean> {
+    const addEditCipherInfo: any = await this.stateService.getAddEditCipherInfo();
+    const loadedSavedInfo = addEditCipherInfo != null;
+
+    if (loadedSavedInfo) {
+      this.cipher = addEditCipherInfo.cipher;
+      this.collectionIds = addEditCipherInfo.collectionIds;
+
+      if (!this.editMode && !this.allowPersonal && this.cipher.organizationId == null) {
+        // This is a new cipher and personal ownership isn't allowed, so we need to set the default owner
+        this.cipher.organizationId = this.defaultOwnerId;
+      }
+    }
+
+    await this.stateService.setAddEditCipherInfo(null);
+
+    return loadedSavedInfo;
   }
 }

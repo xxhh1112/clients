@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Súgó és visszajelzés"
   },
+  "helpCenter": {
+    "message": "Bitwardsn Segítségközpont"
+  },
+  "communityForums": {
+    "message": "Bitwarden közösségi fórum felfedezése"
+  },
+  "contactSupport": {
+    "message": "Kapcsolatfelvétel a Bitwarden támogatással"
+  },
   "sync": {
     "message": "Szinkronizálás"
   },
@@ -430,7 +439,14 @@
     "message": "A mesterjelszó ismételt megadása kötelező."
   },
   "masterPasswordMinlength": {
-    "message": "Mesterjelszónak legalább 8 karakter hosszúnak kell lennie."
+    "message": "A mesterjelszónak legalább $VALUE$ karakter hosszúnak kell lennie.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A megadott két jelszó nem egyezik meg."
@@ -960,7 +976,7 @@
     "message": "Ha egy bejelentkezési űrlap észlelésre került, az adatok automatikus kitöltése az oldal betöltésekor."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Az oldalbetöltésnél automatikus kitöltést a feltört vagy nem megbízhatató weboldalak kihasználhatják."
   },
   "learnMoreAboutAutofill": {
     "message": "További információk az automatikus kitöltésről"
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "A letiltott szervezetek elemei nem érhetők el. Vegyük fel a kapcsolatot a szervezet tulajdonosával segítségért."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Bejelentkezés $DOMAIN$ területre",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "A szervezeti szabályzat bekapcsolta az automatikus kitöltést az oldalbetöltéskor."
+  },
+  "howToAutofill": {
+    "message": "Az automatikus kitöltés működése"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy használjuk a parancsikont: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy állítsunk be parancsikont a beállításokban."
+  },
+  "gotIt": {
+    "message": "Rendben"
+  },
+  "autofillSettings": {
+    "message": "Automatikus kitöltés beállítások"
+  },
+  "autofillShortcut": {
+    "message": "Automatikus kitöltés billentyűparancs"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Az automatikus kitöltés billentyűzetparancs nincs beállítva. Módosítsuk ezt a böngésző beállításaiban."
+  },
+  "autofillShortcutText": {
+    "message": "Az automatikus kitöltés billentyűparancsa: $COMMAND$. Módosítsuk ezt a böngésző beállításaiban.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Alapértelmezett automatikus kitöltési billenytűparancs: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

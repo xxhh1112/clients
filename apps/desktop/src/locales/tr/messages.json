@@ -542,7 +542,14 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parola en az 8 karakter uzunluğunda olmalıdır."
+    "message": "Ana parola en az $VALUE$ karakter uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Parola ve parola onayı eşleşmiyor."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Bize ulaşın"
+  },
+  "helpAndFeedback": {
+    "message": "Yardım ve geribildirim"
   },
   "getHelp": {
     "message": "Yardım al"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "\"Asla\" seçeneğini kullanmak istediğinizden emin misiniz? Kilit seçeneklerinizi \"Asla\" olarak ayarlarsanız kasanızın şifreleme anahtarı cihazınızda saklanacaktır. Bu seçeneği kullanırsanız cihazınızı çok iyi korumalısınız."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Kasa"

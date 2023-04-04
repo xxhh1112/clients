@@ -9,6 +9,7 @@ import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-cr
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
 import { ServiceAccountView } from "../models/view/service-account.view";
+import { BulkOperationStatus } from "../shared/dialogs/bulk-status-dialog.component";
 
 import { ServiceAccountRequest } from "./models/requests/service-account.request";
 import { ServiceAccountResponse } from "./models/responses/service-account.response";
@@ -39,6 +40,41 @@ export class ServiceAccountService {
     return await this.createServiceAccountViews(organizationId, results.data);
   }
 
+  async getByServiceAccountId(
+    serviceAccountId: string,
+    organizationId: string
+  ): Promise<ServiceAccountView> {
+    const orgKey = await this.getOrganizationKey(organizationId);
+    const r = await this.apiService.send(
+      "GET",
+      "/service-accounts/" + serviceAccountId,
+      null,
+      true,
+      true
+    );
+
+    return await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r));
+  }
+
+  async update(
+    serviceAccountId: string,
+    organizationId: string,
+    serviceAccountView: ServiceAccountView
+  ) {
+    const orgKey = await this.getOrganizationKey(organizationId);
+    const request = await this.getServiceAccountRequest(orgKey, serviceAccountView);
+    const r = await this.apiService.send(
+      "PUT",
+      "/service-accounts/" + serviceAccountId,
+      request,
+      true,
+      true
+    );
+    this._serviceAccount.next(
+      await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r))
+    );
+  }
+
   async create(organizationId: string, serviceAccountView: ServiceAccountView) {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = await this.getServiceAccountRequest(orgKey, serviceAccountView);
@@ -52,6 +88,21 @@ export class ServiceAccountService {
     this._serviceAccount.next(
       await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r))
     );
+  }
+
+  async delete(serviceAccounts: ServiceAccountView[]): Promise<BulkOperationStatus[]> {
+    const ids = serviceAccounts.map((serviceAccount) => serviceAccount.id);
+    const r = await this.apiService.send("POST", "/service-accounts/delete", ids, true, true);
+
+    this._serviceAccount.next(null);
+
+    return r.data.map((element: { id: string; error: string }) => {
+      const bulkOperationStatus = new BulkOperationStatus();
+      bulkOperationStatus.id = element.id;
+      bulkOperationStatus.name = serviceAccounts.find((sa) => sa.id == element.id).name;
+      bulkOperationStatus.errorMessage = element.error;
+      return bulkOperationStatus;
+    });
   }
 
   private async getOrganizationKey(organizationId: string): Promise<SymmetricCryptoKey> {

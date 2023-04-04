@@ -542,7 +542,14 @@
     "message": "Master password retype is required."
   },
   "masterPasswordMinlength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontaktirajte nas"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Potraži pomoć"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Vault"

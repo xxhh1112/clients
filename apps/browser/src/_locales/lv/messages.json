@@ -11,7 +11,7 @@
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Jāpiesakās vai jāizveido jauns konts, lai piekļūdu drošajai glabātavai."
+    "message": "Jāpiesakās vai jāizveido jauns konts, lai piekļūtu drošajai glabātavai."
   },
   "createAccount": {
     "message": "Izveidot kontu"
@@ -20,7 +20,7 @@
     "message": "Pieteikties"
   },
   "enterpriseSingleSignOn": {
-    "message": "Uzņēmuma vienotā pierakstīšanās"
+    "message": "Uzņēmuma vienotā pieteikšanās"
   },
   "cancel": {
     "message": "Atcelt"
@@ -77,7 +77,7 @@
     "message": "Ievietot piezīmi starpliktuvē"
   },
   "copyUri": {
-    "message": "Ievietot URI starpliktuvē"
+    "message": "Ievietot vietrādi starpliktuvē"
   },
   "copyUsername": {
     "message": "Ievietot lietotājvārdu starpliktuvē"
@@ -89,7 +89,7 @@
     "message": "Ievietot drošības kodu starpliktuvē"
   },
   "autoFill": {
-    "message": "Automātiskā aizpilde"
+    "message": "Automātiskā aizpildīšana"
   },
   "generatePasswordCopied": {
     "message": "Veidot paroli (ievietota starpliktuvē)"
@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Palīdzība un atsauksmes"
   },
+  "helpCenter": {
+    "message": "Bitwarden palīdzības centrs"
+  },
+  "communityForums": {
+    "message": "Izpētīt Bitwarden kopienas forumus"
+  },
+  "contactSupport": {
+    "message": "Sazināties ar Bitwarden atbalstu"
+  },
   "sync": {
     "message": "Sinhronizēt"
   },
@@ -221,7 +230,7 @@
     "message": "Ievietot vienumus"
   },
   "select": {
-    "message": "Atlasīt"
+    "message": "Izvēlēties"
   },
   "generatePassword": {
     "message": "Veidot paroli"
@@ -333,10 +342,10 @@
     "message": "Novērtēt paplašinājumu"
   },
   "rateExtensionDesc": {
-    "message": "Lūdzu, apsver palīdzēt mums ar labu atsauksmi!"
+    "message": "Lūgums apsvērt palīdzēt mums ar labu atsauksmi."
   },
   "browserNotSupportClipboard": {
-    "message": "Tavs tīmekļa pārlūks neatbalsta vienkāršu starpliktuves kopēšanu. Nokopē to pašrocīgi!"
+    "message": "Tīmekļa pārlūks neatbalsta vienkāršu starpliktuves kopēšanu. Tā vietā tas pašrocīgi jāievieto starpliktuvē."
   },
   "verifyIdentity": {
     "message": "Apstiprināt identitāti"
@@ -430,7 +439,14 @@
     "message": "Ir nepieciešama galvenās paroles atkārtota ievadīšana."
   },
   "masterPasswordMinlength": {
-    "message": "Galvenajai parolei ir jābūt vismaz 8 rakstzīmes garai."
+    "message": "Galvenajai parolei ir jābūt vismaz $VALUE$ rakstzīmes garai.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Galvenās paroles apstiprinājums nesakrīt."
@@ -458,7 +474,7 @@
     }
   },
   "autofillError": {
-    "message": "Neizdevās automātiski aizpildīt izvēlēto vienumu šajā lapā. Tā vietā kopē un ielīmē to! "
+    "message": "Neizdevās automātiski aizpildīt izvēlēto vienumu šajā lapā. Tā vietā informācija ir jāievieto starpliktuvē un jāielīmē pašrocīgi."
   },
   "loggedOut": {
     "message": "Atteicies"
@@ -738,7 +754,7 @@
     "message": "Datne"
   },
   "selectFile": {
-    "message": "Atlasīt datni."
+    "message": "Atlasīt datni"
   },
   "maxFileSize": {
     "message": "Lielākais pieļaujamais datnes izmērs ir 500 MB."
@@ -774,7 +790,7 @@
     "message": "Tādas papildu divpakāpju pieteikšanās iespējas kā YubiKey, FIDO U2F un Duo."
   },
   "ppremiumSignUpReports": {
-    "message": "Paroļu higiēnas, kontu veselības un datu pārkāpumu pārskati, lai uzturētu glabātavu drošu."
+    "message": "Paroļu higiēnas, konta veselības un datu noplūžu pārskati, lai uzturētu glabātavu drošu."
   },
   "ppremiumSignUpTotp": {
     "message": "TOTP apstiprinājuma koda (2FA) veidotājs glabātavas pieteikšanās vienumiem."
@@ -960,7 +976,7 @@
     "message": "Ja tiek noteikta pieteikšanās veidne, tā tiks aizpildīta lapas ielādes brīdī."
   },
   "experimentalFeature": {
-    "message": "Kompromitētas vai neuzticamas vietnes var izmantot automātisko aizpildīšanu lapas ielādes laikā."
+    "message": "Pārveidotās vai neuzticamās vietnēs automātiskā aizpildīšana lapas ielādes laikā var tikt ļaunprātīgi izmantota."
   },
   "learnMoreAboutAutofill": {
     "message": "Uzzināt vairāk par automātisko aizpildīšanu"
@@ -1242,7 +1258,7 @@
     "message": "Pārbaudīt, vai parole ir bijusi nopludināta."
   },
   "passwordExposed": {
-    "message": "Šī parole datu pārkāpumos ir atklāta $VALUE$ reizi(es). To vajag mainīt.",
+    "message": "Šī parole datu noplūdēs ir atklāta $VALUE$ reizi(es). To vajadzētu nomainīt.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1251,7 +1267,7 @@
     }
   },
   "passwordSafe": {
-    "message": "Šī parole netika atrasta nevienā no zināmajiem datu pārkāpumiem. Tai vajadzētu būt droši izmantojamai."
+    "message": "Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai."
   },
   "baseDomain": {
     "message": "Pamata domēns",
@@ -1366,7 +1382,7 @@
     "message": "Atslēgt ar PIN"
   },
   "setYourPinCode": {
-    "message": "Uzstādīt PIN kodu Bitwarden atslēgšanai. PIN iestatījumi tiks atiestatīti, ja jebkad tiks veikta pilnīga izrakstīšanās no lietotnes."
+    "message": "Iestatīt PIN kodu Bitwarden atslēgšanai. PIN iestatījumi tiks atiestatīti pēc pilnīgas izrakstīšanās no lietotnes."
   },
   "pinRequired": {
     "message": "Ir nepieciešams PIN kods."
@@ -1625,7 +1641,7 @@
     "message": "Aizsargāts ar paroli"
   },
   "copySendLink": {
-    "message": "Kopēt Sūtījuma saiti",
+    "message": "Ievietot \"Send\" saiti starpliktuvē",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "removePassword": {
@@ -1723,7 +1739,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendShareDesc": {
-    "message": "Saglabājot, kopējiet šī Sūtījuma saiti starpliktuvē.",
+    "message": "Saglabāšanas brīdī ievietot šī \"Send\" saiti starpliktuvē.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -1748,7 +1764,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "Organizācijas politikas dēļ jūs varat dzēst tikai esošu Sūtījumu.",
+    "message": "Uzņēmuma nosacījumu dēļ ir iespējams izdzēst tikai esošu \"Send\".",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Atspējotu apvienību vienumiem nevar piekļūt. Jāsazinās ar apvienības īpašnieku, lai iegūtu palīdzību."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Piesakās $DOMAIN$",
     "placeholders": {
@@ -2078,16 +2091,16 @@
     "message": "Noplūdusi galvenā parole"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Parole ir atrasta datu noplūdē. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?"
+    "message": "Parole atrasta datu noplūdē. Jāizmanto neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot noplūdušu paroli?"
   },
   "weakAndExposedMasterPassword": {
     "message": "Vāja un noplūdusi galvenā parole"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Noteikta vāja parole, un tā ir atrasta datu noplūdē. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot šo paroli?"
+    "message": "Noteikta vāja parole, un tā ir atrasta datu noplūdē. Jāizmanto spēcīga un neatkārtojama parole, lai aizsargātu savu kontu. Vai tiešām izmantot šo paroli?"
   },
   "checkForBreaches": {
-    "message": "Pārbaudīt šo paroli pret zināmām datu noplūdēm"
+    "message": "Meklēt šo paroli zināmās datu noplūdēs"
   },
   "important": {
     "message": "Svarīgi:"
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Tavas apvienības nosacījumos ir ieslēgta automātiskā aizpildīšana lapas ielādes brīdī."
+  },
+  "howToAutofill": {
+    "message": "Kā automātiski aizpildīt"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Jāatlasa vienums šai lapai vai jāizmanto īsceļš: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Jāatlasa vienums šai lapai vai iestatījumos jāuzstāda īsceļš."
+  },
+  "gotIt": {
+    "message": "Sapratu"
+  },
+  "autofillSettings": {
+    "message": "Automātiskās aizpildes iestatījumi"
+  },
+  "autofillShortcut": {
+    "message": "Automātiskās aizpildes īsinājumtaustiņi"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Automātiskās aizpildes īsceļš nav uzstādīts. To var izdarīt pārlūka iestatījumos."
+  },
+  "autofillShortcutText": {
+    "message": "Automātiskās aizpildes īsceļš ir: $COMMAND$. To var mainīt pārlūka iestatījumos.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Automātiskās aizpildes noklusējuma īsceļš: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

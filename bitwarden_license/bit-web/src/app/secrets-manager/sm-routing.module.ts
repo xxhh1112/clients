@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/organizations/guards/org-permissions.guard";
+import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/admin-console/organizations/guards/org-permissions.guard";
 import { buildFlaggedRoute } from "@bitwarden/web-vault/app/oss-routing.module";
 
 import { LayoutComponent } from "./layout/layout.component";
@@ -11,13 +12,15 @@ import { OverviewModule } from "./overview/overview.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { SecretsModule } from "./secrets/secrets.module";
 import { ServiceAccountsModule } from "./service-accounts/service-accounts.module";
+import { SettingsModule } from "./settings/settings.module";
 import { SMGuard } from "./sm.guard";
+import { TrashModule } from "./trash/trash.module";
 
 const routes: Routes = [
   buildFlaggedRoute("secretsManager", {
     path: ":organizationId",
     component: LayoutComponent,
-    canActivate: [OrganizationPermissionsGuard, SMGuard],
+    canActivate: [AuthGuard, OrganizationPermissionsGuard, SMGuard],
     data: {
       organizationPermissions: (org: Organization) => org.canAccessSecretsManager,
     },
@@ -47,6 +50,17 @@ const routes: Routes = [
         data: {
           titleId: "serviceAccounts",
         },
+      },
+      {
+        path: "trash",
+        loadChildren: () => TrashModule,
+        data: {
+          titleId: "trash",
+        },
+      },
+      {
+        path: "settings",
+        loadChildren: () => SettingsModule,
       },
       {
         path: "",

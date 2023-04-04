@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Tuki ja palaute"
   },
+  "helpCenter": {
+    "message": "Bitwardenin Tukikeskus"
+  },
+  "communityForums": {
+    "message": "Tutustu Bitwardenin keskustelualueeseen"
+  },
+  "contactSupport": {
+    "message": "Ota yhteyttä Bitwardenin asiakaspalveluun"
+  },
   "sync": {
     "message": "Synkronointi"
   },
@@ -430,7 +439,14 @@
     "message": "Pääsalasanan uudelleensyöttö vaaditaan."
   },
   "masterPasswordMinlength": {
-    "message": "Pääsalasanan tulee sisältää ainakin 8 merkkiä."
+    "message": "Pääsalasanan tulee sisältää vähintään $VALUE$ merkkiä.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Pääsalasanan vahvistus ei täsmää."
@@ -458,7 +474,7 @@
     }
   },
   "autofillError": {
-    "message": "Valitttua kohdetta ei voitu täyttää tälle sivulle automaattisesti. Kopioi ja liitä tiedot itse."
+    "message": "Valittua kohdetta ei voitu täyttää tälle sivulle automaattisesti. Kopioi ja liitä tiedot itse."
   },
   "loggedOut": {
     "message": "Kirjauduttu ulos"
@@ -780,7 +796,7 @@
     "message": "Kaksivaiheisen kirjautumisen (2FA) TOTP-todennuskoodien generaattori holvisi kirjautumistiedoille."
   },
   "ppremiumSignUpSupport": {
-    "message": "Ensisijainen asiakastuki."
+    "message": "Ensisijainen asiakaspalvelu."
   },
   "ppremiumSignUpFuture": {
     "message": "Kaikki tulossa olevat Premium-toiminnot. Lisää tulossa pian!"
@@ -963,7 +979,7 @@
     "message": "Vaarantuneet tai epäluotettavat sivustot voivat väärinkäyttää sivun avautuessa suoritettavaa automaattista täyttöä."
   },
   "learnMoreAboutAutofill": {
-    "message": "Lue lisää automaattisesta täytöstä"
+    "message": "Lisätietoja automaattisesta täytöstä"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Automaattisen täytön oletusasetus kirjautumistiedoille"
@@ -1847,7 +1863,7 @@
     "message": "Minuuttia"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a)",
+    "message": "Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Käytöstä poistettujen organisaatioiden kohteet eivät ole käytettävissä. Ole yhteydessä organisaation omistajaan saadaksesi apua."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Kirjaudutaan palveluun $DOMAIN$",
     "placeholders": {
@@ -2093,7 +2106,7 @@
     "message": "Tärkeää:"
   },
   "masterPasswordHint": {
-    "message": "Pääsalasanan palautus ei ole mahdollista, jos unohdat sen!"
+    "message": "Pääsalasanasi palauttaminen ei ole mahdollista, jos unohdat sen!"
   },
   "characterMinimum": {
     "message": "Vähintään $LENGTH$ merkkiä",
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Organisaatiokäytännöt ovat poistaneet käytöstä automaattisen täytön sivun avautuessa."
+  },
+  "howToAutofill": {
+    "message": "Miten täytetään automaattisesti"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Valitse tälle sivulle sopiva kohde tai käytä pikanäppäintä $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Valitse tälle sivulle sopiva kohde tai määritä pikanäppäin asetuksista."
+  },
+  "gotIt": {
+    "message": "Selvä"
+  },
+  "autofillSettings": {
+    "message": "Täytön asetukset"
+  },
+  "autofillShortcut": {
+    "message": "Automaattisen täytön pikanäppäin"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Automaattisen täytön pikanäppäintä ei ole määritetty. Määritä se selaimen asetuksista."
+  },
+  "autofillShortcutText": {
+    "message": "Automaattisen täytön pikanäppäin on $COMMAND$. Vaihda se selaimen asetuksista.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Automaattisen täytön oletuspikanäppäin on $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

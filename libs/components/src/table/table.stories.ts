@@ -1,6 +1,8 @@
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
+import { countries } from "../form/countries";
+
 import { TableDataSource } from "./table-data-source";
 import { TableModule } from "./table.module";
 
@@ -133,3 +135,64 @@ const ScrollableTemplate: Story = (args) => ({
 });
 
 export const Scrollable = ScrollableTemplate.bind({});
+
+const data3 = new TableDataSource<{ value: string; name: string }>();
+
+// Chromatic has a max page size, lowering the number of entries to ensure we don't hit it
+data3.data = countries.slice(0, 100);
+
+const FilterableTemplate: Story = (args) => ({
+  props: {
+    dataSource: data3,
+    sortFn: (a: any, b: any) => a.id - b.id,
+  },
+  template: `
+    <input type="search" placeholder="Search" (input)="dataSource.filter = $event.target.value" />
+    <cdk-virtual-scroll-viewport scrollWindow itemSize="47">
+      <bit-table [dataSource]="dataSource">
+        <ng-container header>
+          <tr>
+            <th bitCell bitSortable="name" default>Name</th>
+            <th bitCell bitSortable="value" width="120px">Value</th>
+          </tr>
+        </ng-container>
+        <ng-template body let-rows$>
+          <tr bitRow *cdkVirtualFor="let r of rows$">
+            <td bitCell>{{ r.name }}</td>
+            <td bitCell>{{ r.value }}</td>
+          </tr>
+        </ng-template>
+      </bit-table>
+    </cdk-virtual-scroll-viewport>
+    `,
+});
+
+export const Filterable = FilterableTemplate.bind({});
+
+const data4 = new TableDataSource<{ name: string }>();
+
+data4.data = [...Array(5).keys()].map((i) => ({
+  name: i % 2 == 0 ? `name-${i}`.toUpperCase() : `name-${i}`.toLowerCase(),
+}));
+
+const VariableCaseTemplate: Story = (args) => ({
+  props: {
+    dataSource: data4,
+  },
+  template: `
+    <bit-table [dataSource]="dataSource">
+      <ng-container header>
+        <tr>
+          <th bitCell bitSortable="name" default>Name</th>
+        </tr>
+      </ng-container>
+      <ng-template body let-rows$>
+        <tr bitRow *ngFor="let r of rows$ | async">
+          <td bitCell>{{ r.name }}</td>
+        </tr>
+      </ng-template>
+    </bit-table>
+    `,
+});
+
+export const VariableCase = VariableCaseTemplate.bind({});

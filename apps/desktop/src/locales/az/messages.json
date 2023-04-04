@@ -542,7 +542,14 @@
     "message": "Ana parolun yenidən yazılması lazımdır."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
+    "message": "Ana parol ən azı $VALUE$ simvol uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parol təsdiqləməsi uyğun gəlmir."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Bizimlə əlaqə"
+  },
+  "helpAndFeedback": {
+    "message": "Kömək və əks-əlaqə"
   },
   "getHelp": {
     "message": "Kömək alın"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "\"Heç vaxt\" seçimini istifadə etmək istədiyinizə əminsiniz? Kilid seçimini \"Heç vaxt\" olaraq tənzimləsəniz, anbarınızın şifrələmə açarı cihazınızda saxlanılacaq. Bu seçimi istifadə etsəniz, cihazınızı daha yaxşı mühafizə etməlisiniz."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Anbar"

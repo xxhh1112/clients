@@ -542,7 +542,14 @@
     "message": "Wymagane jest ponowne wpisanie hasła głównego."
   },
   "masterPasswordMinlength": {
-    "message": "Hasło główne musi zawierać co najmniej 8 znaków."
+    "message": "Hasło główne musi zawierać co najmniej $VALUE$ znaki(-ów).",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hasła nie pasują do siebie."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Skontaktuj się z nami"
+  },
+  "helpAndFeedback": {
+    "message": "Pomoc i opinie"
   },
   "getHelp": {
     "message": "Uzyskaj pomoc"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Czy na pewno chcesz użyć opcji „Nigdy”? Ustawienie opcji blokady na „Nigdy” spowoduje zapisanie klucza szyfrowania sejfu na urządzeniu. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Sejf"

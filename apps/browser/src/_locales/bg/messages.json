@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Помощ и обратна връзка"
   },
+  "helpCenter": {
+    "message": "Помощен център на Битуорден"
+  },
+  "communityForums": {
+    "message": "Разгледайте обществения форум на Битуорден"
+  },
+  "contactSupport": {
+    "message": "Свържете се с поддръжката на Битуорден"
+  },
   "sync": {
     "message": "Синхронизиране"
   },
@@ -430,7 +439,14 @@
     "message": "Повторното въвеждане на главната парола е задължително."
   },
   "masterPasswordMinlength": {
-    "message": "Главната парола трябва да е дълга поне 8 знака."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Записите в изключени организации не са достъпни. Свържете се със собственика на организацията си за помощ."
   },
-  "cardBrandMir": {
-    "message": "Мир"
-  },
   "loggingInTo": {
     "message": "Вписване в $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Автоматичното попълване при зареждане на страница е включено в съответствие с политиките на Вашата организация."
+  },
+  "howToAutofill": {
+    "message": "Как се ползва автоматичното попълване"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Изберете елемент от тази страница или използвайте следната комбинация: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Изберете елемент от тази страница или задайте клавишна комбинация в настройките."
+  },
+  "gotIt": {
+    "message": "Разбрано"
+  },
+  "autofillSettings": {
+    "message": "Настройки за автоматичното попълване"
+  },
+  "autofillShortcut": {
+    "message": "Клавишна комбинация за автоматично попълване"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Няма зададена клавишна комбинация за автоматичното попълване. Променете това в настройките на браузъра."
+  },
+  "autofillShortcutText": {
+    "message": "Клавишната комбинация за автоматично попълване е: $COMMAND$. Може да я промените в настройките на браузъра.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Стандартна клавишна комбинация за автоматично попълване: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

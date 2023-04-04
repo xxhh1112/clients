@@ -5,15 +5,16 @@ import { first } from "rxjs/operators";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/vault/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -51,7 +52,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     private popupUtilsService: PopupUtilsService,
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
-    logService: LogService
+    logService: LogService,
+    sendApiService: SendApiService
   ) {
     super(
       cipherService,
@@ -66,7 +68,8 @@ export class AddEditComponent extends BaseAddEditComponent {
       policyService,
       logService,
       passwordRepromptService,
-      organizationService
+      organizationService,
+      sendApiService
     );
   }
 
@@ -130,15 +133,11 @@ export class AddEditComponent extends BaseAddEditComponent {
           : tabs.filter((tab) => tab.url != null && tab.url !== "").map((tab) => tab.url);
     }
 
-    window.setTimeout(() => {
-      if (!this.editMode) {
-        if (this.cipher.name != null && this.cipher.name !== "") {
-          document.getElementById("loginUsername").focus();
-        } else {
-          document.getElementById("name").focus();
-        }
-      }
-    }, 200);
+    this.setFocus();
+
+    if (this.popupUtilsService.inTab(window)) {
+      this.popupUtilsService.enableCloseTabWarning();
+    }
   }
 
   async load() {
@@ -149,16 +148,23 @@ export class AddEditComponent extends BaseAddEditComponent {
   }
 
   async submit(): Promise<boolean> {
-    if (await super.submit()) {
-      if (this.cloneMode) {
-        this.router.navigate(["/tabs/vault"]);
-      } else {
-        this.location.back();
-      }
+    const success = await super.submit();
+    if (!success) {
+      return false;
+    }
+
+    if (this.popupUtilsService.inTab(window)) {
+      this.popupUtilsService.disableCloseTabWarning();
+      this.messagingService.send("closeTab", { delay: 1000 });
       return true;
     }
 
-    return false;
+    if (this.cloneMode) {
+      this.router.navigate(["/tabs/vault"]);
+    } else {
+      this.location.back();
+    }
+    return true;
   }
 
   attachments() {
@@ -184,6 +190,12 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   cancel() {
     super.cancel();
+
+    if (this.popupUtilsService.inTab(window)) {
+      this.messagingService.send("closeTab");
+      return;
+    }
+
     this.location.back();
   }
 
@@ -234,5 +246,19 @@ export class AddEditComponent extends BaseAddEditComponent {
           ? []
           : this.collections.filter((c) => (c as any).checked).map((c) => c.id),
     });
+  }
+
+  private setFocus() {
+    window.setTimeout(() => {
+      if (this.editMode) {
+        return;
+      }
+
+      if (this.cipher.name != null && this.cipher.name !== "") {
+        document.getElementById("loginUsername").focus();
+      } else {
+        document.getElementById("name").focus();
+      }
+    }, 200);
   }
 }

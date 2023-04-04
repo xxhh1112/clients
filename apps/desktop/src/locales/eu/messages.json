@@ -542,7 +542,14 @@
     "message": "Pasahitz nagusia berridaztea derrigorrezkoa da."
   },
   "masterPasswordMinlength": {
-    "message": "Pasahitz nagusiak gutxienez 8 karaktere izan behar ditu."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Pasahitz nagusiaren egiaztatzea ez dator bat."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Jarri gurekin harremanetan"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Jaso laguntza"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Ziur zaude \"Inoiz ez\" aukera erabili nahi duzula? Zure blokeo aukerak \"Inoiz ez\" bezala konfiguratzeak kutxa gotorraren zifratze-gakoa gailuan gordetzen du. Aukera hau erabiltzen baduzu, gailua behar bezala babestuta duzula ziurtatu behar duzu."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Kutxa gotorra"

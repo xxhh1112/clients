@@ -122,6 +122,7 @@ export class WebauthnUtils {
         userHandle: Fido2Utils.stringToBuffer(result.userHandle),
       } as AuthenticatorAssertionResponse,
       getClientExtensionResults: () => ({}),
+      authenticatorAttachment: "hybrid",
     };
   }
 }

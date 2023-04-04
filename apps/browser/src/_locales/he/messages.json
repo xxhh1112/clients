@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "עזרה ומשוב"
   },
+  "helpCenter": {
+    "message": "Bitwarden Help center"
+  },
+  "communityForums": {
+    "message": "Explore Bitwarden community forums"
+  },
+  "contactSupport": {
+    "message": "Contact Bitwarden support"
+  },
   "sync": {
     "message": "סנכרן"
   },
@@ -430,7 +439,14 @@
     "message": "Master password retype is required."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "שדה אימות סיסמה ראשית לא תואם."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Items in suspended Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logging in to $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Your organization policies have turned on auto-fill on page load."
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Select an item from this page or set a shortcut in settings."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

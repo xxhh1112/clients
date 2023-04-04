@@ -542,7 +542,14 @@
     "message": "Поновно уписивање главне лозинке је неопходно."
   },
   "masterPasswordMinlength": {
-    "message": "Главна Лозинка треба имати бар 8 знака."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Потврђена Главна Лозинка се не подудара."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Контактирајте нас"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Потражи помоћ"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Да ли сте сигурни да желите да користите опцију „Никад“? Ако поставите опције закључавања на „Никада“, на вашем уређају се чува кључ за шифровање сефа. Ако користите ову опцију, осигурајте да је уређај правилно заштићен."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Сеф"

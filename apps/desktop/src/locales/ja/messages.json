@@ -542,7 +542,14 @@
     "message": "マスターパスワードの再入力が必要です。"
   },
   "masterPasswordMinlength": {
-    "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
+    "message": "マスターパスワードは少なくとも $VALUE$ 文字以上でなければなりません。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "マスターパスワードが一致しません。"
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "お問い合わせ"
+  },
+  "helpAndFeedback": {
+    "message": "ヘルプとフィードバック"
   },
   "getHelp": {
     "message": "ヘルプ"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "本当に「なし」オプションを使用しますか？ロックオプションを「なし」に設定すると、保管庫の暗号化キーがデバイスに保存されます。 このオプションを使用する場合は、デバイスを適切に保護する必要があります。"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "保管庫"

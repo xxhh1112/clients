@@ -697,7 +697,14 @@
     "message": "Ana parolun yenidən yazılması lazımdır."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
+    "message": "Ana parol ən azı $VALUE$ simvol uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parol təsdiqləməsi uyğun gəlmir."
@@ -1149,7 +1156,7 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Setting your KDF iterations too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend that you increase the value in increments of $INCREMENT$ and then test all of your devices.",
+    "message": "KDF iterasiyalarınızı çox yüksək tənzimləmək, yavaş və ya köhnə cihazlarda \"Bitwarden\"ə giriş edərkən (və ya kilidi açarkən) aşağı performansa səbəb ola bilər. Dəyəri $INCREMENT$ artımları ilə artırmağınızı və daha sonra bütün cihazlarınızda test etməyinizi məsləhət görürük.",
     "placeholders": {
       "increment": {
         "content": "$1",
@@ -1247,6 +1254,9 @@
   },
   "importSuccess": {
     "message": "Verilənlər anbarınıza uğurla idxal edildi."
+  },
+  "dataExportSuccess": {
+    "message": "Məlumat uğurla xaricə köçürüldü"
   },
   "importWarning": {
     "message": "$ORGANIZATION$ təşkilatına verilənləri idxal edirsiniz. Verilənlərinizi bu təşkilatın üzvləri ilə paylaşa bilərsiniz. Davam etmək istəyirsiniz?",
@@ -2009,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Abunəlikdən imtina"
   },
+  "subscriptionExpiration": {
+    "message": "Abunəliyin bitmə tarixi"
+  },
   "subscriptionCanceled": {
     "message": "Abunəliyiniz ləğv edildi."
   },
@@ -2050,9 +2063,6 @@
   },
   "updateLicense": {
     "message": "Lisenziyanı güncəllə"
-  },
-  "updatedLicense": {
-    "message": "Lisenziyanı güncəlləndi"
   },
   "manageSubscription": {
     "message": "Abunəliyi idarə et"
@@ -4845,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır."
   },
+  "activateAutofill": {
+    "message": "Avto-doldurmanı aktivləşdir"
+  },
+  "activateAutofillDesc": {
+    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yükləmə tənzimləmələri ilə avto-doldurmanı aktivləşdirin."
+  },
+  "experimentalFeature": {
+    "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Avto-doldurma haqqında daha ətraflı"
+  },
   "selectType": {
     "message": "SSO növü seçin"
   },
@@ -5619,9 +5641,6 @@
   "reporting": {
     "message": "Hesabat göndərmə"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "İstifadəçi sayı"
   },
@@ -5670,6 +5689,9 @@
   "customColor": {
     "message": "Özəl rəng"
   },
+  "selectPlaceholder": {
+    "message": "-- Seç --"
+  },
   "multiSelectPlaceholder": {
     "message": "-- Filtrləmək üçün yazın --"
   },
@@ -5694,157 +5716,261 @@
     "message": "Gizlət"
   },
   "projects": {
-    "message": "Layihələr"
+    "message": "Layihələr",
+    "description": "Description for the Projects field."
   },
   "lastEdited": {
-    "message": "Son düzəliş"
+    "message": "Son düzəliş",
+    "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "\"Sirr\"ə düzəliş et"
+    "message": "\"Sirr\"ə düzəliş et",
+    "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "Sirr əlavə et"
+    "message": "Sirr əlavə et",
+    "description": "Action to create a new secret."
   },
   "copySecretName": {
-    "message": "Sirr adını kopyala"
+    "message": "Sirr adını kopyala",
+    "description": "Action to copy the name of a secret to the system's clipboard."
   },
   "copySecretValue": {
-    "message": "Sirr dəyərini kopyala"
+    "message": "Sirr dəyərini kopyala",
+    "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "Sirri sil"
+    "message": "Sirri sil",
+    "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "\"Sirr\"ləri sil"
+    "message": "\"Sirr\"ləri sil",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Sirri birdəfəlik sil"
+  },
+  "hardDeleteSecrets": {
+    "message": "Sirləri birdəfəlik sil"
   },
   "secretProjectAssociationDescription": {
-    "message": "Sirrin əlaqələndiriləcəyi layihələri seçin. Yalnız bu layihələrə müraciəti olan təşkilat istifadəçiləri sirri görə biləcək."
+    "message": "Sirrin əlaqələndiriləcəyi layihələri seçin. Yalnız bu layihələrə müraciəti olan təşkilat istifadəçiləri sirri görə biləcək.",
+    "description": "A prompt explaining how secrets can be associated with projects."
   },
-  "typeOrSelectProjects": {
-    "message": "Layihələri yazın və ya seçin"
+  "selectProjects": {
+    "message": "Layihələri seçin",
+    "description": "A label for a type-to-filter input field to choose projects."
   },
-  "typeOrSelectProject": {
-    "message": "Layihə yazın və ya seçin"
+  "searchProjects": {
+    "message": "Layihə axtar",
+    "description": "Label for the search bar used to search projects."
   },
   "project": {
-    "message": "Layihə"
+    "message": "Layihə",
+    "description": "Similar to collections, projects can be used to group secrets."
   },
   "editProject": {
-    "message": "Layihəyə düzəliş et"
+    "message": "Layihəyə düzəliş et",
+    "description": "The action to modify an existing project."
   },
   "viewProject": {
-    "message": "Layihəyə bax"
+    "message": "Layihəyə bax",
+    "description": "The action to view details of a project."
   },
   "deleteProject": {
-    "message": "Layihəni sil"
+    "message": "Layihəni sil",
+    "description": "The action to delete a project from the system."
   },
   "deleteProjects": {
-    "message": "Layihələri sil"
+    "message": "Layihələri sil",
+    "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "Sirr"
+    "message": "Sirr",
+    "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "Servis hesabı"
+    "message": "Servis hesabı",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "Servis hesabları"
+    "message": "Servis hesabları",
+    "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "\"Sirr\"lər"
+    "message": "\"Sirr\"lər",
+    "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "Ad/Dəyər cütü"
+    "message": "Ad/Dəyər cütü",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
-    "message": "\"Sirr\"ə düzəliş edildi"
+    "message": "\"Sirr\"ə düzəliş edildi",
+    "description": "Notification for the successful editing of a secret."
   },
   "secretCreated": {
-    "message": "Sirr yaradıldı"
+    "message": "Sirr yaradıldı",
+    "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "Yeni Sirr"
+    "message": "Yeni Sirr",
+    "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "Yeni Servis hesabı"
+    "message": "Yeni Servis hesabı",
+    "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "Göstəriləcək sirr yoxdur"
+    "message": "Göstəriləcək sirr yoxdur",
+    "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "Başlamaq üçün yeni bir sirr əlavə edin və ya daxilə köçürün."
+    "message": "Başlamaq üçün yeni bir sirr əlavə edin və ya daxilə köçürün.",
+    "description": "Message to encourage the user to start adding secrets."
   },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Göstəriləcək heç nə yoxdur"
+  "secretsTrashNoItemsMessage": {
+    "message": "Tullantı qutusunda heç bir sirr yoxdur."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "\"Sirr\" müraciətini avtomatlaşdırmağa başlamaq üçün yeni bir Servis hesabı yaradın."
+    "message": "\"Sirr\" müraciətini avtomatlaşdırmağa başlamaq üçün yeni bir Servis hesabı yaradın.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Göstəriləcək heç nə yoxdur",
+    "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "\"Sirr\"ləri axtar"
+    "message": "\"Sirr\"ləri axtar",
+    "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "Servis hesablarını sil"
+    "message": "Servis hesablarını sil",
+    "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "Servis hesabını sil"
+    "message": "Servis hesabını sil",
+    "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "Servis hesabına bax"
+    "message": "Servis hesabına bax",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "$SERVICE_ACCOUNT$ xidmət hesabının silinməsi daimi və geri qaytarıla bilməyən prosesdir.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Xidmət hesablarının silinməsi daimi və geri qaytarıla bilməyən prosesdir."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "$COUNT$ xidmət hesabını sil",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Xidmət hesabı silindi"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Xidmət hesabları silindi"
   },
   "searchServiceAccounts": {
-    "message": "Servis hesablarına bax"
+    "message": "Servis hesablarına bax",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Xidmət hesabına düzəliş et",
+    "description": "Title for editing a service account."
   },
   "addProject": {
-    "message": "Layihə əlavə et"
+    "message": "Layihə əlavə et",
+    "description": "Title for creating a new project."
   },
   "projectEdited": {
-    "message": "Layihəyə düzəliş edildi"
+    "message": "Layihəyə düzəliş edildi",
+    "description": "Notification for the successful editing of a project."
   },
   "projectSaved": {
-    "message": "Layihə saxlanıldı"
+    "message": "Layihə saxlanıldı",
+    "description": "Notification for the successful saving of a project."
   },
   "projectCreated": {
-    "message": "Layihə yaradıldı"
+    "message": "Layihə yaradıldı",
+    "description": "Notification for the successful creation of a project."
   },
   "projectName": {
-    "message": "Layihə adı"
+    "message": "Layihə adı",
+    "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "Yeni layihə"
+    "message": "Yeni layihə",
+    "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
-    "message": "\"Sirr\"ləri silmək, mövcud inteqrasiyalara təsir edə bilər."
+    "message": "\"Sirr\"ləri silmək, mövcud inteqrasiyalara təsir edə bilər.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "\"Sirr\"lər tullantı qutusuna göndərildi"
+    "message": "\"Sirr\"lər tullantı qutusuna göndərildi",
+    "description": "Notifies that the selected secrets have been moved to the trash"
   },
-  "serviceAccountCreated": {
-    "message": "Servis hesabı yaradıldı"
+  "hardDeleteSecretConfirmation": {
+    "message": "Bu sirri birdəfəlik silmək istədiyinizə əminsiniz?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Bu sirləri birdəfəlik silmək istədiyinizə əminsiniz?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Sirlər birdəfəlik silindi"
   },
   "smAccess": {
-    "message": "Müraciət"
+    "message": "Müraciət",
+    "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
-    "message": "Layihə, Sirr"
+    "message": "Layihə, Sirr",
+    "description": ""
   },
   "serviceAccountName": {
-    "message": "Servis hesab adı"
+    "message": "Servis hesab adı",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Servis hesabı yaradıldı",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Xidmət hesabı güncəlləndi",
+    "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Layihələri və ya \"Sirr\"ləri yazın və ya seçin"
+    "message": "Layihələri və ya \"Sirr\"ləri yazın və ya seçin",
+    "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "Filtrləmək üçün yazın"
+    "message": "Filtrləmək üçün yazın",
+    "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
-    "message": "Layihələr silindi"
+    "message": "Layihələr silindi",
+    "description": "Notifies that the selected projects have been deleted"
   },
   "deleteProjectToast": {
-    "message": "Layihə və əlaqələndirilmiş bütün \"sirr\"ləri silindi"
+    "message": "Layihə və əlaqələndirilmiş bütün \"sirr\"ləri silindi",
+    "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
     "message": "$PROJECT$ layihəsinin silinməsi daimi və geri qaytarıla bilməyən prosesdir.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5854,6 +5980,7 @@
   },
   "deleteProjectInputLabel": {
     "message": "Davam etmək üçün \"$CONFIRM$\" yazın",
+    "description": "Users are prompted to type 'confirm' to delete a project",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5863,6 +5990,7 @@
   },
   "deleteProjectConfirmMessage": {
     "message": "$PROJECT$ sil",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5872,6 +6000,7 @@
   },
   "deleteProjectsConfirmMessage": {
     "message": "$COUNT$ layihəni sil",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5880,70 +6009,101 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Layihələrin silinməsi daimi və geri qaytarıla bilməyən prosesdir."
+    "message": "Layihələrin silinməsi daimi və geri qaytarıla bilməyən prosesdir.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
-    "message": "Görüntülənəcək heç bir layihə yoxdur"
+    "message": "Görüntülənəcək heç bir layihə yoxdur",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "\"Sirr\"ləri təşkil etməyə başlamaq üçün yeni bir layihə əlavə edin."
+    "message": "\"Sirr\"ləri təşkil etməyə başlamaq üçün yeni bir layihə əlavə edin.",
+    "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
-    "message": "Təsdiq tələb olunur"
+    "message": "Təsdiq tələb olunur",
+    "description": "Indicates that user confirmation is required for an action to proceed."
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "Aşağıdakı layihələr silinə bilmədi:"
+    "message": "Aşağıdakı layihələr silinə bilmədi:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "Sirr tullantı qutusuna göndərildi"
+    "message": "Sirr tullantı qutusuna göndərildi",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
-  "searchProjects": {
-    "message": "Layihə axtar"
+  "hardDeleteSuccessToast": {
+    "message": "Sirr birdəfəlik silindi"
   },
   "accessTokens": {
-    "message": "Müraciət tokenləri"
+    "message": "Müraciət tokenləri",
+    "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Müraciət tokeni yarat"
+  "newAccessToken": {
+    "message": "Yeni müraciət tokeni",
+    "description": "Button label for creating a new access token."
   },
   "expires": {
-    "message": "Müddəti bitir"
+    "message": "Müddəti bitir",
+    "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "Oxuna bilər"
+    "message": "Oxuna bilər",
+    "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "Göstəriləcək heç bir müraciət tokeni yoxdur"
+    "message": "Göstəriləcək heç bir müraciət tokeni yoxdur",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "Başlamaq üçün bir müraciət tokeni yarat"
+    "message": "Başlamaq üçün bir müraciət tokeni yarat",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
-    "message": "Bağlamazdan əvvəl endir və ya kopyala."
+    "message": "Bağlamazdan əvvəl endir və ya kopyala.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "Bitmə vaxtı:"
+    "message": "Bitmə vaxtı:",
+    "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "Müraciət tokenləri saxlanılmadı və alına bilmir"
+    "message": "Müraciət tokenləri saxlanılmadı və alına bilmir",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
-    "message": "Tokeni kopyala"
+    "message": "Tokeni kopyala",
+    "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "Müraciət tokeni"
+    "message": "Müraciət tokeni",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
-    "message": "Bitmə vaxtı tələb olunur"
+    "message": "Bitmə vaxtı tələb olunur",
+    "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Müraciət tokeni yaradıldı və lövhəyə kopyalandı"
+    "message": "Müraciət tokeni yaradıldı və lövhəyə kopyalandı",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "Beta üçün icazələrin idarə edilməsi əlçatmazdır."
+    "message": "Beta üçün icazələrin idarə edilməsi əlçatmazdır.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "Müraciət tokenini ləğv et"
+    "message": "Müraciət tokenini ləğv et",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Müraciət tokenlərini ləğv et"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Müraciət tokenlərinin ləğv edilməsi daimi və geri qaytarıla bilməyən prosesdir."
+  },
+  "accessTokenRevoked": {
+    "message": "Müraciət tokenləri ləğv edildi",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Alt menyu"
@@ -5999,6 +6159,9 @@
   "collection": {
     "message": "Kolleksiya"
   },
+  "noCollection": {
+    "message": "Kolleksiya yoxdur"
+  },
   "canView": {
     "message": "Baxa bilər"
   },
@@ -6028,6 +6191,138 @@
   },
   "memberAccessAll": {
     "message": "Bu üzv, bütün elementlərə müraciət edə və onları dəyişdirə bilər."
+  },
+  "domainVerification": {
+    "message": "Domen təsdiqləməsi"
+  },
+  "newDomain": {
+    "message": "Yeni domen"
+  },
+  "noDomains": {
+    "message": "Domen yoxdur"
+  },
+  "noDomainsSubText": {
+    "message": "Bir domenin bağlantı qurması, üzvlərin SSO ilə Giriş etməsi əsnasında SSO identifikatorunu ötürməsinə icazə verir."
+  },
+  "verifyDomain": {
+    "message": "Domeni təsdiqlə"
+  },
+  "reverifyDomain": {
+    "message": "Domeni yenidən təsdiqlə"
+  },
+  "copyDnsTxtRecord": {
+    "message": "DNS TXT qeydini kopyala"
+  },
+  "dnsTxtRecord": {
+    "message": "DNS TXT qeydi"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "TXT qeydini DNS Provayderinizə kopyalayıb yapışdırın."
+  },
+  "domainNameInputHint": {
+    "message": "Nümunə: mydomain.com. Alt domenlərin təsdiqlənməsi üçün ayrıca girişlər tələb olunur."
+  },
+  "automaticDomainVerification": {
+    "message": "Avtomatik Domen Təsdiqləməsi"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden, ilk 72 saat ərzində domeni 3 dəfə təsdiqləməyə çalışacaq. Əgər domen təsdiqlənə bilməsə, \"host\"unuzdakı DNS qeydini yoxlayıb əllə təsdiqləyin. Domen təsdiqlənməsə, 7 gün ərzində təşkilatınızdan silinəcək"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Giriş, yararlı bir format deyil. Format: mydomain.com. Alt domenlərin təsdiqlənməsi üçün ayrıca girişlər tələb olunur."
+  },
+  "removeDomain": {
+    "message": "Domeni sil"
+  },
+  "removeDomainWarning": {
+    "message": "Domenin silinməsi, geri qaytarıla bilməyən prosesdir. Davam etmək istədiyinizə əminsiniz?"
+  },
+  "domainRemoved": {
+    "message": "Domen silindi"
+  },
+  "domainSaved": {
+    "message": "Domen saxlanıldı"
+  },
+  "domainVerified": {
+    "message": "Domen təsdiqləndi"
+  },
+  "duplicateDomainError": {
+    "message": "Eyni domeni iki dəfə tələb edə bilməzsiniz."
+  },
+  "domainNotAvailable": {
+    "message": "Kimsə $DOMAIN$ domenini istifadə edir. Davam etmək üçün fərqli bir domen istifadə edin.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ təsdiqlənmədi. DNS qeydinizi yoxlayın.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Təsdiqləndi"
+  },
+  "domainStatusUnverified": {
+    "message": "Təsdiqlənmədi"
+  },
+  "domainNameTh": {
+    "message": "Ad"
+  },
+  "domainStatusTh": {
+    "message": "Vəziyyət"
+  },
+  "lastChecked": {
+    "message": "Son yoxlama"
+  },
+  "editDomain": {
+    "message": "Domenə düzəliş et"
+  },
+  "domainFormInvalid": {
+    "message": "Diqqətinizi tələb edən form xətaları var"
+  },
+  "addedDomain": {
+    "message": "$DOMAIN$ domeni əlavə edildi",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "$DOMAIN$ domeni silindi",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ təsdiqləndi",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ təsdiqlənmədi",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
   "membersColumnHeader": {
     "message": "Üzv/Qrup"
@@ -6104,6 +6399,36 @@
       }
     }
   },
+  "server": {
+    "message": "Server"
+  },
+  "exportData": {
+    "message": "Məlumatı xaricə köçür"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Təşkilat Gizli Məlumatlarının xaricə köçürülməsi"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Yalnız $ORGANIZATION$ ilə əlaqəli Secrets Manager məlumatları xaricə köçürüləcək. Digər məhsullardakı və ya digər təşkilatlardan olan elementlər daxil edilmir.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Fayl yüklə"
+  },
+  "acceptedFormats": {
+    "message": "Qəbul edilən formatlar:"
+  },
+  "copyPasteImportContents": {
+    "message": "Daxilə köçürmə məzmunlarını kopyala və yapışdır:"
+  },
+  "or": {
+    "message": "və ya"
+  },
   "licenseAndBillingManagement": {
     "message": "Lisenziya və faktura idarəetməsi"
   },
@@ -6134,6 +6459,39 @@
   "uploadLicense": {
     "message": "Lisenziyanı yüklə"
   },
+  "projectPeopleDescription": {
+    "message": "Qrup və ya insanların bu layihəyə müraciətinə icazə verin."
+  },
+  "projectPeopleSelectHint": {
+    "message": "İnsanları və ya qrupları yazın və ya seçin"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Xidmət hesablarının bu layihəyə müraciətinə icazə verin."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Xidmət hesablarını yazın və ya seçin"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Əməkdaşlığa başlamaq insanları və ya qrupları əlavə edin"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Müraciət icazəsi veriləcək xidmət hesablarını əlavə edin"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Qrup və ya insanların bu xidmət hesabına müraciətinə icazə verin."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Bu xidmət hesabına layihələr təyin edin. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Müraciət icazəsi vermək üçün layihə əlavə edin"
+  },
+  "canReadWrite": {
+    "message": "Oxuya, yaza bilər"
+  },
+  "groupSlashUser": {
+    "message": "Qrup/İstifadəçi"
+  },
   "lowKdfIterations": {
     "message": "Aşağı KDF iterasiyaları"
   },
@@ -6144,7 +6502,7 @@
     "message": "KDF tənzimləmələrini dəyişdir"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Davam etsəniz hazırkı seansdan çıxış ediləcək, təkrar giriş etməyiniz tələb olunacaq. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
+    "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6154,5 +6512,168 @@
   },
   "userAccessSecretsManager": {
     "message": "Bu istifadəçi \"Secrets Manager Beta\"ya müraciət edə bilər"
+  },
+  "important": {
+    "message": "Vacib:"
+  },
+  "viewAll": {
+    "message": "Hamısına bax"
+  },
+  "showingPortionOfTotal": {
+    "message": "$PORTION$/$TOTAL$ göstərilir",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Aşağıdakı xətaları həll edin və yenidən sınayın."
+  },
+  "description": {
+    "message": "Açıqlama"
+  },
+  "errorReadingImportFile": {
+    "message": "Daxilə köçürmə faylını oxumağa çalışarkən xəta baş verdi"
+  },
+  "accessedSecret": {
+    "message": "$SECRET_ID$ sirrinə müraciət edildi.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Bir sirr yarat"
+  },
+  "createProject": {
+    "message": "Bir layihə yarat"
+  },
+  "createServiceAccount": {
+    "message": "Bir xidmət hesabı yarat"
+  },
+  "downloadThe": {
+    "message": "Endir",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Secrets Manager CLI"
+  },
+  "importSecrets": {
+    "message": "\"Sirr\"ləri daxilə köçür"
+  },
+  "getStarted": {
+    "message": "Başla"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ tamamlandı",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "\"Sirr\"i bərpa et"
+  },
+  "restoreSecrets": {
+    "message": "\"Sirr\"ləri bərpa et"
+  },
+  "restoreSecretPrompt": {
+    "message": "Bu sirri bərpa etmək istədiyinizə əminsiniz?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Bu sirləri bərpa etmək istədiyinizə əminsiniz?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Sirr bərpa olundu"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Sirlər bərpa olundu"
+  },
+  "selectionIsRequired": {
+    "message": "Seçim tələb olunur."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Beta proqramı əsnasında \"Secret Manager\"ə təşkilat müraciətini ödənişsiz işə salın. İstifadəçilərə, Üzvlərdə Betaya müraciət icazəsi verilə bilər."
+  },
+  "secretsManagerEnable": {
+    "message": "\"Secrets Manager Beta\"nı fəallaşdır"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Müraciət tokenləri hələ də əlçatandır"
+  },
+  "saPeopleWarningMessage": {
+    "message": "İnsanları xidmət hesabından silsəniz belə, yaratdıqları müraciət tokenləri silinmir. Güvənliyin ən yaxşı təcrübəsi üçün, xidmət hesabından silinmiş insanlar tərəfindən yaradılan müraciət tokenlərinin ləğv edilməsi tövsiyə olunur."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Bu layihəyə müraciəti sil"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "Bu əməliyyat, layihəyə olan müraciətinizi götürəcək."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Bu xidmət hesabına müraciəti sil"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "Bu əməliyyat, xidmət hesabına olan müraciətinizi götürəcək."
+  },
+  "removeAccess": {
+    "message": "Müraciəti sil"
+  },
+  "checkForBreaches": {
+    "message": "Bu parol üçün bilinən məlumat pozuntularını yoxlayın"
+  },
+  "exposedMasterPassword": {
+    "message": "İfşa olunmuş ana parol"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Parol, məlumat pozuntusunda tapıldı. Hesabınızı qorumaq üçün unikal bir parol istifadə edin. İfşa olunmuş bir parol istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zəif və ifşa olunmuş ana parol"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Zəif parol məlumat pozuntusunda aşkarlandı və tapıldı. Hesabınızı qorumaq üçün güclü və unikal bir parol istifadə edin. Bu parolu istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ simvol",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Ana parol ən azı $LENGTH$ simvol uzunluğunda olmalıdır.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Rədd et"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

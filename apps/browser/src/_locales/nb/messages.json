@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjelp og tilbakemelding"
   },
+  "helpCenter": {
+    "message": "Bitwarden hjelpesenter"
+  },
+  "communityForums": {
+    "message": "Utforsk Bitwardens community forum"
+  },
+  "contactSupport": {
+    "message": "Kontakt Bitwarden brukerstøtte"
+  },
   "sync": {
     "message": "Synkroniser"
   },
@@ -430,7 +439,14 @@
     "message": "Skriv inn hovedpassordet på nytt."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedpassordet må være minst åtte tegn."
+    "message": "Hovedpassordet må være minst $VALUE$ tegn.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Superpassord-bekreftelsen er ikke samsvarende."
@@ -960,10 +976,10 @@
     "message": "Dersom et innloggingskjema blir oppdaget, utfør automatisk en auto-utfylling når nettstedet lastes inn."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Kompromitterte eller upålitelige nettsider kan utnytte auto-utfylling når du laster inn siden."
   },
   "learnMoreAboutAutofill": {
-    "message": "Learn more about auto-fill"
+    "message": "Lær mer om auto-utfylling"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standard autofyll innstilling for innloggingselementer"
@@ -1127,7 +1143,7 @@
     "message": "Dr."
   },
   "mx": {
-    "message": "Mx"
+    "message": "Nøytral"
   },
   "firstName": {
     "message": "Fornavn"
@@ -1396,7 +1412,7 @@
     "message": "Klon"
   },
   "passwordGeneratorPolicyInEffect": {
-    "message": "En eller flere av organisasjonens vilkår påvirker generatorinnstillingene dine."
+    "message": "En eller flere av virksomhetens regler påvirker generatorinnstillingene dine."
   },
   "vaultTimeoutAction": {
     "message": "Handling ved tidsavbrudd i hvelvet"
@@ -1449,7 +1465,7 @@
     "message": "Angi hovedpassord"
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Ett eller flere av organisasjonens vilkår krever at hovedpassordet oppfyller følgende krav:"
+    "message": "En eller flere av virksomhetens regler krever at hovedpassordet oppfyller følgende krav:"
   },
   "policyInEffectMinComplexity": {
     "message": "Minimumspoengsum for kompleksistet er $SCORE$",
@@ -1488,7 +1504,7 @@
     }
   },
   "masterPasswordPolicyRequirementsNotMet": {
-    "message": "Det nye hovedpassordet ditt oppfyller ikke vilkårene."
+    "message": "Det nye hovedpassordet ditt oppfyller ikke vilkår i virksomhetsreglene."
   },
   "acceptPolicies": {
     "message": "Ved å merke av denne boksen sier du deg enig i følgende:"
@@ -1569,10 +1585,10 @@
     "message": "Denne handlingen kan ikke gjøres i sidestolpen, prøv på nytt i sprettoppvinduet eller popvindu."
   },
   "personalOwnershipSubmitError": {
-    "message": "På grunn av bedrifsretningslinjer er du begrenset fra å lagre objekter til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger."
+    "message": "På grunn av en virksomhetsregel er du begrenset fra å lagre objekter til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger."
   },
   "personalOwnershipPolicyInEffect": {
-    "message": "En bedriftsretningslinje påvirker dine eierskapsinnstillinger."
+    "message": "En virksomhetsregel påvirker dine eierskapsinnstillinger."
   },
   "excludedDomains": {
     "message": "Ekskluderte domener"
@@ -1802,7 +1818,7 @@
     "message": "Skjul min e-postadresse fra mottakere."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "En eller flere av organisasjons retningslinjer påvirker generatorinnstillingene dine."
+    "message": "En eller flere av virksomhetens regler påvirker generatorinnstillingene dine."
   },
   "passwordPrompt": {
     "message": "Forespørsel om hovedpassord på nytt"
@@ -1832,7 +1848,7 @@
     "message": "Automatisk registrering"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "Denne organisasjonen har en bedriftsoppsettsregel som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt."
+    "message": "Denne organisasjonen har en virksomhetsregel som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt."
   },
   "selectFolder": {
     "message": "Velg mappe …"
@@ -1847,7 +1863,7 @@
     "message": "Minutter"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisasjonens retningslinjer påvirker tidsavbruddet for hvelvet ditt. Maksimalt tillatt tidsavbrudd for hvelv er $HOURS$ time(r) og $MINUTES$ minutt(er)",
+    "message": "Din virksomhets regler påvirker tidsavbruddet for hvelvet ditt. Maksimalt tillatt tidsavbrudd for hvelv er $HOURS$ time(r) og $MINUTES$ minutt(er)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1866,7 +1882,7 @@
     "message": "Hvelveksportering er skrudd av"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "En eller flere regler i organisasjonsoppsettet forhindrer deg i å eksportere ditt personlige hvelv."
+    "message": "En eller flere virksomhetsregler forhindrer deg i å eksportere ditt personlige hvelv."
   },
   "copyCustomFieldNameInvalidElement": {
     "message": "Klarte ikke å identifisere et gyldig skjemaelement. Prøv å inspisere HTML-en i stedet."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Elementer i deaktiverte organisasjoner kan ikke aksesseres. Kontakt organisasjonseier for hjelp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logger inn på $DOMAIN$",
     "placeholders": {
@@ -2051,28 +2064,28 @@
     "message": "Husk e-post"
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Logg inn med enhet"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "Logg på med enhet må settes opp i Bitwarden-innstillingene. Trenger du et annet alternativ?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Fingeravtrykksfrase"
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+    "message": "Kontroller at hvelvet ditt er låst opp, og at fingeravtrykksfrasen er lik på den andre enheten."
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Send varslingen på nytt"
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Vis alle innloggingsalternativer"
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Et varsel er sendt til enheten din."
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Innlogging startet"
   },
   "exposedMasterPassword": {
     "message": "Eksponert hovedpassord"
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Virksomhetsreglene dine har slått på automatisk utfylling av sidene."
+  },
+  "howToAutofill": {
+    "message": "Hvordan bruke auto-utfylling"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Velg et element fra denne siden eller bruk snarveien: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Velg et element fra denne siden eller angi en snarvei i innstillingene."
+  },
+  "gotIt": {
+    "message": "Skjønner"
+  },
+  "autofillSettings": {
+    "message": "Innstillinger for auto-utfylling"
+  },
+  "autofillShortcut": {
+    "message": "Auto-utfyll tastatursnarvei"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Snarveien for automatisk utfylling er ikke angitt. Endre dette i nettleserens innstillinger."
+  },
+  "autofillShortcutText": {
+    "message": "Snarveien for automatisk utfylling er: $COMMAND$. Endre dette i nettleserens innstillinger.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standard auto-utfyllingssnarvei: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

@@ -542,7 +542,14 @@
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў."
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $VALUE$ сімвалаў.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Пацвярджэнне асноўнага пароля не супадае."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Звязацца з намі"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Атрымаць даведку"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Вы сапраўды хочаце адключыць блакіроўку сховішча? Прызначыўшы параметр блакіравання \"Ніколі\", ключ шыфравання будзе захоўвацца на вашай прыладзе. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Сховішча"

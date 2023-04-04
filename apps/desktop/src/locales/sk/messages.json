@@ -542,7 +542,14 @@
     "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
   },
   "masterPasswordMinlength": {
-    "message": "Hlavné heslo musí obsahovať aspoň 8 znakov."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrdenie hlavného hesla sa nezhoduje."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontaktujte nás"
+  },
+  "helpAndFeedback": {
+    "message": "Pomoc a spätná väzba"
   },
   "getHelp": {
     "message": "Získať pomoc"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Ste si istí, že chcete použiť možnosť \"Nikdy\"? Táto predvoľba ukladá šifrovací kľúč od trezora priamo na zariadení. Ak použijete túto možnosť, mali by ste svoje zariadenie náležite zabezpečiť."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Trezor"

@@ -1,9 +1,9 @@
+import { OrganizationUserStatusType } from "../../../admin-console/enums/organization-user-status-type";
+import { OrganizationUserType } from "../../../admin-console/enums/organization-user-type";
+import { PermissionsApi } from "../../../admin-console/models/api/permissions.api";
+import { SelectionReadOnlyResponse } from "../../../admin-console/models/response/selection-read-only.response";
 import { KdfType } from "../../../enums/kdfType";
-import { OrganizationUserStatusType } from "../../../enums/organizationUserStatusType";
-import { OrganizationUserType } from "../../../enums/organizationUserType";
-import { PermissionsApi } from "../../../models/api/permissions.api";
 import { BaseResponse } from "../../../models/response/base.response";
-import { SelectionReadOnlyResponse } from "../../../models/response/selection-read-only.response";
 
 export class OrganizationUserResponse extends BaseResponse {
   id: string;
@@ -44,6 +44,7 @@ export class OrganizationUserResponse extends BaseResponse {
 export class OrganizationUserUserDetailsResponse extends OrganizationUserResponse {
   name: string;
   email: string;
+  avatarColor: string;
   twoFactorEnabled: boolean;
   usesKeyConnector: boolean;
 
@@ -51,6 +52,7 @@ export class OrganizationUserUserDetailsResponse extends OrganizationUserRespons
     super(response);
     this.name = this.getResponseProperty("Name");
     this.email = this.getResponseProperty("Email");
+    this.avatarColor = this.getResponseProperty("AvatarColor");
     this.twoFactorEnabled = this.getResponseProperty("TwoFactorEnabled");
     this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector") ?? false;
   }

@@ -542,7 +542,14 @@
     "message": "Повторното въвеждане на главната парола е задължително."
   },
   "masterPasswordMinlength": {
-    "message": "Главната парола трябва да е дълга поне 8 знака."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Свържете се с нас"
+  },
+  "helpAndFeedback": {
+    "message": "Помощ и обратна връзка"
   },
   "getHelp": {
     "message": "Помощ"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Уверени ли сте, че искате да зададете стойност „Никога“? Това води до съхранение на шифриращия ключ за трезора във устройството ви. Ако използвате тази възможност, е много важно да имате надлежна защита на устройството си."
-  },
-  "cardBrandMir": {
-    "message": "Мир"
   },
   "vault": {
     "message": "Трезор"

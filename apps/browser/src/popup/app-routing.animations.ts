@@ -197,6 +197,9 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("tabs => lock", inSlideDown),
 
+  transition("tabs => help-and-feedback", inSlideLeft),
+  transition("help-and-feedback => tabs", outSlideRight),
+
   transition("tabs => send-type", inSlideLeft),
   transition("send-type => tabs", outSlideRight),
 
@@ -205,4 +208,7 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("tabs => edit-send, send-type => edit-send", inSlideUp),
   transition("edit-send => tabs, edit-send => send-type", outSlideDown),
+
+  transition("tabs => autofill", inSlideLeft),
+  transition("autofill => tabs", outSlideRight),
 ]);

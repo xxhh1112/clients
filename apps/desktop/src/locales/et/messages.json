@@ -542,7 +542,14 @@
     "message": "Vajalik on ülemparooli uuesti sisestamine."
   },
   "masterPasswordMinlength": {
-    "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
+    "message": "Ülemparool peab olema vähemalt $VALUE$ tähemärgi pikkune.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ülemparoolid ei ühti."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Võta ühendust"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Klienditugi"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Oled kindel, et soovid kasutada valikut \"Mitte kunagi\"? Sellega talletatakse sinu hoidla krüpteerimise võtit seadme mälus. Peaksid olema väga hoolas ja kindel, et seade on ohutu ja selles ei ole pahavara."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Hoidla"

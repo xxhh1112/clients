@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Ayuda y comentarios"
   },
+  "helpCenter": {
+    "message": "Centro de ayuda de Bitwarden"
+  },
+  "communityForums": {
+    "message": "Explorar los foros de la comunidad Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Contactar al soporte de Bitwarden"
+  },
   "sync": {
     "message": "Sincronizar"
   },
@@ -430,7 +439,14 @@
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -960,7 +976,7 @@
     "message": "Si se detecta un formulario, realizar automáticamente un autorellenado cuando la web cargue."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Los sitios web vulnerados o no confiables pueden explotar el autorelleno al cargar la página."
   },
   "learnMoreAboutAutofill": {
     "message": "Más información sobre el relleno automático"
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Póngase en contacto con el personal propietario de la organización para obtener ayuda."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Iniciando sesión en $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Las políticas de su organización han activado autocompletar al cargar la página."
+  },
+  "howToAutofill": {
+    "message": "Cómo autorellenar"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Seleccione un elemento de esta página o utilice el acceso directo: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Seleccione un elemento de esta página o establezca un acceso directo en los ajustes."
+  },
+  "gotIt": {
+    "message": "Entendido"
+  },
+  "autofillSettings": {
+    "message": "Ajustes de autocompletar"
+  },
+  "autofillShortcut": {
+    "message": "Atajo de teclado para autocompletar"
+  },
+  "autofillShortcutNotSet": {
+    "message": "El atajo de autocompletar no está establecido. Cambie esto en los ajustes del navegador."
+  },
+  "autofillShortcutText": {
+    "message": "El atajo de autocompletar es $COMMAND$. Cambie esto en los ajustes del navegador.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Atajo de autocompletar predeterminado: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

@@ -110,7 +110,7 @@
     "message": "Il n'y a pas d'identifiants disponibles à saisir automatiquement pour l'onglet actuel du navigateur."
   },
   "addLogin": {
-    "message": "Ajouter un site"
+    "message": "Ajouter un identifiant"
   },
   "addItem": {
     "message": "Ajouter un élément"
@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Aide et commentaires"
   },
+  "helpCenter": {
+    "message": "Centre d'aide Bitwarden"
+  },
+  "communityForums": {
+    "message": "Explorez les forums de la communauté Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Contacter le support Bitwarden"
+  },
   "sync": {
     "message": "Synchroniser"
   },
@@ -215,7 +224,7 @@
     "message": "Générer automatiquement des mots de passe robustes et uniques pour vos identifiants."
   },
   "bitWebVault": {
-    "message": "Coffre en ligne de bitwarden"
+    "message": "Coffre web bitwarden"
   },
   "importItems": {
     "message": "Importer des éléments"
@@ -339,7 +348,7 @@
     "message": "Votre navigateur web ne supporte pas la copie rapide depuis le presse-papier. Copiez-le manuellement à la place."
   },
   "verifyIdentity": {
-    "message": "Confirmer votre identité"
+    "message": "Vérifier l'identité"
   },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
@@ -430,7 +439,14 @@
     "message": "Une nouvelle saisie du mot de passe principal est nécessaire."
   },
   "masterPasswordMinlength": {
-    "message": "Le mot de passe principal doit comporter au moins 8 caractères."
+    "message": "Le mot de passe principal doit comporter au moins $VALUE$ caractères.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmation du mot de passe principal ne correspond pas."
@@ -552,7 +568,7 @@
     "message": "Êtes-vous sûr de vouloir écraser le mot de passe actuel ?"
   },
   "overwriteUsername": {
-    "message": "Remplacer le nom d'utilisateur"
+    "message": "Écraser le nom d'utilisateur"
   },
   "overwriteUsernameConfirmation": {
     "message": "Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?"
@@ -567,7 +583,7 @@
     "message": "Rechercher dans le type"
   },
   "noneFolder": {
-    "message": "Pas de dossier",
+    "message": "Aucun dossier",
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
@@ -873,7 +889,7 @@
     "message": "Identifiant non disponible"
   },
   "noTwoStepProviders": {
-    "message": "Ce compte dispose d'une authentification à deux facteurs mise en place, mais aucun des fournisseurs d'authentification à deux facteurs configurés ne sont pris en charge par ce navigateur web."
+    "message": "Ce compte dispose d'une authentification à deux facteurs de configurée, cependant, aucun des fournisseurs à deux facteurs configurés n'est pris en charge par ce navigateur web."
   },
   "noTwoStepProviders2": {
     "message": "Merci d'utiliser un navigateur web compatible (comme Chrome) et/ou d'ajouter des services additionnels d'identification en deux étapes qui sont mieux supportés par les navigateurs web (comme par exemple une application d'authentification)."
@@ -1136,7 +1152,7 @@
     "message": "Deuxième prénom"
   },
   "lastName": {
-    "message": "Nom"
+    "message": "Nom de famille"
   },
   "fullName": {
     "message": "Nom et prénom"
@@ -1396,7 +1412,7 @@
     "message": "Cloner"
   },
   "passwordGeneratorPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent les paramètres de votre générateur."
   },
   "vaultTimeoutAction": {
     "message": "Action après délai d'expiration du coffre"
@@ -1449,7 +1465,7 @@
     "message": "Définir le mot de passe principal"
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
   },
   "policyInEffectMinComplexity": {
     "message": "Score de complexité minimum de $SCORE$",
@@ -1491,10 +1507,10 @@
     "message": "Votre nouveau mot de passe principal ne répond pas aux exigences en matière de politique de sécurité."
   },
   "acceptPolicies": {
-    "message": "En cochant cette case, vous acceptez les éléments suivants :"
+    "message": "En cochant cette case vous acceptez ce qui suit :"
   },
   "acceptPoliciesRequired": {
-    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
+    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
   },
   "termsOfService": {
     "message": "Conditions d'utilisation"
@@ -1802,7 +1818,7 @@
     "message": "Masquer mon adresse électronique aux destinataires."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent vos options Send."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent vos options Send."
   },
   "passwordPrompt": {
     "message": "Ressaisir le mot de passe principal"
@@ -1847,7 +1863,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s)",
+    "message": "Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de $HOURS$ heure(s) et $MINUTES$ minute(s) maximum",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1866,7 +1882,7 @@
     "message": "Export du coffre désactivé"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation vous empêchent d'exporter votre coffre individuel."
   },
   "copyCustomFieldNameInvalidElement": {
     "message": "Aucun élément de formulaire valide n'a pu être identifié. Essayez plutôt d'inspecter le HTML."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Les éléments des organisations suspendues ne sont pas accessibles. Contactez le propriétaire de votre organisation pour obtenir de l'aide."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Connexion à $DOMAIN$",
     "placeholders": {
@@ -2051,28 +2064,28 @@
     "message": "Se souvenir du courriel"
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "Se connecter avec l'appareil"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "La connexion avec l'appareil doit être configurée dans les paramètres de l'application Bitwarden. Besoin d'une autre option ?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Phrase d'empreinte"
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+    "message": "Veuillez vous assurer que votre coffre est déverrouillé et que la phrase d'empreinte correspond à celle de l'autre appareil."
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Renvoyer la notification"
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Afficher toutes les options de connexion"
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "Une notification a été envoyée à votre appareil."
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Connexion initiée"
   },
   "exposedMasterPassword": {
     "message": "Mot de passe principal exposé"
@@ -2096,11 +2109,59 @@
     "message": "Votre mot de passe principal ne peut pas être récupéré si vous l'oubliez !"
   },
   "characterMinimum": {
-    "message": "Caractère minimum $LENGTH$",
+    "message": "$LENGTH$ caractère minimum",
     "placeholders": {
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Les politiques de sécurité de votre organisation ont activé la saisie automatique lors du chargement de la page."
+  },
+  "howToAutofill": {
+    "message": "Comment saisir automatiquement"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Sélectionnez un élément depuis cette page ou utilisez le raccourci : $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Sélectionnez un élément depuis cette page ou définissez un raccourci dans les paramètres."
+  },
+  "gotIt": {
+    "message": "Compris"
+  },
+  "autofillSettings": {
+    "message": "Paramètres de saisie automatique"
+  },
+  "autofillShortcut": {
+    "message": "Raccourci clavier de saisie automatique"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Le raccourci de saisie automatique n'est pas défini. Changez-le dans les paramètres du navigateur."
+  },
+  "autofillShortcutText": {
+    "message": "Le raccourci de saisie automatique est : $COMMAND$. Changez-le dans les paramètres du navigateur.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Raccourci de saisie automatique par défaut : $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

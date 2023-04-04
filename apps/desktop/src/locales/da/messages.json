@@ -542,7 +542,14 @@
     "message": "Angivelse af hovedadgangskode igen er obligatorisk."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedadgangskode skal være mindst 8 tegn."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontakt os"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Få hjælp"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Sikker på, at indstillingen \"Aldrig\" skal bruges? Sættes låseindstillinger til \"Aldrig\", gemmes din bokskrypteringsnøgle på enheden. Bruges denne indstilling, så sørg for at holde din enhed ordentligt beskyttet."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Boks"

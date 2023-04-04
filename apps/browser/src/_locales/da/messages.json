@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjælp & feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hjælpecenter"
+  },
+  "communityForums": {
+    "message": "Tjek Bitwardens fællesskabsfora ud"
+  },
+  "contactSupport": {
+    "message": "Kontakt Bitwarden-support"
+  },
   "sync": {
     "message": "Synkronisér"
   },
@@ -430,7 +439,14 @@
     "message": "Hovedadgangskode kræves angivet igen."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedadgangskode skal være mindst 8 tegn."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Elementer i suspenderede organisationer kan ikke tilgås. Kontakt din organisationsejer for at få hjælp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logger ind på $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Organisationspolitikkerne har aktiveret autoudfyldning ved sideindlæsning."
+  },
+  "howToAutofill": {
+    "message": "Sådan autoudfyldes"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vælg et element fra denne side eller brug genvejen: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vælg et element fra denne side eller opret en genvej i Indstillinger."
+  },
+  "gotIt": {
+    "message": "Forstået"
+  },
+  "autofillSettings": {
+    "message": "Autoudfyldelsesindstillinger"
+  },
+  "autofillShortcut": {
+    "message": "Autoudfyld-tastaturgenvej"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Autoudfyldningsgenvejen er ikke opsat. Ændr dette i browserens indstillinger."
+  },
+  "autofillShortcutText": {
+    "message": "Autoudfyldningsgenvejen er: $COMMAND$. Ændr dette i browserens indstillinger.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standard autoudfyldningsgenvej: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

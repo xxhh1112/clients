@@ -1,5 +1,5 @@
-<a [routerLink]="['secrets']" class="tw-mx-4 tw-mt-8 tw-mb-3 tw-block">
-  <bit-icon [icon]="logo" class="tw-w-full tw-text-alt2"></bit-icon>
+<a routerLink="." class="tw-m-5 tw-mt-7 tw-block">
+  <bit-icon [icon]="logo"></bit-icon>
 </a>
 
 <org-switcher [filter]="orgFilter" [hideNewButton]="true"></org-switcher>
@@ -10,5 +10,13 @@
   [text]="'serviceAccounts' | i18n"
   route="service-accounts"
 ></bit-nav-item>
-<bit-nav-item icon="bwi-trash" [text]="'trash' | i18n" route="trash"></bit-nav-item>
-<bit-nav-item icon="bwi-cog" [text]="'settings' | i18n" route="settings"></bit-nav-item>
+<bit-nav-item
+  icon="bwi-trash"
+  [text]="'trash' | i18n"
+  route="trash"
+  *ngIf="isAdmin$ | async"
+></bit-nav-item>
+<bit-nav-group icon="bwi-cog" [text]="'settings' | i18n" *ngIf="isAdmin$ | async">
+  <bit-nav-item [text]="'importData' | i18n" route="settings/import"></bit-nav-item>
+  <bit-nav-item [text]="'exportData' | i18n" route="settings/export"></bit-nav-item>
+</bit-nav-group>

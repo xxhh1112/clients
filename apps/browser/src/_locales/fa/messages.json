@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "کمک و بازخورد"
   },
+  "helpCenter": {
+    "message": "مرکز راهنمایی Bitwarden"
+  },
+  "communityForums": {
+    "message": "انجمن‌های Bitwarden را کاوش کنید"
+  },
+  "contactSupport": {
+    "message": "پیام به پشتیبانیBitwarden"
+  },
   "sync": {
     "message": "همگام‌سازی"
   },
@@ -430,7 +439,14 @@
     "message": "نوشتن مجدد کلمه عبور اصلی ضروری است."
   },
   "masterPasswordMinlength": {
-    "message": "طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد."
+    "message": "طول کلمه عبور اصلی باید حداقل $VALUE$ کاراکتر باشد.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "کلمه عبور اصلی با تکرار آن مطابقت ندارد."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "موارد موجود در سازمان‌های غیرفعال، قابل دسترسی نیستند. برای دریافت کمک با مالک سازمان خود تماس بگیرید."
   },
-  "cardBrandMir": {
-    "message": "میر"
-  },
   "loggingInTo": {
     "message": "ورود به $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "خط مشی‌های سازمان شما پر کردن خودکار هنگام بارگیری صفحه را روشن کرده است."
+  },
+  "howToAutofill": {
+    "message": "نحوه پر کردن خودکار"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "یک مورد را از این صفحه انتخاب کنید یا از میانبر استفاده کنید: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "یک مورد را از این صفحه انتخاب کنید یا یک میانبر در تنظیمات تنظیم کنید."
+  },
+  "gotIt": {
+    "message": "متوجه شدم"
+  },
+  "autofillSettings": {
+    "message": "تنظیمات پر کردن خودکار"
+  },
+  "autofillShortcut": {
+    "message": "میانبر صفحه کلید پر کردن خودکار"
+  },
+  "autofillShortcutNotSet": {
+    "message": "میانبر پر کردن خودکار تنظیم نشده است. این را در تنظیمات مرورگر تغییر دهید."
+  },
+  "autofillShortcutText": {
+    "message": "میانبر پر کردن خودکار: $COMMAND$ است. این را در تنظیمات مرورگر تغییر دهید.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "میانبر پر کردن خودکار پیش‌فرض: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

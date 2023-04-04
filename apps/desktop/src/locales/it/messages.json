@@ -542,7 +542,14 @@
     "message": "È necessario reinserire la password principale."
   },
   "masterPasswordMinlength": {
-    "message": "La password principale deve essere lunga almeno 8 caratteri."
+    "message": "La password principale deve essere lunga almeno $VALUE$ caratteri.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La conferma della password principale non corrisponde."
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "Contattaci"
+  },
+  "helpAndFeedback": {
+    "message": "Aiuto e feedback"
   },
   "getHelp": {
     "message": "Ottieni aiuto"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Sei sicuro di voler usare l'opzione \"Mai\"? Impostando le opzioni di blocco su \"Mai\", la chiave di cifratura della cassaforte sarà salvata sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il dispositivo adeguatamente protetto."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Cassaforte"

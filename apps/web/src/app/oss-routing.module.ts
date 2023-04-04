@@ -5,6 +5,7 @@ import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
 import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 
+import { SubscriptionRoutingModule } from "../app/billing/settings/subscription-routing.module";
 import { AcceptEmergencyComponent } from "../auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../auth/accept-organization.component";
 import { HintComponent } from "../auth/hint.component";
@@ -24,28 +25,27 @@ import { UpdateTempPasswordComponent } from "../auth/update-temp-password.compon
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
 import { flagEnabled, Flags } from "../utils/flags";
-import { VaultModule } from "../vault/individual-vault/vault.module";
 
 import { TrialInitiationComponent } from "./accounts/trial-initiation/trial-initiation.component";
+import { OrganizationModule } from "./admin-console/organizations/organization.module";
+import { AcceptFamilySponsorshipComponent } from "./admin-console/organizations/sponsorships/accept-family-sponsorship.component";
+import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
+import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
+import { SponsoredFamiliesComponent } from "./admin-console/settings/sponsored-families.component";
 import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
-import { OrganizationModule } from "./organizations/organization.module";
-import { AcceptFamilySponsorshipComponent } from "./organizations/sponsorships/accept-family-sponsorship.component";
-import { FamiliesForEnterpriseSetupComponent } from "./organizations/sponsorships/families-for-enterprise-setup.component";
 import { ReportsModule } from "./reports";
-import { AccessComponent } from "./send/access.component";
-import { SendComponent } from "./send/send.component";
 import { AccountComponent } from "./settings/account.component";
-import { CreateOrganizationComponent } from "./settings/create-organization.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
 import { PreferencesComponent } from "./settings/preferences.component";
 import { SecurityRoutingModule } from "./settings/security-routing.module";
 import { SettingsComponent } from "./settings/settings.component";
-import { SponsoredFamiliesComponent } from "./settings/sponsored-families.component";
-import { SubscriptionRoutingModule } from "./settings/subscription-routing.module";
 import { GeneratorComponent } from "./tools/generator.component";
+import { AccessComponent } from "./tools/send/access.component";
+import { SendComponent } from "./tools/send/send.component";
 import { ToolsComponent } from "./tools/tools.component";
+import { VaultModule } from "./vault/individual-vault/vault.module";
 
 const routes: Routes = [
   {

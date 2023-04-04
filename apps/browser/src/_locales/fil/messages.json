@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Tulong at Mga Feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Tulong sentro"
+  },
+  "communityForums": {
+    "message": "I-eksplorang Bitwarden komunidad na mga forum"
+  },
+  "contactSupport": {
+    "message": "Kontakin ang Bitwarden suporta"
+  },
   "sync": {
     "message": "Ikintal"
   },
@@ -430,7 +439,14 @@
     "message": "Kinakailangan ang ulitin ang master password."
   },
   "masterPasswordMinlength": {
-    "message": "Ang master password ay dapat hindi bababa sa 8 na mga character."
+    "message": "Ang master password ay dapat na hindi bababa sa $VALUE$ na mga character.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hindi tumutugma ang kumpirmasyon ng master password."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Mga item sa mga naka-suspindong Organisasyon ay hindi ma-access. Mangyaring makipag-ugnayan sa may-ari ng iyong Organisasyon para sa tulong."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Nag-lolog in sa $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Ang mga patakaran ng iyong organisasyon ay nagbigay ng pag-automatikong pag-load sa pahina."
+  },
+  "howToAutofill": {
+    "message": "Paano mag-auto-fill"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Select an item from this page or set a shortcut in settings."
+  },
+  "gotIt": {
+    "message": "Nakuha ko"
+  },
+  "autofillSettings": {
+    "message": "Mga setting ng auto-fill"
+  },
+  "autofillShortcut": {
+    "message": "Keyboard shortcut para sa auto-fill"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Hindi naka-set ang shortcut ng auto-fill. Baguhin ito sa mga setting ng browser."
+  },
+  "autofillShortcutText": {
+    "message": "Ang shortcut ng auto-fill ay: $COMMAND$. Baguhin ito sa mga setting ng browser.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default shortcut ng auto-fill: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

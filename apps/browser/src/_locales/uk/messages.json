@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Допомога і зворотний зв'язок"
   },
+  "helpCenter": {
+    "message": "Центр допомоги Bitwarden"
+  },
+  "communityForums": {
+    "message": "Форуми спільноти Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Звернутися в службу підтримки Bitwarden"
+  },
   "sync": {
     "message": "Синхронізація"
   },
@@ -430,7 +439,14 @@
     "message": "Необхідно повторно ввести головний пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Довжина головного пароля має бути принаймні 8 символів."
+    "message": "Довжина головного пароля має бути принаймні $VALUE$ символів.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -1130,7 +1146,7 @@
     "message": "Mx"
   },
   "firstName": {
-    "message": "Ім’я"
+    "message": "Ім'я"
   },
   "middleName": {
     "message": "По батькові"
@@ -1612,7 +1628,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів",
+    "message": "Досягнуто максимальної кількості доступів",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
@@ -1675,7 +1691,7 @@
     "message": "Файл, який ви хочете відправити."
   },
   "deletionDate": {
-    "message": "Дата видалення"
+    "message": "Термін дії"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -1701,7 +1717,7 @@
     }
   },
   "custom": {
-    "message": "Спеціальний"
+    "message": "Власний"
   },
   "maximumAccessCount": {
     "message": "Максимальна кількість доступів"
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Записи у вимкнених організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Вхід до $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Політикою вашої організації було увімкнено автозаповнення на сторінці."
+  },
+  "howToAutofill": {
+    "message": "Як працює автозаповнення"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Виберіть елемент з цієї сторінки або використайте комбінацію клавіш: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Виберіть елемент з цієї сторінки або встановіть комбінацію клавіш у налаштуваннях."
+  },
+  "gotIt": {
+    "message": "Зрозуміло"
+  },
+  "autofillSettings": {
+    "message": "Налаштування автозаповнення"
+  },
+  "autofillShortcut": {
+    "message": "Комбінації клавіш автозаповнення"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Комбінацію клавіш для автозаповнення не встановлено. Змініть це в налаштуваннях браузера."
+  },
+  "autofillShortcutText": {
+    "message": "Комбінація клавіш автозаповнення: $COMMAND$. Змініть це в налаштуваннях браузера.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Типова комбінація клавіш автозаповнення: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

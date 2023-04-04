@@ -542,7 +542,14 @@
     "message": "必須再次輸入主密碼。"
   },
   "masterPasswordMinlength": {
-    "message": "主密碼需要至少 8 個字元。"
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "兩次填入的主密碼不一致。"
@@ -762,6 +769,9 @@
   },
   "contactUs": {
     "message": "聯絡我們"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "尋求幫助"
@@ -2027,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "您確定要使用「永不」選項嗎？將鎖定選項設定為「永不」會將密碼庫的加密金鑰儲存在您的裝置上。如果使用此選項，應確保您的裝置是安全的。"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "密碼庫"

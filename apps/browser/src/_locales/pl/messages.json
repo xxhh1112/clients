@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Pomoc i opinie"
   },
+  "helpCenter": {
+    "message": "Centrum pomocy Bitwarden"
+  },
+  "communityForums": {
+    "message": "Przeglądaj fora społeczności Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Skontaktuj się z pomocą techniczną Bitwarden"
+  },
   "sync": {
     "message": "Synchronizacja"
   },
@@ -430,7 +439,14 @@
     "message": "Wymagane jest ponowne wpisanie hasła głównego."
   },
   "masterPasswordMinlength": {
-    "message": "Hasło główne musi zawierać co najmniej 8 znaków."
+    "message": "Hasło główne musi zawierać co najmniej $VALUE$ znaki(-ów).",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hasła nie pasują do siebie."
@@ -1987,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Nie można uzyskać dostępu do elementów w zawieszonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logowanie do $DOMAIN$",
     "placeholders": {
@@ -2101,6 +2114,54 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Twoja organizacji włączyła autouzupełnianie podczas wczytywania strony."
+  },
+  "howToAutofill": {
+    "message": "Jak autouzupełniać"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Wybierz element z tej strony lub użyj skrótu: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Wybierz element z tej strony lub ustaw skrót w ustawieniach."
+  },
+  "gotIt": {
+    "message": "Rozumiem"
+  },
+  "autofillSettings": {
+    "message": "Ustawienia autouzupełniania"
+  },
+  "autofillShortcut": {
+    "message": "Skrót klawiaturowy autouzupełniania"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Skrót autouzupełniania nie jest ustawiony. Zmień to w ustawieniach przeglądarki."
+  },
+  "autofillShortcutText": {
+    "message": "Skrót autouzupełniania to: $COMMAND$. Zmień to w ustawieniach przeglądarki.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Domyślny skrót autouzupełniania: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }
