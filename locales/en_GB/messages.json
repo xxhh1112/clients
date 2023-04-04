@@ -2019,9 +2019,6 @@
   "cancelSubscription": {
     "message": "Cancel subscription"
   },
-  "subscriptionExpiration": {
-    "message": "Subscription expiration"
-  },
   "subscriptionCanceled": {
     "message": "The subscription has been cancelled."
   },
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Dismiss"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

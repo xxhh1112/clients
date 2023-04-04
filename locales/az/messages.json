@@ -2019,9 +2019,6 @@
   "cancelSubscription": {
     "message": "Abunəlikdən imtina"
   },
-  "subscriptionExpiration": {
-    "message": "Abunəliyin bitmə tarixi"
-  },
   "subscriptionCanceled": {
     "message": "Abunəliyiniz ləğv edildi."
   },
@@ -5878,7 +5875,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Xidmət hesabı silindi"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Xidmət hesabları silindi"
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Rədd et"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

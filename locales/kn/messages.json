@@ -2019,9 +2019,6 @@
   "cancelSubscription": {
     "message": "ಚಂದಾದಾರಿಕೆಯನ್ನು ರದ್ದುಗೊಳಿಸಿ"
   },
-  "subscriptionExpiration": {
-    "message": "Subscription expiration"
-  },
   "subscriptionCanceled": {
     "message": "ಚಂದಾದಾರಿಕೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ."
   },
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Dismiss"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

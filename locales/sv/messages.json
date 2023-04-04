@@ -1010,7 +1010,7 @@
     "message": "Exportera typ"
   },
   "accountRestricted": {
-    "message": "Kontot är begränsat"
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "Lösenordsskyddad"
@@ -1923,7 +1923,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Familjeplan."
+    "message": "Bitwarden Families plan."
   },
   "addons": {
     "message": "Tillägg"
@@ -2018,9 +2018,6 @@
   },
   "cancelSubscription": {
     "message": "Avsluta prenumeration"
-  },
-  "subscriptionExpiration": {
-    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "Prenumerationen har avslutats."
@@ -2397,7 +2394,7 @@
     "message": "Årligen"
   },
   "annual": {
-    "message": "Årlig"
+    "message": "Annual"
   },
   "basePrice": {
     "message": "Baspris"
@@ -2490,7 +2487,7 @@
     "message": "Det externa id:t kan användas som referens eller för att länka denna resurs till ett externt system såsom en användarkatalog."
   },
   "nestCollectionUnder": {
-    "message": "Kapsla samling under"
+    "message": "Nest collection under"
   },
   "accessControl": {
     "message": "Åtkomstkontroll"
@@ -2514,7 +2511,7 @@
     "message": "Redigera samling"
   },
   "collectionInfo": {
-    "message": "Samlingsinfo"
+    "message": "Collection info"
   },
   "deleteCollectionConfirmation": {
     "message": "Är du säker på att du vill radera denna samling?"
@@ -2796,7 +2793,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Borttagna samlingar"
+    "message": "Deleted collections"
   },
   "deletedCollectionId": {
     "message": "Raderade samlingen $ID$.",
@@ -3279,7 +3276,7 @@
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
   },
   "maxSeatLimit": {
-    "message": "Platsgräns (valfritt)",
+    "message": "Seat Limit (optional)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
@@ -3309,7 +3306,7 @@
     "message": "Limit subscription (optional)"
   },
   "subscriptionSeats": {
-    "message": "Prenumerationsplatser"
+    "message": "Subscription seats"
   },
   "subscriptionUpdated": {
     "message": "Subscription updated"
@@ -3882,7 +3879,7 @@
     "message": "Medlemmar som inte är ägare eller administratörer och redan är med i en annan organisation kommer att tas bort från organisationen."
   },
   "requireSso": {
-    "message": "Kräv autentisering med Single Sign-On"
+    "message": "Autentisering med Single Sign-On"
   },
   "requireSsoPolicyDesc": {
     "message": "Kräv att användare loggar in med Single Sign-On för företag."
@@ -4307,7 +4304,7 @@
     "message": "Redigera samling"
   },
   "deleteAnyCollection": {
-    "message": "Ta bort valfri samling"
+    "message": "Delete any collection"
   },
   "manageAssignedCollections": {
     "message": "Hantera tilldelade samlingar"
@@ -4369,7 +4366,7 @@
     "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendLinkLabel": {
-    "message": "Send-länk",
+    "message": "Send link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "send": {
@@ -5000,7 +4997,7 @@
     "message": "Shared collections for Family secrets"
   },
   "badToken": {
-    "message": "Länken är inte längre giltig. Be sponsorn att skicka erbjudandet igen."
+    "message": "The link is no longer valid. Please have the sponsor resend the offer."
   },
   "reclaimedFreePlan": {
     "message": "Reclaimed free plan"
@@ -5155,7 +5152,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
-    "message": "för att kräva att alla medlemmar loggar in med SSO.",
+    "message": "to require all members to log in with SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
@@ -6148,7 +6145,7 @@
     "message": "Select members"
   },
   "selectCollections": {
-    "message": "Välj samlingar"
+    "message": "Select collections"
   },
   "role": {
     "message": "Roll"
@@ -6157,10 +6154,10 @@
     "message": "Remove member"
   },
   "collection": {
-    "message": "Samling"
+    "message": "Collection"
   },
   "noCollection": {
-    "message": "Ingen samling"
+    "message": "No collection"
   },
   "canView": {
     "message": "Can view"
@@ -6175,7 +6172,7 @@
     "message": "Can edit, except passwords"
   },
   "noCollectionsAdded": {
-    "message": "Ingen samlingar lades till"
+    "message": "No collections added"
   },
   "noMembersAdded": {
     "message": "No members added"
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Dismiss"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

@@ -2019,9 +2019,6 @@
   "cancelSubscription": {
     "message": "Cancelar suscripción"
   },
-  "subscriptionExpiration": {
-    "message": "Fecha de vencimiento de la suscripción"
-  },
   "subscriptionCanceled": {
     "message": "La suscripción ha sido cancelada."
   },
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Descartar"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "Esta funcionalidad no está disponible para organizaciones gratuitas. Contacte con el propietario de su organización para mejorar."
   }
 }

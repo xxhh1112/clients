@@ -351,7 +351,7 @@
     "message": "Збірки"
   },
   "firstName": {
-    "message": "Ім'я"
+    "message": "Ім’я"
   },
   "middleName": {
     "message": "По батькові"
@@ -992,7 +992,7 @@
     "message": "Підтвердьте головний пароль"
   },
   "confirmFormat": {
-    "message": "Підтвердити формат"
+    "message": "Підтвердьте формат"
   },
   "filePassword": {
     "message": "Пароль файлу"
@@ -2018,9 +2018,6 @@
   },
   "cancelSubscription": {
     "message": "Скасувати передплату"
-  },
-  "subscriptionExpiration": {
-    "message": "Термін дії передплати"
   },
   "subscriptionCanceled": {
     "message": "Передплату було скасовано."
@@ -3938,7 +3935,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletionDate": {
-    "message": "Термін дії"
+    "message": "Дата видалення"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -4253,7 +4250,7 @@
     "message": "Приблизний податок"
   },
   "custom": {
-    "message": "Власний"
+    "message": "Спеціальний"
   },
   "customDesc": {
     "message": "Надання користувацьких дозволів учасникам"
@@ -4994,7 +4991,7 @@
     "message": "Тариф Bitwarden Families включає"
   },
   "sponsoredFamiliesPremiumAccess": {
-    "message": "Преміумдоступ до 6 користувачів"
+    "message": "Преміум-доступ до 6 користувачів"
   },
   "sponsoredFamiliesSharedCollections": {
     "message": "Спільні збірки для обміну паролями"
@@ -5312,7 +5309,7 @@
     }
   },
   "required": {
-    "message": "обов'язково"
+    "message": "обов’язково"
   },
   "characterMaximum": {
     "message": "Максимум $MAX$ символів",
@@ -5878,7 +5875,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Службовий обліковий запис видалено"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Службові облікові записи видалено"
@@ -5941,7 +5938,7 @@
     "description": ""
   },
   "serviceAccountName": {
-    "message": "Назва службового облікового запису",
+    "message": "Назва сервісного облікового запису",
     "description": "Label for the name of a service account"
   },
   "serviceAccountCreated": {
@@ -6672,8 +6669,5 @@
   },
   "dismiss": {
     "message": "Відхилити"
-  },
-  "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }
