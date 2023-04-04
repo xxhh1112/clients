@@ -3117,9 +3117,6 @@
   "inviteAcceptedDesc": {
     "message": "You can access this organization once an administrator confirms your membership. We'll send you an email when that happens."
   },
-  "inviteInitAcceptedDesc": {
-    "message": "You can now access this organization."
-  },
   "inviteAcceptFailed": {
     "message": "Unable to accept invitation. Ask an organization admin to send a new invitation."
   },
@@ -6676,5 +6673,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }
