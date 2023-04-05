@@ -3,6 +3,7 @@ import { filter, first, lastValueFrom, Observable, Subject, takeUntil } from "rx
 import { Utils } from "@bitwarden/common/misc/utils";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
+  Fido2UserInterfaceSession,
   NewCredentialParams,
 } from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
 
@@ -86,6 +87,10 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
   private destroy$ = new Subject<void>();
 
   constructor(private popupUtilsService: PopupUtilsService) {}
+
+  async newSession(abortController?: AbortController): Promise<Fido2UserInterfaceSession> {
+    return await BrowserFido2UserInterfaceSession.create(this, abortController);
+  }
 
   async confirmCredential(
     cipherId: string,
@@ -263,5 +268,73 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 
   private setAbortTimeout(abortController: AbortController) {
     return setTimeout(() => abortController.abort());
+  }
+}
+
+export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSession {
+  static async create(
+    parentService: BrowserFido2UserInterfaceService,
+    abortController?: AbortController
+  ): Promise<BrowserFido2UserInterfaceSession> {
+    return new BrowserFido2UserInterfaceSession(parentService, abortController);
+  }
+
+  readonly abortListener: () => void;
+
+  private constructor(
+    private readonly parentService: BrowserFido2UserInterfaceService,
+    readonly abortController = new AbortController(),
+    readonly sessionId = Utils.newGuid()
+  ) {
+    this.abortListener = () => this.abort();
+    abortController.signal.addEventListener("abort", this.abortListener);
+  }
+
+  fallbackRequested = false;
+
+  get aborted() {
+    return this.abortController.signal.aborted;
+  }
+
+  confirmCredential(cipherId: string, abortController?: AbortController): Promise<boolean> {
+    return this.parentService.confirmCredential(cipherId, this.abortController);
+  }
+
+  pickCredential(cipherIds: string[], abortController?: AbortController): Promise<string> {
+    return this.parentService.pickCredential(cipherIds, this.abortController);
+  }
+
+  confirmNewCredential(
+    params: NewCredentialParams,
+    abortController?: AbortController
+  ): Promise<boolean> {
+    return this.parentService.confirmNewCredential(params, this.abortController);
+  }
+
+  confirmNewNonDiscoverableCredential(
+    params: NewCredentialParams,
+    abortController?: AbortController
+  ): Promise<string> {
+    return this.parentService.confirmNewNonDiscoverableCredential(params, this.abortController);
+  }
+
+  informExcludedCredential(
+    existingCipherIds: string[],
+    newCredential: NewCredentialParams,
+    abortController?: AbortController
+  ): Promise<void> {
+    return this.parentService.informExcludedCredential(
+      existingCipherIds,
+      newCredential,
+      this.abortController
+    );
+  }
+
+  private abort() {
+    this.close();
+  }
+
+  private close() {
+    this.abortController.signal.removeEventListener("abort", this.abortListener);
   }
 }

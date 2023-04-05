@@ -124,9 +124,11 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       }
       throw new DOMException(undefined, "NotAllowedError");
     }
+
     if (abortController.signal.aborted) {
       throw new DOMException(undefined, "AbortError");
     }
+
     clearTimeout(timeout);
     return {
       credentialId: Fido2Utils.bufferToString(makeCredentialResult.credentialId),

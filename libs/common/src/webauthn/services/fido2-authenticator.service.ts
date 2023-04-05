@@ -41,6 +41,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     params: Fido2AuthenticatorMakeCredentialsParams,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
+    const userInterfaceSession = await this.userInterface.newSession(abortController);
+
     if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
     }
@@ -62,7 +64,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
     const isExcluded = await this.vaultContainsCredentials(params.excludeCredentialDescriptorList);
     if (isExcluded) {
-      await this.userInterface.informExcludedCredential(
+      await userInterfaceSession.informExcludedCredential(
         [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
         {
           credentialName: params.rpEntity.name,
@@ -78,7 +80,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     let fido2Key: Fido2KeyView;
     let keyPair: CryptoKeyPair;
     if (params.requireResidentKey) {
-      const userVerification = await this.userInterface.confirmNewCredential(
+      const userVerification = await userInterfaceSession.confirmNewCredential(
         {
           credentialName: params.rpEntity.name,
           userName: params.userEntity.displayName,
@@ -104,7 +106,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
     } else {
-      const cipherId = await this.userInterface.confirmNewNonDiscoverableCredential(
+      const cipherId = await userInterfaceSession.confirmNewNonDiscoverableCredential(
         {
           credentialName: params.rpEntity.name,
           userName: params.userEntity.displayName,
@@ -157,8 +159,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   }
 
   async getAssertion(
-    params: Fido2AuthenticatorGetAssertionParams
+    params: Fido2AuthenticatorGetAssertionParams,
+    abortController?: AbortController
   ): Promise<Fido2AuthenticatorGetAssertionResult> {
+    const userInterfaceSession = await this.userInterface.newSession(abortController);
+
     if (
       params.requireUserVerification != undefined &&
       typeof params.requireUserVerification !== "boolean"
@@ -186,7 +191,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
 
-    const selectedCipherId = await this.userInterface.pickCredential(
+    const selectedCipherId = await userInterfaceSession.pickCredential(
       cipherOptions.map((cipher) => cipher.id)
     );
     const selectedCipher = cipherOptions.find((c) => c.id === selectedCipherId);

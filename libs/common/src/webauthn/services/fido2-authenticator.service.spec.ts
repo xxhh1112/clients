@@ -16,6 +16,7 @@ import {
 } from "../abstractions/fido2-authenticator.service.abstraction";
 import {
   Fido2UserInterfaceService,
+  Fido2UserInterfaceSession,
   NewCredentialParams,
 } from "../abstractions/fido2-user-interface.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
@@ -28,11 +29,14 @@ const RpId = "bitwarden.com";
 describe("FidoAuthenticatorService", () => {
   let cipherService!: MockProxy<CipherService>;
   let userInterface!: MockProxy<Fido2UserInterfaceService>;
+  let userInterfaceSession!: MockProxy<Fido2UserInterfaceSession>;
   let authenticator!: Fido2AuthenticatorService;
 
   beforeEach(async () => {
     cipherService = mock<CipherService>();
     userInterface = mock<Fido2UserInterfaceService>();
+    userInterfaceSession = mock<Fido2UserInterfaceSession>();
+    userInterface.newSession.mockResolvedValue(userInterfaceSession);
     authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
   });
 
@@ -77,7 +81,7 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should not request confirmation from user", async () => {
-        userInterface.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -86,7 +90,7 @@ describe("FidoAuthenticatorService", () => {
             // eslint-disable-next-line no-empty
           } catch {}
         }
-        expect(userInterface.confirmNewCredential).not.toHaveBeenCalled();
+        expect(userInterfaceSession.confirmNewCredential).not.toHaveBeenCalled();
       });
     });
 
@@ -120,19 +124,19 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: Consent is not asked and the user is simply informed of the situation.
        **/
       it("should inform user", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         try {
           await authenticator.makeCredential(params);
           // eslint-disable-next-line no-empty
         } catch {}
 
-        expect(userInterface.informExcludedCredential).toHaveBeenCalled();
+        expect(userInterfaceSession.informExcludedCredential).toHaveBeenCalled();
       });
 
       /** Spec: return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -140,7 +144,7 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should not inform user of duplication when input data does not pass checks", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -149,7 +153,7 @@ describe("FidoAuthenticatorService", () => {
             // eslint-disable-next-line no-empty
           } catch {}
         }
-        expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
+        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
       });
 
       it.todo(
@@ -181,19 +185,19 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: Consent is not asked and the user is simply informed of the situation.
        **/
       it("should inform user", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         try {
           await authenticator.makeCredential(params);
           // eslint-disable-next-line no-empty
         } catch {}
 
-        expect(userInterface.informExcludedCredential).toHaveBeenCalled();
+        expect(userInterfaceSession.informExcludedCredential).toHaveBeenCalled();
       });
 
       /** Spec: return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -201,7 +205,7 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should not inform user of duplication when input data does not pass checks", async () => {
-        userInterface.informExcludedCredential.mockResolvedValue();
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -210,7 +214,7 @@ describe("FidoAuthenticatorService", () => {
             // eslint-disable-next-line no-empty
           } catch {}
         }
-        expect(userInterface.informExcludedCredential).not.toHaveBeenCalled();
+        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
       });
 
       it.todo(
@@ -231,7 +235,7 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
        * */
       it("should request confirmation from user", async () => {
-        userInterface.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
         cipherService.createWithServer.mockImplementation(async (cipher) => {
           cipher.id = Utils.newGuid();
@@ -240,7 +244,7 @@ describe("FidoAuthenticatorService", () => {
 
         await authenticator.makeCredential(params, new AbortController());
 
-        expect(userInterface.confirmNewCredential).toHaveBeenCalledWith(
+        expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
           {
             credentialName: params.rpEntity.name,
             userName: params.userEntity.displayName,
@@ -251,7 +255,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = {};
-        userInterface.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockImplementation(async (cipher) => {
           cipher.id = Utils.newGuid();
@@ -284,7 +288,7 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
-        userInterface.confirmNewCredential.mockResolvedValue(false);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue(false);
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -294,7 +298,7 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = {};
-        userInterface.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
 
@@ -322,11 +326,13 @@ describe("FidoAuthenticatorService", () => {
        * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
        * */
       it("should request confirmation from user", async () => {
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
+          existingCipher.id
+        );
 
         await authenticator.makeCredential(params, new AbortController());
 
-        expect(userInterface.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
+        expect(userInterfaceSession.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
           {
             credentialName: params.rpEntity.name,
             userName: params.userEntity.displayName,
@@ -337,7 +343,9 @@ describe("FidoAuthenticatorService", () => {
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = Symbol();
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
+          existingCipher.id
+        );
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
 
         await authenticator.makeCredential(params);
@@ -368,7 +376,7 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
         const params = await createParams();
 
         const result = async () => await authenticator.makeCredential(params);
@@ -379,7 +387,9 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = Symbol();
-        userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(existingCipher.id);
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
+          existingCipher.id
+        );
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
 
@@ -408,8 +418,8 @@ describe("FidoAuthenticatorService", () => {
         beforeEach(async () => {
           const cipher = createCipherView({ id: cipherId, type: CipherType.Login });
           params = await createParams({ requireResidentKey });
-          userInterface.confirmNewNonDiscoverableCredential.mockResolvedValue(cipherId);
-          userInterface.confirmNewCredential.mockResolvedValue(true);
+          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(cipherId);
+          userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
           cipherService.get.mockImplementation(async (cipherId) =>
             cipherId === cipher.id ? ({ decrypt: () => cipher } as any) : undefined
           );
@@ -625,16 +635,16 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: Prompt the user to select a public key credential source selectedCredential from credentialOptions. */
       it("should request confirmation from the user", async () => {
-        userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
+        userInterfaceSession.pickCredential.mockResolvedValue(ciphers[0].id);
 
         await authenticator.getAssertion(params);
 
-        expect(userInterface.pickCredential).toHaveBeenCalledWith(ciphers.map((c) => c.id));
+        expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith(ciphers.map((c) => c.id));
       });
 
       /** Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
-        userInterface.pickCredential.mockResolvedValue(undefined);
+        userInterfaceSession.pickCredential.mockResolvedValue(undefined);
 
         const result = async () => await authenticator.getAssertion(params);
 
@@ -690,7 +700,7 @@ describe("FidoAuthenticatorService", () => {
             });
           }
           cipherService.getAllDecrypted.mockResolvedValue(ciphers);
-          userInterface.pickCredential.mockResolvedValue(ciphers[0].id);
+          userInterfaceSession.pickCredential.mockResolvedValue(ciphers[0].id);
         });
 
         /** Spec: Increment the credential associated signature counter */
