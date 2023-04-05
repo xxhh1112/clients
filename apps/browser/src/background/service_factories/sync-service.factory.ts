@@ -2,6 +2,18 @@ import { SyncService as AbstractSyncService } from "@bitwarden/common/vault/abst
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
 
 import {
+  collectionServiceFactory,
+  CollectionServiceInitOptions,
+} from "../../admin-console/background/service-factories/collection-service.factory";
+import {
+  organizationServiceFactory,
+  OrganizationServiceInitOptions,
+} from "../../admin-console/background/service-factories/organization-service.factory";
+import {
+  policyServiceFactory,
+  PolicyServiceInitOptions,
+} from "../../admin-console/background/service-factories/policy-service.factory";
+import {
   keyConnectorServiceFactory,
   KeyConnectorServiceInitOptions,
 } from "../../auth/background/service-factories/key-connector-service.factory";
@@ -19,20 +31,12 @@ import {
 } from "../../vault/background/service_factories/folder-service.factory";
 
 import { apiServiceFactory, ApiServiceInitOptions } from "./api-service.factory";
-import {
-  collectionServiceFactory,
-  CollectionServiceInitOptions,
-} from "./collection-service.factory";
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import { messagingServiceFactory, MessagingServiceInitOptions } from "./messaging-service.factory";
-import {
-  organizationServiceFactory,
-  OrganizationServiceInitOptions,
-} from "./organization-service.factory";
-import { policyServiceFactory, PolicyServiceInitOptions } from "./policy-service.factory";
 import { providerServiceFactory, ProviderServiceInitOptions } from "./provider-service.factory";
+import { sendApiServiceFactory } from "./send-api-service.factory";
 import { sendServiceFactory, SendServiceInitOptions } from "./send-service.factory";
 import { settingsServiceFactory, SettingsServiceInitOptions } from "./settings-service.factory";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";
@@ -85,6 +89,7 @@ export function syncServiceFactory(
         await providerServiceFactory(cache, opts),
         await folderApiServiceFactory(cache, opts),
         await organizationServiceFactory(cache, opts),
+        await sendApiServiceFactory(cache, opts),
         opts.syncServiceOptions.logoutCallback
       )
   );

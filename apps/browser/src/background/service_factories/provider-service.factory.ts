@@ -1,5 +1,5 @@
-import { ProviderService as AbstractProviderService } from "@bitwarden/common/abstractions/provider.service";
-import { ProviderService } from "@bitwarden/common/services/provider.service";
+import { ProviderService as AbstractProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
+import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";

@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Contacta'ns"
   },
+  "helpAndFeedback": {
+    "message": "Ajuda i comentaris"
+  },
   "getHelp": {
     "message": "Obteniu ajuda"
   },
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Esteu segur que voleu utilitzar l'opció \"Mai\"? En configurar les opcions de bloqueig a \"Mai\" s'emmagatzema la clau de xifratge de la vostra caixa forta al vostre dispositiu. Si utilitzeu aquesta opció, heu d'assegurar-vos que conserveu el dispositiu degudament protegit."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Caixa forta"

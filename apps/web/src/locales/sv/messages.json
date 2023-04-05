@@ -768,7 +768,7 @@
     "message": "Det finns inga användare att visa."
   },
   "noMembersInList": {
-    "message": "There are no members to list."
+    "message": "Det finns inga medlemmar att visa."
   },
   "noEventsInList": {
     "message": "Det finns inga händelser att visa."
@@ -1007,10 +1007,10 @@
     "message": "Välj ett fillösenord för att kryptera exportfilen. Filen kan sedan importeras till valfritt Bitwarden-konto med hjälp av fillösenordet."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Exportera typ"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Kontot är begränsat"
   },
   "passwordProtected": {
     "message": "Lösenordsskyddad"
@@ -1165,7 +1165,7 @@
     }
   },
   "kdfMemory": {
-    "message": "KDF memory (MB)",
+    "message": "KDF-minne (MB)",
     "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
   },
   "argon2Warning": {
@@ -1256,7 +1256,7 @@
     "message": "Data har importerats till ditt valv"
   },
   "dataExportSuccess": {
-    "message": "Data successfully exported"
+    "message": "Data har exporterats från ditt valv"
   },
   "importWarning": {
     "message": "Du importerar data till $ORGANIZATION$. Din data kan komma att delas med medlemmar i den här organisationen. Vill du fortsätta?",
@@ -1923,7 +1923,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
+    "message": "Bitwarden Familjeplan."
   },
   "addons": {
     "message": "Tillägg"
@@ -2018,6 +2018,9 @@
   },
   "cancelSubscription": {
     "message": "Avsluta prenumeration"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "Prenumerationen har avslutats."
@@ -2394,7 +2397,7 @@
     "message": "Årligen"
   },
   "annual": {
-    "message": "Annual"
+    "message": "Årlig"
   },
   "basePrice": {
     "message": "Baspris"
@@ -2487,7 +2490,7 @@
     "message": "Det externa id:t kan användas som referens eller för att länka denna resurs till ett externt system såsom en användarkatalog."
   },
   "nestCollectionUnder": {
-    "message": "Nest collection under"
+    "message": "Kapsla samling under"
   },
   "accessControl": {
     "message": "Åtkomstkontroll"
@@ -2511,7 +2514,7 @@
     "message": "Redigera samling"
   },
   "collectionInfo": {
-    "message": "Collection info"
+    "message": "Samlingsinfo"
   },
   "deleteCollectionConfirmation": {
     "message": "Är du säker på att du vill radera denna samling?"
@@ -2793,7 +2796,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Deleted collections"
+    "message": "Borttagna samlingar"
   },
   "deletedCollectionId": {
     "message": "Raderade samlingen $ID$.",
@@ -3276,7 +3279,7 @@
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
   },
   "maxSeatLimit": {
-    "message": "Seat Limit (optional)",
+    "message": "Platsgräns (valfritt)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
@@ -3306,7 +3309,7 @@
     "message": "Limit subscription (optional)"
   },
   "subscriptionSeats": {
-    "message": "Subscription seats"
+    "message": "Prenumerationsplatser"
   },
   "subscriptionUpdated": {
     "message": "Subscription updated"
@@ -3562,13 +3565,13 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+    "message": "Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten."
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Fingeravtrycksfras"
   },
   "dontAskFingerprintAgain": {
-    "message": "Never prompt to verify fingerprint phrases for invited users (not recommended)",
+    "message": "Fråga aldrig om att verifiera fingeravtrycksfraser för inbjudna användare (rekommenderas inte)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "free": {
@@ -3631,7 +3634,7 @@
     "message": "Ange minimikrav för huvudlösenordsstyrka."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "Require two-step login"
+    "message": "Kräv tvåstegsverifiering"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Kräv att användare konfigurerar tvåstegsverifiering för sina personliga konton."
@@ -3879,7 +3882,7 @@
     "message": "Medlemmar som inte är ägare eller administratörer och redan är med i en annan organisation kommer att tas bort från organisationen."
   },
   "requireSso": {
-    "message": "Autentisering med Single Sign-On"
+    "message": "Kräv autentisering med Single Sign-On"
   },
   "requireSsoPolicyDesc": {
     "message": "Kräv att användare loggar in med Single Sign-On för företag."
@@ -3911,15 +3914,15 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Send saved",
+    "message": "Send har sparats",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Send saved",
+    "message": "Send har sparats",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Send deleted",
+    "message": "Send har raderats",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSend": {
@@ -3945,39 +3948,39 @@
     "message": "Utgångsdatum"
   },
   "expirationDateDesc": {
-    "message": "If set, access to this Send will expire on the specified date and time.",
+    "message": "Om angiven kommer åtkomst till denna Send att upphöra på angivet datum och tid.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
     "message": "Maximalt antal åtkomster"
   },
   "maxAccessCountDesc": {
-    "message": "If set, users will no longer be able to access this Send once the maximum access count is reached.",
+    "message": "Om angivet kommer användare inte längre kunna komma åt denna Send när det maximala antalet åtkomster har uppnåtts.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
     "message": "Nuvarande antal åtkomster"
   },
   "sendPasswordDesc": {
-    "message": "Optionally require a password for users to access this Send.",
+    "message": "Kräv valfritt ett lösenord för att användare ska komma åt denna Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNotesDesc": {
-    "message": "Private notes about this Send.",
+    "message": "Privata anteckningar om denna Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disabled": {
     "message": "Inaktiverad"
   },
   "revoked": {
-    "message": "Revoked"
+    "message": "Återkallad"
   },
   "sendLink": {
-    "message": "Send link",
+    "message": "Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLink": {
-    "message": "Copy Send link",
+    "message": "Kopiera Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "removePassword": {
@@ -3993,7 +3996,7 @@
     "message": "Dölj min e-postadress för mottagare."
   },
   "disableThisSend": {
-    "message": "Deactivate this Send so that no one can access it.",
+    "message": "Inaktivera denna Send så att ingen kan komma åt den.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "allSends": {
@@ -4018,26 +4021,26 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
-    "message": "Don't know the password? Ask the sender for the password needed to access this Send.",
+    "message": "Vet du inte lösenordet? Fråga avsändaren om lösenordet som behövs för att komma åt denna Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendHiddenByDefault": {
-    "message": "This Send is hidden by default. You can toggle its visibility using the button below.",
+    "message": "Denna Send är dold som standard. Du kan växla dess synlighet med hjälp av knappen nedan.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "downloadFile": {
     "message": "Ladda ner fil"
   },
   "sendAccessUnavailable": {
-    "message": "The Send you are trying to access does not exist or is no longer available.",
+    "message": "Den Send du försöker komma åt finns inte eller är inte längre tillgänglig.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "missingSendFile": {
-    "message": "The file associated with this Send could not be found.",
+    "message": "Filen som är associerad med denna Send kunde inte hittas.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "There are no Sends to list.",
+    "message": "Det finns inga Sends att visa.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
@@ -4195,10 +4198,10 @@
     "message": "På grund av en av företagets policyer är du begränsad från att spara objekt till ditt personliga valv. Ändra ägarskap till en organisation och välj från tillgängliga samlingar."
   },
   "disableSend": {
-    "message": "Remove Send"
+    "message": "Radera Send"
   },
   "disableSendPolicyDesc": {
-    "message": "Do not allow members to create or edit Sends.",
+    "message": "Tillåt inte medlemmar att skapa eller redigera Sends.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -4209,7 +4212,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "Due to an Enterprise policy, you are only able to delete an existing Send.",
+    "message": "På grund av en företagspolicy kan du bara radera en befintlig Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptions": {
@@ -4253,34 +4256,34 @@
     "message": "Anpassad"
   },
   "customDesc": {
-    "message": "Grant customized permissions to members"
+    "message": "Bevilja anpassade behörigheter till medlemmar"
   },
   "customDescNonEnterpriseStart": {
-    "message": "Custom roles is an ",
+    "message": "Anpassade roller är en ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseLink": {
-    "message": "enterprise feature",
+    "message": "företagsfunktion",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customDescNonEnterpriseEnd": {
-    "message": ". Contact our support team to upgrade your subscription",
+    "message": ". Kontakta vårt supportteam för att uppgradera ditt abonnemang",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
   },
   "customNonEnterpriseError": {
-    "message": "To enable custom permissions the organization must be on an Enterprise 2020 plan."
+    "message": "För att aktivera anpassade behörigheter måste organisationen vara med på en Företag 2020-plan."
   },
   "permissions": {
     "message": "Behörigheter"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Behörighet"
   },
   "managerPermissions": {
     "message": "Manager Permissions"
   },
   "adminPermissions": {
-    "message": "Admin Permissions"
+    "message": "Administratörsbehörigheter"
   },
   "accessEventLogs": {
     "message": "Åtkomst till händelseloggar"
@@ -4304,7 +4307,7 @@
     "message": "Redigera samling"
   },
   "deleteAnyCollection": {
-    "message": "Delete any collection"
+    "message": "Ta bort valfri samling"
   },
   "manageAssignedCollections": {
     "message": "Hantera tilldelade samlingar"
@@ -4366,7 +4369,7 @@
     "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendLinkLabel": {
-    "message": "Send link",
+    "message": "Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "send": {
@@ -4692,10 +4695,10 @@
     "message": "The highest access user that can manage all aspects of your Provider as well as access and manage client organizations."
   },
   "serviceUser": {
-    "message": "Service user"
+    "message": "Tjänstanvändare"
   },
   "serviceUserDesc": {
-    "message": "Service users can access and manage all client organizations."
+    "message": "Tjänstanvändare kan komma åt och hantera alla klientorganisationer."
   },
   "providerInviteUserDesc": {
     "message": "Invite a new user to your Provider by entering their Bitwarden account email address below. If they do not have a Bitwarden account already, they will be prompted to create a new account."
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your individual vault."
   },
+  "activateAutofill": {
+    "message": "Aktivera autofyll"
+  },
+  "activateAutofillDesc": {
+    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Läs mer om autofyll"
+  },
   "selectType": {
     "message": "Välj SSO-typ"
   },
@@ -4985,7 +5000,7 @@
     "message": "Shared collections for Family secrets"
   },
   "badToken": {
-    "message": "The link is no longer valid. Please have the sponsor resend the offer."
+    "message": "Länken är inte längre giltig. Be sponsorn att skicka erbjudandet igen."
   },
   "reclaimedFreePlan": {
     "message": "Reclaimed free plan"
@@ -5140,7 +5155,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
-    "message": "to require all members to log in with SSO.",
+    "message": "för att kräva att alla medlemmar loggar in med SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
@@ -5228,7 +5243,7 @@
     "message": "Set up billing sync"
   },
   "generateToken": {
-    "message": "Generate token"
+    "message": "Generera token"
   },
   "rotateToken": {
     "message": "Rotate token"
@@ -5379,16 +5394,16 @@
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Vad vill du generera?"
   },
   "passwordType": {
     "message": "Lösenordstyp"
   },
   "regenerateUsername": {
-    "message": "Regenerate username"
+    "message": "Återskapa användarnamn"
   },
   "generateUsername": {
-    "message": "Generate username"
+    "message": "Generera användarnamn"
   },
   "usernameType": {
     "message": "Username type"
@@ -5407,7 +5422,7 @@
     "message": "Use your domain's configured catch-all inbox."
   },
   "random": {
-    "message": "Random",
+    "message": "Slumpmässigt",
     "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
@@ -5473,14 +5488,14 @@
     "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
-    "message": "Generate an email alias with an external forwarding service."
+    "message": "Generera ett e-postalias med en extern vidarebefordranstjänst."
   },
   "hostname": {
     "message": "Hostname",
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API access token"
+    "message": "API-åtkomsttoken"
   },
   "deviceVerification": {
     "message": "Device verification"
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Reporting"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Antal användare"
   },
@@ -5681,7 +5693,7 @@
     "message": "-- Välj --"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Type to filter --"
+    "message": "-- Skriv för att filtrera --"
   },
   "multiSelectLoading": {
     "message": "Retrieving options..."
@@ -5778,11 +5790,11 @@
     "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "Service account",
+    "message": "Tjänstkonto",
     "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "Service accounts",
+    "message": "Tjänstkonton",
     "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
@@ -5806,7 +5818,7 @@
     "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "New service account",
+    "message": "Nytt tjänstkonto",
     "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
@@ -5821,11 +5833,11 @@
     "message": "There are no secrets in the trash."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Create a new service account to get started automating secret access.",
+    "message": "Skapa ett nytt tjänstkonto för att komma igång med automatisering av hemlig åtkomst.",
     "description": "Message to encourage the user to start creating service accounts."
   },
   "serviceAccountsNoItemsTitle": {
-    "message": "Nothing to show yet",
+    "message": "Inget att visa ännu",
     "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
@@ -5833,19 +5845,19 @@
     "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "Delete service accounts",
+    "message": "Ta bort tjänstkonton",
     "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "Delete service account",
+    "message": "Ta bort tjänstkonto",
     "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "View service account",
+    "message": "Visa tjänstkonto",
     "description": "Action to view the details of a service account."
   },
   "deleteServiceAccountDialogMessage": {
-    "message": "Deleting service account $SERVICE_ACCOUNT$ is permanent and irreversible.",
+    "message": "Att ta bort tjänstkontot $SERVICE_ACCOUNT$ är permanent och kan inte ångras.",
     "placeholders": {
       "service_account": {
         "content": "$1",
@@ -5854,10 +5866,10 @@
     }
   },
   "deleteServiceAccountsDialogMessage": {
-    "message": "Deleting service accounts is permanent and irreversible."
+    "message": "Att ta bort tjänstkonton är permanent och kan inte ångras."
   },
   "deleteServiceAccountsConfirmMessage": {
-    "message": "Delete $COUNT$ service accounts",
+    "message": "Radera $COUNT$ tjänstkonton",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5866,17 +5878,17 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
-    "message": "Service accounts deleted"
+    "message": "Tjänstkonton togs bort"
   },
   "searchServiceAccounts": {
-    "message": "Search service accounts",
+    "message": "Sök efter tjänstkonton",
     "description": "Placeholder text for searching service accounts."
   },
   "editServiceAccount": {
-    "message": "Edit service account",
+    "message": "Redigera tjänstkonto",
     "description": "Title for editing a service account."
   },
   "addProject": {
@@ -5921,7 +5933,7 @@
     "message": "Secrets permanently deleted"
   },
   "smAccess": {
-    "message": "Access",
+    "message": "Åtkomst",
     "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
@@ -5929,23 +5941,23 @@
     "description": ""
   },
   "serviceAccountName": {
-    "message": "Service account name",
+    "message": "Tjänstkontonamn",
     "description": "Label for the name of a service account"
   },
   "serviceAccountCreated": {
-    "message": "Service account created",
+    "message": "Tjänstkonto skapat",
     "description": "Notifies that a new service account has been created"
   },
   "serviceAccountUpdated": {
-    "message": "Service account updated",
+    "message": "Tjänstkonto uppdaterat",
     "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Type or select projects or secrets",
+    "message": "Skriv eller välj projekt eller hemligheter",
     "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "Type to filter",
+    "message": "Skriv för att filtrera",
     "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
@@ -6024,11 +6036,11 @@
     "message": "Secret permanently deleted"
   },
   "accessTokens": {
-    "message": "Access tokens",
+    "message": "Åtkomsttoken",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Create access token",
+  "newAccessToken": {
+    "message": "Nytt åtkomsttoken",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6040,11 +6052,11 @@
     "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "No access tokens to show",
+    "message": "Inga åtkomsttoken att visa",
     "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "To get started, create an access token",
+    "message": "Skapa ett åtkomsttoken för att komma igång",
     "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
@@ -6052,11 +6064,11 @@
     "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "Expires on:",
+    "message": "Upphör:",
     "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "Access tokens are not stored and cannot be retrieved",
+    "message": "Åtkomsttoken lagras inte och kan inte hämtas",
     "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
@@ -6064,7 +6076,7 @@
     "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "Access token",
+    "message": "Åtkomsttoken",
     "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
@@ -6072,7 +6084,7 @@
     "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Access token created and copied to clipboard",
+    "message": "Åtkomsttoken skapades och kopierades till urklipp",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
@@ -6080,17 +6092,17 @@
     "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "Revoke access token",
+    "message": "Återkalla åtkomsttoken",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
   },
   "revokeAccessTokens": {
-    "message": "Revoke access tokens"
+    "message": "Återkalla åtkomsttoken"
   },
   "revokeAccessTokenDesc": {
-    "message": "Revoking access tokens is permanent and irreversible."
+    "message": "Att återkalla åtkomsttoken är permanent och kan inte ångras."
   },
   "accessTokenRevoked": {
-    "message": "Access tokens revoked",
+    "message": "Åtkomsttoken återkallades",
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
@@ -6136,7 +6148,7 @@
     "message": "Select members"
   },
   "selectCollections": {
-    "message": "Select collections"
+    "message": "Välj samlingar"
   },
   "role": {
     "message": "Roll"
@@ -6145,10 +6157,10 @@
     "message": "Remove member"
   },
   "collection": {
-    "message": "Collection"
+    "message": "Samling"
   },
   "noCollection": {
-    "message": "No collection"
+    "message": "Ingen samling"
   },
   "canView": {
     "message": "Can view"
@@ -6163,7 +6175,7 @@
     "message": "Can edit, except passwords"
   },
   "noCollectionsAdded": {
-    "message": "No collections added"
+    "message": "Ingen samlingar lades till"
   },
   "noMembersAdded": {
     "message": "No members added"
@@ -6451,25 +6463,25 @@
     "message": "Grant groups or people access to this project."
   },
   "projectPeopleSelectHint": {
-    "message": "Type or select people or groups"
+    "message": "Skriv eller välj personer eller grupper"
   },
   "projectServiceAccountsDescription": {
-    "message": "Grant service accounts access to this project."
+    "message": "Bevilja åtkomst till det här projektet för servicekonton."
   },
   "projectServiceAccountsSelectHint": {
-    "message": "Type or select service accounts"
+    "message": "Skriv eller välj servicekonton"
   },
   "projectEmptyPeopleAccessPolicies": {
-    "message": "Add people or groups to start collaborating"
+    "message": "Lägg till personer eller grupper för att börja samarbeta"
   },
   "projectEmptyServiceAccountAccessPolicies": {
-    "message": "Add service accounts to grant access"
+    "message": "Lägg till tjänstkonton för att bevilja åtkomst"
   },
   "serviceAccountPeopleDescription": {
-    "message": "Grant groups or people access to this service account."
+    "message": "Ge grupper eller personer åtkomst till detta servicekonto."
   },
   "serviceAccountProjectsDescription": {
-    "message": "Assign projects to this service account. "
+    "message": "Tilldela projekt till detta tjänstkonto. "
   },
   "serviceAccountEmptyProjectAccesspolicies": {
     "message": "Add projects to grant access"
@@ -6490,7 +6502,7 @@
     "message": "Change KDF settings"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6549,7 +6561,7 @@
     "message": "Create a project"
   },
   "createServiceAccount": {
-    "message": "Create a service account"
+    "message": "Skapa ett tjänstkonto"
   },
   "downloadThe": {
     "message": "Download the",
@@ -6605,7 +6617,7 @@
     "message": "Enable Secrets Manager Beta"
   },
   "saPeopleWarningTitle": {
-    "message": "Access tokens still available"
+    "message": "Åtkomsttoken fortfarande tillgängliga"
   },
   "saPeopleWarningMessage": {
     "message": "Removing people from a service account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a service account."
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

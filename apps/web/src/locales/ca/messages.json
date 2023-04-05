@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Cancel·la la subscripció"
   },
+  "subscriptionExpiration": {
+    "message": "Caducitat de la subscripció"
+  },
   "subscriptionCanceled": {
     "message": "S'ha cancel·lat la subscripció."
   },
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta."
   },
+  "activateAutofill": {
+    "message": "Activa l'emplenament automàtic"
+  },
+  "activateAutofillDesc": {
+    "message": "Activa l'emplenament automàtic amb la configuració de càrrega de pàgina a l'extensió del navegador per a tots els membres existents i nous."
+  },
+  "experimentalFeature": {
+    "message": "Els llocs web compromesos o no fiables poden aprofitar l'emplenament automàtic en carregar de la pàgina."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Més informació sobre l'emplenament automàtic"
+  },
   "selectType": {
     "message": "Selecciona el tipus d'SSO"
   },
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Informes"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Nombre d'usuaris"
   },
@@ -5866,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "El compte de servei s'ha suprimit"
+    "message": "S'ha suprimit el compte de servei"
   },
   "deleteServiceAccountsToast": {
     "message": "S'han suprimit els comptes de servei"
@@ -6027,8 +6039,8 @@
     "message": "Tokens d'accès",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Crea un token d'accés",
+  "newAccessToken": {
+    "message": "Token nou d'accés",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6502,7 @@
     "message": "Canvia la configuració de KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Si continueu, es tancarà la sessió de la vostra sessió actual i us demanarà que torneu a iniciar sessió. Les sessions actives en altres dispositius poden continuar romanent actives fins a una hora. Us recomanem que exporteu la vostra caixa forta abans de canviar la configuració d'encriptació per evitar la pèrdua de dades."
+    "message": "Si continueu, tancareu totes les sessions actives. Haureu de tornar a iniciar sessió i completar la configuració d'inici de sessió en dos passos. Recomanem que exporteu la caixa forta abans de canviar la configuració d'encriptació per evitar la pèrdua de dades."
   },
   "secretsManagerBeta": {
     "message": "Administrador de secrets Beta"
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Descarta"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

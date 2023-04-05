@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Kontak ons"
   },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
+  },
   "getHelp": {
     "message": "Kry hulp"
   },
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Is u seker u wil die “Nooit”-opsie gebruik? Deur u vergrendelopsies op “Nooit” te stel word u kluis se enkripsie op u toestel bewaar. Indien u hierdie opsie gebruik moet u verseker dat u toestel behoorlik beskerm is."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Kluis"

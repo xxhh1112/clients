@@ -11,7 +11,6 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
@@ -25,9 +24,7 @@ import {
   LogService as LogServiceAbstraction,
 } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/abstractions/state.service";
 import { StateMigrationService } from "@bitwarden/common/abstractions/stateMigration.service";
@@ -39,6 +36,9 @@ import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/abs
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";

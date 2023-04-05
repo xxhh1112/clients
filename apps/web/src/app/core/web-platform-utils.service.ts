@@ -5,8 +5,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
 @Injectable()
 export class WebPlatformUtilsService implements PlatformUtilsService {
@@ -215,10 +214,7 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     } else if (options && options.doc) {
       doc = options.doc;
     }
-    if ((win as any).clipboardData && (win as any).clipboardData.setData) {
-      // IE specific code path to prevent textarea being shown while dialog is visible.
-      (win as any).clipboardData.setData("Text", text);
-    } else if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
+    if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
       const textarea = doc.createElement("textarea");
       textarea.textContent = text;
       // Prevent scrolling to bottom of page in MS Edge.

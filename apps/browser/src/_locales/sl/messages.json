@@ -149,11 +149,11 @@
     "message": "Spremeni glavno geslo"
   },
   "fingerprintPhrase": {
-    "message": "Fingerprint fraza",
+    "message": "Identifikacijsko geslo",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "Fingerprint fraza vašega računa",
+    "message": "Identifikacijsko geslo vašega računa",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
@@ -300,7 +300,7 @@
     "message": "Geslo"
   },
   "passphrase": {
-    "message": "Parafraza"
+    "message": "Večbesedno geslo"
   },
   "favorite": {
     "message": "Priljubljeni"
@@ -2003,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Items in suspended Organizations cannot be accessed. Contact your Organization owner for assistance."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logging in to $DOMAIN$",
     "placeholders": {
@@ -2073,7 +2070,7 @@
     "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fraza prstnega odtisa"
+    "message": "Identifikacijsko geslo"
   },
   "fingerprintMatchInfo": {
     "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
@@ -2120,11 +2117,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Your organization policies have turned on auto-fill on page load."
+  },
   "howToAutofill": {
     "message": "How to auto-fill"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2132,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Select an item from this page or set a shortcut in settings."
   },
   "gotIt": {
     "message": "Got it"

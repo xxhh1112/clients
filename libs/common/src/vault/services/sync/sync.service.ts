@@ -1,31 +1,32 @@
 import { ApiService } from "../../../abstractions/api.service";
-import { CollectionService } from "../../../abstractions/collection.service";
 import { CryptoService } from "../../../abstractions/crypto.service";
 import { LogService } from "../../../abstractions/log.service";
 import { MessagingService } from "../../../abstractions/messaging.service";
-import { InternalOrganizationService } from "../../../abstractions/organization/organization.service.abstraction";
-import { InternalPolicyService } from "../../../abstractions/policy/policy.service.abstraction";
-import { ProviderService } from "../../../abstractions/provider.service";
-import { SendService } from "../../../abstractions/send.service";
 import { SettingsService } from "../../../abstractions/settings.service";
 import { StateService } from "../../../abstractions/state.service";
+import { CollectionService } from "../../../admin-console/abstractions/collection.service";
+import { InternalOrganizationService } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
+import { InternalPolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
+import { ProviderService } from "../../../admin-console/abstractions/provider.service";
+import { CollectionData } from "../../../admin-console/models/data/collection.data";
+import { OrganizationData } from "../../../admin-console/models/data/organization.data";
+import { PolicyData } from "../../../admin-console/models/data/policy.data";
+import { ProviderData } from "../../../admin-console/models/data/provider.data";
+import { CollectionDetailsResponse } from "../../../admin-console/models/response/collection.response";
+import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
 import { sequentialize } from "../../../misc/sequentialize";
-import { CollectionData } from "../../../models/data/collection.data";
-import { OrganizationData } from "../../../models/data/organization.data";
-import { PolicyData } from "../../../models/data/policy.data";
-import { ProviderData } from "../../../models/data/provider.data";
-import { SendData } from "../../../models/data/send.data";
-import { CollectionDetailsResponse } from "../../../models/response/collection.response";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
   SyncCipherNotification,
   SyncFolderNotification,
   SyncSendNotification,
 } from "../../../models/response/notification.response";
-import { PolicyResponse } from "../../../models/response/policy.response";
 import { ProfileResponse } from "../../../models/response/profile.response";
-import { SendResponse } from "../../../models/response/send.response";
+import { SendData } from "../../../tools/send/models/data/send.data";
+import { SendResponse } from "../../../tools/send/models/response/send.response";
+import { SendApiService } from "../../../tools/send/services/send-api.service.abstraction";
+import { InternalSendService } from "../../../tools/send/services/send.service.abstraction";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "../../../vault/abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService } from "../../../vault/abstractions/folder/folder.service.abstraction";
@@ -47,13 +48,14 @@ export class SyncService implements SyncServiceAbstraction {
     private collectionService: CollectionService,
     private messagingService: MessagingService,
     private policyService: InternalPolicyService,
-    private sendService: SendService,
+    private sendService: InternalSendService,
     private logService: LogService,
     private keyConnectorService: KeyConnectorService,
     private stateService: StateService,
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
     private organizationService: InternalOrganizationService,
+    private sendApiService: SendApiService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
 
@@ -230,12 +232,12 @@ export class SyncService implements SyncServiceAbstraction {
     this.syncStarted();
     if (await this.stateService.getIsAuthenticated()) {
       try {
-        const localSend = await this.sendService.get(notification.id);
+        const localSend = this.sendService.get(notification.id);
         if (
           (!isEdit && localSend == null) ||
           (isEdit && localSend != null && localSend.revisionDate < notification.revisionDate)
         ) {
-          const remoteSend = await this.apiService.getSend(notification.id);
+          const remoteSend = await this.sendApiService.getSend(notification.id);
           if (remoteSend != null) {
             await this.sendService.upsert(new SendData(remoteSend));
             this.messagingService.send("syncedUpsertedSend", { sendId: notification.id });

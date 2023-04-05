@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Abunəlikdən imtina"
   },
+  "subscriptionExpiration": {
+    "message": "Abunəliyin bitmə tarixi"
+  },
   "subscriptionCanceled": {
     "message": "Abunəliyiniz ləğv edildi."
   },
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır."
   },
+  "activateAutofill": {
+    "message": "Avto-doldurmanı aktivləşdir"
+  },
+  "activateAutofillDesc": {
+    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yükləmə tənzimləmələri ilə avto-doldurmanı aktivləşdirin."
+  },
+  "experimentalFeature": {
+    "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Avto-doldurma haqqında daha ətraflı"
+  },
   "selectType": {
     "message": "SSO növü seçin"
   },
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Hesabat göndərmə"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "İstifadəçi sayı"
   },
@@ -6027,8 +6039,8 @@
     "message": "Müraciət tokenləri",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Müraciət tokeni yarat",
+  "newAccessToken": {
+    "message": "Yeni müraciət tokeni",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6502,7 @@
     "message": "KDF tənzimləmələrini dəyişdir"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Davam etsəniz hazırkı seansdan çıxış ediləcək, təkrar giriş etməyiniz tələb olunacaq. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
+    "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Rədd et"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

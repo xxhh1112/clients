@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Скасаваць падпіску"
   },
+  "subscriptionExpiration": {
+    "message": "Тэрмін дзеяння падпіскі"
+  },
   "subscriptionCanceled": {
     "message": "Падпіска была скасавана."
   },
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча."
   },
+  "activateAutofill": {
+    "message": "Актываваць аўтазапаўненне"
+  },
+  "activateAutofillDesc": {
+    "message": "Актываваць аўтазапаўненне падчас загрузкі старонкі ў наладах пашырэння браўзера для ўсіх існуючых і новых удзельнікаў."
+  },
+  "experimentalFeature": {
+    "message": "Скампраметаваныя або ненадзейныя вэб-сайты могуць задзейнічаць функцыю аўтазапаўнення падчас загрузкі старонкі."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Даведацца больш пра аўтазапаўненне"
+  },
   "selectType": {
     "message": "Выберыце тып SSO"
   },
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Справаздачы"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Колькасць карыстальнікаў"
   },
@@ -5866,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Сэрвісны ўліковы запіс быў выдалены"
+    "message": "Сэрвісны ўліковы запіс выдалены"
   },
   "deleteServiceAccountsToast": {
     "message": "Сэрвісны ўліковы запіс выдалены"
@@ -5876,7 +5888,7 @@
     "description": "Placeholder text for searching service accounts."
   },
   "editServiceAccount": {
-    "message": "Edit service account",
+    "message": "Рэдагаваць сэрвісны ўліковы запіс",
     "description": "Title for editing a service account."
   },
   "addProject": {
@@ -5937,7 +5949,7 @@
     "description": "Notifies that a new service account has been created"
   },
   "serviceAccountUpdated": {
-    "message": "Service account updated",
+    "message": "Сэрвісны ўліковы запіс абноўлены",
     "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
@@ -6027,8 +6039,8 @@
     "message": "Токены доступу",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Стварыць токены доступу",
+  "newAccessToken": {
+    "message": "Новы токен доступу",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6502,7 @@
     "message": "Змяніце налады KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны. Мы рэкамендуем экспартаваць ваша сховішча перад тым, як змяняць налады шыфравання, каб пазбегнуць страты даных."
+    "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
   },
   "secretsManagerBeta": {
     "message": "Менеджар сакрэтаў (бэта-версія)"
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Адхіліць"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

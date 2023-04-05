@@ -1,20 +1,20 @@
 import {
   collectionServiceFactory,
   CollectionServiceInitOptions,
-} from "../../../background/service_factories/collection-service.factory";
+} from "../../../admin-console/background/service-factories/collection-service.factory";
+import {
+  organizationServiceFactory,
+  OrganizationServiceInitOptions,
+} from "../../../admin-console/background/service-factories/organization-service.factory";
+import {
+  policyServiceFactory,
+  PolicyServiceInitOptions,
+} from "../../../admin-console/background/service-factories/policy-service.factory";
 import {
   CachedServices,
   factory,
   FactoryOptions,
 } from "../../../background/service_factories/factory-options";
-import {
-  organizationServiceFactory,
-  OrganizationServiceInitOptions,
-} from "../../../background/service_factories/organization-service.factory";
-import {
-  policyServiceFactory,
-  PolicyServiceInitOptions,
-} from "../../../background/service_factories/policy-service.factory";
 import {
   stateServiceFactory,
   StateServiceInitOptions,
