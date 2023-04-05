@@ -65,11 +65,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const isExcluded = await this.vaultContainsCredentials(params.excludeCredentialDescriptorList);
     if (isExcluded) {
       await userInterfaceSession.informExcludedCredential(
-        [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
-        {
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-        },
+        // [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
+        [],
         abortController
       );
 

@@ -76,6 +76,10 @@ export type BrowserFido2Message = { sessionId: string } & (
       cipherId: string;
     }
   | {
+      type: "InformExcludedCredentialRequest";
+      existingCipherIds: string[];
+    }
+  | {
       type: "AbortRequest";
     }
   | {
@@ -222,12 +226,15 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     return response.cipherId;
   }
 
-  informExcludedCredential(
-    existingCipherIds: string[],
-    newCredential: NewCredentialParams,
-    abortController?: AbortController
-  ): Promise<void> {
-    return null;
+  async informExcludedCredential(existingCipherIds: string[]): Promise<void> {
+    const data: BrowserFido2Message = {
+      type: "InformExcludedCredentialRequest",
+      sessionId: this.sessionId,
+      existingCipherIds,
+    };
+
+    await this.send(data);
+    await this.receive("AbortResponse");
   }
 
   private async send(msg: BrowserFido2Message): Promise<void> {

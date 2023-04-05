@@ -85,6 +85,13 @@ export class Fido2Component implements OnInit, OnDestroy {
             this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
               (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
             );
+          } else if (data?.type === "InformExcludedCredentialRequest") {
+            this.ciphers = await Promise.all(
+              data.existingCipherIds.map(async (cipherId) => {
+                const cipher = await this.cipherService.get(cipherId);
+                return cipher.decrypt();
+              })
+            );
           }
         }),
         takeUntil(this.destroy$)

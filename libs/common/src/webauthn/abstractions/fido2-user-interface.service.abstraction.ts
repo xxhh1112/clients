@@ -39,7 +39,6 @@ export abstract class Fido2UserInterfaceSession {
   ) => Promise<string | undefined>;
   informExcludedCredential: (
     existingCipherIds: string[],
-    newCredential: NewCredentialParams,
     abortController?: AbortController
   ) => Promise<void>;
 }
