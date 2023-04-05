@@ -8,14 +8,14 @@ import {
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "../abstractions/anonymousHub.service";
-import { AuthService } from "../abstractions/auth.service";
 import { EnvironmentService } from "../abstractions/environment.service";
 import { LogService } from "../abstractions/log.service";
+import { AuthService } from "../auth/abstractions/auth.service";
 
 import {
   AuthRequestPushNotification,
   NotificationResponse,
-} from "./../models/response/notificationResponse";
+} from "./../models/response/notification.response";
 
 @Injectable()
 export class AnonymousHubService implements AnonymousHubServiceAbstraction {

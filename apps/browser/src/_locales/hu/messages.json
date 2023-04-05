@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Súgó és visszajelzés"
   },
+  "helpCenter": {
+    "message": "Bitwardsn Segítségközpont"
+  },
+  "communityForums": {
+    "message": "Bitwarden közösségi fórum felfedezése"
+  },
+  "contactSupport": {
+    "message": "Kapcsolatfelvétel a Bitwarden támogatással"
+  },
   "sync": {
     "message": "Szinkronizálás"
   },
@@ -430,7 +439,14 @@
     "message": "A mesterjelszó ismételt megadása kötelező."
   },
   "masterPasswordMinlength": {
-    "message": "Mesterjelszónak legalább 8 karakter hosszúnak kell lennie."
+    "message": "A mesterjelszónak legalább $VALUE$ karakter hosszúnak kell lennie.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A megadott két jelszó nem egyezik meg."
@@ -482,7 +498,7 @@
     "message": "Név megadása kötelező."
   },
   "addedFolder": {
-    "message": "Hozzáadott mappa"
+    "message": "A mappa hozzáadásra került."
   },
   "changeMasterPass": {
     "message": "Mesterjelszó módosítása"
@@ -491,7 +507,7 @@
     "message": "Mesterjelszavadat a bitwarden.com webes széfén tudod megváltoztatni. Szeretnéd meglátogatni a most a weboldalt?"
   },
   "twoStepLoginConfirmation": {
-    "message": "A kétlépcsős bejelentkezés biztonságosabbá teszi a felhasználódat azáltal, hogy ellenőrizned kell a bejelentkezésedet egy másik készülékkel mint például biztonsági kulcs, hitelesítő alkalmazás, SMS, telefon hívás vagy e-mail. Kétlépcsős bejelentkezést a bitwarden.com webes széfén tudod megváltoztatni. Szeretnéd meglátogatni a most a weboldalt?"
+    "message": "A kétlépcsős bejelentkezés biztonságosabbá teszi a fiókot azáltal, hogy ellenőrizni kell a bejelentkezést egy másik olyan eszközzel mint például biztonsági kulcs, hitelesítő alkalmazás, SMS, telefon hívás vagy email. A kétlépcsős bejelentkezést a bitwarden.com webes széfben lehet engedélyezni. Felkeressük a webhelyet most?"
   },
   "editedFolder": {
     "message": "A mappa módosításra került."
@@ -500,7 +516,7 @@
     "message": "Biztos, hogy törölni akarod ezt a mappát?"
   },
   "deletedFolder": {
-    "message": "Törölt mappa"
+    "message": "A mappa törlésre került."
   },
   "gettingStartedTutorial": {
     "message": "Kezdeti ismertető"
@@ -534,10 +550,10 @@
     "message": "Új URI"
   },
   "addedItem": {
-    "message": "Elem hozzáadva"
+    "message": "Az elem hozzáadásra került."
   },
   "editedItem": {
-    "message": "Elem szerkesztve"
+    "message": "Az elem szerkesztésre került."
   },
   "deleteItemConfirmation": {
     "message": "Biztosan törlésre kerüljön ezt az elem?"
@@ -723,7 +739,7 @@
     "message": "Biztos törölni akarod ezt a mellékletet?"
   },
   "deletedAttachment": {
-    "message": "Mellékletek törlése"
+    "message": "A melléklet törlésre került."
   },
   "newAttachment": {
     "message": "Új melléklet hozzáadása"
@@ -738,7 +754,7 @@
     "message": "Fájl"
   },
   "selectFile": {
-    "message": "Válassz ki egy fájlt."
+    "message": "Válasszunk egy fájlt."
   },
   "maxFileSize": {
     "message": "A naximális fájlméret 500 MB."
@@ -762,10 +778,10 @@
     "message": "Tagság frissítése"
   },
   "premiumNotCurrentMember": {
-    "message": "Pillanatnyilag nem vagy prémium tag."
+    "message": "Jelenleg nincs prémium tagság."
   },
   "premiumSignUpAndGet": {
-    "message": "Regisztrálj prémium tagságra az alábbi funkciókért:"
+    "message": "Regisztráció a prémium tagságra az alábbi funkciókért:"
   },
   "ppremiumSignUpStorage": {
     "message": "1 GB titkosított tárhely a fájlmellékleteknek."
@@ -783,16 +799,16 @@
     "message": "Kiemelt ügyfélszolgálati."
   },
   "ppremiumSignUpFuture": {
-    "message": "Minden jövőbeli prémium funkció. Hamarosan jön még több!"
+    "message": "Minden jövőbeli prémium funkció. Hamarosan jön még több."
   },
   "premiumPurchase": {
     "message": "Prémium funkció megvásárlása"
   },
   "premiumPurchaseAlert": {
-    "message": "Prémium tagságot a bitwarden.com webes széfén tudsz venni. Szeretnéd meglátogatni a most a weboldalt?"
+    "message": "A prémium tagság megvásárolható a bitwarden.com webes széfben. Szeretnénk felkeresni a webhelyet most?"
   },
   "premiumCurrentMember": {
-    "message": "Te egy prémium tag vagy!"
+    "message": "Jelenleg a prémium tagság érvényben van."
   },
   "premiumCurrentMemberThanks": {
     "message": "Köszönjük a Bitwarden támogatását."
@@ -822,7 +838,7 @@
     "message": "Prémium funkció szükséges"
   },
   "premiumRequiredDesc": {
-    "message": "Prémium tagság szükséges ennek a funkciónak eléréséhez."
+    "message": "Prémium tagság szükséges ennek a funkciónak eléréséhez a jövőben."
   },
   "enterVerificationCodeApp": {
     "message": "Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból."
@@ -882,7 +898,7 @@
     "message": "Kétlépcsős bejelentkezés opciók"
   },
   "recoveryCodeDesc": {
-    "message": "Elvesztetted a hozzáférésed az összes kétlépcsős szolgáltatásodhoz? Használd a visszaállítókódod a kétlépcsős kiszolgálok kikapcsolásához a felhasználódon."
+    "message": "Elveszett a hozzáférés az összes kétlépcsős szolgáltatóhoz? A helyreállító kód használatával letilthatók fiókból a kétlépcsős szolgáltatók."
   },
   "recoveryCodeTitle": {
     "message": "Helyreállító kód"
@@ -951,16 +967,19 @@
     "message": "Ikonok szerver webcím"
   },
   "environmentSaved": {
-    "message": "A környezet URL-ek mentésre kerültek."
+    "message": "A környezeti webcímek mentésre kerültek."
   },
   "enableAutoFillOnPageLoad": {
-    "message": "Automatikus kitöltés engedélyezése oldal betöltéskor"
+    "message": "Automatikus kitöltés oldalbetöltésnél"
   },
   "enableAutoFillOnPageLoadDesc": {
     "message": "Ha egy bejelentkezési űrlap észlelésre került, az adatok automatikus kitöltése az oldal betöltésekor."
   },
   "experimentalFeature": {
-    "message": "Ez jelenleg egy kísérleti funkció. Csak saját felelősségedre használd."
+    "message": "Az oldalbetöltésnél automatikus kitöltést a feltört vagy nem megbízhatató weboldalak kihasználhatják."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "További információk az automatikus kitöltésről"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Alapértelmezett beállítások bejelentkezési elemekhez"
@@ -1103,7 +1122,7 @@
     "message": "December"
   },
   "securityCode": {
-    "message": "Biztonsági kód"
+    "message": "Biztonsági Kód"
   },
   "ex": {
     "message": "példa:"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Személynév"
@@ -1278,7 +1300,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Opciók megnyitása"
+    "message": "Opciók váltása"
   },
   "toggleCurrentUris": {
     "message": "Aktuális URI elemek váltása",
@@ -1310,6 +1332,10 @@
   "dateUpdated": {
     "message": "A frissítés megtörtént.",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Létrehozva",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "A jelszó frissítésre került.",
@@ -1380,7 +1406,7 @@
     "message": "Legalább egy gyűjteményt ki kell választani."
   },
   "cloneItem": {
-    "message": "Tétel klónozása"
+    "message": "Elem klónozása"
   },
   "clone": {
     "message": "Klónozás"
@@ -1505,19 +1531,19 @@
     "message": "Ellenőrizzük, hogy az asztali alkalmazás megjeleníti-e ezt az ujjlenyomatot: "
   },
   "desktopIntegrationDisabledTitle": {
-    "message": "A böngésző integráció nem engedélyezett."
+    "message": "A böngésző integráció nincs beüzemelve."
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "A böngésző integráció nincs engedélyezve a Bitwarden asztali alkalmazásban. Engedélyezzük az asztali alkalmazás beállításai között."
+    "message": "A böngésző integráció nincs beüzemelve a Bitwarden asztali alkalmazásban. Engedélyezzük az asztali alkalmazás beállításai között."
   },
   "startDesktopTitle": {
     "message": "A Bitwarden asztali alkalmazás indítása"
   },
   "startDesktopDesc": {
-    "message": "A funkció használatához el kell indítani a Bitwarden asztali alkalmazást."
+    "message": "A Bitwarden asztali alkalmazást el kell indítani a biometrikus adatokkal feloldás használatához."
   },
   "errorEnableBiometricTitle": {
-    "message": "Nem lehet engedélyezni a biometrikus adatokat."
+    "message": "Nem lehet beüzemelni a biometrikus adatokat."
   },
   "errorEnableBiometricDesc": {
     "message": "A műveletet az asztali alkalmazás törölte."
@@ -1535,10 +1561,10 @@
     "message": "A fiók nem egyezik."
   },
   "biometricsNotEnabledTitle": {
-    "message": "A biometrikus adatok nincsenek engedélyezve."
+    "message": "A biometrikus adatok nincsenek beüzemelve."
   },
   "biometricsNotEnabledDesc": {
-    "message": "A böngésző biometrikus adataihoz először az asztali biometrikus adatokat kell engedélyezni a beállításokban."
+    "message": "A böngésző biometrikus adataihoz először az asztali biometrikus adatokat kell beüzemelni a beállításokban."
   },
   "biometricsNotSupportedTitle": {
     "message": "A biometrikus adatok nem támogatottak."
@@ -1727,14 +1753,14 @@
     "message": "Aktuális elérési szám"
   },
   "createSend": {
-    "message": "Új küldés létrehozása",
+    "message": "Új Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
     "message": "Új jelszó"
   },
   "sendDisabled": {
-    "message": "A  Send kikapcsolásra került",
+    "message": "A  Send eltávolításra került.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1746,7 +1772,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "A Send szerkesztésre került",
+    "message": "A Send mentésre került.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinuxChromiumFileWarning": {
@@ -1977,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "A letiltott szervezetek elemei nem érhetők el. Vegyük fel a kapcsolatot a szervezet tulajdonosával segítségért."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Bejelentkezés $DOMAIN$ területre",
     "placeholders": {
@@ -2022,6 +2045,123 @@
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Bejelentkezés mesterjelszóval"
+  },
+  "loggingInAs": {
+    "message": "Bejelentkezve mint"
+  },
+  "notYou": {
+    "message": "Ez tévedés?"
+  },
+  "newAroundHere": {
+    "message": "Új felhasználó vagyunk?"
+  },
+  "rememberEmail": {
+    "message": "Email megjegyzése"
+  },
+  "loginWithDevice": {
+    "message": "Bejelentkezés eszközzel"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Az eszközzel történő bejelentkezést a Biwarden mobilalkalmazás beállításaiban kell beállítani. Másik opcióra van szükség?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Ujjlenyomat kifejezés"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Ellenőrizzük, hogy a széf feloldásra került és az Ujjlenyomat kifejezés egyezik a másik eszközön levővel."
+  },
+  "resendNotification": {
+    "message": "Értesítés újraküldése"
+  },
+  "viewAllLoginOptions": {
+    "message": "Összes bejelentkezési opció megtekintése"
+  },
+  "notificationSentDevice": {
+    "message": "Egy értesítés lett elküldve az eszközre."
+  },
+  "logInInitiated": {
+    "message": "A bejelentkezés elindításra került."
+  },
+  "exposedMasterPassword": {
+    "message": "Kiszivárgott mesterjelszó"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "A jelszó megtalálható egy adatvédelmi incidensben. A fiók védelméhez használjunk egyedi jelszót. Biztos, hogy kiszivárgott elszót szeretnénk használni?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Gyenge vagy kitett mesterjelszó"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Gyenge jelszó lett azonosítva és megtalálva egy adatvédelmi incidens során. A fók védelme érdekében használjunk erős és egyedi jelszót. Biztosan használni szeretnénk ezt a jelszót?"
+  },
+  "checkForBreaches": {
+    "message": "Az ehhez a jelszóhoz tartozó ismert adatvédelmi incidensek ellenőrzése"
+  },
+  "important": {
+    "message": "Fontos:"
+  },
+  "masterPasswordHint": {
+    "message": "Az elfelejtett mesterjelszó nem állítható helyre, ha elfelejtik!"
+  },
+  "characterMinimum": {
+    "message": "Legalább $LENGTH$ karakter",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "A szervezeti szabályzat bekapcsolta az automatikus kitöltést az oldalbetöltéskor."
+  },
+  "howToAutofill": {
+    "message": "Az automatikus kitöltés működése"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy használjuk a parancsikont: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy állítsunk be parancsikont a beállításokban."
+  },
+  "gotIt": {
+    "message": "Rendben"
+  },
+  "autofillSettings": {
+    "message": "Automatikus kitöltés beállítások"
+  },
+  "autofillShortcut": {
+    "message": "Automatikus kitöltés billentyűparancs"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Az automatikus kitöltés billentyűzetparancs nincs beállítva. Módosítsuk ezt a böngésző beállításaiban."
+  },
+  "autofillShortcutText": {
+    "message": "Az automatikus kitöltés billentyűparancsa: $COMMAND$. Módosítsuk ezt a böngésző beállításaiban.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Alapértelmezett automatikus kitöltési billenytűparancs: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

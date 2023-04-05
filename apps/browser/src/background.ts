@@ -1,12 +1,32 @@
+import { onAlarmListener } from "./alarms/on-alarm-listener";
+import { registerAlarms } from "./alarms/register-alarms";
 import MainBackground from "./background/main.background";
-import { onCommandListener } from "./listeners/onCommandListener";
-import { onInstallListener } from "./listeners/onInstallListener";
+import { BrowserApi } from "./browser/browserApi";
+import {
+  contextMenusClickedListener,
+  onCommandListener,
+  onInstallListener,
+  runtimeMessageListener,
+  tabsOnActivatedListener,
+  tabsOnReplacedListener,
+  tabsOnUpdatedListener,
+} from "./listeners";
 
-const manifest = chrome.runtime.getManifest();
-
-if (manifest.manifest_version === 3) {
+if (BrowserApi.manifestVersion === 3) {
   chrome.commands.onCommand.addListener(onCommandListener);
   chrome.runtime.onInstalled.addListener(onInstallListener);
+  chrome.alarms.onAlarm.addListener(onAlarmListener);
+  registerAlarms();
+  chrome.tabs.onActivated.addListener(tabsOnActivatedListener);
+  chrome.tabs.onReplaced.addListener(tabsOnReplacedListener);
+  chrome.tabs.onUpdated.addListener(tabsOnUpdatedListener);
+  chrome.contextMenus.onClicked.addListener(contextMenusClickedListener);
+  BrowserApi.messageListener(
+    "runtime.background",
+    (message: { command: string }, sender, sendResponse) => {
+      runtimeMessageListener(message, sender);
+    }
+  );
 } else {
   const bitwardenMain = ((window as any).bitwardenMain = new MainBackground());
   bitwardenMain.bootstrap().then(() => {

@@ -4,7 +4,7 @@ import { AbstractControl, UntypedFormGroup } from "@angular/forms";
 @Component({
   selector: "bit-error-summary",
   template: ` <ng-container *ngIf="errorCount > 0">
-    <i class="bwi bwi-error"></i> {{ "fieldsNeedAttention" | i18n: errorString }}
+    <i class="bwi bwi-error"></i> {{ "fieldsNeedAttention" | i18n : errorString }}
   </ng-container>`,
   host: {
     class: "tw-block tw-text-danger tw-mt-2",
@@ -30,6 +30,10 @@ export class BitErrorSummary {
       }
 
       if (control.errors == null) {
+        return acc;
+      }
+
+      if (!control.dirty && control.untouched) {
         return acc;
       }
 

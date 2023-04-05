@@ -13,8 +13,21 @@ on:
           - CLI
           - Desktop
           - Web
+          - All
       version_number:
         description: "New Version"
+        required: true
+
+  workflow_call:
+    inputs:
+      version_number:
+        required: true
+        type: string
+      client:
+        required: true
+        type: string
+    secrets:
+      AZURE_PROD_KV_CREDENTIALS:
         required: true
 
 defaults:
@@ -29,6 +42,26 @@ jobs:
       - name: Checkout Branch
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
+      - name: Login to Azure - Prod Subscription
+        uses: Azure/login@1f63701bf3e6892515f1b7ce2d2bf1708b46beaf
+        with:
+         creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "github-gpg-private-key, github-gpg-private-key-passphrase"
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@c8bb57c57e8df1be8c73ff3d59deab1dbc00e0d1
+        with:
+          gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
+          passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
       - name: Create Version Branch
         id: branch
         env:
@@ -36,7 +69,7 @@ jobs:
           VERSION: ${{ github.event.inputs.version_number }}
         run: |
           CLIENT=$(python -c "print('$CLIENT_NAME'.lower())")
-          echo "::set-output name=client::$CLIENT"
+          echo "client=$CLIENT" >> $GITHUB_OUTPUT
 
           git switch -c ${CLIENT}_version_bump_${VERSION}
 
@@ -46,27 +79,27 @@ jobs:
 
       ### Browser
       - name: Bump Browser Version
-        if: ${{ github.event.inputs.client == 'Browser' }}
+        if: ${{ github.event.inputs.client == 'Browser' || github.event.inputs.client == 'All' }}
         env:
           VERSION: ${{ github.event.inputs.version_number }}
         run: npm version --workspace=@bitwarden/browser ${VERSION}
 
       - name: Bump Browser Version - Manifest
-        if: ${{ github.event.inputs.client == 'Browser' }}
+        if: ${{ github.event.inputs.client == 'Browser' || github.event.inputs.client == 'All' }}
         uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "apps/browser/src/manifest.json"
 
       - name: Bump Browser Version - Manifest v3
-        if: ${{ github.event.inputs.client == 'Browser' }}
+        if: ${{ github.event.inputs.client == 'Browser' || github.event.inputs.client == 'All' }}
         uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "apps/browser/src/manifest.v3.json"
 
       - name: Run Prettier after Browser Version Bump
-        if: ${{ github.event.inputs.client == 'Browser' }}
+        if: ${{ github.event.inputs.client == 'Browser' || github.event.inputs.client == 'All' }}
         run: |
           npm install -g prettier
           prettier --write apps/browser/src/manifest.json
@@ -74,20 +107,20 @@ jobs:
 
       ### CLI
       - name: Bump CLI Version
-        if: ${{ github.event.inputs.client == 'CLI' }}
+        if: ${{ github.event.inputs.client == 'CLI' || github.event.inputs.client == 'All' }}
         env:
           VERSION: ${{ github.event.inputs.version_number }}
         run: npm version --workspace=@bitwarden/cli ${VERSION}
 
       ### Desktop
       - name: Bump Desktop Version - Root
-        if: ${{ github.event.inputs.client == 'Desktop' }}
+        if: ${{ github.event.inputs.client == 'Desktop' || github.event.inputs.client == 'All' }}
         env:
           VERSION: ${{ github.event.inputs.version_number }}
         run: npm version --workspace=@bitwarden/desktop ${VERSION}
 
       - name: Bump Desktop Version - App
-        if: ${{ github.event.inputs.client == 'Desktop' }}
+        if: ${{ github.event.inputs.client == 'Desktop' || github.event.inputs.client == 'All' }}
         env:
           VERSION: ${{ github.event.inputs.version_number }}
         run: npm version ${VERSION}
@@ -95,7 +128,7 @@ jobs:
 
       ### Web
       - name: Bump Web Version
-        if: ${{ github.event.inputs.client == 'Web' }}
+        if: ${{ github.event.inputs.client == 'Web' || github.event.inputs.client == 'All' }}
         env:
           VERSION: ${{ github.event.inputs.version_number }}
         run: npm version --workspace=@bitwarden/web-vault ${VERSION}
@@ -104,16 +137,16 @@ jobs:
 
       - name: Setup git
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "106330231+bitwarden-devops-bot@users.noreply.github.com"
+          git config --local user.name "bitwarden-devops-bot"
 
       - name: Check if version changed
         id: version-changed
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "::set-output name=changes_to_commit::TRUE"
+            echo "changes_to_commit=TRUE" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=changes_to_commit::FALSE"
+            echo "changes_to_commit=FALSE" >> $GITHUB_OUTPUT
             echo "No changes to commit!";
           fi
 
@@ -122,8 +155,7 @@ jobs:
         env:
           CLIENT: ${{ steps.branch.outputs.client }}
           VERSION: ${{ github.event.inputs.version_number }}
-        run: |
-          git commit -m "Bumped ${CLIENT} version to ${VERSION}" -a
+        run: git commit -m "Bumped ${CLIENT} version to ${VERSION}" -a
 
       - name: Push changes
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
@@ -155,3 +187,8 @@ jobs:
 
               ## Objective
               Automated ${{ github.event.inputs.client }} version bump to ${{ github.event.inputs.version_number }}"
+  enforce-labels:
+    name: Enforce Labels
+    needs: bump_version
+    uses: ./.github/workflows/enforce-labels.yml
+    secrets: inherit

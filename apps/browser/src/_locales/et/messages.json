@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Abi ja tagasiside"
   },
+  "helpCenter": {
+    "message": "Bitwardeni abikeskus"
+  },
+  "communityForums": {
+    "message": "Ava Bitwardeni foorum"
+  },
+  "contactSupport": {
+    "message": "Võta Bitwardeniga ühendust"
+  },
   "sync": {
     "message": "Sünkroniseeri"
   },
@@ -430,7 +439,14 @@
     "message": "Vajalik on ülemparooli uuesti sisestamine."
   },
   "masterPasswordMinlength": {
-    "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
+    "message": "Ülemparool peab olema vähemalt $VALUE$ tähemärgi pikkune.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ülemparoolid ei ühti."
@@ -798,7 +814,7 @@
     "message": "Täname, et toetad Bitwardenit."
   },
   "premiumPrice": {
-    "message": "Kõik see ainult %price% aastas!",
+    "message": "Kõik see ainult $PRICE$ / aastas!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -828,7 +844,7 @@
     "message": "Sisesta autentimise rakendusest 6 kohaline number."
   },
   "enterVerificationCodeEmail": {
-    "message": "Sisesta 6 kohaline number, mis saadeti e-posti aadressile",
+    "message": "Sisesta 6 kohaline number, mis saadeti e-posti aadressile $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -960,7 +976,10 @@
     "message": "Sisselogimise vormi tuvastamisel sisestatakse sinna kontoandmed automaatselt."
   },
   "experimentalFeature": {
-    "message": "See funktsioon on katsetusjärgus. Kasuta omal vastutusel."
+    "message": "Häkitud või ebausaldusväärsed veebilehed võivad lehe laadimisel automaatset sisestamist kuritarvitada."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Rohkem infot automaattäite kohta"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Vaikevalik kontoandmete täitmiseks"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Eesnimi"
@@ -1310,6 +1332,10 @@
   "dateUpdated": {
     "message": "Uuendatud",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Loodud",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Parool on uuendatud",
@@ -1977,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Organisatsiooni alla kuuluvatele kirjetele ei ole ligipääsu. Kontakteeru oma organisatsiooni omanikuga."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Sisselogimine läbi $DOMAIN$",
     "placeholders": {
@@ -1999,13 +2022,13 @@
     "message": "et taastada eelseadistatud seaded"
   },
   "serverVersion": {
-    "message": "Server Version"
+    "message": "Serveri versioon"
   },
   "selfHosted": {
-    "message": "Self-Hosted"
+    "message": "Enda majutatud"
   },
   "thirdParty": {
-    "message": "Third-Party"
+    "message": "Kolmanda osapoole"
   },
   "thirdPartyServerMessage": {
     "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
@@ -2017,11 +2040,128 @@
     }
   },
   "lastSeenOn": {
-    "message": "last seen on: $DATE$",
+    "message": "viimati nähtud: $DATE$",
     "placeholders": {
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Logi sisse ülemparooliga"
+  },
+  "loggingInAs": {
+    "message": "Sisselogimas kui"
+  },
+  "notYou": {
+    "message": "Pole sina?"
+  },
+  "newAroundHere": {
+    "message": "Oled siin uus?"
+  },
+  "rememberEmail": {
+    "message": "Mäleta e-posti aadressi"
+  },
+  "loginWithDevice": {
+    "message": "Logi sisse seadme kaudu"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Bitwardeni rakenduse seadistuses peab olema konfigureeritud sisselogimine läbi seadme. Vajad teist valikut?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Sõrmejälje fraas"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad."
+  },
+  "resendNotification": {
+    "message": "Saada märguanne uuesti"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vaata kõiki valikuid"
+  },
+  "notificationSentDevice": {
+    "message": "Sinu seadmesse saadeti teavitus."
+  },
+  "logInInitiated": {
+    "message": "Sisselogimine on käivitatud"
+  },
+  "exposedMasterPassword": {
+    "message": "Ülemparool on haavatav"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Nõrk ja haavatav ülemparool"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?"
+  },
+  "checkForBreaches": {
+    "message": "Otsi seda parooli teadaolevatest andmeleketest"
+  },
+  "important": {
+    "message": "Tähtis:"
+  },
+  "masterPasswordHint": {
+    "message": "Ülemparooli ei saa taastada, kui sa selle unustama peaksid!"
+  },
+  "characterMinimum": {
+    "message": "Minimaalselt $LENGTH$ tähemärki",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Sinu organisatsioon ei võimalda lehe laadimisel automaatset kontoandmete täitmist kasutada."
+  },
+  "howToAutofill": {
+    "message": "Kuidas automaatselt täita"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vali sellele lehelt kirje või kasuta otseteed: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vali sellelt lehelt kirje või määra seadetes otsetee."
+  },
+  "gotIt": {
+    "message": "Selge"
+  },
+  "autofillSettings": {
+    "message": "Automaattäite seaded"
+  },
+  "autofillShortcut": {
+    "message": "Automaattäite klaviatuuri otseteed"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Automaattäite otsetee pole määratud. Muuda seda brauseri seadetes."
+  },
+  "autofillShortcutText": {
+    "message": "Automaattäite otsetee on: $COMMAND$. Saad seda brauseri seadetes muuta.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Vaike automaattäite otsetee on: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

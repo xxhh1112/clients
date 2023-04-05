@@ -1,4 +1,4 @@
-import { EncryptService } from "@bitwarden/common/services/encrypt.service";
+import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 
 import {
   cryptoFunctionServiceFactory,
@@ -18,15 +18,15 @@ export type EncryptServiceInitOptions = EncryptServiceFactoryOptions &
   LogServiceInitOptions;
 
 export function encryptServiceFactory(
-  cache: { encryptService?: EncryptService } & CachedServices,
+  cache: { encryptService?: EncryptServiceImplementation } & CachedServices,
   opts: EncryptServiceInitOptions
-): Promise<EncryptService> {
+): Promise<EncryptServiceImplementation> {
   return factory(
     cache,
     "encryptService",
     opts,
     async () =>
-      new EncryptService(
+      new EncryptServiceImplementation(
         await cryptoFunctionServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
         opts.encryptServiceOptions.logMacFailures

@@ -1,5 +1,5 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { DatePipe, CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
@@ -8,12 +8,26 @@ import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
+  AsyncActionsModule,
+  AvatarModule,
+  BadgeListModule,
   BadgeModule,
   ButtonModule,
   CalloutModule,
+  CheckboxModule,
+  ColorPasswordModule,
+  DialogModule,
   FormFieldModule,
-  MenuModule,
+  IconButtonModule,
   IconModule,
+  LinkModule,
+  MenuModule,
+  MultiSelectModule,
+  RadioButtonModule,
+  TableModule,
+  TabsModule,
+  ToggleGroupModule,
+  TypographyModule,
 } from "@bitwarden/components";
 
 // Register the locales for the application
@@ -31,37 +45,70 @@ import "./locales";
     CommonModule,
     DragDropModule,
     FormsModule,
-    InfiniteScrollModule,
-    JslibModule,
     ReactiveFormsModule,
+    InfiniteScrollModule,
     RouterModule,
+    ToastrModule,
+    JslibModule,
+
+    // Component library modules
+    // Only add components that are used almost everywhere in the application
+    AsyncActionsModule,
+    AvatarModule,
+    BadgeListModule,
     BadgeModule,
     ButtonModule,
     CalloutModule,
-    ToastrModule,
-    BadgeModule,
-    ButtonModule,
-    MenuModule,
+    CheckboxModule,
+    ColorPasswordModule,
+    DialogModule,
     FormFieldModule,
+    IconButtonModule,
     IconModule,
+    LinkModule,
+    MenuModule,
+    MultiSelectModule,
+    RadioButtonModule,
+    TableModule,
+    TabsModule,
+    ToggleGroupModule,
+    TypographyModule,
+
+    // Web specific
   ],
   exports: [
     CommonModule,
     DragDropModule,
     FormsModule,
-    InfiniteScrollModule,
-    JslibModule,
     ReactiveFormsModule,
+    InfiniteScrollModule,
     RouterModule,
+    ToastrModule,
+    JslibModule,
+
+    // Component library
+    AsyncActionsModule,
+    AvatarModule,
+    BadgeListModule,
     BadgeModule,
     ButtonModule,
     CalloutModule,
-    ToastrModule,
-    BadgeModule,
-    ButtonModule,
-    MenuModule,
+    CheckboxModule,
+    ColorPasswordModule,
+    DialogModule,
     FormFieldModule,
+    IconButtonModule,
     IconModule,
+    LinkModule,
+    MenuModule,
+    MultiSelectModule,
+    RadioButtonModule,
+    TableModule,
+    TabsModule,
+    ToggleGroupModule,
+    TypographyModule,
+
+    // Web specific
   ],
   providers: [DatePipe],
   bootstrap: [],

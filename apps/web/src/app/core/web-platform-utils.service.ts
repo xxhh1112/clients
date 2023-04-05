@@ -5,8 +5,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
 @Injectable()
 export class WebPlatformUtilsService implements PlatformUtilsService {
@@ -108,6 +107,10 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     return Promise.resolve(process.env.APPLICATION_VERSION || "-");
   }
 
+  async getApplicationVersionNumber(): Promise<string> {
+    return (await this.getApplicationVersion()).split(RegExp("[+|-]"))[0].trim();
+  }
+
   supportsWebAuthn(win: Window): boolean {
     return typeof PublicKeyCredential !== "undefined";
   }
@@ -136,7 +139,8 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     confirmText?: string,
     cancelText?: string,
     type?: string,
-    bodyIsHtml = false
+    bodyIsHtml = false,
+    target?: string
   ) {
     let iconClasses: string = null;
     if (type != null) {
@@ -178,6 +182,8 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
       cancelButtonText: cancelText,
       showConfirmButton: true,
       confirmButtonText: confirmText == null ? this.i18nService.t("ok") : confirmText,
+      target: target != null ? target : "body",
+      onOpen: () => Swal.getConfirmButton().focus(),
     });
 
     if (bootstrapModal != null) {
@@ -192,6 +198,10 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
   }
 
   isSelfHost(): boolean {
+    return WebPlatformUtilsService.isSelfHost();
+  }
+
+  static isSelfHost(): boolean {
     return process.env.ENV.toString() === "selfhosted";
   }
 
@@ -204,10 +214,7 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     } else if (options && options.doc) {
       doc = options.doc;
     }
-    if ((win as any).clipboardData && (win as any).clipboardData.setData) {
-      // IE specific code path to prevent textarea being shown while dialog is visible.
-      (win as any).clipboardData.setData("Text", text);
-    } else if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
+    if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
       const textarea = doc.createElement("textarea");
       textarea.textContent = text;
       // Prevent scrolling to bottom of page in MS Edge.
@@ -250,5 +257,9 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage() {
     return false;
+  }
+
+  getAutofillKeyboardShortcut(): Promise<string> {
+    return null;
   }
 }

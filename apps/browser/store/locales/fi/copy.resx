@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden – Ilmainen salasanojen hallinta</value>
+    <value>Bitwarden – Ilmainen salasananhallinta</value>
   </data>
   <data name="Summary" xml:space="preserve">
     <value>Turvallinen ja ilmainen salasanojen hallinta kaikille laitteillesi</value>
@@ -134,7 +134,7 @@ Luo usein käyttämillesi sivustoille automaattisesti vahvoja, yksilöllisiä ja
 
 Bitwarden Send -ominaisuudella lähetät tietoa nopeasti salattuna — tiedostoja ja tekstiä — suoraan kenelle tahansa.
 
-Yrityksille Bitwarden tarjoaa Teams- ja Enterprise-tilaukset, jotka mahdollistavat turvallisen salasanojen jakamisen kollegoiden kesken.
+Yritystoimintaan Bitwarden tarjoaa tilaukset Tiimeille ja Yrityksille, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
 
 Miksi Bitwarden?:
 
@@ -170,6 +170,6 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
     <value>Luo automaattisesti vahvoja, satunnaisia ja turvallisia salasanoja</value>
   </data>
   <data name="ScreenshotEdit" xml:space="preserve">
-    <value>Käsittele 256-bittisellä AES-salauksella suojattuja tietojasi turvallisesti</value>
+    <value>Tietojasi käsitellään turvallisesti 256-bittisellä AES-salauksella</value>
   </data>
 </root>

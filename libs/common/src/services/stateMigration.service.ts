@@ -1,30 +1,26 @@
 import { AbstractStorageService } from "../abstractions/storage.service";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StateVersion } from "../enums/stateVersion";
-import { ThemeType } from "../enums/themeType";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { OrganizationData } from "../admin-console/models/data/organization.data";
+import { PolicyData } from "../admin-console/models/data/policy.data";
+import { ProviderData } from "../admin-console/models/data/provider.data";
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { TokenService } from "../auth/services/token.service";
+import { HtmlStorageLocation, KdfType, StateVersion, ThemeType } from "../enums";
 import { StateFactory } from "../factories/stateFactory";
-import { CipherData } from "../models/data/cipherData";
-import { CollectionData } from "../models/data/collectionData";
-import { EventData } from "../models/data/eventData";
-import { FolderData } from "../models/data/folderData";
-import { OrganizationData } from "../models/data/organizationData";
-import { PolicyData } from "../models/data/policyData";
-import { ProviderData } from "../models/data/providerData";
-import { SendData } from "../models/data/sendData";
+import { EventData } from "../models/data/event.data";
 import {
   Account,
   AccountSettings,
   AccountSettingsSettings,
   EncryptionPair,
 } from "../models/domain/account";
-import { EncString } from "../models/domain/encString";
-import { EnvironmentUrls } from "../models/domain/environmentUrls";
-import { GeneratedPasswordHistory } from "../models/domain/generatedPasswordHistory";
-import { GlobalState } from "../models/domain/globalState";
-import { StorageOptions } from "../models/domain/storageOptions";
-
-import { TokenService } from "./token.service";
+import { EncString } from "../models/domain/enc-string";
+import { GlobalState } from "../models/domain/global-state";
+import { StorageOptions } from "../models/domain/storage-options";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { SendData } from "../tools/send/models/data/send.data";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { FolderData } from "../vault/models/data/folder.data";
 
 // Originally (before January 2022) storage was handled as a flat key/value pair store.
 // With the move to a typed object for state storage these keys should no longer be in use anywhere outside of this migration.
@@ -61,7 +57,6 @@ const v1Keys: { [key: string]: string } = {
   enableBrowserIntegrationFingerprint: "enableBrowserIntegrationFingerprint",
   enableCloseToTray: "enableCloseToTray",
   enableFullWidth: "enableFullWidth",
-  enableGravatars: "enableGravatars",
   enableMinimizeToTray: "enableMinimizeToTray",
   enableStartToTray: "enableStartToTrayKey",
   enableTray: "enableTray",
@@ -305,9 +300,6 @@ export class StateMigrationService<
       enableFullWidth:
         (await this.get<boolean>(v1Keys.enableFullWidth)) ??
         defaultAccount.settings.enableFullWidth,
-      enableGravitars:
-        (await this.get<boolean>(v1Keys.enableGravatars)) ??
-        defaultAccount.settings.enableGravitars,
       environmentUrls: globals.environmentUrls ?? defaultAccount.settings.environmentUrls,
       equivalentDomains:
         (await this.get<any>(v1Keys.equivalentDomains)) ??

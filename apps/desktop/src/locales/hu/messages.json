@@ -104,7 +104,7 @@
     "message": "Email cím"
   },
   "verificationCodeTotp": {
-    "message": "Ellenőrző kód (egyszeri-idő alapú)"
+    "message": "Ellenőrző kód (TOTP)"
   },
   "website": {
     "message": "Webhely"
@@ -126,7 +126,7 @@
     "message": "Minimalizálás vágólapra másoláskor"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimalizálás egy elem adatainak vágólapra való másolásakor."
+    "message": "Minimalizálás asz összes elemadat vágólapra másolásakor."
   },
   "toggleVisibility": {
     "message": "Láthatóság váltása"
@@ -175,7 +175,7 @@
     "message": "Postai cím"
   },
   "premiumRequired": {
-    "message": "Prémium verzió szükséges"
+    "message": "Prémium szükséges"
   },
   "premiumRequiredDesc": {
     "message": "A funkció használatához prémium tagság szükséges."
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "Kisasszony"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "dr": {
     "message": "Dr."
@@ -420,7 +423,7 @@
   },
   "capitalize": {
     "message": "Nagy kezdőbetű",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Szám is"
@@ -476,7 +479,7 @@
     "message": "Ez a funkció nem használható a titkosítási kulcs frissítéséig."
   },
   "editedFolder": {
-    "message": "A mappa szerkesztésre került."
+    "message": "A mappa mentésre került."
   },
   "addedFolder": {
     "message": "A mappa hozzáadásra került."
@@ -539,7 +542,14 @@
     "message": "A mesterjelszó ismételt megadása kötelező."
   },
   "masterPasswordMinlength": {
-    "message": "Mesterjelszónak legalább 8 karakter hosszúnak kell lennie."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A mesterjelszó megerősítése nem egyezik."
@@ -734,13 +744,13 @@
     "message": "Kijelentkezés"
   },
   "addNewLogin": {
-    "message": "Új bejelentkezés hozzáadása"
+    "message": "Új bejelentkezés"
   },
   "addNewItem": {
-    "message": "Új elem hozzáadása"
+    "message": "Új elem"
   },
   "addNewFolder": {
-    "message": "Új mappa hozzáadása"
+    "message": "Új mappa"
   },
   "view": {
     "message": "Megtekintés"
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kapcsolatfelvétel"
+  },
+  "helpAndFeedback": {
+    "message": "Súgó és visszajelzés"
   },
   "getHelp": {
     "message": "Segítségkérés"
@@ -782,7 +795,7 @@
     "message": "A mesterjelszó megváltoztatható a bitwarden.com webes széfben. Szeretnénk felkeresni a webhelyet mos?"
   },
   "fingerprintPhrase": {
-    "message": "Ujjlenyomat kifejezés",
+    "message": "Azonosítókifejezés",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -833,10 +846,10 @@
     "message": "Kétlépcsős bejelentkezés"
   },
   "vaultTimeout": {
-    "message": "Széf időkorlát"
+    "message": "Széf időkifutás"
   },
   "vaultTimeoutDesc": {
-    "message": "Állítsd be a széfedhez egy időkorlátot és egy végrehajtandó műveletet."
+    "message": "Válasszuk ki, hogy a széfnél mikor legyen időkifutás és a kiválasztott művelet végrehajtása."
   },
   "immediately": {
     "message": "Azonnal"
@@ -872,13 +885,13 @@
     "message": "4 óra"
   },
   "onIdle": {
-    "message": "Tétlenség esetén"
+    "message": "Rendszer üresjárat esetén"
   },
   "onSleep": {
-    "message": "Alvó módba lépéskor"
+    "message": "Rendszer alvó mód esetén"
   },
   "onLocked": {
-    "message": "A rendszer zárolásakor"
+    "message": "Rendszer zárolás esetén"
   },
   "onRestart": {
     "message": "Újraindításkor"
@@ -904,7 +917,7 @@
     "message": "Felismerhető kép megjelenítése minden bejelentkezés mellett."
   },
   "enableMinToTray": {
-    "message": "Kicsinyítés tálcára"
+    "message": "Kicsinyítés tálcaikonná"
   },
   "enableMinToTrayDesc": {
     "message": "Az ablak minimalizálásakor helyette egy ikon jelenik meg a rendszertálcán."
@@ -1053,7 +1066,7 @@
     "message": "Prémium tagság a bitwarden.com webes széfben kezelhető. Szeretnénk most felkeresni a webhelyet?"
   },
   "premiumRefresh": {
-    "message": "Tagság frissítése"
+    "message": "Előfizetés ellenőrzése"
   },
   "premiumNotCurrentMember": {
     "message": "Jelenleg nincs prémium tagság."
@@ -1137,7 +1150,7 @@
     "message": "Kicsinyítés"
   },
   "resetZoom": {
-    "message": "Nagyítás alaphelyzetbe"
+    "message": "Nagyítás visszaállítása"
   },
   "toggleFullScreen": {
     "message": "Teljes képernyős módra váltás"
@@ -1265,6 +1278,10 @@
   "dateUpdated": {
     "message": "A frissítés megtörtént.",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Létrehozva",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "A jelszó frissítésre került.",
@@ -1446,7 +1463,7 @@
     "message": "Biztos a kilépés? A kilépés esetén az aktuális információ nem kerül mentésre."
   },
   "unsavedChangesTitle": {
-    "message": "Mentetlen változások"
+    "message": "Mentetlen változtatások"
   },
   "clone": {
     "message": "Klónozás"
@@ -1583,7 +1600,7 @@
     "message": "Sajnos a böngésző integrációt egyelőre csak a Mac App Store verzió támogatja."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "A böngésző integrációt egyelőre csak a Microsoft Store verzió támogatja."
+    "message": "A böngésző integrációt egyelőre csak a Windows Store verzió támogatja."
   },
   "browserIntegrationLinuxDesc": {
     "message": "Sajnos a böngésző integrációját a linux verzió jelenleg nem támogatja."
@@ -1699,7 +1716,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinkLabel": {
-    "message": "Hivatkozás küldése",
+    "message": "Send küldése",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "textHiddenByDefault": {
@@ -1707,15 +1724,15 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "A küldés létrejött",
+    "message": "A Send létrejött.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "A küldés szerkesztésre került",
+    "message": "A Send mentésre került.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "A küldés törlésre került",
+    "message": "A Send törlésre került.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
@@ -1726,7 +1743,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createSend": {
-    "message": "A küldés létrejött.",
+    "message": "Új Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -1762,7 +1779,7 @@
     "message": "A hivatkozás másolása a Küldés megosztásához a vágólapra mentéskor."
   },
   "sendDisabled": {
-    "message": "A küldés kikapcsolásra került",
+    "message": "A Send eltávolításra került.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1774,6 +1791,15 @@
   },
   "disabled": {
     "message": "Letiltva"
+  },
+  "removePassword": {
+    "message": "Jelszó eltávolítása"
+  },
+  "removedPassword": {
+    "message": "A jelszó eltávolításra került."
+  },
+  "removePasswordConfirmation": {
+    "message": "Biztosan eltávolításra kerüljön ez a jelszó?"
   },
   "maxAccessCountReached": {
     "message": "A maximális hozzáférések száma elérésre került."
@@ -1794,7 +1820,7 @@
     "message": "Egy vagy több szervezeti szabály érinti a Send opciókat."
   },
   "emailVerificationRequired": {
-    "message": "E-mail hitelesítés szükséges"
+    "message": "Email hitelesítés szükséges"
   },
   "emailVerificationRequiredDesc": {
     "message": "A funkció használatához ellenőrizni kell az email címet."
@@ -2012,10 +2038,168 @@
   "neverLockWarning": {
     "message": "Biztosan szeretnénk használni a \"Soha\" opciót? A zárolási opciók \"Soha\" értékre állítása a széf titkosítási kulcsát az eszközön tárolja. Ennek az opciónak a használatakor célszerű az eszköz megfelelő védettségét biztosítani."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Széf"
+  },
+  "loginWithMasterPassword": {
+    "message": "Bejelentkezés mesterjelszóval"
+  },
+  "loggingInAs": {
+    "message": "Bejelentkezve mint"
+  },
+  "rememberEmail": {
+    "message": "Email megjegyzése"
+  },
+  "notYou": {
+    "message": "Ez tévedés?"
+  },
+  "newAroundHere": {
+    "message": "Új felhasználó vagyunk?"
+  },
+  "loggingInTo": {
+    "message": "Bejelentkezés $DOMAIN$ területre",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Bejelentkezés más eszközzel"
+  },
+  "logInInitiated": {
+    "message": "A bejelentkezés elindításra került."
+  },
+  "notificationSentDevice": {
+    "message": "Egy értesítés lett elküldve az eszközre."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Ellenőrizzük, hogy a széf feloldásra került és az Ujjlenyomat kifejezés egyezik a másik eszközön levővel."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Ujjlenyomat kifejezés"
+  },
+  "needAnotherOption": {
+    "message": "Az eszközzel történő bejelentkezést a Biwarden mobilalkalmazás beállításaiban kell beállítani. Másik opcióra van szükség?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Összes bejelentkezési opció megtekintése"
+  },
+  "resendNotification": {
+    "message": "Értesítés újraküldése"
+  },
+  "toggleCharacterCount": {
+    "message": "Karakterszámláló váltás",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Megpróbálunk bejelentkezni?"
+  },
+  "logInAttemptBy": {
+    "message": "Bejelentkezési kísérlet $EMAIL$ segítségével",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Eszköz típus"
+  },
+  "ipAddress": {
+    "message": "IP cím"
+  },
+  "time": {
+    "message": "Időpont"
+  },
+  "confirmLogIn": {
+    "message": "Bejelentkezés megerősítése"
+  },
+  "denyLogIn": {
+    "message": "Bejelentkezés megtagadása"
+  },
+  "approveLoginRequests": {
+    "message": "Bejelentkezési kérelmek jóváhagyása"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "A bejelelentketés $EMAIL$ email címmel megerősítésre került $DEVICE$ eszközön.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Megtagadásra került egy bejelentkezési kísérletet egy másik eszközről. Ha valóban mi voltunk, próbáljunk meg újra bejelentkezni az eszközzel."
+  },
+  "justNow": {
+    "message": "Éppen most"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Kérve $MINUTES$ perccel ezelőtt",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "A bejelentkezési kérés már lejárt."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "A kérés a továbbiakban már nem érvényes."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bejelentkezési kísérlet megerősítése $EMAIL$ email címmel",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Bejelentkezés megkérve"
+  },
+  "exposedMasterPassword": {
+    "message": "Kiszivárgott mesterjelszó"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "A jelszó megtalálható egy adatvédelmi incidensben. A fiók védelméhez használjunk egyedi jelszót. Biztos, hogy kiszivárgott elszót szeretnénk használni?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Gyenge vagy kiszivárgott mesterjelszó"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Gyenge jelszó lett azonosítva és megtalálva egy adatvédelmi incidens során. A fók védelme érdekében használjunk erős és egyedi jelszót. Biztosan használni szeretnénk ezt a jelszót?"
+  },
+  "checkForBreaches": {
+    "message": "Az ehhez a jelszóhoz tartozó ismert adatvédelmi incidensek ellenőrzése"
+  },
+  "important": {
+    "message": "Fontos:"
+  },
+  "masterPasswordHint": {
+    "message": "Az elfelejtett mesterjelszó nem állítható helyre, ha elfelejtik!"
+  },
+  "characterMinimum": {
+    "message": "Legalább $LENGTH$ karakter",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

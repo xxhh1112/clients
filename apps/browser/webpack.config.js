@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { AngularWebpackPlugin } = require("@ngtools/webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 const configurator = require("./config/config");
 
 if (process.env.NODE_ENV == null) {
@@ -65,6 +66,23 @@ const moduleRules = [
     test: /\.[jt]sx?$/,
     loader: "@ngtools/webpack",
   },
+  {
+    test: /\.wasm$/,
+    loader: "base64-loader",
+    type: "javascript/auto",
+  },
+];
+
+const requiredPlugins = [
+  new webpack.DefinePlugin({
+    "process.env": {
+      ENV: JSON.stringify(ENV),
+    },
+  }),
+  new webpack.EnvironmentPlugin({
+    FLAGS: envConfig.flags,
+    DEV_FLAGS: ENV === "development" ? envConfig.devFlags : {},
+  }),
 ];
 
 const plugins = [
@@ -74,12 +92,7 @@ const plugins = [
     chunks: ["popup/polyfills", "popup/vendor-angular", "popup/vendor", "popup/main"],
   }),
   new HtmlWebpackPlugin({
-    template: "./src/background.html",
-    filename: "background.html",
-    chunks: ["vendor", "background"],
-  }),
-  new HtmlWebpackPlugin({
-    template: "./src/notification/bar.html",
+    template: "./src/autofill/notification/bar.html",
     filename: "notification/bar.html",
     chunks: ["notification/bar"],
   }),
@@ -92,17 +105,12 @@ const plugins = [
       { from: "./src/_locales", to: "_locales" },
       { from: "./src/images", to: "images" },
       { from: "./src/popup/images", to: "popup/images" },
-      { from: "./src/content/autofill.css", to: "content" },
+      { from: "./src/autofill/content/autofill.css", to: "content" },
     ],
   }),
   new MiniCssExtractPlugin({
     filename: "[name].css",
     chunkFilename: "chunk-[id].css",
-  }),
-  new webpack.DefinePlugin({
-    "process.env": {
-      ENV: JSON.stringify(ENV),
-    },
   }),
   new AngularWebpackPlugin({
     tsConfigPath: "tsconfig.json",
@@ -119,25 +127,27 @@ const plugins = [
     exclude: [/content\/.*/, /notification\/.*/],
     filename: "[file].map",
   }),
-  new webpack.EnvironmentPlugin({
-    FLAGS: envConfig.flags,
-    DEV_FLAGS: ENV === "development" ? envConfig.devFlags : {},
-  }),
+  ...requiredPlugins,
 ];
 
-const config = {
+/**
+ * @type {import("webpack").Configuration}
+ * This config compiles everything but the background
+ */
+const mainConfig = {
+  name: "main",
   mode: ENV,
   devtool: false,
   entry: {
     "popup/polyfills": "./src/popup/polyfills.ts",
     "popup/main": "./src/popup/main.ts",
-    background: "./src/background.ts",
-    "content/autofill": "./src/content/autofill.js",
-    "content/autofiller": "./src/content/autofiller.ts",
-    "content/notificationBar": "./src/content/notificationBar.ts",
-    "content/contextMenuHandler": "./src/content/contextMenuHandler.ts",
-    "content/message_handler": "./src/content/message_handler.ts",
-    "notification/bar": "./src/notification/bar.js",
+    "content/autofill": "./src/autofill/content/autofill.js",
+    "content/autofiller": "./src/autofill/content/autofiller.ts",
+    "content/notificationBar": "./src/autofill/content/notification-bar.ts",
+    "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
+    "content/message_handler": "./src/autofill/content/message_handler.ts",
+    "notification/bar": "./src/autofill/notification/bar.ts",
+    "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
   },
   optimization: {
     minimize: ENV !== "development",
@@ -198,26 +208,97 @@ const config = {
       buffer: require.resolve("buffer/"),
       util: require.resolve("util/"),
       url: require.resolve("url/"),
+      fs: false,
+      path: require.resolve("path-browserify"),
     },
   },
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "build"),
   },
-  module: { rules: moduleRules },
+  module: {
+    noParse: /\.wasm$/,
+    rules: moduleRules,
+  },
   plugins: plugins,
 };
 
+/**
+ * @type {import("webpack").Configuration[]}
+ */
+const configs = [];
+
 if (manifestVersion == 2) {
-  // We can't use this in manifest v3
-  // Ideally we understand why this breaks it and we don't have to do this
-  config.optimization.splitChunks.cacheGroups.commons2 = {
+  mainConfig.optimization.splitChunks.cacheGroups.commons2 = {
     test: /[\\/]node_modules[\\/]/,
     name: "vendor",
     chunks: (chunk) => {
       return chunk.name === "background";
     },
   };
+
+  // Manifest V2 uses Background Pages which requires a html page.
+  mainConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: "./src/background.html",
+      filename: "background.html",
+      chunks: ["vendor", "background"],
+    })
+  );
+
+  // Manifest V2 background pages can be run through the regular build pipeline.
+  // Since it's a standard webpage.
+  mainConfig.entry.background = "./src/background.ts";
+
+  configs.push(mainConfig);
+} else {
+  // Manifest v3 needs an extra helper for utilities in the content script.
+  // The javascript output of this should be added to manifest.v3.json
+  mainConfig.entry["content/misc-utils"] = "./src/autofill/content/misc-utils.ts";
+
+  /**
+   * @type {import("webpack").Configuration}
+   */
+  const backgroundConfig = {
+    name: "background",
+    mode: ENV,
+    devtool: false,
+    entry: "./src/background.ts",
+    target: "webworker",
+    output: {
+      filename: "background.js",
+      path: path.resolve(__dirname, "build"),
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+        },
+        {
+          test: /\.wasm$/,
+          loader: "base64-loader",
+          type: "javascript/auto",
+        },
+      ],
+      noParse: /\.wasm$/,
+    },
+    resolve: {
+      extensions: [".ts", ".js"],
+      symlinks: false,
+      modules: [path.resolve("../../node_modules")],
+      plugins: [new TsconfigPathsPlugin()],
+      fallback: {
+        fs: false,
+        path: false,
+      },
+    },
+    dependencies: ["main"],
+    plugins: [...requiredPlugins],
+  };
+
+  configs.push(mainConfig);
+  configs.push(backgroundConfig);
 }
 
-module.exports = config;
+module.exports = configs;

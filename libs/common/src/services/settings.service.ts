@@ -6,7 +6,7 @@ import { Utils } from "../misc/utils";
 import { AccountSettingsSettings } from "../models/domain/account";
 
 export class SettingsService implements SettingsServiceAbstraction {
-  private _settings: BehaviorSubject<AccountSettingsSettings> = new BehaviorSubject({});
+  protected _settings: BehaviorSubject<AccountSettingsSettings> = new BehaviorSubject({});
 
   settings$ = this._settings.asObservable();
 
@@ -38,6 +38,27 @@ export class SettingsService implements SettingsServiceAbstraction {
 
     this._settings.next(settings);
     await this.stateService.setSettings(settings);
+  }
+
+  getEquivalentDomains(url: string): string[] {
+    const domain = Utils.getDomain(url);
+    if (domain == null) {
+      return null;
+    }
+
+    const settings = this._settings.getValue();
+
+    let result: string[] = [];
+
+    if (settings?.equivalentDomains != null) {
+      settings.equivalentDomains
+        .filter((ed) => ed.length > 0 && ed.includes(domain))
+        .forEach((ed) => {
+          result = result.concat(ed);
+        });
+    }
+
+    return result;
   }
 
   async clear(userId?: string): Promise<void> {

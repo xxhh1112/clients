@@ -1,7 +1,6 @@
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
@@ -19,7 +18,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   constructor(
     private messagingService: MessagingService,
     private clipboardWriteCallback: (clipboardValue: string, clearMs: number) => void,
-    private biometricCallback: () => Promise<boolean>
+    private biometricCallback: () => Promise<boolean>,
+    private win: Window & typeof globalThis
   ) {}
 
   getDevice(): DeviceType {
@@ -27,24 +27,17 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
       return this.deviceCache;
     }
 
-    if (
-      navigator.userAgent.indexOf(" Firefox/") !== -1 ||
-      navigator.userAgent.indexOf(" Gecko/") !== -1
-    ) {
+    if (BrowserPlatformUtilsService.isFirefox()) {
       this.deviceCache = DeviceType.FirefoxExtension;
-    } else if (
-      (self.opr && self.opr.addons) ||
-      self.opera ||
-      navigator.userAgent.indexOf(" OPR/") >= 0
-    ) {
+    } else if (BrowserPlatformUtilsService.isOpera(this.win)) {
       this.deviceCache = DeviceType.OperaExtension;
-    } else if (navigator.userAgent.indexOf(" Edg/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isEdge()) {
       this.deviceCache = DeviceType.EdgeExtension;
-    } else if (navigator.userAgent.indexOf(" Vivaldi/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isVivaldi()) {
       this.deviceCache = DeviceType.VivaldiExtension;
-    } else if (window.chrome && navigator.userAgent.indexOf(" Chrome/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isChrome(this.win)) {
       this.deviceCache = DeviceType.ChromeExtension;
-    } else if (navigator.userAgent.indexOf(" Safari/") !== -1) {
+    } else if (BrowserPlatformUtilsService.isSafari(this.win)) {
       this.deviceCache = DeviceType.SafariExtension;
     }
 
@@ -60,24 +53,56 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return ClientType.Browser;
   }
 
+  static isFirefox(): boolean {
+    return (
+      navigator.userAgent.indexOf(" Firefox/") !== -1 ||
+      navigator.userAgent.indexOf(" Gecko/") !== -1
+    );
+  }
+
   isFirefox(): boolean {
     return this.getDevice() === DeviceType.FirefoxExtension;
+  }
+
+  static isChrome(win: Window & typeof globalThis): boolean {
+    return win.chrome && navigator.userAgent.indexOf(" Chrome/") !== -1;
   }
 
   isChrome(): boolean {
     return this.getDevice() === DeviceType.ChromeExtension;
   }
 
+  static isEdge(): boolean {
+    return navigator.userAgent.indexOf(" Edg/") !== -1;
+  }
+
   isEdge(): boolean {
     return this.getDevice() === DeviceType.EdgeExtension;
+  }
+
+  static isOpera(win: Window & typeof globalThis): boolean {
+    return (
+      (!!win.opr && !!win.opr.addons) || !!win.opera || navigator.userAgent.indexOf(" OPR/") >= 0
+    );
   }
 
   isOpera(): boolean {
     return this.getDevice() === DeviceType.OperaExtension;
   }
 
+  static isVivaldi(): boolean {
+    return navigator.userAgent.indexOf(" Vivaldi/") !== -1;
+  }
+
   isVivaldi(): boolean {
     return this.getDevice() === DeviceType.VivaldiExtension;
+  }
+
+  static isSafari(win: Window & typeof globalThis): boolean {
+    // Opera masquerades as Safari, so make sure we're not there first
+    return (
+      !BrowserPlatformUtilsService.isOpera(win) && navigator.userAgent.indexOf(" Safari/") !== -1
+    );
   }
 
   isSafari(): boolean {
@@ -122,6 +147,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
 
   getApplicationVersion(): Promise<string> {
     return Promise.resolve(BrowserApi.getApplicationVersion());
+  }
+
+  async getApplicationVersionNumber(): Promise<string> {
+    return (await this.getApplicationVersion()).split(RegExp("[+|-]"))[0].trim();
   }
 
   supportsWebAuthn(win: Window): boolean {
@@ -178,8 +207,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   copyToClipboard(text: string, options?: any): void {
-    let win = window;
-    let doc = window.document;
+    let win = this.win;
+    let doc = this.win.document;
     if (options && (options.window || options.win)) {
       win = options.window || options.win;
       doc = win.document;
@@ -205,12 +234,6 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
           this.clipboardWriteCallback(text, clearMs);
         }
       });
-    } else if ((win as any).clipboardData && (win as any).clipboardData.setData) {
-      // IE specific code path to prevent textarea being shown while dialog is visible.
-      (win as any).clipboardData.setData("Text", text);
-      if (!clearing && this.clipboardWriteCallback != null) {
-        this.clipboardWriteCallback(text, clearMs);
-      }
     } else if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
       if (this.isChrome() && text === "") {
         text = "\u0000";
@@ -238,8 +261,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   async readFromClipboard(options?: any): Promise<string> {
-    let win = window;
-    let doc = window.document;
+    let win = this.win;
+    let doc = this.win.document;
     if (options && (options.window || options.win)) {
       win = options.window || options.win;
       doc = win.document;
@@ -335,7 +358,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   sidebarViewName(): string {
-    if (window.chrome.sidebarAction && this.isFirefox()) {
+    if (this.win.chrome.sidebarAction && this.isFirefox()) {
       return "sidebar";
     } else if (this.isOpera() && typeof opr !== "undefined" && opr.sidebarAction) {
       return "sidebar_panel";
@@ -346,5 +369,32 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
 
   supportsSecureStorage(): boolean {
     return false;
+  }
+
+  async getAutofillKeyboardShortcut(): Promise<string> {
+    let autofillCommand: string;
+    // You can not change the command in Safari or obtain it programmatically
+    if (this.isSafari()) {
+      autofillCommand = "Cmd+Shift+L";
+    } else if (this.isFirefox()) {
+      autofillCommand = (await browser.commands.getAll()).find(
+        (c) => c.name === "autofill_login"
+      ).shortcut;
+      // Firefox is returing Ctrl instead of Cmd for the modifier key on macOS if
+      // the command is the default one set on installation.
+      if (
+        (await browser.runtime.getPlatformInfo()).os === "mac" &&
+        autofillCommand === "Ctrl+Shift+L"
+      ) {
+        autofillCommand = "Cmd+Shift+L";
+      }
+    } else {
+      await new Promise((resolve) =>
+        chrome.commands.getAll((c) =>
+          resolve((autofillCommand = c.find((c) => c.name === "autofill_login").shortcut))
+        )
+      );
+    }
+    return autofillCommand;
   }
 }

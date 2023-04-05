@@ -1,5 +1,6 @@
 ---
 name: Release Web
+run-name: Release Web ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -28,7 +29,7 @@ jobs:
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != "refs/heads/hotfix-rc-web" ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-web" ]]; then
             echo "==================================="
             echo "[!] Can only release from the 'rc' or 'hotfix-rc-web' branches"
             echo "==================================="
@@ -95,8 +96,7 @@ jobs:
         env:
           DOCKER_CONTENT_TRUST: 1
           DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: ${{ steps.setup-dct.outputs.dct-delegate-repo-passphrase }}
-        run: |
-          docker push bitwarden/web:$_RELEASE_VERSION
+        run: docker push bitwarden/web:$_RELEASE_VERSION
 
       - name: Log out of Docker and disable Docker Notary
         run: |
@@ -104,17 +104,17 @@ jobs:
           echo "DOCKER_CONTENT_TRUST=0" >> $GITHUB_ENV
 
       ########## ACR ##########
-      - name: Login to Azure - QA Subscription
+      - name: Login to Azure - PROD Subscription
         uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010  # v1.1
         with:
-          creds: ${{ secrets.AZURE_QA_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
 
       - name: Login to Azure ACR
-        run: az acr login -n bitwardenqa
+        run: az acr login -n bitwardenprod
 
       - name: Tag version
         env:
-          REGISTRY: bitwardenqa.azurecr.io
+          REGISTRY: bitwardenprod.azurecr.io
         run: |
           if [[ "${{ github.event.inputs.release_type }}" == "Dry Run" ]]; then
             docker tag bitwarden/web:latest $REGISTRY/web:$_RELEASE_VERSION
@@ -129,7 +129,7 @@ jobs:
       - name: Push version
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         env:
-          REGISTRY: bitwardenqa.azurecr.io
+          REGISTRY: bitwardenprod.azurecr.io
         run: |
           docker push $REGISTRY/web:$_RELEASE_VERSION
 
@@ -154,7 +154,7 @@ jobs:
 
       - name: Download latest cloud asset
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web
@@ -162,9 +162,9 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: web-*-cloud-COMMERCIAL.zip
 
-      - name: Download latest cloud asset
+      - name: Dry Run - Download latest cloud asset
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web
@@ -172,7 +172,6 @@ jobs:
           branch: master
           artifacts: web-*-cloud-COMMERCIAL.zip
 
-      # This should result in a build directory in the current working directory
       - name: Unzip build asset
         working-directory: apps/web
         run: unzip web-*-cloud-COMMERCIAL.zip
@@ -228,6 +227,7 @@ jobs:
       - cfpages-deploy
     steps:
       - name: Create GitHub deployment
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
         id: deployment
         with:
@@ -240,7 +240,7 @@ jobs:
 
       - name: Download latest build artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web/artifacts
@@ -249,9 +249,9 @@ jobs:
           artifacts: "web-*-selfhosted-COMMERCIAL.zip,
             web-*-selfhosted-open-source.zip"
 
-      - name: Download latest build artifacts
+      - name: Dry Run - Download latest build artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-web.yml
           path: apps/web/artifacts
@@ -280,7 +280,7 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ success() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -289,7 +289,7 @@ jobs:
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ failure() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'

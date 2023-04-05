@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "ヘルプ＆フィードバック"
   },
+  "helpCenter": {
+    "message": "Bitwarden ヘルプセンター"
+  },
+  "communityForums": {
+    "message": "Bitwarden コミュニティフォーラムを探索"
+  },
+  "contactSupport": {
+    "message": "Bitwarden サポートへの問い合わせ"
+  },
   "sync": {
     "message": "同期"
   },
@@ -430,7 +439,14 @@
     "message": "マスターパスワードの再入力が必要です。"
   },
   "masterPasswordMinlength": {
-    "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
+    "message": "マスターパスワードは少なくとも $VALUE$ 文字以上でなければなりません。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "マスターパスワードが一致しません。"
@@ -482,7 +498,7 @@
     "message": "名前は必須項目です。"
   },
   "addedFolder": {
-    "message": "フォルダーを追加しました"
+    "message": "フォルダを追加しました"
   },
   "changeMasterPass": {
     "message": "マスターパスワードの変更"
@@ -534,10 +550,10 @@
     "message": "新しい URI"
   },
   "addedItem": {
-    "message": "追加しました"
+    "message": "追加されたアイテム"
   },
   "editedItem": {
-    "message": "編集しました"
+    "message": "編集されたアイテム"
   },
   "deleteItemConfirmation": {
     "message": "このアイテムを削除しますか？"
@@ -567,7 +583,7 @@
     "message": "検索の種類"
   },
   "noneFolder": {
-    "message": "フォルダーなし",
+    "message": "フォルダなし",
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
@@ -960,7 +976,10 @@
     "message": "ページ読み込み時にログインフォームを検出したとき、ログイン情報を自動入力します。"
   },
   "experimentalFeature": {
-    "message": "これは現在、実験的な機能です。自己責任で使用してください。"
+    "message": "ウイルス感染したり信頼できないウェブサイトは、ページの読み込み時の自動入力を悪用できてしまいます。"
+  },
+  "learnMoreAboutAutofill": {
+    "message": "自動入力についての詳細"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "ログインアイテムのデフォルトの自動入力設定"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "名"
@@ -1310,6 +1332,10 @@
   "dateUpdated": {
     "message": "更新日",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "作成日",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "パスワード更新日",
@@ -1502,7 +1528,7 @@
     "message": "デスクトップ同期の検証"
   },
   "desktopIntegrationVerificationText": {
-    "message": "デスクトップアプリにこの指紋が表示されていることを確認してください: "
+    "message": "デスクトップアプリにこれが表示されていることを確認してください: "
   },
   "desktopIntegrationDisabledTitle": {
     "message": "ブラウザ統合が有効になっていません"
@@ -1977,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "無効な組織のアイテムにアクセスすることはできません。組織の所有者に連絡してください。"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "$DOMAIN$ にログイン中",
     "placeholders": {
@@ -2022,6 +2045,123 @@
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "マスターパスワードでログイン"
+  },
+  "loggingInAs": {
+    "message": "ログイン中:"
+  },
+  "notYou": {
+    "message": "あなたではないですか？"
+  },
+  "newAroundHere": {
+    "message": "初めてですか?"
+  },
+  "rememberEmail": {
+    "message": "メールアドレスを保存"
+  },
+  "loginWithDevice": {
+    "message": "デバイスでログイン"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Bitwarden アプリの設定でデバイスでログインする必要があります。別のオプションが必要ですか？"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "パスフレーズ"
+  },
+  "fingerprintMatchInfo": {
+    "message": "保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。"
+  },
+  "resendNotification": {
+    "message": "通知を再送信する"
+  },
+  "viewAllLoginOptions": {
+    "message": "すべてのログインオプションを表示"
+  },
+  "notificationSentDevice": {
+    "message": "デバイスに通知を送信しました。"
+  },
+  "logInInitiated": {
+    "message": "ログイン開始"
+  },
+  "exposedMasterPassword": {
+    "message": "流出したマスターパスワード"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "入力したパスワードはデータ流出結果で見つかりました。アカウントを保護するためには一意のパスワードを使用してください。流出済みのパスワードを本当に使用しますか？"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "脆弱で流出済みのマスターパスワード"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "入力されたパスワードは脆弱かつ流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？"
+  },
+  "checkForBreaches": {
+    "message": "このパスワードの既知のデータ流出を確認"
+  },
+  "important": {
+    "message": "重要"
+  },
+  "masterPasswordHint": {
+    "message": "マスターパスワードを忘れた場合は復元できません！"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ 文字以上",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "組織のポリシーはページ読み込み時の自動入力をオンにしました。"
+  },
+  "howToAutofill": {
+    "message": "自動入力する方法"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "このページからアイテムを選択するか、ショートカットを使用してください: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "このページからアイテムを選択するか、設定でショートカットを設定してください。"
+  },
+  "gotIt": {
+    "message": "了解"
+  },
+  "autofillSettings": {
+    "message": "自動入力の設定"
+  },
+  "autofillShortcut": {
+    "message": "自動入力キーボードショートカット"
+  },
+  "autofillShortcutNotSet": {
+    "message": "自動入力のショートカットが設定されていません。ブラウザの設定で変更してください。"
+  },
+  "autofillShortcutText": {
+    "message": "自動入力のショートカットは $COMMAND$ です。ブラウザの設定でこれを変更してください。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "デフォルトの自動入力ショートカットは $COMMAND$ です。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

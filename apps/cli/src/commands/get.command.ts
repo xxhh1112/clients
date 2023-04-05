@@ -1,44 +1,44 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { SendType } from "@bitwarden/common/enums/sendType";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/encString";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CardExport } from "@bitwarden/common/models/export/cardExport";
-import { CipherExport } from "@bitwarden/common/models/export/cipherExport";
-import { CollectionExport } from "@bitwarden/common/models/export/collectionExport";
-import { FieldExport } from "@bitwarden/common/models/export/fieldExport";
-import { FolderExport } from "@bitwarden/common/models/export/folderExport";
-import { IdentityExport } from "@bitwarden/common/models/export/identityExport";
-import { LoginExport } from "@bitwarden/common/models/export/loginExport";
-import { LoginUriExport } from "@bitwarden/common/models/export/loginUriExport";
-import { SecureNoteExport } from "@bitwarden/common/models/export/secureNoteExport";
-import { ErrorResponse } from "@bitwarden/common/models/response/errorResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { StringResponse } from "@bitwarden/node/cli/models/response/stringResponse";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { CardExport } from "@bitwarden/common/models/export/card.export";
+import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
+import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
+import { FieldExport } from "@bitwarden/common/models/export/field.export";
+import { FolderExport } from "@bitwarden/common/models/export/folder.export";
+import { IdentityExport } from "@bitwarden/common/models/export/identity.export";
+import { LoginUriExport } from "@bitwarden/common/models/export/login-uri.export";
+import { LoginExport } from "@bitwarden/common/models/export/login.export";
+import { SecureNoteExport } from "@bitwarden/common/models/export/secure-note.export";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
-import { OrganizationCollectionRequest } from "../models/request/organizationCollectionRequest";
-import { CipherResponse } from "../models/response/cipherResponse";
-import { CollectionResponse } from "../models/response/collectionResponse";
-import { FolderResponse } from "../models/response/folderResponse";
-import { OrganizationCollectionResponse } from "../models/response/organizationCollectionResponse";
-import { OrganizationResponse } from "../models/response/organizationResponse";
-import { SendResponse } from "../models/response/sendResponse";
-import { TemplateResponse } from "../models/response/templateResponse";
-import { SelectionReadOnly } from "../models/selectionReadOnly";
+import { OrganizationCollectionRequest } from "../admin-console/models/request/organization-collection.request";
+import { CollectionResponse } from "../admin-console/models/response/collection.response";
+import { OrganizationCollectionResponse } from "../admin-console/models/response/organization-collection.response";
+import { OrganizationResponse } from "../admin-console/models/response/organization.response";
+import { SelectionReadOnly } from "../admin-console/models/selection-read-only";
+import { Response } from "../models/response";
+import { StringResponse } from "../models/response/string.response";
+import { TemplateResponse } from "../models/response/template.response";
+import { SendResponse } from "../tools/send/models/send.response";
 import { CliUtils } from "../utils";
+import { CipherResponse } from "../vault/models/cipher.response";
+import { FolderResponse } from "../vault/models/folder.response";
 
 import { DownloadCommand } from "./download.command";
 
@@ -353,7 +353,7 @@ export class GetCommand extends DownloadCommand {
   private async getFolder(id: string) {
     let decFolder: FolderView = null;
     if (Utils.isGuid(id)) {
-      const folder = await this.folderService.get(id);
+      const folder = await this.folderService.getFromState(id);
       if (folder != null) {
         decFolder = await folder.decrypt();
       }
@@ -416,7 +416,7 @@ export class GetCommand extends DownloadCommand {
         throw new Error("No encryption key for this organization.");
       }
 
-      const response = await this.apiService.getCollectionDetails(options.organizationId, id);
+      const response = await this.apiService.getCollectionAccessDetails(options.organizationId, id);
       const decCollection = new CollectionView(response);
       decCollection.name = await this.cryptoService.decryptToUtf8(
         new EncString(response.name),
@@ -436,7 +436,7 @@ export class GetCommand extends DownloadCommand {
   private async getOrganization(id: string) {
     let org: Organization = null;
     if (Utils.isGuid(id)) {
-      org = await this.organizationService.get(id);
+      org = await this.organizationService.getFromState(id);
     } else if (id.trim() !== "") {
       let orgs = await this.organizationService.getAll();
       orgs = CliUtils.searchOrganizations(orgs, id);

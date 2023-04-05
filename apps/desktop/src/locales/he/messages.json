@@ -33,10 +33,10 @@
     "message": "אוספים"
   },
   "searchVault": {
-    "message": "חפש כספת"
+    "message": "חיפוש בכספת"
   },
   "addItem": {
-    "message": "הוסף פריט"
+    "message": "הוספת פריט"
   },
   "shared": {
     "message": "משותף"
@@ -238,6 +238,9 @@
   "ms": {
     "message": "העלמה"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "דוקטור"
   },
@@ -420,7 +423,7 @@
   },
   "capitalize": {
     "message": "הפוך אותיות ראשונות לגדולות",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "כלול מספרים"
@@ -539,7 +542,14 @@
     "message": "נדרשת חזרה על הסיסמה הראשית."
   },
   "masterPasswordMinlength": {
-    "message": "הסיסמת הראשית חייבת להכיל 8 תווים לפחות."
+    "message": "סיסמאת המאסטר חייבת להיות באורך $VALUE$ תווים.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "אימות סיסמה ראשית אינו תואם."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "יצירת קשר אתנו"
+  },
+  "helpAndFeedback": {
+    "message": "עזרה ומשוב"
   },
   "getHelp": {
     "message": "קבלת עזרה"
@@ -1266,6 +1279,10 @@
     "message": "עודכן",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "נוצר",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "הסיסמה עודכנה",
     "description": "ex. Date this password was updated"
@@ -1571,10 +1588,10 @@
     "message": "אינטגרצייה עם הדפדפן מאפשרת שימוש באמצעיים ביומטריים בדפדפן."
   },
   "enableDuckDuckGoBrowserIntegration": {
-    "message": "Allow DuckDuckGo browser integration"
+    "message": "אפשר שילוב דפדפן DuckDuckGo"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+    "message": "השתמש בכספת Bitwarden שלך בעת גלישה עם DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "שילוב הדפדפן אינו נתמך"
@@ -1604,7 +1621,7 @@
     "message": "בבקשה, וודא כי חתימת האצבע הדיגיטלית המוצגת זהה לחתימה שמופיע בתוסף הדפדפן."
   },
   "verifyNativeMessagingConnectionTitle": {
-    "message": "$APPID$ wants to connect to Bitwarden",
+    "message": "$APPID$ רוצה להתחבר ל-Bitwarden",
     "placeholders": {
       "appid": {
         "content": "$1",
@@ -1613,10 +1630,10 @@
     }
   },
   "verifyNativeMessagingConnectionDesc": {
-    "message": "Would you like to approve this request?"
+    "message": "האם תרצה לאשר בקשה זו?"
   },
   "verifyNativeMessagingConnectionWarning": {
-    "message": "If you did not initiate this request, do not approve it."
+    "message": "אם לא יזמת בקשה זו, אל תאשר אותה."
   },
   "biometricsNotEnabledTitle": {
     "message": "לא הופעלו אמצעי זיהוי ביומטריים"
@@ -1774,6 +1791,15 @@
   },
   "disabled": {
     "message": "מושבת"
+  },
+  "removePassword": {
+    "message": "הסרת סיסמה"
+  },
+  "removedPassword": {
+    "message": "הסיסמה הוסרה"
+  },
+  "removePasswordConfirmation": {
+    "message": "להסיר את הסיסמה?"
   },
   "maxAccessCountReached": {
     "message": "מספר הגישות המרבי הושג"
@@ -2012,10 +2038,168 @@
   "neverLockWarning": {
     "message": "האם אתה בטוח שברצונך להשתמש באפשרות \"לעולם לא\"? על ידי הגדרת אפשרויות הנעילה ל\"לעולם לא\", מפתח ההצפנה של הכספת שלך יישמר במכשיר שלך. אם אתה משתמש באפשרות זו, ודא שאתה שומר על המכשיר שלך מוגן כראוי."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
-    "message": "Vault"
+    "message": "כספת"
+  },
+  "loginWithMasterPassword": {
+    "message": "היכנס עם סיסמת מאסטר"
+  },
+  "loggingInAs": {
+    "message": "כניסה בתור"
+  },
+  "rememberEmail": {
+    "message": "זכור אימייל"
+  },
+  "notYou": {
+    "message": "לא אתה?"
+  },
+  "newAroundHere": {
+    "message": "חדש כאן?"
+  },
+  "loggingInTo": {
+    "message": "נכנס ל-$DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "התחבר עם מכשיר אחר"
+  },
+  "logInInitiated": {
+    "message": "התחברות החלה"
+  },
+  "notificationSentDevice": {
+    "message": "התראה נשלחה למכשירך."
+  },
+  "fingerprintMatchInfo": {
+    "message": "וודא שהכספת שלך לא נעולה ושם המזהה שלך מתאים למכשיר השני."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "שם מזהה"
+  },
+  "needAnotherOption": {
+    "message": "התחברות עם מכשיר צריכה להיות מוגדרת בהגדרות האפליקציה. זקוק/ה לאפשרות נוספת?"
+  },
+  "viewAllLoginOptions": {
+    "message": "צפייה בכל אפשרות ההתחברות"
+  },
+  "resendNotification": {
+    "message": "שליחת התראה מחדש"
+  },
+  "toggleCharacterCount": {
+    "message": "החלפת מצב ספירת תווים",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "האם את/ה מנסה להתחבר? "
+  },
+  "logInAttemptBy": {
+    "message": "ניסיון התחברות של $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "סוג מכשיר"
+  },
+  "ipAddress": {
+    "message": "‏כתובת IP"
+  },
+  "time": {
+    "message": "זמן"
+  },
+  "confirmLogIn": {
+    "message": "אישור ההתחברות"
+  },
+  "denyLogIn": {
+    "message": "ביטול התחברות"
+  },
+  "approveLoginRequests": {
+    "message": "אישור בקשות התחברות"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "התחברות אושרה עבור $EMAIL$ במכשיר $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

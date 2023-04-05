@@ -1,18 +1,21 @@
 import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import {
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums/organization-user-status-type";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 @Directive()
 export class ShareComponent implements OnInit, OnDestroy {
@@ -54,7 +57,10 @@ export class ShareComponent implements OnInit, OnDestroy {
     this.organizations$ = this.organizationService.organizations$.pipe(
       map((orgs) => {
         return orgs
-          .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed)
+          .filter(
+            (o) =>
+              o.enabled && o.status === OrganizationUserStatusType.Confirmed && isNotProviderUser(o)
+          )
           .sort(Utils.getSortFunction(this.i18nService, "name"));
       })
     );

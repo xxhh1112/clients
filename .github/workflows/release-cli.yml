@@ -1,5 +1,6 @@
 ---
 name: Release CLI
+run-name: Release CLI ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -47,7 +48,7 @@ jobs:
       - name: Branch check
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ $GITHUB_REF != refs/heads/hotfix-rc-cli ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc-cli" ]]; then
             echo "==================================="
             echo "[!] Can only release from the 'rc' or 'hotfix-rc-cli' branches"
             echo "==================================="
@@ -64,7 +65,8 @@ jobs:
           monorepo: true
           monorepo-project: cli
 
-      - name: Create GitHub deployment for Snap
+      - name: Create GitHub deployment
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
         id: deployment
         with:
@@ -76,16 +78,16 @@ jobs:
 
       - name: Download all Release artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
 
-      - name: Download all artifacts
+      - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli
@@ -115,7 +117,7 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ success() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -123,7 +125,7 @@ jobs:
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ failure() }}
+        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -148,17 +150,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            snapcraft-store-token
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "snapcraft-store-token"
 
       - name: Install Snap
         uses: samuelmeuli/action-snapcraft@10d7d0a84d9d86098b19f872257df314b0bd8e2d  # v1.2.0
@@ -167,7 +162,7 @@ jobs:
 
       - name: Download artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli
@@ -175,9 +170,9 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bw_${{ env._PKG_VERSION }}_amd64.snap
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli
@@ -209,17 +204,10 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            cli-choco-api-key
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "cli-choco-api-key"
 
       - name: Setup Chocolatey
         run: choco apikey --key $env:CHOCO_API_KEY --source https://push.chocolatey.org/
@@ -232,7 +220,7 @@ jobs:
 
       - name: Download artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli/dist
@@ -240,9 +228,9 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bitwarden-cli.${{ env._PKG_VERSION }}.nupkg
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli/dist
@@ -275,21 +263,14 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        env:
-          KEYVAULT: bitwarden-prod-kv
-          SECRETS: |
-            cli-npm-api-key
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-            echo "::add-mask::$VALUE"
-            echo "::set-output name=$i::$VALUE"
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@c3b3285993151c5af47cefcb3b9134c28ab479af
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "npm-api-key"
 
       - name: Download artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli/build
@@ -297,9 +278,9 @@ jobs:
           branch: ${{ github.ref_name }}
           artifacts: bitwarden-cli-${{ env._PKG_VERSION }}-npm-build.zip
 
-      - name: Download artifacts
+      - name: Dry Run - Download artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
+        uses: bitwarden/gh-actions/download-artifacts@850faad0cf6c02a8c0dc46eddde2363fbd6c373a
         with:
           workflow: build-cli.yml
           path: apps/cli/build
@@ -312,7 +293,7 @@ jobs:
           echo 'registry="https://registry.npmjs.org/"' > ./.npmrc
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ./.npmrc
         env:
-          NPM_TOKEN: ${{ steps.retrieve-secrets.outputs.cli-npm-api-key }}
+          NPM_TOKEN: ${{ steps.retrieve-secrets.outputs.npm-api-key }}
 
       - name: Install Husky
         run: npm install -g husky
@@ -320,4 +301,3 @@ jobs:
       - name: Publish NPM
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: npm publish --access public --regsitry=https://registry.npmjs.org/  --userconfig=./.npmrc
-

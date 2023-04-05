@@ -5,13 +5,14 @@ import * as inquirer from "inquirer";
 import * as JSZip from "jszip";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { NodeUtils } from "@bitwarden/common/misc/nodeUtils";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/models/view/collectionView";
-import { FolderView } from "@bitwarden/common/models/view/folderView";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { MessageResponse } from "@bitwarden/node/cli/models/response/messageResponse";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+
+import { Response } from "./models/response";
+import { MessageResponse } from "./models/response/message.response";
 
 export class CliUtils {
   static writeLn(s: string, finalLine = false, error = false) {

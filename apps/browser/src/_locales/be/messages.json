@@ -195,8 +195,17 @@
   "helpFeedback": {
     "message": "Даведка і зваротная сувязь"
   },
+  "helpCenter": {
+    "message": "Даведачны цэнтр Bitwarden"
+  },
+  "communityForums": {
+    "message": "Наведайце форумы супольнасці Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Звярніцеся ў службу падтрымкі Bitwarden"
+  },
   "sync": {
-    "message": "Сінхранізацыя"
+    "message": "Сінхранізаваць"
   },
   "syncVaultNow": {
     "message": "Сінхранізаваць сховішча зараз"
@@ -430,7 +439,14 @@
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Асноўны пароль павінен быць даўжынёй не менш за 8 сімвалаў."
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $VALUE$ сімвалаў.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Пацвярджэнне асноўнага пароля не супадае."
@@ -497,7 +513,7 @@
     "message": "Папка адрэдагавана"
   },
   "deleteFolderConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выдаліць гэту папку?"
+    "message": "Вы сапраўды хочаце выдаліць гэту папку?"
   },
   "deletedFolder": {
     "message": "Папка выдалена"
@@ -540,7 +556,7 @@
     "message": "Элемент адрэдагаваны"
   },
   "deleteItemConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце адправіць гэты элемент у сметніцу?"
+    "message": "Вы сапраўды хочаце адправіць гэты элемент у сметніцу?"
   },
   "deletedItem": {
     "message": "Элемент адпраўлены ў сметніцу"
@@ -549,13 +565,13 @@
     "message": "Перазапісаць пароль"
   },
   "overwritePasswordConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?"
+    "message": "Вы сапраўды хочаце перазапісаць бягучы пароль?"
   },
   "overwriteUsername": {
     "message": "Перазапісаць імя карыстальніка"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце перазапісаць бягучае імя карыстальніка?"
+    "message": "Вы сапраўды хочаце перазапісаць бягучае імя карыстальніка?"
   },
   "searchFolder": {
     "message": "Пошук у папцы"
@@ -642,7 +658,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Цёмная Solarized",
+    "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
@@ -720,7 +736,7 @@
     "message": "Выдаліць далучэнне"
   },
   "deleteAttachmentConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выдаліць гэта далучэнне?"
+    "message": "Вы сапраўды хочаце выдаліць гэта далучэнне?"
   },
   "deletedAttachment": {
     "message": "Далучэнне выдалена"
@@ -960,7 +976,10 @@
     "message": "Калі выяўлена форма ўваходу, то будзе выканана яе аўтазапаўненне падчас загрузкі вэб-старонкі."
   },
   "experimentalFeature": {
-    "message": "У дадзены час гэта функцыя з'яўляецца эксперыментальнай. Рызыку падчас яе выкарыстанні вы прымаеце на сябе."
+    "message": "Скампраметаваныя або ненадзейныя вэб-сайты могуць задзейнічаць функцыю аўтазапаўнення падчас загрузкі старонкі."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Даведацца больш пра аўтазапаўненне"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Прадвызначаная налада аўтазапаўнення для элементаў уваходу"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Доктар"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Імя"
@@ -1311,12 +1333,16 @@
     "message": "Абноўлена",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Створана",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Пароль абноўлены",
     "description": "ex. Date this password was updated"
   },
   "neverLockWarning": {
-    "message": "Вы ўпэўнены, што хочаце адключыць блакіроўку сховішча? Прызначыўшы параметр блакіравання \"Ніколі\", ключ шыфравання будзе захоўвацца на вашай прыладзе. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена."
+    "message": "Вы сапраўды хочаце адключыць блакіроўку сховішча? Прызначыўшы параметр блакіравання \"Ніколі\", ключ шыфравання будзе захоўвацца на вашай прыладзе. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена."
   },
   "noOrganizationsList": {
     "message": "Вы не з'яўляецеся членам якой-небудзь арганізацыі. Арганізацыі дазваляюць бяспечна абменьвацца элементамі з іншымі карыстальнікамі."
@@ -1346,7 +1372,7 @@
     "message": "Ненадзейны асноўны пароль"
   },
   "weakMasterPasswordDesc": {
-    "message": "Асноўны пароль, які вы выбралі з'яўляецца ненадзейным. Для належнай абароны ўліковага запісу Bitwarden, вы павінны выкарыстоўваць надзейны асноўны пароль (або парольную фразу). Вы ўпэўнены, што хочаце выкарыстоўваць гэты асноўны пароль?"
+    "message": "Асноўны пароль, які вы выбралі з'яўляецца ненадзейным. Для належнай абароны ўліковага запісу Bitwarden, вы павінны выкарыстоўваць надзейны асноўны пароль (або парольную фразу). Вы сапраўды хочаце выкарыстоўваць гэты асноўны пароль?"
   },
   "pin": {
     "message": "PIN-код",
@@ -1406,7 +1432,7 @@
     "message": "Выдаліць назаўсёды"
   },
   "permanentlyDeleteItemConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце назаўсёды выдаліць гэты элемент?"
+    "message": "Вы сапраўды хочаце назаўсёды выдаліць гэты элемент?"
   },
   "permanentlyDeletedItem": {
     "message": "Элемент выдалены назаўсёды"
@@ -1415,13 +1441,13 @@
     "message": "Аднавіць элемент"
   },
   "restoreItemConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце аднавіць гэты элемент?"
+    "message": "Вы сапраўды хочаце аднавіць гэты элемент?"
   },
   "restoredItem": {
     "message": "Элемент адноўлены"
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "Выхад з сістэмы скасуе ўсе магчымасці доступу да сховішча і запатрабуе аўтэнтыфікацыю праз інтэрнэт пасля завяршэння часу чакання. Вы ўпэўнены, што хочаце выкарыстоўваць гэты параметр?"
+    "message": "Выхад з сістэмы скасуе ўсе магчымасці доступу да сховішча і запатрабуе аўтэнтыфікацыю праз інтэрнэт пасля завяршэння часу чакання. Вы сапраўды хочаце выкарыстоўваць гэты параметр?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Пацвярджэнне дзеяння часу чакання"
@@ -1639,14 +1665,14 @@
     "message": "Адключана"
   },
   "removePasswordConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выдаліць пароль?"
+    "message": "Вы сапраўды хочаце выдаліць пароль?"
   },
   "deleteSend": {
     "message": "Выдаліць Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSendConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выдаліць гэты Send?",
+    "message": "Вы сапраўды хочаце выдаліць гэты Send?",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -1883,7 +1909,7 @@
     "message": "Асноўны пароль выдалены."
   },
   "leaveOrganizationConfirmation": {
-    "message": "Вы ўпэўнены, што хочаце выйсці з гэтай арганізацыі?"
+    "message": "Вы сапраўды хочаце выйсці з гэтай арганізацыі?"
   },
   "leftOrganization": {
     "message": "Вы пакінулі арганізацыю."
@@ -1977,11 +2003,8 @@
   "disabledOrganizationFilterError": {
     "message": "Доступ да элементаў у адключаных арганізацыях немагчымы. Звяжыце з уладальнікам арганізацыі для атрымання дапамогі."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
-    "message": "Уваход у $DOMAIN$",
+    "message": "Увайсці ў $DOMAIN$",
     "placeholders": {
       "domain": {
         "content": "$1",
@@ -2022,6 +2045,123 @@
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Увайсці з асноўным паролем"
+  },
+  "loggingInAs": {
+    "message": "Увайсці як"
+  },
+  "notYou": {
+    "message": "Не вы?"
+  },
+  "newAroundHere": {
+    "message": "Упершыню тут?"
+  },
+  "rememberEmail": {
+    "message": "Запомніць электронную пошту"
+  },
+  "loginWithDevice": {
+    "message": "Уваход з прыладай"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Неабходна наладзіць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Патрабуецца іншы варыянт?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза адбітка пальца"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Пераканайцеся, што ваша сховішча разблакіравана, а фраза адбітка пальца супадае з іншай прыладай."
+  },
+  "resendNotification": {
+    "message": "Адправіць апавяшчэнне паўторна"
+  },
+  "viewAllLoginOptions": {
+    "message": "Паглядзець усе варыянты ўваходу"
+  },
+  "notificationSentDevice": {
+    "message": "Апавяшчэнне было адпраўлена на вашу прыладу."
+  },
+  "logInInitiated": {
+    "message": "Ініцыяваны ўваход"
+  },
+  "exposedMasterPassword": {
+    "message": "Скампраметаваны асноўны пароль"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знойдзены ва ўцечках даных. Выкарыстоўвайце ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць скампраметаваны пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Ненадзейны і скампраметаваны асноўны пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Праверыць у вядомых уцечках даных для гэтага пароля"
+  },
+  "important": {
+    "message": "Важна:"
+  },
+  "masterPasswordHint": {
+    "message": "Ваш асноўны пароль немагчыма будзе аднавіць, калі вы яго забудзеце!"
+  },
+  "characterMinimum": {
+    "message": "Мінімальная колькасць сімвалаў: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Аўтазапаўненне пры загрузцы старонцы было ўключана палітыкамі вашай арганізацыі."
+  },
+  "howToAutofill": {
+    "message": "Як аўтазапоўніць"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Выберыце элемент на гэтай старонцы або скарыстайцеся спалучэннем клавіш: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Выберыце элемент на гэтай старонцы або задайце спалучэнне клавіш у наладах."
+  },
+  "gotIt": {
+    "message": "Зразумела"
+  },
+  "autofillSettings": {
+    "message": "Налады аўтазапаўнення"
+  },
+  "autofillShortcut": {
+    "message": "Спалучэнні клавіш аўтазапаўнення"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Спалучэнні клавіш аўтазапаўнення не зададзены. Змяніце гэта ў наладах браўзера."
+  },
+  "autofillShortcutText": {
+    "message": "Спалучэнні клавіш аўтазапаўнення: $COMMAND$. Змяніце гэта ў наладах браўзера.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Прадвызначаная спалучэнні клавіш аўтазапаўнення: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

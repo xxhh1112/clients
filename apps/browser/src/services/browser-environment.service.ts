@@ -2,8 +2,8 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 
+import { GroupPolicyEnvironment } from "../admin-console/types/group-policy-environment";
 import { devFlagEnabled, devFlagValue } from "../flags";
-import { GroupPolicyEnvironment } from "../types/group-policy-environment";
 
 export class BrowserEnvironmentService extends EnvironmentService {
   constructor(stateService: StateService, private logService: LogService) {
@@ -20,6 +20,10 @@ export class BrowserEnvironmentService extends EnvironmentService {
   }
 
   async settingsHaveChanged() {
+    if (!(await this.hasManagedEnvironment())) {
+      return false;
+    }
+
     const env = await this.getManagedEnvironment();
 
     return (
@@ -37,6 +41,10 @@ export class BrowserEnvironmentService extends EnvironmentService {
     return devFlagEnabled("managedEnvironment")
       ? new Promise((resolve) => resolve(devFlagValue("managedEnvironment")))
       : new Promise((resolve, reject) => {
+          if (chrome.storage.managed == null) {
+            return resolve(null);
+          }
+
           chrome.storage.managed.get("environment", (result) => {
             if (chrome.runtime.lastError) {
               return reject(chrome.runtime.lastError);

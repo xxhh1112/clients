@@ -4,11 +4,12 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { biometrics } from "@bitwarden/desktop-native";
-import { WindowMain } from "@bitwarden/electron/window.main";
 
-import { BiometricMain } from "./biometric.main";
+import { WindowMain } from "../window.main";
 
-export default class BiometricWindowsMain implements BiometricMain {
+import { BiometricsServiceAbstraction } from "./biometrics.service.abstraction";
+
+export default class BiometricWindowsMain implements BiometricsServiceAbstraction {
   constructor(
     private i18nservice: I18nService,
     private windowMain: WindowMain,

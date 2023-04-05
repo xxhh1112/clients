@@ -1,7 +1,7 @@
 import * as program from "commander";
 
-import { Response } from "@bitwarden/node/cli/models/response";
-import { MessageResponse } from "@bitwarden/node/cli/models/response/messageResponse";
+import { Response } from "../models/response";
+import { MessageResponse } from "../models/response/message.response";
 
 interface IOption {
   long?: string;
@@ -20,7 +20,7 @@ const validShells = ["zsh"];
 
 export class CompletionCommand {
   async run(options: program.OptionValues) {
-    const shell: typeof validShells[number] = options.shell;
+    const shell: (typeof validShells)[number] = options.shell;
 
     if (!shell) {
       return Response.badRequest("`shell` option was not provided.");

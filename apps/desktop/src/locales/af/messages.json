@@ -238,6 +238,9 @@
   "ms": {
     "message": "Mej"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -420,7 +423,7 @@
   },
   "capitalize": {
     "message": "Maak beginhoofletters",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Voeg syfer toe"
@@ -539,7 +542,14 @@
     "message": "Hoofwagwoord moet weer intevoer word."
   },
   "masterPasswordMinlength": {
-    "message": "Hoofwagwoord moet ten minste 8 karakters lank wees."
+    "message": "Die Hoofwagwoord moet ten minste $VALUE$ karakters lank wees.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hoofwagwoordbevestiging stem nie ooreen nie."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontak ons"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Kry hulp"
@@ -1266,6 +1279,10 @@
     "message": "Bygewerk",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Geskep",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Wagwoord bygewerk",
     "description": "ex. Date this password was updated"
@@ -1571,10 +1588,10 @@
     "message": "Blaaierintegrasie word gebruik vir biometrie in blaaier."
   },
   "enableDuckDuckGoBrowserIntegration": {
-    "message": "Allow DuckDuckGo browser integration"
+    "message": "Staan DuckDuckGo-blaaierintegrasie toe"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+    "message": "Gebruik u Bitwarden-kluis wanneer u met DuckDuckGo blaai."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Blaaierintegrasie word nie ondersteun nie"
@@ -1604,7 +1621,7 @@
     "message": "Maak seker dat die getoonde vingerafdruk identies is aan dié wat in die blaaieruitbreiding vertoon word."
   },
   "verifyNativeMessagingConnectionTitle": {
-    "message": "$APPID$ wants to connect to Bitwarden",
+    "message": "$APPID$ wil aan Bitwarden koppel",
     "placeholders": {
       "appid": {
         "content": "$1",
@@ -1613,10 +1630,10 @@
     }
   },
   "verifyNativeMessagingConnectionDesc": {
-    "message": "Would you like to approve this request?"
+    "message": "Wil u hierdie versoek goedkeur?"
   },
   "verifyNativeMessagingConnectionWarning": {
-    "message": "If you did not initiate this request, do not approve it."
+    "message": "Indien u nie hierdie versoek geïnisieer het nie, moet dit dan nie goedkeur nie."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometrie is geaktiveer"
@@ -1774,6 +1791,15 @@
   },
   "disabled": {
     "message": "Gedeaktiveer"
+  },
+  "removePassword": {
+    "message": "Verwyder wagwoord"
+  },
+  "removedPassword": {
+    "message": "Wagwoord geverwydered"
+  },
+  "removePasswordConfirmation": {
+    "message": "Is jy seker jy wil die wagwoord verwyder?"
   },
   "maxAccessCountReached": {
     "message": "Maks toegangsaantal bereik"
@@ -2012,10 +2038,168 @@
   "neverLockWarning": {
     "message": "Is u seker u wil die “Nooit”-opsie gebruik? Deur u vergrendelopsies op “Nooit” te stel word u kluis se enkripsie op u toestel bewaar. Indien u hierdie opsie gebruik moet u verseker dat u toestel behoorlik beskerm is."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
-    "message": "Vault"
+    "message": "Kluis"
+  },
+  "loginWithMasterPassword": {
+    "message": "Meld aan met meesterwagwoord"
+  },
+  "loggingInAs": {
+    "message": "Meld aan as"
+  },
+  "rememberEmail": {
+    "message": "Onthou e-pos"
+  },
+  "notYou": {
+    "message": "Nie jy nie?"
+  },
+  "newAroundHere": {
+    "message": "Nuut hier rond?"
+  },
+  "loggingInTo": {
+    "message": "Meld aan tot $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Meld aan met 'n ander toestel"
+  },
+  "logInInitiated": {
+    "message": "Aan tekening geïnisieer"
+  },
+  "notificationSentDevice": {
+    "message": "'n Kennisgewing was na jou toestel gestuur."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Maak asseblief seker dat jou kluis oopgesluit is en die Vingerafdrukfrase met die ander toestel vergelyk."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Vingerafdrukfrase"
+  },
+  "needAnotherOption": {
+    "message": "Aan teken met toestel moet opgestel word in die instellings van die Bitwarden toep. Nodig 'n ander opsie?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Beskou alle aantekenings opsies"
+  },
+  "resendNotification": {
+    "message": "Herstuur kennisgewing"
+  },
+  "toggleCharacterCount": {
+    "message": "Tokkel karakter telling",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Probeer jy om aan te teken?"
+  },
+  "logInAttemptBy": {
+    "message": "Aantekenings poging deur $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Toestel Tiepe"
+  },
+  "ipAddress": {
+    "message": "IP adres"
+  },
+  "time": {
+    "message": "Tyd"
+  },
+  "confirmLogIn": {
+    "message": "Bevestig aantekening"
+  },
+  "denyLogIn": {
+    "message": "Weier aantekening"
+  },
+  "approveLoginRequests": {
+    "message": "Bevestig aantekenings versoeke"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Aantekening gebevestig vir $EMAIL$ op $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Jy het 'n aantekenings poging van 'n ander toestel gekeer. As dit inderdaad jy was, probeer om weer met die toestel aan te teken."
+  },
+  "justNow": {
+    "message": "Nou net"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Versoek $MINUTES$ minute gelede",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Aantekenings versoek het reeds versper."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Hierdie versoek is nie meer geldig nie."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Gebruik hierdie toestel om aantekenings versoeke, van ander toetstelle, goed te keer."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bevestig aantekenings poging vir $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Aan teken versoek"
+  },
+  "exposedMasterPassword": {
+    "message": "Ontblote Hoofwagwoord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Wagwoord gevind in data lekkasie. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n ontblote wagwoord wil gebruik?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Swak en Ontblote Hoofwagwoord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Swak wagwoord geidentifiseer en gevind in 'n data lekkasie. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?"
+  },
+  "checkForBreaches": {
+    "message": "Kontroleer bekende data lekkasies vir hierdie wagwoord"
+  },
+  "important": {
+    "message": "Belangrik:"
+  },
+  "masterPasswordHint": {
+    "message": "Jou hoofwagwoord kan nie herkry word as jy dit vergeet nie!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ karakters minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

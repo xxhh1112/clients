@@ -1,28 +1,26 @@
 import { BehaviorSubject, concatMap } from "rxjs";
+import { Jsonify } from "type-fest";
 
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
 import { StateMigrationService } from "../abstractions/stateMigration.service";
 import {
-  MemoryStorageServiceInterface,
+  AbstractMemoryStorageService,
   AbstractStorageService,
 } from "../abstractions/storage.service";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StorageLocation } from "../enums/storageLocation";
-import { ThemeType } from "../enums/themeType";
-import { UriMatchType } from "../enums/uriMatchType";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { EncryptedOrganizationKeyData } from "../admin-console/models/data/encrypted-organization-key.data";
+import { OrganizationData } from "../admin-console/models/data/organization.data";
+import { PolicyData } from "../admin-console/models/data/policy.data";
+import { ProviderData } from "../admin-console/models/data/provider.data";
+import { Policy } from "../admin-console/models/domain/policy";
+import { CollectionView } from "../admin-console/models/view/collection.view";
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { HtmlStorageLocation, KdfType, StorageLocation, ThemeType, UriMatchType } from "../enums";
 import { StateFactory } from "../factories/stateFactory";
-import { CipherData } from "../models/data/cipherData";
-import { CollectionData } from "../models/data/collectionData";
-import { EncryptedOrganizationKeyData } from "../models/data/encryptedOrganizationKeyData";
-import { EventData } from "../models/data/eventData";
-import { FolderData } from "../models/data/folderData";
-import { LocalData } from "../models/data/localData";
-import { OrganizationData } from "../models/data/organizationData";
-import { PolicyData } from "../models/data/policyData";
-import { ProviderData } from "../models/data/providerData";
-import { SendData } from "../models/data/sendData";
+import { Utils } from "../misc/utils";
+import { EventData } from "../models/data/event.data";
 import { ServerConfigData } from "../models/data/server-config.data";
 import {
   Account,
@@ -30,18 +28,20 @@ import {
   AccountSettings,
   AccountSettingsSettings,
 } from "../models/domain/account";
-import { EncString } from "../models/domain/encString";
-import { EnvironmentUrls } from "../models/domain/environmentUrls";
-import { GeneratedPasswordHistory } from "../models/domain/generatedPasswordHistory";
-import { GlobalState } from "../models/domain/globalState";
-import { Policy } from "../models/domain/policy";
+import { EncString } from "../models/domain/enc-string";
+import { GlobalState } from "../models/domain/global-state";
 import { State } from "../models/domain/state";
-import { StorageOptions } from "../models/domain/storageOptions";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { WindowState } from "../models/domain/windowState";
-import { CipherView } from "../models/view/cipherView";
-import { CollectionView } from "../models/view/collectionView";
-import { SendView } from "../models/view/sendView";
+import { StorageOptions } from "../models/domain/storage-options";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { WindowState } from "../models/domain/window-state";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { SendData } from "../tools/send/models/data/send.data";
+import { SendView } from "../tools/send/models/view/send.view";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { FolderData } from "../vault/models/data/folder.data";
+import { LocalData } from "../vault/models/data/local.data";
+import { CipherView } from "../vault/models/view/cipher.view";
+import { AddEditCipherInfo } from "../vault/types/add-edit-cipher-info";
 
 const keys = {
   state: "state",
@@ -65,22 +65,27 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
-  accounts = new BehaviorSubject<{ [userId: string]: TAccount }>({});
-  private activeAccountSubject = new BehaviorSubject<string>(null);
+  protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
+  accounts$ = this.accountsSubject.asObservable();
+
+  protected activeAccountSubject = new BehaviorSubject<string | null>(null);
   activeAccount$ = this.activeAccountSubject.asObservable();
 
-  private activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
+  protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
   activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
 
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  private accountDiskCache = new Map<string, TAccount>();
+  protected accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
+
+  // default account serializer, must be overridden by child class
+  protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
 
   constructor(
     protected storageService: AbstractStorageService,
     protected secureStorageService: AbstractStorageService,
-    protected memoryStorageService: AbstractStorageService & MemoryStorageServiceInterface,
+    protected memoryStorageService: AbstractMemoryStorageService,
     protected logService: LogService,
     protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
@@ -214,13 +219,13 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getAddEditCipherInfo(options?: StorageOptions): Promise<any> {
+  async getAddEditCipherInfo(options?: StorageOptions): Promise<AddEditCipherInfo> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.data?.addEditCipherInfo;
   }
 
-  async setAddEditCipherInfo(value: any, options?: StorageOptions): Promise<void> {
+  async setAddEditCipherInfo(value: AddEditCipherInfo, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
@@ -674,7 +679,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    return this.recordToMap(account?.keys?.organizationKeys?.decrypted);
+    return Utils.recordToMap(account?.keys?.organizationKeys?.decrypted);
   }
 
   async setDecryptedOrganizationKeys(
@@ -684,7 +689,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.keys.organizationKeys.decrypted = this.mapToRecord(value);
+    account.keys.organizationKeys.decrypted = Utils.mapToRecord(value);
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -772,7 +777,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    return this.recordToMap(account?.keys?.providerKeys?.decrypted);
+    return Utils.recordToMap(account?.keys?.providerKeys?.decrypted);
   }
 
   async setDecryptedProviderKeys(
@@ -782,7 +787,7 @@ export class StateService<
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.keys.providerKeys.decrypted = this.mapToRecord(value);
+    account.keys.providerKeys.decrypted = Utils.mapToRecord(value);
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -968,6 +973,24 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
     account.settings.disableGa = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getDismissedAutofillCallout(options?: StorageOptions): Promise<boolean> {
+    return (
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.settings?.dismissedAutoFillOnPageLoadCallout ?? false
+    );
+  }
+
+  async setDismissedAutofillCallout(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.dismissedAutoFillOnPageLoadCallout = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -1222,27 +1245,6 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
     account.settings.enableFullWidth = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    );
-  }
-
-  async getEnableGravitars(options?: StorageOptions): Promise<boolean> {
-    return (
-      (
-        await this.getAccount(
-          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-        )
-      )?.settings?.enableGravitars ?? false
-    );
-  }
-
-  async setEnableGravitars(value: boolean, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    );
-    account.settings.enableGravitars = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
@@ -1579,7 +1581,7 @@ export class StateService<
     );
   }
 
-  async getEquivalentDomains(options?: StorageOptions): Promise<any> {
+  async getEquivalentDomains(options?: StorageOptions): Promise<string[][]> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.settings?.equivalentDomains;
@@ -1671,17 +1673,26 @@ export class StateService<
     return (await this.getAccessToken(options)) != null && (await this.getUserId(options)) != null;
   }
 
-  async getKdfIterations(options?: StorageOptions): Promise<number> {
-    return (
+  async getKdfConfig(options?: StorageOptions): Promise<KdfConfig> {
+    const iterations = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.profile?.kdfIterations;
+    const memory = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.profile?.kdfMemory;
+    const parallelism = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.profile?.kdfParallelism;
+    return new KdfConfig(iterations, memory, parallelism);
   }
 
-  async setKdfIterations(value: number, options?: StorageOptions): Promise<void> {
+  async setKdfConfig(config: KdfConfig, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.profile.kdfIterations = value;
+    account.profile.kdfIterations = config.iterations;
+    account.profile.kdfMemory = config.memory;
+    account.profile.kdfParallelism = config.parallelism;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -2270,6 +2281,24 @@ export class StateService<
     );
   }
 
+  async getApproveLoginRequests(options?: StorageOptions): Promise<boolean> {
+    const approveLoginRequests = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.approveLoginRequests;
+    return approveLoginRequests;
+  }
+
+  async setApproveLoginRequests(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.approveLoginRequests = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
   async getStateVersion(): Promise<number> {
     return (await this.getGlobals(await this.defaultOnDiskLocalOptions())).stateVersion ?? 1;
   }
@@ -2313,6 +2342,65 @@ export class StateService<
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.settings?.serverConfig;
+  }
+
+  async getAvatarColor(options?: StorageOptions): Promise<string | null | undefined> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.avatarColor;
+  }
+
+  async setAvatarColor(value: string, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.avatarColor = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getActivateAutoFillOnPageLoadFromPolicy(options?: StorageOptions): Promise<boolean> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.activateAutoFillOnPageLoadFromPolicy;
+  }
+
+  async setActivateAutoFillOnPageLoadFromPolicy(
+    value: boolean,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.activateAutoFillOnPageLoadFromPolicy = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getSMOnboardingTasks(
+    options?: StorageOptions
+  ): Promise<Record<string, Record<string, boolean>>> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.smOnboardingTasks;
+  }
+
+  async setSMOnboardingTasks(
+    value: Record<string, Record<string, boolean>>,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.smOnboardingTasks = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
   }
 
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {
@@ -2397,7 +2485,7 @@ export class StateService<
     }
 
     if (this.useAccountCache) {
-      const cachedAccount = this.accountDiskCache.get(options.userId);
+      const cachedAccount = this.accountDiskCache.value[options.userId];
       if (cachedAccount != null) {
         return cachedAccount;
       }
@@ -2411,9 +2499,7 @@ export class StateService<
         ))
       : await this.storageService.get<TAccount>(options.userId, options);
 
-    if (this.useAccountCache) {
-      this.accountDiskCache.set(options.userId, account);
-    }
+    this.setDiskCache(options.userId, account);
     return account;
   }
 
@@ -2444,9 +2530,7 @@ export class StateService<
 
     await storageLocation.save(`${options.userId}`, account, options);
 
-    if (this.useAccountCache) {
-      this.accountDiskCache.delete(options.userId);
-    }
+    this.deleteDiskCache(options.userId);
   }
 
   protected async saveAccountToMemory(account: TAccount): Promise<void> {
@@ -2551,11 +2635,11 @@ export class StateService<
     await this.pruneInMemoryAccounts();
     await this.state().then((state) => {
       if (state.accounts == null || Object.keys(state.accounts).length < 1) {
-        this.accounts.next(null);
+        this.accountsSubject.next({});
         return;
       }
 
-      this.accounts.next(state.accounts);
+      this.accountsSubject.next(state.accounts);
     });
   }
 
@@ -2657,9 +2741,7 @@ export class StateService<
       userId = userId ?? state.activeUserId;
       delete state.accounts[userId];
 
-      if (this.useAccountCache) {
-        this.accountDiskCache.delete(userId);
-      }
+      this.deleteDiskCache(userId);
 
       return state;
     });
@@ -2763,7 +2845,7 @@ export class StateService<
 
   protected async state(): Promise<State<TGlobalState, TAccount>> {
     const state = await this.memoryStorageService.get<State<TGlobalState, TAccount>>(keys.state, {
-      deserializer: (s) => State.fromJSON(s),
+      deserializer: (s) => State.fromJSON(s, this.accountDeserializer),
     });
     return state;
   }
@@ -2785,49 +2867,19 @@ export class StateService<
     });
   }
 
-  private mapToRecord<V>(map: Map<string, V>): Record<string, V> {
-    return map == null ? null : Object.fromEntries(map);
+  private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {
+    if (this.useAccountCache) {
+      this.accountDiskCache.value[key] = value;
+      this.accountDiskCache.next(this.accountDiskCache.value);
+    }
   }
 
-  private recordToMap<V>(record: Record<string, V>): Map<string, V> {
-    return record == null ? null : new Map(Object.entries(record));
+  private deleteDiskCache(key: string) {
+    if (this.useAccountCache) {
+      delete this.accountDiskCache.value[key];
+      this.accountDiskCache.next(this.accountDiskCache.value);
+    }
   }
-}
-
-export function withPrototype<T>(
-  constructor: new (...args: any[]) => T,
-  converter: (input: any) => T = (i) => i
-): (
-  target: any,
-  propertyKey: string | symbol,
-  descriptor: PropertyDescriptor
-) => { value: (...args: any[]) => Promise<T> } {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
-    const originalMethod = descriptor.value;
-
-    return {
-      value: function (...args: any[]) {
-        const originalResult: Promise<T> = originalMethod.apply(this, args);
-
-        if (!(originalResult instanceof Promise)) {
-          throw new Error(
-            `Error applying prototype to stored value -- result is not a promise for method ${String(
-              propertyKey
-            )}`
-          );
-        }
-
-        return originalResult.then((result) => {
-          return result == null ||
-            result.constructor.name === constructor.prototype.constructor.name
-            ? converter(result as T)
-            : converter(
-                Object.create(constructor.prototype, Object.getOwnPropertyDescriptors(result)) as T
-              );
-        });
-      },
-    };
-  };
 }
 
 function withPrototypeForArrayMembers<T>(
@@ -2845,7 +2897,7 @@ function withPrototypeForArrayMembers<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<any[]> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey
@@ -2866,7 +2918,7 @@ function withPrototypeForArrayMembers<T>(
             return result.map((r) => {
               return r == null ||
                 r.constructor.name === memberConstructor.prototype.constructor.name
-                ? memberConverter(r)
+                ? r
                 : memberConverter(
                     Object.create(memberConstructor.prototype, Object.getOwnPropertyDescriptors(r))
                   );
@@ -2893,7 +2945,7 @@ function withPrototypeForObjectValues<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<{ [key: string]: T }> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey

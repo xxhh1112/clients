@@ -1,167 +1,149 @@
-import { OrganizationConnectionType } from "../enums/organizationConnectionType";
-import { SetKeyConnectorKeyRequest } from "../models/request/account/setKeyConnectorKeyRequest";
-import { AttachmentRequest } from "../models/request/attachmentRequest";
-import { BitPayInvoiceRequest } from "../models/request/bitPayInvoiceRequest";
-import { CipherBulkDeleteRequest } from "../models/request/cipherBulkDeleteRequest";
-import { CipherBulkMoveRequest } from "../models/request/cipherBulkMoveRequest";
-import { CipherBulkRestoreRequest } from "../models/request/cipherBulkRestoreRequest";
-import { CipherBulkShareRequest } from "../models/request/cipherBulkShareRequest";
-import { CipherCollectionsRequest } from "../models/request/cipherCollectionsRequest";
-import { CipherCreateRequest } from "../models/request/cipherCreateRequest";
-import { CipherRequest } from "../models/request/cipherRequest";
-import { CipherShareRequest } from "../models/request/cipherShareRequest";
-import { CollectionRequest } from "../models/request/collectionRequest";
-import { DeleteRecoverRequest } from "../models/request/deleteRecoverRequest";
-import { DeviceVerificationRequest } from "../models/request/deviceVerificationRequest";
-import { EmailRequest } from "../models/request/emailRequest";
-import { EmailTokenRequest } from "../models/request/emailTokenRequest";
-import { EmergencyAccessAcceptRequest } from "../models/request/emergencyAccessAcceptRequest";
-import { EmergencyAccessConfirmRequest } from "../models/request/emergencyAccessConfirmRequest";
-import { EmergencyAccessInviteRequest } from "../models/request/emergencyAccessInviteRequest";
-import { EmergencyAccessPasswordRequest } from "../models/request/emergencyAccessPasswordRequest";
-import { EmergencyAccessUpdateRequest } from "../models/request/emergencyAccessUpdateRequest";
-import { EventRequest } from "../models/request/eventRequest";
-import { GroupRequest } from "../models/request/groupRequest";
-import { IapCheckRequest } from "../models/request/iapCheckRequest";
-import { ApiTokenRequest } from "../models/request/identityToken/apiTokenRequest";
-import { PasswordTokenRequest } from "../models/request/identityToken/passwordTokenRequest";
-import { SsoTokenRequest } from "../models/request/identityToken/ssoTokenRequest";
-import { ImportCiphersRequest } from "../models/request/importCiphersRequest";
-import { ImportOrganizationCiphersRequest } from "../models/request/importOrganizationCiphersRequest";
-import { KdfRequest } from "../models/request/kdfRequest";
-import { KeyConnectorUserKeyRequest } from "../models/request/keyConnectorUserKeyRequest";
-import { KeysRequest } from "../models/request/keysRequest";
-import { OrganizationSponsorshipCreateRequest } from "../models/request/organization/organizationSponsorshipCreateRequest";
-import { OrganizationSponsorshipRedeemRequest } from "../models/request/organization/organizationSponsorshipRedeemRequest";
-import { OrganizationConnectionRequest } from "../models/request/organizationConnectionRequest";
-import { OrganizationImportRequest } from "../models/request/organizationImportRequest";
-import { OrganizationUserAcceptRequest } from "../models/request/organizationUserAcceptRequest";
-import { OrganizationUserBulkConfirmRequest } from "../models/request/organizationUserBulkConfirmRequest";
-import { OrganizationUserBulkRequest } from "../models/request/organizationUserBulkRequest";
-import { OrganizationUserConfirmRequest } from "../models/request/organizationUserConfirmRequest";
-import { OrganizationUserInviteRequest } from "../models/request/organizationUserInviteRequest";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "../models/request/organizationUserResetPasswordEnrollmentRequest";
-import { OrganizationUserResetPasswordRequest } from "../models/request/organizationUserResetPasswordRequest";
-import { OrganizationUserUpdateGroupsRequest } from "../models/request/organizationUserUpdateGroupsRequest";
-import { OrganizationUserUpdateRequest } from "../models/request/organizationUserUpdateRequest";
-import { PasswordHintRequest } from "../models/request/passwordHintRequest";
-import { PasswordRequest } from "../models/request/passwordRequest";
-import { PasswordlessCreateAuthRequest } from "../models/request/passwordlessCreateAuthRequest";
-import { PaymentRequest } from "../models/request/paymentRequest";
-import { PreloginRequest } from "../models/request/preloginRequest";
-import { ProviderAddOrganizationRequest } from "../models/request/provider/providerAddOrganizationRequest";
-import { ProviderOrganizationCreateRequest } from "../models/request/provider/providerOrganizationCreateRequest";
-import { ProviderSetupRequest } from "../models/request/provider/providerSetupRequest";
-import { ProviderUpdateRequest } from "../models/request/provider/providerUpdateRequest";
-import { ProviderUserAcceptRequest } from "../models/request/provider/providerUserAcceptRequest";
-import { ProviderUserBulkConfirmRequest } from "../models/request/provider/providerUserBulkConfirmRequest";
-import { ProviderUserBulkRequest } from "../models/request/provider/providerUserBulkRequest";
-import { ProviderUserConfirmRequest } from "../models/request/provider/providerUserConfirmRequest";
-import { ProviderUserInviteRequest } from "../models/request/provider/providerUserInviteRequest";
-import { ProviderUserUpdateRequest } from "../models/request/provider/providerUserUpdateRequest";
-import { RegisterRequest } from "../models/request/registerRequest";
-import { SecretVerificationRequest } from "../models/request/secretVerificationRequest";
-import { SelectionReadOnlyRequest } from "../models/request/selectionReadOnlyRequest";
-import { SendAccessRequest } from "../models/request/sendAccessRequest";
-import { SendRequest } from "../models/request/sendRequest";
-import { SetPasswordRequest } from "../models/request/setPasswordRequest";
-import { StorageRequest } from "../models/request/storageRequest";
-import { TaxInfoUpdateRequest } from "../models/request/taxInfoUpdateRequest";
-import { TwoFactorEmailRequest } from "../models/request/twoFactorEmailRequest";
-import { TwoFactorProviderRequest } from "../models/request/twoFactorProviderRequest";
-import { TwoFactorRecoveryRequest } from "../models/request/twoFactorRecoveryRequest";
-import { UpdateDomainsRequest } from "../models/request/updateDomainsRequest";
-import { UpdateKeyRequest } from "../models/request/updateKeyRequest";
-import { UpdateProfileRequest } from "../models/request/updateProfileRequest";
-import { UpdateTempPasswordRequest } from "../models/request/updateTempPasswordRequest";
-import { UpdateTwoFactorAuthenticatorRequest } from "../models/request/updateTwoFactorAuthenticatorRequest";
-import { UpdateTwoFactorDuoRequest } from "../models/request/updateTwoFactorDuoRequest";
-import { UpdateTwoFactorEmailRequest } from "../models/request/updateTwoFactorEmailRequest";
-import { UpdateTwoFactorWebAuthnDeleteRequest } from "../models/request/updateTwoFactorWebAuthnDeleteRequest";
-import { UpdateTwoFactorWebAuthnRequest } from "../models/request/updateTwoFactorWebAuthnRequest";
-import { UpdateTwoFactorYubioOtpRequest } from "../models/request/updateTwoFactorYubioOtpRequest";
-import { VerifyDeleteRecoverRequest } from "../models/request/verifyDeleteRecoverRequest";
-import { VerifyEmailRequest } from "../models/request/verifyEmailRequest";
-import { ApiKeyResponse } from "../models/response/apiKeyResponse";
-import { AttachmentResponse } from "../models/response/attachmentResponse";
-import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
-import { AuthRequestResponse } from "../models/response/authRequestResponse";
-import { RegisterResponse } from "../models/response/authentication/registerResponse";
-import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
-import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
-import { BreachAccountResponse } from "../models/response/breachAccountResponse";
-import { CipherResponse } from "../models/response/cipherResponse";
+import { OrganizationConnectionType } from "../admin-console/enums/organization-connection-type";
+import { CollectionRequest } from "../admin-console/models/request/collection.request";
+import { OrganizationConnectionRequest } from "../admin-console/models/request/organization-connection.request";
+import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
+import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/request/organization/organization-sponsorship-redeem.request";
+import { ProviderAddOrganizationRequest } from "../admin-console/models/request/provider/provider-add-organization.request";
+import { ProviderOrganizationCreateRequest } from "../admin-console/models/request/provider/provider-organization-create.request";
+import { ProviderSetupRequest } from "../admin-console/models/request/provider/provider-setup.request";
+import { ProviderUpdateRequest } from "../admin-console/models/request/provider/provider-update.request";
+import { ProviderUserAcceptRequest } from "../admin-console/models/request/provider/provider-user-accept.request";
+import { ProviderUserBulkConfirmRequest } from "../admin-console/models/request/provider/provider-user-bulk-confirm.request";
+import { ProviderUserBulkRequest } from "../admin-console/models/request/provider/provider-user-bulk.request";
+import { ProviderUserConfirmRequest } from "../admin-console/models/request/provider/provider-user-confirm.request";
+import { ProviderUserInviteRequest } from "../admin-console/models/request/provider/provider-user-invite.request";
+import { ProviderUserUpdateRequest } from "../admin-console/models/request/provider/provider-user-update.request";
+import { SelectionReadOnlyRequest } from "../admin-console/models/request/selection-read-only.request";
 import {
-  CollectionGroupDetailsResponse,
+  CollectionAccessDetailsResponse,
   CollectionResponse,
-} from "../models/response/collectionResponse";
-import { DeviceVerificationResponse } from "../models/response/deviceVerificationResponse";
-import { DomainsResponse } from "../models/response/domainsResponse";
+} from "../admin-console/models/response/collection.response";
+import {
+  OrganizationConnectionConfigApis,
+  OrganizationConnectionResponse,
+} from "../admin-console/models/response/organization-connection.response";
+import { OrganizationExportResponse } from "../admin-console/models/response/organization-export.response";
+import { OrganizationSponsorshipSyncStatusResponse } from "../admin-console/models/response/organization-sponsorship-sync-status.response";
+import { PolicyResponse } from "../admin-console/models/response/policy.response";
+import {
+  ProviderOrganizationOrganizationDetailsResponse,
+  ProviderOrganizationResponse,
+} from "../admin-console/models/response/provider/provider-organization.response";
+import { ProviderUserBulkPublicKeyResponse } from "../admin-console/models/response/provider/provider-user-bulk-public-key.response";
+import { ProviderUserBulkResponse } from "../admin-console/models/response/provider/provider-user-bulk.response";
+import {
+  ProviderUserResponse,
+  ProviderUserUserDetailsResponse,
+} from "../admin-console/models/response/provider/provider-user.response";
+import { ProviderResponse } from "../admin-console/models/response/provider/provider.response";
+import { SelectionReadOnlyResponse } from "../admin-console/models/response/selection-read-only.response";
+import { DeviceVerificationRequest } from "../auth/models/request/device-verification.request";
+import { EmailTokenRequest } from "../auth/models/request/email-token.request";
+import { EmailRequest } from "../auth/models/request/email.request";
+import { EmergencyAccessAcceptRequest } from "../auth/models/request/emergency-access-accept.request";
+import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-access-confirm.request";
+import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
+import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
+import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
+import { PasswordTokenRequest } from "../auth/models/request/identity-token/password-token.request";
+import { SsoTokenRequest } from "../auth/models/request/identity-token/sso-token.request";
+import { UserApiTokenRequest } from "../auth/models/request/identity-token/user-api-token.request";
+import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector-user-key.request";
+import { PasswordHintRequest } from "../auth/models/request/password-hint.request";
+import { PasswordRequest } from "../auth/models/request/password.request";
+import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
+import { PasswordlessCreateAuthRequest } from "../auth/models/request/passwordless-create-auth.request";
+import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
+import { SetKeyConnectorKeyRequest } from "../auth/models/request/set-key-connector-key.request";
+import { SetPasswordRequest } from "../auth/models/request/set-password.request";
+import { TwoFactorEmailRequest } from "../auth/models/request/two-factor-email.request";
+import { TwoFactorProviderRequest } from "../auth/models/request/two-factor-provider.request";
+import { TwoFactorRecoveryRequest } from "../auth/models/request/two-factor-recovery.request";
+import { UpdateProfileRequest } from "../auth/models/request/update-profile.request";
+import { UpdateTempPasswordRequest } from "../auth/models/request/update-temp-password.request";
+import { UpdateTwoFactorAuthenticatorRequest } from "../auth/models/request/update-two-factor-authenticator.request";
+import { UpdateTwoFactorDuoRequest } from "../auth/models/request/update-two-factor-duo.request";
+import { UpdateTwoFactorEmailRequest } from "../auth/models/request/update-two-factor-email.request";
+import { UpdateTwoFactorWebAuthnDeleteRequest } from "../auth/models/request/update-two-factor-web-authn-delete.request";
+import { UpdateTwoFactorWebAuthnRequest } from "../auth/models/request/update-two-factor-web-authn.request";
+import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-two-factor-yubio-otp.request";
+import { ApiKeyResponse } from "../auth/models/response/api-key.response";
+import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
+import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
 import {
   EmergencyAccessGranteeDetailsResponse,
   EmergencyAccessGrantorDetailsResponse,
   EmergencyAccessTakeoverResponse,
   EmergencyAccessViewResponse,
-} from "../models/response/emergencyAccessResponse";
-import { EventResponse } from "../models/response/eventResponse";
-import { GroupDetailsResponse, GroupResponse } from "../models/response/groupResponse";
-import { IdentityCaptchaResponse } from "../models/response/identityCaptchaResponse";
-import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
-import { IdentityTwoFactorResponse } from "../models/response/identityTwoFactorResponse";
-import { KeyConnectorUserKeyResponse } from "../models/response/keyConnectorUserKeyResponse";
-import { ListResponse } from "../models/response/listResponse";
-import {
-  OrganizationConnectionConfigApis,
-  OrganizationConnectionResponse,
-} from "../models/response/organizationConnectionResponse";
-import { OrganizationExportResponse } from "../models/response/organizationExportResponse";
-import { OrganizationSponsorshipSyncStatusResponse } from "../models/response/organizationSponsorshipSyncStatusResponse";
-import { OrganizationUserBulkPublicKeyResponse } from "../models/response/organizationUserBulkPublicKeyResponse";
-import { OrganizationUserBulkResponse } from "../models/response/organizationUserBulkResponse";
-import {
-  OrganizationUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
-  OrganizationUserUserDetailsResponse,
-} from "../models/response/organizationUserResponse";
-import { PaymentResponse } from "../models/response/paymentResponse";
-import { PlanResponse } from "../models/response/planResponse";
-import { PolicyResponse } from "../models/response/policyResponse";
-import { PreloginResponse } from "../models/response/preloginResponse";
-import { ProfileResponse } from "../models/response/profileResponse";
-import {
-  ProviderOrganizationOrganizationDetailsResponse,
-  ProviderOrganizationResponse,
-} from "../models/response/provider/providerOrganizationResponse";
-import { ProviderResponse } from "../models/response/provider/providerResponse";
-import { ProviderUserBulkPublicKeyResponse } from "../models/response/provider/providerUserBulkPublicKeyResponse";
-import { ProviderUserBulkResponse } from "../models/response/provider/providerUserBulkResponse";
-import {
-  ProviderUserResponse,
-  ProviderUserUserDetailsResponse,
-} from "../models/response/provider/providerUserResponse";
-import { SelectionReadOnlyResponse } from "../models/response/selectionReadOnlyResponse";
-import { SendAccessResponse } from "../models/response/sendAccessResponse";
-import { SendFileDownloadDataResponse } from "../models/response/sendFileDownloadDataResponse";
-import { SendFileUploadDataResponse } from "../models/response/sendFileUploadDataResponse";
-import { SendResponse } from "../models/response/sendResponse";
-import { SsoPreValidateResponse } from "../models/response/ssoPreValidateResponse";
-import { SubscriptionResponse } from "../models/response/subscriptionResponse";
-import { SyncResponse } from "../models/response/syncResponse";
-import { TaxInfoResponse } from "../models/response/taxInfoResponse";
-import { TaxRateResponse } from "../models/response/taxRateResponse";
-import { TwoFactorAuthenticatorResponse } from "../models/response/twoFactorAuthenticatorResponse";
-import { TwoFactorDuoResponse } from "../models/response/twoFactorDuoResponse";
-import { TwoFactorEmailResponse } from "../models/response/twoFactorEmailResponse";
-import { TwoFactorProviderResponse } from "../models/response/twoFactorProviderResponse";
-import { TwoFactorRecoverResponse } from "../models/response/twoFactorRescoverResponse";
+} from "../auth/models/response/emergency-access.response";
+import { IdentityCaptchaResponse } from "../auth/models/response/identity-captcha.response";
+import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
+import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
+import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
+import { PreloginResponse } from "../auth/models/response/prelogin.response";
+import { RegisterResponse } from "../auth/models/response/register.response";
+import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
+import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
+import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
+import { TwoFactorEmailResponse } from "../auth/models/response/two-factor-email.response";
+import { TwoFactorProviderResponse } from "../auth/models/response/two-factor-provider.response";
+import { TwoFactorRecoverResponse } from "../auth/models/response/two-factor-recover.response";
 import {
   ChallengeResponse,
   TwoFactorWebAuthnResponse,
-} from "../models/response/twoFactorWebAuthnResponse";
-import { TwoFactorYubiKeyResponse } from "../models/response/twoFactorYubiKeyResponse";
-import { UserKeyResponse } from "../models/response/userKeyResponse";
-import { SendAccessView } from "../models/view/sendAccessView";
+} from "../auth/models/response/two-factor-web-authn.response";
+import { TwoFactorYubiKeyResponse } from "../auth/models/response/two-factor-yubi-key.response";
+import { BitPayInvoiceRequest } from "../billing/models/request/bit-pay-invoice.request";
+import { PaymentRequest } from "../billing/models/request/payment.request";
+import { TaxInfoUpdateRequest } from "../billing/models/request/tax-info-update.request";
+import { BillingHistoryResponse } from "../billing/models/response/billing-history.response";
+import { BillingPaymentResponse } from "../billing/models/response/billing-payment.response";
+import { PaymentResponse } from "../billing/models/response/payment.response";
+import { PlanResponse } from "../billing/models/response/plan.response";
+import { SubscriptionResponse } from "../billing/models/response/subscription.response";
+import { TaxInfoResponse } from "../billing/models/response/tax-info.response";
+import { TaxRateResponse } from "../billing/models/response/tax-rate.response";
+import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
+import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
+import { EventRequest } from "../models/request/event.request";
+import { IapCheckRequest } from "../models/request/iap-check.request";
+import { KdfRequest } from "../models/request/kdf.request";
+import { KeysRequest } from "../models/request/keys.request";
+import { OrganizationImportRequest } from "../models/request/organization-import.request";
+import { PreloginRequest } from "../models/request/prelogin.request";
+import { RegisterRequest } from "../models/request/register.request";
+import { StorageRequest } from "../models/request/storage.request";
+import { UpdateAvatarRequest } from "../models/request/update-avatar.request";
+import { UpdateDomainsRequest } from "../models/request/update-domains.request";
+import { UpdateKeyRequest } from "../models/request/update-key.request";
+import { VerifyDeleteRecoverRequest } from "../models/request/verify-delete-recover.request";
+import { VerifyEmailRequest } from "../models/request/verify-email.request";
+import { BreachAccountResponse } from "../models/response/breach-account.response";
+import { DomainsResponse } from "../models/response/domains.response";
+import { EventResponse } from "../models/response/event.response";
+import { ListResponse } from "../models/response/list.response";
+import { ProfileResponse } from "../models/response/profile.response";
+import { UserKeyResponse } from "../models/response/user-key.response";
+import { AttachmentRequest } from "../vault/models/request/attachment.request";
+import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
+import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
+import { CipherBulkRestoreRequest } from "../vault/models/request/cipher-bulk-restore.request";
+import { CipherBulkShareRequest } from "../vault/models/request/cipher-bulk-share.request";
+import { CipherCollectionsRequest } from "../vault/models/request/cipher-collections.request";
+import { CipherCreateRequest } from "../vault/models/request/cipher-create.request";
+import { CipherPartialRequest } from "../vault/models/request/cipher-partial.request";
+import { CipherShareRequest } from "../vault/models/request/cipher-share.request";
+import { CipherRequest } from "../vault/models/request/cipher.request";
+import { AttachmentUploadDataResponse } from "../vault/models/response/attachment-upload-data.response";
+import { AttachmentResponse } from "../vault/models/response/attachment.response";
+import { CipherResponse } from "../vault/models/response/cipher.response";
+import { SyncResponse } from "../vault/models/response/sync.response";
 
+/**
+ * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
+ * api services. The `send` method is still allowed to be used within api services. For background
+ * of this decision please read https://contributing.bitwarden.com/architecture/adr/refactor-api-service.
+ */
 export abstract class ApiService {
   send: (
     method: "GET" | "POST" | "PUT" | "DELETE",
@@ -174,7 +156,7 @@ export abstract class ApiService {
   ) => Promise<any>;
 
   postIdentityToken: (
-    request: PasswordTokenRequest | SsoTokenRequest | ApiTokenRequest
+    request: PasswordTokenRequest | SsoTokenRequest | UserApiTokenRequest
   ) => Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse>;
   refreshIdentityToken: () => Promise<any>;
 
@@ -182,6 +164,7 @@ export abstract class ApiService {
   getUserSubscription: () => Promise<SubscriptionResponse>;
   getTaxInfo: () => Promise<TaxInfoResponse>;
   putProfile: (request: UpdateProfileRequest) => Promise<ProfileResponse>;
+  putAvatar: (request: UpdateAvatarRequest) => Promise<ProfileResponse>;
   putTaxInfo: (request: TaxInfoUpdateRequest) => Promise<any>;
   postPrelogin: (request: PreloginRequest) => Promise<PreloginResponse>;
   postEmailToken: (request: EmailTokenRequest) => Promise<any>;
@@ -215,34 +198,13 @@ export abstract class ApiService {
   //passwordless
   postAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
   getAuthResponse: (id: string, accessCode: string) => Promise<AuthRequestResponse>;
+  getAuthRequest: (id: string) => Promise<AuthRequestResponse>;
+  putAuthRequest: (id: string, request: PasswordlessAuthRequest) => Promise<AuthRequestResponse>;
+  getAuthRequests: () => Promise<ListResponse<AuthRequestResponse>>;
+  getLastAuthRequest: () => Promise<AuthRequestResponse>;
 
   getUserBillingHistory: () => Promise<BillingHistoryResponse>;
   getUserBillingPayment: () => Promise<BillingPaymentResponse>;
-
-  getSend: (id: string) => Promise<SendResponse>;
-  postSendAccess: (
-    id: string,
-    request: SendAccessRequest,
-    apiUrl?: string
-  ) => Promise<SendAccessResponse>;
-  getSends: () => Promise<ListResponse<SendResponse>>;
-  postSend: (request: SendRequest) => Promise<SendResponse>;
-  postFileTypeSend: (request: SendRequest) => Promise<SendFileUploadDataResponse>;
-  postSendFile: (sendId: string, fileId: string, data: FormData) => Promise<any>;
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  postSendFileLegacy: (data: FormData) => Promise<SendResponse>;
-  putSend: (id: string, request: SendRequest) => Promise<SendResponse>;
-  putSendRemovePassword: (id: string) => Promise<SendResponse>;
-  deleteSend: (id: string) => Promise<any>;
-  getSendFileDownloadData: (
-    send: SendAccessView,
-    request: SendAccessRequest,
-    apiUrl?: string
-  ) => Promise<SendFileDownloadDataResponse>;
-  renewSendFileUploadUrl: (sendId: string, fileId: string) => Promise<SendFileUploadDataResponse>;
 
   getCipher: (id: string) => Promise<CipherResponse>;
   getFullCipherDetails: (id: string) => Promise<CipherResponse>;
@@ -257,6 +219,7 @@ export abstract class ApiService {
   postCipherCreate: (request: CipherCreateRequest) => Promise<CipherResponse>;
   postCipherAdmin: (request: CipherCreateRequest) => Promise<CipherResponse>;
   putCipher: (id: string, request: CipherRequest) => Promise<CipherResponse>;
+  putPartialCipher: (id: string, request: CipherPartialRequest) => Promise<CipherResponse>;
   putCipherAdmin: (id: string, request: CipherRequest) => Promise<CipherResponse>;
   deleteCipher: (id: string) => Promise<any>;
   deleteCipherAdmin: (id: string) => Promise<any>;
@@ -268,11 +231,6 @@ export abstract class ApiService {
   putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
-  postImportCiphers: (request: ImportCiphersRequest) => Promise<any>;
-  postImportOrganizationCiphers: (
-    organizationId: string,
-    request: ImportOrganizationCiphersRequest
-  ) => Promise<any>;
   putDeleteCipher: (id: string) => Promise<any>;
   putDeleteCipherAdmin: (id: string) => Promise<any>;
   putDeleteManyCiphers: (request: CipherBulkDeleteRequest) => Promise<any>;
@@ -311,13 +269,16 @@ export abstract class ApiService {
   ) => Promise<AttachmentUploadDataResponse>;
   postAttachmentFile: (id: string, attachmentId: string, data: FormData) => Promise<any>;
 
-  getCollectionDetails: (
-    organizationId: string,
-    id: string
-  ) => Promise<CollectionGroupDetailsResponse>;
   getUserCollections: () => Promise<ListResponse<CollectionResponse>>;
   getCollections: (organizationId: string) => Promise<ListResponse<CollectionResponse>>;
   getCollectionUsers: (organizationId: string, id: string) => Promise<SelectionReadOnlyResponse[]>;
+  getCollectionAccessDetails: (
+    organizationId: string,
+    id: string
+  ) => Promise<CollectionAccessDetailsResponse>;
+  getManyCollectionsWithAccessDetails: (
+    orgId: string
+  ) => Promise<ListResponse<CollectionAccessDetailsResponse>>;
   postCollection: (
     organizationId: string,
     request: CollectionRequest
@@ -333,96 +294,16 @@ export abstract class ApiService {
     request: CollectionRequest
   ) => Promise<CollectionResponse>;
   deleteCollection: (organizationId: string, id: string) => Promise<any>;
+  deleteManyCollections: (request: CollectionBulkDeleteRequest) => Promise<any>;
   deleteCollectionUser: (
     organizationId: string,
     id: string,
     organizationUserId: string
   ) => Promise<any>;
 
-  getGroupDetails: (organizationId: string, id: string) => Promise<GroupDetailsResponse>;
-  getGroups: (organizationId: string) => Promise<ListResponse<GroupResponse>>;
   getGroupUsers: (organizationId: string, id: string) => Promise<string[]>;
-  postGroup: (organizationId: string, request: GroupRequest) => Promise<GroupResponse>;
-  putGroup: (organizationId: string, id: string, request: GroupRequest) => Promise<GroupResponse>;
   putGroupUsers: (organizationId: string, id: string, request: string[]) => Promise<any>;
-  deleteGroup: (organizationId: string, id: string) => Promise<any>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
-
-  getOrganizationUser: (
-    organizationId: string,
-    id: string
-  ) => Promise<OrganizationUserDetailsResponse>;
-  getOrganizationUserGroups: (organizationId: string, id: string) => Promise<string[]>;
-  getOrganizationUsers: (
-    organizationId: string
-  ) => Promise<ListResponse<OrganizationUserUserDetailsResponse>>;
-  getOrganizationUserResetPasswordDetails: (
-    organizationId: string,
-    id: string
-  ) => Promise<OrganizationUserResetPasswordDetailsReponse>;
-  postOrganizationUserInvite: (
-    organizationId: string,
-    request: OrganizationUserInviteRequest
-  ) => Promise<any>;
-  postOrganizationUserReinvite: (organizationId: string, id: string) => Promise<any>;
-  postManyOrganizationUserReinvite: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  postOrganizationUserAccept: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserAcceptRequest
-  ) => Promise<any>;
-  postOrganizationUserConfirm: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserConfirmRequest
-  ) => Promise<any>;
-  postOrganizationUsersPublicKey: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkPublicKeyResponse>>;
-  postOrganizationUserBulkConfirm: (
-    organizationId: string,
-    request: OrganizationUserBulkConfirmRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-
-  putOrganizationUser: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateRequest
-  ) => Promise<any>;
-  putOrganizationUserGroups: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserUpdateGroupsRequest
-  ) => Promise<any>;
-  putOrganizationUserResetPasswordEnrollment: (
-    organizationId: string,
-    userId: string,
-    request: OrganizationUserResetPasswordEnrollmentRequest
-  ) => Promise<void>;
-  putOrganizationUserResetPassword: (
-    organizationId: string,
-    id: string,
-    request: OrganizationUserResetPasswordRequest
-  ) => Promise<any>;
-  deleteOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  deleteManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  revokeOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  revokeManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
-  restoreOrganizationUser: (organizationId: string, id: string) => Promise<any>;
-  restoreManyOrganizationUsers: (
-    organizationId: string,
-    request: OrganizationUserBulkRequest
-  ) => Promise<ListResponse<OrganizationUserBulkResponse>>;
 
   getSync: () => Promise<SyncResponse>;
   postPublicImportDirectory: (request: OrganizationImportRequest) => Promise<any>;
@@ -477,6 +358,7 @@ export abstract class ApiService {
   putDeviceVerificationSettings: (
     request: DeviceVerificationRequest
   ) => Promise<DeviceVerificationResponse>;
+  getKnownDevice: (email: string, deviceIdentifier: string) => Promise<boolean>;
 
   getEmergencyAccessTrusted: () => Promise<ListResponse<EmergencyAccessGranteeDetailsResponse>>;
   getEmergencyAccessGranted: () => Promise<ListResponse<EmergencyAccessGrantorDetailsResponse>>;

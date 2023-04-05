@@ -5,7 +5,7 @@
   "productName": "Bitwarden",
   "appId": "com.bitwarden.desktop",
   "buildDependenciesFromSource": true,
-  "copyright": "Copyright © 2015-2022 Bitwarden Inc.",
+  "copyright": "Copyright © 2015-2023 Bitwarden Inc.",
   "directories": {
     "buildResources": "resources",
     "output": "dist",
@@ -19,7 +19,7 @@
     "**/node_modules/@bitwarden/desktop-native/index.js",
     "**/node_modules/@bitwarden/desktop-native/desktop_native.${platform}-${arch}*.node"
   ],
-  "electronVersion": "19.0.8",
+  "electronVersion": "21.3.1",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",

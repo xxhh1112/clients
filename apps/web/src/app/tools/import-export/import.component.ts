@@ -1,17 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import * as JSZip from "jszip";
+import { firstValueFrom } from "rxjs";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { ImportService } from "@bitwarden/common/abstractions/import.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { ImportOption, ImportType } from "@bitwarden/common/enums/importOptions";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { ImportError } from "@bitwarden/common/importers/importError";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import {
+  ImportOption,
+  ImportType,
+  ImportError,
+  ImportServiceAbstraction,
+} from "@bitwarden/importer";
 
 import { FilePasswordPromptComponent } from "./file-password-prompt.component";
 
@@ -24,6 +29,7 @@ export class ImportComponent implements OnInit {
   importOptions: ImportOption[];
   format: ImportType = null;
   fileContents: string;
+  fileSelected: File;
   formPromise: Promise<ImportError>;
   loading = false;
   importBlockedByPolicy = false;
@@ -33,19 +39,20 @@ export class ImportComponent implements OnInit {
 
   constructor(
     protected i18nService: I18nService,
-    protected importService: ImportService,
+    protected importService: ImportServiceAbstraction,
     protected router: Router,
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     private logService: LogService,
-    protected modalService: ModalService
+    protected modalService: ModalService,
+    protected syncService: SyncService
   ) {}
 
   async ngOnInit() {
     this.setImportOptions();
 
-    this.importBlockedByPolicy = await this.policyService.policyAppliesToUser(
-      PolicyType.PersonalOwnership
+    this.importBlockedByPolicy = await firstValueFrom(
+      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
     );
   }
 
@@ -131,6 +138,7 @@ export class ImportComponent implements OnInit {
 
       //No errors, display success message
       this.platformUtilsService.showToast("success", null, this.i18nService.t("importSuccess"));
+      this.syncService.fullSync(true);
       this.router.navigate(this.successNavigate);
     } catch (e) {
       this.logService.error(e);
@@ -176,6 +184,11 @@ export class ImportComponent implements OnInit {
         ? this.i18nService.collator.compare(a.name, b.name)
         : a.name.localeCompare(b.name);
     });
+  }
+
+  setSelectedFile(event: Event) {
+    const fileInputEl = <HTMLInputElement>event.target;
+    this.fileSelected = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
   }
 
   private async error(error: Error) {

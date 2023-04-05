@@ -1,12 +1,11 @@
-import { HashPurpose } from "../enums/hashPurpose";
-import { KdfType } from "../enums/kdfType";
-import { KeySuffixOptions } from "../enums/keySuffixOptions";
-import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
-import { EncString } from "../models/domain/encString";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { ProfileOrganizationResponse } from "../models/response/profileOrganizationResponse";
-import { ProfileProviderOrganizationResponse } from "../models/response/profileProviderOrganizationResponse";
-import { ProfileProviderResponse } from "../models/response/profileProviderResponse";
+import { ProfileOrganizationResponse } from "../admin-console/models/response/profile-organization.response";
+import { ProfileProviderOrganizationResponse } from "../admin-console/models/response/profile-provider-organization.response";
+import { ProfileProviderResponse } from "../admin-console/models/response/profile-provider.response";
+import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { HashPurpose, KdfType, KeySuffixOptions } from "../enums";
+import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
+import { EncString } from "../models/domain/enc-string";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
   setKey: (key: SymmetricCryptoKey) => Promise<any>;
@@ -47,13 +46,13 @@ export abstract class CryptoService {
     password: string,
     salt: string,
     kdf: KdfType,
-    kdfIterations: number
+    kdfConfig: KdfConfig
   ) => Promise<SymmetricCryptoKey>;
   makeKeyFromPin: (
     pin: string,
     salt: string,
     kdf: KdfType,
-    kdfIterations: number,
+    kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
   ) => Promise<SymmetricCryptoKey>;
   makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
@@ -62,7 +61,7 @@ export abstract class CryptoService {
     pin: string,
     salt: string,
     kdf: KdfType,
-    kdfIterations: number
+    kdfConfig: KdfConfig
   ) => Promise<SymmetricCryptoKey>;
   makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
   hashPassword: (

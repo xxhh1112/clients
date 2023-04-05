@@ -121,55 +121,54 @@
     <value>Bitwarden - مدیریت کلمه عبور رایگان</value>
   </data>
   <data name="Summary" xml:space="preserve">
-    <value>یک مدیریت کننده کلمه عبور رایگان برای تمامی دستگاههایتان</value>
+    <value>یک مدیریت کننده کلمه عبور رایگان برای تمامی دستگاه‌هایتان</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden، Inc. شرکت مادر 8bit Solutions LLC است.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+به عنوان بهترین مدیر کلمه عبور توسط VERGE، US News &amp; WORLD REPORT، CNET و دیگران انتخاب شد.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+کلمه‌های عبور با تعداد نامحدود را در دستگاه‌های نامحدود از هر کجا مدیریت کنید، ذخیره کنید، ایمن کنید و به اشتراک بگذارید. Bitwarden راه حل های مدیریت رمز عبور منبع باز را به همه ارائه می دهد، چه در خانه، چه در محل کار یا در حال حرکت.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+بر اساس الزامات امنیتی برای هر وب سایتی که بازدید می کنید، کلمه‌های عبور قوی، منحصر به فرد و تصادفی ایجاد کنید.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send به سرعت اطلاعات رمزگذاری شده --- فایل ها و متن ساده - را مستقیماً به هر کسی منتقل می کند.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden برنامه‌های Teams و Enterprise را برای شرکت‌ها ارائه می‌دهد تا بتوانید به‌طور ایمن کلمه‌های را با همکاران خود به اشتراک بگذارید.
 
-Why Choose Bitwarden:
+چرا Bitwarden را انتخاب کنید:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashing, and PBKDF2 SHA-256) so your data stays secure and private.
+رمزگذاری در کلاس جهانی
+کلمه‌های عبور با رمزگذاری پیشرفته (AES-256 بیت، هشتگ سالت و PBKDF2 SHA-256) محافظت می‌شوند تا داده‌های شما امن و خصوصی بمانند.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+تولیدکننده کلمه عبور داخلی
+بر اساس الزامات امنیتی برای هر وب سایتی که بازدید می کنید، کلمه‌های عبور قوی، منحصر به فرد و تصادفی ایجاد کنید.
 
-Global Translations 
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+ترجمه های جهانی
+ترجمه Bitwarden به 40 زبان وجود دارد و به لطف جامعه جهانی ما در حال رشد است.
 
-Cross-Platform Applications 
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+برنامه های کاربردی چند پلتفرمی
+داده‌های حساس را در Bitwarden Vault خود از هر مرورگر، دستگاه تلفن همراه یا سیستم عامل دسکتاپ و غیره ایمن کنید و به اشتراک بگذارید.</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
-    <value>یک مدیریت کننده کلمه عبور رایگان برای تمامی دستگاههایتان</value>
+    <value>یک مدیریت کننده کلمه عبور رایگان برای تمامی دستگاه‌هایتان</value>
   </data>
   <data name="ScreenshotSync" xml:space="preserve">
-    <value>همگام سازی و دسترسی به گاوصندوق خود را از دستگاه های مختلف</value>
+    <value>همگام‌سازی و دسترسی به گاوصندوق خود از دستگاه های مختلف</value>
   </data>
   <data name="ScreenshotVault" xml:space="preserve">
     <value>مدیریت تمام اطلاعات ورود و کلمه های عبورتان از یک گاوصندوق امن</value>
   </data>
   <data name="ScreenshotAutofill" xml:space="preserve">
-    <value>پرکردن خودکار معتبر ورودی شما بصورت سریع برای هر وبسایتی که از آن بازدید میکنید</value>
+    <value>پرکردن خودکار معتبر ورودی شما به‌صورت سریع برای هر وب‌سایتی که از آن بازدید می‌کنید</value>
   </data>
   <data name="ScreenshotMenu" xml:space="preserve">
     <value>گاوصندوق شما نیز به راحتی از منوی راست کلیک قابل دسترسی است</value>
   </data>
   <data name="ScreenshotPassword" xml:space="preserve">
-    <value>به صورت خودکار کلمات عبور قوی، تصادفی و امن ایجاد کنید</value>
+    <value>به صورت خودکار کلمه‌های عبور قوی، تصادفی و امن ایجاد کنید</value>
   </data>
   <data name="ScreenshotEdit" xml:space="preserve">
-    <value>اطلاعات شما با استفاده از رمزگذاری AES-256 بیتی ایمن مدیریت می شود</value>
+    <value>اطلاعات شما با استفاده از رمزگذاری AES-256 بیتی ایمن مدیریت می‌شود</value>
   </data>
 </root>

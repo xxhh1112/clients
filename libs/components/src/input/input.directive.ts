@@ -1,13 +1,25 @@
-import { Directive, HostBinding, Input, Optional, Self } from "@angular/core";
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  NgZone,
+  Optional,
+  Self,
+} from "@angular/core";
 import { NgControl, Validators } from "@angular/forms";
+
+import { BitFormFieldControl, InputTypes } from "../form-field/form-field-control";
 
 // Increments for each instance of this component
 let nextId = 0;
 
 @Directive({
   selector: "input[bitInput], select[bitInput], textarea[bitInput]",
+  providers: [{ provide: BitFormFieldControl, useExisting: BitInputDirective }],
 })
-export class BitInputDirective {
+export class BitInputDirective implements BitFormFieldControl {
   @HostBinding("class") @Input() get classList() {
     return [
       "tw-block",
@@ -28,6 +40,7 @@ export class BitInputDirective {
       "focus:tw-outline-none",
       "focus:tw-border-primary-700",
       "focus:tw-ring-1",
+      "focus:tw-ring-inset",
       "focus:tw-ring-primary-700",
       "focus:tw-z-10",
       "disabled:tw-bg-secondary-100",
@@ -42,6 +55,10 @@ export class BitInputDirective {
     return this.hasError ? true : undefined;
   }
 
+  @HostBinding("attr.type") @Input() type?: InputTypes;
+
+  @HostBinding("attr.spellcheck") @Input() spellcheck?: boolean;
+
   @HostBinding()
   @Input()
   get required() {
@@ -55,13 +72,51 @@ export class BitInputDirective {
   @Input() hasPrefix = false;
   @Input() hasSuffix = false;
 
+  @Input() showErrorsWhenDisabled? = false;
+
+  get labelForId(): string {
+    return this.id;
+  }
+
+  private isActive = true;
+  @HostListener("blur")
+  onBlur() {
+    this.isActive = true;
+  }
+
+  @HostListener("input")
+  onInput() {
+    this.isActive = false;
+  }
+
   get hasError() {
-    return this.ngControl?.status === "INVALID" && this.ngControl?.touched;
+    if (this.showErrorsWhenDisabled) {
+      return (
+        (this.ngControl?.status === "INVALID" || this.ngControl?.status === "DISABLED") &&
+        this.ngControl?.touched &&
+        this.ngControl?.errors != null
+      );
+    } else {
+      return this.ngControl?.status === "INVALID" && this.ngControl?.touched && this.isActive;
+    }
   }
 
   get error(): [string, any] {
     const key = Object.keys(this.ngControl.errors)[0];
     return [key, this.ngControl.errors[key]];
   }
-  constructor(@Optional() @Self() private ngControl: NgControl) {}
+
+  constructor(
+    @Optional() @Self() private ngControl: NgControl,
+    private ngZone: NgZone,
+    private elementRef: ElementRef<HTMLInputElement>
+  ) {}
+
+  focus() {
+    this.ngZone.runOutsideAngular(() => {
+      const end = this.elementRef.nativeElement.value.length;
+      this.elementRef.nativeElement.setSelectionRange(end, end);
+      this.elementRef.nativeElement.focus();
+    });
+  }
 }

@@ -5,18 +5,19 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testin
 import { FormBuilder, UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
-import { Substitute } from "@fluffy-spoon/substitute";
-import { BehaviorSubject } from "rxjs";
+import { mock, MockProxy } from "jest-mock-extended";
+import { BehaviorSubject, of } from "rxjs";
 
 import { I18nPipe } from "@bitwarden/angular/pipes/i18n.pipe";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { StateService as BaseStateService } from "@bitwarden/common/abstractions/state.service";
-import { PlanType } from "@bitwarden/common/enums/planType";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/masterPasswordPolicyOptions";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
+import { PlanType } from "@bitwarden/common/billing/enums/plan-type";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
 import { RouterService } from "../../core";
 
@@ -31,23 +32,15 @@ describe("TrialInitiationComponent", () => {
   const formBuilder: FormBuilder = new FormBuilder();
   let routerSpy: jest.SpyInstance;
 
-  let stateServiceMock: any;
-  let apiServiceMock: any;
-  let policyServiceMock: any;
+  let stateServiceMock: MockProxy<StateService>;
+  let policyApiServiceMock: MockProxy<PolicyApiServiceAbstraction>;
+  let policyServiceMock: MockProxy<PolicyService>;
 
   beforeEach(() => {
-    // only mock functions we use in this component
-    stateServiceMock = {
-      getOrganizationInvitation: jest.fn(),
-    };
-
-    apiServiceMock = {
-      getPoliciesByToken: jest.fn(),
-    };
-
-    policyServiceMock = {
-      getMasterPasswordPolicyOptions: jest.fn(),
-    };
+    // only define services directly that we want to mock return values in this component
+    stateServiceMock = mock<StateService>();
+    policyApiServiceMock = mock<PolicyApiServiceAbstraction>();
+    policyServiceMock = mock<PolicyService>();
 
     TestBed.configureTestingModule({
       imports: [
@@ -58,7 +51,7 @@ describe("TrialInitiationComponent", () => {
             component: BlankComponent,
           },
           {
-            path: `organizations/${testOrgId}/manage/people`,
+            path: `organizations/${testOrgId}/manage/members`,
             component: BlankComponent,
           },
         ]),
@@ -72,23 +65,19 @@ describe("TrialInitiationComponent", () => {
             queryParams: mockQueryParams.asObservable(),
           },
         },
-        { provide: BaseStateService, useValue: stateServiceMock },
+        { provide: StateService, useValue: stateServiceMock },
         { provide: PolicyService, useValue: policyServiceMock },
-        { provide: ApiService, useValue: apiServiceMock },
-        { provide: LogService, useClass: Substitute.for<LogService>() },
-        { provide: I18nService, useClass: Substitute.for<I18nService>() },
-        { provide: TitleCasePipe, useClass: Substitute.for<TitleCasePipe>() },
-        {
-          provide: PolicyApiServiceAbstraction,
-          useClass: Substitute.for<PolicyApiServiceAbstraction>(),
-        },
+        { provide: PolicyApiServiceAbstraction, useValue: policyApiServiceMock },
+        { provide: LogService, useValue: mock<LogService>() },
+        { provide: I18nService, useValue: mock<I18nService>() },
+        { provide: TitleCasePipe, useValue: mock<TitleCasePipe>() },
         {
           provide: VerticalStepperComponent,
           useClass: VerticalStepperStubComponent,
         },
         {
           provide: RouterService,
-          useClass: Substitute.for<RouterService>(),
+          useValue: mock<RouterService>(),
         },
       ],
       schemas: [NO_ERRORS_SCHEMA], // Allows child components to be ignored (such as register component)
@@ -118,40 +107,46 @@ describe("TrialInitiationComponent", () => {
     });
     it("should set enforcedPolicyOptions if state service returns an invite", async () => {
       // Set up service method mocks
-      stateServiceMock.getOrganizationInvitation.mockReturnValueOnce({
-        organizationId: testOrgId,
-        token: "token",
-        email: "testEmail",
-        organizationUserId: "123",
-      });
-      apiServiceMock.getPoliciesByToken.mockReturnValueOnce({
-        data: [
-          {
-            id: "345",
-            organizationId: testOrgId,
-            type: 1,
-            data: [
-              {
-                minComplexity: 4,
-                minLength: 10,
-                requireLower: null,
-                requireNumbers: null,
-                requireSpecial: null,
-                requireUpper: null,
-              },
-            ],
-            enabled: true,
-          },
-        ],
-      });
-      policyServiceMock.getMasterPasswordPolicyOptions.mockReturnValueOnce({
-        minComplexity: 4,
-        minLength: 10,
-        requireLower: null,
-        requireNumbers: null,
-        requireSpecial: null,
-        requireUpper: null,
-      } as MasterPasswordPolicyOptions);
+      stateServiceMock.getOrganizationInvitation.mockReturnValueOnce(
+        Promise.resolve({
+          organizationId: testOrgId,
+          token: "token",
+          email: "testEmail",
+          organizationUserId: "123",
+        })
+      );
+      policyApiServiceMock.getPoliciesByToken.mockReturnValueOnce(
+        Promise.resolve({
+          data: [
+            {
+              id: "345",
+              organizationId: testOrgId,
+              type: 1,
+              data: [
+                {
+                  minComplexity: 4,
+                  minLength: 10,
+                  requireLower: null,
+                  requireNumbers: null,
+                  requireSpecial: null,
+                  requireUpper: null,
+                },
+              ],
+              enabled: true,
+            },
+          ],
+        } as ListResponse<PolicyResponse>)
+      );
+      policyServiceMock.masterPasswordPolicyOptions$.mockReturnValue(
+        of({
+          minComplexity: 4,
+          minLength: 10,
+          requireLower: null,
+          requireNumbers: null,
+          requireSpecial: null,
+          requireUpper: null,
+        } as MasterPasswordPolicyOptions)
+      );
 
       // Need to recreate component with new service mocks
       fixture = TestBed.createComponent(TrialInitiationComponent);
@@ -173,8 +168,9 @@ describe("TrialInitiationComponent", () => {
     it("should set org variable to be enterprise and plan to EnterpriseAnnually if org param is enterprise", fakeAsync(() => {
       mockQueryParams.next({ org: "enterprise" });
       tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
       fixture.detectChanges();
-      component.ngOnInit();
       expect(component.org).toBe("enterprise");
       expect(component.plan).toBe(PlanType.EnterpriseAnnually);
     }));
@@ -187,13 +183,33 @@ describe("TrialInitiationComponent", () => {
       expect(component.org).toBe("");
       expect(component.accountCreateOnly).toBe(true);
     }));
-    it("should set the org to be families and plan to FamiliesAnnually if org param is invalid ", fakeAsync(async () => {
+    it("should not set the org if org param is invalid ", fakeAsync(async () => {
       mockQueryParams.next({ org: "hahahaha" });
       tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(component.org).toBe("");
+      expect(component.accountCreateOnly).toBe(true);
+    }));
+    it("should set the layout variable if layout param is valid ", fakeAsync(async () => {
+      mockQueryParams.next({ layout: "teams1" });
+      tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(component.layout).toBe("teams1");
+      expect(component.accountCreateOnly).toBe(false);
+    }));
+    it("should not set the layout variable and leave as 'default' if layout param is invalid ", fakeAsync(async () => {
+      mockQueryParams.next({ layout: "asdfasdf" });
+      tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
       fixture.detectChanges();
       component.ngOnInit();
-      expect(component.org).toBe("families");
-      expect(component.plan).toBe(PlanType.FamiliesAnnually);
+      expect(component.layout).toBe("default");
+      expect(component.accountCreateOnly).toBe(true);
     }));
   });
 
@@ -285,7 +301,7 @@ describe("TrialInitiationComponent", () => {
     describe("navigateToOrgVault", () => {
       it("should call verticalStepper.previous()", fakeAsync(() => {
         component.navigateToOrgInvite();
-        expect(routerSpy).toHaveBeenCalledWith(["organizations", testOrgId, "manage", "people"]);
+        expect(routerSpy).toHaveBeenCalledWith(["organizations", testOrgId, "manage", "members"]);
       }));
     });
   });

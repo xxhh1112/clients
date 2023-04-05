@@ -20,7 +20,7 @@
     "message": "Prihlásiť sa"
   },
   "enterpriseSingleSignOn": {
-    "message": "Prihlásenie cez prihlasovací formulár spoločnosti (SSO)"
+    "message": "Jednotné prihlásenie pre podniky (SSO)"
   },
   "cancel": {
     "message": "Zrušiť"
@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Pomoc a spätná väzba"
   },
+  "helpCenter": {
+    "message": "Centrum pomoci Bitwarden"
+  },
+  "communityForums": {
+    "message": "Prehliadať komunitné fóra Bitwardenu"
+  },
+  "contactSupport": {
+    "message": "Kontaktovať podporu Bitwardenu"
+  },
   "sync": {
     "message": "Synchronizácia"
   },
@@ -309,7 +318,7 @@
     "message": "Priečinok"
   },
   "deleteItem": {
-    "message": "Zmazať položku"
+    "message": "Odstrániť položku"
   },
   "viewItem": {
     "message": "Zobraziť položku"
@@ -430,7 +439,14 @@
     "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
   },
   "masterPasswordMinlength": {
-    "message": "Hlavné heslo musí obsahovať aspoň 8 znakov."
+    "message": "Hlavné heslo musí mať aspoň $VALUE$ znakov.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrdenie hlavného hesla sa nezhoduje."
@@ -534,16 +550,16 @@
     "message": "Nové URI"
   },
   "addedItem": {
-    "message": "Položka pridaná"
+    "message": "Pridaná položka"
   },
   "editedItem": {
-    "message": "Položka upravená"
+    "message": "Upravená položka"
   },
   "deleteItemConfirmation": {
     "message": "Naozaj chcete odstrániť túto položku?"
   },
   "deletedItem": {
-    "message": "Položka odstránená do koša"
+    "message": "Položka odstránená"
   },
   "overwritePassword": {
     "message": "Prepísať heslo"
@@ -642,7 +658,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Tmavá –⁠ Solarized",
+    "message": "Solarized –⁠ tmavý",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
@@ -960,7 +976,10 @@
     "message": "Ak je detekovaný prihlasovací formulár, automaticky vykonať vypĺňanie pri načítaní stránky."
   },
   "experimentalFeature": {
-    "message": "Toto je zatiaľ experimentálna funkcia. Použite na vlastné riziko."
+    "message": "Skompromitované alebo nedôveryhodné stránky môžu pri svojom načítaní zneužiť automatické dopĺňanie."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Dozvedieť sa viac o automatickom dopĺňaní"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Predvolené nastavenie automatického vypĺňania pre prihlasovacie položky"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Vážený"
   },
   "firstName": {
     "message": "Krstné meno"
@@ -1310,6 +1332,10 @@
   "dateUpdated": {
     "message": "Aktualizované",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Vytvorené",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Heslo bolo aktualizované",
@@ -1977,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Prihlásenie do $DOMAIN$",
     "placeholders": {
@@ -2022,6 +2045,123 @@
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Prihlásenie pomocou hlavného hesla"
+  },
+  "loggingInAs": {
+    "message": "Prihlasujete sa ako"
+  },
+  "notYou": {
+    "message": "Nie ste to vy?"
+  },
+  "newAroundHere": {
+    "message": "Ste tu nový?"
+  },
+  "rememberEmail": {
+    "message": "Zapamätať si e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Prihlásiť pomocou zariadenia"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fráza odtlačku prsta"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Uistite sa, že je váš trezor odomknutý a fráza odtlačku prsta sa zhoduje s frázou na druhom zariadení."
+  },
+  "resendNotification": {
+    "message": "Znova odoslať upozornenie"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobraziť všetky možnosti prihlásenia"
+  },
+  "notificationSentDevice": {
+    "message": "Do vášho zariadenia bolo odoslané upozornenie."
+  },
+  "logInInitiated": {
+    "message": "Iniciované prihlásenie"
+  },
+  "exposedMasterPassword": {
+    "message": "Odhalené hlavné heslo"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Nájdené heslo v uniknuných údajoch. Na ochranu svojho účtu používajte jedinečné heslo. Naozaj chcete používať odhalené heslo?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Slabé a odhalené hlavné heslo"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?"
+  },
+  "checkForBreaches": {
+    "message": "Skontrolovať známe úniky údajov pre toto heslo"
+  },
+  "important": {
+    "message": "Dôležité:"
+  },
+  "masterPasswordHint": {
+    "message": "Vaše hlavné heslo sa nebude dať obnoviť, ak ho zabudnete!"
+  },
+  "characterMinimum": {
+    "message": "Minimálny počet znakov $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "V pravidlách vašej organizácie je zapnuté automatické vypĺňanie pri načítaní stránky."
+  },
+  "howToAutofill": {
+    "message": "Ako používať automatické vypĺňanie"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vyberte položku z tejto stránky, alebo použite skratku: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vyberte položku z tejto stránky, alebo nastavte skratku v nastaveniach."
+  },
+  "gotIt": {
+    "message": "Chápem"
+  },
+  "autofillSettings": {
+    "message": "Nastavenia automatického vypĺňania"
+  },
+  "autofillShortcut": {
+    "message": "Klávesová skratka automatického vypĺňania"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Skratka automatického vypĺňania nie je nastavená. Zmeníte ju v nastaveniach prehliadača."
+  },
+  "autofillShortcutText": {
+    "message": "Skratka automatického vypĺňania je: $COMMAND$. Zmeníte ju v nastaveniach prehliadača.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Predvolená skratka automatického vypĺňania: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }

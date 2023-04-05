@@ -1,27 +1,28 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { CollectionData } from "@bitwarden/common/models/data/collectionData";
-import { Collection } from "@bitwarden/common/models/domain/collection";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
+import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
 import {
   CollectionDetailsResponse as ApiCollectionDetailsResponse,
   CollectionResponse as ApiCollectionResponse,
-} from "@bitwarden/common/models/response/collectionResponse";
-import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/listResponse";
-import { CipherView } from "@bitwarden/common/models/view/cipherView";
-import { Response } from "@bitwarden/node/cli/models/response";
-import { ListResponse } from "@bitwarden/node/cli/models/response/listResponse";
+} from "@bitwarden/common/admin-console/models/response/collection.response";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/list.response";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { CipherResponse } from "../models/response/cipherResponse";
-import { CollectionResponse } from "../models/response/collectionResponse";
-import { FolderResponse } from "../models/response/folderResponse";
-import { OrganizationResponse } from "../models/response/organizationResponse";
-import { OrganizationUserResponse } from "../models/response/organizationUserResponse";
+import { CollectionResponse } from "../admin-console/models/response/collection.response";
+import { OrganizationUserResponse } from "../admin-console/models/response/organization-user.response";
+import { OrganizationResponse } from "../admin-console/models/response/organization.response";
+import { Response } from "../models/response";
+import { ListResponse } from "../models/response/list.response";
 import { CliUtils } from "../utils";
+import { CipherResponse } from "../vault/models/cipher.response";
+import { FolderResponse } from "../vault/models/folder.response";
 
 export class ListCommand {
   constructor(
@@ -30,6 +31,7 @@ export class ListCommand {
     private collectionService: CollectionService,
     private organizationService: OrganizationService,
     private searchService: SearchService,
+    private organizationUserService: OrganizationUserService,
     private apiService: ApiService
   ) {}
 
@@ -163,7 +165,7 @@ export class ListCommand {
     if (!Utils.isGuid(options.organizationId)) {
       return Response.badRequest("`" + options.organizationId + "` is not a GUID.");
     }
-    const organization = await this.organizationService.get(options.organizationId);
+    const organization = await this.organizationService.getFromState(options.organizationId);
     if (organization == null) {
       return Response.error("Organization not found.");
     }
@@ -196,13 +198,13 @@ export class ListCommand {
     if (!Utils.isGuid(options.organizationId)) {
       return Response.badRequest("`" + options.organizationId + "` is not a GUID.");
     }
-    const organization = await this.organizationService.get(options.organizationId);
+    const organization = await this.organizationService.getFromState(options.organizationId);
     if (organization == null) {
       return Response.error("Organization not found.");
     }
 
     try {
-      const response = await this.apiService.getOrganizationUsers(options.organizationId);
+      const response = await this.organizationUserService.getAllUsers(options.organizationId);
       const res = new ListResponse(
         response.data.map((r) => {
           const u = new OrganizationUserResponse();

@@ -1,8 +1,9 @@
+// eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 import { BehaviorSubject, firstValueFrom } from "rxjs";
 
-import { AbstractEncryptService } from "@bitwarden/common/abstractions/abstractEncrypt.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { StateService } from "@bitwarden/common/services/state.service";
@@ -11,7 +12,7 @@ describe("SettingsService", () => {
   let settingsService: SettingsService;
 
   let cryptoService: SubstituteOf<CryptoService>;
-  let encryptService: SubstituteOf<AbstractEncryptService>;
+  let encryptService: SubstituteOf<EncryptService>;
   let stateService: SubstituteOf<StateService>;
   let activeAccount: BehaviorSubject<string>;
   let activeAccountUnlocked: BehaviorSubject<boolean>;

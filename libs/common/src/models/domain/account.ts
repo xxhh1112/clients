@@ -1,29 +1,28 @@
-import { Except, Jsonify } from "type-fest";
+import { Jsonify } from "type-fest";
 
-import { AuthenticationStatus } from "../../enums/authenticationStatus";
-import { KdfType } from "../../enums/kdfType";
-import { UriMatchType } from "../../enums/uriMatchType";
+import { CollectionData } from "../../admin-console/models/data/collection.data";
+import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
+import { OrganizationData } from "../../admin-console/models/data/organization.data";
+import { PolicyData } from "../../admin-console/models/data/policy.data";
+import { ProviderData } from "../../admin-console/models/data/provider.data";
+import { Policy } from "../../admin-console/models/domain/policy";
+import { CollectionView } from "../../admin-console/models/view/collection.view";
+import { AuthenticationStatus } from "../../auth/enums/authentication-status";
+import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
+import { KdfType, UriMatchType } from "../../enums";
 import { Utils } from "../../misc/utils";
+import { GeneratedPasswordHistory } from "../../tools/generator/password";
+import { SendData } from "../../tools/send/models/data/send.data";
+import { SendView } from "../../tools/send/models/view/send.view";
 import { DeepJsonify } from "../../types/deep-jsonify";
-import { CipherData } from "../data/cipherData";
-import { CollectionData } from "../data/collectionData";
-import { EncryptedOrganizationKeyData } from "../data/encryptedOrganizationKeyData";
-import { EventData } from "../data/eventData";
-import { FolderData } from "../data/folderData";
-import { OrganizationData } from "../data/organizationData";
-import { PolicyData } from "../data/policyData";
-import { ProviderData } from "../data/providerData";
-import { SendData } from "../data/sendData";
+import { CipherData } from "../../vault/models/data/cipher.data";
+import { FolderData } from "../../vault/models/data/folder.data";
+import { CipherView } from "../../vault/models/view/cipher.view";
+import { EventData } from "../data/event.data";
 import { ServerConfigData } from "../data/server-config.data";
-import { CipherView } from "../view/cipherView";
-import { CollectionView } from "../view/collectionView";
-import { SendView } from "../view/sendView";
 
-import { EncString } from "./encString";
-import { EnvironmentUrls } from "./environmentUrls";
-import { GeneratedPasswordHistory } from "./generatedPasswordHistory";
-import { Policy } from "./policy";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import { EncString } from "./enc-string";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class EncryptionPair<TEncrypted, TDecrypted> {
   encrypted?: TEncrypted;
@@ -40,7 +39,7 @@ export class EncryptionPair<TEncrypted, TDecrypted> {
   }
 
   static fromJSON<TEncrypted, TDecrypted>(
-    obj: Jsonify<EncryptionPair<Jsonify<TEncrypted>, Jsonify<TDecrypted>>>,
+    obj: { encrypted?: Jsonify<TEncrypted>; decrypted?: string | Jsonify<TDecrypted> },
     decryptedFromJson?: (decObj: Jsonify<TDecrypted> | string) => TDecrypted,
     encryptedFromJson?: (encObj: Jsonify<TEncrypted>) => TEncrypted
   ) {
@@ -123,7 +122,7 @@ export class AccountKeys {
   apiKeyClientSecret?: string;
 
   toJSON() {
-    return Object.assign(this as Except<AccountKeys, "publicKey">, {
+    return Utils.merge(this, {
       publicKey: Utils.fromBufferToByteString(this.publicKey),
     });
   }
@@ -175,6 +174,7 @@ export class AccountProfile {
   apiKeyClientId?: string;
   authenticationStatus?: AuthenticationStatus;
   convertAccountToKeyConnector?: boolean;
+  name?: string;
   email?: string;
   emailVerified?: boolean;
   entityId?: string;
@@ -188,6 +188,8 @@ export class AccountProfile {
   usesKeyConnector?: boolean;
   keyHash?: string;
   kdfIterations?: number;
+  kdfMemory?: number;
+  kdfParallelism?: number;
   kdfType?: KdfType;
 
   static fromJSON(obj: Jsonify<AccountProfile>): AccountProfile {
@@ -213,13 +215,13 @@ export class AccountSettings {
   disableChangedPasswordNotification?: boolean;
   disableContextMenuItem?: boolean;
   disableGa?: boolean;
+  dismissedAutoFillOnPageLoadCallout?: boolean;
   dontShowCardsCurrentTab?: boolean;
   dontShowIdentitiesCurrentTab?: boolean;
   enableAlwaysOnTop?: boolean;
   enableAutoFillOnPageLoad?: boolean;
   enableBiometric?: boolean;
   enableFullWidth?: boolean;
-  enableGravitars?: boolean;
   environmentUrls: EnvironmentUrls = new EnvironmentUrls();
   equivalentDomains?: any;
   minimizeOnCopyToClipboard?: boolean;
@@ -233,6 +235,10 @@ export class AccountSettings {
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
   serverConfig?: ServerConfigData;
+  approveLoginRequests?: boolean;
+  avatarColor?: string;
+  activateAutoFillOnPageLoadFromPolicy?: boolean;
+  smOnboardingTasks?: Record<string, Record<string, boolean>>;
 
   static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {
     if (obj == null) {
@@ -251,7 +257,7 @@ export class AccountSettings {
 }
 
 export type AccountSettingsSettings = {
-  equivalentDomains?: { [id: string]: any };
+  equivalentDomains?: string[][];
 };
 
 export class AccountTokens {

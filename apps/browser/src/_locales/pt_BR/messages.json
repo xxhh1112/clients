@@ -110,7 +110,7 @@
     "message": "Não há credenciais disponíveis para autopreenchimento para a aba do navegador atual."
   },
   "addLogin": {
-    "message": "Adicionar uma Credencial"
+    "message": "Adicionar um Login"
   },
   "addItem": {
     "message": "Adicionar Item"
@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Ajuda & Feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Help center"
+  },
+  "communityForums": {
+    "message": "Explore Bitwarden community forums"
+  },
+  "contactSupport": {
+    "message": "Contact Bitwarden support"
+  },
   "sync": {
     "message": "Sincronizar"
   },
@@ -245,7 +254,7 @@
     "message": "Números (0-9)"
   },
   "specialCharacters": {
-    "message": "Caracteres Especiais (!@#$%^&*)"
+    "message": "Caracteres especiais (!@#$%^&*)"
   },
   "numWords": {
     "message": "Número de Palavras"
@@ -261,10 +270,10 @@
     "message": "Incluir Número"
   },
   "minNumbers": {
-    "message": "Mínimo de Números"
+    "message": "Números Mínimos"
   },
   "minSpecial": {
-    "message": "Mínimo Especial"
+    "message": "Especiais Mínimos"
   },
   "avoidAmbChar": {
     "message": "Evitar Caracteres Ambíguos"
@@ -424,13 +433,20 @@
     "message": "Endereço de e-mail inválido."
   },
   "masterPasswordRequired": {
-    "message": "A senha mestre é obrigatória."
+    "message": "A senha mestra é obrigatória."
   },
   "confirmMasterPasswordRequired": {
-    "message": "É necessário redigitar a senha mestre."
+    "message": "É necessário redigitar a senha mestra."
   },
   "masterPasswordMinlength": {
-    "message": "A senha mestre deve ter pelo menos 8 caracteres."
+    "message": "A senha mestra deve ter pelo menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -491,7 +507,7 @@
     "message": "Você pode alterar a sua senha mestra no cofre web em bitwarden.com. Você deseja visitar o site agora?"
   },
   "twoStepLoginConfirmation": {
-    "message": "O login em duas etapas torna a sua conta mais segura ao exigir que você verifique seu login com outro dispositivo como uma chave de segurança, aplicativo de autenticação, SMS, ligação telefônica, ou e-mail. O login em duas etapas pode ser ativado no cofre web em bitwarden.com. Você deseja visitar o site agora?"
+    "message": "O login de duas etapas torna a sua conta mais segura ao exigir que digite um código de segurança de um aplicativo de autenticação quando for iniciar a sessão. O login de duas etapas pode ser ativado no cofre web bitwarden.com. Deseja visitar o site agora?"
   },
   "editedFolder": {
     "message": "Pasta Editada"
@@ -543,7 +559,7 @@
     "message": "Você tem certeza que deseja enviar este item para a lixeira?"
   },
   "deletedItem": {
-    "message": "Enviar item para lixeira"
+    "message": "Item excluído"
   },
   "overwritePassword": {
     "message": "Sobrescrever Senha"
@@ -649,7 +665,7 @@
     "message": "Exportar Cofre"
   },
   "fileFormat": {
-    "message": "Formato do Arquivo"
+    "message": "Formato de arquivo"
   },
   "warning": {
     "message": "AVISO",
@@ -744,7 +760,7 @@
     "message": "O tamanho máximo do arquivo é de 500 MB."
   },
   "featureUnavailable": {
-    "message": "Recurso Indisponível"
+    "message": "Funcionalidade Indisponível"
   },
   "updateKey": {
     "message": "Você não pode usar este recurso, até você atualizar sua chave de criptografia."
@@ -762,10 +778,10 @@
     "message": "Atualizar Assinatura"
   },
   "premiumNotCurrentMember": {
-    "message": "Você não é um membro premium atualmente."
+    "message": "Você não é um membro Premium atualmente."
   },
   "premiumSignUpAndGet": {
-    "message": "Registre-se para uma assinatura premium e obtenha:"
+    "message": "Registre-se para uma assinatura Premium e obtenha:"
   },
   "ppremiumSignUpStorage": {
     "message": "1 GB de armazenamento de arquivos encriptados."
@@ -783,7 +799,7 @@
     "message": "Prioridade no suporte ao cliente."
   },
   "ppremiumSignUpFuture": {
-    "message": "Todos os recursos premium no futuro. Mais em breve!"
+    "message": "Todas as funcionalidades Premium no futuro. Mais em breve!"
   },
   "premiumPurchase": {
     "message": "Comprar Premium"
@@ -813,7 +829,7 @@
     "message": "Copiar TOTP automaticamente"
   },
   "disableAutoTotpCopyDesc": {
-    "message": "Se a sua credencial tiver uma chave de autenticação anexada, o código de verificação TOTP será copiado automaticamente para a área de transferência quando você autopreencher a credencial."
+    "message": "Se sua credencial tiver uma chave de autenticação, copie o código de verificação TOTP quando for autopreenchê-la."
   },
   "enableAutoBiometricsPrompt": {
     "message": "Pedir biometria ao iniciar"
@@ -873,7 +889,7 @@
     "message": "Sessão Indisponível"
   },
   "noTwoStepProviders": {
-    "message": "Esta conta tem a verificação em duas etapas ativado, no entanto, nenhum dos provedores de verificação em duas etapas configurados são suportados por este navegador web."
+    "message": "Esta conta tem a verificação de duas etapas ativado, no entanto, nenhum dos provedores de verificação de duas etapas configurados são suportados por este navegador web."
   },
   "noTwoStepProviders2": {
     "message": "Por favor utilize um navegador web suportado (tal como o Chrome) e/ou inclua provedores adicionais que são melhor suportados entre navegadores web (tal como uma aplicativo de autenticação)."
@@ -960,7 +976,10 @@
     "message": "Se um formulário de login for detectado, realizar automaticamente um auto-preenchimento quando a página web carregar."
   },
   "experimentalFeature": {
-    "message": "Atualmente, este é um recurso experimental. Utilize por sua conta e risco."
+    "message": "Sites comprometidos ou não confiáveis podem tomar vantagem do autopreenchimento ao carregar a página."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Saiba mais sobre preenchimento automático"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Configuração de autopreenchimento padrão para itens de credenciais"
@@ -1123,6 +1142,9 @@
   "dr": {
     "message": "Dr"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "firstName": {
     "message": "Primeiro Nome"
   },
@@ -1130,7 +1152,7 @@
     "message": "Nome do Meio"
   },
   "lastName": {
-    "message": "Sobrenome"
+    "message": "Último Nome"
   },
   "fullName": {
     "message": "Nome Completo"
@@ -1142,7 +1164,7 @@
     "message": "Empresa"
   },
   "ssn": {
-    "message": "Cadastro de Pessoas Físicas (CPF)"
+    "message": "Número de Segurança Social"
   },
   "passportNumber": {
     "message": "Número do Passaporte"
@@ -1310,6 +1332,10 @@
   "dateUpdated": {
     "message": "Atualizado",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Criado",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Senha Atualizada",
@@ -1505,10 +1531,10 @@
     "message": "Por favor, verifique se o aplicativo desktop mostra esta impressão digital: "
   },
   "desktopIntegrationDisabledTitle": {
-    "message": "A integração com o navegador não está ativada"
+    "message": "A integração com o navegador não está habilitada"
   },
   "desktopIntegrationDisabledDesc": {
-    "message": "A integração com o navegador não está ativada no aplicativo Bitwarden Desktop. Por favor, ative-a nas configurações do aplicativo desktop."
+    "message": "A integração com o navegador não está habilitada no aplicativo Bitwarden Desktop. Por favor, habilite-a nas configurações do aplicativo desktop."
   },
   "startDesktopTitle": {
     "message": "Iniciar o aplicativo Bitwarden Desktop"
@@ -1538,7 +1564,7 @@
     "message": "Biometria não ativada"
   },
   "biometricsNotEnabledDesc": {
-    "message": "A biometria com o navegador requer que a biometria de desktop seja ativada nas configurações primeiro."
+    "message": "A biometria com o navegador requer que a biometria de desktop seja habilitada nas configurações primeiro."
   },
   "biometricsNotSupportedTitle": {
     "message": "Biometria não suportada"
@@ -1977,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Itens em Organizações Desativadas não podem ser acessados. Entre em contato com o proprietário da sua Organização para obter assistência."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Fazendo login em $DOMAIN$",
     "placeholders": {
@@ -2008,7 +2031,7 @@
     "message": "Terceiros"
   },
   "thirdPartyServerMessage": {
-    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "message": "Conectado a implementação de servidores terceiros, $SERVERNAME$. Por favor, verifique as falhas usando o servidor oficial ou reporte-os ao servidor de terceiros.",
     "placeholders": {
       "servername": {
         "content": "$1",
@@ -2017,11 +2040,128 @@
     }
   },
   "lastSeenOn": {
-    "message": "last seen on: $DATE$",
+    "message": "visto pela última vez: $DATE$",
     "placeholders": {
       "date": {
         "content": "$1",
         "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Entrar com a senha mestra"
+  },
+  "loggingInAs": {
+    "message": "Logar como"
+  },
+  "notYou": {
+    "message": "Não é você?"
+  },
+  "newAroundHere": {
+    "message": "Novo por aqui?"
+  },
+  "rememberEmail": {
+    "message": "Lembrar e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Fazer login com dispositivo"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Login com dispositivo deve ser habilitado nas configurações do aplicativo móvel do Bitwarden. Necessita de outra opção?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de impressão digital"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Certifique-se que o cofre esteja desbloqueado e que a frase de impressão digital corresponda à do outro dispositivo."
+  },
+  "resendNotification": {
+    "message": "Reenviar notificação"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas as opções de login"
+  },
+  "notificationSentDevice": {
+    "message": "Uma notificação foi enviada para seu dispositivo."
+  },
+  "logInInitiated": {
+    "message": "Login iniciado"
+  },
+  "exposedMasterPassword": {
+    "message": "Senha Mestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "A senha foi encontrada em um vazamento de dados. Use uma senha única para proteger sua conta. Tem certeza de que deseja usar uma senha já exposta?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Senha Mestra fraca e comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Senha fraca identificada e encontrada em um vazamento de dados. Use uma senha forte e única para proteger a sua conta. Tem certeza de que deseja usar essa senha?"
+  },
+  "checkForBreaches": {
+    "message": "Verificar vazamento de dados conhecidos para esta senha"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Sua Senha Mestra não pode ser recuperada se você a esquecer!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimos",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Your organization policies have turned on auto-fill on page load."
+  },
+  "howToAutofill": {
+    "message": "Como autopreencher"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Select an item from this page or set a shortcut in settings."
+  },
+  "gotIt": {
+    "message": "Entendi"
+  },
+  "autofillSettings": {
+    "message": "Configurações de autopreenchimento"
+  },
+  "autofillShortcut": {
+    "message": "Atalho para autopreenchimento"
+  },
+  "autofillShortcutNotSet": {
+    "message": "O atalho de preenchimento automático não está definido. Altere-o nas configurações do navegador."
+  },
+  "autofillShortcutText": {
+    "message": "O atalho de preenchimento automático é: $COMMAND$. Altere-o nas configurações do navegador.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Atalho padrão de autopreenchimento: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
       }
     }
   }
