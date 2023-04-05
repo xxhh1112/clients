@@ -41,11 +41,7 @@
       A passkey already exists in Bitwarden for this account
       <div class="box list">
         <div class="box-content">
-          <app-cipher-row
-            *ngFor="let cipher of ciphers"
-            [cipher]="cipher"
-            (onSelected)="pick(cipher)"
-          ></app-cipher-row>
+          <app-cipher-row *ngFor="let cipher of ciphers" [cipher]="cipher"></app-cipher-row>
         </div>
       </div>
     </ng-container>

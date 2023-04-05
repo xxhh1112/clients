@@ -62,13 +62,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
     }
 
-    const isExcluded = await this.vaultContainsCredentials(params.excludeCredentialDescriptorList);
-    if (isExcluded) {
-      await userInterfaceSession.informExcludedCredential(
-        // [Utils.guidToStandardFormat(params.excludeCredentialDescriptorList[0].id)],
-        [],
-        abortController
-      );
+    const existingCipherIds = await this.findExistingCredentials(
+      params.excludeCredentialDescriptorList
+    );
+    if (existingCipherIds.length > 0) {
+      await userInterfaceSession.informExcludedCredential(existingCipherIds, abortController);
 
       throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
     }
@@ -243,9 +241,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     }
   }
 
-  private async vaultContainsCredentials(
+  /** Finds existing crendetials and returns the `cipherId` for each one */
+  private async findExistingCredentials(
     credentials: PublicKeyCredentialDescriptor[]
-  ): Promise<boolean> {
+  ): Promise<string[]> {
     const ids: string[] = [];
 
     for (const credential of credentials) {
@@ -256,17 +255,19 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     }
 
     if (ids.length === 0) {
-      return false;
+      return [];
     }
 
     const ciphers = await this.cipherService.getAllDecrypted();
-    return ciphers.some(
-      (cipher) =>
-        (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
-        (cipher.type === CipherType.Login &&
-          cipher.login.fido2Key != undefined &&
-          ids.includes(cipher.login.fido2Key.nonDiscoverableId))
-    );
+    return ciphers
+      .filter(
+        (cipher) =>
+          (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
+          (cipher.type === CipherType.Login &&
+            cipher.login.fido2Key != undefined &&
+            ids.includes(cipher.login.fido2Key.nonDiscoverableId))
+      )
+      .map((cipher) => cipher.id);
   }
 
   private async findNonDiscoverableCredentials(
