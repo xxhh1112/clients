@@ -1,0 +1,9 @@
+<div class="tw-flex tw-w-full">
+  <ng-content select="[slot=side-nav]"></ng-content>
+  <main
+    class="tw-min-h-screen tw-min-w-0 tw-flex-1 tw-p-6"
+    [ngClass]="(sideNavService.expanded$ | async) ? 'tw-ml-60' : 'tw-ml-0'"
+  >
+    <ng-content></ng-content>
+  </main>
+</div>

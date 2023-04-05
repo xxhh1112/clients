@@ -7,7 +7,6 @@ import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/admin-con
 import { buildFlaggedRoute } from "@bitwarden/web-vault/app/oss-routing.module";
 
 import { LayoutComponent } from "./layout/layout.component";
-import { NavigationComponent } from "./layout/navigation.component";
 import { OverviewModule } from "./overview/overview.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { SecretsModule } from "./secrets/secrets.module";
@@ -25,11 +24,6 @@ const routes: Routes = [
       organizationPermissions: (org: Organization) => org.canAccessSecretsManager,
     },
     children: [
-      {
-        path: "",
-        component: NavigationComponent,
-        outlet: "sidebar",
-      },
       {
         path: "secrets",
         loadChildren: () => SecretsModule,
