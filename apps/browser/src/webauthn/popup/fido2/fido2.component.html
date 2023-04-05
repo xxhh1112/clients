@@ -1,4 +1,4 @@
-<ng-container *ngIf="data">
+<ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
     <ng-container *ngIf="data.type == 'ConfirmCredentialRequest'">
       A site is asking for authentication using the following credential:
@@ -37,9 +37,9 @@
       </div>
       <button type="button" class="btn btn-outline-secondary" (click)="confirmNew()">Create</button>
     </ng-container>
-    <button type="button" class="btn btn-outline-secondary" (click)="cancel(true)">
+    <button type="button" class="btn btn-outline-secondary" (click)="abort(true)">
       Use browser built-in
     </button>
-    <button type="button" class="btn btn-outline-secondary" (click)="cancel(false)">Abort</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="abort(false)">Abort</button>
   </div>
 </ng-container>

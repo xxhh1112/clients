@@ -1,6 +1,17 @@
-import { filter, first, lastValueFrom, Observable, Subject, takeUntil } from "rxjs";
+import {
+  BehaviorSubject,
+  EmptyError,
+  filter,
+  firstValueFrom,
+  fromEvent,
+  Observable,
+  Subject,
+  take,
+  takeUntil,
+} from "rxjs";
 
 import { Utils } from "@bitwarden/common/misc/utils";
+import { UserRequestedFallbackAbortReason } from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   Fido2UserInterfaceSession,
@@ -12,19 +23,26 @@ import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
 
-export class Fido2Error extends Error {
-  constructor(message: string, readonly fallbackRequested = false) {
-    super(message);
+export class SessionClosedError extends Error {
+  constructor() {
+    super("Fido2UserInterfaceSession was closed");
   }
 }
 
-export class RequestAbortedError extends Fido2Error {
-  constructor(fallbackRequested = false) {
-    super("Fido2 request was aborted", fallbackRequested);
-  }
-}
-
-export type BrowserFido2Message = { requestId: string } & (
+export type BrowserFido2Message = { sessionId: string } & (
+  | /**
+   * This message is used by popouts to announce that they are ready
+   * to recieve messages.
+   **/ {
+      type: "ConnectResponse";
+    }
+  /**
+   * This message is used to announce the creation of a new session.
+   * It iss used by popouts to know when to close.
+   **/
+  | {
+      type: "NewSessionCreatedRequest";
+    }
   | {
       type: "PickCredentialRequest";
       cipherIds: string[];
@@ -66,228 +84,77 @@ export type BrowserFido2Message = { requestId: string } & (
     }
 );
 
-export interface BrowserFido2UserInterfaceRequestData {
-  requestId: string;
-}
-
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  static sendMessage(msg: BrowserFido2Message) {
-    BrowserApi.sendMessage(BrowserFido2MessageName, msg);
-  }
-
-  static onAbort$(requestId: string): Observable<BrowserFido2Message> {
-    const messages$ = BrowserApi.messageListener$() as Observable<BrowserFido2Message>;
-    return messages$.pipe(
-      filter((message) => message.type === "AbortRequest" && message.requestId === requestId),
-      first()
-    );
-  }
-
-  private messages$ = BrowserApi.messageListener$() as Observable<BrowserFido2Message>;
-  private destroy$ = new Subject<void>();
-
   constructor(private popupUtilsService: PopupUtilsService) {}
 
   async newSession(abortController?: AbortController): Promise<Fido2UserInterfaceSession> {
-    return await BrowserFido2UserInterfaceSession.create(this, abortController);
-  }
-
-  async confirmCredential(
-    cipherId: string,
-    abortController = new AbortController()
-  ): Promise<boolean> {
-    const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = { type: "ConfirmCredentialRequest", cipherId, requestId };
-    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-
-    const abortHandler = () =>
-      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
-    abortController.signal.addEventListener("abort", abortHandler);
-
-    this.popupUtilsService.popOut(
-      null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-      { center: true }
-    );
-
-    const response = await lastValueFrom(
-      this.messages$.pipe(
-        filter((msg) => msg.requestId === requestId),
-        first(),
-        takeUntil(this.destroy$)
-      )
-    );
-
-    if (response.type === "ConfirmCredentialResponse") {
-      return true;
-    }
-
-    if (response.type === "AbortResponse") {
-      throw new RequestAbortedError(response.fallbackRequested);
-    }
-
-    abortController.signal.removeEventListener("abort", abortHandler);
-
-    return false;
-  }
-
-  async pickCredential(
-    cipherIds: string[],
-    abortController = new AbortController()
-  ): Promise<string> {
-    const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = { type: "PickCredentialRequest", cipherIds, requestId };
-    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-
-    const abortHandler = () =>
-      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
-    abortController.signal.addEventListener("abort", abortHandler);
-
-    this.popupUtilsService.popOut(
-      null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-      { center: true }
-    );
-
-    const response = await lastValueFrom(
-      this.messages$.pipe(
-        filter((msg) => msg.requestId === requestId),
-        first(),
-        takeUntil(this.destroy$)
-      )
-    );
-
-    if (response.type === "AbortResponse") {
-      throw new RequestAbortedError(response.fallbackRequested);
-    }
-
-    if (response.type !== "PickCredentialResponse") {
-      throw new RequestAbortedError();
-    }
-
-    abortController.signal.removeEventListener("abort", abortHandler);
-
-    return response.cipherId;
-  }
-
-  async confirmNewCredential(
-    { credentialName, userName }: NewCredentialParams,
-    abortController = new AbortController()
-  ): Promise<boolean> {
-    const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = {
-      type: "ConfirmNewCredentialRequest",
-      requestId,
-      credentialName,
-      userName,
-    };
-    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-
-    const abortHandler = () =>
-      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
-    abortController.signal.addEventListener("abort", abortHandler);
-
-    this.popupUtilsService.popOut(
-      null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-      { center: true }
-    );
-
-    const response = await lastValueFrom(
-      this.messages$.pipe(
-        filter((msg) => msg.requestId === requestId),
-        first(),
-        takeUntil(this.destroy$)
-      )
-    );
-
-    if (response.type === "ConfirmNewCredentialResponse") {
-      return true;
-    }
-
-    if (response.type === "AbortResponse") {
-      throw new RequestAbortedError(response.fallbackRequested);
-    }
-
-    abortController.signal.removeEventListener("abort", abortHandler);
-
-    return false;
-  }
-
-  async confirmNewNonDiscoverableCredential(
-    { credentialName, userName }: NewCredentialParams,
-    abortController?: AbortController
-  ): Promise<string> {
-    const requestId = Utils.newGuid();
-    const data: BrowserFido2Message = {
-      type: "ConfirmNewNonDiscoverableCredentialRequest",
-      requestId,
-      credentialName,
-      userName,
-    };
-    const queryParams = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-
-    const abortHandler = () =>
-      BrowserFido2UserInterfaceService.sendMessage({ type: "AbortRequest", requestId });
-    abortController.signal.addEventListener("abort", abortHandler);
-
-    this.popupUtilsService.popOut(
-      null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-      { center: true }
-    );
-
-    const response = await lastValueFrom(
-      this.messages$.pipe(
-        filter((msg) => msg.requestId === requestId),
-        first(),
-        takeUntil(this.destroy$)
-      )
-    );
-
-    if (response.type === "ConfirmNewNonDiscoverableCredentialResponse") {
-      return response.cipherId;
-    }
-
-    if (response.type === "AbortResponse") {
-      throw new RequestAbortedError(response.fallbackRequested);
-    }
-
-    abortController.signal.removeEventListener("abort", abortHandler);
-
-    return undefined;
-  }
-
-  async informExcludedCredential(
-    existingCipherIds: string[],
-    newCredential: NewCredentialParams,
-    abortController?: AbortController
-  ): Promise<void> {
-    // Not Implemented
-  }
-
-  private setAbortTimeout(abortController: AbortController) {
-    return setTimeout(() => abortController.abort());
+    return await BrowserFido2UserInterfaceSession.create(this.popupUtilsService, abortController);
   }
 }
 
 export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSession {
   static async create(
-    parentService: BrowserFido2UserInterfaceService,
+    popupUtilsService: PopupUtilsService,
     abortController?: AbortController
   ): Promise<BrowserFido2UserInterfaceSession> {
-    return new BrowserFido2UserInterfaceSession(parentService, abortController);
+    return new BrowserFido2UserInterfaceSession(popupUtilsService, abortController);
   }
 
-  readonly abortListener: () => void;
+  static sendMessage(msg: BrowserFido2Message) {
+    BrowserApi.sendMessage(BrowserFido2MessageName, msg);
+  }
+
+  private closed = false;
+  private messages$ = (BrowserApi.messageListener$() as Observable<BrowserFido2Message>).pipe(
+    filter((msg) => msg.sessionId === this.sessionId)
+  );
+  private connected$ = new BehaviorSubject(false);
+  private destroy$ = new Subject<void>();
 
   private constructor(
-    private readonly parentService: BrowserFido2UserInterfaceService,
+    private readonly popupUtilsService: PopupUtilsService,
     readonly abortController = new AbortController(),
     readonly sessionId = Utils.newGuid()
   ) {
-    this.abortListener = () => this.abort();
-    abortController.signal.addEventListener("abort", this.abortListener);
+    this.messages$
+      .pipe(
+        filter((msg) => msg.type === "ConnectResponse"),
+        take(1),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.connected$.next(true);
+      });
+
+    // Handle session aborted by RP
+    fromEvent(abortController.signal, "abort")
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.close();
+        BrowserFido2UserInterfaceSession.sendMessage({
+          type: "AbortRequest",
+          sessionId: this.sessionId,
+        });
+      });
+
+    // Handle session aborted by user
+    this.messages$
+      .pipe(
+        filter((msg) => msg.type === "AbortResponse"),
+        take(1),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((msg) => {
+        if (msg.type === "AbortResponse") {
+          this.close();
+          this.abortController.abort(UserRequestedFallbackAbortReason);
+        }
+      });
+
+    BrowserFido2UserInterfaceSession.sendMessage({
+      type: "NewSessionCreatedRequest",
+      sessionId,
+    });
   }
 
   fallbackRequested = false;
@@ -296,26 +163,61 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     return this.abortController.signal.aborted;
   }
 
-  confirmCredential(cipherId: string, abortController?: AbortController): Promise<boolean> {
-    return this.parentService.confirmCredential(cipherId, this.abortController);
+  async confirmCredential(cipherId: string): Promise<boolean> {
+    const data: BrowserFido2Message = {
+      type: "ConfirmCredentialRequest",
+      cipherId,
+      sessionId: this.sessionId,
+    };
+
+    await this.send(data);
+    await this.receive("ConfirmCredentialResponse");
+
+    return true;
   }
 
-  pickCredential(cipherIds: string[], abortController?: AbortController): Promise<string> {
-    return this.parentService.pickCredential(cipherIds, this.abortController);
+  async pickCredential(cipherIds: string[]): Promise<string> {
+    const data: BrowserFido2Message = {
+      type: "PickCredentialRequest",
+      cipherIds,
+      sessionId: this.sessionId,
+    };
+
+    await this.send(data);
+    const response = await this.receive("PickCredentialResponse");
+
+    return response.cipherId;
   }
 
-  confirmNewCredential(
-    params: NewCredentialParams,
-    abortController?: AbortController
-  ): Promise<boolean> {
-    return this.parentService.confirmNewCredential(params, this.abortController);
+  async confirmNewCredential({ credentialName, userName }: NewCredentialParams): Promise<boolean> {
+    const data: BrowserFido2Message = {
+      type: "ConfirmNewCredentialRequest",
+      sessionId: this.sessionId,
+      credentialName,
+      userName,
+    };
+
+    await this.send(data);
+    await this.receive("ConfirmNewCredentialResponse");
+
+    return true;
   }
 
-  confirmNewNonDiscoverableCredential(
-    params: NewCredentialParams,
-    abortController?: AbortController
-  ): Promise<string> {
-    return this.parentService.confirmNewNonDiscoverableCredential(params, this.abortController);
+  async confirmNewNonDiscoverableCredential({
+    credentialName,
+    userName,
+  }: NewCredentialParams): Promise<string> {
+    const data: BrowserFido2Message = {
+      type: "ConfirmNewNonDiscoverableCredentialRequest",
+      sessionId: this.sessionId,
+      credentialName,
+      userName,
+    };
+
+    await this.send(data);
+    const response = await this.receive("ConfirmNewNonDiscoverableCredentialResponse");
+
+    return response.cipherId;
   }
 
   informExcludedCredential(
@@ -323,18 +225,52 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     newCredential: NewCredentialParams,
     abortController?: AbortController
   ): Promise<void> {
-    return this.parentService.informExcludedCredential(
-      existingCipherIds,
-      newCredential,
-      this.abortController
-    );
+    return null;
   }
 
-  private abort() {
-    this.close();
+  private async send(msg: BrowserFido2Message): Promise<void> {
+    if (!this.connected$.value) {
+      await this.connect();
+    }
+    BrowserFido2UserInterfaceSession.sendMessage(msg);
+  }
+
+  private async receive<T extends BrowserFido2Message["type"]>(
+    type: T
+  ): Promise<BrowserFido2Message & { type: T }> {
+    try {
+      const response = await firstValueFrom(
+        this.messages$.pipe(
+          filter((msg) => msg.sessionId === this.sessionId && msg.type === type),
+          takeUntil(this.destroy$)
+        )
+      );
+      return response as BrowserFido2Message & { type: T };
+    } catch (error) {
+      if (error instanceof EmptyError) {
+        throw new SessionClosedError();
+      }
+      throw error;
+    }
+  }
+
+  private async connect(): Promise<void> {
+    if (this.closed) {
+      throw new Error("Cannot re-open closed session");
+    }
+
+    const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
+    this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      { center: true }
+    );
+    await firstValueFrom(this.connected$.pipe(filter((connected) => connected === true)));
   }
 
   private close() {
-    this.abortController.signal.removeEventListener("abort", this.abortListener);
+    this.closed = true;
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

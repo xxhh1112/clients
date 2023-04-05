@@ -1,3 +1,5 @@
+export const UserRequestedFallbackAbortReason = "UserRequestedFallback";
+
 export type UserVerification = "discouraged" | "preferred" | "required";
 
 export abstract class Fido2ClientService {
