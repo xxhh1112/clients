@@ -14,8 +14,10 @@ import {
   AssertCredentialResult,
   CreateCredentialParams,
   CreateCredentialResult,
+  FallbackRequestedError,
   Fido2ClientService as Fido2ClientServiceAbstraction,
   PublicKeyCredentialParam,
+  UserRequestedFallbackAbortReason,
   UserVerification,
 } from "../abstractions/fido2-client.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
@@ -117,11 +119,19 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       );
     } catch (error) {
       if (
+        abortController.signal.aborted &&
+        abortController.signal.reason === UserRequestedFallbackAbortReason
+      ) {
+        throw new FallbackRequestedError();
+      }
+
+      if (
         error instanceof Fido2AutenticatorError &&
         error.errorCode === Fido2AutenticatorErrorCode.InvalidState
       ) {
         throw new DOMException(undefined, "InvalidStateError");
       }
+
       throw new DOMException(undefined, "NotAllowedError");
     }
 
@@ -198,6 +208,13 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         abortController
       );
     } catch (error) {
+      if (
+        abortController.signal.aborted &&
+        abortController.signal.reason === UserRequestedFallbackAbortReason
+      ) {
+        throw new FallbackRequestedError();
+      }
+
       if (
         error instanceof Fido2AutenticatorError &&
         error.errorCode === Fido2AutenticatorErrorCode.InvalidState

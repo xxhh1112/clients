@@ -147,7 +147,9 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       .subscribe((msg) => {
         if (msg.type === "AbortResponse") {
           this.close();
-          this.abortController.abort(UserRequestedFallbackAbortReason);
+          this.abortController.abort(
+            msg.fallbackRequested ? UserRequestedFallbackAbortReason : undefined
+          );
         }
       });
 

@@ -79,14 +79,9 @@ export interface PublicKeyCredentialParam {
   type: "public-key";
 }
 
-export class Fido2Error extends Error {
-  constructor(message: string, readonly fallbackRequested = false) {
-    super(message);
-  }
-}
-
-export class RequestAbortedError extends Fido2Error {
-  constructor(fallbackRequested = false) {
-    super("Fido2 request was aborted", fallbackRequested);
+export class FallbackRequestedError extends Error {
+  readonly fallbackRequested = true;
+  constructor() {
+    super("FallbackRequested");
   }
 }
