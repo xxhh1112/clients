@@ -1,9 +1,9 @@
 <div
-  class="tw-relative"
+  class="tw-relative tw-transition-all motion-reduce:tw-transition-none"
   [ngClass]="[
     showActiveStyles ? 'tw-bg-background-alt4' : 'tw-bg-background-alt3',
     fvwStyles$ | async,
-    (expanded$ | async) ? 'tw-w-60' : ''
+    (expanded$ | async) ? 'tw-w-60' : 'tw-w-14'
   ]"
 >
   <div
@@ -78,6 +78,7 @@
     </ng-template>
 
     <div
+      *ngIf="expanded$ | async"
       class="tw-flex tw-gap-1 [&>*:focus-visible::before]:!tw-ring-text-alt2 [&>*:hover]:!tw-border-text-alt2 [&>*]:!tw-text-alt2"
     >
       <ng-content select="[slot-end]"></ng-content>
