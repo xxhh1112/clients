@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Отменить подписку"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "Подписка отменена."
   },
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Одна или несколько политик организации запрещают вам экспортировать личное хранилище."
   },
+  "activateAutofill": {
+    "message": "Активировать автозаполнение"
+  },
+  "activateAutofillDesc": {
+    "message": "Включить автозаполнение при загрузке страницы в расширении браузера для всех существующих и новых участников."
+  },
+  "experimentalFeature": {
+    "message": "Взломанные или недоверенные сайты могут внедрить вредоносный код во время автозаполнения при загрузке страницы."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Узнать больше об автозаполнении"
+  },
   "selectType": {
     "message": "Выберите тип SSO"
   },
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Отчеты"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Количество пользователей"
   },
@@ -5866,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Сервисный аккаунт удален"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Сервисные аккаунты удалены"
@@ -6027,8 +6039,8 @@
     "message": "Токены доступа",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Создать токен доступа",
+  "newAccessToken": {
+    "message": "Новый токен доступа",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6502,7 @@
     "message": "Изменить параметры KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "При продолжении текущая сессия будет завершена, после чего потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
+    "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
   },
   "secretsManagerBeta": {
     "message": "Менеджер секретов Beta"
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Отклонить"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Эта функция недоступна для бесплатных организаций. Свяжитесь с владельцем вашей организации для обновления."
   }
 }

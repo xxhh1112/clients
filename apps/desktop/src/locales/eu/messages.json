@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Jarri gurekin harremanetan"
   },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
+  },
   "getHelp": {
     "message": "Jaso laguntza"
   },
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Ziur zaude \"Inoiz ez\" aukera erabili nahi duzula? Zure blokeo aukerak \"Inoiz ez\" bezala konfiguratzeak kutxa gotorraren zifratze-gakoa gailuan gordetzen du. Aukera hau erabiltzen baduzu, gailua behar bezala babestuta duzula ziurtatu behar duzu."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Kutxa gotorra"

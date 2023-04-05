@@ -1146,7 +1146,7 @@
     "message": "Mx"
   },
   "firstName": {
-    "message": "Ім’я"
+    "message": "Ім'я"
   },
   "middleName": {
     "message": "По батькові"
@@ -1628,7 +1628,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів",
+    "message": "Досягнуто максимальної кількості доступів",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
@@ -1691,7 +1691,7 @@
     "message": "Файл, який ви хочете відправити."
   },
   "deletionDate": {
-    "message": "Дата видалення"
+    "message": "Термін дії"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -1717,7 +1717,7 @@
     }
   },
   "custom": {
-    "message": "Спеціальний"
+    "message": "Власний"
   },
   "maximumAccessCount": {
     "message": "Максимальна кількість доступів"
@@ -2003,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Записи у вимкнених організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Вхід до $DOMAIN$",
     "placeholders": {
@@ -2120,11 +2117,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Політикою вашої організації було увімкнено автозаповнення на сторінці."
+  },
   "howToAutofill": {
     "message": "Як працює автозаповнення"
   },
-  "autofillSelectInfo": {
-    "message": "Виберіть елемент на цій сторінці або скористайтеся комбінацією клавіш: $COMMAND$. Ви також можете спробувати автозаповнення під час завантаження сторінки.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Виберіть елемент з цієї сторінки або використайте комбінацію клавіш: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2132,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Виберіть елемент на цій сторінці або встановіть комбінацію клавіш. Ви також можете спробувати автозаповнення під час завантаження сторінки."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Виберіть елемент з цієї сторінки або встановіть комбінацію клавіш у налаштуваннях."
   },
   "gotIt": {
     "message": "Зрозуміло"

@@ -2,7 +2,7 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -70,18 +70,6 @@ export class CipherReportComponent {
     );
 
     return childComponent;
-  }
-
-  protected async checkAccess(): Promise<boolean> {
-    if (this.organization != null) {
-      // TODO: Maybe we want to just make sure they are not on a free plan? Just compare useTotp for now
-      // since all paid plans include useTotp
-      if (this.requiresPaid && !this.organization.useTotp) {
-        this.messagingService.send("upgradeOrganization", { organizationId: this.organization.id });
-        return false;
-      }
-    }
-    return true;
   }
 
   protected async setCiphers() {

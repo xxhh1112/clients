@@ -2019,6 +2019,9 @@
   "cancelSubscription": {
     "message": "Előfizetés megszüntetése"
   },
+  "subscriptionExpiration": {
+    "message": "Előfizetés lejárat"
+  },
   "subscriptionCanceled": {
     "message": "Az előfizetés törlésre került."
   },
@@ -4852,6 +4855,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Egy vagy több szervezeti házirend tiltja a személyes széf exportálását."
   },
+  "activateAutofill": {
+    "message": "Automatikus kitöltés bekapcsolása"
+  },
+  "activateAutofillDesc": {
+    "message": "Bekapcsolja az automatikus kitöltést az oldalbetöltési beállításokkal a böngésző bővítményben minden meglévő és új tag esetében."
+  },
+  "experimentalFeature": {
+    "message": "A veszélyeztetett vagy nem megbízható webhelyek kihasználhatják az oldal betöltéskor végrehajtott automatikus kitöltést."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "További információ az automatikus kitöltésről"
+  },
   "selectType": {
     "message": "SSO típus választás"
   },
@@ -5626,9 +5641,6 @@
   "reporting": {
     "message": "Jelentés"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Felhasználók száma"
   },
@@ -5866,7 +5878,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "A szolgáltatásfiók törlésre került."
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "A szolgáltatás fiókok törlésre kerültek."
@@ -6027,8 +6039,8 @@
     "message": "Vezérjelek elérése",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Elérési vezérjel létrehozása",
+  "newAccessToken": {
+    "message": "Új hozzáférési vezérjel",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6502,7 @@
     "message": "KDF beállítások megváltoztatása"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "A továbblépéssel kijelentkeztetésre kerülünk az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak. Célszerű a titkosítási beállítások módosítása előtt a széf exportálása  az adatvesztés elkerülése érdekében."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Titkos kód kezelő béta"
@@ -6660,5 +6672,8 @@
   },
   "dismiss": {
     "message": "Elvetés"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }
