@@ -485,9 +485,6 @@ export abstract class ApiService {
   postBitPayInvoice: (request: BitPayInvoiceRequest) => Promise<string>;
   postSetupPayment: () => Promise<string>;
 
-  fetch: (request: Request) => Promise<Response>;
-  nativeFetch: (request: Request) => Promise<Response>;
-
   preValidateSso: (identifier: string) => Promise<SsoPreValidateResponse>;
 
   postCreateSponsorship: (

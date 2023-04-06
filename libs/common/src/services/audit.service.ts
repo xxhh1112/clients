@@ -1,3 +1,4 @@
+import { ApiHelperService } from "../abstractions/api-helper.service.abstraction";
 import { ApiService } from "../abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "../abstractions/audit.service";
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
@@ -11,7 +12,8 @@ const PwnedPasswordsApi = "https://api.pwnedpasswords.com/range/";
 export class AuditService implements AuditServiceAbstraction {
   constructor(
     private cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private apiHelperService: ApiHelperService
   ) {}
 
   @throttle(100, () => "passwordLeaked")
@@ -21,7 +23,9 @@ export class AuditService implements AuditServiceAbstraction {
     const hashStart = hash.substr(0, 5);
     const hashEnding = hash.substr(5);
 
-    const response = await this.apiService.nativeFetch(new Request(PwnedPasswordsApi + hashStart));
+    const response = await this.apiHelperService.nativeFetch(
+      new Request(PwnedPasswordsApi + hashStart)
+    );
     const leakedHashes = await response.text();
     const match = leakedHashes.split(/\r?\n/).find((v) => {
       return v.split(":")[0] === hashEnding;
