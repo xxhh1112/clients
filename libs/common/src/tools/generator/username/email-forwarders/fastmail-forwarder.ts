@@ -1,15 +1,15 @@
-import { ApiService } from "../../../../abstractions/api.service";
+import { ApiHelperService } from "../../../../abstractions/api-helper.service.abstraction";
 
 import { Forwarder } from "./forwarder";
 import { ForwarderOptions } from "./forwarder-options";
 
 export class FastmailForwarder implements Forwarder {
-  async generate(apiService: ApiService, options: ForwarderOptions): Promise<string> {
+  async generate(apiHelperService: ApiHelperService, options: ForwarderOptions): Promise<string> {
     if (options.apiKey == null || options.apiKey === "") {
       throw "Invalid Fastmail API token.";
     }
 
-    const accountId = await this.getAccountId(apiService, options);
+    const accountId = await this.getAccountId(apiHelperService, options);
     if (accountId == null || accountId === "") {
       throw "Unable to obtain Fastmail masked email account ID.";
     }
@@ -45,7 +45,7 @@ export class FastmailForwarder implements Forwarder {
       ],
     });
     const request = new Request(url, requestInit);
-    const response = await apiService.nativeFetch(request);
+    const response = await apiHelperService.nativeFetch(request);
     if (response.status === 200) {
       const json = await response.json();
       if (
@@ -74,7 +74,10 @@ export class FastmailForwarder implements Forwarder {
     throw "Unknown Fastmail error occurred.";
   }
 
-  private async getAccountId(apiService: ApiService, options: ForwarderOptions): Promise<string> {
+  private async getAccountId(
+    apiHelperService: ApiHelperService,
+    options: ForwarderOptions
+  ): Promise<string> {
     const requestInit: RequestInit = {
       cache: "no-store",
       method: "GET",
@@ -84,7 +87,7 @@ export class FastmailForwarder implements Forwarder {
     };
     const url = "https://api.fastmail.com/.well-known/jmap";
     const request = new Request(url, requestInit);
-    const response = await apiService.nativeFetch(request);
+    const response = await apiHelperService.nativeFetch(request);
     if (response.status === 200) {
       const json = await response.json();
       if (json.primaryAccounts != null) {

@@ -1434,7 +1434,7 @@ export class ApiService implements ApiServiceAbstraction {
     if (this.customUserAgent != null) {
       headers.set("User-Agent", this.customUserAgent);
     }
-    const response = await this.fetch(
+    const response = await this.apiHelperService.fetch(
       new Request(this.environmentService.getEventsUrl() + "/collect", {
         cache: "no-store",
         credentials: this.apiHelperService.getCredentials(),
@@ -1479,7 +1479,7 @@ export class ApiService implements ApiServiceAbstraction {
   async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
     const authHeader = await this.tokenApiService.getActiveAccessToken();
 
-    const response = await this.fetch(
+    const response = await this.apiHelperService.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
         cache: "no-store",
         method: "GET",
@@ -1504,7 +1504,7 @@ export class ApiService implements ApiServiceAbstraction {
   ): Promise<void> {
     const authHeader = await this.tokenApiService.getActiveAccessToken();
 
-    const response = await this.fetch(
+    const response = await this.apiHelperService.fetch(
       new Request(keyConnectorUrl + "/user-keys", {
         cache: "no-store",
         method: "POST",
@@ -1524,7 +1524,7 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async getKeyConnectorAlive(keyConnectorUrl: string) {
-    const response = await this.fetch(
+    const response = await this.apiHelperService.fetch(
       new Request(keyConnectorUrl + "/alive", {
         cache: "no-store",
         method: "GET",
@@ -1553,14 +1553,6 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   // Helpers
-
-  async fetch(request: Request): Promise<Response> {
-    return this.apiHelperService.fetch(request);
-  }
-
-  nativeFetch(request: Request): Promise<Response> {
-    return this.apiHelperService.nativeFetch(request);
-  }
 
   async postCreateSponsorship(
     sponsoredOrgId: string,

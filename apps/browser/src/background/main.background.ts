@@ -336,7 +336,8 @@ export default class MainBackground {
       this.logService,
       this.stateService,
       this.encryptService,
-      this.cipherFileUploadService
+      this.cipherFileUploadService,
+      this.apiHelperService
     );
     this.folderService = new BrowserFolderService(
       this.cryptoService,
@@ -493,7 +494,11 @@ export default class MainBackground {
       this.logService,
       this.settingsService
     );
-    this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
+    this.auditService = new AuditService(
+      this.cryptoFunctionService,
+      this.apiService,
+      this.apiHelperService
+    );
     this.exportService = new ExportService(
       this.folderService,
       this.cipherService,
@@ -627,7 +632,7 @@ export default class MainBackground {
     this.usernameGenerationService = new UsernameGenerationService(
       this.cryptoService,
       this.stateService,
-      this.apiService
+      this.apiHelperService
     );
 
     this.avatarUpdateService = new AvatarUpdateService(this.apiService, this.stateService);

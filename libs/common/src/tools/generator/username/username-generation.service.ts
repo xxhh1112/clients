@@ -1,4 +1,4 @@
-import { ApiService } from "../../../abstractions/api.service";
+import { ApiHelperService } from "../../../abstractions/api-helper.service.abstraction";
 import { CryptoService } from "../../../abstractions/crypto.service";
 import { StateService } from "../../../abstractions/state.service";
 import { EFFLongWordList } from "../../../misc/wordlist";
@@ -28,7 +28,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
   constructor(
     private cryptoService: CryptoService,
     private stateService: StateService,
-    private apiService: ApiService
+    private apiHelperService: ApiHelperService
   ) {}
 
   generateUsername(options: any): Promise<string> {
@@ -143,7 +143,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
       return null;
     }
 
-    return forwarder.generate(this.apiService, forwarderOptions);
+    return forwarder.generate(this.apiHelperService, forwarderOptions);
   }
 
   async getOptions(): Promise<any> {

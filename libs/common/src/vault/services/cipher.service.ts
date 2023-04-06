@@ -1,5 +1,6 @@
 import { firstValueFrom } from "rxjs";
 
+import { ApiHelperService } from "../../abstractions/api-helper.service.abstraction";
 import { ApiService } from "../../abstractions/api.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EncryptService } from "../../abstractions/encrypt.service";
@@ -62,7 +63,8 @@ export class CipherService implements CipherServiceAbstraction {
     private logService: LogService,
     private stateService: StateService,
     private encryptService: EncryptService,
-    private cipherFileUploadService: CipherFileUploadService
+    private cipherFileUploadService: CipherFileUploadService,
+    private apiHelperService: ApiHelperService
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -1001,7 +1003,7 @@ export class CipherService implements CipherServiceAbstraction {
     cipherId: string,
     organizationId: string
   ): Promise<any> {
-    const attachmentResponse = await this.apiService.nativeFetch(
+    const attachmentResponse = await this.apiHelperService.nativeFetch(
       new Request(attachmentView.url, { cache: "no-store" })
     );
     if (attachmentResponse.status !== 200) {

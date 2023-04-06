@@ -478,9 +478,6 @@ export abstract class ApiService {
   postBitPayInvoice: (request: BitPayInvoiceRequest) => Promise<string>;
   postSetupPayment: () => Promise<string>;
 
-  fetch: (request: Request) => Promise<Response>;
-  nativeFetch: (request: Request) => Promise<Response>;
-
   postCreateSponsorship: (
     sponsorshipOrgId: string,
     request: OrganizationSponsorshipCreateRequest

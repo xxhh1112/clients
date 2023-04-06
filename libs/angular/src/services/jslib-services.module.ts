@@ -222,7 +222,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: AuditServiceAbstraction,
       useClass: AuditService,
-      deps: [CryptoFunctionServiceAbstraction, ApiServiceAbstraction],
+      deps: [CryptoFunctionServiceAbstraction, ApiServiceAbstraction, ApiHelperServiceAbstraction],
     },
     {
       provide: AuthServiceAbstraction,
@@ -266,7 +266,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         logService: LogService,
         stateService: StateServiceAbstraction,
         encryptService: EncryptService,
-        fileUploadService: CipherFileUploadServiceAbstraction
+        fileUploadService: CipherFileUploadServiceAbstraction,
+        apiHelperService: ApiHelperServiceAbstraction
       ) =>
         new CipherService(
           cryptoService,
@@ -277,7 +278,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
           logService,
           stateService,
           encryptService,
-          fileUploadService
+          fileUploadService,
+          apiHelperService
         ),
       deps: [
         CryptoServiceAbstraction,
@@ -370,7 +372,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: UsernameGenerationServiceAbstraction,
       useClass: UsernameGenerationService,
-      deps: [CryptoServiceAbstraction, StateServiceAbstraction, ApiServiceAbstraction],
+      deps: [CryptoServiceAbstraction, StateServiceAbstraction, ApiHelperServiceAbstraction],
     },
     {
       provide: ApiServiceAbstraction,

@@ -272,7 +272,8 @@ export class Main {
       this.logService,
       this.stateService,
       this.encryptService,
-      this.cipherFileUploadService
+      this.cipherFileUploadService,
+      this.apiHelperService
     );
 
     this.broadcasterService = new BroadcasterService();
@@ -412,7 +413,11 @@ export class Main {
       this.stateService
     );
 
-    this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
+    this.auditService = new AuditService(
+      this.cryptoFunctionService,
+      this.apiService,
+      this.apiHelperService
+    );
     this.program = new Program(this);
     this.vaultProgram = new VaultProgram(this);
     this.sendProgram = new SendProgram(this);
