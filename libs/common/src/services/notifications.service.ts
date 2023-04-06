@@ -11,7 +11,7 @@ import { StateService } from "../abstractions/state.service";
 import { AuthService } from "../auth/abstractions/auth.service";
 import { TokenApiService } from "../auth/abstractions/token-api.service.abstraction";
 import { AuthenticationStatus } from "../auth/enums/authentication-status";
-import { NotificationType } from "../enums/notificationType";
+import { NotificationType } from "../enums";
 import {
   NotificationResponse,
   SyncCipherNotification,
