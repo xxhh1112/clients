@@ -50,7 +50,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
 
     const fetchReq = await this.apiHelperService.createRequest(
       "POST",
-      `${this.environmentService.getIdentityUrl()}/connect/token`,
+      { path: "/connect/token", apiUrl: this.environmentService.getIdentityUrl() },
       this.apiHelperService.qsStringify(identityToken),
       true,
       // Create an arrow function so that the alterIdentityTokenHeaders will be
@@ -133,7 +133,7 @@ export class TokenApiServiceImplementation implements TokenApiServiceAbstraction
 
     const fetchReq = await this.apiHelperService.createRequest(
       "POST",
-      `${this.environmentService.getIdentityUrl()}/connect/token`,
+      { path: "/connect/token", apiUrl: this.environmentService.getIdentityUrl() },
       requestBody,
       true
     );
