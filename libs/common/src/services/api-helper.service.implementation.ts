@@ -1,7 +1,7 @@
 import { ApiHelperService as ApiHelperService } from "../abstractions/api-helper.service.abstraction";
 import { EnvironmentService } from "../abstractions/environment.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
-import { DeviceType } from "../enums/deviceType";
+import { DeviceType } from "../enums";
 import { Utils } from "../misc/utils";
 import { RequestUrlParts } from "../models/api/request-url-parts.model";
 import { ErrorResponse } from "../models/response/error.response";
