@@ -3,6 +3,7 @@ import { EnvironmentService } from "../abstractions/environment.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { DeviceType } from "../enums/deviceType";
 import { Utils } from "../misc/utils";
+import { RequestUrlParts } from "../models/api/request-url-parts.model";
 import { ErrorResponse } from "../models/response/error.response";
 
 /**
@@ -36,7 +37,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
 
   //#region Http Request Creation
 
-  buildRequestUrl(path: string, apiUrl?: string): string {
+  private buildRequestUrl(path: string, apiUrl?: string): string {
     apiUrl = Utils.isNullOrWhitespace(apiUrl || "") ? this.environmentService.getApiUrl() : apiUrl;
 
     // Prevent directory traversal from malicious paths
@@ -53,7 +54,7 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
    * Useful for API services that cannot use `send(...)` because they require custom
    * response handling
    * @param method - GET, POST, PUT, DELETE
-   * @param requestUrl - url to send request to
+   * @param requestUrlParts - parts required (path and optional apiUrl) to build request url
    * @param body - body of request
    * @param hasResponse - whether or not to expect a response
    * @param alterHeaders - function to alter headers before sending request
@@ -61,11 +62,13 @@ export class ApiHelperServiceImplementation implements ApiHelperService {
    */
   async createRequest(
     method: "GET" | "POST" | "PUT" | "DELETE",
-    requestUrl: string,
+    requestUrlParts: RequestUrlParts,
     body: any,
     hasResponse: boolean,
     alterHeaders?: (headers: Headers) => Promise<void> | void
   ): Promise<Request> {
+    const requestUrl = this.buildRequestUrl(requestUrlParts.path, requestUrlParts.apiUrl);
+
     const headers = new Headers({
       "Device-Type": this.deviceType,
     });

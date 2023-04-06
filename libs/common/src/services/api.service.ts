@@ -1723,10 +1723,9 @@ export class ApiService implements ApiServiceAbstraction {
       };
     }
 
-    const requestUrl = this.apiHelperService.buildRequestUrl(path, apiUrl);
     const request = await this.apiHelperService.createRequest(
       method,
-      requestUrl,
+      { path, apiUrl },
       body,
       hasResponse,
       alterHeaders
