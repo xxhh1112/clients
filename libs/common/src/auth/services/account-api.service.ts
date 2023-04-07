@@ -1,10 +1,10 @@
 import { ApiService } from "../../abstractions/api.service";
 import { EnvironmentService } from "../../abstractions/environment.service";
 import { LogService } from "../../abstractions/log.service";
-import { UserVerificationService } from "../../abstractions/userVerification/userVerification.service.abstraction";
 import { Verification } from "../../types/verification";
 import { AccountApiService } from "../abstractions/account-api.service";
 import { InternalAccountService } from "../abstractions/account.service";
+import { UserVerificationService } from "../abstractions/userVerification/userVerification.service.abstraction";
 import { PreloginRequest } from "../models/request/prelogin.request";
 import { RegisterRequest } from "../models/request/register.request";
 import { PreloginResponse } from "../models/response/prelogin.response";
