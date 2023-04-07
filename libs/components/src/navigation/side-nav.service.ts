@@ -18,6 +18,10 @@ export class SideNavService {
   toggleExpanded() {
     this._expanded$.next(!this._expanded$.getValue());
   }
+
+  isExpanded() {
+    return this._expanded$.getValue();
+  }
 }
 
 /**

@@ -5,18 +5,23 @@ import {
   EventEmitter,
   forwardRef,
   Input,
+  OnDestroy,
   Output,
   QueryList,
 } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { NavBaseComponent } from "./nav-base.component";
 import { NavItemComponent } from "./nav-item.component";
+import { SideNavService } from "./side-nav.service";
 
 @Component({
   selector: "bit-nav-group",
   templateUrl: "./nav-group.component.html",
 })
-export class NavGroupComponent extends NavBaseComponent implements AfterContentInit {
+export class NavGroupComponent extends NavBaseComponent implements AfterContentInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   @ContentChildren(forwardRef(() => NavGroupComponent), {
     descendants: true,
   })
@@ -46,6 +51,10 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
   @Output()
   openChange = new EventEmitter<boolean>();
 
+  constructor(private sideNavService: SideNavService) {
+    super();
+  }
+
   protected toggle(event?: MouseEvent) {
     event?.stopPropagation();
     this.open = !this.open;
@@ -66,5 +75,14 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
 
   ngAfterContentInit(): void {
     this.initNestedStyles();
+
+    this.sideNavService.expanded$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isExpanded) => !isExpanded && this.open && this.toggle());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
