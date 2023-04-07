@@ -74,6 +74,9 @@ export class StateService<
   protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
   activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
 
+  protected disableFaviconSubject = new BehaviorSubject<boolean>(false);
+  disableFavicon$ = this.disableFaviconSubject.asObservable();
+
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
@@ -100,7 +103,6 @@ export class StateService<
           } else if (userId == null) {
             this.activeAccountUnlockedSubject.next(false);
           }
-
           // FIXME: This should be refactored into AuthService or a similar service,
           //  as checking for the existance of the crypto key is a low level
           //  implementation detail.
@@ -127,6 +129,9 @@ export class StateService<
       }
     });
     await this.initAccountState();
+
+    this.disableFaviconSubject.next(await this.getDisableFavicon());
+
     this.hasBeenInited = true;
   }
 
@@ -959,6 +964,7 @@ export class StateService<
       globals,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
+    this.disableFaviconSubject.next(value);
   }
 
   async getDisableGa(options?: StorageOptions): Promise<boolean> {
