@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { DeleteRecoverRequest } from "@bitwarden/common/models/request/delete-recover.request";
 
 @Component({
@@ -17,7 +17,7 @@ export class RecoverDeleteComponent {
 
   constructor(
     private router: Router,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private logService: LogService
@@ -27,7 +27,7 @@ export class RecoverDeleteComponent {
     try {
       const request = new DeleteRecoverRequest();
       request.email = this.email.trim().toLowerCase();
-      this.formPromise = this.apiService.postAccountRecoverDelete(request);
+      this.formPromise = this.accountApiService.postAccountRecoverDelete(request);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

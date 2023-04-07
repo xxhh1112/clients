@@ -1,7 +1,6 @@
 import { Directive } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -10,6 +9,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/userVerification.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
@@ -38,7 +38,7 @@ export class UpdatePasswordComponent extends BaseChangePasswordComponent {
     policyService: PolicyService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     stateService: StateService,
     private userVerificationService: UserVerificationService,
     private logService: LogService
@@ -106,7 +106,7 @@ export class UpdatePasswordComponent extends BaseChangePasswordComponent {
       request.key = encKey[1].encryptedString;
 
       // Update user's password
-      this.apiService.postPassword(request);
+      this.accountApiService.postPassword(request);
 
       this.platformUtilsService.showToast(
         "success",

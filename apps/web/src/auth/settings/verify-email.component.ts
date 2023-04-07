@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 
@@ -17,7 +17,7 @@ export class VerifyEmailComponent {
   @Output() onVerified = new EventEmitter<boolean>();
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
@@ -33,7 +33,7 @@ export class VerifyEmailComponent {
       return;
     }
 
-    await this.apiService.postAccountVerifyEmail();
+    await this.accountApiService.postAccountVerifyEmail();
     this.platformUtilsService.showToast(
       "success",
       null,

@@ -2,13 +2,13 @@ import { Directive } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { SsoApiService } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
@@ -46,7 +46,7 @@ export class SsoComponent {
     protected route: ActivatedRoute,
     protected stateService: StateService,
     protected platformUtilsService: PlatformUtilsService,
-    protected apiService: ApiService,
+    protected accountApiService: AccountApiService,
     protected cryptoFunctionService: CryptoFunctionService,
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
@@ -167,7 +167,7 @@ export class SsoComponent {
       encodeURIComponent(token);
 
     if (includeUserIdentifier) {
-      const userIdentifier = await this.apiService.getSsoUserIdentifier();
+      const userIdentifier = await this.accountApiService.getSsoUserIdentifier();
       authorizeUrl += `&user_identifier=${encodeURIComponent(userIdentifier)}`;
     }
 

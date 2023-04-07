@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { OrganizationTaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/organization-tax-info-update.request";
 import { TaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/tax-info-update.request";
 import { TaxInfoResponse } from "@bitwarden/common/billing/models/response/tax-info.response";
@@ -53,7 +54,8 @@ export class TaxInfoComponent {
     private apiService: ApiService,
     private route: ActivatedRoute,
     private logService: LogService,
-    private organizationApiService: OrganizationApiServiceAbstraction
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private accountApiService: AccountApiService
   ) {}
 
   async ngOnInit() {
@@ -85,7 +87,7 @@ export class TaxInfoComponent {
         }
       } else {
         try {
-          const taxInfo = await this.apiService.getTaxInfo();
+          const taxInfo = await this.accountApiService.getTaxInfo();
           if (taxInfo) {
             this.taxInfo.postalCode = taxInfo.postalCode;
             this.taxInfo.country = taxInfo.country || "US";
@@ -154,7 +156,7 @@ export class TaxInfoComponent {
           this.organizationId,
           request as OrganizationTaxInfoUpdateRequest
         )
-      : this.apiService.putTaxInfo(request);
+      : this.accountApiService.putTaxInfo(request);
   }
 
   changeCountry() {

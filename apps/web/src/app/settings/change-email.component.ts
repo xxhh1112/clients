@@ -7,6 +7,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { EmailTokenRequest } from "@bitwarden/common/auth/models/request/email-token.request";
 import { EmailRequest } from "@bitwarden/common/auth/models/request/email.request";
@@ -31,7 +32,8 @@ export class ChangeEmailComponent implements OnInit {
     private cryptoService: CryptoService,
     private messagingService: MessagingService,
     private logService: LogService,
-    private stateService: StateService
+    private stateService: StateService,
+    private accountApiService: AccountApiService
   ) {}
 
   async ngOnInit() {
@@ -54,7 +56,7 @@ export class ChangeEmailComponent implements OnInit {
       request.newEmail = this.newEmail;
       request.masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, null);
       try {
-        this.formPromise = this.apiService.postEmailToken(request);
+        this.formPromise = this.accountApiService.postEmailToken(request);
         await this.formPromise;
         this.tokenSent = true;
       } catch (e) {
@@ -80,7 +82,7 @@ export class ChangeEmailComponent implements OnInit {
       const newEncKey = await this.cryptoService.remakeEncKey(newKey);
       request.key = newEncKey[1].encryptedString;
       try {
-        this.formPromise = this.apiService.postEmail(request);
+        this.formPromise = this.accountApiService.postEmail(request);
         await this.formPromise;
         this.reset();
         this.platformUtilsService.showToast(

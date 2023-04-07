@@ -2,7 +2,6 @@ import { Component, NgZone, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { SetPasswordComponent as BaseSetPasswordComponent } from "@bitwarden/angular/components/set-password.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,6 +12,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -24,7 +24,7 @@ const BroadcasterSubscriptionId = "SetPasswordComponent";
 })
 export class SetPasswordComponent extends BaseSetPasswordComponent implements OnDestroy {
   constructor(
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     i18nService: I18nService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
@@ -50,7 +50,7 @@ export class SetPasswordComponent extends BaseSetPasswordComponent implements On
       policyApiService,
       policyService,
       router,
-      apiService,
+      accountApiService,
       syncService,
       route,
       stateService,

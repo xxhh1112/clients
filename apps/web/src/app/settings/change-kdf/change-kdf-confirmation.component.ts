@@ -2,13 +2,13 @@ import { DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType } from "@bitwarden/common/enums";
 import { KdfRequest } from "@bitwarden/common/models/request/kdf.request";
@@ -30,7 +30,7 @@ export class ChangeKdfConfirmationComponent {
   loading = false;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
@@ -87,6 +87,6 @@ export class ChangeKdfConfirmationComponent {
     const newEncKey = await this.cryptoService.remakeEncKey(newKey);
     request.key = newEncKey[1].encryptedString;
 
-    await this.apiService.postAccountKdf(request);
+    await this.accountApiService.postAccountKdf(request);
   }
 }

@@ -2,12 +2,12 @@ import { ViewChild, ViewContainerRef, Component, OnDestroy, OnInit } from "@angu
 import { Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { UpdateProfileRequest } from "@bitwarden/common/auth/models/request/update-profile.request";
 import { ProfileResponse } from "@bitwarden/common/models/response/profile.response";
@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.profile = await this.apiService.getProfile();
+    this.profile = await this.accountApiService.getProfile();
     this.loading = false;
     const fingerprint = await this.cryptoService.getFingerprint(
       await this.stateService.getUserId()
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   async submit() {
     try {
       const request = new UpdateProfileRequest(this.profile.name, this.profile.masterPasswordHint);
-      this.formPromise = this.apiService.putProfile(request);
+      this.formPromise = this.accountApiService.putProfile(request);
       await this.formPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("accountUpdated"));
     } catch (e) {

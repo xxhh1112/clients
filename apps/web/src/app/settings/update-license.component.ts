@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 
 @Component({
@@ -20,7 +20,7 @@ export class UpdateLicenseComponent {
   formPromise: Promise<void>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
@@ -46,7 +46,7 @@ export class UpdateLicenseComponent {
 
       let updatePromise: Promise<void | unknown> = null;
       if (this.organizationId == null) {
-        updatePromise = this.apiService.postAccountLicense(fd);
+        updatePromise = this.accountApiService.postAccountLicense(fd);
       } else {
         updatePromise = this.organizationApiService.updateLicense(this.organizationId, fd);
       }

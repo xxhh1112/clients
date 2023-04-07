@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { PaymentMethodType } from "@bitwarden/common/billing/enums";
 import { PaymentRequest } from "@bitwarden/common/billing/models/request/payment.request";
 
@@ -28,7 +28,7 @@ export class AdjustPaymentComponent {
   formPromise: Promise<void>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
@@ -44,7 +44,7 @@ export class AdjustPaymentComponent {
         request.postalCode = this.taxInfoComponent.taxInfo.postalCode;
         request.country = this.taxInfoComponent.taxInfo.country;
         if (this.organizationId == null) {
-          return this.apiService.postAccountPayment(request);
+          return this.accountApiService.postAccountPayment(request);
         } else {
           request.taxId = this.taxInfoComponent.taxInfo.taxId;
           request.state = this.taxInfoComponent.taxInfo.state;

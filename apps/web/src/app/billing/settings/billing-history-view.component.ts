@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { BillingHistoryResponse } from "@bitwarden/common/billing/models/response/billing-history.response";
 
 @Component({
@@ -15,7 +15,7 @@ export class BillingHistoryViewComponent implements OnInit {
   billing: BillingHistoryResponse;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private platformUtilsService: PlatformUtilsService,
     private router: Router
   ) {}
@@ -34,7 +34,7 @@ export class BillingHistoryViewComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.billing = await this.apiService.getUserBillingHistory();
+    this.billing = await this.accountApiService.getUserBillingHistory();
     this.loading = false;
   }
 }

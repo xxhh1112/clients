@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 
 import { UpdateTempPasswordComponent as BaseUpdateTempPasswordComponent } from "@bitwarden/angular/auth/components/update-temp-password.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -9,6 +8,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -24,7 +24,7 @@ export class UpdateTempPasswordComponent extends BaseUpdateTempPasswordComponent
     policyService: PolicyService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     syncService: SyncService,
     logService: LogService,
     stateService: StateService
@@ -36,7 +36,7 @@ export class UpdateTempPasswordComponent extends BaseUpdateTempPasswordComponent
       policyService,
       cryptoService,
       messagingService,
-      apiService,
+      accountApiService,
       stateService,
       syncService,
       logService

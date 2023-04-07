@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { UpdateKeyRequest } from "@bitwarden/common/models/request/update-key.request";
 import { CipherWithIdRequest } from "@bitwarden/common/vault//models/request/cipher-with-id.request";
@@ -24,7 +24,7 @@ export class UpdateKeyComponent {
   formPromise: Promise<any>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
@@ -52,7 +52,7 @@ export class UpdateKeyComponent {
 
     try {
       this.formPromise = this.makeRequest().then((request) => {
-        return this.apiService.postAccountKey(request);
+        return this.accountApiService.postAccountKey(request);
       });
       await this.formPromise;
       this.platformUtilsService.showToast(

@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { SubscriptionResponse } from "@bitwarden/common/billing/models/response/subscription.response";
 
 @Component({
@@ -27,7 +27,7 @@ export class UserSubscriptionComponent implements OnInit {
 
   constructor(
     private stateService: StateService,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private router: Router,
@@ -49,7 +49,7 @@ export class UserSubscriptionComponent implements OnInit {
 
     if (this.stateService.getHasPremiumPersonally()) {
       this.loading = true;
-      this.sub = await this.apiService.getUserSubscription();
+      this.sub = await this.accountApiService.getUserSubscription();
     } else {
       this.router.navigate(["/settings/subscription/premium"]);
       return;
@@ -85,7 +85,7 @@ export class UserSubscriptionComponent implements OnInit {
     }
 
     try {
-      this.reinstatePromise = this.apiService.postReinstatePremium();
+      this.reinstatePromise = this.accountApiService.postReinstatePremium();
       await this.reinstatePromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("reinstated"));
       this.load();
@@ -122,7 +122,7 @@ export class UserSubscriptionComponent implements OnInit {
     }
 
     try {
-      this.cancelPromise = this.apiService.postCancelPremium();
+      this.cancelPromise = this.accountApiService.postCancelPremium();
       await this.cancelPromise;
       this.platformUtilsService.showToast(
         "success",

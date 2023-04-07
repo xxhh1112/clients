@@ -2,7 +2,6 @@ import { Component, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -12,6 +11,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
@@ -38,7 +38,7 @@ export class LockComponent extends BaseLockComponent {
     vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     environmentService: EnvironmentService,
     stateService: StateService,
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     logService: LogService,
     keyConnectorService: KeyConnectorService,
     ngZone: NgZone,
@@ -54,7 +54,7 @@ export class LockComponent extends BaseLockComponent {
       vaultTimeoutSettingsService,
       environmentService,
       stateService,
-      apiService,
+      accountApiService,
       logService,
       keyConnectorService,
       ngZone

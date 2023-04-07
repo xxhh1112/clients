@@ -1,6 +1,5 @@
 import { Directive } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -9,6 +8,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { UpdateTempPasswordRequest } from "@bitwarden/common/auth/models/request/update-temp-password.request";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
@@ -33,7 +33,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     policyService: PolicyService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     stateService: StateService,
     private syncService: SyncService,
     private logService: LogService
@@ -111,7 +111,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       request.masterPasswordHint = this.hint;
 
       // Update user's password
-      this.formPromise = this.apiService.putUpdateTempPassword(request);
+      this.formPromise = this.accountApiService.putUpdateTempPassword(request);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

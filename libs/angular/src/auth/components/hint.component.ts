@@ -1,10 +1,10 @@
 import { Directive, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { PasswordHintRequest } from "@bitwarden/common/auth/models/request/password-hint.request";
 
@@ -19,7 +19,7 @@ export class HintComponent implements OnInit {
   constructor(
     protected router: Router,
     protected i18nService: I18nService,
-    protected apiService: ApiService,
+    protected accountApiService: AccountApiService,
     protected platformUtilsService: PlatformUtilsService,
     private logService: LogService,
     private loginService: LoginService
@@ -48,7 +48,9 @@ export class HintComponent implements OnInit {
     }
 
     try {
-      this.formPromise = this.apiService.postPasswordHint(new PasswordHintRequest(this.email));
+      this.formPromise = this.accountApiService.postPasswordHint(
+        new PasswordHintRequest(this.email)
+      );
       await this.formPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("masterPassSent"));
       if (this.onSuccessfulSubmit != null) {

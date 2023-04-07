@@ -1,10 +1,9 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 
 import { StateService } from "../core";
 
@@ -21,13 +20,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   hideSubscription: boolean;
 
   constructor(
-    private tokenService: TokenService,
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
     private platformUtilsService: PlatformUtilsService,
     private organizationService: OrganizationService,
     private stateService: StateService,
-    private apiService: ApiService
+    private accountApiService: AccountApiService
   ) {}
 
   async ngOnInit() {
@@ -56,7 +54,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const hasPremiumFromOrg = await this.stateService.getHasPremiumFromOrganization();
     let billing = null;
     if (!this.selfHosted) {
-      billing = await this.apiService.getUserBillingHistory();
+      billing = await this.accountApiService.getUserBillingHistory();
     }
     this.hideSubscription =
       !this.premium && hasPremiumFromOrg && (this.selfHosted || billing?.hasNoHistory);

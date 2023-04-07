@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ipcRenderer } from "electron";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -14,6 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 
 const BroadcasterSubscriptionId = "LockComponent";
@@ -35,7 +35,7 @@ export class LockComponent extends BaseLockComponent {
     vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     environmentService: EnvironmentService,
     stateService: StateService,
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     private route: ActivatedRoute,
     private broadcasterService: BroadcasterService,
     ngZone: NgZone,
@@ -52,7 +52,7 @@ export class LockComponent extends BaseLockComponent {
       vaultTimeoutSettingsService,
       environmentService,
       stateService,
-      apiService,
+      accountApiService,
       logService,
       keyConnectorService,
       ngZone

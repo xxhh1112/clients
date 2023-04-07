@@ -2,7 +2,6 @@ import { Directive } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -13,6 +12,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { SetPasswordRequest } from "@bitwarden/common/auth/models/request/set-password.request";
 import { HashPurpose, DEFAULT_KDF_TYPE, DEFAULT_KDF_CONFIG } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -45,7 +45,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     private policyApiService: PolicyApiServiceAbstraction,
     policyService: PolicyService,
     protected router: Router,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private syncService: SyncService,
     private route: ActivatedRoute,
     stateService: StateService,
@@ -115,7 +115,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     );
     try {
       if (this.resetPasswordAutoEnroll) {
-        this.formPromise = this.apiService
+        this.formPromise = this.accountApiService
           .setPassword(request)
           .then(async () => {
             await this.onSetPasswordSuccess(key, encKey, keys);
@@ -146,7 +146,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
             );
           });
       } else {
-        this.formPromise = this.apiService.setPassword(request).then(async () => {
+        this.formPromise = this.accountApiService.setPassword(request).then(async () => {
           await this.onSetPasswordSuccess(key, encKey, keys);
         });
       }

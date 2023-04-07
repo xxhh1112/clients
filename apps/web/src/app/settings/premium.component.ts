@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -32,7 +32,7 @@ export class PremiumComponent implements OnInit {
   formPromise: Promise<any>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private tokenService: TokenService,
@@ -83,7 +83,7 @@ export class PremiumComponent implements OnInit {
 
         const fd = new FormData();
         fd.append("license", files[0]);
-        this.formPromise = this.apiService.postAccountLicense(fd).then(() => {
+        this.formPromise = this.accountApiService.postAccountLicense(fd).then(() => {
           return this.finalizePremium();
         });
       } else {
@@ -98,7 +98,7 @@ export class PremiumComponent implements OnInit {
             fd.append("additionalStorageGb", (this.additionalStorage || 0).toString());
             fd.append("country", this.taxInfoComponent.taxInfo.country);
             fd.append("postalCode", this.taxInfoComponent.taxInfo.postalCode);
-            return this.apiService.postPremium(fd);
+            return this.accountApiService.postPremium(fd);
           })
           .then((paymentResponse) => {
             if (!paymentResponse.success && paymentResponse.paymentIntentClientSecret != null) {

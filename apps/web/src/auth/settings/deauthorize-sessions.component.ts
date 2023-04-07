@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/userVerification.service.abstraction";
 import { Verification } from "@bitwarden/common/types/verification";
 
@@ -17,7 +17,7 @@ export class DeauthorizeSessionsComponent {
   formPromise: Promise<unknown>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private userVerificationService: UserVerificationService,
@@ -29,7 +29,7 @@ export class DeauthorizeSessionsComponent {
     try {
       this.formPromise = this.userVerificationService
         .buildRequest(this.masterPassword)
-        .then((request) => this.apiService.postSecurityStamp(request));
+        .then((request) => this.accountApiService.postSecurityStamp(request));
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

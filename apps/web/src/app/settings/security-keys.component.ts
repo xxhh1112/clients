@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 
 import { ApiKeyComponent } from "./api-key.component";
@@ -23,7 +23,7 @@ export class SecurityKeysComponent implements OnInit {
     private keyConnectorService: KeyConnectorService,
     private stateService: StateService,
     private modalService: ModalService,
-    private apiService: ApiService
+    private accountApiService: AccountApiService
   ) {}
 
   async ngOnInit() {
@@ -35,7 +35,7 @@ export class SecurityKeysComponent implements OnInit {
     await this.modalService.openViewRef(ApiKeyComponent, this.viewUserApiKeyModalRef, (comp) => {
       comp.keyType = "user";
       comp.entityId = entityId;
-      comp.postKey = this.apiService.postUserApiKey.bind(this.apiService);
+      comp.postKey = this.accountApiService.postUserApiKey.bind(this.accountApiService);
       comp.scope = "api";
       comp.grantType = "client_credentials";
       comp.apiKeyTitle = "apiKey";
@@ -50,7 +50,7 @@ export class SecurityKeysComponent implements OnInit {
       comp.keyType = "user";
       comp.isRotation = true;
       comp.entityId = entityId;
-      comp.postKey = this.apiService.postUserRotateApiKey.bind(this.apiService);
+      comp.postKey = this.accountApiService.postUserRotateApiKey.bind(this.accountApiService);
       comp.scope = "api";
       comp.grantType = "client_credentials";
       comp.apiKeyTitle = "apiKey";

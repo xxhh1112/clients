@@ -15,6 +15,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { EmergencyAccessStatusType } from "@bitwarden/common/auth/enums/emergency-access-status-type";
 import { EmergencyAccessUpdateRequest } from "@bitwarden/common/auth/models/request/emergency-access-update.request";
@@ -61,7 +62,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     private keyConnectorService: KeyConnectorService,
     private router: Router,
     private organizationApiService: OrganizationApiServiceAbstraction,
-    private organizationUserService: OrganizationUserService
+    private organizationUserService: OrganizationUserService,
+    private accountApiService: AccountApiService
   ) {
     super(
       i18nService,
@@ -79,7 +81,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       this.router.navigate(["/settings/security/two-factor"]);
     }
 
-    this.masterPasswordHint = (await this.apiService.getProfile()).masterPasswordHint;
+    this.masterPasswordHint = (await this.accountApiService.getProfile()).masterPasswordHint;
     await super.ngOnInit();
 
     this.characterMinimumMessage = this.i18nService.t("characterMinimum", this.minimumLength);
@@ -189,11 +191,11 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
     try {
       if (this.rotateEncKey) {
-        this.formPromise = this.apiService.postPassword(request).then(() => {
+        this.formPromise = this.accountApiService.postPassword(request).then(() => {
           return this.updateKey(newKey, request.newMasterPasswordHash);
         });
       } else {
-        this.formPromise = this.apiService.postPassword(request);
+        this.formPromise = this.accountApiService.postPassword(request);
       }
 
       await this.formPromise;
@@ -249,7 +251,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       })
     );
 
-    await this.apiService.postAccountKey(request);
+    await this.accountApiService.postAccountKey(request);
 
     await this.updateEmergencyAccesses(encKey[0]);
 

@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { VerifyDeleteRecoverRequest } from "@bitwarden/common/models/request/verify-delete-recover.request";
 
 @Component({
@@ -22,7 +22,7 @@ export class VerifyRecoverDeleteComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private route: ActivatedRoute,
@@ -45,7 +45,7 @@ export class VerifyRecoverDeleteComponent implements OnInit {
   async submit() {
     try {
       const request = new VerifyDeleteRecoverRequest(this.userId, this.token);
-      this.formPromise = this.apiService.postAccountRecoverDeleteToken(request);
+      this.formPromise = this.accountApiService.postAccountRecoverDeleteToken(request);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

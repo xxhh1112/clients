@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { concatMap, take, takeUntil } from "rxjs/operators";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,6 +12,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/enums";
@@ -52,7 +52,7 @@ export class LockComponent implements OnInit, OnDestroy {
     protected vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     protected environmentService: EnvironmentService,
     protected stateService: StateService,
-    protected apiService: ApiService,
+    protected accountApiService: AccountApiService,
     protected logService: LogService,
     private keyConnectorService: KeyConnectorService,
     protected ngZone: NgZone
@@ -206,7 +206,7 @@ export class LockComponent implements OnInit, OnDestroy {
       );
       request.masterPasswordHash = serverKeyHash;
       try {
-        this.formPromise = this.apiService.postAccountVerifyPassword(request);
+        this.formPromise = this.accountApiService.postAccountVerifyPassword(request);
         await this.formPromise;
         passwordValid = true;
         const localKeyHash = await this.cryptoService.hashPassword(

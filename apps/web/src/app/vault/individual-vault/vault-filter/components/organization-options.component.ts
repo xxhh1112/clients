@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { map, Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
@@ -13,6 +12,7 @@ import { PolicyService } from "@bitwarden/common/admin-console/abstractions/poli
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { EnrollMasterPasswordReset } from "../../../../admin-console/organizations/users/enroll-master-password-reset.component";
@@ -34,7 +34,7 @@ export class OrganizationOptionsComponent implements OnInit, OnDestroy {
     @Inject(OptionsInput) protected organization: OrganizationFilter,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private syncService: SyncService,
     private policyService: PolicyService,
     private modalService: ModalService,
@@ -92,7 +92,7 @@ export class OrganizationOptionsComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this.actionPromise = this.apiService.deleteSsoUser(org.id).then(() => {
+      this.actionPromise = this.accountApiService.deleteSsoUser(org.id).then(() => {
         return this.syncService.fullSync(true);
       });
       await this.actionPromise;

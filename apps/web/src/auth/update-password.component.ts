@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { UpdatePasswordComponent as BaseUpdatePasswordComponent } from "@bitwarden/angular/auth/components/update-password.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -10,6 +9,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/userVerification.service.abstraction";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -26,7 +26,7 @@ export class UpdatePasswordComponent extends BaseUpdatePasswordComponent {
     policyService: PolicyService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     logService: LogService,
     stateService: StateService,
     userVerificationService: UserVerificationService
@@ -39,7 +39,7 @@ export class UpdatePasswordComponent extends BaseUpdatePasswordComponent {
       policyService,
       cryptoService,
       messagingService,
-      apiService,
+      accountApiService,
       stateService,
       userVerificationService,
       logService

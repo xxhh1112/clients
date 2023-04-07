@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { PaymentResponse } from "@bitwarden/common/billing/models/response/payment.response";
 import { StorageRequest } from "@bitwarden/common/models/request/storage.request";
 
@@ -29,7 +29,7 @@ export class AdjustStorageComponent {
   formPromise: Promise<PaymentResponse | void>;
 
   constructor(
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private router: Router,
@@ -50,7 +50,7 @@ export class AdjustStorageComponent {
       const action = async () => {
         let response: Promise<PaymentResponse>;
         if (this.organizationId == null) {
-          response = this.formPromise = this.apiService.postAccountStorage(request);
+          response = this.formPromise = this.accountApiService.postAccountStorage(request);
         } else {
           response = this.formPromise = this.organizationApiService.updateStorage(
             this.organizationId,

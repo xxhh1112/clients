@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationResponse } from "@bitwarden/common/admin-console/models/response/organization.response";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { PaymentMethodType } from "@bitwarden/common/billing/enums";
 import { BillingPaymentResponse } from "@bitwarden/common/billing/models/response/billing-payment.response";
 import { VerifyBankRequest } from "@bitwarden/common/models/request/verify-bank.request";
@@ -48,7 +48,7 @@ export class PaymentMethodComponent implements OnInit {
   });
 
   constructor(
-    protected apiService: ApiService,
+    protected accountApiService: AccountApiService,
     protected organizationApiService: OrganizationApiServiceAbstraction,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
@@ -85,7 +85,7 @@ export class PaymentMethodComponent implements OnInit {
 
       [this.billing, this.org] = await Promise.all([billingPromise, orgPromise]);
     } else {
-      this.billing = await this.apiService.getUserBillingPayment();
+      this.billing = await this.accountApiService.getUserBillingPayment();
     }
 
     this.loading = false;
