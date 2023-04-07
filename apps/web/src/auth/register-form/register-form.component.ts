@@ -13,7 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
-import { AccountsApiService } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -44,7 +44,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     environmentService: EnvironmentService,
     logService: LogService,
     auditService: AuditService,
-    accountsApiService: AccountsApiService
+    accountApiService: AccountApiService
   ) {
     super(
       formValidationErrorService,
@@ -59,7 +59,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       environmentService,
       logService,
       auditService,
-      accountsApiService
+      accountApiService
     );
   }
 

@@ -12,7 +12,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { AccountsApiService } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -38,7 +38,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     private ngZone: NgZone,
     logService: LogService,
     auditService: AuditService,
-    accountsApiService: AccountsApiService
+    accountApiService: AccountApiService
   ) {
     super(
       formValidationErrorService,
@@ -53,7 +53,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
       environmentService,
       logService,
       auditService,
-      accountsApiService
+      accountApiService
     );
   }
 

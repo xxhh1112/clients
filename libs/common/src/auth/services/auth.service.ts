@@ -15,7 +15,7 @@ import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { ErrorResponse } from "../../models/response/error.response";
 import { AuthRequestPushNotification } from "../../models/response/notification.response";
-import { AccountsApiService } from "../abstractions/accounts-api.service.abstraction";
+import { AccountApiService } from "../abstractions/account-api.service";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
@@ -96,7 +96,7 @@ export class AuthService implements AuthServiceAbstraction {
     protected i18nService: I18nService,
     protected encryptService: EncryptService,
     protected tokenApiService: TokenApiService,
-    protected accountsApiService: AccountsApiService
+    protected accountApiService: AccountApiService
   ) {}
 
   async logIn(
@@ -261,7 +261,7 @@ export class AuthService implements AuthServiceAbstraction {
     let kdf: KdfType = null;
     let kdfConfig: KdfConfig = null;
     try {
-      const preloginResponse = await this.accountsApiService.postPrelogin(
+      const preloginResponse = await this.accountApiService.postPrelogin(
         new PreloginRequest(email)
       );
       if (preloginResponse != null) {

@@ -35,13 +35,15 @@ import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common
 import { CollectionService } from "@bitwarden/common/admin-console/services/collection.service";
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
-import { AccountsApiService as AccountsApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/accounts-api.service.abstraction";
+import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
+import { InternalAccountService as InternalAccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
-import { AccountsApiServiceImplementation } from "@bitwarden/common/auth/services/accounts-api.service.implementation";
+import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
+import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
@@ -189,9 +191,10 @@ export default class MainBackground {
   userVerificationApiService: UserVerificationApiServiceAbstraction;
   syncNotifierService: SyncNotifierServiceAbstraction;
   avatarUpdateService: AvatarUpdateServiceAbstraction;
-  accountsApiService: AccountsApiServiceAbstraction;
+  accountApiService: AccountApiServiceAbstraction;
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
+  accountService: InternalAccountServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -390,9 +393,14 @@ export default class MainBackground {
       };
     })();
 
-    this.accountsApiService = new AccountsApiServiceImplementation(
-      this.environmentService,
-      this.apiService
+    this.accountService = new AccountServiceImplementation(this.messagingService, this.logService);
+
+    this.accountApiService = new AccountApiServiceImplementation(
+      this.apiService,
+      this.userVerificationService,
+      this.logService,
+      this.accountService,
+      this.environmentService
     );
 
     this.authService = new AuthService(
@@ -410,7 +418,7 @@ export default class MainBackground {
       this.i18nService,
       this.encryptService,
       this.tokenApiService,
-      this.accountsApiService
+      this.accountApiService
     );
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
