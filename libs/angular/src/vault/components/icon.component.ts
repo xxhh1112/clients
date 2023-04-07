@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -25,8 +26,9 @@ const cardIcons: Record<string, string> = {
 @Component({
   selector: "app-vault-icon",
   templateUrl: "icon.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconComponent implements OnChanges {
+export class IconComponent implements OnChanges, OnDestroy {
   @Input() cipher: CipherView;
   icon: string;
   image: string;
@@ -34,6 +36,7 @@ export class IconComponent implements OnChanges {
   imageEnabled: boolean;
 
   private iconsUrl: string;
+  private destroy$ = new Subject<void>();
 
   constructor(environmentService: EnvironmentService, private stateService: StateService) {
     this.iconsUrl = environmentService.getIconsUrl();
@@ -44,8 +47,16 @@ export class IconComponent implements OnChanges {
     // to avoid this we reset all state variables.
     this.image = null;
     this.fallbackImage = null;
-    this.imageEnabled = !(await this.stateService.getDisableFavicon());
-    this.load();
+
+    this.stateService.disableFavicon$.pipe(takeUntil(this.destroy$)).subscribe((v) => {
+      this.imageEnabled = !v;
+      this.load();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   protected load() {
