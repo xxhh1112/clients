@@ -12,6 +12,7 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -55,6 +56,7 @@ export class LoginCommand {
     protected twoFactorService: TwoFactorService,
     protected syncService: SyncService,
     protected keyConnectorService: KeyConnectorService,
+    protected accountApiService: AccountApiService,
     protected logoutCallback: () => Promise<void>
   ) {}
 
@@ -470,7 +472,7 @@ export class LoginCommand {
       request.masterPasswordHint = masterPasswordHint;
 
       // Update user's password
-      await this.apiService.putUpdateTempPassword(request);
+      await this.accountApiService.putUpdateTempPassword(request);
       return this.handleSuccessResponse();
     } catch (e) {
       await this.logoutCallback();

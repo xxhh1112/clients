@@ -8,6 +8,7 @@ import { OrganizationUserType } from "../../admin-console/enums";
 import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { KeysRequest } from "../../models/request/keys.request";
+import { AccountApiService } from "../abstractions/account-api.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { KdfConfig } from "../models/domain/kdf-config";
@@ -24,6 +25,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     private logService: LogService,
     private organizationService: OrganizationService,
     private cryptoFunctionService: CryptoFunctionService,
+    private accountApiService: AccountApiService,
     private logoutCallback: (expired: boolean, userId?: string) => void
   ) {}
 
@@ -57,7 +59,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
       this.handleKeyConnectorError(e);
     }
 
-    await this.apiService.postConvertToKeyConnector();
+    await this.accountApiService.postConvertToKeyConnector();
   }
 
   async getAndSetKey(url: string) {
@@ -115,7 +117,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
       orgId,
       keys
     );
-    await this.apiService.postSetKeyConnectorKey(setPasswordRequest);
+    await this.accountApiService.postSetKeyConnectorKey(setPasswordRequest);
   }
 
   async setConvertAccountRequired(status: boolean) {

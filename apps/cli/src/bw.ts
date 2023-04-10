@@ -303,19 +303,6 @@ export class Main {
 
     this.policyService = new PolicyService(this.stateService, this.organizationService);
 
-    this.keyConnectorService = new KeyConnectorService(
-      this.stateService,
-      this.cryptoService,
-      this.apiService,
-      this.tokenService,
-      this.logService,
-      this.organizationService,
-      this.cryptoFunctionService,
-      async (expired: boolean) => await this.logout()
-    );
-
-    this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
-
     this.accountService = new AccountServiceImplementation(this.messagingService, this.logService);
 
     this.accountApiService = new AccountApiServiceImplementation(
@@ -325,6 +312,20 @@ export class Main {
       this.accountService,
       this.environmentService
     );
+
+    this.keyConnectorService = new KeyConnectorService(
+      this.stateService,
+      this.cryptoService,
+      this.apiService,
+      this.tokenService,
+      this.logService,
+      this.organizationService,
+      this.cryptoFunctionService,
+      this.accountApiService,
+      async (expired: boolean) => await this.logout()
+    );
+
+    this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
 
     this.authService = new AuthService(
       this.cryptoService,
@@ -388,6 +389,7 @@ export class Main {
       this.organizationService,
       this.tokenApiService,
       this.sendApiService,
+      this.accountApiService,
       async (expired: boolean) => await this.logout()
     );
 

@@ -123,7 +123,7 @@ export class ServeCommand {
       this.main.cryptoService,
       this.main.stateService,
       this.main.cryptoFunctionService,
-      this.main.apiService,
+      this.main.accountApiService,
       this.main.logService,
       this.main.keyConnectorService,
       this.main.environmentService,

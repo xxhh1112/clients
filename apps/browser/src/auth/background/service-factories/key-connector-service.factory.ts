@@ -31,6 +31,10 @@ import {
   StateServiceInitOptions,
 } from "../../../background/service_factories/state-service.factory";
 
+import {
+  accountApiServiceFactory,
+  AccountApiServiceInitOptions,
+} from "./account-api-service.factory";
 import { TokenServiceInitOptions, tokenServiceFactory } from "./token-service.factory";
 
 type KeyConnectorServiceFactoryOptions = FactoryOptions & {
@@ -46,7 +50,8 @@ export type KeyConnectorServiceInitOptions = KeyConnectorServiceFactoryOptions &
   TokenServiceInitOptions &
   LogServiceInitOptions &
   OrganizationServiceInitOptions &
-  CryptoFunctionServiceInitOptions;
+  CryptoFunctionServiceInitOptions &
+  AccountApiServiceInitOptions;
 
 export function keyConnectorServiceFactory(
   cache: { keyConnectorService?: AbstractKeyConnectorService } & CachedServices,
@@ -65,6 +70,7 @@ export function keyConnectorServiceFactory(
         await logServiceFactory(cache, opts),
         await organizationServiceFactory(cache, opts),
         await cryptoFunctionServiceFactory(cache, opts),
+        await accountApiServiceFactory(cache, opts),
         opts.keyConnectorServiceOptions.logoutCallback
       )
   );

@@ -1,4 +1,3 @@
-import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EnvironmentService } from "../../abstractions/environment.service";
@@ -8,6 +7,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { TokenService } from "../../auth/abstractions/token.service";
 import { TwoFactorService } from "../../auth/abstractions/two-factor.service";
+import { AccountApiService } from "../abstractions/account-api.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { UserApiLogInCredentials } from "../models/domain/log-in-credentials";
@@ -21,7 +21,7 @@ export class UserApiLogInStrategy extends LogInStrategy {
 
   constructor(
     cryptoService: CryptoService,
-    apiService: ApiService,
+    accountApiService: AccountApiService,
     tokenService: TokenService,
     appIdService: AppIdService,
     platformUtilsService: PlatformUtilsService,
@@ -35,7 +35,7 @@ export class UserApiLogInStrategy extends LogInStrategy {
   ) {
     super(
       cryptoService,
-      apiService,
+      accountApiService,
       tokenService,
       appIdService,
       platformUtilsService,

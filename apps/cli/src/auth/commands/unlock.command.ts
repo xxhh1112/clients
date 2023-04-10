@@ -1,9 +1,9 @@
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { HashPurpose } from "@bitwarden/common/enums";
@@ -21,7 +21,7 @@ export class UnlockCommand {
     private cryptoService: CryptoService,
     private stateService: StateService,
     private cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService,
+    private accountApiService: AccountApiService,
     private logService: ConsoleLogService,
     private keyConnectorService: KeyConnectorService,
     private environmentService: EnvironmentService,
@@ -60,7 +60,7 @@ export class UnlockCommand {
         const request = new SecretVerificationRequest();
         request.masterPasswordHash = serverKeyHash;
         try {
-          await this.apiService.postAccountVerifyPassword(request);
+          await this.accountApiService.postAccountVerifyPassword(request);
           passwordValid = true;
           const localKeyHash = await this.cryptoService.hashPassword(
             password,

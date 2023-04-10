@@ -1,6 +1,5 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { LogService } from "../../abstractions/log.service";
@@ -8,6 +7,7 @@ import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { Utils } from "../../misc/utils";
+import { AccountApiService } from "../abstractions/account-api.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
@@ -19,7 +19,7 @@ import { SsoLogInStrategy } from "./sso-login.strategy";
 
 describe("SsoLogInStrategy", () => {
   let cryptoService: MockProxy<CryptoService>;
-  let apiService: MockProxy<ApiService>;
+  let accountApiService: MockProxy<AccountApiService>;
   let tokenService: MockProxy<TokenService>;
   let appIdService: MockProxy<AppIdService>;
   let platformUtilsService: MockProxy<PlatformUtilsService>;
@@ -43,7 +43,7 @@ describe("SsoLogInStrategy", () => {
 
   beforeEach(async () => {
     cryptoService = mock<CryptoService>();
-    apiService = mock<ApiService>();
+    accountApiService = mock<AccountApiService>();
     tokenService = mock<TokenService>();
     appIdService = mock<AppIdService>();
     platformUtilsService = mock<PlatformUtilsService>();
@@ -60,7 +60,7 @@ describe("SsoLogInStrategy", () => {
 
     ssoLogInStrategy = new SsoLogInStrategy(
       cryptoService,
-      apiService,
+      accountApiService,
       tokenService,
       appIdService,
       platformUtilsService,

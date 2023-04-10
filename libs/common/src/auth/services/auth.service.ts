@@ -118,7 +118,7 @@ export class AuthService implements AuthServiceAbstraction {
       case AuthenticationType.Password:
         strategy = new PasswordLogInStrategy(
           this.cryptoService,
-          this.apiService,
+          this.accountApiService,
           this.tokenService,
           this.appIdService,
           this.platformUtilsService,
@@ -133,7 +133,7 @@ export class AuthService implements AuthServiceAbstraction {
       case AuthenticationType.Sso:
         strategy = new SsoLogInStrategy(
           this.cryptoService,
-          this.apiService,
+          this.accountApiService,
           this.tokenService,
           this.appIdService,
           this.platformUtilsService,
@@ -148,7 +148,7 @@ export class AuthService implements AuthServiceAbstraction {
       case AuthenticationType.UserApi:
         strategy = new UserApiLogInStrategy(
           this.cryptoService,
-          this.apiService,
+          this.accountApiService,
           this.tokenService,
           this.appIdService,
           this.platformUtilsService,
@@ -164,7 +164,7 @@ export class AuthService implements AuthServiceAbstraction {
       case AuthenticationType.Passwordless:
         strategy = new PasswordlessLogInStrategy(
           this.cryptoService,
-          this.apiService,
+          this.accountApiService,
           this.tokenService,
           this.appIdService,
           this.platformUtilsService,

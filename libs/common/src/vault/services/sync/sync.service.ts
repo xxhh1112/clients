@@ -14,6 +14,7 @@ import { PolicyData } from "../../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { CollectionDetailsResponse } from "../../../admin-console/models/response/collection.response";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
+import { AccountApiService } from "../../../auth/abstractions/account-api.service";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
 import { TokenApiService } from "../../../auth/abstractions/token-api.service.abstraction";
 import { sequentialize } from "../../../misc/sequentialize";
@@ -58,6 +59,7 @@ export class SyncService implements SyncServiceAbstraction {
     private organizationService: InternalOrganizationService,
     private tokenApiService: TokenApiService,
     private sendApiService: SendApiService,
+    private accountApiService: AccountApiService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
 
@@ -287,7 +289,7 @@ export class SyncService implements SyncServiceAbstraction {
       return true;
     }
 
-    const response = await this.apiService.getAccountRevisionDate();
+    const response = await this.accountApiService.getAccountRevisionDate();
     if (new Date(response) <= lastSync) {
       return false;
     }

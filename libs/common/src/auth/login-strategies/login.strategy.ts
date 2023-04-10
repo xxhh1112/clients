@@ -1,4 +1,3 @@
-import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { LogService } from "../../abstractions/log.service";
@@ -7,6 +6,7 @@ import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
 import { Account, AccountProfile, AccountTokens } from "../../models/domain/account";
 import { KeysRequest } from "../../models/request/keys.request";
+import { AccountApiService } from "../abstractions/account-api.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -33,7 +33,7 @@ export abstract class LogInStrategy {
 
   constructor(
     protected cryptoService: CryptoService,
-    protected apiService: ApiService,
+    protected accountApiService: AccountApiService,
     protected tokenService: TokenService,
     protected appIdService: AppIdService,
     protected platformUtilsService: PlatformUtilsService,
@@ -169,7 +169,9 @@ export abstract class LogInStrategy {
   private async createKeyPairForOldAccount() {
     try {
       const [publicKey, privateKey] = await this.cryptoService.makeKeyPair();
-      await this.apiService.postAccountKeys(new KeysRequest(publicKey, privateKey.encryptedString));
+      await this.accountApiService.postAccountKeys(
+        new KeysRequest(publicKey, privateKey.encryptedString)
+      );
       return privateKey.encryptedString;
     } catch (e) {
       this.logService.error(e);

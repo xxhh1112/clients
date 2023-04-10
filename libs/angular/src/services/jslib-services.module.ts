@@ -1,6 +1,6 @@
 import { Injector, LOCALE_ID, NgModule } from "@angular/core";
 
-import { AvatarUpdateService as AccountUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
+import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiHelperService as ApiHelperServiceAbstraction } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
@@ -328,9 +328,9 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       useExisting: AccountServiceAbstraction,
     },
     {
-      provide: AccountUpdateServiceAbstraction,
+      provide: AvatarUpdateServiceAbstraction,
       useClass: AvatarUpdateService,
-      deps: [ApiServiceAbstraction, StateServiceAbstraction],
+      deps: [AccountApiServiceAbstraction, StateServiceAbstraction],
     },
     { provide: LogService, useFactory: () => new ConsoleLogService(false) },
     {
@@ -416,6 +416,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         OrganizationServiceAbstraction,
         TokenApiServiceAbstraction,
         SendApiServiceAbstraction,
+        AccountApiServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
@@ -557,6 +558,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         CryptoFunctionServiceAbstraction,
         SyncNotifierServiceAbstraction,
         MessagingServiceAbstraction,
+        AccountApiServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },

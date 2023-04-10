@@ -152,6 +152,7 @@ export class Program {
             this.main.twoFactorService,
             this.main.syncService,
             this.main.keyConnectorService,
+            this.main.accountApiService,
             async () => await this.main.logout()
           );
           const response = await command.run(email, password, options);
@@ -253,7 +254,7 @@ export class Program {
             this.main.cryptoService,
             this.main.stateService,
             this.main.cryptoFunctionService,
-            this.main.apiService,
+            this.main.accountApiService,
             this.main.logService,
             this.main.keyConnectorService,
             this.main.environmentService,
@@ -612,7 +613,7 @@ export class Program {
           this.main.cryptoService,
           this.main.stateService,
           this.main.cryptoFunctionService,
-          this.main.apiService,
+          this.main.accountApiService,
           this.main.logService,
           this.main.keyConnectorService,
           this.main.environmentService,

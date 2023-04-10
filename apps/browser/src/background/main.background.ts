@@ -370,6 +370,7 @@ export default class MainBackground {
       this.logService,
       this.organizationService,
       this.cryptoFunctionService,
+      this.accountApiService,
       logoutCallback
     );
     this.vaultFilterService = new VaultFilterService(
@@ -474,6 +475,7 @@ export default class MainBackground {
       this.organizationService,
       this.tokenApiService,
       this.sendApiService,
+      this.accountApiService,
       logoutCallback
     );
     this.eventUploadService = new EventUploadService(
@@ -642,7 +644,7 @@ export default class MainBackground {
       this.apiHelperService
     );
 
-    this.avatarUpdateService = new AvatarUpdateService(this.apiService, this.stateService);
+    this.avatarUpdateService = new AvatarUpdateService(this.accountApiService, this.stateService);
 
     if (!this.popupOnlyContext) {
       this.mainContextMenuHandler = new MainContextMenuHandler(
