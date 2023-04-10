@@ -62,6 +62,7 @@ import {
   InternalAccountService,
 } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { KeyConnectorApiService as KeyConnectorApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
 import { SsoApiService as SsoApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-api.service.abstraction";
@@ -73,6 +74,7 @@ import { UserVerificationService as UserVerificationServiceAbstraction } from "@
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import { KeyConnectorApiServiceImplementation } from "@bitwarden/common/auth/services/key-connector-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
 import { SsoApiServiceImplementation } from "@bitwarden/common/auth/services/sso-api.service.implementation";
@@ -678,6 +680,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: SsoApiServiceAbstraction,
       useClass: SsoApiServiceImplementation,
       deps: [EnvironmentServiceAbstraction, ApiServiceAbstraction],
+    },
+    {
+      provide: KeyConnectorApiServiceAbstraction,
+      useClass: KeyConnectorApiServiceImplementation,
+      deps: [ApiHelperServiceAbstraction, TokenApiServiceAbstraction],
     },
     {
       provide: ApiHelperServiceAbstraction,

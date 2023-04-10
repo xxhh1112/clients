@@ -43,7 +43,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector-user-key.request";
 import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
 import { PasswordlessCreateAuthRequest } from "../auth/models/request/passwordless-create-auth.request";
 import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
@@ -64,7 +63,6 @@ import {
   EmergencyAccessTakeoverResponse,
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
-import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
 import { TwoFactorEmailResponse } from "../auth/models/response/two-factor-email.response";
@@ -429,11 +427,5 @@ export abstract class ApiService {
   ) => Promise<void>;
   postResendSponsorshipOffer: (sponsoringOrgId: string) => Promise<void>;
 
-  getUserKeyFromKeyConnector: (keyConnectorUrl: string) => Promise<KeyConnectorUserKeyResponse>;
-  postUserKeyToKeyConnector: (
-    keyConnectorUrl: string,
-    request: KeyConnectorUserKeyRequest
-  ) => Promise<void>;
-  getKeyConnectorAlive: (keyConnectorUrl: string) => Promise<void>;
   getOrganizationExport: (organizationId: string) => Promise<OrganizationExportResponse>;
 }

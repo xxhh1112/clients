@@ -48,7 +48,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector-user-key.request";
 import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
 import { PasswordlessCreateAuthRequest } from "../auth/models/request/passwordless-create-auth.request";
 import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
@@ -69,7 +68,6 @@ import {
   EmergencyAccessTakeoverResponse,
   EmergencyAccessViewResponse,
 } from "../auth/models/response/emergency-access.response";
-import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
 import { TwoFactorAuthenticatorResponse } from "../auth/models/response/two-factor-authenticator.response";
 import { TwoFactorDuoResponse } from "../auth/models/response/two-factor-duo.response";
 import { TwoFactorEmailResponse } from "../auth/models/response/two-factor-email.response";
@@ -91,7 +89,6 @@ import { OrganizationImportRequest } from "../models/request/organization-import
 import { UpdateDomainsRequest } from "../models/request/update-domains.request";
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { DomainsResponse } from "../models/response/domains.response";
-import { ErrorResponse } from "../models/response/error.response";
 import { EventResponse } from "../models/response/event.response";
 import { ListResponse } from "../models/response/list.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
@@ -1281,73 +1278,6 @@ export class ApiService implements ApiServiceAbstraction {
     return r as string;
   }
 
-  // Key Connector
-
-  async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
-    const authHeader = await this.tokenApiService.getActiveAccessToken();
-
-    const response = await this.apiHelperService.fetch(
-      new Request(keyConnectorUrl + "/user-keys", {
-        cache: "no-store",
-        method: "GET",
-        headers: new Headers({
-          Accept: "application/json",
-          Authorization: "Bearer " + authHeader,
-        }),
-      })
-    );
-
-    if (response.status !== 200) {
-      const error = await this.handleError(response, false, true);
-      return Promise.reject(error);
-    }
-
-    return new KeyConnectorUserKeyResponse(await response.json());
-  }
-
-  async postUserKeyToKeyConnector(
-    keyConnectorUrl: string,
-    request: KeyConnectorUserKeyRequest
-  ): Promise<void> {
-    const authHeader = await this.tokenApiService.getActiveAccessToken();
-
-    const response = await this.apiHelperService.fetch(
-      new Request(keyConnectorUrl + "/user-keys", {
-        cache: "no-store",
-        method: "POST",
-        headers: new Headers({
-          Accept: "application/json",
-          Authorization: "Bearer " + authHeader,
-          "Content-Type": "application/json; charset=utf-8",
-        }),
-        body: JSON.stringify(request),
-      })
-    );
-
-    if (response.status !== 200) {
-      const error = await this.handleError(response, false, true);
-      return Promise.reject(error);
-    }
-  }
-
-  async getKeyConnectorAlive(keyConnectorUrl: string) {
-    const response = await this.apiHelperService.fetch(
-      new Request(keyConnectorUrl + "/alive", {
-        cache: "no-store",
-        method: "GET",
-        headers: new Headers({
-          Accept: "application/json",
-          "Content-Type": "application/json; charset=utf-8",
-        }),
-      })
-    );
-
-    if (response.status !== 200) {
-      const error = await this.handleError(response, false, true);
-      return Promise.reject(error);
-    }
-  }
-
   async getOrganizationExport(organizationId: string): Promise<OrganizationExportResponse> {
     const r = await this.send(
       "GET",
@@ -1480,14 +1410,6 @@ export class ApiService implements ApiServiceAbstraction {
     const response = await this.apiHelperService.fetch(request);
 
     return this.apiHelperService.handleResponse(response, hasResponse, authed);
-  }
-
-  private async handleError(
-    errorResponse: Response,
-    tokenError: boolean,
-    authed: boolean
-  ): Promise<ErrorResponse> {
-    return await this.apiHelperService.handleError(errorResponse, tokenError, authed);
   }
 
   private addEventParameters(base: string, start: string, end: string, token: string) {
