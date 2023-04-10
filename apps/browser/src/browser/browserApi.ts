@@ -199,9 +199,18 @@ export class BrowserApi {
     subscriber: string,
     callback: (message: any, sender: chrome.runtime.MessageSender) => Promise<T>
   ) {
-    chrome.runtime.onMessage.addListener((message: any, sender, response) => {
+    chrome.runtime.onMessage.addListener((message: any, sender, sendResponse) => {
       if (message.command === subscriber) {
-        return callback(message, sender);
+        // In firefox you are expected to return a Promise,
+        // but in chrome you should use the sendResponse callback
+        // and return true so that chrome knows to keep the callback
+        // alive.
+        if (BrowserPlatformUtilsService.isFirefox()) {
+          return callback(message, sender);
+        } else {
+          callback(message, sender).then((r) => sendResponse(r));
+          return true;
+        }
       }
     });
   }

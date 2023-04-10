@@ -325,9 +325,10 @@ export class CipherService implements CipherServiceAbstraction {
 
   @sequentialize(() => "getAllDecrypted")
   async getAllDecrypted(): Promise<CipherView[]> {
-    if ((await this.getDecryptedCipherCache()) != null) {
+    const decryptedCiphersCache = await this.getDecryptedCipherCache();
+    if (decryptedCiphersCache != null) {
       await this.reindexCiphers();
-      return await this.getDecryptedCipherCache();
+      return decryptedCiphersCache;
     }
 
     const hasKey = await this.cryptoService.hasKey();
@@ -356,7 +357,10 @@ export class CipherService implements CipherServiceAbstraction {
       .flat()
       .sort(this.getLocaleSortingFunction());
 
-    await this.setDecryptedCipherCache(decCiphers);
+    // Don't bother caching if there are no ciphers
+    if (decCiphers.length !== 0) {
+      await this.setDecryptedCipherCache(decCiphers);
+    }
     return decCiphers;
   }
 

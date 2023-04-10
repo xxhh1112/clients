@@ -2,6 +2,7 @@ import { BehaviorSubject } from "rxjs";
 
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/models/domain/storage-options";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { StateService as BaseStateService } from "@bitwarden/common/services/state.service";
 
 import { Account } from "../models/account";
@@ -130,6 +131,30 @@ export class BrowserStateService
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
+  }
+
+  override async getCryptoMasterKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
+    const key = await super.getCryptoMasterKey(options);
+    if (key == null) {
+      return null;
+    }
+
+    // Chrome will only send back { keyB64: string }
+    // so we need to make sure it has the prototype
+    return SymmetricCryptoKey.fromJSON(key);
+  }
+
+  override async getDecryptedCryptoSymmetricKey(
+    options?: StorageOptions
+  ): Promise<SymmetricCryptoKey> {
+    const key = await super.getDecryptedCryptoSymmetricKey(options);
+    if (key == null) {
+      return null;
+    }
+
+    // Chrome will only send back { keyB64: string }
+    // so we need to make sure it has the prototype
+    return SymmetricCryptoKey.fromJSON(key);
   }
 
   override async setLastActive(value: number, options?: StorageOptions): Promise<void> {
