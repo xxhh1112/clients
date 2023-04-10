@@ -1,4 +1,4 @@
-import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/userVerification/userVerification-api.service.abstraction";
+import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/userVerification/user-verification-api.service.abstraction";
 import { UserVerificationApiService as UserVerificationApiServiceImplementation } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
 
 import {

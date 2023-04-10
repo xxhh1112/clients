@@ -2,7 +2,7 @@ import { Directive, OnInit } from "@angular/core";
 import { ControlValueAccessor, FormControl } from "@angular/forms";
 
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/userVerification.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/user-verification.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";

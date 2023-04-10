@@ -21,7 +21,7 @@ import { ProfileResponse } from "../../models/response/profile.response";
 import { Verification } from "../../types/verification";
 import { AccountApiService } from "../abstractions/account-api.service";
 import { InternalAccountService } from "../abstractions/account.service";
-import { UserVerificationService } from "../abstractions/userVerification/userVerification.service.abstraction";
+import { UserVerificationService } from "../abstractions/userVerification/user-verification.service.abstraction";
 import { EmailTokenRequest } from "../models/request/email-token.request";
 import { EmailRequest } from "../models/request/email.request";
 import { PasswordHintRequest } from "../models/request/password-hint.request";
