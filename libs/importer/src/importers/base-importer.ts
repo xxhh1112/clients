@@ -2,8 +2,7 @@ import * as papa from "papaparse";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
+import { FieldType, SecureNoteType } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -336,6 +335,7 @@ export abstract class BaseImporter {
     result.collections = result.folders.map((f) => {
       const collection = new CollectionView();
       collection.name = f.name;
+      collection.id = f.id;
       return collection;
     });
     result.folderRelationships = [];
@@ -411,19 +411,20 @@ export abstract class BaseImporter {
   }
 
   protected processFolder(result: ImportResult, folderName: string) {
+    if (this.isNullOrWhitespace(folderName)) {
+      return;
+    }
+
     let folderIndex = result.folders.length;
-    const hasFolder = !this.isNullOrWhitespace(folderName);
     // Replace backslashes with forward slashes, ensuring we create sub-folders
     folderName = folderName.replace("\\", "/");
-    let addFolder = hasFolder;
+    let addFolder = true;
 
-    if (hasFolder) {
-      for (let i = 0; i < result.folders.length; i++) {
-        if (result.folders[i].name === folderName) {
-          addFolder = false;
-          folderIndex = i;
-          break;
-        }
+    for (let i = 0; i < result.folders.length; i++) {
+      if (result.folders[i].name === folderName) {
+        addFolder = false;
+        folderIndex = i;
+        break;
       }
     }
 
@@ -432,9 +433,8 @@ export abstract class BaseImporter {
       f.name = folderName;
       result.folders.push(f);
     }
-    if (hasFolder) {
-      result.folderRelationships.push([result.ciphers.length, folderIndex]);
-    }
+
+    result.folderRelationships.push([result.ciphers.length, folderIndex]);
   }
 
   protected convertToNoteIfNeeded(cipher: CipherView) {

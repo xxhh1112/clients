@@ -14,7 +14,7 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
+import { EventType } from "@bitwarden/common/enums";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -118,7 +118,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     protected vaultFilterService: VaultFilterService,
-    protected cipherService: CipherService,
+    cipherService: CipherService,
     protected eventCollectionService: EventCollectionService,
     protected totpService: TotpService,
     protected stateService: StateService,
@@ -129,7 +129,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     private organizationService: OrganizationService,
     private tokenService: TokenService
   ) {
-    super(searchService);
+    super(searchService, cipherService);
   }
 
   ngOnDestroy() {
@@ -223,6 +223,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   }
 
   async doSearch(indexedCiphers?: CipherView[]) {
+    indexedCiphers = indexedCiphers ?? (await this.cipherService.getAllDecrypted());
     this.ciphers = await this.searchService.searchCiphers(
       this.searchText,
       [this.filter, this.deletedFilter],

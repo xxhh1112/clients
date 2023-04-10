@@ -11,9 +11,8 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
-import { EncryptedExportType } from "@bitwarden/common/enums/encryptedExportType";
-import { EventType } from "@bitwarden/common/enums/eventType";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { EncryptedExportType, EventType } from "@bitwarden/common/enums";
 
 @Directive()
 export class ExportComponent implements OnInit, OnDestroy {
