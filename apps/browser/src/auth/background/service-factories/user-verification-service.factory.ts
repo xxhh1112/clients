@@ -1,4 +1,4 @@
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/userVerification/user-verification.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { UserVerificationService as UserVerificationServiceImplementation } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
 
 import {
