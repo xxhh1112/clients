@@ -1,4 +1,3 @@
-import { ApiService } from "../../abstractions/api.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { CryptoFunctionService } from "../../abstractions/cryptoFunction.service";
 import { LogService } from "../../abstractions/log.service";
@@ -9,6 +8,7 @@ import { Utils } from "../../misc/utils";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { KeysRequest } from "../../models/request/keys.request";
 import { AccountApiService } from "../abstractions/account-api.service";
+import { KeyConnectorApiService } from "../abstractions/key-connector-api.service.abstraction";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { KdfConfig } from "../models/domain/kdf-config";
@@ -20,7 +20,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
   constructor(
     private stateService: StateService,
     private cryptoService: CryptoService,
-    private apiService: ApiService,
+    private keyConnectorApiService: KeyConnectorApiService,
     private tokenService: TokenService,
     private logService: LogService,
     private organizationService: OrganizationService,
@@ -51,7 +51,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     const keyConnectorRequest = new KeyConnectorUserKeyRequest(key.encKeyB64);
 
     try {
-      await this.apiService.postUserKeyToKeyConnector(
+      await this.keyConnectorApiService.postUserKeyToKeyConnector(
         organization.keyConnectorUrl,
         keyConnectorRequest
       );
@@ -64,7 +64,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
 
   async getAndSetKey(url: string) {
     try {
-      const userKeyResponse = await this.apiService.getUserKeyFromKeyConnector(url);
+      const userKeyResponse = await this.keyConnectorApiService.getUserKeyFromKeyConnector(url);
       const keyArr = Utils.fromB64ToArray(userKeyResponse.key);
       const k = new SymmetricCryptoKey(keyArr);
       await this.cryptoService.setKey(k);
@@ -104,7 +104,10 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     const [pubKey, privKey] = await this.cryptoService.makeKeyPair();
 
     try {
-      await this.apiService.postUserKeyToKeyConnector(keyConnectorUrl, keyConnectorRequest);
+      await this.keyConnectorApiService.postUserKeyToKeyConnector(
+        keyConnectorUrl,
+        keyConnectorRequest
+      );
     } catch (e) {
       this.handleKeyConnectorError(e);
     }

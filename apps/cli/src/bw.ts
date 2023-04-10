@@ -13,9 +13,11 @@ import { PolicyService } from "@bitwarden/common/admin-console/services/policy/p
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { InternalAccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KeyConnectorApiService as KeyConnectorApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import { KeyConnectorApiServiceImplementation } from "@bitwarden/common/auth/services/key-connector-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
@@ -139,6 +141,7 @@ export class Main {
   accountApiService: AccountApiServiceAbstraction;
   sendApiService: SendApiService;
   accountService: InternalAccountService;
+  keyConnectorApiService: KeyConnectorApiServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -313,10 +316,15 @@ export class Main {
       this.environmentService
     );
 
+    this.keyConnectorApiService = new KeyConnectorApiServiceImplementation(
+      this.apiHelperService,
+      this.tokenApiService
+    );
+
     this.keyConnectorService = new KeyConnectorService(
       this.stateService,
       this.cryptoService,
-      this.apiService,
+      this.keyConnectorApiService,
       this.tokenService,
       this.logService,
       this.organizationService,

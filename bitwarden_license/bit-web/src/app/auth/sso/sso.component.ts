@@ -11,12 +11,12 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { SelectOptions } from "@bitwarden/angular/interfaces/selectOptions";
 import { ControlsOf } from "@bitwarden/angular/types/controls-of";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { KeyConnectorApiService } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import {
   OpenIdConnectRedirectBehavior,
   Saml2BindingType,
@@ -170,7 +170,7 @@ export class SsoComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    private keyConnectorApiService: KeyConnectorApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private organizationService: OrganizationService,
@@ -283,7 +283,7 @@ export class SsoComponent implements OnInit, OnDestroy {
     this.keyConnectorUrl.markAsPending();
 
     try {
-      await this.apiService.getKeyConnectorAlive(this.keyConnectorUrl.value);
+      await this.keyConnectorApiService.getKeyConnectorAlive(this.keyConnectorUrl.value);
       this.keyConnectorUrl.updateValueAndValidity();
     } catch {
       this.keyConnectorUrl.setErrors({

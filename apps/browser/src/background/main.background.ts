@@ -36,6 +36,7 @@ import { ProviderService } from "@bitwarden/common/admin-console/services/provid
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { InternalAccountService as InternalAccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { KeyConnectorApiService as KeyConnectorApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenApiService as TokenApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
@@ -45,6 +46,7 @@ import { UserVerificationService as UserVerificationServiceAbstraction } from "@
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import { KeyConnectorApiServiceImplementation } from "@bitwarden/common/auth/services/key-connector-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenApiServiceImplementation } from "@bitwarden/common/auth/services/token-api.service.implementation";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
@@ -195,6 +197,7 @@ export default class MainBackground {
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
   accountService: InternalAccountServiceAbstraction;
+  keyConnectorApiService: KeyConnectorApiServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -362,10 +365,16 @@ export default class MainBackground {
       this.apiService,
       this.stateService
     );
+
+    this.keyConnectorApiService = new KeyConnectorApiServiceImplementation(
+      this.apiHelperService,
+      this.tokenApiService
+    );
+
     this.keyConnectorService = new KeyConnectorService(
       this.stateService,
       this.cryptoService,
-      this.apiService,
+      this.keyConnectorApiService,
       this.tokenService,
       this.logService,
       this.organizationService,

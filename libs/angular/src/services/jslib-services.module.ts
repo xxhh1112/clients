@@ -553,7 +553,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       deps: [
         StateServiceAbstraction,
         CryptoServiceAbstraction,
-        ApiServiceAbstraction,
+        KeyConnectorApiServiceAbstraction,
         TokenServiceAbstraction,
         LogService,
         OrganizationServiceAbstraction,

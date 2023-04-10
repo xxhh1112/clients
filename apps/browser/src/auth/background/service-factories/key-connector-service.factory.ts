@@ -6,10 +6,6 @@ import {
   organizationServiceFactory,
 } from "../../../admin-console/background/service-factories/organization-service.factory";
 import {
-  apiServiceFactory,
-  ApiServiceInitOptions,
-} from "../../../background/service_factories/api-service.factory";
-import {
   cryptoFunctionServiceFactory,
   CryptoFunctionServiceInitOptions,
 } from "../../../background/service_factories/crypto-function-service.factory";
@@ -35,6 +31,10 @@ import {
   accountApiServiceFactory,
   AccountApiServiceInitOptions,
 } from "./account-api-service.factory";
+import {
+  KeyConnectorApiServiceInitOptions,
+  keyConnectorApiServiceFactory,
+} from "./key-connector-api-service.factory";
 import { TokenServiceInitOptions, tokenServiceFactory } from "./token-service.factory";
 
 type KeyConnectorServiceFactoryOptions = FactoryOptions & {
@@ -46,7 +46,7 @@ type KeyConnectorServiceFactoryOptions = FactoryOptions & {
 export type KeyConnectorServiceInitOptions = KeyConnectorServiceFactoryOptions &
   StateServiceInitOptions &
   CryptoServiceInitOptions &
-  ApiServiceInitOptions &
+  KeyConnectorApiServiceInitOptions &
   TokenServiceInitOptions &
   LogServiceInitOptions &
   OrganizationServiceInitOptions &
@@ -65,7 +65,7 @@ export function keyConnectorServiceFactory(
       new KeyConnectorService(
         await stateServiceFactory(cache, opts),
         await cryptoServiceFactory(cache, opts),
-        await apiServiceFactory(cache, opts),
+        await keyConnectorApiServiceFactory(cache, opts),
         await tokenServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
         await organizationServiceFactory(cache, opts),
