@@ -344,7 +344,7 @@ import { PopupUtilsService } from "./popup-utils.service";
         CollectionService,
         CryptoService,
         PlatformUtilsService,
-        BACKGROUND_MESSAGING_SERVICE,
+        COMBINED_MESSAGING_SERVICE,
         SearchService,
         KeyConnectorServiceAbstraction,
         StateServiceAbstraction,
