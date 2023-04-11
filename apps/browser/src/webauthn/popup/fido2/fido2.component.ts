@@ -33,6 +33,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   protected data$ = new BehaviorSubject<BrowserFido2Message>(null);
   protected sessionId?: string;
   protected ciphers?: CipherView[] = [];
+  protected loading = false;
 
   constructor(private activatedRoute: ActivatedRoute, private cipherService: CipherService) {}
 
@@ -92,6 +93,8 @@ export class Fido2Component implements OnInit, OnDestroy {
                 return cipher.decrypt();
               })
             );
+          } else if (data?.type === "CloseRequest") {
+            window.close();
           }
         }),
         takeUntil(this.destroy$)
@@ -122,7 +125,7 @@ export class Fido2Component implements OnInit, OnDestroy {
       });
     }
 
-    window.close();
+    this.loading = true;
   }
 
   confirm() {
@@ -130,7 +133,7 @@ export class Fido2Component implements OnInit, OnDestroy {
       sessionId: this.sessionId,
       type: "ConfirmCredentialResponse",
     });
-    window.close();
+    this.loading = true;
   }
 
   confirmNew() {
@@ -138,7 +141,7 @@ export class Fido2Component implements OnInit, OnDestroy {
       sessionId: this.sessionId,
       type: "ConfirmNewCredentialResponse",
     });
-    window.close();
+    this.loading = true;
   }
 
   abort(fallback: boolean) {

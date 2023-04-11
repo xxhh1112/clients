@@ -41,4 +41,5 @@ export abstract class Fido2UserInterfaceSession {
     existingCipherIds: string[],
     abortController?: AbortController
   ) => Promise<void>;
+  close: () => void;
 }

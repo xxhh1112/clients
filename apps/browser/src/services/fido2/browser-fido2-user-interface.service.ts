@@ -86,6 +86,9 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "AbortResponse";
       fallbackRequested: boolean;
     }
+  | {
+      type: "CloseRequest";
+    }
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
@@ -237,6 +240,13 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     await this.receive("AbortResponse");
   }
 
+  async close() {
+    await this.send({ type: "CloseRequest", sessionId: this.sessionId });
+    this.closed = true;
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private async send(msg: BrowserFido2Message): Promise<void> {
     if (!this.connected$.value) {
       await this.connect();
@@ -275,11 +285,5 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       { center: true }
     );
     await firstValueFrom(this.connected$.pipe(filter((connected) => connected === true)));
-  }
-
-  private close() {
-    this.closed = true;
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

@@ -43,114 +43,121 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
     const userInterfaceSession = await this.userInterface.newSession(abortController);
 
-    if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
-    }
+    try {
+      if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotSupported);
+      }
 
-    if (params.requireResidentKey != undefined && typeof params.requireResidentKey !== "boolean") {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-    }
+      if (
+        params.requireResidentKey != undefined &&
+        typeof params.requireResidentKey !== "boolean"
+      ) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
 
-    if (
-      params.requireUserVerification != undefined &&
-      typeof params.requireUserVerification !== "boolean"
-    ) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-    }
+      if (
+        params.requireUserVerification != undefined &&
+        typeof params.requireUserVerification !== "boolean"
+      ) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
 
-    if (params.requireUserVerification) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
-    }
+      if (params.requireUserVerification) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
+      }
 
-    const existingCipherIds = await this.findExistingCredentials(
-      params.excludeCredentialDescriptorList
-    );
-    if (existingCipherIds.length > 0) {
-      await userInterfaceSession.informExcludedCredential(existingCipherIds, abortController);
-
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-    }
-
-    let cipher: CipherView;
-    let fido2Key: Fido2KeyView;
-    let keyPair: CryptoKeyPair;
-    if (params.requireResidentKey) {
-      const userVerification = await userInterfaceSession.confirmNewCredential(
-        {
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-        },
-        abortController
+      const existingCipherIds = await this.findExistingCredentials(
+        params.excludeCredentialDescriptorList
       );
+      if (existingCipherIds.length > 0) {
+        await userInterfaceSession.informExcludedCredential(existingCipherIds, abortController);
 
-      if (!userVerification) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
-      try {
-        keyPair = await createKeyPair();
+      let cipher: CipherView;
+      let fido2Key: Fido2KeyView;
+      let keyPair: CryptoKeyPair;
+      if (params.requireResidentKey) {
+        const userVerification = await userInterfaceSession.confirmNewCredential(
+          {
+            credentialName: params.rpEntity.name,
+            userName: params.userEntity.displayName,
+          },
+          abortController
+        );
 
-        cipher = new CipherView();
-        cipher.type = CipherType.Fido2Key;
-        cipher.name = params.rpEntity.name;
-        cipher.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
-        const encrypted = await this.cipherService.encrypt(cipher);
-        await this.cipherService.createWithServer(encrypted); // encrypted.id is assigned inside here
-        cipher.id = encrypted.id;
-      } catch {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+        if (!userVerification) {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+        }
+
+        try {
+          keyPair = await createKeyPair();
+
+          cipher = new CipherView();
+          cipher.type = CipherType.Fido2Key;
+          cipher.name = params.rpEntity.name;
+          cipher.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
+          const encrypted = await this.cipherService.encrypt(cipher);
+          await this.cipherService.createWithServer(encrypted); // encrypted.id is assigned inside here
+          cipher.id = encrypted.id;
+        } catch {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+        }
+      } else {
+        const cipherId = await userInterfaceSession.confirmNewNonDiscoverableCredential(
+          {
+            credentialName: params.rpEntity.name,
+            userName: params.userEntity.displayName,
+          },
+          abortController
+        );
+
+        if (cipherId === undefined) {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+        }
+
+        try {
+          keyPair = await createKeyPair();
+
+          const encrypted = await this.cipherService.get(cipherId);
+          cipher = await encrypted.decrypt();
+          cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
+          const reencrypted = await this.cipherService.encrypt(cipher);
+          await this.cipherService.updateWithServer(reencrypted);
+        } catch {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+        }
       }
-    } else {
-      const cipherId = await userInterfaceSession.confirmNewNonDiscoverableCredential(
-        {
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-        },
-        abortController
+
+      const credentialId =
+        cipher.type === CipherType.Fido2Key ? cipher.id : cipher.login.fido2Key.nonDiscoverableId;
+
+      const authData = await generateAuthData({
+        rpId: params.rpEntity.id,
+        credentialId: Utils.guidToRawFormat(credentialId),
+        counter: fido2Key.counter,
+        userPresence: true,
+        userVerification: false,
+        keyPair,
+      });
+      const attestationObject = new Uint8Array(
+        CBOR.encode({
+          fmt: "none",
+          attStmt: {},
+          authData,
+        })
       );
 
-      if (cipherId === undefined) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-      }
-
-      try {
-        keyPair = await createKeyPair();
-
-        const encrypted = await this.cipherService.get(cipherId);
-        cipher = await encrypted.decrypt();
-        cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
-        const reencrypted = await this.cipherService.encrypt(cipher);
-        await this.cipherService.updateWithServer(reencrypted);
-      } catch {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-      }
-    }
-
-    const credentialId =
-      cipher.type === CipherType.Fido2Key ? cipher.id : cipher.login.fido2Key.nonDiscoverableId;
-
-    const authData = await generateAuthData({
-      rpId: params.rpEntity.id,
-      credentialId: Utils.guidToRawFormat(credentialId),
-      counter: fido2Key.counter,
-      userPresence: true,
-      userVerification: false,
-      keyPair,
-    });
-    const attestationObject = new Uint8Array(
-      CBOR.encode({
-        fmt: "none",
-        attStmt: {},
+      return {
+        credentialId: Utils.guidToRawFormat(credentialId),
+        attestationObject,
         authData,
-      })
-    );
-
-    return {
-      credentialId: Utils.guidToRawFormat(credentialId),
-      attestationObject,
-      authData,
-      publicKeyAlgorithm: -7,
-    };
+        publicKeyAlgorithm: -7,
+      };
+    } finally {
+      userInterfaceSession.close();
+    }
   }
 
   async getAssertion(
@@ -159,85 +166,89 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ): Promise<Fido2AuthenticatorGetAssertionResult> {
     const userInterfaceSession = await this.userInterface.newSession(abortController);
 
-    if (
-      params.requireUserVerification != undefined &&
-      typeof params.requireUserVerification !== "boolean"
-    ) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-    }
-
-    if (params.requireUserVerification) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
-    }
-
-    let cipherOptions: CipherView[];
-
-    // eslint-disable-next-line no-empty
-    if (params.allowCredentialDescriptorList?.length > 0) {
-      cipherOptions = await this.findNonDiscoverableCredentials(
-        params.allowCredentialDescriptorList,
-        params.rpId
-      );
-    } else {
-      cipherOptions = await this.findDiscoverableCredentials(params.rpId);
-    }
-
-    if (cipherOptions.length === 0) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-    }
-
-    const selectedCipherId = await userInterfaceSession.pickCredential(
-      cipherOptions.map((cipher) => cipher.id)
-    );
-    const selectedCipher = cipherOptions.find((c) => c.id === selectedCipherId);
-
-    if (selectedCipher === undefined) {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-    }
-
     try {
-      const selectedFido2Key =
-        selectedCipher.type === CipherType.Login
-          ? selectedCipher.login.fido2Key
-          : selectedCipher.fido2Key;
-      const selectedCredentialId =
-        selectedCipher.type === CipherType.Login
-          ? selectedFido2Key.nonDiscoverableId
-          : selectedCipher.id;
+      if (
+        params.requireUserVerification != undefined &&
+        typeof params.requireUserVerification !== "boolean"
+      ) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
 
-      ++selectedFido2Key.counter;
+      if (params.requireUserVerification) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
+      }
 
-      selectedCipher.localData = {
-        ...selectedCipher.localData,
-        lastUsedDate: new Date().getTime(),
-      };
-      const encrypted = await this.cipherService.encrypt(selectedCipher);
-      await this.cipherService.updateWithServer(encrypted);
+      let cipherOptions: CipherView[];
 
-      const authenticatorData = await generateAuthData({
-        rpId: selectedFido2Key.rpId,
-        credentialId: Utils.guidToRawFormat(selectedCredentialId),
-        counter: selectedFido2Key.counter,
-        userPresence: true,
-        userVerification: false,
-      });
+      // eslint-disable-next-line no-empty
+      if (params.allowCredentialDescriptorList?.length > 0) {
+        cipherOptions = await this.findNonDiscoverableCredentials(
+          params.allowCredentialDescriptorList,
+          params.rpId
+        );
+      } else {
+        cipherOptions = await this.findDiscoverableCredentials(params.rpId);
+      }
 
-      const signature = await generateSignature({
-        authData: authenticatorData,
-        clientDataHash: params.hash,
-        privateKey: await getPrivateKeyFromFido2Key(selectedFido2Key),
-      });
+      if (cipherOptions.length === 0) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+      }
 
-      return {
-        authenticatorData,
-        selectedCredential: {
-          id: Utils.guidToRawFormat(selectedCredentialId),
-          userHandle: Fido2Utils.stringToBuffer(selectedFido2Key.userHandle),
-        },
-        signature,
-      };
-    } catch {
-      throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      const selectedCipherId = await userInterfaceSession.pickCredential(
+        cipherOptions.map((cipher) => cipher.id)
+      );
+      const selectedCipher = cipherOptions.find((c) => c.id === selectedCipherId);
+
+      if (selectedCipher === undefined) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+      }
+
+      try {
+        const selectedFido2Key =
+          selectedCipher.type === CipherType.Login
+            ? selectedCipher.login.fido2Key
+            : selectedCipher.fido2Key;
+        const selectedCredentialId =
+          selectedCipher.type === CipherType.Login
+            ? selectedFido2Key.nonDiscoverableId
+            : selectedCipher.id;
+
+        ++selectedFido2Key.counter;
+
+        selectedCipher.localData = {
+          ...selectedCipher.localData,
+          lastUsedDate: new Date().getTime(),
+        };
+        const encrypted = await this.cipherService.encrypt(selectedCipher);
+        await this.cipherService.updateWithServer(encrypted);
+
+        const authenticatorData = await generateAuthData({
+          rpId: selectedFido2Key.rpId,
+          credentialId: Utils.guidToRawFormat(selectedCredentialId),
+          counter: selectedFido2Key.counter,
+          userPresence: true,
+          userVerification: false,
+        });
+
+        const signature = await generateSignature({
+          authData: authenticatorData,
+          clientDataHash: params.hash,
+          privateKey: await getPrivateKeyFromFido2Key(selectedFido2Key),
+        });
+
+        return {
+          authenticatorData,
+          selectedCredential: {
+            id: Utils.guidToRawFormat(selectedCredentialId),
+            userHandle: Fido2Utils.stringToBuffer(selectedFido2Key.userHandle),
+          },
+          signature,
+        };
+      } catch {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
+      }
+    } finally {
+      userInterfaceSession.close();
     }
   }
 
