@@ -1,6 +1,5 @@
 import { Observable, Subject } from "rxjs";
 
-import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../abstractions/appId.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EncryptService } from "../../abstractions/encrypt.service";
@@ -16,6 +15,7 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { ErrorResponse } from "../../models/response/error.response";
 import { AuthRequestPushNotification } from "../../models/response/notification.response";
 import { AccountApiService } from "../abstractions/account-api.service";
+import { AuthRequestApiService } from "../abstractions/auth-request-api.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenApiService } from "../abstractions/token-api.service.abstraction";
@@ -83,7 +83,7 @@ export class AuthService implements AuthServiceAbstraction {
 
   constructor(
     protected cryptoService: CryptoService,
-    protected apiService: ApiService,
+    protected authRequestApiService: AuthRequestApiService,
     protected tokenService: TokenService,
     protected appIdService: AppIdService,
     protected platformUtilsService: PlatformUtilsService,
@@ -310,7 +310,7 @@ export class AuthService implements AuthServiceAbstraction {
       await this.appIdService.getAppId(),
       requestApproved
     );
-    return await this.apiService.putAuthRequest(id, request);
+    return await this.authRequestApiService.putAuthRequest(id, request);
   }
 
   private saveState(

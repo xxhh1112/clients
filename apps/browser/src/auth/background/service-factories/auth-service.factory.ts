@@ -1,10 +1,6 @@
 import { AuthService as AbstractAuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 
-import {
-  apiServiceFactory,
-  ApiServiceInitOptions,
-} from "../../../background/service_factories/api-service.factory";
 import { appIdServiceFactory } from "../../../background/service_factories/app-id-service.factory";
 import {
   cryptoServiceFactory,
@@ -49,6 +45,10 @@ import {
   AccountApiServiceInitOptions,
 } from "./account-api-service.factory";
 import {
+  authRequestApiServiceFactory,
+  AuthRequestApiServiceInitOptions,
+} from "./auth-request-api-service.factory";
+import {
   KeyConnectorServiceInitOptions,
   keyConnectorServiceFactory,
 } from "./key-connector-service.factory";
@@ -60,7 +60,7 @@ type AuthServiceFactoryOptions = FactoryOptions;
 
 export type AuthServiceInitOptions = AuthServiceFactoryOptions &
   CryptoServiceInitOptions &
-  ApiServiceInitOptions &
+  AuthRequestApiServiceInitOptions &
   TokenServiceInitOptions &
   PlatformUtilsServiceInitOptions &
   MessagingServiceInitOptions &
@@ -85,7 +85,7 @@ export function authServiceFactory(
     async () =>
       new AuthService(
         await cryptoServiceFactory(cache, opts),
-        await apiServiceFactory(cache, opts),
+        await authRequestApiServiceFactory(cache, opts),
         await tokenServiceFactory(cache, opts),
         await appIdServiceFactory(cache, opts),
         await platformUtilsServiceFactory(cache, opts),

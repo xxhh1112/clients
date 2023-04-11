@@ -13,9 +13,11 @@ import { PolicyService } from "@bitwarden/common/admin-console/services/policy/p
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { InternalAccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { AuthRequestApiService as AuthRequestApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { KeyConnectorApiService as KeyConnectorApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
+import { AuthRequestApiServiceImplementation } from "@bitwarden/common/auth/services/auth-request-api.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorApiServiceImplementation } from "@bitwarden/common/auth/services/key-connector-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
@@ -142,6 +144,7 @@ export class Main {
   sendApiService: SendApiService;
   accountService: InternalAccountService;
   keyConnectorApiService: KeyConnectorApiServiceAbstraction;
+  authRequestApiService: AuthRequestApiServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -335,9 +338,11 @@ export class Main {
 
     this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
 
+    this.authRequestApiService = new AuthRequestApiServiceImplementation(this.apiService);
+
     this.authService = new AuthService(
       this.cryptoService,
-      this.apiService,
+      this.authRequestApiService,
       this.tokenService,
       this.appIdService,
       this.platformUtilsService,

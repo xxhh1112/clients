@@ -13,7 +13,6 @@ import { first } from "rxjs/operators";
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -21,6 +20,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { AuthRequestApiService } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { EventType } from "@bitwarden/common/enums";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -100,7 +100,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private passwordRepromptService: PasswordRepromptService,
     private stateService: StateService,
     private searchBarService: SearchBarService,
-    private apiService: ApiService
+    private authRequestApiService: AuthRequestApiService
   ) {}
 
   async ngOnInit() {
@@ -212,7 +212,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     const approveLoginRequests = await this.stateService.getApproveLoginRequests();
     if (approveLoginRequests) {
-      const authRequest = await this.apiService.getLastAuthRequest();
+      const authRequest = await this.authRequestApiService.getLastAuthRequest();
       if (authRequest != null) {
         this.messagingService.send("openLoginApproval", {
           notificationId: authRequest.id,

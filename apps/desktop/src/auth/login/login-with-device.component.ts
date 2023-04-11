@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { LoginWithDeviceComponent as BaseLoginWithDeviceComponent } from "@bitwarden/angular/auth/components/login-with-device.component";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -14,6 +13,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { AuthRequestApiService } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -39,7 +39,7 @@ export class LoginWithDeviceComponent
     cryptoFunctionService: CryptoFunctionService,
     appIdService: AppIdService,
     passwordGenerationService: PasswordGenerationServiceAbstraction,
-    apiService: ApiService,
+    authRequestApiService: AuthRequestApiService,
     authService: AuthService,
     logService: LogService,
     environmentService: EnvironmentService,
@@ -58,7 +58,7 @@ export class LoginWithDeviceComponent
       cryptoFunctionService,
       appIdService,
       passwordGenerationService,
-      apiService,
+      authRequestApiService,
       authService,
       logService,
       environmentService,

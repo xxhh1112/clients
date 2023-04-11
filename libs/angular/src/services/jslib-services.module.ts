@@ -61,6 +61,7 @@ import {
   AccountService as AccountServiceAbstraction,
   InternalAccountService,
 } from "@bitwarden/common/auth/abstractions/account.service";
+import { AuthRequestApiService as AuthRequestApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorApiService as KeyConnectorApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector-api.service.abstraction";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
@@ -73,6 +74,7 @@ import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/ab
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
+import { AuthRequestApiServiceImplementation } from "@bitwarden/common/auth/services/auth-request-api.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorApiServiceImplementation } from "@bitwarden/common/auth/services/key-connector-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
@@ -685,6 +687,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: KeyConnectorApiServiceAbstraction,
       useClass: KeyConnectorApiServiceImplementation,
       deps: [ApiHelperServiceAbstraction, TokenApiServiceAbstraction],
+    },
+    {
+      provide: AuthRequestApiServiceAbstraction,
+      useClass: AuthRequestApiServiceImplementation,
+      deps: [ApiServiceAbstraction],
     },
     {
       provide: ApiHelperServiceAbstraction,

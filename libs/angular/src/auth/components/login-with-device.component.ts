@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -13,6 +12,7 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { AuthRequestApiService } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { AuthRequestType } from "@bitwarden/common/auth/enums/auth-request-type";
@@ -53,7 +53,7 @@ export class LoginWithDeviceComponent
     private cryptoFunctionService: CryptoFunctionService,
     private appIdService: AppIdService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
-    private apiService: ApiService,
+    private authRequestApiService: AuthRequestApiService,
     private authService: AuthService,
     private logService: LogService,
     environmentService: EnvironmentService,
@@ -94,7 +94,9 @@ export class LoginWithDeviceComponent
 
     try {
       await this.buildAuthRequest();
-      const reqResponse = await this.apiService.postAuthRequest(this.passwordlessRequest);
+      const reqResponse = await this.authRequestApiService.postAuthRequest(
+        this.passwordlessRequest
+      );
 
       if (reqResponse.id) {
         this.anonymousHubService.createHubConnection(reqResponse.id);
@@ -116,7 +118,7 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string) {
     try {
-      const response = await this.apiService.getAuthResponse(
+      const response = await this.authRequestApiService.getAuthResponse(
         requestId,
         this.passwordlessRequest.accessCode
       );

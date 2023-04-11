@@ -48,8 +48,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
-import { PasswordlessCreateAuthRequest } from "../auth/models/request/passwordless-create-auth.request";
 import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
 import { TwoFactorEmailRequest } from "../auth/models/request/two-factor-email.request";
 import { TwoFactorProviderRequest } from "../auth/models/request/two-factor-provider.request";
@@ -60,7 +58,6 @@ import { UpdateTwoFactorEmailRequest } from "../auth/models/request/update-two-f
 import { UpdateTwoFactorWebAuthnDeleteRequest } from "../auth/models/request/update-two-factor-web-authn-delete.request";
 import { UpdateTwoFactorWebAuthnRequest } from "../auth/models/request/update-two-factor-web-authn.request";
 import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-two-factor-yubio-otp.request";
-import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
 import {
   EmergencyAccessGranteeDetailsResponse,
@@ -139,46 +136,6 @@ export class ApiService implements ApiServiceAbstraction {
       this.device === DeviceType.WindowsDesktop ||
       this.device === DeviceType.MacOsDesktop ||
       this.device === DeviceType.LinuxDesktop;
-  }
-
-  // Auth APIs
-
-  async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
-    const r = await this.send("POST", "/auth-requests/", request, false, true);
-    return new AuthRequestResponse(r);
-  }
-
-  async getAuthResponse(id: string, accessCode: string): Promise<AuthRequestResponse> {
-    const path = `/auth-requests/${id}/response?code=${accessCode}`;
-    const r = await this.send("GET", path, null, false, true);
-    return new AuthRequestResponse(r);
-  }
-
-  async getAuthRequest(id: string): Promise<AuthRequestResponse> {
-    const path = `/auth-requests/${id}`;
-    const r = await this.send("GET", path, null, true, true);
-    return new AuthRequestResponse(r);
-  }
-
-  async putAuthRequest(id: string, request: PasswordlessAuthRequest): Promise<AuthRequestResponse> {
-    const path = `/auth-requests/${id}`;
-    const r = await this.send("PUT", path, request, true, true);
-    return new AuthRequestResponse(r);
-  }
-
-  async getAuthRequests(): Promise<ListResponse<AuthRequestResponse>> {
-    const path = `/auth-requests/`;
-    const r = await this.send("GET", path, null, true, true);
-    return new ListResponse(r, AuthRequestResponse);
-  }
-
-  async getLastAuthRequest(): Promise<AuthRequestResponse> {
-    const requests = await this.getAuthRequests();
-    const activeRequests = requests.data.filter((m) => !m.isAnswered && !m.isExpired);
-    const lastRequest = activeRequests.sort((a: AuthRequestResponse, b: AuthRequestResponse) =>
-      a.creationDate.localeCompare(b.creationDate)
-    )[activeRequests.length - 1];
-    return lastRequest;
   }
 
   // Cipher APIs

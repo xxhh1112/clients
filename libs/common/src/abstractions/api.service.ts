@@ -43,8 +43,6 @@ import { EmergencyAccessConfirmRequest } from "../auth/models/request/emergency-
 import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-access-invite.request";
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
-import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
-import { PasswordlessCreateAuthRequest } from "../auth/models/request/passwordless-create-auth.request";
 import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
 import { TwoFactorEmailRequest } from "../auth/models/request/two-factor-email.request";
 import { TwoFactorProviderRequest } from "../auth/models/request/two-factor-provider.request";
@@ -55,7 +53,6 @@ import { UpdateTwoFactorEmailRequest } from "../auth/models/request/update-two-f
 import { UpdateTwoFactorWebAuthnDeleteRequest } from "../auth/models/request/update-two-factor-web-authn-delete.request";
 import { UpdateTwoFactorWebAuthnRequest } from "../auth/models/request/update-two-factor-web-authn.request";
 import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-two-factor-yubio-otp.request";
-import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
 import {
   EmergencyAccessGranteeDetailsResponse,
@@ -115,14 +112,6 @@ export abstract class ApiService {
     apiUrl?: string,
     alterHeaders?: (headers: Headers) => void
   ) => Promise<any>;
-
-  //passwordless
-  postAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
-  getAuthResponse: (id: string, accessCode: string) => Promise<AuthRequestResponse>;
-  getAuthRequest: (id: string) => Promise<AuthRequestResponse>;
-  putAuthRequest: (id: string, request: PasswordlessAuthRequest) => Promise<AuthRequestResponse>;
-  getAuthRequests: () => Promise<ListResponse<AuthRequestResponse>>;
-  getLastAuthRequest: () => Promise<AuthRequestResponse>;
 
   getCipher: (id: string) => Promise<CipherResponse>;
   getFullCipherDetails: (id: string) => Promise<CipherResponse>;

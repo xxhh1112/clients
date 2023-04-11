@@ -4,12 +4,12 @@ import { Subject } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalConfig } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AuthRequestApiService } from "@bitwarden/common/auth/abstractions/auth-request-api.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
 import { Utils } from "@bitwarden/common/misc/utils";
@@ -37,7 +37,7 @@ export class LoginApprovalComponent implements OnInit, OnDestroy {
     protected stateService: StateService,
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
-    protected apiService: ApiService,
+    protected authRequestApiService: AuthRequestApiService,
     protected authService: AuthService,
     protected appIdService: AppIdService,
     protected cryptoService: CryptoService,
@@ -64,7 +64,9 @@ export class LoginApprovalComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     if (this.notificationId != null) {
-      this.authRequestResponse = await this.apiService.getAuthRequest(this.notificationId);
+      this.authRequestResponse = await this.authRequestApiService.getAuthRequest(
+        this.notificationId
+      );
       const publicKey = Utils.fromB64ToArray(this.authRequestResponse.publicKey);
       this.email = await this.stateService.getEmail();
       this.fingerprintPhrase = (
@@ -95,7 +97,7 @@ export class LoginApprovalComponent implements OnInit, OnDestroy {
       this.modalRef.close();
     }
 
-    this.authRequestResponse = await this.apiService.getAuthRequest(this.notificationId);
+    this.authRequestResponse = await this.authRequestApiService.getAuthRequest(this.notificationId);
     if (this.authRequestResponse.requestApproved || this.authRequestResponse.responseDate != null) {
       this.platformUtilsService.showToast(
         "info",
