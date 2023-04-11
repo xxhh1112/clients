@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Ota yhteyttä"
   },
+  "helpAndFeedback": {
+    "message": "Tuki ja palaute"
+  },
   "getHelp": {
     "message": "Hanki apua"
   },
@@ -1084,7 +1087,7 @@
     "message": "Kaksivaiheisen kirjautumisen (2FA) TOTP-todennuskoodien generaattori holvisi kirjautumistiedoille."
   },
   "premiumSignUpSupport": {
-    "message": "Ensisijainen asiakastuki."
+    "message": "Ensisijainen asiakaspalvelu."
   },
   "premiumSignUpFuture": {
     "message": "Kaikki tulossa olevat Premium-toiminnot. Lisää tulossa pian!"
@@ -1847,7 +1850,7 @@
     "message": "Minuuttia"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a)",
+    "message": "Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -2035,9 +2038,6 @@
   "neverLockWarning": {
     "message": "Haluatko varmasti käyttää asetusta \"Ei koskaan\"? Se tallentaa holvisi salausavaimen laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Holvi"
   },
@@ -2191,7 +2191,7 @@
     "message": "Tärkeää:"
   },
   "masterPasswordHint": {
-    "message": "Pääsalasanan palautus ei ole mahdollista, jos unohdat sen!"
+    "message": "Pääsalasanasi palauttaminen ei ole mahdollista, jos unohdat sen!"
   },
   "characterMinimum": {
     "message": "Vähintään $LENGTH$ merkkiä",

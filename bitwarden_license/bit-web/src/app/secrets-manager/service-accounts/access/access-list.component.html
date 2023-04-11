@@ -2,7 +2,7 @@
   <i class="bwi bwi-spinner bwi-spin bwi-3x"></i>
 </div>
 
-<sm-no-items *ngIf="tokens?.length == 0">
+<bit-no-items *ngIf="tokens?.length == 0">
   <ng-container slot="title">{{ "accessTokensNoItemsTitle" | i18n }}</ng-container>
   <ng-container slot="description">{{ "accessTokensNoItemsDesc" | i18n }}</ng-container>
   <button
@@ -13,9 +13,9 @@
     (click)="newAccessTokenEvent.emit()"
   >
     <i class="bwi bwi-plus" aria-hidden="true"></i>
-    {{ "createAccessToken" | i18n }}
+    {{ "newAccessToken" | i18n }}
   </button>
-</sm-no-items>
+</bit-no-items>
 
 <bit-table *ngIf="tokens?.length >= 1">
   <ng-container header>
@@ -59,9 +59,9 @@
       <td bitCell>{{ token.name }}</td>
       <td bitCell>{{ permission(token) | i18n }}</td>
       <td bitCell>
-        {{ token.expireAt === null ? ("never" | i18n) : (token.expireAt | date: "medium") }}
+        {{ token.expireAt === null ? ("never" | i18n) : (token.expireAt | date : "medium") }}
       </td>
-      <td bitCell>{{ token.revisionDate | date: "medium" }}</td>
+      <td bitCell>{{ token.revisionDate | date : "medium" }}</td>
       <td bitCell>
         <button
           type="button"

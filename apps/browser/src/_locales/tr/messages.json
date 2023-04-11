@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Yardım ve geribildirim"
   },
+  "helpCenter": {
+    "message": "Bitwarden yardım merkezi"
+  },
+  "communityForums": {
+    "message": "Bitwarden forumlarını keşfedin"
+  },
+  "contactSupport": {
+    "message": "Bitwarden destek ekibiyle iletişime geçin"
+  },
   "sync": {
     "message": "Eşitle"
   },
@@ -430,7 +439,7 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Ana parola en az $VALUE$ karakter uzunluğunda olmalıdır.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -967,7 +976,7 @@
     "message": "Sayfa yüklendiğinde giriş formu tespit edilirse otomatik olarak formu doldur."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Ele geçirilmiş veya güvenilmeyen web siteleri sayfa yüklenirken otomatik doldurmayı suistimal edebilir."
   },
   "learnMoreAboutAutofill": {
     "message": "Otomatik doldurma hakkında bilgi alın"
@@ -1994,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Askıya alınmış kuruluşlardaki kayıtlara erişilemez. Destek almak için kuruluş sahibinizle iletişime geçin."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "$DOMAIN$ sitesine giriş yapılıyor",
     "placeholders": {
@@ -2111,11 +2117,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Kuruluş ilkeleriniz, sayfa yüklendiğinde otomatik doldurmayı etkinleştirdi."
+  },
   "howToAutofill": {
     "message": "Otomatik doldurma nasıl yapılır?"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Bu sayfadan bir kayıt seçin veya $COMMAND$ kısayolunu kullanın.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2123,8 +2132,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Bu sayfadan bir kayıt seçin veya ayarlardan bir kısayol ayarlayın. Sayfa yüklenirken otomatik doldurmayı da deneyebilirsiniz."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Bu sayfadan bir kayıt seçin veya ayarlardan bir kısayol ayarlayın."
   },
   "gotIt": {
     "message": "Anladım"

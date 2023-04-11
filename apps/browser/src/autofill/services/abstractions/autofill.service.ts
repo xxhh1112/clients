@@ -20,6 +20,7 @@ export interface AutoFillOptions {
   onlyVisibleFields?: boolean;
   fillNewPassword?: boolean;
   skipLastUsed?: boolean;
+  allowUntrustedIframe?: boolean;
 }
 
 export interface FormData {

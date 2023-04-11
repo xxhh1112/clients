@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Help & reacties"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hulpcentrum"
+  },
+  "communityForums": {
+    "message": "Ontdek Bitwarden community-forums"
+  },
+  "contactSupport": {
+    "message": "Contacteer Bitwarden support"
+  },
   "sync": {
     "message": "Synchroniseren"
   },
@@ -430,7 +439,7 @@
     "message": "Type je hoofdwachtwoord opnieuw in."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Hoofdwachtwoord moet minstens $VALUE$ tekens lang zijn.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1994,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Je kunt uitgeschakelde items in een organisatie niet benaderen. Neem contact op met de eigenaar van je organisatie voor hulp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Inloggen op $DOMAIN$",
     "placeholders": {
@@ -2111,11 +2117,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Je organisatiebeleid heeft het automatisch invullen bij laden van pagina ingeschakeld."
+  },
   "howToAutofill": {
     "message": "Hoe automatisch aanvullen"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Selecteer een item op deze pagina of gebruik de snelkoppeling: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2123,8 +2132,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Kies een item van deze pagina of stel een snelkoppeling in de instellingen in. Je kunt ook automatisch invullen bij het laden van een pagina proberen."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Selecteer een item op deze pagina of stel een snelkoppeling in via instellingen."
   },
   "gotIt": {
     "message": "Ik snap het"

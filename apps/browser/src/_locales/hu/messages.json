@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Súgó és visszajelzés"
   },
+  "helpCenter": {
+    "message": "Bitwardsn Segítségközpont"
+  },
+  "communityForums": {
+    "message": "Bitwarden közösségi fórum felfedezése"
+  },
+  "contactSupport": {
+    "message": "Kapcsolatfelvétel a Bitwarden támogatással"
+  },
   "sync": {
     "message": "Szinkronizálás"
   },
@@ -430,7 +439,7 @@
     "message": "A mesterjelszó ismételt megadása kötelező."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "A mesterjelszónak legalább $VALUE$ karakter hosszúnak kell lennie.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1994,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "A letiltott szervezetek elemei nem érhetők el. Vegyük fel a kapcsolatot a szervezet tulajdonosával segítségért."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Bejelentkezés $DOMAIN$ területre",
     "placeholders": {
@@ -2111,11 +2117,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "A szervezeti szabályzat bekapcsolta az automatikus kitöltést az oldalbetöltéskor."
+  },
   "howToAutofill": {
     "message": "Az automatikus kitöltés működése"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy használjuk a parancsikont: $COMMAND$.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2123,8 +2132,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Válasszunk ki egy elemet erről az oldalról vagy állítsunk be egy billentyűparancs a beállításokban. Kipróbálhatjuk az automatikus kitöltést is az oldal betöltésekor."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Válasszunk egy elemet ezen az oldalon vagy állítsunk be parancsikont a beállításokban."
   },
   "gotIt": {
     "message": "Rendben"

@@ -1,8 +1,8 @@
 import { Observable } from "rxjs";
 
-import { Organization } from "@bitwarden/common/src/models/domain/organization";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/src/admin-console/models/view/collection.view";
 import { TreeNode } from "@bitwarden/common/src/models/domain/tree-node";
-import { CollectionView } from "@bitwarden/common/src/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/src/vault/models/view/folder.view";
 
 import {
@@ -19,6 +19,7 @@ export abstract class VaultFilterService {
   organizationTree$: Observable<TreeNode<OrganizationFilter>>;
   folderTree$: Observable<TreeNode<FolderFilter>>;
   collectionTree$: Observable<TreeNode<CollectionFilter>>;
+  cipherTypeTree$: Observable<TreeNode<CipherTypeFilter>>;
   reloadCollections: () => Promise<void>;
   getCollectionNodeFromTree: (id: string) => Promise<TreeNode<CollectionFilter>>;
   setCollapsedFilterNodes: (collapsedFilterNodes: Set<string>) => Promise<void>;

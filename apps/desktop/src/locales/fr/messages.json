@@ -98,7 +98,7 @@
     "message": "Phrase de passe"
   },
   "editItem": {
-    "message": "Modifier l'élément"
+    "message": "Éditer l'élément"
   },
   "emailAddress": {
     "message": "Adresse électronique"
@@ -308,7 +308,7 @@
     "message": "Favori"
   },
   "edit": {
-    "message": "Modifier"
+    "message": "Édition"
   },
   "authenticatorKeyTotp": {
     "message": "Clé d'authentification (TOTP)"
@@ -355,7 +355,7 @@
     "message": "Élément modifié"
   },
   "deleteItem": {
-    "message": "Supprimer l'identifiant"
+    "message": "Supprimer l'élément"
   },
   "deleteFolder": {
     "message": "Supprimer le dossier"
@@ -386,13 +386,13 @@
     "message": "Ajouter un dossier"
   },
   "editFolder": {
-    "message": "Modifier le dossier"
+    "message": "Éditer le dossier"
   },
   "regeneratePassword": {
     "message": "Re-générer un mot de passe"
   },
   "copyPassword": {
-    "message": "Copier mot de passe"
+    "message": "Copier le mot de passe"
   },
   "copyUri": {
     "message": "Copier l'URI"
@@ -491,7 +491,7 @@
     "message": "Dossier supprimé"
   },
   "loginOrCreateNewAccount": {
-    "message": "Identifiez-vous ou créez un nouveau compte pour accéder à votre coffre sécurisé."
+    "message": "Connectez-vous ou créez un nouveau compte pour accéder à votre coffre sécurisé."
   },
   "createAccount": {
     "message": "Créer un compte"
@@ -564,7 +564,7 @@
     "message": "Une erreur inattendue est survenue."
   },
   "itemInformation": {
-    "message": "Information sur l'identifiant"
+    "message": "Informations sur l'élément"
   },
   "noItemsInList": {
     "message": "Aucun élément à afficher."
@@ -769,6 +769,9 @@
   },
   "contactUs": {
     "message": "Nous contacter"
+  },
+  "helpAndFeedback": {
+    "message": "Aide et commentaires"
   },
   "getHelp": {
     "message": "Obtenir de l'aide"
@@ -1043,7 +1046,7 @@
     "message": "Inconnu"
   },
   "copyUsername": {
-    "message": "Copier nom d'utilisateur"
+    "message": "Copier le nom d'utilisateur"
   },
   "copyNumber": {
     "message": "Copier le numéro",
@@ -1147,7 +1150,7 @@
     "message": "Zoom arrière"
   },
   "resetZoom": {
-    "message": "Taille réelle"
+    "message": "Réinitialiser le zoom"
   },
   "toggleFullScreen": {
     "message": "Afficher en plein écran"
@@ -1466,7 +1469,7 @@
     "message": "Cloner"
   },
   "passwordGeneratorPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent les paramètres de votre générateur."
   },
   "vaultTimeoutAction": {
     "message": "Action après délai d'expiration du coffre"
@@ -1531,7 +1534,7 @@
     "message": "Confirmer le nouveau mot de passe principal"
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
   },
   "policyInEffectMinComplexity": {
     "message": "Score de complexité minimum de $SCORE$",
@@ -1573,10 +1576,10 @@
     "message": "Votre nouveau mot de passe principal ne répond pas aux exigences en matière de politique de sécurité."
   },
   "acceptPolicies": {
-    "message": "En cochant cette case, vous acceptez les éléments suivants :"
+    "message": "En cochant cette case vous acceptez ce qui suit :"
   },
   "acceptPoliciesRequired": {
-    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
+    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
   },
   "enableBrowserIntegration": {
     "message": "Activer l'intégration avec le navigateur"
@@ -1814,7 +1817,7 @@
     "message": "Masquer mon adresse électronique aux destinataires."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent vos options Send."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent vos options Send."
   },
   "emailVerificationRequired": {
     "message": "Vérification de courriel requise"
@@ -1847,7 +1850,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s)",
+    "message": "Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de $HOURS$ heure(s) et $MINUTES$ minute(s) maximum",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1872,7 +1875,7 @@
     "message": "Export du coffre supprimé"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation vous empêchent d'exporter votre coffre individuel."
   },
   "addAccount": {
     "message": "Ajouter un compte"
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Êtes-vous sûr de vouloir utiliser l'option \"Jamais\" ? Définir le verrouillage sur \"Jamais\" stocke la clé de chiffrement de votre coffre sur votre appareil. Si vous utilisez cette option, vous devez vous assurer de correctement protéger votre appareil."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Coffre"

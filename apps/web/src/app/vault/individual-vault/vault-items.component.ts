@@ -6,16 +6,16 @@ import { VaultItemsComponent as BaseVaultItemsComponent } from "@bitwarden/angul
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { EventType } from "@bitwarden/common/enums";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -23,7 +23,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { DialogService, Icons } from "@bitwarden/components";
 
-import { CollectionAdminView, GroupView } from "../../organizations/core";
+import { CollectionAdminView, GroupView } from "../../admin-console/organizations/core";
 
 import {
   BulkDeleteDialogResult,
@@ -54,14 +54,21 @@ export type VaultItemRow = (CipherView | TreeNode<CollectionFilter>) & { checked
   templateUrl: "vault-items.component.html",
 })
 export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDestroy {
-  @Input() showAddNew = true;
-  @Input() activeFilter: VaultFilter;
   @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
   @Output() onAttachmentsClicked = new EventEmitter<CipherView>();
   @Output() onShareClicked = new EventEmitter<CipherView>();
   @Output() onEditCipherCollectionsClicked = new EventEmitter<CipherView>();
   @Output() onCloneClicked = new EventEmitter<CipherView>();
   @Output() onOrganzationBadgeClicked = new EventEmitter<string>();
+
+  private _activeFilter: VaultFilter;
+  @Input() get activeFilter(): VaultFilter {
+    return this._activeFilter;
+  }
+  set activeFilter(value: VaultFilter) {
+    this._activeFilter = value;
+    this.reload(this.activeFilter.buildFilter(), this.activeFilter.isDeleted);
+  }
 
   cipherType = CipherType;
   actionPromise: Promise<any>;
@@ -81,6 +88,10 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   protected pagedCiphers: CipherView[] = [];
   protected pagedCollections: TreeNode<CollectionFilter>[] = [];
   protected searchedCollections: TreeNode<CollectionFilter>[] = [];
+
+  get showAddNew() {
+    return !this.activeFilter.isDeleted;
+  }
 
   get collections(): TreeNode<CollectionFilter>[] {
     return this.activeFilter?.selectedCollectionNode?.children ?? [];
@@ -107,7 +118,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     protected vaultFilterService: VaultFilterService,
-    protected cipherService: CipherService,
+    cipherService: CipherService,
     protected eventCollectionService: EventCollectionService,
     protected totpService: TotpService,
     protected stateService: StateService,
@@ -118,7 +129,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
     private organizationService: OrganizationService,
     private tokenService: TokenService
   ) {
-    super(searchService);
+    super(searchService, cipherService);
   }
 
   ngOnDestroy() {
@@ -212,6 +223,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnDe
   }
 
   async doSearch(indexedCiphers?: CipherView[]) {
+    indexedCiphers = indexedCiphers ?? (await this.cipherService.getAllDecrypted());
     this.ciphers = await this.searchService.searchCiphers(
       this.searchText,
       [this.filter, this.deletedFilter],

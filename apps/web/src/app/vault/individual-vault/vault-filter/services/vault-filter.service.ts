@@ -10,21 +10,25 @@ import {
   switchMap,
 } from "rxjs";
 
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
+import {
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
-import { CollectionAdminView } from "../../../../organizations/core";
+import { CollectionAdminView } from "../../../../admin-console/organizations/core";
 import {
   CipherTypeFilter,
   CollectionFilter,
@@ -72,6 +76,8 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
   collectionTree$: Observable<TreeNode<CollectionFilter>> = this.filteredCollections$.pipe(
     map((collections) => this.buildCollectionTree(collections))
   );
+
+  cipherTypeTree$: Observable<TreeNode<CipherTypeFilter>> = this.buildCipherTypeTree();
 
   constructor(
     protected stateService: StateService,
@@ -132,12 +138,16 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       orgs = orgs.slice(0, 1);
     }
     if (orgs) {
-      orgs.forEach((org) => {
+      const orgNodes: TreeNode<OrganizationFilter>[] = [];
+      orgs.filter(isNotProviderUser).forEach((org) => {
         const orgCopy = org as OrganizationFilter;
         orgCopy.icon = "bwi-business";
         const node = new TreeNode<OrganizationFilter>(orgCopy, headNode, orgCopy.name);
-        headNode.children.push(node);
+        orgNodes.push(node);
       });
+      // Sort organization nodes, then add them to the list after 'My Vault' and 'All Vaults' if present
+      orgNodes.sort((a, b) => a.node.name.localeCompare(b.node.name));
+      headNode.children.push(...orgNodes);
     }
     return headNode;
   }
@@ -253,5 +263,45 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
   protected getFolderFilterHead(): TreeNode<FolderFilter> {
     const head = new FolderView() as FolderFilter;
     return new TreeNode<FolderFilter>(head, null, "folders", "AllFolders");
+  }
+
+  protected buildCipherTypeTree(): Observable<TreeNode<CipherTypeFilter>> {
+    const allTypeFilters: CipherTypeFilter[] = [
+      {
+        id: "favorites",
+        name: this.i18nService.t("favorites"),
+        type: "favorites",
+        icon: "bwi-star",
+      },
+      {
+        id: "login",
+        name: this.i18nService.t("typeLogin"),
+        type: CipherType.Login,
+        icon: "bwi-globe",
+      },
+      {
+        id: "card",
+        name: this.i18nService.t("typeCard"),
+        type: CipherType.Card,
+        icon: "bwi-credit-card",
+      },
+      {
+        id: "identity",
+        name: this.i18nService.t("typeIdentity"),
+        type: CipherType.Identity,
+        icon: "bwi-id-card",
+      },
+      {
+        id: "note",
+        name: this.i18nService.t("typeSecureNote"),
+        type: CipherType.SecureNote,
+        icon: "bwi-sticky-note",
+      },
+    ];
+
+    return this.buildTypeTree(
+      { id: "AllItems", name: "allItems", type: "all", icon: "" },
+      allTypeFilters
+    );
   }
 }

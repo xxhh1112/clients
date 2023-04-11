@@ -16,11 +16,11 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { KdfType, DEFAULT_PBKDF2_ITERATIONS } from "@bitwarden/common/enums/kdfType";
+import { KdfType, DEFAULT_PBKDF2_ITERATIONS } from "@bitwarden/common/enums";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -37,6 +37,8 @@ import { FolderAddEditComponent } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
+import { RoutedVaultFilterBridgeService } from "./vault-filter/services/routed-vault-filter-bridge.service";
+import { RoutedVaultFilterService } from "./vault-filter/services/routed-vault-filter.service";
 import { VaultFilter } from "./vault-filter/shared/models/vault-filter.model";
 import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/vault-filter.type";
 import { VaultItemsComponent } from "./vault-items.component";
@@ -46,6 +48,7 @@ const BroadcasterSubscriptionId = "VaultComponent";
 @Component({
   selector: "app-vault",
   templateUrl: "vault.component.html",
+  providers: [RoutedVaultFilterService, RoutedVaultFilterBridgeService],
 })
 export class VaultComponent implements OnInit, OnDestroy {
   @ViewChild("vaultFilter", { static: true }) filterComponent: VaultFilterComponent;
@@ -88,6 +91,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private organizationService: OrganizationService,
     private vaultFilterService: VaultFilterService,
+    private routedVaultFilterBridgeService: RoutedVaultFilterBridgeService,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService
   ) {}
@@ -95,7 +99,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.showVerifyEmail = !(await this.tokenService.getEmailVerified());
     this.showBrowserOutdated = window.navigator.userAgent.indexOf("MSIE") !== -1;
-    this.showLowKdf = await this.isLowKdfIteration();
+    // disable warning for March release -> add await this.isLowKdfIteration(); when ready
+    this.showLowKdf = false;
     this.trashCleanupWarning = this.i18nService.t(
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
@@ -165,6 +170,12 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
       });
     });
+
+    this.routedVaultFilterBridgeService.activeFilter$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((activeFilter) => {
+        this.activeFilter = activeFilter;
+      });
   }
 
   get isShowingCards() {
@@ -185,16 +196,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  async applyVaultFilter(filter: VaultFilter) {
-    this.activeFilter = filter;
-    this.vaultItemsComponent.showAddNew = !this.activeFilter.isDeleted;
-    await this.vaultItemsComponent.reload(
-      this.activeFilter.buildFilter(),
-      this.activeFilter.isDeleted
-    );
-    this.go();
   }
 
   async applyOrganizationFilter(orgId: string) {

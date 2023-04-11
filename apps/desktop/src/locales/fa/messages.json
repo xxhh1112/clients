@@ -542,7 +542,7 @@
     "message": "نوشتن مجدد کلمه عبور اصلی ضروری است."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "طول کلمه عبور اصلی باید حداقل $VALUE$ کاراکتر باشد.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -769,6 +769,9 @@
   },
   "contactUs": {
     "message": "تماس با ما"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "کمک گرفتن"
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "آیا جداً می‌خواهید از گزینه \"هرگز\" استفاده کنید؟ تنظیم کردن گزینه قفل به \"هرگز\" کلیدهای رمزنگاری گاوصندوقتان را بر روی دستگاه شما ذخیره خواهد کرد. اگر از این گزینه استفاده می‌کنید باید اطمینان داشته باشید که دستگاه شما کاملا محافظت شده است."
-  },
-  "cardBrandMir": {
-    "message": "میر"
   },
   "vault": {
     "message": "گاوصندوق"

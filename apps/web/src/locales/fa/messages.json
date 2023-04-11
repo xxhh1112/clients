@@ -697,7 +697,7 @@
     "message": "نوشتن مجدد کلمه عبور اصلی ضروری است."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "طول کلمه عبور اصلی باید حداقل $VALUE$ کاراکتر باشد.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1255,8 +1255,17 @@
   "importSuccess": {
     "message": "داده‌ها با موفقیت درون ریزی شد"
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
-    "message": "Data successfully exported"
+    "message": "داده‌ها با موفقیت برون ریزی شد"
   },
   "importWarning": {
     "message": "شما در حال درون ریزی داده به $ORGANIZATION$ هستید. داده‌های شما ممکن است با اعضای این سازمان به اشتراک گذاشته شود. آیا می‌خواهید ادامه دهید؟",
@@ -2019,6 +2028,9 @@
   "cancelSubscription": {
     "message": "لغو اشتراک"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "اشتراک شما لغو گردید."
   },
@@ -2060,9 +2072,6 @@
   },
   "updateLicense": {
     "message": "به‌روزرسانی مجوز"
-  },
-  "updatedLicense": {
-    "message": "مجوز به‌روزرسانی شد"
   },
   "manageSubscription": {
     "message": "مدیریت اشتراک"
@@ -4855,6 +4864,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "یک یا چند خط مشی سازمان از برون ریزی گاوصندوق شخصی شما جلوگیری می‌کند."
   },
+  "activateAutofill": {
+    "message": "پر کردن خودکار را فعال کنید"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "وب‌سایت‌های در معرض خطر یا نامعتبر می‌توانند از پر کردن خودکار در بارگذاری صفحه سوء استفاده کنند."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "درباره پر کردن خودکار بیشتر بدانید"
+  },
   "selectType": {
     "message": "نوع SSO را انتخاب کنید"
   },
@@ -5629,9 +5650,6 @@
   "reporting": {
     "message": "گزارش نویسی"
   },
-  "cardBrandMir": {
-    "message": "میر"
-  },
   "numberOfUsers": {
     "message": "تعداد کاربران"
   },
@@ -5707,172 +5725,261 @@
     "message": "پنهان‌سازی"
   },
   "projects": {
-    "message": "پروژه ها"
+    "message": "پروژه ها",
+    "description": "Description for the Projects field."
   },
   "lastEdited": {
-    "message": "آخرین ویرایش"
+    "message": "آخرین ویرایش",
+    "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "راز را ویرایش کنید"
+    "message": "راز را ویرایش کنید",
+    "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "افزودن راز"
+    "message": "افزودن راز",
+    "description": "Action to create a new secret."
   },
   "copySecretName": {
-    "message": "کپی نام مخفی"
+    "message": "کپی نام مخفی",
+    "description": "Action to copy the name of a secret to the system's clipboard."
   },
   "copySecretValue": {
-    "message": "کپی مقدار مخفی"
+    "message": "کپی مقدار مخفی",
+    "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "حذف راز"
+    "message": "حذف راز",
+    "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "حذف رازها"
+    "message": "حذف رازها",
+    "description": "The action to delete multiple secrets from the system."
   },
   "hardDeleteSecret": {
-    "message": "Permanently delete secret"
+    "message": "حذف دائمی راز"
   },
   "hardDeleteSecrets": {
-    "message": "Permanently delete secrets"
+    "message": "حذف دائمی رازها"
   },
   "secretProjectAssociationDescription": {
-    "message": "پروژه هایی را انتخاب کنید که راز با آن‌ها مرتبط باشد. فقط کاربران سازمانی که به این پروژه ها دسترسی دارند می‌توانند این راز را ببینند."
+    "message": "پروژه هایی را انتخاب کنید که راز با آن‌ها مرتبط باشد. فقط کاربران سازمانی که به این پروژه ها دسترسی دارند می‌توانند این راز را ببینند.",
+    "description": "A prompt explaining how secrets can be associated with projects."
   },
   "selectProjects": {
-    "message": "انتخاب پروژه‌ها"
+    "message": "انتخاب پروژه‌ها",
+    "description": "A label for a type-to-filter input field to choose projects."
+  },
+  "searchProjects": {
+    "message": "جستجوی پروژه‌ها",
+    "description": "Label for the search bar used to search projects."
   },
   "project": {
-    "message": "پروژه"
+    "message": "پروژه",
+    "description": "Similar to collections, projects can be used to group secrets."
   },
   "editProject": {
-    "message": "ویرایش پروژه"
+    "message": "ویرایش پروژه",
+    "description": "The action to modify an existing project."
   },
   "viewProject": {
-    "message": "مشاهده پروژه"
+    "message": "مشاهده پروژه",
+    "description": "The action to view details of a project."
   },
   "deleteProject": {
-    "message": "حذف پروژه"
+    "message": "حذف پروژه",
+    "description": "The action to delete a project from the system."
   },
   "deleteProjects": {
-    "message": "حذف پروژه ها"
+    "message": "حذف پروژه ها",
+    "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "راز"
+    "message": "راز",
+    "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "حساب سرویس"
+    "message": "حساب سرویس",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "حساب‌های خدمات"
+    "message": "حساب‌های خدمات",
+    "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "رازها"
+    "message": "رازها",
+    "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "جفت نام/مقدار"
+    "message": "جفت نام/مقدار",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
-    "message": "راز ویرایش شد"
+    "message": "راز ویرایش شد",
+    "description": "Notification for the successful editing of a secret."
   },
   "secretCreated": {
-    "message": "راز ایجاد شد"
+    "message": "راز ایجاد شد",
+    "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "راز جدید"
+    "message": "راز جدید",
+    "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "حساب سرویس جدید"
+    "message": "حساب سرویس جدید",
+    "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "رازی برای نمایش نیست"
+    "message": "رازی برای نمایش نیست",
+    "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "برای شروع، یک راز جدید اضافه کنید یا رازها را درون ریزی کنید."
+    "message": "برای شروع، یک راز جدید اضافه کنید یا رازها را درون ریزی کنید.",
+    "description": "Message to encourage the user to start adding secrets."
   },
   "secretsTrashNoItemsMessage": {
-    "message": "There are no secrets in the trash."
-  },
-  "serviceAccountsNoItemsTitle": {
-    "message": "هنوز چیزی برای نشان دادن موجود نیست"
+    "message": "هیچ رازی در سطل زباله وجود ندارد."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "برای شروع خودکارسازی دسترسی مخفی، یک حساب سرویس جدید ایجاد کنید."
+    "message": "برای شروع خودکارسازی دسترسی مخفی، یک حساب سرویس جدید ایجاد کنید.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "هنوز چیزی برای نشان دادن موجود نیست",
+    "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "جستجوی رازها"
+    "message": "جستجوی رازها",
+    "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "حساب‌های سرویس را حذف کنید"
+    "message": "حساب‌های سرویس را حذف کنید",
+    "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "حساب سرویس را حذف کنید"
+    "message": "حساب سرویس را حذف کنید",
+    "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "حساب سرویس را ببینید"
+    "message": "حساب سرویس را ببینید",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "حذف حساب سرویس $SERVICE_ACCOUNT$ دائمی و غیرقابل برگشت است.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "حذف حساب‌های سرویس، دائمی و غیرقابل برگشت است."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "حساب‌های خدمات $COUNT$ را حذف کنید",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Service account deleted"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "حساب‌های سرویس حذف شد"
   },
   "searchServiceAccounts": {
-    "message": "جستجوی حساب‌های سرویس"
+    "message": "جستجوی حساب‌های سرویس",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "حساب سرویس را ویرایش کنید",
+    "description": "Title for editing a service account."
   },
   "addProject": {
-    "message": "افزودن پروژه"
+    "message": "افزودن پروژه",
+    "description": "Title for creating a new project."
   },
   "projectEdited": {
-    "message": "پروژه ویرایش شد"
+    "message": "پروژه ویرایش شد",
+    "description": "Notification for the successful editing of a project."
   },
   "projectSaved": {
-    "message": "پروژه ذخیره شد"
+    "message": "پروژه ذخیره شد",
+    "description": "Notification for the successful saving of a project."
   },
   "projectCreated": {
-    "message": "پروژه ساخته شد"
+    "message": "پروژه ساخته شد",
+    "description": "Notification for the successful creation of a project."
   },
   "projectName": {
-    "message": "نام پروژه"
+    "message": "نام پروژه",
+    "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "پروژه جدید"
+    "message": "پروژه جدید",
+    "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
-    "message": "حذف رازها می‌تواند ادغام های موجود را تحت تاثیر قرار دهد."
+    "message": "حذف رازها می‌تواند ادغام های موجود را تحت تاثیر قرار دهد.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "رازهای به زباله‌ها فرستاده شد"
+    "message": "رازهای به زباله‌ها فرستاده شد",
+    "description": "Notifies that the selected secrets have been moved to the trash"
   },
   "hardDeleteSecretConfirmation": {
-    "message": "Are you sure you want to permanently delete this secret?"
+    "message": "آیا مطمئنید که می‌خواهید این راز را برای همیشه حذف کنید؟"
   },
   "hardDeleteSecretsConfirmation": {
-    "message": "Are you sure you want to permanently delete these secrets?"
+    "message": "آیا مطمئنید که می‌خواهید این رازها را برای همیشه حذف کنید؟"
   },
   "hardDeletesSuccessToast": {
-    "message": "Secrets permanently deleted"
-  },
-  "serviceAccountCreated": {
-    "message": "سرویس حساب ساخته شد"
+    "message": "رازها برای همیشه حذف شد"
   },
   "smAccess": {
-    "message": "دسترسی"
+    "message": "دسترسی",
+    "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
-    "message": "پروژه، راز"
+    "message": "پروژه، راز",
+    "description": ""
   },
   "serviceAccountName": {
-    "message": "نام حساب سرویس"
+    "message": "نام حساب سرویس",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "سرویس حساب ساخته شد",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "سرویس حساب به‌روز شد",
+    "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "پروژه‌ها یا اسرار را تایپ یا انتخاب کنید"
+    "message": "پروژه‌ها یا اسرار را تایپ یا انتخاب کنید",
+    "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "برای فیلتر تایپ کنید"
+    "message": "برای فیلتر تایپ کنید",
+    "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
-    "message": "پروژه حذف شد"
+    "message": "پروژه حذف شد",
+    "description": "Notifies that the selected projects have been deleted"
   },
   "deleteProjectToast": {
-    "message": "پروژه و تمام رازهای مرتبط حذف شد"
+    "message": "پروژه و تمام رازهای مرتبط حذف شد",
+    "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
     "message": "حذف پروژه $PROJECT$ دائمی و غیر قابل برگشت است.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5882,6 +5989,7 @@
   },
   "deleteProjectInputLabel": {
     "message": "برای ادامه، «$CONFIRM$» را تایپ کنید",
+    "description": "Users are prompted to type 'confirm' to delete a project",
     "placeholders": {
       "confirm": {
         "content": "$1",
@@ -5891,6 +5999,7 @@
   },
   "deleteProjectConfirmMessage": {
     "message": "حذف $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5900,6 +6009,7 @@
   },
   "deleteProjectsConfirmMessage": {
     "message": "$COUNT$ پروژه را حذف کنید",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5908,82 +6018,100 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "حذف پروژه‌ها دائمی و غیر قابل برگشت است."
+    "message": "حذف پروژه‌ها دائمی و غیر قابل برگشت است.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
-    "message": "پروژه‌ای برای نمایش نیست"
+    "message": "پروژه‌ای برای نمایش نیست",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "برای شروع سازماندهی رازها، پروژه جدیدی اضافه کنید."
+    "message": "برای شروع سازماندهی رازها، پروژه جدیدی اضافه کنید.",
+    "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
-    "message": "به تأیید نیاز دارد"
+    "message": "به تأیید نیاز دارد",
+    "description": "Indicates that user confirmation is required for an action to proceed."
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "پروژه‌های زیر قابل حذف نیستند:"
+    "message": "پروژه‌های زیر قابل حذف نیستند:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "راز به سطل زباله فرستاده شد"
+    "message": "راز به سطل زباله فرستاده شد",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
   "hardDeleteSuccessToast": {
-    "message": "Secret permanently deleted"
-  },
-  "searchProjects": {
-    "message": "جستجوی پروژه‌ها"
+    "message": "راز برای همیشه حذف شد"
   },
   "accessTokens": {
-    "message": "دسترسی به توکن‌ها"
+    "message": "دسترسی به توکن‌ها",
+    "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "توکن دسترسی ایجاد کنید"
+  "newAccessToken": {
+    "message": "New access token",
+    "description": "Button label for creating a new access token."
   },
   "expires": {
-    "message": "منقضی می‌شود"
+    "message": "منقضی می‌شود",
+    "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "می‌تواند بخواند"
+    "message": "می‌تواند بخواند",
+    "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "هیچ توکن دسترسی برای نمایش وجود ندارد"
+    "message": "هیچ توکن دسترسی برای نمایش وجود ندارد",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "برای شروع، یک توکن دسترسی ایجاد کنید"
+    "message": "برای شروع، یک توکن دسترسی ایجاد کنید",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
-    "message": "قبل از بستن بارگیری یا کپی کنید."
+    "message": "قبل از بستن بارگیری یا کپی کنید.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "تاریخ انقضا:"
+    "message": "تاریخ انقضا:",
+    "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "توکن های دسترسی ذخیره نمی‌شوند و قابل بازیابی نیستند"
+    "message": "توکن های دسترسی ذخیره نمی‌شوند و قابل بازیابی نیستند",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
-    "message": "کپی توکن"
+    "message": "کپی توکن",
+    "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "دسترسی به توکن"
+    "message": "دسترسی به توکن",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
-    "message": "تاریخ انقضا مورد نیاز است"
+    "message": "تاریخ انقضا مورد نیاز است",
+    "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "توکن دسترسی ایجاد و در کلیپ بورد کپی شد"
+    "message": "توکن دسترسی ایجاد و در کلیپ بورد کپی شد",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "مدیریت مجوزها برای نسخه بتا در دسترس نیست."
+    "message": "مدیریت مجوزها برای نسخه بتا در دسترس نیست.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "لغو دسترسی به توکن"
+    "message": "لغو دسترسی به توکن",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
   },
   "revokeAccessTokens": {
-    "message": "Revoke access tokens"
+    "message": "لغو دسترسی به توکن‌ها"
   },
   "revokeAccessTokenDesc": {
-    "message": "Revoking access tokens is permanent and irreversible."
+    "message": "لغو دسترسی به توکن‌ها دائمی و غیر قابل برگشت است."
   },
   "accessTokenRevoked": {
-    "message": "Access tokens revoked",
+    "message": "توکن‌های دسترسی لغو شدند",
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
@@ -6074,64 +6202,64 @@
     "message": "این عضو می‌تواند به همه موارد دسترسی داشته باشد و آن‌ها را تغییر دهد."
   },
   "domainVerification": {
-    "message": "Domain verification"
+    "message": "تائید دامنه"
   },
   "newDomain": {
-    "message": "New domain"
+    "message": "دامنه جدید"
   },
   "noDomains": {
-    "message": "No domains"
+    "message": "بدون دامنه"
   },
   "noDomainsSubText": {
-    "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
+    "message": "اتصال یک دامنه به اعضا اجازه می‌دهد تا در حین ورود با SSO از قسمت شناسه SSO رد شوند."
   },
   "verifyDomain": {
-    "message": "Verify domain"
+    "message": "تأیید دامنه"
   },
   "reverifyDomain": {
-    "message": "Reverify domain"
+    "message": "تأیید مجدد دامنه"
   },
   "copyDnsTxtRecord": {
-    "message": "Copy DNS TXT record"
+    "message": "رکورد DNS TXT را کپی کن"
   },
   "dnsTxtRecord": {
-    "message": "DNS TXT record"
+    "message": "رکورد DNS TXT"
   },
   "dnsTxtRecordInputHint": {
-    "message": "Copy and paste the TXT record into your DNS Provider."
+    "message": "رکورد TXT را کپی کرده و در ارائه دهنده DNS خود جایگذاری کن."
   },
   "domainNameInputHint": {
-    "message": "Example: mydomain.com. Subdomains require separate entries to be verified."
+    "message": "مثال: .mydomain.com زیر دامنه‌ها برای تأیید نیاز به ورودی‌های جداگانه دارند."
   },
   "automaticDomainVerification": {
-    "message": "Automatic Domain Verification"
+    "message": "تأیید خودکار دامنه"
   },
   "automaticDomainVerificationProcess": {
-    "message": "Bitwarden will attempt to verify the domain 3 times during the first 72 hours. If the domain can’t be verified, check the DNS record in your host and manually verify. The domain will be removed from your organization in 7 days if it is not verified"
+    "message": "Bitwarden در طول ۷۲ ساعت اول ۳ بار سعی خواهد کرد دامنه را تأیید کند. اگر دامنه قابل تأیید نیست، رکورد DNS در هاست خود را بررسی کرده و به صورت دستی تأیید کنید. در صورت تأیید نشدن دامنه طی ۷ روز از سازمان شما حذف خواهد شد"
   },
   "invalidDomainNameMessage": {
-    "message": "Input is not a valid format. Format: mydomain.com. Subdomains require separate entries to be verified."
+    "message": "ورودی یک قالب معتبر نیست. فرمت: .mydomain.com زیر دامنه ها برای تأیید نیاز به ورودی‌های جداگانه دارند."
   },
   "removeDomain": {
-    "message": "Remove domain"
+    "message": "حذف دامنه"
   },
   "removeDomainWarning": {
-    "message": "Removing a domain cannot be undone. Are you sure you want to continue?"
+    "message": "حذف دامنه قابل لغو نیست. آیا مطمئنید که می‌خواهید ادامه دهید؟"
   },
   "domainRemoved": {
-    "message": "Domain removed"
+    "message": "دامنه حذف شد"
   },
   "domainSaved": {
-    "message": "Domain saved"
+    "message": "دامنه ذخیره شدند"
   },
   "domainVerified": {
-    "message": "Domain verified"
+    "message": "دامنه تأیید شد"
   },
   "duplicateDomainError": {
-    "message": "You can't claim the same domain twice."
+    "message": "شما نمی‌توانید یک دامنه را دو بار مطالبه کنید."
   },
   "domainNotAvailable": {
-    "message": "Someone else is using $DOMAIN$. Use a different domain to continue.",
+    "message": "شخص دیگری از $DOMAIN$ استفاده می کند. برای ادامه از دامنه دیگری استفاده کنید.",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6140,7 +6268,7 @@
     }
   },
   "domainNotVerified": {
-    "message": "$DOMAIN$ not verified. Check your DNS record.",
+    "message": "$DOMAIN$ تأیید نشده است. رکورد DNS خود را بررسی کنید.",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6149,28 +6277,28 @@
     }
   },
   "domainStatusVerified": {
-    "message": "Verified"
+    "message": "تأیید شده"
   },
   "domainStatusUnverified": {
-    "message": "Unverified"
+    "message": "تأیید نشده"
   },
   "domainNameTh": {
-    "message": "Name"
+    "message": "نام"
   },
   "domainStatusTh": {
-    "message": "Status"
+    "message": "وضعیت"
   },
   "lastChecked": {
-    "message": "Last checked"
+    "message": "آخرین بررسی"
   },
   "editDomain": {
-    "message": "Edit domain"
+    "message": "ویرایش دامنه"
   },
   "domainFormInvalid": {
-    "message": "There are form errors that need your attention"
+    "message": "خطاهای فرمی وجود دارد که نیاز به توجه شما دارد"
   },
   "addedDomain": {
-    "message": "Added domain $DOMAIN$",
+    "message": "دامنه $DOMAIN$ اضافه شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6179,7 +6307,7 @@
     }
   },
   "removedDomain": {
-    "message": "Removed domain $DOMAIN$",
+    "message": "دامنه $DOMAIN$ حذف شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6188,7 +6316,7 @@
     }
   },
   "domainVerifiedEvent": {
-    "message": "$DOMAIN$ verified",
+    "message": "$DOMAIN$ تأیید شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6197,7 +6325,7 @@
     }
   },
   "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ not verified",
+    "message": "$DOMAIN$ تأیید نشد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6281,16 +6409,16 @@
     }
   },
   "server": {
-    "message": "Server"
+    "message": "سرور"
   },
   "exportData": {
-    "message": "Export data"
+    "message": "برون ریزی داده"
   },
   "exportingOrganizationSecretDataTitle": {
-    "message": "Exporting Organization Secret Data"
+    "message": "برون ریزی داده‌های مخفی سازمان"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Only the Secrets Manager data associated with $ORGANIZATION$ will be exported. Items in other products or from other organizations will not be included.",
+    "message": "فقط داده‌های مدیریت راز مرتبط با $ORGANIZATION$ برون ریزی خواهند شد. موارد موجود در محصولات دیگر یا سازمان های دیگر شامل نمی‌شود.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6299,16 +6427,16 @@
     }
   },
   "fileUpload": {
-    "message": "File upload"
+    "message": "بارگذاری فایل"
   },
   "acceptedFormats": {
-    "message": "Accepted Formats:"
+    "message": "فرمت های پذیرفته شده:"
   },
   "copyPasteImportContents": {
-    "message": "Copy & paste import contents:"
+    "message": "کپی و جایگذاری محتویات درون ریزی:"
   },
   "or": {
-    "message": "or"
+    "message": "یا"
   },
   "licenseAndBillingManagement": {
     "message": "مدیریت مجوز و صورتحساب"
@@ -6358,8 +6486,14 @@
   "projectEmptyServiceAccountAccessPolicies": {
     "message": "برای اعطای دسترسی، حساب‌های سرویس اضافه کنید"
   },
-  "canWrite": {
-    "message": "می‌توان نوشت"
+  "serviceAccountPeopleDescription": {
+    "message": "به گروه‌ها یا افراد اجازه دسترسی به این حساب سرویس را بدهید."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "پروژه‌ها را به این حساب سرویس اختصاص دهید. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "پروژه‌ها را برای اعطای دسترسی اضافه کنید"
   },
   "canReadWrite": {
     "message": "می‌توان خواند، نوشت"
@@ -6377,7 +6511,7 @@
     "message": "تغییر تنظیمات KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "ادامه، شما را از نشست فعلی خارج می‌کند و باید دوباره وارد سیستم شوید. نشست‌های فعال در دستگاه‌های دیگر ممکن است تا یک ساعت فعال بمانند. توصیه می‌کنیم قبل از تغییر تنظیمات رمزگذاری برای جلوگیری از دست رفتن داده‌ها، گاوصندوق خود را برون ریزی کنید."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "بتا مدیر اسرار"
@@ -6389,13 +6523,13 @@
     "message": "این کاربر می‌تواند به بتای مدیر اسرار دسترسی داشته باشد"
   },
   "important": {
-    "message": "Important:"
+    "message": "مهم:"
   },
   "viewAll": {
-    "message": "View all"
+    "message": "نمایش همه"
   },
   "showingPortionOfTotal": {
-    "message": "Showing $PORTION$ of $TOTAL$",
+    "message": "نمایش $PORTION$ از $TOTAL$",
     "placeholders": {
       "portion": {
         "content": "$1",
@@ -6408,38 +6542,51 @@
     }
   },
   "resolveTheErrorsBelowAndTryAgain": {
-    "message": "Resolve the errors below and try again."
+    "message": "خطاهای زیر را برطرف کرده و دوباره امتحان کنید."
   },
   "description": {
-    "message": "Description"
+    "message": "توضیحات"
   },
   "errorReadingImportFile": {
-    "message": "An error occurred when trying to read the import file"
+    "message": "هنگام تلاش برای خواندن فایل درون ریزی شده خطایی رخ داد"
+  },
+  "accessedSecret": {
+    "message": "به $SECRET_ID$ مخفی دسترسی پیدا کرد.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
   },
   "createSecret": {
-    "message": "Create a secret"
+    "message": "ساختن یک راز"
   },
   "createProject": {
-    "message": "Create a project"
+    "message": "ساختن یک پروژه"
   },
   "createServiceAccount": {
-    "message": "Create a service account"
+    "message": "ساختن یک حساب کاربری"
   },
   "downloadThe": {
-    "message": "Download the",
+    "message": "بارگیری",
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "Secrets Manager CLI"
+    "message": "CLI مدیر رازها"
   },
   "importSecrets": {
-    "message": "Import secrets"
+    "message": "درون ریزی رازها"
   },
   "getStarted": {
-    "message": "Get started"
+    "message": "شروع کنید"
   },
   "complete": {
-    "message": "$COMPLETED$/$TOTAL$ Complete",
+    "message": "$COMPLETED$/$TOTAL$ کامل شد",
     "placeholders": {
       "COMPLETED": {
         "content": "$1",
@@ -6452,49 +6599,70 @@
     }
   },
   "restoreSecret": {
-    "message": "Restore secret"
+    "message": "بازیابی راز"
   },
   "restoreSecrets": {
-    "message": "Restore secrets"
+    "message": "بازیابی رازها"
   },
   "restoreSecretPrompt": {
-    "message": "Are you sure you want to restore this secret?"
+    "message": "آیا مطمئن هستید که می‌خواهید این راز را بازیابی کنید؟"
   },
   "restoreSecretsPrompt": {
-    "message": "Are you sure you want to restore these secrets?"
+    "message": "آیا مطمئن هستید که می‌خواهید این رازها را بازیابی کنید؟"
   },
   "secretRestoredSuccessToast": {
-    "message": "Secret restored"
+    "message": "راز بازیابی شد"
   },
   "secretsRestoredSuccessToast": {
-    "message": "Secrets restored"
+    "message": "رازها بازیابی شد"
   },
   "selectionIsRequired": {
-    "message": "Selection is required."
+    "message": "انتخاب الزامی است."
   },
   "secretsManagerSubscriptionDesc": {
-    "message": "Turn on organization access to the Secrets Manager at no charge during the Beta program. Users can be granted access to the Beta in Members."
+    "message": "در طول برنامه بتا، دسترسی سازمان به مدیر رازها را بدون هزینه فعال کنید. کاربران می‌توانند به نسخه بتا در اعضا دسترسی داشته باشند."
   },
   "secretsManagerEnable": {
-    "message": "Enable Secrets Manager Beta"
+    "message": "بتا مدیر رازها را فعال کنید"
+  },
+  "saPeopleWarningTitle": {
+    "message": "توکن‌های دسترسی هنوز در دسترس هستند"
+  },
+  "saPeopleWarningMessage": {
+    "message": "حذف افراد از حساب سرویس، توکن‌های دسترسی ایجاد شده توسط آن‌ها را حذف نمی‌کند. برای بهترین عملکرد امنیتی، توصیه می‌شود توکن‌های دسترسی ایجاد شده توسط افرادی که از حساب سرویس حذف شده‌اند لغو شود."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "دسترسی به این پروژه را حذف کنید"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "این عمل دسترسی شما به پروژه را حذف می‌کند."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "دسترسی به این حساب سرویس را حذف کنید"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "این عمل دسترسی شما به حساب سرویس را حذف می‌کند."
+  },
+  "removeAccess": {
+    "message": "لغو دسترسی"
   },
   "checkForBreaches": {
-    "message": "Check known data breaches for this password"
+    "message": "نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید"
   },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "کلمه عبور اصلی افشا شده"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "کلمه عبور اصلی ضعیف و افشا شده"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+    "message": "کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "حداقل کاراکتر $LENGTH$",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -6503,12 +6671,18 @@
     }
   },
   "masterPasswordMinimumlength": {
-    "message": "Master password must be at least $LENGTH$ characters long.",
+    "message": "طول کلمه عبور اصلی باید حداقل $LENGTH$ کاراکتر باشد.",
     "placeholders": {
       "length": {
         "content": "$1",
         "example": "14"
       }
     }
+  },
+  "dismiss": {
+    "message": "نادیده گرفتن"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

@@ -1,9 +1,8 @@
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { EventType, FieldType, UriMatchType } from "@bitwarden/common/enums";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -34,6 +33,8 @@ export interface GenerateFillScriptOptions {
   onlyVisibleFields: boolean;
   fillNewPassword: boolean;
   cipher: CipherView;
+  tabUrl: string;
+  defaultUriMatch: UriMatchType;
 }
 
 export default class AutofillService implements AutofillServiceInterface {
@@ -42,7 +43,8 @@ export default class AutofillService implements AutofillServiceInterface {
     private stateService: BrowserStateService,
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService,
-    private logService: LogService
+    private logService: LogService,
+    private settingsService: SettingsService
   ) {}
 
   getFormsWithPasswordFields(pageDetails: AutofillPageDetails): FormData[] {
@@ -84,7 +86,12 @@ export default class AutofillService implements AutofillServiceInterface {
     return formData;
   }
 
-  async doAutoFill(options: AutoFillOptions) {
+  /**
+   * Autofills a given tab with a given login item
+   * @param options Instructions about the autofill operation, including tab and login item
+   * @returns The TOTP code of the successfully autofilled login, if any
+   */
+  async doAutoFill(options: AutoFillOptions): Promise<string> {
     const tab = options.tab;
     if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
       throw new Error("Nothing to auto-fill.");
@@ -93,6 +100,8 @@ export default class AutofillService implements AutofillServiceInterface {
     let totpPromise: Promise<string> = null;
 
     const canAccessPremium = await this.stateService.getCanAccessPremium();
+    const defaultUriMatch = (await this.stateService.getDefaultUriMatch()) ?? UriMatchType.Domain;
+
     let didAutofill = false;
     options.pageDetails.forEach((pd) => {
       // make sure we're still on correct tab
@@ -106,9 +115,20 @@ export default class AutofillService implements AutofillServiceInterface {
         onlyVisibleFields: options.onlyVisibleFields || false,
         fillNewPassword: options.fillNewPassword || false,
         cipher: options.cipher,
+        tabUrl: tab.url,
+        defaultUriMatch: defaultUriMatch,
       });
 
       if (!fillScript || !fillScript.script || !fillScript.script.length) {
+        return;
+      }
+
+      if (
+        fillScript.untrustedIframe &&
+        options.allowUntrustedIframe != undefined &&
+        !options.allowUntrustedIframe
+      ) {
+        this.logService.info("Auto-fill on page load was blocked due to an untrusted iframe.");
         return;
       }
 
@@ -159,7 +179,18 @@ export default class AutofillService implements AutofillServiceInterface {
     }
   }
 
-  async doAutoFillOnTab(pageDetails: PageDetail[], tab: chrome.tabs.Tab, fromCommand: boolean) {
+  /**
+   * Autofills the specified tab with the next login item from the cache
+   * @param pageDetails The data scraped from the page
+   * @param tab The tab to be autofilled
+   * @param fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
+   * @returns The TOTP code of the successfully autofilled login, if any
+   */
+  async doAutoFillOnTab(
+    pageDetails: PageDetail[],
+    tab: chrome.tabs.Tab,
+    fromCommand: boolean
+  ): Promise<string> {
     let cipher: CipherView;
     if (fromCommand) {
       cipher = await this.cipherService.getNextCipherForUrl(tab.url);
@@ -188,6 +219,7 @@ export default class AutofillService implements AutofillServiceInterface {
       onlyEmptyFields: !fromCommand,
       onlyVisibleFields: !fromCommand,
       fillNewPassword: fromCommand,
+      allowUntrustedIframe: fromCommand,
     });
 
     // Update last used index as autofill has succeed
@@ -198,7 +230,13 @@ export default class AutofillService implements AutofillServiceInterface {
     return totpCode;
   }
 
-  async doAutoFillActiveTab(pageDetails: PageDetail[], fromCommand: boolean) {
+  /**
+   * Autofills the active tab with the next login item from the cache
+   * @param pageDetails The data scraped from the page
+   * @param fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
+   * @returns The TOTP code of the successfully autofilled login, if any
+   */
+  async doAutoFillActiveTab(pageDetails: PageDetail[], fromCommand: boolean): Promise<string> {
     const tab = await this.getActiveTab();
     if (!tab || !tab.url) {
       return;
@@ -308,6 +346,8 @@ export default class AutofillService implements AutofillServiceInterface {
     const login = options.cipher.login;
     fillScript.savedUrls =
       login?.uris?.filter((u) => u.match != UriMatchType.Never).map((u) => u.uri) ?? [];
+
+    fillScript.untrustedIframe = this.inUntrustedIframe(pageDetails.url, options);
 
     if (!login.password || login.password === "") {
       // No password for this login. Maybe they just wanted to auto-fill some custom fields?
@@ -740,6 +780,31 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     return fillScript;
+  }
+
+  /**
+   * Determines whether an iframe is potentially dangerous ("untrusted") to autofill
+   * @param pageUrl The url of the page/iframe, usually from AutofillPageDetails
+   * @param options The GenerateFillScript options
+   * @returns `true` if the iframe is untrusted and a warning should be shown, `false` otherwise
+   */
+  private inUntrustedIframe(pageUrl: string, options: GenerateFillScriptOptions): boolean {
+    // If the pageUrl (from the content script) matches the tabUrl (from the sender tab), we are not in an iframe
+    // This also avoids a false positive if no URI is saved and the user triggers auto-fill anyway
+    if (pageUrl === options.tabUrl) {
+      return false;
+    }
+
+    // Check the pageUrl against cipher URIs using the configured match detection.
+    // Remember: if we are in this function, the tabUrl already matches a saved URI for the login.
+    // We need to verify the pageUrl also matches.
+    const equivalentDomains = this.settingsService.getEquivalentDomains(pageUrl);
+    const matchesUri = options.cipher.login.matchesUri(
+      pageUrl,
+      equivalentDomains,
+      options.defaultUriMatch
+    );
+    return !matchesUri;
   }
 
   private fieldAttrsContain(field: AutofillField, containsVal: string) {

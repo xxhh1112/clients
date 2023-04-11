@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Kontaktujte nás"
   },
+  "helpAndFeedback": {
+    "message": "Pomoc a spätná väzba"
+  },
   "getHelp": {
     "message": "Získať pomoc"
   },
@@ -2034,9 +2037,6 @@
   },
   "neverLockWarning": {
     "message": "Ste si istí, že chcete použiť možnosť \"Nikdy\"? Táto predvoľba ukladá šifrovací kľúč od trezora priamo na zariadení. Ak použijete túto možnosť, mali by ste svoje zariadenie náležite zabezpečiť."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Trezor"

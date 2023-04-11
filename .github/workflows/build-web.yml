@@ -80,7 +80,7 @@ jobs:
             npm_command: "dist:bit:selfhost"
           - name: "cloud-QA"
             npm_command: "build:bit:qa"
-          - name: "cloud-POC"
+          - name: "cloud-POC2"
             npm_command: "build:bit:poc"
           - name: "ee"
             npm_command: "build:bit:ee"
@@ -202,6 +202,10 @@ jobs:
             IMAGE_TAG=$(echo "${GITHUB_HEAD_REF}" | sed "s#/#-#g")
           else
             IMAGE_TAG=$(echo "${GITHUB_REF:11}" | sed "s#/#-#g")
+          fi
+
+          if [[ "$IMAGE_TAG" == "master" ]]; then
+            IMAGE_TAG=dev
           fi
 
           TAG_EXTENSION=${{ github.event.inputs.custom_tag_extension }}

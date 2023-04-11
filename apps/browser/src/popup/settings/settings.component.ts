@@ -13,7 +13,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { DeviceType } from "@bitwarden/common/enums";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
@@ -372,10 +372,6 @@ export class SettingsComponent implements OnInit {
 
   export() {
     this.router.navigate(["/export"]);
-  }
-
-  help() {
-    BrowserApi.createNewTab("https://bitwarden.com/help/");
   }
 
   about() {

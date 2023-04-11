@@ -11,16 +11,18 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
-import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+  ProviderUserStatusType,
+  ProviderUserType,
+} from "@bitwarden/common/admin-console/enums";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
-import { OrganizationUserView } from "../organizations/core/views/organization-user.view";
-import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
+import { OrganizationUserView } from "../admin-console/organizations/core/views/organization-user.view";
+import { UserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 
 type StatusType = OrganizationUserStatusType | ProviderUserStatusType;
 
