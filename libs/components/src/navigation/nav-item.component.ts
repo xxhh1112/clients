@@ -2,16 +2,15 @@ import { Component, HostListener, Input } from "@angular/core";
 import { IsActiveMatchOptions } from "@angular/router";
 import { BehaviorSubject, map } from "rxjs";
 
+import { LayoutService } from "../layout/layout.service";
+
 import { NavBaseComponent } from "./nav-base.component";
-import { SideNavService } from "./side-nav.service";
 
 @Component({
   selector: "bit-nav-item",
   templateUrl: "./nav-item.component.html",
 })
 export class NavItemComponent extends NavBaseComponent {
-  protected expanded$ = this.sideNavService.expanded$;
-
   /**
    * Is `true` if `to` matches the current route
    */
@@ -56,7 +55,7 @@ export class NavItemComponent extends NavBaseComponent {
     this.focusVisibleWithin$.next(false);
   }
 
-  constructor(private sideNavService: SideNavService) {
+  constructor(protected layoutService: LayoutService) {
     super();
   }
 }

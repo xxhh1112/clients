@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { SideNavService } from "../navigation/side-nav.service";
+import { LayoutService } from "./layout.service";
 
 @Component({
   selector: "bit-layout",
@@ -11,5 +11,5 @@ export class LayoutComponent implements OnInit {
     document.body.classList.remove("layout_frontend");
   }
 
-  constructor(protected sideNavService: SideNavService) {}
+  constructor(protected layoutService: LayoutService) {}
 }

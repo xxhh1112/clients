@@ -11,9 +11,10 @@ import {
 } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
+import { LayoutService } from "../layout/layout.service";
+
 import { NavBaseComponent } from "./nav-base.component";
 import { NavItemComponent } from "./nav-item.component";
-import { SideNavService } from "./side-nav.service";
 
 @Component({
   selector: "bit-nav-group",
@@ -51,7 +52,7 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
   @Output()
   openChange = new EventEmitter<boolean>();
 
-  constructor(private sideNavService: SideNavService) {
+  constructor(private layoutService: LayoutService) {
     super();
   }
 
@@ -76,7 +77,7 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
   ngAfterContentInit(): void {
     this.initNestedStyles();
 
-    this.sideNavService.expanded$
+    this.layoutService.open$
       .pipe(takeUntil(this.destroy$))
       .subscribe((isExpanded) => !isExpanded && this.open && this.toggle());
   }
