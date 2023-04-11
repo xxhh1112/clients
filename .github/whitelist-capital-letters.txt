@@ -5,7 +5,6 @@
 ./apps/browser/src/services/vaultTimeout
 ./apps/browser/store/windows/Assets
 ./libs/common/src/abstractions/fileDownload
-./libs/common/src/abstractions/userVerification
 ./libs/common/src/abstractions/vaultTimeout
 ./libs/common/src/services/vaultTimeout
 ./bitwarden_license/README.md
