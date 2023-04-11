@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { first, Subject, takeUntil } from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -48,7 +48,7 @@ export class IconComponent implements OnChanges, OnDestroy {
     this.image = null;
     this.fallbackImage = null;
 
-    this.stateService.disableFavicon$.pipe(takeUntil(this.destroy$)).subscribe((v) => {
+    this.stateService.disableFavicon$.pipe(first(), takeUntil(this.destroy$)).subscribe((v) => {
       this.imageEnabled = !v;
       this.load();
     });
