@@ -239,13 +239,14 @@ export class Main {
       this.sendService
     );
 
+    this.searchService = new SearchService(this.logService, this.i18nService);
+
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
       this.apiService,
       this.i18nService,
-      null,
-      this.logService,
+      this.searchService,
       this.stateService,
       this.encryptService,
       this.cipherFileUploadService
@@ -267,8 +268,6 @@ export class Main {
       this.i18nService,
       this.stateService
     );
-
-    this.searchService = new SearchService(this.cipherService, this.logService, this.i18nService);
 
     this.providerService = new ProviderService(this.stateService);
 

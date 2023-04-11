@@ -133,19 +133,14 @@ function getBgService<T>(service: keyof MainBackground) {
     },
     {
       provide: SearchServiceAbstraction,
-      useFactory: (
-        cipherService: CipherService,
-        logService: ConsoleLogService,
-        i18nService: I18nService
-      ) => {
+      useFactory: (logService: ConsoleLogService, i18nService: I18nService) => {
         return new PopupSearchService(
           getBgService<SearchService>("searchService")(),
-          cipherService,
           logService,
           i18nService
         );
       },
-      deps: [CipherService, LogServiceAbstraction, I18nService],
+      deps: [LogServiceAbstraction, I18nService],
     },
     // { provide: AuditService, useFactory: getBgService<AuditService>("auditService"), deps: [] },
     {
