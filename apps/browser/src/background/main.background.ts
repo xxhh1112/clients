@@ -333,12 +333,14 @@ export default class MainBackground {
       this.apiService,
       this.fileUploadService
     );
+    this.searchService = new SearchService(this.logService, this.i18nService);
+
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
       this.apiService,
       this.i18nService,
-      () => this.searchService,
+      this.searchService,
       this.stateService,
       this.encryptService,
       this.cipherFileUploadService,
@@ -356,7 +358,6 @@ export default class MainBackground {
       this.i18nService,
       this.stateService
     );
-    this.searchService = new SearchService(this.cipherService, this.logService, this.i18nService);
     this.syncNotifierService = new SyncNotifierService();
     this.organizationService = new BrowserOrganizationService(this.stateService);
     this.policyService = new BrowserPolicyService(this.stateService, this.organizationService);

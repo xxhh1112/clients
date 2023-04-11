@@ -1,4 +1,4 @@
-import { Injector, LOCALE_ID, NgModule } from "@angular/core";
+import { LOCALE_ID, NgModule } from "@angular/core";
 
 import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
@@ -262,7 +262,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         settingsService: SettingsServiceAbstraction,
         apiService: ApiServiceAbstraction,
         i18nService: I18nServiceAbstraction,
-        injector: Injector,
+        searchService: SearchServiceAbstraction,
         stateService: StateServiceAbstraction,
         encryptService: EncryptService,
         fileUploadService: CipherFileUploadServiceAbstraction,
@@ -273,7 +273,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
           settingsService,
           apiService,
           i18nService,
-          () => injector.get(SearchServiceAbstraction),
+          searchService,
           stateService,
           encryptService,
           fileUploadService,
@@ -284,7 +284,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         SettingsServiceAbstraction,
         ApiServiceAbstraction,
         I18nServiceAbstraction,
-        Injector, // TODO: Get rid of this circular dependency!
+        SearchServiceAbstraction,
         StateServiceAbstraction,
         EncryptService,
         CipherFileUploadServiceAbstraction,
@@ -490,7 +490,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: SearchServiceAbstraction,
       useClass: SearchService,
-      deps: [CipherServiceAbstraction, LogService, I18nServiceAbstraction],
+      deps: [LogService, I18nServiceAbstraction],
     },
     {
       provide: NotificationsServiceAbstraction,
