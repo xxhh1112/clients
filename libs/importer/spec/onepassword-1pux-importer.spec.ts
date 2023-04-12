@@ -661,16 +661,26 @@ describe("1Password 1Pux Importer", () => {
     expect(folders[0].name).toBe("Movies");
     expect(folders[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(folders[1].name).toBe("Finance");
+    expect(folders[1].id).toBe(null);
     expect(folders[2].name).toBe("Travel");
     expect(folders[3].name).toBe("Education");
     expect(folders[4].name).toBe("Starter Kit");
 
-    // Check that ciphers have a folder assigned to them
-    expect(result.ciphers.filter((c) => c.folderId === folders[0].id).length).toBeGreaterThan(0);
-    expect(result.ciphers.filter((c) => c.folderId === folders[1].id).length).toBeGreaterThan(0);
-    expect(result.ciphers.filter((c) => c.folderId === folders[2].id).length).toBeGreaterThan(0);
-    expect(result.ciphers.filter((c) => c.folderId === folders[3].id).length).toBeGreaterThan(0);
-    expect(result.ciphers.filter((c) => c.folderId === folders[4].id).length).toBeGreaterThan(0);
+    expect(result.folderRelationships.length).toBe(7);
+    expect(result.folderRelationships[0][0]).toBe(0);
+    expect(result.folderRelationships[0][1]).toBe(0);
+    expect(result.folderRelationships[1][0]).toBe(2);
+    expect(result.folderRelationships[1][1]).toBe(0);
+    expect(result.folderRelationships[2][0]).toBe(3);
+    expect(result.folderRelationships[2][1]).toBe(1);
+    expect(result.folderRelationships[3][0]).toBe(9);
+    expect(result.folderRelationships[3][1]).toBe(2);
+    expect(result.folderRelationships[4][0]).toBe(15);
+    expect(result.folderRelationships[4][1]).toBe(3);
+    expect(result.folderRelationships[5][0]).toBe(19);
+    expect(result.folderRelationships[5][1]).toBe(1);
+    expect(result.folderRelationships[6][0]).toBe(26);
+    expect(result.folderRelationships[6][1]).toBe(4);
   });
 
   it("should create collections if part of an organization", async () => {
@@ -684,8 +694,25 @@ describe("1Password 1Pux Importer", () => {
     expect(collections[0].name).toBe("Movies");
     expect(collections[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(collections[1].name).toBe("Finance");
+    expect(collections[1].id).toBe(null);
     expect(collections[2].name).toBe("Travel");
     expect(collections[3].name).toBe("Education");
     expect(collections[4].name).toBe("Starter Kit");
+
+    expect(result.collectionRelationships.length).toBe(7);
+    expect(result.collectionRelationships[0][0]).toBe(0);
+    expect(result.collectionRelationships[0][1]).toBe(0);
+    expect(result.collectionRelationships[1][0]).toBe(2);
+    expect(result.collectionRelationships[1][1]).toBe(0);
+    expect(result.collectionRelationships[2][0]).toBe(3);
+    expect(result.collectionRelationships[2][1]).toBe(1);
+    expect(result.collectionRelationships[3][0]).toBe(9);
+    expect(result.collectionRelationships[3][1]).toBe(2);
+    expect(result.collectionRelationships[4][0]).toBe(15);
+    expect(result.collectionRelationships[4][1]).toBe(3);
+    expect(result.collectionRelationships[5][0]).toBe(19);
+    expect(result.collectionRelationships[5][1]).toBe(1);
+    expect(result.collectionRelationships[6][0]).toBe(26);
+    expect(result.collectionRelationships[6][1]).toBe(4);
   });
 });

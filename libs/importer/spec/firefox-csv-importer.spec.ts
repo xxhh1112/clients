@@ -14,7 +14,7 @@ const CipherData = [
     expected: Object.assign(new CipherView(), {
       id: null,
       organizationId: null,
-      folderId: "e7def091-d3c8-4b03-96e3-afb200f6c3bc",
+      folderId: null,
       name: "example.com",
       login: Object.assign(new LoginView(), {
         username: "foo",

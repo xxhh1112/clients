@@ -203,17 +203,18 @@ describe("PSONO JSON Importer", () => {
     expect(folders[0].name).toBe("TestFolder");
     expect(folders[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(folders[1].name).toBe("TestFolder2");
+    expect(result.folderRelationships.length).toBe(2);
+    expect(result.folderRelationships[0][0]).toBe(0);
+    expect(result.folderRelationships[0][1]).toBe(0);
+    expect(result.folderRelationships[1][0]).toBe(1);
+    expect(result.folderRelationships[1][1]).toBe(1);
   });
 
   it("should assign entries to folders", async () => {
     const importer = new PsonoJsonImporter();
     const result = await importer.parse(FoldersTestDataJson);
     expect(result != null).toBe(true);
-
-    const folders = result.folders;
-    // // Check that ciphers have a folder assigned to them
-    expect(result.ciphers.filter((c) => c.folderId === folders[0].id).length).toBeGreaterThan(0);
-    expect(result.ciphers.filter((c) => c.folderId === folders[1].id).length).toBeGreaterThan(0);
+    expect(result.folderRelationships.length).toBe(2);
   });
 
   it("should create collections if part of an organization", async () => {
@@ -225,6 +226,12 @@ describe("PSONO JSON Importer", () => {
     const collections = result.collections;
     expect(collections.length).toBe(2);
     expect(collections[0].name).toBe("TestFolder");
+    expect(collections[0].id).toBe("e7def091-d3c8-4b03-96e3-afb200f6c3bc");
     expect(collections[1].name).toBe("TestFolder2");
+    expect(result.collectionRelationships.length).toBe(2);
+    expect(result.collectionRelationships[0][0]).toBe(0);
+    expect(result.collectionRelationships[0][1]).toBe(0);
+    expect(result.collectionRelationships[1][0]).toBe(1);
+    expect(result.collectionRelationships[1][1]).toBe(1);
   });
 });
