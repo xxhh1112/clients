@@ -247,8 +247,6 @@ export class LockComponent implements OnInit, OnDestroy {
 
   private async doContinue() {
     await this.stateService.setEverBeenUnlocked(true);
-    const disableFavicon = await this.stateService.getDisableFavicon();
-    await this.stateService.setDisableFavicon(!!disableFavicon);
     this.messagingService.send("unlocked");
     if (this.onSuccessfulSubmit != null) {
       await this.onSuccessfulSubmit();

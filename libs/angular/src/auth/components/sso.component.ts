@@ -211,8 +211,6 @@ export class SsoComponent {
           this.router.navigate([this.forcePasswordResetRoute]);
         }
       } else {
-        const disableFavicon = await this.stateService.getDisableFavicon();
-        await this.stateService.setDisableFavicon(!!disableFavicon);
         if (this.onSuccessfulLogin != null) {
           this.onSuccessfulLogin();
         }
