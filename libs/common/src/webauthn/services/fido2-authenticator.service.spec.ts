@@ -663,7 +663,7 @@ describe("FidoAuthenticatorService", () => {
         let fido2Keys: Fido2KeyView[];
         let params: Fido2AuthenticatorGetAssertionParams;
 
-        beforeEach(async () => {
+        const init = async () => {
           keyPair = await createKeyPair();
           credentialIds = [Utils.newGuid(), Utils.newGuid()];
           const keyValue = Fido2Utils.bufferToString(
@@ -701,7 +701,8 @@ describe("FidoAuthenticatorService", () => {
           }
           cipherService.getAllDecrypted.mockResolvedValue(ciphers);
           userInterfaceSession.pickCredential.mockResolvedValue(ciphers[0].id);
-        });
+        };
+        beforeEach(init);
 
         /** Spec: Increment the credential associated signature counter */
         it("should increment counter", async () => {
@@ -769,6 +770,24 @@ describe("FidoAuthenticatorService", () => {
           //   sigBase
           // );
           // expect(isValidSignature).toBe(true);
+        });
+
+        it("should always generate unique signatures even if the input is the same", async () => {
+          const signatures = new Set();
+
+          for (let i = 0; i < 100; ++i) {
+            await init(); // Reset inputs
+            const result = await authenticator.getAssertion(params);
+
+            const counter = result.authenticatorData.slice(33, 37);
+            expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // double check that the counter doesn't change
+
+            const signature = Fido2Utils.bufferToString(result.signature);
+            if (signatures.has(signature)) {
+              throw new Error("Found duplicate signature");
+            }
+            signatures.add(signature);
+          }
         });
 
         /** Spec: If any error occurred while generating the assertion signature, return an error code equivalent to "UnknownError" and terminate the operation. */
