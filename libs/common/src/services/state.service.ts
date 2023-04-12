@@ -74,9 +74,6 @@ export class StateService<
   protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
   activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
 
-  protected disableFaviconSubject = new BehaviorSubject<boolean>(false);
-  disableFavicon$ = this.disableFaviconSubject.asObservable();
-
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
@@ -129,8 +126,6 @@ export class StateService<
       }
     });
     await this.initAccountState();
-
-    this.disableFaviconSubject.next(await this.getDisableFavicon());
 
     this.hasBeenInited = true;
   }
@@ -964,7 +959,6 @@ export class StateService<
       globals,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
-    this.disableFaviconSubject.next(value);
   }
 
   async getDisableGa(options?: StorageOptions): Promise<boolean> {
