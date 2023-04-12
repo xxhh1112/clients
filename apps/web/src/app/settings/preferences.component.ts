@@ -5,6 +5,7 @@ import { AbstractThemingService } from "@bitwarden/angular/services/theming/them
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { ThemeType } from "@bitwarden/common/enums";
@@ -35,7 +36,8 @@ export class PreferencesComponent implements OnInit {
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private platformUtilsService: PlatformUtilsService,
     private messagingService: MessagingService,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private settingsService: SettingsService
   ) {
     this.vaultTimeouts = [
       { name: i18nService.t("oneMinute"), value: 1 },
@@ -71,7 +73,7 @@ export class PreferencesComponent implements OnInit {
   async ngOnInit() {
     this.vaultTimeout.setValue(await this.vaultTimeoutSettingsService.getVaultTimeout());
     this.vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
-    this.enableFavicons = !(await this.stateService.getDisableFavicon());
+    this.enableFavicons = !this.settingsService.getDisableFavicon();
     this.enableFullWidth = await this.stateService.getEnableFullWidth();
 
     this.locale = (await this.stateService.getLocale()) ?? null;
@@ -95,7 +97,7 @@ export class PreferencesComponent implements OnInit {
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
-    await this.stateService.setDisableFavicon(!this.enableFavicons);
+    await this.settingsService.setDisableFavicon(!this.enableFavicons);
     await this.stateService.setEnableFullWidth(this.enableFullWidth);
     this.messagingService.send("setFullWidth");
     if (this.theme !== this.startingTheme) {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy } from 
 import { first, Subject, takeUntil } from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -38,7 +38,7 @@ export class IconComponent implements OnChanges, OnDestroy {
   private iconsUrl: string;
   private destroy$ = new Subject<void>();
 
-  constructor(environmentService: EnvironmentService, private stateService: StateService) {
+  constructor(environmentService: EnvironmentService, private settingsService: SettingsService) {
     this.iconsUrl = environmentService.getIconsUrl();
   }
 
@@ -48,7 +48,7 @@ export class IconComponent implements OnChanges, OnDestroy {
     this.image = null;
     this.fallbackImage = null;
 
-    this.stateService.disableFavicon$.pipe(first(), takeUntil(this.destroy$)).subscribe((v) => {
+    this.settingsService.disableFavicon$.pipe(first(), takeUntil(this.destroy$)).subscribe((v) => {
       this.imageEnabled = !v;
       this.load();
     });

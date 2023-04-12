@@ -8,9 +8,10 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { DeviceType, ThemeType, StorageLocation } from "@bitwarden/common/enums";
+import { DeviceType, ThemeType } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { flagEnabled } from "../../flags";
@@ -81,7 +82,8 @@ export class SettingsComponent implements OnInit {
     private messagingService: MessagingService,
     private cryptoService: CryptoService,
     private modalService: ModalService,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private settingsService: SettingsService
   ) {
     const isMac = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
 
@@ -192,7 +194,7 @@ export class SettingsComponent implements OnInit {
     this.approveLoginRequests = await this.stateService.getApproveLoginRequests();
 
     // Account preferences
-    this.enableFavicons = !(await this.stateService.getDisableFavicon());
+    this.enableFavicons = !this.settingsService.getDisableFavicon();
     this.enableBrowserIntegration = await this.stateService.getEnableBrowserIntegration();
     this.enableDuckDuckGoBrowserIntegration =
       await this.stateService.getEnableDuckDuckGoBrowserIntegration();
@@ -309,10 +311,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async saveFavicons() {
-    await this.stateService.setDisableFavicon(!this.enableFavicons);
-    await this.stateService.setDisableFavicon(!this.enableFavicons, {
-      storageLocation: StorageLocation.Disk,
-    });
+    await this.settingsService.setDisableFavicon(!this.enableFavicons);
     this.messagingService.send("refreshCiphers");
   }
 
