@@ -143,6 +143,19 @@ describe("FidoAuthenticatorService", () => {
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
 
+      /** Devation: Organization ciphers are not checked against excluded credentials, even if the user has access to them. */
+      it("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
+        excludedCipher.organizationId = "someOrganizationId";
+
+        try {
+          await authenticator.makeCredential(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
+
+        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
+      });
+
       it("should not inform user of duplication when input data does not pass checks", async () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
         const invalidParams = await createInvalidParams();
@@ -202,6 +215,19 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.makeCredential(params);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+      });
+
+      /** Devation: Organization ciphers are not checked against excluded credentials, even if the user has access to them. */
+      it.only("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
+        userInterfaceSession.informExcludedCredential.mockResolvedValue();
+        excludedCipherView.organizationId = "someOrganizationId";
+
+        try {
+          await authenticator.makeCredential(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
+
+        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
       });
 
       it("should not inform user of duplication when input data does not pass checks", async () => {

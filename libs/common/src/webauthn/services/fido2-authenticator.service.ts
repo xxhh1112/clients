@@ -273,10 +273,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     return ciphers
       .filter(
         (cipher) =>
-          (cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
-          (cipher.type === CipherType.Login &&
-            cipher.login.fido2Key != undefined &&
-            ids.includes(cipher.login.fido2Key.nonDiscoverableId))
+          cipher.organizationId == undefined &&
+          ((cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
+            (cipher.type === CipherType.Login &&
+              cipher.login.fido2Key != undefined &&
+              ids.includes(cipher.login.fido2Key.nonDiscoverableId)))
       )
       .map((cipher) => cipher.id);
   }
