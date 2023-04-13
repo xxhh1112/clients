@@ -3,7 +3,7 @@ import { BrowserApi } from "../browser/browserApi";
 import { uploadEventAlarmName } from "../tasks/upload-events-tasks";
 
 export const alarmKeys = [clearClipboardAlarmName, uploadEventAlarmName] as const;
-export type AlarmKeys = typeof alarmKeys[number];
+export type AlarmKeys = (typeof alarmKeys)[number];
 
 type AlarmState = { [T in AlarmKeys]: number | undefined };
 

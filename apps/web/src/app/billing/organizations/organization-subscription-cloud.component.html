@@ -59,7 +59,7 @@
             {{ "subscriptionExpiration" | i18n }}
           </dt>
           <dd [ngClass]="{ 'tw-text-danger': isExpired }">
-            {{ nextInvoice ? (nextInvoice.date | date: "mediumDate") : "-" }}
+            {{ nextInvoice ? (nextInvoice.date | date : "mediumDate") : "-" }}
           </dd>
         </ng-container>
       </dl>
@@ -71,9 +71,9 @@
           <tr *ngFor="let i of subscription.items">
             <td>
               {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} @
-              {{ i.amount | currency: "$" }}
+              {{ i.amount | currency : "$" }}
             </td>
-            <td>{{ i.quantity * i.amount | currency: "$" }} /{{ i.interval | i18n }}</td>
+            <td>{{ i.quantity * i.amount | currency : "$" }} /{{ i.interval | i18n }}</td>
           </tr>
         </tbody>
       </table>
@@ -82,7 +82,7 @@
       <div class="col-sm">
         <dl>
           <dt>{{ "provider" | i18n }}</dt>
-          <dd>{{ "yourProviderIs" | i18n: userOrg.providerName }}</dd>
+          <dd>{{ "yourProviderIs" | i18n : userOrg.providerName }}</dd>
         </dl>
       </div>
     </ng-container>
@@ -140,7 +140,7 @@
     {{ "removeSponsorship" | i18n }}
   </button>
   <h2 class="spaced-header">{{ "storage" | i18n }}</h2>
-  <p>{{ "subscriptionStorage" | i18n: sub.maxStorageGb || 0:sub.storageName || "0 MB" }}</p>
+  <p>{{ "subscriptionStorage" | i18n : sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}</p>
   <div class="progress">
     <div
       class="progress-bar bg-success"
