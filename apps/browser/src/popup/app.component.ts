@@ -16,6 +16,7 @@ import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.s
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 
 import { BrowserApi } from "../browser/browserApi";
@@ -48,7 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    private settingsService: SettingsService
   ) {}
 
   async ngOnInit() {
@@ -59,6 +61,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       this.activeUserId = userId;
     });
+
+    this.settingsService.setDisableFavicon(await this.stateService.getDisableFavicon());
 
     this.ngZone.runOutsideAngular(() => {
       window.onmousedown = () => this.recordActivity();
