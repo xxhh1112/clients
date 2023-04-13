@@ -1,14 +1,21 @@
 import { VaultTimeoutSettingsService as AbstractVaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 
+import {
+  policyServiceFactory,
+  PolicyServiceInitOptions,
+} from "../../admin-console/background/service-factories/policy-service.factory";
+import {
+  tokenServiceFactory,
+  TokenServiceInitOptions,
+} from "../../auth/background/service-factories/token-service.factory";
+
 import { cryptoServiceFactory, CryptoServiceInitOptions } from "./crypto-service.factory";
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
-import { policyServiceFactory, PolicyServiceInitOptions } from "./policy-service.factory";
 import {
   stateServiceFactory as stateServiceFactory,
   StateServiceInitOptions,
 } from "./state-service.factory";
-import { tokenServiceFactory, TokenServiceInitOptions } from "./token-service.factory";
 
 type VaultTimeoutSettingsServiceFactoryOptions = FactoryOptions;
 

@@ -222,6 +222,7 @@ header {
     justify-content: center;
     align-items: center;
     height: 100%;
+    white-space: pre;
 
     @include themify($themes) {
       color: themed("headerColor");
@@ -408,28 +409,10 @@ app-root {
   }
 }
 
+// Adds padding on each side of the content if opened in a tab
 @media only screen and (min-width: 601px) {
-  app-login header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-login main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock main {
+  header,
+  main {
     padding: 0 calc((100% - 500px) / 2);
   }
 }
@@ -620,5 +603,37 @@ main {
     width: calc(100% - 20px);
     height: 1px;
     position: relative;
+  }
+}
+
+.login-with-device {
+  .fingerprint-phrase-header {
+    padding-top: 1rem;
+    display: block;
+  }
+
+  @include themify($themes) {
+    .fingerprint-text {
+      color: themed("codeColor");
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+        monospace;
+      padding: 1rem 0;
+    }
+  }
+
+  .resend-notification {
+    padding-bottom: 1rem;
+    a {
+      cursor: pointer;
+    }
+  }
+
+  .footer {
+    padding-top: 1rem;
+
+    a {
+      padding-top: 1rem;
+      display: block;
+    }
   }
 }

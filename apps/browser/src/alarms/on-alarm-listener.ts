@@ -1,5 +1,5 @@
+import { ClearClipboard, clearClipboardAlarmName } from "../autofill/clipboard";
 import { CachedServices } from "../background/service_factories/factory-options";
-import { ClearClipboard, clearClipboardAlarmName } from "../clipboard";
 import { uploadEventAlarmName, UploadEventsTask } from "../tasks/upload-events-tasks";
 
 import { alarmKeys, clearAlarmTime, getAlarmTime } from "./alarm-state";

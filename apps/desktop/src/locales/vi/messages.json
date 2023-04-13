@@ -238,6 +238,9 @@
   "ms": {
     "message": "Chị"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Tiến sĩ"
   },
@@ -539,7 +542,14 @@
     "message": "Yêu cầu nhập lại mật khẩu chính."
   },
   "masterPasswordMinlength": {
-    "message": "Mật khẩu chính phải có ít nhất 8 kí tự."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Xác nhận mật khẩu chính không khớp."
@@ -752,13 +762,16 @@
     "message": "Đang tải..."
   },
   "lockVault": {
-    "message": "Lock vault"
+    "message": "Khóa kho"
   },
   "passwordGenerator": {
     "message": "Tạo mật khẩu"
   },
   "contactUs": {
     "message": "Liên hệ với chúng tôi"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Trợ giúp"
@@ -901,7 +914,7 @@
     "message": "Hiện biểu tượng trang web"
   },
   "faviconDesc": {
-    "message": "Show a recognizable image next to each login."
+    "message": "Hiện một ảnh nhận dạng bên cạnh mỗi lần đăng nhập."
   },
   "enableMinToTray": {
     "message": "Minimize to Tray Icon"
@@ -946,7 +959,7 @@
     "message": "When the application is first started, only show an icon in the menu bar."
   },
   "openAtLogin": {
-    "message": "Start automatically on login"
+    "message": "Tự động bắt đầu khi đăng nhập"
   },
   "openAtLoginDesc": {
     "message": "Start the Bitwarden desktop application automatically on login."
@@ -958,7 +971,7 @@
     "message": "Show the Bitwarden icon in the Dock even when minimized to the menu bar."
   },
   "confirmTrayTitle": {
-    "message": "Confirm hiding tray"
+    "message": "Xác nhận ẩn khay"
   },
   "confirmTrayDesc": {
     "message": "Turning off this setting will also turn off all other tray related settings."
@@ -1312,7 +1325,7 @@
     "message": "Accessibility cookie saved!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "No accessibility cookie saved"
+    "message": "Không có cookie hỗ trợ tương tác nào được lưu"
   },
   "warning": {
     "message": "CẢNH BÁO",
@@ -1325,7 +1338,7 @@
     "message": "This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
-    "message": "This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file."
+    "message": "File xuất mã hóa dữ liệu xủa bạn bằng khóa giải mã. Nếu bạn thay đổi khóa giải mã, bạn nên xuất file lại vì bạn sẽ không thể giải mã file này."
   },
   "encExportAccountWarningDesc": {
     "message": "Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account."
@@ -1569,31 +1582,31 @@
     "message": "Điều khoản sử dụng và chính sách quyền riêng tư chưa được đồng ý."
   },
   "enableBrowserIntegration": {
-    "message": "Allow browser integration"
+    "message": "Cho phép tích hợp với trình duyệt"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Used for biometrics in browser."
   },
   "enableDuckDuckGoBrowserIntegration": {
-    "message": "Allow DuckDuckGo browser integration"
+    "message": "Cho phép tích hợp trình duyệt DuckDuckGo"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+    "message": "Sử dụng kho Bitwarden của bạn khi tìm kiếm bằng DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
-    "message": "Browser integration not supported"
+    "message": "Không hỗ trợ tích hợp trình duyệt"
   },
   "browserIntegrationMasOnlyDesc": {
-    "message": "Unfortunately browser integration is only supported in the Mac App Store version for now."
+    "message": "Rất tiếc, tính năng tích hợp trình duyệt hiện chỉ được hỗ trợ trong phiên bản App Store trên Mac."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Unfortunately browser integration is currently not supported in the Microsoft Store version."
+    "message": "Rất tiếc, tính năng tích hợp trình duyệt hiện không được hỗ trợ trong phiên bản Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
-    "message": "Unfortunately browser integration is currently not supported in the linux version."
+    "message": "Rất tiếc, tính năng tích hợp trình duyệt hiện không được hỗ trợ trong phiên bản linux."
   },
   "enableBrowserIntegrationFingerprint": {
-    "message": "Require verification for browser integration"
+    "message": "Yêu cầu xác minh để tích hợp trình duyệt"
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Add an additional layer of security by requiring fingerprint phrase confirmation when establishing a link between your desktop and browser. This requires user action and verification each time a connection is created."
@@ -1602,7 +1615,7 @@
     "message": "Chấp nhận"
   },
   "verifyBrowserTitle": {
-    "message": "Verify browser connection"
+    "message": "Xác minh kết nối trình duyệt"
   },
   "verifyBrowserDesc": {
     "message": "Please ensure the shown fingerprint is identical to the fingerprint showed in the browser extension."
@@ -1617,13 +1630,13 @@
     }
   },
   "verifyNativeMessagingConnectionDesc": {
-    "message": "Would you like to approve this request?"
+    "message": "Bạn có muốn chấp thuận yêu cầu này không?"
   },
   "verifyNativeMessagingConnectionWarning": {
-    "message": "If you did not initiate this request, do not approve it."
+    "message": "Nếu bạn không gửi yêu cầu này, đừng chấp thuận."
   },
   "biometricsNotEnabledTitle": {
-    "message": "Biometrics not set up"
+    "message": "Sinh trắc học chưa được thiết lập"
   },
   "biometricsNotEnabledDesc": {
     "message": "Browser biometrics requires desktop biometrics to be set up in the settings first."
@@ -1632,7 +1645,7 @@
     "message": "Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections."
   },
   "hintEqualsPassword": {
-    "message": "Your password hint cannot be the same as your password."
+    "message": "Gợi ý mật khẩu không được trùng với mật khẩu của bạn."
   },
   "personalOwnershipPolicyInEffect": {
     "message": "An organization policy is affecting your ownership options."
@@ -2025,9 +2038,6 @@
   "neverLockWarning": {
     "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Vault"
   },
@@ -2058,8 +2068,138 @@
   "logInWithAnotherDevice": {
     "message": "Log in with another device"
   },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
   "toggleCharacterCount": {
     "message": "Toggle character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

@@ -44,7 +44,7 @@ export class BrowserApi {
 
   static async tabsQuery(options: chrome.tabs.QueryInfo): Promise<chrome.tabs.Tab[]> {
     return new Promise((resolve) => {
-      chrome.tabs.query(options, (tabs: any[]) => {
+      chrome.tabs.query(options, (tabs) => {
         resolve(tabs);
       });
     });
@@ -63,7 +63,7 @@ export class BrowserApi {
     tab: chrome.tabs.Tab,
     command: string,
     data: any = null
-  ): Promise<any[]> {
+  ): Promise<void> {
     const obj: any = {
       command: command,
     };
@@ -75,11 +75,11 @@ export class BrowserApi {
     return BrowserApi.tabSendMessage(tab, obj);
   }
 
-  static async tabSendMessage(
+  static async tabSendMessage<T>(
     tab: chrome.tabs.Tab,
-    obj: any,
+    obj: T,
     options: chrome.tabs.MessageSendOptions = null
-  ): Promise<any> {
+  ): Promise<void> {
     if (!tab || !tab.id) {
       return;
     }
@@ -94,12 +94,13 @@ export class BrowserApi {
     });
   }
 
-  static sendTabsMessage<T = never>(
+  static sendTabsMessage<T>(
     tabId: number,
     message: TabMessage,
+    options?: chrome.tabs.MessageSendOptions,
     responseCallback?: (response: T) => void
   ) {
-    chrome.tabs.sendMessage<TabMessage, T>(tabId, message, responseCallback);
+    chrome.tabs.sendMessage<TabMessage, T>(tabId, message, options, responseCallback);
   }
 
   static async getPrivateModeWindows(): Promise<browser.windows.Window[]> {
@@ -114,6 +115,10 @@ export class BrowserApi {
     return chrome.extension.getBackgroundPage();
   }
 
+  static isBackgroundPage(window: Window & typeof globalThis): boolean {
+    return window === chrome.extension.getBackgroundPage();
+  }
+
   static getApplicationVersion(): string {
     return chrome.runtime.getManifest().version;
   }
@@ -122,8 +127,44 @@ export class BrowserApi {
     return Promise.resolve(chrome.extension.getViews({ type: "popup" }).length > 0);
   }
 
-  static createNewTab(url: string, extensionPage = false, active = true) {
-    chrome.tabs.create({ url: url, active: active });
+  static createNewTab(url: string, active = true, openerTab?: chrome.tabs.Tab) {
+    chrome.tabs.create({ url: url, active: active, openerTabId: openerTab?.id });
+  }
+
+  static openBitwardenExtensionTab(
+    relativeUrl: string,
+    active = true,
+    openerTab?: chrome.tabs.Tab
+  ) {
+    if (relativeUrl.includes("uilocation=tab")) {
+      this.createNewTab(relativeUrl, active, openerTab);
+      return;
+    }
+
+    const fullUrl = chrome.extension.getURL(relativeUrl);
+    const parsedUrl = new URL(fullUrl);
+    parsedUrl.searchParams.set("uilocation", "tab");
+    this.createNewTab(parsedUrl.toString(), active, openerTab);
+  }
+
+  static async closeBitwardenExtensionTab() {
+    const tabs = await BrowserApi.tabsQuery({
+      active: true,
+      title: "Bitwarden",
+      windowType: "normal",
+      currentWindow: true,
+    });
+
+    if (tabs.length === 0) {
+      return;
+    }
+
+    const tabToClose = tabs[tabs.length - 1];
+    chrome.tabs.remove(tabToClose.id);
+
+    if (tabToClose.openerTabId) {
+      this.focusTab(tabToClose.openerTabId);
+    }
   }
 
   static messageListener(
@@ -142,23 +183,7 @@ export class BrowserApi {
     return chrome.runtime.sendMessage(message);
   }
 
-  static async closeLoginTab() {
-    const tabs = await BrowserApi.tabsQuery({
-      active: true,
-      title: "Bitwarden",
-      windowType: "normal",
-      currentWindow: true,
-    });
-
-    if (tabs.length === 0) {
-      return;
-    }
-
-    const tabToClose = tabs[tabs.length - 1].id;
-    chrome.tabs.remove(tabToClose);
-  }
-
-  static async focusSpecifiedTab(tabId: number) {
+  static async focusTab(tabId: number) {
     chrome.tabs.update(tabId, { active: true, highlighted: true });
   }
 

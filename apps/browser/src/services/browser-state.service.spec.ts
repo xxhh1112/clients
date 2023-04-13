@@ -1,26 +1,26 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import {
-  MemoryStorageServiceInterface,
+  AbstractMemoryStorageService,
   AbstractStorageService,
 } from "@bitwarden/common/abstractions/storage.service";
-import { SendType } from "@bitwarden/common/enums/sendType";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { State } from "@bitwarden/common/models/domain/state";
-import { SendView } from "@bitwarden/common/models/view/send.view";
 import { StateMigrationService } from "@bitwarden/common/services/stateMigration.service";
+import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
+import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 
 import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../models/browserSendComponentState";
 
-import { AbstractKeyGenerationService } from "./abstractions/abstractKeyGeneration.service";
 import { BrowserStateService } from "./browser-state.service";
-import { LocalBackedSessionStorageService } from "./localBackedSessionStorage.service";
+
+// disable session syncing to just test class
+jest.mock("../decorators/session-sync-observable/");
 
 describe("Browser State Service", () => {
   let secureStorageService: MockProxy<AbstractStorageService>;
@@ -50,41 +50,8 @@ describe("Browser State Service", () => {
     state.activeUserId = userId;
   });
 
-  describe("direct memory storage access", () => {
-    let memoryStorageService: LocalBackedSessionStorageService;
-
-    beforeEach(() => {
-      // We need `AbstractCachedStorageService` in the prototype chain to correctly test cache bypass.
-      memoryStorageService = new LocalBackedSessionStorageService(
-        mock<EncryptService>(),
-        mock<AbstractKeyGenerationService>()
-      );
-
-      sut = new BrowserStateService(
-        diskStorageService,
-        secureStorageService,
-        memoryStorageService,
-        logService,
-        stateMigrationService,
-        stateFactory,
-        useAccountCache
-      );
-    });
-
-    it("should bypass cache if possible", async () => {
-      const spyBypass = jest
-        .spyOn(memoryStorageService, "getBypassCache")
-        .mockResolvedValue("value");
-      const spyGet = jest.spyOn(memoryStorageService, "get");
-      const result = await sut.getFromSessionMemory("key");
-      expect(spyBypass).toHaveBeenCalled();
-      expect(spyGet).not.toHaveBeenCalled();
-      expect(result).toBe("value");
-    });
-  });
-
   describe("state methods", () => {
-    let memoryStorageService: MockProxy<AbstractStorageService & MemoryStorageServiceInterface>;
+    let memoryStorageService: MockProxy<AbstractMemoryStorageService>;
 
     beforeEach(() => {
       memoryStorageService = mock();

@@ -5,26 +5,22 @@ import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
 import { StateMigrationService } from "../abstractions/stateMigration.service";
 import {
-  MemoryStorageServiceInterface,
+  AbstractMemoryStorageService,
   AbstractStorageService,
 } from "../abstractions/storage.service";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StorageLocation } from "../enums/storageLocation";
-import { ThemeType } from "../enums/themeType";
-import { UriMatchType } from "../enums/uriMatchType";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { EncryptedOrganizationKeyData } from "../admin-console/models/data/encrypted-organization-key.data";
+import { OrganizationData } from "../admin-console/models/data/organization.data";
+import { PolicyData } from "../admin-console/models/data/policy.data";
+import { ProviderData } from "../admin-console/models/data/provider.data";
+import { Policy } from "../admin-console/models/domain/policy";
+import { CollectionView } from "../admin-console/models/view/collection.view";
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { HtmlStorageLocation, KdfType, StorageLocation, ThemeType, UriMatchType } from "../enums";
 import { StateFactory } from "../factories/stateFactory";
 import { Utils } from "../misc/utils";
-import { CipherData } from "../models/data/cipher.data";
-import { CollectionData } from "../models/data/collection.data";
-import { EncryptedOrganizationKeyData } from "../models/data/encrypted-organization-key.data";
 import { EventData } from "../models/data/event.data";
-import { FolderData } from "../models/data/folder.data";
-import { LocalData } from "../models/data/local.data";
-import { OrganizationData } from "../models/data/organization.data";
-import { PolicyData } from "../models/data/policy.data";
-import { ProviderData } from "../models/data/provider.data";
-import { SendData } from "../models/data/send.data";
 import { ServerConfigData } from "../models/data/server-config.data";
 import {
   Account,
@@ -33,17 +29,19 @@ import {
   AccountSettingsSettings,
 } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
-import { EnvironmentUrls } from "../models/domain/environment-urls";
-import { GeneratedPasswordHistory } from "../models/domain/generated-password-history";
 import { GlobalState } from "../models/domain/global-state";
-import { Policy } from "../models/domain/policy";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 import { WindowState } from "../models/domain/window-state";
-import { CipherView } from "../models/view/cipher.view";
-import { CollectionView } from "../models/view/collection.view";
-import { SendView } from "../models/view/send.view";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { SendData } from "../tools/send/models/data/send.data";
+import { SendView } from "../tools/send/models/view/send.view";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { FolderData } from "../vault/models/data/folder.data";
+import { LocalData } from "../vault/models/data/local.data";
+import { CipherView } from "../vault/models/view/cipher.view";
+import { AddEditCipherInfo } from "../vault/types/add-edit-cipher-info";
 
 const keys = {
   state: "state",
@@ -87,7 +85,7 @@ export class StateService<
   constructor(
     protected storageService: AbstractStorageService,
     protected secureStorageService: AbstractStorageService,
-    protected memoryStorageService: AbstractStorageService & MemoryStorageServiceInterface,
+    protected memoryStorageService: AbstractMemoryStorageService,
     protected logService: LogService,
     protected stateMigrationService: StateMigrationService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>,
@@ -221,13 +219,13 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getAddEditCipherInfo(options?: StorageOptions): Promise<any> {
+  async getAddEditCipherInfo(options?: StorageOptions): Promise<AddEditCipherInfo> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.data?.addEditCipherInfo;
   }
 
-  async setAddEditCipherInfo(value: any, options?: StorageOptions): Promise<void> {
+  async setAddEditCipherInfo(value: AddEditCipherInfo, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
@@ -981,6 +979,24 @@ export class StateService<
     );
   }
 
+  async getDismissedAutofillCallout(options?: StorageOptions): Promise<boolean> {
+    return (
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.settings?.dismissedAutoFillOnPageLoadCallout ?? false
+    );
+  }
+
+  async setDismissedAutofillCallout(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.dismissedAutoFillOnPageLoadCallout = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
   async getDontShowCardsCurrentTab(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
@@ -1565,7 +1581,7 @@ export class StateService<
     );
   }
 
-  async getEquivalentDomains(options?: StorageOptions): Promise<any> {
+  async getEquivalentDomains(options?: StorageOptions): Promise<string[][]> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.settings?.equivalentDomains;
@@ -1657,17 +1673,26 @@ export class StateService<
     return (await this.getAccessToken(options)) != null && (await this.getUserId(options)) != null;
   }
 
-  async getKdfIterations(options?: StorageOptions): Promise<number> {
-    return (
+  async getKdfConfig(options?: StorageOptions): Promise<KdfConfig> {
+    const iterations = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.profile?.kdfIterations;
+    const memory = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.profile?.kdfMemory;
+    const parallelism = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.profile?.kdfParallelism;
+    return new KdfConfig(iterations, memory, parallelism);
   }
 
-  async setKdfIterations(value: number, options?: StorageOptions): Promise<void> {
+  async setKdfConfig(config: KdfConfig, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.profile.kdfIterations = value;
+    account.profile.kdfIterations = config.iterations;
+    account.profile.kdfMemory = config.memory;
+    account.profile.kdfParallelism = config.parallelism;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -2256,6 +2281,24 @@ export class StateService<
     );
   }
 
+  async getApproveLoginRequests(options?: StorageOptions): Promise<boolean> {
+    const approveLoginRequests = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.approveLoginRequests;
+    return approveLoginRequests;
+  }
+
+  async setApproveLoginRequests(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.approveLoginRequests = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
   async getStateVersion(): Promise<number> {
     return (await this.getGlobals(await this.defaultOnDiskLocalOptions())).stateVersion ?? 1;
   }
@@ -2312,6 +2355,48 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
     account.settings.avatarColor = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getActivateAutoFillOnPageLoadFromPolicy(options?: StorageOptions): Promise<boolean> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.activateAutoFillOnPageLoadFromPolicy;
+  }
+
+  async setActivateAutoFillOnPageLoadFromPolicy(
+    value: boolean,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.activateAutoFillOnPageLoadFromPolicy = value;
+    return await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getSMOnboardingTasks(
+    options?: StorageOptions
+  ): Promise<Record<string, Record<string, boolean>>> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.smOnboardingTasks;
+  }
+
+  async setSMOnboardingTasks(
+    value: Record<string, Record<string, boolean>>,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.smOnboardingTasks = value;
     return await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
@@ -2812,7 +2897,7 @@ function withPrototypeForArrayMembers<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<any[]> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey
@@ -2860,7 +2945,7 @@ function withPrototypeForObjectValues<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<{ [key: string]: T }> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey

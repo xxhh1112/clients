@@ -133,6 +133,9 @@
   "ms": {
     "message": "Міс"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Доктор"
   },
@@ -277,12 +280,36 @@
   "searchFavorites": {
     "message": "Шукати в обраному"
   },
-  "searchType": {
-    "message": "Шукати за типом",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Шукати записи входу",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Шукати картки",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Шукати особисті дані",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Шукати захищені нотатки",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Шукати у сховищі"
+  },
+  "searchMyVault": {
+    "message": "Шукати у сховищі"
+  },
+  "searchOrganization": {
+    "message": "Шукати в організації"
+  },
+  "searchMembers": {
+    "message": "Шукати учасників"
+  },
+  "searchGroups": {
+    "message": "Пошук в групах"
   },
   "allItems": {
     "message": "Всі елементи"
@@ -324,7 +351,7 @@
     "message": "Збірки"
   },
   "firstName": {
-    "message": "Ім’я"
+    "message": "Ім'я"
   },
   "middleName": {
     "message": "По батькові"
@@ -365,6 +392,9 @@
   "select": {
     "message": "Обрати"
   },
+  "newItem": {
+    "message": "Новий запис"
+  },
   "addItem": {
     "message": "Додати запис"
   },
@@ -373,6 +403,13 @@
   },
   "viewItem": {
     "message": "Перегляд запису"
+  },
+  "new": {
+    "message": "Новий",
+    "description": "for adding new items"
+  },
+  "item": {
+    "message": "Запис"
   },
   "ex": {
     "message": "зразок",
@@ -438,6 +475,9 @@
   },
   "vaultItems": {
     "message": "Елементи сховища"
+  },
+  "filter": {
+    "message": "Фільтр"
   },
   "moveSelectedToOrg": {
     "message": "Перемістити вибране до організації"
@@ -545,6 +585,12 @@
   "deletedFolder": {
     "message": "Теку видалено"
   },
+  "editInfo": {
+    "message": "Редагувати інформацію"
+  },
+  "access": {
+    "message": "Доступ"
+  },
   "loggedOut": {
     "message": "Ви вийшли"
   },
@@ -573,7 +619,7 @@
     "message": "Увійти з пристроєм"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Необхідно увімкнути вхід з пристроєм у налаштуваннях мобільної програми Bitwarden. Потрібен інший варіант?"
+    "message": "Потрібно увімкнути схвалення запитів на вхід у налаштуваннях мобільної програми Bitwarden. Потрібен інший варіант?"
   },
   "loginWithMasterPassword": {
     "message": "Увійти з головним паролем"
@@ -612,7 +658,7 @@
     "message": "Головний пароль використовується для доступу до вашого сховища. Дуже важливо, щоб ви запам'ятали його. Якщо ви забудете головний пароль, його неможливо буде відновити."
   },
   "masterPassImportant": {
-    "message": "Головний пароль неможливо відновити, якщо ви забудете його!"
+    "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
   },
   "masterPassHintDesc": {
     "message": "Якщо ви забудете головний пароль, підказка може допомогти вам згадати його."
@@ -651,7 +697,14 @@
     "message": "Необхідно повторно ввести головний пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Довжина головного пароля має бути принаймні 8 символів."
+    "message": "Довжина головного пароля має бути принаймні $VALUE$ символів.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -702,6 +755,9 @@
   "noItemsInList": {
     "message": "Немає записів."
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "У вас немає повноважень на перегляд усіх записів у цій збірці."
+  },
   "noCollectionsInList": {
     "message": "Немає збірок."
   },
@@ -710,6 +766,9 @@
   },
   "noUsersInList": {
     "message": "Немає користувачів."
+  },
+  "noMembersInList": {
+    "message": "Список не містить учасників."
   },
   "noEventsInList": {
     "message": "Немає подій."
@@ -847,13 +906,25 @@
     "message": "Редагуйте збірки, з якими цей запис знаходиться в спільному доступі. Лише учасники організацій з доступом до цих збірок матимуть можливість бачити цей запис."
   },
   "deleteSelectedItemsDesc": {
-    "message": "Ви обрали $COUNT$ записів для видалення. Ви справді хочете їх видалити?",
+    "message": "Записи ($COUNT$) будуть переміщені до смітника.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "150"
       }
     }
+  },
+  "deleteSelectedCollectionsDesc": {
+    "message": "Зазначені збірки ($COUNT$) будуть остаточно видалені.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Ви дійсно хочете продовжити?"
   },
   "moveSelectedItemsDesc": {
     "message": "Оберіть теку, в яку ви бажаєте перемістити $COUNT$ вибраних записів.",
@@ -921,7 +992,7 @@
     "message": "Підтвердьте головний пароль"
   },
   "confirmFormat": {
-    "message": "Підтвердьте формат"
+    "message": "Підтвердити формат"
   },
   "filePassword": {
     "message": "Пароль файлу"
@@ -1085,13 +1156,26 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Встановлення надто великого значення KDF-ітерацій може призвести до повільної роботи під час входу (і розблокування) Bitwarden на пристроях з повільнішим процесором. Рекомендуємо збільшувати значення поступово з кроком $INCREMENT$, після чого випробувати роботу на всіх пристроях.",
+    "message": "Встановлення надто великого значення KDF-ітерацій може призвести до повільної роботи під час входу (і розблокування) Bitwarden на повільніших і старіших пристроях. Ми рекомендуємо збільшувати значення з кроком $INCREMENT$, а потім випробувати на кожному пристрої.",
     "placeholders": {
       "increment": {
         "content": "$1",
         "example": "50,000"
       }
     }
+  },
+  "kdfMemory": {
+    "message": "KDF пам'ять (МБ)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "Встановлення надто великого значення KDF-ітерацій, пам'яті й паралелізму може призвести до повільної роботи під час входу (і розблокування) Bitwarden на повільніших і старіших пристроях. Ми рекомендуємо змінювати їх окремо з невеликим кроком, а потім випробувати на кожному пристрої."
+  },
+  "kdfParallelism": {
+    "message": "KDF паралелізм"
+  },
+  "argon2Desc": {
+    "message": "Вищі значення KDF-ітерацій, пам'яті й паралелізму можуть допомогти захистити ваш головний пароль від грубого зламу зловмисником."
   },
   "changeKdf": {
     "message": "Змінити KDF"
@@ -1160,7 +1244,7 @@
     "message": "Інструменти"
   },
   "importData": {
-    "message": "Імпорт даних"
+    "message": "Імпортувати дані"
   },
   "importError": {
     "message": "Помилка імпорту"
@@ -1170,6 +1254,18 @@
   },
   "importSuccess": {
     "message": "Дані успішно імпортовано"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "dataExportSuccess": {
+    "message": "Дані успішно експортовано"
   },
   "importWarning": {
     "message": "Ви імпортуєте дані до $ORGANIZATION$. Ваші дані можуть бути доступними учасникам цієї організації. Ви хочете продовжити?",
@@ -1558,7 +1654,7 @@
   },
   "orgsReportsDesc": {
     "message": "Визначте і закрийте прогалини в безпеці облікових записів вашої організації, натиснувши на звіти нижче.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Незахищені вебсайти"
@@ -1822,6 +1918,22 @@
       }
     }
   },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Отримайте преміум – лише $PRICE$ /рік. Або отримайте преміум обліковий запис для користувачів $FAMILYPLANUSERCOUNT$ та необмежений спільний доступ з ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "тарифним планом Bitwarden Families."
+  },
   "addons": {
     "message": "Додатки"
   },
@@ -1848,7 +1960,7 @@
     "message": "# додаткових ГБ"
   },
   "additionalStorageIntervalDesc": {
-    "message": "У ваш тарифний план включено зашифроване сховище файлів, розміром $SIZE$. Ви можете збільшити обсяг сховища по ціні $PRICE$ за ГБ /$INTERVAL$.",
+    "message": "У ваш тарифний план включено зашифроване сховище файлів, розміром $SIZE$. Ви можете збільшити обсяг сховища за ціною $PRICE$ за ГБ /$INTERVAL$.",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -1916,6 +2028,9 @@
   "cancelSubscription": {
     "message": "Скасувати передплату"
   },
+  "subscriptionExpiration": {
+    "message": "Термін дії передплати"
+  },
   "subscriptionCanceled": {
     "message": "Передплату було скасовано."
   },
@@ -1958,11 +2073,11 @@
   "updateLicense": {
     "message": "Оновити ліцензію"
   },
-  "updatedLicense": {
-    "message": "Ліцензію оновлено"
-  },
   "manageSubscription": {
     "message": "Керувати передплатою"
+  },
+  "launchCloudSubscription": {
+    "message": "Запустити хмарну передплату"
   },
   "storage": {
     "message": "Сховище"
@@ -2356,6 +2471,15 @@
   "deleteGroupConfirmation": {
     "message": "Ви справді хочете видалити цю групу?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Ви дійсно хочете видалити зазначені групи ($QUANTITY$)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Ви справді хочете вилучити цього користувача?"
   },
@@ -2372,7 +2496,10 @@
     "message": "Зовнішній ID"
   },
   "externalIdDesc": {
-    "message": "Зовнішній ID може використовуватись в якості посилання або для зв'язку цього ресурсу із зовнішньою системою, такою як каталок користувача."
+    "message": "Зовнішній ID – це незашифроване посилання, призначене для використання Bitwarden Directory Connector і API."
+  },
+  "nestCollectionUnder": {
+    "message": "Розмістити збірку під"
   },
   "accessControl": {
     "message": "Контроль доступу"
@@ -2395,20 +2522,29 @@
   "editCollection": {
     "message": "Редагувати збірку"
   },
+  "collectionInfo": {
+    "message": "Інформація про збірку"
+  },
   "deleteCollectionConfirmation": {
     "message": "Ви справді хочете видалити цю збірку?"
   },
-  "editUser": {
-    "message": "Редагувати користувача"
+  "editMember": {
+    "message": "Редагувати учасника"
   },
-  "inviteUser": {
-    "message": "Запросити користувача"
+  "fieldOnTabRequiresAttention": {
+    "message": "Поле у вкладці '$TAB$' потребує вашої уваги.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
   },
   "inviteUserDesc": {
     "message": "Запросіть нового користувача до вашої організації, ввівши адресу е-пошти його облікового запису Bitwarden. Якщо він ще не має облікового запису, він отримає запит на його створення."
   },
   "inviteMultipleEmailDesc": {
-    "message": "Ви можете запросити до $COUNT$ користувачів за раз, розділивши адреси е-пошти комою.",
+    "message": "Введіть не більш ніж $COUNT$ адрес е-пошти, розділяючи їх комою.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2651,7 +2787,7 @@
     }
   },
   "createdCollectionId": {
-    "message": "Створена збірка $ID$.",
+    "message": "Створено збірку $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2660,7 +2796,7 @@
     }
   },
   "editedCollectionId": {
-    "message": "Змінена збірка $ID$.",
+    "message": "Збірку $ID$ змінено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2668,8 +2804,11 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Збірки видалено"
+  },
   "deletedCollectionId": {
-    "message": "Видалена збірка $ID$.",
+    "message": "Збірку $ID$ видалено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2678,7 +2817,7 @@
     }
   },
   "editedPolicyId": {
-    "message": "$ID$ зміненої політики.",
+    "message": "Змінено політику $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2687,7 +2826,7 @@
     }
   },
   "createdGroupId": {
-    "message": "Створена група $ID$.",
+    "message": "Створено групу $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2696,7 +2835,7 @@
     }
   },
   "editedGroupId": {
-    "message": "Змінена група $ID$.",
+    "message": "Групу $ID$ змінено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2705,7 +2844,7 @@
     }
   },
   "deletedGroupId": {
-    "message": "Видалена група $ID$.",
+    "message": "Групу $ID$ видалено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2713,8 +2852,17 @@
       }
     }
   },
+  "deletedManyGroups": {
+    "message": "Групи ($QUANTITY$) видалено.",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removedUserId": {
-    "message": "Вилучений користувач $ID$.",
+    "message": "Користувача $ID$ вилучено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2786,7 +2934,7 @@
     }
   },
   "invitedUserId": {
-    "message": "Запрошений користувач $ID$.",
+    "message": "Запрошено користувача $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2795,7 +2943,7 @@
     }
   },
   "confirmedUserId": {
-    "message": "Підтверджений користувач $ID$.",
+    "message": "Підтверджено користувача $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2804,7 +2952,7 @@
     }
   },
   "editedUserId": {
-    "message": "Змінений користувач $ID$.",
+    "message": "Користувача $ID$ змінено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2813,7 +2961,7 @@
     }
   },
   "editedGroupsForUser": {
-    "message": "Змінені групи для користувача $ID$.",
+    "message": "Для користувача $ID$ змінено групи.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2822,7 +2970,7 @@
     }
   },
   "unlinkedSsoUser": {
-    "message": "Незв'язаний SSO для користувача $ID$.",
+    "message": "Користувач $ID$ не має пов'язаного SSO.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2849,7 +2997,7 @@
     }
   },
   "removedOrganizationId": {
-    "message": "Вилучено організацію $ID$.",
+    "message": "Організацію $ID$ вилучено.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2888,7 +3036,7 @@
     "message": "Доступ до груп"
   },
   "groupAccessUserDesc": {
-    "message": "Змінюйте приналежність користувача до груп."
+    "message": "Надавайте учасникам доступ до збірок, додавши їх до 1 або більше груп."
   },
   "invitedUsers": {
     "message": "Запрошені користувачі"
@@ -2924,10 +3072,10 @@
     }
   },
   "confirmUsers": {
-    "message": "Підтвердити користувачів"
+    "message": "Підтвердити учасників"
   },
   "usersNeedConfirmed": {
-    "message": "У вас є користувачі, які підтвердили ваше запрошення, але все ще мають бути схвалені. Користувачі не матимуть доступу до організації доки ви їх не затвердите."
+    "message": "У вас є учасники, які прийняли запрошення, але все ще потребують затвердження. Учасники не матимуть доступу до організації доки ви їх не затвердите."
   },
   "startDate": {
     "message": "Дата початку"
@@ -3393,7 +3541,7 @@
     "message": "Слабкий головний пароль"
   },
   "weakMasterPasswordDesc": {
-    "message": "Обраний вами головний пароль є слабким. Для належного захисту свого облікового запису Bitwarden, вам слід використовувати надійний головний пароль (або парольну фразу). Ви впевнені, що хочете використати цей пароль?"
+    "message": "Виявлено слабкий пароль. Використовуйте надійний пароль для захисту свого облікового запису. Ви дійсно хочете використати слабкий пароль?"
   },
   "rotateAccountEncKey": {
     "message": "Також оновити ключ шифрування мого облікового запису"
@@ -3641,7 +3789,7 @@
     "message": "Відновити записи"
   },
   "restoreSelectedItemsDesc": {
-    "message": "Ви вибрали $COUNT$ записів для відновлення. Ви справді хочете відновити всі ці записи?",
+    "message": "Вибрані записи ($COUNT$) для відновлення. Ви справді хочете відновити всі ці записи?",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3799,7 +3947,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletionDate": {
-    "message": "Дата видалення"
+    "message": "Термін дії"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -3864,7 +4012,7 @@
     "message": "Усі відправлення"
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів",
+    "message": "Досягнуто максимальної кількості доступів",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "pendingDeletion": {
@@ -4114,7 +4262,7 @@
     "message": "Приблизний податок"
   },
   "custom": {
-    "message": "Спеціальний"
+    "message": "Власний"
   },
   "customDesc": {
     "message": "Надання користувацьких дозволів учасникам"
@@ -4716,6 +4864,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Одна чи декілька політик організації не дозволяють вам експортувати особисте сховище."
   },
+  "activateAutofill": {
+    "message": "Активувати автозаповнення"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Скомпрометовані або ненадійні вебсайти можуть використати функцію автозаповнення під час завантаження сторінки для завдання шкоди."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Дізнатися більше про автозаповнення"
+  },
   "selectType": {
     "message": "Оберіть тип SSO"
   },
@@ -4843,7 +5003,7 @@
     "message": "Тариф Bitwarden Families включає"
   },
   "sponsoredFamiliesPremiumAccess": {
-    "message": "Преміум-доступ до 6 користувачів"
+    "message": "Преміумдоступ до 6 користувачів"
   },
   "sponsoredFamiliesSharedCollections": {
     "message": "Спільні збірки для обміну паролями"
@@ -5112,11 +5272,8 @@
   "billingSyncApiKeyRotated": {
     "message": "Токен оновлено"
   },
-  "billingSync": {
-    "message": "Платіжна синхронізація"
-  },
   "billingSyncDesc": {
-    "message": "Платіжна синхронізація надає безплатні сімейні тарифні плани для учасників, а також розширені можливості передплати завдяки зв'язку вашого власного розміщеного Bitwarden з хмарним сервером Bitwarden."
+    "message": "Платіжна синхронізація дає доступ до спонсорованих сімейних тарифних планів та автоматичної синхронізації ліцензій на вашому сервері. Виконавши оновлення на сервері Bitwarden, виберіть \"Синхронізувати ліцензію\" для застосування змін."
   },
   "billingSyncKeyDesc": {
     "message": "Для завершення цієї форми необхідний токен платіжної синхронізації з налаштувань передплати організації в хмарному сховищі."
@@ -5164,7 +5321,16 @@
     }
   },
   "required": {
-    "message": "обов’язково"
+    "message": "обов'язково"
+  },
+  "characterMaximum": {
+    "message": "Максимум $MAX$ символів",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Обов'язково, якщо ID елемента не є URL."
@@ -5442,6 +5608,27 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "Вказані символи заборонені: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 або більше адрес е-пошти недійсні"
+  },
+  "tooManyEmails": {
+    "message": "Ви можете подавати не більш ніж $COUNT$ адрес е-пошти за раз",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ поле (поля) вище потребують вашої уваги.",
     "placeholders": {
@@ -5463,9 +5650,6 @@
   "reporting": {
     "message": "Звіти"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Кількість користувачів"
   },
@@ -5474,6 +5658,48 @@
   },
   "notYou": {
     "message": "Не ви?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Оберіть колір аватара"
+  },
+  "customizeAvatar": {
+    "message": "Налаштувати аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар оновлено"
+  },
+  "brightBlue": {
+    "message": "Світло-синій"
+  },
+  "green": {
+    "message": "Зелений"
+  },
+  "orange": {
+    "message": "Помаранчевий"
+  },
+  "lavender": {
+    "message": "Лавандовий"
+  },
+  "yellow": {
+    "message": "Жовтий"
+  },
+  "indigo": {
+    "message": "Індиго"
+  },
+  "teal": {
+    "message": "Бірюзовий"
+  },
+  "salmon": {
+    "message": "Лососевий"
+  },
+  "pink": {
+    "message": "Рожевий"
+  },
+  "customColor": {
+    "message": "Власний колір"
+  },
+  "selectPlaceholder": {
+    "message": "-- Оберіть--"
   },
   "multiSelectPlaceholder": {
     "message": "-- Введіть для фільтрування --"
@@ -5499,151 +5725,261 @@
     "message": "Приховати"
   },
   "projects": {
-    "message": "Проєкти"
+    "message": "Проєкти",
+    "description": "Description for the Projects field."
   },
   "lastEdited": {
-    "message": "Востаннє редаговано"
+    "message": "Востаннє редаговано",
+    "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "Редагувати секрет"
+    "message": "Редагувати секрет",
+    "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "Додати секрет"
+    "message": "Додати секрет",
+    "description": "Action to create a new secret."
   },
   "copySecretName": {
-    "message": "Копіювати назву секрету"
+    "message": "Копіювати назву секрету",
+    "description": "Action to copy the name of a secret to the system's clipboard."
   },
   "copySecretValue": {
-    "message": "Копіювати значення секрету"
+    "message": "Копіювати значення секрету",
+    "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "Видалити секрет"
+    "message": "Видалити секрет",
+    "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "Видалити секрети"
+    "message": "Видалити секрети",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Остаточно видалити секрет"
+  },
+  "hardDeleteSecrets": {
+    "message": "Остаточно видалити секрети"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Оберіть проєкти, з якими буде пов'язано секретний ключ.",
+    "description": "A prompt explaining how secrets can be associated with projects."
+  },
+  "selectProjects": {
+    "message": "Виберіть проєкти",
+    "description": "A label for a type-to-filter input field to choose projects."
+  },
+  "searchProjects": {
+    "message": "Пошук проєктів",
+    "description": "Label for the search bar used to search projects."
   },
   "project": {
-    "message": "Проєкт"
+    "message": "Проєкт",
+    "description": "Similar to collections, projects can be used to group secrets."
   },
   "editProject": {
-    "message": "Редагувати проєкт"
+    "message": "Редагувати проєкт",
+    "description": "The action to modify an existing project."
   },
   "viewProject": {
-    "message": "Переглянути проєкт"
+    "message": "Переглянути проєкт",
+    "description": "The action to view details of a project."
   },
   "deleteProject": {
-    "message": "Видалити проєкт"
+    "message": "Видалити проєкт",
+    "description": "The action to delete a project from the system."
   },
   "deleteProjects": {
-    "message": "Видалити проєкти"
+    "message": "Видалити проєкти",
+    "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "Секрет"
+    "message": "Секрет",
+    "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
-    "message": "Службовий обліковий запис"
+    "message": "Службовий обліковий запис",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "Службові облікові записи"
-  },
-  "new": {
-    "message": "Новий"
+    "message": "Службові облікові записи",
+    "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "Секрети"
+    "message": "Секрети",
+    "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "Пара – Назва/Значення"
+    "message": "Пара – Назва/Значення",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
-    "message": "Секрет відредаговано"
+    "message": "Секрет відредаговано",
+    "description": "Notification for the successful editing of a secret."
   },
   "secretCreated": {
-    "message": "Секрет створено"
+    "message": "Секрет створено",
+    "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "Новий секрет"
+    "message": "Новий секрет",
+    "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "Новий службовий обліковий запис"
+    "message": "Новий службовий обліковий запис",
+    "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "Немає секретів для показу"
+    "message": "Немає секретів для показу",
+    "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "Для початку додайте або імпортуйте секрети."
+    "message": "Для початку додайте або імпортуйте секрети.",
+    "description": "Message to encourage the user to start adding secrets."
   },
-  "serviceAccountsNoItemsTitle": {
-    "message": "Наразі немає даних для показу"
+  "secretsTrashNoItemsMessage": {
+    "message": "У смітнику немає секретів."
   },
   "serviceAccountsNoItemsMessage": {
-    "message": "Створіть новий службовий обліковий запис, щоб почати автоматизацію доступу до секретів."
+    "message": "Створіть новий службовий обліковий запис, щоб почати автоматизацію доступу до секретів.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Наразі немає даних для показу",
+    "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "Шукати секрети"
+    "message": "Пошук секретів",
+    "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
-    "message": "Видалити службові облікові записи"
+    "message": "Видалити службові облікові записи",
+    "description": "Title for the action to delete one or multiple service accounts."
   },
   "deleteServiceAccount": {
-    "message": "Видалити службовий обліковий запис"
+    "message": "Видалити службовий обліковий запис",
+    "description": "Title for the action to delete a single service account."
   },
   "viewServiceAccount": {
-    "message": "Переглянути службовий обліковий запис"
+    "message": "Переглянути службовий обліковий запис",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "Видалення службового облікового запису $SERVICE_ACCOUNT$ – це остаточна й незворотна дія.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Видалення службових облікових записів – це остаточна й незворотна дія."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Видалити $COUNT$ службових облікових записів",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Службовий обліковий запис видалено"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Службові облікові записи видалено"
   },
   "searchServiceAccounts": {
-    "message": "Пошук службових облікових записів"
+    "message": "Пошук службових облікових записів",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Редагувати службовий обліковий запис",
+    "description": "Title for editing a service account."
   },
   "addProject": {
-    "message": "Додати проєкт"
+    "message": "Додати проєкт",
+    "description": "Title for creating a new project."
   },
   "projectEdited": {
-    "message": "Проєкт відредаговано"
+    "message": "Проєкт відредаговано",
+    "description": "Notification for the successful editing of a project."
   },
   "projectSaved": {
-    "message": "Проєкт збережено"
+    "message": "Проєкт збережено",
+    "description": "Notification for the successful saving of a project."
   },
   "projectCreated": {
-    "message": "Проєкт створено"
+    "message": "Проєкт створено",
+    "description": "Notification for the successful creation of a project."
   },
   "projectName": {
-    "message": "Назва проєкту"
+    "message": "Назва проєкту",
+    "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "Новий проєкт"
+    "message": "Новий проєкт",
+    "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
-    "message": "Видалення секретів може вплинути на наявні інтеграції."
+    "message": "Видалення секретів може вплинути на наявні інтеграції.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "Секрети переміщено до смітника"
+    "message": "Секрети переміщено до смітника",
+    "description": "Notifies that the selected secrets have been moved to the trash"
   },
-  "serviceAccountCreated": {
-    "message": "Службовий обліковий запис створено"
+  "hardDeleteSecretConfirmation": {
+    "message": "Ви дійсно хочете остаточно видалити цей секрет?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Ви дійсно хочете остаточно видалити ці секрети?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Секрети остаточно видалено"
   },
   "smAccess": {
-    "message": "Доступ"
+    "message": "Доступ",
+    "description": "Title indicating what permissions a service account has"
   },
   "projectCommaSecret": {
-    "message": "Проєкт, секрет"
+    "message": "Проєкт, секрет",
+    "description": ""
   },
   "serviceAccountName": {
-    "message": "Назва сервісного облікового запису"
+    "message": "Назва службового облікового запису",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Службовий обліковий запис створено",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Службовий обліковий запис оновлено",
+    "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Введіть або виберіть проєкти чи секрети"
+    "message": "Введіть або виберіть проєкти чи секрети",
+    "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
-    "message": "Введіть, щоб фільтрувати"
+    "message": "Введіть, щоб фільтрувати",
+    "description": "Instructions for filtering a list of projects or secrets"
   },
   "deleteProjectsToast": {
-    "message": "Проєкти видалено"
+    "message": "Проєкти видалено",
+    "description": "Notifies that the selected projects have been deleted"
   },
   "deleteProjectToast": {
-    "message": "Проєкт і всі пов'язані секрети було видалено"
+    "message": "Проєкт видалено",
+    "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
     "message": "Видалення проєкту $PROJECT$ – незворотна дія.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5653,15 +5989,17 @@
   },
   "deleteProjectInputLabel": {
     "message": "Введіть \"$CONFIRM$\" для продовження",
+    "description": "Users are prompted to type 'confirm' to delete a project",
     "placeholders": {
       "confirm": {
         "content": "$1",
-        "example": "Delete 3 Projects"
+        "example": "Delete 3 projects"
       }
     }
   },
   "deleteProjectConfirmMessage": {
     "message": "Видалити $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
     "placeholders": {
       "project": {
         "content": "$1",
@@ -5671,6 +6009,7 @@
   },
   "deleteProjectsConfirmMessage": {
     "message": "Видалити $COUNT$ проєктів",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5679,70 +6018,101 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "Видалення проєктів – це незворотна дія."
+    "message": "Видалення проєктів – це незворотна дія.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
-    "message": "Немає проєктів для показу"
+    "message": "Немає проєктів для показу",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "Додайте новий проєкт, щоб почати організовувати секрети."
+    "message": "Додайте новий проєкт, щоб почати організовувати секрети.",
+    "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
-    "message": "Потрібне підтвердження"
+    "message": "Потрібне підтвердження",
+    "description": "Indicates that user confirmation is required for an action to proceed."
   },
   "bulkDeleteProjectsErrorMessage": {
-    "message": "Зазначені проєкти неможливо видалити:"
+    "message": "Зазначені проєкти неможливо видалити:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "Секрет переміщено до смітника"
+    "message": "Секрет переміщено до смітника",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
-  "searchProjects": {
-    "message": "Шукати проєкти"
+  "hardDeleteSuccessToast": {
+    "message": "Секрет остаточно видалено"
   },
   "accessTokens": {
-    "message": "Токени доступу"
+    "message": "Токени доступу",
+    "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Створити токен доступу"
+  "newAccessToken": {
+    "message": "Новий токен доступу",
+    "description": "Button label for creating a new access token."
   },
   "expires": {
-    "message": "Завершується"
+    "message": "Завершується",
+    "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "Може читати"
+    "message": "Може читати",
+    "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
-    "message": "Немає токенів доступу"
+    "message": "Немає токенів доступу",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "Щоб розпочати, створіть токен доступу"
+    "message": "Щоб розпочати, створіть токен доступу",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
-    "message": "Завантажте чи скопіюйте перед закриттям."
+    "message": "Завантажте чи скопіюйте перед закриттям.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "Завершується:"
+    "message": "Завершується:",
+    "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "Токени доступу не зберігаються і не можуть бути завантажені"
+    "message": "Токени доступу не зберігаються і не можуть бути завантажені",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
-    "message": "Копіювати токен"
+    "message": "Копіювати токен",
+    "description": "Copies the generated access token to the user's clipboard."
   },
   "accessToken": {
-    "message": "Токен доступу"
+    "message": "Токен доступу",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
   },
   "accessTokenExpirationRequired": {
-    "message": "Дата завершення обов'язкова"
+    "message": "Дата завершення обов'язкова",
+    "description": "Error message indicating that an expiration date for the access token must be set."
   },
   "accessTokenCreatedAndCopied": {
-    "message": "Токен доступу створено і скопійовано до буфера обміну"
+    "message": "Токен доступу створено і скопійовано до буфера обміну",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "accessTokenPermissionsBetaNotification": {
-    "message": "Керування дозволами недоступне у бета-версії."
+    "message": "Керування дозволами недоступне у бета-версії.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
   },
   "revokeAccessToken": {
-    "message": "Відкликати токен доступу"
+    "message": "Відкликати токен доступу",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Відкликати токени доступу"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Відкликання токенів доступу – це остаточна та незворотна дія."
+  },
+  "accessTokenRevoked": {
+    "message": "Токени доступу відкликано",
+    "description": "Toast message after deleting one or multiple access tokens."
   },
   "submenu": {
     "message": "Підменю"
@@ -5759,8 +6129,47 @@
   "update": {
     "message": "Оновити"
   },
+  "plusNMore": {
+    "message": "+ ще $QUANTITY$",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Інформація про групу"
+  },
+  "editGroupMembersDesc": {
+    "message": "Надати учасникам доступ до збірок, призначених групам."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Надати доступ до збірок, додавши їх до цієї групи."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Надати доступ до всіх наявних і майбутніх збірок."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "Ця опція вилучить усі інші дозволи для збірок."
+  },
+  "selectMembers": {
+    "message": "Вибрати учасників"
+  },
+  "selectCollections": {
+    "message": "Вибрати збірки"
+  },
   "role": {
     "message": "Роль"
+  },
+  "removeMember": {
+    "message": "Вилучити учасника"
+  },
+  "collection": {
+    "message": "Збірка"
+  },
+  "noCollection": {
+    "message": "Немає збірки"
   },
   "canView": {
     "message": "Може переглядати"
@@ -5774,6 +6183,15 @@
   "canEditExceptPass": {
     "message": "Може редагувати, крім паролів"
   },
+  "noCollectionsAdded": {
+    "message": "Не додано жодної збірки"
+  },
+  "noMembersAdded": {
+    "message": "Не додано жодного учасника"
+  },
+  "noGroupsAdded": {
+    "message": "Не додано жодної групи"
+  },
   "group": {
     "message": "Група"
   },
@@ -5782,6 +6200,171 @@
   },
   "memberAccessAll": {
     "message": "Цей учасник має доступ і може редагувати всі елементи."
+  },
+  "domainVerification": {
+    "message": "Перевірка доменів"
+  },
+  "newDomain": {
+    "message": "Новий домен"
+  },
+  "noDomains": {
+    "message": "Немає доменів"
+  },
+  "noDomainsSubText": {
+    "message": "Під'єднання домену дозволяє учасникам не використовувати поле ідентифікатора SSO під час входу з SSO."
+  },
+  "verifyDomain": {
+    "message": "Підтвердити домен"
+  },
+  "reverifyDomain": {
+    "message": "Повторно підтвердити домен"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Копіювати TXT-запис для DNS"
+  },
+  "dnsTxtRecord": {
+    "message": "TXT-запис для DNS"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Скопіюйте і вставте TXT-запис у відповідне поле свого DNS-провайдера."
+  },
+  "domainNameInputHint": {
+    "message": "Зразок: mydomain.com. Для піддоменів потрібно підтвердити окремі записи."
+  },
+  "automaticDomainVerification": {
+    "message": "Автоматичне підтвердження доменів"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden намагатиметься підтвердити домен 3 рази впродовж 72 годин. Якщо не вдасться підтвердити домен, перевірте DNS-запис у вашого провайдера й підтвердьте його вручну. Якщо домен не буде підтверджено протягом 7 днів, його буде вилучено з вашої організації"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Неправильний формат введення. Правильний формат: mydomain.com. Для підтвердження піддоменів потрібно ввести окремі записи."
+  },
+  "removeDomain": {
+    "message": "Вилучити домен"
+  },
+  "removeDomainWarning": {
+    "message": "Вилучення домену – це незворотна дія. Ви дійсно хочете продовжити?"
+  },
+  "domainRemoved": {
+    "message": "Домен вилучено"
+  },
+  "domainSaved": {
+    "message": "Домен збережено"
+  },
+  "domainVerified": {
+    "message": "Домен підтверджено"
+  },
+  "duplicateDomainError": {
+    "message": "Не можна запитати той самий домен двічі."
+  },
+  "domainNotAvailable": {
+    "message": "Хтось вже використовує $DOMAIN$. Щоб продовжити, використайте інший домен.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ не підтверджено. Перевірте свій DNS-запис.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Підтверджено"
+  },
+  "domainStatusUnverified": {
+    "message": "Не підтверджено"
+  },
+  "domainNameTh": {
+    "message": "Ім'я"
+  },
+  "domainStatusTh": {
+    "message": "Стан"
+  },
+  "lastChecked": {
+    "message": "Востаннє перевірено"
+  },
+  "editDomain": {
+    "message": "Редагувати домен"
+  },
+  "domainFormInvalid": {
+    "message": "У формі є помилки, що потребують вашої уваги"
+  },
+  "addedDomain": {
+    "message": "Домен $DOMAIN$ додано",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Домен $DOMAIN$ вилучено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "Домен $DOMAIN$ підтверджено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "Домен $DOMAIN$ не підтверджено",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "membersColumnHeader": {
+    "message": "Учасник/Група"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Учасник"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Виберіть групи та учасників"
+  },
+  "selectGroups": {
+    "message": "Вибрати групи"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Дозволи, встановлені для учасника, вилучать дозволи, встановлені групою учасника"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "Не додано жодного учасника чи групи"
+  },
+  "deleted": {
+    "message": "Видалено"
+  },
+  "memberStatusFilter": {
+    "message": "Фільтр стану учасників"
+  },
+  "inviteMember": {
+    "message": "Запросити учасника"
+  },
+  "needsConfirmation": {
+    "message": "Потребує підтвердження"
+  },
+  "memberRole": {
+    "message": "Роль учасника"
   },
   "moreFromBitwarden": {
     "message": "Більше від Bitwarden"
@@ -5824,5 +6407,282 @@
         "example": "2"
       }
     }
+  },
+  "server": {
+    "message": "Сервер"
+  },
+  "exportData": {
+    "message": "Експортувати дані"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Експорт секретних даних організації"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Будуть експортовані лише дані менеджера секретів, пов'язані з $ORGANIZATION$. Елементи інших продуктів чи інших організацій не будуть включені.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Вивантаження файлу"
+  },
+  "acceptedFormats": {
+    "message": "Прийнятні формати:"
+  },
+  "copyPasteImportContents": {
+    "message": "Скопіюйте і вставте вміст імпорту:"
+  },
+  "or": {
+    "message": "або"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Керування ліцензіями й платежами"
+  },
+  "automaticSync": {
+    "message": "Автоматична синхронізація"
+  },
+  "manualUpload": {
+    "message": "Ручне вивантаження"
+  },
+  "manualUploadDesc": {
+    "message": "Якщо ви не хочете користуватися платіжною синхронізацією, вивантажте вашу ліцензію вручну."
+  },
+  "syncLicense": {
+    "message": "Синхронізувати ліцензію"
+  },
+  "licenseSyncSuccess": {
+    "message": "Ліцензію успішно синхронізовано"
+  },
+  "licenseUploadSuccess": {
+    "message": "Ліцензію успішно вивантажено"
+  },
+  "lastLicenseSync": {
+    "message": "Остання синхронізація ліцензії"
+  },
+  "billingSyncHelp": {
+    "message": "Допомога з платіжною синхронізацією"
+  },
+  "uploadLicense": {
+    "message": "Вивантажити ліцензію"
+  },
+  "projectPeopleDescription": {
+    "message": "Надайте групам або людям доступ до цього проєкту."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Введіть або виберіть людей або групи"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Надайте службовим обліковим записам доступ до цього проєкту."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Введіть або виберіть службові облікові записи"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Додайте людей або групи, щоб почати співпрацю"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Додайте службові облікові записи для надання доступу"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Надайте групам або людям доступ до цього службового облікового запису."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Призначити проєкти цьому службовому обліковому запису. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Додайте проєкти, щоб надати доступ"
+  },
+  "canReadWrite": {
+    "message": "Може читати й записувати"
+  },
+  "groupSlashUser": {
+    "message": "Група/Користувач"
+  },
+  "lowKdfIterations": {
+    "message": "Низький показник KDF-ітерацій"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Налаштуйте вищий рівень KDF-шифрування для вдосконалення безпеки облікового запису."
+  },
+  "changeKdfSettings": {
+    "message": "Змінити налаштування KDF"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Продовжуючи, ви вийдете з усіх активних сеансів. Необхідно буде повторно виконати вхід і пройти двоетапну перевірку. Перед зміною налаштувань шифрування ми рекомендуємо експортувати ваше сховище, щоб запобігти можливій втраті даних."
+  },
+  "secretsManagerBeta": {
+    "message": "Керування секретами (бета-версія)"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Дозвольте користувачам доступ до керування секретами безплатно, доки триває програма бета-тестування."
+  },
+  "userAccessSecretsManager": {
+    "message": "Цей користувач має доступ до бета-версії керування секретами"
+  },
+  "important": {
+    "message": "Важливо:"
+  },
+  "viewAll": {
+    "message": "Переглянути все"
+  },
+  "showingPortionOfTotal": {
+    "message": "Показано $PORTION$ з $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Розв'яжіть зазначені помилки та повторіть спробу."
+  },
+  "description": {
+    "message": "Опис"
+  },
+  "errorReadingImportFile": {
+    "message": "Під час спроби прочитання імпортованого файлу сталася помилка"
+  },
+  "accessedSecret": {
+    "message": "Доступ до секрету $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Створити секрет"
+  },
+  "createProject": {
+    "message": "Створити проєкт"
+  },
+  "createServiceAccount": {
+    "message": "Створити службовий обліковий запис"
+  },
+  "downloadThe": {
+    "message": "Завантажити",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Керування секретами CLI"
+  },
+  "importSecrets": {
+    "message": "Імпортувати секрети"
+  },
+  "getStarted": {
+    "message": "Початок роботи"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ завершено",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Відновити секрет"
+  },
+  "restoreSecrets": {
+    "message": "Відновити секрети"
+  },
+  "restoreSecretPrompt": {
+    "message": "Ви дійсно хочете відновити цей секрет?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Ви дійсно хочете відновити ці секрети?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Секрет відновлено"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Секрети відновлено"
+  },
+  "selectionIsRequired": {
+    "message": "Потрібен вибір."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Увімкніть доступ організації до керування секретами безплатно упродовж періоду бета-тестування. Користувачам можна надати доступ в бета-версії в меню учасників."
+  },
+  "secretsManagerEnable": {
+    "message": "Увімкнути керування секретами (бета-версія)"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Токени доступу все ще доступні"
+  },
+  "saPeopleWarningMessage": {
+    "message": "Вилучення людей зі службового облікового запису не вилучає створені ними токени доступу. З міркувань безпеки рекомендовано відкликати токени доступу, створені людьми, вилученими зі службового облікового запису."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Відкликати доступ до цього проєкту"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "Ця дія призведе до відкликання вашого доступу до цього проєкту."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Відкликати доступ до цього службового облікового запису"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "Ця дія призведе до відкликання вашого доступу до цього службового облікового запису."
+  },
+  "removeAccess": {
+    "message": "Відкликати доступ"
+  },
+  "checkForBreaches": {
+    "message": "Перевірити відомі витоки даних для цього пароля"
+  },
+  "exposedMasterPassword": {
+    "message": "Головний пароль викрито"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знайдено у витоку даних. Використовуйте унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати викритий пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабкий і викритий головний пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?"
+  },
+  "characterMinimum": {
+    "message": "Мінімум $LENGTH$ символів",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Довжина головного пароля має бути принаймні $LENGTH$ символів.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Відхилити"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

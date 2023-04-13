@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjälp & Feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hjälpcenter"
+  },
+  "communityForums": {
+    "message": "Utforska Bitwardens communityforum"
+  },
+  "contactSupport": {
+    "message": "Kontakta Bitwarden support"
+  },
   "sync": {
     "message": "Synkronisera"
   },
@@ -430,7 +439,14 @@
     "message": "Huvudlösenord måste anges igen."
   },
   "masterPasswordMinlength": {
-    "message": "Huvudlösenordet måste vara minst 8 tecken långt."
+    "message": "Huvudlösenordet måste vara minst $VALUE$ tecken långt.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Bekräftelsen för huvudlösenordet stämde ej."
@@ -960,7 +976,10 @@
     "message": "Utför automatisk ifyllnad om ett inloggningsformulär upptäcks när webbsidan laddas."
   },
   "experimentalFeature": {
-    "message": "Detta är för närvarande en experimentell funktion. Använd på egen risk."
+    "message": "Komprometterade eller ej betrodda webbplatser kan utnyttja automatisk ifyllnad vid sidladdning."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Läs mer om automatisk ifyllnad"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardinställning för autofyll för inloggningsobjekt"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Vederbörande"
   },
   "firstName": {
     "message": "Förnamn"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Objekt i inaktiverade organisationer är inte åtkomliga. Kontakta organisationens ägare för att få hjälp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Loggar in på $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "Kom ihåg e-postadress"
+  },
+  "loginWithDevice": {
+    "message": "Logga in med enhet"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "\"Logga in med enhet\" måste ställas in i inställningarna i Bitwardens app. Behöver du ett annat alternativ?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrycksfras"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten."
+  },
+  "resendNotification": {
+    "message": "Skicka avisering igen"
+  },
+  "viewAllLoginOptions": {
+    "message": "Visa alla inloggningsalternativ"
+  },
+  "notificationSentDevice": {
+    "message": "En avisering har skickats till din enhet."
+  },
+  "logInInitiated": {
+    "message": "Inloggning påbörjad"
+  },
+  "exposedMasterPassword": {
+    "message": "Huvudlösenordet har exponerats"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Huvudlösenordet är svagt och har exponerats"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?"
+  },
+  "checkForBreaches": {
+    "message": "Kontrollera kända dataintrång för detta lösenord"
+  },
+  "important": {
+    "message": "Viktigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Ditt huvudlösenord kan inte återställas om du glömmer det!"
+  },
+  "characterMinimum": {
+    "message": "Minst $LENGTH$ tecken",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Dina organisationspolicyer har aktiverat automatisk ifyllnad vid sidladdning."
+  },
+  "howToAutofill": {
+    "message": "Hur du fyller i automatiskt"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Välj ett objekt från denna sida eller använd genvägen: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Välj ett objekt från den här sidan eller ange en genväg i inställningarna."
+  },
+  "gotIt": {
+    "message": "Förstått"
+  },
+  "autofillSettings": {
+    "message": "Inställningar för automatisk ifyllnad"
+  },
+  "autofillShortcut": {
+    "message": "Tangentbordsgenväg för automatisk ifyllnad"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Genvägen för automatisk ifyllnad är inte satt. Ändra detta i webbläsarens inställningar."
+  },
+  "autofillShortcutText": {
+    "message": "Genvägen för automatisk ifyllnad är: $COMMAND$. Ändra detta i webbläsarens inställningar.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standardgenväg för automatisk ifyllnad: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 <bit-dialog dialogSize="default">
   <ng-container bitDialogTitle>
-    <span>{{ "createAccessToken" | i18n }}</span>
+    <span>{{ "newAccessToken" | i18n }}</span>
     <span class="tw-text-sm tw-normal-case tw-text-muted">
       {{ data.subTitle }}
     </span>
@@ -22,7 +22,7 @@
   </div>
 
   <div bitDialogFooter class="tw-flex tw-gap-2">
-    <button bitButton buttonType="primary" (click)="copyAccessToken()">
+    <button type="button" bitButton buttonType="primary" (click)="copyAccessToken()">
       <i class="bwi bwi-clone" aria-hidden="true"></i>
       {{ "copyToken" | i18n }}
     </button>

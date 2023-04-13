@@ -2,22 +2,24 @@
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { FolderService } from "@bitwarden/common/abstractions/folder/folder.service.abstraction";
-import { CipherType } from "@bitwarden/common/enums/cipherType";
-import { KdfType } from "@bitwarden/common/enums/kdfType";
+import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
+import { KdfType, DEFAULT_PBKDF2_ITERATIONS } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Cipher } from "@bitwarden/common/models/domain/cipher";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Folder } from "@bitwarden/common/models/domain/folder";
-import { Login } from "@bitwarden/common/models/domain/login";
 import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipher-with-ids.export";
-import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { FolderView } from "@bitwarden/common/models/view/folder.view";
-import { LoginView } from "@bitwarden/common/models/view/login.view";
 import { ExportService } from "@bitwarden/common/services/export.service";
+import { StateService } from "@bitwarden/common/services/state.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
+import { Folder } from "@bitwarden/common/vault/models/domain/folder";
+import { Login } from "@bitwarden/common/vault/models/domain/login";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import { BuildTestObject, GetUniqueString } from "../utils";
 
@@ -144,6 +146,7 @@ describe("ExportService", () => {
   let cipherService: SubstituteOf<CipherService>;
   let folderService: SubstituteOf<FolderService>;
   let cryptoService: SubstituteOf<CryptoService>;
+  let stateService: SubstituteOf<StateService>;
 
   beforeEach(() => {
     apiService = Substitute.for<ApiService>();
@@ -151,16 +154,20 @@ describe("ExportService", () => {
     cipherService = Substitute.for<CipherService>();
     folderService = Substitute.for<FolderService>();
     cryptoService = Substitute.for<CryptoService>();
+    stateService = Substitute.for<StateService>();
 
     folderService.getAllDecryptedFromState().resolves(UserFolderViews);
     folderService.getAllFromState().resolves(UserFolders);
+    stateService.getKdfType().resolves(KdfType.PBKDF2_SHA256);
+    stateService.getKdfConfig().resolves(new KdfConfig(DEFAULT_PBKDF2_ITERATIONS));
 
     exportService = new ExportService(
       folderService,
       cipherService,
       apiService,
       cryptoService,
-      cryptoFunctionService
+      cryptoFunctionService,
+      stateService
     );
   });
 
@@ -232,7 +239,7 @@ describe("ExportService", () => {
       });
 
       it("specifies kdfIterations", () => {
-        expect(exportObject.kdfIterations).toEqual(100000);
+        expect(exportObject.kdfIterations).toEqual(DEFAULT_PBKDF2_ITERATIONS);
       });
 
       it("has kdfType", () => {

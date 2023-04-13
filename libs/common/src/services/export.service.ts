@@ -1,31 +1,35 @@
 import * as papa from "papaparse";
 
+import { BitwardenPasswordProtectedFileFormat } from "@bitwarden/importer/src/importers/bitwarden/bitwarden-password-protected-types";
+
 import { ApiService } from "../abstractions/api.service";
-import { CipherService } from "../abstractions/cipher.service";
 import { CryptoService } from "../abstractions/crypto.service";
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
 import {
   ExportFormat,
   ExportService as ExportServiceAbstraction,
 } from "../abstractions/export.service";
-import { FolderService } from "../abstractions/folder/folder.service.abstraction";
-import { CipherType } from "../enums/cipherType";
-import { DEFAULT_KDF_ITERATIONS, KdfType } from "../enums/kdfType";
+import { StateService } from "../abstractions/state.service";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { Collection } from "../admin-console/models/domain/collection";
+import { CollectionDetailsResponse } from "../admin-console/models/response/collection.response";
+import { CollectionView } from "../admin-console/models/view/collection.view";
+import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { KdfType } from "../enums";
 import { Utils } from "../misc/utils";
-import { CipherData } from "../models/data/cipher.data";
-import { CollectionData } from "../models/data/collection.data";
-import { Cipher } from "../models/domain/cipher";
-import { Collection } from "../models/domain/collection";
-import { Folder } from "../models/domain/folder";
 import { CipherWithIdExport as CipherExport } from "../models/export/cipher-with-ids.export";
 import { CollectionWithIdExport as CollectionExport } from "../models/export/collection-with-id.export";
 import { EventExport } from "../models/export/event.export";
 import { FolderWithIdExport as FolderExport } from "../models/export/folder-with-id.export";
-import { CollectionDetailsResponse } from "../models/response/collection.response";
-import { CipherView } from "../models/view/cipher.view";
-import { CollectionView } from "../models/view/collection.view";
 import { EventView } from "../models/view/event.view";
-import { FolderView } from "../models/view/folder.view";
+import { CipherService } from "../vault/abstractions/cipher.service";
+import { FolderService } from "../vault/abstractions/folder/folder.service.abstraction";
+import { CipherType } from "../vault/enums/cipher-type";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { Cipher } from "../vault/models/domain/cipher";
+import { Folder } from "../vault/models/domain/folder";
+import { CipherView } from "../vault/models/view/cipher.view";
+import { FolderView } from "../vault/models/view/folder.view";
 
 export class ExportService implements ExportServiceAbstraction {
   constructor(
@@ -33,7 +37,8 @@ export class ExportService implements ExportServiceAbstraction {
     private cipherService: CipherService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
-    private cryptoFunctionService: CryptoFunctionService
+    private cryptoFunctionService: CryptoFunctionService,
+    private stateService: StateService
   ) {}
 
   async getExport(format: ExportFormat = "csv", organizationId?: string): Promise<string> {
@@ -53,24 +58,23 @@ export class ExportService implements ExportServiceAbstraction {
       ? await this.getOrganizationExport(organizationId, "json")
       : await this.getExport("json");
 
+    const kdfType: KdfType = await this.stateService.getKdfType();
+    const kdfConfig: KdfConfig = await this.stateService.getKdfConfig();
+
     const salt = Utils.fromBufferToB64(await this.cryptoFunctionService.randomBytes(16));
-    const kdfIterations = DEFAULT_KDF_ITERATIONS;
-    const key = await this.cryptoService.makePinKey(
-      password,
-      salt,
-      KdfType.PBKDF2_SHA256,
-      kdfIterations
-    );
+    const key = await this.cryptoService.makePinKey(password, salt, kdfType, kdfConfig);
 
     const encKeyValidation = await this.cryptoService.encrypt(Utils.newGuid(), key);
     const encText = await this.cryptoService.encrypt(clearText, key);
 
-    const jsonDoc: any = {
+    const jsonDoc: BitwardenPasswordProtectedFileFormat = {
       encrypted: true,
       passwordProtected: true,
       salt: salt,
-      kdfIterations: kdfIterations,
-      kdfType: KdfType.PBKDF2_SHA256,
+      kdfType: kdfType,
+      kdfIterations: kdfConfig.iterations,
+      kdfMemory: kdfConfig.memory,
+      kdfParallelism: kdfConfig.parallelism,
       encKeyValidation_DO_NOT_EDIT: encKeyValidation.encryptedString,
       data: encText.encryptedString,
     };

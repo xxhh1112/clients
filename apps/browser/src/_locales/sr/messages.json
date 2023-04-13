@@ -3,15 +3,15 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden - Бесплатни Менаџер Лозинки",
+    "message": "Bitwarden - бесплатни менаџер лозинки",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Сигурни и бесплатни менаџер лозинке за све ваше уређаје.",
+    "message": "Сигурни и бесплатни менаџер лозинки за све ваше уређаје.",
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Пријавите се или креирајте нови налог за приступ Сефу."
+    "message": "Пријавите се или креирајте нови налог за приступ сефу."
   },
   "createAccount": {
     "message": "Креирај налог"
@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Помоћ и подршка"
   },
+  "helpCenter": {
+    "message": "Bitwarden помоћни центар"
+  },
+  "communityForums": {
+    "message": "Претражити форуми заједнице Bitwarden-а"
+  },
+  "contactSupport": {
+    "message": "Контактирајте подршку Bitwarden-а"
+  },
   "sync": {
     "message": "Синхронизација"
   },
@@ -336,7 +345,7 @@
     "message": "Молимо вас да размотрите да нам помогнете уз добру оцену!"
   },
   "browserNotSupportClipboard": {
-    "message": "Ваш прегледач не подржава једноставно копирање у привремену меморију. Уместо тога копирајте га ручно."
+    "message": "Ваш прегледач не подржава једноставно копирање у клипборду. Уместо тога копирајте га ручно."
   },
   "verifyIdentity": {
     "message": "Потврдите идентитет"
@@ -430,7 +439,14 @@
     "message": "Поновно уписивање главне лозинке је неопходно."
   },
   "masterPasswordMinlength": {
-    "message": "Главна лозинка треба имати барем 8 карактера."
+    "message": "Главна лозинка мора бити дужине најмање $VALUE$ карактера.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Потврда главне лозинке се не подудара."
@@ -960,7 +976,10 @@
     "message": "Ако се открије образац за пријаву, извршите аутоматско попуњавање када се веб страница учита."
   },
   "experimentalFeature": {
-    "message": "Ово је тренутно експериментална способност. Користите на властиту одговорност."
+    "message": "Компромитоване или непоуздане веб локације могу да искористе ауто-пуњење при учитавању странице."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Сазнајте више о ауто-пуњење"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Подразумевано подешавање аутопуњења за пријаве"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Др"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Име"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Није могуће приступити ставкама у онемогућене организације. Обратите се власнику организације за помоћ."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Пријављивање на $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "Запамти имејл"
+  },
+  "loginWithDevice": {
+    "message": "Пријавите се са уређајем"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације. Потребна је друга опција?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Сигурносна фраза сефа"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Уверите се да је ваш сеф откључан и да се фраза отиска прста подудара на другом уређају."
+  },
+  "resendNotification": {
+    "message": "Поново послати обавештење"
+  },
+  "viewAllLoginOptions": {
+    "message": "Погледајте сав извештај у опције"
+  },
+  "notificationSentDevice": {
+    "message": "Обавештење је послато на ваш уређај."
+  },
+  "logInInitiated": {
+    "message": "Пријава је покренута"
+  },
+  "exposedMasterPassword": {
+    "message": "Изложена главна лозинка"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Лозинка је пронађена у случају повреде података. Користите јединствену лозинку да бисте заштитили свој налог. Да ли сте сигурни да желите да користите откривену лозинку?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слаба и изложена главна лозинка"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Идентификована је слаба лозинка и пронађена у упаду података. Користите јаку и јединствену лозинку да заштитите свој налог. Да ли сте сигурни да желите да користите ову лозинку?"
+  },
+  "checkForBreaches": {
+    "message": "Проверите познате упада података за ову лозинку"
+  },
+  "important": {
+    "message": "Важно:"
+  },
+  "masterPasswordHint": {
+    "message": "Ваша главна лозинка се не може повратити ако је заборавите!"
+  },
+  "characterMinimum": {
+    "message": "Минимум $LENGTH$ карактера",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Смернице ваше организације су укључиле ауто-пуњење при учитавању странице."
+  },
+  "howToAutofill": {
+    "message": "Како ауто-попуњавати"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Изаберите ставку са ове странице или користите пречицу: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Изаберите ставку са ове странице или поставите пречицу у подешавањима."
+  },
+  "gotIt": {
+    "message": "Разумем"
+  },
+  "autofillSettings": {
+    "message": "Подешавања Ауто-пуњења"
+  },
+  "autofillShortcut": {
+    "message": "Пречице Ауто-пуњења"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Пречица за ауто-попуњавање није подешена. Промените ово у подешавањима претраживача."
+  },
+  "autofillShortcutText": {
+    "message": "Пречица ауто-пуњења је: $COMMAND$. Промените ово у подешавањима претраживача.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Подразумевана пречица за ауто-пуњење: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

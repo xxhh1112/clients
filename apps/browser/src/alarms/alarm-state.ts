@@ -1,5 +1,5 @@
+import { clearClipboardAlarmName } from "../autofill/clipboard";
 import { BrowserApi } from "../browser/browserApi";
-import { clearClipboardAlarmName } from "../clipboard";
 import { uploadEventAlarmName } from "../tasks/upload-events-tasks";
 
 export const alarmKeys = [clearClipboardAlarmName, uploadEventAlarmName] as const;

@@ -1,8 +1,7 @@
 import * as child_process from "child_process";
 
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
 // eslint-disable-next-line
 const open = require("open");
@@ -149,5 +148,9 @@ export class CliPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage(): boolean {
     return false;
+  }
+
+  getAutofillKeyboardShortcut(): Promise<string> {
+    return null;
   }
 }

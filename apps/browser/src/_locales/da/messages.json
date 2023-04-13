@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjælp & feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hjælpecenter"
+  },
+  "communityForums": {
+    "message": "Tjek Bitwardens fællesskabsfora ud"
+  },
+  "contactSupport": {
+    "message": "Kontakt Bitwarden-support"
+  },
   "sync": {
     "message": "Synkronisér"
   },
@@ -430,7 +439,14 @@
     "message": "Hovedadgangskode kræves angivet igen."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedadgangskode skal være mindst 8 tegn."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -960,7 +976,10 @@
     "message": "Hvis der registreres en loginformular, så auto-udfyld, når websiden indlæses."
   },
   "experimentalFeature": {
-    "message": "Dette er i øjeblikket en eksperimentel funktion. Brug på egen risiko."
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardindstilling for autofyld for loginelementer"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Neutral"
   },
   "firstName": {
     "message": "Fornavn"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Elementer i suspenderede organisationer kan ikke tilgås. Kontakt din organisationsejer for at få hjælp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logger ind på $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "Husk e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Log ind med enhed"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log ind med enhed skal være opsat i indstillingerne i Bitwarden mobil-appen. Behov for en anden mulighed?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeraftrykssætning"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Sørg for, at din boks er oplåst, samt at Fingeraftrykssætningen på den anden enhed matcher."
+  },
+  "resendNotification": {
+    "message": "Gensend notifikation"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vis alle indlogningsmuligheder"
+  },
+  "notificationSentDevice": {
+    "message": "En notifikation er sendt til din enhed."
+  },
+  "logInInitiated": {
+    "message": "Indlogning påbegyndt"
+  },
+  "exposedMasterPassword": {
+    "message": "Kompromitteret hovedadgangskode"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Adgangskode fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at du vil bruge en kompromitteret adgangskode?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Svag eller kompromitteret hovedadgangskode"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Svag adgangskode identificeret og fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at at denne adgangskode skal bruges?"
+  },
+  "checkForBreaches": {
+    "message": "Tjek kendte datalæk for denne adgangskode"
+  },
+  "important": {
+    "message": "Vigtigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Hovedadgangskoden kan ikke gendannes, hvis den glemmes!"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ tegn",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Organisationspolitikkerne har aktiveret autoudfyldning ved sideindlæsning."
+  },
+  "howToAutofill": {
+    "message": "Sådan autoudfyldes"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vælg et element fra denne side eller brug genvejen: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vælg et element fra denne side eller opret en genvej i Indstillinger."
+  },
+  "gotIt": {
+    "message": "Forstået"
+  },
+  "autofillSettings": {
+    "message": "Autoudfyldelsesindstillinger"
+  },
+  "autofillShortcut": {
+    "message": "Autoudfyld-tastaturgenvej"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Autoudfyldningsgenvejen er ikke opsat. Ændr dette i browserens indstillinger."
+  },
+  "autofillShortcutText": {
+    "message": "Autoudfyldningsgenvejen er: $COMMAND$. Ændr dette i browserens indstillinger.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standard autoudfyldningsgenvej: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

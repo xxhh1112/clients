@@ -238,6 +238,9 @@
   "ms": {
     "message": "Mej"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "Hoofwagwoord moet weer intevoer word."
   },
   "masterPasswordMinlength": {
-    "message": "Hoofwagwoord moet ten minste 8 karakters lank wees."
+    "message": "Die Hoofwagwoord moet ten minste $VALUE$ karakters lank wees.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hoofwagwoordbevestiging stem nie ooreen nie."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontak ons"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Kry hulp"
@@ -1780,13 +1793,13 @@
     "message": "Gedeaktiveer"
   },
   "removePassword": {
-    "message": "Remove password"
+    "message": "Verwyder wagwoord"
   },
   "removedPassword": {
-    "message": "Password removed"
+    "message": "Wagwoord geverwydered"
   },
   "removePasswordConfirmation": {
-    "message": "Are you sure you want to remove the password?"
+    "message": "Is jy seker jy wil die wagwoord verwyder?"
   },
   "maxAccessCountReached": {
     "message": "Maks toegangsaantal bereik"
@@ -2025,9 +2038,6 @@
   "neverLockWarning": {
     "message": "Is u seker u wil die “Nooit”-opsie gebruik? Deur u vergrendelopsies op “Nooit” te stel word u kluis se enkripsie op u toestel bewaar. Indien u hierdie opsie gebruik moet u verseker dat u toestel behoorlik beskerm is."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Kluis"
   },
@@ -2058,8 +2068,138 @@
   "logInWithAnotherDevice": {
     "message": "Meld aan met 'n ander toestel"
   },
+  "logInInitiated": {
+    "message": "Aan tekening geïnisieer"
+  },
+  "notificationSentDevice": {
+    "message": "'n Kennisgewing was na jou toestel gestuur."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Maak asseblief seker dat jou kluis oopgesluit is en die Vingerafdrukfrase met die ander toestel vergelyk."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Vingerafdrukfrase"
+  },
+  "needAnotherOption": {
+    "message": "Aan teken met toestel moet opgestel word in die instellings van die Bitwarden toep. Nodig 'n ander opsie?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Beskou alle aantekenings opsies"
+  },
+  "resendNotification": {
+    "message": "Herstuur kennisgewing"
+  },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Tokkel karakter telling",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Probeer jy om aan te teken?"
+  },
+  "logInAttemptBy": {
+    "message": "Aantekenings poging deur $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Toestel Tiepe"
+  },
+  "ipAddress": {
+    "message": "IP adres"
+  },
+  "time": {
+    "message": "Tyd"
+  },
+  "confirmLogIn": {
+    "message": "Bevestig aantekening"
+  },
+  "denyLogIn": {
+    "message": "Weier aantekening"
+  },
+  "approveLoginRequests": {
+    "message": "Bevestig aantekenings versoeke"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Aantekening gebevestig vir $EMAIL$ op $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Jy het 'n aantekenings poging van 'n ander toestel gekeer. As dit inderdaad jy was, probeer om weer met die toestel aan te teken."
+  },
+  "justNow": {
+    "message": "Nou net"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Versoek $MINUTES$ minute gelede",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Aantekenings versoek het reeds versper."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Hierdie versoek is nie meer geldig nie."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Gebruik hierdie toestel om aantekenings versoeke, van ander toetstelle, goed te keer."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bevestig aantekenings poging vir $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Aan teken versoek"
+  },
+  "exposedMasterPassword": {
+    "message": "Ontblote Hoofwagwoord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Wagwoord gevind in data lekkasie. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n ontblote wagwoord wil gebruik?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Swak en Ontblote Hoofwagwoord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Swak wagwoord geidentifiseer en gevind in 'n data lekkasie. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?"
+  },
+  "checkForBreaches": {
+    "message": "Kontroleer bekende data lekkasies vir hierdie wagwoord"
+  },
+  "important": {
+    "message": "Belangrik:"
+  },
+  "masterPasswordHint": {
+    "message": "Jou hoofwagwoord kan nie herkry word as jy dit vergeet nie!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ karakters minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

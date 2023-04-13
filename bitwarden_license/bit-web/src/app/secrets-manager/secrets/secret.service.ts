@@ -10,6 +10,7 @@ import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-cr
 import { SecretListView } from "../models/view/secret-list.view";
 import { SecretProjectView } from "../models/view/secret-project.view";
 import { SecretView } from "../models/view/secret.view";
+import { BulkOperationStatus } from "../shared/dialogs/bulk-status-dialog.component";
 
 import { SecretRequest } from "./requests/secret.request";
 import { SecretListItemResponse } from "./responses/secret-list-item.response";
@@ -34,6 +35,7 @@ export class SecretService {
   async getBySecretId(secretId: string): Promise<SecretView> {
     const r = await this.apiService.send("GET", "/secrets/" + secretId, null, true, true);
     const secretResponse = new SecretResponse(r);
+
     return await this.createSecretView(secretResponse);
   }
 
@@ -63,8 +65,8 @@ export class SecretService {
     return await this.createSecretsListView(organizationId, results);
   }
 
-  async create(organizationId: string, secretView: SecretView, projectId?: string) {
-    const request = await this.getSecretRequest(organizationId, secretView, projectId);
+  async create(organizationId: string, secretView: SecretView) {
+    const request = await this.getSecretRequest(organizationId, secretView);
     const r = await this.apiService.send(
       "POST",
       "/organizations/" + organizationId + "/secrets",
@@ -81,21 +83,52 @@ export class SecretService {
     this._secret.next(await this.createSecretView(new SecretResponse(r)));
   }
 
-  async delete(secretIds: string[]) {
+  async delete(secrets: SecretListView[]): Promise<BulkOperationStatus[]> {
+    const secretIds = secrets.map((secret) => secret.id);
     const r = await this.apiService.send("POST", "/secrets/delete", secretIds, true, true);
 
-    const responseErrors: string[] = [];
-    r.data.forEach((element: { error: string }) => {
-      if (element.error) {
-        responseErrors.push(element.error);
-      }
+    this._secret.next(null);
+    return r.data.map((element: { id: string; error: string }) => {
+      const bulkOperationStatus = new BulkOperationStatus();
+      bulkOperationStatus.id = element.id;
+      bulkOperationStatus.name = secrets.find((secret) => secret.id == element.id).name;
+      bulkOperationStatus.errorMessage = element.error;
+      return bulkOperationStatus;
     });
+  }
 
-    // TODO waiting to hear back on how to display multiple errors.
-    // for now send as a list of strings to be displayed in toast.
-    if (responseErrors?.length >= 1) {
-      throw new Error(responseErrors.join(","));
-    }
+  async getTrashedSecrets(organizationId: string): Promise<SecretListView[]> {
+    const r = await this.apiService.send(
+      "GET",
+      "/secrets/" + organizationId + "/trash",
+      null,
+      true,
+      true
+    );
+
+    return await this.createSecretsListView(organizationId, new SecretWithProjectsListResponse(r));
+  }
+
+  async deleteTrashed(organizationId: string, secretIds: string[]) {
+    await this.apiService.send(
+      "POST",
+      "/secrets/" + organizationId + "/trash/empty",
+      secretIds,
+      true,
+      true
+    );
+
+    this._secret.next(null);
+  }
+
+  async restoreTrashed(organizationId: string, secretIds: string[]) {
+    await this.apiService.send(
+      "POST",
+      "/secrets/" + organizationId + "/trash/restore",
+      secretIds,
+      true,
+      true
+    );
 
     this._secret.next(null);
   }
@@ -106,8 +139,7 @@ export class SecretService {
 
   private async getSecretRequest(
     organizationId: string,
-    secretView: SecretView,
-    projectId?: string
+    secretView: SecretView
   ): Promise<SecretRequest> {
     const orgKey = await this.getOrganizationKey(organizationId);
     const request = new SecretRequest();
@@ -119,7 +151,10 @@ export class SecretService {
     request.key = key.encryptedString;
     request.value = value.encryptedString;
     request.note = note.encryptedString;
-    request.projectId = projectId;
+    request.projectIds = [];
+
+    secretView.projects?.forEach((e) => request.projectIds.push(e.id));
+
     return request;
   }
 
@@ -141,6 +176,16 @@ export class SecretService {
     secretView.value = value;
     secretView.note = note;
 
+    secretView.read = secretResponse.read;
+    secretView.write = secretResponse.write;
+
+    if (secretResponse.projects != null) {
+      secretView.projects = await this.decryptProjectsMappedToSecrets(
+        orgKey,
+        secretResponse.projects
+      );
+    }
+
     return secretView;
   }
 
@@ -150,7 +195,7 @@ export class SecretService {
   ): Promise<SecretListView[]> {
     const orgKey = await this.getOrganizationKey(organizationId);
 
-    const projectsMappedToSecretsView = this.decryptProjectsMappedToSecrets(
+    const projectsMappedToSecretsView = await this.decryptProjectsMappedToSecrets(
       orgKey,
       secrets.projects
     );
@@ -166,9 +211,15 @@ export class SecretService {
         );
         secretListView.creationDate = s.creationDate;
         secretListView.revisionDate = s.revisionDate;
-        secretListView.projects = (await projectsMappedToSecretsView).filter((p) =>
-          s.projects.includes(p.id)
+
+        const projectIds = s.projects?.map((p) => p.id);
+        secretListView.projects = projectsMappedToSecretsView.filter((p) =>
+          projectIds.includes(p.id)
         );
+
+        secretListView.read = s.read;
+        secretListView.write = s.write;
+
         return secretListView;
       })
     );

@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "協助與意見反應"
   },
+  "helpCenter": {
+    "message": "Bitwarden 說明中心"
+  },
+  "communityForums": {
+    "message": "瀏覽 Bitwarden 社群論壇"
+  },
+  "contactSupport": {
+    "message": "連絡 Bitwarden 客戶支援"
+  },
   "sync": {
     "message": "同步"
   },
@@ -430,7 +439,14 @@
     "message": "必須再次輸入主密碼。"
   },
   "masterPasswordMinlength": {
-    "message": "主密碼需要至少 8 個字元。"
+    "message": "主密碼需要至少 $VALUE$ 個字元。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "兩次填入的主密碼不相符。"
@@ -960,7 +976,10 @@
     "message": "網頁載入時如果偵測到登入表單，則執行自動填入。"
   },
   "experimentalFeature": {
-    "message": "這目前是一項實驗性功能。要使用需自行承擔風險。"
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "進一步瞭解「自動填入」功能"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "登入項目的預設自動填入設定"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "名"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "無法存取已停用組織中的項目。請聯絡您組織的擁有者以獲取協助。"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "正在登入至 $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "記住電子郵件地址"
+  },
+  "loginWithDevice": {
+    "message": "使用裝置登入"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "指紋短語"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+  },
+  "resendNotification": {
+    "message": "重新傳送通知"
+  },
+  "viewAllLoginOptions": {
+    "message": "檢視所有登入選項"
+  },
+  "notificationSentDevice": {
+    "message": "已傳送通知至您的裝置。"
+  },
+  "logInInitiated": {
+    "message": "登入已起始"
+  },
+  "exposedMasterPassword": {
+    "message": "已暴露的主密碼"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "強度不足且已暴露的主密碼"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "檢查外洩密碼資料庫中是否有此密碼"
+  },
+  "important": {
+    "message": "重要事項："
+  },
+  "masterPasswordHint": {
+    "message": "如果您忘記主密碼，沒有復原的方法！"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ 個字元以上",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Your organization policies have turned on auto-fill on page load."
+  },
+  "howToAutofill": {
+    "message": "如何自動填入"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Select an item from this page or set a shortcut in settings."
+  },
+  "gotIt": {
+    "message": "我知道了"
+  },
+  "autofillSettings": {
+    "message": "自動填入設定"
+  },
+  "autofillShortcut": {
+    "message": "自動填入鍵盤快速鍵"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "預設自動填入快速鍵：$COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

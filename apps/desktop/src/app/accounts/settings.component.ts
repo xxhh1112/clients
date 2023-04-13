@@ -10,9 +10,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { StorageLocation } from "@bitwarden/common/enums/storageLocation";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
+import { DeviceType, ThemeType, StorageLocation } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { flagEnabled } from "../../flags";
@@ -54,6 +52,7 @@ export class SettingsComponent implements OnInit {
   openAtLogin: boolean;
   requireEnableTray = false;
   showDuckDuckGoIntegrationOption = false;
+  approveLoginRequests = false;
 
   enableTrayText: string;
   enableTrayDescText: string;
@@ -190,6 +189,7 @@ export class SettingsComponent implements OnInit {
 
     const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
     this.pin = pinSet[0] || pinSet[1];
+    this.approveLoginRequests = await this.stateService.getApproveLoginRequests();
 
     // Account preferences
     this.enableFavicons = !(await this.stateService.getDisableFavicon());
@@ -460,5 +460,9 @@ export class SettingsComponent implements OnInit {
     await this.stateService.setEnableBrowserIntegrationFingerprint(
       this.enableBrowserIntegrationFingerprint
     );
+  }
+
+  async updateApproveLoginRequests() {
+    await this.stateService.setApproveLoginRequests(this.approveLoginRequests);
   }
 }

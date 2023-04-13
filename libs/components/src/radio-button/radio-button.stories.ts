@@ -12,21 +12,26 @@ const template = `
   <form [formGroup]="formObj">
     <bit-radio-group formControlName="radio" aria-label="Example radio group">
       <bit-label *ngIf="label">Group of radio buttons</bit-label>
-      <bit-radio-button [value]="TestValue.First" id="radio-first">First</bit-radio-button>
-      <bit-radio-button [value]="TestValue.Second" id="radio-second">Second</bit-radio-button>
-      <bit-radio-button [value]="TestValue.Third" id="radio-third">Third</bit-radio-button>
+      <bit-radio-button *ngFor="let option of TestValue | keyvalue" [ngClass]="{ 'tw-block': blockLayout }"
+        [value]="option.value" id="radio-{{option.key}}" [disabled]="optionDisabled?.includes(option.value)">
+        <bit-label>{{ option.key }}</bit-label>
+        <bit-hint *ngIf="blockLayout">This is a hint for the {{option.key}} option</bit-hint>
+      </bit-radio-button>
     </bit-radio-group>
   </form>`;
 
-enum TestValue {
-  First,
-  Second,
-  Third,
-}
+const TestValue = {
+  First: 0,
+  Second: 1,
+  Third: 2,
+};
+
+const reverseObject = (obj: Record<any, any>) =>
+  Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]));
 
 @Component({
   selector: "app-example",
-  template,
+  template: template,
 })
 class ExampleComponent {
   protected TestValue = TestValue;
@@ -35,18 +40,26 @@ class ExampleComponent {
     radio: TestValue.First,
   });
 
+  @Input() layout: "block" | "inline" = "inline";
+
   @Input() label: boolean;
 
-  @Input() set selected(value: TestValue) {
+  @Input() set selected(value: number) {
     this.formObj.patchValue({ radio: value });
   }
 
-  @Input() set disabled(disable: boolean) {
+  @Input() set groupDisabled(disable: boolean) {
     if (disable) {
       this.formObj.disable();
     } else {
       this.formObj.enable();
     }
+  }
+
+  @Input() optionDisabled: number[] = [];
+
+  get blockLayout() {
+    return this.layout === "block";
   }
 
   constructor(private formBuilder: FormBuilder) {}
@@ -81,27 +94,54 @@ export default {
   },
   args: {
     selected: TestValue.First,
-    disabled: false,
+    groupDisabled: false,
+    optionDisabled: null,
     label: true,
+    layout: "inline",
   },
   argTypes: {
     selected: {
-      options: [TestValue.First, TestValue.Second, TestValue.Third],
+      options: Object.values(TestValue),
       control: {
         type: "inline-radio",
-        labels: {
-          [TestValue.First]: "First",
-          [TestValue.Second]: "Second",
-          [TestValue.Third]: "Third",
-        },
+        labels: reverseObject(TestValue),
+      },
+    },
+    optionDisabled: {
+      options: Object.values(TestValue),
+      control: {
+        type: "check",
+        labels: reverseObject(TestValue),
+      },
+    },
+    layout: {
+      options: ["inline", "block"],
+      control: {
+        type: "inline-radio",
+        labels: ["inline", "block"],
       },
     },
   },
 } as Meta;
 
-const DefaultTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
+const storyTemplate = `<app-example [selected]="selected" [groupDisabled]="groupDisabled" [optionDisabled]="optionDisabled" [label]="label" [layout]="layout"></app-example>`;
+
+const InlineTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
   props: args,
-  template: `<app-example [selected]="selected" [disabled]="disabled" [label]="label"></app-example>`,
+  template: storyTemplate,
 });
 
-export const Default = DefaultTemplate.bind({});
+export const Inline = InlineTemplate.bind({});
+Inline.args = {
+  layout: "inline",
+};
+
+const BlockTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
+  props: args,
+  template: storyTemplate,
+});
+
+export const Block = BlockTemplate.bind({});
+Block.args = {
+  layout: "block",
+};
