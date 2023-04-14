@@ -112,9 +112,11 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
           this.accounts = await this.createSwitcherAccounts(accounts);
           try {
             this.activeAccount = {
-              id: await this.tokenService.getUserId(),
-              name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
-              email: await this.tokenService.getEmail(),
+              id: await this.tokenService.getUserIdFromAccessToken(),
+              name:
+                (await this.tokenService.getNameFromAccessToken()) ??
+                (await this.tokenService.getEmailFromAccessToken()),
+              email: await this.tokenService.getEmailFromAccessToken(),
               avatarColor: await this.stateService.getAvatarColor(),
             };
           } catch {

@@ -477,7 +477,7 @@ export class StateMigrationService<
           account?.profile?.hasPremiumPersonally === null &&
           account.tokens?.accessToken != null
         ) {
-          const decodedToken = await TokenService.decodeToken(account.tokens.accessToken);
+          const decodedToken = await TokenService.decodeJwtToken(account.tokens.accessToken);
           account.profile.hasPremiumPersonally = decodedToken.premium;
           await this.set(userId, account);
         }

@@ -41,9 +41,9 @@ export class NavbarComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.name = await this.tokenService.getName();
-    this.email = await this.tokenService.getEmail();
-    this.userId = await this.tokenService.getUserId();
+    this.name = await this.tokenService.getNameFromAccessToken();
+    this.email = await this.tokenService.getEmailFromAccessToken();
+    this.userId = await this.tokenService.getUserIdFromAccessToken();
     if (this.name == null || this.name.trim() === "") {
       this.name = this.email;
     }

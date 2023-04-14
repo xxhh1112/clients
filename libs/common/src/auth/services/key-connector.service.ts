@@ -38,7 +38,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
   }
 
   async userNeedsMigration() {
-    const loggedInUsingSso = await this.tokenService.getIsExternal();
+    const loggedInUsingSso = await this.tokenService.getIsExternalFromAccessToken();
     const requiredByOrganization = (await this.getManagingOrganization()) != null;
     const userIsNotUsingKeyConnector = !(await this.getUsesKeyConnector());
 
@@ -91,7 +91,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
 
     const k = await this.cryptoService.makeKey(
       Utils.fromBufferToB64(password),
-      await this.tokenService.getEmail(),
+      await this.tokenService.getEmailFromAccessToken(),
       kdf,
       kdfConfig
     );
