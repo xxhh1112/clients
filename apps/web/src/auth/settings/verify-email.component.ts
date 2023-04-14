@@ -27,7 +27,7 @@ export class VerifyEmailComponent {
 
   async verifyEmail(): Promise<void> {
     await this.tokenApiService.refreshAccessToken();
-    if (await this.tokenService.getEmailVerifiedFromAccessToken()) {
+    if (await this.tokenService.getEmailVerified()) {
       this.onVerified.emit(true);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("emailVerified"));
       return;

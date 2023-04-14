@@ -37,13 +37,12 @@ export class OrganizationNameBadgeComponent implements OnChanges {
       this.name = this.i18nService.t("me");
       this.color = await this.avatarService.loadColorFromState();
       if (this.color == null) {
-        const userId = await this.tokenService.getUserIdFromAccessToken();
+        const userId = await this.tokenService.getUserId();
         if (userId != null) {
           this.color = Utils.stringToColor(userId);
         } else {
           const userName =
-            (await this.tokenService.getNameFromAccessToken()) ??
-            (await this.tokenService.getEmailFromAccessToken());
+            (await this.tokenService.getName()) ?? (await this.tokenService.getEmail());
           this.color = Utils.stringToColor(userName.toUpperCase());
         }
       }
