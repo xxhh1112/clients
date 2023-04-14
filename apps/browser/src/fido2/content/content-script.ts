@@ -2,7 +2,7 @@ import { Message, MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
 const s = document.createElement("script");
-s.src = chrome.runtime.getURL("content/webauthn/page-script.js");
+s.src = chrome.runtime.getURL("content/fido2/page-script.js");
 (document.head || document.documentElement).appendChild(s);
 
 const messenger = Messenger.forDOMCommunication(window);

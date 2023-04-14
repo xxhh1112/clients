@@ -14,7 +14,7 @@ import {
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { Fido2KeyView } from "@bitwarden/common/webauthn/models/view/fido2-key.view";
+import { Fido2KeyView } from "@bitwarden/common/fido2/models/view/fido2-key.view";
 
 import { BrowserApi } from "../../../browser/browserApi";
 import {

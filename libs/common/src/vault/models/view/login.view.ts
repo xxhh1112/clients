@@ -3,7 +3,7 @@ import { Jsonify } from "type-fest";
 import { LoginLinkedId as LinkedId } from "../../../enums/linkedIdType";
 import { linkedFieldOption } from "../../../misc/linkedFieldOption.decorator";
 import { Utils } from "../../../misc/utils";
-import { Fido2KeyView } from "../../../webauthn/models/view/fido2-key.view";
+import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { Login } from "../domain/login";
 
 import { ItemView } from "./item.view";

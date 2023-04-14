@@ -89,11 +89,11 @@ import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-u
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
-import { Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-authenticator.service.abstraction";
-import { Fido2ClientService as Fido2ClientServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
-import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
-import { Fido2AuthenticatorService } from "@bitwarden/common/webauthn/services/fido2-authenticator.service";
-import { Fido2ClientService } from "@bitwarden/common/webauthn/services/fido2-client.service";
+import { Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-authenticator.service.abstraction";
+import { Fido2ClientService as Fido2ClientServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
+import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
+import { Fido2AuthenticatorService } from "@bitwarden/common/fido2/services/fido2-authenticator.service";
+import { Fido2ClientService } from "@bitwarden/common/fido2/services/fido2-client.service";
 
 import { BrowserOrganizationService } from "../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../admin-console/services/browser-policy.service";

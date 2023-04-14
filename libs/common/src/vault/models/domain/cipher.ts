@@ -5,7 +5,7 @@ import Domain from "../../../models/domain/domain-base";
 import { EncString } from "../../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
 import { InitializerKey } from "../../../services/cryptography/initializer-key";
-import { Fido2Key } from "../../../webauthn/models/domain/fido2-key";
+import { Fido2Key } from "../../../fido2/models/domain/fido2-key";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { CipherData } from "../data/cipher.data";

@@ -4,7 +4,7 @@ import { LinkedIdType } from "../../../enums/linkedIdType";
 import { InitializerMetadata } from "../../../interfaces/initializer-metadata.interface";
 import { View } from "../../../models/view/view";
 import { InitializerKey } from "../../../services/cryptography/initializer-key";
-import { Fido2KeyView } from "../../../webauthn/models/view/fido2-key.view";
+import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { LocalData } from "../data/local.data";

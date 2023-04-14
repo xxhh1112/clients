@@ -11,12 +11,12 @@ import {
 } from "rxjs";
 
 import { Utils } from "@bitwarden/common/misc/utils";
-import { UserRequestedFallbackAbortReason } from "@bitwarden/common/webauthn/abstractions/fido2-client.service.abstraction";
+import { UserRequestedFallbackAbortReason } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   Fido2UserInterfaceSession,
   NewCredentialParams,
-} from "@bitwarden/common/webauthn/abstractions/fido2-user-interface.service.abstraction";
+} from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";

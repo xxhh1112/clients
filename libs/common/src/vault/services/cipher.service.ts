@@ -19,7 +19,7 @@ import { EncString } from "../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { ErrorResponse } from "../../models/response/error.response";
 import { View } from "../../models/view/view";
-import { Fido2Key } from "../../webauthn/models/domain/fido2-key";
+import { Fido2Key } from "../../fido2/models/domain/fido2-key";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherType } from "../enums/cipher-type";

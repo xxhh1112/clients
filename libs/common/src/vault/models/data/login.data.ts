@@ -1,5 +1,5 @@
 import { LoginApi } from "../../../models/api/login.api";
-import { Fido2KeyData } from "../../../webauthn/models/data/fido2-key.data";
+import { Fido2KeyData } from "../../../fido2/models/data/fido2-key.data";
 
 import { LoginUriData } from "./login-uri.data";
 

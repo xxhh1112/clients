@@ -4,7 +4,7 @@ import { IdentityApi } from "../../../models/api/identity.api";
 import { LoginApi } from "../../../models/api/login.api";
 import { SecureNoteApi } from "../../../models/api/secure-note.api";
 import { BaseResponse } from "../../../models/response/base.response";
-import { Fido2KeyApi } from "../../../webauthn/models/api/fido2-key.api";
+import { Fido2KeyApi } from "../../../fido2/models/api/fido2-key.api";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 
 import { AttachmentResponse } from "./attachment.response";
