@@ -54,7 +54,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
-import { Fido2Component } from "../webauthn/popup/fido2/fido2.component";
+import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";

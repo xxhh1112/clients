@@ -32,7 +32,7 @@ import { ShareComponent } from "../vault/popup/components/vault/share.component"
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
-import { Fido2Component } from "../webauthn/popup/fido2/fido2.component";
+import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 
 import { DebounceNavigationService } from "./services/debounceNavigationService";
 import { AutofillComponent } from "./settings/autofill.component";
