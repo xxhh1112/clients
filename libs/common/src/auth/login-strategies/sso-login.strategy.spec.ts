@@ -56,7 +56,7 @@ describe("SsoLogInStrategy", () => {
 
     tokenService.getTwoFactorToken.mockResolvedValue(null);
     appIdService.getAppId.mockResolvedValue(deviceId);
-    tokenService.decodeAccessToken.mockResolvedValue({});
+    tokenService.decodeToken.mockResolvedValue({});
 
     ssoLogInStrategy = new SsoLogInStrategy(
       cryptoService,
