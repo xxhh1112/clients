@@ -14,9 +14,11 @@ navigator.credentials.create = async (
   options?: CredentialCreationOptions,
   abortController?: AbortController
 ): Promise<Credential> => {
-  if (options.publicKey?.authenticatorSelection?.authenticatorAttachment === "platform") {
-    return await browserCredentials.create(options);
-  }
+  // if (options.publicKey?.authenticatorSelection?.authenticatorAttachment === "platform") {
+  //   return await browserCredentials.create(options);
+  // }
+
+  console.log(options.publicKey);
 
   try {
     const response = await messenger.request(
