@@ -2,11 +2,9 @@ import * as FormData from "form-data";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import * as fe from "node-fetch";
 
-import { ApiHelperService } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { TokenApiService } from "@bitwarden/common/auth/abstractions/token-api.service.abstraction";
-import { ApiService } from "@bitwarden/common/services/api.service";
+import { ApiHelperServiceImplementation } from "@bitwarden/common/services/api-helper.service.implementation";
 
 (global as any).fetch = fe.default;
 (global as any).Request = fe.Request;
@@ -14,21 +12,14 @@ import { ApiService } from "@bitwarden/common/services/api.service";
 (global as any).Headers = fe.Headers;
 (global as any).FormData = FormData;
 
-export class NodeApiService extends ApiService {
+export class NodeApiHelperServiceImplementation extends ApiHelperServiceImplementation {
   constructor(
     platformUtilsService: PlatformUtilsService,
     environmentService: EnvironmentService,
-    apiHelperService: ApiHelperService,
-    tokenApiService: TokenApiService,
+    logoutCallback: (expired: boolean) => Promise<void>,
     customUserAgent: string = null
   ) {
-    super(
-      platformUtilsService,
-      environmentService,
-      apiHelperService,
-      tokenApiService,
-      customUserAgent
-    );
+    super(platformUtilsService, environmentService, logoutCallback, customUserAgent);
   }
 
   nativeFetch(request: Request): Promise<Response> {

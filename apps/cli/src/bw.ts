@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { ApiHelperService } from "@bitwarden/common/abstractions/api-helper.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { CollectionService } from "@bitwarden/common/admin-console/services/collection.service";
@@ -22,7 +23,7 @@ import { ClientType, KeySuffixOptions, LogLevelType } from "@bitwarden/common/en
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
-import { ApiHelperServiceImplementation } from "@bitwarden/common/services/api-helper.service.implementation";
+import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
@@ -68,7 +69,7 @@ import { CliPlatformUtilsService } from "./services/cli-platform-utils.service";
 import { ConsoleLogService } from "./services/console-log.service";
 import { I18nService } from "./services/i18n.service";
 import { LowdbStorageService } from "./services/lowdb-storage.service";
-import { NodeApiService } from "./services/node-api.service";
+import { NodeApiHelperServiceImplementation } from "./services/node-api-helper.service.implementation";
 import { NodeEnvSecureStorageService } from "./services/node-env-secure-storage.service";
 import { SendProgram } from "./tools/send/send.program";
 import { VaultProgram } from "./vault.program";
@@ -89,8 +90,8 @@ export class Main {
   cryptoService: CryptoService;
   tokenService: TokenService;
   appIdService: AppIdService;
-  apiHelperService: ApiHelperServiceImplementation;
-  apiService: NodeApiService;
+  nodeApiHelperService: ApiHelperService;
+  apiService: ApiService;
   environmentService: EnvironmentService;
   settingsService: SettingsService;
   cipherService: CipherService;
@@ -207,7 +208,7 @@ export class Main {
       this.platformUtilsService.getDeviceString().toUpperCase() +
       ")";
 
-    this.apiHelperService = new ApiHelperServiceImplementation(
+    this.nodeApiHelperService = new NodeApiHelperServiceImplementation(
       this.platformUtilsService,
       this.environmentService,
       async (expired: boolean) => await this.logout(),
@@ -219,13 +220,13 @@ export class Main {
       this.environmentService,
       this.tokenService,
       this.appIdService,
-      this.apiHelperService
+      this.nodeApiHelperService
     );
 
-    this.apiService = new NodeApiService(
+    this.apiService = new ApiService(
       this.platformUtilsService,
       this.environmentService,
-      this.apiHelperService,
+      this.nodeApiHelperService,
       this.tokenApiService,
       customUserAgent
     );
@@ -269,7 +270,7 @@ export class Main {
       this.stateService,
       this.encryptService,
       this.cipherFileUploadService,
-      this.apiHelperService
+      this.nodeApiHelperService
     );
 
     this.broadcasterService = new BroadcasterService();
@@ -404,7 +405,7 @@ export class Main {
     this.auditService = new AuditService(
       this.cryptoFunctionService,
       this.apiService,
-      this.apiHelperService
+      this.nodeApiHelperService
     );
     this.program = new Program(this);
     this.vaultProgram = new VaultProgram(this);
