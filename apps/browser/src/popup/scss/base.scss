@@ -623,6 +623,10 @@ app-fido2 {
       margin-top: 25px;
     }
   }
+
+  .box.list {
+    overflow-y: auto;
+  }
 }
 
 .login-with-device {
