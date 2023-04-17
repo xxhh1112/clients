@@ -95,6 +95,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const makeCredentialParams: Fido2AuthenticatorMakeCredentialsParams = {
       requireResidentKey:
         params.authenticatorSelection?.residentKey === "required" ||
+        params.authenticatorSelection?.residentKey === "preferred" ||
         (params.authenticatorSelection?.residentKey === undefined &&
           params.authenticatorSelection?.requireResidentKey === true),
       requireUserVerification: params.authenticatorSelection?.userVerification === "required",
