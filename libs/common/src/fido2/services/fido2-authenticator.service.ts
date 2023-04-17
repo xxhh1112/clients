@@ -191,6 +191,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       if (cipherOptions.length === 0) {
+        await userInterfaceSession.informCredentialNotFound();
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 

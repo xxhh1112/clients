@@ -10,13 +10,13 @@ import {
   takeUntil,
 } from "rxjs";
 
-import { Utils } from "@bitwarden/common/misc/utils";
 import { UserRequestedFallbackAbortReason } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   Fido2UserInterfaceSession,
   NewCredentialParams,
 } from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
@@ -78,6 +78,9 @@ export type BrowserFido2Message = { sessionId: string } & (
   | {
       type: "InformExcludedCredentialRequest";
       existingCipherIds: string[];
+    }
+  | {
+      type: "InformCredentialNotFoundRequest";
     }
   | {
       type: "AbortRequest";
@@ -234,6 +237,16 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       type: "InformExcludedCredentialRequest",
       sessionId: this.sessionId,
       existingCipherIds,
+    };
+
+    await this.send(data);
+    await this.receive("AbortResponse");
+  }
+
+  async informCredentialNotFound(): Promise<void> {
+    const data: BrowserFido2Message = {
+      type: "InformCredentialNotFoundRequest",
+      sessionId: this.sessionId,
     };
 
     await this.send(data);

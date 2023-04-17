@@ -46,6 +46,14 @@
         </div>
       </div>
     </ng-container>
+    <ng-container *ngIf="data.type == 'InformCredentialNotFoundRequest'">
+      You do not have a matching login for this site.
+      <div class="box list">
+        <div class="box-content">
+          <app-cipher-row *ngFor="let cipher of ciphers" [cipher]="cipher"></app-cipher-row>
+        </div>
+      </div>
+    </ng-container>
     <button type="button" class="btn btn-outline-secondary" (click)="abort(true)">
       Use browser built-in
     </button>

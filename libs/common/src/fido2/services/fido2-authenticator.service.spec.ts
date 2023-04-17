@@ -218,7 +218,7 @@ describe("FidoAuthenticatorService", () => {
       });
 
       /** Devation: Organization ciphers are not checked against excluded credentials, even if the user has access to them. */
-      it.only("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
+      it("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
         excludedCipherView.organizationId = "someOrganizationId";
 
@@ -597,24 +597,35 @@ describe("FidoAuthenticatorService", () => {
         });
       });
 
-      /** Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation. */
-      it("should throw error if no credential exists", async () => {
+      /**
+       * Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation.
+       * Deviation: We do not throw error but instead inform the user and allow the user to fallback to browser implementation.
+       **/
+      it("should inform user if no credential exists", async () => {
         cipherService.getAllDecrypted.mockResolvedValue([]);
+        userInterfaceSession.informCredentialNotFound.mockResolvedValue();
 
-        const result = async () => await authenticator.getAssertion(params);
+        try {
+          await authenticator.getAssertion(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
 
-        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+        expect(userInterfaceSession.informCredentialNotFound).toHaveBeenCalled();
       });
 
-      it("should throw error if credential exists but rpId does not match", async () => {
+      it("should inform user if credential exists but rpId does not match", async () => {
         const cipher = await createCipherView({ type: CipherType.Login });
         cipher.login.fido2Key.nonDiscoverableId = credentialId;
         cipher.login.fido2Key.rpId = "mismatch-rpid";
         cipherService.getAllDecrypted.mockResolvedValue([cipher]);
+        userInterfaceSession.informCredentialNotFound.mockResolvedValue();
 
-        const result = async () => await authenticator.getAssertion(params);
+        try {
+          await authenticator.getAssertion(params);
+          // eslint-disable-next-line no-empty
+        } catch {}
 
-        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
+        expect(userInterfaceSession.informCredentialNotFound).toHaveBeenCalled();
       });
     });
 
