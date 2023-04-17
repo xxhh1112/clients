@@ -296,7 +296,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     }
 
     if (ids.length === 0) {
-      return undefined;
+      return [];
     }
 
     const ciphers = await this.cipherService.getAllDecrypted();
