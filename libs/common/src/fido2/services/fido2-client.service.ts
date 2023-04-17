@@ -41,9 +41,9 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     const parsedOrigin = parse(params.origin, { allowPrivateDomains: true });
-    const rpId = params.rp.id ?? parsedOrigin.domain;
+    const rpId = params.rp.id ?? parsedOrigin.hostname;
 
-    if (parsedOrigin.domain == undefined || !params.origin.startsWith("https://")) {
+    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
 
@@ -161,9 +161,9 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     const parsedOrigin = parse(params.origin, { allowPrivateDomains: true });
-    const rpId = params.rpId ?? parsedOrigin.domain;
+    const rpId = params.rpId ?? parsedOrigin.hostname;
 
-    if (parsedOrigin.domain == undefined || !params.origin.startsWith("https://")) {
+    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
 
