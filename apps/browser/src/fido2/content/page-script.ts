@@ -18,7 +18,7 @@ navigator.credentials.create = async (
   //   return await browserCredentials.create(options);
   // }
 
-  console.log(options.publicKey);
+  console.log("navigator.credentials.create", options.publicKey);
 
   try {
     const response = await messenger.request(
@@ -49,7 +49,9 @@ navigator.credentials.create = async (
     return mappedResult;
   } catch (error) {
     if (error && error.fallbackRequested) {
-      return await browserCredentials.create(options);
+      const browserResponse = await browserCredentials.create(options);
+      console.log("browserResponse", browserResponse);
+      return browserResponse;
     }
 
     throw error;
@@ -60,6 +62,7 @@ navigator.credentials.get = async (
   options?: CredentialRequestOptions,
   abortController?: AbortController
 ): Promise<Credential> => {
+  console.log("navigator.credentials.get()", options);
   try {
     const response = await messenger.request(
       {
@@ -70,16 +73,19 @@ navigator.credentials.get = async (
       abortController
     );
 
+    console.log("Response from background", response);
+
     if (response.type !== MessageType.CredentialGetResponse) {
       throw new Error("Something went wrong.");
     }
 
-    console.log(response.result);
-
     return WebauthnUtils.mapCredentialAssertResult(response.result);
   } catch (error) {
+    console.log("Error from background", error);
     if (error && error.fallbackRequested) {
-      return await browserCredentials.get(options);
+      const browserResponse = await browserCredentials.get(options);
+      console.log("browserResponse", browserResponse);
+      return browserResponse;
     }
 
     throw error;
