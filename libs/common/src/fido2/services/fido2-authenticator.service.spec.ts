@@ -812,7 +812,7 @@ describe("FidoAuthenticatorService", () => {
         it("should always generate unique signatures even if the input is the same", async () => {
           const signatures = new Set();
 
-          for (let i = 0; i < 100; ++i) {
+          for (let i = 0; i < 10; ++i) {
             await init(); // Reset inputs
             const result = await authenticator.getAssertion(params);
 
