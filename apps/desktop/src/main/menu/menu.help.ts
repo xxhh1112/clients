@@ -1,7 +1,8 @@
 import { shell, MenuItemConstructorOptions } from "electron";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { isMacAppStore, isWindowsStore } from "@bitwarden/electron/utils";
+
+import { isMacAppStore, isWindowsStore } from "../../utils";
 
 import { AboutMenu } from "./menu.about";
 import { IMenubarMenu } from "./menubar";
@@ -15,8 +16,7 @@ export class HelpMenu implements IMenubarMenu {
 
   get items(): MenuItemConstructorOptions[] {
     const items = [
-      this.getHelp,
-      this.contactUs,
+      this.helpAndFeedback,
       this.fileBugReport,
       this.legal,
       this.separator,
@@ -44,18 +44,10 @@ export class HelpMenu implements IMenubarMenu {
     this._aboutMenu = aboutMenu;
   }
 
-  private get contactUs(): MenuItemConstructorOptions {
+  private get helpAndFeedback(): MenuItemConstructorOptions {
     return {
-      id: "contactUs",
-      label: this.localize("contactUs"),
-      click: () => shell.openExternal("https://bitwarden.com/contact"),
-    };
-  }
-
-  private get getHelp(): MenuItemConstructorOptions {
-    return {
-      id: "getHelp",
-      label: this.localize("getHelp"),
+      id: "helpAndFeedback",
+      label: this.localize("helpAndFeedback"),
       click: () => shell.openExternal("https://bitwarden.com/help"),
     };
   }
@@ -165,6 +157,7 @@ export class HelpMenu implements IMenubarMenu {
       {
         id: "android",
         label: "Android",
+        visible: !isMacAppStore(), // Apple Guideline 2.3.10 - Accurate Metadata
         click: () => {
           shell.openExternal(
             "https://play.google.com/store/apps/" + "details?id=com.x8bit.bitwarden"

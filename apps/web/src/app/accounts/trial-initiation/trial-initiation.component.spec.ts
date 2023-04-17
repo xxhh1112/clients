@@ -11,13 +11,13 @@ import { BehaviorSubject, of } from "rxjs";
 import { I18nPipe } from "@bitwarden/angular/pipes/i18n.pipe";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PlanType } from "@bitwarden/common/enums/planType";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
+import { PlanType } from "@bitwarden/common/billing/enums";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 
 import { RouterService } from "../../core";
 
@@ -51,7 +51,7 @@ describe("TrialInitiationComponent", () => {
             component: BlankComponent,
           },
           {
-            path: `organizations/${testOrgId}/manage/people`,
+            path: `organizations/${testOrgId}/manage/members`,
             component: BlankComponent,
           },
         ]),
@@ -168,8 +168,9 @@ describe("TrialInitiationComponent", () => {
     it("should set org variable to be enterprise and plan to EnterpriseAnnually if org param is enterprise", fakeAsync(() => {
       mockQueryParams.next({ org: "enterprise" });
       tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
       fixture.detectChanges();
-      component.ngOnInit();
       expect(component.org).toBe("enterprise");
       expect(component.plan).toBe(PlanType.EnterpriseAnnually);
     }));
@@ -182,13 +183,33 @@ describe("TrialInitiationComponent", () => {
       expect(component.org).toBe("");
       expect(component.accountCreateOnly).toBe(true);
     }));
-    it("should set the org to be families and plan to FamiliesAnnually if org param is invalid ", fakeAsync(async () => {
+    it("should not set the org if org param is invalid ", fakeAsync(async () => {
       mockQueryParams.next({ org: "hahahaha" });
       tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(component.org).toBe("");
+      expect(component.accountCreateOnly).toBe(true);
+    }));
+    it("should set the layout variable if layout param is valid ", fakeAsync(async () => {
+      mockQueryParams.next({ layout: "teams1" });
+      tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(component.layout).toBe("teams1");
+      expect(component.accountCreateOnly).toBe(false);
+    }));
+    it("should not set the layout variable and leave as 'default' if layout param is invalid ", fakeAsync(async () => {
+      mockQueryParams.next({ layout: "asdfasdf" });
+      tick(); // wait for resolution
+      fixture = TestBed.createComponent(TrialInitiationComponent);
+      component = fixture.componentInstance;
       fixture.detectChanges();
       component.ngOnInit();
-      expect(component.org).toBe("families");
-      expect(component.plan).toBe(PlanType.FamiliesAnnually);
+      expect(component.layout).toBe("default");
+      expect(component.accountCreateOnly).toBe(true);
     }));
   });
 
@@ -280,7 +301,7 @@ describe("TrialInitiationComponent", () => {
     describe("navigateToOrgVault", () => {
       it("should call verticalStepper.previous()", fakeAsync(() => {
         component.navigateToOrgInvite();
-        expect(routerSpy).toHaveBeenCalledWith(["organizations", testOrgId, "manage", "people"]);
+        expect(routerSpy).toHaveBeenCalledWith(["organizations", testOrgId, "manage", "members"]);
       }));
     });
   });

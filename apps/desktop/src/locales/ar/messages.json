@@ -3,7 +3,7 @@
     "message": "Bitwarden"
   },
   "filters": {
-    "message": "فلاتر"
+    "message": "عوامل التصفية"
   },
   "allItems": {
     "message": "كافة العناصر"
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "آنسة"
+  },
+  "mx": {
+    "message": "ماكس"
   },
   "dr": {
     "message": "د"
@@ -539,7 +542,14 @@
     "message": "مطلوب إعادة كتابة كلمة المرور الرئيسية."
   },
   "masterPasswordMinlength": {
-    "message": "يجب أن تكون كلمة المرور الرئيسية أكثر من 8 أحرف."
+    "message": "كلمة المرور الرئيسية يجب أن تكون على الأقل $VALUE$ حرفاً.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "لا يتطابق تأكيد كلمة المرور مع كلمة المرور."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "اتصل بنا"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "الحصول على المساعدة"
@@ -1779,6 +1792,15 @@
   "disabled": {
     "message": "معطّل"
   },
+  "removePassword": {
+    "message": "إزالة كلمة المرور"
+  },
+  "removedPassword": {
+    "message": "تمت إزالة كلمة المرور"
+  },
+  "removePasswordConfirmation": {
+    "message": "هل أنت متأكد من أنك تريد إزالة كلمة المرور؟"
+  },
   "maxAccessCountReached": {
     "message": "تم بلوغ الحد الأقصى لعدد الدخول"
   },
@@ -2016,9 +2038,6 @@
   "neverLockWarning": {
     "message": "هل أنت متأكد من أنك تريد استخدام خيار \"مطلقا\"؟ إعداد خيارات القفل إلى \"مطلقا\" يخزن مفتاح تشفير المستودع الخاص بك على جهازك. إذا كنت تستخدم هذا الخيار، يجب أن تتأكد من الحفاظ على حماية جهازك بشكل صحيح."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "الخزنة"
   },
@@ -2048,5 +2067,139 @@
   },
   "logInWithAnotherDevice": {
     "message": "تسجيل الدخول باستخدام جهاز آخر"
+  },
+  "logInInitiated": {
+    "message": "بدء تسجيل الدخول"
+  },
+  "notificationSentDevice": {
+    "message": "تم إرسال إشعار إلى جهازك."
+  },
+  "fingerprintMatchInfo": {
+    "message": "الرجاء التأكد من أن المخزن الخاص بك غير مقفل وأن عبارة بصمة الإصبع تطابق الجهاز الآخر."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "عبارة بصمة الإصبع"
+  },
+  "needAnotherOption": {
+    "message": "تسجيل الدخول باستخدام الجهاز يجب أن يتم إعداده في إعدادات تطبيق Bitwarden. هل تحتاج إلى خيار آخر؟"
+  },
+  "viewAllLoginOptions": {
+    "message": "عرض جميع خيارات تسجيل الدخول"
+  },
+  "resendNotification": {
+    "message": "إعادة إرسال الإشعار"
+  },
+  "toggleCharacterCount": {
+    "message": "تبديل عدد الأحرف",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "هل تحاول تسجيل الدخول؟"
+  },
+  "logInAttemptBy": {
+    "message": "محاولة تسجيل الدخول بواسطة $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "نوع الجهاز"
+  },
+  "ipAddress": {
+    "message": "عنوان IP"
+  },
+  "time": {
+    "message": "الوقت"
+  },
+  "confirmLogIn": {
+    "message": "تأكيد تسجيل الدخول"
+  },
+  "denyLogIn": {
+    "message": "رفض تسجيل الدخول"
+  },
+  "approveLoginRequests": {
+    "message": "الموافقة على طلبات تسجيل الدخول"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "تم تأكيد تسجيل الدخول لـ $EMAIL$ في $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "لقد رفضت محاولة تسجيل الدخول من جهاز آخر. إذا كان هذا بالفعل أنت ، حاول تسجيل الدخول مرة أخرى باستخدام الجهاز."
+  },
+  "justNow": {
+    "message": "للتو الآن"
+  },
+  "requestedXMinutesAgo": {
+    "message": "طلب قبل $MINUTES$ دقائق",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "لقد انتهت صلاحية طلب تسجيل الدخول."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "هذا الطلب لم يعد صالحًا."
+  },
+  "approveLoginRequestDesc": {
+    "message": "استخدم هذا الجهاز للموافقة على طلبات تسجيل الدخول من الأجهزة الأخرى."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "تأكيد محاولة تسجيل الدخول لـ $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "طلب تسجيل الدخول"
+  },
+  "exposedMasterPassword": {
+    "message": "كلمة المرور الرئيسية مكشوفة"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "كلمة المرور موجودة في خرق البيانات. استخدم كلمة مرور فريدة لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة مرور مكشوفة؟"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "كلمة المرور الرئيسية ضعيفة ومكشوفة"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "كلمة مرور ضعيفة محددة وموجودة في خرق البيانات. استخدم كلمة مرور قوية وفريدة لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة المرور هذه؟"
+  },
+  "checkForBreaches": {
+    "message": "تحقق من خروقات البيانات المعروفة لكلمة المرور هذه"
+  },
+  "important": {
+    "message": "مهم:"
+  },
+  "masterPasswordHint": {
+    "message": "لا يمكن استعادة كلمة المرور الرئيسية إذا نسيتها!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ حرف أدنى",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

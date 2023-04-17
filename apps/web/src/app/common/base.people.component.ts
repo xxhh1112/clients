@@ -11,16 +11,18 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
-import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+  ProviderUserStatusType,
+  ProviderUserType,
+} from "@bitwarden/common/admin-console/enums";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/models/response/organization-user.response";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
-import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
+import { OrganizationUserView } from "../admin-console/organizations/core/views/organization-user.view";
+import { UserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 
 type StatusType = OrganizationUserStatusType | ProviderUserStatusType;
 
@@ -28,7 +30,7 @@ const MaxCheckedCount = 500;
 
 @Directive()
 export abstract class BasePeopleComponent<
-  UserType extends ProviderUserUserDetailsResponse | OrganizationUserUserDetailsResponse
+  UserType extends ProviderUserUserDetailsResponse | OrganizationUserView
 > {
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
   confirmModalRef: ViewContainerRef;
@@ -110,7 +112,7 @@ export abstract class BasePeopleComponent<
   ) {}
 
   abstract edit(user: UserType): void;
-  abstract getUsers(): Promise<ListResponse<UserType>>;
+  abstract getUsers(): Promise<ListResponse<UserType> | UserType[]>;
   abstract deleteUser(id: string): Promise<void>;
   abstract revokeUser(id: string): Promise<void>;
   abstract restoreUser(id: string): Promise<void>;
@@ -125,9 +127,14 @@ export abstract class BasePeopleComponent<
       this.statusMap.set(status, []);
     }
 
-    this.allUsers = response.data != null && response.data.length > 0 ? response.data : [];
+    if (response instanceof ListResponse) {
+      this.allUsers = response.data != null && response.data.length > 0 ? response.data : [];
+    } else if (Array.isArray(response)) {
+      this.allUsers = response;
+    }
+
     this.allUsers.sort(
-      Utils.getSortFunction<ProviderUserUserDetailsResponse | OrganizationUserUserDetailsResponse>(
+      Utils.getSortFunction<ProviderUserUserDetailsResponse | OrganizationUserView>(
         this.i18nService,
         "email"
       )
@@ -176,7 +183,7 @@ export abstract class BasePeopleComponent<
     this.didScroll = this.pagedUsers.length > this.pageSize;
   }
 
-  checkUser(user: OrganizationUserUserDetailsResponse, select?: boolean) {
+  checkUser(user: UserType, select?: boolean) {
     (user as any).checked = select == null ? !(user as any).checked : select;
   }
 
@@ -401,6 +408,12 @@ export abstract class BasePeopleComponent<
       this.users.splice(index, 1);
       this.resetPaging();
     }
+
+    index = this.allUsers.indexOf(user);
+    if (index > -1) {
+      this.allUsers.splice(index, 1);
+    }
+
     if (this.statusMap.has(user.status)) {
       index = this.statusMap.get(user.status).indexOf(user);
       if (index > -1) {

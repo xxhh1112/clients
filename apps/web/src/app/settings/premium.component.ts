@@ -7,11 +7,11 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
-import { TokenService } from "@bitwarden/common/abstractions/token.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { PaymentComponent } from "./payment.component";
-import { TaxInfoComponent } from "./tax-info.component";
+import { PaymentComponent } from "../billing/settings/payment.component";
+import { TaxInfoComponent } from "../billing/settings/tax-info.component";
 
 @Component({
   selector: "app-premium",
@@ -24,6 +24,7 @@ export class PremiumComponent implements OnInit {
   canAccessPremium = false;
   selfHosted = false;
   premiumPrice = 10;
+  familyPlanMaxUserCount = 6;
   storageGbPrice = 4;
   additionalStorage = 0;
 

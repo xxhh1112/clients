@@ -1,11 +1,14 @@
 import { Component, ContentChild, Directive } from "@angular/core";
 
-@Directive({ selector: "[bit-dialog-icon]" })
+import { fadeIn } from "../animations";
+
+@Directive({ selector: "[bitDialogIcon]" })
 export class IconDirective {}
 
 @Component({
   selector: "bit-simple-dialog",
   templateUrl: "./simple-dialog.component.html",
+  animations: [fadeIn],
 })
 export class SimpleDialogComponent {
   @ContentChild(IconDirective) icon!: IconDirective;

@@ -26,6 +26,11 @@
     }
   }
 
+  &.callout-half {
+    font-weight: bold;
+    max-width: 50%;
+  }
+
   &:hover:not([disabled]) {
     cursor: pointer;
 
@@ -65,7 +70,7 @@
 
   &.block {
     display: block;
-    width: calc(100% - 20px);
+    width: calc(100% - 10px);
     margin: 0 auto;
   }
 
@@ -90,7 +95,7 @@
 
 button.box-content-row {
   display: block;
-  width: calc(100% - 20px);
+  width: calc(100% - 10px);
   text-align: left;
   border-color: none;
 

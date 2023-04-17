@@ -6,18 +6,10 @@
 </app-callout>
 <div class="card card-generated bg-light my-4">
   <div class="card-body">
-    <div
-      *ngIf="type === 'password'"
-      class="generated-wrapper"
-      [innerHTML]="password | colorPassword"
+    <bit-color-password
+      [password]="type === 'password' ? password : username"
       appSelectCopy
-    ></div>
-    <div
-      *ngIf="type === 'username'"
-      class="generated-wrapper"
-      [innerHTML]="username | colorPassword"
-      appSelectCopy
-    ></div>
+    ></bit-color-password>
   </div>
 </div>
 <div class="form-group" role="radiogroup" aria-labelledby="typeHeading">
@@ -299,7 +291,7 @@
           id="duckduckgo-apikey"
           class="form-control"
           type="password"
-          name="DuckDudkGoApiKey"
+          name="DuckDuckGoApiKey"
           [(ngModel)]="usernameOptions.forwardedDuckDuckGoToken"
           (blur)="saveUsernameOptions()"
         />
@@ -407,8 +399,8 @@
     <button
       type="button"
       class="btn btn-submit btn-primary"
-      (click)="regenerate()"
-      [disabled]="form.loading"
+      (click)="$any(form).loading ? false : regenerate()"
+      [attr.aria-disabled]="$any(form).loading ? 'true' : null"
     >
       <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
       <span>{{ "regenerateUsername" | i18n }}</span>

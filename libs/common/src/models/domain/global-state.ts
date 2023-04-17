@@ -1,7 +1,6 @@
-import { StateVersion } from "../../enums/stateVersion";
-import { ThemeType } from "../../enums/themeType";
+import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
+import { StateVersion, ThemeType } from "../../enums";
 
-import { EnvironmentUrls } from "./environment-urls";
 import { WindowState } from "./window-state";
 
 export class GlobalState {

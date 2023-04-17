@@ -4,11 +4,11 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { TokenService } from "@bitwarden/common/abstractions/token.service";
-import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Account } from "@bitwarden/common/models/domain/account";
 
@@ -16,6 +16,7 @@ type ActiveAccount = {
   id: string;
   name: string;
   email: string;
+  avatarColor: string;
 };
 
 export class SwitcherAccount extends Account {
@@ -26,6 +27,8 @@ export class SwitcherAccount extends Account {
         "https://bitwarden.com"
     );
   }
+
+  avatarColor: string;
 
   private removeWebProtocolFromString(urlString: string) {
     const regex = /http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g;
@@ -112,6 +115,7 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
               id: await this.tokenService.getUserId(),
               name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
               email: await this.tokenService.getEmail(),
+              avatarColor: await this.stateService.getAvatarColor(),
             };
           } catch {
             this.activeAccount = undefined;
@@ -162,6 +166,9 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
         userId: userId,
       });
       switcherAccounts[userId] = new SwitcherAccount(baseAccounts[userId]);
+      switcherAccounts[userId].avatarColor = await this.stateService.getAvatarColor({
+        userId: userId,
+      });
     }
     return switcherAccounts;
   }

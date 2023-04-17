@@ -1,6 +1,9 @@
 import { BehaviorSubject } from "rxjs";
 
-import { StateService } from "../../services/state.service";
+import { AbstractMemoryStorageService } from "@bitwarden/common/abstractions/storage.service";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
+
+import { BrowserStateService } from "../../services/browser-state.service";
 
 import { browserSession } from "./browser-session.decorator";
 import { SessionStorable } from "./session-storable";
@@ -11,36 +14,55 @@ import { sessionSync } from "./session-sync.decorator";
 jest.mock("./session-syncer");
 
 describe("browserSession decorator", () => {
-  it("should throw if StateService is not a constructor argument", () => {
+  it("should throw if neither StateService nor MemoryStorageService is a constructor argument", () => {
     @browserSession
     class TestClass {}
     expect(() => {
       new TestClass();
     }).toThrowError(
-      "Cannot decorate TestClass with browserSession, Browser's StateService must be injected"
+      "Cannot decorate TestClass with browserSession, Browser's AbstractMemoryStorageService must be accessible through the observed classes parameters"
     );
   });
 
   it("should create if StateService is a constructor argument", () => {
-    const stateService = Object.create(StateService.prototype, {});
+    const stateService = Object.create(BrowserStateService.prototype, {
+      memoryStorageService: {
+        value: Object.create(MemoryStorageService.prototype, {
+          type: { value: MemoryStorageService.TYPE },
+        }),
+      },
+    });
 
     @browserSession
     class TestClass {
-      constructor(private stateService: StateService) {}
+      constructor(private stateService: BrowserStateService) {}
     }
 
     expect(new TestClass(stateService)).toBeDefined();
   });
 
+  it("should create if MemoryStorageService is a constructor argument", () => {
+    const memoryStorageService = Object.create(MemoryStorageService.prototype, {
+      type: { value: MemoryStorageService.TYPE },
+    });
+
+    @browserSession
+    class TestClass {
+      constructor(private memoryStorageService: AbstractMemoryStorageService) {}
+    }
+
+    expect(new TestClass(memoryStorageService)).toBeDefined();
+  });
+
   describe("interaction with @sessionSync decorator", () => {
-    let stateService: StateService;
+    let memoryStorageService: MemoryStorageService;
 
     @browserSession
     class TestClass {
       @sessionSync({ initializer: (s: string) => s })
       private behaviorSubject = new BehaviorSubject("");
 
-      constructor(private stateService: StateService) {}
+      constructor(private memoryStorageService: MemoryStorageService) {}
 
       fromJSON(json: any) {
         this.behaviorSubject.next(json);
@@ -48,16 +70,18 @@ describe("browserSession decorator", () => {
     }
 
     beforeEach(() => {
-      stateService = Object.create(StateService.prototype, {}) as StateService;
+      memoryStorageService = Object.create(MemoryStorageService.prototype, {
+        type: { value: MemoryStorageService.TYPE },
+      });
     });
 
     it("should create a session syncer", () => {
-      const testClass = new TestClass(stateService) as any as SessionStorable;
+      const testClass = new TestClass(memoryStorageService) as any as SessionStorable;
       expect(testClass.__sessionSyncers.length).toEqual(1);
     });
 
     it("should initialize the session syncer", () => {
-      const testClass = new TestClass(stateService) as any as SessionStorable;
+      const testClass = new TestClass(memoryStorageService) as any as SessionStorable;
       expect(testClass.__sessionSyncers[0].init).toHaveBeenCalled();
     });
   });

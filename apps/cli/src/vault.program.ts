@@ -1,19 +1,19 @@
 import * as program from "commander";
 
+import { ConfirmCommand } from "./admin-console/commands/confirm.command";
+import { ShareCommand } from "./admin-console/commands/share.command";
 import { Main } from "./bw";
-import { ConfirmCommand } from "./commands/confirm.command";
-import { CreateCommand } from "./commands/create.command";
-import { DeleteCommand } from "./commands/delete.command";
 import { EditCommand } from "./commands/edit.command";
 import { ExportCommand } from "./commands/export.command";
 import { GetCommand } from "./commands/get.command";
-import { ImportCommand } from "./commands/import.command";
 import { ListCommand } from "./commands/list.command";
 import { RestoreCommand } from "./commands/restore.command";
-import { ShareCommand } from "./commands/share.command";
 import { Response } from "./models/response";
 import { Program } from "./program";
+import { ImportCommand } from "./tools/import.command";
 import { CliUtils } from "./utils";
+import { CreateCommand } from "./vault/create.command";
+import { DeleteCommand } from "./vault/delete.command";
 
 const writeLn = CliUtils.writeLn;
 
@@ -115,6 +115,7 @@ export class VaultProgram extends Program {
           this.main.collectionService,
           this.main.organizationService,
           this.main.searchService,
+          this.main.organizationUserService,
           this.main.apiService
         );
         const response = await command.run(object, cmd);
@@ -410,7 +411,11 @@ export class VaultProgram extends Program {
         }
 
         await this.exitIfLocked();
-        const command = new ConfirmCommand(this.main.apiService, this.main.cryptoService);
+        const command = new ConfirmCommand(
+          this.main.apiService,
+          this.main.cryptoService,
+          this.main.organizationUserService
+        );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
       });

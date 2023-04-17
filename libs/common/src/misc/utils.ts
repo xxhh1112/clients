@@ -1,5 +1,9 @@
 /* eslint-disable no-useless-escape */
+import * as path from "path";
+
+import { Observable, of, switchMap } from "rxjs";
 import { getHostname, parse } from "tldts";
+import { Merge } from "type-fest";
 
 import { CryptoService } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
@@ -28,6 +32,10 @@ export class Utils {
   static regexpEmojiPresentation =
     /(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])/g;
   static readonly validHosts: string[] = ["localhost"];
+  static readonly minimumPasswordLength = 12;
+  static readonly DomainMatchBlacklist = new Map<string, Set<string>>([
+    ["google.com", new Set(["script.google.com"])],
+  ]);
 
   static init() {
     if (Utils.inited) {
@@ -55,6 +63,10 @@ export class Utils {
   }
 
   static fromB64ToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
+
     if (Utils.isNode) {
       return new Uint8Array(Buffer.from(str, "base64"));
     } else {
@@ -108,6 +120,9 @@ export class Utils {
   }
 
   static fromBufferToB64(buffer: ArrayBuffer): string {
+    if (buffer == null) {
+      return null;
+    }
     if (Utils.isNode) {
       return Buffer.from(buffer).toString("base64");
     } else {
@@ -365,15 +380,7 @@ export class Utils {
 
     uriString = uriString.trim();
 
-    let url = Utils.getUrlObject(uriString);
-    if (url == null) {
-      const hasHttpProtocol =
-        uriString.indexOf("http://") === 0 || uriString.indexOf("https://") === 0;
-      if (!hasHttpProtocol && uriString.indexOf(".") > -1) {
-        url = Utils.getUrlObject("http://" + uriString);
-      }
-    }
-    return url;
+    return Utils.getUrlObject(uriString);
   }
 
   static camelToPascalCase(s: string) {
@@ -423,6 +430,82 @@ export class Utils {
     return this.global.bitwardenContainerService;
   }
 
+  static validateHexColor(color: string) {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
+  }
+
+  /**
+   * Converts map to a Record<string, V> with the same data. Inverse of recordToMap
+   * Useful in toJSON methods, since Maps are not serializable
+   * @param map
+   * @returns
+   */
+  static mapToRecord<K extends string | number, V>(map: Map<K, V>): Record<string, V> {
+    if (map == null) {
+      return null;
+    }
+    if (!(map instanceof Map)) {
+      return map;
+    }
+    return Object.fromEntries(map);
+  }
+
+  /**
+   * Converts record to a Map<string, V> with the same data. Inverse of mapToRecord
+   * Useful in fromJSON methods, since Maps are not serializable
+   *
+   * Warning: If the record has string keys that are numbers, they will be converted to numbers in the map
+   * @param record
+   * @returns
+   */
+  static recordToMap<K extends string | number, V>(record: Record<K, V>): Map<K, V> {
+    if (record == null) {
+      return null;
+    } else if (record instanceof Map) {
+      return record;
+    }
+
+    const entries = Object.entries(record);
+    if (entries.length === 0) {
+      return new Map();
+    }
+
+    if (isNaN(Number(entries[0][0]))) {
+      return new Map(entries) as Map<K, V>;
+    } else {
+      return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
+    }
+  }
+
+  /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */
+  static merge<Destination, Source>(
+    destination: Destination,
+    source: Source
+  ): Merge<Destination, Source> {
+    return Object.assign(destination, source) as unknown as Merge<Destination, Source>;
+  }
+
+  /**
+   * encodeURIComponent escapes all characters except the following:
+   * alphabetic, decimal digits, - _ . ! ~ * ' ( )
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#encoding_for_rfc3986
+   */
+  static encodeRFC3986URIComponent(str: string): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+    );
+  }
+
+  /**
+   * Normalizes a path for defense against attacks like traversals
+   * @param denormalizedPath
+   * @returns
+   */
+  static normalizePath(denormalizedPath: string): string {
+    return path.normalize(decodeURIComponent(denormalizedPath)).replace(/^(\.\.(\/|\\|$))+/, "");
+  }
+
   private static isMobile(win: Window) {
     let mobile = false;
     ((a) => {
@@ -440,6 +523,21 @@ export class Utils {
     return mobile || win.navigator.userAgent.match(/iPad/i) != null;
   }
 
+  static delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Generate an observable from a function that returns a promise.
+   * Similar to the rxjs function {@link from} with one big exception:
+   * {@link from} will not re-execute the function when observers resubscribe.
+   * {@link Util.asyncToObservable} will execute `generator` for every
+   * subscribe, making it ideal if the value ever needs to be refreshed.
+   * */
+  static asyncToObservable<T>(generator: () => Promise<T>): Observable<T> {
+    return of(undefined).pipe(switchMap(() => generator()));
+  }
+
   private static isAppleMobile(win: Window) {
     return (
       win.navigator.userAgent.match(/iPhone/i) != null ||
@@ -448,22 +546,21 @@ export class Utils {
   }
 
   private static getUrlObject(uriString: string): URL {
+    // All the methods below require a protocol to properly parse a URL string
+    // Assume http if no other protocol is present
+    const hasProtocol = uriString.indexOf("://") > -1;
+    if (!hasProtocol && uriString.indexOf(".") > -1) {
+      uriString = "http://" + uriString;
+    } else if (!hasProtocol) {
+      return null;
+    }
+
     try {
       if (nodeURL != null) {
         return new nodeURL.URL(uriString);
-      } else if (typeof URL === "function") {
-        return new URL(uriString);
-      } else if (typeof window !== "undefined") {
-        const hasProtocol = uriString.indexOf("://") > -1;
-        if (!hasProtocol && uriString.indexOf(".") > -1) {
-          uriString = "http://" + uriString;
-        } else if (!hasProtocol) {
-          return null;
-        }
-        const anchor = window.document.createElement("a");
-        anchor.href = uriString;
-        return anchor as any;
       }
+
+      return new URL(uriString);
     } catch (e) {
       // Ignore error
     }

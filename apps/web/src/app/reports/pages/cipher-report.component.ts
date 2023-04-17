@@ -2,14 +2,13 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CipherRepromptType } from "@bitwarden/common/enums/cipherRepromptType";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CipherView } from "@bitwarden/common/models/view/cipher.view";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { AddEditComponent as OrgAddEditComponent } from "../../organizations/vault/add-edit.component";
-import { AddEditComponent } from "../../vault/add-edit.component";
+import { AddEditComponent } from "../../vault/individual-vault/add-edit.component";
+import { AddEditComponent as OrgAddEditComponent } from "../../vault/org-vault/add-edit.component";
 
 @Directive()
 export class CipherReportComponent {
@@ -25,7 +24,6 @@ export class CipherReportComponent {
     private modalService: ModalService,
     protected messagingService: MessagingService,
     public requiresPaid: boolean,
-    private stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService
   ) {}
 
@@ -72,18 +70,6 @@ export class CipherReportComponent {
     );
 
     return childComponent;
-  }
-
-  protected async checkAccess(): Promise<boolean> {
-    if (this.organization != null) {
-      // TODO: Maybe we want to just make sure they are not on a free plan? Just compare useTotp for now
-      // since all paid plans include useTotp
-      if (this.requiresPaid && !this.organization.useTotp) {
-        this.messagingService.send("upgradeOrganization", { organizationId: this.organization.id });
-        return false;
-      }
-    }
-    return true;
   }
 
   protected async setCiphers() {

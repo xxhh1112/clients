@@ -12,9 +12,11 @@
     "paths": {
       "@bitwarden/common/*": ["../../libs/common/src/*"],
       "@bitwarden/angular/*": ["../../libs/angular/src/*"]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
+    "strictTemplates": true,
     "preserveWhitespaces": true
   },
   "include": ["src", "../../libs/common/src/services/**/*.worker.ts"]

@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <button
   class="account-switcher"
   (click)="toggle()"
@@ -12,7 +14,8 @@
     <app-avatar
       [text]="activeAccount.name"
       [id]="activeAccount.id"
-      size="25"
+      [color]="activeAccount.avatarColor"
+      [size]="25"
       [circle]="true"
       [fontSize]="14"
       [dynamic]="true"
@@ -27,7 +30,7 @@
   <i
     class="bwi"
     aria-hidden="true"
-    [ngClass]="{ 'bwi-angle-down': !isOpen, 'bwi-chevron-up': isOpen }"
+    [ngClass]="{ 'bwi-angle-down': !isOpen, 'bwi-angle-up': isOpen }"
   ></i>
 </button>
 
@@ -55,16 +58,17 @@
         *ngFor="let a of accounts | keyvalue"
         class="account"
         (click)="switch(a.key)"
-        appA11yTitle="{{ 'loggedInAsOn' | i18n: a.value.profile.email:a.value.serverUrl }}"
+        appA11yTitle="{{ 'loggedInAsOn' | i18n : a.value.profile.email : a.value.serverUrl }}"
         attr.aria-label="{{ 'switchAccount' | i18n }}"
       >
         <app-avatar
           [text]="a.value.profile.name ?? a.value.profile.email"
           [id]="a.value.profile.userId"
-          size="25"
+          [size]="25"
           [circle]="true"
           [fontSize]="14"
           [dynamic]="true"
+          [color]="a.value.avatarColor"
           *ngIf="a.value.profile.email != null"
           aria-hidden="true"
         ></app-avatar>

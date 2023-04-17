@@ -7,7 +7,7 @@
     "port": 8081
   },
   "flags": {
-    "showTrial": false,
+    "secretsManager": false,
     "showPasswordless": false
   }
 }

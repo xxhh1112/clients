@@ -238,6 +238,9 @@
   "ms": {
     "message": "Srta."
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr."
   },
@@ -539,7 +542,14 @@
     "message": "Cal tornar a escriure la contrasenya mestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contrasenya ha de contenir almenys 8 caràcters."
+    "message": "La contrasenya mestra ha de contenir almenys $VALUE$ caràcters.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmació de la contrasenya mestra no coincideix."
@@ -760,6 +770,9 @@
   "contactUs": {
     "message": "Contacta'ns"
   },
+  "helpAndFeedback": {
+    "message": "Ajuda i comentaris"
+  },
   "getHelp": {
     "message": "Obteniu ajuda"
   },
@@ -967,7 +980,7 @@
     "message": "Idioma"
   },
   "languageDesc": {
-    "message": "Canvia l'idioma que utilitza l'aplicació. Es requereix un reinici."
+    "message": "Canvia l'idioma que utilitza l'aplicació. Cal realitzar un reinici."
   },
   "theme": {
     "message": "Tema"
@@ -1134,7 +1147,7 @@
     "message": "Amplia"
   },
   "zoomOut": {
-    "message": "Allunya"
+    "message": "Redueix"
   },
   "resetZoom": {
     "message": "Restableix el zoom"
@@ -1459,7 +1472,7 @@
     "message": "Una o més polítiques d’organització afecten la configuració del generador."
   },
   "vaultTimeoutAction": {
-    "message": "Acció del temps d'espera de la caixa forta"
+    "message": "Acció quan acabe el temps d'espera de la caixa forta"
   },
   "vaultTimeoutActionLockDesc": {
     "message": "Una caixa forta bloquejada requereix que torneu a introduir la contrasenya principal per accedir-ne de nou."
@@ -1779,6 +1792,15 @@
   "disabled": {
     "message": "Deshabilitat"
   },
+  "removePassword": {
+    "message": "Suprimeix la contrasenya"
+  },
+  "removedPassword": {
+    "message": "Contrasenya suprimida"
+  },
+  "removePasswordConfirmation": {
+    "message": "Esteu segur que voleu suprimir la contrasenya?"
+  },
   "maxAccessCountReached": {
     "message": "S'ha assolit el recompte màxim d'accesos"
   },
@@ -2016,14 +2038,11 @@
   "neverLockWarning": {
     "message": "Esteu segur que voleu utilitzar l'opció \"Mai\"? En configurar les opcions de bloqueig a \"Mai\" s'emmagatzema la clau de xifratge de la vostra caixa forta al vostre dispositiu. Si utilitzeu aquesta opció, heu d'assegurar-vos que conserveu el dispositiu degudament protegit."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Caixa forta"
   },
   "loginWithMasterPassword": {
-    "message": "Inicia sessió amb la contrasenya mestra"
+    "message": "Inici de sessió amb contrasenya mestra"
   },
   "loggingInAs": {
     "message": "Has iniciat sessió com"
@@ -2048,5 +2067,139 @@
   },
   "logInWithAnotherDevice": {
     "message": "Inicia sessió amb un altre dispositiu"
+  },
+  "logInInitiated": {
+    "message": "S'ha iniciat la sessió"
+  },
+  "notificationSentDevice": {
+    "message": "S'ha enviat una notificació al vostre dispositiu."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Assegureu-vos que la vostra caixa forta estiga desbloquejada i que la frase d'empremta digital coincidisca amb l'altre dispositiu."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase d'empremta digital"
+  },
+  "needAnotherOption": {
+    "message": "L'inici de sessió amb el dispositiu ha d'estar activat a la configuració de l'aplicació Bitwarden. Necessiteu una altra opció?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Veure totes les opcions d'inici de sessió"
+  },
+  "resendNotification": {
+    "message": "Torna a enviar la notificació"
+  },
+  "toggleCharacterCount": {
+    "message": "Commuta el recompte de caràcters",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Esteu intentant iniciar sessió?"
+  },
+  "logInAttemptBy": {
+    "message": "Intent d'inici de sessió per $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Tipus de dispositiu"
+  },
+  "ipAddress": {
+    "message": "Adreça IP"
+  },
+  "time": {
+    "message": "Hora"
+  },
+  "confirmLogIn": {
+    "message": "Confirma l'inici de sessió"
+  },
+  "denyLogIn": {
+    "message": "Denega l'inici de sessió"
+  },
+  "approveLoginRequests": {
+    "message": "Aprova les sol·licituds d'inici de sessió"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "S'ha confirmat l'inici de sessió per a $EMAIL$ a $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Heu denegat un intent d'inici de sessió des d'un altre dispositiu. Si realment heu sigut vosaltres, intenteu tornar a iniciar sessió amb el dispositiu."
+  },
+  "justNow": {
+    "message": "Ara mateix"
+  },
+  "requestedXMinutesAgo": {
+    "message": "S'ha sol·licitat fa $MINUTES$ minuts",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "La sol·licitud d'inici de sessió ja ha caducat."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Aquesta sol·licitud ja no és vàlida."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Utilitzeu aquest dispositiu per aprovar les sol·licituds d'inici de sessió fetes des d'altres dispositius."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirmeu l'intent d'inici de sessió per a $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "S'ha sol·licitat inici de sessió"
+  },
+  "exposedMasterPassword": {
+    "message": "Contrasenya mestra exposada"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "S'ha trobat la contrasenya en una filtració de dades. Utilitzeu una contrasenya única per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya exposada?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contrasenya mestra exposada i poc segura"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?"
+  },
+  "checkForBreaches": {
+    "message": "Comproveu les filtracions de dades conegudes per a aquesta contrasenya"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "La contrasenya mestra no es pot recuperar si la oblideu!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caràcters mínim",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

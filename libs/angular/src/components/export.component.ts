@@ -3,17 +3,16 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { merge, takeUntil, Subject, startWith } from "rxjs";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EventService } from "@bitwarden/common/abstractions/event.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
-import { EncryptedExportType } from "@bitwarden/common/enums/encryptedExportType";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { EncryptedExportType, EventType } from "@bitwarden/common/enums";
 
 @Directive()
 export class ExportComponent implements OnInit, OnDestroy {
@@ -21,8 +20,6 @@ export class ExportComponent implements OnInit, OnDestroy {
 
   formPromise: Promise<string>;
   disabledByPolicy = false;
-  showFilePassword: boolean;
-  showConfirmFilePassword: boolean;
 
   exportForm = this.formBuilder.group({
     format: ["json"],
@@ -45,7 +42,7 @@ export class ExportComponent implements OnInit, OnDestroy {
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     protected exportService: ExportService,
-    protected eventService: EventService,
+    protected eventCollectionService: EventCollectionService,
     private policyService: PolicyService,
     protected win: Window,
     private logService: LogService,
@@ -180,7 +177,7 @@ export class ExportComponent implements OnInit, OnDestroy {
   }
 
   protected async collectEvent(): Promise<void> {
-    await this.eventService.collect(EventType.User_ClientExportedVault);
+    await this.eventCollectionService.collect(EventType.User_ClientExportedVault);
   }
 
   get format() {
@@ -197,16 +194,6 @@ export class ExportComponent implements OnInit, OnDestroy {
 
   get fileEncryptionType() {
     return this.exportForm.get("fileEncryptionType").value;
-  }
-
-  toggleFilePassword() {
-    this.showFilePassword = !this.showFilePassword;
-    document.getElementById("filePassword").focus();
-  }
-
-  toggleConfirmFilePassword() {
-    this.showConfirmFilePassword = !this.showConfirmFilePassword;
-    document.getElementById("confirmFilePassword").focus();
   }
 
   adjustValidators() {

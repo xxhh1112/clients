@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "帮助与反馈"
   },
+  "helpCenter": {
+    "message": "Bitwarden 帮助中心"
+  },
+  "communityForums": {
+    "message": "探索 Bitwarden 社区论坛"
+  },
+  "contactSupport": {
+    "message": "联系 Bitwarden 支持"
+  },
   "sync": {
     "message": "同步"
   },
@@ -430,7 +439,14 @@
     "message": "必须填写确认主密码。"
   },
   "masterPasswordMinlength": {
-    "message": "主密码至少需要 8 个字符。"
+    "message": "主密码必须至少 $VALUE$ 个字符长度。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "两次填写的主密码不一致。"
@@ -491,7 +507,7 @@
     "message": "您可以在 bitwarden.com 网页版密码库修改主密码。您现在要访问这个网站吗？"
   },
   "twoStepLoginConfirmation": {
-    "message": "两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码中设置。您现在要访问这个网站吗？"
+    "message": "两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码库中设置。现在访问此网站吗？"
   },
   "editedFolder": {
     "message": "文件夹已保存"
@@ -662,10 +678,10 @@
     "message": "导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。"
   },
   "encExportKeyWarningDesc": {
-    "message": "此导出将使用您账户的加密密钥来加密您的数据。 如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
+    "message": "此导出将使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
   },
   "encExportAccountWarningDesc": {
-    "message": "账户加密密钥对每个 Bitwarden 用户账户都是唯一的，所以您不能将加密的导出导入到另一个账户。"
+    "message": "每个 Bitwarden 用户账户的账户加密密钥都是唯一的，因此您无法将加密的导出导入到另一个账户。"
   },
   "exportMasterPassword": {
     "message": "输入主密码来导出你的密码库。"
@@ -960,7 +976,10 @@
     "message": "网页加载时如果检测到登录表单，则执行自动填充。"
   },
   "experimentalFeature": {
-    "message": "目前这是一项实验功能。使用需自担风险。"
+    "message": "不完整或不信任的网站可以在页面加载时自动填充。"
+  },
+  "learnMoreAboutAutofill": {
+    "message": "了解更多关于自动填充的信息"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "登录项目的默认自动填充设置"
@@ -1058,13 +1077,13 @@
     "message": "品牌"
   },
   "expirationMonth": {
-    "message": "到期月份"
+    "message": "过期月份"
   },
   "expirationYear": {
-    "message": "到期年份"
+    "message": "过期年份"
   },
   "expiration": {
-    "message": "到期"
+    "message": "过期日"
   },
   "january": {
     "message": "一月"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "博士"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "名"
@@ -1208,7 +1230,7 @@
     "message": "集合"
   },
   "favorites": {
-    "message": "收藏"
+    "message": "收藏夹"
   },
   "popOutNewWindow": {
     "message": "弹出到新窗口"
@@ -1473,7 +1495,7 @@
     "message": "至少包含一个数字"
   },
   "policyInEffectSpecial": {
-    "message": "至少包含一个下列的特殊字符：$CHARS$",
+    "message": "至少包含一个以下特殊字符 $CHARS$",
     "placeholders": {
       "chars": {
         "content": "$1",
@@ -1676,7 +1698,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "到期日期"
+    "message": "过期日期"
   },
   "expirationDateDesc": {
     "message": "设置后，对此 Send 的访问将在指定的日期和时间后过期。",
@@ -1778,19 +1800,19 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To use a calendar style date picker click here **to pop out your window.**'"
   },
   "expirationDateIsInvalid": {
-    "message": "所提供的到期日期无效。"
+    "message": "所提供的过期日期无效。"
   },
   "deletionDateIsInvalid": {
     "message": "所提供的删除日期无效。"
   },
   "expirationDateAndTimeRequired": {
-    "message": "需要到期日期和时间。"
+    "message": "需要过期日期和时间。"
   },
   "deletionDateAndTimeRequired": {
     "message": "需要删除日期和时间。"
   },
   "dateParsingError": {
-    "message": "保存您的删除和到期日期时出错。"
+    "message": "保存您的删除和过期日期时出错。"
   },
   "hideEmail": {
     "message": "对收件人隐藏我的电子邮件地址。"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "无法访问已暂停组织中的项目。请联系您的组织所有者获取帮助。"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "正在登录到 $DOMAIN$",
     "placeholders": {
@@ -2039,9 +2058,111 @@
     "message": "不是你？"
   },
   "newAroundHere": {
-    "message": "新建在这里？"
+    "message": "初来乍到吗？"
   },
   "rememberEmail": {
     "message": "记住电子邮件地址"
+  },
+  "loginWithDevice": {
+    "message": "设备登录"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "必须在 Bitwarden 应用程序的设置中启用设备登录。需要其他选项吗？"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "指纹短语"
+  },
+  "fingerprintMatchInfo": {
+    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。"
+  },
+  "resendNotification": {
+    "message": "重新发送通知"
+  },
+  "viewAllLoginOptions": {
+    "message": "查看所有登录选项"
+  },
+  "notificationSentDevice": {
+    "message": "通知已发送到您的设备。"
+  },
+  "logInInitiated": {
+    "message": "登录已发起"
+  },
+  "exposedMasterPassword": {
+    "message": "已暴露的主密码"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "主密码弱且曾经暴露"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "识别到弱密码且其出现在数据泄露中。请使用一个强且唯一的密码以保护你的账户。确定要使用这个密码吗？"
+  },
+  "checkForBreaches": {
+    "message": "检查已知的数据泄露是否包含此密码。"
+  },
+  "important": {
+    "message": "重要："
+  },
+  "masterPasswordHint": {
+    "message": "主密码忘记后，将无法恢复！"
+  },
+  "characterMinimum": {
+    "message": "至少 $LENGTH$ 个字符",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "您的组织策略已开启在页面加载时的自动填充。"
+  },
+  "howToAutofill": {
+    "message": "如何自动填充"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "从此页面选择一个项目，或使用快捷方式：$COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "从此页面选择一个项目，或者在设置中设置一个快捷方式。"
+  },
+  "gotIt": {
+    "message": "明白了"
+  },
+  "autofillSettings": {
+    "message": "自动填充设置"
+  },
+  "autofillShortcut": {
+    "message": "自动填充键盘快捷键"
+  },
+  "autofillShortcutNotSet": {
+    "message": "未设置自动填充快捷方式。请在浏览器设置中更改此设置。"
+  },
+  "autofillShortcutText": {
+    "message": "自动填充快捷方式为： $COMMAND$。在浏览器设置中更改此项。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "默认自动填充快捷方式：$COMMAND$。",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }
