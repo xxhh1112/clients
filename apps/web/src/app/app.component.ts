@@ -38,6 +38,7 @@ import {
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
 import { PolicyListService, RouterService } from "./core";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -77,7 +78,8 @@ export class AppComponent implements OnDestroy, OnInit {
     private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private configService: ConfigServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -127,6 +129,7 @@ export class AppComponent implements OnDestroy, OnInit {
           case "syncStarted":
             break;
           case "syncCompleted":
+            this.configService.fetchServerConfig();
             break;
           case "upgradeOrganization": {
             const upgradeConfirmed = await this.platformUtilsService.showDialog(
