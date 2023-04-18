@@ -66,7 +66,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
       }
 
-      const existingCipherIds = await this.findExistingCredentials(
+      const existingCipherIds = await this.findExcludedCredentials(
         params.excludeCredentialDescriptorList
       );
       if (existingCipherIds.length > 0) {
@@ -182,12 +182,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       // eslint-disable-next-line no-empty
       if (params.allowCredentialDescriptorList?.length > 0) {
-        cipherOptions = await this.findNonDiscoverableCredentials(
+        cipherOptions = await this.findCredentialsById(
           params.allowCredentialDescriptorList,
           params.rpId
         );
       } else {
-        cipherOptions = await this.findDiscoverableCredentials(params.rpId);
+        cipherOptions = await this.findCredentialsByRp(params.rpId);
       }
 
       if (cipherOptions.length === 0) {
@@ -254,7 +254,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   }
 
   /** Finds existing crendetials and returns the `cipherId` for each one */
-  private async findExistingCredentials(
+  private async findExcludedCredentials(
     credentials: PublicKeyCredentialDescriptor[]
   ): Promise<string[]> {
     const ids: string[] = [];
@@ -274,6 +274,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     return ciphers
       .filter(
         (cipher) =>
+          !cipher.isDeleted &&
           cipher.organizationId == undefined &&
           ((cipher.type === CipherType.Fido2Key && ids.includes(cipher.id)) ||
             (cipher.type === CipherType.Login &&
@@ -283,7 +284,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       .map((cipher) => cipher.id);
   }
 
-  private async findNonDiscoverableCredentials(
+  private async findCredentialsById(
     credentials: PublicKeyCredentialDescriptor[],
     rpId: string
   ): Promise<CipherView[]> {
@@ -303,15 +304,18 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
-        !cipher.isDeleted &&
-        cipher.type === CipherType.Login &&
-        cipher.login.fido2Key != undefined &&
-        cipher.login.fido2Key.rpId === rpId &&
-        ids.includes(cipher.login.fido2Key.nonDiscoverableId)
+        (!cipher.isDeleted &&
+          cipher.type === CipherType.Login &&
+          cipher.login.fido2Key != undefined &&
+          cipher.login.fido2Key.rpId === rpId &&
+          ids.includes(cipher.login.fido2Key.nonDiscoverableId)) ||
+        (cipher.type === CipherType.Fido2Key &&
+          cipher.fido2Key.rpId === rpId &&
+          ids.includes(cipher.id))
     );
   }
 
-  private async findDiscoverableCredentials(rpId: string): Promise<CipherView[]> {
+  private async findCredentialsByRp(rpId: string): Promise<CipherView[]> {
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>

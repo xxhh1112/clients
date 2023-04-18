@@ -655,11 +655,16 @@ describe("FidoAuthenticatorService", () => {
 
       beforeEach(async () => {
         credentialIds = [Utils.newGuid(), Utils.newGuid()];
-        ciphers = await Promise.all(
-          credentialIds.map((id) =>
-            createCipherView({ type: CipherType.Login }, { nonDiscoverableId: id, rpId: RpId })
-          )
-        );
+        ciphers = [
+          await createCipherView(
+            { type: CipherType.Login },
+            { nonDiscoverableId: credentialIds[0], rpId: RpId }
+          ),
+          await createCipherView(
+            { type: CipherType.Fido2Key, id: credentialIds[1] },
+            { rpId: RpId }
+          ),
+        ];
         params = await createParams({
           allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
             id: Utils.guidToRawFormat(credentialId),
