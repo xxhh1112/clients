@@ -6,32 +6,6 @@ import {
 } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
 import { Fido2Utils } from "@bitwarden/common/fido2/abstractions/fido2-utils";
 
-class BitAuthenticatorAttestationResponse implements AuthenticatorAttestationResponse {
-  clientDataJSON: ArrayBuffer;
-  attestationObject: ArrayBuffer;
-
-  constructor(private result: CreateCredentialResult) {
-    this.clientDataJSON = Fido2Utils.stringToBuffer(result.clientDataJSON);
-    this.attestationObject = Fido2Utils.stringToBuffer(result.attestationObject);
-  }
-
-  getAuthenticatorData(): ArrayBuffer {
-    return Fido2Utils.stringToBuffer(this.result.authData);
-  }
-
-  getPublicKey(): ArrayBuffer {
-    return null;
-  }
-
-  getPublicKeyAlgorithm(): number {
-    return this.result.publicKeyAlgorithm;
-  }
-
-  getTransports(): string[] {
-    return this.result.transports;
-  }
-}
-
 export class WebauthnUtils {
   static mapCredentialCreationOptions(
     options: CredentialCreationOptions,
@@ -77,14 +51,41 @@ export class WebauthnUtils {
   }
 
   static mapCredentialRegistrationResult(result: CreateCredentialResult): PublicKeyCredential {
-    return {
+    const credential = {
       id: result.credentialId,
       rawId: Fido2Utils.stringToBuffer(result.credentialId),
       type: "public-key",
       authenticatorAttachment: "cross-platform",
-      response: new BitAuthenticatorAttestationResponse(result),
+      response: {
+        clientDataJSON: Fido2Utils.stringToBuffer(result.clientDataJSON),
+        attestationObject: Fido2Utils.stringToBuffer(result.attestationObject),
+
+        getAuthenticatorData(): ArrayBuffer {
+          return Fido2Utils.stringToBuffer(this.result.authData);
+        },
+
+        getPublicKey(): ArrayBuffer {
+          return null;
+        },
+
+        getPublicKeyAlgorithm(): number {
+          return this.result.publicKeyAlgorithm;
+        },
+
+        getTransports(): string[] {
+          return this.result.transports;
+        },
+      } as AuthenticatorAttestationResponse,
       getClientExtensionResults: () => ({}),
-    } as any;
+    } as PublicKeyCredential;
+
+    // Modify prototype chains to fix `instanceof` calls.
+    // This makes these objects indistinguishable from the native classes.
+    // Unfortunately PublicKeyCredential does not have a javascript constructor so `extends` does not work here.
+    Object.setPrototypeOf(credential.response, AuthenticatorAttestationResponse.prototype);
+    Object.setPrototypeOf(credential, PublicKeyCredential.prototype);
+
+    return credential;
   }
 
   static mapCredentialRequestOptions(
@@ -111,7 +112,7 @@ export class WebauthnUtils {
   }
 
   static mapCredentialAssertResult(result: AssertCredentialResult): PublicKeyCredential {
-    return {
+    const credential = {
       id: result.credentialId,
       rawId: Fido2Utils.stringToBuffer(result.credentialId),
       type: "public-key",
@@ -123,6 +124,14 @@ export class WebauthnUtils {
       } as AuthenticatorAssertionResponse,
       getClientExtensionResults: () => ({}),
       authenticatorAttachment: "hybrid",
-    };
+    } as PublicKeyCredential;
+
+    // Modify prototype chains to fix `instanceof` calls.
+    // This makes these objects indistinguishable from the native classes.
+    // Unfortunately PublicKeyCredential does not have a javascript constructor so `extends` does not work here.
+    Object.setPrototypeOf(credential.response, AuthenticatorAssertionResponse.prototype);
+    Object.setPrototypeOf(credential, PublicKeyCredential.prototype);
+
+    return credential;
   }
 }

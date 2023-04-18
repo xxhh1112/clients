@@ -4,8 +4,10 @@ import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
 const browserCredentials = {
-  create: navigator.credentials.create.bind(navigator.credentials),
-  get: navigator.credentials.get.bind(navigator.credentials),
+  create: navigator.credentials.create.bind(
+    navigator.credentials
+  ) as typeof navigator.credentials.create,
+  get: navigator.credentials.get.bind(navigator.credentials) as typeof navigator.credentials.get,
 };
 
 const messenger = Messenger.forDOMCommunication(window);
