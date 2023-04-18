@@ -14,6 +14,15 @@ export class ConfigService implements ConfigServiceAbstraction {
     private stateService: StateService,
     private configApiService: ConfigApiServiceAbstraction
   ) {
+    // Re-fetch the server config every hour
+    timer(0, 1000 * 3600).pipe(
+      map(async () => {
+        return await this.buildServerConfig();
+      }))
+      .subscribe(async (serverConfig) => {
+        this._serverConfig.next( await serverConfig);
+      });
+
     this.stateService.activeAccountUnlocked$
       .pipe(
         switchMap((unlocked) => {
@@ -46,7 +55,7 @@ export class ConfigService implements ConfigServiceAbstraction {
     return domain;
   }
 
-  private async fetchServerConfig(): Promise<ServerConfig> {
+  public async fetchServerConfig(): Promise<ServerConfig> {
     try {
       const response = await this.configApiService.get();
 
