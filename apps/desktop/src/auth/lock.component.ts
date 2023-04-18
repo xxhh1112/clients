@@ -1,3 +1,5 @@
+import * as os from "os";
+
 import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ipcRenderer } from "electron";
@@ -14,7 +16,10 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 const BroadcasterSubscriptionId = "LockComponent";
 
@@ -24,6 +29,8 @@ const BroadcasterSubscriptionId = "LockComponent";
 })
 export class LockComponent extends BaseLockComponent {
   private deferFocus: boolean = null;
+  protected oldOs = false;
+  protected deprecated = false;
 
   constructor(
     router: Router,
@@ -39,6 +46,9 @@ export class LockComponent extends BaseLockComponent {
     private route: ActivatedRoute,
     private broadcasterService: BroadcasterService,
     ngZone: NgZone,
+    policyApiService: PolicyApiServiceAbstraction,
+    policyService: InternalPolicyService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
     logService: LogService,
     keyConnectorService: KeyConnectorService
   ) {
@@ -55,8 +65,25 @@ export class LockComponent extends BaseLockComponent {
       apiService,
       logService,
       keyConnectorService,
-      ngZone
+      ngZone,
+      policyApiService,
+      policyService,
+      passwordGenerationService
     );
+
+    if (process.platform === "win32") {
+      try {
+        const release = os.release();
+        const majorVersion = parseInt(release.split(".")[0], 10);
+
+        this.oldOs = majorVersion < 10;
+        if (new Date() > new Date("2023-05-31")) {
+          this.deprecated = true;
+        }
+      } catch (e) {
+        this.logService.error(e);
+      }
+    }
   }
 
   async ngOnInit() {

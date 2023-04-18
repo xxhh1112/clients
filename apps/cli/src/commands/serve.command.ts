@@ -5,31 +5,33 @@ import * as koa from "koa";
 import * as koaBodyParser from "koa-bodyparser";
 import * as koaJson from "koa-json";
 
-import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
+import { KeySuffixOptions } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/misc/utils";
 
+import { ConfirmCommand } from "../admin-console/commands/confirm.command";
+import { ShareCommand } from "../admin-console/commands/share.command";
 import { LockCommand } from "../auth/commands/lock.command";
 import { UnlockCommand } from "../auth/commands/unlock.command";
 import { Main } from "../bw";
 import { Response } from "../models/response";
 import { FileResponse } from "../models/response/file.response";
 import { GenerateCommand } from "../tools/generate.command";
+import {
+  SendEditCommand,
+  SendCreateCommand,
+  SendDeleteCommand,
+  SendGetCommand,
+  SendListCommand,
+  SendRemovePasswordCommand,
+} from "../tools/send";
 import { CreateCommand } from "../vault/create.command";
 import { DeleteCommand } from "../vault/delete.command";
 import { SyncCommand } from "../vault/sync.command";
 
-import { ConfirmCommand } from "./confirm.command";
 import { EditCommand } from "./edit.command";
 import { GetCommand } from "./get.command";
 import { ListCommand } from "./list.command";
 import { RestoreCommand } from "./restore.command";
-import { SendCreateCommand } from "./send/create.command";
-import { SendDeleteCommand } from "./send/delete.command";
-import { SendEditCommand } from "./send/edit.command";
-import { SendGetCommand } from "./send/get.command";
-import { SendListCommand } from "./send/list.command";
-import { SendRemovePasswordCommand } from "./send/remove-password.command";
-import { ShareCommand } from "./share.command";
 import { StatusCommand } from "./status.command";
 
 export class ServeCommand {
@@ -133,9 +135,10 @@ export class ServeCommand {
     this.sendCreateCommand = new SendCreateCommand(
       this.main.sendService,
       this.main.stateService,
-      this.main.environmentService
+      this.main.environmentService,
+      this.main.sendApiService
     );
-    this.sendDeleteCommand = new SendDeleteCommand(this.main.sendService);
+    this.sendDeleteCommand = new SendDeleteCommand(this.main.sendService, this.main.sendApiService);
     this.sendGetCommand = new SendGetCommand(
       this.main.sendService,
       this.main.environmentService,
@@ -145,14 +148,18 @@ export class ServeCommand {
     this.sendEditCommand = new SendEditCommand(
       this.main.sendService,
       this.main.stateService,
-      this.sendGetCommand
+      this.sendGetCommand,
+      this.main.sendApiService
     );
     this.sendListCommand = new SendListCommand(
       this.main.sendService,
       this.main.environmentService,
       this.main.searchService
     );
-    this.sendRemovePasswordCommand = new SendRemovePasswordCommand(this.main.sendService);
+    this.sendRemovePasswordCommand = new SendRemovePasswordCommand(
+      this.main.sendService,
+      this.main.sendApiService
+    );
   }
 
   async run(options: program.OptionValues) {

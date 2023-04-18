@@ -14,15 +14,15 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
-import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-import { PolicyData } from "@bitwarden/common/models/data/policy.data";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
-import { Policy } from "@bitwarden/common/models/domain/policy";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { RouterService, StateService } from "../../app/core";
@@ -155,7 +155,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     if (this.enforcedPasswordPolicyOptions != null) {
       const strengthResult = this.passwordGenerationService.passwordStrength(
         masterPassword,
-        this.getPasswordStrengthUserInput()
+        this.formGroup.value.email
       );
       const masterPasswordScore = strengthResult == null ? null : strengthResult.score;
 
@@ -207,21 +207,5 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       await this.stateService.setRememberedEmail(null);
     }
     await super.submit(false);
-  }
-
-  private getPasswordStrengthUserInput() {
-    const email = this.formGroup.value.email;
-    let userInput: string[] = [];
-    const atPosition = email.indexOf("@");
-    if (atPosition > -1) {
-      userInput = userInput.concat(
-        email
-          .substr(0, atPosition)
-          .trim()
-          .toLowerCase()
-          .split(/[^A-Za-z0-9]/)
-      );
-    }
-    return userInput;
   }
 }

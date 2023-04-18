@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Связаться с нами"
   },
+  "helpAndFeedback": {
+    "message": "Помощь и обратная связь"
+  },
   "getHelp": {
     "message": "Получить помощь"
   },

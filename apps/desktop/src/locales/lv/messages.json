@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Sazināties ar mums"
   },
+  "helpAndFeedback": {
+    "message": "Palīdzība un atsauksmes"
+  },
   "getHelp": {
     "message": "Saņemt palīdzību"
   },
@@ -815,7 +818,7 @@
     "message": "Sinhronizācija neizdevās"
   },
   "yourVaultIsLocked": {
-    "message": "Jūsu glabātuve ir bloķēta. Lai turpinātu, apstipriniet savu identitāti."
+    "message": "Glabātava ir slēgta. Jāapstiprina identitāte, lai turpinātu."
   },
   "unlock": {
     "message": "Atslēgt"

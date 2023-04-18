@@ -1,17 +1,13 @@
 import { AbstractStorageService } from "../abstractions/storage.service";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { OrganizationData } from "../admin-console/models/data/organization.data";
+import { PolicyData } from "../admin-console/models/data/policy.data";
+import { ProviderData } from "../admin-console/models/data/provider.data";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
 import { TokenService } from "../auth/services/token.service";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StateVersion } from "../enums/stateVersion";
-import { ThemeType } from "../enums/themeType";
+import { HtmlStorageLocation, KdfType, StateVersion, ThemeType } from "../enums";
 import { StateFactory } from "../factories/stateFactory";
-import { CollectionData } from "../models/data/collection.data";
 import { EventData } from "../models/data/event.data";
-import { OrganizationData } from "../models/data/organization.data";
-import { PolicyData } from "../models/data/policy.data";
-import { ProviderData } from "../models/data/provider.data";
-import { SendData } from "../models/data/send.data";
 import {
   Account,
   AccountSettings,
@@ -22,6 +18,7 @@ import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
 import { StorageOptions } from "../models/domain/storage-options";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { SendData } from "../tools/send/models/data/send.data";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 

@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Dáta boli úspešne importované do trezora."
   },
+  "importSuccessNumberOfItems": {
+    "message": "Dokopy bolo importovaných $AMOUNT$ položiek.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Dáta boli úspešne exportované"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Zrušiť predplatné"
+  },
+  "subscriptionExpiration": {
+    "message": "Exspirácia predplatného"
   },
   "subscriptionCanceled": {
     "message": "Predplatné bolo zrušené."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Prístup k organizácii získate keď administrátor potvrdí vaše členstvo. Keď sa tak stane, pošleme vám email."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Prijatie pozvánky zlyhalo. Požiadajte administrátora organizácie, aby vám poslal novú pozvánku."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Activate auto-fill"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "Aktivujte nastavenie automatického vypĺňania pri načítaní stránky v rozšírení pre prehliadač pre všetkých súčasných a nových členov."
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Service accounts deleted"
@@ -6036,8 +6051,8 @@
     "message": "Access tokens",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Create access token",
+  "newAccessToken": {
+    "message": "Nový prístupový token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Táto funkcia nie je dostupná pre bezplatné organizácie. Pre upgrade kontaktujte vlastníka organizácie."
   }
 }

@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "データを保管庫にインポートしました。"
   },
+  "importSuccessNumberOfItems": {
+    "message": "合計 $AMOUNT$ 件のアイテムをインポートしました。",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "データをエクスポートしました"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "契約のキャンセル"
+  },
+  "subscriptionExpiration": {
+    "message": "サブスクリプションの有効期限"
   },
   "subscriptionCanceled": {
     "message": "契約はキャンセルされました。"
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "組織の管理者が承認すると組織へアクセスできるようになります。アクセスできるようになったらメールでお知らせします。"
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "この組織にアクセスできるようになりました。"
   },
   "inviteAcceptFailed": {
     "message": "招待を承諾出来ませんでした。組織の管理者に招待を再送信するように依頼してください。"
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "自動入力を有効にする"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "すべての既存および新規メンバーのブラウザ拡張機能のページ読み込み設定で、自動入力を有効にします。"
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "サービスアカウントを削除しました"
+    "message": "サービスアカウントは削除されました"
   },
   "deleteServiceAccountsToast": {
     "message": "サービスアカウントを削除しました"
@@ -6036,8 +6051,8 @@
     "message": "アクセストークン",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "アクセストークンを作成",
+  "newAccessToken": {
+    "message": "新しいアクセストークン",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6499,7 +6514,7 @@
     "message": "KDF 設定の変更"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
   },
   "secretsManagerBeta": {
     "message": "ベータ版シークレットマネージャー"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "表示しない"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "この機能は無料の組織では利用できません。アップグレードするには組織の所有者に連絡してください。"
   }
 }

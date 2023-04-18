@@ -8,22 +8,21 @@ import {
   AbstractMemoryStorageService,
   AbstractStorageService,
 } from "../abstractions/storage.service";
+import { CollectionData } from "../admin-console/models/data/collection.data";
+import { EncryptedOrganizationKeyData } from "../admin-console/models/data/encrypted-organization-key.data";
+import { OrganizationData } from "../admin-console/models/data/organization.data";
+import { PolicyData } from "../admin-console/models/data/policy.data";
+import { ProviderData } from "../admin-console/models/data/provider.data";
+import { Policy } from "../admin-console/models/domain/policy";
+import { CollectionView } from "../admin-console/models/view/collection.view";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { ForceResetPasswordReason } from "../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../auth/models/domain/kdf-config";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StorageLocation } from "../enums/storageLocation";
-import { ThemeType } from "../enums/themeType";
-import { UriMatchType } from "../enums/uriMatchType";
+import { HtmlStorageLocation, KdfType, StorageLocation, ThemeType, UriMatchType } from "../enums";
+import { VaultTimeoutAction } from "../enums/vault-timeout-action.enum";
 import { StateFactory } from "../factories/stateFactory";
 import { Utils } from "../misc/utils";
-import { CollectionData } from "../models/data/collection.data";
-import { EncryptedOrganizationKeyData } from "../models/data/encrypted-organization-key.data";
 import { EventData } from "../models/data/event.data";
-import { OrganizationData } from "../models/data/organization.data";
-import { PolicyData } from "../models/data/policy.data";
-import { ProviderData } from "../models/data/provider.data";
-import { SendData } from "../models/data/send.data";
 import { ServerConfigData } from "../models/data/server-config.data";
 import {
   Account,
@@ -33,14 +32,13 @@ import {
 } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
-import { Policy } from "../models/domain/policy";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 import { WindowState } from "../models/domain/window-state";
-import { CollectionView } from "../models/view/collection.view";
-import { SendView } from "../models/view/send.view";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { SendData } from "../tools/send/models/data/send.data";
+import { SendView } from "../tools/send/models/view/send.view";
 import { CipherData } from "../vault/models/data/cipher.data";
 import { FolderData } from "../vault/models/data/folder.data";
 import { LocalData } from "../vault/models/data/local.data";
@@ -1638,21 +1636,27 @@ export class StateService<
     );
   }
 
-  async getForcePasswordReset(options?: StorageOptions): Promise<boolean> {
+  async getForcePasswordResetReason(options?: StorageOptions): Promise<ForceResetPasswordReason> {
     return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.profile?.forcePasswordReset ?? false
+      (
+        await this.getAccount(
+          this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
+        )
+      )?.profile?.forcePasswordResetReason ?? ForceResetPasswordReason.None
     );
   }
 
-  async setForcePasswordReset(value: boolean, options?: StorageOptions): Promise<void> {
+  async setForcePasswordResetReason(
+    value: ForceResetPasswordReason,
+    options?: StorageOptions
+  ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
-    account.profile.forcePasswordReset = value;
+    account.profile.forcePasswordResetReason = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
   }
 
@@ -2575,7 +2579,10 @@ export class StateService<
       await this.storageService.remove(keys.tempAccountSettings);
     }
     account.settings.environmentUrls = environmentUrls;
-    if (account.settings.vaultTimeoutAction === "logOut" && account.settings.vaultTimeout != null) {
+    if (
+      account.settings.vaultTimeoutAction === VaultTimeoutAction.LogOut &&
+      account.settings.vaultTimeout != null
+    ) {
       account.tokens.accessToken = null;
       account.tokens.refreshToken = null;
       account.profile.apiKeyClientId = null;
@@ -2835,7 +2842,7 @@ export class StateService<
     const timeoutAction = await this.getVaultTimeoutAction({ userId: options?.userId });
     const timeout = await this.getVaultTimeout({ userId: options?.userId });
     const defaultOptions =
-      timeoutAction === "logOut" && timeout != null
+      timeoutAction === VaultTimeoutAction.LogOut && timeout != null
         ? await this.defaultInMemoryOptions()
         : await this.defaultOnDiskOptions();
     return this.reconcileOptions(options, defaultOptions);
@@ -2901,7 +2908,7 @@ function withPrototypeForArrayMembers<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<any[]> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey
@@ -2949,7 +2956,7 @@ function withPrototypeForObjectValues<T>(
       value: function (...args: any[]) {
         const originalResult: Promise<{ [key: string]: T }> = originalMethod.apply(this, args);
 
-        if (!(originalResult instanceof Promise)) {
+        if (!Utils.isPromise(originalResult)) {
           throw new Error(
             `Error applying prototype to stored value -- result is not a promise for method ${String(
               propertyKey

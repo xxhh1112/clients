@@ -10,6 +10,7 @@ on:
       - 'apps/desktop/**'
       - 'libs/**'
       - '*'
+      - '!libs/importer'
       - '!*.md'
       - '!*.txt'
       - '.github/workflows/build-desktop.yml'
@@ -22,6 +23,7 @@ on:
       - 'apps/desktop/**'
       - 'libs/**'
       - '*'
+      - '!libs/importer'
       - '!*.md'
       - '!*.txt'
       - '.github/workflows/build-desktop.yml'
@@ -296,13 +298,13 @@ jobs:
       - name: Login to Azure
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
-          keyvault: "bitwarden-prod-kv"
+          keyvault: "bitwarden-ci"
           secrets: "code-signing-vault-url,
             code-signing-client-id,
             code-signing-tenant-id,
@@ -773,6 +775,7 @@ jobs:
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          CSC_FOR_PULL_REQUEST: true
         run: npm run pack:mac
 
       - name: Upload .zip artifact
@@ -970,6 +973,7 @@ jobs:
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          CSC_FOR_PULL_REQUEST: true
 
       - name: Upload .pkg artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
@@ -1182,13 +1186,13 @@ jobs:
       - name: Login to Azure
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
-          keyvault: "bitwarden-prod-kv"
+          keyvault: "bitwarden-ci"
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
@@ -1260,14 +1264,14 @@ jobs:
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
         if: failure()
         with:
-          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
         uses: bitwarden/gh-actions/get-keyvault-secrets@471ae4aec27405f16c5b796e288f54262c406e5d
         with:
-          keyvault: "bitwarden-prod-kv"
+          keyvault: "bitwarden-ci"
           secrets: "devops-alerts-slack-webhook-url"
 
       - name: Notify Slack on failure

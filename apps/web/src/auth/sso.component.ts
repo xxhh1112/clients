@@ -15,7 +15,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-import { HttpStatusCode } from "@bitwarden/common/enums/http-status-code.enum";
+import { HttpStatusCode } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -104,11 +104,8 @@ export class SsoComponent extends BaseSsoComponent {
       const errorResponse: ErrorResponse = error as ErrorResponse;
       switch (errorResponse.statusCode) {
         case HttpStatusCode.NotFound:
-          if (errorResponse?.message?.includes("Claimed org domain not found")) {
-            // Do nothing. This is a valid case.
-            return;
-          }
-          break;
+          //this is a valid case for a domain not found
+          return;
 
         default:
           this.validationService.showError(errorResponse);

@@ -28,7 +28,7 @@
               {{ "enterVerificationCodeApp" | i18n }}
             </p>
             <p *ngIf="selectedProviderType === providerType.Email">
-              {{ "enterVerificationCodeEmail" | i18n: twoFactorEmail }}
+              {{ "enterVerificationCodeEmail" | i18n : twoFactorEmail }}
             </p>
             <div class="form-group">
               <label for="code" class="sr-only">{{ "verificationCode" | i18n }}</label>
@@ -80,7 +80,7 @@
           </ng-container>
           <ng-container *ngIf="selectedProviderType === providerType.WebAuthn">
             <div id="web-authn-frame" class="mb-3">
-              <iframe id="webauthn_iframe" [attr.allow]="webAuthnAllow"></iframe>
+              <iframe id="webauthn_iframe"></iframe>
             </div>
           </ng-container>
           <ng-container

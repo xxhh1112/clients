@@ -1,11 +1,11 @@
-import { SendView } from "../models/view/send.view";
+import { SendView } from "../tools/send/models/view/send.view";
 import { CipherView } from "../vault/models/view/cipher.view";
 
 export abstract class SearchService {
   indexedEntityId?: string = null;
   clearIndex: () => void;
   isSearchable: (query: string) => boolean;
-  indexCiphers: (indexedEntityGuid?: string, ciphersToIndex?: CipherView[]) => Promise<void>;
+  indexCiphers: (ciphersToIndex: CipherView[], indexedEntityGuid?: string) => void;
   searchCiphers: (
     query: string,
     filter?: ((cipher: CipherView) => boolean) | ((cipher: CipherView) => boolean)[],

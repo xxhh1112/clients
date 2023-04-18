@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Dane zostały zaimportowane"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Zaimportowano elementów: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Dane zostały pomyślnie wyeksportowane"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Anuluj subskrypcję"
+  },
+  "subscriptionExpiration": {
+    "message": "Wygaśnięcie subskrypcji"
   },
   "subscriptionCanceled": {
     "message": "Subskrypcja została anulowana."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Dostęp do tej organizacji otrzymasz po potwierdzeniu członkostwa przez administratora. Dostaniesz wtedy wiadomość e-mail."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "Możesz teraz uzyskać dostęp do tej organizacji."
   },
   "inviteAcceptFailed": {
     "message": "Nie można zaakceptować zaproszenia. Poproś administratora organizacji o wysłanie nowego zaproszenia."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Włącz autouzupełnianie"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Aktywuj autouzupełnianie podczas wczytywania strony w rozszerzeniu przeglądarki dla wszystkich istniejących i nowych użytkowników."
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Konto serwisowe zostało usunięte"
+    "message": "Usunięto konto serwisowe"
   },
   "deleteServiceAccountsToast": {
     "message": "Usunięto konta serwisowe"
@@ -6036,8 +6051,8 @@
     "message": "Tokeny dostępu",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Utwórz token dostępu",
+  "newAccessToken": {
+    "message": "Nowy token dostępu",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6499,7 +6514,7 @@
     "message": "Zmień ustawienia KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Kontynuowanie spowoduje wylogowanie ze wszystkich aktywnych sesji. Będzie trzeba zalogować się ponownie i ukończyć konfigurację logowania dwuetapowego. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
   },
   "secretsManagerBeta": {
     "message": "Menedżer sekretów beta"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Odrzuć"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Ta funkcja nie jest dostępna dla darmowych organizacji. Skontaktuj się z właścicielem organizacji, aby ją ulepszyć."
   }
 }

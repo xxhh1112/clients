@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="box-footer" *ngIf="selfHostedDomain">
-            {{ "loggingInTo" | i18n: selfHostedDomain }}
+            {{ "loggingInTo" | i18n : selfHostedDomain }}
           </div>
         </div>
         <div class="checkbox remember-email">
@@ -159,6 +159,12 @@
         </div>
       </ng-template>
     </div>
+
+    <ng-container *ngIf="oldOs">
+      <app-callout type="warning" class="os-deprecated">
+        {{ (deprecated ? "windows8Deprecated" : "windows8SoonDeprecated") | i18n }}
+      </app-callout>
+    </ng-container>
   </form>
 </div>
 <ng-template #environment></ng-template>

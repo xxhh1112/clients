@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Данные успешно импортированы"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Всего было импортировано элементов: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Данные успешно экспортированы"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Отменить подписку"
+  },
+  "subscriptionExpiration": {
+    "message": "Срок действия подписки"
   },
   "subscriptionCanceled": {
     "message": "Подписка отменена."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Вы получите доступ к этой организации, как только администратор подтвердит ваше членство. Когда это произойдет, мы отправим вам email."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Не удается принять приглашение. Попросите администратора организации выслать новое."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Активировать автозаполнение"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Включить автозаполнение при загрузке страницы в расширении браузера для всех существующих и новых участников."
   },
   "experimentalFeature": {
@@ -6036,8 +6051,8 @@
     "message": "Токены доступа",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Создать токен доступа",
+  "newAccessToken": {
+    "message": "Новый токен доступа",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6499,7 +6514,7 @@
     "message": "Изменить параметры KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
   },
   "secretsManagerBeta": {
     "message": "Менеджер секретов Beta"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Отклонить"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Эта функция недоступна для организаций с бесплатным тарифом. Свяжитесь с владельцем вашей организации для перехода на другой тариф."
   }
 }

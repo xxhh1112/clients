@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Contacta'ns"
   },
+  "helpAndFeedback": {
+    "message": "Ajuda i comentaris"
+  },
   "getHelp": {
     "message": "Obteniu ajuda"
   },
@@ -1144,7 +1147,7 @@
     "message": "Amplia"
   },
   "zoomOut": {
-    "message": "Allunya"
+    "message": "Redueix"
   },
   "resetZoom": {
     "message": "Restableix el zoom"

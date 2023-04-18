@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "داده‌ها با موفقیت درون ریزی شد"
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "داده‌ها با موفقیت برون ریزی شد"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "لغو اشتراک"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "اشتراک شما لغو گردید."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "زمانی که یک سرپرست عضویت شما را تأیید کرد، می‌توانید به این سازمان دسترسی داشته باشید. زمانی که این اتفاق بیفتد، یک ایمیل برای شما ارسال خواهیم کرد."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "قادر به پذیرش دعوت نیست. از مدیر سازمان بخواهید دعوتنامه جدیدی ارسال کند."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "پر کردن خودکار را فعال کنید"
   },
-  "activateAutofillDesc": {
-    "message": "تنظیمات پر کردن خودکار با بارگذاری صفحه را در افزونه مرورگر برای همه اعضای موجود و جدید فعال کنید."
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
   },
   "experimentalFeature": {
     "message": "وب‌سایت‌های در معرض خطر یا نامعتبر می‌توانند از پر کردن خودکار در بارگذاری صفحه سوء استفاده کنند."
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "حساب سرویس حذف شده است"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "حساب‌های سرویس حذف شد"
@@ -6036,8 +6051,8 @@
     "message": "دسترسی به توکن‌ها",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "توکن دسترسی ایجاد کنید",
+  "newAccessToken": {
+    "message": "New access token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "نادیده گرفتن"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }
