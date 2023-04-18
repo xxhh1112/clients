@@ -8,7 +8,7 @@ export class Fido2KeyData {
   keyValue: string;
   rpId: string;
   userHandle: string;
-  counter: number;
+  counter: string;
 
   // Extras
   rpName: string;

@@ -47,8 +47,8 @@ export class Fido2Key extends Domain {
     );
   }
 
-  decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<Fido2KeyView> {
-    return this.decryptObj(
+  async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<Fido2KeyView> {
+    const view = await this.decryptObj(
       new Fido2KeyView(),
       {
         nonDiscoverableId: null,
@@ -58,7 +58,6 @@ export class Fido2Key extends Domain {
         keyValue: null,
         rpId: null,
         userHandle: null,
-        counter: null,
         rpName: null,
         userName: null,
         origin: null,
@@ -66,6 +65,19 @@ export class Fido2Key extends Domain {
       orgId,
       encKey
     );
+
+    const { counter } = await this.decryptObj(
+      { counter: "" },
+      {
+        counter: null,
+      },
+      orgId,
+      encKey
+    );
+    // Counter will end up as NaN if this fails
+    view.counter = parseInt(counter);
+
+    return view;
   }
 
   toFido2KeyData(): Fido2KeyData {

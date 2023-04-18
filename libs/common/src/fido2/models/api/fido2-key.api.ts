@@ -8,7 +8,7 @@ export class Fido2KeyApi extends BaseResponse {
   keyValue: string;
   rpId: string;
   userHandle: string;
-  counter: number;
+  counter: string;
 
   // Extras
   rpName: string;

@@ -1,10 +1,10 @@
+import { Fido2KeyApi } from "../../../fido2/models/api/fido2-key.api";
 import { CardApi } from "../../../models/api/card.api";
 import { FieldApi } from "../../../models/api/field.api";
 import { IdentityApi } from "../../../models/api/identity.api";
 import { LoginUriApi } from "../../../models/api/login-uri.api";
 import { LoginApi } from "../../../models/api/login.api";
 import { SecureNoteApi } from "../../../models/api/secure-note.api";
-import { Fido2KeyApi } from "../../../fido2/models/api/fido2-key.api";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { Cipher } from "../domain/cipher";
@@ -91,6 +91,10 @@ export class CipherRequest {
           this.login.fido2Key.rpName =
             cipher.login.fido2Key.rpName != null
               ? cipher.login.fido2Key.rpName.encryptedString
+              : null;
+          this.login.fido2Key.counter =
+            cipher.login.fido2Key.counter != null
+              ? cipher.login.fido2Key.counter.encryptedString
               : null;
           this.login.fido2Key.userHandle =
             cipher.login.fido2Key.userHandle != null
@@ -185,6 +189,8 @@ export class CipherRequest {
           cipher.fido2Key.rpId != null ? cipher.fido2Key.rpId.encryptedString : null;
         this.fido2Key.rpName =
           cipher.fido2Key.rpName != null ? cipher.fido2Key.rpName.encryptedString : null;
+        this.fido2Key.counter =
+          cipher.fido2Key.counter != null ? cipher.fido2Key.counter.encryptedString : null;
         this.fido2Key.userHandle =
           cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
         this.fido2Key.userName =

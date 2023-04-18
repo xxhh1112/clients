@@ -10,6 +10,7 @@ import { SettingsService } from "../../abstractions/settings.service";
 import { StateService } from "../../abstractions/state.service";
 import { FieldType } from "../../enums/fieldType";
 import { UriMatchType } from "../../enums/uriMatchType";
+import { Fido2Key } from "../../fido2/models/domain/fido2-key";
 import { sequentialize } from "../../misc/sequentialize";
 import { Utils } from "../../misc/utils";
 import { AccountSettingsSettings } from "../../models/domain/account";
@@ -19,7 +20,6 @@ import { EncString } from "../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { ErrorResponse } from "../../models/response/error.response";
 import { View } from "../../models/view/view";
-import { Fido2Key } from "../../fido2/models/domain/fido2-key";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherType } from "../enums/cipher-type";
@@ -1137,6 +1137,10 @@ export class CipherService implements CipherServiceAbstraction {
             },
             key
           );
+          cipher.login.fido2Key.counter = await this.cryptoService.encrypt(
+            String(model.login.fido2Key.counter),
+            key
+          );
         }
         return;
       case CipherType.SecureNote:
@@ -1203,6 +1207,10 @@ export class CipherService implements CipherServiceAbstraction {
             userName: null,
             origin: null,
           },
+          key
+        );
+        cipher.fido2Key.counter = await this.cryptoService.encrypt(
+          String(model.fido2Key.counter),
           key
         );
         break;
