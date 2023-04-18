@@ -61,7 +61,7 @@ export class WebauthnUtils {
         attestationObject: Fido2Utils.stringToBuffer(result.attestationObject),
 
         getAuthenticatorData(): ArrayBuffer {
-          return Fido2Utils.stringToBuffer(this.result.authData);
+          return Fido2Utils.stringToBuffer(result.authData);
         },
 
         getPublicKey(): ArrayBuffer {
@@ -69,11 +69,11 @@ export class WebauthnUtils {
         },
 
         getPublicKeyAlgorithm(): number {
-          return this.result.publicKeyAlgorithm;
+          return result.publicKeyAlgorithm;
         },
 
         getTransports(): string[] {
-          return this.result.transports;
+          return result.transports;
         },
       } as AuthenticatorAttestationResponse,
       getClientExtensionResults: () => ({}),
@@ -123,7 +123,7 @@ export class WebauthnUtils {
         userHandle: Fido2Utils.stringToBuffer(result.userHandle),
       } as AuthenticatorAssertionResponse,
       getClientExtensionResults: () => ({}),
-      authenticatorAttachment: "hybrid",
+      authenticatorAttachment: "cross-platform",
     } as PublicKeyCredential;
 
     // Modify prototype chains to fix `instanceof` calls.
