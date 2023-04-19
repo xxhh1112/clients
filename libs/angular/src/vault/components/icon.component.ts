@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy } from "@angular/core";
-import { first, Subject, takeUntil } from "rxjs";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
@@ -28,7 +35,7 @@ const cardIcons: Record<string, string> = {
   templateUrl: "icon.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconComponent implements OnChanges, OnDestroy {
+export class IconComponent implements OnChanges, OnDestroy, OnInit {
   @Input() cipher: CipherView;
   icon: string;
   image: string;
@@ -42,16 +49,19 @@ export class IconComponent implements OnChanges, OnDestroy {
     this.iconsUrl = environmentService.getIconsUrl();
   }
 
+  async ngOnInit() {
+    this.settingsService.disableFavicon$.pipe(takeUntil(this.destroy$)).subscribe((v) => {
+      this.imageEnabled = !v;
+      this.load();
+    });
+  }
+
   async ngOnChanges() {
     // Components may be re-used when using cdk-virtual-scroll. Which puts the component in a weird state,
     // to avoid this we reset all state variables.
     this.image = null;
     this.fallbackImage = null;
-
-    this.settingsService.disableFavicon$.pipe(first(), takeUntil(this.destroy$)).subscribe((v) => {
-      this.imageEnabled = !v;
-      this.load();
-    });
+    this.load();
   }
 
   ngOnDestroy(): void {
