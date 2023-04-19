@@ -43,18 +43,6 @@ export class ConfigService implements ConfigServiceAbstraction {
       });
   }
 
-  private async buildServerConfig(): Promise<ServerConfig> {
-    const data = await this.stateService.getServerConfig();
-    const domain = data ? new ServerConfig(data) : null;
-
-    if (domain == null || !domain.isValid() || domain.expiresSoon()) {
-      const value = await this.fetchServerConfig();
-      return value ?? domain;
-    }
-
-    return domain;
-  }
-
   public async fetchServerConfig(): Promise<ServerConfig> {
     try {
       const response = await this.configApiService.get();
@@ -67,5 +55,38 @@ export class ConfigService implements ConfigServiceAbstraction {
     } catch {
       return null;
     }
+  }
+
+  public async getFeatureFlagBool (key: string, defaultValue: boolean): Promise<boolean> {
+    return await this.getFeatureFlag(key, defaultValue);
+  }
+  public async getFeatureFlagString (key: string, defaultValue: string): Promise<string> {
+    return await this.getFeatureFlag(key, defaultValue);
+  }  
+  
+  public async getFeatureFlagNumber (key: string, defaultValue: number): Promise<number> {
+    return await this.getFeatureFlag(key, defaultValue);
+  }
+  
+  private async getFeatureFlag<T>(key: string, defaultValue: T): Promise<T> 
+  {
+      const serverConfig = await this.buildServerConfig();
+      if (serverConfig == null || serverConfig.featureStates == null || serverConfig.featureStates[key] == null) { 
+        return defaultValue;
+      }
+
+      return serverConfig.featureStates[key] as T;
+  }
+
+  private async buildServerConfig(): Promise<ServerConfig> {
+    const data = await this.stateService.getServerConfig();
+    const domain = data ? new ServerConfig(data) : null;
+
+    if (domain == null || !domain.isValid() || domain.expiresSoon()) {
+      const value = await this.fetchServerConfig();
+      return value ?? domain;
+    }
+
+    return domain;
   }
 }
