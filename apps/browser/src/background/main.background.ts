@@ -127,6 +127,9 @@ import IdleBackground from "./idle.background";
 import { NativeMessagingBackground } from "./nativeMessaging.background";
 import RuntimeBackground from "./runtime.background";
 import WebRequestBackground from "./webRequest.background";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
+import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
+import { ConfigService } from "@bitwarden/common/services/config/config.service";
 
 export default class MainBackground {
   messagingService: MessagingServiceAbstraction;
@@ -183,6 +186,8 @@ export default class MainBackground {
   avatarUpdateService: AvatarUpdateServiceAbstraction;
   mainContextMenuHandler: MainContextMenuHandler;
   cipherContextMenuHandler: CipherContextMenuHandler;
+  configService: ConfigServiceAbstraction;
+  configApiService: ConfigApiServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -491,6 +496,8 @@ export default class MainBackground {
       this.userVerificationApiService
     );
 
+    this.configService = new ConfigService(this.stateService, this.configApiService);
+
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =
         this.platformUtilsService.isSafari() ||
@@ -520,7 +527,8 @@ export default class MainBackground {
       this.systemService,
       this.environmentService,
       this.messagingService,
-      this.logService
+      this.logService,
+      this.configService
     );
     this.nativeMessagingBackground = new NativeMessagingBackground(
       this.cryptoService,
