@@ -8,6 +8,7 @@ import { Subject, takeUntil } from "rxjs";
 import Swal from "sweetalert2";
 
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -38,7 +39,6 @@ import {
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
 import { PolicyListService, RouterService } from "./core";
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes

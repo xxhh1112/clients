@@ -17,12 +17,12 @@ export class ConfigService implements ConfigServiceAbstraction {
     // Re-fetch the server config every hour
     timer(0, 1000 * 3600)
       .pipe(
-        map(async () => {
+        concatMap(async () => {
           return await this.buildServerConfig();
         })
       )
-      .subscribe(async (serverConfig) => {
-        this._serverConfig.next(await serverConfig);
+      .subscribe((serverConfig) => {
+        this._serverConfig.next(serverConfig);
       });
 
     this.stateService.activeAccountUnlocked$
