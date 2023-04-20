@@ -45,7 +45,7 @@ export class ConfigService implements ConfigServiceAbstraction {
       });
   }
 
-  public async fetchServerConfig(): Promise<ServerConfig> {
+  async fetchServerConfig(): Promise<ServerConfig> {
     try {
       const response = await this.configApiService.get();
 
@@ -59,14 +59,15 @@ export class ConfigService implements ConfigServiceAbstraction {
     }
   }
 
-  public async getFeatureFlagBool(key: string, defaultValue: boolean): Promise<boolean> {
-    return await this.getFeatureFlag(key, defaultValue);
-  }
-  public async getFeatureFlagString(key: string, defaultValue: string): Promise<string> {
+  async getFeatureFlagBool(key: string, defaultValue: boolean): Promise<boolean> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  public async getFeatureFlagNumber(key: string, defaultValue: number): Promise<number> {
+  async getFeatureFlagString(key: string, defaultValue: string): Promise<string> {
+    return await this.getFeatureFlag(key, defaultValue);
+  }
+
+  async getFeatureFlagNumber(key: string, defaultValue: number): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
