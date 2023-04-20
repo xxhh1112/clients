@@ -3,11 +3,11 @@ import "module-alias/register";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { NativeMessagingVersion } from "@bitwarden/common/enums/nativeMessagingVersion";
+import { NativeMessagingVersion } from "@bitwarden/common/enums";
 
-import { CredentialUpdatePayload } from "../../../src/models/nativeMessaging/encryptedMessagePayloads/credentialUpdatePayload";
-import { LogUtils } from "../logUtils";
-import NativeMessageService from "../nativeMessageService";
+import { CredentialUpdatePayload } from "../../../src/models/native-messaging/encrypted-message-payloads/credential-update-payload";
+import { LogUtils } from "../log-utils";
+import NativeMessageService from "../native-message.service";
 import * as config from "../variables";
 
 // Command line arguments

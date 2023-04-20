@@ -1,18 +1,22 @@
+import * as argon2 from "argon2-browser";
 import * as forge from "node-forge";
 
 import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
 import { Utils } from "../misc/utils";
 import { DecryptParameters } from "../models/domain/decrypt-parameters";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { CsprngArray } from "../types/csprng";
 
 export class WebCryptoFunctionService implements CryptoFunctionService {
   private crypto: Crypto;
   private subtle: SubtleCrypto;
+  private wasmSupported: boolean;
 
   constructor(win: Window | typeof global) {
     this.crypto = typeof win.crypto !== "undefined" ? win.crypto : null;
     this.subtle =
       !!this.crypto && typeof win.crypto.subtle !== "undefined" ? win.crypto.subtle : null;
+    this.wasmSupported = this.checkIfWasmSupported();
   }
 
   async pbkdf2(
@@ -40,6 +44,32 @@ export class WebCryptoFunctionService implements CryptoFunctionService {
       ["deriveBits"]
     );
     return await this.subtle.deriveBits(pbkdf2Params, impKey, wcLen);
+  }
+
+  async argon2(
+    password: string | ArrayBuffer,
+    salt: string | ArrayBuffer,
+    iterations: number,
+    memory: number,
+    parallelism: number
+  ): Promise<ArrayBuffer> {
+    if (!this.wasmSupported) {
+      throw "Webassembly support is required for the Argon2 KDF feature.";
+    }
+
+    const passwordArr = new Uint8Array(this.toBuf(password));
+    const saltArr = new Uint8Array(this.toBuf(salt));
+
+    const result = await argon2.hash({
+      pass: passwordArr,
+      salt: saltArr,
+      time: iterations,
+      mem: memory,
+      parallelism: parallelism,
+      hashLen: 32,
+      type: argon2.ArgonType.Argon2id,
+    });
+    return result.hash;
   }
 
   async hkdf(
@@ -321,10 +351,10 @@ export class WebCryptoFunctionService implements CryptoFunctionService {
     return [publicKey, privateKey];
   }
 
-  randomBytes(length: number): Promise<ArrayBuffer> {
+  randomBytes(length: number): Promise<CsprngArray> {
     const arr = new Uint8Array(length);
     this.crypto.getRandomValues(arr);
-    return Promise.resolve(arr.buffer);
+    return Promise.resolve(arr.buffer as CsprngArray);
   }
 
   private toBuf(value: string | ArrayBuffer): ArrayBuffer {
@@ -352,5 +382,22 @@ export class WebCryptoFunctionService implements CryptoFunctionService {
       throw new Error("MD5 is not supported in WebCrypto.");
     }
     return algorithm === "sha1" ? "SHA-1" : algorithm === "sha256" ? "SHA-256" : "SHA-512";
+  }
+
+  // ref: https://stackoverflow.com/a/47880734/1090359
+  private checkIfWasmSupported(): boolean {
+    try {
+      if (typeof WebAssembly === "object" && typeof WebAssembly.instantiate === "function") {
+        const module = new WebAssembly.Module(
+          Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00)
+        );
+        if (module instanceof WebAssembly.Module) {
+          return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
+        }
+      }
+    } catch {
+      return false;
+    }
+    return false;
   }
 }

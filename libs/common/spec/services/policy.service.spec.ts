@@ -4,20 +4,19 @@ import { BehaviorSubject, firstValueFrom } from "rxjs";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { PermissionsApi } from "@bitwarden/common/models/api/permissions.api";
-import { OrganizationData } from "@bitwarden/common/models/data/organization.data";
-import { PolicyData } from "@bitwarden/common/models/data/policy.data";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { Policy } from "@bitwarden/common/models/domain/policy";
-import { ResetPasswordPolicyOptions } from "@bitwarden/common/models/domain/reset-password-policy-options";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { OrganizationUserStatusType, PolicyType } from "@bitwarden/common/admin-console/enums";
+import { PermissionsApi } from "@bitwarden/common/admin-console/models/api/permissions.api";
+import { OrganizationData } from "@bitwarden/common/admin-console/models/data/organization.data";
+import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { ResetPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/reset-password-policy-options";
+import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/policy.response";
+import { PolicyService } from "@bitwarden/common/admin-console/services/policy/policy.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { PolicyResponse } from "@bitwarden/common/models/response/policy.response";
 import { ContainerService } from "@bitwarden/common/services/container.service";
-import { PolicyService } from "@bitwarden/common/services/policy/policy.service";
 import { StateService } from "@bitwarden/common/services/state.service";
 
 describe("PolicyService", () => {
@@ -162,6 +161,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: true,
+        enforceOnLogin: false,
       });
     });
 
@@ -201,6 +201,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: false,
+        enforceOnLogin: false,
       });
     });
   });
@@ -402,7 +403,7 @@ describe("PolicyService", () => {
     status: OrganizationUserStatusType,
     managePolicies: boolean
   ) {
-    const organizationData = new OrganizationData({} as any);
+    const organizationData = new OrganizationData({} as any, {} as any);
     organizationData.id = id;
     organizationData.enabled = enabled;
     organizationData.usePolicies = usePolicies;

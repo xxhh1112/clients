@@ -1,6 +1,8 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <nav class="navbar navbar-expand navbar-dark" [ngClass]="{ 'nav-background-alt': selfHosted }">
   <div class="container">
-    <a class="navbar-brand" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n: 'Bitwarden' }}">
+    <a class="navbar-brand" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n : 'Bitwarden' }}">
       <i class="bwi bwi-shield" aria-hidden="true"></i>
     </a>
     <div class="collapse navbar-collapse">
@@ -38,13 +40,19 @@
         </ng-container>
       </ul>
     </div>
+    <product-switcher buttonType="light"></product-switcher>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
       <li>
         <button
           [bitMenuTriggerFor]="accountMenu"
           class="tw-border-0 tw-bg-transparent tw-text-alt2 tw-opacity-70 hover:tw-opacity-90"
         >
-          <i class="bwi bwi-user-circle bwi-lg" aria-hidden="true"></i>
+          <dynamic-avatar
+            [text]="name"
+            [id]="userId"
+            size="xsmall"
+            aria-hidden="true"
+          ></dynamic-avatar>
           <i class="bwi bwi-caret-down bwi-sm" aria-hidden="true"></i>
         </button>
         <bit-menu class="dropdown-menu" #accountMenu>
@@ -54,7 +62,7 @@
               *ngIf="name"
               appStopProp
             >
-              <bit-avatar [text]="name" [id]="userId" size="small"></bit-avatar>
+              <dynamic-avatar [text]="name" [id]="userId" size="small"></dynamic-avatar>
               <div class="tw-ml-2 tw-block tw-overflow-hidden tw-whitespace-nowrap">
                 <span>{{ "loggedInAs" | i18n }}</span>
                 <small class="tw-block tw-overflow-hidden tw-whitespace-nowrap tw-text-muted">{{

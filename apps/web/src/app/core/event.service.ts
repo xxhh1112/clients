@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { Policy } from "@bitwarden/common/models/domain/policy";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { DeviceType, EventType } from "@bitwarden/common/enums";
 import { EventResponse } from "@bitwarden/common/models/response/event.response";
 
 @Injectable()
@@ -36,7 +35,7 @@ export class EventService {
   }
 
   async getEventInfo(ev: EventResponse, options = new EventOptions()): Promise<EventInfo> {
-    const appInfo = this.getAppInfo(ev.deviceType);
+    const appInfo = this.getAppInfo(ev);
     const { message, humanReadableMessage } = await this.getEventMessage(ev, options);
     return {
       message: message,
@@ -397,6 +396,24 @@ export class EventService {
           this.getShortId(ev.providerOrganizationId)
         );
         break;
+      // Org Domain claiming events
+      case EventType.OrganizationDomain_Added:
+        msg = humanReadableMsg = this.i18nService.t("addedDomain", ev.domainName);
+        break;
+      case EventType.OrganizationDomain_Removed:
+        msg = humanReadableMsg = this.i18nService.t("removedDomain", ev.domainName);
+        break;
+      case EventType.OrganizationDomain_Verified:
+        msg = humanReadableMsg = this.i18nService.t("domainVerifiedEvent", ev.domainName);
+        break;
+      case EventType.OrganizationDomain_NotVerified:
+        msg = humanReadableMsg = this.i18nService.t("domainNotVerifiedEvent", ev.domainName);
+        break;
+      // Secrets Manager
+      case EventType.Secret_Retrieved:
+        msg = this.i18nService.t("accessedSecret", this.formatSecretId(ev));
+        humanReadableMsg = this.i18nService.t("accessedSecret", this.getShortId(ev.secretId));
+        break;
       default:
         break;
     }
@@ -406,8 +423,12 @@ export class EventService {
     };
   }
 
-  private getAppInfo(deviceType: DeviceType): [string, string] {
-    switch (deviceType) {
+  private getAppInfo(ev: EventResponse): [string, string] {
+    if (ev.serviceAccountId) {
+      return ["bwi-globe", this.i18nService.t("sdk")];
+    }
+
+    switch (ev.deviceType) {
       case DeviceType.Android:
         return ["bwi-android", this.i18nService.t("mobile") + " - Android"];
       case DeviceType.iOS:
@@ -446,6 +467,8 @@ export class EventService {
         return ["bwi-globe", this.i18nService.t("webVault") + " - Edge"];
       case DeviceType.IEBrowser:
         return ["bwi-globe", this.i18nService.t("webVault") + " - IE"];
+      case DeviceType.Server:
+        return ["bwi-server", this.i18nService.t("server")];
       case DeviceType.UnknownBrowser:
         return [
           "bwi-globe",
@@ -464,12 +487,7 @@ export class EventService {
     const a = this.makeAnchor(shortId);
     a.setAttribute(
       "href",
-      "#/organizations/" +
-        ev.organizationId +
-        "/vault?search=" +
-        shortId +
-        "&viewEvents=" +
-        ev.cipherId
+      `#/organizations/${ev.organizationId}/vault?search=${shortId}&viewEvents=${ev.cipherId}&type=all`
     );
     return a.outerHTML;
   }
@@ -484,10 +502,9 @@ export class EventService {
   private formatCollectionId(ev: EventResponse) {
     const shortId = this.getShortId(ev.collectionId);
     const a = this.makeAnchor(shortId);
-    // TODO: Update view/edit collection link after EC-14 is completed
     a.setAttribute(
       "href",
-      "#/organizations/" + ev.organizationId + "/manage/collections?search=" + shortId
+      `#/organizations/${ev.organizationId}/vault?collectionId=${ev.collectionId}`
     );
     return a.outerHTML;
   }
@@ -534,8 +551,15 @@ export class EventService {
     const a = this.makeAnchor(shortId);
     a.setAttribute(
       "href",
-      "#/organizations/" + ev.organizationId + "/manage/policies?policyId=" + ev.policyId
+      "#/organizations/" + ev.organizationId + "/settings/policies?policyId=" + ev.policyId
     );
+    return a.outerHTML;
+  }
+
+  formatSecretId(ev: EventResponse): string {
+    const shortId = this.getShortId(ev.secretId);
+    const a = this.makeAnchor(shortId);
+    a.setAttribute("href", "#/sm/" + ev.organizationId + "/secrets?search=" + shortId);
     return a.outerHTML;
   }
 

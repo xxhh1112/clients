@@ -149,7 +149,7 @@
     "message": "Změnit hlavní heslo"
   },
   "fingerprintPhrase": {
-    "message": "Fráze otisku účtu",
+    "message": "Unikátní přístupová fráze",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -194,6 +194,15 @@
   },
   "helpFeedback": {
     "message": "Nápověda a zpětná vazba"
+  },
+  "helpCenter": {
+    "message": "Bitwarden Help center"
+  },
+  "communityForums": {
+    "message": "Prozkoumejte komunitní fóra Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Kontaktujte podporu/support Bitwarden"
   },
   "sync": {
     "message": "Synchronizace"
@@ -430,7 +439,14 @@
     "message": "Je vyžadováno zopakovat zadání hlavního hesla."
   },
   "masterPasswordMinlength": {
-    "message": "Hlavní heslo musí obsahovat alespoň 8 znaků."
+    "message": "Zakládní heslo musí obsahovat alespoň $VALUE$ znaků.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrzení hlavního hesla se neshoduje."
@@ -606,7 +622,7 @@
     "message": "Zeptat se na aktualizaci existujícího přihlášení"
   },
   "changedPasswordNotificationDesc": {
-    "message": "Ask to update a login's password when a change is detected on a website."
+    "message": "Dotázat se na aktualizaci hesla pro přihlášení, pokud je na webové stránce zjištěno použití jiného hesla."
   },
   "notificationChangeDesc": {
     "message": "Chcete aktualizovat toto heslo v Bitwarden?"
@@ -618,7 +634,7 @@
     "message": "Zobrazit v kontextovém menu"
   },
   "contextMenuItemDesc": {
-    "message": "Use a secondary click to access password generation and matching logins for the website. "
+    "message": "Použijte pravé tlačítko pro přístup k vytvoření hesla a odpovídajícímu přihlášení pro tuto stránku. "
   },
   "defaultUriMatchDetection": {
     "message": "Výchozí zjišťování shody URI",
@@ -960,7 +976,10 @@
     "message": "Pokud je zjištěn přihlašovací formulář, automaticky se při načítání webové stránky vyplní přihlašovací údaje."
   },
   "experimentalFeature": {
-    "message": "Toto je momentálně experimentální funkce. Použijte na vlastní riziko."
+    "message": "Kompromitované nebo nedůvěryhodné webové stránky mohou zneužívat automatické vyplňování při načítání stránky."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Více informací o automatickém vyplňování"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Výchozí nastavení automatického vyplňování pro položky přihlášení"
@@ -1043,10 +1062,10 @@
     "message": "Zobrazit rozeznatelný obrázek vedle každého přihlášení."
   },
   "enableBadgeCounter": {
-    "message": "Show badge counter"
+    "message": "Zobrazovat počet uložených přihlašovacích údajů na stránce"
   },
   "badgeCounterDesc": {
-    "message": "Zobrazit počet přihlašovacích údajů pro aktuální webovou stránku."
+    "message": "Zobrazit počet přihlašovacích údajů pro aktuální webovou stránku na ikoně rozšíření prohlížeče."
   },
   "cardholderName": {
     "message": "Jméno držitele karty"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "MUDr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Jméno"
@@ -1632,7 +1654,7 @@
     "message": "Odstraněné heslo"
   },
   "deletedSend": {
-    "message": "Smazaný Send",
+    "message": "Send odstraněn",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLink": {
@@ -1899,10 +1921,10 @@
     "message": "Vypršel časový limit relace. Vraťte se prosím zpět a zkuste se znovu přihlásit."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting individual vault"
+    "message": "Export mého trezoru"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Budou exportovány pouze položky trezoru spojené s účtem $EMAIL$. Nebudou zahrnuty položky trezoru v organizaci.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1933,7 +1955,7 @@
     "message": "E-mail pro doménový koš"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Použijte nakonfigurovanou univerzální schránku své domény."
   },
   "random": {
     "message": "Náhodný"
@@ -1970,19 +1992,16 @@
     "message": "API klíč"
   },
   "ssoKeyConnectorError": {
-    "message": "Key connector error: make sure key connector is available and working correctly."
+    "message": "Chyba Key Connector: ujistěte se, že je Key Connector k dispozici a funguje správně."
   },
   "premiumSubcriptionRequired": {
     "message": "Vyžadováno prémiové předplatné"
   },
   "organizationIsDisabled": {
-    "message": "Organization suspended."
+    "message": "Organizace je deaktivována."
   },
   "disabledOrganizationFilterError": {
-    "message": "Items in suspended Organizations cannot be accessed. Contact your Organization owner for assistance."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
+    "message": "K položkám v deaktivované organizaci nemáte přístup. Požádejte o pomoc vlastníka organizace."
   },
   "loggingInTo": {
     "message": "Přihlašování do $DOMAIN$",
@@ -2000,19 +2019,19 @@
     "message": "Klikněte zde"
   },
   "environmentEditedReset": {
-    "message": "to reset to pre-configured settings"
+    "message": "pro obnovení do přednastavených nastavení"
   },
   "serverVersion": {
     "message": "Verze serveru"
   },
   "selfHosted": {
-    "message": "Self-hosted"
+    "message": "Vlastní hosting"
   },
   "thirdParty": {
-    "message": "Third-party"
+    "message": "Tretí strana"
   },
   "thirdPartyServerMessage": {
-    "message": "Connected to third-party server implementation, $SERVERNAME$. Please verify bugs using the official server, or report them to the third-party server.",
+    "message": "Připojeno k serveru třetí strany $SERVERNAME$. Ověřte chyby připojením na oficiální server nebo nahlaste problém správci serveru.",
     "placeholders": {
       "servername": {
         "content": "$1",
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "Pamatovat si e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Přihlásit se pomocí zařízení"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Unikátní přístupová fráze"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Ověřte, zda je trezor odemčený a jestli se unikátní přístupová fráze shoduje s frází na druhém zařízení."
+  },
+  "resendNotification": {
+    "message": "Znovu odeslat upozornění"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobrazit veškeré možnosti přihlášení"
+  },
+  "notificationSentDevice": {
+    "message": "Na vaše zařízení bylo odesláno upozornění."
+  },
+  "logInInitiated": {
+    "message": "Přihlášení zahájeno"
+  },
+  "exposedMasterPassword": {
+    "message": "Odhalené základní heslo"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Your organization policies have turned on auto-fill on page load."
+  },
+  "howToAutofill": {
+    "message": "How to auto-fill"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vyberte položku z této stránky nebo použijte zkratku: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vyberte položku z této stránky nebo nastavte zkratku v nastavení."
+  },
+  "gotIt": {
+    "message": "Got it"
+  },
+  "autofillSettings": {
+    "message": "Auto-fill settings"
+  },
+  "autofillShortcut": {
+    "message": "Auto-fill keyboard shortcut"
+  },
+  "autofillShortcutNotSet": {
+    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+  },
+  "autofillShortcutText": {
+    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

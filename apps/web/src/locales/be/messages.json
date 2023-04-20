@@ -133,6 +133,9 @@
   "ms": {
     "message": "Пані"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Доктар"
   },
@@ -277,12 +280,36 @@
   "searchFavorites": {
     "message": "Пошук у абраным"
   },
-  "searchType": {
-    "message": "Пошук па тыпу",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Пошук даных уваходу",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Пошук картак",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Пошук пасведчанняў",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Пошук абароненых нататак",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Пошук у сховішчы"
+  },
+  "searchMyVault": {
+    "message": "Пошук у сховішчы"
+  },
+  "searchOrganization": {
+    "message": "Пошук у арганізацыі"
+  },
+  "searchMembers": {
+    "message": "Пошук удзельнікаў"
+  },
+  "searchGroups": {
+    "message": "Пошук груп"
   },
   "allItems": {
     "message": "Усе элементы"
@@ -365,6 +392,9 @@
   "select": {
     "message": "Выбраць"
   },
+  "newItem": {
+    "message": "Новы элемент"
+  },
   "addItem": {
     "message": "Дадаць элемент"
   },
@@ -373,6 +403,13 @@
   },
   "viewItem": {
     "message": "Прагледзець элемент"
+  },
+  "new": {
+    "message": "Новы",
+    "description": "for adding new items"
+  },
+  "item": {
+    "message": "Элемент"
   },
   "ex": {
     "message": "напр.",
@@ -438,6 +475,9 @@
   },
   "vaultItems": {
     "message": "Элементы сховішча"
+  },
+  "filter": {
+    "message": "Фільтр"
   },
   "moveSelectedToOrg": {
     "message": "Перамясціць выбранае ў арганізацыю"
@@ -545,6 +585,12 @@
   "deletedFolder": {
     "message": "Папка выдалена"
   },
+  "editInfo": {
+    "message": "Рэдагаваць інфармацыю"
+  },
+  "access": {
+    "message": "Доступ"
+  },
   "loggedOut": {
     "message": "Вы выйшлі"
   },
@@ -651,7 +697,14 @@
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў."
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $VALUE$ сімвалаў.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Пацвярджэнне асноўнага пароля не супадае."
@@ -702,6 +755,9 @@
   "noItemsInList": {
     "message": "У спісе адсутнічаюць элементы."
   },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "У вас няма правоў для прагляду ўсіх элементаў у гэтай калекцыі."
+  },
   "noCollectionsInList": {
     "message": "У спісе адсутнічаюць калекцыі."
   },
@@ -710,6 +766,9 @@
   },
   "noUsersInList": {
     "message": "У спісе адсутнічаюць карыстальнікі."
+  },
+  "noMembersInList": {
+    "message": "У спісе адсутнічаюць удзельнікі."
   },
   "noEventsInList": {
     "message": "У спісе адсутнічаюць падзеі."
@@ -855,6 +914,18 @@
       }
     }
   },
+  "deleteSelectedCollectionsDesc": {
+    "message": "Наступная колькасць калекцый будзе незваротна выдалена: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Вы сапраўды хочаце працягнуць?"
+  },
   "moveSelectedItemsDesc": {
     "message": "Выберыце папку ў якую вы хочаце перамясціць выбраныя элементы (колькасць: $COUNT$ шт.).",
     "placeholders": {
@@ -929,17 +1000,17 @@
   "confirmFilePassword": {
     "message": "Пацвердзіць пароль файла"
   },
-  "accountBackupOptionDescription": {
-    "message": "Выкарыстоўвайце ключ шыфравання вашага ўліковага запісу, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
+  "accountRestrictedOptionDescription": {
+    "message": "Выкарыстоўвайце свой ключ шыфравання, які атрыманы з імя карыстальніка і асноўнага пароля, каб зашыфраваць экспартаванне і абмежаваць імпартаванне толькі бягучага ўліковага запісу Bitwarden."
   },
   "passwordProtectedOptionDescription": {
     "message": "Прызначце пароль, каб зашыфраваць экспартаванне і імпартуйце яго ў любы ўліковы запіс Bitwarden з выкарыстаннем пароля для расшыфроўкі."
   },
-  "fileTypeHeading": {
-    "message": "Тып файла"
+  "exportTypeHeading": {
+    "message": "Тып экспартавання"
   },
-  "accountBackup": {
-    "message": "Рэзервовая копія ўліковага запісу"
+  "accountRestricted": {
+    "message": "Абмежавана ўліковым запісам"
   },
   "passwordProtected": {
     "message": "Абаронена паролем"
@@ -1093,6 +1164,19 @@
       }
     }
   },
+  "kdfMemory": {
+    "message": "Памяць KDF (МБ)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "Занадта вялікае значэнне ітэрацый KDF, памяці і паралелізму можа стаць вынікам павольнай працы падчас выхаду (і разблакіроўкі) Bitwarden на бюджэтных і састарэлых прыладах. Мы рэкамендуем змяняць гэтыя параметры паасобку з невялікім крокам, а потым тэсціраваць на ўсіх вашых прыладах."
+  },
+  "kdfParallelism": {
+    "message": "Паралелізм KDF"
+  },
+  "argon2Desc": {
+    "message": "Высокае значэнне ітэрацыі KDF, памяці і паралелізму дапаможа абараніць асноўны пароль ад атакі поўным пераборам."
+  },
   "changeKdf": {
     "message": "Змяніць KDF"
   },
@@ -1170,6 +1254,18 @@
   },
   "importSuccess": {
     "message": "Даныя былі паспяхова імпартаваны ў ваша сховішча."
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "dataExportSuccess": {
+    "message": "Дадзеныя паспяхова экспартаваныя"
   },
   "importWarning": {
     "message": "Вы імпартуеце даныя ў $ORGANIZATION$. Вашы даныя могуць быць абагулены з удзельнікамі арганізацыі. Вы сапраўды хочаце працягнуць?",
@@ -1558,7 +1654,7 @@
   },
   "orgsReportsDesc": {
     "message": "Выявіце і выпраўце недахопы ў бяспецы ўліковых запісаў вашай арганізацыі, націснуўшы на справаздачы ніжэй.",
-    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization Vault."
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Неабароненыя вэб-сайты"
@@ -1822,6 +1918,22 @@
       }
     }
   },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Перайдзіце на прэміяльны тарыфны план усяго за $PRICE$/год або атрымайце прэміяльныя ўліковыя запісы для $FAMILYPLANUSERCOUNT$ карыстальнікаў і неабмежаванае сямейнае абагуленне з ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Тарыфны план Bitwarden Families."
+  },
   "addons": {
     "message": "Дадаткі"
   },
@@ -1916,6 +2028,9 @@
   "cancelSubscription": {
     "message": "Скасаваць падпіску"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "Падпіска была скасавана."
   },
@@ -1958,11 +2073,11 @@
   "updateLicense": {
     "message": "Абнавіць ліцэнзію"
   },
-  "updatedLicense": {
-    "message": "Ліцэнзія абноўлена"
-  },
   "manageSubscription": {
     "message": "Кіраванне падпіскай"
+  },
+  "launchCloudSubscription": {
+    "message": "Запусціць воблачную падпіску"
   },
   "storage": {
     "message": "Сховішча"
@@ -2356,6 +2471,15 @@
   "deleteGroupConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэту групу?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Вы сапраўды хочаце выдаліць наступную колькасць груп: $QUANTITY$?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэтага карыстальніка?"
   },
@@ -2373,6 +2497,9 @@
   },
   "externalIdDesc": {
     "message": "Знешні ідэнтыфікатар можа быць выкарыстаны ў якасці спасылкі для сувязі гэтага рэсурсу са знешняй сістэмай, такой як каталог карыстальніка."
+  },
+  "nestCollectionUnder": {
+    "message": "Размясціць калекцыю пад"
   },
   "accessControl": {
     "message": "Кантроль доступу"
@@ -2395,14 +2522,23 @@
   "editCollection": {
     "message": "Рэдагаваць калекцыю"
   },
+  "collectionInfo": {
+    "message": "Інфармацыя пра калекцыю"
+  },
   "deleteCollectionConfirmation": {
     "message": "Вы сапраўды хочаце выдаліць гэту калекцыю?"
   },
-  "editUser": {
-    "message": "Рэдагаваць карыстальніка"
+  "editMember": {
+    "message": "Рэдагаваць удзельніка"
   },
-  "inviteUser": {
-    "message": "Запрасіць карыстальніка"
+  "fieldOnTabRequiresAttention": {
+    "message": "Поле на ўкладцы '$TAB$' патрабуе вашай увагі.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
   },
   "inviteUserDesc": {
     "message": "Запрасіць новага карыстальніка ў вашу арганізацыю, увёўшы яго электронную пошту ўліковага запісу Bitwarden. Калі ён не мае ўліковага запісу, то ён атрымае запыт на яго стварэнне."
@@ -2423,7 +2559,7 @@
     "message": "Гэты карыстальнік можа атрымліваць доступ і змяняць усе элементы."
   },
   "userAccessSelectedCollections": {
-    "message": "Гэта карыстальнік можа мець доступ толькі да выбраных калекцый."
+    "message": "Гэты карыстальнік можа мець доступ толькі да выбраных калекцый."
   },
   "search": {
     "message": "Пошук"
@@ -2668,6 +2804,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Выдаленыя калекцыі"
+  },
   "deletedCollectionId": {
     "message": "Выдалена калекцыя $ID$.",
     "placeholders": {
@@ -2710,6 +2849,15 @@
       "id": {
         "content": "$1",
         "example": "Developers"
+      }
+    }
+  },
+  "deletedManyGroups": {
+    "message": "Выдалена груп: $QUANTITY$",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
       }
     }
   },
@@ -2888,7 +3036,7 @@
     "message": "Доступ да групы"
   },
   "groupAccessUserDesc": {
-    "message": "Рэдагуйце групы да якіх належыць гэты карыстальнік."
+    "message": "Даць удзельнікам доступ да калекцый, дадаўшы іх у 1 або некалькі груп."
   },
   "invitedUsers": {
     "message": "Запрошаныя карыстальнікі."
@@ -2976,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Вы можаце атрымаць доступ да гэтай арганізацыі адразу пасля таго, як будзе пацверджаны ваш удзел. Мы апавясцім вас, калі гэта адбудзецца."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Немагчыма прыняць запрашэнне. Папрасіце адміністратара арганізацыі адправіць яго яшчэ раз."
@@ -3584,25 +3735,25 @@
     "message": "Пошук у сметніцы"
   },
   "permanentlyDelete": {
-    "message": "Выдаліць назаўсёды"
+    "message": "Выдаліць незваротна"
   },
   "permanentlyDeleteSelected": {
-    "message": "Назаўсёды выдаліць выбраныя"
+    "message": "Незваротна выдаліць выбраныя"
   },
   "permanentlyDeleteItem": {
-    "message": "Назаўсёды выдаліць элементы"
+    "message": "Незваротна выдаліць элементы"
   },
   "permanentlyDeleteItemConfirmation": {
-    "message": "Вы сапраўды хочаце назаўсёды выдаліць гэты элемент?"
+    "message": "Вы сапраўды хочаце незваротна выдаліць гэты элемент?"
   },
   "permanentlyDeletedItem": {
-    "message": "Элемент выдалены назаўсёды"
+    "message": "Элемент выдалены незваротна"
   },
   "permanentlyDeletedItems": {
-    "message": "Элементы выдалены назаўсёды"
+    "message": "Элементы выдалены незваротна"
   },
   "permanentlyDeleteSelectedItemsDesc": {
-    "message": "Вы выбралі наступную колькасць элементаў для выдалення: $COUNT$ шт. Вы сапраўды хочаце назаўсёды выдаліць іх?",
+    "message": "Вы выбралі наступную колькасць элементаў для выдалення: $COUNT$ шт. Вы сапраўды хочаце незваротна выдаліць іх?",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3611,7 +3762,7 @@
     }
   },
   "permanentlyDeletedItemId": {
-    "message": "Элемент $ID$ выдалены назаўсёды.",
+    "message": "Элемент $ID$ выдалены незваротна",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3926,7 +4077,7 @@
     "message": "Прызначаны ў якасці экстраннага кантакту"
   },
   "noGrantedAccess": {
-    "message": "У вас пакуль няма экстранных кантактаў."
+    "message": "Вас пакуль яшчэ ніхто не прызначаў у якасці экстраннага кантакту."
   },
   "inviteEmergencyContact": {
     "message": "Запрасіць экстранны кантакт"
@@ -3956,7 +4107,7 @@
     "message": "Час чакання"
   },
   "waitTimeDesc": {
-    "message": "Час, пасля якога доступ будзе дазволены аўтаматычна."
+    "message": "Час, пасля якога доступ надаецца аўтаматычна."
   },
   "oneDay": {
     "message": "1 дзень"
@@ -4117,7 +4268,22 @@
     "message": "Карыстальніцкі"
   },
   "customDesc": {
-    "message": "Дазваляе больш паглыблена кантраляваць дазволы карыстальніка для дадатковых канфігурацый."
+    "message": "Даць удзельнікам карыстальніцкія дазволы"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Карыстальніцкія ролі з'яўляюцца ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "функцыяй для прадпрыемства",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Звяжыцеся з нашай камандай падтрымкі для паляпшэння падпіскі",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Каб уключыць дазволы карыстальніка, арганізацыя павінна мець тарыфны план Enterprise 2020."
   },
   "permissions": {
     "message": "Дазволы"
@@ -4510,7 +4676,7 @@
     "message": "Памылка"
   },
   "resetPasswordManageUsers": {
-    "message": "Кіраванне карыстальнікамі павінна таксама быць уключана з дазволам \"Кіраванне скіданнем пароля\""
+    "message": "Для кіравання карыстальнікамі неабходна даць дазвол на кіраванне скідання пароля"
   },
   "setupProvider": {
     "message": "Налады пастаўшчыка"
@@ -4700,6 +4866,18 @@
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча."
+  },
+  "activateAutofill": {
+    "message": "Актываваць аўтазапаўненне"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Скампраметаваныя або ненадзейныя вэб-сайты могуць задзейнічаць функцыю аўтазапаўнення падчас загрузкі старонкі."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Даведацца больш пра аўтазапаўненне"
   },
   "selectType": {
     "message": "Выберыце тып SSO"
@@ -5097,9 +5275,6 @@
   "billingSyncApiKeyRotated": {
     "message": "Токен зменены."
   },
-  "billingSync": {
-    "message": "Плацежная сінхранізацыя"
-  },
   "billingSyncDesc": {
     "message": "Плацежная сінхранізацыя дае магчымасць удзельнікам атрымаць бясплатны тарыфны план Bitwarden Families і пашыраныя магчымасці выстаўлення рахункаў звязваючы ваш уласны сервер Bitwarden з воблачным серверам нашай кампаніі."
   },
@@ -5150,6 +5325,15 @@
   },
   "required": {
     "message": "патрабуецца"
+  },
+  "characterMaximum": {
+    "message": "Максімум $MAX$ сімвалаў",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Патрабуецца, калі ідэнтыфікатар аб'екта не з'яўляецца URL-адрасам."
@@ -5427,6 +5611,27 @@
       }
     }
   },
+  "inputForbiddenCharacters": {
+    "message": "Наступныя сімвалы забаронены: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 або некалькі адрасоў электроннай пошты з'яўляюцца памылковымі"
+  },
+  "tooManyEmails": {
+    "message": "Вы можаце адправіць за раз наступную колькасць лістоў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
   "fieldsNeedAttention": {
     "message": "$COUNT$ полі(-ёў) вышэй патрабуе вашай увагі.",
     "placeholders": {
@@ -5448,9 +5653,6 @@
   "reporting": {
     "message": "Справаздачы"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Колькасць карыстальнікаў"
   },
@@ -5459,6 +5661,48 @@
   },
   "notYou": {
     "message": "Не вы?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Выберыце колер аватара"
+  },
+  "customizeAvatar": {
+    "message": "Дапасаваць аватар"
+  },
+  "avatarUpdated": {
+    "message": "Аватар абноўлены"
+  },
+  "brightBlue": {
+    "message": "Ярка-блакітны"
+  },
+  "green": {
+    "message": "Зялёны"
+  },
+  "orange": {
+    "message": "Аранжавы"
+  },
+  "lavender": {
+    "message": "Пурпурны"
+  },
+  "yellow": {
+    "message": "Жоўты"
+  },
+  "indigo": {
+    "message": "Індыга"
+  },
+  "teal": {
+    "message": "Сіне-зялёны"
+  },
+  "salmon": {
+    "message": "Ласосевы"
+  },
+  "pink": {
+    "message": "Ружовы"
+  },
+  "customColor": {
+    "message": "Карыстальніцкі колер"
+  },
+  "selectPlaceholder": {
+    "message": "-- Выбраць --"
   },
   "multiSelectPlaceholder": {
     "message": "- Увядзіце для фільтрацыі -"
@@ -5472,6 +5716,410 @@
   "multiSelectClearAll": {
     "message": "Ачысціць усё"
   },
+  "toggleCharacterCount": {
+    "message": "Пераключыць лічыльнік сімвалаў",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Колькасць сімвалаў пароля",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Схаваць"
+  },
+  "projects": {
+    "message": "Праекты",
+    "description": "Description for the Projects field."
+  },
+  "lastEdited": {
+    "message": "Апошні рэдагаваны",
+    "description": "The label for the date and time when a item was last edited."
+  },
+  "editSecret": {
+    "message": "Рэдагаваць сакрэт",
+    "description": "Action to modify an existing secret."
+  },
+  "addSecret": {
+    "message": "Дадаць сакрэт",
+    "description": "Action to create a new secret."
+  },
+  "copySecretName": {
+    "message": "Капіяваць назву сакрэта",
+    "description": "Action to copy the name of a secret to the system's clipboard."
+  },
+  "copySecretValue": {
+    "message": "Капіяваць значэнне сакрэту",
+    "description": "Action to copy the value of a secret to the system's clipboard."
+  },
+  "deleteSecret": {
+    "message": "Выдаліць сакрэт",
+    "description": "Action to delete a single secret from the system."
+  },
+  "deleteSecrets": {
+    "message": "Выдаліць сакрэты",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Незваротна выдаліць сакрэт"
+  },
+  "hardDeleteSecrets": {
+    "message": "Незваротна выдаліць сакрэты"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Выберыце праекты з якімі будзе звязаны сакрэт. Толькі карыстальнікі арганізацыі з доступам да гэтых праектаў змогуць бачыць сакрэт.",
+    "description": "A prompt explaining how secrets can be associated with projects."
+  },
+  "selectProjects": {
+    "message": "Выберыце праекты",
+    "description": "A label for a type-to-filter input field to choose projects."
+  },
+  "searchProjects": {
+    "message": "Шукаць праекты",
+    "description": "Label for the search bar used to search projects."
+  },
+  "project": {
+    "message": "Праект",
+    "description": "Similar to collections, projects can be used to group secrets."
+  },
+  "editProject": {
+    "message": "Рэдагаваць праект",
+    "description": "The action to modify an existing project."
+  },
+  "viewProject": {
+    "message": "Прагледзець праект",
+    "description": "The action to view details of a project."
+  },
+  "deleteProject": {
+    "message": "Выдаліць праект",
+    "description": "The action to delete a project from the system."
+  },
+  "deleteProjects": {
+    "message": "Выдаліць праекты",
+    "description": "The action to delete multiple projects from the system."
+  },
+  "secret": {
+    "message": "Сакрэт",
+    "description": "Label for a secret (key/value pair)"
+  },
+  "serviceAccount": {
+    "message": "Сэрвісны ўліковы запіс",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "serviceAccounts": {
+    "message": "Сэрвісныя ўліковыя запісы",
+    "description": "The title for the section that deals with service accounts."
+  },
+  "secrets": {
+    "message": "Сакрэты",
+    "description": "The title for the section of the application that deals with secrets."
+  },
+  "nameValuePair": {
+    "message": "Парная назва/значэнне",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
+  },
+  "secretEdited": {
+    "message": "Сакрэт адрэдагаваны",
+    "description": "Notification for the successful editing of a secret."
+  },
+  "secretCreated": {
+    "message": "Сакрэт створаны",
+    "description": "Notification for the successful creation of a secret."
+  },
+  "newSecret": {
+    "message": "Новы сакрэт",
+    "description": "Title for creating a new secret."
+  },
+  "newServiceAccount": {
+    "message": "Новы сэрвісны ўліковы запіс",
+    "description": "Title for creating a new service account."
+  },
+  "secretsNoItemsTitle": {
+    "message": "Няма сакрэтаў для паказу",
+    "description": "Empty state to indicate that there are no secrets to display."
+  },
+  "secretsNoItemsMessage": {
+    "message": "Каб пачаць, дадайце новы сакрэт або імпартуйце сакрэты.",
+    "description": "Message to encourage the user to start adding secrets."
+  },
+  "secretsTrashNoItemsMessage": {
+    "message": "Сметніца не змяшчае сакрэты."
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Стварыць новы сэрвісны ўліковы запіс, каб пачаць аўтаматызацыю доступу да сакрэту.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Адсутнічаюць элементы для паказу",
+    "description": "Title to indicate that there are no service accounts to display."
+  },
+  "searchSecrets": {
+    "message": "Пошук сакрэтаў",
+    "description": "Placeholder text for searching secrets."
+  },
+  "deleteServiceAccounts": {
+    "message": "Выдаліць сэрвісныя ўліковыя запісы",
+    "description": "Title for the action to delete one or multiple service accounts."
+  },
+  "deleteServiceAccount": {
+    "message": "Выдаліць сэрвісны ўліковы запіс",
+    "description": "Title for the action to delete a single service account."
+  },
+  "viewServiceAccount": {
+    "message": "Паглядзець сэрвісны ўліковы запіс",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "Выдаленне сэрвіснага ўліковага запісу $SERVICE_ACCOUNT$ з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Выдаленне сэрвісных уліковых запісаў з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Выдаленне сэрвіснага ўліковага запісу $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Сэрвісны ўліковы запіс выдалены"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Сэрвісны ўліковы запіс выдалены"
+  },
+  "searchServiceAccounts": {
+    "message": "Пошук сэрвісных уліковых запісаў",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Рэдагаваць сэрвісны ўліковы запіс",
+    "description": "Title for editing a service account."
+  },
+  "addProject": {
+    "message": "Дадаць праект",
+    "description": "Title for creating a new project."
+  },
+  "projectEdited": {
+    "message": "Праект адрэдагаваны",
+    "description": "Notification for the successful editing of a project."
+  },
+  "projectSaved": {
+    "message": "Праект захаваны",
+    "description": "Notification for the successful saving of a project."
+  },
+  "projectCreated": {
+    "message": "Праект створаны",
+    "description": "Notification for the successful creation of a project."
+  },
+  "projectName": {
+    "message": "Назва праекта",
+    "description": "Label for entering the name of a project."
+  },
+  "newProject": {
+    "message": "Новы праект",
+    "description": "Title for creating a new project."
+  },
+  "softDeleteSecretWarning": {
+    "message": "Выдаленне сакрэтаў можа паўплываць на існуючыя інтэграцыі.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
+  },
+  "softDeletesSuccessToast": {
+    "message": "Сакрэты адпраўлены ў сметніцу",
+    "description": "Notifies that the selected secrets have been moved to the trash"
+  },
+  "hardDeleteSecretConfirmation": {
+    "message": "Вы сапраўды хочаце незваротна выдаліць гэты сакрэт?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Вы сапраўды хочаце незваротна выдаліць гэтыя сакрэты?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Сакрэты незваротна выдалены"
+  },
+  "smAccess": {
+    "message": "Доступ",
+    "description": "Title indicating what permissions a service account has"
+  },
+  "projectCommaSecret": {
+    "message": "Праект, сакрэт",
+    "description": ""
+  },
+  "serviceAccountName": {
+    "message": "Назва сэрвіснага ўліковага запісу",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Сэрвісныя ўліковыя запісы створаны",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Сэрвісны ўліковы запіс абноўлены",
+    "description": "Notifies that a service account has been updated"
+  },
+  "newSaSelectAccess": {
+    "message": "Увядзіце або выберыце праекты (сакрэты)",
+    "description": "Instructions for selecting projects or secrets for a new service account"
+  },
+  "newSaTypeToFilter": {
+    "message": "Увядзіце, каб адфільтраваць",
+    "description": "Instructions for filtering a list of projects or secrets"
+  },
+  "deleteProjectsToast": {
+    "message": "Праекты выдалены",
+    "description": "Notifies that the selected projects have been deleted"
+  },
+  "deleteProjectToast": {
+    "message": "Праект і ўсе звязаныя сакрэты былі выдалены",
+    "description": "Notifies that a project has been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Выдаленне праекта $PROJECT$ з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Увядзіце \"$CONFIRM$\", каб працягнуць",
+    "description": "Users are prompted to type 'confirm' to delete a project",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Выдаліць $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Выдаліць $COUNT$ праекты(-аў)",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Выдаленне праектаў з'яўляецца незваротным дзеяннем і яго нельга будзе адрабіць.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Няма праектаў для адлюстравання",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
+  },
+  "projectsNoItemsMessage": {
+    "message": "Дадаць новы праект, каб пачаць арганізоўваць сакрэты.",
+    "description": "Message to be displayed when there are no projects to display in the list."
+  },
+  "smConfirmationRequired": {
+    "message": "Патрабуецца пацверджанне",
+    "description": "Indicates that user confirmation is required for an action to proceed."
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Немагчыма выдаліць наступныя праекты:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
+  },
+  "softDeleteSuccessToast": {
+    "message": "Сакрэт адпраўлены ў сметніцу",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
+  },
+  "hardDeleteSuccessToast": {
+    "message": "Сакрэты незваротна выдалены"
+  },
+  "accessTokens": {
+    "message": "Токены доступу",
+    "description": "Title for the section displaying access tokens."
+  },
+  "newAccessToken": {
+    "message": "Новы токен доступу",
+    "description": "Button label for creating a new access token."
+  },
+  "expires": {
+    "message": "Заканчваецца",
+    "description": "Label for the expiration date of an access token."
+  },
+  "canRead": {
+    "message": "Можна прачытаць",
+    "description": "Label for the access level of an access token (Read only)."
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Няма токенаў доступу для паказу",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Каб пачаць, стварыце токен доступу",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
+  },
+  "downloadAccessToken": {
+    "message": "Спампуйце або скапіюйце перад закрыццём.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
+  },
+  "expiresOnAccessToken": {
+    "message": "Заканчваецца:",
+    "description": "Label for the expiration date of an access token."
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Токены доступу не захоўваюцца і не могуць быць атрыманы",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
+  },
+  "copyToken": {
+    "message": "Капіяваць токен",
+    "description": "Copies the generated access token to the user's clipboard."
+  },
+  "accessToken": {
+    "message": "Доступ да токена",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Патрабуецца дата заканчэння",
+    "description": "Error message indicating that an expiration date for the access token must be set."
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Доступ да токена створаны і скапіяваны ў буфер абмену",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Кіраванне дазволамі недаступна для бэта-версіі.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
+  },
+  "revokeAccessToken": {
+    "message": "Адклікаць токен доступу",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Адклікаць токены доступу"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Адкліканне токенаў доступу - гэта канчатковая і незваротнае дзеянне."
+  },
+  "accessTokenRevoked": {
+    "message": "Токены доступу адкліканы",
+    "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "submenu": {
+    "message": "Падменю"
+  },
   "from": {
     "message": "Ад"
   },
@@ -5484,8 +6132,47 @@
   "update": {
     "message": "Абнавіць"
   },
+  "plusNMore": {
+    "message": "+ яшчэ $QUANTITY$",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Інфармацыя пра групу"
+  },
+  "editGroupMembersDesc": {
+    "message": "Даць удзельнікам групы доступ да прызначаных калекцый."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Забяспечыць доступ да калекцый, дадаўшы іх у гэту групу."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Даць доступ да ўсіх бягучых і будучых калекцый."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "Калі пазначана, то гэта заменіць усе іншыя дазволы на калекцыю."
+  },
+  "selectMembers": {
+    "message": "Выбраць удзельнікаў"
+  },
+  "selectCollections": {
+    "message": "Выбраць калекцыі"
+  },
   "role": {
     "message": "Роля"
+  },
+  "removeMember": {
+    "message": "Выдаліць удзільніка"
+  },
+  "collection": {
+    "message": "Калекцыя"
+  },
+  "noCollection": {
+    "message": "Няма калекцый"
   },
   "canView": {
     "message": "Можа праглядаць"
@@ -5499,6 +6186,15 @@
   "canEditExceptPass": {
     "message": "Можа рэдагаваць (без пароляў)"
   },
+  "noCollectionsAdded": {
+    "message": "Няма дадзеных калекцый"
+  },
+  "noMembersAdded": {
+    "message": "Няма дададзеных удзельнікаў"
+  },
+  "noGroupsAdded": {
+    "message": "Няма дадзеных груп"
+  },
   "group": {
     "message": "Група"
   },
@@ -5507,5 +6203,489 @@
   },
   "memberAccessAll": {
     "message": "Гэты ўдзельнік можа атрымліваць доступ і змяняць усе элементы."
+  },
+  "domainVerification": {
+    "message": "Праверка дамена"
+  },
+  "newDomain": {
+    "message": "Новы дамен"
+  },
+  "noDomains": {
+    "message": "Няма даменаў"
+  },
+  "noDomainsSubText": {
+    "message": "Падлучэнне дамена дазваляе ўдзельнікам прапускаць поле з ідэнтыфікатара SSO падчас аўтарызацыі праз SSO."
+  },
+  "verifyDomain": {
+    "message": "Праверыць дамен"
+  },
+  "reverifyDomain": {
+    "message": "Паўторна праверыць дамен"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Капіяваць запіс DNS TXT"
+  },
+  "dnsTxtRecord": {
+    "message": "Запіс DNS TXT"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Капіяваць і ўставіць запіс TXT у поле вашага пастаўшчыка паслуг DNS."
+  },
+  "domainNameInputHint": {
+    "message": "Прыклад: mydomain.com. Для праверкі паддаменаў неабходны асобныя запісы."
+  },
+  "automaticDomainVerification": {
+    "message": "Аўтаматычная праверка дамена"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden паспрабуе праверыць дамен 3 разы на працягу першых 72 гадзін. Калі гэта не атрымліваецца зрабіць, праверце запіс DNS і выканайце дадзеную аперацыю ўручную. Дамен будзе выдалены з вашай арганізацыі праз 7 дзён, калі яго праверка не будзе завершана"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Няправільны фармат уводу. Слушны фармат: mydomain.com. Для праверкі паддаменаў неабходны асобныя запісы."
+  },
+  "removeDomain": {
+    "message": "Выдаліць дамен"
+  },
+  "removeDomainWarning": {
+    "message": "Аперацыю выдалення дамена нельга будзе адрабіць. Вы сапраўды хочаце працягнуць?"
+  },
+  "domainRemoved": {
+    "message": "Дамен выдалены"
+  },
+  "domainSaved": {
+    "message": "Дамен захаваны"
+  },
+  "domainVerified": {
+    "message": "Дамен правераны"
+  },
+  "duplicateDomainError": {
+    "message": "Нельга атрымаць адзін і той жа дамен двойчы."
+  },
+  "domainNotAvailable": {
+    "message": "Нехта ўжо выкарыстоўвае $DOMAIN$. Для працягу, выберыце іншы дамен.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ не правераны. Праверце ваш запіс DNS.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Правераны"
+  },
+  "domainStatusUnverified": {
+    "message": "Неправераны"
+  },
+  "domainNameTh": {
+    "message": "Назва"
+  },
+  "domainStatusTh": {
+    "message": "Статус"
+  },
+  "lastChecked": {
+    "message": "Апошняя праверка"
+  },
+  "editDomain": {
+    "message": "Рэдагаваць дамен"
+  },
+  "domainFormInvalid": {
+    "message": "У форме ёсць памылкі, якія патрабуюць вашай увагі"
+  },
+  "addedDomain": {
+    "message": "Дамен $DOMAIN$ дададзены",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Дамен $DOMAIN$ выдалены",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "Дамен $DOMAIN$ правераны",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "Дамен $DOMAIN$ неправераны",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "membersColumnHeader": {
+    "message": "Удзельнік/Група"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Удзельнік"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Выбраць групы і ўдзельнікаў"
+  },
+  "selectGroups": {
+    "message": "Выбраць групы"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Дазволы прызначаныя для ўдзельніка, заменяць дазволы, якія прызначаны групай гэтага ўдзельніка"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "Няма дададзены ўдзельнікі або групы"
+  },
+  "deleted": {
+    "message": "Выдалена"
+  },
+  "memberStatusFilter": {
+    "message": "Фільтр статусу ўдзельніка"
+  },
+  "inviteMember": {
+    "message": "Запрасіць удзельніка"
+  },
+  "needsConfirmation": {
+    "message": "Патрабуецца пацвярджэнне"
+  },
+  "memberRole": {
+    "message": "Роля ўдзельніка"
+  },
+  "moreFromBitwarden": {
+    "message": "Больш ад Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Змяніць прадукты"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Перайдзіце на платны тарыфны план, каб запрасіць больш удзельнікаў.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $SEATCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Колькасць бясплатных удзельнікаў у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Перайдзіце на платны тарыфны план, каб больш калекцый.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Колькасць бясплатных калекцый у бясплатных арганізацыях можа дасягаць: $COLLECTIONCOUNT$. Завяжыцеся з уладальнікам арганізацыі, каб палепшыць гэты параметр.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "server": {
+    "message": "Сервер"
+  },
+  "exportData": {
+    "message": "Экспартаванне даных"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Экспартаванне сакрэтных даных арганізацыі"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Будуць экспартаваны даныя толькі менеджара сакрэтаў, якія звязаны з арганізацыяй $ORGANIZATION$. Элементы іншых прадуктаў або іншыя арганізацыі не будуць уключаны.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Файл запампаваны"
+  },
+  "acceptedFormats": {
+    "message": "Прынятыя фарматы:"
+  },
+  "copyPasteImportContents": {
+    "message": "Скапіюйце і ўстаўце змесціва імпартавання:"
+  },
+  "or": {
+    "message": "або"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Кіраванне ліцэнзіямі і плацяжамі"
+  },
+  "automaticSync": {
+    "message": "Аўтаматычная сінхранізацыя"
+  },
+  "manualUpload": {
+    "message": "Ручное запампоўванне"
+  },
+  "manualUploadDesc": {
+    "message": "Калі вы не хочаце карыстацца плацежнай сінхранізацыяй, запампуйце сваю ліцэнзію тут."
+  },
+  "syncLicense": {
+    "message": "Сінхранізаваць ліцэнзію"
+  },
+  "licenseSyncSuccess": {
+    "message": "Ліцэнзія паспяхова сінхранізавана"
+  },
+  "licenseUploadSuccess": {
+    "message": "Ліцэнзія паспяхова запампавана"
+  },
+  "lastLicenseSync": {
+    "message": "Апошняя сінхранізацыя ліцэнзіі"
+  },
+  "billingSyncHelp": {
+    "message": "Дапамога з плацежнай сінхранізацыяй"
+  },
+  "uploadLicense": {
+    "message": "Запампаваць ліцэнзію"
+  },
+  "projectPeopleDescription": {
+    "message": "Даць групам або людзям доступ да гэтых праектаў."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Увядзіце або выберыце людзей (групы)"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Даць сэрвісным уліковым запісам доступ да гэтага праекта."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Увядзіце або выберыце сэрвісныя ўліковы запісы"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Дадаць людзей або групы, каб пачаць сумесную працу"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Дадаць сэрвісныя ўліковы запісы для надання доступу"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Даць групам або людзям доступ да гэтых сэрвісных уліковых запісаў."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Прызначыць праект гэтым сэрвісным уліковым запісам. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Дадаць праект, каб даць доступ"
+  },
+  "canReadWrite": {
+    "message": "Можа чытаць і запісваць"
+  },
+  "groupSlashUser": {
+    "message": "Група/Карыстальнік"
+  },
+  "lowKdfIterations": {
+    "message": "Нізкае значэнне ітэрацыі KDF"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Наладзьце ўзровень шыфравання KDF, каб удасканаліць бяспеку вашага ўліковага запісу."
+  },
+  "changeKdfSettings": {
+    "message": "Змяніце налады KDF"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
+  },
+  "secretsManagerBeta": {
+    "message": "Менеджар сакрэтаў (бэта-версія)"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Дазвольце карыстальнікам доступ да Менеджара сакрэтаў падчас праграмы бэта-тэсціравання."
+  },
+  "userAccessSecretsManager": {
+    "message": "Гэты карыстальнік можа атрымаць доступ да Менеджара сакрэтаў у рэжыме бэта-тэсціравання"
+  },
+  "important": {
+    "message": "Важна:"
+  },
+  "viewAll": {
+    "message": "Паглядзець усе"
+  },
+  "showingPortionOfTotal": {
+    "message": "Паказана $PORTION$ з $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Выпраўце памылкі ніжэй і паспрабуйце яшчэ раз."
+  },
+  "description": {
+    "message": "Апісанне"
+  },
+  "errorReadingImportFile": {
+    "message": "Адбылася памылка падчас спробы прачытаць імпартаваны файл"
+  },
+  "accessedSecret": {
+    "message": "Атрыманы доступ да сакрэту $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Стварыць сакрэт"
+  },
+  "createProject": {
+    "message": "Стварыць праект"
+  },
+  "createServiceAccount": {
+    "message": "Стварыць сэрвісны ўліковы запіс"
+  },
+  "downloadThe": {
+    "message": "Спампаваць",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Менеджар сакрэтаў CLI"
+  },
+  "importSecrets": {
+    "message": "Імпартаванне сакрэтаў"
+  },
+  "getStarted": {
+    "message": "Пачатак працы"
+  },
+  "complete": {
+    "message": "Завершана $COMPLETED$/$TOTAL$",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Аднавіць сакрэт"
+  },
+  "restoreSecrets": {
+    "message": "Аднавіць сакрэты"
+  },
+  "restoreSecretPrompt": {
+    "message": "Вы сапраўды хочаце аднавіць гэты сакрэт?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Вы сапраўды хочаце аднавіць гэтыя сакрэты?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Сакрэт адноўлены"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Сакрэты адноўлены"
+  },
+  "selectionIsRequired": {
+    "message": "Неабходна выбраць."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Падчас праграмы бэта-тэсціравання плата за ўключэнне доступу арганізацыі да менеджара сакрэтаў спаганяцца не будзе. Карыстальнікі могуць даваць доступ да бэта-версіі ў раздзеле з удзельнікамі."
+  },
+  "secretsManagerEnable": {
+    "message": "Уключыць кіраванне сакрэтамі (бэта-версія)"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Токены доступу яшчэ даступны"
+  },
+  "saPeopleWarningMessage": {
+    "message": "Выдаленне людзей з сэрвіснага ўліковага запісу не прывядзе да выдалення токенаў доступу, якія яны стварылі. У мэтах бяспекі рэкамендуецца адклікаць токены доступу людзей, якія выдалены з сэрвіснага ўліковага запісу."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Выдаліць доступ да гэтага праекта"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "Пры выкананні гэтага дзеяння вы будзе выдалены з праекта."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Выдаліць доступ да гэтага ўліковага запісу"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "Пры выкананні гэтага дзеяння вы будзе выдалены з сэрвіснага ўліковага запісу."
+  },
+  "removeAccess": {
+    "message": "Выдаліць доступ"
+  },
+  "checkForBreaches": {
+    "message": "Праверыць у вядомых уцечках даных для гэтага пароля"
+  },
+  "exposedMasterPassword": {
+    "message": "Скампраметаваны асноўны пароль"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знойдзены ва ўцечках даных. Выкарыстоўвайце ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць скампраметаваны пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Ненадзейны і скампраметаваны асноўны пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?"
+  },
+  "characterMinimum": {
+    "message": "Мінімальная колькасць сімвалаў: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $LENGTH$ сімвалаў.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Адхіліць"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

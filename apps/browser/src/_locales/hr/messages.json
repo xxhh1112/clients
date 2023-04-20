@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Pomoć i povratne informacije"
   },
+  "helpCenter": {
+    "message": "Bitwarden centar za pomoć"
+  },
+  "communityForums": {
+    "message": "Istraži forume zajednice Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Kontaktiraj Bitwarden pomoć"
+  },
   "sync": {
     "message": "Sinkronizacija"
   },
@@ -430,7 +439,14 @@
     "message": "Potreban je ponovni unos glavne lozinke."
   },
   "masterPasswordMinlength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+    "message": "Glavna lozinka mora imati najmanje $VALUE$ znakova.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -960,7 +976,10 @@
     "message": "Nakon učitavanja web stranice, ako je otkriven obrazac za prijavu, auto-ispuni."
   },
   "experimentalFeature": {
-    "message": "Ovo je trenutno eksperimentalna značajka. Koristi na vlastitu odgovornost."
+    "message": "Ugrožene ili nepouzdane web stranice mogu iskoristiti auto-ispunu prilikom učitavanja stranice."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Saznaj više o auto-ispuni"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Zadana postvaka Auto-ispune za prijave"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "dr."
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Ime"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Stavkama u suspendiranoj Organizaciji se ne može pristupiti. Kontaktiraj vlasnika Organizacije za pomoć."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Prijava u $DOMAIN$",
     "placeholders": {
@@ -2039,9 +2058,111 @@
     "message": "Nisi ti?"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "Novi korisnik?"
   },
   "rememberEmail": {
     "message": "Zapamti adresu e-pošte"
+  },
+  "loginWithDevice": {
+    "message": "Prijava uređajem"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije. Trebaš drugu opciju?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Jedinstvena fraza"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Provjeri je li trezor otključan i slaže li se jedinstvena fraza s drugim uređajem."
+  },
+  "resendNotification": {
+    "message": "Ponovno pošalji obavijest"
+  },
+  "viewAllLoginOptions": {
+    "message": "Pogledaj sve mogućnosti prijave"
+  },
+  "notificationSentDevice": {
+    "message": "Obavijest je poslana na tvoj uređaj."
+  },
+  "logInInitiated": {
+    "message": "Pokrenuta prijava"
+  },
+  "exposedMasterPassword": {
+    "message": "Ukradena glavna lozinka"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jedinstvenu lozinku. Želiš li svejedno korisiti ukradenu lozinku?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Slaba i ukradena glavna lozinka"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Slaba lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jaku i jedinstvenu lozinku. Želiš li svejedno korisiti slabu, ukradenu lozinku?"
+  },
+  "checkForBreaches": {
+    "message": "Provjeri je li lozinka ukradena prilikom krađe podataka"
+  },
+  "important": {
+    "message": "Važno:"
+  },
+  "masterPasswordHint": {
+    "message": "Glavnu lozinku nije moguće oporaviti ako ju zaboraviš!"
+  },
+  "characterMinimum": {
+    "message": "najmanje $LENGTH$ znakova",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Prema pravilima tvoje organizacije uključena je auto-ispuna prilikom učitavanja stranice."
+  },
+  "howToAutofill": {
+    "message": "Kako auto-ispuniti"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Odaberi stavku s ove stranice ili koristi prečac $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Odaberi stavku s ove stranice ili namjesti prečac u postavkama."
+  },
+  "gotIt": {
+    "message": "U redu"
+  },
+  "autofillSettings": {
+    "message": "Postavke auto-ispune"
+  },
+  "autofillShortcut": {
+    "message": "Tipkovnički precač auto-ispune"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Prečac auto-ispune nije postavljen. Promijeni u postavkama preglednika."
+  },
+  "autofillShortcutText": {
+    "message": "Prečac auto-ispune je: $COMMAND$. Promijeni u postavkama preglednika.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Zadani prečac auto-ispune: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

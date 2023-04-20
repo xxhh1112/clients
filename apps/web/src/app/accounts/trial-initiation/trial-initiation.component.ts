@@ -7,18 +7,42 @@ import { first, Subject, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PlanType } from "@bitwarden/common/enums/planType";
-import { ProductType } from "@bitwarden/common/enums/productType";
-import { PolicyData } from "@bitwarden/common/models/data/policy.data";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
-import { Policy } from "@bitwarden/common/models/domain/policy";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { PlanType } from "@bitwarden/common/billing/enums";
+import { ProductType } from "@bitwarden/common/enums";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 
 import { RouterService } from "./../../core/router.service";
 import { VerticalStepperComponent } from "./vertical-stepper/vertical-stepper.component";
+
+enum ValidOrgParams {
+  families = "families",
+  enterprise = "enterprise",
+  teams = "teams",
+  individual = "individual",
+  premium = "premium",
+  free = "free",
+}
+
+enum ValidLayoutParams {
+  default = "default",
+  teams = "teams",
+  teams1 = "teams1",
+  teams2 = "teams2",
+  enterprise = "enterprise",
+  enterprise1 = "enterprise1",
+  enterprise2 = "enterprise2",
+  cnetcmpgnent = "cnetcmpgnent",
+  cnetcmpgnind = "cnetcmpgnind",
+  cnetcmpgnteams = "cnetcmpgnteams",
+  abmenterprise = "abmenterprise",
+  abmteams = "abmteams",
+}
 
 @Component({
   selector: "app-trial",
@@ -35,14 +59,25 @@ export class TrialInitiationComponent implements OnInit, OnDestroy {
   plan: PlanType;
   product: ProductType;
   accountCreateOnly = true;
+  useTrialStepper = false;
   policies: Policy[];
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
-  validOrgs: string[] = ["teams", "enterprise", "families"];
+  trialFlowOrgs: string[] = [
+    ValidOrgParams.teams,
+    ValidOrgParams.enterprise,
+    ValidOrgParams.families,
+  ];
+  routeFlowOrgs: string[] = [
+    ValidOrgParams.free,
+    ValidOrgParams.premium,
+    ValidOrgParams.individual,
+  ];
+  layouts = ValidLayoutParams;
   referenceData: ReferenceEventRequest;
   @ViewChild("stepper", { static: false }) verticalStepper: VerticalStepperComponent;
 
   orgInfoFormGroup = this.formBuilder.group({
-    name: ["", [Validators.required]],
+    name: ["", { validators: [Validators.required, Validators.maxLength(50)], updateOn: "change" }],
     email: [""],
   });
 
@@ -87,39 +122,38 @@ export class TrialInitiationComponent implements OnInit, OnDestroy {
 
       this.referenceDataId = qParams.reference;
 
-      if (!qParams.org) {
-        return;
-      }
-
-      if (qParams.layout) {
+      if (Object.values(ValidLayoutParams).includes(qParams.layout)) {
         this.layout = qParams.layout;
+        this.accountCreateOnly = false;
       }
 
-      if (this.validOrgs.includes(qParams.org)) {
+      if (this.trialFlowOrgs.includes(qParams.org)) {
         this.org = qParams.org;
-      } else {
-        this.org = "families";
-      }
+        this.orgLabel = this.titleCasePipe.transform(this.org);
+        this.useTrialStepper = true;
+        this.referenceData.flow = qParams.org;
 
-      this.referenceData.flow = qParams.org;
+        if (this.org === ValidOrgParams.families) {
+          this.plan = PlanType.FamiliesAnnually;
+          this.product = ProductType.Families;
+        } else if (this.org === ValidOrgParams.teams) {
+          this.plan = PlanType.TeamsAnnually;
+          this.product = ProductType.Teams;
+        } else if (this.org === ValidOrgParams.enterprise) {
+          this.plan = PlanType.EnterpriseAnnually;
+          this.product = ProductType.Enterprise;
+        }
+      } else if (this.routeFlowOrgs.includes(qParams.org)) {
+        this.referenceData.flow = qParams.org;
+        const route = this.router.createUrlTree(["create-organization"], {
+          queryParams: { plan: qParams.org },
+        });
+        this.routerService.setPreviousUrl(route.toString());
+      }
 
       // Are they coming from an email for sponsoring a families organization
       // After logging in redirect them to setup the families sponsorship
       this.setupFamilySponsorship(qParams.sponsorshipToken);
-
-      this.orgLabel = this.titleCasePipe.transform(this.org);
-      this.accountCreateOnly = false;
-
-      if (this.org === "families") {
-        this.plan = PlanType.FamiliesAnnually;
-        this.product = ProductType.Families;
-      } else if (this.org === "teams") {
-        this.plan = PlanType.TeamsAnnually;
-        this.product = ProductType.Teams;
-      } else if (this.org === "enterprise") {
-        this.plan = PlanType.EnterpriseAnnually;
-        this.product = ProductType.Enterprise;
-      }
     });
 
     const invite = await this.stateService.getOrganizationInvitation();
@@ -148,6 +182,12 @@ export class TrialInitiationComponent implements OnInit, OnDestroy {
           this.enforcedPolicyOptions = enforcedPasswordPolicyOptions;
         });
     }
+
+    this.orgInfoFormGroup.controls.name.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.orgInfoFormGroup.controls.name.markAsTouched();
+      });
   }
 
   ngOnDestroy(): void {
@@ -187,7 +227,7 @@ export class TrialInitiationComponent implements OnInit, OnDestroy {
   }
 
   navigateToOrgInvite() {
-    this.router.navigate(["organizations", this.orgId, "manage", "people"]);
+    this.router.navigate(["organizations", this.orgId, "manage", "members"]);
   }
 
   previousStep() {

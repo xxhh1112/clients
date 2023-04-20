@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Kömək və əks əlaqə"
   },
+  "helpCenter": {
+    "message": "Bitwarden Kömək mərkəzi"
+  },
+  "communityForums": {
+    "message": "Bitwarden cəmiyyət forumlarını kəşf et"
+  },
+  "contactSupport": {
+    "message": "Bitwarden dəstəyi ilə əlaqə saxla"
+  },
   "sync": {
     "message": "Eyniləşdirmə"
   },
@@ -430,7 +439,14 @@
     "message": "Ana parolun yenidən yazılması lazımdır."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
+    "message": "Ana parol ən azı $VALUE$ simvol uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parol təsdiqləməsi uyğun gəlmir."
@@ -960,7 +976,10 @@
     "message": "Giriş formu aşkarlananda, səhifə yüklənən zaman formu avto-doldurma icra edilsin."
   },
   "experimentalFeature": {
-    "message": "Bu, hazırda təcrübi bir özəllikdir. İstifadə zamanı riski sizə aiddir."
+    "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Avto-doldurma haqqında daha ətraflı"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Giriş məlumatları üçün ilkin avto-doldurma tənzimləməsi"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Hörmətli"
   },
   "firstName": {
     "message": "Ad"
@@ -1981,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "Sıradan çıxarılmış Təşkilatlardakı elementlərə müraciət edilə bilmir. Kömək üçün Təşkilatınızın sahibi ilə əlaqə saxlayın."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "$DOMAIN$ domeninə giriş edilir",
     "placeholders": {
@@ -2043,5 +2062,107 @@
   },
   "rememberEmail": {
     "message": "E-poçtu xatırla"
+  },
+  "loginWithDevice": {
+    "message": "Cihazla giriş et"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Barmaq izi ifadəsi"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Zəhmət olmasa anbarınızın kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazda uyğun gəldiyinə əmin olun."
+  },
+  "resendNotification": {
+    "message": "Bildirişi təkrar göndər"
+  },
+  "viewAllLoginOptions": {
+    "message": "Bütün giriş etmə seçimlərinə bax"
+  },
+  "notificationSentDevice": {
+    "message": "Cihazınıza bir bildiriş göndərildi."
+  },
+  "logInInitiated": {
+    "message": "Giriş etmə başladıldı"
+  },
+  "exposedMasterPassword": {
+    "message": "İfşa olunmuş ana parol"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Parol, məlumat pozuntusunda tapıldı. Hesabınızı qorumaq üçün unikal bir parol istifadə edin. İfşa olunmuş bir parol istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zəif və ifşa olunmuş ana parol"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Zəif parol məlumat pozuntusunda aşkarlandı və tapıldı. Hesabınızı qorumaq üçün güclü və unikal bir parol istifadə edin. Bu parolu istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "checkForBreaches": {
+    "message": "Bu parol üçün bilinən məlumat pozuntularını yoxlayın"
+  },
+  "important": {
+    "message": "Vacib:"
+  },
+  "masterPasswordHint": {
+    "message": "Unutsanız, ana parolunuz bərpa edilə bilməz!"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ simvol",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Təşkilatınızın siyasətləri, səhifə yüklənəndə avto-doldurmanı işə saldı."
+  },
+  "howToAutofill": {
+    "message": "Avto-doldurma necə edilir"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Bu səhifədən bir element seçin və ya qısayolu istifadə edin: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Bu səhifədən bir element seçin və ya tənzimləmələrdə bir qısayol tənzimləyin."
+  },
+  "gotIt": {
+    "message": "Anladım"
+  },
+  "autofillSettings": {
+    "message": "Avto-doldurma tənzimləmələri"
+  },
+  "autofillShortcut": {
+    "message": "Avto-doldurma klaviatura qısayolu"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Avto-doldurma qısayolu tənzimlənməyib. Bunu brauzerin tənzimləmələrində dəyişdirin."
+  },
+  "autofillShortcutText": {
+    "message": "Avto-doldurma qısayolu: $COMMAND$. Bunu brauzerin tənzimləmələrində dəyişdirin.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "İlkin avto-doldurma qısayolu: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
   }
 }

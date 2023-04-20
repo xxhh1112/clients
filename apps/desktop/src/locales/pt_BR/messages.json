@@ -101,7 +101,7 @@
     "message": "Editar Item"
   },
   "emailAddress": {
-    "message": "Endereço de E-mail"
+    "message": "Endereço de e-mail"
   },
   "verificationCodeTotp": {
     "message": "Código de Verificação (TOTP)"
@@ -238,6 +238,9 @@
   "ms": {
     "message": "Sra"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -269,7 +272,7 @@
     "message": "Último Nome"
   },
   "fullName": {
-    "message": "Nome Completo"
+    "message": "Nome completo"
   },
   "address1": {
     "message": "Endereço 1"
@@ -370,7 +373,7 @@
     "message": "Você tem certeza que deseja substituir a senha atual?"
   },
   "overwriteUsername": {
-    "message": "Substituir Usuário"
+    "message": "Sobrescrever usuário"
   },
   "overwriteUsernameConfirmation": {
     "message": "Tem certeza que deseja substituir o usuário atual?"
@@ -410,7 +413,7 @@
     "message": "Números (0-9)"
   },
   "specialCharacters": {
-    "message": "Caracteres Especiais (!@#$%^&*)"
+    "message": "Caracteres especiais (!@#$%^&*)"
   },
   "numWords": {
     "message": "Número de palavras"
@@ -423,7 +426,7 @@
     "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
-    "message": "Incluir Número"
+    "message": "Incluir número"
   },
   "close": {
     "message": "Fechar"
@@ -485,7 +488,7 @@
     "message": "Você tem certeza que deseja excluir esta pasta?"
   },
   "deletedFolder": {
-    "message": "Pasta apagada"
+    "message": "Pasta excluída"
   },
   "loginOrCreateNewAccount": {
     "message": "Inicie a sessão ou crie uma nova conta para acessar seu cofre seguro."
@@ -533,13 +536,20 @@
     "message": "Endereço de e-mail inválido."
   },
   "masterPasswordRequired": {
-    "message": "A senha mestre é obrigatória."
+    "message": "A senha mestra é obrigatória."
   },
   "confirmMasterPasswordRequired": {
-    "message": "É necessário redigitar a senha mestre."
+    "message": "É necessário redigitar a senha mestra."
   },
   "masterPasswordMinlength": {
-    "message": "A senha mestre deve ter pelo menos 8 caracteres."
+    "message": "A senha mestra deve ter pelo menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da senha mestra não corresponde."
@@ -563,10 +573,10 @@
     "message": "Enviar um código de verificação para o seu e-mail"
   },
   "sendCode": {
-    "message": "Enviar Código"
+    "message": "Enviar código"
   },
   "codeSent": {
-    "message": "Código Enviado"
+    "message": "Código enviado"
   },
   "verificationCode": {
     "message": "Código de Verificação"
@@ -650,7 +660,7 @@
     "message": "WebAuthn FIDO2"
   },
   "webAuthnDesc": {
-    "message": "Utilize qualquer chave de segurança ativada por WebAuthn para acessar a sua conta."
+    "message": "Utilize qualquer chave de segurança compatível com WebAuthn para acessar a sua conta."
   },
   "emailTitle": {
     "message": "E-mail"
@@ -662,7 +672,7 @@
     "message": "Sessão Indisponível"
   },
   "noTwoStepProviders": {
-    "message": "Esta conta tem o início de sessão em duas etapas ativada, no entanto, nenhum dos provedores de início de sessão em duas etapas configurados são suportados por este dispositivo."
+    "message": "Esta conta tem a autenticação por duas etapas ativado, no entanto, nenhum dos provedores de início de sessão em duas etapas configurados são suportados por este dispositivo."
   },
   "noTwoStepProviders2": {
     "message": "Por favor inclua provedores adicionais que são melhor suportados entre dispositivos (como um aplicativo de autenticação)."
@@ -701,7 +711,7 @@
     "message": "URL do Servidor de Ícones"
   },
   "environmentSaved": {
-    "message": "Os URLs de ambiente foram salvos."
+    "message": "As URLs de ambiente foram salvas"
   },
   "ok": {
     "message": "Ok"
@@ -752,7 +762,7 @@
     "message": "Carregando..."
   },
   "lockVault": {
-    "message": "Bloquear Cofre"
+    "message": "Bloquear cofre"
   },
   "passwordGenerator": {
     "message": "Gerador de Senha"
@@ -760,11 +770,14 @@
   "contactUs": {
     "message": "Fale Conosco"
   },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
+  },
   "getHelp": {
     "message": "Obter Ajuda"
   },
   "fileBugReport": {
-    "message": "Enviar um Relatório de Bug"
+    "message": "Relate um bug"
   },
   "blog": {
     "message": "Blog"
@@ -830,7 +843,7 @@
     "message": "A autenticação em duas etapas torna sua conta mais segura, exigindo que você verifique o seu login com outro dispositivo, como uma chave de segurança, um aplicativo de autenticação, SMS, chamada telefônica ou e-mail. A autenticação em duas etapas pode ser ativada no cofre web em bitwarden.com. Você deseja visitar o site agora?"
   },
   "twoStepLogin": {
-    "message": "Login em Duas Etapas"
+    "message": "Autenticação em duas etapas"
   },
   "vaultTimeout": {
     "message": "Tempo Limite do Cofre"
@@ -901,7 +914,7 @@
     "message": "Mostrar ícones dos sites"
   },
   "faviconDesc": {
-    "message": "Mostre uma imagem reconhecível ao lado de cada login."
+    "message": "Mostre uma imagem reconhecível ao lado de cada credencial."
   },
   "enableMinToTray": {
     "message": "Minimizar para Ícone da Bandeja"
@@ -949,7 +962,7 @@
     "message": "Iniciar automaticamente ao iniciar sessão"
   },
   "openAtLoginDesc": {
-    "message": "Inicia o aplicativo Bitwarden Desktop automaticamente no logon."
+    "message": "Inicie o aplicativo Bitwarden Desktop automaticamente no login."
   },
   "alwaysShowDock": {
     "message": "Exibir sempre na Dock"
@@ -988,7 +1001,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Verificar por atualizações"
+    "message": "Verificar por atualizações…"
   },
   "version": {
     "message": "Versão $VERSION_NUM$",
@@ -1779,6 +1792,15 @@
   "disabled": {
     "message": "Desativado"
   },
+  "removePassword": {
+    "message": "Remover senha"
+  },
+  "removedPassword": {
+    "message": "Senha removida"
+  },
+  "removePasswordConfirmation": {
+    "message": "Você tem certeza que deseja remover a senha?"
+  },
   "maxAccessCountReached": {
     "message": "Número máximo de acessos atingido"
   },
@@ -2016,9 +2038,6 @@
   "neverLockWarning": {
     "message": "Você tem certeza que deseja usar a opção \"Nunca\"? Definir suas opções de bloqueio para \"Nunca\" armazena a chave de criptografia do seu cofre no seu dispositivo. Se você usar esta opção, deve garantir que mantém seu dispositivo devidamente protegido."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Cofre"
   },
@@ -2048,5 +2067,139 @@
   },
   "logInWithAnotherDevice": {
     "message": "Fazer login com outro dispositivo"
+  },
+  "logInInitiated": {
+    "message": "Login iniciado"
+  },
+  "notificationSentDevice": {
+    "message": "Uma notificação foi enviada para seu dispositivo."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, certifique-se de que o seu cofre esteja desbloqueado e a frase de identificação corresponda ao outro dispositivo."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de identificação"
+  },
+  "needAnotherOption": {
+    "message": "Login com dispositivo deve ser habilitado nas configurações do aplicativo móvel do Bitwarden. Necessita de outra opção?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas as opções de login"
+  },
+  "resendNotification": {
+    "message": "Reenviar notificação"
+  },
+  "toggleCharacterCount": {
+    "message": "Ativar/Desativar contagem de caracteres",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Você está tentando fazer login?"
+  },
+  "logInAttemptBy": {
+    "message": "Tentativa de login por $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Tipo de dispositivo"
+  },
+  "ipAddress": {
+    "message": "Endereço IP"
+  },
+  "time": {
+    "message": "Horário"
+  },
+  "confirmLogIn": {
+    "message": "Confirmar acesso"
+  },
+  "denyLogIn": {
+    "message": "Negar acesso"
+  },
+  "approveLoginRequests": {
+    "message": "Aprovar solicitações de acesso"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Acesso confirmado para $EMAIL$ em $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Você negou uma tentativa de acesso de outro dispositivo. Se isso realmente foi você, tente fazer login com o dispositivo novamente."
+  },
+  "justNow": {
+    "message": "Agora há pouco"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Solicitado há $MINUTES$ minutos",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "O pedido de login já expirou."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Este pedido não é mais válido."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use este dispositivo para aprovar solicitações de acesso feitas de outros dispositivos."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirmar tentativa de acesso de $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Acesso solicitado"
+  },
+  "exposedMasterPassword": {
+    "message": "Senha Mestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Senha encontrada em um vazamento de dados. Use uma senha única para proteger sua conta. Tem certeza de que deseja usar uma senha já exposta?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Senha Mestra Fraca e Comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Senha fraca identificada e encontrada em um vazamento de dados. Use uma senha forte e única para proteger a sua conta. Tem certeza de que deseja usar essa senha?"
+  },
+  "checkForBreaches": {
+    "message": "Verificar vazamentos de dados conhecidos para esta senha"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "A sua senha mestra não pode ser recuperada se você esquecê-la!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimos",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

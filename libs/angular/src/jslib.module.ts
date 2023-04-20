@@ -3,8 +3,6 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { CalloutComponent } from "./components/callout.component";
-import { ExportScopeCalloutComponent } from "./components/export-scope-callout.component";
-import { IconComponent } from "./components/icon.component";
 import { BitwardenToastModule } from "./components/toastr.component";
 import { A11yInvalidDirective } from "./directives/a11y-invalid.directive";
 import { A11yTitleDirective } from "./directives/a11y-title.directive";
@@ -21,15 +19,16 @@ import { SelectCopyDirective } from "./directives/select-copy.directive";
 import { StopClickDirective } from "./directives/stop-click.directive";
 import { StopPropDirective } from "./directives/stop-prop.directive";
 import { TrueFalseValueDirective } from "./directives/true-false-value.directive";
-import { ColorPasswordCountPipe } from "./pipes/color-password-count.pipe";
-import { ColorPasswordPipe } from "./pipes/color-password.pipe";
 import { CreditCardNumberPipe } from "./pipes/credit-card-number.pipe";
 import { EllipsisPipe } from "./pipes/ellipsis.pipe";
 import { I18nPipe } from "./pipes/i18n.pipe";
 import { SearchCiphersPipe } from "./pipes/search-ciphers.pipe";
 import { SearchPipe } from "./pipes/search.pipe";
 import { UserNamePipe } from "./pipes/user-name.pipe";
+import { UserTypePipe } from "./pipes/user-type.pipe";
 import { PasswordStrengthComponent } from "./shared/components/password-strength/password-strength.component";
+import { ExportScopeCalloutComponent } from "./tools/export/components/export-scope-callout.component";
+import { IconComponent } from "./vault/components/icon.component";
 
 @NgModule({
   imports: [
@@ -49,8 +48,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     AutofocusDirective,
     BoxRowDirective,
     CalloutComponent,
-    ColorPasswordCountPipe,
-    ColorPasswordPipe,
     CreditCardNumberPipe,
     EllipsisPipe,
     ExportScopeCalloutComponent,
@@ -70,6 +67,7 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     LaunchClickDirective,
     UserNamePipe,
     PasswordStrengthComponent,
+    UserTypePipe,
   ],
   exports: [
     A11yInvalidDirective,
@@ -79,8 +77,6 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     BitwardenToastModule,
     BoxRowDirective,
     CalloutComponent,
-    ColorPasswordCountPipe,
-    ColorPasswordPipe,
     CreditCardNumberPipe,
     EllipsisPipe,
     ExportScopeCalloutComponent,
@@ -100,7 +96,8 @@ import { PasswordStrengthComponent } from "./shared/components/password-strength
     LaunchClickDirective,
     UserNamePipe,
     PasswordStrengthComponent,
+    UserTypePipe,
   ],
-  providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe],
+  providers: [CreditCardNumberPipe, DatePipe, I18nPipe, SearchPipe, UserNamePipe, UserTypePipe],
 })
 export class JslibModule {}

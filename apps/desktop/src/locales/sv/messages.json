@@ -238,6 +238,9 @@
   "ms": {
     "message": "Fröken"
   },
+  "mx": {
+    "message": "Vederbörande"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "Huvudlösenord måste anges igen."
   },
   "masterPasswordMinlength": {
-    "message": "Huvudlösenordet måste vara minst 8 tecken långt."
+    "message": "Huvudlösenordet måste vara minst $VALUE$ tecken långt.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Huvudlösenorden stämmer inte överens."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontakta oss"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Få hjälp"
@@ -1779,6 +1792,15 @@
   "disabled": {
     "message": "Inaktiverad"
   },
+  "removePassword": {
+    "message": "Ta bort lösenord"
+  },
+  "removedPassword": {
+    "message": "Tog bort lösenord"
+  },
+  "removePasswordConfirmation": {
+    "message": "Är du säker på att du vill ta bort lösenordet?"
+  },
   "maxAccessCountReached": {
     "message": "Det maximala antalet åtkomster har uppnåtts"
   },
@@ -2016,9 +2038,6 @@
   "neverLockWarning": {
     "message": "Är du säker på att du vill använda alternativet ”Aldrig”? Att ställa in låsnings-alternativet till ”Aldrig” lagrar valvets krypteringsnyckel på datorn. Om du använder det här alternativet bör du se till att du håller datorn ordentligt skyddad."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Valv"
   },
@@ -2048,5 +2067,139 @@
   },
   "logInWithAnotherDevice": {
     "message": "Logga in med en annan enhet"
+  },
+  "logInInitiated": {
+    "message": "Inloggning påbörjad"
+  },
+  "notificationSentDevice": {
+    "message": "En avisering har skickats till din enhet."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrycksfras"
+  },
+  "needAnotherOption": {
+    "message": "\"Logga in med enhet\" måste ställas in i inställningarna i Bitwardens app. Behöver du ett annat alternativ?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Visa alla inloggningsalternativ"
+  },
+  "resendNotification": {
+    "message": "Skicka avisering igen"
+  },
+  "toggleCharacterCount": {
+    "message": "Växla teckenantal",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Försöker du logga in?"
+  },
+  "logInAttemptBy": {
+    "message": "Inloggningsförsök av $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Enhetstyp"
+  },
+  "ipAddress": {
+    "message": "IP-adress"
+  },
+  "time": {
+    "message": "Tid"
+  },
+  "confirmLogIn": {
+    "message": "Bekräfta inloggning"
+  },
+  "denyLogIn": {
+    "message": "Neka inloggning"
+  },
+  "approveLoginRequests": {
+    "message": "Godkänn inloggningsförfrågningar"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Inloggning bekräftad för $EMAIL$ på $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Du nekade ett inloggningsförsök från en annan enhet. Om detta verkligen var du, försök att logga in med enheten igen."
+  },
+  "justNow": {
+    "message": "Just nu"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Begärd för $MINUTES$ minuter sedan",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Inloggningsbegäran har redan löpt ut."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Denna begäran är inte längre giltig."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Använd denna enhet för att godkänna inloggningsförfrågningar från andra enheter."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bekräfta inloggningsförsök för $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Inloggning begärd"
+  },
+  "exposedMasterPassword": {
+    "message": "Huvudlösenordet har exponerats"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Huvudlösenordet är svagt och har exponerats"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?"
+  },
+  "checkForBreaches": {
+    "message": "Kontrollera kända dataintrång för detta lösenord"
+  },
+  "important": {
+    "message": "Viktigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Ditt huvudlösenord kan inte återställas om du glömmer det!"
+  },
+  "characterMinimum": {
+    "message": "Minst $LENGTH$ tecken",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }
