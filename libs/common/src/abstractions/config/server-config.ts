@@ -24,7 +24,7 @@ export class ServerConfig {
     this.utcDate = new Date(serverConfigData.utcDate);
     this.environment = serverConfigData.environment;
     this.featureStates = serverConfigData.featureStates;
-    
+
     if (this.server?.name == null && this.server?.url == null) {
       this.server = null;
     }

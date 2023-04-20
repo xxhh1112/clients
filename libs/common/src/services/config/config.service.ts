@@ -15,12 +15,14 @@ export class ConfigService implements ConfigServiceAbstraction {
     private configApiService: ConfigApiServiceAbstraction
   ) {
     // Re-fetch the server config every hour
-    timer(0, 1000 * 3600).pipe(
-      map(async () => {
-        return await this.buildServerConfig();
-      }))
+    timer(0, 1000 * 3600)
+      .pipe(
+        map(async () => {
+          return await this.buildServerConfig();
+        })
+      )
       .subscribe(async (serverConfig) => {
-        this._serverConfig.next( await serverConfig);
+        this._serverConfig.next(await serverConfig);
       });
 
     this.stateService.activeAccountUnlocked$
@@ -57,25 +59,28 @@ export class ConfigService implements ConfigServiceAbstraction {
     }
   }
 
-  public async getFeatureFlagBool (key: string, defaultValue: boolean): Promise<boolean> {
+  public async getFeatureFlagBool(key: string, defaultValue: boolean): Promise<boolean> {
     return await this.getFeatureFlag(key, defaultValue);
   }
-  public async getFeatureFlagString (key: string, defaultValue: string): Promise<string> {
-    return await this.getFeatureFlag(key, defaultValue);
-  }  
-  
-  public async getFeatureFlagNumber (key: string, defaultValue: number): Promise<number> {
+  public async getFeatureFlagString(key: string, defaultValue: string): Promise<string> {
     return await this.getFeatureFlag(key, defaultValue);
   }
-  
-  private async getFeatureFlag<T>(key: string, defaultValue: T): Promise<T> 
-  {
-      const serverConfig = await this.buildServerConfig();
-      if (serverConfig == null || serverConfig.featureStates == null || serverConfig.featureStates[key] == null) { 
-        return defaultValue;
-      }
 
-      return serverConfig.featureStates[key] as T;
+  public async getFeatureFlagNumber(key: string, defaultValue: number): Promise<number> {
+    return await this.getFeatureFlag(key, defaultValue);
+  }
+
+  private async getFeatureFlag<T>(key: string, defaultValue: T): Promise<T> {
+    const serverConfig = await this.buildServerConfig();
+    if (
+      serverConfig == null ||
+      serverConfig.featureStates == null ||
+      serverConfig.featureStates[key] == null
+    ) {
+      return defaultValue;
+    }
+
+    return serverConfig.featureStates[key] as T;
   }
 
   private async buildServerConfig(): Promise<ServerConfig> {
