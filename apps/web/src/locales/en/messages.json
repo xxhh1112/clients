@@ -3467,7 +3467,7 @@
     "message": "Filters"
   },
   "vaultTimeout": {
-    "message": "Vault timeout"
+    "message": "Session timeout"
   },
   "vaultTimeoutDesc": {
     "message": "Choose when your account will take the session timeout action."
@@ -3717,7 +3717,7 @@
     "message": "User preference"
   },
   "vaultTimeoutAction": {
-    "message": "Vault timeout action"
+    "message": "Session timeout action"
   },
   "vaultTimeoutActionLockDesc": {
     "message": "Master password or other unlock method is required to access your account again."
@@ -4818,7 +4818,7 @@
     "message": "Your master password does not meet one or more of your organization policies. In order to access your account, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
-    "message": "Vault timeout"
+    "message": "Session timeout"
   },
   "maximumVaultTimeoutDesc": {
     "message": "Set a maximum session timeout for members."
@@ -4884,7 +4884,7 @@
     "message": "Minimum custom timeout is 1 minute."
   },
   "vaultTimeoutRangeError": {
-    "message": "Vault timeout is not within allowed range."
+    "message": "Session timeout is not within allowed range."
   },
   "disablePersonalVaultExport": {
     "message": "Remove individual vault export"
