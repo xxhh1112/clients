@@ -614,7 +614,7 @@
     "message": "No"
   },
   "loginOrCreateNewAccount": {
-    "message": "Log in or create a new account to access your secure vault."
+    "message": "Log in or create a new account to access your secure account."
   },
   "loginWithDevice": {
     "message": "Log in with device"
@@ -656,7 +656,7 @@
     "message": "Master password"
   },
   "masterPassDesc": {
-    "message": "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
+    "message": "The master password is the password you use to access your account. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
   },
   "masterPassImportant": {
     "message": "Your master password cannot be recovered if you forget it!"
@@ -726,7 +726,7 @@
     "message": "Email address"
   },
   "yourVaultIsLocked": {
-    "message": "Your vault is locked. Verify your master password to continue."
+    "message": "Your account is locked. Verify your master password to continue."
   },
   "unlock": {
     "message": "Unlock"
@@ -1318,7 +1318,7 @@
     "message": "Preferences"
   },
   "preferencesDesc": {
-    "message": "Customize your web vault experience."
+    "message": "Customize your web app experience."
   },
   "preferencesUpdated": {
     "message": "Preferences saved"
@@ -1327,7 +1327,7 @@
     "message": "Language"
   },
   "languageDesc": {
-    "message": "Change the language used by the web vault."
+    "message": "Change the language used by the web app."
   },
   "enableFavicon": {
     "message": "Show website icons"
@@ -1337,10 +1337,10 @@
   },
   "enableFullWidth": {
     "message": "Display full width layout",
-    "description": "Allows scaling the web vault UI's width"
+    "description": "Allows scaling the web app UI's width"
   },
   "enableFullWidthDesc": {
-    "message": "Allow the web vault to expand the full width of the browser window."
+    "message": "Allow the web app to expand the full width of the browser window."
   },
   "default": {
     "message": "Default"
@@ -1517,7 +1517,7 @@
     "message": "Due to platform limitations, YubiKeys cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when YubiKeys cannot be used. Supported platforms:"
   },
   "twoFactorYubikeySupportUsb": {
-    "message": "Web vault, desktop application, CLI, and all browser extensions on a device with a USB port that can accept your YubiKey."
+    "message": "Web app, desktop application, CLI, and all browser extensions on a device with a USB port that can accept your YubiKey."
   },
   "twoFactorYubikeySupportMobile": {
     "message": "Mobile apps on a device with NFC capabilities or a data port that can accept your YubiKey."
@@ -1619,7 +1619,7 @@
     "message": "Due to platform limitations, FIDO U2F cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when FIDO U2F cannot be used. Supported platforms:"
   },
   "twoFactorU2fSupportWeb": {
-    "message": "Web vault and browser extensions on a desktop/laptop with a U2F supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
+    "message": "Web app and browser extensions on a desktop/laptop with a U2F supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
   },
   "twoFactorU2fWaiting": {
     "message": "Waiting for you to touch the button on your security key"
@@ -1634,7 +1634,7 @@
     "message": "Due to platform limitations, WebAuthn cannot be used on all Bitwarden applications. You should set up another two-step login provider so that you can access your account when WebAuthn cannot be used. Supported platforms:"
   },
   "twoFactorWebAuthnSupportWeb": {
-    "message": "Web vault and browser extensions on a desktop/laptop with a WebAuthn supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
+    "message": "Web app and browser extensions on a desktop/laptop with a WebAuthn supported browser (Chrome, Opera, Vivaldi, or Firefox with FIDO U2F turned on)."
   },
   "twoFactorRecoveryYourCode": {
     "message": "Your Bitwarden two-step login recovery code"
@@ -1899,7 +1899,7 @@
     "message": "Emergency access"
   },
   "premiumSignUpReports": {
-    "message": "Password hygiene, account health, and data breach reports to keep your vault safe."
+    "message": "Password hygiene, account health, and data breach reports to keep your data safe."
   },
   "premiumSignUpTotp": {
     "message": "TOTP verification code (2FA) generator for logins in your vault."
@@ -2635,7 +2635,8 @@
     "description": "Desktop app"
   },
   "webVault": {
-    "message": "Web vault"
+    "message": "Web app",
+    "description": "The Bitwarden web application previously referred to as web vault"
   },
   "loggedIn": {
     "message": "Logged in"
@@ -3112,7 +3113,7 @@
     "message": "Update browser"
   },
   "updateBrowserDesc": {
-    "message": "You are using an unsupported web browser. The web vault may not function properly."
+    "message": "You are using an unsupported web browser. The web app may not function properly."
   },
   "joinOrganization": {
     "message": "Join organization"
@@ -3469,7 +3470,7 @@
     "message": "Vault timeout"
   },
   "vaultTimeoutDesc": {
-    "message": "Choose when your vault will take the vault timeout action."
+    "message": "Choose when your account will take the session timeout action."
   },
   "oneMinute": {
     "message": "1 minute"
@@ -3578,7 +3579,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+    "message": "Please make sure your account is unlocked and Fingerprint phrase matches the other device."
   },
   "fingerprintPhraseHeader": {
     "message": "Fingerprint phrase"
@@ -3719,10 +3720,10 @@
     "message": "Vault timeout action"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Master password or other unlock method is required to access your vault again."
+    "message": "Master password or other unlock method is required to access your account again."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Re-authentication is required to access your vault again."
+    "message": "Re-authentication is required to access your account again."
   },
   "lock": {
     "message": "Lock",
@@ -3811,7 +3812,7 @@
     }
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?"
+    "message": "Logging out will remove all access to your account and requires online authentication after the timeout period. Are you sure you want to use this setting?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Timeout action confirmation"
@@ -3835,7 +3836,7 @@
     "message": "Set master password"
   },
   "ssoCompleteRegistration": {
-    "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+    "message": "In order to complete logging in with SSO, please set a master password to access and protect your account."
   },
   "identifier": {
     "message": "Identifier"
@@ -4626,7 +4627,7 @@
     "message": "Theme"
   },
   "themeDesc": {
-    "message": "Choose a theme for your web vault."
+    "message": "Choose a theme for the web app."
   },
   "themeSystem": {
     "message": "Use system theme"
@@ -4808,25 +4809,25 @@
     "message": "Update master password"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password was recently changed by an administrator in your organization. In order to access your account, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "masterPasswordInvalidWarning": {
     "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password does not meet one or more of your organization policies. In order to access your account, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "maximumVaultTimeout": {
     "message": "Vault timeout"
   },
   "maximumVaultTimeoutDesc": {
-    "message": "Set a maximum vault timeout for members."
+    "message": "Set a maximum session timeout for members."
   },
   "maximumVaultTimeoutLabel": {
-    "message": "Maximum vault timeout"
+    "message": "Maximum session timeout"
   },
   "invalidMaximumVaultTimeout": {
-    "message": "Invalid maximum vault timeout."
+    "message": "Invalid maximum session timeout."
   },
   "hours": {
     "message": "Hours"
@@ -4835,7 +4836,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
+    "message": "Your organization policies have set your maximum allowed session timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4848,7 +4849,7 @@
     }
   },
   "vaultTimeoutPolicyWithActionInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "message": "Your organization policies are affecting your session timeout. Maximum allowed session timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your session timeout action is set to $ACTION$.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4865,7 +4866,7 @@
     }
   },
   "vaultTimeoutActionPolicyInEffect": {
-    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "message": "Your organization policies have set your session timeout action to $ACTION$.",
     "placeholders": {
       "action": {
         "content": "$1",
@@ -4874,10 +4875,10 @@
     }
   },
   "customVaultTimeout": {
-    "message": "Custom vault timeout"
+    "message": "Custom session timeout"
   },
   "vaultTimeoutToLarge": {
-    "message": "Your vault timeout exceeds the restriction set by your organization."
+    "message": "Your session timeout exceeds the restriction set by your organization."
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Minimum custom timeout is 1 minute."
