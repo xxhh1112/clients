@@ -5,6 +5,7 @@ import { ConfigServiceAbstraction } from "../../abstractions/config/config.servi
 import { ServerConfig } from "../../abstractions/config/server-config";
 import { StateService } from "../../abstractions/state.service";
 import { ServerConfigData } from "../../models/data/server-config.data";
+import { FeatureFlag } from "../../enums/feature-flags.enum";
 
 export class ConfigService implements ConfigServiceAbstraction {
   protected _serverConfig = new BehaviorSubject<ServerConfig | null>(null);
@@ -59,24 +60,24 @@ export class ConfigService implements ConfigServiceAbstraction {
     }
   }
 
-  async getFeatureFlagBool(key: string, defaultValue: boolean): Promise<boolean> {
+  async getFeatureFlagBool(key: FeatureFlag, defaultValue: boolean): Promise<boolean> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagString(key: string, defaultValue: string): Promise<string> {
+  async getFeatureFlagString(key: FeatureFlag, defaultValue: string): Promise<string> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagNumber(key: string, defaultValue: number): Promise<number> {
+  async getFeatureFlagNumber(key: FeatureFlag, defaultValue: number): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  private async getFeatureFlag<T>(key: string, defaultValue: T): Promise<T> {
+  private async getFeatureFlag<T>(key: FeatureFlag, defaultValue: T): Promise<T> {
     const serverConfig = await this.buildServerConfig();
     if (
       serverConfig == null ||
       serverConfig.featureStates == null ||
-      serverConfig.featureStates[key] == null
+      serverConfig.featureStates[FeatureFlag.DisplayEuEnvironmentFlag] == null
     ) {
       return defaultValue;
     }
