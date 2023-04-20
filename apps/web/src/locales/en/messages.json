@@ -614,7 +614,7 @@
     "message": "No"
   },
   "loginOrCreateNewAccount": {
-    "message": "Log in or create a new account to access your secure account."
+    "message": "Log in or create a new account to access Bitwarden."
   },
   "loginWithDevice": {
     "message": "Log in with device"
