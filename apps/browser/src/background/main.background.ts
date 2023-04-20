@@ -2,6 +2,8 @@ import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarde
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
+import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
@@ -50,6 +52,7 @@ import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-u
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
+import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
@@ -89,9 +92,6 @@ import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-u
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
-import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
-import { ConfigService } from "@bitwarden/common/services/config/config.service";
 
 import { BrowserOrganizationService } from "../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../admin-console/services/browser-policy.service";
