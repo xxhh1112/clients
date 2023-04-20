@@ -17,7 +17,10 @@ export class SendEditCommand {
     private sendApiService: SendApiService
   ) {}
 
-  async run(requestJson: string, cmdOptions: Record<string, any>): Promise<Response> {
+  async run(
+    requestJson: string | SendResponse,
+    cmdOptions: Record<string, any>
+  ): Promise<Response> {
     if (process.env.BW_SERVE !== "true" && (requestJson == null || requestJson === "")) {
       requestJson = await CliUtils.readStdin();
     }

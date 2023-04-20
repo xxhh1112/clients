@@ -34,7 +34,7 @@ export class CreateCommand {
 
   async run(
     object: string,
-    requestJson: string,
+    requestJson: string | any,
     cmdOptions: Record<string, any>,
     additionalData: any = null
   ): Promise<Response> {

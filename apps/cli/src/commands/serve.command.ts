@@ -24,6 +24,7 @@ import {
   SendListCommand,
   SendRemovePasswordCommand,
 } from "../tools/send";
+import { SendResponse } from "../tools/send/models/send.response";
 import { CreateCommand } from "../vault/create.command";
 import { DeleteCommand } from "../vault/delete.command";
 import { SyncCommand } from "../vault/sync.command";
@@ -283,7 +284,7 @@ export class ServeCommand {
       const response = await this.shareCommand.run(
         ctx.params.id,
         ctx.params.organizationId,
-        ctx.request.body as any // TODO: Check the format of this body for an array of collection ids
+        ctx.request.body as string[] // TODO: Check the format of this body for an array of collection ids
       );
       this.processResponse(ctx.response, response);
       await next();
@@ -342,12 +343,12 @@ export class ServeCommand {
         return;
       }
 
-      const body = ctx.request.body as { id: string };
+      const body = ctx.request.body as SendResponse;
 
       let response: Response = null;
       if (ctx.params.object === "send") {
         body.id = ctx.params.id;
-        response = await this.sendEditCommand.run(body as any, ctx.request.query);
+        response = await this.sendEditCommand.run(body, ctx.request.query);
       } else {
         response = await this.editCommand.run(
           ctx.params.object,

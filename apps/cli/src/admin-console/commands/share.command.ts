@@ -7,7 +7,7 @@ import { CipherResponse } from "../../vault/models/cipher.response";
 export class ShareCommand {
   constructor(private cipherService: CipherService) {}
 
-  async run(id: string, organizationId: string, requestJson: string): Promise<Response> {
+  async run(id: string, organizationId: string, requestJson: string | string[]): Promise<Response> {
     if (process.env.BW_SERVE !== "true" && (requestJson == null || requestJson === "")) {
       requestJson = await CliUtils.readStdin();
     }
