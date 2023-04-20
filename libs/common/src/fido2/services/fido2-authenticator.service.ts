@@ -202,12 +202,19 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
-      const selectedCipherId = await userInterfaceSession.pickCredential(
-        cipherOptions.map((cipher) => cipher.id)
-      );
+      const response = await userInterfaceSession.pickCredential({
+        cipherIds: cipherOptions.map((cipher) => cipher.id),
+        userVerification: params.requireUserVerification,
+      });
+      const selectedCipherId = response.cipherId;
+      const userVerified = response.userVerified;
       const selectedCipher = cipherOptions.find((c) => c.id === selectedCipherId);
 
       if (selectedCipher === undefined) {
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+      }
+
+      if (params.requireUserVerification && !userVerified) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
@@ -235,7 +242,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
           credentialId: Utils.guidToRawFormat(selectedCredentialId),
           counter: selectedFido2Key.counter,
           userPresence: true,
-          userVerification: false,
+          userVerification: userVerified,
         });
 
         const signature = await generateSignature({

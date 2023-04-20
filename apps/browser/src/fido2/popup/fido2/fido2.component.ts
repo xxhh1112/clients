@@ -77,9 +77,6 @@ export class Fido2Component implements OnInit, OnDestroy {
             cipher.fido2Key = new Fido2KeyView();
             cipher.fido2Key.userName = data.userName;
             this.ciphers = [cipher];
-          } else if (data?.type === "ConfirmCredentialRequest") {
-            const cipher = await this.cipherService.get(data.cipherId);
-            this.ciphers = [await cipher.decrypt()];
           } else if (data?.type === "PickCredentialRequest") {
             this.ciphers = await Promise.all(
               data.cipherIds.map(async (cipherId) => {
@@ -117,10 +114,16 @@ export class Fido2Component implements OnInit, OnDestroy {
   async pick(cipher: CipherView) {
     const data = this.data$.value;
     if (data?.type === "PickCredentialRequest") {
+      let userVerified = false;
+      if (data.userVerification) {
+        userVerified = await this.passwordRepromptService.showPasswordPrompt();
+      }
+
       this.send({
         sessionId: this.sessionId,
         cipherId: cipher.id,
         type: "PickCredentialResponse",
+        userVerified,
       });
     } else if (data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
       let userVerified = false;
@@ -139,15 +142,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     this.loading = true;
   }
 
-  confirm() {
-    this.send({
-      sessionId: this.sessionId,
-      type: "ConfirmCredentialResponse",
-    });
-    this.loading = true;
-  }
-
-  async confirmNew() {
+  async confirm() {
     const data = this.data$.value;
     if (data.type !== "ConfirmNewCredentialRequest") {
       return;

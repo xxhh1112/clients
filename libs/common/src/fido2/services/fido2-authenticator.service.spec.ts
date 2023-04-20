@@ -716,18 +716,30 @@ describe("FidoAuthenticatorService", () => {
         cipherService.getAllDecrypted.mockResolvedValue(ciphers);
       });
 
-      /** Spec: Prompt the user to select a public key credential source selectedCredential from credentialOptions. */
-      it("should request confirmation from the user", async () => {
-        userInterfaceSession.pickCredential.mockResolvedValue(ciphers[0].id);
+      for (const userVerification of [true, false]) {
+        /** Spec: Prompt the user to select a public key credential source selectedCredential from credentialOptions. */
+        it(`should request confirmation from user when user verification is ${userVerification}`, async () => {
+          params.requireUserVerification = userVerification;
+          userInterfaceSession.pickCredential.mockResolvedValue({
+            cipherId: ciphers[0].id,
+            userVerified: userVerification,
+          });
 
-        await authenticator.getAssertion(params);
+          await authenticator.getAssertion(params);
 
-        expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith(ciphers.map((c) => c.id));
-      });
+          expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
+            cipherIds: ciphers.map((c) => c.id),
+            userVerification,
+          });
+        });
+      }
 
       /** Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
-        userInterfaceSession.pickCredential.mockResolvedValue(undefined);
+        userInterfaceSession.pickCredential.mockResolvedValue({
+          cipherId: undefined,
+          userVerified: false,
+        });
 
         const result = async () => await authenticator.getAssertion(params);
 
@@ -783,7 +795,10 @@ describe("FidoAuthenticatorService", () => {
             });
           }
           cipherService.getAllDecrypted.mockResolvedValue(ciphers);
-          userInterfaceSession.pickCredential.mockResolvedValue(ciphers[0].id);
+          userInterfaceSession.pickCredential.mockResolvedValue({
+            cipherId: ciphers[0].id,
+            userVerified: false,
+          });
         };
         beforeEach(init);
 

@@ -15,6 +15,7 @@ import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   Fido2UserInterfaceSession,
   NewCredentialParams,
+  PickCredentialParams,
 } from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
 
@@ -46,17 +47,12 @@ export type BrowserFido2Message = { sessionId: string } & (
   | {
       type: "PickCredentialRequest";
       cipherIds: string[];
+      userVerification: boolean;
     }
   | {
       type: "PickCredentialResponse";
       cipherId?: string;
-    }
-  | {
-      type: "ConfirmCredentialRequest";
-      cipherId: string;
-    }
-  | {
-      type: "ConfirmCredentialResponse";
+      userVerified: boolean;
     }
   | {
       type: "ConfirmNewCredentialRequest";
@@ -179,30 +175,21 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     return this.abortController.signal.aborted;
   }
 
-  async confirmCredential(cipherId: string): Promise<boolean> {
-    const data: BrowserFido2Message = {
-      type: "ConfirmCredentialRequest",
-      cipherId,
-      sessionId: this.sessionId,
-    };
-
-    await this.send(data);
-    await this.receive("ConfirmCredentialResponse");
-
-    return true;
-  }
-
-  async pickCredential(cipherIds: string[]): Promise<string> {
+  async pickCredential({
+    cipherIds,
+    userVerification,
+  }: PickCredentialParams): Promise<{ cipherId: string; userVerified: boolean }> {
     const data: BrowserFido2Message = {
       type: "PickCredentialRequest",
       cipherIds,
       sessionId: this.sessionId,
+      userVerification,
     };
 
     await this.send(data);
     const response = await this.receive("PickCredentialResponse");
 
-    return response.cipherId;
+    return { cipherId: response.cipherId, userVerified: response.userVerified };
   }
 
   async confirmNewCredential({

@@ -4,6 +4,11 @@ export interface NewCredentialParams {
   userVerification: boolean;
 }
 
+export interface PickCredentialParams {
+  cipherIds: string[];
+  userVerification: boolean;
+}
+
 export abstract class Fido2UserInterfaceService {
   newSession: (abortController?: AbortController) => Promise<Fido2UserInterfaceSession>;
 }
@@ -12,8 +17,10 @@ export abstract class Fido2UserInterfaceSession {
   fallbackRequested = false;
   aborted = false;
 
-  confirmCredential: (cipherId: string, abortController?: AbortController) => Promise<boolean>;
-  pickCredential: (cipherIds: string[], abortController?: AbortController) => Promise<string>;
+  pickCredential: (
+    params: PickCredentialParams,
+    abortController?: AbortController
+  ) => Promise<{ cipherId: string; userVerified: boolean }>;
   confirmNewCredential: (
     params: NewCredentialParams,
     abortController?: AbortController

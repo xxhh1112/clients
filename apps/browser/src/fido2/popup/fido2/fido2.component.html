@@ -1,17 +1,6 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
-    <ng-container *ngIf="data.type == 'ConfirmCredentialRequest'">
-      A site is asking for authentication using the following credential:
-      <div class="box list">
-        <div class="box-content">
-          <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
-        </div>
-      </div>
-      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">
-        Authenticate
-      </button>
-    </ng-container>
     <ng-container
       *ngIf="
         data.type == 'PickCredentialRequest' ||
@@ -36,7 +25,7 @@
           <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
         </div>
       </div>
-      <button type="button" class="btn btn-outline-secondary" (click)="confirmNew()">Create</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">Create</button>
     </ng-container>
     <ng-container *ngIf="data.type == 'InformExcludedCredentialRequest'">
       A passkey already exists in Bitwarden for this account
