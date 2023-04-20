@@ -71,8 +71,9 @@ describe("FidoAuthenticatorService", () => {
       /**
        * Spec: If requireUserVerification is true and the authenticator cannot perform user verification, return an error code equivalent to "ConstraintError" and terminate the operation.
        * Deviation: User verification is checked before checking for excluded credentials
-       * */
-      it("should throw error if requireUserVerification is set to true", async () => {
+       **/
+      /** TODO: This test should only be activated if we disable support for user verification */
+      it.skip("should throw error if requireUserVerification is set to true", async () => {
         const params = await createParams({ requireUserVerification: true });
 
         const result = async () => await authenticator.makeCredential(params);
@@ -81,7 +82,10 @@ describe("FidoAuthenticatorService", () => {
       });
 
       it("should not request confirmation from user", async () => {
-        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
+          confirmed: true,
+          userVerified: false,
+        });
         const invalidParams = await createInvalidParams();
 
         for (const p of Object.values(invalidParams)) {
@@ -258,30 +262,41 @@ describe("FidoAuthenticatorService", () => {
 
       /**
        * Spec: Collect an authorization gesture confirming user consent for creating a new credential. The prompt for the authorization gesture is shown by the authenticator if it has its own output capability. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name and userEntity.displayName, if possible.
+       * If requireUserVerification is true, the authorization gesture MUST include user verification.
        * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
        * */
-      it("should request confirmation from user", async () => {
-        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
-        cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
-        cipherService.createWithServer.mockImplementation(async (cipher) => {
-          cipher.id = Utils.newGuid();
-          return cipher;
+      for (const userVerification of [true, false]) {
+        it(`should request confirmation from user when user verification is ${userVerification}`, async () => {
+          params.requireUserVerification = userVerification;
+          userInterfaceSession.confirmNewCredential.mockResolvedValue({
+            confirmed: true,
+            userVerified: userVerification,
+          });
+          cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
+          cipherService.createWithServer.mockImplementation(async (cipher) => {
+            cipher.id = Utils.newGuid();
+            return cipher;
+          });
+
+          await authenticator.makeCredential(params, new AbortController());
+
+          expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
+            {
+              credentialName: params.rpEntity.name,
+              userName: params.userEntity.displayName,
+              userVerification,
+            } as NewCredentialParams,
+            expect.anything()
+          );
         });
-
-        await authenticator.makeCredential(params, new AbortController());
-
-        expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
-          {
-            credentialName: params.rpEntity.name,
-            userName: params.userEntity.displayName,
-          } as NewCredentialParams,
-          expect.anything()
-        );
-      });
+      }
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = {};
-        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
+          confirmed: true,
+          userVerified: false,
+        });
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockImplementation(async (cipher) => {
           cipher.id = Utils.newGuid();
@@ -314,7 +329,10 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
-        userInterfaceSession.confirmNewCredential.mockResolvedValue(false);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
+          confirmed: false,
+          userVerified: false,
+        });
 
         const result = async () => await authenticator.makeCredential(params);
 
@@ -324,7 +342,10 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = {};
-        userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
+          confirmed: true,
+          userVerified: false,
+        });
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
 
@@ -351,27 +372,33 @@ describe("FidoAuthenticatorService", () => {
        * Spec: Collect an authorization gesture confirming user consent for creating a new credential. The prompt for the authorization gesture is shown by the authenticator if it has its own output capability. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name and userEntity.displayName, if possible.
        * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
        * */
-      it("should request confirmation from user", async () => {
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
-          existingCipher.id
-        );
+      for (const userVerification of [true, false]) {
+        it(`should request confirmation from user when user verification is ${userVerification}`, async () => {
+          params.requireUserVerification = userVerification;
+          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+            cipherId: existingCipher.id,
+            userVerified: userVerification,
+          });
 
-        await authenticator.makeCredential(params, new AbortController());
+          await authenticator.makeCredential(params, new AbortController());
 
-        expect(userInterfaceSession.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
-          {
-            credentialName: params.rpEntity.name,
-            userName: params.userEntity.displayName,
-          } as NewCredentialParams,
-          expect.anything()
-        );
-      });
+          expect(userInterfaceSession.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
+            {
+              credentialName: params.rpEntity.name,
+              userName: params.userEntity.displayName,
+              userVerification,
+            } as NewCredentialParams,
+            expect.anything()
+          );
+        });
+      }
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = Symbol();
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
-          existingCipher.id
-        );
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+          cipherId: existingCipher.id,
+          userVerified: false,
+        });
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
 
         await authenticator.makeCredential(params);
@@ -402,7 +429,10 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(undefined);
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+          cipherId: undefined,
+          userVerified: false,
+        });
         const params = await createParams();
 
         const result = async () => await authenticator.makeCredential(params);
@@ -413,9 +443,10 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = Symbol();
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(
-          existingCipher.id
-        );
+        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+          cipherId: existingCipher.id,
+          userVerified: false,
+        });
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
 
@@ -444,8 +475,14 @@ describe("FidoAuthenticatorService", () => {
         beforeEach(async () => {
           const cipher = createCipherView({ id: cipherId, type: CipherType.Login });
           params = await createParams({ requireResidentKey });
-          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue(cipherId);
-          userInterfaceSession.confirmNewCredential.mockResolvedValue(true);
+          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+            cipherId,
+            userVerified: false,
+          });
+          userInterfaceSession.confirmNewCredential.mockResolvedValue({
+            confirmed: true,
+            userVerified: false,
+          });
           cipherService.get.mockImplementation(async (cipherId) =>
             cipherId === cipher.id ? ({ decrypt: () => cipher } as any) : undefined
           );
@@ -573,8 +610,12 @@ describe("FidoAuthenticatorService", () => {
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
 
-      /** Deviation: User verification is checked before checking for credentials */
-      it("should throw error if requireUserVerification is set to true", async () => {
+      /**
+       * Spec: If requireUserVerification is true and the authenticator cannot perform user verification, return an error code equivalent to "ConstraintError" and terminate the operation.
+       * Deviation: User verification is checked before checking for excluded credentials
+       **/
+      /** TODO: This test should only be activated if we disable support for user verification */
+      it.skip("should throw error if requireUserVerification is set to true", async () => {
         const params = await createParams({ requireUserVerification: true });
 
         const result = async () => await authenticator.getAssertion(params);

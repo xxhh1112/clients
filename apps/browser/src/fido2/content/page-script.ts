@@ -65,6 +65,7 @@ navigator.credentials.get = async (
   abortController?: AbortController
 ): Promise<Credential> => {
   console.log("navigator.credentials.get()", options);
+
   try {
     const response = await messenger.request(
       {

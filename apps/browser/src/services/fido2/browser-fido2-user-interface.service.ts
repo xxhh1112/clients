@@ -62,18 +62,22 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "ConfirmNewCredentialRequest";
       credentialName: string;
       userName: string;
+      userVerification: boolean;
     }
   | {
       type: "ConfirmNewCredentialResponse";
+      userVerified: boolean;
     }
   | {
       type: "ConfirmNewNonDiscoverableCredentialRequest";
       credentialName: string;
       userName: string;
+      userVerification: boolean;
     }
   | {
       type: "ConfirmNewNonDiscoverableCredentialResponse";
       cipherId: string;
+      userVerified: boolean;
     }
   | {
       type: "InformExcludedCredentialRequest";
@@ -201,35 +205,42 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     return response.cipherId;
   }
 
-  async confirmNewCredential({ credentialName, userName }: NewCredentialParams): Promise<boolean> {
+  async confirmNewCredential({
+    credentialName,
+    userName,
+    userVerification,
+  }: NewCredentialParams): Promise<{ confirmed: boolean; userVerified: boolean }> {
     const data: BrowserFido2Message = {
       type: "ConfirmNewCredentialRequest",
       sessionId: this.sessionId,
       credentialName,
       userName,
+      userVerification,
     };
 
     await this.send(data);
-    await this.receive("ConfirmNewCredentialResponse");
+    const response = await this.receive("ConfirmNewCredentialResponse");
 
-    return true;
+    return { confirmed: true, userVerified: response.userVerified };
   }
 
   async confirmNewNonDiscoverableCredential({
     credentialName,
     userName,
-  }: NewCredentialParams): Promise<string> {
+    userVerification,
+  }: NewCredentialParams): Promise<{ cipherId: string; userVerified: boolean }> {
     const data: BrowserFido2Message = {
       type: "ConfirmNewNonDiscoverableCredentialRequest",
       sessionId: this.sessionId,
       credentialName,
       userName,
+      userVerification,
     };
 
     await this.send(data);
     const response = await this.receive("ConfirmNewNonDiscoverableCredentialResponse");
 
-    return response.cipherId;
+    return { cipherId: response.cipherId, userVerified: response.userVerified };
   }
 
   async informExcludedCredential(existingCipherIds: string[]): Promise<void> {

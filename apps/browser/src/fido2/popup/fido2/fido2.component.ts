@@ -11,10 +11,11 @@ import {
   takeUntil,
 } from "rxjs";
 
+import { Fido2KeyView } from "@bitwarden/common/fido2/models/view/fido2-key.view";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { Fido2KeyView } from "@bitwarden/common/fido2/models/view/fido2-key.view";
 
 import { BrowserApi } from "../../../browser/browserApi";
 import {
@@ -35,7 +36,11 @@ export class Fido2Component implements OnInit, OnDestroy {
   protected ciphers?: CipherView[] = [];
   protected loading = false;
 
-  constructor(private activatedRoute: ActivatedRoute, private cipherService: CipherService) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private cipherService: CipherService,
+    private passwordRepromptService: PasswordRepromptService
+  ) {}
 
   ngOnInit(): void {
     const sessionId$ = this.activatedRoute.queryParamMap.pipe(
@@ -118,10 +123,16 @@ export class Fido2Component implements OnInit, OnDestroy {
         type: "PickCredentialResponse",
       });
     } else if (data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
+      let userVerified = false;
+      if (data.userVerification) {
+        userVerified = await this.passwordRepromptService.showPasswordPrompt();
+      }
+
       this.send({
         sessionId: this.sessionId,
         cipherId: cipher.id,
         type: "ConfirmNewNonDiscoverableCredentialResponse",
+        userVerified,
       });
     }
 
@@ -136,10 +147,21 @@ export class Fido2Component implements OnInit, OnDestroy {
     this.loading = true;
   }
 
-  confirmNew() {
+  async confirmNew() {
+    const data = this.data$.value;
+    if (data.type !== "ConfirmNewCredentialRequest") {
+      return;
+    }
+
+    let userVerified = false;
+    if (data.userVerification) {
+      userVerified = await this.passwordRepromptService.showPasswordPrompt();
+    }
+
     this.send({
       sessionId: this.sessionId,
       type: "ConfirmNewCredentialResponse",
+      userVerified,
     });
     this.loading = true;
   }

@@ -1,6 +1,7 @@
 export interface NewCredentialParams {
   credentialName: string;
   userName: string;
+  userVerification: boolean;
 }
 
 export abstract class Fido2UserInterfaceService {
@@ -16,11 +17,11 @@ export abstract class Fido2UserInterfaceSession {
   confirmNewCredential: (
     params: NewCredentialParams,
     abortController?: AbortController
-  ) => Promise<boolean>;
+  ) => Promise<{ confirmed: boolean; userVerified: boolean }>;
   confirmNewNonDiscoverableCredential: (
     params: NewCredentialParams,
     abortController?: AbortController
-  ) => Promise<string | undefined>;
+  ) => Promise<{ cipherId: string; userVerified: boolean }>;
   informExcludedCredential: (
     existingCipherIds: string[],
     abortController?: AbortController

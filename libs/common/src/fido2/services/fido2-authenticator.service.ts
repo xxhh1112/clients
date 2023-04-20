@@ -62,10 +62,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
 
-      if (params.requireUserVerification) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
-      }
-
       const existingCipherIds = await this.findExcludedCredentials(
         params.excludeCredentialDescriptorList
       );
@@ -78,16 +74,24 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       let cipher: CipherView;
       let fido2Key: Fido2KeyView;
       let keyPair: CryptoKeyPair;
+      let userVerified = false;
       if (params.requireResidentKey) {
-        const userVerification = await userInterfaceSession.confirmNewCredential(
+        const response = await userInterfaceSession.confirmNewCredential(
           {
             credentialName: params.rpEntity.name,
             userName: params.userEntity.displayName,
+            userVerification: params.requireUserVerification,
           },
           abortController
         );
+        const userConfirmation = response.confirmed;
+        userVerified = response.userVerified;
 
-        if (!userVerification) {
+        if (!userConfirmation) {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+        }
+
+        if (params.requireUserVerification && !userVerified) {
           throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
         }
 
@@ -105,15 +109,22 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
           throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
         }
       } else {
-        const cipherId = await userInterfaceSession.confirmNewNonDiscoverableCredential(
+        const response = await userInterfaceSession.confirmNewNonDiscoverableCredential(
           {
             credentialName: params.rpEntity.name,
             userName: params.userEntity.displayName,
+            userVerification: params.requireUserVerification,
           },
           abortController
         );
+        const cipherId = response.cipherId;
+        userVerified = response.userVerified;
 
         if (cipherId === undefined) {
+          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+        }
+
+        if (params.requireUserVerification && !userVerified) {
           throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
         }
 
@@ -138,7 +149,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         credentialId: Utils.guidToRawFormat(credentialId),
         counter: fido2Key.counter,
         userPresence: true,
-        userVerification: false,
+        userVerification: userVerified,
         keyPair,
       });
       const attestationObject = new Uint8Array(
@@ -172,10 +183,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         typeof params.requireUserVerification !== "boolean"
       ) {
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-      }
-
-      if (params.requireUserVerification) {
-        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Constraint);
       }
 
       let cipherOptions: CipherView[];
