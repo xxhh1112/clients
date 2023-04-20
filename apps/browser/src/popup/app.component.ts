@@ -62,8 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.activeUserId = userId;
     });
 
-    this.settingsService.setDisableFavicon(await this.stateService.getDisableFavicon());
-
     this.ngZone.runOutsideAngular(() => {
       window.onmousedown = () => this.recordActivity();
       window.ontouchstart = () => this.recordActivity();

@@ -1,12 +1,12 @@
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+} from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
@@ -35,100 +35,99 @@ const cardIcons: Record<string, string> = {
   templateUrl: "icon.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconComponent implements OnChanges, OnDestroy, OnInit {
-  @Input() cipher: CipherView;
-  icon: string;
-  image: string;
-  fallbackImage: string;
-  imageEnabled: boolean;
-
-  private iconsUrl: string;
-  private destroy$ = new Subject<void>();
-
-  constructor(environmentService: EnvironmentService, private settingsService: SettingsService) {
-    this.iconsUrl = environmentService.getIconsUrl();
+export class IconComponent implements OnInit {
+  @Input()
+  set cipher(value: CipherView) {
+    this.cipher$.next(value);
   }
+
+  protected data$: Observable<{
+    imageEnabled: boolean;
+    image?: string;
+    fallbackImage: string;
+    icon?: string;
+  }>;
+
+  private cipher$ = new BehaviorSubject<CipherView>(undefined);
+
+  constructor(
+    private environmentService: EnvironmentService,
+    private settingsService: SettingsService
+  ) {}
 
   async ngOnInit() {
-    this.settingsService.disableFavicon$.pipe(takeUntil(this.destroy$)).subscribe((v) => {
-      this.imageEnabled = !v;
-      this.load();
-    });
-  }
+    const iconsUrl = this.environmentService.getIconsUrl();
 
-  async ngOnChanges() {
-    // Components may be re-used when using cdk-virtual-scroll. Which puts the component in a weird state,
-    // to avoid this we reset all state variables.
-    this.image = null;
-    this.fallbackImage = null;
-    this.load();
-  }
+    this.data$ = combineLatest([
+      this.settingsService.disableFavicon$.pipe(distinctUntilChanged()),
+      this.cipher$.pipe(filter((c) => c !== undefined)),
+    ]).pipe(
+      map(([disableFavicon, cipher]) => {
+        const imageEnabled = !disableFavicon;
+        let image = undefined;
+        let fallbackImage = "";
+        let icon = undefined;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+        switch (cipher.type) {
+          case CipherType.Login:
+            icon = "bwi-globe";
 
-  protected load() {
-    switch (this.cipher.type) {
-      case CipherType.Login:
-        this.icon = "bwi-globe";
-        this.setLoginIcon();
-        break;
-      case CipherType.SecureNote:
-        this.icon = "bwi-sticky-note";
-        break;
-      case CipherType.Card:
-        this.icon = "bwi-credit-card";
-        this.setCardIcon();
-        break;
-      case CipherType.Identity:
-        this.icon = "bwi-id-card";
-        break;
-      default:
-        break;
-    }
-  }
+            if (cipher.login.uri) {
+              let hostnameUri = cipher.login.uri;
+              let isWebsite = false;
 
-  private setLoginIcon() {
-    if (this.cipher.login.uri) {
-      let hostnameUri = this.cipher.login.uri;
-      let isWebsite = false;
+              if (hostnameUri.indexOf("androidapp://") === 0) {
+                icon = "bwi-android";
+                image = null;
+              } else if (hostnameUri.indexOf("iosapp://") === 0) {
+                icon = "bwi-apple";
+                image = null;
+              } else if (
+                imageEnabled &&
+                hostnameUri.indexOf("://") === -1 &&
+                hostnameUri.indexOf(".") > -1
+              ) {
+                hostnameUri = "http://" + hostnameUri;
+                isWebsite = true;
+              } else if (imageEnabled) {
+                isWebsite = hostnameUri.indexOf("http") === 0 && hostnameUri.indexOf(".") > -1;
+              }
 
-      if (hostnameUri.indexOf("androidapp://") === 0) {
-        this.icon = "bwi-android";
-        this.image = null;
-      } else if (hostnameUri.indexOf("iosapp://") === 0) {
-        this.icon = "bwi-apple";
-        this.image = null;
-      } else if (
-        this.imageEnabled &&
-        hostnameUri.indexOf("://") === -1 &&
-        hostnameUri.indexOf(".") > -1
-      ) {
-        hostnameUri = "http://" + hostnameUri;
-        isWebsite = true;
-      } else if (this.imageEnabled) {
-        isWebsite = hostnameUri.indexOf("http") === 0 && hostnameUri.indexOf(".") > -1;
-      }
-
-      if (this.imageEnabled && isWebsite) {
-        try {
-          this.image = this.iconsUrl + "/" + Utils.getHostname(hostnameUri) + "/icon.png";
-          this.fallbackImage = "images/bwi-globe.png";
-        } catch (e) {
-          // Ignore error since the fallback icon will be shown if image is null.
+              if (imageEnabled && isWebsite) {
+                try {
+                  image = iconsUrl + "/" + Utils.getHostname(hostnameUri) + "/icon.png";
+                  fallbackImage = "images/bwi-globe.png";
+                } catch (e) {
+                  // Ignore error since the fallback icon will be shown if image is null.
+                }
+              }
+            } else {
+              image = null;
+            }
+            break;
+          case CipherType.SecureNote:
+            icon = "bwi-sticky-note";
+            break;
+          case CipherType.Card:
+            icon = "bwi-credit-card";
+            if (imageEnabled && cipher.card.brand in cardIcons) {
+              icon = "credit-card-icon " + cardIcons[cipher.card.brand];
+            }
+            break;
+          case CipherType.Identity:
+            icon = "bwi-id-card";
+            break;
+          default:
+            break;
         }
-      }
-    } else {
-      this.image = null;
-    }
-  }
 
-  private setCardIcon() {
-    const brand = this.cipher.card.brand;
-    if (this.imageEnabled && brand in cardIcons) {
-      this.icon = "credit-card-icon " + cardIcons[brand];
-    }
+        return {
+          imageEnabled,
+          image,
+          fallbackImage,
+          icon,
+        };
+      })
+    );
   }
 }
