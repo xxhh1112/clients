@@ -16,6 +16,7 @@ import { firstValueFrom, Subject, takeUntil } from "rxjs";
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -51,7 +52,6 @@ import { SettingsComponent } from "./accounts/settings.component";
 import { GeneratorComponent } from "./tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-history.component";
 import { ExportComponent } from "./vault/export.component";
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes

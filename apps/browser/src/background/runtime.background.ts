@@ -1,4 +1,4 @@
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
@@ -12,7 +12,6 @@ import BrowserPlatformUtilsService from "../services/browserPlatformUtils.servic
 
 import MainBackground from "./main.background";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 
 export default class RuntimeBackground {
   private autofillTimeout: any;
