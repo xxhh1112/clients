@@ -77,7 +77,7 @@ export class ConfigService implements ConfigServiceAbstraction {
     if (
       serverConfig == null ||
       serverConfig.featureStates == null ||
-      serverConfig.featureStates[FeatureFlag.DisplayEuEnvironmentFlag] == null
+      serverConfig.featureStates[key] == null
     ) {
       return defaultValue;
     }
