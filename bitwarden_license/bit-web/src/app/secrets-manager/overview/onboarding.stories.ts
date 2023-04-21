@@ -1,5 +1,6 @@
+import { importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, Story, moduleMetadata } from "@storybook/angular";
+import { Meta, Story, applicationConfig, moduleMetadata } from "@storybook/angular";
 import { delay, of, startWith } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -16,21 +17,16 @@ export default {
     moduleMetadata({
       imports: [
         JslibModule,
-        RouterModule.forRoot(
-          [
-            {
-              path: "",
-              component: OnboardingComponent,
-            },
-          ],
-          { useHash: true }
-        ),
+        RouterModule,
         LinkModule,
         IconModule,
         ProgressModule,
         PreloadedEnglishI18nModule,
       ],
       declarations: [OnboardingTaskComponent],
+    }),
+    applicationConfig({
+      providers: [importProvidersFrom(RouterModule.forRoot([], { useHash: true }))],
     }),
   ],
 } as Meta;

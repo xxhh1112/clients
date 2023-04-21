@@ -23,6 +23,12 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
+  env: (config) => ({
+    ...config,
+    FLAGS: JSON.stringify({
+      secretsManager: true,
+    }),
+  }),
   webpackFinal: async (config, { configType }) => {
     if (config.resolve) {
       config.resolve.plugins = [new TsconfigPathsPlugin()] as any;

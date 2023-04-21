@@ -1,6 +1,12 @@
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, Story, moduleMetadata, componentWrapperDecorator } from "@storybook/angular";
+import {
+  Meta,
+  Story,
+  moduleMetadata,
+  componentWrapperDecorator,
+  applicationConfig,
+} from "@storybook/angular";
 import { BehaviorSubject } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -50,15 +56,7 @@ export default {
     moduleMetadata({
       imports: [
         JslibModule,
-        RouterModule.forRoot(
-          [
-            {
-              path: "",
-              component: HeaderComponent,
-            },
-          ],
-          { useHash: true }
-        ),
+        RouterModule,
         AvatarModule,
         BreadcrumbsModule,
         ButtonModule,
@@ -81,6 +79,9 @@ export default {
           },
         },
       ],
+    }),
+    applicationConfig({
+      providers: [importProvidersFrom(RouterModule.forRoot([], { useHash: true }))],
     }),
   ],
 } as Meta;

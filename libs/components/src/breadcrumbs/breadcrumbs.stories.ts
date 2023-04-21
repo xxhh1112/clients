@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, Story, moduleMetadata } from "@storybook/angular";
+import { Meta, Story, applicationConfig, moduleMetadata } from "@storybook/angular";
 
 import { IconButtonModule } from "../icon-button";
 import { LinkModule } from "../link";
@@ -26,11 +26,13 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [BreadcrumbComponent],
-      imports: [
-        LinkModule,
-        MenuModule,
-        IconButtonModule,
-        RouterModule.forRoot([{ path: "**", component: EmptyComponent }], { useHash: true }),
+      imports: [LinkModule, MenuModule, IconButtonModule, RouterModule],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(
+          RouterModule.forRoot([{ path: "**", component: EmptyComponent }], { useHash: true })
+        ),
       ],
     }),
   ],
