@@ -1,4 +1,3 @@
 export enum FeatureFlag {
-    DisplayEuEnvironmentFlag = "display-eu-environment",
-  }
-  
+  DisplayEuEnvironmentFlag = "display-eu-environment",
+}

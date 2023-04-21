@@ -2,9 +2,9 @@ import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
 
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
-import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { ServerConfig } from "../../abstractions/config/server-config";
 import { StateService } from "../../abstractions/state.service";
+import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { ServerConfigData } from "../../models/data/server-config.data";
 
 export class ConfigService implements ConfigServiceAbstraction {
