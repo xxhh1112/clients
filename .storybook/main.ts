@@ -1,11 +1,13 @@
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-module.exports = {
+import { StorybookConfig } from "@storybook/angular";
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+
+const config: StorybookConfig = {
   stories: [
-    "../libs/components/src/**/*.stories.mdx",
+    "../libs/components/src/**/*.mdx",
     "../libs/components/src/**/*.stories.@(js|jsx|ts|tsx)",
-    "../apps/web/src/**/*.stories.mdx",
+    "../apps/web/src/**/*.mdx",
     "../apps/web/src/**/*.stories.@(js|jsx|ts|tsx)",
-    "../bitwarden_license/bit-web/src/**/*.stories.mdx",
+    "../bitwarden_license/bit-web/src/**/*.mdx",
     "../bitwarden_license/bit-web/src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
@@ -21,17 +23,15 @@ module.exports = {
   core: {
     disableTelemetry: true,
   },
-  env: (config) => ({
-    ...config,
-    FLAGS: JSON.stringify({
-      secretsManager: true,
-    }),
-  }),
   webpackFinal: async (config, { configType }) => {
-    config.resolve.plugins = [new TsconfigPathsPlugin()];
+    if (config.resolve) {
+      config.resolve.plugins = [new TsconfigPathsPlugin()] as any;
+    }
     return config;
   },
   docs: {
     autodocs: true,
   },
 };
+
+export default config;
