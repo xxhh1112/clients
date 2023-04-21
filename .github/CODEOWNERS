@@ -7,7 +7,7 @@
 # @bitwarden/team-leads
 
 ## Secrets Manager team files ##
-bitwarden_license/bit-web/src/app/secrets-manager @bitwarden/pod-sm-dev
+bitwarden_license/bit-web/src/app/secrets-manager @bitwarden/team-secrets-manager-dev
 
 ## Auth team files ##
 apps/browser/src/auth @bitwarden/team-auth-dev
@@ -25,7 +25,9 @@ apps/cli/src/app/tools @bitwarden/team-tools-dev
 apps/desktop/src/app/tools @bitwarden/team-tools-dev
 apps/web/src/app/tools @bitwarden/team-tools-dev
 libs/angular/src/tools @bitwarden/team-tools-dev
+libs/common/src/models/export @bitwarden/team-tools-dev
 libs/common/src/tools @bitwarden/team-tools-dev
+libs/exporter @bitwarden/team-tools-dev
 libs/importer @bitwarden/team-tools-dev
 
 ## Vault team files ##
@@ -36,3 +38,17 @@ apps/desktop/src/vault @bitwarden/team-vault-dev
 apps/web/src/app/vault @bitwarden/team-vault-dev
 libs/angular/src/vault @bitwarden/team-vault-dev
 libs/common/src/vault @bitwarden/team-vault-dev
+
+## Admin Console team files ##
+apps/browser/src/admin-console @bitwarden/team-admin-console-dev
+apps/cli/src/admin-console @bitwarden/team-admin-console-dev
+apps/desktop/src/admin-console @bitwarden/team-admin-console-dev
+apps/web/src/app/admin-console @bitwarden/team-admin-console-dev
+bitwarden_license/bit-web/src/app/admin-console @bitwarden/team-admin-console-dev
+libs/angular/src/admin-console @bitwarden/team-admin-console-dev
+libs/common/src/admin-console @bitwarden/team-admin-console-dev
+
+## Billing team files ##
+apps/web/src/app/billing @bitwarden/team-billing-dev
+libs/angular/src/billing @bitwarden/team-billing-dev
+libs/common/src/billing @bitwarden/team-billing-dev

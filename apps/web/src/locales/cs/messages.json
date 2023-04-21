@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data byla úspěšně importována"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Bylo importováno celkem $AMOUNT$ položek.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Zrušit předplatné"
+  },
+  "subscriptionExpiration": {
+    "message": "Vypršení předplatného"
   },
   "subscriptionCanceled": {
     "message": "Předplatné bylo zrušeno"
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "K této organizaci získáte přístup jakmile vám administrátor udělí členství. Až se tak stane, pošleme vám e-mail."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Pozvánku nelze přijmout. Požádejte administrátora organizace o novou pozvánku."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Activate auto-fill"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "Aktivuje automatické vyplnění při načítání stránky pro rozšíření prohlížeče pro všechny existující i nové členy."
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Tato funkce není dostupná pro bezplatné organizace. Pro upgrade kontaktujte vlastníka organizace."
   }
 }

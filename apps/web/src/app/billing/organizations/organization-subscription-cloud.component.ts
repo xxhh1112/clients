@@ -9,9 +9,9 @@ import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationApiKeyType } from "@bitwarden/common/admin-console/enums/organization-api-key-type";
+import { OrganizationApiKeyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { PlanType } from "@bitwarden/common/billing/enums/plan-type";
+import { PlanType } from "@bitwarden/common/billing/enums";
 import { OrganizationSubscriptionResponse } from "@bitwarden/common/billing/models/response/organization-subscription.response";
 
 import {
@@ -77,7 +77,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     }
     this.loading = true;
     this.userOrg = this.organizationService.get(this.organizationId);
-    if (this.userOrg.canManageBilling) {
+    if (this.userOrg.canViewSubscription) {
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
     }
 

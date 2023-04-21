@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Τα δεδομένα έχουν εισαχθεί με επιτυχία στο vault σας."
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Ακύρωση Συνδρομής"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "Η συνδρομή ακυρώθηκε."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Μπορείτε να αποκτήσετε πρόσβαση σε αυτόν τον οργανισμό μόλις ο διαχειριστής σας επιβεβαιώσει την ιδιότητα μέλους. Θα σας στείλουμε ένα email όταν αυτό συμβεί."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Δεν είναι δυνατή η αποδοχή πρόσκλησης. Ζητήστε από έναν διαχειριστή του οργανισμού να στείλει μια νέα πρόσκληση."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Activate auto-fill"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

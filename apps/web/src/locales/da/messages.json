@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data er nu importeret"
   },
+  "importSuccessNumberOfItems": {
+    "message": "I alt $AMOUNT$ emner blev importeret.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data hermed eksporteret"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Opsig abonnement"
+  },
+  "subscriptionExpiration": {
+    "message": "Abonnementsudløb"
   },
   "subscriptionCanceled": {
     "message": "Dit abonnement er opsagt."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Du kan få adgang til denne organisation, når en administrator bekræfter dit medlemskab. Vi sender dig en e-mail, når dette sker."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Kan ikke acceptere invitationen. Bed en organisations-administrator om at sende en ny invitation."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Aktivér autoudfyldning"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Aktivér indstillingen Autoudfyldning ved sideindlæsning i browserudvidelsen for alle eksisterende og nye medlemmer."
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Tjenestekonto slettet"
   },
   "deleteServiceAccountsToast": {
     "message": "Tjenestekonti slettet"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Afvis"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Denne funktion er ikke tilgængelig for gratis organisationer. Kontakt organisationsejeren for at opgradere."
   }
 }

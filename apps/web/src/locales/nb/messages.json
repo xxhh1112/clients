@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Dataene har blitt vellykket importert inn i hvelvet ditt."
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data-eksporten var vellykket"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Avbryt abonnementet"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "Abonnementet har blitt avbrutt."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Du kan få tilgang til denne organisasjonen så fort en administrator godkjenner ditt medlemskap. Vi vil sende deg E-post når det skjer."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Klarte ikke å godkjenne invitasjonen. Spør en organisasjonsadmin om å sende en ny invitasjon."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Activate auto-fill"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Avvis"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

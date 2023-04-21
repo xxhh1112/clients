@@ -849,14 +849,14 @@
     "message": "Todennussovellus"
   },
   "authenticatorAppDesc": {
-    "message": "Käytä todennussovellusta (kuten Authy tai Google/Microsoft Authenticator) luodaksesi aikarajallisia todennuskoodeja.",
+    "message": "Vahvista kirjautuminen todennussoveluksen (esim. Authy ja Google/Microsoft Authenticator) luomilla aikarajallisilla todennuskoodeilla.",
     "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
   },
   "yubiKeyTitle": {
     "message": "YubiKey OTP"
   },
   "yubiKeyDesc": {
-    "message": "Käytä YubiKey-todennuslaitetta tilisi avaukseen. Toimii YubiKey 4 ja 5 -sarjojen sekä NEO -laitteiden kanssa."
+    "message": "Vahvista kirjatuminen YubiKey-todennuslaiteella. Toimii YubiKey 4 ja 5 -sarjojen sekä NEO -laitteiden kanssa."
   },
   "duoDesc": {
     "message": "Vahvista kirjautuminen Duo Securityn avulla käyttäen Duo Mobile ‑sovellusta, tekstiviestiä, puhelua tai U2F-todennuslaitetta.",
@@ -867,7 +867,7 @@
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "u2fDesc": {
-    "message": "Avaa tilisi millä tahansa FIDO U2F ‑yhteensopivalla todennuslaitteella."
+    "message": "Vahvista kirjautuminen FIDO U2F -todennuslaitteella."
   },
   "u2fTitle": {
     "message": "FIDO U2F ‑todennuslaite"
@@ -876,7 +876,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Avaa tilisi millä tahansa WebAuthn‑yhteensopivalla todennuslaitteella."
+    "message": "Vahvista kirjautuminen WebAuthn-todennuslaitteella."
   },
   "webAuthnMigrated": {
     "message": "(siirretty FIDO:sta)"
@@ -885,7 +885,7 @@
     "message": "Sähköposti"
   },
   "emailDesc": {
-    "message": "Todennuskoodit lähetetään sinulle sähköpostitse."
+    "message": "Vahvista kirjautuminen sähköpostitse lähetettävällä todennuskoodilla."
   },
   "continue": {
     "message": "Jatka"
@@ -1254,6 +1254,15 @@
   },
   "importSuccess": {
     "message": "Tietojen tuonti onnistui"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Tuotiin kaikkiaan $AMOUNT$ kohdetta.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Tietojen vienti onnistui"
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Irtisano tilaus"
+  },
+  "subscriptionExpiration": {
+    "message": "Tilauksen päättyminen"
   },
   "subscriptionCanceled": {
     "message": "Tilaus irtisanottiin."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Saat organisaation käyttöoikeudet ylläpitäjän vahvistettua jäsentyytesi. Saat vahvistuksesta ilmoituksen sähköpostitse."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Kutsua ei voitu hyväksyä. Pyydä organisaation ylläpitäjää lähettämään uusi kutsu."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Aktivoi automaattinen täyttö"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Aktivoi selainlaajennuksen \"Automaattinen täyttö sivun avautuessa\" -asetus kaikille nykyisille ja uusille jäsenille."
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Palvelutili poistettiin"
   },
   "deleteServiceAccountsToast": {
     "message": "Palvelutilit poistettiin"
@@ -6565,7 +6580,7 @@
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "Salaisuushallinnan CLI"
+    "message": "Salaisuushallinnan komentoliittymä"
   },
   "importSecrets": {
     "message": "Tuo salaisuuksia"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Hylkää"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Ominaisuus ei ole käytettävissä ilmaisella organisaatiotilauksella. Ole tilauspäivityksestä yhteydessä organisaatiosi omistajaan."
   }
 }

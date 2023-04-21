@@ -17,16 +17,14 @@ import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { FileUploadService } from "@bitwarden/common/abstractions/file-upload/file-upload.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
-import { SendService } from "@bitwarden/common/abstractions/send.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import {
   StateService as BaseStateServiceAbstraction,
@@ -64,7 +62,14 @@ import { ContainerService } from "@bitwarden/common/services/container.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service";
+import { SendApiService as SendApiServiceAbstraction } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
+import {
+  InternalSendService as InternalSendServiceAbstraction,
+  SendService,
+} from "@bitwarden/common/tools/send/services/send.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherFileUploadService } from "@bitwarden/common/vault/abstractions/file-upload/cipher-file-upload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import {
   FolderService,
@@ -73,7 +78,9 @@ import {
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
+import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
+import { BrowserOrganizationService } from "../../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../../admin-console/services/browser-policy.service";
 import { LockGuardService, UnauthGuardService } from "../../auth/popup/services";
 import { AutofillService } from "../../autofill/services/abstractions/autofill.service";
@@ -84,7 +91,7 @@ import { BrowserStateService as StateServiceAbstraction } from "../../services/a
 import { BrowserConfigService } from "../../services/browser-config.service";
 import { BrowserEnvironmentService } from "../../services/browser-environment.service";
 import { BrowserI18nService } from "../../services/browser-i18n.service";
-import { BrowserOrganizationService } from "../../services/browser-organization.service";
+import { BrowserSendService } from "../../services/browser-send.service";
 import { BrowserSettingsService } from "../../services/browser-settings.service";
 import { BrowserStateService } from "../../services/browser-state.service";
 import { BrowserFileDownloadService } from "../../services/browserFileDownloadService";
@@ -157,24 +164,19 @@ function getBgService<T>(service: keyof MainBackground) {
     },
     {
       provide: SearchServiceAbstraction,
-      useFactory: (
-        cipherService: CipherService,
-        logService: ConsoleLogService,
-        i18nService: I18nServiceAbstraction
-      ) => {
+      useFactory: (logService: ConsoleLogService, i18nService: I18nServiceAbstraction) => {
         return new PopupSearchService(
           getBgService<SearchService>("searchService")(),
-          cipherService,
           logService,
           i18nService
         );
       },
-      deps: [CipherService, LogServiceAbstraction, I18nServiceAbstraction],
+      deps: [LogServiceAbstraction, I18nServiceAbstraction],
     },
     { provide: AuditService, useFactory: getBgService<AuditService>("auditService"), deps: [] },
     {
-      provide: FileUploadService,
-      useFactory: getBgService<FileUploadService>("fileUploadService"),
+      provide: CipherFileUploadService,
+      useFactory: getBgService<CipherFileUploadService>("cipherFileUploadService"),
       deps: [],
     },
     { provide: CipherService, useFactory: getBgService<CipherService>("cipherService"), deps: [] },
@@ -182,6 +184,10 @@ function getBgService<T>(service: keyof MainBackground) {
       provide: CryptoFunctionService,
       useFactory: getBgService<CryptoFunctionService>("cryptoFunctionService"),
       deps: [],
+    },
+    {
+      provide: FileUploadService,
+      useFactory: getBgService<FileUploadService>("fileUploadService"),
     },
     {
       provide: FolderService,
@@ -285,6 +291,38 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     { provide: ApiService, useFactory: getBgService<ApiService>("apiService"), deps: [] },
+    {
+      provide: SendService,
+      useFactory: (
+        cryptoService: CryptoService,
+        i18nService: I18nServiceAbstraction,
+        cryptoFunctionService: CryptoFunctionService,
+        stateServiceAbstraction: StateServiceAbstraction
+      ) => {
+        return new BrowserSendService(
+          cryptoService,
+          i18nService,
+          cryptoFunctionService,
+          stateServiceAbstraction
+        );
+      },
+      deps: [CryptoService, I18nServiceAbstraction, CryptoFunctionService, StateServiceAbstraction],
+    },
+    {
+      provide: InternalSendServiceAbstraction,
+      useExisting: SendService,
+    },
+    {
+      provide: SendApiServiceAbstraction,
+      useFactory: (
+        apiService: ApiService,
+        fileUploadService: FileUploadService,
+        sendService: InternalSendServiceAbstraction
+      ) => {
+        return new SendApiService(apiService, fileUploadService, sendService);
+      },
+      deps: [ApiService, FileUploadService, InternalSendServiceAbstraction],
+    },
     { provide: SyncService, useFactory: getBgService<SyncService>("syncService"), deps: [] },
     {
       provide: SettingsService,
@@ -304,8 +342,11 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<AutofillService>("autofillService"),
       deps: [],
     },
-    { provide: ExportService, useFactory: getBgService<ExportService>("exportService"), deps: [] },
-    { provide: SendService, useFactory: getBgService<SendService>("sendService"), deps: [] },
+    {
+      provide: VaultExportServiceAbstraction,
+      useFactory: getBgService<VaultExportServiceAbstraction>("exportService"),
+      deps: [],
+    },
     {
       provide: KeyConnectorService,
       useFactory: getBgService<KeyConnectorService>("keyConnectorService"),

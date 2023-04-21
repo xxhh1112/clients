@@ -697,7 +697,7 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Ana parola en az $VALUE$ karakter uzunluğunda olmalıdır.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1254,6 +1254,15 @@
   },
   "importSuccess": {
     "message": "Veriler başarıyla içe aktarıldı"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Toplam $AMOUNT$ kayıt içe aktarıldı.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Veriler başarıyla dışa aktarıldı"
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Aboneliği iptal et"
+  },
+  "subscriptionExpiration": {
+    "message": "Abonelik bitişi"
   },
   "subscriptionCanceled": {
     "message": "Aboneliğiniz iptal edildi."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Yöneticiler üyeliğinizi onayladıktan sonra kuruluşa erişebilirsiniz. Üyeliğiniz onaylandığında size e-posta göndereceğiz."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "Artık bu kuruluşa erişebilirsiniz."
   },
   "inviteAcceptFailed": {
     "message": "Davet kabul edilemedi. Kuruluş yöneticisinden yeni bir davet göndermesini isteyin."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Otomatik doldurmayı etkinleştir"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Tüm mevcut ve yeni üyeler için tarayıcı uzantısındaki \"sayfa yüklendiğinde otomatik doldur\" ayarını etkinleştir."
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Hizmet hesabı silindi"
   },
   "deleteServiceAccountsToast": {
     "message": "Hizmet hesapları silindi"
@@ -6499,7 +6514,7 @@
     "message": "KDF ayarlarını değiştir"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "İşlem, tüm aktif oturumlardan çıkış yapmanızı sağlayacaktır. Tekrar oturum açmanız ve iki adımlı oturum açma kurulumunu tamamlamanız gerekecek. Veri kaybını önlemek için şifreleme ayarlarınızı değiştirmeden önce kasanızı dışa aktarmanızı öneririz."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Kapat"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Bu özellik ücretsiz kuruluşlar için mevcut değildir. Yükseltmek için kuruluşunuzun sahibiyle iletişime geçin."
   }
 }

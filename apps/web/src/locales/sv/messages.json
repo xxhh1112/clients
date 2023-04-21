@@ -1010,7 +1010,7 @@
     "message": "Exportera typ"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Kontot är begränsat"
   },
   "passwordProtected": {
     "message": "Lösenordsskyddad"
@@ -1254,6 +1254,15 @@
   },
   "importSuccess": {
     "message": "Data har importerats till ditt valv"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Data har exporterats från ditt valv"
@@ -1696,7 +1705,7 @@
     "message": "Rapport om avslöjade lösenord"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Lösenord som exponeras i ett dataintrång är enkla mål för angripare. Ändra dessa lösenord för att förhindra potentiella intrång."
+    "message": "Lösenord som exponerats vid ett dataintrång är enkla mål för angripare. Ändra dessa lösenord för att förhindra potentiella intrång."
   },
   "exposedPasswordsFound": {
     "message": "Avslöjade lösenord hittades"
@@ -1910,7 +1919,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "message": "Uppgradera till premium för bara $PRICE$ /år, eller skaffa premiumkonton för $FAMILYPLANUSERCOUNT$ användare och obegränsad familjedelning med en ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1923,7 +1932,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden Families plan."
+    "message": "Bitwarden Familjeplan."
   },
   "addons": {
     "message": "Tillägg"
@@ -2019,6 +2028,9 @@
   "cancelSubscription": {
     "message": "Avsluta prenumeration"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "Prenumerationen har avslutats."
   },
@@ -2065,7 +2077,7 @@
     "message": "Hantera prenumeration"
   },
   "launchCloudSubscription": {
-    "message": "Launch Cloud Subscription"
+    "message": "Starta molnprenumeration"
   },
   "storage": {
     "message": "Lagring"
@@ -2367,7 +2379,7 @@
     }
   },
   "trialThankYou": {
-    "message": "Thanks for signing up for Bitwarden for $PLAN$!",
+    "message": "Tack för att du registrerar dig för Bitwarden för $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2376,7 +2388,7 @@
     }
   },
   "trialPaidInfoMessage": {
-    "message": "Your $PLAN$ 7 day free trial will be converted to a paid subscription after 7 days.",
+    "message": "Din $PLAN$ 7-dagars gratis provperiod kommer att övergå till en betald prenumeration efter 7 dagar.",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2385,7 +2397,7 @@
     }
   },
   "trialConfirmationEmail": {
-    "message": "We've sent a confirmation email to your team's billing email at "
+    "message": "Vi har skickat en bekräftelse via e-post till ditt teams faktureringsadress "
   },
   "monthly": {
     "message": "Månadsvis"
@@ -2394,7 +2406,7 @@
     "message": "Årligen"
   },
   "annual": {
-    "message": "Annual"
+    "message": "Årlig"
   },
   "basePrice": {
     "message": "Baspris"
@@ -2460,7 +2472,7 @@
     "message": "Är du säker på att du vill radera denna grupp?"
   },
   "deleteMultipleGroupsConfirmation": {
-    "message": "Are you sure you want to delete the following $QUANTITY$ group(s)?",
+    "message": "Är du säker på att du vill ta bort följande $QUANTITY$ grupper?",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2487,7 +2499,7 @@
     "message": "Det externa id:t kan användas som referens eller för att länka denna resurs till ett externt system såsom en användarkatalog."
   },
   "nestCollectionUnder": {
-    "message": "Nest collection under"
+    "message": "Kapsla samling under"
   },
   "accessControl": {
     "message": "Åtkomstkontroll"
@@ -2511,7 +2523,7 @@
     "message": "Redigera samling"
   },
   "collectionInfo": {
-    "message": "Collection info"
+    "message": "Samlingsinfo"
   },
   "deleteCollectionConfirmation": {
     "message": "Är du säker på att du vill radera denna samling?"
@@ -2793,7 +2805,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Deleted collections"
+    "message": "Borttagna samlingar"
   },
   "deletedCollectionId": {
     "message": "Raderade samlingen $ID$.",
@@ -2841,7 +2853,7 @@
     }
   },
   "deletedManyGroups": {
-    "message": "Deleted $QUANTITY$ group(s).",
+    "message": "Tog bort $QUANTITY$ grupp(er).",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -3113,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Du kan komma åt denna organisation när en administratör har bekräftat ditt medlemskap. Vi skickar ett e-postmeddelande till dig när det sker."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
+  },
   "inviteAcceptFailed": {
     "message": "Det gick inte att acceptera inbjudan. Be en administratör för organisationen att skicka en ny inbjudan."
   },
@@ -3276,7 +3291,7 @@
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
   },
   "maxSeatLimit": {
-    "message": "Seat Limit (optional)",
+    "message": "Platsgräns (valfritt)",
     "description": "Upper limit of seats to allow through autoscaling"
   },
   "maxSeatCost": {
@@ -3306,10 +3321,10 @@
     "message": "Limit subscription (optional)"
   },
   "subscriptionSeats": {
-    "message": "Subscription seats"
+    "message": "Prenumerationsplatser"
   },
   "subscriptionUpdated": {
-    "message": "Subscription updated"
+    "message": "Prenumeration uppdaterad"
   },
   "additionalOptions": {
     "message": "Ytterligare alternativ"
@@ -3625,7 +3640,7 @@
     "message": "Klona"
   },
   "masterPassPolicyTitle": {
-    "message": "Master password requirements"
+    "message": "Krav på huvudlösenord"
   },
   "masterPassPolicyDesc": {
     "message": "Ange minimikrav för huvudlösenordsstyrka."
@@ -3879,7 +3894,7 @@
     "message": "Medlemmar som inte är ägare eller administratörer och redan är med i en annan organisation kommer att tas bort från organisationen."
   },
   "requireSso": {
-    "message": "Autentisering med Single Sign-On"
+    "message": "Kräv autentisering med Single Sign-On"
   },
   "requireSsoPolicyDesc": {
     "message": "Kräv att användare loggar in med Single Sign-On för företag."
@@ -4304,7 +4319,7 @@
     "message": "Redigera samling"
   },
   "deleteAnyCollection": {
-    "message": "Delete any collection"
+    "message": "Ta bort valfri samling"
   },
   "manageAssignedCollections": {
     "message": "Hantera tilldelade samlingar"
@@ -4313,7 +4328,7 @@
     "message": "Redigera tilldelade samlingar"
   },
   "deleteAssignedCollections": {
-    "message": "Delete assigned collections"
+    "message": "Ta bort tilldelade samlingar"
   },
   "manageGroups": {
     "message": "Hantera grupper"
@@ -4366,7 +4381,7 @@
     "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendLinkLabel": {
-    "message": "Send link",
+    "message": "Send-länk",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "send": {
@@ -4759,7 +4774,7 @@
     "message": "Provider suspended"
   },
   "providerUpdated": {
-    "message": "Provider saved"
+    "message": "Leverantör sparades"
   },
   "yourProviderIs": {
     "message": "Your Provider is $PROVIDER$. They have administrative and billing privileges for your organization.",
@@ -4786,13 +4801,13 @@
     "message": "Lägg till"
   },
   "updatedMasterPassword": {
-    "message": "Master password saved"
+    "message": "Huvudlösenordet sparades"
   },
   "updateMasterPassword": {
     "message": "Uppdatera huvudlösenord"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera ditt huvudlösenord nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme."
   },
   "masterPasswordInvalidWarning": {
     "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Aktivera autofyll"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -4892,7 +4907,7 @@
     "message": "Client ID"
   },
   "clientSecret": {
-    "message": "Client secret"
+    "message": "Klienthemlighet"
   },
   "metadataAddress": {
     "message": "Metadata address"
@@ -4997,7 +5012,7 @@
     "message": "Shared collections for Family secrets"
   },
   "badToken": {
-    "message": "The link is no longer valid. Please have the sponsor resend the offer."
+    "message": "Länken är inte längre giltig. Be sponsorn att skicka erbjudandet igen."
   },
   "reclaimedFreePlan": {
     "message": "Reclaimed free plan"
@@ -5152,7 +5167,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
-    "message": "to require all members to log in with SSO.",
+    "message": "för att kräva att alla medlemmar loggar in med SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
@@ -5721,11 +5736,11 @@
     "description": "The label for the date and time when a item was last edited."
   },
   "editSecret": {
-    "message": "Edit secret",
+    "message": "Redigera hemlighet",
     "description": "Action to modify an existing secret."
   },
   "addSecret": {
-    "message": "Add secret",
+    "message": "Lägg till hemlighet",
     "description": "Action to create a new secret."
   },
   "copySecretName": {
@@ -5737,18 +5752,18 @@
     "description": "Action to copy the value of a secret to the system's clipboard."
   },
   "deleteSecret": {
-    "message": "Delete secret",
+    "message": "Ta bort hemlighet",
     "description": "Action to delete a single secret from the system."
   },
   "deleteSecrets": {
-    "message": "Delete secrets",
+    "message": "Ta bort hemligheter",
     "description": "The action to delete multiple secrets from the system."
   },
   "hardDeleteSecret": {
     "message": "Permanently delete secret"
   },
   "hardDeleteSecrets": {
-    "message": "Permanently delete secrets"
+    "message": "Ta bort hemligheter permanent"
   },
   "secretProjectAssociationDescription": {
     "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret.",
@@ -5783,7 +5798,7 @@
     "description": "The action to delete multiple projects from the system."
   },
   "secret": {
-    "message": "Secret",
+    "message": "Hemlighet",
     "description": "Label for a secret (key/value pair)"
   },
   "serviceAccount": {
@@ -5795,11 +5810,11 @@
     "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
-    "message": "Secrets",
+    "message": "Hemligheter",
     "description": "The title for the section of the application that deals with secrets."
   },
   "nameValuePair": {
-    "message": "Name/Value pair",
+    "message": "Namn/Värde-par",
     "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
   },
   "secretEdited": {
@@ -5811,7 +5826,7 @@
     "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "New secret",
+    "message": "Ny hemlighet",
     "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
@@ -5819,15 +5834,15 @@
     "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
-    "message": "No secrets to show",
+    "message": "Inga hemligheter att visa",
     "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "To get started, add a new secret or import secrets.",
+    "message": "Lägg till en ny hemlighet eller importera hemligheter för att komma igång.",
     "description": "Message to encourage the user to start adding secrets."
   },
   "secretsTrashNoItemsMessage": {
-    "message": "There are no secrets in the trash."
+    "message": "Det finns inga hemligheter i papperskorgen."
   },
   "serviceAccountsNoItemsMessage": {
     "message": "Skapa ett nytt tjänstkonto för att komma igång med automatisering av hemlig åtkomst.",
@@ -5838,7 +5853,7 @@
     "description": "Title to indicate that there are no service accounts to display."
   },
   "searchSecrets": {
-    "message": "Search secrets",
+    "message": "Sök i hemligheter",
     "description": "Placeholder text for searching secrets."
   },
   "deleteServiceAccounts": {
@@ -5917,17 +5932,17 @@
     "description": "Warns that deleting secrets can have consequences on integrations"
   },
   "softDeletesSuccessToast": {
-    "message": "Secrets sent to trash",
+    "message": "Hemligheter skickades till papperskorgen",
     "description": "Notifies that the selected secrets have been moved to the trash"
   },
   "hardDeleteSecretConfirmation": {
     "message": "Are you sure you want to permanently delete this secret?"
   },
   "hardDeleteSecretsConfirmation": {
-    "message": "Are you sure you want to permanently delete these secrets?"
+    "message": "Är du säker på att du vill ta bort dessa hemligheter permanent?"
   },
   "hardDeletesSuccessToast": {
-    "message": "Secrets permanently deleted"
+    "message": "Hemligheter togs bort permanent"
   },
   "smAccess": {
     "message": "Åtkomst",
@@ -6026,7 +6041,7 @@
     "description": "Message to be displayed when there is an error during bulk project deletion."
   },
   "softDeleteSuccessToast": {
-    "message": "Secret sent to trash",
+    "message": "Hemligheten skickades till papperskorgen",
     "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
   "hardDeleteSuccessToast": {
@@ -6145,7 +6160,7 @@
     "message": "Select members"
   },
   "selectCollections": {
-    "message": "Select collections"
+    "message": "Välj samlingar"
   },
   "role": {
     "message": "Roll"
@@ -6154,10 +6169,10 @@
     "message": "Remove member"
   },
   "collection": {
-    "message": "Collection"
+    "message": "Samling"
   },
   "noCollection": {
-    "message": "No collection"
+    "message": "Ingen samling"
   },
   "canView": {
     "message": "Can view"
@@ -6172,7 +6187,7 @@
     "message": "Can edit, except passwords"
   },
   "noCollectionsAdded": {
-    "message": "No collections added"
+    "message": "Ingen samlingar lades till"
   },
   "noMembersAdded": {
     "message": "No members added"
@@ -6502,13 +6517,13 @@
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
+    "message": "Hemlighetshanterare beta"
   },
   "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+    "message": "Aktivera användaråtkomst till hemlighetshanteraren utan kostnad under Beta-programmet."
   },
   "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+    "message": "Denna användare har åtkomst till hemlighetshanteraren Beta"
   },
   "important": {
     "message": "Important:"
@@ -6552,7 +6567,7 @@
     "description": "Software Development Kit"
   },
   "createSecret": {
-    "message": "Create a secret"
+    "message": "Skapa en hemlighet"
   },
   "createProject": {
     "message": "Create a project"
@@ -6561,14 +6576,14 @@
     "message": "Skapa ett tjänstkonto"
   },
   "downloadThe": {
-    "message": "Download the",
+    "message": "Ladda ner",
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
     "message": "Secrets Manager CLI"
   },
   "importSecrets": {
-    "message": "Import secrets"
+    "message": "Importera hemligheter"
   },
   "getStarted": {
     "message": "Get started"
@@ -6587,16 +6602,16 @@
     }
   },
   "restoreSecret": {
-    "message": "Restore secret"
+    "message": "Återställ hemlighet"
   },
   "restoreSecrets": {
-    "message": "Restore secrets"
+    "message": "Återställ hemligheter"
   },
   "restoreSecretPrompt": {
     "message": "Are you sure you want to restore this secret?"
   },
   "restoreSecretsPrompt": {
-    "message": "Are you sure you want to restore these secrets?"
+    "message": "Är du säker på att du vill återställa dessa hemligheter?"
   },
   "secretRestoredSuccessToast": {
     "message": "Secret restored"
@@ -6638,13 +6653,13 @@
     "message": "Check known data breaches for this password"
   },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "Huvudlösenordet har exponerats"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "Lösenordet upptäcktes vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda ett exponerat lösenord?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "Svagt och exponerat huvudlösenord"
   },
   "weakAndBreachedMasterPasswordDesc": {
     "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

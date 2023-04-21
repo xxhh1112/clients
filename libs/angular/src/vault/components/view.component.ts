@@ -22,8 +22,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
+import { EventType, FieldType } from "@bitwarden/common/enums";
 import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -434,6 +433,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   private cleanUp() {
     this.totpCode = null;
     this.cipher = null;
+    this.folder = null;
     this.showPassword = false;
     this.showCardNumber = false;
     this.showCardCode = false;

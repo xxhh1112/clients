@@ -31,10 +31,8 @@ import { VerifyRecoverDeleteComponent } from "../../auth/verify-recover-delete.c
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
-import { CollectionsComponent as OrgManageCollectionsComponent } from "../admin-console/organizations/manage/collections.component";
 import { EntityEventsComponent as OrgEntityEventsComponent } from "../admin-console/organizations/manage/entity-events.component";
 import { EventsComponent as OrgEventsComponent } from "../admin-console/organizations/manage/events.component";
-import { ManageComponent as OrgManageComponent } from "../admin-console/organizations/manage/manage.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 import { AcceptFamilySponsorshipComponent } from "../admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "../admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
@@ -68,10 +66,6 @@ import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
 import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
-import { AccessComponent } from "../send/access.component";
-import { AddEditComponent as SendAddEditComponent } from "../send/add-edit.component";
-import { EffluxDatesComponent as SendEffluxDatesComponent } from "../send/efflux-dates.component";
-import { SendComponent } from "../send/send.component";
 import { AccountComponent } from "../settings/account.component";
 import { AdjustStorageComponent } from "../settings/adjust-storage.component";
 import { ApiKeyComponent } from "../settings/api-key.component";
@@ -94,6 +88,10 @@ import { UpdateLicenseComponent } from "../settings/update-license.component";
 import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.component";
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
+import { AccessComponent } from "../tools/send/access.component";
+import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
+import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/send/efflux-dates.component";
+import { SendComponent } from "../tools/send/send.component";
 import { ToolsComponent } from "../tools/tools.component";
 import { PasswordRepromptComponent } from "../vault/components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
@@ -162,8 +160,6 @@ import { SharedModule } from "./shared.module";
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,
-    OrgManageCollectionsComponent,
-    OrgManageComponent,
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
@@ -266,8 +262,6 @@ import { SharedModule } from "./shared.module";
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,
-    OrgManageCollectionsComponent,
-    OrgManageComponent,
     OrgReusedPasswordsReportComponent,
     OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,

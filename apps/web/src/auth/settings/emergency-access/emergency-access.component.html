@@ -133,6 +133,13 @@
 </div>
 
 <bit-table *ngIf="grantedContacts?.length">
+  <ng-container header>
+    <tr>
+      <th bitCell colspan="2">{{ "name" | i18n }}</th>
+      <th bitCell>{{ "userAccess" | i18n }}</th>
+      <th bitCell class="tw-w-0"></th>
+    </tr>
+  </ng-container>
   <ng-template body>
     <tr *ngFor="let c of grantedContacts">
       <td bitCell width="30">

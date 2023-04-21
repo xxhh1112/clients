@@ -1,6 +1,5 @@
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
-import { StateVersion } from "../../enums/stateVersion";
-import { ThemeType } from "../../enums/themeType";
+import { StateVersion, ThemeType } from "../../enums";
 
 import { WindowState } from "./window-state";
 
@@ -25,7 +24,6 @@ export class GlobalState {
   mainWindowSize?: number;
   enableBiometrics?: boolean;
   biometricText?: string;
-  noAutoPromptBiometrics?: boolean;
   noAutoPromptBiometricsText?: string;
   stateVersion: StateVersion = StateVersion.One;
   environmentUrls: EnvironmentUrls = new EnvironmentUrls();

@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Данные успешно импортированы"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Всего было импортировано элементов: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Данные успешно экспортированы"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Отменить подписку"
+  },
+  "subscriptionExpiration": {
+    "message": "Срок действия подписки"
   },
   "subscriptionCanceled": {
     "message": "Подписка отменена."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Вы получите доступ к этой организации, как только администратор подтвердит ваше членство. Когда это произойдет, мы отправим вам email."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Не удается принять приглашение. Попросите администратора организации выслать новое."
@@ -4855,7 +4870,7 @@
   "activateAutofill": {
     "message": "Активировать автозаполнение"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Включить автозаполнение при загрузке страницы в расширении браузера для всех существующих и новых участников."
   },
   "experimentalFeature": {
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Сервисный аккаунт удален"
   },
   "deleteServiceAccountsToast": {
     "message": "Сервисные аккаунты удалены"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Отклонить"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Эта функция недоступна для организаций с бесплатным тарифом. Свяжитесь с владельцем вашей организации для перехода на другой тариф."
   }
 }

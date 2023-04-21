@@ -2,7 +2,7 @@ import { firstValueFrom } from "rxjs";
 
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -25,11 +25,11 @@ import { GenerateResponse } from "../models/native-messaging/encrypted-message-r
 import { SuccessStatusResponse } from "../models/native-messaging/encrypted-message-responses/success-status-response";
 import { UserStatusErrorResponse } from "../models/native-messaging/encrypted-message-responses/user-status-error-response";
 
-import { StateService } from "./state.service";
+import { ElectronStateService } from "./electron-state.service";
 
 export class EncryptedMessageHandlerService {
   constructor(
-    private stateService: StateService,
+    private stateService: ElectronStateService,
     private authService: AuthService,
     private cipherService: CipherService,
     private policyService: PolicyService,

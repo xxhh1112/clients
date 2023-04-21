@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Verilənlər anbarınıza uğurla idxal edildi."
   },
+  "importSuccessNumberOfItems": {
+    "message": "Cəmi $AMOUNT$ element daxilə köçürüldü.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Məlumat uğurla xaricə köçürüldü"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Abunəlikdən imtina"
+  },
+  "subscriptionExpiration": {
+    "message": "Abunəliyin bitmə tarixi"
   },
   "subscriptionCanceled": {
     "message": "Abunəliyiniz ləğv edildi."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Administrator üzvlüyünüzü təsdiqlədikdən sonra bu təşkilata müraciət edə bilərsiniz. Bu baş verəndə sizə bir e-poçt göndərəcəyik."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Dəvət qəbul edilə bilmədi. Təşkilat adminindən yeni bir dəvət göndərməsini xahiş edin."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Avto-doldurmanı aktivləşdir"
   },
-  "activateAutofillDesc": {
-    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yükləmə tənzimləmələri ilə avto-doldurmanı aktivləşdirin."
+  "activateAutofillPolicyDesc": {
+    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yüklənəndə avto-doldurmanı tənzimləməsini aktivləşdirin."
   },
   "experimentalFeature": {
     "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Xidmət hesabı silindi"
   },
   "deleteServiceAccountsToast": {
     "message": "Xidmət hesabları silindi"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Rədd et"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Bu özəllik ödənişsiz təşkilatlar üçün əlçatmazdır. Yüksəltmək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
   }
 }

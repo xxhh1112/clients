@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Les dades s'han importat amb èxit"
   },
+  "importSuccessNumberOfItems": {
+    "message": "S'han importat un total de $AMOUNT$ elements.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Les dades s'han exportat correctament"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Cancel·la la subscripció"
+  },
+  "subscriptionExpiration": {
+    "message": "Caducitat de la subscripció"
   },
   "subscriptionCanceled": {
     "message": "S'ha cancel·lat la subscripció."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Podeu accedir a aquesta organització una vegada que un administrador confirme la vostra pertinença. Rebreu un correu electrònic quan això passe."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "No es pot acceptar la invitació. Demaneu a l'administrador d'una organització que envie una invitació nova."
@@ -4855,8 +4870,8 @@
   "activateAutofill": {
     "message": "Activa l'emplenament automàtic"
   },
-  "activateAutofillDesc": {
-    "message": "Activa l'emplenament automàtic amb la configuració de càrrega de pàgina a l'extensió del navegador per a tots els membres existents i nous."
+  "activateAutofillPolicyDesc": {
+    "message": "Activeu l'emplenament automàtic a la configuració de la càrrega de la pàgina en l'extensió del navegador per a tots els membres existents i nous."
   },
   "experimentalFeature": {
     "message": "Els llocs web compromesos o no fiables poden aprofitar l'emplenament automàtic en carregar de la pàgina."
@@ -5875,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "S'ha suprimit el compte de servei"
   },
   "deleteServiceAccountsToast": {
     "message": "S'han suprimit els comptes de servei"
@@ -6669,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Descarta"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Aquesta característica no està disponible per a organitzacions gratuïtes. Poseu-vos en contacte amb el propietari de la vostra organització per actualitzar.-la."
   }
 }

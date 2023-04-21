@@ -14,6 +14,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -51,7 +52,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     private popupUtilsService: PopupUtilsService,
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
-    logService: LogService
+    logService: LogService,
+    sendApiService: SendApiService
   ) {
     super(
       cipherService,
@@ -66,7 +68,8 @@ export class AddEditComponent extends BaseAddEditComponent {
       policyService,
       logService,
       passwordRepromptService,
-      organizationService
+      organizationService,
+      sendApiService
     );
   }
 

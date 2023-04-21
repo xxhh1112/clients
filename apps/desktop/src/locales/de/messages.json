@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Kontakt"
   },
+  "helpAndFeedback": {
+    "message": "Hilfe und Feedback"
+  },
   "getHelp": {
     "message": "Hilfe erhalten"
   },
@@ -1241,7 +1244,7 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Match-Erkennung",
+    "message": "Übereinstimmungserkennung",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
