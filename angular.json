@@ -146,9 +146,35 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "outputPath": "dist/storybook",
+            "index": "libs/components/src/index.html",
+            "main": "libs/components/src/main.ts",
             "tsConfig": ".storybook/tsconfig.json",
             "styles": ["libs/components/src/styles.scss", "libs/components/src/styles.css"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["libs/components/src/styles"]
+            },
             "scripts": []
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "storybook:build",
+            "port": 6006,
+            "compodoc": true,
+            "compodocArgs": ["-p", "./tsconfig.json", "-e", "json", "-d", "."]
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "storybook:build",
+            "outputDir": "dist/storybook/your-project",
+            "compodoc": true,
+            "compodocArgs": ["-e", "json", "-d", "."]
           }
         }
       }

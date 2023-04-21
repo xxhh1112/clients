@@ -1,5 +1,4 @@
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-
 module.exports = {
   stories: [
     "../libs/components/src/**/*.stories.mdx",
@@ -13,11 +12,13 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
-    "storybook-addon-designs",
+    "@storybook/addon-mdx-gfm",
   ],
-  framework: "@storybook/angular",
+  framework: {
+    name: "@storybook/angular",
+    options: {},
+  },
   core: {
-    builder: "webpack5",
     disableTelemetry: true,
   },
   env: (config) => ({
@@ -29,5 +30,8 @@ module.exports = {
   webpackFinal: async (config, { configType }) => {
     config.resolve.plugins = [new TsconfigPathsPlugin()];
     return config;
+  },
+  docs: {
+    autodocs: true,
   },
 };

@@ -1,5 +1,5 @@
 import { setCompodocJson } from "@storybook/addon-docs/angular";
-import { componentWrapperDecorator, addDecorator } from "@storybook/angular";
+import { componentWrapperDecorator } from "@storybook/angular";
 
 import docJson from "../documentation.json";
 setCompodocJson(docJson);
@@ -35,4 +35,4 @@ const decorator = componentWrapperDecorator(
 `
 );
 
-addDecorator(decorator);
+//addDecorator(decorator);

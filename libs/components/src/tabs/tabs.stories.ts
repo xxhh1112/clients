@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { applicationConfig, Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { ButtonModule } from "../button";
 import { FormFieldModule } from "../form-field";
@@ -44,20 +44,21 @@ export default {
         ItemThreeDummyComponent,
         DisabledDummyComponent,
       ],
-      imports: [
-        CommonModule,
-        TabsModule,
-        ButtonModule,
-        FormFieldModule,
-        RouterModule.forRoot(
-          [
-            { path: "", redirectTo: "active", pathMatch: "full" },
-            { path: "active", component: ActiveDummyComponent },
-            { path: "item-2", component: ItemTwoDummyComponent },
-            { path: "item-3", component: ItemThreeDummyComponent },
-            { path: "disabled", component: DisabledDummyComponent },
-          ],
-          { useHash: true }
+      imports: [CommonModule, TabsModule, ButtonModule, FormFieldModule, RouterModule],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(
+          RouterModule.forRoot(
+            [
+              { path: "", redirectTo: "active", pathMatch: "full" },
+              { path: "active", component: ActiveDummyComponent },
+              { path: "item-2", component: ItemTwoDummyComponent },
+              { path: "item-3", component: ItemThreeDummyComponent },
+              { path: "disabled", component: DisabledDummyComponent },
+            ],
+            { useHash: true }
+          )
         ),
       ],
     }),
