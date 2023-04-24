@@ -161,6 +161,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: true,
+        enforceOnLogin: false,
       });
     });
 
@@ -200,6 +201,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: false,
+        enforceOnLogin: false,
       });
     });
   });
@@ -401,7 +403,7 @@ describe("PolicyService", () => {
     status: OrganizationUserStatusType,
     managePolicies: boolean
   ) {
-    const organizationData = new OrganizationData({} as any);
+    const organizationData = new OrganizationData({} as any, {} as any);
     organizationData.id = id;
     organizationData.enabled = enabled;
     organizationData.usePolicies = usePolicies;

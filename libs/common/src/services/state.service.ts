@@ -1,5 +1,5 @@
 import { BehaviorSubject, concatMap } from "rxjs";
-import { Jsonify } from "type-fest";
+import { Jsonify, JsonValue } from "type-fest";
 
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
@@ -16,8 +16,11 @@ import { ProviderData } from "../admin-console/models/data/provider.data";
 import { Policy } from "../admin-console/models/domain/policy";
 import { CollectionView } from "../admin-console/models/view/collection.view";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { ForceResetPasswordReason } from "../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { BiometricKey } from "../auth/types/biometric-key";
 import { HtmlStorageLocation, KdfType, StorageLocation, ThemeType, UriMatchType } from "../enums";
+import { VaultTimeoutAction } from "../enums/vault-timeout-action.enum";
 import { StateFactory } from "../factories/stateFactory";
 import { Utils } from "../misc/utils";
 import { EventData } from "../models/data/event.data";
@@ -605,7 +608,7 @@ export class StateService<
     );
   }
 
-  async setCryptoMasterKeyBiometric(value: string, options?: StorageOptions): Promise<void> {
+  async setCryptoMasterKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
       await this.defaultSecureStorageOptions()
@@ -1134,24 +1137,6 @@ export class StateService<
     );
   }
 
-  async getEnableBiometric(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.enableBiometrics ?? false
-    );
-  }
-
-  async setEnableBiometric(value: boolean, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    globals.enableBiometrics = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-  }
-
   async getEnableBrowserIntegration(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
@@ -1634,21 +1619,27 @@ export class StateService<
     );
   }
 
-  async getForcePasswordReset(options?: StorageOptions): Promise<boolean> {
+  async getForcePasswordResetReason(options?: StorageOptions): Promise<ForceResetPasswordReason> {
     return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.profile?.forcePasswordReset ?? false
+      (
+        await this.getAccount(
+          this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
+        )
+      )?.profile?.forcePasswordResetReason ?? ForceResetPasswordReason.None
     );
   }
 
-  async setForcePasswordReset(value: boolean, options?: StorageOptions): Promise<void> {
+  async setForcePasswordResetReason(
+    value: ForceResetPasswordReason,
+    options?: StorageOptions
+  ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
-    account.profile.forcePasswordReset = value;
+    account.profile.forcePasswordResetReason = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
   }
 
@@ -1864,24 +1855,6 @@ export class StateService<
     account.settings.neverDomains = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-  }
-
-  async getNoAutoPromptBiometrics(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.noAutoPromptBiometrics ?? false
-    );
-  }
-
-  async setNoAutoPromptBiometrics(value: boolean, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    globals.noAutoPromptBiometrics = value;
-    await this.saveGlobals(
-      globals,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
@@ -2571,7 +2544,10 @@ export class StateService<
       await this.storageService.remove(keys.tempAccountSettings);
     }
     account.settings.environmentUrls = environmentUrls;
-    if (account.settings.vaultTimeoutAction === "logOut" && account.settings.vaultTimeout != null) {
+    if (
+      account.settings.vaultTimeoutAction === VaultTimeoutAction.LogOut &&
+      account.settings.vaultTimeout != null
+    ) {
       account.tokens.accessToken = null;
       account.tokens.refreshToken = null;
       account.profile.apiKeyClientId = null;
@@ -2831,13 +2807,17 @@ export class StateService<
     const timeoutAction = await this.getVaultTimeoutAction({ userId: options?.userId });
     const timeout = await this.getVaultTimeout({ userId: options?.userId });
     const defaultOptions =
-      timeoutAction === "logOut" && timeout != null
+      timeoutAction === VaultTimeoutAction.LogOut && timeout != null
         ? await this.defaultInMemoryOptions()
         : await this.defaultOnDiskOptions();
     return this.reconcileOptions(options, defaultOptions);
   }
 
-  private async saveSecureStorageKey(key: string, value: string, options?: StorageOptions) {
+  private async saveSecureStorageKey<T extends JsonValue>(
+    key: string,
+    value: T,
+    options?: StorageOptions
+  ) {
     return value == null
       ? await this.secureStorageService.remove(`${options.userId}${key}`, options)
       : await this.secureStorageService.save(`${options.userId}${key}`, value, options);
