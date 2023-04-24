@@ -1,6 +1,5 @@
 import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
 
-
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { ServerConfig } from "../../abstractions/config/server-config";
@@ -58,7 +57,7 @@ export class ConfigService implements ConfigServiceAbstraction {
         const data = new ServerConfigData(response);
         const serverConfig = new ServerConfig(data);
         this._serverConfig.next(serverConfig);
-        if (await this.authService.getAuthStatus() === AuthenticationStatus.LoggedOut) {
+        if ((await this.authService.getAuthStatus()) === AuthenticationStatus.LoggedOut) {
           return serverConfig;
         }
         await this.stateService.setServerConfig(data);
