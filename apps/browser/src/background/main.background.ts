@@ -498,7 +498,7 @@ export default class MainBackground {
       this.userVerificationApiService
     );
 
-    this.configService = new ConfigService(this.stateService, this.configApiService);
+    this.configService = new ConfigService(this.stateService, this.configApiService, this.authService);
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =

@@ -1,9 +1,12 @@
 import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
 
+
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { ServerConfig } from "../../abstractions/config/server-config";
 import { StateService } from "../../abstractions/state.service";
+import { AuthService } from "../../auth/abstractions/auth.service";
+import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { ServerConfigData } from "../../models/data/server-config.data";
 
@@ -13,7 +16,8 @@ export class ConfigService implements ConfigServiceAbstraction {
 
   constructor(
     private stateService: StateService,
-    private configApiService: ConfigApiServiceAbstraction
+    private configApiService: ConfigApiServiceAbstraction,
+    private authService: AuthService
   ) {
     // Re-fetch the server config every hour
     timer(0, 1000 * 3600)
@@ -54,13 +58,10 @@ export class ConfigService implements ConfigServiceAbstraction {
         const data = new ServerConfigData(response);
         const serverConfig = new ServerConfig(data);
         this._serverConfig.next(serverConfig);
-        try
-        {
-          // if there isn't a user authed this will throw, ignore
-          await this.stateService.setServerConfig(data);
-        } catch {
+        if (await this.authService.getAuthStatus() === AuthenticationStatus.LoggedOut) {
+          return serverConfig;
         }
-        return serverConfig;
+        await this.stateService.setServerConfig(data);
       }
     } catch {
       return null;
