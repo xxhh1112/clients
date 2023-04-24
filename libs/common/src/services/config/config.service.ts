@@ -19,7 +19,7 @@ export class ConfigService implements ConfigServiceAbstraction {
     timer(0, 1000 * 3600)
       .pipe(
         concatMap(async () => {
-          return await this.buildServerConfig();
+          return await this.fetchServerConfig();
         })
       )
       .subscribe((serverConfig) => {
@@ -52,23 +52,30 @@ export class ConfigService implements ConfigServiceAbstraction {
 
       if (response != null) {
         const data = new ServerConfigData(response);
-        await this.stateService.setServerConfig(data);
-        return new ServerConfig(data);
+        const serverConfig = new ServerConfig(data);
+        this._serverConfig.next(serverConfig);
+        try
+        {
+          // if there isn't a user authed this will throw, ignore
+          await this.stateService.setServerConfig(data);
+        } catch {
+        }
+        return serverConfig;
       }
     } catch {
       return null;
     }
   }
 
-  async getFeatureFlagBool(key: FeatureFlag, defaultValue: boolean): Promise<boolean> {
+  async getFeatureFlagBool(key: FeatureFlag, defaultValue: boolean = false): Promise<boolean> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagString(key: FeatureFlag, defaultValue: string): Promise<string> {
+  async getFeatureFlagString(key: FeatureFlag, defaultValue: string = ""): Promise<string> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagNumber(key: FeatureFlag, defaultValue: number): Promise<number> {
+  async getFeatureFlagNumber(key: FeatureFlag, defaultValue: number = 0): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
@@ -81,13 +88,12 @@ export class ConfigService implements ConfigServiceAbstraction {
     ) {
       return defaultValue;
     }
-
     return serverConfig.featureStates[key] as T;
   }
 
   private async buildServerConfig(): Promise<ServerConfig> {
     const data = await this.stateService.getServerConfig();
-    const domain = data ? new ServerConfig(data) : null;
+    const domain = data ? new ServerConfig(data) : this._serverConfig.getValue();
 
     if (domain == null || !domain.isValid() || domain.expiresSoon()) {
       const value = await this.fetchServerConfig();

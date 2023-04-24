@@ -39,6 +39,7 @@ import {
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
 import { PolicyListService, RouterService } from "./core";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -129,7 +130,7 @@ export class AppComponent implements OnDestroy, OnInit {
           case "syncStarted":
             break;
           case "syncCompleted":
-            this.configService.fetchServerConfig();
+            await this.configService.fetchServerConfig();
             break;
           case "upgradeOrganization": {
             const upgradeConfirmed = await this.platformUtilsService.showDialog(
