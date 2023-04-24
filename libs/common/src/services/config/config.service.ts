@@ -67,15 +67,15 @@ export class ConfigService implements ConfigServiceAbstraction {
     }
   }
 
-  async getFeatureFlagBool(key: FeatureFlag, defaultValue: boolean = false): Promise<boolean> {
+  async getFeatureFlagBool(key: FeatureFlag, defaultValue = false): Promise<boolean> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagString(key: FeatureFlag, defaultValue: string = ""): Promise<string> {
+  async getFeatureFlagString(key: FeatureFlag, defaultValue = ""): Promise<string> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
-  async getFeatureFlagNumber(key: FeatureFlag, defaultValue: number = 0): Promise<number> {
+  async getFeatureFlagNumber(key: FeatureFlag, defaultValue = 0): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
   }
 
