@@ -1,6 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -61,6 +62,7 @@ describe("ContextMenuClickedHandler", () => {
   let autofill: AutofillAction;
   let authService: MockProxy<AuthService>;
   let cipherService: MockProxy<CipherService>;
+  let stateService: MockProxy<StateService>;
   let totpService: MockProxy<TotpService>;
   let eventCollectionService: MockProxy<EventCollectionService>;
 
@@ -72,6 +74,7 @@ describe("ContextMenuClickedHandler", () => {
     autofill = jest.fn<Promise<void>, [tab: chrome.tabs.Tab, cipher: CipherView]>();
     authService = mock();
     cipherService = mock();
+    stateService = mock();
     totpService = mock();
     eventCollectionService = mock();
 
@@ -81,6 +84,7 @@ describe("ContextMenuClickedHandler", () => {
       autofill,
       authService,
       cipherService,
+      stateService,
       totpService,
       eventCollectionService
     );

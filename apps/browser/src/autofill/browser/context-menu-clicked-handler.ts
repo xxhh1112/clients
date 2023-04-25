@@ -1,4 +1,5 @@
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
@@ -55,6 +56,7 @@ export class ContextMenuClickedHandler {
     private autofillAction: AutofillAction,
     private authService: AuthService,
     private cipherService: CipherService,
+    private stateService: StateService,
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService
   ) {}
@@ -108,6 +110,7 @@ export class ContextMenuClickedHandler {
       (tab, cipher) => autofillCommand.doAutofillTabWithCipherCommand(tab, cipher),
       await authServiceFactory(cachedServices, serviceOptions),
       await cipherServiceFactory(cachedServices, serviceOptions),
+      await stateServiceFactory(cachedServices, serviceOptions),
       await totpServiceFactory(cachedServices, serviceOptions),
       await eventCollectionServiceFactory(cachedServices, serviceOptions)
     );
@@ -198,6 +201,7 @@ export class ContextMenuClickedHandler {
       return;
     }
 
+    this.stateService.setLastActive(new Date().getTime());
     switch (info.parentMenuItemId) {
       case AUTOFILL_ID:
         if (tab == null) {
