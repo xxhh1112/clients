@@ -9,7 +9,7 @@ on:
 jobs:
   chromatic:
     name: Chromatic
-    runs-on: windows-2019
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Set up Node
@@ -33,10 +33,11 @@ jobs:
         run: npm ci
 
       - name: Publish to Chromatic
-        uses: chromaui/action-next@a8e9047d85f3b351bc4a5af7f0c1d8c3e6c402d3
+        uses: chromaui/action@d51b84e79d164fbe8fc5bb7175695d88ddd04b72
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           onlyChanged: true
+          debug: true
           externals: "[\"libs/components/**/*.scss\", \"libs/components/tailwind.config*.js\"]"
