@@ -7,7 +7,7 @@ import { SharedModule } from "../shared/shared.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BannerComponent } from "./banner.component";
-
+//test
 export default {
   title: "Component Library/Banner",
   component: BannerComponent,

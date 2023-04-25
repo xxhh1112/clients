@@ -9,7 +9,7 @@ on:
 jobs:
   chromatic:
     name: Chromatic
-    runs-on: ubuntu-22.04
+    runs-on: windows-2019
 
     steps:
       - name: Set up Node
