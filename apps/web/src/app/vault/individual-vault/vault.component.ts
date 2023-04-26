@@ -124,6 +124,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   trashCleanupWarning: string = null;
   kdfIterations: number;
   activeFilter: VaultFilter = new VaultFilter();
+  sidebarOpen = false;
 
   protected noItemIcon = Icons.Search;
   protected performingInitialLoad = true;
@@ -395,6 +396,14 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.refreshing = false;
         }
       );
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  get isSidebarOpen() {
+    return this.sidebarOpen;
   }
 
   get isShowingCards() {

@@ -1,22 +1,35 @@
-<div class="container page-content">
-  <div class="row">
-    <div class="col-3">
-      <div class="groupings">
-        <div class="content">
-          <div class="inner-content">
-            <app-vault-filter
-              #vaultFilter
-              [activeFilter]="activeFilter"
-              [searchText]="currentSearchText$ | async"
-              (searchTextChanged)="filterSearchText($event)"
-              (onAddFolder)="addFolder()"
-              (onEditFolder)="editFolder($event)"
-            ></app-vault-filter>
-          </div>
+<button type="button" class="tw-mb-8 md:tw-invisible" (click)="toggleSidebar()">Sidebar</button>
+
+<div class="tw-flex">
+  <div
+    class="tw-absolute tw-inset-x-4 tw-z-50 tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
+    [ngClass]="
+      isSidebarOpen
+        ? '-tw-translate-x-0 sm:-tw-ml-0'
+        : 'tw-left-0 -tw-translate-x-full sm:tw-left-auto sm:-tw-ml-80 sm:-tw-translate-x-0'
+    "
+  >
+    <div class="groupings">
+      <div class="content">
+        <div class="inner-content">
+          <app-vault-filter
+            #vaultFilter
+            [activeFilter]="activeFilter"
+            [searchText]="currentSearchText$ | async"
+            (searchTextChanged)="filterSearchText($event)"
+            (onAddFolder)="addFolder()"
+            (onEditFolder)="editFolder($event)"
+          ></app-vault-filter>
         </div>
       </div>
     </div>
-    <div [ngClass]="{ 'col-6': isShowingCards, 'col-9': !isShowingCards }">
+  </div>
+
+  <div
+    class="tw-flex tw-flex-grow tw-flex-col tw-gap-5 tw-transition-all tw-duration-300 md:tw-pl-5 lg:tw-flex-row"
+    [ngClass]="isSidebarOpen ? 'sm:tw-pl-5' : 'sm:tw-pl-8'"
+  >
+    <div class="tw-order-2 tw-flex-grow lg:tw-order-1">
       <app-vault-header
         [filter]="filter"
         [loading]="refreshing && !performingInitialLoad"
@@ -74,7 +87,7 @@
         </button>
       </div>
     </div>
-    <div class="col-3">
+    <div class="tw-order-1 tw-hidden tw-w-72 tw-flex-shrink-0 lg:tw-order-2">
       <div class="card border-warning mb-4" *ngIf="showUpdateKey">
         <div class="card-header bg-warning text-white">
           <i class="bwi bwi-exclamation-triangle bwi-fw" aria-hidden="true"></i>
@@ -130,6 +143,7 @@
     </div>
   </div>
 </div>
+
 <ng-template #attachments></ng-template>
 <ng-template #folderAddEdit></ng-template>
 <ng-template #cipherAddEdit></ng-template>
