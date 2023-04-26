@@ -1,4 +1,4 @@
-import { BehaviorSubject, concatMap, map, switchMap, timer, EMPTY } from "rxjs";
+import { BehaviorSubject, concatMap, timer } from "rxjs";
 
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
@@ -23,25 +23,6 @@ export class ConfigService implements ConfigServiceAbstraction {
       .pipe(
         concatMap(async () => {
           return await this.fetchServerConfig();
-        })
-      )
-      .subscribe((serverConfig) => {
-        this._serverConfig.next(serverConfig);
-      });
-
-    this.stateService.activeAccountUnlocked$
-      .pipe(
-        switchMap((unlocked) => {
-          if (!unlocked) {
-            this._serverConfig.next(null);
-            return EMPTY;
-          }
-
-          // Re-fetch the server config every hour
-          return timer(0, 3600 * 1000).pipe(map(() => unlocked));
-        }),
-        concatMap(async (unlocked) => {
-          return unlocked ? await this.buildServerConfig() : null;
         })
       )
       .subscribe((serverConfig) => {
