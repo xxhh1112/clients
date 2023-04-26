@@ -1,5 +1,8 @@
-<div class="tw-inline-grid tw-grid-cols-3 tw-gap-4">
-  <div *ngFor="let report of reports">
+<div
+  class="tw-grid tw-max-w-5xl tw-justify-start tw-gap-4"
+  [ngStyle]="{ 'grid-template-columns': 'repeat(auto-fill, 18rem' }"
+>
+  <ng-container *ngFor="let report of reports">
     <app-report-card
       [title]="report.title | i18n"
       [description]="report.description | i18n"
@@ -7,5 +10,5 @@
       [variant]="report.variant"
       [icon]="report.icon"
     ></app-report-card>
-  </div>
+  </ng-container>
 </div>
