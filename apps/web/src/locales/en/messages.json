@@ -6738,5 +6738,16 @@
   },
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }
