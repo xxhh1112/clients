@@ -3,19 +3,17 @@
 </div>
 <p>{{ "breachDesc" | i18n }}</p>
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise" ngNativeValidate>
-  <div class="row">
-    <div class="form-group col-6">
-      <label for="username">{{ "username" | i18n }}</label>
-      <input
-        id="username"
-        type="text"
-        name="Username"
-        class="form-control"
-        [(ngModel)]="username"
-        required
-      />
-      <small class="form-text text-muted">{{ "breachCheckUsernameEmail" | i18n }}</small>
-    </div>
+  <div class="form-group tw-max-w-lg">
+    <label for="username">{{ "username" | i18n }}</label>
+    <input
+      id="username"
+      type="text"
+      name="Username"
+      class="form-control"
+      [(ngModel)]="username"
+      required
+    />
+    <small class="form-text text-muted">{{ "breachCheckUsernameEmail" | i18n }}</small>
   </div>
   <button type="submit" buttonType="primary" bitButton [loading]="form.loading">
     {{ "checkBreaches" | i18n }}
