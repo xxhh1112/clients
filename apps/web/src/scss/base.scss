@@ -3,8 +3,6 @@ html {
 }
 
 body {
-  min-width: 1010px;
-
   &.layout_frontend {
     @media (prefers-color-scheme: dark) {
       background-color: $darkDarkBlue2;
