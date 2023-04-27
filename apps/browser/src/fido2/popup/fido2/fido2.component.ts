@@ -4,6 +4,7 @@ import {
   BehaviorSubject,
   combineLatest,
   concatMap,
+  filter,
   map,
   Observable,
   Subject,
@@ -23,6 +24,10 @@ import {
   BrowserFido2UserInterfaceSession,
 } from "../../../services/fido2/browser-fido2-user-interface.service";
 
+interface ViewData {
+  message: BrowserFido2Message;
+}
+
 @Component({
   selector: "app-fido2",
   templateUrl: "fido2.component.html",
@@ -31,10 +36,12 @@ import {
 export class Fido2Component implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  protected data$ = new BehaviorSubject<BrowserFido2Message>(null);
+  protected data$: Observable<ViewData>;
   protected sessionId?: string;
   protected ciphers?: CipherView[] = [];
   protected loading = false;
+
+  private message$ = new BehaviorSubject<BrowserFido2Message>(null);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -64,44 +71,47 @@ export class Fido2Component implements OnInit, OnDestroy {
           return this.abort(false);
         }
 
-        this.data$.next(message);
+        this.message$.next(message);
       });
 
-    this.data$
-      .pipe(
-        concatMap(async (data) => {
-          if (data?.type === "ConfirmNewCredentialRequest") {
-            const cipher = new CipherView();
-            cipher.name = data.credentialName;
-            cipher.type = CipherType.Fido2Key;
-            cipher.fido2Key = new Fido2KeyView();
-            cipher.fido2Key.userName = data.userName;
-            this.ciphers = [cipher];
-          } else if (data?.type === "PickCredentialRequest") {
-            this.ciphers = await Promise.all(
-              data.cipherIds.map(async (cipherId) => {
-                const cipher = await this.cipherService.get(cipherId);
-                return cipher.decrypt();
-              })
-            );
-          } else if (data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
-            this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
-              (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
-            );
-          } else if (data?.type === "InformExcludedCredentialRequest") {
-            this.ciphers = await Promise.all(
-              data.existingCipherIds.map(async (cipherId) => {
-                const cipher = await this.cipherService.get(cipherId);
-                return cipher.decrypt();
-              })
-            );
-          } else if (data?.type === "CloseRequest") {
-            window.close();
-          }
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
+    this.data$ = this.message$.pipe(
+      filter((message) => message != undefined),
+      concatMap(async (message) => {
+        if (message.type === "ConfirmNewCredentialRequest") {
+          const cipher = new CipherView();
+          cipher.name = message.credentialName;
+          cipher.type = CipherType.Fido2Key;
+          cipher.fido2Key = new Fido2KeyView();
+          cipher.fido2Key.userName = message.userName;
+          this.ciphers = [cipher];
+        } else if (message.type === "PickCredentialRequest") {
+          this.ciphers = await Promise.all(
+            message.cipherIds.map(async (cipherId) => {
+              const cipher = await this.cipherService.get(cipherId);
+              return cipher.decrypt();
+            })
+          );
+        } else if (message.type === "ConfirmNewNonDiscoverableCredentialRequest") {
+          this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
+            (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
+          );
+        } else if (message.type === "InformExcludedCredentialRequest") {
+          this.ciphers = await Promise.all(
+            message.existingCipherIds.map(async (cipherId) => {
+              const cipher = await this.cipherService.get(cipherId);
+              return cipher.decrypt();
+            })
+          );
+        } else if (message.type === "CloseRequest") {
+          window.close();
+        }
+
+        return {
+          message,
+        };
+      }),
+      takeUntil(this.destroy$)
+    );
 
     sessionId$.pipe(takeUntil(this.destroy$)).subscribe((sessionId) => {
       this.send({
@@ -112,7 +122,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   async pick(cipher: CipherView) {
-    const data = this.data$.value;
+    const data = this.message$.value;
     if (data?.type === "PickCredentialRequest") {
       let userVerified = false;
       if (data.userVerification) {
@@ -143,7 +153,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   async confirm() {
-    const data = this.data$.value;
+    const data = this.message$.value;
     if (data.type !== "ConfirmNewCredentialRequest") {
       return;
     }

@@ -3,8 +3,8 @@
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
     <ng-container
       *ngIf="
-        data.type == 'PickCredentialRequest' ||
-        data.type == 'ConfirmNewNonDiscoverableCredentialRequest'
+        data.message.type == 'PickCredentialRequest' ||
+        data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
       "
     >
       A site is asking for authentication, please choose one of the following credentials to use:
@@ -18,7 +18,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="data.type == 'ConfirmNewCredentialRequest'">
+    <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
       A site wants to create the following passkey in your vault
       <div class="box list">
         <div class="box-content">
@@ -27,7 +27,7 @@
       </div>
       <button type="button" class="btn btn-outline-secondary" (click)="confirm()">Create</button>
     </ng-container>
-    <ng-container *ngIf="data.type == 'InformExcludedCredentialRequest'">
+    <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
       A passkey already exists in Bitwarden for this account
       <div class="box list">
         <div class="box-content">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="data.type == 'InformCredentialNotFoundRequest'">
+    <ng-container *ngIf="data.message.type == 'InformCredentialNotFoundRequest'">
       You do not have a matching login for this site.
       <div class="box list">
         <div class="box-content">
