@@ -45,6 +45,11 @@ import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.ser
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-authenticator.service.abstraction";
+import { Fido2ClientService as Fido2ClientServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
+import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
+import { Fido2AuthenticatorService } from "@bitwarden/common/fido2/services/fido2-authenticator.service";
+import { Fido2ClientService } from "@bitwarden/common/fido2/services/fido2-client.service";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
@@ -89,11 +94,6 @@ import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-u
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
-import { Fido2AuthenticatorService as Fido2AuthenticatorServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-authenticator.service.abstraction";
-import { Fido2ClientService as Fido2ClientServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
-import { Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction } from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
-import { Fido2AuthenticatorService } from "@bitwarden/common/fido2/services/fido2-authenticator.service";
-import { Fido2ClientService } from "@bitwarden/common/fido2/services/fido2-client.service";
 
 import { BrowserOrganizationService } from "../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../admin-console/services/browser-policy.service";
@@ -504,7 +504,8 @@ export default class MainBackground {
     this.fido2UserInterfaceService = new BrowserFido2UserInterfaceService(this.popupUtilsService);
     this.fido2AuthenticatorService = new Fido2AuthenticatorService(
       this.cipherService,
-      this.fido2UserInterfaceService
+      this.fido2UserInterfaceService,
+      this.logService
     );
     this.fido2ClientService = new Fido2ClientService(this.fido2AuthenticatorService);
 
