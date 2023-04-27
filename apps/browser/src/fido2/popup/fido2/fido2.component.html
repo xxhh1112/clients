@@ -1,47 +1,49 @@
+<!-- TODO: Rewrite and refactor this component when implementing the new design -->
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
-    <ng-container
-      *ngIf="
-        data.message.type == 'PickCredentialRequest' ||
-        data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
-      "
-    >
-      A site is asking for authentication, please choose one of the following credentials to use:
-      <div class="box list">
-        <div class="box-content">
-          <app-cipher-row
-            *ngFor="let cipher of ciphers"
-            [cipher]="cipher"
-            (onSelected)="pick(cipher)"
-          ></app-cipher-row>
-        </div>
-      </div>
+    <ng-container *ngIf="data.showUnsupportedVerification">
+      Password confirmation required by initiating site. Your account does not support password
+      confirmation.
     </ng-container>
-    <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
-      A site wants to create the following passkey in your vault
-      <div class="box list">
-        <div class="box-content">
-          <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
+    <ng-container *ngIf="!data.showUnsupportedVerification">
+      <ng-container
+        *ngIf="
+          data.message.type == 'PickCredentialRequest' ||
+          data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
+        "
+      >
+        A site is asking for authentication, please choose one of the following credentials to use:
+        <div class="box list">
+          <div class="box-content">
+            <app-cipher-row
+              *ngFor="let cipher of ciphers"
+              [cipher]="cipher"
+              (onSelected)="pick(cipher)"
+            ></app-cipher-row>
+          </div>
         </div>
-      </div>
-      <button type="button" class="btn btn-outline-secondary" (click)="confirm()">Create</button>
-    </ng-container>
-    <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
-      A passkey already exists in Bitwarden for this account
-      <div class="box list">
-        <div class="box-content">
-          <app-cipher-row *ngFor="let cipher of ciphers" [cipher]="cipher"></app-cipher-row>
+      </ng-container>
+      <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
+        A site wants to create the following passkey in your vault
+        <div class="box list">
+          <div class="box-content">
+            <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
+          </div>
         </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="data.message.type == 'InformCredentialNotFoundRequest'">
-      You do not have a matching login for this site.
-      <div class="box list">
-        <div class="box-content">
-          <app-cipher-row *ngFor="let cipher of ciphers" [cipher]="cipher"></app-cipher-row>
+        <button type="button" class="btn btn-outline-secondary" (click)="confirm()">Create</button>
+      </ng-container>
+      <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
+        A passkey already exists in Bitwarden for this account
+        <div class="box list">
+          <div class="box-content">
+            <app-cipher-row *ngFor="let cipher of ciphers" [cipher]="cipher"></app-cipher-row>
+          </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-container *ngIf="data.message.type == 'InformCredentialNotFoundRequest'">
+        You do not have a matching login for this site.
+      </ng-container>
     </ng-container>
     <button type="button" class="btn btn-outline-secondary" (click)="abort(true)">
       Use browser built-in
