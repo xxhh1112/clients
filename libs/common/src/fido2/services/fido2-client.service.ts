@@ -1,5 +1,6 @@
 import { parse } from "tldts";
 
+import { LogService } from "../../abstractions/log.service";
 import { Utils } from "../../misc/utils";
 import {
   Fido2AutenticatorError,
@@ -25,18 +26,24 @@ import { Fido2Utils } from "../abstractions/fido2-utils";
 import { isValidRpId } from "./domain-utils";
 
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
-  constructor(private authenticator: Fido2AuthenticatorService) {}
+  constructor(private authenticator: Fido2AuthenticatorService, private logService?: LogService) {}
 
   async createCredential(
     params: CreateCredentialParams,
     abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
     if (!params.sameOriginWithAncestors) {
+      this.logService?.warning(
+        `[Fido2Client] Invalid 'sameOriginWithAncestors' value: ${params.sameOriginWithAncestors}`
+      );
       throw new DOMException("Invalid 'sameOriginWithAncestors' value", "NotAllowedError");
     }
 
     const userId = Fido2Utils.stringToBuffer(params.user.id);
     if (userId.length < 1 || userId.length > 64) {
+      this.logService?.warning(
+        `[Fido2Client] Invalid 'user.id' length: ${params.user.id} (${userId.length})`
+      );
       throw new TypeError("Invalid 'user.id' length");
     }
 
@@ -44,10 +51,14 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const rpId = params.rp.id ?? parsedOrigin.hostname;
 
     if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+      this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
 
     if (!isValidRpId(rpId, params.origin)) {
+      this.logService?.warning(
+        `[Fido2Client] 'rp.id' cannot be used with the current origin: rp.id = ${rpId}; origin = ${params.origin}`
+      );
       throw new DOMException("'rp.id' cannot be used with the current origin", "SecurityError");
     }
 
@@ -64,6 +75,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     if (credTypesAndPubKeyAlgs.length === 0) {
+      const requestedAlgorithms = credTypesAndPubKeyAlgs.map((p) => p.alg).join(", ");
+      this.logService?.warning(
+        `[Fido2Client] No compatible algorithms found, RP requested: ${requestedAlgorithms}`
+      );
       throw new DOMException("No supported key algorithms were found", "NotSupportedError");
     }
 
@@ -78,6 +93,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const clientDataJSONBytes = Utils.fromByteStringToArray(clientDataJSON);
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
     if (abortController.signal.aborted) {
+      this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException(undefined, "AbortError");
     }
     const timeout = setAbortTimeout(
@@ -123,6 +139,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         abortController.signal.aborted &&
         abortController.signal.reason === UserRequestedFallbackAbortReason
       ) {
+        this.logService?.info(`[Fido2Client] Aborting because user requested fallback`);
         throw new FallbackRequestedError();
       }
 
@@ -130,13 +147,16 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         error instanceof Fido2AutenticatorError &&
         error.errorCode === Fido2AutenticatorErrorCode.InvalidState
       ) {
+        this.logService?.warning(`[Fido2Client] Unknown error: ${error}`);
         throw new DOMException(undefined, "InvalidStateError");
       }
 
+      this.logService?.info(`[Fido2Client] Aborted by user: ${error}`);
       throw new DOMException(undefined, "NotAllowedError");
     }
 
     if (abortController.signal.aborted) {
+      this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException(undefined, "AbortError");
     }
 
@@ -157,6 +177,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   ): Promise<AssertCredentialResult> {
     const { domain: effectiveDomain } = parse(params.origin, { allowPrivateDomains: true });
     if (effectiveDomain == undefined) {
+      this.logService?.warning(`[Fido2Client] Invalid origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid domain", "SecurityError");
     }
 
@@ -164,10 +185,14 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const rpId = params.rpId ?? parsedOrigin.hostname;
 
     if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+      this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
 
     if (!isValidRpId(rpId, params.origin)) {
+      this.logService?.warning(
+        `[Fido2Client] 'rp.id' cannot be used with the current origin: rp.id = ${rpId}; origin = ${params.origin}`
+      );
       throw new DOMException("'rp.id' cannot be used with the current origin", "SecurityError");
     }
 
@@ -183,6 +208,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
 
     if (abortController.signal.aborted) {
+      this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException(undefined, "AbortError");
     }
 
@@ -213,6 +239,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         abortController.signal.aborted &&
         abortController.signal.reason === UserRequestedFallbackAbortReason
       ) {
+        this.logService?.info(`[Fido2Client] Aborting because user requested fallback`);
         throw new FallbackRequestedError();
       }
 
@@ -220,12 +247,16 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         error instanceof Fido2AutenticatorError &&
         error.errorCode === Fido2AutenticatorErrorCode.InvalidState
       ) {
+        this.logService?.warning(`[Fido2Client] Unknown error: ${error}`);
         throw new DOMException(undefined, "InvalidStateError");
       }
+
+      this.logService?.info(`[Fido2Client] Aborted by user: ${error}`);
       throw new DOMException(undefined, "NotAllowedError");
     }
 
     if (abortController.signal.aborted) {
+      this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException(undefined, "AbortError");
     }
     clearTimeout(timeout);

@@ -507,7 +507,10 @@ export default class MainBackground {
       this.fido2UserInterfaceService,
       this.logService
     );
-    this.fido2ClientService = new Fido2ClientService(this.fido2AuthenticatorService);
+    this.fido2ClientService = new Fido2ClientService(
+      this.fido2AuthenticatorService,
+      this.logService
+    );
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =
