@@ -4,8 +4,8 @@ import { EnvironmentService } from "@bitwarden/common/abstractions/environment.s
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
-import { KdfType } from "@bitwarden/common/enums/kdfType";
+import { DeviceType } from "@bitwarden/common/enums/device-type.enum";
+import { KdfType } from "@bitwarden/common/enums/kdf-type.enum";
 import {
   BitwardenClient,
   Convert,
@@ -45,7 +45,7 @@ export class BitwardenSdkService {
     });
 
     const module = await import("@bitwarden/sdk-wasm");
-    this.client = new BitwardenClient(new module.BitwardenClient(settings_json, 2));
+    this.client = new BitwardenClient(new module.BitwardenClient(settings_json, 0));
   }
 
   private toDevice(device: DeviceType): DeviceType2 {

@@ -10,7 +10,10 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { UpdateProfileRequest } from "@bitwarden/common/auth/models/request/update-profile.request";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { ProfileResponse } from "@bitwarden/common/models/response/profile.response";
+
+import { BitwardenSdkService } from "../core/bitwarden-sdk.service";
 
 import { ChangeAvatarComponent } from "./change-avatar.component";
 
@@ -36,18 +39,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private logService: LogService,
     private keyConnectorService: KeyConnectorService,
     private stateService: StateService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private bitwardenSdkService: BitwardenSdkService
   ) {}
 
   async ngOnInit() {
     this.profile = await this.apiService.getProfile();
     this.loading = false;
-    const fingerprint = await this.cryptoService.getFingerprint(
-      await this.stateService.getUserId()
+
+    const client = await this.bitwardenSdkService.getClient();
+    this.fingerprint = await client.fingerprint(
+      await this.stateService.getUserId(),
+      Utils.fromBufferToB64(await this.cryptoService.getPublicKey())
     );
-    if (fingerprint != null) {
-      this.fingerprint = fingerprint.join("-");
-    }
   }
 
   async ngOnDestroy() {
