@@ -1,5 +1,5 @@
-<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="cipherAddEditTitle">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+<div class="modal fade tw-p-2" role="dialog" aria-modal="true" aria-labelledby="cipherAddEditTitle">
+  <div class="modal-dialog modal-dialog-scrollable tw-w-full tw-max-w-4xl" role="document">
     <form
       class="modal-content"
       #form
@@ -23,8 +23,8 @@
         <app-callout type="info" *ngIf="allowOwnershipAssignment() && !allowPersonal">
           {{ "personalOwnershipPolicyInEffect" | i18n }}
         </app-callout>
-        <div class="row" *ngIf="!editMode && !viewOnly">
-          <div class="col-6 form-group">
+        <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6" *ngIf="!editMode && !viewOnly">
+          <div class="form-group">
             <label for="type">{{ "whatTypeOfItem" | i18n }}</label>
             <select
               id="type"
@@ -37,9 +37,10 @@
               <option *ngFor="let o of typeOptions" [ngValue]="o.value">{{ o.name }}</option>
             </select>
           </div>
+          <div></div>
         </div>
-        <div class="row">
-          <div class="col-6 form-group">
+        <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6">
+          <div class="form-group">
             <label for="name">{{ "name" | i18n }}</label>
             <input
               id="name"
@@ -52,7 +53,7 @@
               [readonly]="!cipher.edit && editMode"
             />
           </div>
-          <div class="col-6 form-group" *ngIf="!organization">
+          <div class="form-group" *ngIf="!organization">
             <label for="folder">{{ "folder" | i18n }}</label>
             <select
               id="folder"
@@ -67,8 +68,8 @@
         </div>
         <!-- Login -->
         <ng-container *ngIf="cipher.type === cipherType.Login">
-          <div class="row">
-            <div class="col-6 form-group">
+          <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6">
+            <div class="form-group" [ngStyle]="{ 'min-width': '50%' }">
               <label for="loginUsername">{{ "username" | i18n }}</label>
               <div class="input-group">
                 <input
@@ -93,7 +94,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-6 form-group">
+            <div class="form-group" [ngStyle]="{ 'min-width': '50%' }">
               <div class="d-flex">
                 <label for="loginPassword">{{ "password" | i18n }}</label>
                 <div class="ml-auto d-flex" *ngIf="!cipher.isDeleted && !viewOnly">
@@ -191,8 +192,8 @@
               </button>
             </div>
           </div>
-          <div class="tw-flex tw-flex-row">
-            <div class="tw-mb-4 tw-w-1/2">
+          <div class="tw-mb-4 tw-grid tw-grid-cols-fit-250 tw-items-center tw-gap-x-6 tw-gap-y-4">
+            <div>
               <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
               <input
                 id="loginTotp"
@@ -205,7 +206,7 @@
                 [readonly]="!cipher.edit && editMode"
               />
             </div>
-            <div class="tw-mb-4 tw-ml-4 tw-flex tw-w-1/2 tw-items-end" [ngClass]="{ low: totpLow }">
+            <div class="tw-self-end" [ngClass]="{ low: totpLow }">
               <div
                 class="totp tw-flex tw-flex-row tw-items-center"
                 *ngIf="!cipher.login.totp || !totpCode"
@@ -300,11 +301,11 @@
           <ng-container *ngIf="cipher.login.hasUris">
             <div
               role="group"
-              class="row"
+              class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6"
               *ngFor="let u of cipher.login.uris; let i = index; trackBy: trackByFunction"
               attr.aria-label="{{ 'uriPosition' | i18n : i + 1 }}"
             >
-              <div class="col-7 form-group">
+              <div class="form-group">
                 <label for="loginUri{{ i }}">{{ "uriPosition" | i18n : i + 1 }}</label>
                 <div class="input-group">
                   <input
@@ -338,7 +339,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-5 form-group">
+              <div class="form-group">
                 <div class="d-flex">
                   <label for="loginUriMatch{{ i }}">
                     {{ "matchDetection" | i18n }}

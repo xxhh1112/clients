@@ -93,6 +93,9 @@ module.exports = {
         ...theme("width"),
         "90vw": "90vw",
       }),
+      gridTemplateColumns: {
+        "fit-250": "repeat(auto-fit, minmax(250px, 1fr))",
+      },
     },
   },
   plugins: [
