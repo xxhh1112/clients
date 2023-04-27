@@ -18,7 +18,7 @@
 
 <div class="tw-flex">
   <div
-    class="tw-absolute tw-inset-x-4 tw-z-50 tw-rounded-md tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
+    class="tw-absolute tw-inset-x-0 tw-z-50 tw-rounded-md tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
     [ngClass]="
       isSidebarOpen
         ? '-tw-translate-x-0 tw-shadow-2xl sm:-tw-ml-0 sm:tw-shadow-none'
@@ -26,7 +26,7 @@
     "
   >
     <div class="groupings">
-      <div class="card vault-filters">
+      <div class="card vault-filters tw-rounded-none sm:tw-rounded-md">
         <div class="card-header d-flex">
           {{ "filters" | i18n }}
         </div>

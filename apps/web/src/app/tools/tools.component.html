@@ -11,14 +11,14 @@
 
 <div class="tw-flex">
   <div
-    class="tw-absolute tw-inset-x-4 tw-z-50 tw-rounded-md tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
+    class="tw-absolute tw-inset-x-0 tw-z-50 tw-rounded-md tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
     [ngClass]="
       isSidebarOpen
         ? '-tw-translate-x-0 tw-shadow-2xl sm:-tw-ml-0 sm:tw-shadow-none'
         : 'tw-left-0 -tw-translate-x-full tw-opacity-0 sm:tw-left-auto sm:-tw-ml-80 sm:-tw-translate-x-0 md:tw-opacity-100'
     "
   >
-    <div class="card">
+    <div class="card tw-rounded-none sm:tw-rounded-md">
       <div class="card-header">{{ "tools" | i18n }}</div>
       <div class="list-group list-group-flush">
         <a routerLink="generator" class="list-group-item" routerLinkActive="active">
