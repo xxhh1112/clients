@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-escape */
 import * as path from "path";
 
+import { Observable, of, switchMap } from "rxjs";
 import { getHostname, parse } from "tldts";
 import { Merge } from "type-fest";
 
@@ -379,15 +380,7 @@ export class Utils {
 
     uriString = uriString.trim();
 
-    let url = Utils.getUrlObject(uriString);
-    if (url == null) {
-      const hasHttpProtocol =
-        uriString.indexOf("http://") === 0 || uriString.indexOf("https://") === 0;
-      if (!hasHttpProtocol && uriString.indexOf(".") > -1) {
-        url = Utils.getUrlObject("http://" + uriString);
-      }
-    }
-    return url;
+    return Utils.getUrlObject(uriString);
   }
 
   static camelToPascalCase(s: string) {
@@ -534,6 +527,17 @@ export class Utils {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  /**
+   * Generate an observable from a function that returns a promise.
+   * Similar to the rxjs function {@link from} with one big exception:
+   * {@link from} will not re-execute the function when observers resubscribe.
+   * {@link Util.asyncToObservable} will execute `generator` for every
+   * subscribe, making it ideal if the value ever needs to be refreshed.
+   * */
+  static asyncToObservable<T>(generator: () => Promise<T>): Observable<T> {
+    return of(undefined).pipe(switchMap(() => generator()));
+  }
+
   private static isAppleMobile(win: Window) {
     return (
       win.navigator.userAgent.match(/iPhone/i) != null ||
@@ -542,22 +546,21 @@ export class Utils {
   }
 
   private static getUrlObject(uriString: string): URL {
+    // All the methods below require a protocol to properly parse a URL string
+    // Assume http if no other protocol is present
+    const hasProtocol = uriString.indexOf("://") > -1;
+    if (!hasProtocol && uriString.indexOf(".") > -1) {
+      uriString = "http://" + uriString;
+    } else if (!hasProtocol) {
+      return null;
+    }
+
     try {
       if (nodeURL != null) {
         return new nodeURL.URL(uriString);
-      } else if (typeof URL === "function") {
-        return new URL(uriString);
-      } else if (typeof window !== "undefined") {
-        const hasProtocol = uriString.indexOf("://") > -1;
-        if (!hasProtocol && uriString.indexOf(".") > -1) {
-          uriString = "http://" + uriString;
-        } else if (!hasProtocol) {
-          return null;
-        }
-        const anchor = window.document.createElement("a");
-        anchor.href = uriString;
-        return anchor as any;
       }
+
+      return new URL(uriString);
     } catch (e) {
       // Ignore error
     }

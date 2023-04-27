@@ -5,6 +5,7 @@ import { lastValueFrom, Subject } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
@@ -40,10 +41,9 @@ export class SecretDialogComponent implements OnInit {
     project: new FormControl("", [Validators.required]),
   });
 
+  private destroy$ = new Subject<void>();
   private loading = true;
   projects: ProjectListView[];
-
-  private destroy$ = new Subject<void>();
 
   constructor(
     public dialogRef: DialogRef,
@@ -52,7 +52,8 @@ export class SecretDialogComponent implements OnInit {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private projectService: ProjectService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private organizationService: OrganizationService
   ) {}
 
   async ngOnInit() {
@@ -61,20 +62,26 @@ export class SecretDialogComponent implements OnInit {
     } else if (this.data.operation !== OperationType.Add) {
       this.dialogRef.close();
       throw new Error(`The secret dialog was not called with the appropriate operation values.`);
+    } else if (this.data.operation == OperationType.Add) {
+      await this.loadProjects(true);
     }
 
     if (this.data.projectId) {
       this.formGroup.get("project").setValue(this.data.projectId);
     }
 
-    this.projects = await this.projectService
-      .getProjects(this.data.organizationId)
-      .then((projects) => projects.sort((a, b) => a.name.localeCompare(b.name)));
+    if (this.organizationService.get(this.data.organizationId)?.isAdmin) {
+      this.formGroup.get("project").removeValidators(Validators.required);
+      this.formGroup.get("project").updateValueAndValidity();
+    }
   }
 
   async loadData() {
     this.formGroup.disable();
     const secret: SecretView = await this.secretService.getBySecretId(this.data.secretId);
+
+    await this.loadProjects(secret.write);
+
     this.formGroup.setValue({
       name: secret.name,
       value: secret.value,
@@ -86,6 +93,16 @@ export class SecretDialogComponent implements OnInit {
 
     if (secret.write) {
       this.formGroup.enable();
+    }
+  }
+
+  async loadProjects(filterByPermission: boolean) {
+    this.projects = await this.projectService
+      .getProjects(this.data.organizationId)
+      .then((projects) => projects.sort((a, b) => a.name.localeCompare(b.name)));
+
+    if (filterByPermission) {
+      this.projects = this.projects.filter((p) => p.write);
     }
   }
 
@@ -157,7 +174,10 @@ export class SecretDialogComponent implements OnInit {
     secretView.name = this.formGroup.value.name;
     secretView.value = this.formGroup.value.value;
     secretView.note = this.formGroup.value.notes;
-    secretView.projects = [this.projects.find((p) => p.id == this.formGroup.value.project)];
+
+    const project = this.projects.find((p) => p.id == this.formGroup.value.project);
+    secretView.projects = project != undefined ? [project] : [];
+
     return secretView;
   }
 

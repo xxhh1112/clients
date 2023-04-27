@@ -5,10 +5,7 @@ import { PolicyData } from "../admin-console/models/data/policy.data";
 import { ProviderData } from "../admin-console/models/data/provider.data";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
 import { TokenService } from "../auth/services/token.service";
-import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
-import { KdfType } from "../enums/kdfType";
-import { StateVersion } from "../enums/stateVersion";
-import { ThemeType } from "../enums/themeType";
+import { HtmlStorageLocation, KdfType, StateVersion, ThemeType } from "../enums";
 import { StateFactory } from "../factories/stateFactory";
 import { EventData } from "../models/data/event.data";
 import {
@@ -177,6 +174,22 @@ export class StateMigrationService<
           await this.setCurrentStateVersion(StateVersion.Six);
           break;
         }
+        case StateVersion.Six: {
+          const authenticatedAccounts = await this.getAuthenticatedAccounts();
+          const globals = (await this.getGlobals()) as any;
+          for (const account of authenticatedAccounts) {
+            const migratedAccount = await this.migrateAccountFrom6To7(
+              globals?.noAutoPromptBiometrics,
+              account
+            );
+            await this.set(account.profile.userId, migratedAccount);
+          }
+          if (globals) {
+            delete globals.noAutoPromptBiometrics;
+          }
+          await this.set(keys.global, globals);
+          await this.setCurrentStateVersion(StateVersion.Seven);
+        }
       }
 
       currentStateVersion += 1;
@@ -207,7 +220,7 @@ export class StateMigrationService<
     // 1. Check for an existing storage value from the old storage structure OR
     // 2. Check for a value already set by processes that run before migration OR
     // 3. Assign the default value
-    const globals =
+    const globals: any =
       (await this.get<GlobalState>(keys.global)) ?? this.stateFactory.createGlobal(null);
     globals.stateVersion = StateVersion.Two;
     globals.environmentUrls =
@@ -525,6 +538,16 @@ export class StateMigrationService<
 
   protected async migrateAccountFrom5To6(account: TAccount): Promise<TAccount> {
     delete (account as any).keys?.legacyEtmKey;
+    return account;
+  }
+
+  protected async migrateAccountFrom6To7(
+    globalSetting: boolean,
+    account: TAccount
+  ): Promise<TAccount> {
+    if (globalSetting) {
+      account.settings = Object.assign({}, account.settings, { disableAutoBiometricsPrompt: true });
+    }
     return account;
   }
 

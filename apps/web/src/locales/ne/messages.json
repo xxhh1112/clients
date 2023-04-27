@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "message": "$APP_NAME$ Web Vault",
+    "message": "$APP_NAME$ वेब भल्ट",
     "description": "The title of the website in the browser window.",
     "placeholders": {
       "app_name": {
@@ -10,10 +10,10 @@
     }
   },
   "whatTypeOfItem": {
-    "message": "What type of item is this?"
+    "message": "यो कस्तो प्रकारको वस्तु हो?"
   },
   "name": {
-    "message": "Name"
+    "message": "नाम"
   },
   "uri": {
     "message": "URI"
@@ -29,22 +29,22 @@
     }
   },
   "newUri": {
-    "message": "New URI"
+    "message": "नयाँ URI"
   },
   "username": {
-    "message": "Username"
+    "message": "प्रयोगकर्ता नाम"
   },
   "password": {
-    "message": "Password"
+    "message": "पासवर्ड"
   },
   "newPassword": {
-    "message": "New password"
+    "message": "नया पासवर्ड"
   },
   "passphrase": {
-    "message": "Passphrase"
+    "message": "पासफ्रेज"
   },
   "notes": {
-    "message": "Notes"
+    "message": "नोटहरू"
   },
   "customFields": {
     "message": "Custom fields"
@@ -53,103 +53,103 @@
     "message": "Cardholder name"
   },
   "number": {
-    "message": "Number"
+    "message": "नम्बर"
   },
   "brand": {
-    "message": "Brand"
+    "message": "ब्राण्ड"
   },
   "expiration": {
-    "message": "Expiration"
+    "message": "म्याद समाप्ति"
   },
   "securityCode": {
-    "message": "Security code (CVV)"
+    "message": "सुरक्षा कोड (CVV)"
   },
   "identityName": {
-    "message": "Identity name"
+    "message": "पहिचानको लागि नाम"
   },
   "company": {
-    "message": "Company"
+    "message": "कम्पनी"
   },
   "ssn": {
-    "message": "Social Security number"
+    "message": "सामाजिक सुरक्षा नम्बर"
   },
   "passportNumber": {
-    "message": "Passport number"
+    "message": "राहदानी नम्बर"
   },
   "licenseNumber": {
-    "message": "License number"
+    "message": "लाइसेन्स नम्बर"
   },
   "email": {
-    "message": "Email"
+    "message": "इमेल"
   },
   "phone": {
-    "message": "Phone"
+    "message": "फोन"
   },
   "january": {
-    "message": "January"
+    "message": "जनवरी"
   },
   "february": {
-    "message": "February"
+    "message": "फेब्रुएरी"
   },
   "march": {
-    "message": "March"
+    "message": "मार्च"
   },
   "april": {
-    "message": "April"
+    "message": "अप्रिल"
   },
   "may": {
-    "message": "May"
+    "message": "मे"
   },
   "june": {
-    "message": "June"
+    "message": "जुन"
   },
   "july": {
-    "message": "July"
+    "message": "जुलाई"
   },
   "august": {
-    "message": "August"
+    "message": "अगष्ट"
   },
   "september": {
-    "message": "September"
+    "message": "सेप्टेम्बर"
   },
   "october": {
-    "message": "October"
+    "message": "अक्टोबर"
   },
   "november": {
-    "message": "November"
+    "message": "नोभेम्बर"
   },
   "december": {
-    "message": "December"
+    "message": "डिसेम्बर"
   },
   "title": {
-    "message": "Title"
+    "message": "शीर्षक"
   },
   "mr": {
-    "message": "Mr"
+    "message": "श्री"
   },
   "mrs": {
-    "message": "Mrs"
+    "message": "श्रीमती"
   },
   "ms": {
-    "message": "Ms"
+    "message": "सुश्री"
   },
   "mx": {
     "message": "Mx"
   },
   "dr": {
-    "message": "Dr"
+    "message": "डा"
   },
   "expirationMonth": {
-    "message": "Expiration month"
+    "message": "म्याद सकिने महिना"
   },
   "expirationYear": {
-    "message": "Expiration year"
+    "message": "म्याद सकिने वर्ष"
   },
   "authenticatorKeyTotp": {
-    "message": "Authenticator key (TOTP)"
+    "message": "प्रमाणक कुञ्जी (TOTP)"
   },
   "folder": {
-    "message": "Folder"
+    "message": "फोल्‍डर"
   },
   "newCustomField": {
     "message": "New custom field"
@@ -158,10 +158,10 @@
     "message": "Value"
   },
   "dragToSort": {
-    "message": "Drag to sort"
+    "message": "क्रमबद्ध गर्न तान्नुहोस्"
   },
   "cfTypeText": {
-    "message": "Text"
+    "message": "पाठ"
   },
   "cfTypeHidden": {
     "message": "Hidden"
@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data successfully imported"
   },
+  "importSuccessNumberOfItems": {
+    "message": "कुल $AMOUNT$ वस्तुहरू आयात गरियो।",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2020,7 +2029,7 @@
     "message": "Cancel subscription"
   },
   "subscriptionExpiration": {
-    "message": "Subscription expiration"
+    "message": "सदस्यताको म्याद समाप्त"
   },
   "subscriptionCanceled": {
     "message": "The subscription has been canceled."
@@ -3115,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "You can access this organization once an administrator confirms your membership. We'll send you an email when that happens."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Unable to accept invitation. Ask an organization admin to send a new invitation."
@@ -4800,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "maximumVaultTimeout": {
     "message": "Vault timeout"
   },
@@ -4819,7 +4834,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4828,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -4858,8 +4899,8 @@
   "activateAutofill": {
     "message": "Activate auto-fill"
   },
-  "activateAutofillDesc": {
-    "message": "Activate the auto-fill with page load settings on the browser extension for all existing and new members."
+  "activateAutofillPolicyDesc": {
+    "message": "सबै अवस्थित र नयाँ सदस्यहरूको लागि ब्राउजर एक्सटेन्सनको पृष्ठ लोड सेटिङमा स्वत: भरण विकल्प सक्रिय गर्नुहोस्।"
   },
   "experimentalFeature": {
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
@@ -5605,6 +5646,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6674,6 +6733,9 @@
     "message": "Dismiss"
   },
   "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+    "message": "यो सुविधा नि:शुल्क संस्थाहरूको लागि उपलब्ध छैन। स्तरवृद्धि गर्न आफ्नो संस्थाको मालिकलाई सम्पर्क गर्नुहोस्।"
+  },
+  "enforceOnLoginDesc": {
+    "message": "Require existing members to change their passwords"
   }
 }

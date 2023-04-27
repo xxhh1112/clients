@@ -5,8 +5,7 @@ import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums/organization-user-status-type";
-import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
+import { OrganizationUserStatusType, PolicyType } from "@bitwarden/common/admin-console/enums";
 import { PermissionsApi } from "@bitwarden/common/admin-console/models/api/permissions.api";
 import { OrganizationData } from "@bitwarden/common/admin-console/models/data/organization.data";
 import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
@@ -162,6 +161,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: true,
+        enforceOnLogin: false,
       });
     });
 
@@ -201,6 +201,7 @@ describe("PolicyService", () => {
         requireNumbers: false,
         requireSpecial: false,
         requireUpper: false,
+        enforceOnLogin: false,
       });
     });
   });
@@ -402,7 +403,7 @@ describe("PolicyService", () => {
     status: OrganizationUserStatusType,
     managePolicies: boolean
   ) {
-    const organizationData = new OrganizationData({} as any);
+    const organizationData = new OrganizationData({} as any, {} as any);
     organizationData.id = id;
     organizationData.enabled = enabled;
     organizationData.usePolicies = usePolicies;

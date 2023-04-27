@@ -35,15 +35,17 @@ import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-conso
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction as PolicyApiService } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums/organization-user-status-type";
-import { OrganizationUserType } from "@bitwarden/common/admin-console/enums/organization-user-type";
-import { PolicyType } from "@bitwarden/common/admin-console/enums/policy-type";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+  PolicyType,
+} from "@bitwarden/common/admin-console/enums";
 import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
 import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
 import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
-import { ProductType } from "@bitwarden/common/enums/productType";
+import { ProductType } from "@bitwarden/common/enums";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import {
@@ -179,7 +181,7 @@ export class PeopleComponent
             if (response != null) {
               this.organization.hasPublicAndPrivateKeys =
                 response.publicKey != null && response.privateKey != null;
-              await this.syncService.fullSync(true); // Replace oganizations with new data
+              await this.syncService.fullSync(true); // Replace organizations with new data
             } else {
               throw new Error(this.i18nService.t("resetPasswordOrgKeysError"));
             }
@@ -345,7 +347,7 @@ export class PeopleComponent
     const orgUpgradeSimpleDialogOpts: SimpleDialogOptions = {
       title: this.i18nService.t("upgradeOrganization"),
       content: this.i18nService.t(
-        this.organization.canManageBilling
+        this.organization.canEditSubscription
           ? "freeOrgInvLimitReachedManageBilling"
           : "freeOrgInvLimitReachedNoManageBilling",
         this.organization.seats
@@ -353,7 +355,7 @@ export class PeopleComponent
       type: SimpleDialogType.PRIMARY,
     };
 
-    if (this.organization.canManageBilling) {
+    if (this.organization.canEditSubscription) {
       orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("upgrade");
     } else {
       orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("ok");
@@ -367,7 +369,7 @@ export class PeopleComponent
         return;
       }
 
-      if (result == SimpleDialogCloseType.ACCEPT && this.organization.canManageBilling) {
+      if (result == SimpleDialogCloseType.ACCEPT && this.organization.canEditSubscription) {
         this.router.navigate(["/organizations", this.organization.id, "billing", "subscription"], {
           queryParams: { upgrade: true },
         });

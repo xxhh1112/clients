@@ -266,7 +266,7 @@
     "message": "お気に入り"
   },
   "unfavorite": {
-    "message": "お気に入り解除"
+    "message": "お気に入りから削除"
   },
   "edit": {
     "message": "編集"
@@ -330,7 +330,7 @@
     "message": "ID"
   },
   "typeSecureNote": {
-    "message": "メモ"
+    "message": "セキュアメモ"
   },
   "typeLoginPlural": {
     "message": "ログイン"
@@ -516,7 +516,7 @@
     "message": "ファイルを選択してください。"
   },
   "maxFileSize": {
-    "message": "最大ファイルサイズ: 500 MB"
+    "message": "最大ファイルサイズは500MBです。"
   },
   "updateKey": {
     "message": "暗号キーを更新するまでこの機能は使用できません。"
@@ -525,7 +525,7 @@
     "message": "追加されたアイテム"
   },
   "editedItem": {
-    "message": "編集されたアイテム"
+    "message": "保存されたアイテム"
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ を $ORGNAME$ に移動しました",
@@ -559,13 +559,13 @@
     "message": "添付ファイルの削除"
   },
   "deleteItemConfirmation": {
-    "message": "このアイテムを削除してもよろしいですか?"
+    "message": "本当にごみ箱に入れますか？"
   },
   "deletedItem": {
-    "message": "削除されたアイテム"
+    "message": "ゴミ箱に送られたアイテム"
   },
   "deletedItems": {
-    "message": "削除されたアイテム"
+    "message": "ゴミ箱に送られたアイテム"
   },
   "movedItems": {
     "message": "移動されたアイテム"
@@ -574,7 +574,7 @@
     "message": "現在のパスワードを上書きしてもよろしいですか?"
   },
   "editedFolder": {
-    "message": "フォルダーを編集しました"
+    "message": "フォルダが保存されました"
   },
   "addedFolder": {
     "message": "フォルダーを追加しました"
@@ -1254,6 +1254,15 @@
   },
   "importSuccess": {
     "message": "データを保管庫にインポートしました。"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "合計 $AMOUNT$ 件のアイテムをインポートしました。",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "データをエクスポートしました"
@@ -3116,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "組織の管理者が承認すると組織へアクセスできるようになります。アクセスできるようになったらメールでお知らせします。"
   },
+  "inviteInitAcceptedDesc": {
+    "message": "この組織にアクセスできるようになりました。"
+  },
   "inviteAcceptFailed": {
     "message": "招待を承諾出来ませんでした。組織の管理者に招待を再送信するように依頼してください。"
   },
@@ -4800,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "お客様のマスターパスワードは、当組織のポリシー要件を満たしていません。保管庫にアクセスするためには、今すぐマスターパスワードを更新する必要があります。この操作を行うと、現在のセッションからログアウトし、再度ログインする必要があります。他のデバイスのアクティブなセッションは、最大1時間までアクティブな状態を維持します。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
+  },
   "maximumVaultTimeout": {
     "message": "保管庫のタイムアウト"
   },
@@ -4831,6 +4846,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "組織のポリシーがデータ保管庫のタイムアウトに影響しています。保管庫のタイムアウトの最大許容値は、$HOURS$時間$MINUTES$分です。保管庫タイムアウト時のアクションは、$ACTION$に設定されています。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "組織のポリシーで保管庫のタイムアウトアクションが$ACTION$に設定されています。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "個別の保管庫のタイムアウト"
   },
@@ -4858,7 +4899,7 @@
   "activateAutofill": {
     "message": "自動入力を有効にする"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "すべての既存および新規メンバーのブラウザ拡張機能のページ読み込み設定で、自動入力を有効にします。"
   },
   "experimentalFeature": {
@@ -5608,6 +5649,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "入力値は少なくとも$MIN$桁でなければなりません。",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "入力値は$MAX$桁を超えてはいけません。",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "1つ以上のメールが無効です"
   },
@@ -5878,7 +5937,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "サービスアカウントは削除されました"
   },
   "deleteServiceAccountsToast": {
     "message": "サービスアカウントを削除しました"
@@ -6674,6 +6733,9 @@
     "message": "表示しない"
   },
   "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+    "message": "この機能は無料の組織では利用できません。アップグレードするには組織の所有者に連絡してください。"
+  },
+  "enforceOnLoginDesc": {
+    "message": "パスワードを変更するには、メンバーが存在しないといけません"
   }
 }
