@@ -26,6 +26,7 @@ export class SendComponent extends BaseSendComponent {
   @ViewChild("sendAddEdit", { read: ViewContainerRef, static: true })
   sendAddEditModalRef: ViewContainerRef;
   noItemIcon = Icons.Search;
+  sidebarOpen = false;
 
   constructor(
     sendService: SendService,
@@ -73,6 +74,14 @@ export class SendComponent extends BaseSendComponent {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  get isSidebarOpen() {
+    return this.sidebarOpen;
   }
 
   async addSend() {
