@@ -2,35 +2,42 @@
 <!-- eslint-disable @angular-eslint/template/button-has-type -->
 <nav class="tw-bg-primary-500 tw-py-2">
   <div class="tw-mx-auto tw-max-w-7xl tw-px-5">
-    <div class="tw-flex tw-items-center tw-gap-6">
-      <a routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n : 'Bitwarden' }}">
-        <i class="bwi bwi-shield tw-text-4xl tw-text-contrast" aria-hidden="true"></i>
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-6">
+      <a class="tw-order-1" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n : 'Bitwarden' }}">
+        <i
+          class="bwi bwi-shield tw-text-3xl tw-text-contrast sm:tw-text-4xl"
+          aria-hidden="true"
+        ></i>
       </a>
-      <div class="tw-hidden md:tw-block">
-        <ul class="tw-mb-0 tw-flex tw-list-none tw-pl-0">
+      <div class="tw-order-3 tw-w-full sm:tw-order-2 sm:tw-w-auto">
+        <ul
+          class="tw-mb-0 tw-flex tw-list-none tw-flex-wrap tw-gap-x-5 tw-gap-y-2 tw-pl-0 tw-pb-2 sm:tw-gap-0 sm:tw-pb-0"
+        >
           <li routerLinkActive="active">
-            <a class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast" routerLink="/vault">{{
+            <a class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3" routerLink="/vault">{{
               "vaults" | i18n
             }}</a>
           </li>
           <li routerLinkActive="active">
-            <a class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast" routerLink="/sends">{{
+            <a class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3" routerLink="/sends">{{
               "send" | i18n
             }}</a>
           </li>
           <li routerLinkActive="active">
-            <a class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast" routerLink="/tools">{{
+            <a class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3" routerLink="/tools">{{
               "tools" | i18n
             }}</a>
           </li>
           <li routerLinkActive="active">
-            <a class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast" routerLink="/reports">{{
-              "reports" | i18n
-            }}</a>
+            <a
+              class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3"
+              routerLink="/reports"
+              >{{ "reports" | i18n }}</a
+            >
           </li>
           <li *ngIf="(organizations$ | async)?.length >= 1" routerLinkActive="active">
             <a
-              class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast"
+              class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3"
               [routerLink]="['/organizations', (organizations$ | async)[0].id]"
               >{{ "organizations" | i18n }}</a
             >
@@ -38,14 +45,14 @@
           <ng-container *ngIf="providers.length >= 1">
             <li routerLinkActive="active" *ngIf="providers.length == 1">
               <a
-                class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast"
+                class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3"
                 [routerLink]="['/providers', providers[0].id]"
                 >{{ "provider" | i18n }}</a
               >
             </li>
             <li routerLinkActive="active" *ngIf="providers.length > 1">
               <a
-                class="tw-py-2 tw-px-3 tw-font-semibold !tw-text-contrast"
+                class="tw-py-2 tw-font-semibold !tw-text-contrast sm:tw-px-3"
                 routerLink="/providers"
                 >{{ "provider" | i18n }}</a
               >
@@ -53,7 +60,7 @@
           </ng-container>
         </ul>
       </div>
-      <div class="tw-ml-auto tw-flex tw-items-center">
+      <div class="tw-order-2 tw-ml-auto tw-flex tw-items-center sm:tw-order-3">
         <product-switcher buttonType="light"></product-switcher>
         <ul class="tw-mb-0 tw-flex tw-list-none tw-items-center tw-pl-0">
           <li>

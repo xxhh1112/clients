@@ -1,4 +1,13 @@
-<button type="button" class="tw-mb-8 md:tw-invisible" (click)="toggleSidebar()">Sidebar</button>
+<button
+  type="button"
+  class="tw-mb-8 tw-border-none tw-bg-transparent tw-px-0 tw-text-muted md:tw-hidden"
+  (click)="toggleSidebar()"
+>
+  <!-- <span *ngIf="isSidebarOpen">&larr;</span> -->
+  {{ isSidebarOpen ? "Close" : "Open" }}
+  sidebar
+  {{ isSidebarOpen ? "&#x2715;" : "&raquo;" }}
+</button>
 
 <div class="tw-flex">
   <div
