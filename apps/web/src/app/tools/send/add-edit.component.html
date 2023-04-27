@@ -1,7 +1,7 @@
 <!-- Please remove this disable statement when editing this file! -->
 <!-- eslint-disable @angular-eslint/template/button-has-type -->
-<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="sendAddEditTitle">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+<div class="modal fade tw-p-2" role="dialog" aria-modal="true" aria-labelledby="sendAddEditTitle">
+  <div class="modal-dialog modal-dialog-scrollable tw-w-full tw-max-w-4xl" role="document">
     <form
       class="modal-content"
       #form
@@ -31,8 +31,8 @@
             <li>{{ "sendDisableHideEmailInEffect" | i18n }}</li>
           </ul>
         </app-callout>
-        <div class="row">
-          <div class="col-6 form-group">
+        <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6">
+          <div class="form-group">
             <label for="name">{{ "name" | i18n }}</label>
             <input
               id="name"
@@ -45,6 +45,7 @@
             />
             <small class="form-text text-muted">{{ "sendNameDesc" | i18n }}</small>
           </div>
+          <div></div>
         </div>
         <div class="row" *ngIf="!editMode">
           <div class="col-6 form-group">
@@ -163,8 +164,8 @@
             (datesChanged)="setDates($event)"
           >
           </app-send-efflux-dates>
-          <div class="row">
-            <div class="col-6 form-group">
+          <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6">
+            <div class="form-group">
               <label for="maxAccessCount">{{ "maxAccessCount" | i18n }}</label>
               <input
                 id="maxAccessCount"
@@ -177,7 +178,7 @@
               />
               <div class="form-text text-muted small">{{ "maxAccessCountDesc" | i18n }}</div>
             </div>
-            <div class="col-6 form-group" *ngIf="editMode">
+            <div class="form-group" *ngIf="editMode; else placeholder">
               <label for="accessCount">{{ "currentAccessCount" | i18n }}</label>
               <input
                 id="accessCount"
@@ -188,9 +189,10 @@
                 [(ngModel)]="send.accessCount"
               />
             </div>
+            <ng-template #placeholder><div></div></ng-template>
           </div>
-          <div class="row">
-            <div class="col-6 form-group">
+          <div class="tw-grid tw-grid-cols-fit-250 tw-gap-x-6">
+            <div class="form-group">
               <label for="password" *ngIf="!hasPassword">{{ "password" | i18n }}</label>
               <label for="password" *ngIf="hasPassword">{{ "newPassword" | i18n }}</label>
               <div class="input-group">
@@ -219,6 +221,7 @@
               </div>
               <div class="form-text text-muted small">{{ "sendPasswordDesc" | i18n }}</div>
             </div>
+            <div></div>
           </div>
           <div class="form-group">
             <label for="notes">{{ "notes" | i18n }}</label>
