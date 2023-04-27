@@ -9,11 +9,20 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 })
 export class ToolsComponent implements OnInit {
   canAccessPremium = false;
+  sidebarOpen = false;
 
   constructor(private stateService: StateService, private messagingService: MessagingService) {}
 
   async ngOnInit() {
     this.canAccessPremium = await this.stateService.getCanAccessPremium();
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  get isSidebarOpen() {
+    return this.sidebarOpen;
   }
 
   premiumRequired() {

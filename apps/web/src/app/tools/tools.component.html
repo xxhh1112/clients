@@ -1,23 +1,42 @@
-<div class="container page-content">
-  <div class="row">
-    <div class="col-3">
-      <div class="card mb-4">
-        <div class="card-header">{{ "tools" | i18n }}</div>
-        <div class="list-group list-group-flush">
-          <a routerLink="generator" class="list-group-item" routerLinkActive="active">
-            {{ "generator" | i18n }}
-          </a>
-          <a routerLink="import" class="list-group-item" routerLinkActive="active">
-            {{ "importData" | i18n }}
-          </a>
-          <a routerLink="export" class="list-group-item" routerLinkActive="active">
-            {{ "exportVault" | i18n }}
-          </a>
-        </div>
+<button
+  type="button"
+  class="tw-mb-8 tw-border-none tw-bg-transparent tw-px-0 tw-text-muted md:tw-hidden"
+  (click)="toggleSidebar()"
+>
+  <!-- <span *ngIf="isSidebarOpen">&larr;</span> -->
+  {{ isSidebarOpen ? "Close" : "Open" }}
+  sidebar
+  {{ isSidebarOpen ? "&#x2715;" : "&raquo;" }}
+</button>
+
+<div class="tw-flex">
+  <div
+    class="tw-absolute tw-inset-x-4 tw-z-50 tw-rounded-md tw-transition-all tw-duration-300 sm:tw-relative sm:tw-inset-auto sm:tw-w-72 sm:tw-flex-shrink-0 md:-tw-ml-0"
+    [ngClass]="
+      isSidebarOpen
+        ? '-tw-translate-x-0 tw-shadow-2xl sm:-tw-ml-0 sm:tw-shadow-none'
+        : 'tw-left-0 -tw-translate-x-full tw-opacity-0 sm:tw-left-auto sm:-tw-ml-80 sm:-tw-translate-x-0 md:tw-opacity-100'
+    "
+  >
+    <div class="card">
+      <div class="card-header">{{ "tools" | i18n }}</div>
+      <div class="list-group list-group-flush">
+        <a routerLink="generator" class="list-group-item" routerLinkActive="active">
+          {{ "generator" | i18n }}
+        </a>
+        <a routerLink="import" class="list-group-item" routerLinkActive="active">
+          {{ "importData" | i18n }}
+        </a>
+        <a routerLink="export" class="list-group-item" routerLinkActive="active">
+          {{ "exportVault" | i18n }}
+        </a>
       </div>
     </div>
-    <div class="col-9">
-      <router-outlet></router-outlet>
-    </div>
+  </div>
+  <div
+    class="tw-flex-grow tw-transition-all tw-duration-300 md:tw-pl-5 lg:tw-flex-row"
+    [ngClass]="isSidebarOpen ? 'sm:tw-pl-5' : 'sm:tw-pl-8'"
+  >
+    <router-outlet></router-outlet>
   </div>
 </div>

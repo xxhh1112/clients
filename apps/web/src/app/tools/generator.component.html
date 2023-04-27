@@ -103,7 +103,7 @@
   </ng-container>
   <ng-container *ngIf="passwordOptions.type === 'password'">
     <div class="row">
-      <div class="form-group col-4">
+      <div class="form-group col-4 tw-flex tw-flex-col tw-justify-between">
         <label for="length">{{ "length" | i18n }}</label>
         <input
           id="length"
@@ -116,7 +116,7 @@
           (change)="lengthChanged()"
         />
       </div>
-      <div class="form-group col-4">
+      <div class="form-group col-4 tw-flex tw-flex-col tw-justify-between">
         <label for="min-number">{{ "minNumbers" | i18n }}</label>
         <input
           id="min-number"
@@ -129,7 +129,7 @@
           (change)="minNumberChanged()"
         />
       </div>
-      <div class="form-group col-4">
+      <div class="form-group col-4 tw-flex tw-flex-col tw-justify-between">
         <label for="min-special">{{ "minSpecial" | i18n }}</label>
         <input
           id="min-special"
@@ -205,8 +205,8 @@
       </div>
     </div>
   </ng-container>
-  <div class="d-flex">
-    <div>
+  <div class="tw-flex tw-flex-wrap tw-justify-between tw-gap-5">
+    <div class="tw-flex tw-flex-wrap tw-gap-2">
       <button type="button" class="btn btn-primary" (click)="regenerate()">
         {{ "regeneratePassword" | i18n }}
       </button>
@@ -214,7 +214,7 @@
         {{ "copyPassword" | i18n }}
       </button>
     </div>
-    <div class="ml-auto">
+    <div>
       <button
         type="button"
         class="btn btn-outline-secondary"
