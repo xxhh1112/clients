@@ -3,11 +3,34 @@ import { WebauthnUtils } from "../../browser/webauthn-utils";
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
+const browserNativeWebauthnSupport = window.PublicKeyCredential == undefined;
+if (!browserNativeWebauthnSupport) {
+  // Polyfill webauthn in browser without support
+  try {
+    // credentials is read-only if supported, use type-casting to force assignment
+    (navigator as any).credentials = {
+      async create() {
+        throw new Error("Webauthn not supported in this browser.");
+      },
+      async get() {
+        throw new Error("Webauthn not supported in this browser.");
+      },
+    };
+    // We will be replacing this class with our own implementation when responding
+    window.PublicKeyCredential = class {} as any;
+  } catch {
+    /* empty */
+  }
+}
+window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable = async () => true;
+
 const browserCredentials = {
   create: navigator.credentials.create.bind(
     navigator.credentials
   ) as typeof navigator.credentials.create,
   get: navigator.credentials.get.bind(navigator.credentials) as typeof navigator.credentials.get,
+  isUserVerifyingPlatformAuthenticatorAvailable:
+    window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable,
 };
 
 const messenger = Messenger.forDOMCommunication(window);
