@@ -25,6 +25,7 @@ if (!browserNativeWebauthnSupport) {
         return Promise.resolve(true);
       }
     } as any;
+    window.AuthenticatorAttestationResponse = class {} as any;
   } catch {
     /* empty */
   }
