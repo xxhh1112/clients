@@ -20,7 +20,7 @@ import {
 import { Utils } from "@bitwarden/common/misc/utils";
 
 import { BrowserApi } from "../../browser/browserApi";
-import { PopupUtilsService } from "../../popup/services/popup-utils.service";
+import { Popout, PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
 
@@ -89,9 +89,6 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "AbortResponse";
       fallbackRequested: boolean;
     }
-  | {
-      type: "CloseRequest";
-    }
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
@@ -120,6 +117,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   );
   private connected$ = new BehaviorSubject(false);
   private destroy$ = new Subject<void>();
+  private popout?: Popout;
 
   private constructor(
     private readonly popupUtilsService: PopupUtilsService,
@@ -252,7 +250,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   }
 
   async close() {
-    await this.send({ type: "CloseRequest", sessionId: this.sessionId });
+    this.popupUtilsService.closePopOut(this.popout);
     this.closed = true;
     this.destroy$.next();
     this.destroy$.complete();
@@ -290,7 +288,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     }
 
     const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
-    this.popupUtilsService.popOut(
+    this.popout = await this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
       { center: true }

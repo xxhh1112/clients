@@ -103,8 +103,6 @@ export class Fido2Component implements OnInit, OnDestroy {
               return cipher.decrypt();
             })
           );
-        } else if (message.type === "CloseRequest") {
-          window.close();
         }
 
         return {
