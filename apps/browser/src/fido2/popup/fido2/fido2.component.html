@@ -3,8 +3,8 @@
   <div class="auth-wrapper">
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
     <ng-container *ngIf="data.showUnsupportedVerification">
-      Password confirmation required by initiating site. Your account does not support password
-      confirmation.
+      Verification required by the initiating site. This feature is not yet implemented for accounts
+      without master password.
     </ng-container>
     <ng-container *ngIf="!data.showUnsupportedVerification">
       <ng-container
