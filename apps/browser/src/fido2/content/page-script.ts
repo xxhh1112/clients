@@ -20,12 +20,13 @@ if (!browserNativeWebauthnSupport) {
         throw new Error("Webauthn not supported in this browser.");
       },
     };
-    window.PublicKeyCredential = class {
+    window.PublicKeyCredential = class PolyfillPublicKeyCredential {
       static isUserVerifyingPlatformAuthenticatorAvailable() {
         return Promise.resolve(true);
       }
     } as any;
-    window.AuthenticatorAttestationResponse = class {} as any;
+    window.AuthenticatorAttestationResponse =
+      class PolyfillAuthenticatorAttestationResponse {} as any;
   } catch {
     /* empty */
   }
