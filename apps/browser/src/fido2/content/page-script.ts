@@ -3,9 +3,13 @@ import { WebauthnUtils } from "../../browser/webauthn-utils";
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
-const browserNativeWebauthnSupport = window.PublicKeyCredential == undefined;
+const BrowserPublicKeyCredential = window.PublicKeyCredential;
+
+const browserNativeWebauthnSupport = window.PublicKeyCredential != undefined;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let browserNativeWebauthnPlatformAuthenticatorSupport = false;
 if (!browserNativeWebauthnSupport) {
-  // Polyfill webauthn in browser without support
+  // Polyfill webauthn support
   try {
     // credentials is read-only if supported, use type-casting to force assignment
     (navigator as any).credentials = {
@@ -16,21 +20,33 @@ if (!browserNativeWebauthnSupport) {
         throw new Error("Webauthn not supported in this browser.");
       },
     };
-    // We will be replacing this class with our own implementation when responding
-    window.PublicKeyCredential = class {} as any;
+    window.PublicKeyCredential = class {
+      static isUserVerifyingPlatformAuthenticatorAvailable() {
+        return Promise.resolve(true);
+      }
+    } as any;
   } catch {
     /* empty */
   }
 }
-window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable = async () => true;
+
+if (browserNativeWebauthnSupport) {
+  BrowserPublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then((available) => {
+    browserNativeWebauthnPlatformAuthenticatorSupport = available;
+
+    if (!available) {
+      // Polyfill platform authenticator support
+      window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable = () =>
+        Promise.resolve(true);
+    }
+  });
+}
 
 const browserCredentials = {
   create: navigator.credentials.create.bind(
     navigator.credentials
   ) as typeof navigator.credentials.create,
   get: navigator.credentials.get.bind(navigator.credentials) as typeof navigator.credentials.get,
-  isUserVerifyingPlatformAuthenticatorAvailable:
-    window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable,
 };
 
 const messenger = Messenger.forDOMCommunication(window);
