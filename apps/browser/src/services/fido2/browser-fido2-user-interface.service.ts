@@ -311,11 +311,15 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     }
 
     const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
+    // create promise first to avoid race condition where the popout opens before we start listening
+    const connectPromise = firstValueFrom(
+      this.connected$.pipe(filter((connected) => connected === true))
+    );
     this.popout = await this.popupUtilsService.popOut(
       null,
       `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
       { center: true }
     );
-    await firstValueFrom(this.connected$.pipe(filter((connected) => connected === true)));
+    await connectPromise;
   }
 }
