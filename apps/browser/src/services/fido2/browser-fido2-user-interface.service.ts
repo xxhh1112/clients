@@ -48,6 +48,7 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "PickCredentialRequest";
       cipherIds: string[];
       userVerification: boolean;
+      fallbackSupported: boolean;
     }
   | {
       type: "PickCredentialResponse";
@@ -59,6 +60,7 @@ export type BrowserFido2Message = { sessionId: string } & (
       credentialName: string;
       userName: string;
       userVerification: boolean;
+      fallbackSupported: boolean;
     }
   | {
       type: "ConfirmNewCredentialResponse";
@@ -69,6 +71,7 @@ export type BrowserFido2Message = { sessionId: string } & (
       credentialName: string;
       userName: string;
       userVerification: boolean;
+      fallbackSupported: boolean;
     }
   | {
       type: "ConfirmNewNonDiscoverableCredentialResponse";
@@ -78,9 +81,11 @@ export type BrowserFido2Message = { sessionId: string } & (
   | {
       type: "InformExcludedCredentialRequest";
       existingCipherIds: string[];
+      fallbackSupported: boolean;
     }
   | {
       type: "InformCredentialNotFoundRequest";
+      fallbackSupported: boolean;
     }
   | {
       type: "AbortRequest";
@@ -94,17 +99,29 @@ export type BrowserFido2Message = { sessionId: string } & (
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
   constructor(private popupUtilsService: PopupUtilsService) {}
 
-  async newSession(abortController?: AbortController): Promise<Fido2UserInterfaceSession> {
-    return await BrowserFido2UserInterfaceSession.create(this.popupUtilsService, abortController);
+  async newSession(
+    fallbackSupported: boolean,
+    abortController?: AbortController
+  ): Promise<Fido2UserInterfaceSession> {
+    return await BrowserFido2UserInterfaceSession.create(
+      this.popupUtilsService,
+      fallbackSupported,
+      abortController
+    );
   }
 }
 
 export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSession {
   static async create(
     popupUtilsService: PopupUtilsService,
+    fallbackSupported: boolean,
     abortController?: AbortController
   ): Promise<BrowserFido2UserInterfaceSession> {
-    return new BrowserFido2UserInterfaceSession(popupUtilsService, abortController);
+    return new BrowserFido2UserInterfaceSession(
+      popupUtilsService,
+      fallbackSupported,
+      abortController
+    );
   }
 
   static sendMessage(msg: BrowserFido2Message) {
@@ -121,6 +138,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
 
   private constructor(
     private readonly popupUtilsService: PopupUtilsService,
+    private readonly fallbackSupported: boolean,
     readonly abortController = new AbortController(),
     readonly sessionId = Utils.newGuid()
   ) {
@@ -182,6 +200,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       cipherIds,
       sessionId: this.sessionId,
       userVerification,
+      fallbackSupported: this.fallbackSupported,
     };
 
     await this.send(data);
@@ -201,6 +220,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       credentialName,
       userName,
       userVerification,
+      fallbackSupported: this.fallbackSupported,
     };
 
     await this.send(data);
@@ -220,6 +240,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       credentialName,
       userName,
       userVerification,
+      fallbackSupported: this.fallbackSupported,
     };
 
     await this.send(data);
@@ -233,6 +254,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       type: "InformExcludedCredentialRequest",
       sessionId: this.sessionId,
       existingCipherIds,
+      fallbackSupported: this.fallbackSupported,
     };
 
     await this.send(data);
@@ -243,6 +265,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     const data: BrowserFido2Message = {
       type: "InformCredentialNotFoundRequest",
       sessionId: this.sessionId,
+      fallbackSupported: this.fallbackSupported,
     };
 
     await this.send(data);

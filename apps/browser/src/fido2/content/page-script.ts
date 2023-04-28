@@ -55,12 +55,22 @@ navigator.credentials.create = async (
   options?: CredentialCreationOptions,
   abortController?: AbortController
 ): Promise<Credential> => {
+  const fallbackSupported =
+    (options?.publicKey?.authenticatorSelection.authenticatorAttachment === "platform" &&
+      browserNativeWebauthnPlatformAuthenticatorSupport) ||
+    (options?.publicKey?.authenticatorSelection.authenticatorAttachment !== "platform" &&
+      browserNativeWebauthnSupport);
   try {
     const response = await messenger.request(
       {
         type: MessageType.CredentialCreationRequest,
         // TODO: Fix sameOriginWithAncestors!
-        data: WebauthnUtils.mapCredentialCreationOptions(options, window.location.origin, true),
+        data: WebauthnUtils.mapCredentialCreationOptions(
+          options,
+          window.location.origin,
+          true,
+          fallbackSupported
+        ),
       },
       abortController
     );
@@ -71,7 +81,7 @@ navigator.credentials.create = async (
 
     return WebauthnUtils.mapCredentialRegistrationResult(response.result);
   } catch (error) {
-    if (error && error.fallbackRequested) {
+    if (error && error.fallbackRequested && fallbackSupported) {
       return await browserCredentials.create(options);
     }
 
@@ -83,12 +93,18 @@ navigator.credentials.get = async (
   options?: CredentialRequestOptions,
   abortController?: AbortController
 ): Promise<Credential> => {
+  const fallbackSupported = browserNativeWebauthnSupport;
   try {
     const response = await messenger.request(
       {
         type: MessageType.CredentialGetRequest,
         // TODO: Fix sameOriginWithAncestors!
-        data: WebauthnUtils.mapCredentialRequestOptions(options, window.location.origin, true),
+        data: WebauthnUtils.mapCredentialRequestOptions(
+          options,
+          window.location.origin,
+          true,
+          fallbackSupported
+        ),
       },
       abortController
     );
@@ -99,7 +115,7 @@ navigator.credentials.get = async (
 
     return WebauthnUtils.mapCredentialAssertResult(response.result);
   } catch (error) {
-    if (error && error.fallbackRequested) {
+    if (error && error.fallbackRequested && fallbackSupported) {
       return await browserCredentials.get(options);
     }
 

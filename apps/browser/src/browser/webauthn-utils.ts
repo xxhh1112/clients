@@ -10,7 +10,8 @@ export class WebauthnUtils {
   static mapCredentialCreationOptions(
     options: CredentialCreationOptions,
     origin: string,
-    sameOriginWithAncestors: boolean
+    sameOriginWithAncestors: boolean,
+    fallbackSupported: boolean
   ): CreateCredentialParams {
     const keyOptions = options.publicKey;
 
@@ -47,6 +48,7 @@ export class WebauthnUtils {
       },
       timeout: keyOptions.timeout,
       sameOriginWithAncestors,
+      fallbackSupported,
     };
   }
 
@@ -91,7 +93,8 @@ export class WebauthnUtils {
   static mapCredentialRequestOptions(
     options: CredentialRequestOptions,
     origin: string,
-    sameOriginWithAncestors: boolean
+    sameOriginWithAncestors: boolean,
+    fallbackSupported: boolean
   ): AssertCredentialParams {
     const keyOptions = options.publicKey;
 
@@ -108,6 +111,7 @@ export class WebauthnUtils {
       userVerification: keyOptions.userVerification,
       timeout: keyOptions.timeout,
       sameOriginWithAncestors,
+      fallbackSupported,
     };
   }
 

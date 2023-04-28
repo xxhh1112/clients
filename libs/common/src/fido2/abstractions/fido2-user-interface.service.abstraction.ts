@@ -10,7 +10,10 @@ export interface PickCredentialParams {
 }
 
 export abstract class Fido2UserInterfaceService {
-  newSession: (abortController?: AbortController) => Promise<Fido2UserInterfaceSession>;
+  newSession: (
+    fallbackSupported: boolean,
+    abortController?: AbortController
+  ) => Promise<Fido2UserInterfaceSession>;
 }
 
 export abstract class Fido2UserInterfaceSession {

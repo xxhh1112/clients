@@ -27,6 +27,7 @@ import {
 interface ViewData {
   message: BrowserFido2Message;
   showUnsupportedVerification: boolean;
+  fallbackSupported: boolean;
 }
 
 @Component({
@@ -108,11 +109,10 @@ export class Fido2Component implements OnInit, OnDestroy {
         return {
           message,
           showUnsupportedVerification:
-            (message.type === "ConfirmNewCredentialRequest" ||
-              message.type === "ConfirmNewNonDiscoverableCredentialRequest" ||
-              message.type === "PickCredentialRequest") &&
+            "userVerification" in message &&
             message.userVerification &&
             !(await this.passwordRepromptService.enabled()),
+          fallbackSupported: "fallbackSupported" in message && message.fallbackSupported,
         };
       }),
       takeUntil(this.destroy$)

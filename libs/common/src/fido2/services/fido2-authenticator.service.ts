@@ -43,7 +43,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     params: Fido2AuthenticatorMakeCredentialsParams,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
-    const userInterfaceSession = await this.userInterface.newSession(abortController);
+    const userInterfaceSession = await this.userInterface.newSession(
+      params.fallbackSupported,
+      abortController
+    );
 
     try {
       if (params.credTypesAndPubKeyAlgs.every((p) => p.alg !== Fido2AlgorithmIdentifier.ES256)) {
@@ -211,7 +214,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     params: Fido2AuthenticatorGetAssertionParams,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorGetAssertionResult> {
-    const userInterfaceSession = await this.userInterface.newSession(abortController);
+    const userInterfaceSession = await this.userInterface.newSession(
+      params.fallbackSupported,
+      abortController
+    );
 
     try {
       if (

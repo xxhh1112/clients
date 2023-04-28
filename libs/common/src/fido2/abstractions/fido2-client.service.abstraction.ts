@@ -44,6 +44,7 @@ export interface CreateCredentialParams {
     id: string; // b64 encoded
     displayName: string;
   };
+  fallbackSupported: boolean;
   timeout?: number;
 }
 
@@ -64,6 +65,7 @@ export interface AssertCredentialParams {
   userVerification?: UserVerification;
   timeout: number;
   sameOriginWithAncestors: boolean;
+  fallbackSupported: boolean;
 }
 
 export interface AssertCredentialResult {

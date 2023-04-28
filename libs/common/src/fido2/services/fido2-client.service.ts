@@ -127,6 +127,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
         id: Fido2Utils.stringToBuffer(params.user.id),
         displayName: params.user.displayName,
       },
+      fallbackSupported: params.fallbackSupported,
     };
     let makeCredentialResult;
     try {
@@ -226,6 +227,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       hash: clientDataHash,
       allowCredentialDescriptorList,
       extensions: {},
+      fallbackSupported: params.fallbackSupported,
     };
 
     let getAssertionResult;

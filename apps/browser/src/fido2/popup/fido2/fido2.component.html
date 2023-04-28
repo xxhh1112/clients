@@ -45,7 +45,12 @@
         You do not have a matching login for this site.
       </ng-container>
     </ng-container>
-    <button type="button" class="btn btn-outline-secondary" (click)="abort(true)">
+    <button
+      *ngIf="data.fallbackSupported"
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="abort(true)"
+    >
       Use browser built-in
     </button>
     <button type="button" class="btn btn-outline-secondary" (click)="abort(false)">Abort</button>
