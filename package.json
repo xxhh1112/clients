@@ -23,8 +23,8 @@
     "test:watch:all": "jest --watchAll",
     "test:types": "for p in libs/**/tsconfig.spec.json; do  echo \"Typechecking $p\"; tsc --noEmit --project $p; done",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
-    "storybook": "ng run storybook:storybook",
-    "build-storybook": "ng run storybook:build-storybook",
+    "storybook": "ng run components:storybook",
+    "build-storybook": "ng run components:build-storybook",
     "chromatic": "npx chromatic --exit-zero-on-changes"
   },
   "workspaces": [
