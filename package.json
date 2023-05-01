@@ -25,7 +25,7 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "ng run storybook:storybook",
     "build-storybook": "ng run storybook:build-storybook",
-    "chromatic": "chromatic --debug --exit-zero-on-changes"
+    "chromatic": "npx chromatic --exit-zero-on-changes"
   },
   "workspaces": [
     "apps/*",
