@@ -145,7 +145,13 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getDisableContextMenuItem: (options?: StorageOptions) => Promise<boolean>;
   setDisableContextMenuItem: (value: boolean, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this, use SettingsService
+   */
   getDisableFavicon: (options?: StorageOptions) => Promise<boolean>;
+  /**
+   * @deprecated Do not call this, use SettingsService
+   */
   setDisableFavicon: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDisableGa: (options?: StorageOptions) => Promise<boolean>;
   setDisableGa: (value: boolean, options?: StorageOptions) => Promise<void>;
@@ -298,6 +304,8 @@ export abstract class StateService<T extends Account = Account> {
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
+  getEmergencyAccessInvitation: (options?: StorageOptions) => Promise<any>;
+  setEmergencyAccessInvitation: (value: any, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this directly, use OrganizationService
    */
@@ -347,7 +355,7 @@ export abstract class StateService<T extends Account = Account> {
   setTwoFactorToken: (value: string, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
   getUsesKeyConnector: (options?: StorageOptions) => Promise<boolean>;
-  setUsesKeyConnector: (vaule: boolean, options?: StorageOptions) => Promise<void>;
+  setUsesKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
   getVaultTimeout: (options?: StorageOptions) => Promise<number>;
   setVaultTimeout: (value: number, options?: StorageOptions) => Promise<void>;
   getVaultTimeoutAction: (options?: StorageOptions) => Promise<string>;

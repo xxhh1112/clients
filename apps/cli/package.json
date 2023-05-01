@@ -1,7 +1,7 @@
 {
   "name": "@bitwarden/cli",
   "description": "A secure and free password manager for all of your devices.",
-  "version": "2023.3.0",
+  "version": "2023.4.0",
   "keywords": [
     "bitwarden",
     "password",
@@ -24,7 +24,7 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:prod:watch": "cross-env NODE_ENV=production webpack --watch",
     "package": "npm run package:win && npm run package:mac && npm run package:lin",
-    "package:win": "pkg . --targets win-x64 --output ./dist/windows/bw.exe --build",
+    "package:win": "pkg . --targets win-x64 --output ./dist/windows/bw.exe",
     "package:mac": "pkg . --targets macos-x64 --output ./dist/macos/bw",
     "package:lin": "pkg . --targets linux-x64 --output ./dist/linux/bw",
     "debug": "node --inspect ./build/bw.js",
