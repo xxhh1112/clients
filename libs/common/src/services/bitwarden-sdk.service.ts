@@ -1,11 +1,3 @@
-import { Injectable } from "@angular/core";
-
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { DeviceType } from "@bitwarden/common/enums/device-type.enum";
-import { KdfType } from "@bitwarden/common/enums/kdf-type.enum";
 import {
   BitwardenClient,
   Convert,
@@ -13,8 +5,15 @@ import {
   KdfType as KdfType2,
 } from "@bitwarden/sdk-client";
 
-@Injectable()
-export class BitwardenSdkService {
+import { BitwardenSdkServiceAbstraction } from "../abstractions/bitwarden-sdk.service.abstraction";
+import { EnvironmentService } from "../abstractions/environment.service";
+import { PlatformUtilsService } from "../abstractions/platformUtils.service";
+import { StateService } from "../abstractions/state.service";
+import { TokenService } from "../auth/abstractions/token.service";
+import { DeviceType } from "../enums/device-type.enum";
+import { KdfType } from "../enums/kdf-type.enum";
+
+export class BitwardenSdkService implements BitwardenSdkServiceAbstraction {
   private client: BitwardenClient;
 
   constructor(

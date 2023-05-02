@@ -3,6 +3,7 @@ import { Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -12,8 +13,6 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { UpdateProfileRequest } from "@bitwarden/common/auth/models/request/update-profile.request";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ProfileResponse } from "@bitwarden/common/models/response/profile.response";
-
-import { BitwardenSdkService } from "../core/bitwarden-sdk.service";
 
 import { ChangeAvatarComponent } from "./change-avatar.component";
 
@@ -40,7 +39,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private keyConnectorService: KeyConnectorService,
     private stateService: StateService,
     private modalService: ModalService,
-    private bitwardenSdkService: BitwardenSdkService
+    private bitwardenSdkService: BitwardenSdkServiceAbstraction
   ) {}
 
   async ngOnInit() {

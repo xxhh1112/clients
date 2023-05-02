@@ -27,7 +27,6 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@
 import { PolicyListService } from "../admin-console/core/policy-list.service";
 import { PasswordRepromptService } from "../vault/core/password-reprompt.service";
 
-import { BitwardenSdkService } from "./bitwarden-sdk.service";
 import { BroadcasterMessagingService } from "./broadcaster-messaging.service";
 import { EventService } from "./event.service";
 import { HtmlStorageService } from "./html-storage.service";
@@ -107,7 +106,6 @@ import { WebPlatformUtilsService } from "./web-platform-utils.service";
       useClass: LoginService,
       deps: [StateService],
     },
-    BitwardenSdkService,
   ],
 })
 export class CoreModule {

@@ -6,7 +6,9 @@
       "@bitwarden/angular/*": ["../angular/src/*"],
       "@bitwarden/node/*": ["../node/src/*"],
       "@bitwarden/importer": ["../importer/src"],
-      "@bitwarden/exporter/*": ["../exporter/src/*"]
+      "@bitwarden/exporter/*": ["../exporter/src/*"],
+      "@bitwarden/sdk-client": ["../../sdk/languages/js/sdk-client"],
+      "@bitwarden/sdk-wasm": ["../../sdk/languages/js/wasm"]
     }
   }
 }

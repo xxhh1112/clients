@@ -5,6 +5,7 @@ import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarde
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/abstractions/broadcaster.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
@@ -84,6 +85,7 @@ import { AnonymousHubService } from "@bitwarden/common/services/anonymousHub.ser
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
+import { BitwardenSdkService } from "@bitwarden/common/services/bitwarden-sdk.service";
 import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
 import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
@@ -650,6 +652,16 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: OrgDomainApiServiceAbstraction,
       useClass: OrgDomainApiService,
       deps: [OrgDomainServiceAbstraction, ApiServiceAbstraction],
+    },
+    {
+      provide: BitwardenSdkServiceAbstraction,
+      useClass: BitwardenSdkService,
+      deps: [
+        TokenServiceAbstraction,
+        EnvironmentServiceAbstraction,
+        PlatformUtilsServiceAbstraction,
+        StateServiceAbstraction,
+      ],
     },
   ],
 })
