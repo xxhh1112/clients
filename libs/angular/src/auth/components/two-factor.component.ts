@@ -197,14 +197,12 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       this.captchaToken
     );
     const response: AuthResult = await this.formPromise;
-    const disableFavicon = await this.stateService.getDisableFavicon();
-    await this.stateService.setDisableFavicon(!!disableFavicon);
     if (this.handleCaptchaRequired(response)) {
       return;
     }
     if (this.onSuccessfulLogin != null) {
       this.loginService.clearValues();
-      this.onSuccessfulLogin();
+      await this.onSuccessfulLogin();
     }
     if (response.resetMasterPassword) {
       this.successRoute = "set-password";
@@ -214,7 +212,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     }
     if (this.onSuccessfulLoginNavigate != null) {
       this.loginService.clearValues();
-      this.onSuccessfulLoginNavigate();
+      await this.onSuccessfulLoginNavigate();
     } else {
       this.loginService.clearValues();
       this.router.navigate([this.successRoute], {
