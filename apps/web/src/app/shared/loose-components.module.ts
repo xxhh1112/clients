@@ -80,6 +80,7 @@ import { ChangeKdfModule } from "../settings/change-kdf/change-kdf.module";
 import { ChangePasswordComponent } from "../settings/change-password.component";
 import { DeleteAccountComponent } from "../settings/delete-account.component";
 import { DomainRulesComponent } from "../settings/domain-rules.component";
+import { Fido2LoginSettingsModule } from "../settings/fido2-login-settings/fido2-login-settings.module";
 import { LowKdfComponent } from "../settings/low-kdf.component";
 import { PreferencesComponent } from "../settings/preferences.component";
 import { PremiumComponent } from "../settings/premium.component";
@@ -122,6 +123,7 @@ import { SharedModule } from "./shared.module";
     ProductSwitcherModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
+    Fido2LoginSettingsModule, // TODO: Move to AuthModule when it is created
   ],
   declarations: [
     PremiumBadgeComponent,
