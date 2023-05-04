@@ -640,6 +640,12 @@
   "learnMoreAboutPasswordless": {
     "message": "Learn more about passwordless"
   },
+  "passkeyEnterMasterPassword": {
+    "message": "Enter your master password to modify log in with passkey settings."
+  },
+  "tryAgain": {
+    "message": "Try again"
+  },
   "createAccount": {
     "message": "Create account"
   },
