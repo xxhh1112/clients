@@ -443,28 +443,18 @@ export class SettingsComponent implements OnInit {
   }
 
   async fingerprint() {
-    const fingerprint = await this.cryptoService.getFingerprint(
-      await this.stateService.getUserId()
-    );
-    const p = document.createElement("p");
-    p.innerText = this.i18nService.t("yourAccountsFingerprint") + ":";
-    const p2 = document.createElement("p");
-    p2.innerText = fingerprint.join("-");
-    const div = document.createElement("div");
-    div.appendChild(p);
-    div.appendChild(p2);
+    const fingerprint = (
+      await this.cryptoService.getFingerprint(await this.stateService.getUserId())
+    ).join("-");
 
-    const result = await Swal.fire({
-      heightAuto: false,
-      buttonsStyling: false,
-      html: div,
-      showCancelButton: true,
-      cancelButtonText: this.i18nService.t("close"),
-      showConfirmButton: true,
-      confirmButtonText: this.i18nService.t("learnMore"),
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "yourAccountsFingerprint" },
+      content: fingerprint,
+      acceptButtonText: { key: "learnMore" },
+      type: SimpleDialogType.INFO,
     });
 
-    if (result.value) {
+    if (confirmed) {
       this.platformUtilsService.launchUri("https://bitwarden.com/help/fingerprint-phrase/");
     }
   }
