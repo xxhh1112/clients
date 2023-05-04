@@ -1,8 +1,8 @@
 import {
   BitwardenClient,
   Convert,
-  DeviceType as DeviceType2,
-  KdfType as KdfType2,
+  DeviceType as SdkDeviceType,
+  KdfType as SdkKdfType,
 } from "@bitwarden/sdk-client";
 
 import { BitwardenSdkServiceAbstraction } from "../abstractions/bitwarden-sdk.service.abstraction";
@@ -47,63 +47,61 @@ export class BitwardenSdkService implements BitwardenSdkServiceAbstraction {
     this.client = new BitwardenClient(new module.BitwardenClient(settings_json, 0));
   }
 
-  private toDevice(device: DeviceType): DeviceType2 {
+  private toDevice(device: DeviceType): SdkDeviceType {
     switch (device) {
       case DeviceType.Android:
-        return DeviceType2.Android;
+        return SdkDeviceType.Android;
       case DeviceType.iOS:
-        return DeviceType2.IOS;
+        return SdkDeviceType.IOS;
       case DeviceType.ChromeExtension:
-        return DeviceType2.ChromeExtension;
+        return SdkDeviceType.ChromeExtension;
       case DeviceType.FirefoxExtension:
-        return DeviceType2.FirefoxExtension;
+        return SdkDeviceType.FirefoxExtension;
       case DeviceType.OperaExtension:
-        return DeviceType2.OperaExtension;
+        return SdkDeviceType.OperaExtension;
       case DeviceType.EdgeExtension:
-        return DeviceType2.EdgeExtension;
+        return SdkDeviceType.EdgeExtension;
       case DeviceType.WindowsDesktop:
-        return DeviceType2.WindowsDesktop;
+        return SdkDeviceType.WindowsDesktop;
       case DeviceType.MacOsDesktop:
-        return DeviceType2.MACOSDesktop;
+        return SdkDeviceType.MACOSDesktop;
       case DeviceType.LinuxDesktop:
-        return DeviceType2.LinuxDesktop;
+        return SdkDeviceType.LinuxDesktop;
       case DeviceType.ChromeBrowser:
-        return DeviceType2.ChromeBrowser;
+        return SdkDeviceType.ChromeBrowser;
       case DeviceType.FirefoxBrowser:
-        return DeviceType2.FirefoxBrowser;
+        return SdkDeviceType.FirefoxBrowser;
       case DeviceType.OperaBrowser:
-        return DeviceType2.OperaBrowser;
+        return SdkDeviceType.OperaBrowser;
       case DeviceType.EdgeBrowser:
-        return DeviceType2.EdgeBrowser;
+        return SdkDeviceType.EdgeBrowser;
       case DeviceType.IEBrowser:
-        return DeviceType2.IEBrowser;
+        return SdkDeviceType.IEBrowser;
       case DeviceType.UnknownBrowser:
-        return DeviceType2.UnknownBrowser;
+        return SdkDeviceType.UnknownBrowser;
       case DeviceType.AndroidAmazon:
-        return DeviceType2.AndroidAmazon;
+        return SdkDeviceType.AndroidAmazon;
       case DeviceType.UWP:
-        return DeviceType2.UWP;
+        return SdkDeviceType.UWP;
       case DeviceType.SafariBrowser:
-        return DeviceType2.SafariBrowser;
+        return SdkDeviceType.SafariBrowser;
       case DeviceType.VivaldiBrowser:
-        return DeviceType2.VivaldiBrowser;
+        return SdkDeviceType.VivaldiBrowser;
       case DeviceType.VivaldiExtension:
-        return DeviceType2.VivaldiExtension;
+        return SdkDeviceType.VivaldiExtension;
       case DeviceType.SafariExtension:
-        return DeviceType2.SafariExtension;
-      case DeviceType.SDK:
-        return DeviceType2.SDK;
-      //case DeviceType.Server:
-      //return DeviceType2.Server;
+        return SdkDeviceType.SafariExtension;
+      default:
+        return SdkDeviceType.SDK;
     }
   }
 
-  private toKdf(kdf: KdfType): KdfType2 {
+  private toKdf(kdf: KdfType): SdkKdfType {
     switch (kdf) {
       case KdfType.PBKDF2_SHA256:
-        return KdfType2.Pbkdf2Sha256;
+        return SdkKdfType.Pbkdf2Sha256;
       case KdfType.Argon2id:
-        return KdfType2.Argon2ID;
+        return SdkKdfType.Argon2ID;
     }
   }
 
