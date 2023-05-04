@@ -7,7 +7,9 @@ import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { Subject, takeUntil } from "rxjs";
 import Swal from "sweetalert2";
 
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -77,7 +79,9 @@ export class AppComponent implements OnDestroy, OnInit {
     private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private configService: ConfigServiceAbstraction,
+    private dialogService: DialogServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -127,14 +131,15 @@ export class AppComponent implements OnDestroy, OnInit {
           case "syncStarted":
             break;
           case "syncCompleted":
+            await this.configService.fetchServerConfig();
             break;
           case "upgradeOrganization": {
-            const upgradeConfirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("upgradeOrganizationDesc"),
-              this.i18nService.t("upgradeOrganization"),
-              this.i18nService.t("upgradeOrganization"),
-              this.i18nService.t("cancel")
-            );
+            const upgradeConfirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "upgradeOrganization" },
+              content: { key: "upgradeOrganizationDesc" },
+              acceptButtonText: { key: "upgradeOrganization" },
+              type: SimpleDialogType.INFO,
+            });
             if (upgradeConfirmed) {
               this.router.navigate([
                 "organizations",
@@ -146,24 +151,24 @@ export class AppComponent implements OnDestroy, OnInit {
             break;
           }
           case "premiumRequired": {
-            const premiumConfirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("premiumRequiredDesc"),
-              this.i18nService.t("premiumRequired"),
-              this.i18nService.t("upgrade"),
-              this.i18nService.t("cancel")
-            );
+            const premiumConfirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "premiumRequired" },
+              content: { key: "premiumRequiredDesc" },
+              acceptButtonText: { key: "upgrade" },
+              type: SimpleDialogType.SUCCESS,
+            });
             if (premiumConfirmed) {
               this.router.navigate(["settings/subscription/premium"]);
             }
             break;
           }
           case "emailVerificationRequired": {
-            const emailVerificationConfirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("emailVerificationRequiredDesc"),
-              this.i18nService.t("emailVerificationRequired"),
-              this.i18nService.t("learnMore"),
-              this.i18nService.t("cancel")
-            );
+            const emailVerificationConfirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "emailVerificationRequired" },
+              content: { key: "emailVerificationRequiredDesc" },
+              acceptButtonText: { key: "learnMore" },
+              type: SimpleDialogType.INFO,
+            });
             if (emailVerificationConfirmed) {
               this.platformUtilsService.launchUri(
                 "https://bitwarden.com/help/create-bitwarden-account/"

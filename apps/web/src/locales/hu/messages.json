@@ -4812,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "A mesterjelszó nem felel meg a szervezet rendszabályainak. A szervezet eléréséhez most frissíteni kell a mesterjelszót. Továbblépéskor kijelentkezés történik a jelenlegi munkamenetből és újra be kell jelentkezni. Ha van aktív munkamenet más eszközön, az még legfeljebb egy óráig aktív maradhat."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak."
+  },
   "maximumVaultTimeout": {
     "message": "Széf időkifutás"
   },
@@ -4840,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "A szervezeti házirendek hatással vannak a széf időkorlátjára. A széf időkorlátja legfeljebb $HOURS$ óra és $MINUTES$ perc lehet. A széf időkifutási művelete $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "A szervezeti házirendek által jelenleg beállított időkifutási művelet $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5399,6 +5428,15 @@
     "message": "Jelenlegi szervezet",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Fiókbeállítások"
   },
@@ -5617,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "A beviteli érték legyen legalább $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "A beviteli érték ne haladja meg $MAX$ értéket.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -5890,7 +5946,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "A szolgáltatás fiók törlésre került"
   },
   "deleteServiceAccountsToast": {
     "message": "A szolgáltatás fiókok törlésre kerültek."
@@ -6514,7 +6570,7 @@
     "message": "KDF beállítások megváltoztatása"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "A folytatással minden aktív munkamenetből kijelentkezik. Újra be kell jelentkeznie, és ki kell töltenie a kétlépcsős bejelentkezési beállításokat. Az adatvesztés elkerülése érdekében javasoljuk, hogy a titkosítási beállítások módosítása előtt exportálja a széfet."
   },
   "secretsManagerBeta": {
     "message": "Titkos kód kezelő béta"
@@ -6687,5 +6743,20 @@
   },
   "notAvailableForFreeOrganization": {
     "message": "Ez a funkció nem érhető el ingyenes szervezetek számára. Az áttéréshez a szervezet tulajdonosához kell fordulni."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Lépjünk kapcsolatba a szervezet adminisztrátorával a projekt titkos kódjainak kezeléséhez.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "A meglévő tagoknak meg kell változtatniuk jelszavaikat."
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Nincs jogosulltság ezen projekt törléséhez.",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "A következő projektek nem törölhetők. Szeretnénk folytatni?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   }
 }

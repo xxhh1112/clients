@@ -30,6 +30,7 @@ import {
 } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
@@ -52,7 +53,7 @@ import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/pa
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { DialogService, Icons } from "@bitwarden/components";
+import { Icons } from "@bitwarden/components";
 
 import {
   CollectionAdminService,
@@ -147,7 +148,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private syncService: SyncService,
     private i18nService: I18nService,
     private modalService: ModalService,
-    private dialogService: DialogService,
+    private dialogService: DialogServiceAbstraction,
     private messagingService: MessagingService,
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
@@ -558,7 +559,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.collectionsModalRef,
       (comp) => {
         comp.collectionIds = cipher.collectionIds;
-        comp.collections = currCollections.filter((c) => !c.readOnly && c.id != null);
+        comp.collections = currCollections.filter((c) => !c.readOnly && c.id != Unassigned);
         comp.organization = this.organization;
         comp.cipherId = cipher.id;
         comp.onSavedCollections.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -571,7 +572,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async addCipher() {
     const collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
-      (c) => !c.readOnly && c.id != null
+      (c) => !c.readOnly && c.id != Unassigned
     );
 
     await this.editCipher(null, (comp) => {
@@ -644,7 +645,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async cloneCipher(cipher: CipherView) {
     const collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
-      (c) => !c.readOnly && c.id != null
+      (c) => !c.readOnly && c.id != Unassigned
     );
 
     await this.editCipher(cipher, (comp) => {
@@ -662,19 +663,20 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (!c.isDeleted) {
       return;
     }
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("restoreItemConfirmation"),
-      this.i18nService.t("restoreItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "restoreItem" },
+      content: { key: "restoreItemConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
 
     try {
-      await this.cipherService.restoreWithServer(c.id);
+      const asAdmin = this.organization?.canEditAnyCollection;
+      await this.cipherService.restoreWithServer(c.id, asAdmin);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("restoredItem"));
       this.refresh();
     } catch (e) {
@@ -713,15 +715,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
 
     const permanent = c.isDeleted;
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t(
-        permanent ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation"
-      ),
-      this.i18nService.t(permanent ? "permanentlyDeleteItem" : "deleteItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: permanent ? "permanentlyDeleteItem" : "deleteItem" },
+      content: { key: permanent ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
@@ -751,13 +751,12 @@ export class VaultComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("deleteCollectionConfirmation"),
-      collection.name,
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: collection.name,
+      content: { key: "deleteCollectionConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return;
     }
@@ -856,11 +855,10 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
     );
 
-    if (field === "password" || field === "totp") {
-      this.eventCollectionService.collect(
-        EventType.Cipher_ClientToggledHiddenFieldVisible,
-        cipher.id
-      );
+    if (field === "password") {
+      this.eventCollectionService.collect(EventType.Cipher_ClientCopiedPassword, cipher.id);
+    } else if (field === "totp") {
+      this.eventCollectionService.collect(EventType.Cipher_ClientCopiedHiddenField, cipher.id);
     }
   }
 

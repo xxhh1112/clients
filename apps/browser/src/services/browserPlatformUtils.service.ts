@@ -5,15 +5,8 @@ import { ClientType, DeviceType } from "@bitwarden/common/enums";
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
 
-const DialogPromiseExpiration = 600000; // 10 minutes
-
 export default class BrowserPlatformUtilsService implements PlatformUtilsService {
-  private showDialogResolves = new Map<number, { resolve: (value: boolean) => void; date: Date }>();
-  private passwordDialogResolves = new Map<
-    number,
-    { tryResolve: (canceled: boolean, password: string) => Promise<boolean>; date: Date }
-  >();
-  private deviceCache: DeviceType = null;
+  private static deviceCache: DeviceType = null;
 
   constructor(
     private messagingService: MessagingService,
@@ -22,26 +15,30 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     private win: Window & typeof globalThis
   ) {}
 
-  getDevice(): DeviceType {
+  static getDevice(win: Window & typeof globalThis): DeviceType {
     if (this.deviceCache) {
       return this.deviceCache;
     }
 
     if (BrowserPlatformUtilsService.isFirefox()) {
       this.deviceCache = DeviceType.FirefoxExtension;
-    } else if (BrowserPlatformUtilsService.isOpera(this.win)) {
+    } else if (BrowserPlatformUtilsService.isOpera(win)) {
       this.deviceCache = DeviceType.OperaExtension;
     } else if (BrowserPlatformUtilsService.isEdge()) {
       this.deviceCache = DeviceType.EdgeExtension;
     } else if (BrowserPlatformUtilsService.isVivaldi()) {
       this.deviceCache = DeviceType.VivaldiExtension;
-    } else if (BrowserPlatformUtilsService.isChrome(this.win)) {
+    } else if (BrowserPlatformUtilsService.isChrome(win)) {
       this.deviceCache = DeviceType.ChromeExtension;
-    } else if (BrowserPlatformUtilsService.isSafari(this.win)) {
+    } else if (BrowserPlatformUtilsService.isSafari(win)) {
       this.deviceCache = DeviceType.SafariExtension;
     }
 
     return this.deviceCache;
+  }
+
+  getDevice(): DeviceType {
+    return BrowserPlatformUtilsService.getDevice(this.win);
   }
 
   getDeviceString(): string {
@@ -53,6 +50,9 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return ClientType.Browser;
   }
 
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
   static isFirefox(): boolean {
     return (
       navigator.userAgent.indexOf(" Firefox/") !== -1 ||
@@ -64,7 +64,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return this.getDevice() === DeviceType.FirefoxExtension;
   }
 
-  static isChrome(win: Window & typeof globalThis): boolean {
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
+  private static isChrome(win: Window & typeof globalThis): boolean {
     return win.chrome && navigator.userAgent.indexOf(" Chrome/") !== -1;
   }
 
@@ -72,7 +75,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return this.getDevice() === DeviceType.ChromeExtension;
   }
 
-  static isEdge(): boolean {
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
+  private static isEdge(): boolean {
     return navigator.userAgent.indexOf(" Edg/") !== -1;
   }
 
@@ -80,7 +86,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return this.getDevice() === DeviceType.EdgeExtension;
   }
 
-  static isOpera(win: Window & typeof globalThis): boolean {
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
+  private static isOpera(win: Window & typeof globalThis): boolean {
     return (
       (!!win.opr && !!win.opr.addons) || !!win.opera || navigator.userAgent.indexOf(" OPR/") >= 0
     );
@@ -90,7 +99,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return this.getDevice() === DeviceType.OperaExtension;
   }
 
-  static isVivaldi(): boolean {
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
+  private static isVivaldi(): boolean {
     return navigator.userAgent.indexOf(" Vivaldi/") !== -1;
   }
 
@@ -98,11 +110,32 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return this.getDevice() === DeviceType.VivaldiExtension;
   }
 
+  /**
+   * @deprecated Do not call this directly, use getDevice() instead
+   */
   static isSafari(win: Window & typeof globalThis): boolean {
     // Opera masquerades as Safari, so make sure we're not there first
     return (
       !BrowserPlatformUtilsService.isOpera(win) && navigator.userAgent.indexOf(" Safari/") !== -1
     );
+  }
+
+  private static safariVersion(): string {
+    return navigator.userAgent.match("Version/([0-9.]*)")?.[1];
+  }
+
+  /**
+   * Safari previous to version 16.1 had a bug which caused artifacts on hover in large extension popups.
+   * https://bugs.webkit.org/show_bug.cgi?id=218704
+   */
+  static shouldApplySafariHeightFix(win: Window & typeof globalThis): boolean {
+    if (BrowserPlatformUtilsService.getDevice(win) !== DeviceType.SafariExtension) {
+      return false;
+    }
+
+    const version = BrowserPlatformUtilsService.safariVersion();
+    const parts = version?.split(".")?.map((v) => Number(v));
+    return parts?.[0] < 16 || (parts?.[0] === 16 && parts?.[1] === 0);
   }
 
   isSafari(): boolean {
@@ -172,29 +205,6 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
       title: title,
       type: type,
       options: options,
-    });
-  }
-
-  showDialog(
-    body: string,
-    title?: string,
-    confirmText?: string,
-    cancelText?: string,
-    type?: string,
-    bodyIsHtml = false
-  ) {
-    const dialogId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-    this.messagingService.send("showDialog", {
-      text: bodyIsHtml ? null : body,
-      html: bodyIsHtml ? body : null,
-      title: title,
-      confirmText: confirmText,
-      cancelText: cancelText,
-      type: type,
-      dialogId: dialogId,
-    });
-    return new Promise<boolean>((resolve) => {
-      this.showDialogResolves.set(dialogId, { resolve: resolve, date: new Date() });
     });
   }
 
@@ -299,47 +309,6 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     return null;
   }
 
-  resolveDialogPromise(dialogId: number, confirmed: boolean) {
-    if (this.showDialogResolves.has(dialogId)) {
-      const resolveObj = this.showDialogResolves.get(dialogId);
-      resolveObj.resolve(confirmed);
-      this.showDialogResolves.delete(dialogId);
-    }
-
-    // Clean up old promises
-    this.showDialogResolves.forEach((val, key) => {
-      const age = new Date().getTime() - val.date.getTime();
-      if (age > DialogPromiseExpiration) {
-        this.showDialogResolves.delete(key);
-      }
-    });
-  }
-
-  async resolvePasswordDialogPromise(
-    dialogId: number,
-    canceled: boolean,
-    password: string
-  ): Promise<boolean> {
-    let result = false;
-    if (this.passwordDialogResolves.has(dialogId)) {
-      const resolveObj = this.passwordDialogResolves.get(dialogId);
-      if (await resolveObj.tryResolve(canceled, password)) {
-        this.passwordDialogResolves.delete(dialogId);
-        result = true;
-      }
-    }
-
-    // Clean up old promises
-    this.passwordDialogResolves.forEach((val, key) => {
-      const age = new Date().getTime() - val.date.getTime();
-      if (age > DialogPromiseExpiration) {
-        this.passwordDialogResolves.delete(key);
-      }
-    });
-
-    return result;
-  }
-
   async supportsBiometric() {
     const platformInfo = await BrowserApi.getPlatformInfo();
     if (platformInfo.os === "android") {
@@ -380,7 +349,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
       autofillCommand = (await browser.commands.getAll()).find(
         (c) => c.name === "autofill_login"
       ).shortcut;
-      // Firefox is returing Ctrl instead of Cmd for the modifier key on macOS if
+      // Firefox is returning Ctrl instead of Cmd for the modifier key on macOS if
       // the command is the default one set on installation.
       if (
         (await browser.runtime.getPlatformInfo()).os === "mac" &&

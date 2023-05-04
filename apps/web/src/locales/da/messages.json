@@ -3126,7 +3126,7 @@
     "message": "Du kan få adgang til denne organisation, når en administrator bekræfter dit medlemskab. Vi sender dig en e-mail, når dette sker."
   },
   "inviteInitAcceptedDesc": {
-    "message": "You can now access this organization."
+    "message": "Denne organisation kan nu tilgås."
   },
   "inviteAcceptFailed": {
     "message": "Kan ikke acceptere invitationen. Bed en organisations-administrator om at sende en ny invitation."
@@ -4812,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Din hovedadgangskode opfylder ikke organisationspolitikkens krav. For at kunne blive organisationsmedlem, skal din hovedadgangskode derfor opdateres nu. Fortsættes, logges der ud af den nuværende session, og du vil skulle logge ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Din hovedadgangskode opfylder ikke et eller flere organisationspolitikkrav. For at kunne tilgå boksen skal hovedadgangskode derfor opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logge ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
+  },
   "maximumVaultTimeout": {
     "message": "Boks-timeout"
   },
@@ -4840,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter). Boks-timeouthandlingen er pt. sat til $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisationspolitikker har sat boks-timeouthandlingen til $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5399,6 +5428,15 @@
     "message": "Nuværende organisation",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: Logget ind som $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Kontoindstillinger"
   },
@@ -5617,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Inputværdi skal være mindst $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Inputværdi må ikke overstige $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6687,5 +6743,20 @@
   },
   "notAvailableForFreeOrganization": {
     "message": "Denne funktion er ikke tilgængelig for gratis organisationer. Kontakt organisationsejeren for at opgradere."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Kontakt organisationsadmin for at håndtere hemmeligheder for dette projekt.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Kræv, at eksisterende medlemmer ændrer deres adgangskoder"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Ingen tilladelse til at slette dette objekt",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Flg. projekter kan ikke slettes. Fortsæt?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   }
 }

@@ -1464,6 +1464,15 @@
   "setMasterPassword": {
     "message": "Ana parolu tənzimlə"
   },
+  "currentMasterPass": {
+    "message": "Hazırkı ana parol"
+  },
+  "newMasterPass": {
+    "message": "Yeni ana parol"
+  },
+  "confirmNewMasterPass": {
+    "message": "Yeni ana parolu təsdiqlə"
+  },
   "masterPasswordPolicyInEffect": {
     "message": "Bir və ya daha çox təşkilat siyasəti, aşağıdakı tələbləri qarşılamaq üçün ana parolunuzu tələb edir:"
   },
@@ -1844,6 +1853,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ana parolunuz təzəlikcə təşkilatınızdakı bir administrator tərəfindən dəyişdirildi. Anbara müraciət üçün indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Avtomatik qeydiyyat"
   },
@@ -1872,6 +1884,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt $HOURS$ saat $MINUTES$ dəqiqədir. Anbar vaxt bitişi əməliyyatı $ACTION$ olaraq tənzimləndi.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı $ACTION$ olaraq tənzimlədi.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
