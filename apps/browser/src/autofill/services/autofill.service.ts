@@ -20,22 +20,13 @@ import {
   AutofillService as AutofillServiceInterface,
   PageDetail,
   FormData,
+  GenerateFillScriptOptions,
 } from "./abstractions/autofill.service";
 import {
   AutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
 } from "./autofill-constants";
-
-export interface GenerateFillScriptOptions {
-  skipUsernameOnlyFill: boolean;
-  onlyEmptyFields: boolean;
-  onlyVisibleFields: boolean;
-  fillNewPassword: boolean;
-  cipher: CipherView;
-  tabUrl: string;
-  defaultUriMatch: UriMatchType;
-}
 
 export default class AutofillService implements AutofillServiceInterface {
   constructor(

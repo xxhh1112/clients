@@ -1,3 +1,4 @@
+import { UriMatchType } from "@bitwarden/common/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import AutofillField from "../../models/autofill-field";
@@ -28,6 +29,16 @@ export interface FormData {
   password: AutofillField;
   username: AutofillField;
   passwords: AutofillField[];
+}
+
+export interface GenerateFillScriptOptions {
+  skipUsernameOnlyFill: boolean;
+  onlyEmptyFields: boolean;
+  onlyVisibleFields: boolean;
+  fillNewPassword: boolean;
+  cipher: CipherView;
+  tabUrl: string;
+  defaultUriMatch: UriMatchType;
 }
 
 export abstract class AutofillService {
