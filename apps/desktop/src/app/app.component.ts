@@ -16,6 +16,7 @@ import { firstValueFrom, Subject, takeUntil } from "rxjs";
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -37,6 +38,7 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -137,7 +139,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private keyConnectorService: KeyConnectorService,
     private configService: ConfigServiceAbstraction,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    private bitwardenSdkService: BitwardenSdkServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -230,13 +233,15 @@ export class AppComponent implements OnInit, OnDestroy {
             await this.openModal<PremiumComponent>(PremiumComponent, this.premiumRef);
             break;
           case "showFingerprintPhrase": {
-            const fingerprint = await this.cryptoService.getFingerprint(
-              await this.stateService.getUserId()
+            const client = await this.bitwardenSdkService.getClient();
+            const fingerprint = await client.fingerprint(
+              await this.stateService.getUserId(),
+              Utils.fromBufferToB64(await this.cryptoService.getPublicKey())
             );
+
             const result = await this.dialogService.openSimpleDialog({
               title: { key: "fingerprintPhrase" },
-              content:
-                this.i18nService.t("yourAccountsFingerprint") + ":\n" + fingerprint.join("-"),
+              content: this.i18nService.t("yourAccountsFingerprint") + ":\n" + fingerprint,
               acceptButtonText: { key: "learnMore" },
               cancelButtonText: { key: "close" },
               type: SimpleDialogType.INFO,
