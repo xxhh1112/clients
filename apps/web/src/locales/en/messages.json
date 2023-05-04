@@ -625,6 +625,15 @@
   "loginWithMasterPassword": {
     "message": "Log in with master password"
   },
+  "loginWithPasskey": {
+    "message": "Log in with passkey"
+  },
+  "loginWithPasskeyInfo": {
+    "message": "Use facial recognition, a fingerprint, or other FIDO2 security key to log in instead of your email and password."
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "Learn more about passwordless"
+  },
   "createAccount": {
     "message": "Create account"
   },
