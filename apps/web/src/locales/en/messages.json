@@ -634,6 +634,9 @@
   "enableLoginWithPasskey": {
     "message": "Turn on log in with passkey"
   },
+  "newPasskey": {
+    "message": "New passkey"
+  },
   "learnMoreAboutPasswordless": {
     "message": "Learn more about passwordless"
   },

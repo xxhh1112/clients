@@ -6,6 +6,11 @@
   <a bitLink href="???">{{ "learnMoreAboutPasswordless" | i18n }}</a>
 </p>
 
-<button type="button" bitButton [attr.aria-label]="'enableLoginWithPasskey' | i18n">
+<button
+  type="button"
+  bitButton
+  [attr.aria-label]="'enableLoginWithPasskey' | i18n"
+  (click)="createCredential()"
+>
   {{ "enable" | i18n }}
 </button>
