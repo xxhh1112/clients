@@ -1,7 +1,11 @@
-<h2 bitTypography="h2">{{ "loginWithPasskey" | i18n }}</h2>
+<h2 bitTypography="h2">
+  {{ "loginWithPasskey" | i18n }} <span bitBadge badgeType="secondary">Not implemented</span>
+</h2>
 <p bitTypography="body1">
   {{ "loginWithPasskeyInfo" | i18n }}
   <a bitLink href="???">{{ "learnMoreAboutPasswordless" | i18n }}</a>
 </p>
 
-<button type="button" bitButton>{{ "enable" | i18n }}</button>
+<button type="button" bitButton [attr.aria-label]="'enableLoginWithPasskey' | i18n">
+  {{ "enable" | i18n }}
+</button>
