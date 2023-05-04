@@ -1,5 +1,6 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -53,7 +54,8 @@ export class GetCommand extends DownloadCommand {
     private stateService: StateService,
     private searchService: SearchService,
     private apiService: ApiService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private bitwardenSdkService: BitwardenSdkServiceAbstraction
   ) {
     super(cryptoService);
   }
@@ -506,14 +508,18 @@ export class GetCommand extends DownloadCommand {
   }
 
   private async getFingerprint(id: string) {
-    let fingerprint: string[] = null;
+    let fingerprint: string = null;
     if (id === "me") {
-      fingerprint = await this.cryptoService.getFingerprint(await this.stateService.getUserId());
+      const client = await this.bitwardenSdkService.getClient();
+      fingerprint = await client.fingerprint(
+        await this.stateService.getUserId(),
+        Utils.fromBufferToB64(await this.cryptoService.getPublicKey())
+      );
     } else if (Utils.isGuid(id)) {
       try {
         const response = await this.apiService.getUserPublicKey(id);
         const pubKey = Utils.fromB64ToArray(response.publicKey);
-        fingerprint = await this.cryptoService.getFingerprint(id, pubKey.buffer);
+        fingerprint = (await this.cryptoService.getFingerprint(id, pubKey.buffer)).join("-");
       } catch {
         // eslint-disable-next-line
       }
@@ -522,7 +528,7 @@ export class GetCommand extends DownloadCommand {
     if (fingerprint == null) {
       return Response.notFound();
     }
-    const res = new StringResponse(fingerprint.join("-"));
+    const res = new StringResponse(fingerprint);
     return Response.success(res);
   }
 }

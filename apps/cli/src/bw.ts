@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
@@ -25,6 +26,7 @@ import { Account } from "@bitwarden/common/models/domain/account";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
+import { BitwardenSdkService } from "@bitwarden/common/services/bitwarden-sdk.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
@@ -135,6 +137,7 @@ export class Main {
   organizationApiService: OrganizationApiServiceAbstraction;
   syncNotifierService: SyncNotifierService;
   sendApiService: SendApiService;
+  bitwardenSdkService: BitwardenSdkServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -404,6 +407,14 @@ export class Main {
       this.cryptoService,
       this.i18nService,
       this.userVerificationApiService
+    );
+
+    this.bitwardenSdkService = new BitwardenSdkService(
+      this.tokenService,
+      this.environmentService,
+      this.platformUtilsService,
+      this.stateService,
+      customUserAgent
     );
   }
 

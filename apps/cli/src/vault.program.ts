@@ -189,7 +189,8 @@ export class VaultProgram extends Program {
           this.main.stateService,
           this.main.searchService,
           this.main.apiService,
-          this.main.organizationService
+          this.main.organizationService,
+          this.main.bitwardenSdkService
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);

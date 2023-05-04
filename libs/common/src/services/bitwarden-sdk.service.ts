@@ -20,7 +20,8 @@ export class BitwardenSdkService implements BitwardenSdkServiceAbstraction {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private platformUtilsService: PlatformUtilsService,
-    private stateService: StateService
+    private stateService: StateService,
+    private userAgent: string = null
   ) {}
 
   async init(): Promise<void> {
@@ -32,7 +33,7 @@ export class BitwardenSdkService implements BitwardenSdkServiceAbstraction {
       apiUrl: this.environmentService.getApiUrl(),
       identityUrl: this.environmentService.getIdentityUrl(),
       deviceType: this.toDevice(this.platformUtilsService.getDevice()),
-      userAgent: navigator.userAgent,
+      userAgent: this.userAgent ?? navigator.userAgent,
       internal: {
         accessToken: await this.tokenService.getToken(),
         refreshToken: await this.tokenService.getRefreshToken(),
