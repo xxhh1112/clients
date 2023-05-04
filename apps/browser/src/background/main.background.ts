@@ -2,6 +2,7 @@ import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarde
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
@@ -51,6 +52,7 @@ import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-u
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
+import { BitwardenSdkService } from "@bitwarden/common/services/bitwarden-sdk.service";
 import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
@@ -190,6 +192,7 @@ export default class MainBackground {
   cipherContextMenuHandler: CipherContextMenuHandler;
   configService: ConfigServiceAbstraction;
   configApiService: ConfigApiServiceAbstraction;
+  bitwardenSdkService: BitwardenSdkServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -502,6 +505,13 @@ export default class MainBackground {
       this.stateService,
       this.configApiService,
       this.authService
+    );
+
+    this.bitwardenSdkService = new BitwardenSdkService(
+      this.tokenService,
+      this.environmentService,
+      this.platformUtilsService,
+      this.stateService
     );
 
     const systemUtilsServiceReloadCallback = () => {

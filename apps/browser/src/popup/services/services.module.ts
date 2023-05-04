@@ -10,6 +10,7 @@ import { AbstractThemingService } from "@bitwarden/angular/services/theming/them
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -494,6 +495,10 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: DialogServiceAbstraction,
       useClass: BrowserDialogService,
+    },
+    {
+      provide: BitwardenSdkServiceAbstraction,
+      useFactory: getBgService<BitwardenSdkServiceAbstraction>("bitwardenSdkService"),
     },
   ],
 })

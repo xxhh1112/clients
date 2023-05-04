@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -19,6 +20,7 @@ import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { DeviceType } from "@bitwarden/common/enums";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
@@ -84,7 +86,8 @@ export class SettingsComponent implements OnInit {
     private popupUtilsService: PopupUtilsService,
     private modalService: ModalService,
     private keyConnectorService: KeyConnectorService,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    private bitwardenSdkService: BitwardenSdkServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -443,9 +446,11 @@ export class SettingsComponent implements OnInit {
   }
 
   async fingerprint() {
-    const fingerprint = (
-      await this.cryptoService.getFingerprint(await this.stateService.getUserId())
-    ).join("-");
+    const client = await this.bitwardenSdkService.getClient();
+    const fingerprint = await client.fingerprint(
+      await this.stateService.getUserId(),
+      Utils.fromBufferToB64(await this.cryptoService.getPublicKey())
+    );
 
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "yourAccountsFingerprint" },
