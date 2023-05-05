@@ -27,6 +27,9 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   set invalidSecret(value: boolean) {
     this._invalidSecret = value;
     this.invalidSecretChange.emit(value);
+    if (value) {
+      this.secret.markAsTouched();
+    }
     this.secret.updateValueAndValidity({ emitEvent: false });
   }
   @Output() invalidSecretChange = new EventEmitter<boolean>();
