@@ -33,6 +33,7 @@ import { EnvironmentComponent } from "../../auth/environment.component";
     ]),
   ],
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class EnvironmentSelectorComponent implements OnInit {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
