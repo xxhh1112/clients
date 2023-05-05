@@ -64,8 +64,7 @@ import { TaxInfoComponent } from "../billing/settings/tax-info.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
-import { UserVerificationPromptComponent } from "../components/user-verification-prompt.component";
-import { UserVerificationComponent } from "../components/user-verification.component";
+import { UserVerificationModule } from "../components/user-verification";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
@@ -122,6 +121,7 @@ import { SharedModule } from "./shared.module";
     ProductSwitcherModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
+    UserVerificationModule,
   ],
   declarations: [
     PremiumBadgeComponent,
@@ -178,7 +178,6 @@ import { SharedModule } from "./shared.module";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordRepromptComponent,
-    UserVerificationPromptComponent,
     PaymentComponent,
     PaymentMethodComponent,
     PreferencesComponent,
@@ -224,7 +223,6 @@ import { SharedModule } from "./shared.module";
     BillingHistoryViewComponent,
     UserLayoutComponent,
     UserSubscriptionComponent,
-    UserVerificationComponent,
     VaultTimeoutInputComponent,
     VerifyEmailComponent,
     VerifyEmailTokenComponent,
@@ -232,6 +230,7 @@ import { SharedModule } from "./shared.module";
     LowKdfComponent,
   ],
   exports: [
+    UserVerificationModule,
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
     AcceptOrganizationComponent,
@@ -330,7 +329,6 @@ import { SharedModule } from "./shared.module";
     BillingHistoryViewComponent,
     UserLayoutComponent,
     UserSubscriptionComponent,
-    UserVerificationComponent,
     VaultTimeoutInputComponent,
     VerifyEmailComponent,
     VerifyEmailTokenComponent,

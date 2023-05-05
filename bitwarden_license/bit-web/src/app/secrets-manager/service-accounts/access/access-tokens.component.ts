@@ -5,7 +5,7 @@ import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationPromptComponent } from "@bitwarden/web-vault/app/components/user-verification-prompt.component";
+import { UserVerificationPromptComponent } from "@bitwarden/web-vault/app/components/user-verification";
 
 import { AccessTokenView } from "../models/view/access-token.view";
 
