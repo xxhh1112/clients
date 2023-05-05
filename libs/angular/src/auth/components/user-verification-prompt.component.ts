@@ -1,9 +1,10 @@
 import { Directive } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
+import { Verification } from "@bitwarden/common/types/verification";
 
 import { ModalRef } from "../../components/modal/modal.ref";
 import { ModalConfig } from "../../services/modal.service";
@@ -16,7 +17,10 @@ export class UserVerificationPromptComponent {
   confirmDescription = this.config.data.confirmDescription;
   confirmButtonText = this.config.data.confirmButtonText;
   modalTitle = this.config.data.modalTitle;
-  secret = new FormControl();
+
+  formGroup = this.formBuilder.group({
+    secret: this.formBuilder.control<Verification | null>(null),
+  });
 
   constructor(
     private modalRef: ModalRef,
@@ -27,7 +31,11 @@ export class UserVerificationPromptComponent {
     private i18nService: I18nService
   ) {}
 
-  async submit() {
+  get secret() {
+    return this.formGroup.controls.secret;
+  }
+
+  submit = async () => {
     try {
       //Incorrect secret will throw an invalid password error.
       await this.userVerificationService.verifyUser(this.secret.value);
@@ -40,6 +48,10 @@ export class UserVerificationPromptComponent {
       return;
     }
 
-    this.modalRef.close(true);
+    this.close(true);
+  };
+
+  close(success: boolean) {
+    this.modalRef.close(success);
   }
 }
