@@ -27,7 +27,11 @@
 >
   <div class="box-content">
     <div class="environment-selector-dialog" [@transformPanel]="'open'" role="dialog">
-      <button type="button" class="environment-selector-dialog-item" (click)="toggle(ServerEnvironmentType.US)">
+      <button
+        type="button"
+        class="environment-selector-dialog-item"
+        (click)="toggle(ServerEnvironmentType.US)"
+      >
         <i
           class="bwi bwi-fw bwi-sm bwi-check"
           style="padding-bottom: 1px"
@@ -40,7 +44,11 @@
         <span>{{ "us" | i18n }}</span>
       </button>
       <br />
-      <button type="button" class="environment-selector-dialog-item" (click)="toggle(ServerEnvironmentType.EU)">
+      <button
+        type="button"
+        class="environment-selector-dialog-item"
+        (click)="toggle(ServerEnvironmentType.EU)"
+      >
         <i
           class="bwi bwi-fw bwi-sm bwi-check"
           style="padding-bottom: 1px"

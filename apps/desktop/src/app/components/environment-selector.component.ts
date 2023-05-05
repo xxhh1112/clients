@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ConnectedPosition } from "@angular/cdk/overlay";
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
@@ -33,11 +34,9 @@ import { EnvironmentComponent } from "../../auth/environment.component";
     ]),
   ],
 })
-// eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class EnvironmentSelectorComponent implements OnInit {
+export class EnvironmentSelectorComponent implements OnInit, OnDestroy {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
-
   isOpen = false;
   showingModal = false;
   selectedEnvironment: ServerEnvironment;
@@ -51,6 +50,7 @@ export class EnvironmentSelectorComponent implements OnInit {
       overlayY: "top",
     },
   ];
+  private componentDestroyed$: Subject<void> = new Subject();
 
   constructor(
     private modalService: ModalService,
@@ -65,6 +65,11 @@ export class EnvironmentSelectorComponent implements OnInit {
     this.updateEnvironmentInfo();
   }
 
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next();
+    this.componentDestroyed$.complete();
+  }
+
   async toggle(option: ServerEnvironment) {
     this.isOpen = !this.isOpen;
     if (option === ServerEnvironment.EU) {
@@ -76,14 +81,13 @@ export class EnvironmentSelectorComponent implements OnInit {
     }
     this.updateEnvironmentInfo();
   }
+
   async settings() {
     const modal = this.modalService.open(EnvironmentComponent);
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    modal.onShown.subscribe(() => {
+    modal.onShown.pipe(takeUntil(this.componentDestroyed$)).subscribe(() => {
       this.showingModal = true;
     });
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    modal.onClosed.subscribe(() => {
+    modal.onClosed.pipe(takeUntil(this.componentDestroyed$)).subscribe(() => {
       this.showingModal = false;
       this.updateEnvironmentInfo();
     });
