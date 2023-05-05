@@ -1,5 +1,6 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, FormControl, Validators } from "@angular/forms";
+import { Subject, takeUntil } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
@@ -18,7 +19,7 @@ import { Verification } from "@bitwarden/common/types/verification";
   selector: "app-user-verification",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class UserVerificationComponent implements ControlValueAccessor, OnInit {
+export class UserVerificationComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private _invalidSecret = false;
   @Input()
   get invalidSecret() {
@@ -34,7 +35,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   }
   @Output() invalidSecretChange = new EventEmitter<boolean>();
 
-  usesKeyConnector = false;
+  usesKeyConnector = true;
   disableRequestOTP = false;
   sentCode = false;
 
@@ -50,6 +51,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   ]);
 
   private onChange: (value: Verification) => void;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private keyConnectorService: KeyConnectorService,
@@ -61,8 +63,9 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     this.usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
     this.processChanges(this.secret.value);
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.secret.valueChanges.subscribe((secret: string) => this.processChanges(secret));
+    this.secret.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((secret: string) => this.processChanges(secret));
   }
 
   requestOTP = async () => {
@@ -96,6 +99,11 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     } else {
       this.secret.enable();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   protected processChanges(secret: string) {
