@@ -9,7 +9,9 @@
       ></app-user-verification>
     </ng-container>
     <ng-container bitDialogFooter>
-      <button type="submit" bitButton bitFormButton buttonType="primary">Save</button>
+      <button type="submit" bitButton bitFormButton buttonType="primary">
+        {{ confirmButtonText | i18n }}
+      </button>
       <button
         type="button"
         bitButton
@@ -18,7 +20,7 @@
         bitDialogClose
         [bit-dialog-close]=""
       >
-        Cancel
+        {{ "cancel" | i18n }}
       </button>
     </ng-container>
   </bit-dialog>
