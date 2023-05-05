@@ -7,7 +7,7 @@ import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalConfig } from "@bitwarden/angular/services/modal.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 
 export interface UserVerificationPromptParams {
   confirmDescription: string;
