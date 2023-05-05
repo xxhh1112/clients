@@ -4,6 +4,9 @@ import { FormBuilder, Validators } from "@angular/forms";
 
 import { DialogService } from "@bitwarden/components";
 
+import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
+import { CreatePasskeyIcon } from "./create-passkey.icon";
+
 export enum CreateCredentialDialogResult {
   Success,
   Canceled,
@@ -19,6 +22,9 @@ type Step =
   templateUrl: "create-credential-dialog.component.html",
 })
 export class CreateCredentialDialogComponent {
+  protected readonly CreateCredentialDialogResult = CreateCredentialDialogResult;
+  protected readonly Icons = { CreatePasskeyIcon, CreatePasskeyFailedIcon };
+
   protected currentStep: Step = "userVerification";
   protected formGroup = this.formBuilder.group({
     userVerification: this.formBuilder.group({

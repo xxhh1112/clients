@@ -643,6 +643,18 @@
   "passkeyEnterMasterPassword": {
     "message": "Enter your master password to modify log in with passkey settings."
   },
+  "readingPasskeyLoading": {
+    "message": "Reading passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "errorReadingPasskey": {
+    "message": "Error reading passkey"
+  },
+  "errorReadingPasskeyInfo": {
+    "message": "There was a problem reading your passkey."
+  },
   "tryAgain": {
     "message": "Try again"
   },
