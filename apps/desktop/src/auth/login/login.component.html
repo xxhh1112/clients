@@ -28,6 +28,7 @@
           <div class="box-footer" *ngIf="selfHostedDomain">
             {{ "loggingInTo" | i18n : selfHostedDomain }}
           </div>
+          <environment-selector></environment-selector>
         </div>
         <div class="checkbox remember-email">
           <label for="rememberEmail">

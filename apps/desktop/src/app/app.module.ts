@@ -54,6 +54,7 @@ import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-hi
 import { AddEditComponent as SendAddEditComponent } from "./tools/send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "./tools/send/efflux-dates.component";
 import { SendComponent } from "./tools/send/send.component";
+import { EnvironmentSelectorComponent } from "./components/environment-selector.component";
 
 @NgModule({
   imports: [SharedModule, AppRoutingModule, VaultFilterModule, LoginModule],
@@ -101,6 +102,7 @@ import { SendComponent } from "./tools/send/send.component";
     ViewComponent,
     ViewCustomFieldsComponent,
     LoginApprovalComponent,
+    EnvironmentSelectorComponent
   ],
   bootstrap: [AppComponent],
 })

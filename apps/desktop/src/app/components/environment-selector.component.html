@@ -1,0 +1,55 @@
+<button
+  (click)="toggle()"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  aria-haspopup="menu"
+  aria-controls="cdk-overlay-container"
+>
+    {{ "region" | i18n }}:
+    <a>
+        <b>{{ isEuServer ? ("eu" | i18n) : ("us" | i18n) }}</b
+        ><i class="bwi bwi-fw bwi-sm bwi-angle-down" aria-hidden="true"></i>
+    </a>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  (backdropClick)="close()"
+  (detach)="close()"
+  [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayPositions]="overlayPostition"
+  cdkConnectedOverlayMinWidth="250px"
+>
+  <div
+    class="account-switcher-dropdown"
+    [@transformPanel]="'open'"
+    cdkTrapFocus
+    cdkTrapFocusAutoCapture
+    role="dialog"
+    aria-modal="true"
+  >
+  <a href="https://vault.bitwarden.com" style="padding-right: 4px;">
+    <i
+      class="bwi bwi-fw bwi-sm bwi-check"
+      style="padding-bottom: 1px;"
+      aria-hidden="true"
+      [style.visibility]="isEuServer ? 'hidden' : 'visible'"
+    ></i>
+    <img src="../../images/us_flag.png" alt="" style="padding-bottom: 1px; margin-right: 1px;" />
+    {{ "us" | i18n }}
+  </a>
+  <a href="https://vault.bitwarden.eu" style="padding-right: 4px;" *ngIf="euServerFlagEnabled">
+    <i
+      class="bwi bwi-fw bwi-sm bwi-check"
+      style="padding-bottom: 1px;"
+      aria-hidden="true"
+      [style.visibility]="isEuServer ? 'visible' : 'hidden'"
+    ></i>
+    <img src="../../images/eu_flag.png" alt="" style="padding-bottom: 1px; margin-right: 1px;" />
+    {{ "eu" | i18n }}
+  </a>
+  </div>
+</ng-template>
