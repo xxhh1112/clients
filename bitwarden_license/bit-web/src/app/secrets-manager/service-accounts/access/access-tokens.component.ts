@@ -4,7 +4,7 @@ import { combineLatestWith, firstValueFrom, Observable, startWith, switchMap } f
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { openUserVerificationPrompt } from "@bitwarden/web-vault/app/components/user-verification";
+import { openUserVerificationPrompt } from "@bitwarden/web-vault/app/auth/shared/components/user-verification";
 
 import { AccessTokenView } from "../models/view/access-token.view";
 

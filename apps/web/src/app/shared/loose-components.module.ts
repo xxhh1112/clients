@@ -44,6 +44,7 @@ import { TwoFactorVerifyComponent } from "../auth/settings/two-factor-verify.com
 import { TwoFactorWebAuthnComponent } from "../auth/settings/two-factor-webauthn.component";
 import { TwoFactorYubiKeyComponent } from "../auth/settings/two-factor-yubikey.component";
 import { VerifyEmailComponent } from "../auth/settings/verify-email.component";
+import { UserVerificationModule } from "../auth/shared/components/user-verification";
 import { SsoComponent } from "../auth/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/two-factor.component";
@@ -64,7 +65,6 @@ import { TaxInfoComponent } from "../billing/settings/tax-info.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
-import { UserVerificationModule } from "../components/user-verification";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";

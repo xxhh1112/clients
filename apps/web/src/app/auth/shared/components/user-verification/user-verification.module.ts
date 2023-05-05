@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { SharedModule } from "../../shared/shared.module";
+import { SharedModule } from "../../../../shared/shared.module";
 
 import { UserVerificationPromptComponent } from "./user-verification-prompt.component";
 import { UserVerificationComponent } from "./user-verification.component";
