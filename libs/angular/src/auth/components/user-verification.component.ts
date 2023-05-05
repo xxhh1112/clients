@@ -1,6 +1,7 @@
-import { Directive, OnInit } from "@angular/core";
+import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, FormControl, Validators } from "@angular/forms";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
@@ -18,17 +19,39 @@ import { Verification } from "@bitwarden/common/types/verification";
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class UserVerificationComponent implements ControlValueAccessor, OnInit {
+  private _invalidSecret = false;
+  @Input()
+  get invalidSecret() {
+    return this._invalidSecret;
+  }
+  set invalidSecret(value: boolean) {
+    this._invalidSecret = value;
+    this.invalidSecretChange.emit(value);
+    this.secret.updateValueAndValidity({ emitEvent: false });
+  }
+  @Output() invalidSecretChange = new EventEmitter<boolean>();
+
   usesKeyConnector = false;
   disableRequestOTP = false;
   sentCode = false;
 
-  secret = new FormControl("", [Validators.required]);
+  secret = new FormControl("", [
+    Validators.required,
+    () => {
+      if (this.invalidSecret) {
+        return {
+          invalidSecret: { message: this.i18nService.t("incorrectPassword") },
+        };
+      }
+    },
+  ]);
 
   private onChange: (value: Verification) => void;
 
   constructor(
     private keyConnectorService: KeyConnectorService,
-    private userVerificationService: UserVerificationService
+    private userVerificationService: UserVerificationService,
+    private i18nService: I18nService
   ) {}
 
   async ngOnInit() {
@@ -72,7 +95,9 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  private processChanges(secret: string) {
+  protected processChanges(secret: string) {
+    this.invalidSecret = false;
+
     if (this.onChange == null) {
       return;
     }

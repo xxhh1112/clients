@@ -22,6 +22,8 @@ export class UserVerificationPromptComponent {
     secret: this.formBuilder.control<Verification | null>(null),
   });
 
+  protected invalidSecret = false;
+
   constructor(
     private modalRef: ModalRef,
     protected config: ModalConfig,
@@ -45,7 +47,9 @@ export class UserVerificationPromptComponent {
     try {
       //Incorrect secret will throw an invalid password error.
       await this.userVerificationService.verifyUser(this.secret.value);
+      this.invalidSecret = false;
     } catch (e) {
+      this.invalidSecret = true;
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("error"),
