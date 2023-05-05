@@ -16,7 +16,7 @@
 <ng-container *ngIf="usesKeyConnector">
   <div class="tw-mb-6">
     <label class="tw-block">{{ "sendVerificationCode" | i18n }}</label>
-    <button type="button" bitButton buttonType="secondary" [bitAction]="requestOTP">
+    <button type="button" bitButton buttonType="secondary" [bitAction]="requestOTP" appAutofocus>
       {{ "sendCode" | i18n }}
     </button>
     <span class="tw-ml-2 tw-text-success" role="alert" @sent *ngIf="sentCode">
@@ -33,7 +33,6 @@
       id="verificationCode"
       name="verificationCode"
       [formControl]="secret"
-      appAutofocus
       appInputVerbatim
     />
     <bit-hint>{{ "confirmIdentity" | i18n }}</bit-hint>
