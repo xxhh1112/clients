@@ -36,6 +36,12 @@ export class UserVerificationPromptComponent {
   }
 
   submit = async () => {
+    this.formGroup.markAllAsTouched();
+
+    if (this.formGroup.invalid) {
+      return;
+    }
+
     try {
       //Incorrect secret will throw an invalid password error.
       await this.userVerificationService.verifyUser(this.secret.value);
