@@ -28,6 +28,11 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit, 
   set invalidSecret(value: boolean) {
     this._invalidSecret = value;
     this.invalidSecretChange.emit(value);
+
+    // ISSUE: This is pretty hacky but unfortunately there is no way of knowing if the parent
+    // control has been marked as touched, see: https://github.com/angular/angular/issues/10887
+    // When that functionality has been added we should also look into forwarding reactive form
+    // controls errors so that we don't need a separate input/output `invalidSecret`.
     if (value) {
       this.secret.markAsTouched();
     }
