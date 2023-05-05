@@ -19,7 +19,6 @@ interface Animal {
 }
 
 @Component({
-  selector: "app-story-dialog",
   template: `<button bitButton (click)="openDialog()">Open Simple Dialog</button>`,
 })
 class StoryDialogComponent {
@@ -35,7 +34,6 @@ class StoryDialogComponent {
 }
 
 @Component({
-  selector: "story-dialog-content",
   template: `
     <bit-simple-dialog>
       <span bitDialogTitle>Dialog Title</span>
@@ -44,10 +42,10 @@ class StoryDialogComponent {
         <br />
         Animal: {{ animal }}
       </span>
-      <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
+      <ng-container bitDialogFooter>
         <button bitButton buttonType="primary" (click)="dialogRef.close()">Save</button>
         <button bitButton buttonType="secondary" bitDialogClose>Cancel</button>
-      </div>
+      </ng-container>
     </bit-simple-dialog>
   `,
 })

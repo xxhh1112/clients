@@ -5038,7 +5038,7 @@
     "message": "最大 6 人のプレミアム機能へのアクセス"
   },
   "sponsoredFamiliesSharedCollections": {
-    "message": "家族の秘密のための共有されたコレクション"
+    "message": "家族のシークレットのために共有されたコレクション"
   },
   "badToken": {
     "message": "リンクは無効になりました。スポンサーにオファーを再送信してもらってください。"
@@ -5427,6 +5427,15 @@
   "currentOrganization": {
     "message": "現在の組織",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountLoggedInAsName": {
+    "message": "アカウント: $NAME$ としてログインしました",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
   },
   "accountSettings": {
     "message": "アカウント設定"
@@ -6076,7 +6085,7 @@
     "description": "Empty state to be displayed when there are no projects to display in the list."
   },
   "projectsNoItemsMessage": {
-    "message": "秘密を始めるために新しいプロジェクトを追加する。",
+    "message": "シークレットの管理を始めるには新しいプロジェクトを追加してください。",
     "description": "Message to be displayed when there are no projects to display in the list."
   },
   "smConfirmationRequired": {
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "低 KDF イテレーション"
   },
-  "lowKdfIterationsDesc": {
-    "message": "KDF 暗号化設定を増やし、アカウントのセキュリティを向上してください。"
-  },
-  "changeKdfSettings": {
-    "message": "KDF 設定の変更"
+  "updateLowKdfIterationsDesc": {
+    "message": "新しいセキュリティの推奨事項に対応し、アカウントの保護を向上させるために、暗号化設定を更新してください。"
   },
   "changeKdfLoggedOutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "この機能は無料の組織では利用できません。アップグレードするには組織の所有者に連絡してください。"
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "このプロジェクトのシークレットを管理するには、組織の管理者に連絡してください。",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "パスワードを変更するには、メンバーが存在しないといけません"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "このプロジェクトを削除する権限がありません",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "次のプロジェクトは削除できません。続行しますか？",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF の設定を更新する"
   }
 }

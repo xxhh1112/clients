@@ -5428,6 +5428,15 @@
     "message": "Obecna organizacja",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: zalogowano jako $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Ustawienia konta"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Niska liczba iteracji KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Zwiększ ustawienia szyfrowania KDF, aby poprawić bezpieczeństwo swojego konta."
-  },
-  "changeKdfSettings": {
-    "message": "Zmień ustawienia KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Zaktualizuj ustawienia szyfrowania, aby spełnić nowe zalecenia bezpieczeństwa i poprawić ochronę konta."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Kontynuowanie spowoduje wylogowanie ze wszystkich aktywnych sesji. Będzie trzeba zalogować się ponownie i ukończyć konfigurację logowania dwuetapowego. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "Ta funkcja nie jest dostępna dla darmowych organizacji. Skontaktuj się z właścicielem organizacji, aby ją ulepszyć."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Skontaktuj się z administratorem organizacji, aby zarządzać sekretami dla tego projektu.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Wymagaj od istniejących członków zmiany haseł"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Nie masz uprawnień do usunięcia tego projektu",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Następujące projekty nie mogą zostać usunięte. Czy chcesz kontynuować?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Zaktualizuj ustawienia KDF"
   }
 }

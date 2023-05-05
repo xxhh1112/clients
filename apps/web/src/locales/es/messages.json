@@ -5428,6 +5428,15 @@
     "message": "Organización actual",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Cuenta: Sesión iniciada como $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Configuración de la cuenta"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Iteraciones KDF bajas"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Aumente los ajustes de cifrado de KDF para mejorar la seguridad de su cuenta."
-  },
-  "changeKdfSettings": {
-    "message": "Cambiar ajustes de KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Actualice sus ajustes de cifrado para cumplir con las nuevas recomendaciones de seguridad y mejorar la protección de la cuenta."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Al continuar, saldrá de todas las sesiones activas. Deberá volver a iniciar sesión y completar la configuración de inicio de sesión en dos pasos. Le recomendamos que exporte su caja fuerte antes de cambiar la configuración de cifrado para evitar la pérdida de datos."
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "Esta funcionalidad no está disponible para organizaciones gratuitas. Contacte con el propietario de su organización para mejorar."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Póngase en contacto con el administrador de su organización para administrar secretos para este proyecto.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Requiere que los miembros existentes cambien sus contraseñas"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "No tiene permisos para eliminar este proyecto",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Los siguientes proyectos no pueden ser eliminados. ¿Desea continuar?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Actualizar ajustes de KDF"
   }
 }

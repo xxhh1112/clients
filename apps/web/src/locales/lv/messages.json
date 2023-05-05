@@ -5428,6 +5428,15 @@
     "message": "Pašreizējā apvienība",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konts: pierakstījies kā $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Konta iestatījumi"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Zems KDF atkārtojumu skaits"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Jāpaaugstina KDF šifrēšanas iestatījumi, lai uzlabotu konta drošību."
-  },
-  "changeKdfSettings": {
-    "message": "Mainīt KDF iestatījumus"
+  "updateLowKdfIterationsDesc": {
+    "message": "Jāatjaunina šifrēšanas iestatījumi, lai atbilstu jaunajiem drošības ieteikumiem un uzlabotu konta aizsardzību."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Turpinot notiks atteikšanās no visām aktīvām sesijām. Jums būs atkārtoti jāpiesakās un jāveic divpakapāju autentifikācijas uzstādīšana. Mēs iesakām eksportēt savu glabātavu pirms šifrēšanas iestatījumu maiņas lai novērstu datu zudumu."
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "Šī iespēja nav pieejama bezmaksas apvienībām. Jāsazinās ar apvienības īpašnieku, lai uzlabotu."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Jāsazinās ar apvienības pārvaldnieku, lai pārvaldītu šī projekta noslēpumus.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Pieprasīt esošajiem dalībniekiem nomainīt to paroles"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Nav nepieciešamo atļauju, lai izdzēstu šo projektu",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Zemāk esošos projektus nevar izdzēst. Vai turpināt?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Atjaunināt KDF iestatījumus"
   }
 }

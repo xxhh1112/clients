@@ -5428,6 +5428,15 @@
     "message": "Бягучая арганізацыя",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Уліковы запіс: вы ўвайшлі як $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Налады ўліковага запісу"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Нізкае значэнне ітэрацыі KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Наладзьце ўзровень шыфравання KDF, каб удасканаліць бяспеку вашага ўліковага запісу."
-  },
-  "changeKdfSettings": {
-    "message": "Змяніце налады KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Абнавіце свае налады шыфравання, каб адпавядаць новым рэкамендацыям бяспекі і палепшыць абарону ўліковага запісу."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "Гэта функцыя недаступна для бясплатных арганізацый. Звяжыцеся з уладальнікам вашай арганізацыі для паляпшэння."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Звяжыцеся з адміністратарам вашай арганізацыі, каб кіраваць сакрэтамі для гэтага праекта.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Патрабаваць ад існуючых удзельнікаў змены пароляў"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "У вас няма правоў для выдалення гэтага праекта",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Наступныя праекты не могуць быць выдалены. Вы сапраўды хочаце працягнуць?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Абнавіце налады KDF"
   }
 }

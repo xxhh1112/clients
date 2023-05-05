@@ -5428,6 +5428,15 @@
     "message": "Geçerli kuruluş",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Hesap: $NAME$ olarak giriş yapıldı",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Hesap ayarları"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Düşük KDF iterasyonu"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Hesabınızın güvenliğini artırmak için KDF şifreleme ayarlarınızı yükseltin."
-  },
-  "changeKdfSettings": {
-    "message": "KDF ayarlarını değiştir"
+  "updateLowKdfIterationsDesc": {
+    "message": "Yeni güvenlik önerilerini karşılamak ve hesap korumasını iyileştirmek için şifreleme ayarlarınızı güncelleyin."
   },
   "changeKdfLoggedOutWarning": {
     "message": "İşlem, tüm aktif oturumlardan çıkış yapmanızı sağlayacaktır. Tekrar oturum açmanız ve iki adımlı oturum açma kurulumunu tamamlamanız gerekecek. Veri kaybını önlemek için şifreleme ayarlarınızı değiştirmeden önce kasanızı dışa aktarmanızı öneririz."
@@ -6735,7 +6741,22 @@
   "notAvailableForFreeOrganization": {
     "message": "Bu özellik ücretsiz kuruluşlar için mevcut değildir. Yükseltmek için kuruluşunuzun sahibiyle iletişime geçin."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Bu projenin sırlarını yönetmek için kuruluş yöneticinize başvurun.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Mevcut üyelerin parolalarını değiştirmelerini zorunlu tut"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Bu projeyi silme izniniz yok",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Aşağıdaki projeler silinemez. Devam etmek istiyor musunuz?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF ayarlarını güncelle"
   }
 }
