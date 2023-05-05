@@ -1,0 +1,39 @@
+<div class="tw-container tw-mx-auto">
+  <div
+    class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
+  >
+    <div class="tw-mb-6">
+      <img class="logo logo-themed" alt="Bitwarden" />
+    </div>
+
+    <div
+      class="tw-w-full tw-rounded-md tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-p-6"
+    >
+      <h2 bitTypography="h2" class="tw-mb-6">{{ "loginInitiated" | i18n }}</h2>
+
+      <p bitTypography="body1" class="tw-mb-6">{{ "deviceApprovalRequired" | i18n }}</p>
+
+      <form [formGroup]="rememberDeviceForm">
+        <bit-form-control>
+          <input type="checkbox" bitCheckbox formControlName="rememberDevice" />
+          <bit-label>{{ "rememberThisDevice" | i18n }} </bit-label>
+          <bit-hint bitTypography="body2">{{ "uncheckIfPublicDevice" | i18n }}</bit-hint>
+        </bit-form-control>
+      </form>
+
+      <div class="tw-flex tw-flex-col">
+        <button bitButton type="button" buttonType="primary" [block]="true" class="tw-mb-3">
+          {{ "approveFromYourOtherDevice" | i18n }}
+        </button>
+
+        <button bitButton type="button" buttonType="secondary" class="tw-mb-3">
+          {{ "requestAdminApproval" | i18n }}
+        </button>
+
+        <button bitButton type="button" buttonType="secondary">
+          {{ "approveWithMasterPassword" | i18n }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

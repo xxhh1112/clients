@@ -18,6 +18,7 @@ import { AcceptEmergencyComponent } from "./auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "./auth/accept-organization.component";
 import { HintComponent } from "./auth/hint.component";
 import { LockComponent } from "./auth/lock.component";
+import { LoginDecryptionOptionsComponent } from "./auth/login/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "./auth/login/login-with-device.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { RecoverDeleteComponent } from "./auth/recover-delete.component";
@@ -66,6 +67,11 @@ const routes: Routes = [
         data: { titleId: "loginWithDevice" },
       },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
+      {
+        path: "login-initiated",
+        component: LoginDecryptionOptionsComponent,
+        canActivate: [], // TODO: put UnauthGuard back here
+      },
       {
         path: "register",
         component: TrialInitiationComponent,
