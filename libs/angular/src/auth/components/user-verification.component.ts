@@ -1,5 +1,5 @@
 import { Directive, OnInit } from "@angular/core";
-import { ControlValueAccessor, FormControl } from "@angular/forms";
+import { ControlValueAccessor, FormControl, Validators } from "@angular/forms";
 
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
@@ -22,7 +22,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
   disableRequestOTP = false;
   sentCode = false;
 
-  secret = new FormControl("");
+  secret = new FormControl("", [Validators.required]);
 
   private onChange: (value: Verification) => void;
 
@@ -39,7 +39,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
     this.secret.valueChanges.subscribe((secret: string) => this.processChanges(secret));
   }
 
-  async requestOTP() {
+  requestOTP = async () => {
     if (this.usesKeyConnector) {
       this.disableRequestOTP = true;
       try {
@@ -49,7 +49,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit {
         this.disableRequestOTP = false;
       }
     }
-  }
+  };
 
   writeValue(obj: any): void {
     this.secret.setValue(obj);
