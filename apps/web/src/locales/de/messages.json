@@ -5428,6 +5428,15 @@
     "message": "Aktuelle Organisation",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: Angemeldet als $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Kontoeinstellungen"
   },
@@ -6554,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Geringe KDF-Iterationen"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Erhöhe deine KDF-Verschlüsselungseinstellungen, um die Sicherheit deines Kontos zu verbessern."
-  },
-  "changeKdfSettings": {
-    "message": "KDF-Einstellungen ändern"
+  "updateLowKdfIterationsDesc": {
+    "message": "Aktualisiere deine Verschlüsselungseinstellungen, um neue Sicherheitsempfehlungen zu erfüllen und den Kontoschutz zu verbessern."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Wenn du fortfährst, wirst du von allen aktiven Sitzungen abgemeldet. Du musst dich erneut anmelden und die Zwei-Faktor-Authentifizierung durchführen. Wir empfehlen, deinen Tresor zu exportieren, bevor du deine Verschlüsselungseinstellungen änderst, um Datenverluste zu vermeiden."
@@ -6743,11 +6749,14 @@
     "message": "Bestehende Mitglieder auffordern, ihre Passwörter zu ändern"
   },
   "smProjectDeleteAccessRestricted": {
-    "message": "Du hast nicht die Berechtigungen, dieses Projekt zu löschen",
+    "message": "Dir fehlen die Berechtigungen, dieses Projekt zu löschen.",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
     "message": "Die folgenden Projekte können nicht gelöscht werden. Möchtest du fortfahren?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF-Einstellungen aktualisieren"
   }
 }
