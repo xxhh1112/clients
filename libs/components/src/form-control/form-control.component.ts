@@ -20,10 +20,20 @@ export class FormControlComponent {
     this._inline = coerceBooleanProperty(value);
   }
 
+  private _disableMargin = false;
+  @Input() set disableMargin(value: boolean | "") {
+    this._disableMargin = coerceBooleanProperty(value);
+  }
+  get disableMargin() {
+    return this._disableMargin;
+  }
+
   @ContentChild(BitFormControlAbstraction) protected formControl: BitFormControlAbstraction;
 
   @HostBinding("class") get classes() {
-    return ["tw-mb-6"].concat(this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"]);
+    return []
+      .concat(this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"])
+      .concat(this.disableMargin ? ["tw-mb-2"] : ["tw-mb-6"]);
   }
 
   constructor(private i18nService: I18nService) {}

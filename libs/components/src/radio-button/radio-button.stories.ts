@@ -1,5 +1,11 @@
 import { Component, Input } from "@angular/core";
-import { FormsModule, ReactiveFormsModule, FormBuilder } from "@angular/forms";
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  FormControl,
+} from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -7,6 +13,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { RadioButtonModule } from "./radio-button.module";
+import { RadioGroupComponent } from "./radio-group.component";
 
 const template = `
   <form [formGroup]="formObj">
@@ -136,9 +143,34 @@ Inline.args = {
   layout: "inline",
 };
 
-const BlockTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
-  props: args,
-  template: storyTemplate,
+const BlockTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
+  props: {
+    formObj: new FormGroup({
+      radio: new FormControl(0),
+    }),
+  },
+  template: `
+    <form [formGroup]="formObj">
+      <bit-radio-group formControlName="radio" aria-label="Example radio group" [block]="true">
+        <bit-label>Group of radio buttons</bit-label>
+
+        <bit-radio-button id="radio-first" [value]="0">
+          <bit-label>First</bit-label>
+          <bit-hint>This is a hint for the first option</bit-hint>
+        </bit-radio-button>
+
+        <bit-radio-button id="radio-second" [value]="1">
+          <bit-label>Second</bit-label>
+          <bit-hint>This is a hint for the second option</bit-hint>
+        </bit-radio-button>
+
+        <bit-radio-button id="radio-third" [value]="2">
+          <bit-label>Third</bit-label>
+          <bit-hint>This is a hint for the third option</bit-hint>
+        </bit-radio-button>
+      </bit-radio-group>
+    </form>
+  `,
 });
 
 export const Block = BlockTemplate.bind({});
