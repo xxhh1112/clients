@@ -2,7 +2,7 @@ import { DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
-import { DialogService } from "@bitwarden/components";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
@@ -82,7 +82,7 @@ export class CreateCredentialDialogComponent {
  * @param config Configuration for the dialog
  */
 export const openCreateCredentialDialog = (
-  dialogService: DialogService,
+  dialogService: DialogServiceAbstraction,
   config: DialogConfig<unknown>
 ) => {
   return dialogService.open<CreateCredentialDialogResult, unknown>(

@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { SharedModule } from "../../shared/shared.module";
+import { SharedModule } from "../../../shared/shared.module";
 
 import { CreateCredentialDialogComponent } from "./create-credential-dialog/create-credential-dialog.component";
 import { Fido2LoginSettingsComponent } from "./fido2-login-settings.component";

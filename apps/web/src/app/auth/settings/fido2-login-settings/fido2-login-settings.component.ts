@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 
-import { DialogService } from "@bitwarden/components";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
 import {
   CreateCredentialDialogResult,
@@ -13,7 +13,7 @@ import {
   templateUrl: "fido2-login-settings.component.html",
 })
 export class Fido2LoginSettingsComponent {
-  constructor(private dialogService: DialogService) {}
+  constructor(private dialogService: DialogServiceAbstraction) {}
 
   protected async createCredential() {
     const dialogRef = openCreateCredentialDialog(this.dialogService, {});

@@ -35,6 +35,7 @@ import { EmergencyAccessTakeoverComponent } from "../auth/settings/emergency-acc
 import { EmergencyAccessViewComponent } from "../auth/settings/emergency-access/emergency-access-view.component";
 import { EmergencyAccessComponent } from "../auth/settings/emergency-access/emergency-access.component";
 import { EmergencyAddEditComponent } from "../auth/settings/emergency-access/emergency-add-edit.component";
+import { Fido2LoginSettingsModule } from "../auth/settings/fido2-login-settings";
 import { TwoFactorAuthenticatorComponent } from "../auth/settings/two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "../auth/settings/two-factor-duo.component";
 import { TwoFactorEmailComponent } from "../auth/settings/two-factor-email.component";
@@ -80,7 +81,6 @@ import { ChangeKdfModule } from "../settings/change-kdf/change-kdf.module";
 import { ChangePasswordComponent } from "../settings/change-password.component";
 import { DeleteAccountComponent } from "../settings/delete-account.component";
 import { DomainRulesComponent } from "../settings/domain-rules.component";
-import { Fido2LoginSettingsModule } from "../settings/fido2-login-settings/fido2-login-settings.module";
 import { LowKdfComponent } from "../settings/low-kdf.component";
 import { PreferencesComponent } from "../settings/preferences.component";
 import { PremiumComponent } from "../settings/premium.component";
@@ -123,7 +123,7 @@ import { SharedModule } from "./shared.module";
     ProductSwitcherModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
-    Fido2LoginSettingsModule, // TODO: Move to AuthModule when it is created
+    Fido2LoginSettingsModule, // TODO: Remove when `app/settings/change-password.component.ts` has been moved to `app/auth/settings/.`
   ],
   declarations: [
     PremiumBadgeComponent,
