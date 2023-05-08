@@ -643,17 +643,17 @@
   "passkeyEnterMasterPassword": {
     "message": "Enter your master password to modify log in with passkey settings."
   },
-  "readingPasskeyLoading": {
-    "message": "Reading passkey..."
+  "creatingPasskeyLoading": {
+    "message": "Creating passkey..."
   },
-  "readingPasskeyLoadingInfo": {
+  "creatingPasskeyLoadingInfo": {
     "message": "Keep this window open and follow prompts from your browser."
   },
-  "errorReadingPasskey": {
-    "message": "Error reading passkey"
+  "errorCreatingPasskey": {
+    "message": "Error creating passkey"
   },
-  "errorReadingPasskeyInfo": {
-    "message": "There was a problem reading your passkey."
+  "errorCreatingPasskeyInfo": {
+    "message": "There was a problem creating your passkey."
   },
   "tryAgain": {
     "message": "Try again"
