@@ -1,6 +1,5 @@
 /* eslint-disable no-var, no-console, no-prototype-builtins */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix
-// them all now
+// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix them all now
 
 /*
   1Password Extension
@@ -56,32 +55,38 @@ import AutofillScript, {
   FillScript,
   FillScriptOp,
 } from "../models/autofill-script";
+import { AutofillDocument, ElementWithOpId, FillableControl, FormElement } from "../types";
+import {
+  // collect utils
+  addProp,
+  checkNodeType,
+  focusElement,
+  getElementAttrValue,
+  getElementForOPID,
+  getElementValue,
+  getFormElements,
+  getLabelTop,
+  getSelectElementOptions,
+  isElementViewable,
+  isElementVisible,
+  isKnownTag,
+  queryDoc,
+  shiftForLeftLabel,
+  toLowerString,
 
-/**
- * The Document with additional custom properties added by this script
- */
-type AutofillDocument = Document & {
-  elementsByOPID: Record<string, Element>;
-  elementForOPID: (opId: string) => Element;
-};
-
-/**
- * A HTMLElement (usually a form element) with additional custom properties added by this script
- */
-type ElementWithOpId<T> = T & {
-  opid: string;
-};
-
-/**
- * This script's definition of a Form Element (only a subset of HTML form elements)
- * This is defined by getFormElements
- */
-type FormElement = HTMLInputElement | HTMLSelectElement | HTMLSpanElement;
-
-/**
- * A Form Element that we can set a value on (fill)
- */
-type FillableControl = HTMLInputElement | HTMLSelectElement;
+  // fill utils
+  urlNotSecure,
+  canSeeElementToStyle,
+  selectAllFromDoc,
+  getElementByOpId,
+  setValueForElementByEvent,
+  setValueForElement,
+  doClickByOpId,
+  touchAllFields,
+  doClickByQuery,
+  doFocusByOpId,
+  doSimpleSetByQuery,
+} from "../utils";
 
 function collect(document: Document) {
   // START MODIFICATION
@@ -91,121 +96,28 @@ function collect(document: Document) {
 
   (document as AutofillDocument).elementsByOPID = {};
 
+  /**
+   * Do the event on the element.
+   * @param {HTMLElement} kedol The element to do the event on
+   * @param {string} fonor The event name
+   * @returns
+   */
+  function doEventOnElement(kedol: HTMLElement, fonor: string) {
+    var quebo: any;
+    isFirefox
+      ? ((quebo = document.createEvent("KeyboardEvent")),
+        quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
+      : ((quebo = kedol.ownerDocument.createEvent("Events")),
+        quebo.initEvent(fonor, true, false),
+        (quebo.charCode = 0),
+        (quebo.keyCode = 0),
+        (quebo.which = 0),
+        (quebo.srcElement = kedol),
+        (quebo.target = kedol));
+    return quebo;
+  }
+
   function getPageDetails(theDoc: Document, oneShotId: string) {
-    // start helpers
-
-    /**
-     * For a given element `el`, returns the value of the attribute `attrName`.
-     * @param {HTMLElement} el
-     * @param {string} attrName
-     * @returns {string} The value of the attribute
-     */
-    function getElementAttrValue(el: any, attrName: string) {
-      var attrVal = el[attrName];
-      if ("string" == typeof attrVal) {
-        return attrVal;
-      }
-      attrVal = el.getAttribute(attrName);
-      return "string" == typeof attrVal ? attrVal : null;
-    }
-
-    /**
-     * Returns the value of the given element.
-     * @param {HTMLElement} el
-     * @returns {any} Value of the element
-     */
-    function getElementValue(el: any) {
-      switch (toLowerString(el.type)) {
-        case "checkbox":
-          return el.checked ? "✓" : "";
-
-        case "hidden":
-          el = el.value;
-          if (!el || "number" != typeof el.length) {
-            return "";
-          }
-          254 < el.length && (el = el.substr(0, 254) + "...SNIPPED");
-          return el;
-
-        default:
-          // START MODIFICATION
-          if (!el.type && el.tagName.toLowerCase() === "span") {
-            return el.innerText;
-          }
-          // END MODIFICATION
-          return el.value;
-      }
-    }
-
-    /**
-     * If `el` is a `<select>` element, return an array of all of the options' `text` properties.
-     */
-    function getSelectElementOptions(el: HTMLSelectElement): { options: string[] } {
-      if (!el.options) {
-        return null;
-      }
-
-      var options = Array.prototype.slice
-        .call(el.options)
-        .map(function (option: HTMLOptionElement) {
-          var optionText = option.text
-            ? toLowerString(option.text)
-                .replace(/\\s/gm, "")
-                // eslint-disable-next-line no-useless-escape
-                .replace(/[~`!@$%^&*()\\-_+=:;'\"\\[\\]|\\\\,<.>\\?]/gm, "")
-            : null;
-
-          return [optionText ? optionText : null, option.value];
-        });
-
-      return {
-        options: options,
-      };
-    }
-
-    /**
-     * If `el` is in a data table, get the label in the row directly above it
-     * @param {HTMLElement} el
-     * @returns {string} A string containing the label, or null if not found
-     */
-    function getLabelTop(el: any) {
-      var parent;
-
-      // Traverse up the DOM until we reach either the top or the table data element containing our field
-      for (el = el.parentElement || el.parentNode; el && "td" != toLowerString(el.tagName); ) {
-        el = el.parentElement || el.parentNode;
-      }
-
-      // If we reached the top, return null
-      if (!el || void 0 === el) {
-        return null;
-      }
-
-      // Establish the parent of the table and make sure it's a table row
-      parent = el.parentElement || el.parentNode;
-      if ("tr" != parent.tagName.toLowerCase()) {
-        return null;
-      }
-
-      // Get the previous sibling of the table row and make sure it's a table row
-      parent = parent.previousElementSibling;
-      if (
-        !parent ||
-        "tr" != (parent.tagName + "").toLowerCase() ||
-        (parent.cells && el.cellIndex >= parent.cells.length)
-      ) {
-        return null;
-      }
-
-      // Parent is established as the row above the table data element containing our field
-      // Now let's traverse over to the cell in the same column as our field
-      el = parent.cells[el.cellIndex];
-
-      // Get the contents of this label
-      var elText = el.textContent || el.innerText;
-      return (elText = cleanText(elText));
-    }
-
     /**
      * Get the contents of the elements that are labels for `el`
      * @param {HTMLElement} el
@@ -278,42 +190,6 @@ function collect(document: Document) {
         })
         .join("");
     }
-
-    /**
-     * Add property `prop` with value `val` to the object `obj`
-     * @param {*} d unknown
-     */
-    function addProp(obj: Record<string, any>, prop: string, val: any, d?: unknown) {
-      if ((0 !== d && d === val) || null === val || void 0 === val) {
-        return;
-      }
-
-      obj[prop] = val;
-    }
-
-    /**
-     * Converts the string `s` to lowercase
-     * @param {string} s
-     * @returns Lowercase string
-     */
-    function toLowerString(s: string) {
-      return "string" === typeof s ? s.toLowerCase() : ("" + s).toLowerCase();
-    }
-
-    /**
-     * Query the document `doc` for elements matching the selector `selector`
-     */
-    function queryDoc<T extends Element = Element>(doc: Document, query: string): Array<T> {
-      var els: Array<T> = [];
-      try {
-        // Technically this returns a NodeListOf<Element> but it's ducktyped as an Array everywhere, so return it as an array here
-        els = doc.querySelectorAll(query) as unknown as Array<T>;
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-      return els;
-    }
-
-    // end helpers
 
     var theView = theDoc.defaultView ? theDoc.defaultView : window;
 
@@ -428,10 +304,6 @@ function collect(document: Document) {
           field.form = getElementAttrValue((el as FillableControl).form, "opid");
         }
 
-        // START MODIFICATION
-        //addProp(field, 'fakeTested', checkIfFakeTested(field, el), false);
-        // END MODIFICATION
-
         return field;
       });
 
@@ -498,353 +370,12 @@ function collect(document: Document) {
 
   (document as AutofillDocument).elementForOPID = getElementForOPID;
 
-  /**
-   * Do the event on the element.
-   * @param {HTMLElement} kedol The element to do the event on
-   * @param {string} fonor The event name
-   * @returns
-   */
-  function doEventOnElement(kedol: HTMLElement, fonor: string) {
-    var quebo: any;
-    isFirefox
-      ? ((quebo = document.createEvent("KeyboardEvent")),
-        quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
-      : ((quebo = kedol.ownerDocument.createEvent("Events")),
-        quebo.initEvent(fonor, true, false),
-        (quebo.charCode = 0),
-        (quebo.keyCode = 0),
-        (quebo.which = 0),
-        (quebo.srcElement = kedol),
-        (quebo.target = kedol));
-    return quebo;
-  }
-
-  /**
-   * Clean up the string `s` to remove non-printable characters and whitespace.
-   * @param {string} s
-   * @returns {string} Clean text
-   */
-  function cleanText(s: string): string {
-    var sVal = null;
-    s &&
-      ((sVal = s.replace(/^\\s+|\\s+$|\\r?\\n.*$/gm, "")), (sVal = 0 < sVal.length ? sVal : null));
-    return sVal;
-  }
-
-  /**
-   * If `el` is a text node, add the node's text to `arr`.
-   * If `el` is an element node, add the element's `textContent or `innerText` to `arr`.
-   * @param {string[]} arr An array of `textContent` or `innerText` values
-   * @param {HTMLElement} el The element to push to the array
-   */
-  function checkNodeType(arr: string[], el: Node) {
-    var theText = "";
-    3 === el.nodeType
-      ? (theText = el.nodeValue)
-      : 1 === el.nodeType && (theText = el.textContent || (el as HTMLElement).innerText);
-    (theText = cleanText(theText)) && arr.push(theText);
-  }
-
-  /**
-   * Check if `el` is a type that indicates the transition to a new section of the page.
-   * If so, this indicates that we should not use `el` or its children for getting autofill context for the previous element.
-   * @param {HTMLElement} el The element to check
-   * @returns {boolean} Returns `true` if `el` is an HTML element from a known set and `false` otherwise
-   */
-  function isKnownTag(el: any) {
-    if (el && void 0 !== el) {
-      var tags = "select option input form textarea button table iframe body head script".split(
-        " "
-      );
-
-      if (el) {
-        var elTag = el ? (el.tagName || "").toLowerCase() : "";
-        return tags.constructor == Array ? 0 <= tags.indexOf(elTag) : elTag === tags;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  /**
-   * Recursively gather all of the text values from the elements preceding `el` in the DOM
-   * @param {HTMLElement} el
-   * @param {string[]} arr An array of `textContent` or `innerText` values
-   * @param {number} steps The number of steps to take up the DOM tree
-   */
-  function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
-    var sib;
-    for (steps || (steps = 0); el && el.previousSibling; ) {
-      el = el.previousSibling;
-      if (isKnownTag(el)) {
-        return;
-      }
-
-      checkNodeType(arr, el);
-    }
-    if (el && 0 === arr.length) {
-      for (sib = null; !sib; ) {
-        el = el.parentElement || el.parentNode;
-        if (!el) {
-          return;
-        }
-        for (sib = el.previousSibling; sib && !isKnownTag(sib) && sib.lastChild; ) {
-          sib = sib.lastChild;
-        }
-      }
-
-      // base case and recurse
-      isKnownTag(sib) ||
-        (checkNodeType(arr, sib), 0 === arr.length && shiftForLeftLabel(sib, arr, steps + 1));
-    }
-  }
-
-  /**
-   * Determine if the element is visible.
-   * Visible is define as not having `display: none` or `visibility: hidden`.
-   * @param {HTMLElement} el
-   * @returns {boolean} Returns `true` if the element is visible and `false` otherwise
-   */
-  function isElementVisible(el: any) {
-    var theEl = el;
-    // Get the top level document
-    // eslint-disable-next-line no-cond-assign
-    el = (el = el.ownerDocument) ? el.defaultView : {};
-
-    // walk the dom tree until we reach the top
-    for (var elStyle; theEl && theEl !== document; ) {
-      // Calculate the style of the element
-      elStyle = el.getComputedStyle ? el.getComputedStyle(theEl, null) : theEl.style;
-      // If there's no computed style at all, we're done, as we know that it's not hidden
-      if (!elStyle) {
-        return true;
-      }
-
-      // If the element's computed style includes `display: none` or `visibility: hidden`, we know it's hidden
-      if ("none" === elStyle.display || "hidden" == elStyle.visibility) {
-        return false;
-      }
-
-      // At this point, we aren't sure if the element is hidden or not, so we need to keep walking up the tree
-      theEl = theEl.parentNode;
-    }
-
-    return theEl === document;
-  }
-
-  /**
-   * Determine if the element is "viewable" on the screen.
-   * "Viewable" is defined as being visible in the DOM and being within the confines of the viewport.
-   * @param {HTMLElement} el
-   * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
-   */
-  function isElementViewable(el: FormElement) {
-    var theDoc = el.ownerDocument.documentElement,
-      rect = el.getBoundingClientRect(), // getBoundingClientRect is relative to the viewport
-      docScrollWidth = theDoc.scrollWidth, // scrollWidth is the width of the document including any overflow
-      docScrollHeight = theDoc.scrollHeight, // scrollHeight is the height of the document including any overflow
-      leftOffset = rect.left - theDoc.clientLeft, // How far from the left of the viewport is the element, minus the left border width?
-      topOffset = rect.top - theDoc.clientTop, // How far from the top of the viewport is the element, minus the top border width?
-      theRect;
-
-    if (!isElementVisible(el) || !el.offsetParent || 10 > el.clientWidth || 10 > el.clientHeight) {
-      return false;
-    }
-
-    var rects = el.getClientRects();
-    if (0 === rects.length) {
-      return false;
-    }
-
-    // If any of the rects have a left side that is further right than the document width or a right side that is
-    // further left than the origin (i.e. is negative), we consider the element to be not viewable
-    for (var i = 0; i < rects.length; i++) {
-      if (((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)) {
-        return false;
-      }
-    }
-
-    // If the element is further left than the document width, or further down than the document height, we know that it's not viewable
-    if (
-      0 > leftOffset ||
-      leftOffset > docScrollWidth ||
-      0 > topOffset ||
-      topOffset > docScrollHeight
-    ) {
-      return false;
-    }
-
-    // Our next check is going to get the center point of the element, and then use elementFromPoint to see if the element
-    // is actually returned from that point. If it is, we know that it's viewable. If it isn't, we know that it's not viewable.
-    // If the right side of the bounding rectangle is outside the viewport, the x coordinate of the center point is the window width (minus offset) divided by 2.
-    // If the right side of the bounding rectangle is inside the viewport, the x coordinate of the center point is the width of the bounding rectangle divided by 2.
-    // If the bottom of the bounding rectangle is outside the viewport, the y coordinate of the center point is the window height (minus offset) divided by 2.
-    // If the bottom side of the bounding rectangle is inside the viewport, the y coordinate of the center point is the height of the bounding rectangle divided by
-    // We then use elementFromPoint to find the element at that point.
-    for (
-      var pointEl = el.ownerDocument.elementFromPoint(
-        leftOffset +
-          (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2),
-        topOffset +
-          (rect.bottom > window.innerHeight
-            ? (window.innerHeight - topOffset) / 2
-            : rect.height / 2)
-      );
-      pointEl && pointEl !== el && pointEl !== (document as unknown as Element);
-
-    ) {
-      // If the element we found is a label, and the element we're checking has labels
-      if (
-        pointEl.tagName &&
-        "string" === typeof pointEl.tagName &&
-        "label" === pointEl.tagName.toLowerCase() &&
-        (el as FillableControl).labels &&
-        0 < (el as FillableControl).labels.length
-      ) {
-        // Return true if the element we found is one of the labels for the element we're checking.
-        // This means that the element we're looking for is considered viewable
-        return 0 <= Array.prototype.slice.call((el as FillableControl).labels).indexOf(pointEl);
-      }
-
-      // Walk up the DOM tree to check the parent element
-      pointEl = pointEl.parentNode as Element;
-    }
-
-    // If the for loop exited because we found the element we're looking for, return true, as it's viewable
-    // If the element that we found isn't the element we're looking for, it means the element we're looking for is not viewable
-    return pointEl === el;
-  }
-
-  /**
-   * Retrieve the element from the document with the specified `opid` property
-   * @param {number} opId
-   * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
-   */
-  function getElementForOPID(opId: string): Element {
-    var theEl;
-    if (void 0 === opId || null === opId) {
-      return null;
-    }
-
-    try {
-      var formEls = Array.prototype.slice.call(getFormElements(document));
-      var filteredFormEls = formEls.filter(function (el: ElementWithOpId<FormElement>) {
-        return el.opid == opId;
-      });
-
-      if (0 < filteredFormEls.length) {
-        (theEl = filteredFormEls[0]),
-          1 < filteredFormEls.length &&
-            console.warn("More than one element found with opid " + opId);
-      } else {
-        var theIndex = parseInt(opId.split("__")[1], 10);
-        isNaN(theIndex) || (theEl = formEls[theIndex]);
-      }
-    } catch (e) {
-      console.error("An unexpected error occurred: " + e);
-    } finally {
-      // eslint-disable-next-line no-unsafe-finally
-      return theEl;
-    }
-  }
-
-  /**
-   * Query `theDoc` for form elements that we can use for autofill, ranked by importance and limited by `limit`
-   * @param {Document} theDoc The Document to query
-   * @param {number} limit The maximum number of elements to return
-   * @returns An array of HTMLElements
-   */
-  function getFormElements(theDoc: Document, limit?: number): FormElement[] {
-    // START MODIFICATION
-    var els: FormElement[] = [];
-    try {
-      var elsList = theDoc.querySelectorAll(
-        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
-          ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, ' +
-          "span[data-bwautofill]"
-      );
-      els = Array.prototype.slice.call(elsList);
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-
-    if (!limit || els.length <= limit) {
-      return els;
-    }
-
-    // non-checkboxes/radios have higher priority
-    var returnEls = [];
-    var unimportantEls = [];
-    for (var i = 0; i < els.length; i++) {
-      if (returnEls.length >= limit) {
-        break;
-      }
-
-      var el = els[i];
-      var type = (el as HTMLInputElement).type
-        ? (el as HTMLInputElement).type.toLowerCase()
-        : (el as HTMLInputElement).type;
-      if (type === "checkbox" || type === "radio") {
-        unimportantEls.push(el);
-      } else {
-        returnEls.push(el);
-      }
-    }
-
-    var unimportantElsToAdd = limit - returnEls.length;
-    if (unimportantElsToAdd > 0) {
-      returnEls = returnEls.concat(unimportantEls.slice(0, unimportantElsToAdd));
-    }
-
-    return returnEls;
-    // END MODIFICATION
-  }
-
-  /**
-   * Focus the element `el` and optionally restore its original value
-   * @param {HTMLElement} el
-   * @param {boolean} setVal Set the value of the element to its original value
-   */
-  function focusElement(el: FillableControl, setVal: boolean) {
-    if (setVal) {
-      var initialValue = el.value;
-      el.focus();
-
-      if (el.value !== initialValue) {
-        el.value = initialValue;
-      }
-    } else {
-      el.focus();
-    }
-  }
-
   return JSON.stringify(getPageDetails(document, "oneshotUUID"));
 }
 
 function fill(document: Document, fillScript: AutofillScript) {
   var markTheFilling = true,
     animateTheFilling = true;
-
-  // Check if URL is not secure when the original saved one was
-  function urlNotSecure(savedURLs: string[]) {
-    var passwordInputs = null;
-    if (!savedURLs) {
-      return false;
-    }
-
-    let confirmResult: any; // Boolean but we want to allow weak comparisons for compatibility with existing code
-    return savedURLs.some((url) => url?.indexOf("https://") === 0) &&
-      "http:" === document.location.protocol &&
-      ((passwordInputs = document.querySelectorAll("input[type=password]")),
-      0 < passwordInputs.length &&
-        ((confirmResult = confirm(
-          "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page.\n\nDo you still wish to fill this login?"
-        )),
-        0 == confirmResult))
-      ? true
-      : false;
-  }
 
   // Detect if within an iframe, and the iframe is sandboxed
   function isSandboxed() {
@@ -995,72 +526,6 @@ function fill(document: Document, fillScript: AutofillScript) {
     );
   }
 
-  /**
-   * Assign `valueToSet` to all elements in the DOM that match `query`.
-   * @param {string} query
-   * @param {string} valueToSet
-   * @returns {Array} Array of elements that were set.
-   */
-  function doSimpleSetByQuery(query: string, valueToSet: string): FillableControl[] {
-    var elements = selectAllFromDoc(query),
-      arr: FillableControl[] = [];
-    Array.prototype.forEach.call(
-      Array.prototype.slice.call(elements),
-      function (el: FillableControl) {
-        el.disabled ||
-          (el as any).a ||
-          (el as HTMLInputElement).readOnly ||
-          void 0 === el.value ||
-          ((el.value = valueToSet), arr.push(el));
-      }
-    );
-    return arr;
-  }
-
-  /**
-   * Do a a click and focus on the element with the given `opId`.
-   * @param {number} opId
-   * @returns
-   */
-  function doFocusByOpId(opId: string): null {
-    var el = getElementByOpId(opId) as FillableControl;
-    if (el) {
-      "function" === typeof el.click && el.click(),
-        "function" === typeof el.focus && doFocusElement(el, true);
-    }
-
-    return null;
-  }
-
-  /**
-   * Do a click on the element with the given `opId`.
-   * @param {number} opId
-   * @returns
-   */
-  function doClickByOpId(opId: string) {
-    var el = getElementByOpId(opId) as FillableControl;
-    return el ? (clickElement(el) ? [el] : null) : null;
-  }
-
-  /**
-   * Do a `click` and `focus` on all elements that match the query.
-   * @param {string} query
-   * @returns
-   */
-  function doClickByQuery(query: string) {
-    query = selectAllFromDoc(query) as any; // string parameter has been reassigned and is now a NodeList
-    return Array.prototype.map.call(
-      Array.prototype.slice.call(query),
-      function (el: HTMLInputElement) {
-        clickElement(el);
-        "function" === typeof el.click && el.click();
-        "function" === typeof el.focus && doFocusElement(el, true);
-        return [el];
-      },
-      this
-    );
-  }
-
   var checkRadioTrueOps: Record<string, boolean> = {
       true: true,
       y: true,
@@ -1071,7 +536,7 @@ function fill(document: Document, fillScript: AutofillScript) {
     styleTimeout = 200;
 
   /**
-   * Fll an element `el` using the value `op` from the fill script
+   * Fill an element `el` using the value `op` from the fill script
    * @param {HTMLElement} el
    * @param {string} op
    */
@@ -1130,7 +595,7 @@ function fill(document: Document, fillScript: AutofillScript) {
     setValueForElementByEvent(el);
 
     // START MODIFICATION
-    if (canSeeElementToStyle(el)) {
+    if (canSeeElementToStyle(el, animateTheFilling)) {
       el.classList.add("com-bitwarden-browser-animated-fill");
       setTimeout(function () {
         if (el) {
@@ -1142,218 +607,6 @@ function fill(document: Document, fillScript: AutofillScript) {
   }
 
   (document as AutofillDocument).elementForOPID = getElementByOpId;
-
-  /**
-   * Normalize the event based on API support
-   * @param {HTMLElement} el
-   * @param {string} eventName
-   * @returns {Event} A normalized event
-   */
-  function normalizeEvent(el: FillableControl, eventName: string) {
-    var ev: any;
-    if ("KeyboardEvent" in window) {
-      ev = new window.KeyboardEvent(eventName, {
-        bubbles: true,
-        cancelable: false,
-      });
-    } else {
-      ev = el.ownerDocument.createEvent("Events");
-      ev.initEvent(eventName, true, false);
-      ev.charCode = 0;
-      ev.keyCode = 0;
-      ev.which = 0;
-      ev.srcElement = el;
-      ev.target = el;
-    }
-
-    return ev;
-  }
-
-  /**
-   * Simulate the entry of a value into an element.
-   * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.
-   * @param {HTMLElement} el
-   */
-  function setValueForElement(el: FillableControl) {
-    var valueToSet = el.value;
-    clickElement(el);
-    doFocusElement(el, false);
-    el.dispatchEvent(normalizeEvent(el, "keydown"));
-    el.dispatchEvent(normalizeEvent(el, "keypress"));
-    el.dispatchEvent(normalizeEvent(el, "keyup"));
-    el.value !== valueToSet && (el.value = valueToSet);
-  }
-
-  /**
-   * Simulate the entry of a value into an element by using events.
-   * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
-   * @param {HTMLElement} el
-   */
-  function setValueForElementByEvent(el: FillableControl) {
-    var valueToSet = el.value,
-      ev1 = el.ownerDocument.createEvent("HTMLEvents"),
-      ev2 = el.ownerDocument.createEvent("HTMLEvents");
-
-    el.dispatchEvent(normalizeEvent(el, "keydown"));
-    el.dispatchEvent(normalizeEvent(el, "keypress"));
-    el.dispatchEvent(normalizeEvent(el, "keyup"));
-    ev2.initEvent("input", true, true);
-    el.dispatchEvent(ev2);
-    ev1.initEvent("change", true, true);
-    el.dispatchEvent(ev1);
-    el.blur();
-    el.value !== valueToSet && (el.value = valueToSet);
-  }
-
-  /**
-   * Click on an element `el`
-   * @param {HTMLElement} el
-   * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
-   */
-  function clickElement(el: HTMLElement) {
-    if (!el || (el && "function" !== typeof el.click)) {
-      return false;
-    }
-    el.click();
-    return true;
-  }
-
-  /**
-   * Get all the elements on the DOM that are likely to be a password field
-   * @returns {Array} Array of elements
-   */
-  function getAllFields(): HTMLInputElement[] {
-    var r = RegExp(
-      "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
-      "i"
-    );
-    return Array.prototype.slice
-      .call(selectAllFromDoc("input[type='text']"))
-      .filter(function (el: HTMLInputElement) {
-        return el.value && r.test(el.value);
-      }, this);
-  }
-
-  /**
-   * Touch all the fields
-   */
-  function touchAllFields() {
-    getAllFields().forEach(function (el) {
-      setValueForElement(el);
-      el.click && el.click();
-      setValueForElementByEvent(el);
-    });
-  }
-
-  /**
-   * Determine if we can apply styling to `el` to indicate that it was filled.
-   * @param {HTMLElement} el
-   * @returns {boolean} Returns true if we can see the element to apply styling.
-   */
-  function canSeeElementToStyle(el: HTMLElement) {
-    var currentEl: any;
-    if ((currentEl = animateTheFilling)) {
-      a: {
-        currentEl = el;
-        for (
-          var owner: any = el.ownerDocument, owner = owner ? owner.defaultView : {}, theStyle;
-          currentEl && currentEl !== document;
-
-        ) {
-          theStyle = owner.getComputedStyle
-            ? owner.getComputedStyle(currentEl, null)
-            : currentEl.style;
-          if (!theStyle) {
-            currentEl = true;
-            break a;
-          }
-          if ("none" === theStyle.display || "hidden" == theStyle.visibility) {
-            currentEl = false;
-            break a;
-          }
-          currentEl = currentEl.parentNode;
-        }
-        currentEl = currentEl === document;
-      }
-    }
-    // START MODIFICATION
-    if (el && !(el as FillableControl).type && el.tagName.toLowerCase() === "span") {
-      return true;
-    }
-    // END MODIFICATION
-    return currentEl
-      ? -1 !==
-          "email text password number tel url"
-            .split(" ")
-            .indexOf((el as HTMLInputElement).type || "")
-      : false;
-  }
-
-  /**
-   * Find the element for the given `opid`.
-   * @param {number} theOpId
-   * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
-   */
-  function getElementByOpId(theOpId: string): FormElement {
-    var theElement;
-    if (void 0 === theOpId || null === theOpId) {
-      return null;
-    }
-    try {
-      // START MODIFICATION
-      var elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
-        selectAllFromDoc("input, select, button, " + "span[data-bwautofill]")
-      );
-      // END MODIFICATION
-      var filteredElements = elements.filter(function (o) {
-        return (o as ElementWithOpId<FillableControl | HTMLButtonElement>).opid == theOpId;
-      });
-      if (0 < filteredElements.length) {
-        (theElement = filteredElements[0]),
-          1 < filteredElements.length &&
-            console.warn("More than one element found with opid " + theOpId);
-      } else {
-        var elIndex = parseInt(theOpId.split("__")[1], 10);
-        isNaN(elIndex) || (theElement = elements[elIndex]);
-      }
-    } catch (e) {
-      console.error("An unexpected error occurred: " + e);
-    } finally {
-      // eslint-disable-next-line no-unsafe-finally
-      return theElement;
-    }
-  }
-
-  /**
-   * Helper for doc.querySelectorAll
-   * @param {string} theSelector
-   * @returns
-   */
-  function selectAllFromDoc<T extends Element = Element>(theSelector: string): Array<T> {
-    var d = document,
-      elements: Array<T> = [];
-    try {
-      // Technically this returns a NodeListOf<Element> but it's ducktyped as an Array everywhere, so return it as an array here
-      elements = d.querySelectorAll(theSelector) as unknown as Array<T>;
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-    return elements;
-  }
-
-  /**
-   * Focus an element and optionally re-set its value after focusing
-   * @param {HTMLElement} el
-   * @param {boolean} setValue Re-set the value after focusing
-   */
-  function doFocusElement(el: FillableControl, setValue: boolean): void {
-    if (setValue) {
-      var existingValue = el.value;
-      el.focus();
-      el.value !== existingValue && (el.value = existingValue);
-    } else {
-      el.focus();
-    }
-  }
 
   doFill(fillScript);
 
