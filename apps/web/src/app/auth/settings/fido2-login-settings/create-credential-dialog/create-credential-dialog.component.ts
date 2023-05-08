@@ -4,9 +4,9 @@ import { FormBuilder, Validators } from "@angular/forms";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
-import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
 
 import { WebauthnService } from "../../../core";
+import { NewCredentialOptionsView } from "../../../core/views/new-credential-options.view";
 
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
@@ -38,7 +38,7 @@ export class CreateCredentialDialogComponent {
       name: ["", Validators.maxLength(50)],
     }),
   });
-  protected challenge?: ChallengeResponse;
+  protected credentialOptions?: NewCredentialOptionsView;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,11 +56,11 @@ export class CreateCredentialDialogComponent {
           return;
         }
 
-        this.challenge = await this.webauthnService.newCredentialOptions({
+        this.credentialOptions = await this.webauthnService.getNewCredentialOptions({
           type: VerificationType.MasterPassword,
           secret: this.formGroup.value.userVerification.masterPassword,
         });
-        if (this.challenge === undefined) {
+        if (this.credentialOptions === undefined) {
           return;
         }
         this.currentStep = "credentialCreation";
@@ -72,7 +72,7 @@ export class CreateCredentialDialogComponent {
 
       if (this.currentStep === "credentialCreation") {
         try {
-          await this.webauthnService.createCredential(this.challenge);
+          await this.webauthnService.createCredential(this.credentialOptions);
         } catch {
           this.currentStep = "credentialCreationFailed";
         }
