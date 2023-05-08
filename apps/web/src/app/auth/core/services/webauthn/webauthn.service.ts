@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Optional } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -17,10 +17,13 @@ export class WebauthnService {
   constructor(
     private apiService: WebauthnApiService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    @Optional() private credentials: CredentialsContainer = navigator.credentials
   ) {}
 
-  async getNewCredentialOptions(verification: Verification): Promise<NewCredentialOptionsView> {
+  async getNewCredentialOptions(
+    verification: Verification
+  ): Promise<NewCredentialOptionsView | undefined> {
     try {
       return { challenge: await this.apiService.getChallenge(verification) };
     } catch (error) {
@@ -39,8 +42,7 @@ export class WebauthnService {
 
   async createCredential(
     credentialOptions: NewCredentialOptionsView
-  ): Promise<WebauthnCredentialView> {
-    await new Promise((_, reject) => setTimeout(() => reject(new Error("Not implemented")), 1000));
-    return undefined;
+  ): Promise<WebauthnCredentialView | undefined> {
+    return await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
   }
 }

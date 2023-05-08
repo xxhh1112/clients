@@ -6,6 +6,8 @@ import { VerificationType } from "@bitwarden/common/auth/enums/verification-type
 import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
 import { Verification } from "@bitwarden/common/types/verification";
 
+import { NewCredentialOptionsView } from "../../views/new-credential-options.view";
+
 import { WebauthnApiService } from "./webauthn-api.service";
 import { WebauthnService } from "./webauthn.service";
 
@@ -13,13 +15,20 @@ describe("WebauthnService", () => {
   let apiService!: MockProxy<WebauthnApiService>;
   let platformUtilsService!: MockProxy<PlatformUtilsService>;
   let i18nService!: MockProxy<I18nService>;
+  let credentials: MockProxy<CredentialsContainer>;
   let webauthnService!: WebauthnService;
 
   beforeAll(() => {
     apiService = mock<WebauthnApiService>();
     platformUtilsService = mock<PlatformUtilsService>();
     i18nService = mock<I18nService>();
-    webauthnService = new WebauthnService(apiService, platformUtilsService, i18nService);
+    credentials = mock<CredentialsContainer>();
+    webauthnService = new WebauthnService(
+      apiService,
+      platformUtilsService,
+      i18nService,
+      credentials
+    );
   });
 
   describe("getNewCredentialOptions", () => {
@@ -43,6 +52,17 @@ describe("WebauthnService", () => {
       expect(result).toEqual({ challenge });
     });
   });
+
+  describe("createCredential", () => {
+    it("should return undefined when navigator.credentials throws", async () => {
+      credentials.create.mockRejectedValue(new Error("Mocked error"));
+      const options = createNewCredentialOptions();
+
+      const result = await webauthnService.createCredential(options);
+
+      expect(result).toBeUndefined();
+    });
+  });
 });
 
 function createVerification(): Verification {
@@ -50,4 +70,8 @@ function createVerification(): Verification {
     type: VerificationType.MasterPassword,
     secret: "secret",
   };
+}
+
+function createNewCredentialOptions(): NewCredentialOptionsView {
+  return new NewCredentialOptionsView(Symbol() as any);
 }

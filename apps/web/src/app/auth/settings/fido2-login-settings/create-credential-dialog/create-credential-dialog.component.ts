@@ -71,10 +71,10 @@ export class CreateCredentialDialogComponent {
       }
 
       if (this.currentStep === "credentialCreation") {
-        try {
-          await this.webauthnService.createCredential(this.credentialOptions);
-        } catch {
+        const credential = await this.webauthnService.createCredential(this.credentialOptions);
+        if (credential === undefined) {
           this.currentStep = "credentialCreationFailed";
+          return;
         }
       }
     } finally {
