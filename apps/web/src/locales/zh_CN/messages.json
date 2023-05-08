@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "数据导入成功"
   },
+  "importSuccessNumberOfItems": {
+    "message": "一共导入了 $AMOUNT$ 个项目。",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "数据导出成功"
   },
@@ -2080,7 +2089,7 @@
     "message": "移除存储空间"
   },
   "subscriptionStorage": {
-    "message": "您的订阅共有 $MAX_STORAGE$ GB 的加密存储空间。您目前已使用 $USED_STORAGE$ 。",
+    "message": "您的订阅一共有 $MAX_STORAGE$ GB 的加密存储空间。您目前已使用 $USED_STORAGE$ 。",
     "placeholders": {
       "max_storage": {
         "content": "$1",
@@ -3116,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "管理员确认您的成员资格后，您将能访问此组织。到时我们将向您发送电子邮件通知。"
   },
+  "inviteInitAcceptedDesc": {
+    "message": "您现在可以访问此组织。"
+  },
   "inviteAcceptFailed": {
     "message": "无法接受邀请。请向组织管理员请求发送新的邀请。"
   },
@@ -3351,7 +3363,7 @@
     }
   },
   "subscriptionSponsoredFamiliesPlan": {
-    "message": "您的订阅允许总共 $COUNT$ 位成员。您的计划由一个外部组织赞助和支付费用。",
+    "message": "您的订阅一共允许 $COUNT$ 位成员。您的计划由一个外部组织赞助和支付费用。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -4800,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "您的主密码不符合此组织的策略要求。要加入此组织，必须立即更新您的主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "您的主密码不符合您的组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
+  },
   "maximumVaultTimeout": {
     "message": "密码库超时时间"
   },
@@ -4819,7 +4834,7 @@
     "message": "分钟"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 $HOURS$ 小时 $MINUTES$ 分钟。",
+    "message": "您的组织策略已将您最大允许的密码库超时时间设置为 $HOURS$ 小时 $MINUTES$ 分钟。",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4828,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 $HOURS$ 小时 $MINUTES$ 分钟。您的密码库超时动作被设置为 $ACTION$。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "您的组织策略已将您的密码库超时动作设置为 $ACTION$。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -4858,8 +4899,8 @@
   "activateAutofill": {
     "message": "激活自动填充"
   },
-  "activateAutofillDesc": {
-    "message": "为所有现有成员和新成员激活浏览器扩展中的页面加载时自动填充设置。"
+  "activateAutofillPolicyDesc": {
+    "message": "为所有现有成员和新成员激活浏览器扩展上的页面加载时的自动填充设置。"
   },
   "experimentalFeature": {
     "message": "不完整或不信任的网站可以在页面加载时自动填充。"
@@ -5387,6 +5428,15 @@
     "message": "当前组织",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "账户: 以 $NAME$ 登录",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "账户设置"
   },
@@ -5608,6 +5658,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "输入的值不能低于 $MIN$。",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "输入的值不能超过 $MAX$。",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "一个或多个电子邮件地址无效"
   },
@@ -5814,11 +5882,11 @@
     "description": "Notification for the successful creation of a secret."
   },
   "newSecret": {
-    "message": "新建机密",
+    "message": "新增机密",
     "description": "Title for creating a new secret."
   },
   "newServiceAccount": {
-    "message": "新建服务账户",
+    "message": "新增服务账户",
     "description": "Title for creating a new service account."
   },
   "secretsNoItemsTitle": {
@@ -5857,7 +5925,7 @@
     "description": "Action to view the details of a service account."
   },
   "deleteServiceAccountDialogMessage": {
-    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久和不可逆的。",
+    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久性的，无法撤销！",
     "placeholders": {
       "service_account": {
         "content": "$1",
@@ -5866,7 +5934,7 @@
     }
   },
   "deleteServiceAccountsDialogMessage": {
-    "message": "删除服务账户是永久和不可逆的。"
+    "message": "删除服务账户是永久性的，无法撤销！"
   },
   "deleteServiceAccountsConfirmMessage": {
     "message": "删除 $COUNT$ 个服务账户",
@@ -5912,7 +5980,7 @@
     "description": "Label for entering the name of a project."
   },
   "newProject": {
-    "message": "新建工程",
+    "message": "新增工程",
     "description": "Title for creating a new project."
   },
   "softDeleteSecretWarning": {
@@ -5969,7 +6037,7 @@
     "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "删除工程 $PROJECT$ 是永久性的，不可撤销！",
+    "message": "删除工程 $PROJECT$ 是永久性的，无法撤销！",
     "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
@@ -6009,7 +6077,7 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "删除工程是永久性的，不可撤销！",
+    "message": "删除工程是永久性的，无法撤销！",
     "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
@@ -6099,7 +6167,7 @@
     "message": "吊销访问令牌"
   },
   "revokeAccessTokenDesc": {
-    "message": "吊销访问令牌是永久和不可逆的。"
+    "message": "吊销访问令牌是永久性的，无法撤销！"
   },
   "accessTokenRevoked": {
     "message": "访问令牌已吊销",
@@ -6226,7 +6294,7 @@
     "message": "自动域验证"
   },
   "automaticDomainVerificationProcess": {
-    "message": "Bitwarden 将尝试在 72 小时内验证此域 3 次。如果无法验证此域，请检查主机中的 DNS 记录并手动验证。如果此域无法验证，7 天内将从您的组织中移除。"
+    "message": "Bitwarden 将尝试在 72 小时内验证此域 3 次。如果无法验证此域，请检查您的主机中的 DNS 记录并手动验证。如果此域无法验证，7 天内将从您的组织中移除。"
   },
   "invalidDomainNameMessage": {
     "message": "输入格式不正确。格式：mydomain.com。子域需要单独的条目进行验证。"
@@ -6495,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "较低的 KDF 迭代"
   },
-  "lowKdfIterationsDesc": {
-    "message": "增加您的 KDF 加密设置，以提高您账户的安全性。"
-  },
-  "changeKdfSettings": {
-    "message": "更改 KDF 设置"
+  "updateLowKdfIterationsDesc": {
+    "message": "更新您的加密设置以满足新的安全建议以及增强账户保护。"
   },
   "changeKdfLoggedOutWarning": {
     "message": "接下来将会注销您所有的活动会话。您将需要重新登录并完成两步登录设置。我们建议在更改您的加密设置之前导出您的密码库，以防数据丢失。"
@@ -6508,7 +6573,7 @@
     "message": "机密管理器 Beta 版"
   },
   "secretsManagerBetaDesc": {
-    "message": "在 Beta 计划期间，允许用户免费访问机密管理器。"
+    "message": "在 Beta 计划期间，启用用户对机密管理器的访问是免费的。"
   },
   "userAccessSecretsManager": {
     "message": "此用户可以访问机密管理器 Beta 版"
@@ -6611,7 +6676,7 @@
     "message": "必须选择"
   },
   "secretsManagerSubscriptionDesc": {
-    "message": "在 Beta 计划期间，开启组织对机密管理器的访问权限是免费的。成员中的用户会被授予对 Beta 版的访问权限。"
+    "message": "在 Beta 计划期间，开启组织对机密管理器的访问是免费的。成员中的用户会被授予对 Beta 版的访问权限。"
   },
   "secretsManagerEnable": {
     "message": "启用机密管理器 Beta 版"
@@ -6629,7 +6694,7 @@
     "message": "此操作将移除您对此工程的访问权限。"
   },
   "smAccessRemovalWarningSaTitle": {
-    "message": "删除对此服务账户的访问权限"
+    "message": "移除对此服务账户的访问权限"
   },
   "smAccessRemovalWarningSaMessage": {
     "message": "此操作将移除您对此服务账户的访问权限。"
@@ -6674,6 +6739,24 @@
     "message": "取消"
   },
   "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+    "message": "免费组织不能使用此功能。请联系您的组织所有者寻求升级。"
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "请联系您的组织的管理员来管理此项目的秘密。",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "要求现有成员更改他们的密码"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "您无权删除此项目",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "无法删除下列项目。是否继续？",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "更新 KDF 设置"
   }
 }

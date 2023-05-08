@@ -4,7 +4,6 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -13,11 +12,12 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { EventSystemUser } from "@bitwarden/common/enums/event-system-user";
+import { EventSystemUser } from "@bitwarden/common/enums";
 import { EventResponse } from "@bitwarden/common/models/response/event.response";
 
 import { BaseEventsComponent } from "../../../common/base.events.component";
 import { EventService } from "../../../core";
+import { EventExportService } from "../../../tools/event-export";
 
 const EVENT_SYSTEM_USER_TO_TRANSLATION: Record<EventSystemUser, string> = {
   [EventSystemUser.SCIM]: null, // SCIM acronym not able to be translated so just display SCIM
@@ -41,7 +41,7 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
     private route: ActivatedRoute,
     eventService: EventService,
     i18nService: I18nService,
-    exportService: ExportService,
+    exportService: EventExportService,
     platformUtilsService: PlatformUtilsService,
     private router: Router,
     logService: LogService,

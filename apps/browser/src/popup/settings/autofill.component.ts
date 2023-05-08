@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { UriMatchType } from "@bitwarden/common/enums";
 
 import { BrowserApi } from "../../browser/browserApi";
 
@@ -61,10 +61,6 @@ export class AutofillComponent implements OnInit {
 
   async saveDefaultUriMatch() {
     await this.stateService.setDefaultUriMatch(this.defaultUriMatch);
-  }
-
-  AboutAutofill() {
-    BrowserApi.createNewTab("https://bitwarden.com/help/auto-fill-browser/");
   }
 
   private async setAutofillKeyboardHelperText(command: string) {

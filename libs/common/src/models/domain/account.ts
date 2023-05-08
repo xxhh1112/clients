@@ -9,8 +9,8 @@ import { Policy } from "../../admin-console/models/domain/policy";
 import { CollectionView } from "../../admin-console/models/view/collection.view";
 import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
-import { KdfType } from "../../enums/kdfType";
-import { UriMatchType } from "../../enums/uriMatchType";
+import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
+import { KdfType, UriMatchType } from "../../enums";
 import { Utils } from "../../misc/utils";
 import { GeneratedPasswordHistory } from "../../tools/generator/password";
 import { SendData } from "../../tools/send/models/data/send.data";
@@ -133,27 +133,20 @@ export class AccountKeys {
       return null;
     }
 
-    return Object.assign(
-      new AccountKeys(),
-      { cryptoMasterKey: SymmetricCryptoKey.fromJSON(obj?.cryptoMasterKey) },
-      {
-        cryptoSymmetricKey: EncryptionPair.fromJSON(
-          obj?.cryptoSymmetricKey,
-          SymmetricCryptoKey.fromJSON
-        ),
-      },
-      { organizationKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.organizationKeys) },
-      { providerKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.providerKeys) },
-      {
-        privateKey: EncryptionPair.fromJSON<string, ArrayBuffer>(
-          obj?.privateKey,
-          (decObj: string) => Utils.fromByteStringToArray(decObj).buffer
-        ),
-      },
-      {
-        publicKey: Utils.fromByteStringToArray(obj?.publicKey)?.buffer,
-      }
-    );
+    return Object.assign(new AccountKeys(), {
+      cryptoMasterKey: SymmetricCryptoKey.fromJSON(obj?.cryptoMasterKey),
+      cryptoSymmetricKey: EncryptionPair.fromJSON(
+        obj?.cryptoSymmetricKey,
+        SymmetricCryptoKey.fromJSON
+      ),
+      organizationKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.organizationKeys),
+      providerKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.providerKeys),
+      privateKey: EncryptionPair.fromJSON<string, ArrayBuffer>(
+        obj?.privateKey,
+        (decObj: string) => Utils.fromByteStringToArray(decObj).buffer
+      ),
+      publicKey: Utils.fromByteStringToArray(obj?.publicKey)?.buffer,
+    });
   }
 
   static initRecordEncryptionPairsFromJSON(obj: any) {
@@ -181,7 +174,7 @@ export class AccountProfile {
   entityId?: string;
   entityType?: string;
   everBeenUnlocked?: boolean;
-  forcePasswordReset?: boolean;
+  forcePasswordResetReason?: ForceResetPasswordReason;
   hasPremiumPersonally?: boolean;
   hasPremiumFromOrganization?: boolean;
   lastSync?: string;

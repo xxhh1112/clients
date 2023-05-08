@@ -18,11 +18,13 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
+import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
+import { ExportComponent } from "../tools/popup/settings/export.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/popup/components/vault/attachments.component";
 import { CollectionsComponent } from "../vault/popup/components/vault/collections.component";
@@ -32,12 +34,10 @@ import { ShareComponent } from "../vault/popup/components/vault/share.component"
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
-import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 
 import { DebounceNavigationService } from "./services/debounceNavigationService";
 import { AutofillComponent } from "./settings/autofill.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
-import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
 import { FoldersComponent } from "./settings/folders.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";

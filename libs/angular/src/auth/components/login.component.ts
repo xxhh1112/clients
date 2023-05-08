@@ -1,4 +1,4 @@
-import { Directive, NgZone, OnInit } from "@angular/core";
+import { Directive, ElementRef, NgZone, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { take } from "rxjs/operators";
@@ -18,6 +18,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
+import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -26,6 +27,8 @@ import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
 @Directive()
 export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
+  @ViewChild("masterPasswordInput", { static: true }) masterPasswordInput: ElementRef;
+
   showPassword = false;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
@@ -142,15 +145,13 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         } else {
           this.router.navigate([this.twoFactorRoute]);
         }
-      } else if (response.forcePasswordReset) {
+      } else if (response.forcePasswordReset != ForceResetPasswordReason.None) {
         if (this.onSuccessfulLoginForceResetNavigate != null) {
           this.onSuccessfulLoginForceResetNavigate();
         } else {
           this.router.navigate([this.forcePasswordResetRoute]);
         }
       } else {
-        const disableFavicon = await this.stateService.getDisableFavicon();
-        await this.stateService.setDisableFavicon(!!disableFavicon);
         if (this.onSuccessfulLogin != null) {
           this.onSuccessfulLogin();
         }
@@ -238,10 +239,24 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
 
   toggleValidateEmail(value: boolean) {
     this.validatedEmail = value;
-    if (!value) {
-      // Reset master password only when going from validated to not validated (not you btn press)
+    if (!this.validatedEmail) {
+      // Reset master password only when going from validated to not validated
       // so that autofill can work properly
       this.formGroup.controls.masterPassword.reset();
+    } else {
+      // Mark MP as untouched so that, when users enter email and hit enter,
+      // the MP field doesn't load with validation errors
+      this.formGroup.controls.masterPassword.markAsUntouched();
+
+      // When email is validated, focus on master password after
+      // waiting for input to be rendered
+      if (this.ngZone.isStable) {
+        this.masterPasswordInput?.nativeElement?.focus();
+      } else {
+        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+          this.masterPasswordInput?.nativeElement?.focus();
+        });
+      }
     }
   }
 

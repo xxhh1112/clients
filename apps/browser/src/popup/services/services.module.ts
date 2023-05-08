@@ -2,6 +2,7 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
 import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
@@ -17,7 +18,6 @@ import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService } from "@bitwarden/common/abstractions/file-upload/file-upload.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
@@ -79,6 +79,7 @@ import {
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
+import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
 import { BrowserOrganizationService } from "../../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../../admin-console/services/browser-policy.service";
@@ -101,6 +102,7 @@ import { PasswordRepromptService } from "../../vault/popup/services/password-rep
 import { BrowserFolderService } from "../../vault/services/browser-folder.service";
 import { VaultFilterService } from "../../vault/services/vault-filter.service";
 
+import { BrowserDialogService } from "./browser-dialog.service";
 import { DebounceNavigationService } from "./debounceNavigationService";
 import { InitService } from "./init.service";
 import { PopupSearchService } from "./popup-search.service";
@@ -164,19 +166,14 @@ function getBgService<T>(service: keyof MainBackground) {
     },
     {
       provide: SearchServiceAbstraction,
-      useFactory: (
-        cipherService: CipherService,
-        logService: ConsoleLogService,
-        i18nService: I18nServiceAbstraction
-      ) => {
+      useFactory: (logService: ConsoleLogService, i18nService: I18nServiceAbstraction) => {
         return new PopupSearchService(
           getBgService<SearchService>("searchService")(),
-          cipherService,
           logService,
           i18nService
         );
       },
-      deps: [CipherService, LogServiceAbstraction, I18nServiceAbstraction],
+      deps: [LogServiceAbstraction, I18nServiceAbstraction],
     },
     { provide: AuditService, useFactory: getBgService<AuditService>("auditService"), deps: [] },
     {
@@ -347,7 +344,11 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<AutofillService>("autofillService"),
       deps: [],
     },
-    { provide: ExportService, useFactory: getBgService<ExportService>("exportService"), deps: [] },
+    {
+      provide: VaultExportServiceAbstraction,
+      useFactory: getBgService<VaultExportServiceAbstraction>("exportService"),
+      deps: [],
+    },
     {
       provide: KeyConnectorService,
       useFactory: getBgService<KeyConnectorService>("keyConnectorService"),
@@ -489,6 +490,10 @@ function getBgService<T>(service: keyof MainBackground) {
       provide: ConfigServiceAbstraction,
       useClass: BrowserConfigService,
       deps: [StateServiceAbstraction, ConfigApiServiceAbstraction],
+    },
+    {
+      provide: DialogServiceAbstraction,
+      useClass: BrowserDialogService,
     },
   ],
 })

@@ -1,9 +1,9 @@
 import { Jsonify } from "type-fest";
 
-import { LoginLinkedId as LinkedId } from "../../../enums/linkedIdType";
+import { LoginLinkedId as LinkedId, UriMatchType } from "../../../enums";
+import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { linkedFieldOption } from "../../../misc/linkedFieldOption.decorator";
 import { Utils } from "../../../misc/utils";
-import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { Login } from "../domain/login";
 
 import { ItemView } from "./item.view";
@@ -63,6 +63,18 @@ export class LoginView extends ItemView {
 
   get hasUris(): boolean {
     return this.uris != null && this.uris.length > 0;
+  }
+
+  matchesUri(
+    targetUri: string,
+    equivalentDomains: Set<string>,
+    defaultUriMatch: UriMatchType = null
+  ): boolean {
+    if (this.uris == null) {
+      return false;
+    }
+
+    return this.uris.some((uri) => uri.matchesUri(targetUri, equivalentDomains, defaultUriMatch));
   }
 
   static fromJSON(obj: Partial<Jsonify<LoginView>>): LoginView {

@@ -1,5 +1,4 @@
-import { ClientType } from "../enums/clientType";
-import { DeviceType } from "../enums/deviceType";
+import { ClientType, DeviceType } from "../enums";
 
 interface ToastOptions {
   timeout?: number;
@@ -28,15 +27,6 @@ export abstract class PlatformUtilsService {
     text: string | string[],
     options?: ToastOptions
   ) => void;
-  showDialog: (
-    body: string,
-    title?: string,
-    confirmText?: string,
-    cancelText?: string,
-    type?: string,
-    bodyIsHtml?: boolean,
-    target?: string
-  ) => Promise<boolean>;
   isDev: () => boolean;
   isSelfHost: () => boolean;
   copyToClipboard: (text: string, options?: any) => void | boolean;

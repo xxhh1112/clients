@@ -697,7 +697,7 @@
     "message": "Повторното въвеждане на главната парола е задължително."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Главната парола трябва да е дълга поне $VALUE$ знака.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1254,6 +1254,15 @@
   },
   "importSuccess": {
     "message": "Данните са внесени успешно в трезора ви."
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Общо внесени елементи: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Данните са изнесени успешно"
@@ -3116,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Ще имате достъп до организацията, след като администраторът ѝ потвърди членството ви. Ще ви изпратим електронно писмо, когато това се случи."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "Вече имате достъп до тази организация."
+  },
   "inviteAcceptFailed": {
     "message": "Поканата не може да бъде приета. Помолете администратора на организацията да ви прати нова."
   },
@@ -4800,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Вашата главна парола не отговарян на изискванията в политиката на тази организацията. За да се присъедините към организацията, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
+  },
   "maximumVaultTimeout": {
     "message": "Време за достъп"
   },
@@ -4831,6 +4846,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е $HOURS$ час(а) и $MINUTES$ минута/и. Зададеното действие при изтичане на това време е $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Настройките на организацията Ви задават следното действие при изтичане на времето за достъп до трезора: $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "Персонализирано време за достъп до трезора"
   },
@@ -4858,7 +4899,7 @@
   "activateAutofill": {
     "message": "Включване на автоматичното попълване"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Включване на автоматичното попълване при зареждане на страница в браузърното разширение на всички текущи и бъдещи членове."
   },
   "experimentalFeature": {
@@ -5387,6 +5428,15 @@
     "message": "Текуща организация",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Настройки на регистрацията"
   },
@@ -5605,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Въведената стойност трябва да бъде поне $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Въведената стойност не трябва да бъде по-голяма от $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6495,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Малко повторения за KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Увеличете настройките си за шифроване чрез KDF, за да защитите по-добре регистрацията си."
-  },
-  "changeKdfSettings": {
-    "message": "Промяна на настройките за KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
@@ -6674,6 +6739,24 @@
     "message": "Dismiss"
   },
   "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+    "message": "Тази функционалност не е налична за организациите използващи безплатния план. Свържете се със собственика на организацията си, за да преминете към платен абонамент."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Свържете се с администратора на организацията си, който може да управлява тайните за този проект.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Задължаване на текущите членове да сменят паролите си"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Нямате право за изтриване на този проект",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Следните проекти не могат да бъдат изтрити. Искате ли да продължите?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Update KDF settings"
   }
 }

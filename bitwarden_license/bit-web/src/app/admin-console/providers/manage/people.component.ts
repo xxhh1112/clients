@@ -4,6 +4,7 @@ import { first } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
@@ -14,8 +15,7 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
-import { ProviderUserStatusType } from "@bitwarden/common/admin-console/enums/provider-user-status-type";
-import { ProviderUserType } from "@bitwarden/common/admin-console/enums/provider-user-type";
+import { ProviderUserStatusType, ProviderUserType } from "@bitwarden/common/admin-console/enums";
 import { ProviderUserBulkRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-user-bulk.request";
 import { ProviderUserConfirmRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-user-confirm.request";
 import { ProviderUserBulkResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user-bulk.response";
@@ -69,7 +69,8 @@ export class PeopleComponent
     searchPipe: SearchPipe,
     userNamePipe: UserNamePipe,
     stateService: StateService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    dialogService: DialogServiceAbstraction
   ) {
     super(
       apiService,
@@ -82,7 +83,8 @@ export class PeopleComponent
       logService,
       searchPipe,
       userNamePipe,
-      stateService
+      stateService,
+      dialogService
     );
   }
 

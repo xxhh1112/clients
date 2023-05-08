@@ -2,6 +2,7 @@ import { Component, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
@@ -12,9 +13,12 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
 
@@ -42,7 +46,11 @@ export class LockComponent extends BaseLockComponent {
     logService: LogService,
     keyConnectorService: KeyConnectorService,
     ngZone: NgZone,
-    private authService: AuthService
+    policyApiService: PolicyApiServiceAbstraction,
+    policyService: InternalPolicyService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
+    private authService: AuthService,
+    dialogService: DialogServiceAbstraction
   ) {
     super(
       router,
@@ -57,7 +65,11 @@ export class LockComponent extends BaseLockComponent {
       apiService,
       logService,
       keyConnectorService,
-      ngZone
+      ngZone,
+      policyApiService,
+      policyService,
+      passwordGenerationService,
+      dialogService
     );
     this.successRoute = "/tabs/current";
     this.isInitialLockScreen = (window as any).previousPopupUrl == null;

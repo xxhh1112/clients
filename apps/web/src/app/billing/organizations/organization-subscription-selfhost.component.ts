@@ -10,7 +10,7 @@ import { MessagingService } from "@bitwarden/common/abstractions/messaging.servi
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationConnectionType } from "@bitwarden/common/admin-console/enums/organization-connection-type";
+import { OrganizationConnectionType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationConnectionResponse } from "@bitwarden/common/admin-console/models/response/organization-connection.response";
 import { BillingSyncConfigApi } from "@bitwarden/common/billing/models/api/billing-sync-config.api";
@@ -101,7 +101,7 @@ export class OrganizationSubscriptionSelfhostComponent implements OnInit, OnDest
     }
     this.loading = true;
     this.userOrg = this.organizationService.get(this.organizationId);
-    if (this.userOrg.canManageBilling) {
+    if (this.userOrg.canViewSubscription) {
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
     }
 

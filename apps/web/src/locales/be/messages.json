@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Даныя былі паспяхова імпартаваны ў ваша сховішча."
   },
+  "importSuccessNumberOfItems": {
+    "message": "Усяго элементаў, якія былі імпартаваны: $AMOUNT$",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Дадзеныя паспяхова экспартаваныя"
   },
@@ -3116,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Вы можаце атрымаць доступ да гэтай арганізацыі адразу пасля таго, як будзе пацверджаны ваш удзел. Мы апавясцім вас, калі гэта адбудзецца."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "Цяпер вы можаце атрымаць доступ да гэтай арганізацыі."
+  },
   "inviteAcceptFailed": {
     "message": "Немагчыма прыняць запрашэнне. Папрасіце адміністратара арганізацыі адправіць яго яшчэ раз."
   },
@@ -4800,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Ваш асноўны пароль не адпавядае патрабаванням гэтай арганізацыі. Каб далучыцца да арганізацыі, вам неабходна абнавіць яго зараз. Працягнуўшы, вы выйдзіце з бягучага сеанса і вам спатрэбіцца ўвайсці зноў. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу гадзіны."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
+  },
   "maximumVaultTimeout": {
     "message": "Час чакання сховішча"
   },
@@ -4831,6 +4846,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае гадзін: $HOURS$; хвілін: $MINUTES$. Для часу чакання вашага сховішча прызначана дзеянне $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Палітыкай вашай арганізацыі прызначана дзеянне $ACTION$ для часу чакання вашага сховішча.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "Карыстальніцкі час чакання сховішча"
   },
@@ -4858,7 +4899,7 @@
   "activateAutofill": {
     "message": "Актываваць аўтазапаўненне"
   },
-  "activateAutofillDesc": {
+  "activateAutofillPolicyDesc": {
     "message": "Актываваць аўтазапаўненне падчас загрузкі старонкі ў наладах пашырэння браўзера для ўсіх існуючых і новых удзельнікаў."
   },
   "experimentalFeature": {
@@ -5387,6 +5428,15 @@
     "message": "Бягучая арганізацыя",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Уліковы запіс: вы ўвайшлі як $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Налады ўліковага запісу"
   },
@@ -5605,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Мінімальная даўжыня сімвалаў значэння, якое будзе ўводзіцца: $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Максімальная даўжыня сімвалаў значэння, якое будзе ўводзіцца: $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6495,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Нізкае значэнне ітэрацыі KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Наладзьце ўзровень шыфравання KDF, каб удасканаліць бяспеку вашага ўліковага запісу."
-  },
-  "changeKdfSettings": {
-    "message": "Змяніце налады KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Абнавіце свае налады шыфравання, каб адпавядаць новым рэкамендацыям бяспекі і палепшыць абарону ўліковага запісу."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
@@ -6674,6 +6739,24 @@
     "message": "Адхіліць"
   },
   "notAvailableForFreeOrganization": {
-    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+    "message": "Гэта функцыя недаступна для бясплатных арганізацый. Звяжыцеся з уладальнікам вашай арганізацыі для паляпшэння."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Звяжыцеся з адміністратарам вашай арганізацыі, каб кіраваць сакрэтамі для гэтага праекта.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Патрабаваць ад існуючых удзельнікаў змены пароляў"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "У вас няма правоў для выдалення гэтага праекта",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Наступныя праекты не могуць быць выдалены. Вы сапраўды хочаце працягнуць?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Абнавіце налады KDF"
   }
 }

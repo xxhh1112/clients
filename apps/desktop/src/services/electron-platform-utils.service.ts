@@ -4,9 +4,9 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
+import { BiometricMessage, BiometricStorageAction } from "../types/biometric-message";
 import { isDev, isMacAppStore } from "../utils";
 
 export class ElectronPlatformUtilsService implements PlatformUtilsService {
@@ -115,32 +115,6 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
     });
   }
 
-  async showDialog(
-    text: string,
-    title?: string,
-    confirmText?: string,
-    cancelText?: string,
-    type?: string
-  ): Promise<boolean> {
-    const buttons = [confirmText == null ? this.i18nService.t("ok") : confirmText];
-    if (cancelText != null) {
-      buttons.push(cancelText);
-    }
-
-    const result = await ipcRenderer.invoke("showMessageBox", {
-      type: type,
-      title: title,
-      message: title,
-      detail: text,
-      buttons: buttons,
-      cancelId: buttons.length === 2 ? 1 : null,
-      defaultId: 0,
-      noLink: true,
-    });
-
-    return Promise.resolve(result.response === 0);
-  }
-
   isDev(): boolean {
     return isDev();
   }
@@ -170,9 +144,15 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
   }
 
   async supportsBiometric(): Promise<boolean> {
-    return await this.stateService.getEnableBiometric();
+    return await ipcRenderer.invoke("biometric", {
+      action: BiometricStorageAction.OsSupported,
+    } as BiometricMessage);
   }
 
+  /** This method is used to authenticate the user presence _only_.
+   * It should not be used in the process to retrieve
+   * biometric keys, which has a separate authentication mechanism.
+   * For biometric keys, invoke "keytar" with a biometric key suffix */
   async authenticateBiometric(): Promise<boolean> {
     const val = await ipcRenderer.invoke("biometric", {
       action: "authenticate",

@@ -1464,6 +1464,15 @@
   "setMasterPassword": {
     "message": "マスターパスワードを設定"
   },
+  "currentMasterPass": {
+    "message": "現在のマスターパスワード"
+  },
+  "newMasterPass": {
+    "message": "新しいマスターパスワード"
+  },
+  "confirmNewMasterPass": {
+    "message": "新しいマスターパスワードの確認"
+  },
   "masterPasswordPolicyInEffect": {
     "message": "組織が求めるマスターパスワードの要件："
   },
@@ -1844,6 +1853,9 @@
   "updateMasterPasswordWarning": {
     "message": "マスターパスワードは最近組織の管理者によって変更されました。保管庫にアクセスするには、今すぐ更新する必要があります。 続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイスでのアクティブなセッションは、最大1時間アクティブになり続けることがあります。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "あなたのマスターパスワードは、組織のポリシーを満たしていません。保管庫にアクセスするには、今すぐマスターパスワードを更新する必要があります。この操作を続けると、現在のセッションがログアウトされ、再ログインする必要があります。他のデバイスでのアクティブなセッションは最大1時間継続する場合があります。"
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自動登録"
   },
@@ -1872,6 +1884,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "組織のポリシーがあなたの保管庫のタイムアウトに影響しす。保管庫の最大許容タイムアウトは$HOURS$時間$MINUTES$分です。保管庫のタイムアウト設定は$ACTION$にあります。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "あなたの保管庫のタイムアウト設定は、組織のポリシーで決められた$ACTION$にあります。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2164,5 +2202,8 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "opensInANewWindow": {
+    "message": "新しいウィンドウで開く"
   }
 }

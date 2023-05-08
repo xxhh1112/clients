@@ -1,14 +1,10 @@
 import { A11yModule } from "@angular/cdk/a11y";
+import { DialogModule } from "@angular/cdk/dialog";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { LayoutModule } from "@angular/cdk/layout";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
-// eslint-disable-next-line import/order
-import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common";
-
-// Register the locales for the application
-import "./locales";
-
+import { CurrencyPipe, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
@@ -32,6 +28,7 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
+import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendListComponent } from "../tools/popup/send/components/send-list.component";
@@ -39,6 +36,7 @@ import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/popup
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
+import { ExportComponent } from "../tools/popup/settings/export.component";
 import { ActionButtonsComponent } from "../vault/popup/components/action-buttons.component";
 import { CipherRowComponent } from "../vault/popup/components/cipher-row.component";
 import { PasswordRepromptComponent } from "../vault/popup/components/password-reprompt.component";
@@ -54,7 +52,6 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
-import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -66,7 +63,6 @@ import { ServicesModule } from "./services/services.module";
 import { AboutComponent } from "./settings/about.component";
 import { AutofillComponent } from "./settings/autofill.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
-import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
 import { FoldersComponent } from "./settings/folders.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
@@ -77,9 +73,11 @@ import { SyncComponent } from "./settings/sync.component";
 import { VaultTimeoutInputComponent } from "./settings/vault-timeout-input.component";
 import { TabsComponent } from "./tabs.component";
 
+// Register the locales for the application
+import "./locales";
+
 @NgModule({
   imports: [
-    CommonModule,
     A11yModule,
     AppRoutingModule,
     BitwardenToastModule.forRoot({
@@ -98,6 +96,7 @@ import { TabsComponent } from "./tabs.component";
     ReactiveFormsModule,
     ScrollingModule,
     ServicesModule,
+    DialogModule,
   ],
   declarations: [
     ActionButtonsComponent,

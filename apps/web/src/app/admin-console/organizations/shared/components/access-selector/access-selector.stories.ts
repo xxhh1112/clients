@@ -3,8 +3,10 @@ import { action } from "@storybook/addon-actions";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums/organization-user-status-type";
-import { OrganizationUserType } from "@bitwarden/common/admin-console/enums/organization-user-type";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+} from "@bitwarden/common/admin-console/enums";
 import {
   AvatarModule,
   BadgeModule,
@@ -147,7 +149,7 @@ const DialogAccessSelectorTemplate: Story<AccessSelectorComponent> = (
           [showMemberRoles]="showMemberRoles"
         ></bit-access-selector>
       </span>
-      <div bitDialogFooter class="tw-flex tw-items-center tw-flex-row tw-gap-2">
+      <ng-container bitDialogFooter>
         <button bitButton buttonType="primary">Save</button>
         <button bitButton buttonType="secondary">Cancel</button>
         <button
@@ -157,7 +159,7 @@ const DialogAccessSelectorTemplate: Story<AccessSelectorComponent> = (
           size="default"
           title="Delete"
           aria-label="Delete"></button>
-      </div>
+      </ng-container>
     </bit-dialog>
 `,
 });
