@@ -3,6 +3,11 @@ import { Component } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
 import { WebauthnService } from "../../../core";
 
@@ -36,11 +41,14 @@ export class CreateCredentialDialogComponent {
       name: ["", Validators.maxLength(50)],
     }),
   });
+  protected challenge?: ChallengeResponse;
 
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnService
+    private webauthnService: WebauthnService,
+    private platformUtilsService: PlatformUtilsService,
+    private i18nService: I18nService
   ) {}
 
   protected submit = async () => {
@@ -52,7 +60,11 @@ export class CreateCredentialDialogComponent {
         if (this.formGroup.controls.userVerification.invalid) {
           return;
         }
-        await this.verifyUser();
+
+        this.challenge = await this.getNewCredentialOptions();
+        if (this.challenge === undefined) {
+          return;
+        }
         this.currentStep = "credentialCreation";
       }
 
@@ -72,9 +84,24 @@ export class CreateCredentialDialogComponent {
     }
   };
 
-  private async verifyUser() {
-    // Mocked
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  private async getNewCredentialOptions(): Promise<ChallengeResponse | undefined> {
+    try {
+      return await this.webauthnService.newCredentialOptions({
+        type: VerificationType.MasterPassword,
+        secret: this.formGroup.value.userVerification.masterPassword,
+      });
+    } catch (error) {
+      if (error instanceof ErrorResponse && error.statusCode === 400) {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("error"),
+          this.i18nService.t("invalidMasterPassword")
+        );
+      } else {
+        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      }
+      return undefined;
+    }
   }
 
   private async createCredential() {
