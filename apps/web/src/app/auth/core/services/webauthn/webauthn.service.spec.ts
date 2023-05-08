@@ -62,6 +62,16 @@ describe("WebauthnService", () => {
 
       expect(result).toBeUndefined();
     });
+
+    it("should return credential when navigator.credentials does not throw", async () => {
+      const credential: Credential = Symbol() as any;
+      credentials.create.mockResolvedValue(credential);
+      const options = createNewCredentialOptions();
+
+      const result = await webauthnService.createCredential(options);
+
+      expect(result).toBe(credential);
+    });
   });
 });
 

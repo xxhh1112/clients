@@ -14,12 +14,17 @@ type WebauthnCredentialView = unknown;
 
 @Injectable({ providedIn: CoreAuthModule })
 export class WebauthnService {
+  private credentials: CredentialsContainer;
+
   constructor(
     private apiService: WebauthnApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    @Optional() private credentials: CredentialsContainer = navigator.credentials
-  ) {}
+    @Optional() credentials: CredentialsContainer
+  ) {
+    // Default parameters don't work when used with Angular DI
+    this.credentials = credentials ?? navigator.credentials;
+  }
 
   async getNewCredentialOptions(
     verification: Verification
@@ -43,6 +48,14 @@ export class WebauthnService {
   async createCredential(
     credentialOptions: NewCredentialOptionsView
   ): Promise<WebauthnCredentialView | undefined> {
-    return await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
+    const nativeOptions: CredentialCreationOptions = {
+      publicKey: credentialOptions.challenge,
+    };
+
+    try {
+      return await this.credentials.create(nativeOptions);
+    } catch {
+      return undefined;
+    }
   }
 }

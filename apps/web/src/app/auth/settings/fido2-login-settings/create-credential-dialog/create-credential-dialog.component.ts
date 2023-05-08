@@ -76,6 +76,7 @@ export class CreateCredentialDialogComponent {
           this.currentStep = "credentialCreationFailed";
           return;
         }
+        this.currentStep = "credentialNaming";
       }
     } finally {
       this.dialogRef.disableClose = false;
