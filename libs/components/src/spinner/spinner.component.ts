@@ -1,13 +1,10 @@
 import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Component, HostBinding, Input } from "@angular/core";
 
-import { IconModule } from "../icon";
-
 @Component({
   selector: "bit-spinner",
   templateUrl: "spinner.component.html",
   standalone: true,
-  imports: [IconModule],
 })
 export class SpinnerComponent {
   /**
