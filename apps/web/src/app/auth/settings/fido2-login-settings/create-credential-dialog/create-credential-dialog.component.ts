@@ -4,6 +4,8 @@ import { FormBuilder, Validators } from "@angular/forms";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
+import { WebauthnService } from "../../../core";
+
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
 
@@ -35,7 +37,11 @@ export class CreateCredentialDialogComponent {
     }),
   });
 
-  constructor(private formBuilder: FormBuilder, private dialogRef: DialogRef) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialogRef: DialogRef,
+    private webauthnService: WebauthnService
+  ) {}
 
   protected submit = async () => {
     this.dialogRef.disableClose = true;

@@ -18,6 +18,7 @@ import { ProvidersComponent } from "../admin-console/providers/providers.compone
 import { CreateOrganizationComponent } from "../admin-console/settings/create-organization.component";
 import { SponsoredFamiliesComponent } from "../admin-console/settings/sponsored-families.component";
 import { SponsoringOrgRowComponent } from "../admin-console/settings/sponsoring-org-row.component";
+import { AuthModule } from "../auth";
 import { AcceptEmergencyComponent } from "../auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../auth/accept-organization.component";
 import { HintComponent } from "../auth/hint.component";
@@ -35,7 +36,6 @@ import { EmergencyAccessTakeoverComponent } from "../auth/settings/emergency-acc
 import { EmergencyAccessViewComponent } from "../auth/settings/emergency-access/emergency-access-view.component";
 import { EmergencyAccessComponent } from "../auth/settings/emergency-access/emergency-access.component";
 import { EmergencyAddEditComponent } from "../auth/settings/emergency-access/emergency-add-edit.component";
-import { Fido2LoginSettingsModule } from "../auth/settings/fido2-login-settings";
 import { TwoFactorAuthenticatorComponent } from "../auth/settings/two-factor-authenticator.component";
 import { TwoFactorDuoComponent } from "../auth/settings/two-factor-duo.component";
 import { TwoFactorEmailComponent } from "../auth/settings/two-factor-email.component";
@@ -123,7 +123,7 @@ import { SharedModule } from "./shared.module";
     ProductSwitcherModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
-    Fido2LoginSettingsModule, // TODO: Remove when `app/settings/change-password.component.ts` has been moved to `app/auth/settings/.`
+    AuthModule, // TODO: Remove when `app/settings/change-password.component.ts` has been moved to `app/auth/settings/.`
   ],
   declarations: [
     PremiumBadgeComponent,
