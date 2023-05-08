@@ -3,11 +3,8 @@ import { Component } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
-import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
 import { WebauthnService } from "../../../core";
 
@@ -46,9 +43,7 @@ export class CreateCredentialDialogComponent {
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnService,
-    private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private webauthnService: WebauthnService
   ) {}
 
   protected submit = async () => {
@@ -61,7 +56,10 @@ export class CreateCredentialDialogComponent {
           return;
         }
 
-        this.challenge = await this.getNewCredentialOptions();
+        this.challenge = await this.webauthnService.newCredentialOptions({
+          type: VerificationType.MasterPassword,
+          secret: this.formGroup.value.userVerification.masterPassword,
+        });
         if (this.challenge === undefined) {
           return;
         }
@@ -74,7 +72,7 @@ export class CreateCredentialDialogComponent {
 
       if (this.currentStep === "credentialCreation") {
         try {
-          await this.createCredential();
+          await this.webauthnService.createCredential(this.challenge);
         } catch {
           this.currentStep = "credentialCreationFailed";
         }
@@ -83,30 +81,6 @@ export class CreateCredentialDialogComponent {
       this.dialogRef.disableClose = false;
     }
   };
-
-  private async getNewCredentialOptions(): Promise<ChallengeResponse | undefined> {
-    try {
-      return await this.webauthnService.newCredentialOptions({
-        type: VerificationType.MasterPassword,
-        secret: this.formGroup.value.userVerification.masterPassword,
-      });
-    } catch (error) {
-      if (error instanceof ErrorResponse && error.statusCode === 400) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("error"),
-          this.i18nService.t("invalidMasterPassword")
-        );
-      } else {
-        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
-      }
-      return undefined;
-    }
-  }
-
-  private async createCredential() {
-    await new Promise((_, reject) => setTimeout(() => reject(new Error("Not implemented")), 1000));
-  }
 }
 
 /**
