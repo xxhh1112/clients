@@ -26,6 +26,7 @@ type Step =
   templateUrl: "create-credential-dialog.component.html",
 })
 export class CreateCredentialDialogComponent {
+  protected readonly NameMaxCharacters = 50;
   protected readonly CreateCredentialDialogResult = CreateCredentialDialogResult;
   protected readonly Icons = { CreatePasskeyIcon, CreatePasskeyFailedIcon };
 

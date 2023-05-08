@@ -655,6 +655,15 @@
   "errorCreatingPasskeyInfo": {
     "message": "There was a problem creating your passkey."
   },
+  "passkeySuccessfullyCreated": {
+    "message": "Passkey successfully created!"
+  },
+  "customName": {
+    "message": "Custom name"
+  },
+  "customPasskeyNameInfo": {
+    "message": "Name your passkey to help you identify it."
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -5388,6 +5397,19 @@
   },
   "required": {
     "message": "required"
+  },
+  "charactersCurrentAndMaximum": {
+    "message": "$CURRENT$/$MAX$ character maximum",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
   },
   "characterMaximum": {
     "message": "$MAX$ character maximum",
