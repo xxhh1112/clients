@@ -1,5 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { Utils } from "../../misc/utils";
 import {
   Fido2AutenticatorError,
@@ -20,11 +21,13 @@ const RpId = "bitwarden.com";
 
 describe("FidoAuthenticatorService", () => {
   let authenticator!: MockProxy<Fido2AuthenticatorService>;
+  let configService!: MockProxy<ConfigServiceAbstraction>;
   let client!: Fido2ClientService;
 
   beforeEach(async () => {
     authenticator = mock<Fido2AuthenticatorService>();
-    client = new Fido2ClientService(authenticator);
+    configService = mock<ConfigServiceAbstraction>();
+    client = new Fido2ClientService(authenticator, configService);
   });
 
   describe("createCredential", () => {
@@ -32,6 +35,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
       it("should throw error if sameOriginWithAncestors is false", async () => {
         const params = createParams({ sameOriginWithAncestors: false });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -43,6 +47,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If the length of options.user.id is not between 1 and 64 bytes (inclusive) then return a TypeError.
       it("should throw error if user.id is too small", async () => {
         const params = createParams({ user: { id: "", displayName: "name" } });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -57,6 +62,7 @@ describe("FidoAuthenticatorService", () => {
             displayName: "name",
           },
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -72,6 +78,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams({
           origin: "invalid-domain-name",
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -86,6 +93,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "https://passwordless.dev",
           rp: { id: "bitwarden.com", name: "Bitwraden" },
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -99,6 +107,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "http://passwordless.dev",
           rp: { id: "bitwarden.com", name: "Bitwraden" },
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -115,6 +124,7 @@ describe("FidoAuthenticatorService", () => {
             { alg: -7, type: "not-supported" as any },
           ],
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.createCredential(params);
 
@@ -128,6 +138,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If the options.signal is present and its aborted flag is set to true, return a DOMException whose name is "AbortError" and terminate this algorithm.
       it("should throw error if aborting using abort controller", async () => {
         const params = createParams({});
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         const abortController = new AbortController();
         abortController.abort();
 
@@ -144,6 +155,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams({
           authenticatorSelection: { residentKey: "required", userVerification: "required" },
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.makeCredential.mockResolvedValue(createAuthenticatorMakeResult());
 
         await client.createCredential(params);
@@ -166,6 +178,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If any authenticator returns an error status equivalent to "InvalidStateError", Return a DOMException whose name is "InvalidStateError" and terminate this algorithm.
       it("should throw error if authenticator throws InvalidState", async () => {
         const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.makeCredential.mockRejectedValue(
           new Fido2AutenticatorError(Fido2AutenticatorErrorCode.InvalidState)
         );
@@ -180,6 +193,7 @@ describe("FidoAuthenticatorService", () => {
       // This keeps sensetive information form leaking
       it("should throw NotAllowedError if authenticator throws unknown error", async () => {
         const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.makeCredential.mockRejectedValue(new Error("unknown error"));
 
         const result = async () => await client.createCredential(params);
@@ -238,6 +252,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams({
           origin: "invalid-domain-name",
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.assertCredential(params);
 
@@ -252,6 +267,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "https://passwordless.dev",
           rpId: "bitwarden.com",
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.assertCredential(params);
 
@@ -265,6 +281,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "http://passwordless.dev",
           rpId: "bitwarden.com",
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
 
         const result = async () => await client.assertCredential(params);
 
@@ -278,6 +295,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If the options.signal is present and its aborted flag is set to true, return a DOMException whose name is "AbortError" and terminate this algorithm.
       it("should throw error if aborting using abort controller", async () => {
         const params = createParams({});
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         const abortController = new AbortController();
         abortController.abort();
 
@@ -293,6 +311,7 @@ describe("FidoAuthenticatorService", () => {
       // Spec: If any authenticator returns an error status equivalent to "InvalidStateError", Return a DOMException whose name is "InvalidStateError" and terminate this algorithm.
       it("should throw error if authenticator throws InvalidState", async () => {
         const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.getAssertion.mockRejectedValue(
           new Fido2AutenticatorError(Fido2AutenticatorErrorCode.InvalidState)
         );
@@ -307,6 +326,7 @@ describe("FidoAuthenticatorService", () => {
       // This keeps sensetive information form leaking
       it("should throw NotAllowedError if authenticator throws unknown error", async () => {
         const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.getAssertion.mockRejectedValue(new Error("unknown error"));
 
         const result = async () => await client.assertCredential(params);
@@ -328,6 +348,7 @@ describe("FidoAuthenticatorService", () => {
           userVerification: "required",
           allowedCredentialIds,
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
 
         await client.assertCredential(params);
@@ -359,6 +380,7 @@ describe("FidoAuthenticatorService", () => {
           userVerification: "required",
           allowedCredentialIds: [],
         });
+        configService.getFeatureFlagBool.mockResolvedValue(true);
         authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
 
         await client.assertCredential(params);
