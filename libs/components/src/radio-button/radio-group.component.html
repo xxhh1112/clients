@@ -11,4 +11,9 @@
   <ng-container *ngTemplateOutlet="content"></ng-container>
 </ng-container>
 
-<ng-template #content><ng-content></ng-content></ng-template>
+<ng-template #content>
+  <div>
+    <ng-content></ng-content>
+  </div>
+  <ng-content select="bit-hint" ngProjectAs="bit-hint"></ng-content>
+</ng-template>
