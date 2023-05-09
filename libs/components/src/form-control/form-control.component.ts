@@ -45,7 +45,7 @@ export class FormControlComponent {
   }
 
   protected get labelContentClasses() {
-    return ["tw-font-semibold"].concat(
+    return ["tw-inline-flex", "tw-flex-col", "tw-font-semibold"].concat(
       this.formControl.disabled ? "tw-text-muted" : "tw-text-main"
     );
   }
