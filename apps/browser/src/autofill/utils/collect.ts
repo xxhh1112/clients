@@ -234,7 +234,6 @@ export function getElementForOPID(opId: string): Element {
  * @returns An array of HTMLElements
  */
 export function getFormElements(theDoc: Document, limit?: number): FormElement[] {
-  // START MODIFICATION
   var els: FormElement[] = [];
   try {
     var elsList = theDoc.querySelectorAll(
@@ -275,7 +274,6 @@ export function getFormElements(theDoc: Document, limit?: number): FormElement[]
   }
 
   return returnEls;
-  // END MODIFICATION
 }
 
 /**
@@ -332,11 +330,9 @@ export function getElementValue(el: any) {
       return el;
 
     default:
-      // START MODIFICATION
       if (!el.type && el.tagName.toLowerCase() === "span") {
         return el.innerText;
       }
-      // END MODIFICATION
       return el.value;
   }
 }

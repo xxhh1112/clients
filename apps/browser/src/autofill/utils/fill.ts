@@ -107,11 +107,11 @@ export function canSeeElementToStyle(el: HTMLElement, animateTheFilling: boolean
       currentEl = currentEl === document;
     }
   }
-  // START MODIFICATION
+
   if (el && !(el as FillableControl).type && el.tagName.toLowerCase() === "span") {
     return true;
   }
-  // END MODIFICATION
+
   return currentEl
     ? -1 !==
         "email text password number tel url".split(" ").indexOf((el as HTMLInputElement).type || "")
@@ -146,11 +146,9 @@ export function getElementByOpId(theOpId: string): FormElement {
     return null;
   }
   try {
-    // START MODIFICATION
     var elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
       selectAllFromDoc("input, select, button, " + "span[data-bwautofill]")
     );
-    // END MODIFICATION
     var filteredElements = elements.filter(function (o) {
       return (o as ElementWithOpId<FillableControl | HTMLButtonElement>).opid == theOpId;
     });

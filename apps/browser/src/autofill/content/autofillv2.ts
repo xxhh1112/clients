@@ -30,24 +30,6 @@
   SOFTWARE.
   */
 
-/*
-  MODIFICATIONS FROM ORIGINAL
-
-  1. Populate isFirefox
-  2. Remove isChrome and isSafari since they are not used.
-  3. Unminify and format to meet Mozilla review requirements.
-  4. Remove unnecessary input types from getFormElements query selector and limit number of elements returned.
-  5. Remove fakeTested prop.
-  6. Rename com.agilebits.* stuff to com.bitwarden.*
-  7. Remove "some useful globals" on window
-  8. Add ability to autofill span[data-bwautofill] elements
-  9. Add new handler, for new command that responds with page details in response callback
-  10. Handle sandbox iframe and sandbox rule in CSP
-  11. Work on array of saved urls instead of just one to determine if we should autofill non-https sites
-  12. Remove setting of attribute com.browser.browser.userEdited on user-inputs
-  13. Handle null value URLs in urlNotSecure
-  14. Convert to Typescript, add typings and remove dead code (not marked with START/END MODIFICATION)
-  */
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript, {
@@ -89,10 +71,8 @@ import {
 } from "../utils";
 
 function collect(document: Document) {
-  // START MODIFICATION
   var isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
-  // END MODIFICATION
 
   (document as AutofillDocument).elementsByOPID = {};
 
@@ -238,14 +218,12 @@ function collect(document: Document) {
         addProp(field, "tabindex", getElementAttrValue(el, "tabindex"));
         addProp(field, "title", getElementAttrValue(el, "title"));
 
-        // START MODIFICATION
         var elTagName = el.tagName.toLowerCase();
         addProp(field, "tagName", elTagName);
 
         if (elTagName === "span") {
           return field;
         }
-        // END MODIFICATION
 
         if ("hidden" != toLowerString((el as FillableControl).type)) {
           addProp(field, "label-tag", getLabelTag(el as FillableControl));
@@ -569,12 +547,10 @@ function fill(document: Document, fillScript: AutofillScript) {
         default:
           el.value == op ||
             doAllFillOperations(el, function (theEl) {
-              // START MODIFICATION
               if (!theEl.type && theEl.tagName.toLowerCase() === "span") {
                 theEl.innerText = op;
                 return;
               }
-              // END MODIFICATION
               theEl.value = op;
             });
       }
@@ -594,7 +570,6 @@ function fill(document: Document, fillScript: AutofillScript) {
     afterValSetFunc(el);
     setValueForElementByEvent(el);
 
-    // START MODIFICATION
     if (canSeeElementToStyle(el, animateTheFilling)) {
       el.classList.add("com-bitwarden-browser-animated-fill");
       setTimeout(function () {
@@ -603,7 +578,6 @@ function fill(document: Document, fillScript: AutofillScript) {
         }
       }, styleTimeout);
     }
-    // END MODIFICATION
   }
 
   (document as AutofillDocument).elementForOPID = getElementByOpId;
