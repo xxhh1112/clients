@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Verilənlər anbarınıza uğurla idxal edildi."
   },
+  "importSuccessNumberOfItems": {
+    "message": "Cəmi $AMOUNT$ element daxilə köçürüldü.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Məlumat uğurla xaricə köçürüldü"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Abunəlikdən imtina"
+  },
+  "subscriptionExpiration": {
+    "message": "Abunəliyin bitmə tarixi"
   },
   "subscriptionCanceled": {
     "message": "Abunəliyiniz ləğv edildi."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Administrator üzvlüyünüzü təsdiqlədikdən sonra bu təşkilata müraciət edə bilərsiniz. Bu baş verəndə sizə bir e-poçt göndərəcəyik."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Dəvət qəbul edilə bilmədi. Təşkilat adminindən yeni bir dəvət göndərməsini xahiş edin."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır."
   },
+  "activateAutofill": {
+    "message": "Avto-doldurmanı aktivləşdir"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yüklənəndə avto-doldurmanı tənzimləməsini aktivləşdirin."
+  },
+  "experimentalFeature": {
+    "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Avto-doldurma haqqında daha ətraflı"
+  },
   "selectType": {
     "message": "SSO növü seçin"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Hesabat göndərmə"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "İstifadəçi sayı"
   },
@@ -6027,8 +6051,8 @@
     "message": "Müraciət tokenləri",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Müraciət tokeni yarat",
+  "newAccessToken": {
+    "message": "Yeni müraciət tokeni",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "KDF tənzimləmələrini dəyişdir"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Davam etsəniz hazırkı seansdan çıxış ediləcək, təkrar giriş etməyiniz tələb olunacaq. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
+    "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Rədd et"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Bu özəllik ödənişsiz təşkilatlar üçün əlçatmazdır. Yüksəltmək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
   }
 }

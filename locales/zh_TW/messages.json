@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "資料匯入成功"
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "取消訂閱"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "已取消訂閱"
@@ -3060,7 +3072,7 @@
     }
   },
   "confirmUsers": {
-    "message": "確認使用者"
+    "message": "確認成員"
   },
   "usersNeedConfirmed": {
     "message": "有使用者已接受邀請，但仍然需要確認。在確認之前，使用者將無法存取組織。"
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "管理員確認您的成員身分後，您便可以存取此組織。到時我們會向您傳送電子郵件通知。"
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "您現在可以存取此組織。"
   },
   "inviteAcceptFailed": {
     "message": "無法接受邀請。請要求組織管理員傳送新的邀請。"
@@ -3387,7 +3402,7 @@
     }
   },
   "keyUpdated": {
-    "message": "已更新金鑰"
+    "message": "金鑰已更新"
   },
   "updateKeyTitle": {
     "message": "更新金鑰"
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "一個或多個組織原則禁止您匯出個人密碼庫。"
   },
+  "activateAutofill": {
+    "message": "Activate auto-fill"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
+  },
   "selectType": {
     "message": "選擇 SSO 類型"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "回報"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "使用者數量"
   },
@@ -5746,7 +5770,7 @@
     "description": "A prompt explaining how secrets can be associated with projects."
   },
   "selectProjects": {
-    "message": "Select projects",
+    "message": "選取專案",
     "description": "A label for a type-to-filter input field to choose projects."
   },
   "searchProjects": {
@@ -5866,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Service accounts deleted"
@@ -6027,8 +6051,8 @@
     "message": "存取權杖",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "建立存取權杖",
+  "newAccessToken": {
+    "message": "新增存取權杖",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6262,16 +6286,16 @@
     "message": "未驗證"
   },
   "domainNameTh": {
-    "message": "Name"
+    "message": "名稱"
   },
   "domainStatusTh": {
     "message": "狀態"
   },
   "lastChecked": {
-    "message": "Last checked"
+    "message": "上次確認"
   },
   "editDomain": {
-    "message": "Edit domain"
+    "message": "編輯網域名稱"
   },
   "domainFormInvalid": {
     "message": "There are form errors that need your attention"
@@ -6445,7 +6469,7 @@
     "message": "Billing Sync help"
   },
   "uploadLicense": {
-    "message": "Upload license"
+    "message": "上傳授權證"
   },
   "projectPeopleDescription": {
     "message": "Grant groups or people access to this project."
@@ -6490,7 +6514,7 @@
     "message": "變更 KDF 設定"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6505,7 +6529,7 @@
     "message": "Important:"
   },
   "viewAll": {
-    "message": "View all"
+    "message": "檢視全部"
   },
   "showingPortionOfTotal": {
     "message": "Showing $PORTION$ of $TOTAL$",
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

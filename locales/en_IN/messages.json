@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data has been successfully imported into your vault."
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Cancel subscription"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "The subscription has been cancelled."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "You can access this organisation once an administrator confirms your membership. We'll send you an email when that happens."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Unable to accept invitation. Ask an organisation admin to send a new invitation."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your individual vault."
   },
+  "activateAutofill": {
+    "message": "Activate auto-fill"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
+  },
   "selectType": {
     "message": "Select SSO type"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Reporting"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Number of users"
   },
@@ -5866,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Service accounts deleted"
@@ -6027,8 +6051,8 @@
     "message": "Access tokens",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Create access token",
+  "newAccessToken": {
+    "message": "New access token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "Change KDF settings"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
   }
 }

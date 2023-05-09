@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data er nu importeret"
   },
+  "importSuccessNumberOfItems": {
+    "message": "I alt $AMOUNT$ emner blev importeret.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data hermed eksporteret"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Opsig abonnement"
+  },
+  "subscriptionExpiration": {
+    "message": "Abonnementsudløb"
   },
   "subscriptionCanceled": {
     "message": "Dit abonnement er opsagt."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Du kan få adgang til denne organisation, når en administrator bekræfter dit medlemskab. Vi sender dig en e-mail, når dette sker."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Kan ikke acceptere invitationen. Bed en organisations-administrator om at sende en ny invitation."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "En eller flere organisationspolitikker forhindrer eksport af din personlige boks."
   },
+  "activateAutofill": {
+    "message": "Aktivér autoudfyldning"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Aktivér indstillingen Autoudfyldning ved sideindlæsning i browserudvidelsen for alle eksisterende og nye medlemmer."
+  },
+  "experimentalFeature": {
+    "message": "Kompromitterede eller ikke-betroede websteder kan udnytte autoudfyldning ved sideindlæsning."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Læs mere om autoudfyldning"
+  },
   "selectType": {
     "message": "Vælg SSO-type"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Rapportering"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Antal brugere"
   },
@@ -6027,8 +6051,8 @@
     "message": "Adgangstokener",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Opret adgangstoken",
+  "newAccessToken": {
+    "message": "Nyt adgangstoken",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "Skift KDF-indstillinger"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Fortsættes, logges der ud af den aktuelle session, og der skal logges ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time. For at forhindre datatab, anbefaler vi, at du eksporterer din boks, inden krypteringsindstillingerne ændres."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Afvis"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Denne funktion er ikke tilgængelig for gratis organisationer. Kontakt organisationsejeren for at opgradere."
   }
 }

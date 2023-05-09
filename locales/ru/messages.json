@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Данные успешно импортированы"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Всего было импортировано элементов: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Данные успешно экспортированы"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Отменить подписку"
+  },
+  "subscriptionExpiration": {
+    "message": "Срок действия подписки"
   },
   "subscriptionCanceled": {
     "message": "Подписка отменена."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Вы получите доступ к этой организации, как только администратор подтвердит ваше членство. Когда это произойдет, мы отправим вам email."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Не удается принять приглашение. Попросите администратора организации выслать новое."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Одна или несколько политик организации запрещают вам экспортировать личное хранилище."
   },
+  "activateAutofill": {
+    "message": "Активировать автозаполнение"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Включить автозаполнение при загрузке страницы в расширении браузера для всех существующих и новых участников."
+  },
+  "experimentalFeature": {
+    "message": "Взломанные или недоверенные сайты могут внедрить вредоносный код во время автозаполнения при загрузке страницы."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Узнать больше об автозаполнении"
+  },
   "selectType": {
     "message": "Выберите тип SSO"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Отчеты"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Количество пользователей"
   },
@@ -6027,8 +6051,8 @@
     "message": "Токены доступа",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Создать токен доступа",
+  "newAccessToken": {
+    "message": "Новый токен доступа",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "Изменить параметры KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "При продолжении текущая сессия будет завершена, после чего потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
+    "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
   },
   "secretsManagerBeta": {
     "message": "Менеджер секретов Beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Отклонить"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Эта функция недоступна для организаций с бесплатным тарифом. Свяжитесь с владельцем вашей организации для перехода на другой тариф."
   }
 }

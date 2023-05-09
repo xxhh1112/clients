@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Data byla úspěšně importována"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Bylo importováno celkem $AMOUNT$ položek.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Zrušit předplatné"
+  },
+  "subscriptionExpiration": {
+    "message": "Vypršení předplatného"
   },
   "subscriptionCanceled": {
     "message": "Předplatné bylo zrušeno"
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "K této organizaci získáte přístup jakmile vám administrátor udělí členství. Až se tak stane, pošleme vám e-mail."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Pozvánku nelze přijmout. Požádejte administrátora organizace o novou pozvánku."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your individual vault."
   },
+  "activateAutofill": {
+    "message": "Activate auto-fill"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Aktivuje automatické vyplnění při načítání stránky pro rozšíření prohlížeče pro všechny existující i nové členy."
+  },
+  "experimentalFeature": {
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
+  },
   "selectType": {
     "message": "Select SSO type"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Reporting"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Number of users"
   },
@@ -5866,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Service accounts deleted"
@@ -6027,8 +6051,8 @@
     "message": "Access tokens",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Create access token",
+  "newAccessToken": {
+    "message": "Nový přístupový token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "Change KDF settings"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Tato funkce není dostupná pro bezplatné organizace. Pro upgrade kontaktujte vlastníka organizace."
   }
 }

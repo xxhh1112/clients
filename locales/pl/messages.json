@@ -1255,6 +1255,15 @@
   "importSuccess": {
     "message": "Dane zostały zaimportowane"
   },
+  "importSuccessNumberOfItems": {
+    "message": "Zaimportowano elementów: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Dane zostały pomyślnie wyeksportowane"
   },
@@ -2018,6 +2027,9 @@
   },
   "cancelSubscription": {
     "message": "Anuluj subskrypcję"
+  },
+  "subscriptionExpiration": {
+    "message": "Wygaśnięcie subskrypcji"
   },
   "subscriptionCanceled": {
     "message": "Subskrypcja została anulowana."
@@ -3112,6 +3124,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Dostęp do tej organizacji otrzymasz po potwierdzeniu członkostwa przez administratora. Dostaniesz wtedy wiadomość e-mail."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "Możesz teraz uzyskać dostęp do tej organizacji."
   },
   "inviteAcceptFailed": {
     "message": "Nie można zaakceptować zaproszenia. Poproś administratora organizacji o wysłanie nowego zaproszenia."
@@ -4852,6 +4867,18 @@
   "personalVaultExportPolicyInEffect": {
     "message": "Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu."
   },
+  "activateAutofill": {
+    "message": "Włącz autouzupełnianie"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Aktywuj autouzupełnianie podczas wczytywania strony w rozszerzeniu przeglądarki dla wszystkich istniejących i nowych użytkowników."
+  },
+  "experimentalFeature": {
+    "message": "Zaatakowane lub niezaufane witryny internetowe mogą wykorzystać funkcję autouzupełniania podczas wczytywania strony, aby wyrządzić szkody."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Dowiedz się więcej o autouzupełnianiu"
+  },
   "selectType": {
     "message": "Wybierz rodzaj logowania jednokrotnego SSO"
   },
@@ -5626,9 +5653,6 @@
   "reporting": {
     "message": "Zgłaszanie"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "numberOfUsers": {
     "message": "Liczba użytkowników"
   },
@@ -5866,7 +5890,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Konto serwisowe zostało usunięte"
+    "message": "Usunięto konto serwisowe"
   },
   "deleteServiceAccountsToast": {
     "message": "Usunięto konta serwisowe"
@@ -6027,8 +6051,8 @@
     "message": "Tokeny dostępu",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Utwórz token dostępu",
+  "newAccessToken": {
+    "message": "Nowy token dostępu",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6490,7 +6514,7 @@
     "message": "Zmień ustawienia KDF"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Kontynuowanie spowoduje wylogowanie z bieżącej sesji i konieczność ponownego zalogowania. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
+    "message": "Kontynuowanie spowoduje wylogowanie ze wszystkich aktywnych sesji. Będzie trzeba zalogować się ponownie i ukończyć konfigurację logowania dwuetapowego. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
   },
   "secretsManagerBeta": {
     "message": "Menedżer sekretów beta"
@@ -6660,5 +6684,8 @@
   },
   "dismiss": {
     "message": "Odrzuć"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Ta funkcja nie jest dostępna dla darmowych organizacji. Skontaktuj się z właścicielem organizacji, aby ją ulepszyć."
   }
 }
