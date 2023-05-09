@@ -9,9 +9,9 @@ import { Verification } from "@bitwarden/common/types/verification";
 import { CoreAuthModule } from "../../core.module";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 
+import { SaveCredentialRequest } from "./request/save-credential.request";
+import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
 import { WebauthnApiService } from "./webauthn-api.service";
-
-type WebauthnCredentialView = unknown;
 
 @Injectable({ providedIn: CoreAuthModule })
 export class WebauthnService {
@@ -51,15 +51,39 @@ export class WebauthnService {
 
   async createCredential(
     credentialOptions: CredentialCreateOptionsView
-  ): Promise<WebauthnCredentialView | undefined> {
+  ): Promise<PublicKeyCredential | undefined> {
     const nativeOptions: CredentialCreationOptions = {
       publicKey: credentialOptions.options,
     };
 
     try {
-      return await this.credentials.create(nativeOptions);
-    } catch {
+      const response = await this.credentials.create(nativeOptions);
+      if (!(response instanceof PublicKeyCredential)) {
+        return undefined;
+      }
+      return response;
+    } catch (error) {
+      this.logService?.error(error);
       return undefined;
+    }
+  }
+
+  async saveCredential(
+    credentialOptions: CredentialCreateOptionsView,
+    deviceResponse: PublicKeyCredential,
+    name: string
+  ) {
+    try {
+      const request = new SaveCredentialRequest();
+      request.deviceResponse = new WebauthnAttestationResponseRequest(deviceResponse);
+      request.token = credentialOptions.token;
+      request.name = name;
+      await this.apiService.saveCredential(request);
+      return true;
+    } catch (error) {
+      this.logService?.error(error);
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      return false;
     }
   }
 }

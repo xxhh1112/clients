@@ -13,7 +13,6 @@ import { CreatePasskeyIcon } from "./create-passkey.icon";
 
 export enum CreateCredentialDialogResult {
   Success,
-  Canceled,
 }
 
 type Step =
@@ -40,6 +39,7 @@ export class CreateCredentialDialogComponent {
     }),
   });
   protected credentialOptions?: CredentialCreateOptionsView;
+  protected deviceResponse?: PublicKeyCredential;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,12 +72,31 @@ export class CreateCredentialDialogComponent {
       }
 
       if (this.currentStep === "credentialCreation") {
-        const credential = await this.webauthnService.createCredential(this.credentialOptions);
-        if (credential === undefined) {
+        this.deviceResponse = await this.webauthnService.createCredential(this.credentialOptions);
+        if (this.deviceResponse === undefined) {
           this.currentStep = "credentialCreationFailed";
           return;
         }
         this.currentStep = "credentialNaming";
+        return;
+      }
+
+      if (this.currentStep === "credentialNaming") {
+        this.formGroup.controls.credentialNaming.markAllAsTouched();
+        if (this.formGroup.controls.credentialNaming.invalid) {
+          return;
+        }
+
+        const result = await this.webauthnService.saveCredential(
+          this.credentialOptions,
+          this.deviceResponse,
+          this.formGroup.value.credentialNaming.name
+        );
+        if (!result) {
+          return;
+        }
+
+        this.dialogRef.close(CreateCredentialDialogResult.Success);
       }
     } finally {
       this.dialogRef.disableClose = false;
@@ -94,7 +113,7 @@ export const openCreateCredentialDialog = (
   dialogService: DialogServiceAbstraction,
   config: DialogConfig<unknown>
 ) => {
-  return dialogService.open<CreateCredentialDialogResult, unknown>(
+  return dialogService.open<CreateCredentialDialogResult | undefined, unknown>(
     CreateCredentialDialogComponent,
     config
   );
