@@ -3,11 +3,11 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
-import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
 import { Verification } from "@bitwarden/common/types/verification";
 
-import { NewCredentialOptionsView } from "../../views/new-credential-options.view";
+import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 
+import { CredentialCreateOptionsResponse } from "./response/credential-create-options.response";
 import { WebauthnApiService } from "./webauthn-api.service";
 import { WebauthnService } from "./webauthn.service";
 
@@ -33,30 +33,32 @@ describe("WebauthnService", () => {
 
   describe("getNewCredentialOptions", () => {
     it("should return undefined and show toast when api service call throws", async () => {
-      apiService.getChallenge.mockRejectedValue(new Error("Mock error"));
+      apiService.getCredentialCreateOptions.mockRejectedValue(new Error("Mock error"));
       const verification = createVerification();
 
-      const result = await webauthnService.getNewCredentialOptions(verification);
+      const result = await webauthnService.getCredentialCreateOptions(verification);
 
       expect(result).toBeUndefined();
       expect(platformUtilsService.showToast).toHaveBeenCalled();
     });
 
     it("should return options when api service call is successfull", async () => {
-      const challenge: ChallengeResponse = Symbol() as any;
-      apiService.getChallenge.mockResolvedValue(challenge);
+      const options = Symbol() as any;
+      const token = Symbol() as any;
+      const response = { options, token } as CredentialCreateOptionsResponse;
+      apiService.getCredentialCreateOptions.mockResolvedValue(response);
       const verification = createVerification();
 
-      const result = await webauthnService.getNewCredentialOptions(verification);
+      const result = await webauthnService.getCredentialCreateOptions(verification);
 
-      expect(result).toEqual({ challenge });
+      expect(result).toEqual({ options, token });
     });
   });
 
   describe("createCredential", () => {
     it("should return undefined when navigator.credentials throws", async () => {
       credentials.create.mockRejectedValue(new Error("Mocked error"));
-      const options = createNewCredentialOptions();
+      const options = createCredentialCreateOptions();
 
       const result = await webauthnService.createCredential(options);
 
@@ -66,7 +68,7 @@ describe("WebauthnService", () => {
     it("should return credential when navigator.credentials does not throw", async () => {
       const credential: Credential = Symbol() as any;
       credentials.create.mockResolvedValue(credential);
-      const options = createNewCredentialOptions();
+      const options = createCredentialCreateOptions();
 
       const result = await webauthnService.createCredential(options);
 
@@ -82,6 +84,6 @@ function createVerification(): Verification {
   };
 }
 
-function createNewCredentialOptions(): NewCredentialOptionsView {
-  return new NewCredentialOptionsView(Symbol() as any);
+function createCredentialCreateOptions(): CredentialCreateOptionsView {
+  return new CredentialCreateOptionsView(Symbol() as any, Symbol() as any);
 }

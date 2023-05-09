@@ -6,7 +6,7 @@ import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 
 import { WebauthnService } from "../../../core";
-import { NewCredentialOptionsView } from "../../../core/views/new-credential-options.view";
+import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
 
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
@@ -39,7 +39,7 @@ export class CreateCredentialDialogComponent {
       name: ["", Validators.maxLength(50)],
     }),
   });
-  protected credentialOptions?: NewCredentialOptionsView;
+  protected credentialOptions?: CredentialCreateOptionsView;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,7 +57,7 @@ export class CreateCredentialDialogComponent {
           return;
         }
 
-        this.credentialOptions = await this.webauthnService.getNewCredentialOptions({
+        this.credentialOptions = await this.webauthnService.getCredentialCreateOptions({
           type: VerificationType.MasterPassword,
           secret: this.formGroup.value.userVerification.masterPassword,
         });
