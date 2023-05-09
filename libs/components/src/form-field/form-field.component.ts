@@ -18,7 +18,7 @@ import { BitSuffixDirective } from "./suffix.directive";
   selector: "bit-form-field",
   templateUrl: "./form-field.component.html",
   host: {
-    class: "tw-mb-5 tw-block",
+    class: "tw-mb-6 tw-block",
   },
 })
 export class BitFormFieldComponent implements AfterContentChecked {

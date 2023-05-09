@@ -24,7 +24,6 @@ export class BitInputDirective implements BitFormFieldControl {
     return [
       "tw-block",
       "tw-w-full",
-      "tw-mb-1",
       "tw-px-3",
       "tw-py-1.5",
       "tw-bg-background-alt",
