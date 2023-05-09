@@ -33,7 +33,7 @@ export class FormControlComponent {
   @HostBinding("class") get classes() {
     return []
       .concat(this.inline ? ["tw-inline-block", "tw-mr-4"] : ["tw-block"])
-      .concat(this.disableMargin ? ["tw-mb-2"] : ["tw-mb-6"]);
+      .concat(this.disableMargin ? [] : ["tw-mb-6"]);
   }
 
   constructor(private i18nService: I18nService) {}

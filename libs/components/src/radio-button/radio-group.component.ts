@@ -25,6 +25,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
 
   @HostBinding("attr.role") role = "radiogroup";
   @HostBinding("attr.id") @Input() id = `bit-radio-group-${nextId++}`;
+  @HostBinding("class") classList = ["tw-block", "tw-mb-4"];
 
   @ContentChild(BitLabel) protected label: BitLabel;
 
