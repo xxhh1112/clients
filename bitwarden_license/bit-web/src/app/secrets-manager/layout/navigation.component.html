@@ -3,20 +3,20 @@
 </a>
 
 <org-switcher [filter]="orgFilter" [hideNewButton]="true"></org-switcher>
-<bit-nav-item icon="bwi-collection" [text]="'projects' | i18n" route="projects"></bit-nav-item>
-<bit-nav-item icon="bwi-key" [text]="'secrets' | i18n" route="secrets"></bit-nav-item>
+<bit-nav-item icon="collection" [text]="'projects' | i18n" route="projects"></bit-nav-item>
+<bit-nav-item icon="key" [text]="'secrets' | i18n" route="secrets"></bit-nav-item>
 <bit-nav-item
-  icon="bwi-wrench"
+  icon="wrench"
   [text]="'serviceAccounts' | i18n"
   route="service-accounts"
 ></bit-nav-item>
 <bit-nav-item
-  icon="bwi-trash"
+  icon="trash"
   [text]="'trash' | i18n"
   route="trash"
   *ngIf="isAdmin$ | async"
 ></bit-nav-item>
-<bit-nav-group icon="bwi-cog" [text]="'settings' | i18n" *ngIf="isAdmin$ | async">
+<bit-nav-group icon="cog" [text]="'settings' | i18n" *ngIf="isAdmin$ | async">
   <bit-nav-item [text]="'importData' | i18n" route="settings/import"></bit-nav-item>
   <bit-nav-item [text]="'exportData' | i18n" route="settings/export"></bit-nav-item>
 </bit-nav-group>

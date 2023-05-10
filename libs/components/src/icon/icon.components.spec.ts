@@ -17,14 +17,14 @@ describe("IconComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should have empty innerHtml when input is not an Icon", () => {
+  it("should not contain icon when input is not an Icon", () => {
     const fakeIcon = { svg: "harmful user input" } as Icon;
 
     component.icon = fakeIcon;
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.innerHTML).toBe("");
+    expect(el.innerHTML.includes(fakeIcon.svg)).toBe(false);
   });
 
   it("should contain icon when input is a safe Icon", () => {
@@ -34,6 +34,6 @@ describe("IconComponent", () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.innerHTML).toBe(`<svg><text x="0" y="15">safe icon</text></svg>`);
+    expect(el.innerHTML.includes(icon.svg)).toBe(true);
   });
 });

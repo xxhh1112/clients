@@ -2,35 +2,37 @@ import { Component, Input } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 import { Icon, isIcon } from "./icon";
+import { IconKey } from "./types";
 
 @Component({
   selector: "bit-icon",
   template: `
     <div *ngIf="safeHtml" [outerHTML]="safeHtml"></div>
-    <svg *ngIf="!safeHtml" class="tw-h-[1em] tw-w-[1em] tw-fill-current tw-align-baseline">
-      <use [attr.xlink:href]="'#icon-' + _name"></use>
+    <svg
+      *ngIf="!safeHtml"
+      class="tw-relative tw-top-[.125em] tw-h-[1em] tw-w-[calc(18em/14)] tw-fill-current tw-align-baseline"
+    >
+      <use [attr.xlink:href]="'images/icons/symbol-defs.svg#icon-' + name"></use>
     </svg>
   `,
 })
 export class BitIconComponent {
-  protected _name: string;
+  /**
+   * Reference a Bitwarden icon by its name, e.g. "caret-up"
+   *
+   * Do not prefix with "bwi-"
+   */
   @Input()
-  set name(name: string) {
-    this._name = name;
-    if (!document.querySelector(`symbol#icon-${name}`)) {
-      // eslint-disable-next-line
-      console.error(`Cannot find icon: ${name}`);
-    }
-  }
+  name: IconKey;
 
-  @Input() set icon(src: Icon) {
-    if (!isIcon(src)) {
+  /** Use a custom SVG icon */
+  @Input() set icon(icon: Icon) {
+    if (!isIcon(icon)) {
       this.safeHtml = "";
-      // TODO set this.name of fallback icon
       return;
     }
 
-    const svg = src.svg;
+    const svg = icon.svg;
     this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(svg);
   }
 

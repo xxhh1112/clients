@@ -1,5 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 
+import type { IconKey } from "../icon";
+
 /**
  * Base class used in `NavGroupComponent` and `NavItemComponent`
  */
@@ -18,7 +20,7 @@ export abstract class NavBaseComponent {
   /**
    * Optional icon, e.g. `"bwi-collection"`
    */
-  @Input() icon: string;
+  @Input() icon: IconKey;
 
   /**
    * Route to be passed to internal `routerLink`

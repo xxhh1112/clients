@@ -1,6 +1,7 @@
 import { Meta, Story } from "@storybook/angular";
 
 import { BitIconComponent } from "./icon.component";
+import { selection } from "./selection";
 
 export default {
   title: "Component Library/Icon",
@@ -25,3 +26,30 @@ export const UnknownIcon = Template.bind({});
 UnknownIcon.args = {
   icon: "unknown",
 };
+
+const AllIconsTemplate = () => ({
+  template: `
+    <table class="tw-text-lg tw-text-main">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Icon</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${selection.icons
+          .map(
+            (icon) => `
+        <tr>
+          <td class="tw-p-1">${icon.properties.name}</td>
+          <td class="tw-p-1"><bit-icon name="${icon.properties.name}"></bit-icon></td>
+        </tr>
+      `
+          )
+          .join("\n")}
+      </tbody>
+    </table>
+  `,
+});
+
+export const AllIcons = AllIconsTemplate.bind({});
