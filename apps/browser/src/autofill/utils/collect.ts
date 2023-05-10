@@ -1,5 +1,3 @@
-/* eslint-disable no-var, no-console, no-prototype-builtins, prefer-const */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix them all now
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
 /**
@@ -8,7 +6,7 @@ import { FillableControl, ElementWithOpId, FormElement } from "../types";
  * @returns {string} Clean text
  */
 function cleanText(s: string): string {
-  var sVal = null;
+  let sVal = null;
   s && ((sVal = s.replace(/^\\s+|\\s+$|\\r?\\n.*$/gm, "")), (sVal = 0 < sVal.length ? sVal : null));
   return sVal;
 }
@@ -20,7 +18,7 @@ function cleanText(s: string): string {
  * @param {HTMLElement} el The element to push to the array
  */
 export function checkNodeType(arr: string[], el: Node) {
-  var theText = "";
+  let theText = "";
   3 === el.nodeType
     ? (theText = el.nodeValue)
     : 1 === el.nodeType && (theText = el.textContent || (el as HTMLElement).innerText);
@@ -35,10 +33,13 @@ export function checkNodeType(arr: string[], el: Node) {
  */
 export function isKnownTag(el: any) {
   if (el && void 0 !== el) {
-    var tags = "select option input form textarea button table iframe body head script".split(" ");
+    const tags = "select option input form textarea button table iframe body head script".split(
+      " "
+    );
 
     if (el) {
-      var elTag = el ? (el.tagName || "").toLowerCase() : "";
+      const elTag = el ? (el.tagName || "").toLowerCase() : "";
+
       return tags.constructor == Array ? 0 <= tags.indexOf(elTag) : elTag === tags;
     } else {
       return false;
@@ -55,7 +56,7 @@ export function isKnownTag(el: any) {
  * @param {number} steps The number of steps to take up the DOM tree
  */
 export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
-  var sib;
+  let sib;
   for (steps || (steps = 0); el && el.previousSibling; ) {
     el = el.previousSibling;
     if (isKnownTag(el)) {
@@ -88,15 +89,16 @@ export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
  * @returns {boolean} Returns `true` if the element is visible and `false` otherwise
  */
 export function isElementVisible(el: any) {
-  var theEl = el;
+  let theEl = el;
   // Get the top level document
   // eslint-disable-next-line no-cond-assign
   el = (el = el.ownerDocument) ? el.defaultView : {};
 
   // walk the dom tree until we reach the top
-  for (var elStyle; theEl && theEl !== document; ) {
+  for (let elStyle; theEl && theEl !== document; ) {
     // Calculate the style of the element
     elStyle = el.getComputedStyle ? el.getComputedStyle(theEl, null) : theEl.style;
+
     // If there's no computed style at all, we're done, as we know that it's not hidden
     if (!elStyle) {
       return true;
@@ -121,26 +123,27 @@ export function isElementVisible(el: any) {
  * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
  */
 export function isElementViewable(el: FormElement) {
-  var theDoc = el.ownerDocument.documentElement,
-    rect = el.getBoundingClientRect(), // getBoundingClientRect is relative to the viewport
-    docScrollWidth = theDoc.scrollWidth, // scrollWidth is the width of the document including any overflow
-    docScrollHeight = theDoc.scrollHeight, // scrollHeight is the height of the document including any overflow
-    leftOffset = rect.left - theDoc.clientLeft, // How far from the left of the viewport is the element, minus the left border width?
-    topOffset = rect.top - theDoc.clientTop, // How far from the top of the viewport is the element, minus the top border width?
-    theRect;
+  const theDoc = el.ownerDocument.documentElement;
+  const rect = el.getBoundingClientRect(); // getBoundingClientRect is relative to the viewport
+  const docScrollWidth = theDoc.scrollWidth; // scrollWidth is the width of the document including any overflow
+  const docScrollHeight = theDoc.scrollHeight; // scrollHeight is the height of the document including any overflow
+  const leftOffset = rect.left - theDoc.clientLeft; // How far from the left of the viewport is the element, minus the left border width?
+  const topOffset = rect.top - theDoc.clientTop; // How far from the top of the viewport is the element, minus the top border width?
+  let theRect;
 
   if (!isElementVisible(el) || !el.offsetParent || 10 > el.clientWidth || 10 > el.clientHeight) {
     return false;
   }
 
-  var rects = el.getClientRects();
+  const rects = el.getClientRects();
+
   if (0 === rects.length) {
     return false;
   }
 
   // If any of the rects have a left side that is further right than the document width or a right side that is
   // further left than the origin (i.e. is negative), we consider the element to be not viewable
-  for (var i = 0; i < rects.length; i++) {
+  for (let i = 0; i < rects.length; i++) {
     if (((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)) {
       return false;
     }
@@ -163,16 +166,14 @@ export function isElementViewable(el: FormElement) {
   // If the bottom of the bounding rectangle is outside the viewport, the y coordinate of the center point is the window height (minus offset) divided by 2.
   // If the bottom side of the bounding rectangle is inside the viewport, the y coordinate of the center point is the height of the bounding rectangle divided by
   // We then use elementFromPoint to find the element at that point.
-  for (
-    var pointEl = el.ownerDocument.elementFromPoint(
-      leftOffset +
-        (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2),
-      topOffset +
-        (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)
-    );
-    pointEl && pointEl !== el && pointEl !== (document as unknown as Element);
+  let pointEl = el.ownerDocument.elementFromPoint(
+    leftOffset +
+      (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2),
+    topOffset +
+      (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)
+  );
 
-  ) {
+  for (; pointEl && pointEl !== el && pointEl !== (document as unknown as Element); ) {
     // If the element we found is a label, and the element we're checking has labels
     if (
       pointEl.tagName &&
@@ -201,26 +202,29 @@ export function isElementViewable(el: FormElement) {
  * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
  */
 export function getElementForOPID(opId: string): Element {
-  var theEl;
+  let theEl;
+
   if (void 0 === opId || null === opId) {
     return null;
   }
 
   try {
-    var formEls = Array.prototype.slice.call(getFormElements(document));
-    var filteredFormEls = formEls.filter(function (el: ElementWithOpId<FormElement>) {
+    const formEls = Array.prototype.slice.call(getFormElements(document));
+    const filteredFormEls = formEls.filter(function (el: ElementWithOpId<FormElement>) {
       return el.opid == opId;
     });
 
     if (0 < filteredFormEls.length) {
       (theEl = filteredFormEls[0]),
-        1 < filteredFormEls.length && console.warn("More than one element found with opid " + opId);
+        // eslint-disable-next-line no-console
+        1 < filteredFormEls.length && console.warn(`More than one element found with opid ${opId}`);
     } else {
-      var theIndex = parseInt(opId.split("__")[1], 10);
+      const theIndex = parseInt(opId.split("__")[1], 10);
       isNaN(theIndex) || (theEl = formEls[theIndex]);
     }
   } catch (e) {
-    console.error("An unexpected error occurred: " + e);
+    // eslint-disable-next-line no-console
+    console.error(`An unexpected error occurred: ${e}`);
   } finally {
     // eslint-disable-next-line no-unsafe-finally
     return theEl;
@@ -234,33 +238,37 @@ export function getElementForOPID(opId: string): Element {
  * @returns An array of HTMLElements
  */
 export function getFormElements(theDoc: Document, limit?: number): FormElement[] {
-  var els: FormElement[] = [];
+  let els: FormElement[] = [];
+
   try {
-    var elsList = theDoc.querySelectorAll(
+    const elsList = theDoc.querySelectorAll(
       'input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
         ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, ' +
         "span[data-bwautofill]"
     );
     els = Array.prototype.slice.call(elsList);
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+  } catch (e) {
+    /* no-op */
+  }
 
   if (!limit || els.length <= limit) {
     return els;
   }
 
   // non-checkboxes/radios have higher priority
-  var returnEls = [];
-  var unimportantEls = [];
-  for (var i = 0; i < els.length; i++) {
+  let returnEls = [];
+  const unimportantEls = [];
+
+  for (let i = 0; i < els.length; i++) {
     if (returnEls.length >= limit) {
       break;
     }
 
-    var el = els[i];
-    var type = (el as HTMLInputElement).type
+    const el = els[i];
+    const type = (el as HTMLInputElement).type
       ? (el as HTMLInputElement).type.toLowerCase()
       : (el as HTMLInputElement).type;
+
     if (type === "checkbox" || type === "radio") {
       unimportantEls.push(el);
     } else {
@@ -268,7 +276,8 @@ export function getFormElements(theDoc: Document, limit?: number): FormElement[]
     }
   }
 
-  var unimportantElsToAdd = limit - returnEls.length;
+  const unimportantElsToAdd = limit - returnEls.length;
+
   if (unimportantElsToAdd > 0) {
     returnEls = returnEls.concat(unimportantEls.slice(0, unimportantElsToAdd));
   }
@@ -283,7 +292,8 @@ export function getFormElements(theDoc: Document, limit?: number): FormElement[]
  */
 export function focusElement(el: FillableControl, setVal: boolean) {
   if (setVal) {
-    var initialValue = el.value;
+    const initialValue = el.value;
+
     el.focus();
 
     if (el.value !== initialValue) {
@@ -294,8 +304,6 @@ export function focusElement(el: FillableControl, setVal: boolean) {
   }
 }
 
-// start helpers
-
 /**
  * For a given element `el`, returns the value of the attribute `attrName`.
  * @param {HTMLElement} el
@@ -303,11 +311,14 @@ export function focusElement(el: FillableControl, setVal: boolean) {
  * @returns {string} The value of the attribute
  */
 export function getElementAttrValue(el: any, attrName: string) {
-  var attrVal = el[attrName];
+  let attrVal = el[attrName];
+
   if ("string" == typeof attrVal) {
     return attrVal;
   }
+
   attrVal = el.getAttribute(attrName);
+
   return "string" == typeof attrVal ? attrVal : null;
 }
 
@@ -345,8 +356,8 @@ export function getSelectElementOptions(el: HTMLSelectElement): { options: strin
     return null;
   }
 
-  var options = Array.prototype.slice.call(el.options).map(function (option: HTMLOptionElement) {
-    var optionText = option.text
+  const options = Array.prototype.slice.call(el.options).map(function (option: HTMLOptionElement) {
+    const optionText = option.text
       ? toLowerString(option.text)
           .replace(/\\s/gm, "")
           // eslint-disable-next-line no-useless-escape
@@ -367,7 +378,7 @@ export function getSelectElementOptions(el: HTMLSelectElement): { options: strin
  * @returns {string} A string containing the label, or null if not found
  */
 export function getLabelTop(el: any) {
-  var parent;
+  let parent;
 
   // Traverse up the DOM until we reach either the top or the table data element containing our field
   for (el = el.parentElement || el.parentNode; el && "td" != toLowerString(el.tagName); ) {
@@ -400,7 +411,8 @@ export function getLabelTop(el: any) {
   el = parent.cells[el.cellIndex];
 
   // Get the contents of this label
-  var elText = el.textContent || el.innerText;
+  let elText = el.textContent || el.innerText;
+
   return (elText = cleanText(elText));
 }
 
@@ -429,13 +441,14 @@ export function toLowerString(s: string) {
  * Query the document `doc` for elements matching the selector `selector`
  */
 export function queryDoc<T extends Element = Element>(doc: Document, query: string): Array<T> {
-  var els: Array<T> = [];
+  let els: Array<T> = [];
+
   try {
     // Technically this returns a NodeListOf<Element> but it's ducktyped as an Array everywhere, so return it as an array here
     els = doc.querySelectorAll(query) as unknown as Array<T>;
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+  } catch (e) {
+    /* no-op */
+  }
+
   return els;
 }
-
-// end helpers

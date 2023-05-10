@@ -1,15 +1,14 @@
-/* eslint-disable no-var, no-console, no-prototype-builtins, prefer-const */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix them all now
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
 // Check if URL is not secure when the original saved one was
 export function urlNotSecure(savedURLs: string[]) {
-  var passwordInputs = null;
+  let passwordInputs = null;
   if (!savedURLs) {
     return false;
   }
 
   let confirmResult: any; // Boolean but we want to allow weak comparisons for compatibility with existing code
+
   return savedURLs.some((url) => url?.indexOf("https://") === 0) &&
     "http:" === document.location.protocol &&
     ((passwordInputs = document.querySelectorAll("input[type=password]")),
@@ -29,7 +28,7 @@ export function urlNotSecure(savedURLs: string[]) {
  * @returns {Event} A normalized event
  */
 function normalizeEvent(el: FillableControl, eventName: string) {
-  var ev: any;
+  let ev: any;
   if ("KeyboardEvent" in window) {
     ev = new window.KeyboardEvent(eventName, {
       bubbles: true,
@@ -57,7 +56,9 @@ function clickElement(el: HTMLElement) {
   if (!el || (el && "function" !== typeof el.click)) {
     return false;
   }
+
   el.click();
+
   return true;
 }
 
@@ -68,7 +69,8 @@ function clickElement(el: HTMLElement) {
  */
 function doFocusElement(el: FillableControl, setValue: boolean): void {
   if (setValue) {
-    var existingValue = el.value;
+    const existingValue = el.value;
+
     el.focus();
     el.value !== existingValue && (el.value = existingValue);
   } else {
@@ -82,12 +84,12 @@ function doFocusElement(el: FillableControl, setValue: boolean): void {
  * @returns {boolean} Returns true if we can see the element to apply styling.
  */
 export function canSeeElementToStyle(el: HTMLElement, animateTheFilling: boolean) {
-  var currentEl: any;
+  let currentEl: any;
   if ((currentEl = animateTheFilling)) {
     a: {
       currentEl = el;
       for (
-        var owner: any = el.ownerDocument, owner = owner ? owner.defaultView : {}, theStyle;
+        let owner: any = el.ownerDocument.defaultView || {}, theStyle;
         currentEl && currentEl !== document;
 
       ) {
@@ -124,14 +126,16 @@ export function canSeeElementToStyle(el: HTMLElement, animateTheFilling: boolean
  * @returns
  */
 export function selectAllFromDoc<T extends Element = Element>(theSelector: string): Array<T> {
-  var d = document,
-    elements: Array<T> = [];
+  const d = document;
+  let elements: Array<T> = [];
+
   try {
     // Technically this returns a NodeListOf<Element> but it's ducktyped as an Array everywhere, so return it as an array here
     elements = d.querySelectorAll(theSelector) as unknown as Array<T>;
   } catch (e) {
     /* no-op */
   }
+
   return elements;
 }
 
@@ -141,26 +145,28 @@ export function selectAllFromDoc<T extends Element = Element>(theSelector: strin
  * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
  */
 export function getElementByOpId(theOpId: string): FormElement {
-  var theElement;
+  let theElement;
   if (void 0 === theOpId || null === theOpId) {
     return null;
   }
   try {
-    var elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
+    const elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
       selectAllFromDoc("input, select, button, " + "span[data-bwautofill]")
     );
-    var filteredElements = elements.filter(function (o) {
+    const filteredElements = elements.filter(function (o) {
       return (o as ElementWithOpId<FillableControl | HTMLButtonElement>).opid == theOpId;
     });
     if (0 < filteredElements.length) {
       (theElement = filteredElements[0]),
         1 < filteredElements.length &&
+          // eslint-disable-next-line no-console
           console.warn("More than one element found with opid " + theOpId);
     } else {
-      var elIndex = parseInt(theOpId.split("__")[1], 10);
+      const elIndex = parseInt(theOpId.split("__")[1], 10);
       isNaN(elIndex) || (theElement = elements[elIndex]);
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error("An unexpected error occurred: " + e);
   } finally {
     // eslint-disable-next-line no-unsafe-finally
@@ -174,7 +180,7 @@ export function getElementByOpId(theOpId: string): FormElement {
  * @param {HTMLElement} el
  */
 export function setValueForElementByEvent(el: FillableControl) {
-  var valueToSet = el.value,
+  const valueToSet = el.value,
     ev1 = el.ownerDocument.createEvent("HTMLEvents"),
     ev2 = el.ownerDocument.createEvent("HTMLEvents");
 
@@ -194,7 +200,7 @@ export function setValueForElementByEvent(el: FillableControl) {
  * @returns {Array} Array of elements
  */
 function getAllFields(): HTMLInputElement[] {
-  var r = RegExp(
+  const r = RegExp(
     "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
     "i"
   );
@@ -211,7 +217,8 @@ function getAllFields(): HTMLInputElement[] {
  * @param {HTMLElement} el
  */
 export function setValueForElement(el: FillableControl) {
-  var valueToSet = el.value;
+  const valueToSet = el.value;
+
   clickElement(el);
   doFocusElement(el, false);
   el.dispatchEvent(normalizeEvent(el, "keydown"));
@@ -226,7 +233,8 @@ export function setValueForElement(el: FillableControl) {
  * @returns
  */
 export function doClickByOpId(opId: string) {
-  var el = getElementByOpId(opId) as FillableControl;
+  const el = getElementByOpId(opId) as FillableControl;
+
   return el ? (clickElement(el) ? [el] : null) : null;
 }
 
@@ -248,6 +256,7 @@ export function touchAllFields() {
  */
 export function doClickByQuery(query: string) {
   query = selectAllFromDoc(query) as any; // string parameter has been reassigned and is now a NodeList
+
   return Array.prototype.map.call(
     Array.prototype.slice.call(query),
     function (el: HTMLInputElement) {
@@ -266,7 +275,8 @@ export function doClickByQuery(query: string) {
  * @returns
  */
 export function doFocusByOpId(opId: string): null {
-  var el = getElementByOpId(opId) as FillableControl;
+  const el = getElementByOpId(opId) as FillableControl;
+
   if (el) {
     "function" === typeof el.click && el.click(),
       "function" === typeof el.focus && doFocusElement(el, true);
@@ -282,8 +292,8 @@ export function doFocusByOpId(opId: string): null {
  * @returns {Array} Array of elements that were set.
  */
 export function doSimpleSetByQuery(query: string, valueToSet: string): FillableControl[] {
-  var elements = selectAllFromDoc(query),
-    arr: FillableControl[] = [];
+  const elements = selectAllFromDoc(query);
+  const arr: FillableControl[] = [];
   Array.prototype.forEach.call(
     Array.prototype.slice.call(elements),
     function (el: FillableControl) {
@@ -294,5 +304,6 @@ export function doSimpleSetByQuery(query: string, valueToSet: string): FillableC
         ((el.value = valueToSet), arr.push(el));
     }
   );
+
   return arr;
 }

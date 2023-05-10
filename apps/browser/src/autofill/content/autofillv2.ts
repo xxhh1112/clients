@@ -1,6 +1,3 @@
-/* eslint-disable no-var, no-console, no-prototype-builtins */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix them all now
-
 /*
   1Password Extension
 
@@ -71,7 +68,7 @@ import {
 } from "../utils";
 
 function collect(document: Document) {
-  var isFirefox =
+  const isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
 
   (document as AutofillDocument).elementsByOPID = {};
@@ -83,7 +80,7 @@ function collect(document: Document) {
    * @returns
    */
   function doEventOnElement(kedol: HTMLElement, fonor: string) {
-    var quebo: any;
+    let quebo: any;
     isFirefox
       ? ((quebo = document.createEvent("KeyboardEvent")),
         quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
@@ -94,6 +91,7 @@ function collect(document: Document) {
         (quebo.which = 0),
         (quebo.srcElement = kedol),
         (quebo.target = kedol));
+
     return quebo;
   }
 
@@ -104,8 +102,9 @@ function collect(document: Document) {
      * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
      */
     function getLabelTag(el: FillableControl): string {
-      var docLabel: HTMLLabelElement[],
+      let docLabel: HTMLLabelElement[],
         theLabels: HTMLLabelElement[] = [];
+      let theEl: HTMLElement = el;
 
       if (el.labels && el.labels.length && 0 < el.labels.length) {
         theLabels = Array.prototype.slice.call(el.labels);
@@ -124,18 +123,14 @@ function collect(document: Document) {
             "label[for=" + JSON.stringify(el.name) + "]"
           );
 
-          for (var labelIndex = 0; labelIndex < docLabel.length; labelIndex++) {
+          for (let labelIndex = 0; labelIndex < docLabel.length; labelIndex++) {
             if (-1 === theLabels.indexOf(docLabel[labelIndex])) {
               theLabels.push(docLabel[labelIndex]);
             }
           }
         }
 
-        for (
-          var theEl: HTMLElement = el;
-          theEl && theEl != (theDoc as any);
-          theEl = theEl.parentNode as HTMLElement
-        ) {
+        for (; theEl && theEl != (theDoc as any); theEl = theEl.parentNode as HTMLElement) {
           if (
             "label" === toLowerString(theEl.tagName) &&
             -1 === theLabels.indexOf(theEl as HTMLLabelElement)
@@ -171,14 +166,14 @@ function collect(document: Document) {
         .join("");
     }
 
-    var theView = theDoc.defaultView ? theDoc.defaultView : window;
+    const theView = theDoc.defaultView ? theDoc.defaultView : window;
 
     // get all the docs
-    var theForms: AutofillForm[] = Array.prototype.slice
+    const theForms: AutofillForm[] = Array.prototype.slice
       .call(queryDoc<HTMLFormElement>(theDoc, "form"))
       .map(function (formEl: HTMLFormElement, elIndex: number) {
-        var op: AutofillForm = {} as any,
-          formOpId: unknown = "__form__" + elIndex;
+        const op: AutofillForm = {} as any;
+        let formOpId: unknown = "__form__" + elIndex;
 
         (formEl as ElementWithOpId<HTMLFormElement>).opid = formOpId as string;
         op.opid = formOpId as string;
@@ -193,13 +188,13 @@ function collect(document: Document) {
       });
 
     // get all the form fields
-    var theFields = Array.prototype.slice
+    const theFields = Array.prototype.slice
       .call(getFormElements(theDoc, 50))
       .map(function (el: FormElement, elIndex: number) {
-        var field: Record<string, any> = {},
-          opId = "__" + elIndex,
-          elMaxLen =
-            -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
+        const field: Record<string, any> = {};
+        const opId = "__" + elIndex;
+        let elMaxLen =
+          -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
 
         if (!elMaxLen || ("number" === typeof elMaxLen && isNaN(elMaxLen))) {
           elMaxLen = 999;
@@ -218,7 +213,7 @@ function collect(document: Document) {
         addProp(field, "tabindex", getElementAttrValue(el, "tabindex"));
         addProp(field, "title", getElementAttrValue(el, "title"));
 
-        var elTagName = el.tagName.toLowerCase();
+        const elTagName = el.tagName.toLowerCase();
         addProp(field, "tagName", elTagName);
 
         if (elTagName === "span") {
@@ -230,14 +225,19 @@ function collect(document: Document) {
           addProp(field, "label-data", getElementAttrValue(el, "data-label"));
           addProp(field, "label-aria", getElementAttrValue(el, "aria-label"));
           addProp(field, "label-top", getLabelTop(el));
-          var labelArr: any = [];
-          for (var sib: Node = el; sib && sib.nextSibling; ) {
+
+          let labelArr: any = [];
+
+          for (let sib: Node = el; sib && sib.nextSibling; ) {
             sib = sib.nextSibling;
+
             if (isKnownTag(sib)) {
               break;
             }
+
             checkNodeType(labelArr, sib);
           }
+
           addProp(field, "label-right", labelArr.join(""));
           labelArr = [];
           shiftForLeftLabel(el, labelArr);
@@ -291,10 +291,10 @@ function collect(document: Document) {
         return f.fakeTested;
       })
       .forEach(function (f: any) {
-        var el = (theDoc as AutofillDocument).elementsByOPID[f.opid] as FillableControl;
+        const el = (theDoc as AutofillDocument).elementsByOPID[f.opid] as FillableControl;
         el.getBoundingClientRect();
 
-        var originalValue = el.value;
+        const originalValue = el.value;
         // click it
         !el || (el && "function" !== typeof el.click) || el.click();
         focusElement(el, false);
@@ -310,9 +310,9 @@ function collect(document: Document) {
         f.postFakeTestViewable = isElementViewable(el);
         f.postFakeTestType = el.type;
 
-        var elValue = el.value;
+        const elValue = el.value;
 
-        var event1 = el.ownerDocument.createEvent("HTMLEvents"),
+        const event1 = el.ownerDocument.createEvent("HTMLEvents"),
           event2 = el.ownerDocument.createEvent("HTMLEvents");
         el.dispatchEvent(doEventOnElement(el, "keydown"));
         el.dispatchEvent(doEventOnElement(el, "keypress"));
@@ -327,13 +327,13 @@ function collect(document: Document) {
       });
 
     // build out the page details object. this is the final result
-    var pageDetails: AutofillPageDetails = {
+    const pageDetails: AutofillPageDetails = {
       documentUUID: oneShotId,
       title: theDoc.title,
       url: theView.location.href,
       documentUrl: theDoc.location.href,
       forms: (function (forms) {
-        var formObj: { [id: string]: AutofillForm } = {};
+        const formObj: { [id: string]: AutofillForm } = {};
         forms.forEach(function (f) {
           formObj[f.opid] = f;
         });
@@ -352,8 +352,8 @@ function collect(document: Document) {
 }
 
 function fill(document: Document, fillScript: AutofillScript) {
-  var markTheFilling = true,
-    animateTheFilling = true;
+  let markTheFilling = true;
+  let animateTheFilling = true;
 
   // Detect if within an iframe, and the iframe is sandboxed
   function isSandboxed() {
@@ -362,12 +362,11 @@ function fill(document: Document, fillScript: AutofillScript) {
   }
 
   function doFill(fillScript: AutofillScript) {
-    var fillScriptOps: AutofillScriptOptions | FillScript[], // This variable is re-assigned and its type changes
-      theOpIds: string[] = [],
-      fillScriptProperties = fillScript.properties,
-      operationDelayMs = 1,
-      doOperation: (ops: FillScript[], theOperation: () => void) => void,
-      operationsToDo: any[] = [];
+    let fillScriptOps: AutofillScriptOptions | FillScript[]; // This variable is re-assigned and its type changes
+    let theOpIds: string[] = [];
+    const fillScriptProperties = fillScript.properties;
+    let operationDelayMs = 1;
+    const operationsToDo: any[] = [];
 
     fillScriptProperties &&
       fillScriptProperties.delay_between_operations &&
@@ -381,7 +380,7 @@ function fill(document: Document, fillScript: AutofillScript) {
       // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
       // If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
       // The browser may print a message to the console, but this is not a standard error that we can handle.
-      var acceptedIframeWarning = confirm(
+      const acceptedIframeWarning = confirm(
         "The form is hosted by a different domain than the URI " +
           "of your saved login. Choose OK to auto-fill anyway, or Cancel to stop. " +
           "To prevent this warning in the future, save this URI, " +
@@ -398,8 +397,9 @@ function fill(document: Document, fillScript: AutofillScript) {
      * @argument ops An array of FillScripts to execute
      * @argument theOperation A callback to execute after the operations are complete (this appears to be misnamed)
      */
-    doOperation = function (ops: FillScript[], theOperation) {
-      var op = ops[0];
+    const doOperation = function (ops: FillScript[], theOperation: () => void): void {
+      let op = ops[0];
+
       if (void 0 === op) {
         theOperation();
       } else {
@@ -408,18 +408,21 @@ function fill(document: Document, fillScript: AutofillScript) {
           operationDelayMs = (op as any).parameters ? (op as any).parameters[0] : op[1];
         } else {
           if ((op = normalizeOp(op))) {
-            for (var opIndex = 0; opIndex < op.length; opIndex++) {
+            for (let opIndex = 0; opIndex < op.length; opIndex++) {
               -1 === operationsToDo.indexOf(op[opIndex]) && operationsToDo.push(op[opIndex]);
             }
           }
+
           theOpIds = theOpIds.concat(
             operationsToDo.map(function (operationToDo) {
+              // eslint-disable-next-line no-prototype-builtins
               return operationToDo && operationToDo.hasOwnProperty("opid")
                 ? operationToDo.opid
                 : null;
             })
           );
         }
+
         setTimeout(function () {
           doOperation(ops.slice(1), theOperation);
         }, operationDelayMs);
@@ -427,13 +430,16 @@ function fill(document: Document, fillScript: AutofillScript) {
     };
 
     if ((fillScriptOps = fillScript.options)) {
+      // eslint-disable-next-line no-prototype-builtins
       fillScriptOps.hasOwnProperty("animate") && (animateTheFilling = fillScriptOps.animate),
+        // eslint-disable-next-line no-prototype-builtins
         fillScriptOps.hasOwnProperty("markFilling") && (markTheFilling = fillScriptOps.markFilling);
     }
 
     // don't mark a password filling
     fillScript.itemType && "fillPassword" === fillScript.itemType && (markTheFilling = false);
 
+    // eslint-disable-next-line no-prototype-builtins
     if (!fillScript.hasOwnProperty("script")) {
       return;
     }
@@ -452,7 +458,7 @@ function fill(document: Document, fillScript: AutofillScript) {
    * This contains all possible FillScript operations, which matches the FillScriptOp enum. We only use some of them.
    * This is accessed by indexing on the FillScriptOp, e.g. thisFill[FillScriptOp].
    */
-  var thisFill: Record<FillScriptOp | string, any> = {
+  const thisFill: Record<FillScriptOp | string, any> = {
     fill_by_opid: doFillByOpId,
     fill_by_query: doFillByQuery,
     click_on_opid: doClickByOpId,
@@ -467,9 +473,10 @@ function fill(document: Document, fillScript: AutofillScript) {
    * Performs the operation specified by the FillScript
    */
   function normalizeOp(op: FillScript) {
-    var thisOperation: FillScriptOp;
+    let thisOperation: FillScriptOp;
 
     // If the FillScript is an object - unused
+    // eslint-disable-next-line no-prototype-builtins
     if (op.hasOwnProperty("operation") && op.hasOwnProperty("parameters")) {
       (thisOperation = (op as any).operation), (op = (op as any).parameters);
     } else {
@@ -480,12 +487,15 @@ function fill(document: Document, fillScript: AutofillScript) {
         return null;
       }
     }
+
+    // eslint-disable-next-line no-prototype-builtins
     return thisFill.hasOwnProperty(thisOperation) ? thisFill[thisOperation].apply(this, op) : null;
   }
 
   // do a fill by opid operation
   function doFillByOpId(opId: string, op: string) {
-    var el = getElementByOpId(opId) as FillableControl;
+    const el = getElementByOpId(opId) as FillableControl;
+
     return el ? (fillTheElement(el, op), [el]) : null;
   }
 
@@ -493,18 +503,20 @@ function fill(document: Document, fillScript: AutofillScript) {
    * Find all elements matching `query` and fill them using the value `op` from the fill script
    */
   function doFillByQuery(query: string, op: string): FillableControl[] {
-    var elements = selectAllFromDoc(query);
+    const elements = selectAllFromDoc(query);
+
     return Array.prototype.map.call(
       Array.prototype.slice.call(elements),
       function (el: FillableControl) {
         fillTheElement(el, op);
+
         return el;
       },
       this
     );
   }
 
-  var checkRadioTrueOps: Record<string, boolean> = {
+  const checkRadioTrueOps: Record<string, boolean> = {
       true: true,
       y: true,
       1: true,
@@ -519,7 +531,8 @@ function fill(document: Document, fillScript: AutofillScript) {
    * @param {string} op
    */
   function fillTheElement(el: FillableControl, op: string) {
-    var shouldCheck: boolean;
+    let shouldCheck: boolean;
+
     if (
       el &&
       null !== op &&
@@ -534,23 +547,28 @@ function fill(document: Document, fillScript: AutofillScript) {
           shouldCheck =
             op &&
             1 <= op.length &&
+            // eslint-disable-next-line no-prototype-builtins
             checkRadioTrueOps.hasOwnProperty(op.toLowerCase()) &&
             true === checkRadioTrueOps[op.toLowerCase()];
           (el as HTMLInputElement).checked === shouldCheck ||
             doAllFillOperations(el, function (theEl: HTMLInputElement) {
               theEl.checked = shouldCheck;
             });
+
           break;
         case "radio":
           true === checkRadioTrueOps[op.toLowerCase()] && el.click();
+
           break;
         default:
           el.value == op ||
             doAllFillOperations(el, function (theEl) {
               if (!theEl.type && theEl.tagName.toLowerCase() === "span") {
                 theEl.innerText = op;
+
                 return;
               }
+
               theEl.value = op;
             });
       }
@@ -572,6 +590,7 @@ function fill(document: Document, fillScript: AutofillScript) {
 
     if (canSeeElementToStyle(el, animateTheFilling)) {
       el.classList.add("com-bitwarden-browser-animated-fill");
+
       setTimeout(function () {
         if (el) {
           el.classList.remove("com-bitwarden-browser-animated-fill");
@@ -595,23 +614,28 @@ function fill(document: Document, fillScript: AutofillScript) {
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.command === "collectPageDetails") {
-    var pageDetails = collect(document);
-    var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
+    const pageDetails = collect(document);
+    const pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
+
     chrome.runtime.sendMessage({
       command: "collectPageDetailsResponse",
       tab: msg.tab,
       details: pageDetailsObj,
       sender: msg.sender,
     });
+
     sendResponse();
+
     return true;
   } else if (msg.command === "fillForm") {
     fill(document, msg.fillScript);
     sendResponse();
+
     return true;
   } else if (msg.command === "collectPageDetailsImmediately") {
-    var pageDetails = collect(document);
-    var pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
+    const pageDetails = collect(document);
+    const pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
+
     sendResponse(pageDetailsObj);
     return true;
   }
