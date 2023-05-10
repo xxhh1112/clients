@@ -7,6 +7,7 @@ import { WebauthnService } from "../../core";
 import { WebauthnCredentialView } from "../../core/views/webauth-credential.view";
 
 import { openCreateCredentialDialog } from "./create-credential-dialog/create-credential-dialog.component";
+import { openDeleteCredentialDialogComponent } from "./delete-credential-dialog/delete-credential-dialog.component";
 
 @Component({
   selector: "app-fido2-login-settings",
@@ -54,7 +55,11 @@ export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  protected async createCredential() {
+  protected createCredential() {
     openCreateCredentialDialog(this.dialogService, {});
+  }
+
+  protected deleteCredential(credentialId: string) {
+    openDeleteCredentialDialogComponent(this.dialogService, { data: { credentialId } });
   }
 }

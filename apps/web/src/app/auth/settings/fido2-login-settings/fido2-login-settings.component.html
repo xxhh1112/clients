@@ -29,6 +29,7 @@
         bitLink
         [disabled]="loading"
         [attr.aria-label]="('remove' | i18n) + ' ' + credential.name"
+        (click)="deleteCredential(credential.id)"
       >
         {{ "remove" | i18n }}
       </button>

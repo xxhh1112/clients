@@ -1,5 +1,5 @@
 import { Injectable, Optional } from "@angular/core";
-import { BehaviorSubject, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
+import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -103,6 +103,15 @@ export class WebauthnService {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
       return false;
     }
+  }
+
+  getCredential$(credentialId: string): Observable<WebauthnCredentialView> {
+    return this.credentials$.pipe(
+      map(
+        (credentials) => credentials.find((c) => c.id === credentialId),
+        filter((c) => c !== undefined)
+      )
+    );
   }
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
