@@ -15,6 +15,7 @@ module.exports = {
     "@storybook/addon-a11y",
     "storybook-addon-designs",
   ],
+  staticDirs: ["./public/"],
   framework: "@storybook/angular",
   core: {
     builder: "webpack5",
