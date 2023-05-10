@@ -245,7 +245,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-      - name: Retrieve storage account key
+      - name: Retrieve storage account connection string
         id: retrieve-bot-secrets
         uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
         with:
