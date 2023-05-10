@@ -3125,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Vous pourrez accéder à cette organisation dès qu'un administrateur aura confirmé votre adhésion. Nous vous enverrons un courriel lorsque cela se produira."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "Vous pouvez maintenant accéder à cette organisation."
+  },
   "inviteAcceptFailed": {
     "message": "Impossible d’accepter l’invitation. Demandez à un administrateur de l'organisation d’envoyer une nouvelle invitation."
   },
@@ -3700,7 +3703,7 @@
     }
   },
   "masterPasswordPolicyRequirementsNotMet": {
-    "message": "Votre nouveau mot de passe principal ne répond pas aux exigences en matière de politique de sécurité."
+    "message": "Votre nouveau mot de passe principal ne répond pas aux exigences de politique de sécurité."
   },
   "minimumNumberOfWords": {
     "message": "Nombre minimum de mots"
@@ -4807,7 +4810,10 @@
     "message": "Votre mot de passe principal a été récemment changé par un administrateur de votre organisation. Pour pouvoir accéder au coffre, vous devez mettre à jour votre mot de passe principal maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure."
   },
   "masterPasswordInvalidWarning": {
-    "message": "Votre mot de passe principal ne répond pas aux exigences de politique de sécurité de cette organisation. Afin de rejoindre l'organisation, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure."
+    "message": "Votre mot de passe principal ne répond pas aux exigences de politique de sécurité de cette organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuver rester actives pendant encore une heure."
+  },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Votre mot de passe principal ne répond pas aux exigences des politiques de sécurité de cette organisation. Pour pouvoir accéder au coffre, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuver rester actives pendant encore une heure."
   },
   "maximumVaultTimeout": {
     "message": "Délai d'expiration du coffre"
@@ -4828,7 +4834,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration autorisé du coffre est de $HOURS$ heure(s) et $MINUTES$ minute(s) maximum",
+    "message": "Les politiques de sécurité de votre organisation ont défini le délai d'expiration de votre coffre à $HOURS$ heure(s) et $MINUTES$ minute(s) maximum.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4837,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai autorisé d'expiration du coffre est de $HOURS$ heure(s) et $MINUTES$ minute(s) maximum. L'action après délai d'expiration de votre coffre est fixée à $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Les politiques de sécurité de votre organisation ont défini l'action après délai d'expiration de votre coffre à $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5396,6 +5428,15 @@
     "message": "Organisation actuelle",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Compte : connecté en tant que $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Paramètres du compte"
   },
@@ -5614,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "La valeur d'entrée doit être au moins $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "La valeur d'entrée ne doit pas excéder $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6504,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Itérations KDF basses"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Augmentez vos paramètres de chiffrement KDF pour améliorer la sécurité de votre compte."
-  },
-  "changeKdfSettings": {
-    "message": "Changer les paramètres KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Mettez à jour vos paramètres de chiffrement pour répondre à de nouvelles recommandations de sécurité et améliorer la protection de votre compte."
   },
   "changeKdfLoggedOutWarning": {
     "message": "En poursuivant, vous serez déconnecté de toutes les sessions actives. Vous devrez vous reconnecter et terminer le paramétrage de l'authentification à deux facteurs. Nous vous recommandons d'exporter votre coffre avant de modifier vos paramètres de chiffrement afin d'éviter toute perte de données."
@@ -6684,5 +6740,23 @@
   },
   "notAvailableForFreeOrganization": {
     "message": "Cette fonctionnalité n'est pas disponible pour les organisations gratuites. Contactez le propriétaire de votre organisation pour une mise à niveau."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Contactez l'administrateur de votre organisation pour gérer les secrets de ce projet.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Exiger que les membres existants changent leurs mots de passe"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Vous n'avez pas les droits pour supprimer ce projet",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Les projets suivants ne peuvent pas être supprimés. Voulez-vous continuer ?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Mettre à jour les paramètres KDF"
   }
 }

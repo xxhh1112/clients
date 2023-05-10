@@ -18,7 +18,7 @@ jobs:
       version_number: ${{ steps.version.outputs.new-version }}
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Calculate bumped version
         id: version

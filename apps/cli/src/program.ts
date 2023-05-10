@@ -152,10 +152,12 @@ export class Program {
             this.main.twoFactorService,
             this.main.syncService,
             this.main.keyConnectorService,
+            this.main.policyApiService,
+            this.main.organizationService,
             async () => await this.main.logout()
           );
           const response = await command.run(email, password, options);
-          this.processResponse(response);
+          this.processResponse(response, true);
         }
       });
 

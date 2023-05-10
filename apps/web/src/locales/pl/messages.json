@@ -1256,7 +1256,7 @@
     "message": "Dane zostały zaimportowane"
   },
   "importSuccessNumberOfItems": {
-    "message": "W sumie zaimportowano $AMOUNT$ elementów.",
+    "message": "Zaimportowano elementów: $AMOUNT$.",
     "placeholders": {
       "amount": {
         "content": "$1",
@@ -3125,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Dostęp do tej organizacji otrzymasz po potwierdzeniu członkostwa przez administratora. Dostaniesz wtedy wiadomość e-mail."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "Możesz teraz uzyskać dostęp do tej organizacji."
+  },
   "inviteAcceptFailed": {
     "message": "Nie można zaakceptować zaproszenia. Poproś administratora organizacji o wysłanie nowego zaproszenia."
   },
@@ -4809,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Hasło główne nie spełnia wymagań zasad organizacji. Aby dołączyć do organizacji, musisz zaktualizować je. Ta czynność spowoduje wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę."
+  },
   "maximumVaultTimeout": {
     "message": "Blokowanie sejfu"
   },
@@ -4828,7 +4834,7 @@
     "message": "Minuty"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Zasady organizacji mają wpływ czas blokowania sejfu. Maksymalny dozwolony czas wynosi $HOURS$ godz. i $MINUTES$ min.",
+    "message": "Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi $HOURS$ godz. i $MINUTES$ min.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4837,6 +4843,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi $HOURS$ godz. i $MINUTES$ min. Twój czas blokowania sejfu to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Zasady organizacji ustawiły czas blokowania sejfu na $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5396,6 +5428,15 @@
     "message": "Obecna organizacja",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: zalogowano jako $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Ustawienia konta"
   },
@@ -5614,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Wartość wejściowa musi wynosić co najmniej $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Wartość wejściowa nie może przekraczać $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6504,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Niska liczba iteracji KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Zwiększ ustawienia szyfrowania KDF, aby poprawić bezpieczeństwo swojego konta."
-  },
-  "changeKdfSettings": {
-    "message": "Zmień ustawienia KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Zaktualizuj ustawienia szyfrowania, aby spełnić nowe zalecenia bezpieczeństwa i poprawić ochronę konta."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Kontynuowanie spowoduje wylogowanie ze wszystkich aktywnych sesji. Będzie trzeba zalogować się ponownie i ukończyć konfigurację logowania dwuetapowego. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
@@ -6683,6 +6739,24 @@
     "message": "Odrzuć"
   },
   "notAvailableForFreeOrganization": {
-    "message": "Ta funkcja nie jest dostępna dla darmowych organizacji. Skontaktuj się z właścicielem organizacji, aby ulepszyć."
+    "message": "Ta funkcja nie jest dostępna dla darmowych organizacji. Skontaktuj się z właścicielem organizacji, aby ją ulepszyć."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Skontaktuj się z administratorem organizacji, aby zarządzać sekretami dla tego projektu.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Wymagaj od istniejących członków zmiany haseł"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Nie masz uprawnień do usunięcia tego projektu",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Następujące projekty nie mogą zostać usunięte. Czy chcesz kontynuować?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Zaktualizuj ustawienia KDF"
   }
 }

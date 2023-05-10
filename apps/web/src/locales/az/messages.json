@@ -1256,7 +1256,7 @@
     "message": "Verilənlər anbarınıza uğurla idxal edildi."
   },
   "importSuccessNumberOfItems": {
-    "message": "A total of $AMOUNT$ items were imported.",
+    "message": "Cəmi $AMOUNT$ element daxilə köçürüldü.",
     "placeholders": {
       "amount": {
         "content": "$1",
@@ -3125,6 +3125,9 @@
   "inviteAcceptedDesc": {
     "message": "Administrator üzvlüyünüzü təsdiqlədikdən sonra bu təşkilata müraciət edə bilərsiniz. Bu baş verəndə sizə bir e-poçt göndərəcəyik."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "Artıq bu təşkilata müraciət edə bilərsiniz."
+  },
   "inviteAcceptFailed": {
     "message": "Dəvət qəbul edilə bilmədi. Təşkilat adminindən yeni bir dəvət göndərməsini xahiş edin."
   },
@@ -4809,6 +4812,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Ana parolunuz bu təşkilatın siyasət tələblərinə cavab vermir. Təşkilata qoşulmaq üçün Ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
   "maximumVaultTimeout": {
     "message": "Anbara müraciət bitəcək"
   },
@@ -4840,6 +4846,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt $HOURS$ saat $MINUTES$ dəqiqədir. Anbar vaxt bitişi əməliyyatı $ACTION$ olaraq tənzimləndi.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı $ACTION$ olaraq tənzimlədi.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "Özəl vaxt"
   },
@@ -4868,7 +4900,7 @@
     "message": "Avto-doldurmanı aktivləşdir"
   },
   "activateAutofillPolicyDesc": {
-    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+    "message": "Bütün mövcud və yeni üzvlər üçün brauzer genişləndirməsindəki səhifə yüklənəndə avto-doldurmanı tənzimləməsini aktivləşdirin."
   },
   "experimentalFeature": {
     "message": "Təhlükəli və ya güvənilməyən veb saytlar, səhifə yüklənərkən avto-doldurmanı istifadə edə bilər."
@@ -5396,6 +5428,15 @@
     "message": "Hazırkı təşkilat",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Hesab: $NAME$ olaraq giriş edildi",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Hesab tənzimləmələri"
   },
@@ -5614,6 +5655,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Giriş dəyəri ən azı $MIN$ olmalıdır.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Giriş dəyəri $MAX$ dəyərini aşmamalıdır.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6504,11 +6563,8 @@
   "lowKdfIterations": {
     "message": "Aşağı KDF iterasiyaları"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Hesabınızın güvənliyini artırmaq üçün KDF şifrələmə tənzimləmələrinizi yüksəldin."
-  },
-  "changeKdfSettings": {
-    "message": "KDF tənzimləmələrini dəyişdir"
+  "updateLowKdfIterationsDesc": {
+    "message": "Yeni güvənlik tövsiyələrini qarşılamaq və hesab qorumasını təkmilləşdirmək üçün şifrələmə tənzimləmələrinizi güncəlləyin."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
@@ -6684,5 +6740,23 @@
   },
   "notAvailableForFreeOrganization": {
     "message": "Bu özəllik ödənişsiz təşkilatlar üçün əlçatmazdır. Yüksəltmək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Contact your organization's admin to manage secrets for this project.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Mövcud üzvlərin öz parollarını dəyişdirməsini tələb et"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Bu layihəni silmək icazəniz yoxdur",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Aşağıdakı layihələr silinə bilməz. Davam etmək istəyirsiniz?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF tənzimləmələrini güncəllə"
   }
 }

@@ -8,7 +8,9 @@ import { ProviderData } from "../admin-console/models/data/provider.data";
 import { Policy } from "../admin-console/models/domain/policy";
 import { CollectionView } from "../admin-console/models/view/collection.view";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { ForceResetPasswordReason } from "../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { BiometricKey } from "../auth/types/biometric-key";
 import { KdfType, ThemeType, UriMatchType } from "../enums";
 import { EventData } from "../models/data/event.data";
 import { ServerConfigData } from "../models/data/server-config.data";
@@ -77,7 +79,7 @@ export abstract class StateService<T extends Account = Account> {
   setCryptoMasterKeyB64: (value: string, options?: StorageOptions) => Promise<void>;
   getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
   hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
-  setCryptoMasterKeyBiometric: (value: string, options?: StorageOptions) => Promise<void>;
+  setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   getDecryptedCiphers: (options?: StorageOptions) => Promise<CipherView[]>;
   setDecryptedCiphers: (value: CipherView[], options?: StorageOptions) => Promise<void>;
   getDecryptedCollections: (options?: StorageOptions) => Promise<CollectionView[]>;
@@ -143,7 +145,13 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getDisableContextMenuItem: (options?: StorageOptions) => Promise<boolean>;
   setDisableContextMenuItem: (value: boolean, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this, use SettingsService
+   */
   getDisableFavicon: (options?: StorageOptions) => Promise<boolean>;
+  /**
+   * @deprecated Do not call this, use SettingsService
+   */
   setDisableFavicon: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDisableGa: (options?: StorageOptions) => Promise<boolean>;
   setDisableGa: (value: boolean, options?: StorageOptions) => Promise<void>;
@@ -163,8 +171,6 @@ export abstract class StateService<T extends Account = Account> {
   setEnableAlwaysOnTop: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableAutoFillOnPageLoad: (options?: StorageOptions) => Promise<boolean>;
   setEnableAutoFillOnPageLoad: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getEnableBiometric: (options?: StorageOptions) => Promise<boolean>;
-  setEnableBiometric: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableBrowserIntegration: (options?: StorageOptions) => Promise<boolean>;
   setEnableBrowserIntegration: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableBrowserIntegrationFingerprint: (options?: StorageOptions) => Promise<boolean>;
@@ -261,8 +267,11 @@ export abstract class StateService<T extends Account = Account> {
   setEventCollection: (value: EventData[], options?: StorageOptions) => Promise<void>;
   getEverBeenUnlocked: (options?: StorageOptions) => Promise<boolean>;
   setEverBeenUnlocked: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getForcePasswordReset: (options?: StorageOptions) => Promise<boolean>;
-  setForcePasswordReset: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getForcePasswordResetReason: (options?: StorageOptions) => Promise<ForceResetPasswordReason>;
+  setForcePasswordResetReason: (
+    value: ForceResetPasswordReason,
+    options?: StorageOptions
+  ) => Promise<void>;
   getInstalledVersion: (options?: StorageOptions) => Promise<string>;
   setInstalledVersion: (value: string, options?: StorageOptions) => Promise<void>;
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
@@ -289,14 +298,14 @@ export abstract class StateService<T extends Account = Account> {
   setMinimizeOnCopyToClipboard: (value: boolean, options?: StorageOptions) => Promise<void>;
   getNeverDomains: (options?: StorageOptions) => Promise<{ [id: string]: any }>;
   setNeverDomains: (value: { [id: string]: any }, options?: StorageOptions) => Promise<void>;
-  getNoAutoPromptBiometrics: (options?: StorageOptions) => Promise<boolean>;
-  setNoAutoPromptBiometrics: (value: boolean, options?: StorageOptions) => Promise<void>;
   getNoAutoPromptBiometricsText: (options?: StorageOptions) => Promise<string>;
   setNoAutoPromptBiometricsText: (value: string, options?: StorageOptions) => Promise<void>;
   getOpenAtLogin: (options?: StorageOptions) => Promise<boolean>;
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
+  getEmergencyAccessInvitation: (options?: StorageOptions) => Promise<any>;
+  setEmergencyAccessInvitation: (value: any, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this directly, use OrganizationService
    */
@@ -346,7 +355,7 @@ export abstract class StateService<T extends Account = Account> {
   setTwoFactorToken: (value: string, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
   getUsesKeyConnector: (options?: StorageOptions) => Promise<boolean>;
-  setUsesKeyConnector: (vaule: boolean, options?: StorageOptions) => Promise<void>;
+  setUsesKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
   getVaultTimeout: (options?: StorageOptions) => Promise<number>;
   setVaultTimeout: (value: number, options?: StorageOptions) => Promise<void>;
   getVaultTimeoutAction: (options?: StorageOptions) => Promise<string>;

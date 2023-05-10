@@ -1,4 +1,4 @@
-import { of, concatMap, BehaviorSubject, Observable, map } from "rxjs";
+import { BehaviorSubject, concatMap, map, Observable, of } from "rxjs";
 
 import { StateService } from "../../../abstractions/state.service";
 import { Utils } from "../../../misc/utils";
@@ -40,6 +40,28 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
         })
       )
       .subscribe();
+  }
+
+  /**
+   * Returns the first policy found that applies to the active user
+   * @param policyType Policy type to search for
+   * @param policyFilter Additional filter to apply to the policy
+   */
+  get$(policyType: PolicyType, policyFilter?: (policy: Policy) => boolean): Observable<Policy> {
+    return this.policies$.pipe(
+      concatMap(async (policies) => {
+        const userId = await this.stateService.getUserId();
+        const appliesToCurrentUser = await this.checkPoliciesThatApplyToUser(
+          policies,
+          policyType,
+          policyFilter,
+          userId
+        );
+        if (appliesToCurrentUser) {
+          return policies.find((policy) => policy.type === policyType && policy.enabled);
+        }
+      })
+    );
   }
 
   /**
@@ -114,6 +136,10 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
 
           if (currentPolicy.data.requireSpecial) {
             enforcedOptions.requireSpecial = true;
+          }
+
+          if (currentPolicy.data.enforceOnLogin) {
+            enforcedOptions.enforceOnLogin = true;
           }
         });
 
@@ -238,7 +264,7 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
     await this.stateService.setEncryptedPolicies(null, { userId: userId });
   }
 
-  private isExcemptFromPolicies(organization: Organization, policyType: PolicyType) {
+  private isExemptFromPolicies(organization: Organization, policyType: PolicyType) {
     if (policyType === PolicyType.MaximumVaultTimeout) {
       return organization.type === OrganizationUserType.Owner;
     }
@@ -269,7 +295,7 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
         o.status >= OrganizationUserStatusType.Accepted &&
         o.usePolicies &&
         policySet.has(o.id) &&
-        !this.isExcemptFromPolicies(o, policyType)
+        !this.isExemptFromPolicies(o, policyType)
     );
   }
 }
