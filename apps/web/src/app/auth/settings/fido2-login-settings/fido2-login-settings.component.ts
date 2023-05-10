@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
@@ -18,7 +18,7 @@ import { openCreateCredentialDialog } from "./create-credential-dialog/create-cr
 export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  protected credentials$: Observable<WebauthnCredentialView[]>;
+  protected credentials?: WebauthnCredentialView[];
   protected loading = true;
 
   constructor(
@@ -31,8 +31,18 @@ export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
     return this.loading ? "true" : "false";
   }
 
+  get hasCredentials() {
+    return this.credentials && this.credentials.length > 0;
+  }
+
+  get hasData() {
+    return this.credentials !== undefined;
+  }
+
   ngOnInit(): void {
-    this.credentials$ = this.webauthnService.credentials$;
+    this.webauthnService.credentials$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((credentials) => (this.credentials = credentials));
 
     this.webauthnService.loading$
       .pipe(takeUntil(this.destroy$))

@@ -664,6 +664,9 @@
   "customPasskeyNameInfo": {
     "message": "Name your passkey to help you identify it."
   },
+  "supportsEncryption": {
+    "message": "supports encryption"
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -5758,6 +5761,9 @@
   },
   "on": {
     "message": "On"
+  },
+  "off": {
+    "message": "Off"
   },
   "members": {
     "message": "Members"
