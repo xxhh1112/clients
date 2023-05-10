@@ -664,6 +664,15 @@
   "supportsEncryption": {
     "message": "supports encryption"
   },
+  "passkeySaved": {
+    "message": "$NAME$ saved",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
   "tryAgain": {
     "message": "Try again"
   },

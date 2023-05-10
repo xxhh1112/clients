@@ -100,6 +100,7 @@ describe("WebauthnService", () => {
 
       expect(result).toBe(true);
       expect(apiService.saveCredential).toHaveBeenCalled();
+      expect(platformUtilsService.showToast).toHaveBeenCalled();
     });
   });
 });

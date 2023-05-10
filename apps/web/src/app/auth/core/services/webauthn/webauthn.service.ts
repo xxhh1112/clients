@@ -91,6 +91,11 @@ export class WebauthnService {
       request.token = credentialOptions.token;
       request.name = name;
       await this.apiService.saveCredential(request);
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("passkeySaved", name)
+      );
       this.refresh();
       return true;
     } catch (error) {
