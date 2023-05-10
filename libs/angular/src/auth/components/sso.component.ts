@@ -183,6 +183,12 @@ export class SsoComponent {
         orgIdFromState
       );
       this.formPromise = this.authService.logIn(credentials);
+
+      // if device is trusted go to success route
+      // what does it mean for a device to not be trusted:
+      // -- no device key stored locally in secure storage
+      // -- no device encrypted user symmetric key from server
+
       const response = await this.formPromise;
       if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
