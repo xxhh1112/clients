@@ -11,11 +11,21 @@
     ":separateMajorReleases"
   ],
   "prConcurrentLimit": 3,
-  "enabledManagers": ["npm"],
+  "enabledManagers": ["cargo", "github-actions", "npm"],
   "packageRules": [
     {
-      "groupName": "{{manager}}",
-      "matchPackagePatterns": ["*"],
+      "groupName": "cargo minor",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
+      "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"]
     },
     {
@@ -28,5 +38,13 @@
       "matchUpdateTypes": "patch"
     }
   ],
-  "ignoreDeps": ["bootstrap", "electron-builder", "electron", "node-ipc", "regedit", "zone.js"]
+  "ignoreDeps": [
+    "@types/koa-bodyparser",
+    "bootstrap",
+    "electron-builder",
+    "electron",
+    "node-ipc",
+    "regedit",
+    "zone.js"
+  ]
 }
