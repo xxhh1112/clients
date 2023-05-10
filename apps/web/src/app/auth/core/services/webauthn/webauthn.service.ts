@@ -1,4 +1,5 @@
 import { Injectable, Optional } from "@angular/core";
+import { from, map, Observable } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -8,6 +9,7 @@ import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
+import { WebauthnCredentialView } from "../../views/webauth-credential.view";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
@@ -85,5 +87,9 @@ export class WebauthnService {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
       return false;
     }
+  }
+
+  getCredentials$(): Observable<WebauthnCredentialView[]> {
+    return from(this.apiService.getCredentials()).pipe(map((response) => response.data));
   }
 }

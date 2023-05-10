@@ -6,6 +6,10 @@
   <a bitLink href="???">{{ "learnMoreAboutPasswordless" | i18n }}</a>
 </p>
 
+<ul>
+  <li *ngFor="let credential of credentials$ | async">{{ credential.name }}</li>
+</ul>
+
 <button
   type="button"
   bitButton

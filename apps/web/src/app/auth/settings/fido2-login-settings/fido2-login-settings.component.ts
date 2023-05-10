@@ -1,7 +1,10 @@
-import { Component } from "@angular/core";
-import { firstValueFrom } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { firstValueFrom, Observable } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+
+import { WebauthnService } from "../../core";
+import { WebauthnCredentialView } from "../../core/views/webauth-credential.view";
 
 import {
   CreateCredentialDialogResult,
@@ -12,8 +15,17 @@ import {
   selector: "app-fido2-login-settings",
   templateUrl: "fido2-login-settings.component.html",
 })
-export class Fido2LoginSettingsComponent {
-  constructor(private dialogService: DialogServiceAbstraction) {}
+export class Fido2LoginSettingsComponent implements OnInit {
+  protected credentials$: Observable<WebauthnCredentialView[]>;
+
+  constructor(
+    private webauthnService: WebauthnService,
+    private dialogService: DialogServiceAbstraction
+  ) {}
+
+  ngOnInit(): void {
+    this.credentials$ = this.webauthnService.getCredentials$();
+  }
 
   protected async createCredential() {
     const dialogRef = openCreateCredentialDialog(this.dialogService, {});
