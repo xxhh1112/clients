@@ -114,6 +114,19 @@ export class WebauthnService {
     );
   }
 
+  async deleteCredential(credentialId: string): Promise<boolean> {
+    try {
+      await this.apiService.deleteCredential(credentialId);
+      this.platformUtilsService.showToast("success", null, this.i18nService.t("passkeyRemoved"));
+      this.refresh();
+      return true;
+    } catch (error) {
+      this.logService?.error(error);
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      return false;
+    }
+  }
+
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
     return from(this.apiService.getCredentials()).pipe(map((response) => response.data));
   }

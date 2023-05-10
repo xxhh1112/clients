@@ -38,7 +38,16 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
   }
 
   submit = async () => {
-    // empty
+    if (this.credential === undefined) {
+      return;
+    }
+
+    this.dialogRef.disableClose = true;
+    if (!(await this.webauthnService.deleteCredential(this.credential.id))) {
+      this.dialogRef.disableClose = false;
+      return;
+    }
+    this.dialogRef.close();
   };
 
   ngOnDestroy(): void {

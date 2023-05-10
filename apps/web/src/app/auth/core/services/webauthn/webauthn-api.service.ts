@@ -34,4 +34,8 @@ export class WebauthnApiService {
   getCredentials(): Promise<ListResponse<WebauthnCredentialResponse>> {
     return this.apiService.send("GET", "/webauthn", null, true, true);
   }
+
+  deleteCredential(id: string): Promise<unknown> {
+    return this.apiService.send("DELETE", `/webauthn/${id}`, null, true, true);
+  }
 }

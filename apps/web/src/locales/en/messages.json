@@ -673,6 +673,9 @@
       }
     }
   },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
   "removePasskey": {
     "message": "Remove passkey"
   },
