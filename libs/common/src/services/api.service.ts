@@ -77,6 +77,7 @@ import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-tw
 import { ApiKeyResponse } from "../auth/models/response/api-key.response";
 import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
+import { DeviceResponse } from "../auth/models/response/device.response";
 import {
   EmergencyAccessGranteeDetailsResponse,
   EmergencyAccessGrantorDetailsResponse,
@@ -1116,6 +1117,12 @@ export class ApiService implements ApiServiceAbstraction {
       headers.set("X-Request-Email", Utils.fromUtf8ToUrlB64(email));
     });
     return r as boolean;
+  }
+
+  // TODO: move this method to new devices-api.service once it's merged to master
+  async getDevices(): Promise<ListResponse<DeviceResponse>> {
+    const r = await this.send("GET", "/devices", null, true, true, null);
+    return new ListResponse(r, DeviceResponse);
   }
 
   // Emergency Access APIs

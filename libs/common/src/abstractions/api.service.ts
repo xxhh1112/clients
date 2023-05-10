@@ -70,6 +70,7 @@ import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-tw
 import { ApiKeyResponse } from "../auth/models/response/api-key.response";
 import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
+import { DeviceResponse } from "../auth/models/response/device.response";
 import {
   EmergencyAccessGranteeDetailsResponse,
   EmergencyAccessGrantorDetailsResponse,
@@ -362,6 +363,8 @@ export abstract class ApiService {
     request: DeviceVerificationRequest
   ) => Promise<DeviceVerificationResponse>;
   getKnownDevice: (email: string, deviceIdentifier: string) => Promise<boolean>;
+
+  getDevices: () => Promise<ListResponse<DeviceResponse>>;
 
   getEmergencyAccessTrusted: () => Promise<ListResponse<EmergencyAccessGranteeDetailsResponse>>;
   getEmergencyAccessGranted: () => Promise<ListResponse<EmergencyAccessGrantorDetailsResponse>>;
