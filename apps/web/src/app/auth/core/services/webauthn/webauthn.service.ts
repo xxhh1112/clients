@@ -22,6 +22,7 @@ export class WebauthnService {
   private _loading$ = new BehaviorSubject<boolean>(true);
 
   readonly credentials$ = this._refresh$.pipe(
+    tap(() => this._loading$.next(true)),
     switchMap(() => this.getCredentials$()),
     tap(() => this._loading$.next(false)),
     shareReplay({ bufferSize: 1, refCount: true })
@@ -104,7 +105,6 @@ export class WebauthnService {
   }
 
   private refresh() {
-    this._loading$.next(true);
     this._refresh$.next();
   }
 }
