@@ -631,9 +631,6 @@
   "loginWithPasskeyInfo": {
     "message": "Use facial recognition, a fingerprint, or other FIDO2 security key to log in instead of your email and password."
   },
-  "enableLoginWithPasskey": {
-    "message": "Turn on log in with passkey"
-  },
   "newPasskey": {
     "message": "New passkey"
   },

@@ -24,7 +24,14 @@
       <ng-container *ngIf="!credential.prfSupport">-</ng-container>
     </td>
     <td class="tw-py-2 tw-pl-20 tw-pr-0">
-      <button type="button" bitLink [disabled]="loading">{{ "remove" | i18n }}</button>
+      <button
+        type="button"
+        bitLink
+        [disabled]="loading"
+        [attr.aria-label]="('remove' | i18n) + ' ' + credential.name"
+      >
+        {{ "remove" | i18n }}
+      </button>
     </td>
   </tr>
 </table>
@@ -44,7 +51,7 @@
     *ngIf="!hasCredentials"
     type="button"
     bitButton
-    [attr.aria-label]="'enableLoginWithPasskey' | i18n"
+    [attr.aria-label]="('enable' | i18n) + ' ' + ('loginWithPasskey' | i18n)"
     [disabled]="loading"
     (click)="createCredential()"
   >
