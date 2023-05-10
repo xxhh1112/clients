@@ -281,8 +281,10 @@ jobs:
         run: |
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
-            --account-name "devops1352" \
-            --account-key "${{ steps.retrieve-bot-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}"
+            --account-name "devops1354" \
+            --connection-string "${{ steps.retrieve-bot-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
+            --overwrite \
+            --no-progress
         
 
   release:
