@@ -1,5 +1,5 @@
 import { Injectable, Optional } from "@angular/core";
-import { from, map, Observable } from "rxjs";
+import { BehaviorSubject, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -17,17 +17,26 @@ import { WebauthnApiService } from "./webauthn-api.service";
 
 @Injectable({ providedIn: CoreAuthModule })
 export class WebauthnService {
-  private credentials: CredentialsContainer;
+  private navigatorCredentials: CredentialsContainer;
+  private _refresh$ = new BehaviorSubject<void>(undefined);
+  private _loading$ = new BehaviorSubject<boolean>(true);
+
+  readonly credentials$ = this._refresh$.pipe(
+    switchMap(() => this.getCredentials$()),
+    tap(() => this._loading$.next(false)),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+  readonly loading$ = this._loading$.asObservable();
 
   constructor(
     private apiService: WebauthnApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    @Optional() credentials?: CredentialsContainer,
+    @Optional() navigatorCredentials?: CredentialsContainer,
     @Optional() private logService?: LogService
   ) {
     // Default parameters don't work when used with Angular DI
-    this.credentials = credentials ?? navigator.credentials;
+    this.navigatorCredentials = navigatorCredentials ?? navigator.credentials;
   }
 
   async getCredentialCreateOptions(
@@ -59,7 +68,7 @@ export class WebauthnService {
     };
 
     try {
-      const response = await this.credentials.create(nativeOptions);
+      const response = await this.navigatorCredentials.create(nativeOptions);
       if (!(response instanceof PublicKeyCredential)) {
         return undefined;
       }
@@ -81,6 +90,7 @@ export class WebauthnService {
       request.token = credentialOptions.token;
       request.name = name;
       await this.apiService.saveCredential(request);
+      this.refresh();
       return true;
     } catch (error) {
       this.logService?.error(error);
@@ -89,7 +99,12 @@ export class WebauthnService {
     }
   }
 
-  getCredentials$(): Observable<WebauthnCredentialView[]> {
+  private getCredentials$(): Observable<WebauthnCredentialView[]> {
     return from(this.apiService.getCredentials()).pipe(map((response) => response.data));
+  }
+
+  private refresh() {
+    this._loading$.next(true);
+    this._refresh$.next();
   }
 }

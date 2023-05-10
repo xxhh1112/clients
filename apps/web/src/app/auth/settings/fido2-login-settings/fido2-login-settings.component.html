@@ -1,5 +1,6 @@
 <h2 bitTypography="h2">
   {{ "loginWithPasskey" | i18n }} <span bitBadge badgeType="secondary">Not implemented</span>
+  <i *ngIf="loading" class="bwi bwi-spinner bwi-spin tw-ml-1" aria-hidden="true"></i>
 </h2>
 <p bitTypography="body1">
   {{ "loginWithPasskeyInfo" | i18n }}
