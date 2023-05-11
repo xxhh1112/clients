@@ -37,7 +37,9 @@
   </tr>
 </table>
 
-<ng-container *ngIf="hasData">
+<p bitTypography="body2" *ngIf="limitReached">{{ "passkeyLimitReachedInfo" | i18n }}</p>
+
+<ng-container *ngIf="hasData && !limitReached">
   <button
     *ngIf="hasCredentials"
     type="button"

@@ -19,6 +19,8 @@ import { openDeleteCredentialDialogComponent } from "./delete-credential-dialog/
 export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  protected readonly MaxCredentialCount = 5;
+
   protected credentials?: WebauthnCredentialView[];
   protected loading = true;
 
@@ -38,6 +40,10 @@ export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
 
   get hasData() {
     return this.credentials !== undefined;
+  }
+
+  get limitReached() {
+    return this.credentials?.length >= this.MaxCredentialCount;
   }
 
   ngOnInit(): void {
