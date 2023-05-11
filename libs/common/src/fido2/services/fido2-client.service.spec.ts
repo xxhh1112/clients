@@ -330,6 +330,16 @@ describe("FidoAuthenticatorService", () => {
         await rejects.toMatchObject({ name: "NotAllowedError" });
         await rejects.toBeInstanceOf(DOMException);
       });
+
+      it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
+        const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(false);
+
+        const result = async () => await client.assertCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toThrow(FallbackRequestedError);
+      });
     });
 
     describe("assert non-discoverable credential", () => {

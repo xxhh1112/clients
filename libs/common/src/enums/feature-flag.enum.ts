@@ -1,5 +1,5 @@
 export enum FeatureFlag {
   DisplayEuEnvironmentFlag = "display-eu-environment",
   DisplayLowKdfIterationWarningFlag = "display-kdf-iteration-warning",
-  EnablePassKeysFlag = "enable-pass-keys",
+  Fido2VaultCredentials = "fido2-vault-credentials",
 }

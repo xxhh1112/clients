@@ -38,12 +38,12 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     params: CreateCredentialParams,
     abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
-    const enablePassKeys = await this.configService.getFeatureFlagBool(
-      FeatureFlag.EnablePassKeysFlag
+    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
+      FeatureFlag.Fido2VaultCredentials
     );
 
-    if (!enablePassKeys) {
-      this.logService?.warning(`[Fido2Client] PassKeys are not enabled`);
+    if (!enableFido2VaultCredentials) {
+      this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
       throw new FallbackRequestedError();
     }
 
@@ -191,12 +191,12 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     params: AssertCredentialParams,
     abortController = new AbortController()
   ): Promise<AssertCredentialResult> {
-    const enablePassKeys = await this.configService.getFeatureFlagBool(
-      FeatureFlag.EnablePassKeysFlag
+    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
+      FeatureFlag.Fido2VaultCredentials
     );
 
-    if (!enablePassKeys) {
-      this.logService?.warning(`[Fido2Client] PassKeys are not enabled`);
+    if (!enableFido2VaultCredentials) {
+      this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
       throw new FallbackRequestedError();
     }
 
