@@ -37,6 +37,49 @@ jobs:
           echo "environment-branch=cf-pages-$ENV_NAME_LOWER" >> $GITHUB_OUTPUT
           echo "environment-artifact=web-*-cloud-${{ inputs.environment }}.zip" >> $GITHUB_OUTPUT
 
+  azure-deploy:
+    name: Deploy to Azure
+    runs-on: ubuntu-22.04
+    needs:
+      - setup
+    env:
+      _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
+      _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
+    steps:
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve storage account connection string
+        id: retrieve-bot-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
+        with:
+          keyvault: bitwarden-ci
+          secrets: "sa-bitwarden-web-vault-dev-key-temp"
+
+      - name: Download latest cloud asset
+        uses: bitwarden/gh-actions/download-artifacts@82bfda66185116020992660f6c73aa53277d081d
+        with:
+          workflow: build-web.yml
+          path: apps/web
+          workflow_conclusion: success
+          branch: ${{ github.ref_name }}
+          artifacts: ${{ env._ENVIRONMENT_ARTIFACT }}
+
+      - name: Unzip build asset
+        working-directory: app/web
+        run: unzip web-*-cloud-COMMERCIAL.zip
+
+      - name: Deploy to Azure Storage Account
+        working-directory: app/web
+        run: |
+          az storage blob upload-batch --source "./build" \
+            --destination "\$web" \
+            --account-name "devops1354" \
+            --connection-string "${{ steps.retrieve-bot-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
+            --overwrite \
+            --no-progress
 
   cfpages-deploy:
     name: Deploy Web Vault to ${{ inputs.environment }} CloudFlare Pages branch
