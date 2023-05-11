@@ -171,7 +171,7 @@ jobs:
 
       - name: Sign bw CLI for MacOS
         run: |
-          codesign -s "Developer ID Application: Bitwarden Inc." -v bw
+          codesign -s "Developer ID Application: 8bit Solutions LLC" -v bw
 
       - name: Zip macOS
         run: |
