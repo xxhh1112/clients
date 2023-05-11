@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 
 import { WebauthnService } from "../../../core";
 import { WebauthnCredentialView } from "../../../core/views/webauth-credential.view";
@@ -43,7 +44,11 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
     }
 
     this.dialogRef.disableClose = true;
-    if (!(await this.webauthnService.deleteCredential(this.credential.id))) {
+    const success = await this.webauthnService.deleteCredential(this.credential.id, {
+      type: VerificationType.MasterPassword,
+      secret: this.formGroup.value.masterPassword,
+    });
+    if (!success) {
       this.dialogRef.disableClose = false;
       return;
     }

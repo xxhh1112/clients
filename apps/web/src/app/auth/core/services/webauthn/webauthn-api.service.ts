@@ -35,7 +35,8 @@ export class WebauthnApiService {
     return this.apiService.send("GET", "/webauthn", null, true, true);
   }
 
-  deleteCredential(id: string): Promise<unknown> {
-    return this.apiService.send("DELETE", `/webauthn/${id}`, null, true, true);
+  async deleteCredential(credentialId: string, verification: Verification): Promise<void> {
+    const request = await this.userVerificationService.buildRequest(verification);
+    await this.apiService.send("POST", `/webauthn/${credentialId}/delete`, request, true, true);
   }
 }

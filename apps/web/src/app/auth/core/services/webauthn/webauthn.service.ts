@@ -114,9 +114,9 @@ export class WebauthnService {
     );
   }
 
-  async deleteCredential(credentialId: string): Promise<boolean> {
+  async deleteCredential(credentialId: string, verification: Verification): Promise<boolean> {
     try {
-      await this.apiService.deleteCredential(credentialId);
+      await this.apiService.deleteCredential(credentialId, verification);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("passkeyRemoved"));
       this.refresh();
       return true;
