@@ -121,8 +121,16 @@ export class WebauthnService {
       this.refresh();
       return true;
     } catch (error) {
-      this.logService?.error(error);
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      if (error instanceof ErrorResponse && error.statusCode === 400) {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("error"),
+          this.i18nService.t("invalidMasterPassword")
+        );
+      } else {
+        this.logService?.error(error);
+        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      }
       return false;
     }
   }
