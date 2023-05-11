@@ -164,20 +164,31 @@ jobs:
       - name: List all certs from keychain
         run: security find-identity -v -p codesigning
 
-      - name: Remove ad-hoc signature
-        run: |
-          cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          codesign --remove-signature bw
+      # - name: Remove ad-hoc signature
+      #   run: |
+      #     cd ./dist/${{ env.LOWER_RUNNER_OS }}
+      #     codesign --remove-signature bw
 
       - name: Sign bw CLI for MacOS
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          codesign -s "Developer ID Application: 8bit Solutions LLC" -v bw
+          codesign --force -s "Developer ID Application: 8bit Solutions LLC" -v bw --entitlements ./entitlements.plist
 
       - name: Zip macOS
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
           zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+
+      # - name: Store notary credentials
+      #   env:
+      #     APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+      #     APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #   run: |
+      #     xcrun notarytool store-credentials --apple-id $APPLE_ID_USERNAME \
+      #       --password $APPLE_ID_PASSWORD --team-id LTZ2PFU5D6 "CliNotaryProfile"
+
+      # - name: Notarize bw CLI for MacOS
+      #   run: xcrun notarytool submit bw.zip --wait --keychain-profile "CliNotaryProfile"
 
       - name: Version Test
         run: |
