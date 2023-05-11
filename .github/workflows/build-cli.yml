@@ -171,8 +171,7 @@ jobs:
 
       - name: Sign bw CLI for MacOS
         run: |
-          cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          codesign --force -s "Developer ID Application: 8bit Solutions LLC" -v bw --entitlements ./entitlements.plist
+          codesign --force -s "Developer ID Application: 8bit Solutions LLC" -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw --entitlements ./entitlements.plist
 
       - name: Zip macOS
         run: |
