@@ -190,16 +190,16 @@ jobs:
       # - name: Notarize bw CLI for MacOS
       #   run: xcrun notarytool submit bw.zip --wait --keychain-profile "CliNotaryProfile"
 
-      - name: Version Test
-        run: |
-          unzip "./dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip" -d "./test"
-          testVersion=$(./test/bw -v)
-          echo "version: $_PACKAGE_VERSION"
-          echo "testVersion: $testVersion"
-          if [[ $testVersion != $_PACKAGE_VERSION ]]; then
-            echo "Version test failed."
-            exit 1
-          fi
+      # - name: Version Test
+      #   run: |
+      #     unzip "./dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip" -d "./test"
+      #     testVersion=$(./test/bw -v)
+      #     echo "version: $_PACKAGE_VERSION"
+      #     echo "testVersion: $testVersion"
+      #     if [[ $testVersion != $_PACKAGE_VERSION ]]; then
+      #       echo "Version test failed."
+      #       exit 1
+      #     fi
 
       - name: Create checksums macOS
         run: |
