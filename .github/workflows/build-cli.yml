@@ -170,7 +170,8 @@ jobs:
           codesign --remove-signature bw
 
       - name: Sign bw CLI for MacOS
-        run: codesign -s "Developer ID Application: Bitwarden Inc." -v bw
+        run: |
+          codesign -s "Developer ID Application: Bitwarden Inc." -v bw
 
       - name: Zip macOS
         run: |
