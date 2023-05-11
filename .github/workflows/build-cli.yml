@@ -171,11 +171,12 @@ jobs:
 
       - name: Sign bw CLI for MacOS
         run: |
-          codesign --force -s "Developer ID Application: 8bit Solutions LLC" -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw --entitlements ./entitlements.plist
+          codesign --force -s "Developer ID Application: 8bit Solutions LLC" --entitlements ./entitlements.plist -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw
 
       - name: Zip macOS
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
+          # ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
           zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
 
       # - name: Store notary credentials
