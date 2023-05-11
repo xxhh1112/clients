@@ -1,6 +1,7 @@
 import { DialogConfig, DialogRef } from "@angular/cdk/dialog";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
+import { map, Observable } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
@@ -24,7 +25,7 @@ type Step =
 @Component({
   templateUrl: "create-credential-dialog.component.html",
 })
-export class CreateCredentialDialogComponent {
+export class CreateCredentialDialogComponent implements OnInit {
   protected readonly NameMaxCharacters = 50;
   protected readonly CreateCredentialDialogResult = CreateCredentialDialogResult;
   protected readonly Icons = { CreatePasskeyIcon, CreatePasskeyFailedIcon };
@@ -40,12 +41,19 @@ export class CreateCredentialDialogComponent {
   });
   protected credentialOptions?: CredentialCreateOptionsView;
   protected deviceResponse?: PublicKeyCredential;
+  protected hasPasskeys$?: Observable<boolean>;
 
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
     private webauthnService: WebauthnService
   ) {}
+
+  ngOnInit(): void {
+    this.hasPasskeys$ = this.webauthnService.credentials$.pipe(
+      map((credentials) => credentials.length > 0)
+    );
+  }
 
   protected submit = async () => {
     this.dialogRef.disableClose = true;
