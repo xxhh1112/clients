@@ -101,7 +101,7 @@ function collect(document: Document) {
      * @param {HTMLElement} el
      * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
      */
-    function getLabelTag(el: FillableControl): string {
+    function getLabelTag(el: FillableControl): string | null {
       let docLabel: HTMLLabelElement[],
         theLabels: HTMLLabelElement[] = [];
       let theEl: HTMLElement = el;
@@ -431,9 +431,14 @@ function fill(document: Document, fillScript: AutofillScript) {
 
     if ((fillScriptOps = fillScript.options)) {
       // eslint-disable-next-line no-prototype-builtins
-      fillScriptOps.hasOwnProperty("animate") && (animateTheFilling = fillScriptOps.animate),
-        // eslint-disable-next-line no-prototype-builtins
-        fillScriptOps.hasOwnProperty("markFilling") && (markTheFilling = fillScriptOps.markFilling);
+      if (fillScriptOps.hasOwnProperty("animate") && fillScriptOps.animate) {
+        animateTheFilling = fillScriptOps.animate;
+      }
+
+      // eslint-disable-next-line no-prototype-builtins
+      if (fillScriptOps.hasOwnProperty("markFilling") && fillScriptOps.markFilling) {
+        markTheFilling = fillScriptOps.markFilling;
+      }
     }
 
     // don't mark a password filling
@@ -544,15 +549,17 @@ function fill(document: Document, fillScript: AutofillScript) {
         el.type ? el.type.toLowerCase() : null)
       ) {
         case "checkbox":
-          shouldCheck =
+          shouldCheck = !!(
             op &&
-            1 <= op.length &&
+            op.length >= 1 &&
             // eslint-disable-next-line no-prototype-builtins
             checkRadioTrueOps.hasOwnProperty(op.toLowerCase()) &&
-            true === checkRadioTrueOps[op.toLowerCase()];
+            checkRadioTrueOps[op.toLowerCase()]
+          );
+
           (el as HTMLInputElement).checked === shouldCheck ||
-            doAllFillOperations(el, function (theEl: HTMLInputElement) {
-              theEl.checked = shouldCheck;
+            doAllFillOperations(el, function (theEl) {
+              (theEl as HTMLInputElement).checked = shouldCheck;
             });
 
           break;
@@ -607,10 +614,6 @@ function fill(document: Document, fillScript: AutofillScript) {
     success: true,
   });
 }
-
-/*
-  End 1Password Extension
-  */
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.command === "collectPageDetails") {

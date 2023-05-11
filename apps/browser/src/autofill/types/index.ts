@@ -3,7 +3,7 @@
  */
 export type AutofillDocument = Document & {
   elementsByOPID: Record<string, Element>;
-  elementForOPID: (opId: string) => Element;
+  elementForOPID: (opId: string) => Element | null;
 };
 
 /**

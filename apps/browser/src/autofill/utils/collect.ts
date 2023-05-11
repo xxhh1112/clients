@@ -5,9 +5,10 @@ import { FillableControl, ElementWithOpId, FormElement } from "../types";
  * @param {string} s
  * @returns {string} Clean text
  */
-function cleanText(s: string): string {
-  let sVal = null;
+function cleanText(s: string | null): string | null {
+  let sVal: string | null = null;
   s && ((sVal = s.replace(/^\\s+|\\s+$|\\r?\\n.*$/gm, "")), (sVal = 0 < sVal.length ? sVal : null));
+
   return sVal;
 }
 
@@ -18,10 +19,12 @@ function cleanText(s: string): string {
  * @param {HTMLElement} el The element to push to the array
  */
 export function checkNodeType(arr: string[], el: Node) {
-  let theText = "";
+  let theText: string | Node["nodeValue"] = "";
+
   3 === el.nodeType
     ? (theText = el.nodeValue)
     : 1 === el.nodeType && (theText = el.textContent || (el as HTMLElement).innerText);
+
   (theText = cleanText(theText)) && arr.push(theText);
 }
 
@@ -33,9 +36,19 @@ export function checkNodeType(arr: string[], el: Node) {
  */
 export function isKnownTag(el: any) {
   if (el && void 0 !== el) {
-    const tags = "select option input form textarea button table iframe body head script".split(
-      " "
-    );
+    const tags = [
+      "body",
+      "button",
+      "form",
+      "head",
+      "iframe",
+      "input",
+      "option",
+      "script",
+      "select",
+      "table",
+      "textarea",
+    ];
 
     if (el) {
       const elTag = el ? (el.tagName || "").toLowerCase() : "";
@@ -57,20 +70,25 @@ export function isKnownTag(el: any) {
  */
 export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
   let sib;
+
   for (steps || (steps = 0); el && el.previousSibling; ) {
     el = el.previousSibling;
+
     if (isKnownTag(el)) {
       return;
     }
 
     checkNodeType(arr, el);
   }
+
   if (el && 0 === arr.length) {
     for (sib = null; !sib; ) {
       el = el.parentElement || el.parentNode;
+
       if (!el) {
         return;
       }
+
       for (sib = el.previousSibling; sib && !isKnownTag(sib) && sib.lastChild; ) {
         sib = sib.lastChild;
       }
@@ -180,7 +198,7 @@ export function isElementViewable(el: FormElement) {
       "string" === typeof pointEl.tagName &&
       "label" === pointEl.tagName.toLowerCase() &&
       (el as FillableControl).labels &&
-      0 < (el as FillableControl).labels.length
+      0 < ((el as FillableControl).labels?.length || 0)
     ) {
       // Return true if the element we found is one of the labels for the element we're checking.
       // This means that the element we're looking for is considered viewable
@@ -201,7 +219,7 @@ export function isElementViewable(el: FormElement) {
  * @param {number} opId
  * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
  */
-export function getElementForOPID(opId: string): Element {
+export function getElementForOPID(opId: string): Element | null {
   let theEl;
 
   if (void 0 === opId || null === opId) {
@@ -220,6 +238,7 @@ export function getElementForOPID(opId: string): Element {
         1 < filteredFormEls.length && console.warn(`More than one element found with opid ${opId}`);
     } else {
       const theIndex = parseInt(opId.split("__")[1], 10);
+
       isNaN(theIndex) || (theEl = formEls[theIndex]);
     }
   } catch (e) {
@@ -256,8 +275,8 @@ export function getFormElements(theDoc: Document, limit?: number): FormElement[]
   }
 
   // non-checkboxes/radios have higher priority
-  let returnEls = [];
-  const unimportantEls = [];
+  let returnEls: FormElement[] = [];
+  const unimportantEls: FormElement[] = [];
 
   for (let i = 0; i < els.length; i++) {
     if (returnEls.length >= limit) {
@@ -331,19 +350,21 @@ export function getElementValue(el: any) {
   switch (toLowerString(el.type)) {
     case "checkbox":
       return el.checked ? "✓" : "";
-
     case "hidden":
       el = el.value;
+
       if (!el || "number" != typeof el.length) {
         return "";
       }
-      254 < el.length && (el = el.substr(0, 254) + "...SNIPPED");
-      return el;
 
+      254 < el.length && (el = el.substr(0, 254) + "...SNIPPED");
+
+      return el;
     default:
       if (!el.type && el.tagName.toLowerCase() === "span") {
         return el.innerText;
       }
+
       return el.value;
   }
 }
@@ -351,7 +372,7 @@ export function getElementValue(el: any) {
 /**
  * If `el` is a `<select>` element, return an array of all of the options' `text` properties.
  */
-export function getSelectElementOptions(el: HTMLSelectElement): { options: string[] } {
+export function getSelectElementOptions(el: HTMLSelectElement): null | { options: string[] } {
   if (!el.options) {
     return null;
   }
@@ -398,6 +419,7 @@ export function getLabelTop(el: any) {
 
   // Get the previous sibling of the table row and make sure it's a table row
   parent = parent.previousElementSibling;
+
   if (
     !parent ||
     "tr" != (parent.tagName + "").toLowerCase() ||
@@ -433,8 +455,8 @@ export function addProp(obj: Record<string, any>, prop: string, val: any, d?: un
  * @param {string} s
  * @returns Lowercase string
  */
-export function toLowerString(s: string) {
-  return "string" === typeof s ? s.toLowerCase() : ("" + s).toLowerCase();
+export function toLowerString(s: string | null) {
+  return typeof s === "string" ? s.toLowerCase() : ("" + s).toLowerCase();
 }
 
 /**

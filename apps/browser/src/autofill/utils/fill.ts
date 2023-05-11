@@ -1,8 +1,12 @@
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
+const TYPE_CHECK = {
+  FUNCTION: "function",
+};
+
 // Check if URL is not secure when the original saved one was
 export function urlNotSecure(savedURLs: string[]) {
-  let passwordInputs = null;
+  let passwordInputs: NodeListOf<Element> | null = null;
   if (!savedURLs) {
     return false;
   }
@@ -29,6 +33,7 @@ export function urlNotSecure(savedURLs: string[]) {
  */
 function normalizeEvent(el: FillableControl, eventName: string) {
   let ev: any;
+
   if ("KeyboardEvent" in window) {
     ev = new window.KeyboardEvent(eventName, {
       bubbles: true,
@@ -53,7 +58,7 @@ function normalizeEvent(el: FillableControl, eventName: string) {
  * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
  */
 function clickElement(el: HTMLElement) {
-  if (!el || (el && "function" !== typeof el.click)) {
+  if (!el || (el && TYPE_CHECK.FUNCTION !== typeof el.click)) {
     return false;
   }
 
@@ -85,6 +90,7 @@ function doFocusElement(el: FillableControl, setValue: boolean): void {
  */
 export function canSeeElementToStyle(el: HTMLElement, animateTheFilling: boolean) {
   let currentEl: any;
+
   if ((currentEl = animateTheFilling)) {
     a: {
       currentEl = el;
@@ -96,14 +102,17 @@ export function canSeeElementToStyle(el: HTMLElement, animateTheFilling: boolean
         theStyle = owner.getComputedStyle
           ? owner.getComputedStyle(currentEl, null)
           : currentEl.style;
+
         if (!theStyle) {
           currentEl = true;
           break a;
         }
+
         if ("none" === theStyle.display || "hidden" == theStyle.visibility) {
           currentEl = false;
           break a;
         }
+
         currentEl = currentEl.parentNode;
       }
       currentEl = currentEl === document;
@@ -144,11 +153,13 @@ export function selectAllFromDoc<T extends Element = Element>(theSelector: strin
  * @param {number} theOpId
  * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
  */
-export function getElementByOpId(theOpId: string): FormElement {
+export function getElementByOpId(theOpId: string): FormElement | null {
   let theElement;
+
   if (void 0 === theOpId || null === theOpId) {
     return null;
   }
+
   try {
     const elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
       selectAllFromDoc("input, select, button, " + "span[data-bwautofill]")
@@ -156,6 +167,7 @@ export function getElementByOpId(theOpId: string): FormElement {
     const filteredElements = elements.filter(function (o) {
       return (o as ElementWithOpId<FillableControl | HTMLButtonElement>).opid == theOpId;
     });
+
     if (0 < filteredElements.length) {
       (theElement = filteredElements[0]),
         1 < filteredElements.length &&
@@ -261,8 +273,8 @@ export function doClickByQuery(query: string) {
     Array.prototype.slice.call(query),
     function (el: HTMLInputElement) {
       clickElement(el);
-      "function" === typeof el.click && el.click();
-      "function" === typeof el.focus && doFocusElement(el, true);
+      TYPE_CHECK.FUNCTION === typeof el.click && el.click();
+      TYPE_CHECK.FUNCTION === typeof el.focus && doFocusElement(el, true);
       return [el];
     },
     this
@@ -270,7 +282,7 @@ export function doClickByQuery(query: string) {
 }
 
 /**
- * Do a a click and focus on the element with the given `opId`.
+ * Do a click and focus on the element with the given `opId`.
  * @param {number} opId
  * @returns
  */
@@ -278,8 +290,13 @@ export function doFocusByOpId(opId: string): null {
   const el = getElementByOpId(opId) as FillableControl;
 
   if (el) {
-    "function" === typeof el.click && el.click(),
-      "function" === typeof el.focus && doFocusElement(el, true);
+    if (TYPE_CHECK.FUNCTION === typeof el.click) {
+      el.click();
+    }
+
+    if (TYPE_CHECK.FUNCTION === typeof el.focus) {
+      doFocusElement(el, true);
+    }
   }
 
   return null;
@@ -294,6 +311,7 @@ export function doFocusByOpId(opId: string): null {
 export function doSimpleSetByQuery(query: string, valueToSet: string): FillableControl[] {
   const elements = selectAllFromDoc(query);
   const arr: FillableControl[] = [];
+
   Array.prototype.forEach.call(
     Array.prototype.slice.call(elements),
     function (el: FillableControl) {
