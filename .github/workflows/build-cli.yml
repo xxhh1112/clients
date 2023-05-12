@@ -176,8 +176,8 @@ jobs:
       - name: Zip macOS
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          # ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
-          zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+          ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+          # zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
 
       - name: Store notary credentials
         env:
