@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "コレクションを表示 - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "アイテムを編集 - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "アイテム $ID$ のパスワードをコピーしました。",
     "placeholders": {
@@ -5428,6 +5446,15 @@
     "message": "現在の組織",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "アカウント: $NAME$ としてログインしました",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "アカウント設定"
   },
@@ -6164,6 +6191,10 @@
     "message": "アクセストークンを取り消しました",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "取り消すアクセストークンが選択されていません",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "サブメニュー"
   },
@@ -6554,11 +6585,8 @@
   "lowKdfIterations": {
     "message": "低 KDF イテレーション"
   },
-  "lowKdfIterationsDesc": {
-    "message": "KDF 暗号化設定を増やし、アカウントのセキュリティを向上してください。"
-  },
-  "changeKdfSettings": {
-    "message": "KDF 設定の変更"
+  "updateLowKdfIterationsDesc": {
+    "message": "新しいセキュリティの推奨事項に対応し、アカウントの保護を向上させるために、暗号化設定を更新してください。"
   },
   "changeKdfLoggedOutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
@@ -6749,5 +6777,8 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "次のプロジェクトは削除できません。続行しますか？",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF の設定を更新する"
   }
 }

@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "Skatīt krājumu - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Labot vienumu - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Vienuma $ID$ parole ievietota starpliktuvē.",
     "placeholders": {
@@ -5428,6 +5446,15 @@
     "message": "Pašreizējā apvienība",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konts: pierakstījies kā $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Konta iestatījumi"
   },
@@ -6164,6 +6191,10 @@
     "message": "Piekļuves pilnvaras ir atsauktas",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Nav atlasīta neviena piekļuves pilnvara, ko atsaukt",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Apakšizvēlne"
   },
@@ -6554,11 +6585,8 @@
   "lowKdfIterations": {
     "message": "Zems KDF atkārtojumu skaits"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Jāpaaugstina KDF šifrēšanas iestatījumi, lai uzlabotu konta drošību."
-  },
-  "changeKdfSettings": {
-    "message": "Mainīt KDF iestatījumus"
+  "updateLowKdfIterationsDesc": {
+    "message": "Jāatjaunina šifrēšanas iestatījumi, lai atbilstu jaunajiem drošības ieteikumiem un uzlabotu konta aizsardzību."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Turpinot notiks atteikšanās no visām aktīvām sesijām. Jums būs atkārtoti jāpiesakās un jāveic divpakapāju autentifikācijas uzstādīšana. Mēs iesakām eksportēt savu glabātavu pirms šifrēšanas iestatījumu maiņas lai novērstu datu zudumu."
@@ -6749,5 +6777,8 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Zemāk esošos projektus nevar izdzēst. Vai turpināt?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Atjaunināt KDF iestatījumus"
   }
 }

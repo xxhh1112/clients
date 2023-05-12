@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "Zobacz kolekcję - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edytuj element - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Hasło dla elementu $ID$ zostało skopiowane.",
     "placeholders": {
@@ -5428,6 +5446,15 @@
     "message": "Obecna organizacja",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: zalogowano jako $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Ustawienia konta"
   },
@@ -6164,6 +6191,10 @@
     "message": "Tokeny dostępu zostały odwołane",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Nie wybrano tokenu dostępu do unieważnienia",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Podmenu"
   },
@@ -6554,11 +6585,8 @@
   "lowKdfIterations": {
     "message": "Niska liczba iteracji KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Zwiększ ustawienia szyfrowania KDF, aby poprawić bezpieczeństwo swojego konta."
-  },
-  "changeKdfSettings": {
-    "message": "Zmień ustawienia KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Zaktualizuj ustawienia szyfrowania, aby spełnić nowe zalecenia bezpieczeństwa i poprawić ochronę konta."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Kontynuowanie spowoduje wylogowanie ze wszystkich aktywnych sesji. Będzie trzeba zalogować się ponownie i ukończyć konfigurację logowania dwuetapowego. Zalecamy wyeksportowanie sejfu przed zmianą ustawień szyfrowania, aby zapobiec utracie danych."
@@ -6749,5 +6777,8 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Następujące projekty nie mogą zostać usunięte. Czy chcesz kontynuować?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Zaktualizuj ustawienia KDF"
   }
 }

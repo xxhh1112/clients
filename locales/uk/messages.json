@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "View collection - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edit item - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Скопійовано пароль запису $ID$.",
     "placeholders": {
@@ -5428,6 +5446,15 @@
     "message": "Поточна організація",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Налаштування облікового запису"
   },
@@ -6164,6 +6191,10 @@
     "message": "Токени доступу відкликано",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "No access token selected to revoke",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Підменю"
   },
@@ -6554,11 +6585,8 @@
   "lowKdfIterations": {
     "message": "Низький показник KDF-ітерацій"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Налаштуйте вищий рівень KDF-шифрування для вдосконалення безпеки облікового запису."
-  },
-  "changeKdfSettings": {
-    "message": "Змінити налаштування KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Продовжуючи, ви вийдете з усіх активних сеансів. Необхідно буде повторно виконати вхід і пройти двоетапну перевірку. Перед зміною налаштувань шифрування ми рекомендуємо експортувати ваше сховище, щоб запобігти можливій втраті даних."
@@ -6749,5 +6777,8 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Неможливо видалити зазначені проєкти. Бажаєте продовжити?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Update KDF settings"
   }
 }

@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "View collection - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edit item - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "$ID$ elementi üçün parol kopyalandı.",
     "placeholders": {
@@ -5428,6 +5446,15 @@
     "message": "Hazırkı təşkilat",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Hesab: $NAME$ olaraq giriş edildi",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Hesab tənzimləmələri"
   },
@@ -6164,6 +6191,10 @@
     "message": "Müraciət tokenləri ləğv edildi",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Ləğv ediləcək müraciət tokeni seçilmədi",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Alt menyu"
   },
@@ -6554,11 +6585,8 @@
   "lowKdfIterations": {
     "message": "Aşağı KDF iterasiyaları"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Hesabınızın güvənliyini artırmaq üçün KDF şifrələmə tənzimləmələrinizi yüksəldin."
-  },
-  "changeKdfSettings": {
-    "message": "KDF tənzimləmələrini dəyişdir"
+  "updateLowKdfIterationsDesc": {
+    "message": "Yeni güvənlik tövsiyələrini qarşılamaq və hesab qorumasını təkmilləşdirmək üçün şifrələmə tənzimləmələrinizi güncəlləyin."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
@@ -6743,11 +6771,14 @@
     "message": "Mövcud üzvlərin öz parollarını dəyişdirməsini tələb et"
   },
   "smProjectDeleteAccessRestricted": {
-    "message": "You don't have permissions to delete this project",
+    "message": "Bu layihəni silmək icazəniz yoxdur",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
-    "message": "The following projects can not be deleted. Would you like to continue?",
+    "message": "Aşağıdakı layihələr silinə bilməz. Davam etmək istəyirsiniz?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF tənzimləmələrini güncəllə"
   }
 }
