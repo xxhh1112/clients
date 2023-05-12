@@ -25,11 +25,25 @@ jobs:
       environment-name: ${{ steps.config.outputs.environment-name }}
       environment-branch: ${{ steps.config.outputs.environment-branch }}
       environment-artifact: ${{ steps.config.outputs.environment-artifact }}
+      environment-storage-account-name: ${{ steps.config.outputs.environment-storage-account-name }}
     steps:
       - name: Configure
         id: config
         run: |
           ENV_NAME_LOWER=$(echo "${{ inputs.environment }}" | awk '{print tolower($0)}')
+
+          # Set the storage account name
+          ENV_STORAGE_ACCOUNT_NAME=""
+          case "${{ inputs.environment}}" in
+            *QA*)
+              ENV_STORAGE_ACCOUNT_NAME="devops1354"
+              ;;
+            *POC2*)
+              ENV_STORAGE_ACCOUNT_NAME="devops1354"
+              ;;
+          esac
+          
+          echo "environment-storage-account-name=$ENV_STORAGE_ACCOUNT_NAME" >> $GITHUB_ENV
           echo "configuring the Web deploy for ${{ inputs.environment }}"
           echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo "environment-url=http://vault.$ENV_NAME_LOWER.bitwarden.pw" >> $GITHUB_OUTPUT
@@ -45,6 +59,7 @@ jobs:
     env:
       _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
       _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
+      _ENV_STORAGE_ACCOUNT: ${{ needs.setup.outputs.environment-storage-account-name }}
     steps:
       - name: Login to Azure - CI Subscription
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
@@ -76,7 +91,7 @@ jobs:
         run: |
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
-            --account-name "devops1354" \
+            --account-name "$_ENV_STORAGE_ACCOUNT" \
             --connection-string "${{ steps.retrieve-bot-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
             --overwrite \
             --no-progress
