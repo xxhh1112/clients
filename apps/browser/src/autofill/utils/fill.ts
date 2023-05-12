@@ -168,7 +168,7 @@ export function getElementByOpId(theOpId: string): FormElement | null {
 
   try {
     const elements: Array<FillableControl | HTMLButtonElement> = Array.prototype.slice.call(
-      selectAllFromDoc("input, select, button, " + "span[data-bwautofill]")
+      selectAllFromDoc("input, select, button, textarea, span[data-bwautofill]")
     );
     const filteredElements = elements.filter(function (o) {
       return (o as ElementWithOpId<FillableControl | HTMLButtonElement>).opid == theOpId;
