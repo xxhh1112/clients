@@ -66,12 +66,29 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-      - name: Retrieve storage account connection string
-        id: retrieve-bot-secrets
-        uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
-        with:
-          keyvault: bitwarden-ci
-          secrets: "sa-bitwarden-web-vault-dev-key-temp"
+      # - name: Retrieve storage account connection string
+      #   id: retrieve-bot-secrets
+      #   uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
+      #   with:
+      #     keyvault: bitwarden-ci
+      #     secrets: "sa-bitwarden-web-vault-dev-key-temp"
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        env:
+          KEYVAULT: "bitwarden-ci"
+          SECRETS: |
+            sa-bitwarden-web-vault-dev-key-temp"
+        run: |
+          for i in $SECRETS; do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+
+            while IFS= read -r line; do
+              echo "::add-mask::$line"
+            done <<< "$VALUE"
+
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
+
 
       - name: Download latest cloud asset
         uses: bitwarden/gh-actions/download-artifacts@82bfda66185116020992660f6c73aa53277d081d
@@ -92,91 +109,91 @@ jobs:
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
             --account-name "$_ENV_STORAGE_ACCOUNT" \
-            --connection-string "${{ steps.retrieve-bot-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
+            --connection-string "${{ steps.retrieve-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
             --overwrite \
             --no-progress
 
-  cfpages-deploy:
-    name: Deploy Web Vault to ${{ inputs.environment }} CloudFlare Pages branch
-    needs: setup
-    runs-on: ubuntu-20.04
-    env:
-      _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
-      _ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
-      _ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
-      _ENVIRONMENT_BRANCH: ${{ needs.setup.outputs.environment-branch }}
-      _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
-    steps:
-      - name: Create GitHub deployment
-        uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
-        id: deployment
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          initial-status: 'in_progress'
-          environment-url: ${{ env._ENVIRONMENT_URL }}
-          environment: ${{ env._ENVIRONMENT_NAME }}
-          description: 'Deployment from branch ${{ github.ref_name }}'
+  # cfpages-deploy:
+  #   name: Deploy Web Vault to ${{ inputs.environment }} CloudFlare Pages branch
+  #   needs: setup
+  #   runs-on: ubuntu-20.04
+  #   env:
+  #     _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
+  #     _ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
+  #     _ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
+  #     _ENVIRONMENT_BRANCH: ${{ needs.setup.outputs.environment-branch }}
+  #     _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
+  #   steps:
+  #     - name: Create GitHub deployment
+  #       uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
+  #       id: deployment
+  #       with:
+  #         token: '${{ secrets.GITHUB_TOKEN }}'
+  #         initial-status: 'in_progress'
+  #         environment-url: ${{ env._ENVIRONMENT_URL }}
+  #         environment: ${{ env._ENVIRONMENT_NAME }}
+  #         description: 'Deployment from branch ${{ github.ref_name }}'
 
-      - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
-      - name: Download latest cloud asset
-        uses: bitwarden/gh-actions/download-artifacts@34ecb67b2a357795dc893549df0795e7383ff50f
-        with:
-          workflow: build-web.yml
-          path: apps/web
-          workflow_conclusion: success
-          branch: ${{ github.ref_name }}
-          artifacts: ${{ env._ENVIRONMENT_ARTIFACT }}
+  #     - name: Download latest cloud asset
+  #       uses: bitwarden/gh-actions/download-artifacts@34ecb67b2a357795dc893549df0795e7383ff50f
+  #       with:
+  #         workflow: build-web.yml
+  #         path: apps/web
+  #         workflow_conclusion: success
+  #         branch: ${{ github.ref_name }}
+  #         artifacts: ${{ env._ENVIRONMENT_ARTIFACT }}
 
-      - name: Unzip cloud asset
-        working-directory: apps/web
-        run: unzip ${{ env._ENVIRONMENT_ARTIFACT }}
+  #     - name: Unzip cloud asset
+  #       working-directory: apps/web
+  #       run: unzip ${{ env._ENVIRONMENT_ARTIFACT }}
 
-      - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-        with:
-          ref: ${{ env._ENVIRONMENT_BRANCH }}
-          path: deployment
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+  #       with:
+  #         ref: ${{ env._ENVIRONMENT_BRANCH }}
+  #         path: deployment
 
-      - name: Setup git config
-        run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global url."https://github.com/".insteadOf ssh://git@github.com/
-          git config --global url."https://".insteadOf ssh://
+  #     - name: Setup git config
+  #       run: |
+  #         git config --global user.name "GitHub Action Bot"
+  #         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --global url."https://github.com/".insteadOf ssh://git@github.com/
+  #         git config --global url."https://".insteadOf ssh://
 
-      - name: Deploy CloudFlare Pages
-        run: |
-          rm -rf ./*
-          cp -R ../apps/web/build/* .
-        working-directory: deployment
+  #     - name: Deploy CloudFlare Pages
+  #       run: |
+  #         rm -rf ./*
+  #         cp -R ../apps/web/build/* .
+  #       working-directory: deployment
 
-      - name: Push new ver to ${{ env._ENVIRONMENT_BRANCH }}
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git add .
-            git commit -m "Deploy ${{ github.ref_name }} to ${{ env._ENVIRONMENT }} Cloudflare pages"
-            git push -u origin ${{ env._ENVIRONMENT_BRANCH }}
-          else
-            echo "No changes to commit!";
-          fi
-        working-directory: deployment
+  #     - name: Push new ver to ${{ env._ENVIRONMENT_BRANCH }}
+  #       run: |
+  #         if [ -n "$(git status --porcelain)" ]; then
+  #           git add .
+  #           git commit -m "Deploy ${{ github.ref_name }} to ${{ env._ENVIRONMENT }} Cloudflare pages"
+  #           git push -u origin ${{ env._ENVIRONMENT_BRANCH }}
+  #         else
+  #           echo "No changes to commit!";
+  #         fi
+  #       working-directory: deployment
 
-      - name: Update deployment status to Success
-        if: ${{ success() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          environment-url: ${{ env._ENVIRONMENT_URL }}
-          state: 'success'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+  #     - name: Update deployment status to Success
+  #       if: ${{ success() }}
+  #       uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+  #       with:
+  #         token: '${{ secrets.GITHUB_TOKEN }}'
+  #         environment-url: ${{ env._ENVIRONMENT_URL }}
+  #         state: 'success'
+  #         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
-      - name: Update deployment status to Failure
-        if: ${{ failure() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          environment-url: ${{ env._ENVIRONMENT_URL }}
-          state: 'failure'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+  #     - name: Update deployment status to Failure
+  #       if: ${{ failure() }}
+  #       uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+  #       with:
+  #         token: '${{ secrets.GITHUB_TOKEN }}'
+  #         environment-url: ${{ env._ENVIRONMENT_URL }}
+  #         state: 'failure'
+  #         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
