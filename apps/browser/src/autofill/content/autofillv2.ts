@@ -380,13 +380,11 @@ function fill(document: Document, fillScript: AutofillScript) {
       // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
       // If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
       // The browser may print a message to the console, but this is not a standard error that we can handle.
-      const acceptedIframeWarning = confirm(
-        "The form is hosted by a different domain than the URI " +
-          "of your saved login. Choose OK to auto-fill anyway, or Cancel to stop. " +
-          "To prevent this warning in the future, save this URI, " +
-          window.location.hostname +
-          ", to your login."
-      );
+      const confirmationWarning = [
+        chrome.i18n.getMessage("autofillIframeWarning"),
+        chrome.i18n.getMessage("autofillIframeWarningTip", [window.location.hostname]),
+      ].join("\n\n");
+      const acceptedIframeWarning = confirm(confirmationWarning);
       if (!acceptedIframeWarning) {
         return;
       }

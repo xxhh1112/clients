@@ -6,23 +6,29 @@ const TYPE_CHECK = {
 
 // Check if URL is not secure when the original saved one was
 export function urlNotSecure(savedURLs: string[]) {
-  let passwordInputs: NodeListOf<Element> | null = null;
-  if (!savedURLs) {
+  if (!savedURLs || !savedURLs.length) {
     return false;
   }
 
-  let confirmResult: any; // Boolean but we want to allow weak comparisons for compatibility with existing code
+  const confirmationWarning = [
+    chrome.i18n.getMessage("insecurePageWarning"),
+    chrome.i18n.getMessage("insecurePageWarningFillPrompt", [window.location.hostname]),
+  ].join("\n\n");
 
-  return savedURLs.some((url) => url?.indexOf("https://") === 0) &&
-    "http:" === document.location.protocol &&
-    ((passwordInputs = document.querySelectorAll("input[type=password]")),
-    0 < passwordInputs.length &&
-      ((confirmResult = confirm(
-        "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page.\n\nDo you still wish to fill this login?"
-      )),
-      0 == confirmResult))
-    ? true
-    : false;
+  if (
+    // At least one of the `savedURLs` uses SSL
+    savedURLs.some((url) => url.startsWith("https://")) &&
+    // The current page is not using SSL
+    document.location.protocol === "http:" &&
+    // There are password inputs on the page
+    document.querySelectorAll("input[type=password]")?.length
+  ) {
+    // The user agrees the page is unsafe or not
+    return !confirm(confirmationWarning);
+  }
+
+  // The page is secure
+  return false;
 }
 
 /**
