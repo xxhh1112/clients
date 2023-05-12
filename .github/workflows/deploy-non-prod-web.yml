@@ -69,7 +69,7 @@ jobs:
 
       - name: Unzip build asset
         working-directory: app/web
-        run: unzip web-*-cloud-COMMERCIAL.zip
+        run: unzip ${{ env._ENVIRONMENT_ARTIFACT }}
 
       - name: Deploy to Azure Storage Account
         working-directory: app/web
