@@ -125,9 +125,9 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output "$HOME/secrets/macdev-cert.p12" \
             "$GITHUB_WORKSPACE/.github/secrets/macdev-cert.p12.gpg"
-          # gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-          #   --output "$HOME/secrets/bitwarden_desktop_appstore.provisionprofile" \
-          #   "$GITHUB_WORKSPACE/.github/secrets/bitwarden_desktop_appstore.provisionprofile.gpg"
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output "$HOME/secrets/Bitwarden_bw_CLI.provisionprofile" \
+            "$GITHUB_WORKSPACE/.github/secrets/Bitwarden_bw_CLI.provisionprofile.gpg"
 
       - name: Set up keychain
         env:
