@@ -93,7 +93,7 @@ jobs:
               echo "::add-mask::$line"
             done <<< "$VALUE"
 
-            echo "$i=$VALUE" >> $GITHUB_OUTPUT
+            echo "$i<<$VALUE" >> $GITHUB_OUTPUT
           done
 
 
