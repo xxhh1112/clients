@@ -81,7 +81,7 @@ jobs:
             sa-bitwarden-web-vault-dev-key-temp,
             dct-delegate-key
         run: |
-          for i in $SECRETS; do
+          for i in ${SECRETS//,/ }; do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
 
             while IFS= read -r line; do
