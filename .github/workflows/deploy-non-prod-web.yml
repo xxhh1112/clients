@@ -78,7 +78,8 @@ jobs:
         env:
           KEYVAULT: "bitwarden-ci"
           SECRETS: |
-            sa-bitwarden-web-vault-dev-key-temp
+            sa-bitwarden-web-vault-dev-key-temp,
+            dct-delegate-key
         run: |
           for i in $SECRETS; do
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
