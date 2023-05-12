@@ -102,11 +102,11 @@ jobs:
           artifacts: ${{ env._ENVIRONMENT_ARTIFACT }}
 
       - name: Unzip build asset
-        working-directory: app/web
+        working-directory: apps/web
         run: unzip ${{ env._ENVIRONMENT_ARTIFACT }}
 
       - name: Deploy to Azure Storage Account
-        working-directory: app/web
+        working-directory: apps/web
         run: |
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
