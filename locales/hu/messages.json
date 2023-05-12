@@ -5428,15 +5428,6 @@
     "message": "Jelenlegi szervezet",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
-  "accountLoggedInAsName": {
-    "message": "Fiók: Bejelentkezve mint $NAME$",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John Smith"
-      }
-    }
-  },
   "accountSettings": {
     "message": "Fiókbeállítások"
   },
@@ -5946,7 +5937,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "A szolgáltatás fiók törlésre került"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "A szolgáltatás fiókok törlésre kerültek."
@@ -6563,11 +6554,14 @@
   "lowKdfIterations": {
     "message": "Alacsony KDF iterációk"
   },
-  "updateLowKdfIterationsDesc": {
-    "message": "Frissítsük a titkosítási beállításokat, hogy megfeleljünk az új biztonsági ajánlásoknak és javítsuk a fiókvédelmet."
+  "lowKdfIterationsDesc": {
+    "message": "Növeljük meg a KDF titkosítási beállításait a fiók biztonságának javítása érdekében."
+  },
+  "changeKdfSettings": {
+    "message": "KDF beállítások megváltoztatása"
   },
   "changeKdfLoggedOutWarning": {
-    "message": "A folytatással minden aktív munkamenetből kijelentkezik. Újra be kell jelentkeznie, és ki kell töltenie a kétlépcsős bejelentkezési beállításokat. Az adatvesztés elkerülése érdekében javasoljuk, hogy a titkosítási beállítások módosítása előtt exportálja a széfet."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Titkos kód kezelő béta"
@@ -6755,8 +6749,5 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "A következő projektek nem törölhetők. Szeretnénk folytatni?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
-  },
-  "updateKdfSettings": {
-    "message": "KDF beállítások frissítése"
   }
 }

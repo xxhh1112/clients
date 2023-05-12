@@ -5428,15 +5428,6 @@
     "message": "Тренутна организација",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
-  "accountLoggedInAsName": {
-    "message": "Account: Logged in as $NAME$",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John Smith"
-      }
-    }
-  },
   "accountSettings": {
     "message": "Подешавања налога"
   },
@@ -6563,8 +6554,11 @@
   "lowKdfIterations": {
     "message": "Ниска KDF понављања"
   },
-  "updateLowKdfIterationsDesc": {
-    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
+  "lowKdfIterationsDesc": {
+    "message": "Повећајте KDF подешавања шифровања да бисте побољшали безбедност налога."
+  },
+  "changeKdfSettings": {
+    "message": "Променити KDF подешавања"
   },
   "changeKdfLoggedOutWarning": {
     "message": "Ако наставите, одјавићете се са свих активних сесија. Мораћете поново да се пријавите и завршите подешавање пријаве у два корака. Препоручујемо да извезете трезор пре него што промените подешавања шифровања да бисте спречили губитак података."
@@ -6755,8 +6749,5 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Следећи пројекти се не могу брисати. Да ли желите да наставите?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
-  },
-  "updateKdfSettings": {
-    "message": "Update KDF settings"
   }
 }

@@ -5428,15 +5428,6 @@
     "message": "Nykyinen organisaatio",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
-  "accountLoggedInAsName": {
-    "message": "Tili: Kirjautuneena käyttäjänä $NAME$",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John Smith"
-      }
-    }
-  },
   "accountSettings": {
     "message": "Tilin asetukset"
   },
@@ -6563,8 +6554,11 @@
   "lowKdfIterations": {
     "message": "Alhainen KDF-toistomäärä"
   },
-  "updateLowKdfIterationsDesc": {
-    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
+  "lowKdfIterationsDesc": {
+    "message": "Paranna tilisi suojausta korottamalla KDF-salausasetuksiasi."
+  },
+  "changeKdfSettings": {
+    "message": "Muuta KDF-asetuksia"
   },
   "changeKdfLoggedOutWarning": {
     "message": "Jos jatkat, kirjataan kaikki aktiiviset istunnot ulos, jonka jälkeen sinun on kirjauduttava sisään uudelleen ja suoritettava kaksivaiheisen todennuksen määritys. Tietojesi säilyvyyden varmistamiseksi suosittelemme, että viet holvisi sisällön ennen kuin muutat salausasetuksiasi."
@@ -6755,8 +6749,5 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Seuraavia projekteja ei voi poistaa. Haluatko jatkaa?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
-  },
-  "updateKdfSettings": {
-    "message": "Update KDF settings"
   }
 }

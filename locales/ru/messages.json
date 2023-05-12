@@ -5428,15 +5428,6 @@
     "message": "Текущая организация",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
-  "accountLoggedInAsName": {
-    "message": "Аккаунт: авторизован $NAME$",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John Smith"
-      }
-    }
-  },
   "accountSettings": {
     "message": "Настройки аккаунта"
   },
@@ -6563,8 +6554,11 @@
   "lowKdfIterations": {
     "message": "Низкие итерации KDF"
   },
-  "updateLowKdfIterationsDesc": {
-    "message": "Обновите настройки шифрования в соответствии с новыми рекомендациями по безопасности и улучшите защиту аккаунта."
+  "lowKdfIterationsDesc": {
+    "message": "Увеличьте параметры шифрования KDF, чтобы повысить безопасность аккаунта."
+  },
+  "changeKdfSettings": {
+    "message": "Изменить параметры KDF"
   },
   "changeKdfLoggedOutWarning": {
     "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
@@ -6755,8 +6749,5 @@
   "smProjectsDeleteBulkConfirmation": {
     "message": "Следующие проекты не могут быть удалены. Продолжить?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
-  },
-  "updateKdfSettings": {
-    "message": "Обновить параметры KDF"
   }
 }

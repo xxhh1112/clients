@@ -5428,15 +5428,6 @@
     "message": "Hazırkı təşkilat",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
-  "accountLoggedInAsName": {
-    "message": "Hesab: $NAME$ olaraq giriş edildi",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John Smith"
-      }
-    }
-  },
   "accountSettings": {
     "message": "Hesab tənzimləmələri"
   },
@@ -6563,8 +6554,11 @@
   "lowKdfIterations": {
     "message": "Aşağı KDF iterasiyaları"
   },
-  "updateLowKdfIterationsDesc": {
-    "message": "Yeni güvənlik tövsiyələrini qarşılamaq və hesab qorumasını təkmilləşdirmək üçün şifrələmə tənzimləmələrinizi güncəlləyin."
+  "lowKdfIterationsDesc": {
+    "message": "Hesabınızın güvənliyini artırmaq üçün KDF şifrələmə tənzimləmələrinizi yüksəldin."
+  },
+  "changeKdfSettings": {
+    "message": "KDF tənzimləmələrini dəyişdir"
   },
   "changeKdfLoggedOutWarning": {
     "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki mərhələli giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə tənzimləmələrinizi dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
@@ -6749,14 +6743,11 @@
     "message": "Mövcud üzvlərin öz parollarını dəyişdirməsini tələb et"
   },
   "smProjectDeleteAccessRestricted": {
-    "message": "Bu layihəni silmək icazəniz yoxdur",
+    "message": "You don't have permissions to delete this project",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
-    "message": "Aşağıdakı layihələr silinə bilməz. Davam etmək istəyirsiniz?",
+    "message": "The following projects can not be deleted. Would you like to continue?",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
-  },
-  "updateKdfSettings": {
-    "message": "KDF tənzimləmələrini güncəllə"
   }
 }
