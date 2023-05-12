@@ -87,6 +87,9 @@ jobs:
             VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
 
             while IFS= read -r line; do
+              if [[ -z "$line" ]]; then
+                continue
+              fi
               echo "::add-mask::$line"
             done <<< "$VALUE"
 
